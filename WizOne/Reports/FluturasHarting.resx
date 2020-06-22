@@ -1277,32 +1277,19 @@
         BFMAkROBQCAQTAFETgQCgUDwmGHt/wcdxEUlhNunYAAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="xrTableCell25.Text" xml:space="preserve">
-    <value>Realizat:                        [Camp16]
-Ore suplimentare:        [Camp17]
-Ore noapte:                  [Camp18]
-Concediu odihna:        [Camp19]
-Compensare CO:         [Camp20]
-Concediu CM:             [Camp21]
-Prima prezenta:            [Camp22]
-Prima sarbatoare:        [Camp23]
-Prima calitate:              [Camp24]
-Prima diferenta:           [Camp25]
-Prima merit:                  [Camp26]
-Val. Salar. compens.:   [Camp27]
-Prima bruta:                  [Camp28]</value>
-  </data>
-  <data name="xrTableCell26.Text" xml:space="preserve">
-    <value>CAS:                                [Camp31]
-Ajutor somaj:                 [Camp32]
-Asig. Sanatate:              [Camp33]
-Impozit:                           [Camp34]
-Pensie suplimentara:    [Camp35]
-Popriri:                            [Camp36]
-Pensie alimentara:         [Camp37]
-Penalizari:                       [Camp38]
-Avans:                            [Camp39]
-Necuvenit:                     [Camp40]
-</value>
+  <data name="xrTableCell33.Text" xml:space="preserve">
+    <value>Realizat:
+Ore suplimentare:
+Ore noapte:
+Concediu odihna:
+Compensare CO:
+Concediu CM:
+Prima prezenta:
+Prima sarbatoare:
+Prima calitate:
+Prima diferenta:
+Prima merit:
+Val. Salar. compens.:
+Prima bruta:</value>
   </data>
 </root>

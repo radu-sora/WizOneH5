@@ -144,11 +144,11 @@ namespace WizOne.Tactil
                         Session["Fluturas_An"] = Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru"));
                         Session["Fluturas_Luna"] = Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru"));
                         Reports.FluturasHarting dlreport = new Reports.FluturasHarting();
-                        dlreport.PaperKind = System.Drawing.Printing.PaperKind.A4;
-                        dlreport.Margins.Top = 10;
-                        dlreport.Margins.Bottom = 10;
-                        dlreport.Margins.Left = 50;
-                        dlreport.Margins.Right = 50;
+                        //dlreport.PaperKind = System.Drawing.Printing.PaperKind.A4;
+                        //dlreport.Margins.Top = 10;
+                        //dlreport.Margins.Bottom = 10;
+                        //dlreport.Margins.Left = 50;
+                        //dlreport.Margins.Right = 50;
                         dlreport.PrintingSystem.ShowMarginsWarning = false;
                         dlreport.ShowPrintMarginsWarning = false;
 

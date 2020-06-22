@@ -78,11 +78,11 @@ namespace WizOne.Reports
                         ScrieInFluturasLog();
 
                         Reports.FluturasHarting dlreport = new Reports.FluturasHarting();
-                        dlreport.PaperKind = System.Drawing.Printing.PaperKind.A4;
-                        dlreport.Margins.Top = 10;
-                        dlreport.Margins.Bottom = 10;
-                        dlreport.Margins.Left = 50;
-                        dlreport.Margins.Right = 50;
+                        //dlreport.PaperKind = System.Drawing.Printing.PaperKind.A4;
+                        //dlreport.Margins.Top = 10;
+                        //dlreport.Margins.Bottom = 10;
+                        //dlreport.Margins.Left = 50;
+                        //dlreport.Margins.Right = 50;
                         dlreport.PrintingSystem.ShowMarginsWarning = false;
                         dlreport.ShowPrintMarginsWarning = false;
 

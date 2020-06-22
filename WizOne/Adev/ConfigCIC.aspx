@@ -13,8 +13,12 @@
     <script type="text/javascript" src="../Fisiere/MsgBox/sweetalert.min.js"></script>
 
     <script type="text/javascript">
-        function OnBtnClientClick(s, e) {
-            window.parent.HidePopupAndShowInfo();
+        function OnBtnGenClientClick(s, e) {
+            window.parent.HidePopupAndShowInfo();            
+        }
+
+        function OnBtnExitClientClick(s, e) {
+            window.parent.HidePopup(); 
         }
     </script>
 </head>
@@ -27,10 +31,10 @@
                 <td style="float:right; text-align:right;">
                     <dx:ASPxButton ID="btnGenerare" ClientInstanceName="btnGenerare" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Genereaza" OnClick="btnGen_Click" oncontextMenu="ctx(this,event)">                         
                         <Image Url="~/Fisiere/Imagini/Icoane/finalizare.png"></Image>
-                        <ClientSideEvents Click="OnBtnClientClick" />
+                        <ClientSideEvents Click="OnBtnGenClientClick" />
                     </dx:ASPxButton>
                     <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" >
-                        <ClientSideEvents Click="OnBtnClientClick" />
+                        <ClientSideEvents Click="OnBtnExitClientClick" />
                         <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                     </dx:ASPxButton>
                 </td>

@@ -84,6 +84,10 @@
         btnCreaza.DoClick();
     }
 
+    function HidePopup() {
+        popGenCIC.Hide();
+    }
+
     function EmptyFields(s, e) {
         cmbAngBulk.SetValue(null);
         cmbCtr.SetValue(null);     

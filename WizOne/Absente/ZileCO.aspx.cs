@@ -48,8 +48,8 @@ namespace WizOne.Absente
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 GridViewDataComboBoxColumn colAn = (grDate.Columns["An"] as GridViewDataComboBoxColumn);
-                colAn.PropertiesComboBox.DataSource = Dami.ListaAni(2000, 2020);
-                cmbAn.DataSource = Dami.ListaAni(2000, 2020);
+                colAn.PropertiesComboBox.DataSource = Dami.ListaAni(2000, 2030);
+                cmbAn.DataSource = Dami.ListaAni(2000, 2030);
                 cmbAn.DataBind();
                 
 
@@ -447,7 +447,14 @@ namespace WizOne.Absente
             {
                 if (e.Parameters != "")
                 {
-                    if (e.Parameters == "btnCO") General.CalculCO(Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)), Convert.ToInt32(cmbAng.Value ?? -99));
+                    if (e.Parameters == "btnCO")
+                    {//Radu 22.06.2020
+                        for (int i = 0; i < grDate.VisibleRowCount; i++)
+                        {
+                            int? marca = grDate.GetRowValues(i, new string[] { "F10003" }) as int?;
+                            General.CalculCO(Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)), Convert.ToInt32(marca ?? -99), true);
+                        }
+                    }
                     if (e.Parameters == "btnSI") CalculSI();
                     IncarcaGrid();
                 }

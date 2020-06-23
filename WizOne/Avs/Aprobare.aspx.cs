@@ -363,6 +363,7 @@ namespace WizOne.Avs
                     {
                         case "btnDelete":
                             {
+                                //{f10003}, {dtCer.Rows[0]["MotivSuspId"].ToString()},{data11}, {data12}, {data13},
                                 MetodeCereri(3,1);
                                 IncarcaGrid();
                             }
@@ -629,6 +630,22 @@ namespace WizOne.Avs
                     {
                         msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Nu este randul dvs.") + System.Environment.NewLine;
                         continue;
+                    }
+
+                    //Florin 2020.05.13
+                    if (tipActiune == 3 && (Convert.ToInt32(General.Nz(arr[2],0)) == Convert.ToInt32(Constante.Atribute.Suspendare) || Convert.ToInt32(General.Nz(arr[2], 0)) == Convert.ToInt32(Constante.Atribute.RevenireSuspendare)))
+                    {
+                        int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar(
+                            @"SELECT COUNT(*)
+                            FROM ""Avs_Cereri"" B
+                            INNER JOIN F111 A ON A.F11103 = B.F10003 AND A.F11104 = B.""IdAtribut"" AND CAST(A.F11105 AS DATE) = CAST(B.""DataInceputSusp"" AS DATE)
+                            AND CAST(A.F11106 AS DATE) = CAST(B.""DataSfEstimSusp"" AS DATE) AND CAST(A.F11107 AS DATE) = CAST(B.""DataIncetareSusp"" AS DATE)
+                            WHERE B.""Id""=706", new object[] { arr[0] }),0));
+                        if (cnt == 1)
+                        {
+                            msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Datele au fost actualizate in personal") + System.Environment.NewLine;
+                            continue;
+                        }
                     }
 
                     //Radu 14.11.2019 - verificare norma si salariu

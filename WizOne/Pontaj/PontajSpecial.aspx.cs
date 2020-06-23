@@ -1,34 +1,24 @@
 ﻿using DevExpress.Web;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using WizOne.Module;
-using System.Drawing;
 
 namespace WizOne.Pontaj
 {
     public partial class PontajSpecial : System.Web.UI.Page
     {
-
-
         protected void Page_Init(object sender, EventArgs e)
         {
             try
             {
-                    
-
                 grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ","10"));
-
             }
             catch (Exception ex)
             {
@@ -200,15 +190,16 @@ namespace WizOne.Pontaj
                 cmbBirou.DataSource = General.IncarcaDT("SELECT F00809, F00810 FROM F008", null);
                 cmbBirou.DataBind();
 
-                cmbCateg.DataSource = General.IncarcaDT("SELECT F72402, F72404 FROM F724", null);
+                //Florin 2020.06.11
+                cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
                 cmbCateg.DataBind();
+                //cmbCateg.DataSource = General.IncarcaDT("SELECT F72402, F72404 FROM F724", null);
+                //cmbCateg.DataBind();
 
                 cmbCtr.DataSource = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte"" ", null);
                 cmbCtr.DataBind();
 
                 IncarcaPopUp();
-
-    
             }
             catch (Exception ex)
             {
@@ -216,7 +207,6 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
 
         protected void btnInit_Click(object sender, EventArgs e)
         {
@@ -297,10 +287,7 @@ namespace WizOne.Pontaj
                         MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoError);
                     else
                         MessageBox.Show(Dami.TraduCuvant("Initializare reusita!"), MessageBox.icoSuccess);
-
-                }                
-                 
-
+                }
             }
             catch (Exception ex)
             {
@@ -450,9 +437,7 @@ namespace WizOne.Pontaj
 
                                 lstInit.Add(zi);
                                 sqlSDSL += "OR (\"Ziua\" = " + data1 + " AND F10003 IN (" + lista1 + ")) ";
-
                             }
-
                         }
                         else
                         {   
@@ -594,12 +579,10 @@ namespace WizOne.Pontaj
 
         }
 
-
         protected void btnFiltru_Click(object sender, EventArgs e)
         {
             try
             {
-         
                 IncarcaGrid();
             }
             catch (Exception ex)
@@ -632,21 +615,6 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-
-        public void Iesire()
-        {
-            try
-            {
-                Response.Redirect("~/Absente/Lista.aspx", false);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
 
         protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
         {
@@ -913,14 +881,11 @@ namespace WizOne.Pontaj
                 grDate.KeyFieldName = "F10003";
 
                 DataTable dt = GetF100NumeCompletPontajSpecial(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99),
-                    Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbSubDept.Value ?? -99), Convert.ToInt32(cmbBirou.Value ?? -99), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), Convert.ToInt32(cmbCateg.Value ?? -99));
+                    Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbSubDept.Value ?? -99), Convert.ToInt32(cmbBirou.Value ?? -99), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), General.Nz(cmbCateg.Value,"").ToString());
                 //dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
                 grDate.DataSource = dt;
                 Session["InformatiaCurenta_PS"] = dt;
                 grDate.DataBind();
-                grDate.SettingsPager.PageSize = 25;
-
-
             }
             catch (Exception ex)
             {
@@ -929,7 +894,7 @@ namespace WizOne.Pontaj
             }
         }
 
-        public DataTable GetF100NumeCompletPontajSpecial(int idUser, int idSubcomp = -99, int idFiliala = -99, int idSectie = -99, int idDept = -99, int idSubdept = -99, int idBirou = -99, int idAngajat = -9, int idCtr = -99, int idCateg = -99)
+        public DataTable GetF100NumeCompletPontajSpecial(int idUser, int idSubcomp = -99, int idFiliala = -99, int idSectie = -99, int idDept = -99, int idSubdept = -99, int idBirou = -99, int idAngajat = -9, int idCtr = -99, string idCateg = "")
         {
             DataTable dt = new DataTable();
 
@@ -943,8 +908,8 @@ namespace WizOne.Pontaj
                 string strSql = @"SELECT Y.* FROM(
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
                                 A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025,
-                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
-                                A.F10061, A.F10062
+                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou""
+                                {3}
 
                                 FROM ""relGrupAngajat"" B                                
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""                                
@@ -957,15 +922,16 @@ namespace WizOne.Pontaj
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506                                
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607                                
                                 LEFT JOIN F007 K ON X.F100958 = K.F00708  
-                                LEFT JOIN F008 L ON X.F100959 = L.F00809                                 
-                                WHERE C.""IdSuper"" = {1}
+                                LEFT JOIN F008 L ON X.F100959 = L.F00809     
+                                {5}
+                                WHERE C.""IdSuper"" = {1} {4}
 
                                 UNION
 
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
                                 A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  ,
-                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
-                                A.F10061, A.F10062
+                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou""
+                                {3}
 
                                 FROM ""relGrupAngajat"" B                                
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""                                
@@ -979,8 +945,9 @@ namespace WizOne.Pontaj
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506                                
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
                                 LEFT JOIN F007 K ON X.F100958 = K.F00708  
-                                LEFT JOIN F008 L ON X.F100959 = L.F00809                                  
-                                WHERE J.""IdUser"" = {1}
+                                LEFT JOIN F008 L ON X.F100959 = L.F00809 
+                                {5}
+                                WHERE J.""IdUser"" = {1} {4}
   
                                                            
                                 ) Y 
@@ -1062,13 +1029,31 @@ namespace WizOne.Pontaj
                         cond += " AND " + tmp;
                 }
 
-                if (idCateg != -99)
+                //Florin 2020.06.11
+
+                //if (idCateg != -99)
+                //{
+                //    tmp = string.Format("  (Y.F10061 = {0} OR Y.F10062 = {0})", idCateg);
+                //    if (cond.Length <= 0)
+                //        cond = " WHERE " + tmp;
+                //    else
+                //        cond += " AND " + tmp;
+                //}
+
+                //Florin 2020.06.11
+                string cmpCateg = @" ,NULL AS ""Categorie"" ";
+                string strLeg = "";
+                string filtruPlus = "";
+                string sqlCateg = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'viewCategoriePontaj'";
+                if (Constante.tipBD == 2)
+                    sqlCateg = "SELECT COUNT(*) FROM user_views where view_name = 'viewCategoriePontaj'";
+                int este = Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlCateg), 0));
+                if (este == 1)
                 {
-                    tmp = string.Format("  (Y.F10061 = {0} OR Y.F10062 = {0})", idCateg);
-                    if (cond.Length <= 0)
-                        cond = " WHERE " + tmp;
-                    else
-                        cond += " AND " + tmp;
+                    cmpCateg = @" ,CTG.""Denumire"" AS ""Categorie"" ";
+                    if (idCateg != "")
+                        filtruPlus += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
+                    strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
                 }
 
                 if (cond.Length <= 0)
@@ -1078,7 +1063,7 @@ namespace WizOne.Pontaj
 
                 strSql += cond;
 
-                strSql = string.Format(strSql, op, idUser, condCtr);
+                strSql = string.Format(strSql, op, idUser, condCtr, cmpCateg, filtruPlus, strLeg);
 
                 dt = General.IncarcaDT(strSql, null);
 
@@ -1090,9 +1075,6 @@ namespace WizOne.Pontaj
 
             return dt;
         }
-
-
-
 
         private void IncarcaAngajati()
         {
@@ -1111,7 +1093,6 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
 
         private string SelectAngajati(string filtru = "")
         {
@@ -1171,26 +1152,6 @@ namespace WizOne.Pontaj
             return strSql;
         }
 
-
-
-
-        protected void grDate_HtmlDataCellPrepared(object sender, ASPxGridViewTableDataCellEventArgs e)
-        {
-            try
-            {
-
-
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-
-
         protected void grDate_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
         {
             try
@@ -1207,7 +1168,6 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
 
         private void AscundeCtl()
         {
@@ -1226,21 +1186,6 @@ namespace WizOne.Pontaj
                     lx.Text = "";
                     lx.ToolTip = "";
                 }
-            }
-        }
-            
-
-
-        protected void grDate_DataBound(object sender, EventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

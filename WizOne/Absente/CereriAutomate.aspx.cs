@@ -127,11 +127,11 @@ namespace WizOne.Absente
                     AfisareCtl("cmbAbs;0");
 
                     DataTable dtAngFiltrati = dtAng;
-                    if (cmbRol.Value != null && Convert.ToInt32(cmbRol.Value) != -44 && dtAng != null && dtAng.Rows.Count > 0)
+                    if (cmbRol.Value != null && Convert.ToInt32(cmbRol.Value) != -44 && dtAng != null && dtAng.Rows.Count > 0 && dtAng.Select("Rol=" + cmbRol.Value).Count() > 0)
                         dtAngFiltrati = dtAng.Select("Rol=" + cmbRol.Value).CopyToDataTable();
 
                     DataTable dtAngActivi = new DataTable();
-                    if (dtAngFiltrati != null && dtAngFiltrati.Rows.Count > 0) dtAngActivi = dtAngFiltrati.Select("AngajatActiv=1").CopyToDataTable();
+                    if (dtAngFiltrati != null && dtAngFiltrati.Rows.Count > 0 && dtAngFiltrati.Select("AngajatActiv=1").Count() > 0) dtAngActivi = dtAngFiltrati.Select("AngajatActiv=1").CopyToDataTable();
                     cmbAng.DataSource = dtAngActivi;
                     Session["CereriAut_Angajati"] = dtAngActivi;                  
                     Session["CereriAut_AngajatiToti"] = dtAngFiltrati;
@@ -613,7 +613,7 @@ namespace WizOne.Absente
                         Session["CereriAut_Angajati"] = dtAng;
                         Session["CereriAut_AngajatiToti"] = dtAng;
                         cmbAng.DataBind();
-                        cmbAng.SelectedIndex = 0;
+                        cmbAng.SelectedIndex = -1;
 
                         DataTable dt = null;
                         string sir = Session["CereriAut_Sir"].ToString();
@@ -623,6 +623,8 @@ namespace WizOne.Absente
                         cmbAbs.DataBind();
                         Session["CereriAut_Absente"] = dt;                     
                         AfisareCtl("cmbAbs;0");
+                        grDate.DataSource = null;
+                        grDate.DataBind();
                         break;
                     case "btnFiltru":
                         IncarcaGrid();

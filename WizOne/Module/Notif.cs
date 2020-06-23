@@ -1,14 +1,11 @@
-﻿using ProceseSec;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Hosting;
@@ -19,7 +16,7 @@ namespace WizOne.Module
 {
     public class Notif
     {
-        internal class metaAdreseMail
+        public class metaAdreseMail
         {
             public string Mail { get; set; }
             public string Destinatie { get; set; }
@@ -32,7 +29,6 @@ namespace WizOne.Module
 
             try
             {
-                //string numePagina = Dami.PaginaWeb();
                 string strSql = @"SELECT A.* FROM ""Ntf_Setari"" A WHERE A.""Pagina""=@1 AND A.""TipNotificare""=@2 AND A.""Activ""=1 AND 
                             (A.""ValidTip""=0 OR
                             (A.""ValidTip""=1 AND (SELECT COUNT(*) FROM ""relGrupUser"" X WHERE X.""IdUser""=@3 AND X.""IdGrup""=A.""ValidVal"")>0) OR 
@@ -49,10 +45,6 @@ namespace WizOne.Module
                     {
                         string ntf_Campuri = "";
                         string ntf_Conditii = "";
-
-                        //string strSel = CreazaSelect(Convert.ToInt32(dtReg.Rows[i]["Id"]), strSelect, numePagina, userId, userMarca);
-                        //if (strSql == "") continue;
-
 
                         CreazaSelect(Convert.ToInt32(dtReg.Rows[i]["Id"]), strSelect, numePagina, userId, userMarca, out ntf_Campuri, out ntf_Conditii);
                         if (ntf_Campuri == "" || ntf_Conditii == "") continue;
@@ -75,8 +67,8 @@ namespace WizOne.Module
 
                                         if (Convert.ToInt32(General.Nz(dtReg.Rows[i]["SalveazaInDisc"],0)) == 1 || Convert.ToInt32(General.Nz(dtReg.Rows[i]["SalveazaInBaza"],0)) == 1 || Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimitePeMail"],0)) == 1)
                                         {
-                                            corpAtt = InlocuiesteCampuri((dtReg.Rows[i]["ContinutAtasament"] ?? "").ToString(), dtSel, userId, userMarca);
-                                            numeAtt = InlocuiesteCampuri(General.Nz(dtReg.Rows[i]["NumeAtasament"], "Atasament_" + DateTime.Now.Ticks.ToString()).ToString(), dtSel, userId, userMarca) + ".html";
+                                            corpAtt = InlocuiesteCampuri((dtReg.Rows[i]["ContinutAtasament"] ?? "").ToString(), dtSel.Rows[0], userId, userMarca);
+                                            numeAtt = InlocuiesteCampuri(General.Nz(dtReg.Rows[i]["NumeAtasament"], "Atasament_" + DateTime.Now.Ticks.ToString()).ToString(), dtSel.Rows[0], userId, userMarca) + ".html";
 
                                             if (Convert.ToInt32(dtReg.Rows[i]["SalveazaInBaza"]) == 1)
                                             {
@@ -104,39 +96,32 @@ namespace WizOne.Module
 
                                         if (Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)) == 1 || (dtReg.Rows[i]["TrimiteXLS"] ?? "").ToString() != "")
                                         {
-                                            numeExcel = InlocuiesteCampuri(General.Nz(dtReg.Rows[i]["NumeExcel"], "Atasament_" + DateTime.Now.Ticks.ToString()).ToString(), dtSel, userId, userMarca) + ".xls";
-                                            selectXls = InlocuiesteCampuri((dtReg.Rows[i]["SelectXLS"] ?? "").ToString(),dtSel, userId, userMarca);
+                                            numeExcel = InlocuiesteCampuri(General.Nz(dtReg.Rows[i]["NumeExcel"], "Atasament_" + DateTime.Now.Ticks.ToString()).ToString(), dtSel.Rows[0], userId, userMarca) + ".xls";
+                                            selectXls = InlocuiesteCampuri((dtReg.Rows[i]["SelectXLS"] ?? "").ToString(), dtSel.Rows[0], userId, userMarca);
                                         }
 
-                                        List<metaAdreseMail> lstAdrese = CreazaAdreseMail(Convert.ToInt32(dtReg.Rows[i]["Id"]), dtSel);
-                                        //string lstAdr = "";
-                                        //for(int j = 0; j < lstAdrese.Count(); j++)
-                                        //{
-                                        //    if (lstAdrese[j].Destinatie.ToUpper() == "TO")
-                                        //    {
-                                        //        //lstAdr += ";" + lstAdrese[j].Mail;
-                                        //        lstAdr = lstAdrese[j].Mail;
-                                        //        break;
-                                        //    }
-                                        //}
-                                        //string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel, numePagina, tblAtasamente_Id, lstAdr);
+                                        List<metaAdreseMail> lstAdrese = CreazaAdreseMail(Convert.ToInt32(dtReg.Rows[i]["Id"]), dtSel.Rows[0]);
 
                                         if (lstAdrese.Count > 0)
                                         {
-                                            string subiect = InlocuiesteCampuri((dtReg.Rows[i]["Subiect"] ?? "").ToString(), dtSel, userId, userMarca);
+                                            string subiect = InlocuiesteCampuri((dtReg.Rows[i]["Subiect"] ?? "").ToString(), dtSel.Rows[0], userId, userMarca);
+                                            int idClient = Convert.ToInt32(HttpContext.Current.Session["IdClient"]);
 
                                             //Florin 2018.05.09
                                             if (lstAdrese.Where(p => p.IncludeLinkAprobare == 1).Count() == 0)
                                             {
-                                                string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel, userId, userMarca, numePagina, tblAtasamente_Id);
-                                                TrimiteMail(lstAdrese, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel);
+                                                string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel.Rows[0], userId, userMarca, numePagina, tblAtasamente_Id);
+                                                TrimiteMail(lstAdrese, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, CreazaHTML(corpAtt), Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel, idClient);
                                             }
                                             else
                                             {
                                                 for (int j = 0; j < lstAdrese.Count(); j++)
                                                 {
-                                                    string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel, userId, userMarca, numePagina, tblAtasamente_Id, lstAdrese[j].Mail, lstAdrese[j].IncludeLinkAprobare);
-                                                    TrimiteMail(lstAdrese[j].Mail, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel);
+                                                    List<metaAdreseMail> lstOne = new List<metaAdreseMail>();
+                                                    lstOne.Add(new metaAdreseMail { Mail=lstAdrese[j].Mail, Destinatie="TO", IncludeLinkAprobare=0 });
+
+                                                    string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel.Rows[0], userId, userMarca, numePagina, tblAtasamente_Id, lstAdrese[j].Mail, lstAdrese[j].IncludeLinkAprobare);
+                                                    TrimiteMail(lstOne, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, CreazaHTML(corpAtt), Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel, idClient);
                                                 }
                                             }
                                         }
@@ -148,30 +133,12 @@ namespace WizOne.Module
                                     break;
                                 case 2:                                 //Validare
                                     {
-                                        string corpMsg = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel, userId, userMarca);
+                                        string corpMsg = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel.Rows[0], userId, userMarca);
                                         if (corpMsg != "")
                                         {
-                                            
                                             if ((dtReg.Rows[i]["mesaj"] ?? "avertisment").ToString() == "avertisment")
                                             {
-                                                //rez = Constante.MesajeValidari.Avertisment.ToString();
                                                 rez = corpMsg;  //Radu 15.04.2019
-                                                //MessageBox.ShowProba2(corpMsg, MessageBox.icoWarning, (dtReg.Rows[i]["Subiect"] ?? "").ToString());
-                                                //string asd = @"<script type='text/javascript'> swal({   title: 'Are you sure ? ',   text: 'You will not be able to recover this imaginary file!',   type: 'warning',   showCancelButton: true,   confirmButtonColor: '#DD6B55',   confirmButtonText: 'Yes, delete it!',   closeOnConfirm: false }, function(isConfirm){ if (isConfirm) { <%= Iesire() %> } });</script>";
-
-                                                //string msg = "<script type='text/javascript'> " +
-                                                //            " swal({  title: 'Validare',    " +
-                                                //            "         text: '" + corpMsg + "', " +
-                                                //            "         type: '" + tipIco + "', " +
-                                                //            "         showCancelButton: true, " +
-                                                //            "         confirmButtonColor: '#DD6B55',    " +
-                                                //            "         confirmButtonText: 'Continuati operatia!', " +
-                                                //            "         cancelButtonText: 'Renuntare!',    " +
-                                                //            "         closeOnConfirm: false },  " +
-                                                //            "         function(isConfirm){  " +
-                                                //            "         if (isConfirm) { document.getElementById('btnBack').click(); } }); " +
-                                                //            "         </script>";
-
                                                 string msg = "<script type='text/javascript'> " +
                                                             " swal({  title: 'Validare',    " +
                                                             "         text: '" + corpMsg + "', " +
@@ -185,29 +152,17 @@ namespace WizOne.Module
 
                                                 Page pagina = HttpContext.Current.Handler as Page;
                                                 pagina.Page.ClientScript.RegisterStartupScript(pagina.GetType(), "MessageBox", msg);
-
                                             }
                                             else
                                             {
                                                 rez += "2;" + corpMsg;
-
-                                                //string txt = "<script type=\"text/javascript\" language=\"javascript\"> " +
-                                                //    " swal({ " +
-                                                //    "     title: \"" + (dtReg.Rows[i]["Subiect"] ?? "").ToString() + "\", " +
-                                                //    "     text: \"" + corpMsg + "\", " +
-                                                //    "     type: \"" + MessageBox.icoError + "\" " +
-                                                //    " });</script>";
-                                                //Page pagina = HttpContext.Current.Handler as Page;
-                                                //pagina.Page.ClientScript.RegisterStartupScript(pagina.GetType(), "MessageBox", txt);
-
-                                                string subiect = InlocuiesteCampuri((dtReg.Rows[i]["Subiect"] ?? "").ToString(), dtSel, userId, userMarca);
+                                                string subiect = InlocuiesteCampuri((dtReg.Rows[i]["Subiect"] ?? "").ToString(), dtSel.Rows[0], userId, userMarca);
                                                 MessageBox.Show(corpMsg, MessageBox.icoError, subiect);
                                             }
                                         }
                                     }
                                     break;
                             }
-
                         }
                         else
                         {
@@ -215,7 +170,6 @@ namespace WizOne.Module
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -225,10 +179,8 @@ namespace WizOne.Module
             return rez;
         }
 
-        private static void CreazaSelect(int id, string strSelect, string numePagina, int userId, int userMarca, out string ntf_Campuri, out string ntf_Conditii)
+        public static void CreazaSelect(int id, string strSelect, string numePagina, int userId, int userMarca, out string ntf_Campuri, out string ntf_Conditii)
         {
-            string strSql = "";
-
             string strCamp = "";
             string strCond = "";
 
@@ -320,11 +272,9 @@ namespace WizOne.Module
                             switch (dr["Operator"].ToString())
                             {
                                 case "fara valoare":
-                                    //strCond += " AND ((" + col + ") IS NULL OR (" + col + ") = '' OR (" + col + ") = 0)";
                                     strCond += " AND (" + col + ") IS NULL";
                                     break;
                                 case "cu valoare":
-                                    //strCond += " AND ((" + col + ") IS NOT NULL AND (" + col + ") <> '' AND (" + col + ") <> 0)";
                                     strCond += " AND (" + col + ") IS NOT NULL";
                                     break;
                                 case "in":
@@ -368,12 +318,7 @@ namespace WizOne.Module
                                 case "=":
                                     {
                                         string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                        //Florin 2019.10.15
                                         strCond += " AND ((" + col + ")" + dr["Operator"] + "(" + arr[0] + "))";
-                                        //if (arr[1] == "2")
-                                        //    strCond += " AND ((" + col + ")" + dr["Operator"] + "('" + arr[0] + "'))";
-                                        //else
-                                        //    strCond += " AND ((" + col + ")" + dr["Operator"] + "(" + arr[0] + "))";
                                     }
                                     break;
                             }
@@ -382,42 +327,26 @@ namespace WizOne.Module
                 }
                 if (Dami.ValoareParam("LogNotificari") == "1") General.CreazaLog(strCond, "CreazaFiltrul");
 
-
-                //cream campurile
-                
+                //cream campurile             
                 for (int i = 0; i < dtCmp.Rows.Count; i++)
                 {
-                    //Florin 2019.10.11
-                    //if ((dtCmp.Rows[i]["CampSelect"] ?? "").ToString() != "" && (dtCmp.Rows[i]["Alias"] ?? "").ToString() != "")
-                    //    strCamp += ", (" + dtCmp.Rows[i]["CampSelect"] + ") AS '" + dtCmp.Rows[i]["Alias"] + "'";
                     if ((dtCmp.Rows[i]["CampSelect"] ?? "").ToString() != "" && (dtCmp.Rows[i]["Alias"] ?? "").ToString() != "")
                         strCamp += ", (" + dtCmp.Rows[i]["CampSelect"] + ") AS \"" + dtCmp.Rows[i]["Alias"] + "\"";
                 }
 
                 if (strCamp != "") strCamp = strCamp.Substring(1);
                 if (Dami.ValoareParam("LogNotificari") == "1") General.CreazaLog(strCamp, "CreazaCampurile");
-
-
-                //cream selectul
-                if (strCamp != "")
-                {
-                    strSql = "SELECT " + strCamp + " FROM (" + strSelect + ") ent WHERE 1 = 1 " + strCond;
-                    strSql = strSql.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
-                    if (Dami.ValoareParam("LogNotificari") == "1") General.CreazaLog(strSql, "CreazaSelect");
-                }
             }
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
-            //return strSql;
-
             ntf_Campuri = strCamp;
             ntf_Conditii = strCond;
         }
 
-        private static string[] AflaValoarea(string camp, DataTable dtCmp)
+        private static string[] AflaValoarea(string camp, DataTable dtCmp, int nrZile = 0)
         {
             //1 - este valoare
             //2 - este cuvant rezervat
@@ -473,7 +402,8 @@ namespace WizOne.Module
                             break;
                     }
 
-                    //Florin 2019.10.15 s-au adaugat apostroafele la data de pe sql
+                    dt = dt.AddDays(nrZile);
+
                     if (Constante.tipBD == 1)
                         str[0] = "'" + dt.Year + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Day.ToString().PadLeft(2, '0') + "'";
                     else
@@ -505,14 +435,12 @@ namespace WizOne.Module
             return str;
         }
 
-        private static List<metaAdreseMail> CreazaAdreseMail(int id, DataTable dtSel)
+        public static List<metaAdreseMail> CreazaAdreseMail(int id, DataRow dtSel)
         {
             List<metaAdreseMail> lst = new List<metaAdreseMail>();
 
             try
             {
-                //Florin 2019.10.11
-                //DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ntf_Mailuri"" WHERE ""Id""=@1 AND ""MailTip"" IS NOT NULL AND ""MailTip"" <> '' AND ""MailAdresaId"" IS NOT NULL AND ""MailAdresaId"" <> ''  ", new string[] { id.ToString() });
                 DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ntf_Mailuri"" WHERE ""Id""=@1 {General.FiltrulCuNull("MailTip")} {General.FiltrulCuNull("MailAdresaId")} ", new string[] { id.ToString() });
 
                 for (int i = 0; i < dt.Rows.Count; i++)
@@ -572,7 +500,7 @@ namespace WizOne.Module
                                 break;
                             case "coloana tabel":
                                 {
-                                    string str = (dtSel.Rows[0][dt.Rows[i]["MailAdresaText"].ToString()] ?? "").ToString();
+                                    string str = (dtSel[dt.Rows[i]["MailAdresaText"].ToString()] ?? "").ToString();
                                     string[] lstMail = str.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                                     for(int x = 0; x < lstMail.Count(); x++)
                                     {
@@ -609,7 +537,7 @@ namespace WizOne.Module
 
         }
 
-        private static string InlocuiesteCampuri(string text, DataTable dtSel, int userId, int userMarca, string numePagina = "", int id = -99, string lstAdr = "", int inlocLinkAprobare = 0)
+        public static string InlocuiesteCampuri(string text, DataRow drSel, int userId, int userMarca, string numePagina = "", int id = -99, string lstAdr = "", int inlocLinkAprobare = 0)
         {
             string str = text;
 
@@ -618,9 +546,9 @@ namespace WizOne.Module
                 string strSelect = "";
                 string strOriginal = "";
 
-                for (int i = 0; i < dtSel.Columns.Count; i++)
+                for (int i = 0; i < drSel.Table.Columns.Count; i++)
                 {
-                    str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
+                    str = str.Replace("#$" + drSel.Table.Columns[i] + "$#", General.Nz(drSel[drSel.Table.Columns[i]],"").ToString());
                 }
 
                 int z = 1;
@@ -731,153 +659,7 @@ namespace WizOne.Module
             return str;
         }
 
-        private static void TrimiteMail(string mail, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel)
-        {
-            try
-            {
-                string folosesteCred = Dami.ValoareParam("TrimiteMailCuCredentiale");
-                string cuSSL = Dami.ValoareParam("TrimiteMailCuSSL", "false");
-
-                string smtpMailFrom = Dami.ValoareParam("SmtpMailFrom");
-                string smtpServer = Dami.ValoareParam("SmtpServer");
-                string smtpPort = Dami.ValoareParam("SmtpPort");
-                string smtpMail = Dami.ValoareParam("SmtpMail");
-                string smtpParola = Dami.ValoareParam("SmtpParola");
-
-
-                string strMsg = "";
-                if (smtpMailFrom == "") strMsg += ", mail from";
-
-                if (smtpServer == "") strMsg += ", serverul de smtp";
-                if (smtpPort == "") strMsg += ", smtp port";
-                if (folosesteCred == "1" || folosesteCred == "2")
-                {
-                    if (smtpMail == "") strMsg += ", smtp mail";
-                    if (smtpParola == "") strMsg += ", smtp parola";
-                }
-
-                if (strMsg != "")
-                {
-                    General.MemoreazaEroarea("Nu exista date despre " + strMsg.Substring(2), "Notif", "TrimiteMail");
-                    return;
-                }
-
-                MailMessage mm = new MailMessage();
-                mm.From = new MailAddress(smtpMailFrom);
-
-                if (mail.Trim() == "")
-                {
-                    General.MemoreazaEroarea(Dami.TraduCuvant("Nu exista destinatar"), "Notif", "TrimiteMail");
-                    return;
-                }
-                else
-                {
-                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 14)
-                        mm.To.Add(new MailAddress("<" + mail + ">"));
-                    else
-                        mm.To.Add(new MailAddress(mail));
-                }
-
-                #region OLD
-                //if (lstAdr == null || lstAdr.Count() == 0)
-                //{
-                //    General.MemoreazaEroarea(Dami.TraduCuvant("Nu exista destinatar"), "Dami", "TrimiteMail");
-                //    return;
-                //}
-                //else
-                //{
-                //    foreach (var mail in lstAdr)
-                //    {
-                //        switch(mail.Destinatie.ToUpper())
-                //        {
-                //            case "TO":
-                //                {
-                //                    if (Session["IdClient"] == 14)
-                //                        mm.To.Add(new MailAddress("<" + mail.Mail + ">"));
-                //                    else
-                //                        mm.To.Add(new MailAddress(mail.Mail));
-                //                }
-                //                break;
-                //            case "CC":
-                //                {
-                //                    if (Session["IdClient"] == 14)
-                //                        mm.CC.Add(new MailAddress("<" + mail.Mail + ">"));
-                //                    else
-                //                        mm.CC.Add(new MailAddress(mail.Mail));
-                //                }
-                //                break;
-                //            case "BCC":
-                //                {
-                //                    if (Session["IdClient"] == 14)
-                //                        mm.Bcc.Add(new MailAddress("<" + mail.Mail + ">"));
-                //                    else
-                //                        mm.Bcc.Add(new MailAddress(mail.Mail));
-                //                }
-                //                break;
-                //        }
-                //    }
-                //}
-#endregion
-
-                mm.Subject = subiect;
-                mm.Body = corpMail;
-                mm.IsBodyHtml = true;
-                
-                //
-                if (trimiteAtt == 1)
-                {
-                    byte[] arrByte = Encoding.UTF8.GetBytes(CreazaHTML(corpAtt));
-                    MemoryStream stream = new MemoryStream(arrByte);
-                    mm.Attachments.Add(new Attachment(stream, numeAtt, "text/html"));
-                }
-
-                //
-                if (trimiteXls == 1)
-                {
-                    if (selectXls != "")
-                    {
-                        DateTime ora = DateTime.Now;
-                        //string numeXLS = "SituatieConcedii_" + ora.Year.ToString() + ora.Month.ToString().PadLeft(2, '0') + ora.Day.ToString().PadLeft(2, '0') + "_" + ora.Hour.ToString().PadLeft(2, '0') + ora.Minute.ToString().PadLeft(2, '0') + ora.Second.ToString().PadLeft(2, '0') + ".xls";
-
-                        MemoryStream stream = new MemoryStream(General.CreazaExcel(selectXls));
-                        mm.Attachments.Add(new Attachment(stream, numeExcel, "application/vnd.ms-excel"));
-                    }
-                    else
-                    {
-                        if (Dami.ValoareParam("LogNotificari") == "1") General.CreazaLog("Sursa de date pentru excel nu este setata", "TrimiteMail");
-                    }
-                }
-
-                //
-                SmtpClient smtp = new SmtpClient(smtpServer);
-                smtp.Port = Convert.ToInt32(smtpPort);
-                smtp.Host = smtpServer;
-
-                if (folosesteCred == "1" || folosesteCred == "2")
-                {
-                    NetworkCredential basicCred = new NetworkCredential(smtpMail, smtpParola);
-                    smtp.UseDefaultCredentials = false;
-                    smtp.Credentials = basicCred;
-                }
-                else
-                {
-                    smtp.UseDefaultCredentials = true;
-                }
-
-                smtp.EnableSsl = cuSSL == "1" ? true : false;
-
-                ServicePointManager.ServerCertificateValidationCallback += (o, c, ch, er) => true;
-
-                smtp.Send(mm);
-                smtp.Dispose();
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        private static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel)
+        public static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel, int idClient)
         {
             try
             {
@@ -920,31 +702,20 @@ namespace WizOne.Module
                 {
                     foreach (var mail in lstAdr)
                     {
+                        string mailPt = mail.Mail;
+                        if (idClient == Convert.ToInt32(IdClienti.Clienti.Honeywell))
+                            mailPt = "<" + mail.Mail + ">";
+
                         switch (mail.Destinatie.ToUpper())
                         {
                             case "TO":
-                                {
-                                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 14)
-                                        mm.To.Add(new MailAddress("<" + mail.Mail + ">"));
-                                    else
-                                        mm.To.Add(new MailAddress(mail.Mail));
-                                }
+                                mm.To.Add(new MailAddress(mail.Mail));
                                 break;
                             case "CC":
-                                {
-                                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 14)
-                                        mm.CC.Add(new MailAddress("<" + mail.Mail + ">"));
-                                    else
-                                        mm.CC.Add(new MailAddress(mail.Mail));
-                                }
+                                mm.CC.Add(new MailAddress(mail.Mail));
                                 break;
                             case "BCC":
-                                {
-                                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 14)
-                                        mm.Bcc.Add(new MailAddress("<" + mail.Mail + ">"));
-                                    else
-                                        mm.Bcc.Add(new MailAddress(mail.Mail));
-                                }
+                                mm.Bcc.Add(new MailAddress(mail.Mail));
                                 break;
                         }
                     }
@@ -958,7 +729,7 @@ namespace WizOne.Module
                 //
                 if (trimiteAtt == 1)
                 {
-                    byte[] arrByte = Encoding.UTF8.GetBytes(CreazaHTML(corpAtt));
+                    byte[] arrByte = Encoding.UTF8.GetBytes(corpAtt);
                     MemoryStream stream = new MemoryStream(arrByte);
                     mm.Attachments.Add(new Attachment(stream, numeAtt, "text/html"));
                 }
@@ -968,9 +739,6 @@ namespace WizOne.Module
                 {
                     if (selectXls != "")
                     {
-                        DateTime ora = DateTime.Now;
-                        //string numeXLS = "SituatieConcedii_" + ora.Year.ToString() + ora.Month.ToString().PadLeft(2, '0') + ora.Day.ToString().PadLeft(2, '0') + "_" + ora.Hour.ToString().PadLeft(2, '0') + ora.Minute.ToString().PadLeft(2, '0') + ora.Second.ToString().PadLeft(2, '0') + ".xls";
-
                         MemoryStream stream = new MemoryStream(General.CreazaExcel(selectXls));
                         mm.Attachments.Add(new Attachment(stream, numeExcel, "application/vnd.ms-excel"));
                     }
@@ -1015,7 +783,6 @@ namespace WizOne.Module
             {
                 string txt = CreazaHTML(corp);
 
-                //DataTable dt = General.IncarcaDT(@"SELECT * FROM ""tblAtasamente"" WHERE ""Tabela""=@1 AND ""Id""=@2", new string[] { tblAtasamente_Tabela, tblAtasamente_Id.ToString() });
                 DataTable dt = General.IncarcaDT(@"SELECT * FROM ""tblFisiere"" WHERE ""Tabela""=@1 AND ""Id""=@2 AND ""EsteCerere""=1", new string[] { tblAtasamente_Tabela, tblAtasamente_Id.ToString() });
                 if (dt.Rows.Count == 0)
                 {
@@ -1028,7 +795,6 @@ namespace WizOne.Module
                     dr["FisierExtensie"] = ".html";
                     dr["USER_NO"] = userId;
                     dr["TIME"] = DateTime.Now;
-                    //dr["IdAuto"] = 1;
                     dt.Rows.Add(dr);
                 }
                 else
@@ -1040,15 +806,7 @@ namespace WizOne.Module
                     dt.Rows[0]["TIME"] = DateTime.Now;
                 }
 
-                //SqlDataAdapter da = new SqlDataAdapter();
-                //da.SelectCommand = General.DamiSqlCommand(@"SELECT TOP 0 * FROM ""tblFisiere"" ", null);
-                //SqlCommandBuilder cb = new SqlCommandBuilder(da);
-                //da.Update(dt);
-
-                //da.Dispose();
-                //da = null;
                 General.SalveazaDate(dt, "tblFisiere");
-
             }
             catch (Exception ex)
             {
@@ -1065,36 +823,6 @@ namespace WizOne.Module
                 string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority;
                 var virtualDir = VirtualPathUtility.ToAbsolute("~/");
 
-                ////string ert = hostUrl + Environment.NewLine;
-
-                ////ert += virtualDir + Environment.NewLine;
-
-                ////if (virtualDir != "" && virtualDir.Substring(virtualDir.Length - 1, 1) == "/")
-                ////    virtualDir = virtualDir.Substring(0, virtualDir.Length - 1);
-                ////ert += virtualDir + Environment.NewLine;
-
-                ////ert += corpAtt.IndexOf("../UploadFiles/Images") + Environment.NewLine;
-                ////ert += virtualDir + "../UploadFiles/Images" + Environment.NewLine;
-                ////ert += hostUrl + virtualDir + "../UploadFiles/Images" + Environment.NewLine;
-                ////ert += corpAtt + Environment.NewLine;
-
-
-
-                //if (corpAtt.IndexOf("../UploadFiles/Images") >= 0)
-                //    corpAtt = corpAtt.Replace("../UploadFiles/Images", hostUrl + virtualDir + "/UploadFiles/Images");
-                //else
-                //{
-                //    if (corpAtt.IndexOf("/UploadFiles/Images") >= 0)
-                //        corpAtt = corpAtt.Replace("/UploadFiles/Images", hostUrl + virtualDir + "/UploadFiles/Images");
-                //    else
-                //    {
-                //        if (corpAtt.IndexOf("UploadFiles/Images") >= 0)
-                //            corpAtt = corpAtt.Replace("UploadFiles/Images", hostUrl + virtualDir + "/UploadFiles/Images");
-                //    }
-
-                //}
-
-
                 int poz = corpAtt.IndexOf("UploadFiles/Images");
                 if (poz >= 0)
                 {
@@ -1105,10 +833,6 @@ namespace WizOne.Module
                         corpAtt = corpAtt.Replace(txtReplace, "\"" + hostUrl + virtualDir + "UploadFiles/Images");
                     }
                 }
-
-
-
-
 
                 string txt = @"<!DOCTYPE html>
                                 <html>

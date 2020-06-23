@@ -169,7 +169,7 @@ namespace WizOne.Personal
                             case "F10003":
                                 row[x] = Session["Marca"];
                                 break;
-                            case "IDAUTO":
+                            case "IDAUTO":   
                                 if (Constante.tipBD == 1)
                                     row[x] = Convert.ToInt32(General.Nz(ds.Tables["F100Studii"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                                 else
@@ -408,7 +408,7 @@ namespace WizOne.Personal
                 ASPxComboBox cmbTipInv = grDateStudii.FindEditFormTemplateControl("cmbTipInv") as ASPxComboBox;
                 if (cmbTipInv != null)
                 {
-                    DataTable dtTipInv = General.IncarcaDT("Select * FROM \"tblTipInvatamant\"", null);
+                    DataTable dtTipInv = General.IncarcaDT("Select * FROM \"tblTipInvatamant\" ORDER BY \"Denumire\"", null);
                     cmbTipInv.DataSource = dtTipInv;
                     cmbTipInv.DataBindItems();
                 }
@@ -416,7 +416,7 @@ namespace WizOne.Personal
                 ASPxComboBox cmbNivStudii = grDateStudii.FindEditFormTemplateControl("cmbNivStudii") as ASPxComboBox;
                 if (cmbNivStudii != null)
                 {
-                    DataTable dtNiv = General.IncarcaDT("Select * FROM F712", null);
+                    DataTable dtNiv = General.IncarcaDT("Select * FROM F712 ORDER BY F71204", null);
                     cmbNivStudii.DataSource = dtNiv;
                     cmbNivStudii.DataBindItems();
                 }
@@ -424,7 +424,7 @@ namespace WizOne.Personal
                 ASPxComboBox cmbTipInst = grDateStudii.FindEditFormTemplateControl("cmbTipInst") as ASPxComboBox;
                 if (cmbTipInst != null)
                 {
-                    DataTable dtTipInst = General.IncarcaDT("Select * FROM \"tblTipInstitutie\"", null);
+                    DataTable dtTipInst = General.IncarcaDT("Select * FROM \"tblTipInstitutie\" ORDER BY \"Denumire\"", null);
                     cmbTipInst.DataSource = dtTipInst;
                     cmbTipInst.DataBindItems();
                 }
@@ -432,7 +432,7 @@ namespace WizOne.Personal
                 ASPxComboBox cmbProfil = grDateStudii.FindEditFormTemplateControl("cmbProfil") as ASPxComboBox;
                 if (cmbProfil != null)
                 {
-                    DataTable dtProfil = General.IncarcaDT("Select * FROM \"tblProfilStudii\"", null);
+                    DataTable dtProfil = General.IncarcaDT("Select * FROM \"tblProfilStudii\" ORDER BY \"Denumire\"", null);
                     cmbProfil.DataSource = dtProfil;
                     cmbProfil.DataBindItems();
                 }
@@ -440,7 +440,7 @@ namespace WizOne.Personal
                 ASPxComboBox cmbDomeniu = grDateStudii.FindEditFormTemplateControl("cmbDomeniu") as ASPxComboBox;
                 if (cmbDomeniu != null)
                 {
-                    DataTable dtDom = General.IncarcaDT("Select * FROM \"tblDomeniuStudii\"", null);
+                    DataTable dtDom = General.IncarcaDT("Select * FROM \"tblDomeniuStudii\" ORDER BY \"Denumire\"", null);
                     cmbDomeniu.DataSource = dtDom;
                     cmbDomeniu.DataBindItems();
                 }
@@ -451,7 +451,7 @@ namespace WizOne.Personal
                     DataTable dtLoc = General.IncarcaDT("select a.siruta, a.denloc as \"Nivel3\", b.denloc as \"Nivel2\", c.denloc as \"Nivel1\" from localitati a "
                                                 + "left  join Localitati b on a.sirsup = b.siruta "
                                                 + "left join Localitati c on b.SIRSUP = c.SIRUTA "
-                                                + "where a.niv = 3", null);
+                                                + "where a.niv = 3 ORDER BY \"Nivel1\", \"Nivel2\", \"Nivel3\"", null);
                     cmbLocalitate.DataSource = dtLoc;
                     cmbLocalitate.DataBindItems();
                 }

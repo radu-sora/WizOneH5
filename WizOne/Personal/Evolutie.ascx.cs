@@ -68,9 +68,9 @@ namespace WizOne.Personal
             grDateEvolutie.KeyFieldName = "IdAuto";
             grDateEvolutie.DataSource = dt;
 
-            string sql = @"SELECT * FROM F006";
+            string sql = @"SELECT * FROM F006 ORDER BY F00608";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F006", "F00607");
+                sql = General.SelectOracle("F006", "F00607") + " ORDER BY F00608";
             DataTable dtDep = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colDep = (grDateEvolutie.Columns["IdDepartament"] as GridViewDataComboBoxColumn);
             colDep.PropertiesComboBox.DataSource = dtDep;

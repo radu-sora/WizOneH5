@@ -12,6 +12,8 @@ using System.Web.UI.WebControls;
 using WizOne.Module;
 using System.Globalization;
 using System.Web.Hosting;
+using DevExpress.Skins;
+using DevExpress.LookAndFeel;
 
 namespace WizOne.Tactil
 {
@@ -83,29 +85,29 @@ namespace WizOne.Tactil
                             //lblZile.InnerText = "Nr. ore";
                             lblNrOre.Visible = true;
                             tdNrOre.Visible = true;
-                            txtNrOre.Visible = true;
+                            txtNrOre.ClientVisible = true;
                             txtNrOre.MinValue = 1;
                             txtNrOre.MaxValue = 8;
                             tdNrOre.Align = "left";    
 
-                            txtNrZile.Visible = false;
+                            txtNrZile.ClientVisible = false;
                             lblZile.Visible = false;
                             tdNrZile.Visible = false;
 
                             lblDataSf.Visible = false;
-                            txtDataSf.Visible = false;
+                            txtDataSf.ClientVisible = false;
 
                             //tdNrZile.Align = "left";
                             tdDataSf.Visible = false;
                             tdNrOre.Width = "550";
                             if (Session["CereriTactil"].ToString() == "BiletVoie")
                             {
-                                rbMotiv1.Visible = true;
-                                rbMotiv2.Visible = true;
+                                rbMotiv1.ClientVisible = true;
+                                rbMotiv2.ClientVisible = true;
                             }
 
                             lblZileRamase.Visible = false;
-                            txtNrZileRamase.Visible = false;
+                            txtNrZileRamase.ClientVisible = false;
                             tdNrZileRamase.Visible = false;
                             break;
                         case "PlanificareCO":
@@ -232,7 +234,7 @@ namespace WizOne.Tactil
                             {
                                 lblZileRamase.Visible = false;
                                 //tdNrZileRamase.Visible = false;
-                                txtNrZileRamase.Visible = false;
+                                txtNrZileRamase.ClientVisible = false;
                             }
                         }
 
@@ -276,7 +278,7 @@ namespace WizOne.Tactil
 
                 }
 
-                txtNrZile.Visible = true;
+                txtNrZile.ClientVisible = true;
 
             }
             catch (Exception ex)
@@ -528,7 +530,7 @@ namespace WizOne.Tactil
                             {
                                 lblZileRamase.Visible = false;
                                 //tdNrZileRamase.Visible = false;
-                                txtNrZileRamase.Visible = false;
+                                txtNrZileRamase.ClientVisible = false;
                             }
                             //if (dtRow.ElementAt(0)["AdunaZileLibere"] != null && dtRow.ElementAt(0)["AdunaZileLibere"].ToString() == "1")                            
                             //    lblZile.InnerText = "Nr. zile calendaristice";                            
@@ -886,7 +888,7 @@ namespace WizOne.Tactil
                 if (txtDataSf.Date < txtDataInc.Date && (Session["CereriTactil"].ToString() == "BiletVoie" || Session["CereriTactil"].ToString() == "AbsenteOra"))
                     txtDataSf.Date = txtDataInc.Date;
 
-                if (txtDataSf.Visible == false)
+                if (txtDataSf.ClientVisible == false)
                     txtDataSf.Date = txtDataInc.Date;
 
                 //daca abs este de tip ore dtinc si datasf trebuie sa fie aceeasi
@@ -1446,18 +1448,18 @@ namespace WizOne.Tactil
                                 tdNrOreInMinute.Visible = true;
                                 //txtNrOreInMinute.Visible = true;
                                 //txtNrOreInMinute.ClientEnabled = false;
-                                txtNrOreTime.Visible = true;
+                                txtNrOreTime.ClientVisible = true;
                                 txtNrOreTime.ClientEnabled = false;
                                 tdNrOre.Visible = false;
-                                txtNrOre.Visible = false;
+                                txtNrOre.ClientVisible = false;
                                 lblOraInc.Visible = true;
                                 lblOraSf.Visible = true;
                                 tdOraInc.Visible = true;
-                                cmbOraInc.Visible = true;
+                                cmbOraInc.ClientVisible = true;
                                 cmbOraInc.DataSource = lst;
                                 cmbOraInc.DataBind();
                                 tdOraSf.Visible = true;
-                                cmbOraSf.Visible = true;
+                                cmbOraSf.ClientVisible = true;
                                 cmbOraSf.DataSource = lst;
                                 cmbOraSf.DataBind();
                                 tdNrOre.Width = "300";
@@ -1488,7 +1490,7 @@ namespace WizOne.Tactil
                     {
                         lblZileRamase.Visible = false;
                         //tdNrZileRamase.Visible = false;
-                        txtNrZileRamase.Visible = false;
+                        txtNrZileRamase.ClientVisible = false;
                     }
                     //if (dtRow.ElementAt(0)["AdunaZileLibere"] != null && dtRow.ElementAt(0)["AdunaZileLibere"].ToString() == "1")                            
                     //    lblZile.InnerText = "Nr. zile calendaristice";                            
@@ -1655,14 +1657,14 @@ namespace WizOne.Tactil
                     //lbl.ID = "lblDinamic" + i;
                     lbl.Text = dr["Denumire"].ToString();
                     lbl.Style.Add("margin", "10px 0px !important");
-                    lbl.Font.Size = 16;                    
-                    lbl.Width = Unit.Pixel(250);
+                    lbl.Font.Size = 16;       
                     ctlDiv.Controls.Add(lbl);
 
                     string ctlId = "ctlDinamic" + i;
                     switch (General.Nz(dr["TipCamp"], "").ToString())
                     {
                         case "0":                   //text
+                            lbl.Width = Unit.Pixel(250);
                             ASPxTextBox txt = new ASPxTextBox();
                             txt.ID = ctlId;
                             txt.ClientIDMode = ClientIDMode.Static;
@@ -1691,6 +1693,18 @@ namespace WizOne.Tactil
                             chk.AllowGrayed = false;
                             chk.Width = Unit.Pixel(200);
                             chk.Height = Unit.Pixel(75);
+                            chk.CheckedImage.Url = "../Fisiere/Imagini/Checked.png";                        
+                            chk.CheckedImage.Height = Unit.Pixel(50);
+                            chk.CheckedImage.Width = Unit.Pixel(50);
+                            chk.UncheckedImage.Url = "../Fisiere/Imagini/Unchecked.png";
+                            chk.UncheckedImage.Height = Unit.Pixel(50);
+                            chk.UncheckedImage.Width = Unit.Pixel(50);
+                            //chk.GrayedImage.Height = Unit.Pixel(50);
+                            //chk.GrayedImage.Width = Unit.Pixel(50);                            
+                            //SkinElement element = SkinManager.GetSkinElement(SkinProductId.Editors, DevExpress.LookAndFeel.UserLookAndFeel.Default, EditorsSkins.SkinCheckBox);
+                            //element.Size.MinSize = new System.Drawing.Size(20, 20);
+                            ////element.Image.Stretch = SkinImageStretch.Stretch;
+                            //LookAndFeelHelper.ForceDefaultLookAndFeelChanged();
                             chk.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
                             if (General.Nz(dr["Sursa"], "").ToString() != "")
                             {

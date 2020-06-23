@@ -39,8 +39,8 @@ namespace WizOne.Absente
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 GridViewDataComboBoxColumn colAn = (grDate.Columns["An"] as GridViewDataComboBoxColumn);
-                colAn.PropertiesComboBox.DataSource = Dami.ListaAni(2000, 2020);
-                cmbAn.DataSource = Dami.ListaAni(2000, 2020);
+                colAn.PropertiesComboBox.DataSource = Dami.ListaAni(2000, 2030);
+                cmbAn.DataSource = Dami.ListaAni(2000, 2030);
                 cmbAn.DataBind();
                 
 
@@ -392,11 +392,11 @@ namespace WizOne.Absente
                 strSql = "BEGIN " + strSql + " END;";
 
                 //Radu 21.04.2020
-                //General.ExecutaNonQuery(strSql, null);
-                if (Constante.tipBD == 1)
-                    General.ExecutaNonQuery("EXEC CalculZLPProc @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1", null);
-                else
-                    General.ExecutaNonQuery("exec \"CalculZLPProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1);", null);
+                General.ExecutaNonQuery(strSql, null);
+                //if (Constante.tipBD == 1)
+                //    General.ExecutaNonQuery("EXEC CalculZLPProc @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1", null);
+                //else
+                //    General.ExecutaNonQuery("exec \"CalculZLPProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1);", null);
             }
             catch (Exception ex)
             {

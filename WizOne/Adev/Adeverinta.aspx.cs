@@ -1507,6 +1507,7 @@ namespace WizOne.Adev
                     Response.ContentType = "application/zip";
                     Response.AddHeader("Content-Disposition", "attachment; filename=" + numeArhiva + ".zip");
                     Response.TransmitFile(archive);
+                    System.IO.File.Delete(archive);
                 }
 
                 return null;

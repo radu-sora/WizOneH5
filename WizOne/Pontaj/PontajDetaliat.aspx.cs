@@ -77,7 +77,11 @@ namespace WizOne.Pontaj
 
                 if (Dami.ValoareParam("PontajulAreCC") == "1" && (tip == 1 || tip == 10))
                 {
-                    grDate.Columns[0].Visible = true;
+                    //Florin 2020.05.25
+                    GridViewCommandColumn grCmd = grDate.Columns[0] as GridViewCommandColumn;
+                    grCmd.Visible = true;
+                    grCmd.CustomButtons[0].Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                    
                     tblCC.Attributes["class"] = "visible";
 
                     if (Dami.ValoareParam("PontajCCcuAprobare", "0") == "1")
@@ -167,7 +171,7 @@ namespace WizOne.Pontaj
             try
             {
                 Dami.AccesApp();
-                
+
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
@@ -254,7 +258,7 @@ namespace WizOne.Pontaj
                                 try
                                 {
                                     DateTime dt = new DateTime(Convert.ToInt32(lst["An"]), Convert.ToInt32(lst["Luna"]), Convert.ToInt32(lst["Ziua"]));
-                                    if (General.Nz(Request.QueryString["Ziua"], "").ToString() != "") dt = new DateTime(Convert.ToInt32(lst["An"]), Convert.ToInt32(lst["Luna"]), Convert.ToInt32(General.Nz(Request.QueryString["Ziua"], "").ToString().Replace("Ziua","")));
+                                    if (General.Nz(Request.QueryString["Ziua"], "").ToString() != "") dt = new DateTime(Convert.ToInt32(lst["An"]), Convert.ToInt32(lst["Luna"]), Convert.ToInt32(General.Nz(Request.QueryString["Ziua"], "").ToString().Replace("Ziua", "")));
                                     txtAnLuna.Value = dt;
                                 }
                                 catch (Exception)
@@ -312,12 +316,12 @@ namespace WizOne.Pontaj
                 }
                 else
                 {
-                    if (General.Nz(Session["SurseCombo"],"").ToString() != "")
+                    if (General.Nz(Session["SurseCombo"], "").ToString() != "")
                     {
                         DataSet ds = Session["SurseCombo"] as DataSet;
                         if (ds.Tables.Count > 0)
                         {
-                            for(int i =0; i < ds.Tables.Count; i++)
+                            for (int i = 0; i < ds.Tables.Count; i++)
                             {
                                 GridViewDataComboBoxColumn colAbs = (grDate.Columns[ds.Tables[i].TableName] as GridViewDataComboBoxColumn);
                                 if (colAbs != null) colAbs.PropertiesComboBox.DataSource = ds.Tables[i];
@@ -449,7 +453,6 @@ namespace WizOne.Pontaj
                         }
                     }
 
-
                     if (IsPostBack && tip == 1)
                         IncarcaCC();
                 }
@@ -481,6 +484,31 @@ namespace WizOne.Pontaj
         {
             try
             {
+                //Florinn 2020.05.20
+                DataRow drCnt = General.IncarcaDR($@"
+                    SELECT
+                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999) AND F10022 <= {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)}  AND  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)} <= F10023) AS ""NrAng"",
+                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)}) AS ""NrPtj"" {General.FromDual()}");
+                if (drCnt != null)
+                {
+                    decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
+                    decimal nrPtj = Convert.ToDecimal(General.Nz(drCnt["NrPtj"], 0));
+
+                    if (tip == 1 || tip == 10)
+                        nrAng = DateTime.DaysInMonth(txtAnLuna.Date.Year, txtAnLuna.Date.Month);
+                    if (nrAng != 0)
+                    {
+                        decimal rez = ((nrAng - nrPtj) / nrAng) * 100;
+                        if (rez > 15)
+                        {
+                            grDate.DataSource = null;
+                            grDate.DataBind();
+                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pontajul nu este initializat") + Environment.NewLine + Dami.TraduCuvant("Va rugam ca mai intai sa efectuati initializarea");
+                            return;
+                        }
+                    }
+                }
+
                 IncarcaGrid();
                 grCC.DataSource = null;
                 grCC.DataBind();
@@ -607,6 +635,18 @@ namespace WizOne.Pontaj
                     //else
                     //    grCC.Enabled = true;
                 }
+
+                //Florin 2020.05.25
+                GridViewCommandColumn grCmd = grDate.Columns[0] as GridViewCommandColumn;
+                if ((tip == 2 || tip == 20) && dt.Rows.Count == 1)
+                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                else
+                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.Invisible;
+
+                if (grCmd.CustomButtons[0].Visibility != GridViewCustomButtonVisibility.Invisible || grCmd.CustomButtons[1].Visibility != GridViewCustomButtonVisibility.Invisible)
+                    grCmd.Visible = true;
+                else
+                    grCmd.Visible = false;
             }
             catch (Exception ex)
             {
@@ -1140,6 +1180,7 @@ namespace WizOne.Pontaj
                     dtSf = General.ToDataUniv(txtZiua.Date);
                 }
 
+                //Florin 25.05.2020 - am adaugat conditia DataInceput si DataSfarsit la F100Supervizori
                 string strSql = $@"SELECT {cmp} AS ""IdAuto"", X.* FROM (
                                 SELECT B.F10003 AS F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} a.F10009 AS ""NumeComplet"", A.F10008 AS ""Nume"", A.F10009 AS ""Prenume"", 
                                 A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"",A.F10011 AS ""NrContract"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", 
@@ -1163,7 +1204,7 @@ namespace WizOne.Pontaj
                                 FROM ""relGrupAngajat"" B
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                 INNER JOIN F100 A ON b.F10003 = a.F10003
-                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")
+                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"") AND CAST(J.""DataInceput"" AS Date) <= {dtSf} AND {dtInc} <= CAST(J.""DataSfarsit"" AS Date)
                                 LEFT JOIN F718 D ON A.F10071 = D.F71802
                                 LEFT JOIN F002 E ON A.F10002 = E.F00202
                                 LEFT JOIN F003 F ON A.F10004 = F.F00304
@@ -1175,7 +1216,12 @@ namespace WizOne.Pontaj
                                 ORDER BY X.""NumeComplet"" ";
 
                 DataTable dt = General.IncarcaDT(strSql, null);
-                
+
+                int valAng = Convert.ToInt32(cmbAng.Value ?? -99);
+                if (dt.Select("F10003=" + valAng).Count() == 0) valAng = -99;
+                int valAngZi = Convert.ToInt32(cmbAngZi.Value ?? -99);
+                if (dt.Select("F10003=" + valAngZi).Count() == 0) valAngZi = -99;
+
                 cmbAng.DataSource = null;
                 cmbAng.DataSource = dt;
                 cmbAng.DataBind();
@@ -1186,7 +1232,19 @@ namespace WizOne.Pontaj
 
                 Session["Pontaj_Angajati"] = dt;
 
-                if (tip == 1 && txtAnLuna.Value != null && dt != null && dt.Rows.Count > 0) cmbAng.SelectedIndex = 0;
+                //if (tip == 1 && txtAnLuna.Value != null && dt != null && dt.Rows.Count > 0) cmbAng.SelectedIndex = 0;
+                if (tip == 1 || tip == 10)
+                {
+                    if (valAng == -99)
+                        cmbAng.SelectedIndex = 0;
+                    else
+                        cmbAng.Value = valAng;
+                }
+
+                if ((tip == 2 || tip == 20) && valAngZi != -99)
+                    cmbAngZi.Value = valAngZi;
+                else
+                    cmbAngZi.Value = null;
             }
             catch (Exception ex)
             {

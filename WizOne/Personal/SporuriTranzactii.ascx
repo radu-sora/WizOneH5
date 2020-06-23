@@ -23,6 +23,7 @@
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>   
             <dx:GridViewDataTextColumn FieldName="Cod" Name="Cod" Caption="Cod"  Width="75px"  ReadOnly="true"/>
             <dx:GridViewDataComboBoxColumn FieldName="Spor" Name="Spor" Caption="Spor" Width="150px" ReadOnly="false" >
+                <Settings SortMode="DisplayText" />
                 <PropertiesComboBox TextField="F02105" ValueField="F02104" ValueType="System.Int32" DropDownStyle="DropDown" />                
             </dx:GridViewDataComboBoxColumn>                 
              <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  Width="100px" Visible="false"/>

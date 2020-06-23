@@ -398,7 +398,7 @@
         <tr>
             <td colspan="2">
 
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize">
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCustomUnboundColumnData="grDate_CustomUnboundColumnData">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowFilterRow="True" ShowGroupPanel="True" HorizontalScrollBarMode="Auto" ShowFilterRowMenu="true" VerticalScrollBarMode="Visible" />
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
@@ -458,7 +458,8 @@
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataTextColumn FieldName="NrZile" Name="NrZile" Caption="Nr. zile" ReadOnly="true" Width="70px" VisibleIndex="9" />
-                        <dx:GridViewDataTextColumn FieldName="NrOre" Name="NrOre" Caption="Nr. ore" ReadOnly="true" Width="70px" VisibleIndex="10" />
+                        <dx:GridViewDataTextColumn FieldName="NumarOre" Name="NumarOre" Caption="Nr. ore" ReadOnly="true"  Width="100px" UnboundType="String" VisibleIndex="10"/>
+                        <dx:GridViewDataTextColumn FieldName="NrOre" Name="NrOre" ReadOnly="true" Width="70px" Visible="false"  />
                         <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii" Width="250px" VisibleIndex="11" >
                             <EditFormSettings Visible="False"/>
                         </dx:GridViewDataTextColumn>

@@ -161,7 +161,7 @@ namespace WizOne.Absente
                     }
 
                     //Incarcam Absentele
-                    DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value,-99).ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
+                    DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value,-99).ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date),-99, Convert.ToInt32(cmbRol.Value ?? -99)), null);
                     cmbAbs.DataSource = dtAbs;
                     cmbAbs.DataBind();
                     Session["Cereri_Absente_Absente"] = dtAbs;
@@ -326,6 +326,7 @@ namespace WizOne.Absente
                     inn2 = $@" OR c.""Super1"" = {General.VarSession("UserId")}  OR c.""Super2"" = {General.VarSession("UserId")}  OR c.""Super3"" = {General.VarSession("UserId")}  OR c.""Super4"" = {General.VarSession("UserId")}  OR c.""Super5"" = {General.VarSession("UserId")}  OR c.""Super6"" = {General.VarSession("UserId")}  OR c.""Super7"" = {General.VarSession("UserId")}  OR c.""Super8"" = {General.VarSession("UserId")}  OR c.""Super9"" = {General.VarSession("UserId")}  OR c.""Super10"" = {General.VarSession("UserId")} OR c.""Super11"" = {General.VarSession("UserId")} OR c.""Super12"" = {General.VarSession("UserId")}  OR c.""Super13"" = {General.VarSession("UserId")}  OR c.""Super14"" = {General.VarSession("UserId")}  OR c.""Super15"" = {General.VarSession("UserId")}  OR c.""Super16"" = {General.VarSession("UserId")}  OR c.""Super17"" = {General.VarSession("UserId")}  OR c.""Super18"" = {General.VarSession("UserId")}  OR c.""Super19"" = {General.VarSession("UserId")}  OR c.""Super20"" = {General.VarSession("UserId")} ";
                 }
 
+                //Florin 2020-05-27 - am adaugat filtrul la F100Supervizori
                 strSql = $@"SELECT B.""Rol"", B.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", A.F10017 AS CNP, A.F10022 AS ""DataAngajarii"", A.F10023 AS ""DataPlecarii"",
                         A.F10011 AS ""NrContract"", CAST(A.F10043 AS int) AS ""Norma"",A.F100901, CASE WHEN (A.F10025 = 0 OR A.F10025=999) THEN 1 ELSE 0 END AS ""AngajatActiv"",
                         X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"", B.""RolDenumire""  {cmp}
@@ -336,7 +337,7 @@ namespace WizOne.Absente
                         UNION
                         SELECT A.F10003, B.""IdSuper"" AS ""Rol"", CASE WHEN D.""Alias"" IS NOT NULL AND D.""Alias"" <> '' THEN D.""Alias"" ELSE D.""Denumire"" END AS ""RolDenumire""
                         FROM F100 A
-                        INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
+                        INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003 AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit""
                         INNER JOIN ""Ptj_Circuit"" C ON B.""IdSuper"" = -1 * c.""UserIntrod"" {inn1}
                         LEFT JOIN ""tblSupervizori"" D ON D.""Id"" = B.""IdSuper""
                         WHERE B.""IdUser""= {General.VarSession("UserId")}
@@ -435,7 +436,7 @@ namespace WizOne.Absente
                 {
                     case "1":               //cmbAng
                         {
-                            dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
+                            dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date), -99, Convert.ToInt32(cmbRol.Value ?? -99)), null);
                             cmbAbs.DataSource = dtAbs;
                             cmbAbs.DataBind();
                             cmbAbs.SelectedIndex = -1;
@@ -448,7 +449,7 @@ namespace WizOne.Absente
                         break;
                     case "3":               //DataInceput
                         {
-                            dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
+                            dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date), -99, Convert.ToInt32(cmbRol.Value ?? -99)), null);
                             cmbAbs.DataSource = dtAbs;
                             cmbAbs.DataBind();
                             bool gasit = false;
@@ -511,7 +512,7 @@ namespace WizOne.Absente
 
 
                         //acelasi cod ca la case "1"
-                        dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
+                        dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date), -99, Convert.ToInt32(cmbRol.Value ?? -99)), null);
                         cmbAbs.DataSource = dtAbs;
                         cmbAbs.DataBind();
                         cmbAbs.SelectedIndex = -1;
@@ -909,7 +910,7 @@ namespace WizOne.Absente
                 }
 
                 //Radu 13.03.2020 - verificare ca idAbsenta sa fie valabil si la DataSfarsit
-                DataTable dtAbsVerif = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataSf.Value ?? DateTime.Now.Date)), null);
+                DataTable dtAbsVerif = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataSf.Value ?? DateTime.Now.Date), -99, Convert.ToInt32(cmbRol.Value ?? -99)), null);
                 bool eroare = true;
                 if (dtAbsVerif != null && dtAbsVerif.Rows.Count > 0)
                     for (int k = 0; k < dtAbsVerif.Rows.Count; k++)
@@ -994,14 +995,31 @@ namespace WizOne.Absente
 
                 if (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 1)) == 0)
                 {
-                    //daca este absenta de tip ora atunci se verifica doar campul NrMax; campul NrMaxAn nu are sens
-                    if (Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) < Convert.ToInt32(txtNrOre.Value))
+                    //daca este absenta de tip ora 
+
+                    //verificam NrMax pe cerere
+                    if (Convert.ToDecimal(General.Nz(drAbs["NrMax"], 999)) < Convert.ToDecimal(txtNrOre.Value))
                     {
                         //strErr += " " + Dami.TraduCuvant("Aveti voie sa cereti un numar maxim de " + Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) + " ore");
                         if (tip == 1)
                             MessageBox.Show(Dami.TraduCuvant("Aveti voie sa cereti un numar maxim de") + " " + Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) + " " + Dami.TraduCuvant("ore"), MessageBox.icoWarning);
                         else
                             pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Aveti voie sa cereti un numar maxim de" + " " + Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) + " " + Dami.TraduCuvant("ore"));
+
+                        return;
+                    }
+
+                    //Florin 2020.05.27
+                    //verificam nr max pe an
+                    string sqlAn = $@"SELECT COALESCE(SUM(COALESCE(""NrOre"",0)),0) AS ""OreAn"" FROM ""Ptj_Cereri"" WHERE F10003=@1 AND {General.FunctiiData("\"DataInceput\"", "A")}=@2 AND ""IdAbsenta"" = @3 AND ""IdStare"" IN (1,2,3)";
+                    DataRow drAn = General.IncarcaDR(sqlAn, new object[] { Convert.ToInt32(cmbAng.Value), txtDataInc.Date.Year, Convert.ToInt32(cmbAbs.Value) });
+
+                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && (Convert.ToDecimal(General.Nz(drAn[0], 0)) + Convert.ToDecimal(txtNrOre.Value)) > Convert.ToDecimal(drAbs["NrMaxAn"]))
+                    {
+                        if (tip == 1)
+                            MessageBox.Show(Dami.TraduCuvant("Nr total de ore depaseste nr maxim de ore cuvenite in an"), MessageBox.icoWarning);
+                        else
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nr total de ore depaseste nr maxim de ore cuvenite in an");
 
                         return;
                     }
@@ -1027,7 +1045,7 @@ namespace WizOne.Absente
                     string sqlAn = $@"SELECT COALESCE(SUM(COALESCE(""NrZile"",0)),0) AS ""ZileAn"" FROM ""Ptj_Cereri"" WHERE F10003=@1 AND {General.FunctiiData("\"DataInceput\"", "A")}=@2 AND ""IdAbsenta"" = @3 AND ""IdStare"" IN (1,2,3)";
                     DataRow drAn = General.IncarcaDR(sqlAn, new object[] { Convert.ToInt32(cmbAng.Value), txtDataInc.Date.Year, Convert.ToInt32(cmbAbs.Value) });
 
-                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && Convert.ToInt32(General.Nz(drAn[0], 0)) >= Convert.ToInt32(drAbs["NrMaxAn"]))
+                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && (Convert.ToInt32(General.Nz(drAn[0], 0)) + Convert.ToInt32(txtNrZile.Value)) > Convert.ToInt32(drAbs["NrMaxAn"]))
                     {
                         if (tip == 1)
                             MessageBox.Show(Dami.TraduCuvant("Nr de zile depaseste nr maxim de zile cuvenite in an"), MessageBox.icoWarning);

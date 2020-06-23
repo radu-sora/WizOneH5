@@ -76,9 +76,11 @@
                             <PropertiesCheckEdit ValueChecked="False" ValueUnchecked="True" />
                         </dx:GridViewDataCheckColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="F11004" Name="F11004" Caption="Relatie"  Width="80px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="F71104" ValueField="F71102" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="F11014" Name="F11014" Caption="Grad invaliditate"  Width="100px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="F71504" ValueField="F71502" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataDateColumn FieldName="F11015" Name="F11015" Caption="Invaliditate pana la" Width="90px" HeaderStyle-Wrap="True" >

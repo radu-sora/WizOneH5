@@ -190,6 +190,19 @@ namespace WizOne.Reports
                                 if (lblSemnatura.Text != "") lblSemnatura.Text += "\n\r";
                                 lblSemnatura.Text += dtPrint.Rows[k]["Camp"].ToString();
                                 lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));
+                                //Florin 2020.06.11
+                                switch (Convert.ToInt32(General.Nz(dtPrint.Rows[k]["Aliniere"], 1)))
+                                {
+                                    case 1:
+                                        lblSemnatura.TextAlignment = TextAlignment.MiddleLeft;
+                                        break;
+                                    case 2:
+                                        lblSemnatura.TextAlignment = TextAlignment.MiddleCenter;
+                                        break;
+                                    case 3:
+                                        lblSemnatura.TextAlignment = TextAlignment.MiddleRight;
+                                        break;
+                                }
                                 break;
                             case 4:                     //antet
                                 string txt = "";

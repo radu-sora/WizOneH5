@@ -90,16 +90,16 @@ namespace WizOne.Personal
                 grDateAdresa.KeyFieldName = "IdAuto";
                 grDateAdresa.DataSource = dt;
 
-                string sql = @"SELECT * FROM ""tblTipAdresa"" ";
+                string sql = @"SELECT * FROM ""tblTipAdresa"" ORDER BY ""Denumire""";
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("tblTipAdresa", "Id");
+                    sql = General.SelectOracle("tblTipAdresa", "Id") + " ORDER BY  \"Denumire\"";
                 DataTable dtTipAdr = General.IncarcaDT(sql, null);
                 GridViewDataComboBoxColumn colTipAdr = (grDateAdresa.Columns["IdTipAdresa"] as GridViewDataComboBoxColumn);
                 colTipAdr.PropertiesComboBox.DataSource = dtTipAdr;
 
-                sql = @"SELECT * FROM ""tblTipStrada"" ";
+                sql = @"SELECT * FROM ""tblTipStrada""  ORDER BY ""Denumire"" ";
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("tblTipStrada", "Id");
+                    sql = General.SelectOracle("tblTipStrada", "Id") + @" ORDER BY ""Denumire""";
                 DataTable dtTipArt = General.IncarcaDT(sql, null);
                 GridViewDataComboBoxColumn colTipArt = (grDateAdresa.Columns["IdTipStrada"] as GridViewDataComboBoxColumn);
                 colTipArt.PropertiesComboBox.DataSource = dtTipArt;

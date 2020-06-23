@@ -24,6 +24,7 @@
                         <dx:GridViewDataTextColumn FieldName="Marca" Name="Marca" Caption="Angajat"  Width="75px" Visible="false"/>
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" VisibleIndex="0"/>
                         <dx:GridViewDataComboBoxColumn FieldName="IdTipAutorizatie" Name="IdTipAutorizatie" Caption="Tip autorizatie" Width="100px" VisibleIndex="4" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="TipAutorizatie" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="NrAutorizatie" Name="NrAutorizatie" Caption="Nr Autorizatie"  Width="250px" VisibleIndex="5" />

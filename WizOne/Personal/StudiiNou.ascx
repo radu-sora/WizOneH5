@@ -82,18 +82,22 @@
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
 
                         <dx:GridViewDataComboBoxColumn FieldName="IdTipInvatamant" Name="IdTipInvatamant" Caption="Tip invatamant"  Width="125px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdNivel" Name="IdNivel" Caption="Nivel studii"  Width="125px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="F71204" ValueField="F71202" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="NivelISCED" Name="NivelISCED" Caption="Nivel ISCED" ReadOnly="true"   Width="75px" />
                         <dx:GridViewDataComboBoxColumn FieldName="IdTipInstitutie" Name="IdTipInstitutie" Caption="Tip institutie de invatamant"  Width="175px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="NumeInstitutie" Name="NumeInstitutie" Caption="Nume institutie"  Width="150px" />
                         <dx:GridViewDataTextColumn FieldName="NrClase" Name="NrClase" Caption="Numar clase"  Width="75px" />
                         <dx:GridViewDataComboBoxColumn FieldName="SirutaLocalitate" Name="SirutaLocalitate" Caption="Localitate" Width="125px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="Nivel3" ValueField="SIRUTA" ValueType="System.Int32" DropDownStyle="DropDown">
                                 <Columns>
                                     <dx:ListBoxColumn FieldName="Nivel3" Caption="Localitate/Sat/Sector" Width="130px" />
@@ -111,9 +115,11 @@
                         <dx:GridViewDataTextColumn FieldName="Perioada" Name="Perioada" Caption="Perioada" ReadOnly="true"  Width="75px" UnboundType="String" />
                         <dx:GridViewDataTextColumn FieldName="Specializare" Name="Specializare" Caption="Specializare"  Width="150px" />
                         <dx:GridViewDataComboBoxColumn FieldName="IdProfil" Name="IdProfil" Caption="Profil"  Width="75px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdDomeniu" Name="IdDomeniu" Caption="Domeniu studiat"  Width="100px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="Calificare" Name="Calificare" Caption="Calificare"  Width="150px" />                         

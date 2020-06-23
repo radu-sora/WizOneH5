@@ -56,6 +56,12 @@
     <Reference Include="Adeverinte_Word">
       <HintPath>..\Artifacts\Adeverinte_Word.dll</HintPath>
     </Reference>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\Artifacts\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="CryptoXMLHONEYWELL">
+      <HintPath>..\Artifacts\CryptoXMLHONEYWELL.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Charts.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Charts.Core.19.1.4\lib\net452\DevExpress.Charts.v19.1.Core.dll</HintPath>
     </Reference>
@@ -206,6 +212,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="ImportDateDLL">
+      <HintPath>..\Artifacts\ImportDateDLL.dll</HintPath>
+    </Reference>
     <Reference Include="itextsharp, Version=5.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Artifacts\itextsharp.dll</HintPath>
@@ -237,6 +246,9 @@
     <Reference Include="ProceseSec, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Artifacts\ProceseSec.dll</HintPath>
+    </Reference>
+    <Reference Include="Renci.SshNet">
+      <HintPath>..\Artifacts\Renci.SshNet.dll</HintPath>
     </Reference>
     <Reference Include="RevisalDLL">
       <HintPath>..\Artifacts\RevisalDLL.dll</HintPath>
@@ -321,8 +333,12 @@
     <Reference Include="WindowsBase">
       <Private>True</Private>
     </Reference>
+    <Reference Include="wizone_exchange">
+      <HintPath>..\Artifacts\wizone_exchange.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Absente\AnulareCO.aspx" />
     <Content Include="Absente\Cereri.aspx" />
     <Content Include="Absente\CereriAutomate.aspx" />
     <Content Include="Absente\IstoricExtins.aspx" />
@@ -799,6 +815,7 @@
     <Content Include="Pagini\Captcha.aspx" />
     <Content Include="Pagini\CodConfirmare.aspx" />
     <Content Include="Pagini\Delegari.aspx" />
+    <Content Include="Pagini\ExportSAP.aspx" />
     <Content Include="Pagini\Fisiere.aspx" />
     <Content Include="Pagini\ImportDate.aspx" />
     <Content Include="Pagini\ImportPontaj.aspx" />
@@ -819,6 +836,7 @@
     <Content Include="Personal\Atestate.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
     <Content Include="Personal\ListaDocumente.aspx" />
+    <Content Include="Personal\NotaLichidare.aspx" />
     <Content Include="Personal\Sporuri.ascx" />
     <Content Include="Personal\SporuriTranzactii.ascx" />
     <Content Include="Personal\StudiiNou.ascx" />
@@ -1005,6 +1023,13 @@
     <Content Include="Web_adfs.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Absente\AnulareCO.aspx.cs">
+      <DependentUpon>AnulareCO.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Absente\AnulareCO.aspx.designer.cs">
+      <DependentUpon>AnulareCO.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Absente\Cereri.aspx.cs">
       <DependentUpon>Cereri.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1578,6 +1603,13 @@
     <Compile Include="Pagini\Delegari.aspx.designer.cs">
       <DependentUpon>Delegari.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pagini\ExportSAP.aspx.cs">
+      <DependentUpon>ExportSAP.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\ExportSAP.aspx.designer.cs">
+      <DependentUpon>ExportSAP.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pagini\Fisiere.aspx.cs">
       <DependentUpon>Fisiere.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1717,6 +1749,13 @@
     </Compile>
     <Compile Include="Personal\ListaDocumente.aspx.designer.cs">
       <DependentUpon>ListaDocumente.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\NotaLichidare.aspx.cs">
+      <DependentUpon>NotaLichidare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\NotaLichidare.aspx.designer.cs">
+      <DependentUpon>NotaLichidare.aspx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Sporuri.ascx.cs">
       <DependentUpon>Sporuri.ascx</DependentUpon>

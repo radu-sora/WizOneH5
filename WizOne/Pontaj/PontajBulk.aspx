@@ -46,13 +46,13 @@
 		<tr>
 			<td colspan="2">
 				<dx:ASPxGridView ID="grCC" runat="server" ClientInstanceName="grCC" ClientIDMode="Static" OnRowDeleting="grCC_RowDeleting" Width="100%" OnCellEditorInitialize="grDate_CellEditorInitialize"
-					OnRowInserting="grCC_RowInserting" OnRowUpdating="grCC_RowUpdating" OnInitNewRow="grCC_InitNewRow" OnCustomErrorText="grDate_CustomErrorText" >
+					OnRowInserting="grCC_RowInserting" OnRowUpdating="grCC_RowUpdating" OnInitNewRow="grCC_InitNewRow" OnCustomErrorText="grDate_CustomErrorText">
 					<SettingsBehavior AllowFocusedRow="true" EnableCustomizationWindow="true" AllowSelectByRowClick="true" />
 					<Settings ShowFilterRow="True" ShowGroupPanel="True" />
 					<SettingsSearchPanel Visible="True" />
 					<ClientSideEvents ContextMenu="ctx" />
 					<SettingsEditing Mode="Inline" />
-                    <ClientSideEvents ContextMenu="ctx" />
+                    <ClientSideEvents EndCallback="function(s,e) { OnGridEndCallback(s); }" ContextMenu="ctx" />
 
 					<Columns>
 						<dx:GridViewCommandColumn ShowSelectCheckbox="false" ShowClearFilterButton="true" VisibleIndex="0" SelectAllCheckboxMode="None" Width="50px" ShowDeleteButton="true" 
@@ -107,9 +107,18 @@
 			
 			</td>
 		</tr>
-		
-		
-		
     </table>
 
+    <script>
+        function OnGridEndCallback(s) {
+            if (s.cpAlertMessage) {
+                swal({
+                    title: "",
+                    text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                delete s.cpAlertMessage;
+            }
+        }
+    </script>
 </asp:Content>

@@ -587,6 +587,29 @@ namespace WizOne.Pontaj
         {
             try
             {
+                //Florinn 2020.05.20
+                DataRow drCnt = General.IncarcaDR($@"
+                    SELECT
+                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999)) AS ""NrAng"",
+                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)}) AS ""NrPtj"" {General.FromDual()}");
+                if (drCnt != null)
+                {
+                    decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
+                    decimal nrPtj = Convert.ToDecimal(General.Nz(drCnt["NrPtj"], 0));
+
+                    if (nrAng != 0)
+                    {
+                        decimal rez = ((nrAng - nrPtj)/nrAng) * 100;
+                        if (rez > 15)
+                        {
+                            grDate.DataSource = null;
+                            grDate.DataBind();
+                            MessageBox.Show("Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea", MessageBox.icoInfo,"Initializare");
+                            return;
+                        }
+                    }
+                }
+
                 RetineFiltru("1");
                 SetColoane();
                 IncarcaGrid();
@@ -1863,7 +1886,7 @@ namespace WizOne.Pontaj
                         strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + an;
                     DataTable dtHolidays = General.IncarcaDT(strSql, null);
 
-                    DataTable dtCol = General.IncarcaDT("SELECT * FROM \"Ptj_tblPrint\" WHERE \"Activ\" = 1 ORDER BY \"Ordine\"", null);
+                    DataTable dtCol = General.IncarcaDT("SELECT * FROM \"Ptj_tblPrint\" WHERE \"Activ\" = 1 AND \"Id\" NOT IN (2, 3, 4) ORDER BY \"Ordine\"", null);
                     Dictionary<string, string> lista = new Dictionary<string, string>();
                     Dictionary<string, string> listaLung = new Dictionary<string, string>();
                     Dictionary<string, int> listaId = new Dictionary<string, int>();
@@ -1930,8 +1953,12 @@ namespace WizOne.Pontaj
                                 }
                                 else
                                 {
-                                    ws2.Cells[1, nrCol].Value = lista[dt.Columns[i].ColumnName];
-                                    ws2.Cells[1, nrCol++].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
+                                    //ws2.Cells[1, nrCol].Value = lista[dt.Columns[i].ColumnName];
+                                    //ws2.Cells[1, nrCol++].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
+                                    ws2.Cells[1, listaId[dt.Columns[i].ColumnName] - 1].Value = lista[dt.Columns[i].ColumnName];
+                                    ws2.Cells[1, listaId[dt.Columns[i].ColumnName] - 1].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
+                                    if (listaId[dt.Columns[i].ColumnName] > nrCol)
+                                        nrCol = listaId[dt.Columns[i].ColumnName];
                                 }
 
                             }
@@ -1981,9 +2008,14 @@ namespace WizOne.Pontaj
                                     }
                                     else
                                     {
+                                        //if (nrZec > 0)
+                                        //    ws2.Cells[row + 2, nrCol].NumberFormat = format;
+                                        //ws2.Cells[row + 2, nrCol++].Value = dt.Rows[row][i].ToString();
                                         if (nrZec > 0)
-                                            ws2.Cells[row + 2, nrCol].NumberFormat = format;
-                                        ws2.Cells[row + 2, nrCol++].Value = dt.Rows[row][i].ToString();
+                                            ws2.Cells[row + 2, listaId[dt.Columns[i].ColumnName] - 1].NumberFormat = format;
+                                        ws2.Cells[row + 2, listaId[dt.Columns[i].ColumnName] - 1].Value = dt.Rows[row][i].ToString();
+                                        if (listaId[dt.Columns[i].ColumnName] > nrCol)
+                                            nrCol = listaId[dt.Columns[i].ColumnName];
                                     }
                                 }
 
@@ -3078,6 +3110,7 @@ namespace WizOne.Pontaj
                 {
                     //Florin 2020.05.15 - am scos conditia WHERE COALESCE(""Vizibil"", 0) = 1
                     //Florin 2020.04.30 - am modificat X.* cu colCumulat
+                    //string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT ',X.' + ""Coloana"" FROM ""Ptj_tblFormuleCumulat"" ORDER BY COALESCE(""OrdineAfisare"", 999999) FOR XML Path('')"), "").ToString();
                     string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT ',X.' + ""Coloana"" FROM ""Ptj_tblFormuleCumulat"" GROUP BY ""Coloana"" FOR XML Path('')"), "").ToString();
 
                     strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A 
@@ -3147,8 +3180,8 @@ namespace WizOne.Pontaj
                 }
                 else
                 {
-                    //Florin 2020.05.15 - am scos conditia WHERE COALESCE(""Vizibil"", 0) = 1
                     //Florin 2020.04.30 - am modificat X.* cu colCumulat
+                    //string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT LISTAGG(',X.' || ""Coloana"") WITHIN GROUP (ORDER BY COALESCE(""OrdineAfisare"", 999999)) FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"", 0) = 1 ORDER BY COALESCE(""OrdineAfisare"", 999999)"), "").ToString();
                     string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT LISTAGG(',X.' || ""Coloana"") WITHIN GROUP (ORDER BY COALESCE(""Coloana"", '')) FROM (SELECT ""Coloana"" FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"", 0) = 1 GROUP BY ""Coloana"")"), "").ToString();
 
                     strSql = $@"with ""Ptj_Intrari_2"" as (select A.* from ""Ptj_Intrari"" A 
@@ -3355,6 +3388,25 @@ namespace WizOne.Pontaj
                     zileF += $@",COALESCE(X.""F{i}"",0) AS ""F{i}""";
                 }
 
+                //Florin 2020.05.21
+                string cmpExpIn = "FirstInPaid";
+                string cmpExpOut = "LastOutPaid";
+                string tipExp = Dami.ValoareParam("InOutInExportPontaj");
+                switch(tipExp)
+                {
+                    case "1":
+                        cmpExpIn = "FirstIn";
+                        cmpExpOut = "LastOut";
+                        break;
+                    case "2":
+                        cmpExpIn = "FirstInRap";
+                        cmpExpOut = "LastOutRap";
+                        break;
+                    case "4":
+                        cmpExpIn = "FirstInPaid";
+                        cmpExpOut = "LastOutPaid";
+                        break;
+                }
 
                 if (Constante.tipBD == 1)
                 {
@@ -3367,13 +3419,13 @@ namespace WizOne.Pontaj
                     if (chkOre.Checked)
                     {
                         pvtIn = $@"INNER JOIN (SELECT F10003 {zileAsIn} FROM 
-                                (SELECT F10003, ""FirstInPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""FirstInPaid"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
+                                (SELECT F10003, ""{cmpExpIn}"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""{cmpExpIn}"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
                                 ) pvtIn ON X.F10003=pvtIn.F10003";
 
                         pvtOut = $@"INNER JOIN (SELECT F10003 {zileAsOut} FROM 
-                                (SELECT F10003, ""LastOutPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""LastOutPaid"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
+                                (SELECT F10003, ""{cmpExpOut}"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""{cmpExpOut}"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
                                 ) pvtOut ON X.F10003=pvtOut.F10003";
                     }
                     if (chkPauza.Checked)
@@ -3428,13 +3480,13 @@ namespace WizOne.Pontaj
                     if (chkOre.Checked)
                     {
                         pvtIn = $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""FirstInPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""FirstInPaid"") FOR ""Ziua"" IN ( {zileAsIn.Substring(1)} )) pvt
+                                (SELECT F10003, ""{cmpExpIn}"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""{cmpExpIn}"") FOR ""Ziua"" IN ( {zileAsIn.Substring(1)} )) pvt
                                 ) pvtIn ON X.F10003=pvtIn.F10003";
 
                         pvtOut = $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""LastOutPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""LastOutPaid"") FOR ""Ziua"" IN ( {zileAsOut.Substring(1)} )) pvt
+                                (SELECT F10003, ""{cmpExpOut}"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""{cmpExpOut}"") FOR ""Ziua"" IN ( {zileAsOut.Substring(1)} )) pvt
                                 ) pvtOut ON X.F10003=pvtOut.F10003";
                     }
                     if (chkPauza.Checked)

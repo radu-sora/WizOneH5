@@ -19,7 +19,6 @@ namespace WizOne.Pontaj
 
         string msgError = string.Empty;
 
-
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -32,10 +31,11 @@ namespace WizOne.Pontaj
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                
+
 
                 #endregion
 
+                Session["PaginaWeb"] = "Pontaj.PontajBulk";
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 if (Session["User_Marca"] == null || Session["User_Marca"].ToString() == "-99" || Session["User_Marca"].ToString().Trim() == "")
@@ -49,8 +49,6 @@ namespace WizOne.Pontaj
                 GridViewDataComboBoxColumn colAct = (grCC.Columns["IdActivitate"] as GridViewDataComboBoxColumn);
                 colAct.PropertiesComboBox.DataSource = dtAct;
 
-
-
                 if (!IsPostBack)
                 {
                     txtDataInc.Value = DateTime.Now;
@@ -60,23 +58,9 @@ namespace WizOne.Pontaj
                 }
                 else
                 {
-                    //foreach (var c in grCC.Columns)
-                    //{
-                    //    try
-                    //    {
-                    //        GridViewDataColumn col = (GridViewDataColumn)c;
-                    //        col.Caption = Dami.TraduCuvant(col.FieldName);
-                    //    }
-                    //    catch (Exception) { }
-                    //}
-
                     grCC.DataSource = Session["InformatiaCurenta"];
                     grCC.DataBind();
                 }
-
-
-
-
             }
             catch (Exception ex)
             {
@@ -98,7 +82,6 @@ namespace WizOne.Pontaj
             }
         }
 
-
         protected void grCC_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
         {
             try
@@ -109,13 +92,6 @@ namespace WizOne.Pontaj
                     msgError = "Campurile Zi, Contract/Proiect, Activitate si Nr Ore sunt obligatorii";
                     return;
                 }
-
-                //int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""Ptj_CC"" WHERE F10003={Session["User_Marca"]} AND ""Ziua""={General.ToDataUniv(Convert.ToDateTime(e.NewValues["Ziua"]))} AND F06204={e.NewValues["F06204"]}", null),0));
-                //if (cnt != 0)
-                //{
-                //    msgError = "Inregistrare existenta";
-                //    return;
-                //}
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.NewRow();
@@ -130,17 +106,33 @@ namespace WizOne.Pontaj
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
 
-                dt.Rows.Add(dr);
-                e.Cancel = true;
-                grCC.CancelEdit();
-                Session["InformatiaCurenta"] = dt;
-                grCC.DataSource = dt;
-
-                string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] as int? ?? -99), Convert.ToDateTime(dr["Ziua"]));
-                if (txt != "")
+                //Florin 2020.05.14 - am adaugat validarile
+                string sqlPtj = General.CreazaSelectFromRow(dr);
+                string msg = Notif.TrimiteNotificare("Pontaj.PontajBulk", (int)Constante.TipNotificare.Validare, sqlPtj, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                if (msg != "" && msg.Substring(0, 1) == "2")
                 {
-                    msgError = txt;
+                    msgError = Dami.TraduCuvant(msg.Substring(2));
                     e.Cancel = false;
+                }
+                else
+                {
+                    dt.Rows.Add(dr);
+                    string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] as int? ?? -99), Convert.ToDateTime(dr["Ziua"]));
+                    if (txt != "")
+                    {
+                        msgError = txt;
+                        e.Cancel = false;
+                    }
+                    else
+                    {
+                        if (msg != "")
+                            grCC.JSProperties["cpAlertMessage"] = msg;
+
+                        e.Cancel = true;
+                        grCC.CancelEdit();
+                        Session["InformatiaCurenta"] = dt;
+                        grCC.DataSource = dt;
+                    }  
                 }
             }
             catch (Exception ex)
@@ -170,16 +162,6 @@ namespace WizOne.Pontaj
                     return;
                 }
 
-                //if (e.NewValues["Ziua"] != e.OldValues["Ziua"] || e.NewValues["F06204"] != e.OldValues["F06204"])
-                //{
-                //    int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""Ptj_CC"" WHERE F10003={Session["User_Marca"]} AND Ziua={General.ToDataUniv(Convert.ToDateTime(e.NewValues["Ziua"]))} AND F06204={e.NewValues["F06204"]}", null), 0));
-                //    if (cnt != 0)
-                //    {
-                //        msgError = "Inregistrare existenta";
-                //        return;
-                //    }
-                //}
-
                 dr["Ziua"] = e.NewValues["Ziua"] ?? DBNull.Value;
                 dr["F06204"] = e.NewValues["F06204"] ?? DBNull.Value;
                 dr["IdActivitate"] = e.NewValues["IdActivitate"] ?? DBNull.Value;
@@ -189,16 +171,32 @@ namespace WizOne.Pontaj
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
 
-                e.Cancel = true;
-                grCC.CancelEdit();
-                Session["InformatiaCurenta"] = dt;
-                grCC.DataSource = dt;
-
-                string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] as int? ?? -99), Convert.ToDateTime(dr["Ziua"]));
-                if (txt != "")
+                //Florin 2020.05.14 - am adaugat validarile
+                string sqlPtj = General.CreazaSelectFromRow(dr);
+                string msg = Notif.TrimiteNotificare("Pontaj.PontajBulk", (int)Constante.TipNotificare.Validare, sqlPtj, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                if (msg != "" && msg.Substring(0, 1) == "2")
                 {
-                    msgError = txt;
-                    e.Cancel = true;
+                    msgError = Dami.TraduCuvant(msg.Substring(2));
+                    e.Cancel = false;
+                }
+                else
+                {
+                    string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] as int? ?? -99), Convert.ToDateTime(dr["Ziua"]));
+                    if (txt != "")
+                    {
+                        msgError = txt;
+                        e.Cancel = false;
+                    }
+                    else
+                    {
+                        if (msg != "")
+                            grCC.JSProperties["cpAlertMessage"] = msg;
+
+                        e.Cancel = true;
+                        grCC.CancelEdit();
+                        Session["InformatiaCurenta"] = dt;
+                        grCC.DataSource = dt;
+                    }
                 }
             }
             catch (Exception ex)
@@ -244,12 +242,27 @@ namespace WizOne.Pontaj
                 DataRow dr = dt.Rows.Find(keys);
                 int f10003 = Convert.ToInt32(dr["F10003"] as int? ?? -99);
                 DateTime ziua = Convert.ToDateTime(dr["Ziua"]);
-                dr.Delete();
 
-                e.Cancel = true;
-                grCC.DataSource = dt;
+                //Florin 2020.05.14 - am adaugat validarile
+                string sqlPtj = General.CreazaSelectFromRow(dr);
+                string msg = Notif.TrimiteNotificare("Pontaj.PontajBulk", (int)Constante.TipNotificare.Validare, sqlPtj, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                if (msg != "" && msg.Substring(0, 1) == "2")
+                {
+                    msgError = Dami.TraduCuvant(msg.Substring(2));
+                    e.Cancel = false;
+                }
+                else
+                {
+                    dr.Delete();
+                    SalveazaDate(f10003, ziua);
+                    if (msg != "")
+                        grCC.JSProperties["cpAlertMessage"] = msg;
 
-                SalveazaDate(f10003, ziua);
+                    e.Cancel = true;
+                    grCC.CancelEdit();
+                    Session["InformatiaCurenta"] = dt;
+                    grCC.DataSource = dt;
+                }
             }
             catch (Exception ex)
             {
@@ -258,7 +271,6 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
 
         protected string SalveazaDate(int f10003, DateTime ziua)
         {
@@ -325,7 +337,6 @@ namespace WizOne.Pontaj
             return txt;
         }
 
-
         private void IncarcaGrid()
         {
             try
@@ -375,8 +386,5 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-
-
     }
 }

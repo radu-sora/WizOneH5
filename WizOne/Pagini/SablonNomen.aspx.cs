@@ -116,6 +116,7 @@ namespace WizOne.Pagini
                         //aplicam securitatea
                         bool vizibil = true;
                         bool blocat = false;
+                        string alias = col.ColumnName;
 
                         if (dtSec.Rows.Count > 0 && dtSec.Select("IdColoana='" + col.ColumnName + "'").Count() > 0)
                         {
@@ -132,6 +133,7 @@ namespace WizOne.Pagini
                             tipCamp = Convert.ToInt32(dr["TipCamp"] == DBNull.Value ? 0 : dr["TipCamp"]);
                             if (dr != null && tipCamp == 2 && dr["SursaCombo"].ToString() == "") tipCamp = 0;
                             if (vizibil) vizibil = Convert.ToInt32(General.Nz(dr["Vizibil"],0)) == 1 ? true : false;
+                            if (dr.Table.Columns["Alias"] != null && General.Nz(dr["Alias"], "").ToString() != "") alias = dr["Alias"].ToString();
                         }
 
                         
@@ -145,7 +147,7 @@ namespace WizOne.Pagini
                                     GridViewDataColumn c = new GridViewDataColumn();
                                     c.Name = col.ColumnName;
                                     c.FieldName = col.ColumnName;
-                                    c.Caption = Dami.TraduCuvant(col.ColumnName);
+                                    c.Caption = Dami.TraduCuvant(alias);
                                     if (cmp.IndexOf(col.ColumnName.ToUpper() + ",") >= 0)
                                         c.Visible = false;
                                     else
@@ -165,7 +167,7 @@ namespace WizOne.Pagini
                                     GridViewDataCheckColumn c = new GridViewDataCheckColumn();
                                     c.Name = col.ColumnName;
                                     c.FieldName = col.ColumnName;
-                                    c.Caption = Dami.TraduCuvant(col.ColumnName);
+                                    c.Caption = Dami.TraduCuvant(alias);
                                     if (cmp.IndexOf(col.ColumnName.ToUpper() + ",") >= 0)
                                         c.Visible = false;
                                     else
@@ -180,7 +182,7 @@ namespace WizOne.Pagini
                                     GridViewDataComboBoxColumn c = new GridViewDataComboBoxColumn();
                                     c.Name = col.ColumnName;
                                     c.FieldName = col.ColumnName;
-                                    c.Caption = Dami.TraduCuvant(col.ColumnName);
+                                    c.Caption = Dami.TraduCuvant(alias);
                                     if (cmp.IndexOf(col.ColumnName.ToUpper() + ",") >= 0)
                                         c.Visible = false;
                                     else
@@ -243,7 +245,7 @@ namespace WizOne.Pagini
                                     GridViewDataDateColumn c = new GridViewDataDateColumn();
                                     c.Name = col.ColumnName;
                                     c.FieldName = col.ColumnName;
-                                    c.Caption = Dami.TraduCuvant(col.ColumnName);
+                                    c.Caption = Dami.TraduCuvant(alias);
                                     if (cmp.IndexOf(col.ColumnName.ToUpper() + ",") >= 0)
                                         c.Visible = false;
                                     else
@@ -258,7 +260,7 @@ namespace WizOne.Pagini
                                     GridViewDataMemoColumn c = new GridViewDataMemoColumn();
                                     c.Name = col.ColumnName;
                                     c.FieldName = col.ColumnName;
-                                    c.Caption = Dami.TraduCuvant(col.ColumnName);
+                                    c.Caption = Dami.TraduCuvant(alias);
                                     if (cmp.IndexOf(col.ColumnName.ToUpper() + ",") >= 0)
                                         c.Visible = false;
                                     else
@@ -274,7 +276,7 @@ namespace WizOne.Pagini
                                     GridViewDataColorEditColumn c = new GridViewDataColorEditColumn();
                                     c.Name = col.ColumnName;
                                     c.FieldName = col.ColumnName;
-                                    c.Caption = Dami.TraduCuvant(col.ColumnName);
+                                    c.Caption = Dami.TraduCuvant(alias);
                                     if (cmp.IndexOf(col.ColumnName.ToUpper() + ",") >= 0)
                                         c.Visible = false;
                                     else
@@ -289,7 +291,7 @@ namespace WizOne.Pagini
                                     GridViewDataTextColumn c = new GridViewDataTextColumn();
                                     c.Name = col.ColumnName;
                                     c.FieldName = col.ColumnName;
-                                    c.Caption = Dami.TraduCuvant(col.ColumnName);
+                                    c.Caption = Dami.TraduCuvant(alias);
                                     if (cmp.IndexOf(col.ColumnName.ToUpper() + ",") >= 0)
                                         c.Visible = false;
                                     else
@@ -307,7 +309,7 @@ namespace WizOne.Pagini
                                     GridViewDataSpinEditColumn c = new GridViewDataSpinEditColumn();
                                     c.Name = col.ColumnName;
                                     c.FieldName = col.ColumnName;
-                                    c.Caption = Dami.TraduCuvant(col.ColumnName);
+                                    c.Caption = Dami.TraduCuvant(alias);
                                     if (cmp.IndexOf(col.ColumnName.ToUpper() + ",") >= 0)
                                         c.Visible = false;
                                     else
@@ -324,7 +326,7 @@ namespace WizOne.Pagini
                                     GridViewDataComboBoxColumn c = new GridViewDataComboBoxColumn();
                                     c.Name = col.ColumnName;
                                     c.FieldName = col.ColumnName;
-                                    c.Caption = Dami.TraduCuvant(col.ColumnName);
+                                    c.Caption = Dami.TraduCuvant(alias);
                                     if (cmp.IndexOf(col.ColumnName.ToUpper() + ",") >= 0)
                                         c.Visible = false;
                                     else

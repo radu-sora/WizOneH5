@@ -69,16 +69,16 @@ namespace WizOne.Personal
             grDateContacte.KeyFieldName = "IdAuto";
             grDateContacte.DataSource = dt;
 
-            string sql = @"SELECT * FROM ""tblContacte"" ";
+            string sql = @"SELECT * FROM ""tblContacte"" ORDER BY ""Denumire""";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("tblContacte", "Id");
+                sql = General.SelectOracle("tblContacte", "Id") + " ORDER BY \"Denumire\"";
             DataTable dtContact = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colContact = (grDateContacte.Columns["IdContact"] as GridViewDataComboBoxColumn);
             colContact.PropertiesComboBox.DataSource = dtContact;
 
-            sql = @"SELECT * FROM LOCATII ";
+            sql = @"SELECT * FROM LOCATII ORDER BY LOCATIE";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("LOCATII", "NUMAR");
+                sql = General.SelectOracle("LOCATII", "NUMAR") + " ORDER BY LOCATIE";
             DataTable dtLocatii = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colLocatii = (grDateContacte.Columns["IdLocatie"] as GridViewDataComboBoxColumn);
             colLocatii.PropertiesComboBox.DataSource = dtLocatii;
@@ -202,36 +202,36 @@ namespace WizOne.Personal
                 }
 
                 switch (estePrincipal)
-                {
+                {//Radu 22.06.2020 - s-au eliminat conditiile cu idContact == 2 si idContact != 2
                     // Telefon 1
                     case 1:                        
                             // daca nu e email...
-                            if (idContact != 2 && idContact != 0)
-                            {
+                            //if (idContact != 2 && idContact != 0)
+                            //{
                                 // telefon 1
                                 if (result.Length > 0)
                                     ds.Tables[1].Rows[0]["F10088"] = result;
-                            }  
+                            //}  
                         break;
                     // Telefon 2
                     case 2:                       
                             // daca nu e email...
-                            if (idContact != 2 && idContact != 0)
-                            {
+                            //if (idContact != 2 && idContact != 0)
+                            //{
                                 // telefon 2
                                 if (result.Length > 0)
                                     ds.Tables[1].Rows[0]["F10089"] = result;
-                            }                        
+                            //}                        
                         break;
                     // EMail
                     case 3:
                         {
-                            if (idContact == 2)
-                            {
+                            //if (idContact == 2)
+                            //{
                                 // e-mail
                                 if (result.Length > 0)
                                     ds.Tables[1].Rows[0]["F100894"] = valoare;
-                            }
+                            //}
                         }
                         break;
                 }
@@ -324,36 +324,36 @@ namespace WizOne.Personal
                 }
 
                 switch (estePrincipal)
-                {
+                {//Radu 22.06.2020 - s-au eliminat conditiile cu idContact == 2 si idContact != 2
                     // Telefon 1
                     case 1:
                         // daca nu e email...
-                        if (idContact != 2 && idContact != 0)
-                        {
+                        //if (idContact != 2 && idContact != 0)
+                        //{
                             // telefon 1
                             if (result.Length > 0)
                                 ds.Tables[1].Rows[0]["F10088"] = result;
-                        }
+                        //}
                         break;
                     // Telefon 2
                     case 2:
                         // daca nu e email...
-                        if (idContact != 2 && idContact != 0)
-                        {
+                        //if (idContact != 2 && idContact != 0)
+                        //{
                             // telefon 2
                             if (result.Length > 0)
                                 ds.Tables[1].Rows[0]["F10089"] = result;
-                        }
+                        //}
                         break;
                     // EMail
                     case 3:
                         {
-                            if (idContact == 2)
-                            {
+                            //if (idContact == 2)
+                            //{
                                 // e-mail
                                 if (result.Length > 0)
                                     ds.Tables[1].Rows[0]["F100894"] = valoare;
-                            }
+                            //}
                         }
                         break;
                 }

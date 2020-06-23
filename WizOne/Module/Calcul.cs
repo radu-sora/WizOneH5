@@ -711,7 +711,7 @@ namespace WizOne.Module
                 if (lastOut != null)
                 {
                     //Florin 2020.04.21 - Am adaugat conditia flexibil=1
-                    if (Convert.ToInt32(General.Nz(entPrg["Flexibil"], -99)) == 1)
+                    if (entPrg != null && Convert.ToInt32(General.Nz(entPrg["Flexibil"], -99)) == 1)
                     {
                         dtSch = lastOut;
                     }
@@ -887,6 +887,9 @@ namespace WizOne.Module
             {
                 DataRow entProg = General.IncarcaDR(string.Format(@"SELECT * FROM ""Ptj_Programe"" WHERE ""Id""={0}", idProg));
                 DataTable dtPauza = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_ProgramePauza"" WHERE ""IdProgram""={0}", idProg));
+
+                //Florin 2020.06.22
+                if (entProg == null) return tpd;
 
                 int idCtr = Convert.ToInt32(General.Nz(ent["IdContract"], -99));
                 DataTable dtCtr = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""={0}", idCtr));
@@ -1168,7 +1171,10 @@ namespace WizOne.Module
                                         if (difOs > 0) os += difOs;
                                     }
 
-                                    ent["F60"] = os;
+                                    //Florin 2020.05.28
+                                    if (ent.Table.Columns["TimpOSReal"] != null)
+                                        ent["TimpOSReal"] = os;
+
                                     //Florin 2016.12.06  End
                                     //Florin 2016.11.07 End  ###################################
                                 }
@@ -1298,7 +1304,6 @@ namespace WizOne.Module
 
                 try
                 {
-                    string ert = entPrg["ONCamp"].ToString();
                     if (entPrg != null && entPrg["ONCamp"] != null && entPrg["ONCamp"].ToString() != "") ent[entPrg["ONCamp"].ToString()] = oreCalc;
                 }
                 catch (Exception)
@@ -1833,18 +1838,19 @@ namespace WizOne.Module
 
                     gridOut = ent["Out" + i];
 
-                    if (gridIn != null && gridOut != null)
+                    //Florin 2020.06.22
+                    if (gridIn != DBNull.Value && Convert.ToDateTime(gridIn) < firstInPaid)
+                        gridIn = firstInPaid;
+
+                    if (gridOut != DBNull.Value && Convert.ToDateTime(gridOut) > lastOutPaid)
+                        gridOut = lastOutPaid;
+
+                    if (gridIn != DBNull.Value && gridOut != DBNull.Value && Convert.ToDateTime(gridIn) < Convert.ToDateTime(gridOut))
                     {
                         try
                         {
                             if (tip == 1)
                             {
-                                if (prima)
-                                {
-                                    gridIn = firstInPaid;
-                                    prima = false;
-                                }
-
                                 dif = CalculTimp(Convert.ToDateTime(OraInceput), Convert.ToDateTime(OraSfarsit), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(gridIn), Convert.ToDateTime(gridOut), rap);
 
                                 if (dif > 0)
@@ -1865,13 +1871,6 @@ namespace WizOne.Module
                         {
                         }
                     }
-                }
-
-                if (tip == 1 && ultIn != null && ultOut != null)
-                {
-                    //utilizam lastoutpaid ca ultima iesire
-                    dif = CalculTimp(Convert.ToDateTime(OraInceput), Convert.ToDateTime(OraSfarsit), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(ultIn), Convert.ToDateTime(ultOut), rap);
-                    rez = total - ultima + dif;
                 }
             }
             catch (Exception ex)

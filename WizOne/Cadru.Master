@@ -422,7 +422,7 @@
         var getAbsoluteUrl = window.location.protocol + '//' + window.location.host + '<%=VirtualPathUtility.ToAbsolute("~/")%>';
 
         /* Main functions */
-        $(window).on('load', function () {
+        $(window).on('load', function () {          
             var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;           
             var firstLoad = <%= Session["PrimaIntrare"] %> === 1;
             var myModal = $("#myModal");

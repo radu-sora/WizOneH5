@@ -447,7 +447,14 @@ namespace WizOne.Absente
             {
                 if (e.Parameters != "")
                 {
-                    if (e.Parameters == "btnCO") General.CalculCO(Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)), Convert.ToInt32(cmbAng.Value ?? -99));
+                    if (e.Parameters == "btnCO")
+                    {//Radu 22.06.2020
+                        for (int i = 0; i < grDate.VisibleRowCount; i++)
+                        {
+                            int? marca = grDate.GetRowValues(i, new string[] { "F10003" }) as int?;
+                            General.CalculCO(Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)), Convert.ToInt32(marca ?? -99), true);
+                        }
+                    }
                     if (e.Parameters == "btnSI") CalculSI();
                     IncarcaGrid();
                 }

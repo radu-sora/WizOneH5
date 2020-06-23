@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web;
+using WizOne.Module;
 using Wizrom.Reports.Models;
 
 namespace Wizrom.Reports.Code
@@ -279,6 +280,21 @@ namespace Wizrom.Reports.Code
                 }
 
                 xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for Print here
+
+                //Florin 2020.06.10
+                xtraReport.PaperKind = System.Drawing.Printing.PaperKind.A4;
+                xtraReport.Margins.Top = 10;
+                xtraReport.Margins.Bottom = 10;
+                xtraReport.Margins.Left = 50;
+                xtraReport.Margins.Right = 50;
+                xtraReport.PrintingSystem.ShowMarginsWarning = false;
+                xtraReport.ShowPrintMarginsWarning = false;
+
+                string numeImprimanta = Dami.ValoareParam("TactilImprimanta").Trim();
+                if (numeImprimanta != "")
+                    xtraReport.PrinterName = numeImprimanta;
+
+                xtraReport.CreateDocument();
 
                 using (var reportPrint = new ReportPrintTool(xtraReport))
                     reportPrint.Print(); // Send to default server printer

@@ -1930,7 +1930,7 @@ namespace WizOne.Eval
 
                                 colObiectiv.PropertiesComboBox.TextField = "Denumire";
                                 colObiectiv.PropertiesComboBox.ValueField = "Id";
-                                colObiectiv.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDown;
+                                colObiectiv.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDownList;
                                 //Florin 2020.01.29 - comentat deoarece apare eroarea - Unable to set property 'collectCallbackIDs' of undefined or null reference
                                 //colObiectiv.PropertiesComboBox.EnableCallbackMode = true;
                                 colObiectiv.PropertiesComboBox.ValidationSettings.RequiredField.IsRequired = true;
@@ -2029,7 +2029,7 @@ namespace WizOne.Eval
 
                                 colActivitate.PropertiesComboBox.TextField = "Denumire";
                                 colActivitate.PropertiesComboBox.ValueField = "Id";
-                                colActivitate.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDown;
+                                colActivitate.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDownList;
                                 //Florin 2020.01.29 - comentat deoarece apare eroarea - Unable to set property 'collectCallbackIDs' of undefined or null reference
                                 //colActivitate.PropertiesComboBox.EnableCallbackMode = true;
                                 colActivitate.PropertiesComboBox.ItemRequestedByValue += Activitate_RequestedByValue;
@@ -2109,7 +2109,7 @@ namespace WizOne.Eval
 
                                 colCalificativ.PropertiesComboBox.TextField = "Denumire";
                                 colCalificativ.PropertiesComboBox.ValueField = "IdCalificativ";
-                                colCalificativ.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDown;
+                                colCalificativ.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDownList;
                                 colCalificativ.PropertiesComboBox.DataSource = lstEval_SetCalificativDet;
                                 colCalificativ.Visible = false;
                                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) != 20 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)) >= 2 || tab >= 2)   //Radu 03.07.2018 - calificativul nu trebuie sa fie afisat pe tab-ul angajatului decat dupa ce acesta finalizeaza
@@ -3639,7 +3639,7 @@ namespace WizOne.Eval
                             colCompetenta.Width = clsConfigDetail.Width;
                             colCompetenta.PropertiesComboBox.TextField = "Denumire";
                             colCompetenta.PropertiesComboBox.ValueField = "Id";
-                            colCompetenta.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDown;
+                            colCompetenta.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDownList;
                             colCompetenta.PropertiesComboBox.ValidationSettings.RequiredField.IsRequired = true;
                             colCompetenta.PropertiesComboBox.ValidationSettings.Display = Display.None;
                             colCompetenta.PropertiesComboBox.DataSource = lstCompetente;
@@ -3683,7 +3683,7 @@ namespace WizOne.Eval
 
                             colCalificativ.PropertiesComboBox.TextField = "Denumire";
                             colCalificativ.PropertiesComboBox.ValueField = "IdCalificativ";
-                            colCalificativ.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDown;
+                            colCalificativ.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDownList;
                             colCalificativ.PropertiesComboBox.DataSource = lstEval_CompSetCalificativDet;
 
                             grDateCompetente.Columns.Add(colCalificativ);
@@ -4526,7 +4526,7 @@ namespace WizOne.Eval
 
                 //if (Constante.tipBD == 2)
                 string sqlSinc = $@"MERGE INTO ""Eval_ObiIndividualeTemp"" B
-                            USING (SELECT * FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz"" = 28 AND F10003 = 5537 AND ""Pozitie"" = 1) A
+                            USING (SELECT * FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = @3) A
                             ON(A.""IdUnic"" = B.""IdUnic"" AND A.""Pozitie"" <> B.""Pozitie"")
                             WHEN MATCHED THEN
                             UPDATE SET B.""IdPeriod"" = A.""IdPeriod"", B.""Obiectiv""=A.""Obiectiv"", B.""Activitate""=A.""Activitate"", B.""Descriere""=A.""Descriere"", B.""Pondere""=A.""Pondere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"", B.""IdCalificativ""=A.""IdCalificativ"",B.""Calificativ""=A.""Calificativ"",  B.""ExplicatiiCalificativ""=A.""ExplicatiiCalificativ"", B.""ColoanaSuplimentara1""=A.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2""=A.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3""=A.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4""=A.""ColoanaSuplimentara4"", B.""IdCategObiective""=A.""IdCategObiective"";";

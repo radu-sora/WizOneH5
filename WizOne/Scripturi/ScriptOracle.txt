@@ -14573,3 +14573,242 @@ COMMIT;
 	ALTER TABLE "TemplateCampuri" ADD "Tabela" VARCHAR2(50);
 	
 
+	create or replace type calcul_co_record as object (
+ "ZileCuveniteAn" NUMBER(9),
+"ZileCuvenite"  NUMBER(9),
+ "ZileCuveniteZi"  NUMBER(9),
+ "ZileAnPrecedent"  NUMBER(9)
+);
+
+create or replace type calcul_co_table as table of calcul_co_record;
+
+
+
+create or replace function "CalculCO"(
+    marca in number,
+	zi in date,
+	tip in number,
+	grila in number
+) return calcul_co_table as
+  v_ret   calcul_co_table;
+  ZileCuveniteAn number;
+ZileCuvenite number;
+ZileCuveniteZi number;
+ZileAnPrecedent number;
+ZileAngajare number;
+ZileAngajareZi number;
+ZileSuspendare number;
+ZileSuspendareZi number;
+PrimaZiAn date;
+UltimaZiAn date;
+TipCalcul number;
+ZileSuplimentare number;
+LuniVechime number;
+CalculCOProp18Ani number;
+CalculCOPropHand number;
+ZileAn number := 365;
+Grila1 number := grila;
+  
+begin
+  
+-- @TipCalcul
+--  1 -- se calculeaza vechimea in munca in ultima zi din an
+-- 2. —se calculeaza vechimea in munca in prima zi din an
+--  3 —se calculeaza vechimea in munca la data angajarii
+--   11 -- se calculeaza vechimea in companie in ultima zi din an
+-- 12 —se calculeaza vechimea in companie in prima zi din an
+--  13 —se calculeaza vechimea in companie la data angajarii
+--   21 -- se calculeaza vechimea de la data angajarii in ultima zi din an
+-- 22 —se calculeaza vechimea de la data angajarii in prima zi din an
+--  23 —se calculeaza vechimea de la data angajarii la data angajarii
+
+-- 99 - particular 
+
+
+if  REMAINDER(extract(year from zi), 4) = 0 then
+  select 366 into ZileAn from dual;
+end if;
+   
+if nvl(Grila1,0)= 0 then
+    select  f10072 into Grila1 from f100 where f10003 = marca;   
+end if;    
+    
+    
+ Select  to_number(nvl((select "Valoare" from "tblParametrii" where "Nume"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3)) into ZileSuplimentare from dual;
+ Select to_number(nvl((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCOCuvenite'),1)) into TipCalcul from dual;
+ Select to_number(nvl((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCO_Proportional_18Ani'),0)) into CalculCOProp18Ani from dual;
+ Select to_number(nvl((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCO_Proportional_Handicap'),0)) into CalculCOPropHand from dual;    
+   
+ Select (CASE WHEN trunc(F10022) <  to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy')  THEN to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy')  ELSE trunc(F10022) END) into PrimaZiAn 
+ from (select * from F100 where f10003 = marca) a ;
+ 
+  Select 
+  (CASE WHEN trunc(f10023) < to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy')  THEN trunc(f10023) ELSE to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy')  END)  into UltimaZiAn
+ from (select * from F100 where f10003 = marca) a ;
+
+Select  UltimaZiAn - PrimaZiAn +1 into ZileAngajare
+ from (select * from F100 where f10003 = marca) a  ;   
+   
+Select  ((CASE WHEN trunc(f10023) < zi THEN trunc(f10023) ELSE zi END) - PrimaZiAn + 1) into ZileAngajareZi
+ from (select * from F100 where f10003 = marca) a  ;  
+ 
+ 
+ If TipCalcul = 1 then
+    select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + MONTHS_BETWEEN(to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy')  ,  
+(select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') from f010) ) into LuniVechime from f100 where f10003 = marca;             
+elsif TipCalcul = 2 then
+     Select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + MONTHS_BETWEEN (to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy'),
+     (select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') from f010)) into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 3 then
+     Select  nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + MONTHS_BETWEEN ( zi,  (select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') 
+     from f010)) into LuniVechime from f100 where f10003 = marca;
+ElsIf TipCalcul = 11 then
+     Select  nvl(to_number(substr(F100643,1,2)),0) * 12 + nvl(to_number(substr(F100643,3,2)),0) + MONTHS_BETWEEN (to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy'),
+     (select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') from f010)) into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 12 then
+     Select  nvl(To_number(substr(F100643,1,2)),0) * 12 + nvl(to_number(substr(F100643,3,2)),0) + MONTHS_BETWEEN (to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy'),  
+     (select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') from f010)) into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 13 then
+     Select  nvl(to_number(substr(F100643,1,2)),0) * 12 + NVL(to_number(substr(F100643,3,2)),0) + MONTHS_BETWEEN (zi,   (select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') 
+     from f010) ) into LuniVechime from f100 where f10003 = marca;
+ElsIf TipCalcul = 21 then
+     Select   MONTHS_BETWEEN (to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy'), F10022)
+     - case when extract(day from f10022) > extract(day from to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy')) then 1 else 0 end into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 22 then
+     Select  MONTHS_BETWEEN ( to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') , F10022)
+     - case when extract(day from f10022) > extract(day from to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy')) then 1 else 0 end into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 23 then
+    Select  MONTHS_BETWEEN ( zi, F10022 )
+     - case when extract(day from f10022) > extract(day from zi)  then 1 else 0 end into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 99 then
+     select  MONTHS_BETWEEN (zi,  case when f10022 <= to_date('14/02/2018','dd/mm/yyyy') then to_date('14/02/2018','dd/mm/yyyy') else f10022 end )
+     - case when ( case when f10022 <= to_date('14/02/2018','dd/mm/yyyy') then 14 else extract(day from f10022) end) > extract(day from zi)  then 1 else 0 end into LuniVechime
+    from f100 where f10003 = marca;
+ end if;
+
+ if tip = 1 then
+    select    (  c.F02615    + CASE WHEN nvl(a.F10027,0)>=2 THEN
+     to_number(round( case when CalculCOPropHand = 0 or f100271 = to_date('01/01/2100', 'dd/mm/yyyy') or f100271 = to_date('01/01/1900', 'dd/mm/yyyy') then 1 else
+     ((case when  f100271 <= UltimaZiAn  then f100271 else UltimaZiAn end) - PrimaZiAn +1 )     / to_number(ZileAn)    end * ZileSuplimentare,0)) ELSE 0 END
+    +  case when add_months(f10021, 18 * 12) >= PrimaZiAn  then
+    to_number( round( case when CalculCOProp18Ani = 0 then 1 else
+     ( (case when  add_months(f10021, 18 * 12) <= UltimaZiAn  then add_months(f10021, 18 * 12)  else UltimaZiAn end) - PrimaZiAn +1 ) / to_number(ZileAn)
+    end * ZileSuplimentare,0))  else 0 end) into ZileCuveniteAn
+        from (select * from F100 where f10003 = marca) a    
+        left join F026 c on to_number(Grila1) = c.F02604 and
+        (to_number(c.F02610/100) * 12) <= LuniVechime and LuniVechime < (to_number(c.F02611/100) * 12)  where (extract(year from zi)  between extract(year from F10022)
+        and extract(year from F10023) ) and a.F10003= marca ;
+ else
+      select  "CuveniteAn" into ZileCuveniteAn from "Ptj_tblZileCO" where "An"=extract(year from zi) and f10003 = marca;
+ end if;  
+   
+   
+   with xx as  (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else 
+f111.f11107 end la_data from f111 inner join   (select a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) 
+timp from F111 a inner join f111 b  on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-01-2100','DD-MM-YYYY') then b.f11106 else b.f11107 end   and b.f11105 <= case 
+when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end)  group by a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else 
+a.f11107 end, a.time) t  on f111.f11103 = t.f11103 and f111.f11105 = t.f11105 and   case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 
+and f111.time = t.timp  union all  select f10003 Marca, "DataInceput" de_la_data, "DataSfarsit" la_data  from "Ptj_Cereri" inner join "Ptj_tblAbsente" on "Ptj_Cereri"."IdAbsenta" = 
+"Ptj_tblAbsente"."Id"  where "Ptj_Cereri"."IdStare"=3 and COALESCE("Ptj_tblAbsente"."AbsenteCFPInCalculCO",0) = 1  ),   
+yy as  (select distinct a.marca, min(b.de_la_data) de_la_data, max(b.la_data) la_data from xx a  inner join xx b on a.marca = b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= 
+a.la_data)  group by a.marca, a.de_la_data, a.la_data),  f111_2 as   (select distinct a.marca f11103, min(b.de_la_data) f11105, max(b.la_data)  f11107 from yy a  inner join yy b on a.marca = 
+b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= a.la_data)  group by a.marca, a.de_la_data, a.la_data) 
+    
+  select  (select COALESCE(SUM( (CASE WHEN F11107 > to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy') THEN to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy') else F11107 END -
+  CASE WHEN F11105 <  to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') THEN to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') else F11105 END) + 1) ,0)
+  from (select * from F100 where f10003 = marca) a  join f111_2 Z on a.f10003 = z.f11103
+   and F11105 <= F11107 AND F11107 >= to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') AND F11105 <= to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy')) into ZileSuspendare from dual;
+   
+   
+     with xx as  (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else 
+f111.f11107 end la_data from f111 inner join   (select a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) 
+timp from F111 a inner join f111 b  on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-01-2100','DD-MM-YYYY') then b.f11106 else b.f11107 end   and b.f11105 <= case 
+when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end)  group by a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else 
+a.f11107 end, a.time) t  on f111.f11103 = t.f11103 and f111.f11105 = t.f11105 and   case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 
+and f111.time = t.timp  union all  select f10003 Marca, "DataInceput" de_la_data, "DataSfarsit" la_data  from "Ptj_Cereri" inner join "Ptj_tblAbsente" on "Ptj_Cereri"."IdAbsenta" = 
+"Ptj_tblAbsente"."Id"  where "Ptj_Cereri"."IdStare"=3 and COALESCE("Ptj_tblAbsente"."AbsenteCFPInCalculCO",0) = 1  ),   
+yy as  (select distinct a.marca, min(b.de_la_data) de_la_data, max(b.la_data) la_data from xx a  inner join xx b on a.marca = b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= 
+a.la_data)  group by a.marca, a.de_la_data, a.la_data),  f111_2 as   (select distinct a.marca f11103, min(b.de_la_data) f11105, max(b.la_data)  f11107 from yy a  inner join yy b on a.marca = 
+b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= a.la_data)  group by a.marca, a.de_la_data, a.la_data)  
+   select (select COALESCE(SUM( (   CASE WHEN F11107 > trunc(zi)    THEN trunc(zi) else F11107 END) -
+   CASE WHEN F11105 <   to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') THEN to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') else F11105 END +1) ,0)
+   from (select * from F100 where f10003 = marca) a  join f111_2 Z on a.f10003 = z.f11103
+   and F11105 <= F11107 AND F11107 >= to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') AND F11105 <= trunc(zi)) into ZileSuspendareZi from dual;
+   
+     select case when tip= 1 then round(to_number(ZileCuveniteAn * (ZileAngajare - nvl(ZileSuspendare,0))) /To_number(ZileAn),0)
+             else (select "Cuvenite" from "Ptj_tblZileCO" where f10003 = marca and "An" = extract(year from zi)) end into ZileCuvenite from dual;
+             
+             
+      with xx as  (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else 
+f111.f11107 end la_data from f111 inner join   (select a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) 
+timp from F111 a inner join f111 b  on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-01-2100','DD-MM-YYYY') then b.f11106 else b.f11107 end   and b.f11105 <= case 
+when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end)  group by a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else 
+a.f11107 end, a.time) t  on f111.f11103 = t.f11103 and f111.f11105 = t.f11105 and   case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 
+and f111.time = t.timp  union all  select f10003 Marca, "DataInceput" de_la_data, "DataSfarsit" la_data  from "Ptj_Cereri" inner join "Ptj_tblAbsente" on "Ptj_Cereri"."IdAbsenta" = 
+"Ptj_tblAbsente"."Id"  where "Ptj_Cereri"."IdStare"=3 and COALESCE("Ptj_tblAbsente"."AbsenteCFPInCalculCO",0) = 1  ),   
+yy as  (select distinct a.marca, min(b.de_la_data) de_la_data, max(b.la_data) la_data from xx a  inner join xx b on a.marca = b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= 
+a.la_data)  group by a.marca, a.de_la_data, a.la_data),  f111_2 as   (select distinct a.marca f11103, min(b.de_la_data) f11105, max(b.la_data)  f11107 from yy a  inner join yy b on a.marca = 
+b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= a.la_data)  group by a.marca, a.de_la_data, a.la_data)              
+             
+             
+    select ( round(to_number(ZileCuveniteAn * (ZileAngajareZi - nvl(ZileSuspendareZi,0))) /To_number(ZileAn),0)) into ZileCuveniteZi from dual;     
+   
+   
+    v_ret  := calcul_co_table();
+    
+    select       calcul_co_record("ZileCuveniteAn", "ZileCuvenite", "ZileCuveniteZi", "ZileAnPrecedent")    
+    bulk collect into
+      v_ret
+    from 
+    (
+
+  SELECT ZileCuveniteAn as "ZileCuveniteAn", nvl(ZileCuvenite,0) as "ZileCuvenite", ZileCuveniteZi as "ZileCuveniteZi", 
+  nvl((select "SoldAnterior" from "Ptj_tblZileCO" where f10003 = marca and "An"=extract(year from zi)),0) as "ZileAnPrecedent" from dual
+    
+    )  
+      ;
+
+    return v_ret;
+ 
+end  "CalculCO";
+
+
+
+CREATE OR REPLACE Procedure "CalculCOProc"
+   (     marca in number,
+	zi in date,
+	tip in number,
+	grila in number )
+IS
+
+ ZileCuveniteAn number;
+ ZileCuvenite number ;
+ ZileCuveniteZi number ;
+ ZileAnPrecedent number ;
+ cnt number;
+  AnCurent number;
+ 
+BEGIN
+SELECT "ZileCuveniteAn" INTO ZileCuveniteAn  from table("CalculCO"(marca, zi, tip, grila));
+SELECT "ZileCuvenite" INTO ZileCuvenite  from table("CalculCO"(marca, zi, tip, grila));
+SELECT "ZileCuveniteZi" INTO ZileCuveniteZi  from table("CalculCO"(marca, zi, tip, grila));
+SELECT "ZileAnPrecedent" INTO ZileAnPrecedent  from table("CalculCO"(marca, zi, tip, grila));
+SELECT COUNT(*) INTO cnt FROM "Ptj_tblZileCO" WHERE F10003 = marca and "An" = extract(year from zi);
+SELECT F01011 INTO  AnCurent  FROM F010;
+
+   if (extract(year from zi) = AnCurent) then
+    UPDATE F100 set F100642 =  ZileCuveniteAn,   F100995 = ZileCuvenite ,  F100996 =  ZileAnPrecedent  WHERE	F10003 = marca;
+  end if;
+  
+ if (extract(year from zi) >= AnCurent) then
+  if (cnt > 0) then
+    UPDATE "Ptj_tblZileCO" set "CuveniteAn" = ZileCuveniteAn ,   "Cuvenite" = ZileCuvenite WHERE 	F10003 = marca and "An" = extract(year from zi);
+   else
+    		INSERT INTO "Ptj_tblZileCO" (F10003, "An", "Cuvenite", "SoldAnterior", "Efectuate", "CuveniteAn")
+        VALUES (marca, extract(year from zi), ZileCuvenite, 0, 0, ZileCuveniteAn);
+  end if;
+ end if; 
+
+   commit;
+
+END;

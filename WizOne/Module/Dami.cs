@@ -609,8 +609,10 @@ namespace WizOne.Module
                                 INNER JOIN ""Ptj_CereriIstoric"" B ON A.""Id"" = B.""IdCerere"" AND B.""IdSuper"" <> 0 AND B.""IdStare"" <> -1 AND B.""Pozitie"" <> 0 AND B.""IdUser"" IN 
                                 (SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={HttpContext.Current.Session["UserId"]} AND ""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= ""DataSfarsit"") {condSuplim}";
 
+
+                //Florin 2020.06.23 - am schimbat 77 AS ""Rol"" cu  B."IdSuper" AS ""Rol""
                 if (totiAngajatii == 3)
-                    strSql = $@"SELECT DISTINCT A.*, 77 AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
+                    strSql = $@"SELECT DISTINCT A.*, B.""IdSuper"" AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
                                FROM ""Ptj_Cereri"" A
                                INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idHR}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}";
 

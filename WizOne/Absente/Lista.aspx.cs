@@ -425,10 +425,11 @@ namespace WizOne.Absente
                                     }
                                 }
 
-                                //daca este hr nu se aplica regulile
-                                if (Convert.ToInt32(obj[10] ?? 0) != 77)
-                                {
-                                    int selRol = 0;
+                                //Florin 2020.06.23 - am scos conditia de mai jos
+                                ////daca este hr nu se aplica regulile
+                                //if (Convert.ToInt32(obj[10] ?? 0) != 77)
+                                //{
+                                int selRol = 0;
                                     if (cmbRol.SelectedItem != null) selRol = Convert.ToInt32(General.Nz(cmbRol.SelectedItem.Value, 0));
                                     DateTime ziDrp = Dami.DataDrepturi(Convert.ToInt32(General.Nz(obj[8], -99)), Convert.ToInt32(General.Nz(obj[9], 0)), Convert.ToDateTime(obj[4]), Convert.ToInt32(obj[1]), selRol);
                                     if (Convert.ToDateTime(obj[4]).Date < ziDrp)
@@ -444,7 +445,7 @@ namespace WizOne.Absente
                                         }
                                         return;
                                     }
-                                }
+                                //}
 
                                 string msg = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT Z.*, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                                 if (msg != "" && msg.Substring(0, 1) == "2")

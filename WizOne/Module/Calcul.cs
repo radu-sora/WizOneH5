@@ -1872,6 +1872,8 @@ namespace WizOne.Module
                         }
                     }
                 }
+
+                if (total > 0) rez = total;
             }
             catch (Exception ex)
             {

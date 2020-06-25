@@ -13664,3 +13664,479 @@ WHERE X."ProgramId" IS NOT NULL
 AND ("ContractId" * 1000000 + "ProgramId" * 10 + "ZiSapt") NOT IN 
 (SELECT "IdContract" * 1000000 + "IdProgram" * 10 + "TipSchimb" FROM "Ptj_ContracteSchimburi") 
 GO
+
+
+
+
+
+----	2.2.129	----
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('NrOptiuniExportSAP', '3', 'Numar de optiuni pentru pagina Export SAP (intre 1 si 5)', 0);
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('CaleConfigPeopleSoft', '', 'Calea catre fisierul Config pagina Export SAP', 0);
+GO
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(80, 'Tipul de invatamant', 'Tipul de invatamant', 'Pagini\SablonNomen[tblTipInvatamant]', 1, 'm1.png')
+GO 
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(81, 'Tipul institutiei de invatamant', 'Tipul institutiei de invatamant', 'Pagini\SablonNomen[tblTipInstitutie]', 1, 'm1.png')
+GO
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(82, 'Profil studii', 'Profil studii', 'Pagini\SablonNomen[tblProfilStudii]', 1, 'm1.png')
+GO
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(83, 'Domeniu studii', 'Domeniu studii', 'Pagini\SablonNomen[tblDomeniuStudii]', 1, 'm1.png')
+GO
+
+DELETE FROM "tblParametrii" WHERE "Nume"='NumeImprimanta'
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TactilImprimanta', '', 'Numele imprimantei la care se vor imprima documentele din info chiosc; daca nu este specificat nimic atunci se foloseste imprimanta default', 0);
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TactilImprimantaFluturas', '', 'Numele imprimantei la care se va imprima fluturasul din info chiosc; daca nu este specificat nimic atunci se foloseste imprimanta default', 0);
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('InOutInExportPontaj', '3', 'Se foloseste in exportul din pontajul echipei si In/Out-ul care apare in export ia valorile astfel: 1 - FirstIn/LastOut; 2 - FirstInRap/LastOutRap; 3 - FirstInPaid/LastOutPaid', 2);
+GO
+
+alter table Ptj_tblAbsenteConfig add AfisareInfoChiosc int
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_Frecventa', '15', 'Frecventa de verificare: daca setez 15, inseamna ca o sa verificam 1 din 15 angajati', 0);
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_TimpAfisare', '5', 'cate secunde sa fie afisat numele persoanei pe ecran', 0);
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_InOut', 'IO', 'se specifica ce tranzactii sunt luate in considerare; I - daor intrarile; O - doar iesirile; IO - intrari si iesiri', 0);
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_NrCeas', '', 'se enumera terminalele care sunt incluse in procesul de control al angajatilor; restul se ignora; daca nu este nici o valoare se iau in calcul toate;', 0);
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_FontSize', '', 'se enumera terminalele care sunt incluse in procesul de control al angajatilor; restul se ignora; daca nu este nici o valoare se iau in calcul toate;', 0);
+GO
+
+ALTER TABLE "Ptj_Intrari" ADD "TimpOSReal" int
+GO
+
+--https://github.com/wizromRD/WizOne/issues/456
+ALTER TABLE "tblNomenConfig" ADD "Alias" nvarchar(250)
+GO
+
+
+
+CREATE TABLE MP_NotaLichidare_Circuit(
+	GrupAngajati [int],
+	Rol [nvarchar](250),
+	Supervizor [int],
+	Valoare [nvarchar](max),
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_MP_NotaLichidare_Circuit] PRIMARY KEY CLUSTERED 
+(	
+	IdAuto ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+CREATE TABLE MP_NotaLichidare(
+	F10003 [int],
+	NrDoc [int],
+	Observatii [nvarchar](250),
+	IdStare [int],
+	DataDoc datetime,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_MP_NotaLichidare] PRIMARY KEY CLUSTERED 
+(	
+	IdAuto ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+CREATE TABLE MP_NotaLichidare_Detalii(	
+	F10003 [int],
+	IdStare [int],
+	IdNotaLichidare [int],
+	Rol [nvarchar](250),
+	Supervizor [int],
+	Valoare [nvarchar](max),
+	Datorii [int],
+	Comentarii [nvarchar](250),
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_MP_NotaLichidare_Detalii] PRIMARY KEY CLUSTERED 
+(	
+	IdAuto ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+CREATE TABLE MP_NotaLichidare_Stari(
+	Id [int],
+	Denumire [nvarchar](250),
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_MP_NotaLichidare_Stari] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (-1, 'Anulat')
+GO
+INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (1, 'Initiat')
+GO
+INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (3, 'Finalizat')
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportNotaLichidare', '-99', 'Id Raport pentru Nota Lichidare', 0);
+GO
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(81, 'Nota lichidare', 'Nota lichidare', 'Personal\NotaLichidare', 1, 'm1.png')
+GO
+
+
+
+--Automatizarea acordarii de numere in Circuit Documente #343
+--https://github.com/wizromRD/WizOne/issues/343
+
+CREATE TABLE [dbo].[MP_ActAdSetari](
+	[IdTip] [int] NOT NULL,
+	[IdRegistru] [int] NULL,
+	[NrStart] [int] NULL,
+	[IdRaport] [int] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_MP_ActAdSetari] PRIMARY KEY CLUSTERED 
+(
+	[IdTip] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[MP_ActAdSetari] ADD  CONSTRAINT [DF_MP_ActAdSetari_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+
+
+
+CREATE TABLE [dbo].[MP_ActAdTip](
+	[Id] [int] NOT NULL,
+	[Denumire] [nvarchar](150) NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_MP_ActAdTip] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[MP_ActAdTip] ADD  CONSTRAINT [DF_MP_ActAdTip_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(1, 'Angajari')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(2, 'Acte Aditionale')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(3, 'Incetari')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(4, 'Detasari')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(5, 'DetasariRevenire')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(6, 'Suspendari')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(7, 'SuspendariRevenire')
+GO
+
+
+
+CREATE TABLE [dbo].[MP_ActAdRegistru](
+	[Id] [int] NOT NULL,
+	[Denumire] [nvarchar](150) NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_MP_ActAdRegistru] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[MP_ActAdRegistru] ADD  CONSTRAINT [DF_MP_ActAdRegistru_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(1, 'Numar marca')
+GO
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(2, 'Registru pe angajat')
+GO
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(3, 'Registru pe firma nr 1')
+GO
+
+
+
+IF((SELECT COUNT(*) FROM "tblMeniuri" WHERE "Pagina" LIKE '%MP_ActAdSetari%') = 0)
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana", USER_NO) VALUES(COALESCE((SELECT MAX(COALESCE("Id",0))+1 FROM "tblMeniuri"),0), 'Setari circuit documente', 'Setari circuit documente', 'Pagini\SablonNomen[MP_ActAdSetari]', 1, 'm1.png', -45);
+GO
+
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdTip',2,1,'SELECT Id, Denumire FROM MP_ActAdTip ORDER BY Denumire',0,-45);
+GO
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdRegistru',2,1,'SELECT Id, Denumire FROM MP_ActAdRegistru ORDER BY Denumire',0,-45);
+GO
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','NrStart',0,1,NULL,0,-45);
+GO
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdRaport',2,1,'SELECT DynReportId AS Id, Name AS Denumire FROM DynReports ORDER BY Name',0,-45);
+GO
+
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (1, 1, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (2, 2, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (3, 3, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (4, 3, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (5, 3, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (6, 3, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (7, 3, 1, 1, 2, NULL)
+GO
+
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_CIM') WHERE "IdTip"=1;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_ModificariCIM') WHERE "IdTip"=2;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Incetare') WHERE "IdTip"=3;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Detasare') WHERE "IdTip"=4;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_DetasareRevenire') WHERE "IdTip"=5;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Suspendare') WHERE "IdTip"=6;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_SuspendareRevenire') WHERE "IdTip"=7;
+GO
+
+DELETE FROM "tblParametrii" WHERE "Nume" IN ('RaportActeAditionale_CIM', 'RaportActeAditionale_ModificariCIM', 'RaportActeAditionale_Incetare', 'RaportActeAditionale_Detasare' ,'RaportActeAditionale_DetasareRevenire' , 'RaportActeAditionale_Suspendare', 'RaportActeAditionale_SuspendareRevenire');
+GO
+
+ALTER TABLE "Admin_NrActAd" ADD "IdTip" int
+GO
+ALTER TABLE "Admin_NrActAd" ADD "IdRegistru" int
+GO
+
+
+IF ((SELECT COUNT(*) FROM TblNomenConfig WHERE "Tabela"='Ptj_CumulatSetari' and "Camp" = 'Coloana')=0)
+INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo) VALUES('Ptj_CumulatSetari','Coloana',2,1,'SELECT ''F'' + CONVERT(nvarchar(3),Id) FROM (SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS Id FROM tblZile) AS X WHERE X.Id <= 100')
+ELSE
+UPDATE "tblNomenConfig" SET "SursaCombo" = REPLACE(REPLACE("SursaCombo",'60','100'), 'nvarchar(2)', 'nvarchar(3)') WHERE "Tabela"='Ptj_CumulatSetari' AND "Camp" = 'Coloana'
+GO
+
+
+IF COL_LENGTH('F1001', 'F1001135') IS NULL
+BEGIN
+    ALTER TABLE F1001 ADD F1001135 INT NULL ;
+END;
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ModCalculZileCO_Proportional_18Ani', '0', '1 - zilele de CO suplimentare se calculeaza proportional cu data la care implineste 18 ani; 0- zilele CO suplimentare se calculeaza la nivel de an', 0)
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ModCalculZileCO_Proportional_Handicap', '0', '1 - zilele de CO suplimentare se calculeaza proportional cu data la care inceteaza starea de invaliditate; 0- zilele CO suplimentare se calculeaza la nivel de an', 0)
+GO
+
+ALTER TABLE Ptj_tblZileCO ADD Anulate INT 
+GO
+
+ALTER TABLE TemplateCampuri ADD Tabela NVARCHAR(50) 
+GO
+
+
+CREATE FUNCTION [dbo].[CalculCO] (
+         @f10003 INT,
+    @zi datetime,
+    @mod int,
+    @grila int
+)
+    RETURNS @CalculCO TABLE (
+        ZileCuveniteAn int,
+        ZileCuvenite int,
+        ZileCuveniteZi int,
+        ZileAnPrecedent int
+    )
+ AS
+
+ BEGIN
+
+ declare @ZileCuveniteAn int, @ZileCuvenite int, @ZileCuveniteZi int, @ZileAnPrecedent int, @ZileAngajare int, @ZileAngajareZi int, @ZileSuspendare int, @ZileSuspendareZi int,
+ @PrimaZiAn date, @UltimaZiAn date, @TipCalcul int, @ZileSuplimentare int, @LuniVechime int, @CalculCOProp18Ani int, @CalculCOPropHand int, @ZileAn int
+
+-- @TipCalcul
+--  1 -- se calculeaza vechimea in munca in ultima zi din an
+-- 2. —se calculeaza vechimea in munca in prima zi din an
+--  3 —se calculeaza vechimea in munca la data angajarii
+--   11 -- se calculeaza vechimea in companie in ultima zi din an
+-- 12 —se calculeaza vechimea in companie in prima zi din an
+--  13 —se calculeaza vechimea in companie la data angajarii
+--   21 -- se calculeaza vechimea de la data angajarii in ultima zi din an
+-- 22 —se calculeaza vechimea de la data angajarii in prima zi din an
+--  23 —se calculeaza vechimea de la data angajarii la data angajarii
+
+-- 99 - particular
+
+select @ZileAn = 365
+if  year(@zi) % 4 = 0
+    select @ZileAn = 366;
+
+if isnull(@grila,0)= 0
+    select @grila = f10072 from f100 where f10003 = @f10003;
+
+ Select @ZileSuplimentare = Convert(int,isnull((select "Valoare" from "tblParametrii" where "Nume"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3));
+ Select @TipCalcul = Convert(int,isnull((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCOCuvenite'),1));
+ Select @CalculCOProp18Ani = Convert(int,isnull((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCO_Proportional_18Ani'),0));
+ Select @CalculCOPropHand = Convert(int,isnull((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCO_Proportional_Handicap'),0));
+
+
+ Select @PrimaZiAn = CASE WHEN cast(F10022 as date) < convert(varchar, year(@zi))  +  '-01-01'  THEN convert(varchar, year(@zi))  +  '-01-01'  ELSE cast(F10022 as date) END,
+ @UltimaZiAn = CASE WHEN cast(f10023 as date) < convert(varchar, year(@zi))  +  '-12-31'  THEN cast(f10023 as date) ELSE convert(varchar, year(@zi))  +  '-12-31'  END
+ from (select * from F100 where f10003 = @F10003) a ;
+
+Select @ZileAngajare = datediff(day, @PrimaZiAn, @UltimaZiAn)+1 ,
+ @ZileAngajareZi = datediff(day, @PrimaZiAn,  (CASE WHEN cast(f10023 as date) < @zi THEN cast(f10023 as date) ELSE @zi END))+1
+ from (select * from F100 where f10003 = @F10003) a  ;
+
+If @TipCalcul = 1
+     Select @LuniVechime = ISNULL(convert(int,substring(F100644,1,2)),0) * 12 + ISNULL(convert(int,substring(F100644,3,2)),0) + DATEDIFF (MONTH,   (select convert(nvarchar(4),F01011) + '-' +
+            convert(nvarchar(4),F01012) + '-01' from F010),convert(varchar, year(@zi))  +  '-12-31') from f100 where f10003 = @f10003
+Else if @TipCalcul = 2
+     Select @LuniVechime = ISNULL(convert(int,substring(F100644,1,2)),0) * 12 + ISNULL(convert(int,substring(F100644,3,2)),0) + DATEDIFF (MONTH,   (select convert(nvarchar(4),F01011) + '-' +
+            convert(nvarchar(4),F01012) + '-01' from F010),convert(varchar, year(@zi))  +  '-01-01') from f100 where f10003 = @f10003
+Else if @TipCalcul = 3
+     Select @LuniVechime = ISNULL(convert(int,substring(F100644,1,2)),0) * 12 + ISNULL(convert(int,substring(F100644,3,2)),0) + DATEDIFF (MONTH,   (select convert(nvarchar(4),F01011) + '-' +
+            convert(nvarchar(4),F01012) + '-01' from F010), @zi ) from f100 where f10003 = @f10003
+Else If @TipCalcul = 11
+     Select @LuniVechime = ISNULL(convert(int,substring(F100643,1,2)),0) * 12 + ISNULL(convert(int,substring(F100643,3,2)),0) + DATEDIFF (MONTH,   (select convert(nvarchar(4),F01011) + '-' +
+            convert(nvarchar(4),F01012) + '-01' from F010),convert(varchar, year(@zi))  +  '-12-31') from f100 where f10003 = @f10003
+Else if @TipCalcul = 12
+     Select @LuniVechime = ISNULL(convert(int,substring(F100643,1,2)),0) * 12 + ISNULL(convert(int,substring(F100643,3,2)),0) + DATEDIFF (MONTH,   (select convert(nvarchar(4),F01011) + '-' +
+            convert(nvarchar(4),F01012) + '-01' from F010),convert(varchar, year(@zi))  +  '-01-01') from f100 where f10003 = @f10003
+Else if @TipCalcul = 13
+     Select @LuniVechime = ISNULL(convert(int,substring(F100643,1,2)),0) * 12 + ISNULL(convert(int,substring(F100643,3,2)),0) + DATEDIFF (MONTH,   (select convert(nvarchar(4),F01011) + '-' +
+            convert(nvarchar(4),F01012) + '-01' from F010), @zi ) from f100 where f10003 = @f10003
+Else If @TipCalcul = 21
+     Select @LuniVechime =  DATEDIFF (MONTH, F10022,convert(varchar, year(@zi))  +  '-12-31')
+     - case when day(f10022) > day(convert(varchar, year(@zi))  +  '-12-31') then 1 else 0 end from f100 where f10003 = @f10003
+Else if @TipCalcul = 22
+     Select @LuniVechime =  DATEDIFF (MONTH, F10022,convert(varchar, year(@zi))  +  '-01-01')
+     - case when day(f10022) > day(convert(varchar, year(@zi))  +  '-01-01') then 1 else 0 end from f100 where f10003 = @f10003
+Else if @TipCalcul = 23
+    Select @LuniVechime = DATEDIFF (MONTH, F10022, @zi )
+     - case when day(f10022) > day(@zi)  then 1 else 0 end from f100 where f10003 = @f10003
+Else if @TipCalcul = 99
+     select @LuniVechime =  DATEDIFF (MONTH,  case when f10022 <= '2018-02-14' then '2018-02-14' else f10022 end , @zi )
+     - case when ( case when f10022 <= '2018-02-14' then 14 else day(f10022) end) > day(@zi)  then 1 else 0 end
+    from f100 where f10003 = @f10003;
+
+
+If @mod <> 1
+     select @ZileCuveniteAn = CuveniteAn from ptj_tblzileco where an=year(@zi) and f10003 = @f10003
+ else
+    select @ZileCuveniteAn =     c.F02615
+    + CASE WHEN ISNULL(a.F10027,0)>=2 THEN
+     convert(int, round( case when @CalculCOPropHand = 0 or f100271 = '2100-01-01' or f100271 = '1900-01-01' then 1 else
+     (datediff(day, @PrimaZiAn, (case when  f100271 <= @UltimaZiAn  then f100271 else @UltimaZiAn end) )+1 ) / convert(float, @ZileAn)
+    end * @ZileSuplimentare,0)) ELSE 0 END
+    +  case when dateadd(year,18,f10021) >= @PrimaZiAn  then
+    convert(int, round( case when @CalculCOProp18Ani = 0 then 1 else
+     (datediff(day, @PrimaZiAn, (case when  dateadd(year, 18, f10021) <= @UltimaZiAn  then dateadd(year, 18, f10021)  else @UltimaZiAn end) )+1 ) / convert(float, @ZileAn)
+    end * @ZileSuplimentare,0))  else 0 end
+        from (select * from F100 where f10003 = @F10003) a    left join F026 c on convert(int,@grila) = c.F02604 and
+        (convert(int,c.F02610/100) * 12) <= @LuniVechime and @LuniVechime < (convert(int,c.F02611/100) * 12)  where (year(@zi)  between year(F10022) and year(F10023) ) and a.F10003= @f10003 ;
+
+
+
+    with xx as  (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107='2100-01-01' then f111.f11106 else dateadd(d,-1,f111.f11107) end la_data from f111 inner join
+  (select a.f11103, a.f11105, case when a.f11107='2100-01-01' then a.f11106 else dateadd(d,-1,a.f11107) end f11107, a.time, max(b.time) timp from F111 a inner join f111 b  on
+  a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107='2100-01-01' then b.f11106 else dateadd(d,-1,b.f11107) end   and b.f11105 <= case when a.f11107='2100-01-01'
+  then a.f11106 else dateadd(d,-1,a.f11107) end)  group by a.f11103, a.f11105, case when a.f11107='2100-01-01' then a.f11106 else dateadd(d,-1,a.f11107) end, a.time) t  on f111.f11103 = t.f11103 and
+  f111.f11105 = t.f11105 and   case when f111.f11107='2100-01-01' then f111.f11106 else dateadd(d,-1,f111.f11107) end = t.f11107 and f111.time = t.timp  union all
+  select f10003 Marca, datainceput de_la_data, datasfarsit la_data  from ptj_cereri inner join Ptj_tblAbsente on Ptj_Cereri.IdAbsenta = Ptj_tblAbsente.id  where
+  ptj_cereri.IdStare=3 and isnull(Ptj_tblAbsente.AbsenteCFPInCalculCO,0) = 1  ),
+   yy as  (select distinct a.marca, min(b.de_la_data) de_la_data, max(b.la_data) la_data from xx a  inner join xx b on a.marca = b.marca and
+   (a.de_la_data <= b.la_data and b.de_la_data <= a.la_data)  group by a.marca, a.de_la_data, a.la_data),
+   f111_2 as   (select distinct a.marca f11103, min(b.de_la_data) f11105, max(b.la_data)  f11107 from yy a  inner join yy b on a.marca = b.marca and (a.de_la_data <=
+    b.la_data and b.de_la_data <= a.la_data)  group by a.marca, a.de_la_data, a.la_data)
+
+  select  @ZileSuspendare= (select COALESCE(SUM(datediff(d,CASE WHEN F11105 <  CONVERT(date,convert(varchar, year(@zi))  +  '-01-01') THEN CONVERT(date,convert(varchar, year(@zi))  +  '-01-01') else F11105 END,CASE WHEN F11107 > CONVERT(date,convert(varchar, year(@zi))  +  '-12-31') THEN CONVERT(date,convert(varchar, year(@zi))  +  '-12-31') else F11107 END) + 1) ,0)
+  from (select * from F100 where f10003 = @F10003) a  join f111_2 Z on a.f10003 = z.f11103
+   and F11105 <= F11107 AND F11107 >= CONVERT(date,convert(varchar, year(@zi))  +  '-01-01') AND F11105 <= CONVERT(date,convert(varchar, year(@zi))  +  '-12-31')) ,
+  @ZileSuspendareZi = (select COALESCE(SUM(datediff(d,CASE WHEN F11105 <
+   CONVERT(date,convert(varchar, year(@zi))  +  '-01-01') THEN CONVERT(date,convert(varchar, year(@zi))  +  '-01-01') else F11105 END,CASE WHEN F11107 > CONVERT(date,@zi) THEN CONVERT(date,@zi) else F11107 END)+1) ,0)
+   from (select * from F100 where f10003 = @F10003) a  join f111_2 Z on a.f10003 = z.f11103
+   and F11105 <= F11107 AND F11107 >= CONVERT(date,convert(varchar, year(@zi))  +  '-01-01') AND F11105 <= CONVERT(date,@zi)) ;
+
+   select @ZileCuvenite = case when @mod= 1 then round(convert(float,@ZileCuveniteAn * (@ZileAngajare - isnull(@ZileSuspendare,0))) /CONVERT(float,@ZileAn),0)
+             else (select Cuvenite from Ptj_tblZileCO where f10003 = @f10003 and an = year(@zi)) end;
+
+   select @ZileCuveniteZi =  round(convert(float, @ZileCuveniteAn * (@ZileAngajareZi - isnull(@ZileSuspendareZi,0))) /CONVERT(float,@ZileAn),0);
+
+
+
+ INSERT INTO @CalculCO
+  SELECT @ZileCuveniteAn, isnull(@ZileCuvenite,0), @ZileCuveniteZi, isnull((select SoldAnterior from Ptj_tblZileCO where f10003 = @f10003 and an=year(@zi)),0);
+
+   RETURN;
+  END
+
+  GO
+
+
+
+  CREATE PROCEDURE [dbo].[CalculCOProc]
+     @f10003 INT,
+	@zi datetime,
+	@mod int = 1,
+	@grila int = 0
+AS
+
+BEGIN
+
+DECLARE @ZileCuveniteAn INT;
+DECLARE @ZileCuvenite INT;
+DECLARE @ZileCuveniteZi INT;
+DECLARE @ZileAnPrecedent INT;
+DECLARE @cnt INT;
+
+SELECT @ZileCuveniteAn=ZileCuveniteAn, @ZileCuvenite=ZileCuvenite,@ZileCuveniteZi=ZileCuveniteZi,@ZileAnPrecedent=ZileAnPrecedent  FROM CalculCO(@f10003, @zi, @mod, @grila)
+
+SELECT @cnt = COUNT(*) FROM Ptj_tblZileCO WHERE F10003 = @f10003 and An = year(@zi)
+
+    if (year(@zi) = (SELECT F01011 FROM F010))
+	UPDATE F100 set F100642 =  @ZileCuveniteAn, F100995 =  @ZileCuvenite, F100996 = @ZileAnPrecedent WHERE
+	F10003 = @f10003;
+
+  if (year(@zi) >= (SELECT F01011 FROM F010))
+   if(@cnt > 0)
+		UPDATE Ptj_tblZileCO set CuveniteAn = @ZileCuveniteAn, Cuvenite = @ZileCuvenite WHERE
+		F10003 = @f10003 and An = year(@zi);
+	else
+		INSERT INTO Ptj_tblZileCO (F10003, An, Cuvenite, SoldAnterior, Efectuate, CuveniteAn)
+		VALUES (@f10003, year(@zi), @ZileCuvenite, 0, 0, @ZileCuveniteAn)
+END
+
+
+GO
+
+
+

@@ -579,7 +579,7 @@ namespace WizOne.Module
 
             try
             {
-                if (General.Nz(HttpContext.Current.Session["SecAuditSelect"], "0").ToString() == "1")
+                if (HttpContext.Current != null && General.Nz(HttpContext.Current.Session["SecAuditSelect"], "0").ToString() == "1")
                 {
                     string[] arr = Constante.campuriGDPR.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -590,7 +590,7 @@ namespace WizOne.Module
                     }
                 }
 
-                if (General.Nz(HttpContext.Current.Session["SecCriptare"], "0").ToString() == "1")
+                if (HttpContext.Current != null && General.Nz(HttpContext.Current.Session["SecCriptare"], "0").ToString() == "1")
                 {
                     string[] arr = Constante.campuriGDPR.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 

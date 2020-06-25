@@ -14366,3 +14366,533 @@ WHERE X."ProgramId" IS NOT NULL
 AND ("ContractId" * 1000000 + "ProgramId" * 10 + "ZiSapt") NOT IN 
 (SELECT "IdContract" * 1000000 + "IdProgram" * 10 + "TipSchimb" FROM "Ptj_ContracteSchimburi");
 COMMIT;
+
+
+
+----	2.2.129	----
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('NrOptiuniExportSAP', '3', 'Numar de optiuni pentru pagina Export SAP (intre 1 si 5)', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('CaleConfigPeopleSoft', '', 'Calea catre fisierul Config pagina Export SAP', 0);
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(80, 'Tipul de invatamant', 'Tipul de invatamant', 'Pagini\SablonNomen[tblTipInvatamant]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(81, 'Tipul institutiei de invatamant', 'Tipul institutiei de invatamant', 'Pagini\SablonNomen[tblTipInstitutie]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(82, 'Profil studii', 'Profil studii', 'Pagini\SablonNomen[tblProfilStudii]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(83, 'Domeniu studii', 'Domeniu studii', 'Pagini\SablonNomen[tblDomeniuStudii]', 1, 'm1.png');
+COMMIT;
+
+alter table "Eval_QuizIntrebari" ADD "IdCategObiective_Nou" number(9) NULL;
+update "Eval_QuizIntrebari" set "IdCategObiective_Nou" = "IdCategObiective";
+commit;
+alter table "Eval_QuizIntrebari" drop column "IdCategObiective";
+alter table "Eval_QuizIntrebari" rename column "IdCategObiective_Nou" to "IdCategObiective";
+/
+
+DELETE FROM "tblParametrii" WHERE "Nume"='NumeImprimanta';
+COMMIT;
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TactilImprimanta', '', 'Numele imprimantei la care se vor imprima documentele din info chiosc; daca nu este specificat nimic atunci se foloseste imprimanta default', 0);
+COMMIT;
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TactilImprimantaFluturas', '', 'Numele imprimantei la care se va imprima fluturasul din info chiosc; daca nu este specificat nimic atunci se foloseste imprimanta default', 0);
+COMMIT;
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('InOutInExportPontaj', '3', 'Se foloseste in exportul din pontajul echipei si In/Out-ul care apare in export ia valorile astfel: 1 - FirstIn/LastOut; 2 - FirstInRap/LastOutRap; 3 - FirstInPaid/LastOutPaid', 2);
+COMMIT;
+
+alter table "Ptj_tblAbsenteConfig" add "AfisareInfoChiosc" number(9);
+/
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_Frecventa', '15', 'Frecventa de verificare: daca setez 15, inseamna ca o sa verificam 1 din 15 angajati', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_TimpAfisare', '5', 'cate secunde sa fie afisat numele persoanei pe ecran', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_InOut', 'IO', 'se specifica ce tranzactii sunt luate in considerare; I - daor intrarile; O - doar iesirile; IO - intrari si iesiri', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_NrCeas', '', 'se enumera terminalele care sunt incluse in procesul de control al angajatilor; restul se ignora; daca nu este nici o valoare se iau in calcul toate;', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_FontSize', '', 'se foloseste in procesul de control al angajatilor si reprezinta fontul cu care se afiseaza mesajele pe ecran', 0);
+COMMIT;
+
+ALTER TABLE "Ptj_Intrari" ADD "TimpOSReal" number(10);
+/
+
+--https://github.com/wizromRD/WizOne/issues/456
+ALTER TABLE "tblNomenConfig" ADD "Alias" varchar2(250)
+/
+
+
+CREATE TABLE "MP_NotaLichidare_Circuit"(
+	"GrupAngajati" NUMBER(9),
+	"Rol" varchar2(250),
+	"Supervizor" NUMBER(9),
+	"Valoare" CLOB,
+	"IdAuto" NUMBER(9) NOT NULL,
+	USER_NO NUMBER(9),
+	TIME DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_MP_NotaLichidare_Circuit" ON "MP_NotaLichidare_Circuit" ("IdAuto") ;
+
+ALTER TABLE "MP_NotaLichidare_Circuit" ADD CONSTRAINT "PK_MP_NotaLichidare_Circuit" PRIMARY KEY ("IdAuto");
+
+CREATE SEQUENCE "MP_NotaLichidare_Circuit_SEQ"  MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER  NOCYCLE ;
+
+
+create or replace TRIGGER "Auto_MP_NotaLichidare_Circuit"
+  BEFORE INSERT ON "MP_NotaLichidare_Circuit"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "MP_NotaLichidare_Circuit_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+
+
+
+
+CREATE TABLE "MP_NotaLichidare"(
+	F10003 NUMBER(9),
+	"NrDoc" NUMBER(9),
+	"Observatii" VARCHAR2(250),
+  "IdStare" NUMBER(9),
+  "DataDoc" DATE,
+	"IdAuto" NUMBER(9) NOT NULL,
+	USER_NO NUMBER(9),
+	TIME DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_MP_NotaLichidare" ON "MP_NotaLichidare" ("IdAuto") ;
+
+ALTER TABLE "MP_NotaLichidare" ADD CONSTRAINT "PK_MP_NotaLichidare" PRIMARY KEY ("IdAuto");
+
+CREATE SEQUENCE "MP_NotaLichidare_SEQ"  MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER  NOCYCLE ;
+
+
+create or replace TRIGGER "Auto_MP_NotaLichidare"
+  BEFORE INSERT ON "MP_NotaLichidare"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "MP_NotaLichidare_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+
+
+
+CREATE TABLE "MP_NotaLichidare_Detalii"(
+	F10003 NUMBER(9),
+	"IdStare" NUMBER(9),
+	"IdNotaLichidare" NUMBER(9),
+	"Rol" varchar2(250),
+	"Supervizor" NUMBER(9),
+	"Valoare" CLOB,
+  "Datorii" NUMBER(9),
+  "Comentarii" varchar2(250),
+	"IdAuto" NUMBER(9) NOT NULL,
+	USER_NO NUMBER(9),
+	TIME DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_MP_NotaLichidare_Detalii" ON "MP_NotaLichidare_Detalii" ("IdAuto") ;
+
+ALTER TABLE "MP_NotaLichidare_Detalii" ADD CONSTRAINT "PK_MP_NotaLichidare_Detalii" PRIMARY KEY ("IdAuto");
+
+CREATE SEQUENCE "MP_NotaLichidare_Detalii_SEQ"  MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER  NOCYCLE ;
+
+
+create or replace TRIGGER "Auto_MP_NotaLichidare_Detalii"
+  BEFORE INSERT ON "MP_NotaLichidare_Detalii"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "MP_NotaLichidare_Detalii_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+
+
+CREATE TABLE "MP_NotaLichidare_Stari"(
+	"Id" NUMBER(9),
+	"Denumire" varchar2(250),
+	USER_NO NUMBER(9),
+	TIME DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_MP_NotaLichidare_Stari" ON "MP_NotaLichidare_Stari" ("Id") ;
+
+ALTER TABLE "MP_NotaLichidare_Stari" ADD CONSTRAINT "PK_MP_NotaLichidare_Stari" PRIMARY KEY ("Id");
+
+INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (-1, 'Anulat');
+INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (1, 'Initiat');
+INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (3, 'Finalizat');
+COMMIT;
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportNotaLichidare', '-99', 'Id Raport pentru Nota Lichidare', 0);
+COMMIT;
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(81, 'Nota lichidare', 'Nota lichidare', 'Personal\NotaLichidare', 1, 'm1.png');
+COMMIT;
+
+
+--Automatizarea acordarii de numere in Circuit Documente #343
+--https://github.com/wizromRD/WizOne/issues/343
+
+DELETE FROM "tblNomenConfig" WHERE "Tabela"='MP_ActAdSetari';
+COMMIT;
+
+CREATE TABLE "MP_ActAdSetari" 
+(	"IdTip" NUMBER(10,0), 
+    "IdRegistru" NUMBER(10,0), 
+    "NrStart" NUMBER(10,0), 
+    "IdRaport" NUMBER(10,0), 
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE
+);
+
+CREATE UNIQUE INDEX "MP_ActAdSetari_PK" ON "MP_ActAdSetari" ("IdTip");
+ALTER TABLE "MP_ActAdSetari" ADD CONSTRAINT "MP_ActAdSetari_PK" PRIMARY KEY ("IdTip");
+ALTER TABLE "MP_ActAdSetari" MODIFY ("IdTip" NOT NULL ENABLE);
+/
+
+CREATE TABLE "MP_ActAdTip" 
+(	"Id" NUMBER(10,0), 
+    "Denumire" VARCHAR2(150 BYTE), 
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE
+);
+
+ALTER TABLE "MP_ActAdTip" MODIFY ("Id" NOT NULL ENABLE);
+/
+
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(1, 'Angajari');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(2, 'Acte Aditionale');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(3, 'Incetari');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(4, 'Detasari');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(5, 'DetasariRevenire');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(6, 'Suspendari');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(7, 'SuspendariRevenire');
+COMMIT;
+
+
+
+CREATE TABLE "MP_ActAdRegistru" 
+(	"Id" NUMBER(10,0), 
+    "Denumire" VARCHAR2(150 BYTE), 
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE
+);
+
+ALTER TABLE "MP_ActAdRegistru" MODIFY ("Id" NOT NULL ENABLE);
+/
+
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(1, 'Numar marca');
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(2, 'Registru pe angajat');
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(3, 'Registru pe firma nr 1');
+COMMIT;
+
+
+BEGIN
+DECLARE vExists number;
+BEGIN
+SELECT COUNT(*) INTO vExists FROM "tblMeniuri" WHERE "Pagina" LIKE '%MP_ActAdSetari%';
+  IF vExists > 0 THEN 
+    EXECUTE IMMEDIATE 'INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana", USER_NO) VALUES(COALESCE((SELECT MAX(COALESCE("Id",0))+1 FROM "tblMeniuri"),0), ''Setari circuit documente'', ''Setari circuit documente'', ''Pagini\SablonNomen[MP_ActAdSetari]'', 1, ''m1.png'', -45)';
+  END IF;
+END;
+END;
+/
+
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdTip',2,1,'SELECT Id, Denumire FROM MP_ActAdTip ORDER BY Denumire',0,-45);
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdRegistru',2,1,'SELECT Id, Denumire FROM MP_ActAdRegistru ORDER BY Denumire',0,-45);
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','NrStart',0,1,NULL,0,-45);
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdRaport',2,1,'SELECT DynReportId AS Id, Name AS Denumire FROM DynReports ORDER BY Name',0,-45);
+COMMIT;
+
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (1, 1, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (2, 2, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (3, 3, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (4, 3, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (5, 3, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (6, 3, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (7, 3, 1, 1, 2, NULL);
+COMMIT;
+
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_CIM') WHERE "IdTip"=1;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_ModificariCIM') WHERE "IdTip"=2;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Incetare') WHERE "IdTip"=3;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Detasare') WHERE "IdTip"=4;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_DetasareRevenire') WHERE "IdTip"=5;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Suspendare') WHERE "IdTip"=6;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_SuspendareRevenire') WHERE "IdTip"=7;
+COMMIT;
+
+DELETE FROM "tblParametrii" WHERE "Nume" IN ('RaportActeAditionale_CIM', 'RaportActeAditionale_ModificariCIM', 'RaportActeAditionale_Incetare', 'RaportActeAditionale_Detasare' ,'RaportActeAditionale_DetasareRevenire' , 'RaportActeAditionale_Suspendare', 'RaportActeAditionale_SuspendareRevenire');
+COMMIT;
+
+ALTER TABLE "Admin_NrActAd" ADD "IdTip" number(10);
+/
+ALTER TABLE "Admin_NrActAd" ADD "IdRegistru" number(10);
+/
+
+
+BEGIN
+DECLARE vExists number;
+BEGIN
+SELECT COUNT(*) INTO vExists FROM "tblNomenConfig" WHERE "Tabela"='Ptj_CumulatSetari' and "Camp" = 'Coloana';
+  IF vExists = 0 THEN 
+    INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo") VALUES('Ptj_CumulatSetari','Coloana',2,1,'SELECT ''F'' || CAST(Id as varchar2(3)) FROM (SELECT CAST(ROW_NUMBER() OVER (ORDER BY (SELECT 1 FROM DUAL)) AS int) AS Id FROM "tblZile") X WHERE X.Id <= 100');
+  ELSE
+    UPDATE "tblNomenConfig" SET "SursaCombo" = REPLACE(REPLACE("SursaCombo",'60','100'), 'varchar2(2)', 'varchar2(3)') WHERE "Tabela"='Ptj_CumulatSetari' AND "Camp" = 'Coloana';
+  END IF;
+  COMMIT;
+END;
+END;
+/
+
+
+    declare
+    column_exists exception;
+    pragma exception_init (column_exists , -01430);
+    begin
+        execute immediate 'ALTER TABLE F1001 ADD F1001135 NUMBER(9) NULL';
+        exception when column_exists then null;
+    end;
+	
+	INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ModCalculZileCO_Proportional_18Ani', '0', '1 - zilele de CO suplimentare se calculeaza proportional cu data la care implineste 18 ani; 0- zilele CO suplimentare se calculeaza la nivel de an', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ModCalculZileCO_Proportional_Handicap', '0', '1 - zilele de CO suplimentare se calculeaza proportional cu data la care inceteaza starea de invaliditate; 0- zilele CO suplimentare se calculeaza la nivel de an', 0);
+COMMIT;
+
+
+    ALTER TABLE "Ptj_tblZileCO" ADD "Anulate" NUMBER(9);
+	
+	ALTER TABLE "TemplateCampuri" ADD "Tabela" VARCHAR2(50);
+	
+
+	create or replace type calcul_co_record as object (
+ "ZileCuveniteAn" NUMBER(9),
+"ZileCuvenite"  NUMBER(9),
+ "ZileCuveniteZi"  NUMBER(9),
+ "ZileAnPrecedent"  NUMBER(9)
+);
+
+create or replace type calcul_co_table as table of calcul_co_record;
+
+
+
+create or replace function "CalculCO"(
+    marca in number,
+	zi in date,
+	tip in number,
+	grila in number
+) return calcul_co_table as
+  v_ret   calcul_co_table;
+  ZileCuveniteAn number;
+ZileCuvenite number;
+ZileCuveniteZi number;
+ZileAnPrecedent number;
+ZileAngajare number;
+ZileAngajareZi number;
+ZileSuspendare number;
+ZileSuspendareZi number;
+PrimaZiAn date;
+UltimaZiAn date;
+TipCalcul number;
+ZileSuplimentare number;
+LuniVechime number;
+CalculCOProp18Ani number;
+CalculCOPropHand number;
+ZileAn number := 365;
+Grila1 number := grila;
+  
+begin
+  
+-- @TipCalcul
+--  1 -- se calculeaza vechimea in munca in ultima zi din an
+-- 2. —se calculeaza vechimea in munca in prima zi din an
+--  3 —se calculeaza vechimea in munca la data angajarii
+--   11 -- se calculeaza vechimea in companie in ultima zi din an
+-- 12 —se calculeaza vechimea in companie in prima zi din an
+--  13 —se calculeaza vechimea in companie la data angajarii
+--   21 -- se calculeaza vechimea de la data angajarii in ultima zi din an
+-- 22 —se calculeaza vechimea de la data angajarii in prima zi din an
+--  23 —se calculeaza vechimea de la data angajarii la data angajarii
+
+-- 99 - particular 
+
+
+if  REMAINDER(extract(year from zi), 4) = 0 then
+  select 366 into ZileAn from dual;
+end if;
+   
+if nvl(Grila1,0)= 0 then
+    select  f10072 into Grila1 from f100 where f10003 = marca;   
+end if;    
+    
+    
+ Select  to_number(nvl((select "Valoare" from "tblParametrii" where "Nume"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3)) into ZileSuplimentare from dual;
+ Select to_number(nvl((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCOCuvenite'),1)) into TipCalcul from dual;
+ Select to_number(nvl((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCO_Proportional_18Ani'),0)) into CalculCOProp18Ani from dual;
+ Select to_number(nvl((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCO_Proportional_Handicap'),0)) into CalculCOPropHand from dual;    
+   
+ Select (CASE WHEN trunc(F10022) <  to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy')  THEN to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy')  ELSE trunc(F10022) END) into PrimaZiAn 
+ from (select * from F100 where f10003 = marca) a ;
+ 
+  Select 
+  (CASE WHEN trunc(f10023) < to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy')  THEN trunc(f10023) ELSE to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy')  END)  into UltimaZiAn
+ from (select * from F100 where f10003 = marca) a ;
+
+Select  UltimaZiAn - PrimaZiAn +1 into ZileAngajare
+ from (select * from F100 where f10003 = marca) a  ;   
+   
+Select  ((CASE WHEN trunc(f10023) < zi THEN trunc(f10023) ELSE zi END) - PrimaZiAn + 1) into ZileAngajareZi
+ from (select * from F100 where f10003 = marca) a  ;  
+ 
+ 
+ If TipCalcul = 1 then
+    select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + MONTHS_BETWEEN(to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy')  ,  
+(select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') from f010) ) into LuniVechime from f100 where f10003 = marca;             
+elsif TipCalcul = 2 then
+     Select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + MONTHS_BETWEEN (to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy'),
+     (select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') from f010)) into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 3 then
+     Select  nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + MONTHS_BETWEEN ( zi,  (select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') 
+     from f010)) into LuniVechime from f100 where f10003 = marca;
+ElsIf TipCalcul = 11 then
+     Select  nvl(to_number(substr(F100643,1,2)),0) * 12 + nvl(to_number(substr(F100643,3,2)),0) + MONTHS_BETWEEN (to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy'),
+     (select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') from f010)) into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 12 then
+     Select  nvl(To_number(substr(F100643,1,2)),0) * 12 + nvl(to_number(substr(F100643,3,2)),0) + MONTHS_BETWEEN (to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy'),  
+     (select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') from f010)) into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 13 then
+     Select  nvl(to_number(substr(F100643,1,2)),0) * 12 + NVL(to_number(substr(F100643,3,2)),0) + MONTHS_BETWEEN (zi,   (select to_date('01/'||f01012||'/'||F01011, 'dd/mm/yyyy') 
+     from f010) ) into LuniVechime from f100 where f10003 = marca;
+ElsIf TipCalcul = 21 then
+     Select   MONTHS_BETWEEN (to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy'), F10022)
+     - case when extract(day from f10022) > extract(day from to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy')) then 1 else 0 end into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 22 then
+     Select  MONTHS_BETWEEN ( to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') , F10022)
+     - case when extract(day from f10022) > extract(day from to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy')) then 1 else 0 end into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 23 then
+    Select  MONTHS_BETWEEN ( zi, F10022 )
+     - case when extract(day from f10022) > extract(day from zi)  then 1 else 0 end into LuniVechime from f100 where f10003 = marca;
+Elsif TipCalcul = 99 then
+     select  MONTHS_BETWEEN (zi,  case when f10022 <= to_date('14/02/2018','dd/mm/yyyy') then to_date('14/02/2018','dd/mm/yyyy') else f10022 end )
+     - case when ( case when f10022 <= to_date('14/02/2018','dd/mm/yyyy') then 14 else extract(day from f10022) end) > extract(day from zi)  then 1 else 0 end into LuniVechime
+    from f100 where f10003 = marca;
+ end if;
+
+ if tip = 1 then
+    select    (  c.F02615    + CASE WHEN nvl(a.F10027,0)>=2 THEN
+     to_number(round( case when CalculCOPropHand = 0 or f100271 = to_date('01/01/2100', 'dd/mm/yyyy') or f100271 = to_date('01/01/1900', 'dd/mm/yyyy') then 1 else
+     ((case when  f100271 <= UltimaZiAn  then f100271 else UltimaZiAn end) - PrimaZiAn +1 )     / to_number(ZileAn)    end * ZileSuplimentare,0)) ELSE 0 END
+    +  case when add_months(f10021, 18 * 12) >= PrimaZiAn  then
+    to_number( round( case when CalculCOProp18Ani = 0 then 1 else
+     ( (case when  add_months(f10021, 18 * 12) <= UltimaZiAn  then add_months(f10021, 18 * 12)  else UltimaZiAn end) - PrimaZiAn +1 ) / to_number(ZileAn)
+    end * ZileSuplimentare,0))  else 0 end) into ZileCuveniteAn
+        from (select * from F100 where f10003 = marca) a    
+        left join F026 c on to_number(Grila1) = c.F02604 and
+        (to_number(c.F02610/100) * 12) <= LuniVechime and LuniVechime < (to_number(c.F02611/100) * 12)  where (extract(year from zi)  between extract(year from F10022)
+        and extract(year from F10023) ) and a.F10003= marca ;
+ else
+      select  "CuveniteAn" into ZileCuveniteAn from "Ptj_tblZileCO" where "An"=extract(year from zi) and f10003 = marca;
+ end if;  
+   
+   
+   with xx as  (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else 
+f111.f11107 end la_data from f111 inner join   (select a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) 
+timp from F111 a inner join f111 b  on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-01-2100','DD-MM-YYYY') then b.f11106 else b.f11107 end   and b.f11105 <= case 
+when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end)  group by a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else 
+a.f11107 end, a.time) t  on f111.f11103 = t.f11103 and f111.f11105 = t.f11105 and   case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 
+and f111.time = t.timp  union all  select f10003 Marca, "DataInceput" de_la_data, "DataSfarsit" la_data  from "Ptj_Cereri" inner join "Ptj_tblAbsente" on "Ptj_Cereri"."IdAbsenta" = 
+"Ptj_tblAbsente"."Id"  where "Ptj_Cereri"."IdStare"=3 and COALESCE("Ptj_tblAbsente"."AbsenteCFPInCalculCO",0) = 1  ),   
+yy as  (select distinct a.marca, min(b.de_la_data) de_la_data, max(b.la_data) la_data from xx a  inner join xx b on a.marca = b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= 
+a.la_data)  group by a.marca, a.de_la_data, a.la_data),  f111_2 as   (select distinct a.marca f11103, min(b.de_la_data) f11105, max(b.la_data)  f11107 from yy a  inner join yy b on a.marca = 
+b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= a.la_data)  group by a.marca, a.de_la_data, a.la_data) 
+    
+  select  (select COALESCE(SUM( (CASE WHEN F11107 > to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy') THEN to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy') else F11107 END -
+  CASE WHEN F11105 <  to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') THEN to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') else F11105 END) + 1) ,0)
+  from (select * from F100 where f10003 = marca) a  join f111_2 Z on a.f10003 = z.f11103
+   and F11105 <= F11107 AND F11107 >= to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') AND F11105 <= to_date('31/12/' || extract(year from zi), 'dd/mm/yyyy')) into ZileSuspendare from dual;
+   
+   
+     with xx as  (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else 
+f111.f11107 end la_data from f111 inner join   (select a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) 
+timp from F111 a inner join f111 b  on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-01-2100','DD-MM-YYYY') then b.f11106 else b.f11107 end   and b.f11105 <= case 
+when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end)  group by a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else 
+a.f11107 end, a.time) t  on f111.f11103 = t.f11103 and f111.f11105 = t.f11105 and   case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 
+and f111.time = t.timp  union all  select f10003 Marca, "DataInceput" de_la_data, "DataSfarsit" la_data  from "Ptj_Cereri" inner join "Ptj_tblAbsente" on "Ptj_Cereri"."IdAbsenta" = 
+"Ptj_tblAbsente"."Id"  where "Ptj_Cereri"."IdStare"=3 and COALESCE("Ptj_tblAbsente"."AbsenteCFPInCalculCO",0) = 1  ),   
+yy as  (select distinct a.marca, min(b.de_la_data) de_la_data, max(b.la_data) la_data from xx a  inner join xx b on a.marca = b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= 
+a.la_data)  group by a.marca, a.de_la_data, a.la_data),  f111_2 as   (select distinct a.marca f11103, min(b.de_la_data) f11105, max(b.la_data)  f11107 from yy a  inner join yy b on a.marca = 
+b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= a.la_data)  group by a.marca, a.de_la_data, a.la_data)  
+   select (select COALESCE(SUM( (   CASE WHEN F11107 > trunc(zi)    THEN trunc(zi) else F11107 END) -
+   CASE WHEN F11105 <   to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') THEN to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') else F11105 END +1) ,0)
+   from (select * from F100 where f10003 = marca) a  join f111_2 Z on a.f10003 = z.f11103
+   and F11105 <= F11107 AND F11107 >= to_date('01/01/' || extract(year from zi), 'dd/mm/yyyy') AND F11105 <= trunc(zi)) into ZileSuspendareZi from dual;
+   
+     select case when tip= 1 then round(to_number(ZileCuveniteAn * (ZileAngajare - nvl(ZileSuspendare,0))) /To_number(ZileAn),0)
+             else (select "Cuvenite" from "Ptj_tblZileCO" where f10003 = marca and "An" = extract(year from zi)) end into ZileCuvenite from dual;
+             
+             
+      with xx as  (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else 
+f111.f11107 end la_data from f111 inner join   (select a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) 
+timp from F111 a inner join f111 b  on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-01-2100','DD-MM-YYYY') then b.f11106 else b.f11107 end   and b.f11105 <= case 
+when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end)  group by a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else 
+a.f11107 end, a.time) t  on f111.f11103 = t.f11103 and f111.f11105 = t.f11105 and   case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 
+and f111.time = t.timp  union all  select f10003 Marca, "DataInceput" de_la_data, "DataSfarsit" la_data  from "Ptj_Cereri" inner join "Ptj_tblAbsente" on "Ptj_Cereri"."IdAbsenta" = 
+"Ptj_tblAbsente"."Id"  where "Ptj_Cereri"."IdStare"=3 and COALESCE("Ptj_tblAbsente"."AbsenteCFPInCalculCO",0) = 1  ),   
+yy as  (select distinct a.marca, min(b.de_la_data) de_la_data, max(b.la_data) la_data from xx a  inner join xx b on a.marca = b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= 
+a.la_data)  group by a.marca, a.de_la_data, a.la_data),  f111_2 as   (select distinct a.marca f11103, min(b.de_la_data) f11105, max(b.la_data)  f11107 from yy a  inner join yy b on a.marca = 
+b.marca and (a.de_la_data <= b.la_data and b.de_la_data <= a.la_data)  group by a.marca, a.de_la_data, a.la_data)              
+             
+             
+    select ( round(to_number(ZileCuveniteAn * (ZileAngajareZi - nvl(ZileSuspendareZi,0))) /To_number(ZileAn),0)) into ZileCuveniteZi from dual;     
+   
+   
+    v_ret  := calcul_co_table();
+    
+    select       calcul_co_record("ZileCuveniteAn", "ZileCuvenite", "ZileCuveniteZi", "ZileAnPrecedent")    
+    bulk collect into
+      v_ret
+    from 
+    (
+
+  SELECT ZileCuveniteAn as "ZileCuveniteAn", nvl(ZileCuvenite,0) as "ZileCuvenite", ZileCuveniteZi as "ZileCuveniteZi", 
+  nvl((select "SoldAnterior" from "Ptj_tblZileCO" where f10003 = marca and "An"=extract(year from zi)),0) as "ZileAnPrecedent" from dual
+    
+    )  
+      ;
+
+    return v_ret;
+ 
+end  "CalculCO";
+
+
+
+CREATE OR REPLACE Procedure "CalculCOProc"
+   (     marca in number,
+	zi in date,
+	tip in number,
+	grila in number )
+IS
+
+ ZileCuveniteAn number;
+ ZileCuvenite number ;
+ ZileCuveniteZi number ;
+ ZileAnPrecedent number ;
+ cnt number;
+  AnCurent number;
+ 
+BEGIN
+SELECT "ZileCuveniteAn" INTO ZileCuveniteAn  from table("CalculCO"(marca, zi, tip, grila));
+SELECT "ZileCuvenite" INTO ZileCuvenite  from table("CalculCO"(marca, zi, tip, grila));
+SELECT "ZileCuveniteZi" INTO ZileCuveniteZi  from table("CalculCO"(marca, zi, tip, grila));
+SELECT "ZileAnPrecedent" INTO ZileAnPrecedent  from table("CalculCO"(marca, zi, tip, grila));
+SELECT COUNT(*) INTO cnt FROM "Ptj_tblZileCO" WHERE F10003 = marca and "An" = extract(year from zi);
+SELECT F01011 INTO  AnCurent  FROM F010;
+
+   if (extract(year from zi) = AnCurent) then
+    UPDATE F100 set F100642 =  ZileCuveniteAn,   F100995 = ZileCuvenite ,  F100996 =  ZileAnPrecedent  WHERE	F10003 = marca;
+  end if;
+  
+ if (extract(year from zi) >= AnCurent) then
+  if (cnt > 0) then
+    UPDATE "Ptj_tblZileCO" set "CuveniteAn" = ZileCuveniteAn ,   "Cuvenite" = ZileCuvenite WHERE 	F10003 = marca and "An" = extract(year from zi);
+   else
+    		INSERT INTO "Ptj_tblZileCO" (F10003, "An", "Cuvenite", "SoldAnterior", "Efectuate", "CuveniteAn")
+        VALUES (marca, extract(year from zi), ZileCuvenite, 0, 0, ZileCuveniteAn);
+  end if;
+ end if; 
+
+   commit;
+
+END;

@@ -114,13 +114,13 @@ namespace WizOne.Module
                                         if (lstAdrese.Count > 0)
                                         {
                                             string subiect = InlocuiesteCampuri((dtReg.Rows[i]["Subiect"] ?? "").ToString(), dtSel.Rows[0], userId, userMarca);
-                                            int idClient = Convert.ToInt32(HttpContext.Current.Session["IdClient"]);
+                                            //int idClient = Convert.ToInt32(HttpContext.Current.Session["IdClient"]);
 
                                             //Florin 2018.05.09
                                             if (lstAdrese.Where(p => p.IncludeLinkAprobare == 1).Count() == 0)
                                             {
                                                 string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel.Rows[0], userId, userMarca, numePagina, tblAtasamente_Id);
-                                                TrimiteMail(lstAdrese, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, CreazaHTML(corpAtt), Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel, idClient);
+                                                TrimiteMail(lstAdrese, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, CreazaHTML(corpAtt), Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel, Convert.ToInt32(idClient));
                                             }
                                             else
                                             {
@@ -130,7 +130,7 @@ namespace WizOne.Module
                                                     lstOne.Add(new metaAdreseMail { Mail = lstAdrese[j].Mail, Destinatie = "TO", IncludeLinkAprobare = 0 });
 
                                                     string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel.Rows[0], userId, userMarca, numePagina, tblAtasamente_Id, lstAdrese[j].Mail, lstAdrese[j].IncludeLinkAprobare);
-                                                    TrimiteMail(lstOne, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, CreazaHTML(corpAtt), Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel, idClient);
+                                                    TrimiteMail(lstOne, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, CreazaHTML(corpAtt), Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel, Convert.ToInt32(idClient));
                                                 }
                                             }
                                         }

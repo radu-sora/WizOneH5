@@ -224,10 +224,7 @@
             </td>            
         </tr>
     </table>
-   
-    <script type="text/html" id="dx-date-simple">
-        <div data-bind="dxDateBox: { value: value.extend({ rateLimit: 500 }), closeOnValueChange: true, type: 'date', disabled: disabled }, dxValidator: { validationRules: validationRules || [] }"></div>
-    </script>
+       
     <script>
         // Globals
         var reportType = <%: ReportType %>;
@@ -348,8 +345,11 @@
         }
 
         function onCustomizeParameter(parameter, info) {
+            info.editor.extendedOptions = info.editor.extendedOptions || {};
+            info.editor.extendedOptions.placeholder = parameter.tag || info.editorOptions.placeholder();
+
             if (parameter.type == 'System.DateTime') {
-                info.editor = { header: 'dx-date-simple' };                
+                info.editor.extendedOptions.type = 'date';
             }
         }        
 

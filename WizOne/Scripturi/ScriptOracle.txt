@@ -14812,3 +14812,13 @@ SELECT F01011 INTO  AnCurent  FROM F010;
    commit;
 
 END;
+
+
+
+
+-----	2.2.130	----------
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_Subiect', '', 'Subiectul mail-ul pentru Trimitere fluturasi', 0);
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_Continut', '', 'Continutul mail-ul pentru Trimitere fluturasi', 0);

@@ -53,12 +53,16 @@ namespace WizOne.Personal
 
         private void IncarcaGrid()
         {
+            grDateSituatieCO.DataSource = null;
+
             string sqlFinal = "SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + Session["Marca"].ToString() + " ORDER BY \"An\" ";
             DataTable dt = new DataTable();
             dt = General.IncarcaDT(sqlFinal, null);
                        
             grDateSituatieCO.KeyFieldName = "F10003;An";
             grDateSituatieCO.DataSource = dt;
+
+            grDateSituatieCO.Columns.Clear();
 
             foreach (DataColumn col in dt.Columns)
             {  
@@ -84,8 +88,8 @@ namespace WizOne.Personal
             {
                 //Florin 2019.07.01
                 //s-a inlocuit functia comentata cu cea din General
-                General.CalculCO(DateTime.Now.Year, Convert.ToInt32(General.Nz(Session["Marca"],-98)), false);
-
+                General.CalculCO(DateTime.Now.Year, Convert.ToInt32(General.Nz(Session["Marca"],-98)), true);
+                IncarcaGrid();
 
 
                 //int an = DateTime.Now.Year;

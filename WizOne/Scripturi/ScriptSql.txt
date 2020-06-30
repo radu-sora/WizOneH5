@@ -14120,3 +14120,11 @@ o.name = 'SituatieZileAbsente' AND o.type = 'V'
 exec sp_executeSql @querydef6
 GO
  
+-----	2.2.130	----------
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_Subiect', '', 'Subiectul mail-ul pentru Trimitere fluturasi', 0)
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_Continut', '', 'Continutul mail-ul pentru Trimitere fluturasi', 0)
+GO

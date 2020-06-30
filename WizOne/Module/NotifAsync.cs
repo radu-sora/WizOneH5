@@ -114,7 +114,8 @@ namespace WizOne.Module
                                         if (lstAdrese.Count > 0)
                                         {
                                             string subiect = InlocuiesteCampuri((dtReg.Rows[i]["Subiect"] ?? "").ToString(), dtSel.Rows[0], userId, userMarca);
-                                            int idClient = Convert.ToInt32(HttpContext.Current.Session["IdClient"]);
+                                            int idClient = Convert.ToInt32(HttpContext.Current.Session["IdClient"]);                                           
+                                            //int idClient = 23;
 
                                             //Florin 2018.05.09
                                             if (lstAdrese.Where(p => p.IncludeLinkAprobare == 1).Count() == 0)

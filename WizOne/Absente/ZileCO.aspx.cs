@@ -448,12 +448,8 @@ namespace WizOne.Absente
                 if (e.Parameters != "")
                 {
                     if (e.Parameters == "btnCO")
-                    {//Radu 22.06.2020
-                        for (int i = 0; i < grDate.VisibleRowCount; i++)
-                        {
-                            int? marca = grDate.GetRowValues(i, new string[] { "F10003" }) as int?;
-                            General.CalculCO(Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)), Convert.ToInt32(marca ?? -99), true);
-                        }
+                    {
+                        General.CalculCO(Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)), Convert.ToInt32(cmbAng.Value ?? -99), true);                        
                     }
                     if (e.Parameters == "btnSI") CalculSI();
                     IncarcaGrid();
@@ -472,7 +468,7 @@ namespace WizOne.Absente
             {
                 string strSql = "";
 
-                strSql = $@"SELECT A.F10003, A.F10003 AS ""Nume"", ""An"", ""Cuvenite"", ""SoldAnterior"", ""Efectuate"", ""CuveniteAn"", A.USER_NO, A.TIME, A.""IdAuto"" FROM ""Ptj_tblZileCO"" A
+                strSql = $@"SELECT A.F10003, A.F10003 AS ""Nume"", ""An"", ""Cuvenite"", ""SoldAnterior"", ""Efectuate"", ""CuveniteAn"", A.USER_NO, A.TIME, A.""IdAuto"", ""Anulate"" FROM ""Ptj_tblZileCO"" A
                         INNER JOIN F100 B ON A.F10003=B.F10003
                         WHERE A.""An""={Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year))}";
 

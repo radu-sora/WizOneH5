@@ -2197,12 +2197,13 @@ namespace WizOne.Pontaj
         {
             try
             {
-                if (!chkNormaSD.Checked && !chkNormaSL.Checked && !chkNormaZL.Checked)
-                {
-                    MessageBox.Show(Dami.TraduCuvant("Lipsesc date"), MessageBox.icoInfo, "Initializare");
-                }
-                else
-                {
+                //Florin 2020.06.30 
+                //if (!chkNormaSD.Checked && !chkNormaSL.Checked && !chkNormaZL.Checked)
+                //{
+                //    MessageBox.Show(Dami.TraduCuvant("Lipsesc date"), MessageBox.icoInfo, "Initializare");
+                //}
+                //else
+                //{
                     DateTime dt = Convert.ToDateTime(txtAnLuna.Value);
                     bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month, Convert.ToInt32(cmbRol.Value ?? -99), chkNormaZL.Checked, chkCCCu.Checked, General.Nz(cmbDept.Value,"").ToString(), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99), Convert.ToInt32(cmbSec.Value ?? -99), General.Nz(cmbCtr.Value,"").ToString(), chkNormaSD.Checked, chkNormaSL.Checked, false, 1, Convert.ToInt32(chkInOut.Checked));
                     if (ras)
@@ -2212,7 +2213,7 @@ namespace WizOne.Pontaj
                     }
                     else
                         MessageBox.Show(Dami.TraduCuvant("Eroare la initializare"), MessageBox.icoInfo, "Initializare");
-                }
+                //}
 
             }
             catch (Exception ex)

@@ -7018,6 +7018,38 @@ namespace WizOne.Module
                             General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1, " + dtAng.Rows[0][0].ToString() + ");", null);
                         }
                     }
+                    else
+                    {
+                        string sql = "";
+                        if (Constante.tipBD == 1)
+                        {                        
+                            sql = "SELECT F10003 FROM F100 WHERE CONVERT(DATE, F10022) <= '" + dtSf + "' AND '" + dtInc + "' <= CONVERT(DATE, F10023)";
+                        }
+                        else
+                        {
+                            dtInc = "01-01-" + an.ToString();
+                            dtSf = "31-12-" + an.ToString();
+                            sql = "SELECT F10003 FROM F100 WHERE TRUNC(F10022) <= to_date('" + dtSf + "','DD-MM-YYYY') AND to_date('" + dtInc + "','DD-MM-YYYY') <= TRUNC(F10023)";
+
+                        }
+                        DataTable dtAng = General.IncarcaDT(sql, null);
+                        if (dtAng != null && dtAng.Rows.Count > 0)
+                        {
+                            for (int i = 0; i < dtAng.Rows.Count; i++)
+                            {
+                                if (Constante.tipBD == 1)
+                                    General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
+                                                        + " SELECT TOP 1 @f10003 = " + dtAng.Rows[i][0].ToString() + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + dtAng.Rows[i][0].ToString()
+                                                        + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
+                                else
+                                {
+                                    DataTable dtAngajat = General.IncarcaDT("SELECT F10072 FROM F100 WHERE F10003 = " + dtAng.Rows[i][0].ToString());
+                                    General.ExecutaNonQuery("exec \"CalculCOProc\" (" + dtAng.Rows[i][0].ToString() + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1, " + dtAngajat.Rows[0][0].ToString() + ");", null);
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
             catch (Exception ex)

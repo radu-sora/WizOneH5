@@ -286,6 +286,8 @@ namespace WizOne.Personal
                 strSql = "BEGIN " + strSql + " END;";
 
                 General.ExecutaNonQuery(strSql, null);
+
+                IncarcaGrid();
             }
             catch (Exception ex)
             {

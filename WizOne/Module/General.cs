@@ -6306,7 +6306,8 @@ namespace WizOne.Module
 
             try
             {
-                if (cuNormaZL == false && cuNormaSD == false && cuNormaSL == false) return ras;
+                //Florin 2020.06.30 am comentat conditia de mai jos
+                //if (cuNormaZL == false && cuNormaSD == false && cuNormaSL == false) return ras;
 
                 string strZile = "";
                 string usr = "";
@@ -6387,7 +6388,8 @@ namespace WizOne.Module
                     string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
 
-                    strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, 1, cuInOut), strFiltru, strFiltruZile, usr);
+                    //Florin 2020.06.30 am modificat 1 cu cuNormaZL
+                    strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, cuNormaZL, cuInOut), strFiltru, strFiltruZile, usr);
 
                     strFIN += strIns + ";";
 
@@ -6446,9 +6448,12 @@ namespace WizOne.Module
                               LEFT JOIN DamiDataPlecare_Table ddp ON ddp.F10003=A.F10003 AND ddp.dt=A.Ziua";
                     }
 
+                    //Florin 2020.06.30 - s-a adaugat conditia cu norma
                     //actualizam inregistrarile unde norma = null doar pt linia mama, nu si pt centrii de cost
                     //2015-12-07  s-a adaugat inner join f100 pt a elimina zilele in care angajatii s-au angajat sau au plecat in luna
-                    string strUp = @"UPDATE A SET 
+                    if (cuNormaZL)
+                    {
+                        string strUp = @"UPDATE A SET 
                                         A.""ValStr"" = dn.Norma , 
                                         A.""Val0""   = dn.Norma * 60,
                                         In1  = (SELECT DATETIMEFROMPARTS(YEAR(A.Ziua), MONTH(A.Ziua), DAY(A.Ziua), DATEPART(HOUR, OraInInitializare), DATEPART(MINUTE, OraInInitializare), 0, 0) FROM Ptj_Contracte WHERE Id = A.IdContract),
@@ -6461,10 +6466,11 @@ namespace WizOne.Module
                                         AND CONVERT(date, A.Ziua) <= COALESCE(CONVERT(date, ddp.DataPlecare),C.F10023)
                                         {2} {3} {4}";
 
-                    strUp = string.Format(strUp, an, luna, usr, strFiltru, strFiltruZile.Replace("X.", "A."), strInner);
-                    //strUp = strUp.Replace("X.", "A.");
+                        strUp = string.Format(strUp, an, luna, usr, strFiltru, strFiltruZile.Replace("X.", "A."), strInner);
+                        //strUp = strUp.Replace("X.", "A.");
 
-                    strFIN += strUp + ";" + "\n\r";
+                        strFIN += strUp + ";" + "\n\r";
+                    }
 
                     //initializam Ptj_Cumulat
                     string strCum = @"INSERT INTO ""Ptj_Cumulat""(F10003, ""An"",""Luna"",""IdStare"", ""NumeComplet"")
@@ -6569,7 +6575,8 @@ namespace WizOne.Module
                     string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
 
-                    strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, 1, cuInOut), strFiltru, strFiltruZile, usr);
+                    //Florin 2020.06.30 am modificat 1 cu cuNormaZL
+                    strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, cuNormaZL, cuInOut), strFiltru, strFiltruZile, usr);
 
                     strFIN += strIns + ";";
 
@@ -6601,19 +6608,22 @@ namespace WizOne.Module
                     }
 
 
-
+                    //Florin 2020.06.30 - s-a adaugat conditia cu norma
                     //actualizam inregistrarile unde norma = null
                     //2015-12-07  s-a adaugat inner join f100 pt a elimina zilele in care angajatii s-au angajat sau au plecat in luna
-                    string strUp = @"UPDATE ""Ptj_Intrari"" A SET 
+                    if (cuNormaZL)
+                    {
+                        string strUp = @"UPDATE ""Ptj_Intrari"" A SET 
                                         A.""ValStr"" = CASE WHEN ((SELECT COUNT(*) FROM F100 Z WHERE Z.F10003=A.F10003 AND TRUNC(F10022) <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= TRUNC(F10023) ) = 1 AND TRUNC(A.""Ziua"") <= TRUNC(""DamiDataPlecare""(A.F10003, A.""Ziua""))) THEN CAST(nvl((""DamiNorma""(A.F10003, A.""Ziua"")),(select f10043 from f100 where f10003 = A.F10003)) as int) ELSE null END , 
                                         A.""Val0"" =   CASE WHEN ((SELECT COUNT(*) FROM F100 Z WHERE Z.F10003=A.F10003 AND TRUNC(F10022) <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= TRUNC(F10023) ) = 1 AND TRUNC(A.""Ziua"") <= TRUNC(""DamiDataPlecare""(A.F10003, A.""Ziua""))) THEN CAST(nvl((""DamiNorma""(A.F10003, A.""Ziua"")),(select f10043 from f100 where f10003 = A.F10003)) * 60 as int) ELSE null END 
                                         WHERE TO_CHAR(A.""Ziua"",'yyyy')={0} AND TO_CHAR(A.""Ziua"",'mm')={1} AND (A.""ValStr"" IS NULL OR RTRIM(LTRIM(A.""ValStr"")) = '') AND A.F06204=-1 
                                         {2} {3} {4}";
 
-                    strUp = string.Format(strUp, an, luna, usr, strFiltru, strFiltruUpdate.Replace("X.Ziua", "A.\"Ziua\""));
-                    //strUp = strUp.Replace("X.ZIUA", "A.\"Ziua\"");
+                        strUp = string.Format(strUp, an, luna, usr, strFiltru, strFiltruUpdate.Replace("X.Ziua", "A.\"Ziua\""));
+                        //strUp = strUp.Replace("X.ZIUA", "A.\"Ziua\"");
 
-                    strFIN += strUp + ";";
+                        strFIN += strUp + ";";
+                    }
 
                     //initializam Ptj_Cumulat
                     string strCum = @"INSERT INTO ""Ptj_Cumulat""(F10003, ""An"",""Luna"",""IdStare"", ""NumeComplet"")
@@ -6645,7 +6655,7 @@ namespace WizOne.Module
             return ras;
         }
 
-        private static string DamiSelectPontajInit(int idUser, int an, int luna, int cuNorma = 0, int cuInOut = 0)
+        private static string DamiSelectPontajInit(int idUser, int an, int luna, bool cuNorma = false, int cuInOut = 0)
         {
             //cuNorma
             //0 - PontajInitGlobal
@@ -6657,7 +6667,7 @@ namespace WizOne.Module
             try
             {
                 string strZile = "";
-                string nrm = "";
+                string nrm = @" ,null AS ""ValStr"", null AS ""Val0""";
                 string inOut = @" ,null AS ""In1"", null AS ""Out1""";
 
                 string strInner =
@@ -6676,7 +6686,7 @@ namespace WizOne.Module
 
                 if (Constante.tipBD == 1)
                 {
-                    if (cuNorma == 1)
+                    if (cuNorma)
                         nrm = @" ,CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR CONVERT(date, X.Ziua) > CONVERT(date, ddp.DataPlecare) THEN CONVERT(int,NULL) ELSE dn.Norma END AS ValStr
                                  ,CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR CONVERT(date, X.Ziua) > CONVERT(date, ddp.DataPlecare) THEN CONVERT(int,NULL) ELSE dn.Norma * 60 END AS Val0";
                     if (cuInOut == 1)
@@ -6730,7 +6740,7 @@ namespace WizOne.Module
                 }
                 else
                 {
-                    if (cuNorma == 1)
+                    if (cuNorma)
                         nrm = @" ,CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=6 OR (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 OR TRUNC(X.""Ziua"") > TRUNC(""DamiDataPlecare""(A.F10003, X.""Ziua"")) THEN NULL ELSE ""DamiNorma""(A.F10003, X.""Ziua"") END AS ""ValStr""
                                  ,CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=6 OR (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 OR TRUNC(X.""Ziua"") > TRUNC(""DamiDataPlecare""(A.F10003, X.""Ziua"")) THEN NULL ELSE ""DamiNorma""(A.F10003, X.""Ziua"") * 60 END AS ""Val0"" ";
 

@@ -1060,7 +1060,7 @@ namespace WizOne.Pagini
                                         //incetare
                                         if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
                                         {
-                                            DataRow[] arr = dtSet.Select("Id=3");
+                                            DataRow[] arr = dtSet.Select("IdTip=3");
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"],"").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
@@ -1076,7 +1076,7 @@ namespace WizOne.Pagini
                                         //candidati
                                         if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
                                         {
-                                            DataRow[] arr = dtSet.Select("Id=1");
+                                            DataRow[] arr = dtSet.Select("IdTip=1");
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"], "").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
@@ -1098,7 +1098,7 @@ namespace WizOne.Pagini
                                                 break;
                                             }
 
-                                            DataRow[] arr = dtSet.Select("Id=2");
+                                            DataRow[] arr = dtSet.Select("IdTip=2");
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"], "").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
@@ -1113,7 +1113,7 @@ namespace WizOne.Pagini
                                         //suspendare
                                         if (Convert.ToInt32(General.Nz(obj[16], 0)) == 1)
                                         {
-                                            DataRow[] arr = dtSet.Select("Id=6");
+                                            DataRow[] arr = dtSet.Select("IdTip=6");
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"], "").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
@@ -1123,7 +1123,7 @@ namespace WizOne.Pagini
                                         //revenire suspendare
                                         if (Convert.ToInt32(General.Nz(obj[17], 0)) == 1)
                                         {
-                                            DataRow[] arr = dtSet.Select("Id=7");
+                                            DataRow[] arr = dtSet.Select("IdTip=7");
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"], "").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
@@ -1133,7 +1133,7 @@ namespace WizOne.Pagini
                                         //detasare
                                         if (Convert.ToInt32(General.Nz(obj[18], 0)) == 1)
                                         {
-                                            DataRow[] arr = dtSet.Select("Id=4");
+                                            DataRow[] arr = dtSet.Select("IdTip=4");
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"], "").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
@@ -1143,7 +1143,7 @@ namespace WizOne.Pagini
                                         //revenire detasare
                                         if (Convert.ToInt32(General.Nz(obj[19], 0)) == 1)
                                         {
-                                            DataRow[] arr = dtSet.Select("Id=5");
+                                            DataRow[] arr = dtSet.Select("IdTip=5");
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"], "").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
@@ -1192,7 +1192,7 @@ namespace WizOne.Pagini
                                             //revenire detasare
                                             if (Convert.ToInt32(General.Nz(obj[19], 0)) == 1) idTipDoc = 5;
 
-                                            DataRow[] arr = dtSet.Select("Id=" + idTipDoc);
+                                            DataRow[] arr = dtSet.Select("IdTip=" + idTipDoc);
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"], "").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
@@ -1641,7 +1641,7 @@ namespace WizOne.Pagini
 
             try
             {
-                DataRow[] arr = dtSet.Select("Id=" + idTip);
+                DataRow[] arr = dtSet.Select("IdTip=" + idTip);
                 if (arr.Count() > 0 && General.Nz(arr[0][camp], "").ToString() != "")
                     rez = Convert.ToInt32(General.Nz(arr[0][camp], 0));
             }

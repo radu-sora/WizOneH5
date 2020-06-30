@@ -6099,10 +6099,15 @@ namespace WizOne.Module
         }
 
 
-        public static void PontajInitGeneral(int idUser, int an, int luna)
+        public static void PontajInitGeneral(int idUser, int an, int luna, string contracte = "")
         {
             try
             {
+                //Florin 2020.06.30
+                string filtru = "";
+                if (contracte != "")
+                    filtru = $@"AND Y.""Denumire"" IN ('{contracte}')";
+
                 string strInner = @"OUTER APPLY dbo.DamiNorma(B.F10003, A.""Zi"") dn
                                     OUTER APPLY    dbo.DamiCC(B.F10003, A.""Zi"") dc
                                     OUTER APPLY  dbo.DamiDept(B.F10003, A.""Zi"") dd";
@@ -6143,8 +6148,8 @@ namespace WizOne.Module
                                 LEFT JOIN (SELECT X.F10003, X.""Ziua"", COUNT(*) AS CNT FROM ""Ptj_Intrari"" X WHERE {General.FunctiiData("X.\"Ziua\"", "A")}={an} AND {General.FunctiiData("X.\"Ziua\"", "L")}={luna} GROUP BY X.F10003, X.""Ziua"") D ON D.F10003=B.F10003 AND D.""Ziua"" = A.""Zi""
                                 {strInner}                                
                                 LEFT JOIN F006 G ON G.F00607 = dd.Dept
-                                LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" BB WHERE BB.F10003 = B.F10003 AND BB.""DataInceput"" <= A.Zi AND A.Zi <= BB.""DataSfarsit"")
-                                WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {General.FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0;";
+                                INNER JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" BB WHERE BB.F10003 = B.F10003 AND BB.""DataInceput"" <= A.Zi AND A.Zi <= BB.""DataSfarsit"")
+                                WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {General.FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0 {filtru};";
                 if (Constante.tipBD == 2)
                     strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"")
                                 SELECT B.F10003, A.""Zi"", -1 AS F06204, A.""ZiSapt"", 
@@ -6175,13 +6180,13 @@ namespace WizOne.Module
                                 LEFT JOIN (SELECT X.F10003, X.""Ziua"", COUNT(*) AS CNT FROM ""Ptj_Intrari"" X WHERE {FunctiiData("X.\"Ziua\"", "A")}={an} AND {FunctiiData("X.\"Ziua\"", "L")}={luna} GROUP BY X.F10003, X.""Ziua"") D ON D.F10003=B.F10003 AND D.""Ziua"" = A.""Zi""                                                                   
                                 LEFT JOIN F006 G ON G.F00607 = ""DamiDept""(B.F10003, A.""Zi"")
                                 LEFT JOIN (SELECT ROW_NUMBER() OVER (PARTITION BY CTR.F10003 order by CTR.""F10003"", CTR.""IdContract"" DESC) as ""NrCrt"", CTR.* FROM ""F100Contracte"" CTR) BC ON BC.F10003 = B.F10003 AND BC.""DataInceput"" <= A.""Zi"" AND A.""Zi"" <= BC.""DataSfarsit"" AND ""NrCrt"" = 1
-                                LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id"" = BC.""IdContract""                                
-                                WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0;";
+                                INNER JOIN ""Ptj_Contracte"" Y ON Y.""Id"" = BC.""IdContract""                                
+                                WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0 {filtru};";
 								
 								
                 //initializam Ptj_Cumulat
                 string strCum = $@"INSERT INTO ""Ptj_Cumulat""(F10003, ""An"",""Luna"",""IdStare"", ""NumeComplet"", USER_NO, TIME)
-                                SELECT F10003, {an}, {luna}, 1, F10008 {Dami.Operator()} ' ' {Dami.Operator()} F10009, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()} FROM F100 
+                                SELECT F10003, {an}, {luna}, 1, F10008 {Dami.Operator()} ' ' {Dami.Operator()} F10009, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()} FROM F100
                                 WHERE F10022 <= {General.ToDataUniv(an, luna, 99)} AND {General.ToDataUniv(an, luna, 1)} <= F10023 
                                 AND F10003 NOT IN (SELECT F10003 FROM ""Ptj_Cumulat"" WHERE ""An""={an} AND ""Luna"" = {luna});";
 
@@ -6190,6 +6195,25 @@ namespace WizOne.Module
                                 SELECT F10003, {an}, {luna}, 1, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()} FROM F100 
                                 WHERE F10022 <= {General.ToDataUniv(an, luna, 99)} AND {General.ToDataUniv(an, luna, 1)} <= F10023 
                                 AND F10003 NOT IN (SELECT F10003 FROM ""Ptj_CumulatIstoric"" WHERE ""An""={an} AND ""Luna"" = {luna} GROUP BY F10003);";
+
+                if (contracte != "")
+                {
+                    //initializam Ptj_Cumulat
+                    strCum = $@"INSERT INTO ""Ptj_Cumulat""(F10003, ""An"",""Luna"",""IdStare"", ""NumeComplet"", USER_NO, TIME)
+                                SELECT A.F10003, {an}, {luna}, 1, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()} FROM F100 A
+                                INNER JOIN ""F100Contracte"" B ON A.F10003=B.F10003 AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit""
+                                INNER JOIN ""Ptj_Contracte"" C ON B.""IdContract""=C.""Id"" AND C.""Denumire"" IN ('{contracte}')
+                                WHERE A.F10022 <= {General.ToDataUniv(an, luna, 99)} AND {General.ToDataUniv(an, luna, 1)} <= A.F10023 
+                                AND A.F10003 NOT IN (SELECT F10003 FROM ""Ptj_Cumulat"" WHERE ""An""={an} AND ""Luna"" = {luna});";
+
+                    //initializam Ptj_CumulatIstoric
+                    strIst = $@"INSERT INTO ""Ptj_CumulatIstoric""(F10003, ""An"",""Luna"",""IdStare"", ""IdUser"", ""DataAprobare"", USER_NO, TIME)
+                                SELECT A.F10003, {an}, {luna}, 1, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()} FROM F100 A
+                                INNER JOIN ""F100Contracte"" B ON A.F10003=B.F10003 AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit""
+                                INNER JOIN ""Ptj_Contracte"" C ON B.""IdContract""=C.""Id"" AND C.""Denumire"" IN ('{contracte}')                                
+                                WHERE A.F10022 <= {General.ToDataUniv(an, luna, 99)} AND {General.ToDataUniv(an, luna, 1)} <= A.F10023 
+                                AND A.F10003 NOT IN (SELECT F10003 FROM ""Ptj_CumulatIstoric"" WHERE ""An""={an} AND ""Luna"" = {luna} GROUP BY F10003);";
+                }
 
                 General.ExecutaNonQuery("BEGIN " + strInt + "\n\r" + strCum + "\n\r" + strIst + " END;", null);
             }

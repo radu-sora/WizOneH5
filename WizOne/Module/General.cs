@@ -4015,7 +4015,7 @@ namespace WizOne.Module
                     string ora = dt.Value.Hour.ToString().PadLeft(2, Convert.ToChar("0"));
                     string min = dt.Value.Minute.ToString().PadLeft(2, Convert.ToChar("0"));
                     string sec = dt.Value.Second.ToString().PadLeft(2, Convert.ToChar("0"));
-                    string mask = "DD-MM-YYYY";
+                    string mask = "DD-MON-YYYY";
 
                     switch (Constante.tipBD)
                     {
@@ -4028,7 +4028,7 @@ namespace WizOne.Module
                             rez = zi + "-" + General.NumeLuna(Convert.ToInt32(luna), 1, "EN").ToUpper() + "-" + an;
                             if (cuTimp == 1)
                             {
-                                mask = "DD-MM-YYYY HH24:MI:SS";
+                                mask = "DD-MON-YYYY HH24:MI:SS";
                                 rez += " " + ora + ":" + min + ":" + sec;
                             }
                             if (tip == 2) rez = "to_date('" + rez + "','" + mask + "')";

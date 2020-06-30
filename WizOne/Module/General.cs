@@ -4028,7 +4028,7 @@ namespace WizOne.Module
                             rez = zi + "-" + General.NumeLuna(Convert.ToInt32(luna), 1, "EN").ToUpper() + "-" + an;
                             if (cuTimp == 1)
                             {
-                                mask = "DD-MM-YYYY HH24:MI:SS";
+                                mask = "DD-MON-YYYY HH24:MI:SS";
                                 rez += " " + ora + ":" + min + ":" + sec;
                             }
                             if (tip == 2) rez = "to_date('" + rez + "','" + mask + "')";

@@ -4015,7 +4015,7 @@ namespace WizOne.Module
                     string ora = dt.Value.Hour.ToString().PadLeft(2, Convert.ToChar("0"));
                     string min = dt.Value.Minute.ToString().PadLeft(2, Convert.ToChar("0"));
                     string sec = dt.Value.Second.ToString().PadLeft(2, Convert.ToChar("0"));
-                    string mask = "DD-MM-YYYY";
+                    string mask = "DD-MON-YYYY";
 
                     switch (Constante.tipBD)
                     {

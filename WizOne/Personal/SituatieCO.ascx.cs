@@ -38,7 +38,7 @@ namespace WizOne.Personal
             btnCalcSI.Text = Dami.TraduCuvant(btnCalcSI.Text);
         }
 
-        protected void grDateSituatieCO_DataBinding(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
@@ -51,14 +51,33 @@ namespace WizOne.Personal
             }
         }
 
+        //protected void grDateSituatieCO_DataBinding(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        IncarcaGrid();
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //}
+
         private void IncarcaGrid()
         {
+            grDateSituatieCO.DataSource = null;
+            grDateSituatieCO.DataBind();
+
             string sqlFinal = "SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + Session["Marca"].ToString() + " ORDER BY \"An\" ";
             DataTable dt = new DataTable();
             dt = General.IncarcaDT(sqlFinal, null);
                        
             grDateSituatieCO.KeyFieldName = "F10003;An";
             grDateSituatieCO.DataSource = dt;
+            grDateSituatieCO.DataBind();
+
+            grDateSituatieCO.Columns.Clear();
 
             foreach (DataColumn col in dt.Columns)
             {  
@@ -84,8 +103,8 @@ namespace WizOne.Personal
             {
                 //Florin 2019.07.01
                 //s-a inlocuit functia comentata cu cea din General
-                General.CalculCO(DateTime.Now.Year, Convert.ToInt32(General.Nz(Session["Marca"],-98)), false);
-
+                General.CalculCO(DateTime.Now.Year, Convert.ToInt32(General.Nz(Session["Marca"],-98)), true);
+                IncarcaGrid();
 
 
                 //int an = DateTime.Now.Year;
@@ -267,6 +286,8 @@ namespace WizOne.Personal
                 strSql = "BEGIN " + strSql + " END;";
 
                 General.ExecutaNonQuery(strSql, null);
+
+                IncarcaGrid();
             }
             catch (Exception ex)
             {

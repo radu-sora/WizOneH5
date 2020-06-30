@@ -11,7 +11,7 @@ namespace Wizrom.Reports.Pages
     {
         public void ProcessRequest(HttpContext context)
         {
-            string fileName = string.Empty;
+            var fileName = string.Empty;
 
             // Get the file name from the querystring
             if (context.Request.QueryString["FileName"] != null)
@@ -19,7 +19,7 @@ namespace Wizrom.Reports.Pages
 
             fileName = context.Server.MapPath("~/Temp/" + fileName);
 
-            FileInfo fileInfo = new FileInfo(fileName);
+            var fileInfo = new FileInfo(fileName);
 
             try
             {
@@ -31,6 +31,7 @@ namespace Wizrom.Reports.Pages
                     context.Response.ContentType = "application/octet-stream";
                     context.Response.TransmitFile(fileInfo.FullName);
                     context.Response.Flush();
+                    fileInfo.Delete();
                 }
                 else
                     throw new Exception("File not found.");                

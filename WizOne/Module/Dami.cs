@@ -247,21 +247,24 @@ namespace WizOne.Module
                                 {
                                     //verificam daca sunt butoane in interiorul gridului
                                     GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
-                                    GridViewCommandColumnCustomButton button = column.CustomButtons[idCol] as GridViewCommandColumnCustomButton;
-                                    if (button != null)
+                                    if (column != null)
                                     {
-                                        if (vizibil)
-                                            button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
-                                        else
-                                            button.Visibility = GridViewCustomButtonVisibility.Invisible;
-                                    }
-                                    else
-                                    {
-                                        //Florin 2018.08.16
-                                        //atunci este buton BuiltIn al Devexpress-ului
-                                        if (idCol.ToLower() == "btnedit")
+                                        GridViewCommandColumnCustomButton button = column.CustomButtons[idCol] as GridViewCommandColumnCustomButton;
+                                        if (button != null)
                                         {
-                                            column.ShowEditButton = vizibil;
+                                            if (vizibil)
+                                                button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                                            else
+                                                button.Visibility = GridViewCustomButtonVisibility.Invisible;
+                                        }
+                                        else
+                                        {
+                                            //Florin 2018.08.16
+                                            //atunci este buton BuiltIn al Devexpress-ului
+                                            if (idCol.ToLower() == "btnedit")
+                                            {
+                                                column.ShowEditButton = vizibil;
+                                            }
                                         }
                                     }
                                 }

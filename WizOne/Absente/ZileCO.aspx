@@ -56,7 +56,7 @@
                             <ClientSideEvents Click="function (s, e) { GoToCalculationMode(s, e); }" />
                             <Image Url="~/Fisiere/Imagini/Icoane/calcul.png"></Image>
                         </dx:ASPxButton>
-                        <dx:ASPxButton ID="btnNew" ClientInstanceName="btnNew" ClientIDMode="Static" runat="server" Text="Nou" AutoPostBack="False" oncontextMenu="ctx(this,event)" >
+                        <dx:ASPxButton ID="btnNew" ClientInstanceName="btnNew" ClientIDMode="Static" runat="server" Text="Nou" AutoPostBack="False" Visible="false" oncontextMenu="ctx(this,event)" >
                             <ClientSideEvents Click="function (s, e) { OnNewClick(s, e); }" />
                             <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
                         </dx:ASPxButton>
@@ -139,6 +139,11 @@
                                     </PropertiesTextEdit>
                                 </dx:GridViewDataTextColumn>
                                 <dx:GridViewDataTextColumn FieldName="CuveniteAn" Name="CuveniteAn" Caption="Cuvenite An" ReadOnly="true" >
+                                    <PropertiesTextEdit DisplayFormatInEditMode="true" DisplayFormatString="N0" MaskSettings-IncludeLiterals="None">
+                                        <ValidationSettings ErrorDisplayMode="ImageWithTooltip" />
+                                    </PropertiesTextEdit>
+                                </dx:GridViewDataTextColumn>
+                                <dx:GridViewDataTextColumn FieldName="Anulate" Name="Anulate" Caption="Anulate" ReadOnly="true" >
                                     <PropertiesTextEdit DisplayFormatInEditMode="true" DisplayFormatString="N0" MaskSettings-IncludeLiterals="None">
                                         <ValidationSettings ErrorDisplayMode="ImageWithTooltip" />
                                     </PropertiesTextEdit>

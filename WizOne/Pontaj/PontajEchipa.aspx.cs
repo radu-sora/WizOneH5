@@ -1368,7 +1368,8 @@ namespace WizOne.Pontaj
                                                         General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
 
 
-                                            General.IncarcaDT(strTmp, null);
+                                            //General.IncarcaDT(strTmp, null);
+                                            General.ExecutaNonQuery(strTmp);
                                         }
                                     }
                                 }

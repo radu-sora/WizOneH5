@@ -295,9 +295,6 @@
             grDate.SetHeight(height);
         }
 
-        function OnPanelEndCallback(s, e) {
-            pnlLoading.Hide();
-        }
 
     </script>
 
@@ -335,87 +332,67 @@
         </tr>
         <tr>
             <td colspan="2">
-                <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
-                    <SettingsLoadingPanel Enabled="False"></SettingsLoadingPanel>
-                    <ClientSideEvents EndCallback="function (s,e) { OnPanelEndCallback(s,e); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
-                    <PanelCollection>
-                        <dx:PanelContent>
-
-                            <div style="display:inline-block; line-height:22px; vertical-align:middle; padding:15px 0px 15px 0px;">
-                                <label id="lblViz" runat="server" style="display:inline-block; float:left; padding:0px 15px;"></label>
-                                <div style="float:left; padding-right:15px;">
-                                    <dx:ASPxComboBox ID="cmbViz" ClientInstanceName="cmbViz" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="false" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s,e) { SetComboViz();pnlCtl.PerformCallback('cmbViz'); }" Init="function(s,e) { SetComboViz(); }" />
-                                    </dx:ASPxComboBox>
-                                </div>
-                                <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px;">Roluri</label>
-                                <div style="float:left; padding-right:15px;">
-                                    <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
-                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRol'); }"/>
-                                    </dx:ASPxComboBox>
-                                </div>
-                                <label id="lblStare" runat="server" style="display:inline-block; float:left; padding-right:15px;">Stare</label>
-                                <div style="float:left; padding-right:15px;">
-                                    <dx:ASPxDropDownEdit ClientInstanceName="cmbStare" ID="cmbStare" Width="150px" runat="server" AnimationType="None">
-                                        <DropDownWindowStyle BackColor="#EDEDED" />
-                                        <DropDownWindowTemplate>
-                                            <dx:ASPxListBox Width="100%" ID="listBoxStare" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
-                                                <Border BorderStyle="None" />
-                                                <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
-                                                <Items>
-                                                    <dx:ListEditItem Text="(Selectie toate)" />
-                                                    <dx:ListEditItem Text="Solicitat" Value="1" />
-                                                    <dx:ListEditItem Text="In Curs" Value="2" />
-                                                    <dx:ListEditItem Text="Aprobat" Value="3" />
-                                                    <dx:ListEditItem Text="Respins" Value="0" />
-                                                    <dx:ListEditItem Text="Anulat" Value="-1" />
-                                                    <dx:ListEditItem Text="Planificat" Value="4" />
-                                                </Items>
-                                                <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged" />
-                                            </dx:ASPxListBox>
-                                           <table style="width: 100%">
-                                                <tr>
-                                                    <td style="padding: 4px">
-                                                        <dx:ASPxButton ID="btnInchide" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
-                                                            <ClientSideEvents Click="function(s, e){ cmbStare.HideDropDown(); pnlCtl.PerformCallback('cmbStare'); }" />
-                                                        </dx:ASPxButton>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </DropDownWindowTemplate>
-                                        <ClientSideEvents CloseUp="function() { pnlCtl.PerformCallback('cmbStare'); }" TextChanged="SynchronizeListBoxValues" DropDown="SynchronizeListBoxValues"/>
-                                    </dx:ASPxDropDownEdit>
-                                </div>
-                                <label id="lblDtInc" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data Inceput</label>
-                                <div style="float:left; padding-right:15px;">
-                                    <dx:ASPxDateEdit ID="txtDtInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
-                                        <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtDtInc'); }" />
-                                    </dx:ASPxDateEdit>
-                                </div>
-                                <label id="lblDtSf" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data Sfarsit</label>
-                                <div style="float:left; padding-right:15px;">
-                                    <dx:ASPxDateEdit ID="txtDtSf" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
-                                        <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtDtSf'); }" />
-                                    </dx:ASPxDateEdit>
-                                </div>
-                                <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px;">Angajat</label>
-                                <div style="float:left; padding-right:15px;">
-                                    <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeAngajat" ValueType="System.Int32" 
-                                        AutoPostBack="false" CallbackPageSize="15" AllowNull="true" EnableCallbackMode="true">
-                                    </dx:ASPxComboBox>
-                                </div>
-                                <div style="float:left;">
-                                    <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
-                                        <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
-                                    </dx:ASPxButton>
-                                </div>
-                            </div>
-
-                        </dx:PanelContent>
-                    </PanelCollection>
-                </dx:ASPxCallbackPanel>
+                <div style="display:inline-block; line-height:22px; vertical-align:middle; padding:15px 0px 15px 0px;">
+                    <label id="lblViz" runat="server" style="display:inline-block; float:left; padding:0px 15px;"></label>
+                    <div style="float:left; padding-right:15px;">
+                        <dx:ASPxComboBox ID="cmbViz" ClientInstanceName="cmbViz" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="false" >
+                            <ClientSideEvents SelectedIndexChanged="function(s,e) { SetComboViz(); }" Init="function(s,e) { SetComboViz(); }" />
+                        </dx:ASPxComboBox>
+                    </div>
+                    <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px;">Roluri</label>
+                    <div style="float:left; padding-right:15px;">
+                        <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
+                    </div>
+                    <label id="lblStare" runat="server" style="display:inline-block; float:left; padding-right:15px;">Stare</label>
+                    <div style="float:left; padding-right:15px;">
+                        <dx:ASPxDropDownEdit ClientInstanceName="cmbStare" ID="cmbStare" Width="150px" runat="server" AnimationType="None">
+                            <DropDownWindowStyle BackColor="#EDEDED" />
+                            <DropDownWindowTemplate>
+                                <dx:ASPxListBox Width="100%" ID="listBoxStare" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
+                                    <Border BorderStyle="None" />
+                                    <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
+                                    <Items>
+                                        <dx:ListEditItem Text="(Selectie toate)" />
+                                        <dx:ListEditItem Text="Solicitat" Value="1" />
+                                        <dx:ListEditItem Text="In Curs" Value="2" />
+                                        <dx:ListEditItem Text="Aprobat" Value="3" />
+                                        <dx:ListEditItem Text="Respins" Value="0" />
+                                        <dx:ListEditItem Text="Anulat" Value="-1" />
+                                        <dx:ListEditItem Text="Planificat" Value="4" />
+                                    </Items>
+                                    <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged" />
+                                </dx:ASPxListBox>
+                               <table style="width: 100%">
+                                    <tr>
+                                        <td style="padding: 4px">
+                                            <dx:ASPxButton ID="btnInchide" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
+                                                <ClientSideEvents Click="function(s, e){ cmbStare.HideDropDown(); }" />
+                                            </dx:ASPxButton>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </DropDownWindowTemplate>
+                            <ClientSideEvents TextChanged="SynchronizeListBoxValues" DropDown="SynchronizeListBoxValues" />
+                        </dx:ASPxDropDownEdit>
+                    </div>
+                    <label id="lblDtInc" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data Inceput</label>
+                    <div style="float:left; padding-right:15px;">
+                        <dx:ASPxDateEdit ID="txtDtInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                            <CalendarProperties FirstDayOfWeek="Monday" />
+                        </dx:ASPxDateEdit>
+                    </div>
+                    <label id="lblDtSf" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data Sfarsit</label>
+                    <div style="float:left; padding-right:15px;">
+                        <dx:ASPxDateEdit ID="txtDtSf" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                            <CalendarProperties FirstDayOfWeek="Monday" />
+                        </dx:ASPxDateEdit>
+                    </div>                    
+                    <div style="float:left;">
+                        <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
+                            <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
+                        </dx:ASPxButton>
+                    </div>
+                </div>
             </td>
         </tr>
         <tr>

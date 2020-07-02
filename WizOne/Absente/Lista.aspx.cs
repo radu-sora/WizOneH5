@@ -201,10 +201,6 @@ namespace WizOne.Absente
 
                 if (General.Nz(cmbViz.Value,"").ToString() == "3")
                     cmbRol.Value = -1;
-
-                string strSql = $@"SELECT DISTINCT X.F10003, X.""NumeAngajat"" FROM ({CreeazaSelect()}) X ORDER BY X.""NumeAngajat"" ";
-                cmbAng.DataSource = General.IncarcaDT(strSql);
-                cmbAng.DataBind();
             }
             catch (Exception ex)
             {
@@ -333,8 +329,15 @@ namespace WizOne.Absente
 
             try
             {
-                string strSql = CreeazaSelect() + " ORDER BY A.TIME DESC";
-                dt = General.IncarcaDT(strSql, null);
+                string filtru = "";
+                if (General.Nz(cmbViz.Value,1).ToString() == "1") filtru=" AND A.\"Actiune\"=1 ";
+                if (cmbRol.SelectedIndex != -1 && cmbRol.SelectedIndex != 0) filtru += @" AND A.""Rol""= " + General.Nz(cmbRol.Value, 0);
+                if (cmbStare.Value != null) filtru += @" AND A.""IdStare"" IN (" + DamiStari() + ")";
+                if (txtDtSf.Date != null) filtru += @" AND A.""DataInceput"" <= " + General.ToDataUniv(txtDtSf.Date);
+                if (txtDtInc.Date != null) filtru += " AND " + General.ToDataUniv(txtDtInc.Date) + @" <= A.""DataSfarsit"" ";
+
+                string sqlFinal = Dami.SelectCereri(Convert.ToInt32(cmbViz.Value ?? -99)) + $@" {filtru} ORDER BY A.TIME DESC";
+                dt = General.IncarcaDT(sqlFinal, null);
                 grDate.KeyFieldName = "Id; Rol";
                 grDate.DataSource = dt;
             }
@@ -348,31 +351,6 @@ namespace WizOne.Absente
                 dt.Dispose();
                 dt = null;
             }
-        }
-
-        private string CreeazaSelect()
-        {
-            string strSql = "";
-
-            try
-            {
-                string filtru = "";
-                if (General.Nz(cmbViz.Value, 1).ToString() == "1") filtru = " AND A.\"Actiune\"=1 ";
-                if (cmbRol.SelectedIndex != -1 && cmbRol.SelectedIndex != 0) filtru += @" AND A.""Rol""= " + General.Nz(cmbRol.Value, 0);
-                if (cmbStare.Value != null) filtru += @" AND A.""IdStare"" IN (" + DamiStari() + ")";
-                if (txtDtSf.Date != null) filtru += @" AND A.""DataInceput"" <= " + General.ToDataUniv(txtDtSf.Date);
-                if (txtDtInc.Date != null) filtru += " AND " + General.ToDataUniv(txtDtInc.Date) + @" <= A.""DataSfarsit"" ";
-                if (cmbAng.Value != null) filtru += @" AND B.F10003= " + General.Nz(cmbAng.Value, -99);
-
-                strSql = Dami.SelectCereri(Convert.ToInt32(cmbViz.Value ?? -99)) + filtru;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return strSql;
         }
 
         protected void grDate_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
@@ -1122,36 +1100,7 @@ namespace WizOne.Absente
             }
         }
 
-        protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
-        {
-            try
-            {
-                string tip = e.Parameter;
-                DataTable dtAbs = new DataTable();
 
-                switch (tip)
-                {
-                    case "cmbViz":
-                    case "cmbRol":
-                    case "cmbStare":
-                    case "txtDtInc":
-                    case "txtDtSf":
-                        string strSql = $@"SELECT DISTINCT X.F10003, X.""NumeAngajat"" FROM ({CreeazaSelect()}) X ORDER BY X.""NumeAngajat"" ";
-                        DataTable dt = General.IncarcaDT(strSql);
-                        cmbAng.DataSource = dt;
-                        cmbAng.DataBind();
-
-                        if (dt.Select("F10003=" + General.Nz(cmbAng.Value,-99)).Count() == 0)
-                            cmbAng.Value = null;
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
 
     }
 }

@@ -14896,3 +14896,10 @@ SELECT F01011 INTO  AnCurent  FROM F010;
    commit;
 
 END;
+
+
+----	2.2.130	----
+
+
+UPDATE "tblParametrii" SET "Valoare"=REPLACE("Valoare", '16,','') WHERE "Nume"= 'IdExcluseCircuitDoc';
+COMMIT;

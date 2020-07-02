@@ -146,6 +146,7 @@
                                 <dx:GridViewDataCheckColumn FieldName="FunctieId" Name="Functie" Caption="Functie" ReadOnly="true" Width="80px" />
                                 <dx:GridViewDataCheckColumn FieldName="Norma" Name="Norma" Caption="Norma" ReadOnly="true" Width="80px" />
                                 <dx:GridViewDataCheckColumn FieldName="Salariul" Name="Salariu" Caption="Salariu" ReadOnly="true" Width="80px" />
+                                <dx:GridViewDataCheckColumn FieldName="PunctLucru" Name="PunctLucru" Caption="PctLucru" ReadOnly="true" Width="80px" />
                                 <dx:GridViewDataCheckColumn FieldName="Spor" Name="Spor" Caption="Spor" ReadOnly="true" Width="80px" />
                                 <dx:GridViewDataCheckColumn FieldName="SporVechime" Name="SporVechime" Caption="Spor Vechime" ReadOnly="true" Width="80px" />
                                 <dx:GridViewDataCheckColumn FieldName="Structura" Name="Structura" Caption="Structura" ReadOnly="true" Width="80px"  />

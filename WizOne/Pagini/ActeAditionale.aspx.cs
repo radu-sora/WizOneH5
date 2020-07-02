@@ -183,7 +183,7 @@ namespace WizOne.Pagini
                             WHERE IdAuto=20)
                             ELSE '2100-01-01' END AS ColData 
                             UNION
-                            SELECT CASE WHEN CORCod=1 OR FunctieId = 1 OR CIMDet=1 OR CIMNed=1 THEN 
+                            SELECT CASE WHEN CORCod=1 OR FunctieId = 1 OR CIMDet=1 OR CIMNed=1 OR ""PunctLucru"" = 1 THEN 
                             (SELECT TOP 1 Zi FROM tblZile WHERE Zi<DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
                             ELSE '2100-01-01' END AS ColData 
                             UNION
@@ -206,6 +206,7 @@ namespace WizOne.Pagini
 							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 31 THEN 1 ELSE 0 END) AS ""SuspendareRev"",
 							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 32 THEN 1 ELSE 0 END) AS ""Detasare"",
 							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
+                            MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 16 THEN 1 ELSE 0 END) AS ""PunctLucru"",
                             CONVERT(nvarchar(10),J.DocNr) AS DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct, 
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas,
@@ -243,7 +244,7 @@ namespace WizOne.Pagini
                             GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             CONVERT(nvarchar(10),B.F100985) AS DocNr, B.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct,
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
@@ -271,7 +272,7 @@ namespace WizOne.Pagini
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= (X.""DataModif"" - 1) AND ""ZiSapt"" <= 5)
                             when ""Salariul"" = 1 OR ""Spor"" = 1 OR ""SporVechime"" = 1 then
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" + 19 AND ""ZiSapt"" <= 5)
-                            WHEN ""CORCod"" = 1 OR ""FunctieId"" = 1 OR ""CIMDet"" = 1 OR ""CIMNed"" = 1 THEN
+                            WHEN ""CORCod"" = 1 OR ""FunctieId"" = 1 OR ""CIMDet"" = 1 OR ""CIMNed"" = 1 OR ""PunctLucru"" = 1 THEN
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" - 1 AND ""ZiSapt"" <= 5)
                             ELSE TO_DATE('01-01-2100', 'DD-MM-YYYY') END AS ""TermenDepasire""
                             FROM(
@@ -289,6 +290,7 @@ namespace WizOne.Pagini
 							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 31 THEN 1 ELSE 0 END) AS ""SuspendareRev"",
 							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 32 THEN 1 ELSE 0 END) AS ""Detasare"",
 							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
+                            MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 16 THEN 1 ELSE 0 END) AS ""PunctLucru"",
                             CAST(J.""DocNr"" AS varchar2(20)) AS ""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"", 
                             CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"",
@@ -327,7 +329,7 @@ namespace WizOne.Pagini
                             GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente"", B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             A.F100985, A.F100986, COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"",
                             CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"", ',-1' AS ""IdAvans"",

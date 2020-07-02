@@ -14135,8 +14135,13 @@ SELECT @cnt = COUNT(*) FROM Ptj_tblZileCO WHERE F10003 = @f10003 and An = year(@
 		VALUES (@f10003, year(@zi), @ZileCuvenite, 0, 0, @ZileCuveniteAn)
 END
 
-
 GO
 
+
+----	2.2.130	----
+
+
+UPDATE tblParametrii SET Valoare=REPLACE(Valoare, '16,','') WHERE "Nume"= 'IdExcluseCircuitDoc'
+GO
 
 

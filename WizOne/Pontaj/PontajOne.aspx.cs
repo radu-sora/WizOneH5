@@ -403,14 +403,13 @@ namespace WizOne.Pontaj
                             END END END AS ""DrepturiModif""
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
-                            LEFT JOIN F1001 C ON A.F10003=C.F10003
                             LEFT JOIN F002 E ON P.F10002 = E.F00202
                             LEFT JOIN F003 F ON P.F10004 = F.F00304
                             LEFT JOIN F004 G ON P.F10005 = G.F00405
                             LEFT JOIN F005 H ON P.F10006 = H.F00506
                             LEFT JOIN F006 I ON P.F10007 = I.F00607
-                            LEFT JOIN F007 Y ON C.F100958 = Y.F00708
-                            LEFT JOIN F008 Z ON C.F100959 = Z.F00809
+                            LEFT JOIN F007 Y ON P.F100958 = Y.F00708
+                            LEFT JOIN F008 Z ON P.F100959 = Z.F00809
                             LEFT JOIN ""Ptj_Cumulat"" J ON J.F10003=A.F10003 AND J.""An""={General.FunctiiData("P.\"Ziua\"", "A")} AND J.""Luna""={General.FunctiiData("P.\"Ziua\"", "L")}
                             LEFT JOIN ""Ptj_tblStariPontaj"" K ON COALESCE(J.""IdStare"",1) = K.""Id""
                             LEFT JOIN ""Ptj_Contracte"" L ON P.""IdContract""=L.""Id""

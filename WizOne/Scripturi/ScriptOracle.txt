@@ -14901,5 +14901,91 @@ END;
 ----	2.2.130	----
 
 
+--https://github.com/wizromRD/WizOne/issues/458
+--De adaugat Punct de lucru pe Circuit documente #458
 UPDATE "tblParametrii" SET "Valoare"=REPLACE("Valoare", '16,','') WHERE "Nume"= 'IdExcluseCircuitDoc';
 COMMIT;
+
+--https://github.com/wizromRD/WizOne/issues/487
+--La Actualizare Date in pontaj - pe Structura organizatorica de adaugat si Subdepartemant si Birou #487
+ALTER TABLE "Ptj_Intrari" ADD F100958 number(10);
+/
+ALTER TABLE "Ptj_Intrari" ADD F100959 number(10);
+/
+
+
+create or replace FUNCTION "DamiSubdept" (altF10003 IN NUMBER, "dt" IN DATE) RETURN NUMBER
+IS Subdept number(10);
+
+BEGIN 
+
+SELECT val INTO Subdept from 
+(
+SELECT 1 as rank, F70403 marca,  F70418 val,  f70406 data_Subdept,  F70406 Data from f704   WHERE F70404=5 AND F70406 <= "dt" and F70403 = altF10003 AND ROWNUM<=1
+union 
+select 2 as rank, f100.f10003 marca, F100958 val, case when coalesce(TO_NUMBER(TO_CHAR(F100910,'YYYY')),2100) in (1900,2100) then F10022 else f100910 end data_Subdept, 
+case when coalesce(100*TO_NUMBER(TO_CHAR(F100910,'YYYY'))+TO_NUMBER(TO_CHAR(F100910,'MM')), 100*2100+1) = 100 * f01011 + f01012 then F100910 else  TO_DATE('01-' || f01012 || '-' || f01011,'DD-MM-YYYY') end data 
+from f100 
+inner join f1001 on f100.F10003=f1001.F10003
+join f010 on 1=1 where f100.f10003 =altf10003 and case when coalesce(100*TO_NUMBER(TO_CHAR(F100910,'YYYY'))+TO_NUMBER(TO_CHAR(F100910,'MM')), 100*2100+1) = 100 * f01011 + f01012 then F100910 else  
+TO_DATE('01-' || f01012 || '-' || f01011,'DD-MM-YYYY') end<="dt"
+union
+select 3 as rank, f910.f91003 marca, F910958 val, case when coalesce(TO_NUMBER(TO_CHAR(F910910,'YYYY')),2100) in (1900,2100) then F91022 else f910910 end data_subdept, 
+case when coalesce(100*TO_NUMBER(TO_CHAR(F910910,'YYYY'))+TO_NUMBER(TO_CHAR(F910910,'MM')), 100*2100+1) = 100 * TO_NUMBER(TO_CHAR(F910910,'YYYY')) + f910.month then F910910 else  TO_DATE('01-' || F910.month || '-' || F910.year,'DD-MM-YYYY') end data 
+from f910, F9101
+where f910.F91003=f9101.F91003 and case when coalesce(100*TO_NUMBER(TO_CHAR(F910910,'YYYY'))+TO_NUMBER(TO_CHAR(F910910,'MM')), 100*2100+1) = 100 * f910.YEAR + f910.month then F910910 else TO_DATE('01-' || F910.month || '-' || F910.year,'DD-MM-YYYY') end <= "dt" 
+and f910.f91003 = altf10003 and ROWNUM <= 1
+union
+select 4 as rank, f100.f10003 marca, F100958 val, case when coalesce(TO_NUMBER(TO_CHAR(F100910,'YYYY')),2100) in (1900,2100) then F10022 else f100910 end data_Subdept, TO_DATE('01-01-1900','DD-MM-YYYY') data from f100
+join f1001 on f100.F10003=f1001.F10003
+where f100.f10003 =altf10003
+) x;
+
+
+    RETURN Subdept;
+
+    EXCEPTION
+      WHEN NO_DATA_FOUND THEN RETURN 8;
+      WHEN TOO_MANY_ROWS THEN RETURN 8;
+      WHEN OTHERS THEN RETURN 8;
+
+END;
+
+
+
+create or replace FUNCTION "DamiBirou" (altF10003 IN NUMBER, "dt" IN DATE) RETURN NUMBER
+IS Birou number(10);
+
+BEGIN 
+
+SELECT val INTO Birou from 
+(
+SELECT 1 as rank, F70403 marca,  F704180 val,  f70406 data_Birou,  F70406 Data from f704   WHERE F70404=5 AND F70406 <= "dt" and F70403 = altF10003 AND ROWNUM<=1
+union 
+select 2 as rank, f100.f10003 marca, F100959 val, case when coalesce(TO_NUMBER(TO_CHAR(F100910,'YYYY')),2100) in (1900,2100) then F10022 else f100910 end data_Birou, 
+case when coalesce(100*TO_NUMBER(TO_CHAR(F100910,'YYYY'))+TO_NUMBER(TO_CHAR(F100910,'MM')), 100*2100+1) = 100 * f01011 + f01012 then F100910 else  TO_DATE('01-' || f01012 || '-' || f01011,'DD-MM-YYYY') end data 
+from f100 
+inner join f1001 on f100.F10003=f1001.F10003
+join f010 on 1=1 where f100.f10003 =altf10003 and case when coalesce(100*TO_NUMBER(TO_CHAR(F100910,'YYYY'))+TO_NUMBER(TO_CHAR(F100910,'MM')), 100*2100+1) = 100 * f01011 + f01012 then F100910 else  
+TO_DATE('01-' || f01012 || '-' || f01011,'DD-MM-YYYY') end<="dt"
+union
+select 3 as rank, f910.f91003 marca, F910959 val, case when coalesce(TO_NUMBER(TO_CHAR(F910910,'YYYY')),2100) in (1900,2100) then F91022 else f910910 end data_Birou, 
+case when coalesce(100*TO_NUMBER(TO_CHAR(F910910,'YYYY'))+TO_NUMBER(TO_CHAR(F910910,'MM')), 100*2100+1) = 100 * TO_NUMBER(TO_CHAR(F910910,'YYYY')) + f910.month then F910910 else  TO_DATE('01-' || F910.month || '-' || F910.year,'DD-MM-YYYY') end data 
+from f910, F9101
+where f910.F91003=f9101.F91003 and case when coalesce(100*TO_NUMBER(TO_CHAR(F910910,'YYYY'))+TO_NUMBER(TO_CHAR(F910910,'MM')), 100*2100+1) = 100 * f910.YEAR + f910.month then F910910 else TO_DATE('01-' || F910.month || '-' || F910.year,'DD-MM-YYYY') end <= "dt" 
+and f910.f91003 = altf10003 and ROWNUM <= 1
+union
+select 4 as rank, f100.f10003 marca, F100958 val, case when coalesce(TO_NUMBER(TO_CHAR(F100910,'YYYY')),2100) in (1900,2100) then F10022 else f100910 end data_Birou, TO_DATE('01-01-1900','DD-MM-YYYY') data from f100
+join f1001 on f100.F10003=f1001.F10003
+where f100.f10003 =altf10003
+) x;
+
+
+    RETURN Birou;
+
+    EXCEPTION
+      WHEN NO_DATA_FOUND THEN RETURN 8;
+      WHEN TOO_MANY_ROWS THEN RETURN 8;
+      WHEN OTHERS THEN RETURN 8;
+
+END;

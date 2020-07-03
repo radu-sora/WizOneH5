@@ -3052,16 +3052,20 @@ namespace WizOne.Pontaj
                 //if (Convert.ToInt32(cmbDept.Value ?? -99) != -99) strFiltru += " AND A.F10007 = " + cmbDept.Value;
                 if (General.Nz(cmbDept.Value,"").ToString() != "") strFiltru += @" AND A.""Dept"" IN ('" + cmbDept.Value.ToString().Replace(",","','") + "')";
 
-                if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99)
-                {
-                    strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
-                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.F10003 ";
-                }
-                if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99)
-                {
-                    strFiltru += " AND A.F100959 = " + cmbBirou.Value;
-                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.F10003 ";
-                }
+
+                //Florin 2020.07.03
+                if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99) strFiltru += @" AND A.F100958=" + cmbSubDept.Value;
+                if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99) strFiltru += @" AND A.F100959=" + cmbBirou.Value;
+                //if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99)
+                //{
+                //    strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
+                //    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.F10003 ";
+                //}
+                //if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99)
+                //{
+                //    strFiltru += " AND A.F100959 = " + cmbBirou.Value;
+                //    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.F10003 ";
+                //}
 
                 //Florin 2019.12.27
                 //if (General.Nz(cmbCtr.Value,"").ToString() != "") strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
@@ -3153,7 +3157,7 @@ namespace WizOne.Pontaj
                                 CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, CONVERT(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit,  A.F10008 + ' ' + A.F10009 AS AngajatNume, C.Id AS IdContract, 
                                 Y.Norma, Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, 
                                 C.Denumire AS DescContract, ISNULL(C.OreSup,0) AS OreSup, ISNULL(C.Afisare,1) AS Afisare, 
-                                B.F100958, B.F100959, 
+                                Y.F100958, Y.F100959,
                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, {cmpCateg}
                                 ISNULL(K.Culoare,'#FFFFFFFF') AS Culoare, K.Denumire AS StareDenumire,
                                 A.F10078 AS Angajator, DR.F08903 AS TipContract, 
@@ -3170,7 +3174,6 @@ namespace WizOne.Pontaj
                                 PIVOT  (MAX(ValStr) FOR Ziua IN ( {zile.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003
                                 LEFT JOIN F100 A ON A.F10003=X.F10003 
-                                LEFT JOIN F1001 B ON A.F10003=B.F10003 
                                 LEFT JOIN (SELECT R.F10003, MIN(R.Ziua) AS ZiuaMin FROM Ptj_Intrari_2 R WHERE YEAR(R.Ziua)= {an} AND MONTH(R.Ziua)= {luna} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
                                 LEFT JOIN Ptj_Intrari_2 Y ON A.F10003=Y.F10003 AND Y.Ziua=Q.ZiuaMin
                                 LEFT JOIN Ptj_tblStariPontaj K ON K.Id = ISNULL(X.IdStare,1) 
@@ -3186,8 +3189,8 @@ namespace WizOne.Pontaj
 							    LEFT JOIN F005 H ON Y.F10006 = H.F00506
 							    LEFT JOIN F006 I ON Y.F10007 = I.F00607
 
-							    LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
-                                LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
+							    LEFT JOIN F007 S7 ON Y.F100958 = S7.F00708
+                                LEFT JOIN F008 S8 ON Y.F100959 = S8.F00809
 
                                 LEFT JOIN F062 L ON Y.F06204Default=L.F06204
 
@@ -3224,7 +3227,7 @@ namespace WizOne.Pontaj
                                 A.F10022 AS ""DataInceput"", ""DamiDataPlecare""(X.F10003, {dtSf}) AS ""DataSfarsit"",  A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", C.""Id"" AS ""IdContract"", 
                                 Y.""Norma"", Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, 
                                 C.""Denumire"" AS ""DescContract"", NVL(C.""OreSup"",0) AS ""OreSup"", NVL(C.""Afisare"",1) AS ""Afisare"", 
-                                B.F100958, B.F100959, 
+                                Y.F100958, Y.F100959, 
                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, {cmpCateg}
                                 NVL(K.""Culoare"",'#FFFFFFFF') AS ""Culoare"", K.""Denumire"" AS ""StareDenumire"",
                                 A.F10078 AS ""Angajator"", DR.F08903 AS ""TipContract"", 
@@ -3241,7 +3244,6 @@ namespace WizOne.Pontaj
                                 PIVOT  (MAX(COALESCE(""ValStr"",'')) FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003
                                 LEFT JOIN F100 A ON A.F10003=X.F10003
-                                LEFT JOIN F1001 B ON A.F10003=B.F10003 
                                 LEFT JOIN (SELECT R.F10003, MIN(R.""Ziua"") AS ""ZiuaMin"" FROM ""Ptj_Intrari_2"" R WHERE EXTRACT(YEAR FROM R.""Ziua"")= {an} AND EXTRACT(MONTH FROM R.""Ziua"")= {luna} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
                                 LEFT JOIN ""Ptj_Intrari_2"" Y ON A.F10003=Y.F10003 AND Y.""Ziua""=Q.""ZiuaMin""
                                 LEFT JOIN ""Ptj_tblStariPontaj"" K ON K.""Id"" = NVL(X.""IdStare"",1) 
@@ -3256,8 +3258,8 @@ namespace WizOne.Pontaj
 							    LEFT JOIN F005 H ON Y.F10006 = H.F00506
 							    LEFT JOIN F006 I ON Y.F10007 = I.F00607
 
-							    LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
-                                LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
+							    LEFT JOIN F007 S7 ON Y.F100958 = S7.F00708
+                                LEFT JOIN F008 S8 ON Y.F100959 = S8.F00809
 
                                 LEFT JOIN F062 L ON Y.""F06204Default""=L.F06204
 
@@ -3315,16 +3317,22 @@ namespace WizOne.Pontaj
                 //if (Convert.ToInt32(cmbDept.Value ?? -99) != -99) strFiltru += " AND A.F10007 = " + cmbDept.Value;
                 if (General.Nz(cmbDept.Value, "").ToString() != "") strFiltru += @" AND A.""Dept"" IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
 
-                if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99)
-                {
-                    strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
-                    strLeg = " LEFT JOIN (SELECT F10003 AS MARCA1, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.MARCA1 ";
-                }
-                if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99)
-                {
-                    strFiltru += " AND A.F100959 = " + cmbBirou.Value;
-                    strLeg = " LEFT JOIN (SELECT F10003 AS MARCA2, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.MARCA2 ";
-                }
+
+                //Florin 2020.07.03
+                if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99) strFiltru += @" AND A.F100958=" + cmbSubDept.Value;
+                if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99) strFiltru += @" AND A.F100959=" + cmbBirou.Value;
+                //if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99)
+                //{
+                //    strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
+                //    strLeg = " LEFT JOIN (SELECT F10003 AS MARCA1, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.MARCA1 ";
+                //}
+                //if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99)
+                //{
+                //    strFiltru += " AND A.F100959 = " + cmbBirou.Value;
+                //    strLeg = " LEFT JOIN (SELECT F10003 AS MARCA2, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.MARCA2 ";
+                //}
+
+
                 //Florin 2019.12.27
                 //if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
                 if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += " AND A.\"DescContract\" IN ('" + cmbCtr.Value.ToString().Replace(",", "','") + "')";
@@ -3540,7 +3548,7 @@ namespace WizOne.Pontaj
                                 FROM (
                                  SELECT TOP 100 PERCENT X.F10003, CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, convert(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit, A.F10008 + ' ' + A.F10009 AS AngajatNume, st.Denumire AS StarePontaj, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate,
                                  H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, F06205, {cmpCateg}
-                                B.F100958, B.F100959, Y.IdContract, A.F100901 AS EID, X.IdStare , Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, C.Denumire AS DescContract, X.Comentarii
+                                Y.F100958, Y.F100959, Y.IdContract, A.F100901 AS EID, X.IdStare , Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, C.Denumire AS DescContract, X.Comentarii
                                 {zileVal}  {zileF}
                                 FROM Ptj_Cumulat X 
 		                        LEFT JOIN Ptj_tblStari st on st.Id = x.IdStare
@@ -3568,8 +3576,8 @@ namespace WizOne.Pontaj
 							    LEFT JOIN F005 H ON Y.F10006 = H.F00506
 							    LEFT JOIN F006 I ON Y.F10007 = I.F00607
 
-							    LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
-                                LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
+							    LEFT JOIN F007 S7 ON Y.F100958 = S7.F00708
+                                LEFT JOIN F008 S8 ON Y.F100959 = S8.F00809
 
                                 LEFT JOIN F062 L ON Y.F06204Default=L.F06204
 
@@ -3588,7 +3596,7 @@ namespace WizOne.Pontaj
                                 FROM (
                                 SELECT X.F10003, TO_CHAR(A.F10022, 'dd/mm/yyyy') AS ""DataInceput"", TO_CHAR(""DamiDataPlecare""(X.F10003, {dtSf}), 'dd/mm/yyyy') AS ""DataSfarsit"", A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", st.""Denumire"" AS ""StarePontaj"", COALESCE(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", COALESCE(zlp.""Ramase"", 0) as ""ZLPNeefectuate"",
                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, F06205, {cmpCateg}
-                                B.F100958, B.F100959, Y.""IdContract"", A.F100901 AS EID, X.""IdStare"" , Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, C.""Denumire"" AS ""DescContract"", X.""Comentarii""
+                                Y.F100958, Y.F100959, Y.""IdContract"", A.F100901 AS EID, X.""IdStare"" , Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, C.""Denumire"" AS ""DescContract"", X.""Comentarii""
                                 {zileVal} {zileF}
                                 FROM ""Ptj_Cumulat"" X 
 		                        LEFT JOIN ""Ptj_tblStari"" st on st.""Id"" = x.""IdStare""
@@ -3615,8 +3623,8 @@ namespace WizOne.Pontaj
 							    LEFT JOIN F005 H ON Y.F10006 = H.F00506
 							    LEFT JOIN F006 I ON Y.F10007 = I.F00607
 
-							    LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
-                                LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
+							    LEFT JOIN F007 S7 ON Y.F100958 = S7.F00708
+                                LEFT JOIN F008 S8 ON Y.F100959 = S8.F00809
 
                                 LEFT JOIN F062 L ON Y.""F06204Default""=L.F06204
 

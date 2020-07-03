@@ -253,9 +253,12 @@ namespace WizOne.Pontaj
                         }
                         if (chkStr == true)
                         {
-                            act += ",A.F10002=G.F00603, A.F10004=G.F00604, A.F10005=G.F00605, A.F10006=G.F00606, A.F10007=G.F00607";
+                            //Florin 2020.07.02 - am adaugat subdept si birou
+                            act += ",A.F10002=G.F00603, A.F10004=G.F00604, A.F10005=G.F00605, A.F10006=G.F00606, A.F10007=G.F00607, A.F100958=sd.Subdept, A.F100959=br.Birou";
                             inn += " OUTER APPLY dbo.DamiDept(A.F10003, A.Ziua) dd " +
-                                   " LEFT JOIN F006 G ON G.F00607 = dd.Dept";
+                                   " LEFT JOIN F006 G ON G.F00607 = dd.Dept " +
+                                   " OUTER APPLY dbo.DamiSubdept(A.F10003, A.Ziua) sd " +
+                                   " OUTER APPLY dbo.DamiBirou(A.F10003, A.Ziua) br ";
                             //Florin 2018.10.23
                             if (Dami.ValoareParam("TipCalculDate") == "2")
                                 inn += " LEFT JOIN DamiDept_Table ddt ON ddt.F10003=A.F10003 AND ddt.dt=A.Ziua";
@@ -352,7 +355,10 @@ namespace WizOne.Pontaj
 
                         if (chkCtr == true) act += ",A.\"IdContract\" = CASE WHEN COALESCE(A.\"ModifProgram\",0) = 1 THEN A.\"IdContract\" ELSE (SELECT MAX(B.\"IdContract\") AS \"IdContract\" FROM \"F100Contracte\" B WHERE A.F10003 = B.F10003 AND CAST(B.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(B.\"DataSfarsit\" AS Date)) END";
                         if (chkNrm == true) act += ",A.\"Norma\"=COALESCE(\"DamiNorma\"(A.F10003, A.\"Ziua\"), (SELECT C.F10043 FROM F100 C WHERE C.F10003=A.F10003))";
-                        if (chkStr == true) act += ",A.F10007=COALESCE(\"DamiDept\"(A.F10003, A.\"Ziua\"), (SELECT C.F10007 FROM F100 C WHERE C.F10003=A.F10003))";
+                        if (chkStr == true) act += 
+                                $@",A.F10007=COALESCE(""DamiDept""(A.F10003, A.""Ziua""), (SELECT C.F10007 FROM F100 C WHERE C.F10003=A.F10003))
+                                   ,A.F100958=COALESCE(""DamiSubdept""(A.F10003, A.""Ziua""), (SELECT C.F100958 FROM F1001 C WHERE C.F10003=A.F10003))
+                                   ,A.F100959=COALESCE(""DamiBirou""(A.F10003, A.""Ziua""), (SELECT C.F100959 FROM F1001 C WHERE C.F10003=A.F10003))";
                         if (chkCC == true)
                             act += ",A.\"F06204Default\"=CASE WHEN NOT EXISTS(SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(C.\"DataSfarsit\" AS Date)) THEN COALESCE(\"DamiCC\"(A.F10003, A.\"Ziua\"), (SELECT C.F10053 FROM F100 C WHERE C.F10003=A.F10003)) ELSE "
                                   + " (SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(C.\"DataSfarsit\" AS Date)) END";

@@ -702,8 +702,8 @@ namespace WizOne.Pontaj
                     if (General.Nz(cmbFil.Value, "").ToString() != "") filtru += " AND P.F10005=" + cmbFil.Value;
                     if (General.Nz(cmbSec.Value, "").ToString() != "") filtru += " AND P.F10006=" + cmbSec.Value;
                     if (General.Nz(cmbDept.Value, "").ToString() != "") filtru += " AND P.F10007=" + cmbDept.Value;
-                    if (General.Nz(cmbSubDept.Value, "").ToString() != "") filtru += " AND C.F100958 = " + cmbSubDept.Value;
-                    if (General.Nz(cmbBirou.Value, "").ToString() != "") filtru += " AND C.F100959 = " + cmbBirou.Value;
+                    if (General.Nz(cmbSubDept.Value, "").ToString() != "") filtru += " AND P.F100958 = " + cmbSubDept.Value;
+                    if (General.Nz(cmbBirou.Value, "").ToString() != "") filtru += " AND P.F100959 = " + cmbBirou.Value;
 
                     if (General.Nz(cmbCtr.Value, "").ToString() != "") filtru += " AND P.\"IdContract\"=" + cmbCtr.Value;
                     if (General.Nz(cmbStare.Value, "").ToString() != "") filtru += " AND J.\"IdStare\"=" + cmbStare.Value;
@@ -898,7 +898,6 @@ namespace WizOne.Pontaj
                             ABSE.""DenumireScurta"" AS ""ValAbs""                            
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
-                            LEFT JOIN F1001 C ON A.F10003=C.F10003
                             LEFT JOIN F002 E ON P.F10002 = E.F00202
                             LEFT JOIN F003 F ON P.F10004 = F.F00304
                             LEFT JOIN F004 G ON P.F10005 = G.F00405
@@ -909,8 +908,8 @@ namespace WizOne.Pontaj
                             LEFT JOIN ""Ptj_Contracte"" L ON P.""IdContract""=L.""Id""
                             LEFT JOIN ""Ptj_Programe"" M ON P.""IdProgram""=M.""Id""
 
-                            LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
-                            LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
+                            LEFT JOIN F007 S7 ON P.F100958 = S7.F00708
+                            LEFT JOIN F008 S8 ON P.F100959 = S8.F00809
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402
@@ -998,7 +997,6 @@ namespace WizOne.Pontaj
                             ABSE.""DenumireScurta"" AS ""ValAbs""                            
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
-                            LEFT JOIN F1001 C ON A.F10003=C.F10003
                             LEFT JOIN F002 E ON P.F10002 = E.F00202
                             LEFT JOIN F003 F ON P.F10004 = F.F00304
                             LEFT JOIN F004 G ON P.F10005 = G.F00405
@@ -1009,8 +1007,8 @@ namespace WizOne.Pontaj
                             LEFT JOIN ""Ptj_Contracte"" L ON P.""IdContract""=L.""Id""
                             LEFT JOIN ""Ptj_Programe"" M ON P.""IdProgram""=M.""Id""
 
-                            LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
-                            LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
+                            LEFT JOIN F007 S7 ON P.F100958 = S7.F00708
+                            LEFT JOIN F008 S8 ON P.F100959 = S8.F00809
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402 

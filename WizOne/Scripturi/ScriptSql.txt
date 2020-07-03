@@ -14212,3 +14212,9 @@ where f100.f10003 =@f10003
 ) x
 order by data desc, rank
 GO
+
+
+--https://github.com/wizromRD/WizOne/issues/496
+--Adaugare program de lucru in modificari in avans/Circuit Documente pentru generare AA #496
+ALTER TABLE Ptj_Contracte ADD DenumireInAdmin nvarchar(150)
+GO

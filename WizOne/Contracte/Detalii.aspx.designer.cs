@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Contracte {
-    
-    
-    public partial class Detalii {
-        
+namespace WizOne.Contracte
+{
+
+
+    public partial class Detalii
+    {
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
+
         /// <summary>
         /// btnSave control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnSave;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// lblId control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblId;
-        
+
         /// <summary>
         /// txtId control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtId;
-        
+
         /// <summary>
         /// lblDenumire control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblDenumire;
-        
+
         /// <summary>
         /// txtDenumire control.
         /// </summary>
@@ -74,7 +76,25 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtDenumire;
-        
+
+        /// <summary>
+        /// lblDenumireInAdmin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblDenumireInAdmin;
+
+        /// <summary>
+        /// txtDenumireInAdmin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtDenumireInAdmin;
+
         /// <summary>
         /// pnlTab control.
         /// </summary>
@@ -83,7 +103,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxFormLayout pnlTab;
-        
+
         /// <summary>
         /// txtOraSchIn control.
         /// </summary>
@@ -92,7 +112,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTimeEdit txtOraSchIn;
-        
+
         /// <summary>
         /// txtOraSchOut control.
         /// </summary>
@@ -101,7 +121,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTimeEdit txtOraSchOut;
-        
+
         /// <summary>
         /// chkOreSup control.
         /// </summary>
@@ -110,7 +130,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkOreSup;
-        
+
         /// <summary>
         /// cmbRap control.
         /// </summary>
@@ -119,7 +139,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbRap;
-        
+
         /// <summary>
         /// txtOraIn control.
         /// </summary>
@@ -128,7 +148,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTimeEdit txtOraIn;
-        
+
         /// <summary>
         /// txtOraOut control.
         /// </summary>
@@ -137,7 +157,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTimeEdit txtOraOut;
-        
+
         /// <summary>
         /// chkPontareAuto control.
         /// </summary>
@@ -146,7 +166,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkPontareAuto;
-        
+
         /// <summary>
         /// grDateAbs control.
         /// </summary>
@@ -155,7 +175,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDateAbs;
-        
+
         /// <summary>
         /// pnlCall control.
         /// </summary>
@@ -164,7 +184,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCall;
-        
+
         /// <summary>
         /// PanelContent3 control.
         /// </summary>
@@ -173,7 +193,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.PanelContent PanelContent3;
-        
+
         /// <summary>
         /// pnlPrg control.
         /// </summary>
@@ -182,7 +202,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxFormLayout pnlPrg;
-        
+
         /// <summary>
         /// cmbZiDeLa control.
         /// </summary>
@@ -191,7 +211,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbZiDeLa;
-        
+
         /// <summary>
         /// cmbZiPentru control.
         /// </summary>
@@ -200,7 +220,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDropDownEdit cmbZiPentru;
-        
+
         /// <summary>
         /// btnDuplica control.
         /// </summary>
@@ -209,7 +229,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnDuplica;
-        
+
         /// <summary>
         /// grDate1 control.
         /// </summary>
@@ -218,7 +238,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate1;
-        
+
         /// <summary>
         /// grDate2 control.
         /// </summary>
@@ -227,7 +247,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate2;
-        
+
         /// <summary>
         /// grDate3 control.
         /// </summary>
@@ -236,7 +256,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate3;
-        
+
         /// <summary>
         /// grDate4 control.
         /// </summary>
@@ -245,7 +265,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate4;
-        
+
         /// <summary>
         /// grDate5 control.
         /// </summary>
@@ -254,7 +274,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate5;
-        
+
         /// <summary>
         /// grDate6 control.
         /// </summary>
@@ -263,7 +283,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate6;
-        
+
         /// <summary>
         /// grDate7 control.
         /// </summary>
@@ -272,7 +292,7 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate7;
-        
+
         /// <summary>
         /// grDate8 control.
         /// </summary>

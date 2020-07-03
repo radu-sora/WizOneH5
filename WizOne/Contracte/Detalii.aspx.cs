@@ -72,6 +72,7 @@ namespace WizOne.Contracte
 
                         txtId.Value = dr["Id"];
                         txtDenumire.Value = General.Nz(dr["Denumire"], null);
+                        txtDenumireInAdmin.Value = General.Nz(dr["DenumireInAdmin"], null);
                     }
                 }
             }
@@ -140,7 +141,8 @@ namespace WizOne.Contracte
                                 dr = dt.Rows[0];
 
                             dr["Denumire"] = txtDenumire.Value ?? DBNull.Value;
-                            dr["OreSup"] = chkOreSup.Value ?? DBNull.Value;
+                            dr["DenumireInAdmin"] = txtDenumireInAdmin.Value ?? DBNull.Value;
+                            dr["OreSup"] = chkOreSup.Value ?? 0;
                             dr["TipRaportareOreNoapte"] = cmbRap.Value ?? DBNull.Value;
                             dr["PontareAutomata"] = chkPontareAuto.Value ?? DBNull.Value;
                             if (txtOraSchIn.Value != null)

@@ -151,7 +151,7 @@ namespace WizOne.Pagini
 
 
                 //Florin 2020.04.28
-                DateTime dtInit = new DateTime(2018,1,1);
+                DateTime dtInit = new DateTime(2018, 1, 1);
                 string paramDt = Dami.ValoareParam("CircuitDocumenteDataInceput").Trim();
                 if (paramDt != "")
                 {
@@ -159,7 +159,8 @@ namespace WizOne.Pagini
                     try
                     {
                         dtInit = new DateTime(Convert.ToInt32(arr[2]), Convert.ToInt32(arr[1]), Convert.ToInt32(arr[0]));
-                    } catch (Exception) {}
+                    }
+                    catch (Exception) { }
                 }
 
                 if (Constante.tipBD == 1)
@@ -197,7 +198,7 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(FunctieId, 0) > 0 THEN 1 ELSE 0 END) AS FunctieId,
                             MAX(CASE WHEN COALESCE(Norma, 0) > 0 THEN 1 ELSE 0 END) AS Norma,
                             MAX(CASE WHEN COALESCE(SalariulBrut, 0) > 0 OR COALESCE(SalariulNet, 0) > 0 THEN 1 ELSE 0 END) AS Salariul,
-                            MAX(CASE WHEN (COALESCE(Spor0,0) + COALESCE(Spor1,0) +COALESCE(Spor2,0) +COALESCE(Spor3,0) +COALESCE(Spor4,0) +COALESCE(Spor5,0) +COALESCE(Spor6,0) +COALESCE(Spor7,0) +COALESCE(Spor8,0) +COALESCE(Spor9,0) +COALESCE(Spor10,0) +COALESCE(Spor11,0) +COALESCE(Spor12,0) +COALESCE(Spor13,0) +COALESCE(Spor14,0) +COALESCE(Spor15,0) +COALESCE(Spor16,0) +COALESCE(Spor17,0) +COALESCE(Spor18,0) +COALESCE(Spor19,0)) > 0 THEN 1 ELSE 0 END ) AS Spor,
+                            MAX(CASE WHEN (COALESCE(Spor0,0) + COALESCE(Spor1,0) +COALESCE(Spor2,0) +COALESCE(Spor3,0) +COALESCE(Spor4,0) +COALESCE(Spor5,0) +COALESCE(Spor6,0) +COALESCE(Spor7,0) +COALESCE(Spor8,0) +COALESCE(Spor9,0) +COALESCE(Spor10,0) +COALESCE(Spor11,0) +COALESCE(Spor12,0) +COALESCE(Spor13,0) +COALESCE(Spor14,0) +COALESCE(Spor15,0) +COALESCE(Spor16,0) +COALESCE(Spor17,0) +COALESCE(Spor18,0) +COALESCE(Spor19,0)) > 0 AND A.Explicatii<>'Inserat automat la inchidere luna' THEN 1 ELSE 0 END ) AS Spor,
                             MAX(CASE WHEN COALESCE(SubcompanieId, 0) > 0 OR COALESCE(FilialaId, 0) > 0 OR COALESCE(SectieId, 0) > 0 OR COALESCE(DeptId, 0) > 0 THEN 1 ELSE 0 END) AS Structura,
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 2 THEN 1 ELSE 0 END) AS CIMDet,
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 1 THEN 1 ELSE 0 END) AS CIMNed,
@@ -208,6 +209,7 @@ namespace WizOne.Pagini
 							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
                             MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 16 THEN 1 ELSE 0 END) AS ""PunctLucru"",
                             MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 106 THEN 1 ELSE 0 END) AS ""ProgramLucru"",
+                            MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 11 AND A.""Explicatii""= 'Inserat automat la inchidere luna' THEN 1 ELSE 0 END) AS ""SporVechime"",
                             CONVERT(nvarchar(10),J.DocNr) AS DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct, 
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas,
@@ -217,45 +219,28 @@ namespace WizOne.Pagini
                             LEFT JOIN Admin_NrActAd JJ ON AA.IdActAd=JJ.IdAuto
                             WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,'1900-01-01')=COALESCE(J.DocData,'1900-01-01')
                             AND COALESCE((SELECT CHARINDEX(',' + CAST(AA.IdAtribut AS nvarchar(20)) + ',', ',' + Valoare + ',') FROM tblParametrii WHERE Nume='IdExcluseCircuitDoc'),0) = 0                            
-                            AND (CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END) = (CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END) 
-                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END
+                            AND (CASE WHEN AA.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN AA.""IdAtribut"" ELSE 0 END) = (CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END) 
+                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN AA.""IdAtribut"" ELSE 0 END
                             FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente,
-                            0 AS CandidatAngajat, 
-                            COALESCE((SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
-                            B5.F02504 IS NOT NULL OR B6.F02504 IS NOT NULL OR B7.F02504 IS NOT NULL OR B8.F02504 IS NOT NULL OR B9.F02504 IS NOT NULL THEN 1 ELSE 0 END) AS SporVechime
-                            FROM F704 FA
-                            LEFT JOIN F025 B0 ON FA.F704660 = B0.F02504 AND B0.F02504 > 10 AND B0.F02520 IN ('F100643','F100644') AND B0.F02521 > 0
-                            LEFT JOIN F025 B1 ON FA.F704661 = B1.F02504 AND B1.F02504 > 10 AND B1.F02520 IN ('F100643','F100644') AND B1.F02521 > 0
-                            LEFT JOIN F025 B2 ON FA.F704662 = B2.F02504 AND B2.F02504 > 10 AND B2.F02520 IN ('F100643','F100644') AND B2.F02521 > 0
-                            LEFT JOIN F025 B3 ON FA.F704663 = B3.F02504 AND B3.F02504 > 10 AND B3.F02520 IN ('F100643','F100644') AND B3.F02521 > 0
-                            LEFT JOIN F025 B4 ON FA.F704664 = B4.F02504 AND B4.F02504 > 10 AND B4.F02520 IN ('F100643','F100644') AND B4.F02521 > 0
-                            LEFT JOIN F025 B5 ON FA.F704665 = B5.F02504 AND B5.F02504 > 10 AND B5.F02520 IN ('F100643','F100644') AND B5.F02521 > 0
-                            LEFT JOIN F025 B6 ON FA.F704666 = B6.F02504 AND B6.F02504 > 10 AND B6.F02520 IN ('F100643','F100644') AND B6.F02521 > 0
-                            LEFT JOIN F025 B7 ON FA.F704667 = B7.F02504 AND B7.F02504 > 10 AND B7.F02520 IN ('F100643','F100644') AND B7.F02521 > 0
-                            LEFT JOIN F025 B8 ON FA.F704668 = B8.F02504 AND B8.F02504 > 10 AND B8.F02520 IN ('F100643','F100644') AND B8.F02521 > 0
-                            LEFT JOIN F025 B9 ON FA.F704669 = B9.F02504 AND B9.F02504 > 10 AND B9.F02520 IN ('F100643','F100644') AND B9.F02521 > 0
-                            WHERE FA.F70404=11 AND FA.F70410='Automat - grila' AND FA.F70403=A.F10003
-							AND CAST((SELECT CONVERT(nvarchar(10),F01011) + '-' + CONVERT(nvarchar(10),F01012) + '-01' FROM F010) AS DATE) <= FA.F70406
-							AND FA.F70406 < DATEADD(m,3,CAST((SELECT CONVERT(nvarchar(10),F01011) + '-' + CONVERT(nvarchar(10),F01012) + '-01' FROM F010) AS DATE))
-							),0) AS SporVechime
+                            0 AS CandidatAngajat
                             FROM Avs_Cereri A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
                             WHERE A.IdStare = 3 AND A.DataModif >= {General.ToDataUniv(dtInit)} {companie} {filtruSup}
-                            GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END
+                            GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             CONVERT(nvarchar(10),B.F100985) AS DocNr, B.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct,
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
                             B.F10022, B.F100993, J.IdAutoAtasamente,
-                            CASE WHEN (COALESCE(B.F10025,-99) <> 900 AND COALESCE(J.Semnat,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat, 0 AS SporVechime
+                            CASE WHEN (COALESCE(B.F10025,-99) <> 900 AND COALESCE(J.Semnat,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat
                             FROM F100 B
                             LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
                             WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
                             ) AS Y
-                            WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"],-99)), "", "")}) " + filtru;
+                            WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"], -99)), "", "")}) " + filtru;
 
                     #endregion
                 }
@@ -282,7 +267,7 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(""FunctieId"", 0) > 0 THEN 1 ELSE 0 END) AS ""FunctieId"",
                             MAX(CASE WHEN COALESCE(""Norma"", 0) > 0 THEN 1 ELSE 0 END) AS ""Norma"",
                             MAX(CASE WHEN COALESCE(""SalariulBrut"", 0) > 0 OR COALESCE(""SalariulNet"", 0) > 0 THEN 1 ELSE 0 END) AS ""Salariul"",
-                            MAX(CASE WHEN (COALESCE(""Spor0"",0) + COALESCE(""Spor1"",0) +COALESCE(""Spor2"",0) +COALESCE(""Spor3"",0) +COALESCE(""Spor4"",0) +COALESCE(""Spor5"",0) +COALESCE(""Spor6"",0) +COALESCE(""Spor7"",0) +COALESCE(""Spor8"",0) +COALESCE(""Spor9"",0) +COALESCE(""Spor10"",0) +COALESCE(""Spor11"",0) +COALESCE(""Spor12"",0) +COALESCE(""Spor13"",0) +COALESCE(""Spor14"",0) +COALESCE(""Spor15"",0) +COALESCE(""Spor16"",0) +COALESCE(""Spor17"",0) +COALESCE(""Spor18"",0) +COALESCE(""Spor19"",0)) > 0 THEN 1 ELSE 0 END ) AS ""Spor"",
+                            MAX(CASE WHEN (COALESCE(""Spor0"",0) + COALESCE(""Spor1"",0) +COALESCE(""Spor2"",0) +COALESCE(""Spor3"",0) +COALESCE(""Spor4"",0) +COALESCE(""Spor5"",0) +COALESCE(""Spor6"",0) +COALESCE(""Spor7"",0) +COALESCE(""Spor8"",0) +COALESCE(""Spor9"",0) +COALESCE(""Spor10"",0) +COALESCE(""Spor11"",0) +COALESCE(""Spor12"",0) +COALESCE(""Spor13"",0) +COALESCE(""Spor14"",0) +COALESCE(""Spor15"",0) +COALESCE(""Spor16"",0) +COALESCE(""Spor17"",0) +COALESCE(""Spor18"",0) +COALESCE(""Spor19"",0)) > 0 AND A.Explicatii<>'Inserat automat la inchidere luna' THEN 1 ELSE 0 END ) AS ""Spor"",
                             MAX(CASE WHEN COALESCE(""SubcompanieId"", 0) > 0 OR COALESCE(""FilialaId"", 0) > 0 OR COALESCE(""SectieId"", 0) > 0 OR COALESCE(""DeptId"", 0) > 0 THEN 1 ELSE 0 END) AS ""Structura"",
                             MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 2 THEN 1 ELSE 0 END) AS ""CIMDet"",
                             MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 1 THEN 1 ELSE 0 END) AS ""CIMNed"",
@@ -293,6 +278,7 @@ namespace WizOne.Pagini
 							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
                             MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 16 THEN 1 ELSE 0 END) AS ""PunctLucru"",
                             MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 106 THEN 1 ELSE 0 END) AS ""ProgramLucru"",
+                            MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 11 AND A.""Explicatii""= 'Inserat automat la inchidere luna' THEN 1 ELSE 0 END) AS ""SporVechime"",
                             CAST(J.""DocNr"" AS varchar2(20)) AS ""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"", 
                             CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"",
@@ -303,40 +289,23 @@ namespace WizOne.Pagini
                             WHERE AA.""IdStare"" = 3 AND AA.F10003=A.F10003 AND AA.""DataModif""=A.""DataModif"" AND COALESCE(JJ.""DocNr"",-99)=COALESCE(J.""DocNr"",-99) 
                             AND NVL(JJ.""DocData"",'01-01-2000') = NVL(J.""DocData"",'01-01-2000')
                             AND COALESCE((SELECT INSTR(',' || CAST(AA.""IdAtribut"" AS varchar2(20)) || ',', ',' || ""Valoare"" || ',') FROM ""tblParametrii"" WHERE ""Nume"" ='IdExcluseCircuitDoc'),0) = 0
-                            AND (CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END) = (CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END) 
-                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END
+                            AND (CASE WHEN AA.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN AA.""IdAtribut"" ELSE 0 END) = (CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END) 
+                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN AA.""IdAtribut"" ELSE 0 END
                             ) AS ""IdAvans"", B.F10022, B.F100993, J.""IdAutoAtasamente"",
-                            0 AS ""CandidatAngajat"", 
-                            COALESCE((SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
-                            B5.F02504 IS NOT NULL OR B6.F02504 IS NOT NULL OR B7.F02504 IS NOT NULL OR B8.F02504 IS NOT NULL OR B9.F02504 IS NOT NULL THEN 1 ELSE 0 END) AS ""SporVechime""
-                            FROM F704 FA
-                            LEFT JOIN F025 B0 ON FA.F704660 = B0.F02504 AND B0.F02504 > 10 AND B0.F02520 IN ('F100643','F100644') AND B0.F02521 > 0
-                            LEFT JOIN F025 B1 ON FA.F704661 = B1.F02504 AND B1.F02504 > 10 AND B1.F02520 IN ('F100643','F100644') AND B1.F02521 > 0
-                            LEFT JOIN F025 B2 ON FA.F704662 = B2.F02504 AND B2.F02504 > 10 AND B2.F02520 IN ('F100643','F100644') AND B2.F02521 > 0
-                            LEFT JOIN F025 B3 ON FA.F704663 = B3.F02504 AND B3.F02504 > 10 AND B3.F02520 IN ('F100643','F100644') AND B3.F02521 > 0
-                            LEFT JOIN F025 B4 ON FA.F704664 = B4.F02504 AND B4.F02504 > 10 AND B4.F02520 IN ('F100643','F100644') AND B4.F02521 > 0
-                            LEFT JOIN F025 B5 ON FA.F704665 = B5.F02504 AND B5.F02504 > 10 AND B5.F02520 IN ('F100643','F100644') AND B5.F02521 > 0
-                            LEFT JOIN F025 B6 ON FA.F704666 = B6.F02504 AND B6.F02504 > 10 AND B6.F02520 IN ('F100643','F100644') AND B6.F02521 > 0
-                            LEFT JOIN F025 B7 ON FA.F704667 = B7.F02504 AND B7.F02504 > 10 AND B7.F02520 IN ('F100643','F100644') AND B7.F02521 > 0
-                            LEFT JOIN F025 B8 ON FA.F704668 = B8.F02504 AND B8.F02504 > 10 AND B8.F02520 IN ('F100643','F100644') AND B8.F02521 > 0
-                            LEFT JOIN F025 B9 ON FA.F704669 = B9.F02504 AND B9.F02504 > 10 AND B9.F02520 IN ('F100643','F100644') AND B9.F02521 > 0
-                            WHERE FA.F70404=11 AND FA.F70410='Automat - grila' AND FA.F70403=A.F10003
-                            AND TO_DATE((SELECT '01-' || F01012 || '-' || F01011 FROM F010), 'DD-MM-YYYY') <= FA.F70406
-                            AND FA.F70406 < ADD_MONTHS(TO_DATE((SELECT '01-' || F01012 || '-' || F01011 FROM F010), 'DD-MM-YYYY'),3)
-							),0) AS ""SporVechime""
+                            0 AS ""CandidatAngajat""
                             FROM ""Avs_Cereri"" A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""
                             WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= {General.ToDataUniv(dtInit)} {companie}
-                            GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente"", B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END
+                            GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente"", B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             A.F100985, A.F100986, COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"",
                             CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"", ',-1' AS ""IdAvans"",
                             A.F10022, A.F100993, J.""IdAutoAtasamente"",
-                            CASE WHEN (COALESCE(B.F10025,-99) <> 900 AND COALESCE(J.""Semnat"",0) = 1) THEN 1 ELSE 0 END AS ""CandidatAngajat"", 0 AS ""SporVechime""
+                            CASE WHEN (COALESCE(B.F10025,-99) <> 900 AND COALESCE(J.""Semnat"",0) = 1) THEN 1 ELSE 0 END AS ""CandidatAngajat""
                             FROM F100 A
                             LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
                             WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
@@ -365,7 +334,286 @@ namespace WizOne.Pagini
                 dt.Dispose();
                 dt = null;
             }
-        }        
+        }
+
+
+        // private void IncarcaGrid()
+        // {
+        //     DataTable dt = new DataTable();
+
+        //     try
+        //     {
+        //         string companie = "";
+        //         string strSql = "";
+        //         string filtru = "";
+        //         var filter = JObject.Parse(Session["Filtru_ActeAditionale"] as string) as dynamic;
+
+        //         if ((filter as JObject).HasValues)
+        //         {
+        //             switch ((int?)filter.tip ?? 9)
+        //             {
+        //                 case 0:
+        //                     filtru = " AND \"Candidat\"= 0";
+        //                     break;
+        //                 case 1:
+        //                     filtru = " AND \"Candidat\"= 1 AND \"CandidatAngajat\"= 0";
+        //                     break;
+        //                 case 2:
+        //                     filtru = " AND \"Candidat\"= 1 AND \"CandidatAngajat\"= 1";
+        //                     break;
+        //                 case 9:
+        //                     //NOP
+        //                     break;
+        //             }
+
+        //             if (filter.ang != null) filtru += @" AND ""F10003""= " + (int)filter.ang;
+        //             if (filter.data != null) filtru += " AND \"DataModif\" = " + General.ToDataUniv((DateTime)filter.data);
+        //             if (filter.depasire != null) filtru += " AND \"TermenDepasire\" = " + General.ToDataUniv((DateTime)filter.depasire);
+
+        //             if (filter.cmp != null) companie = " AND B.F10002 = " + (int)filter.cmp;
+
+        //             switch ((int?)filter.status ?? 0)
+        //             {
+        //                 case 1:         //Numar atribuit
+        //                     filtru += @" AND COALESCE(""DocNr"",0) <> 0";
+        //                     break;
+        //                 case 2:         //Tiparit
+        //                     filtru += @" AND COALESCE(""Tiparit"",0) <> 0";
+        //                     break;
+        //                 case 3:         //Semnat
+        //                     filtru += @" AND COALESCE(""Semnat"",0) <> 0";
+        //                     break;
+        //                 case 4:         //Revisal
+        //                     filtru += @" AND COALESCE(""Revisal"",0) <> 0";
+        //                     break;
+        //             }
+        //         }
+
+        //         string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
+        //         if (Constante.tipBD == 2) cmp = " CAST(ROWNUM AS INT) ";
+
+        //         string filtruSup = "";
+        //         string idExcluseCircuitDoc = General.Nz(General.ExecutaScalar($@"SELECT Valoare FROM ""tblParametrii"" WHERE ""Nume""= 'IdExcluseCircuitDoc'", null), "").ToString();
+        //         if (idExcluseCircuitDoc != "")
+        //             filtruSup = $@" AND A.""IdAtribut"" NOT IN ({idExcluseCircuitDoc})";
+
+
+        //         //Florin 2020.04.28
+        //         DateTime dtInit = new DateTime(2018,1,1);
+        //         string paramDt = Dami.ValoareParam("CircuitDocumenteDataInceput").Trim();
+        //         if (paramDt != "")
+        //         {
+        //             string[] arr = paramDt.Split('-');
+        //             try
+        //             {
+        //                 dtInit = new DateTime(Convert.ToInt32(arr[2]), Convert.ToInt32(arr[1]), Convert.ToInt32(arr[0]));
+        //             } catch (Exception) {}
+        //         }
+
+        //         if (Constante.tipBD == 1)
+        //         {
+        //             #region SQL
+
+        //             strSql = $@"
+        //                     SELECT * FROM (
+        //                     SELECT {cmp} AS ""Cheie"", X.*,
+        //                     (SELECT MIN(""ColData"") FROM (
+        //                     SELECT CASE WHEN ""Candidat"" = 1 THEN 
+        //                     (SELECT TOP 1 Zi FROM tblZile WHERE Zi<=DATEADD(d,-1,F10022) AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
+        //                     ELSE '2100-01-01' END AS ColData 
+        //                     UNION
+        //                     SELECT CASE WHEN Motiv = 1 THEN X.DataModif ELSE '2100-01-01' END AS ColData  
+        //                     UNION
+        //                     SELECT CASE WHEN (Salariul = 1 OR Spor = 1 OR SporVechime = 1) THEN 
+        //                     (SELECT Zi FROM (
+        //                     SELECT Zi, CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) as IdAuto 
+        //                     FROM tblZile WHERE Zi>=DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays)) x
+        //                     WHERE IdAuto=20)
+        //                     ELSE '2100-01-01' END AS ColData 
+        //                     UNION
+        //                     SELECT CASE WHEN CORCod=1 OR FunctieId = 1 OR CIMDet=1 OR CIMNed=1 OR ""PunctLucru"" = 1 THEN 
+        //                     (SELECT TOP 1 Zi FROM tblZile WHERE Zi<DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
+        //                     ELSE '2100-01-01' END AS ColData 
+        //                     UNION
+        //                     SELECT CASE WHEN ""Norma"" = 1 OR ""Suspendare""=1 OR ""SuspendareRev"" =1 OR ""ProgramLucru""=1 THEN 
+        //                     (SELECT TOP 1 Zi FROM tblZile WHERE Zi<=DATEADD(d,-1,X.DataModif) AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
+        //                     ELSE '2100-01-01' END AS ColData 
+        //                     ) x) AS TermenDepasire
+        //                     FROM (
+        //                     SELECT A.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, A.DataModif, 0 AS Candidat,
+        //                     MAX(CASE WHEN COALESCE(CORCod, 0) > 0 THEN 1 ELSE 0 END) AS CORCod,
+        //                     MAX(CASE WHEN COALESCE(FunctieId, 0) > 0 THEN 1 ELSE 0 END) AS FunctieId,
+        //                     MAX(CASE WHEN COALESCE(Norma, 0) > 0 THEN 1 ELSE 0 END) AS Norma,
+        //                     MAX(CASE WHEN COALESCE(SalariulBrut, 0) > 0 OR COALESCE(SalariulNet, 0) > 0 THEN 1 ELSE 0 END) AS Salariul,
+        //                     MAX(CASE WHEN (COALESCE(Spor0,0) + COALESCE(Spor1,0) +COALESCE(Spor2,0) +COALESCE(Spor3,0) +COALESCE(Spor4,0) +COALESCE(Spor5,0) +COALESCE(Spor6,0) +COALESCE(Spor7,0) +COALESCE(Spor8,0) +COALESCE(Spor9,0) +COALESCE(Spor10,0) +COALESCE(Spor11,0) +COALESCE(Spor12,0) +COALESCE(Spor13,0) +COALESCE(Spor14,0) +COALESCE(Spor15,0) +COALESCE(Spor16,0) +COALESCE(Spor17,0) +COALESCE(Spor18,0) +COALESCE(Spor19,0)) > 0 THEN 1 ELSE 0 END ) AS Spor,
+        //                     MAX(CASE WHEN COALESCE(SubcompanieId, 0) > 0 OR COALESCE(FilialaId, 0) > 0 OR COALESCE(SectieId, 0) > 0 OR COALESCE(DeptId, 0) > 0 THEN 1 ELSE 0 END) AS Structura,
+        //                     MAX(CASE WHEN COALESCE(DurataContract, 0) = 2 THEN 1 ELSE 0 END) AS CIMDet,
+        //                     MAX(CASE WHEN COALESCE(DurataContract, 0) = 1 THEN 1 ELSE 0 END) AS CIMNed,
+        //                     MAX(CASE WHEN COALESCE(MotivId, 0) > 0 THEN 1 ELSE 0 END) AS Motiv,
+        //MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 30 THEN 1 ELSE 0 END) AS ""Suspendare"",
+        //MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 31 THEN 1 ELSE 0 END) AS ""SuspendareRev"",
+        //MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 32 THEN 1 ELSE 0 END) AS ""Detasare"",
+        //MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
+        //                     MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 16 THEN 1 ELSE 0 END) AS ""PunctLucru"",
+        //                     MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 106 THEN 1 ELSE 0 END) AS ""ProgramLucru"",
+        //                     CONVERT(nvarchar(10),J.DocNr) AS DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
+        //                     J.IdAuto AS IdAutoAct, 
+        //                     CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas,
+        //                     (SELECT ',' + CONVERT(nvarchar(20),COALESCE(AA.Id, '')) 
+        //                     FROM Avs_Cereri AA
+        //                     LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
+        //                     LEFT JOIN Admin_NrActAd JJ ON AA.IdActAd=JJ.IdAuto
+        //                     WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,'1900-01-01')=COALESCE(J.DocData,'1900-01-01')
+        //                     AND COALESCE((SELECT CHARINDEX(',' + CAST(AA.IdAtribut AS nvarchar(20)) + ',', ',' + Valoare + ',') FROM tblParametrii WHERE Nume='IdExcluseCircuitDoc'),0) = 0                            
+        //                     AND (CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END) = (CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END) 
+        //                     GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END
+        //                     FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente,
+        //                     0 AS CandidatAngajat, 
+        //                     COALESCE((SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
+        //                     B5.F02504 IS NOT NULL OR B6.F02504 IS NOT NULL OR B7.F02504 IS NOT NULL OR B8.F02504 IS NOT NULL OR B9.F02504 IS NOT NULL THEN 1 ELSE 0 END) AS SporVechime
+        //                     FROM F704 FA
+        //                     LEFT JOIN F025 B0 ON FA.F704660 = B0.F02504 AND B0.F02504 > 10 AND B0.F02520 IN ('F100643','F100644') AND B0.F02521 > 0
+        //                     LEFT JOIN F025 B1 ON FA.F704661 = B1.F02504 AND B1.F02504 > 10 AND B1.F02520 IN ('F100643','F100644') AND B1.F02521 > 0
+        //                     LEFT JOIN F025 B2 ON FA.F704662 = B2.F02504 AND B2.F02504 > 10 AND B2.F02520 IN ('F100643','F100644') AND B2.F02521 > 0
+        //                     LEFT JOIN F025 B3 ON FA.F704663 = B3.F02504 AND B3.F02504 > 10 AND B3.F02520 IN ('F100643','F100644') AND B3.F02521 > 0
+        //                     LEFT JOIN F025 B4 ON FA.F704664 = B4.F02504 AND B4.F02504 > 10 AND B4.F02520 IN ('F100643','F100644') AND B4.F02521 > 0
+        //                     LEFT JOIN F025 B5 ON FA.F704665 = B5.F02504 AND B5.F02504 > 10 AND B5.F02520 IN ('F100643','F100644') AND B5.F02521 > 0
+        //                     LEFT JOIN F025 B6 ON FA.F704666 = B6.F02504 AND B6.F02504 > 10 AND B6.F02520 IN ('F100643','F100644') AND B6.F02521 > 0
+        //                     LEFT JOIN F025 B7 ON FA.F704667 = B7.F02504 AND B7.F02504 > 10 AND B7.F02520 IN ('F100643','F100644') AND B7.F02521 > 0
+        //                     LEFT JOIN F025 B8 ON FA.F704668 = B8.F02504 AND B8.F02504 > 10 AND B8.F02520 IN ('F100643','F100644') AND B8.F02521 > 0
+        //                     LEFT JOIN F025 B9 ON FA.F704669 = B9.F02504 AND B9.F02504 > 10 AND B9.F02520 IN ('F100643','F100644') AND B9.F02521 > 0
+        //                     WHERE FA.F70404=11 AND FA.F70410='Automat - grila' AND FA.F70403=A.F10003
+        //AND CAST((SELECT CONVERT(nvarchar(10),F01011) + '-' + CONVERT(nvarchar(10),F01012) + '-01' FROM F010) AS DATE) <= FA.F70406
+        //AND FA.F70406 < DATEADD(m,3,CAST((SELECT CONVERT(nvarchar(10),F01011) + '-' + CONVERT(nvarchar(10),F01012) + '-01' FROM F010) AS DATE))
+        //),0) AS SporVechime
+        //                     FROM Avs_Cereri A
+        //                     INNER JOIN F100 B ON A.F10003 = B.F10003
+        //                     LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
+        //                     WHERE A.IdStare = 3 AND A.DataModif >= {General.ToDataUniv(dtInit)} {companie} {filtruSup}
+        //                     GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END
+        //                     UNION
+        //                     SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
+        //                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        //                     CONVERT(nvarchar(10),B.F100985) AS DocNr, B.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
+        //                     J.IdAuto AS IdAutoAct,
+        //                     CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
+        //                     B.F10022, B.F100993, J.IdAutoAtasamente,
+        //                     CASE WHEN (COALESCE(B.F10025,-99) <> 900 AND COALESCE(J.Semnat,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat, 0 AS SporVechime
+        //                     FROM F100 B
+        //                     LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
+        //                     WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
+        //                     ) AS Y
+        //                     WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"],-99)), "", "")}) " + filtru;
+
+        //             #endregion
+        //         }
+        //         else
+        //         {
+        //             #region Orcl
+
+        //             strSql = $@"
+        //                     SELECT * FROM (
+        //                     SELECT {cmp} AS ""Cheie"", X.*,
+        //                     CASE WHEN ""Candidat"" = 1 then 
+        //                     (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= (F10022 - 1) AND ""ZiSapt"" <= 5)
+        //                     when ""Motiv"" = 1 then X.""DataModif""
+        //                     WHEN ""Norma""=1 OR ""Suspendare""=1 OR ""SuspendareRev"" =1 OR ""ProgramLucru""=1 THEN
+        //                     (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= (X.""DataModif"" - 1) AND ""ZiSapt"" <= 5)
+        //                     when ""Salariul"" = 1 OR ""Spor"" = 1 OR ""SporVechime"" = 1 then
+        //                     (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" + 19 AND ""ZiSapt"" <= 5)
+        //                     WHEN ""CORCod"" = 1 OR ""FunctieId"" = 1 OR ""CIMDet"" = 1 OR ""CIMNed"" = 1 OR ""PunctLucru"" = 1 THEN
+        //                     (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" - 1 AND ""ZiSapt"" <= 5)
+        //                     ELSE TO_DATE('01-01-2100', 'DD-MM-YYYY') END AS ""TermenDepasire""
+        //                     FROM(
+        //                     SELECT A.F10003, COALESCE(B.F10008, '') || ' ' || COALESCE(B.F10009, '') AS ""NumeComplet"", A.""DataModif"", 0 AS ""Candidat"",
+        //                     MAX(CASE WHEN COALESCE(""CORCod"", 0) > 0 THEN 1 ELSE 0 END) AS ""CORCod"",
+        //                     MAX(CASE WHEN COALESCE(""FunctieId"", 0) > 0 THEN 1 ELSE 0 END) AS ""FunctieId"",
+        //                     MAX(CASE WHEN COALESCE(""Norma"", 0) > 0 THEN 1 ELSE 0 END) AS ""Norma"",
+        //                     MAX(CASE WHEN COALESCE(""SalariulBrut"", 0) > 0 OR COALESCE(""SalariulNet"", 0) > 0 THEN 1 ELSE 0 END) AS ""Salariul"",
+        //                     MAX(CASE WHEN (COALESCE(""Spor0"",0) + COALESCE(""Spor1"",0) +COALESCE(""Spor2"",0) +COALESCE(""Spor3"",0) +COALESCE(""Spor4"",0) +COALESCE(""Spor5"",0) +COALESCE(""Spor6"",0) +COALESCE(""Spor7"",0) +COALESCE(""Spor8"",0) +COALESCE(""Spor9"",0) +COALESCE(""Spor10"",0) +COALESCE(""Spor11"",0) +COALESCE(""Spor12"",0) +COALESCE(""Spor13"",0) +COALESCE(""Spor14"",0) +COALESCE(""Spor15"",0) +COALESCE(""Spor16"",0) +COALESCE(""Spor17"",0) +COALESCE(""Spor18"",0) +COALESCE(""Spor19"",0)) > 0 THEN 1 ELSE 0 END ) AS ""Spor"",
+        //                     MAX(CASE WHEN COALESCE(""SubcompanieId"", 0) > 0 OR COALESCE(""FilialaId"", 0) > 0 OR COALESCE(""SectieId"", 0) > 0 OR COALESCE(""DeptId"", 0) > 0 THEN 1 ELSE 0 END) AS ""Structura"",
+        //                     MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 2 THEN 1 ELSE 0 END) AS ""CIMDet"",
+        //                     MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 1 THEN 1 ELSE 0 END) AS ""CIMNed"",
+        //                     MAX(CASE WHEN COALESCE(""MotivId"", 0) > 0 THEN 1 ELSE 0 END) AS ""Motiv"",
+        //MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 30 THEN 1 ELSE 0 END) AS ""Suspendare"",
+        //MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 31 THEN 1 ELSE 0 END) AS ""SuspendareRev"",
+        //MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 32 THEN 1 ELSE 0 END) AS ""Detasare"",
+        //MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
+        //                     MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 16 THEN 1 ELSE 0 END) AS ""PunctLucru"",
+        //                     MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 106 THEN 1 ELSE 0 END) AS ""ProgramLucru"",
+        //                     CAST(J.""DocNr"" AS varchar2(20)) AS ""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
+        //                     J.""IdAuto"" AS ""IdAutoAct"", 
+        //                     CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"",
+        //                     (SELECT LISTAGG(AA.""Id"", ',') WITHIN GROUP (ORDER BY AA.""Id"") AS ""Id""
+        //                     FROM ""Avs_Cereri"" AA
+        //                     LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
+        //                     LEFT JOIN ""Admin_NrActAd"" JJ ON AA.""IdActAd""=JJ.""IdAuto""
+        //                     WHERE AA.""IdStare"" = 3 AND AA.F10003=A.F10003 AND AA.""DataModif""=A.""DataModif"" AND COALESCE(JJ.""DocNr"",-99)=COALESCE(J.""DocNr"",-99) 
+        //                     AND NVL(JJ.""DocData"",'01-01-2000') = NVL(J.""DocData"",'01-01-2000')
+        //                     AND COALESCE((SELECT INSTR(',' || CAST(AA.""IdAtribut"" AS varchar2(20)) || ',', ',' || ""Valoare"" || ',') FROM ""tblParametrii"" WHERE ""Nume"" ='IdExcluseCircuitDoc'),0) = 0
+        //                     AND (CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END) = (CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END) 
+        //                     GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END
+        //                     ) AS ""IdAvans"", B.F10022, B.F100993, J.""IdAutoAtasamente"",
+        //                     0 AS ""CandidatAngajat"", 
+        //                     COALESCE((SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
+        //                     B5.F02504 IS NOT NULL OR B6.F02504 IS NOT NULL OR B7.F02504 IS NOT NULL OR B8.F02504 IS NOT NULL OR B9.F02504 IS NOT NULL THEN 1 ELSE 0 END) AS ""SporVechime""
+        //                     FROM F704 FA
+        //                     LEFT JOIN F025 B0 ON FA.F704660 = B0.F02504 AND B0.F02504 > 10 AND B0.F02520 IN ('F100643','F100644') AND B0.F02521 > 0
+        //                     LEFT JOIN F025 B1 ON FA.F704661 = B1.F02504 AND B1.F02504 > 10 AND B1.F02520 IN ('F100643','F100644') AND B1.F02521 > 0
+        //                     LEFT JOIN F025 B2 ON FA.F704662 = B2.F02504 AND B2.F02504 > 10 AND B2.F02520 IN ('F100643','F100644') AND B2.F02521 > 0
+        //                     LEFT JOIN F025 B3 ON FA.F704663 = B3.F02504 AND B3.F02504 > 10 AND B3.F02520 IN ('F100643','F100644') AND B3.F02521 > 0
+        //                     LEFT JOIN F025 B4 ON FA.F704664 = B4.F02504 AND B4.F02504 > 10 AND B4.F02520 IN ('F100643','F100644') AND B4.F02521 > 0
+        //                     LEFT JOIN F025 B5 ON FA.F704665 = B5.F02504 AND B5.F02504 > 10 AND B5.F02520 IN ('F100643','F100644') AND B5.F02521 > 0
+        //                     LEFT JOIN F025 B6 ON FA.F704666 = B6.F02504 AND B6.F02504 > 10 AND B6.F02520 IN ('F100643','F100644') AND B6.F02521 > 0
+        //                     LEFT JOIN F025 B7 ON FA.F704667 = B7.F02504 AND B7.F02504 > 10 AND B7.F02520 IN ('F100643','F100644') AND B7.F02521 > 0
+        //                     LEFT JOIN F025 B8 ON FA.F704668 = B8.F02504 AND B8.F02504 > 10 AND B8.F02520 IN ('F100643','F100644') AND B8.F02521 > 0
+        //                     LEFT JOIN F025 B9 ON FA.F704669 = B9.F02504 AND B9.F02504 > 10 AND B9.F02520 IN ('F100643','F100644') AND B9.F02521 > 0
+        //                     WHERE FA.F70404=11 AND FA.F70410='Automat - grila' AND FA.F70403=A.F10003
+        //                     AND TO_DATE((SELECT '01-' || F01012 || '-' || F01011 FROM F010), 'DD-MM-YYYY') <= FA.F70406
+        //                     AND FA.F70406 < ADD_MONTHS(TO_DATE((SELECT '01-' || F01012 || '-' || F01011 FROM F010), 'DD-MM-YYYY'),3)
+        //),0) AS ""SporVechime""
+        //                     FROM ""Avs_Cereri"" A
+        //                     INNER JOIN F100 B ON A.F10003 = B.F10003
+        //                     LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""
+        //                     WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= {General.ToDataUniv(dtInit)} {companie}
+        //                     GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente"", B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END
+        //                     UNION
+        //                     SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",
+        //                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        //                     A.F100985, A.F100986, COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
+        //                     J.""IdAuto"" AS ""IdAutoAct"",
+        //                     CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"", ',-1' AS ""IdAvans"",
+        //                     A.F10022, A.F100993, J.""IdAutoAtasamente"",
+        //                     CASE WHEN (COALESCE(B.F10025,-99) <> 900 AND COALESCE(J.""Semnat"",0) = 1) THEN 1 ELSE 0 END AS ""CandidatAngajat"", 0 AS ""SporVechime""
+        //                     FROM F100 A
+        //                     LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
+        //                     WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
+        //                     ) 
+        //                     WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"], -99)), "", "")}) " + filtru;
+
+        //             #endregion
+        //         }
+
+        //         dt = General.IncarcaDT(strSql, null);
+        //         dt.PrimaryKey = new DataColumn[] { dt.Columns["Cheie"] };
+
+        //         Session["InformatiaCurenta"] = dt;
+
+        //         grDate.KeyFieldName = "Cheie";
+        //         grDate.DataSource = dt;
+        //         grDate.DataBind();
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //         General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //     }
+        //     finally
+        //     {
+        //         dt.Dispose();
+        //         dt = null;
+        //     }
+        // }        
 
         protected void Page_Load(object sender, EventArgs e)
         {

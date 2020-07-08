@@ -14896,3 +14896,12 @@ SELECT F01011 INTO  AnCurent  FROM F010;
    commit;
 
 END;
+
+
+----	2.2.129.03	----
+
+
+--https://github.com/wizromRD/WizOne/issues/511
+--Circuit documente - print simplu - nu se trimit parametri cand se tipareste suspendare, - print multiplu da acelasi "Trebuie sa selectati inregistrari care au acelasi tip de modificare"mesaj indiferent ce se selecteaza: "" #511
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ModCalculZileCO_SuspendariExcluse', '25,27','Id-urile de suspendare pt care nu sunt scazute zilele de CO cuvenite', 3);
+COMMIT;

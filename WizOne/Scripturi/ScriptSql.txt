@@ -14140,3 +14140,82 @@ GO
 
 
 
+
+
+
+  Declare @Querydef1 nvarchar(max)
+ 
+SELECT @Querydef1 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), ', B.Efectuate', ', B.Efectuate, B.Anulate')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef1
+GO
+  Declare @Querydef2 nvarchar(max)
+ 
+SELECT @Querydef2 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), ',B.Efectuate', ',B.Efectuate, B.Anulate')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef2
+ 
+GO
+ 
+Declare @Querydef3 nvarchar(max)
+ 
+SELECT @Querydef3 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), 'ISNULL(B.Efectuate, 0)', 'ISNULL(B.Efectuate, 0) + ISNULL(B.Anulate,0)')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef3
+ 
+GO
+Declare @Querydef4 nvarchar(max)
+ 
+SELECT @Querydef4 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), 'ISNULL(B.Efectuate,0)', 'ISNULL(B.Efectuate,0) + ISNULL(B.Anulate,0)')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef4
+GO
+ 
+Declare @Querydef5 nvarchar(max)
+ 
+SELECT @Querydef5 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), 'COALESCE(B.Efectuate, 0)', 'COALESCE(B.Efectuate, 0) + COALESCE(B.Anulate,0)')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef5
+ 
+GO
+Declare @Querydef6 nvarchar(max)
+ 
+SELECT @Querydef6 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), 'COALESCE(B.Efectuate,0)', 'COALESCE(B.Efectuate,0) + COALESCE(B.Anulate,0)')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef6
+GO
+ 
+ 
+----	2.2.129.03	----
+
+
+--https://github.com/wizromRD/WizOne/issues/511
+--Circuit documente - print simplu - nu se trimit parametri cand se tipareste suspendare, - print multiplu da acelasi "Trebuie sa selectati inregistrari care au acelasi tip de modificare"mesaj indiferent ce se selecteaza: "" #511
+INSERT INTO "tblParametrii" ("Nume", "Valoare", Explicatie, IdModul) VALUES('ModCalculZileCO_SuspendariExcluse', '25,27','Id-urile de suspendare pt care nu sunt scazute zilele de CO cuvenite', 3)
+GO
+
+

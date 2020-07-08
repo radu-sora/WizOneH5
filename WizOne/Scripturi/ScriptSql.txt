@@ -13936,6 +13936,8 @@ GO
 ALTER TABLE "Admin_NrActAd" ADD "IdRegistru" int
 GO
 
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('BlocareIncetariSuspendariDeschise', '0', '0 - se permite incetarea contractelor care au suspendari deschise; 1- nu se permite', 0)
+GO
 
 IF ((SELECT COUNT(*) FROM TblNomenConfig WHERE "Tabela"='Ptj_CumulatSetari' and "Camp" = 'Coloana')=0)
 INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo) VALUES('Ptj_CumulatSetari','Coloana',2,1,'SELECT ''F'' + CONVERT(nvarchar(3),Id) FROM (SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS Id FROM tblZile) AS X WHERE X.Id <= 100')

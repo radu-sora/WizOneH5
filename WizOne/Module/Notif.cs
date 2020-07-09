@@ -659,7 +659,7 @@ namespace WizOne.Module
             return str;
         }
 
-        public static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel, int idClient)
+        public static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel, int idClient, MemoryStream mem  = null) //Radu 29.06.2020 - am adaugat mem
         {
             try
             {
@@ -730,8 +730,9 @@ namespace WizOne.Module
                 if (trimiteAtt == 1)
                 {
                     byte[] arrByte = Encoding.UTF8.GetBytes(corpAtt);
-                    MemoryStream stream = new MemoryStream(arrByte);
+                    MemoryStream stream = new MemoryStream(arrByte);                   
                     mm.Attachments.Add(new Attachment(stream, numeAtt, "text/html"));
+             
                 }
 
                 //
@@ -748,6 +749,11 @@ namespace WizOne.Module
                     }
                 }
 
+                //Radu 29.06.2020
+                if (mem != null)
+                {
+                    mm.Attachments.Add(new Attachment(mem, numeAtt, "application/pdf"));
+                }
                 //
                 SmtpClient smtp = new SmtpClient(smtpServer);
                 smtp.Port = Convert.ToInt32(smtpPort);

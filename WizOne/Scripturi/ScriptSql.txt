@@ -13982,7 +13982,9 @@ CREATE FUNCTION [dbo].[CalculCO] (
  BEGIN
 
  declare @ZileCuveniteAn int, @ZileCuvenite int, @ZileCuveniteZi int, @ZileAnPrecedent int, @ZileAngajare int, @ZileAngajareZi int, @ZileSuspendare int, @ZileSuspendareZi int,
- @PrimaZiAn date, @UltimaZiAn date, @TipCalcul int, @ZileSuplimentare int, @LuniVechime int, @CalculCOProp18Ani int, @CalculCOPropHand int, @ZileAn int
+ @PrimaZiAn date, @UltimaZiAn date, @TipCalcul int, @ZileSuplimentare int, @LuniVechime int, @CalculCOProp18Ani int, @CalculCOPropHand int, @ZileAn int,
+ @SuspendariExcluse nvarchar(100)
+
 
 -- @TipCalcul
 --  1 -- se calculeaza vechimea in munca in ultima zi din an
@@ -14008,9 +14010,10 @@ if isnull(@grila,0)= 0
  Select @TipCalcul = Convert(int,isnull((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCOCuvenite'),1));
  Select @CalculCOProp18Ani = Convert(int,isnull((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCO_Proportional_18Ani'),0));
  Select @CalculCOPropHand = Convert(int,isnull((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCO_Proportional_Handicap'),0));
+ Select @SuspendariExcluse = Convert(nvarchar(100),isnull((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCO_SuspendariExcluse'),' '));
 
 
- Select @PrimaZiAn = CASE WHEN cast(F10022 as date) < convert(varchar, year(@zi))  +  '-01-01'  THEN convert(varchar, year(@zi))  +  '-01-01'  ELSE cast(F10022 as date) END,
+Select @PrimaZiAn = CASE WHEN cast(F10022 as date) < convert(varchar, year(@zi))  +  '-01-01'  THEN convert(varchar, year(@zi))  +  '-01-01'  ELSE cast(F10022 as date) END,
  @UltimaZiAn = CASE WHEN cast(f10023 as date) < convert(varchar, year(@zi))  +  '-12-31'  THEN cast(f10023 as date) ELSE convert(varchar, year(@zi))  +  '-12-31'  END
  from (select * from F100 where f10003 = @F10003) a ;
 
@@ -14050,6 +14053,9 @@ Else if @TipCalcul = 99
      - case when ( case when f10022 <= '2018-02-14' then 14 else day(f10022) end) > day(@zi)  then 1 else 0 end
     from f100 where f10003 = @f10003;
 
+if isnull(@LuniVechime,0) < =0 
+	 select @LuniVechime = 0;
+
 
 If @mod <> 1
      select @ZileCuveniteAn = CuveniteAn from ptj_tblzileco where an=year(@zi) and f10003 = @f10003
@@ -14068,11 +14074,14 @@ If @mod <> 1
 
 
 
-    with xx as  (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107='2100-01-01' then f111.f11106 else dateadd(d,-1,f111.f11107) end la_data from f111 inner join
+    with xx as  ( select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107='2100-01-01' then f111.f11106 else dateadd(d,-1,f111.f11107) end la_data from f111
+	 inner join
   (select a.f11103, a.f11105, case when a.f11107='2100-01-01' then a.f11106 else dateadd(d,-1,a.f11107) end f11107, a.time, max(b.time) timp from F111 a inner join f111 b  on
   a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107='2100-01-01' then b.f11106 else dateadd(d,-1,b.f11107) end   and b.f11105 <= case when a.f11107='2100-01-01'
   then a.f11106 else dateadd(d,-1,a.f11107) end)  group by a.f11103, a.f11105, case when a.f11107='2100-01-01' then a.f11106 else dateadd(d,-1,a.f11107) end, a.time) t  on f111.f11103 = t.f11103 and
-  f111.f11105 = t.f11105 and   case when f111.f11107='2100-01-01' then f111.f11106 else dateadd(d,-1,f111.f11107) end = t.f11107 and f111.time = t.timp  union all
+  f111.f11105 = t.f11105 and   case when f111.f11107='2100-01-01' then f111.f11106 else dateadd(d,-1,f111.f11107) end = t.f11107 and f111.time = t.timp 
+  where CHARINDEX(concat(',',ltrim(rtrim(convert(nvarchar(100),f111.f11104))),','), concat(',',ltrim(rtrim(@SuspendariExcluse)),','))  = 0 
+   union all
   select f10003 Marca, datainceput de_la_data, datasfarsit la_data  from ptj_cereri inner join Ptj_tblAbsente on Ptj_Cereri.IdAbsenta = Ptj_tblAbsente.id  where
   ptj_cereri.IdStare=3 and isnull(Ptj_tblAbsente.AbsenteCFPInCalculCO,0) = 1  ),
    yy as  (select distinct a.marca, min(b.de_la_data) de_la_data, max(b.la_data) la_data from xx a  inner join xx b on a.marca = b.marca and
@@ -14101,7 +14110,9 @@ If @mod <> 1
    RETURN;
   END
 
-  GO
+
+GO
+
 
 
 

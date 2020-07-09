@@ -1449,14 +1449,14 @@ namespace WizOne.Pagini
                                 }
 
                                 DataTable dtVerif = General.IncarcaDT(sqlPozitie.Substring(1, sqlPozitie.Length - 2), null);
-                                //if (dtVerif == null || dtVerif.Rows.Count <= 0 || dtVerif.Rows[0][0] == null || Convert.ToInt32(dtVerif.Rows[0][0].ToString()) < 1)
-                                //{
-                                //    General.ExecutaNonQuery("DELETE FROM \"Ptj_CereriIstoric\" WHERE \"IdCerere\" = " + idCerere, null);
-                                //    General.ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE \"Id\" = " + idCerere, null);                                   
-                                //    dtViz.Rows[j - 2]["Actiune"] = "";
-                                //    dtViz.Rows[j - 2]["MesajEroare"] = "Circuitul nu este valid!";
-                                //}
-                                //else
+                                if (dtVerif == null || dtVerif.Rows.Count <= 0 || dtVerif.Rows[0][0] == null || Convert.ToInt32(dtVerif.Rows[0][0].ToString()) < 1)
+                                {
+                                    General.ExecutaNonQuery("DELETE FROM \"Ptj_CereriIstoric\" WHERE \"IdCerere\" = " + idCerere, null);
+                                    General.ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE \"Id\" = " + idCerere, null);
+                                    dtViz.Rows[j - 2]["Actiune"] = "";
+                                    dtViz.Rows[j - 2]["MesajEroare"] = "Circuitul nu este valid!";
+                                }
+                                else
                                 {
                                     sql = "UPDATE \"Ptj_Cereri\" SET \"IdStare\" =  " + sqlIdStare + ", \"Culoare\" = " + sqlCuloare + ", \"TotalSuperCircuit\" = " + sqlTotal + ", \"Pozitie\" = " + sqlPozitie + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");
                                     General.ExecutaNonQuery(sql, null);

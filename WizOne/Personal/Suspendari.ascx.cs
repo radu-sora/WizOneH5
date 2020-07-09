@@ -638,14 +638,17 @@ namespace WizOne.Personal
                 else
                 {
                     //Radu 21.01.2020
-                    //DataTable dtSuspNomen = Session["MP_SuspNomen"] as DataTable;
-                    //DataRow[] drSusp = dtSuspNomen.Select("F09002 = " + dtSuspAng.Rows[0]["F11104"].ToString());
-                    //if (drSusp[0]["F09004"].ToString() != "Art52Alin1LiteraC" && drSusp[0]["F09004"].ToString() != "Art52Alin3")
+                    DataTable dtSuspNomen = Session["MP_SuspNomen"] as DataTable;
+                    if (dt.Select("1 = 1", "F11105 DESC") != null && dt.Select("1 = 1", "F11105 DESC").Count() > 0)
                     {
-                        ds.Tables[0].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];
-                        ds.Tables[0].Rows[0]["F1001102"] = new DateTime(2100, 1, 1);
-                        ds.Tables[2].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];
-                        ds.Tables[2].Rows[0]["F1001102"] = new DateTime(2100, 1, 1);
+                        DataRow[] drSusp = dtSuspNomen.Select("F09002 = " + dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11104"]);
+                        if (drSusp[0]["F09004"].ToString() != "Art52Alin1LiteraC" && drSusp[0]["F09004"].ToString() != "Art52Alin3")
+                        {
+                            ds.Tables[0].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];
+                            ds.Tables[0].Rows[0]["F1001102"] = new DateTime(2100, 1, 1);
+                            ds.Tables[2].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];
+                            ds.Tables[2].Rows[0]["F1001102"] = new DateTime(2100, 1, 1);
+                        }
                     }
                     if (dt.Select("1 = 1", "F11105 DESC") != null && dt.Select("1 = 1", "F11105 DESC").Count() > 0 && Convert.ToInt32(dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11104"].ToString()) == 11 && Convert.ToDateTime(dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11107"]) != new DateTime(2100, 1, 1))  //revenire din CIC
                     {

@@ -884,6 +884,7 @@ namespace WizOne.Pagini
                 string msgErr = "";
                 int idSablon = -99;
                 string marcaInit = "";
+                string idCerere = "";
                 DataTable dtViz = Session["ImportDate_Previz"] as DataTable;
                 int nrCol = Convert.ToInt32(Session["ImportDate_NrColoane"].ToString());
                 while (!ws2.Cells[j, k].Value.IsEmpty)
@@ -951,6 +952,10 @@ namespace WizOne.Pagini
                                     Session["ImportDate_Marca"] = val;
                                     marcaInit = val;
                                 }
+                                if ((numeTabela == "Avs_Cereri" || numeTabela == "Ptj_Cereri") && dr[0]["NumeColoana"].ToString() == "Id")
+                                {
+                                    idCerere = val;
+                                }
                                 if (val == "NULL")
                                     msgErr = "Lipsa valoare camp " + dr[0]["NumeColoana"].ToString();
                             }
@@ -1011,7 +1016,7 @@ namespace WizOne.Pagini
 
                             if (drAltele[z]["NumeColoana"].ToString().ToString() == "F10096" && valAltele != "NULL")
                                 idSablon = Convert.ToInt32(valAltele);
-                            if (drAltele[z]["NumeColoana"].ToString() == "F10003")
+                            if (numeTabela == "F100" && drAltele[z]["NumeColoana"].ToString() == "F10003")
                             {
                                 if (Session["ImportDate_Marca"] != null)
                                     valAltele = Session["ImportDate_Marca"].ToString();
@@ -1024,6 +1029,14 @@ namespace WizOne.Pagini
                                 }
                                 marcaInit = valAltele;
                                 Session["ImportDate_Marca"] = marcaInit;
+                            }
+                            if ((numeTabela == "Avs_Cereri" || numeTabela == "Ptj_Cereri") && drAltele[z]["NumeColoana"].ToString() == "Id")
+                            {
+                                string dual = "";
+                                if (Constante.tipBD == 2) dual = " FROM DUAL";
+                                DataTable dtId = General.IncarcaDT("SELECT " + valAltele + dual, null);
+                                valAltele = dtId.Rows[0][0].ToString();
+                                idCerere = valAltele;
                             }
                             campNonOblig += ", \"" + drAltele[z]["NumeColoana"].ToString() + "\" = " + valAltele;
                             if (drAltele[z]["OmiteLaActualizare"] == null || drAltele[z]["OmiteLaActualizare"].ToString().Length <= 0 || Convert.ToInt32(drAltele[z]["OmiteLaActualizare"].ToString()) == 0)
@@ -1085,7 +1098,7 @@ namespace WizOne.Pagini
                     if (dtTest != null && dtTest.Rows.Count > 0 && dtTest.Rows[0][0] != null && Convert.ToInt32(dtTest.Rows[0][0].ToString()) > 0)
                     {
                         sql = "UPDATE \"" + numeTabela + "\" SET " + campNonObligAct.Substring(1).Replace("#&*", ",") + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");                      
-                        if (campNonObligAct2.Length > 0)
+                        if (numeTabela == "F100" && campNonObligAct2.Length > 0)
                             sql1001 = "UPDATE F1001 SET " + campNonObligAct2.Substring(1).Replace("#&*", ",") + " WHERE F10003 IN (SELECT F10003 FROM F100 WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",") + ")";
                         dtViz.Rows[j - 1]["Actiune"] = "UPDATE";                       
                     }
@@ -1105,7 +1118,7 @@ namespace WizOne.Pagini
                             General.SalveazaDate(ds.Tables[2], "F1001");
 
                             sql = "UPDATE \"" + numeTabela + "\" SET " + campOblig.Substring(1).Replace("#&*", ",") + ", " + campNonObligAct.Substring(1).Replace("#&*", ",") + " WHERE F10003 = " + marcaInit;
-                            if (campNonObligAct2.Length > 0)
+                            if (numeTabela == "F100" && campNonObligAct2.Length > 0)
                                 sql1001 = "UPDATE F1001 SET " + campNonObligAct2.Substring(1).Replace("#&*", ",") + " WHERE F10003 = " + marcaInit;
                         }
                         else
@@ -1226,6 +1239,7 @@ namespace WizOne.Pagini
                                     dtTemp = General.IncarcaDT(sql, null);
 
                                     int idUrm = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
+                                    //int idUrm = Convert.ToInt32(idCerere);
 
                                     //adaugam istoricul
                                     int poz = 0;
@@ -1388,18 +1402,44 @@ namespace WizOne.Pagini
                                     if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "IdCircuit" && lstCampuri[x].Split('=')[1].Trim() != "NULL")
                                         idCir = Convert.ToInt32(lstCampuri[x].Split('=')[1].Trim());
                                 }
-                                string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) FROM ""Ptj_Cereri"") ";
-                                DataTable dtId = General.IncarcaDT(sqlIdCerere, null);
+                                //string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) FROM ""Ptj_Cereri"") ";
+                                //DataTable dtId = General.IncarcaDT(sqlIdCerere, null);
+
+                                int estePlanif = 0, idCircuitAbs = -1;                                
+
                                 DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(marcaInit, dataInc), null);
-                                General.SelectCereriIstoric(Convert.ToInt32(marcaInit), inloc, idCir < 0 ? Convert.ToInt32(dtAbs.Rows[0]["IdCircuit"].ToString()) : idCir, Convert.ToInt32(General.Nz(dtAbs.Rows[0]["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor, Convert.ToInt32(dtId.Rows[0][0].ToString()));
+
+                                if (dtAbs != null && dtAbs.Rows.Count > 0)
+                                {
+                                    estePlanif = Convert.ToInt32(General.Nz(dtAbs.Rows[0]["EstePlanificare"], 0));
+                                    idCircuit = Convert.ToInt32(dtAbs.Rows[0]["IdCircuit"].ToString());
+                                }
+
+                                if (idCir < 0 && idCircuitAbs < 0)
+                                {
+                                    General.ExecutaNonQuery("DELETE FROM \"Ptj_CereriIstoric\" WHERE \"IdCerere\" = " + idCerere, null);
+                                    General.ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE \"Id\" = " + idCerere, null);
+                                    dtViz.Rows[j - 2]["Actiune"] = "";
+                                    dtViz.Rows[j - 2]["MesajEroare"] = "Nu a fost gasit circuit!";
+                                    continue;
+                                }
+
+
+                                sql = "SELECT \"Id\" FROM  \"Ptj_Cereri\" WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");
+                                DataTable dtTemp = General.IncarcaDT(sql, null);
+
+                                int idUrm = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
+                                General.ExecutaNonQuery("DELETE FROM \"Ptj_CereriIstoric\" WHERE \"IdCerere\" = " + idUrm, null);
+
+                                General.SelectCereriIstoric(Convert.ToInt32(marcaInit), inloc, idCir < 0 ? idCircuitAbs : idCir, estePlanif, out sqlIst, out trimiteLaInlocuitor, Convert.ToInt32(idCerere));
                                 General.ExecutaNonQuery(sqlIst, null);
 
                                 string strTop = "";
                                 if (Constante.tipBD == 1) strTop = "TOP 1";   
-                                string sqlTotal = @"(SELECT COUNT(*) FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere""=" + sqlIdCerere + ")";
-                                string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC)";
-                                string sqlPozitie = $@"(SELECT {strTop} ""Pozitie"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC)";
-                                string sqlCuloare = $@"(SELECT {strTop} ""Culoare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC)";
+                                string sqlTotal = @"(SELECT COUNT(*) FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere""=" + idCerere + ")";
+                                string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={idCerere} ORDER BY ""Pozitie"" DESC)";
+                                string sqlPozitie = $@"(SELECT {strTop} ""Pozitie"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={idCerere} ORDER BY ""Pozitie"" DESC)";
+                                string sqlCuloare = $@"(SELECT {strTop} ""Culoare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={idCerere} ORDER BY ""Pozitie"" DESC)";
 
                                 if (Constante.tipBD == 2)
                                 {
@@ -1411,8 +1451,8 @@ namespace WizOne.Pagini
                                 DataTable dtVerif = General.IncarcaDT(sqlPozitie.Substring(1, sqlPozitie.Length - 2), null);
                                 if (dtVerif == null || dtVerif.Rows.Count <= 0 || dtVerif.Rows[0][0] == null || Convert.ToInt32(dtVerif.Rows[0][0].ToString()) < 1)
                                 {
-                                    General.ExecutaNonQuery("DELETE FROM \"Ptj_CereriIstoric\" WHERE \"IdCerere\" = " + sqlIdCerere, null);
-                                    General.ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE \"Id\" = " + sqlIdCerere, null);                                   
+                                    General.ExecutaNonQuery("DELETE FROM \"Ptj_CereriIstoric\" WHERE \"IdCerere\" = " + idCerere, null);
+                                    General.ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE \"Id\" = " + idCerere, null);
                                     dtViz.Rows[j - 2]["Actiune"] = "";
                                     dtViz.Rows[j - 2]["MesajEroare"] = "Circuitul nu este valid!";
                                 }

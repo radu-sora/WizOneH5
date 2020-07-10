@@ -1627,7 +1627,7 @@ namespace WizOne.Personal
                 DataTable dtCO = General.IncarcaDT(strSql, null);
 
                 //DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });
-                if (dtCO != null)
+                if (dtCO != null && dtCO.Rows.Count > 0)
                 {
                     //F100642
                     //txtZileCOCuvAnCrt

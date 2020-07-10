@@ -826,6 +826,7 @@
     <Content Include="Pagini\IstoricModificari.aspx" />
     <Content Include="Pagini\MainPage.aspx" />
     <Content Include="Pagini\SchimbaParolaCaptcha.aspx" />
+    <Content Include="Pagini\TrimitereFluturasi.aspx" />
     <Content Include="Pagini\VerificareBD.aspx" />
     <Content Include="Personal\Activitati.ascx" />
     <Content Include="Personal\Cursuri.ascx" />
@@ -1679,6 +1680,13 @@
     </Compile>
     <Compile Include="Pagini\SchimbaParolaCaptcha.aspx.designer.cs">
       <DependentUpon>SchimbaParolaCaptcha.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\TrimitereFluturasi.aspx.cs">
+      <DependentUpon>TrimitereFluturasi.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\TrimitereFluturasi.aspx.designer.cs">
+      <DependentUpon>TrimitereFluturasi.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pagini\VerificareBD.aspx.cs">
       <DependentUpon>VerificareBD.aspx</DependentUpon>

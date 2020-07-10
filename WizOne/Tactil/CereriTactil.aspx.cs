@@ -1398,7 +1398,8 @@ namespace WizOne.Tactil
                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
 
                 // ASPxPanel.RedirectOnCallback("../Tactil/Main.aspx");
-                Response.Redirect("../Tactil/Main.aspx", false);
+                //Response.Redirect("../Tactil/Main.aspx", false);
+                Response.RedirectLocation = System.Web.VirtualPathUtility.ToAbsolute("~/Tactil/Main.aspx");
 
 
             }

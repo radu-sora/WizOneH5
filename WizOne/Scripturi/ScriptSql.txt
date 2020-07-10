@@ -14138,6 +14138,72 @@ END
 GO
 
 
+Declare @Querydef1 nvarchar(max)
+ 
+SELECT @Querydef1 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), ', B.Efectuate', ', B.Efectuate, B.Anulate')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef1
+GO
+  Declare @Querydef2 nvarchar(max)
+ 
+SELECT @Querydef2 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), ',B.Efectuate', ',B.Efectuate, B.Anulate')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef2
+ 
+GO
+ 
+Declare @Querydef3 nvarchar(max)
+ 
+SELECT @Querydef3 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), 'ISNULL(B.Efectuate, 0)', 'ISNULL(B.Efectuate, 0) + ISNULL(B.Anulate,0)')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef3
+ 
+GO
+Declare @Querydef4 nvarchar(max)
+ 
+SELECT @Querydef4 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), 'ISNULL(B.Efectuate,0)', 'ISNULL(B.Efectuate,0) + ISNULL(B.Anulate,0)')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef4
+GO
+ 
+Declare @Querydef5 nvarchar(max)
+ 
+SELECT @Querydef5 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), 'COALESCE(B.Efectuate, 0)', 'COALESCE(B.Efectuate, 0) + COALESCE(B.Anulate,0)')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef5
+GO
+Declare @Querydef6 nvarchar(max)
+ 
+SELECT @Querydef6 = REPLACE (REPLACE (sm.definition, 'CREATE VIEW', 'ALTER VIEW'), 'COALESCE(B.Efectuate,0)', 'COALESCE(B.Efectuate,0) + COALESCE(B.Anulate,0)')
+FROM sys.sql_modules sm JOIN sys.objects o
+ON sm.object_id = o.object_id
+WHERE
+o.name = 'SituatieZileAbsente' AND o.type = 'V'
+ 
+exec sp_executeSql @querydef6
+GO
+
+
 ----	2.2.130	----
 
 
@@ -14217,4 +14283,17 @@ GO
 --https://github.com/wizromRD/WizOne/issues/496
 --Adaugare program de lucru in modificari in avans/Circuit Documente pentru generare AA #496
 ALTER TABLE Ptj_Contracte ADD DenumireInAdmin nvarchar(150)
+GO
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_Subiect', '', 'Subiectul mail-ul pentru Trimitere fluturasi', 0)
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_Continut', '', 'Continutul mail-ul pentru Trimitere fluturasi', 0)
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportFluturasMail', '-99', 'Id Raport pentru trimitere fluturasi pe mail', 0)
+GO
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(82, 'Trimitere fluturas', 'Trimitere fluturas', 'Pagini\TrimitereFluturasi', 1, 'm1.png')
 GO

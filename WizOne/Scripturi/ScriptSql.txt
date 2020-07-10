@@ -13892,7 +13892,7 @@ CREATE FUNCTION [dbo].[CalculCO] (
 
  declare @ZileCuveniteAn int, @ZileCuvenite int, @ZileCuveniteZi int, @ZileAnPrecedent int, @ZileAngajare int, @ZileAngajareZi int, @ZileSuspendare int, @ZileSuspendareZi int,
  @PrimaZiAn date, @UltimaZiAn date, @TipCalcul int, @ZileSuplimentare int, @LuniVechime int, @CalculCOProp18Ani int, @CalculCOPropHand int, @ZileAn int,
- @SuspendariExcluse nvarchar(100)
+ @SuspendariExcluse nvarchar(100), @f10023 datetime
 
 
 -- @TipCalcul
@@ -13915,6 +13915,9 @@ if  year(@zi) % 4 = 0
 if isnull(@grila,0)= 0
     select @grila = f10072 from f100 where f10003 = @f10003;
 
+
+select @f10023 = DataPlecare from DamiDataPlecare(@f10003, @zi);
+
  Select @ZileSuplimentare = Convert(int,isnull((select "Valoare" from "tblParametrii" where "Nume"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3));
  Select @TipCalcul = Convert(int,isnull((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCOCuvenite'),1));
  Select @CalculCOProp18Ani = Convert(int,isnull((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCO_Proportional_18Ani'),0));
@@ -13922,12 +13925,14 @@ if isnull(@grila,0)= 0
  Select @SuspendariExcluse = Convert(nvarchar(100),isnull((select "Valoare" from "tblParametrii" where "Nume"='ModCalculZileCO_SuspendariExcluse'),' '));
 
 
+
+
 Select @PrimaZiAn = CASE WHEN cast(F10022 as date) < convert(varchar, year(@zi))  +  '-01-01'  THEN convert(varchar, year(@zi))  +  '-01-01'  ELSE cast(F10022 as date) END,
- @UltimaZiAn = CASE WHEN cast(f10023 as date) < convert(varchar, year(@zi))  +  '-12-31'  THEN cast(f10023 as date) ELSE convert(varchar, year(@zi))  +  '-12-31'  END
+ @UltimaZiAn = CASE WHEN cast(@f10023 as date) < convert(varchar, year(@zi))  +  '-12-31'  THEN cast(@f10023 as date) ELSE convert(varchar, year(@zi))  +  '-12-31'  END
  from (select * from F100 where f10003 = @F10003) a ;
 
 Select @ZileAngajare = datediff(day, @PrimaZiAn, @UltimaZiAn)+1 ,
- @ZileAngajareZi = datediff(day, @PrimaZiAn,  (CASE WHEN cast(f10023 as date) < @zi THEN cast(f10023 as date) ELSE @zi END))+1
+ @ZileAngajareZi = datediff(day, @PrimaZiAn,  (CASE WHEN cast(@f10023 as date) < @zi THEN cast(@f10023 as date) ELSE @zi END))+1
  from (select * from F100 where f10003 = @F10003) a  ;
 
 If @TipCalcul = 1

@@ -188,7 +188,7 @@ namespace WizOne.Pagini
                     table.Columns.Add("Denumire", typeof(string));
 
                     int i = 0;
-                    while (!ws2.Cells[0, i].Value.IsEmpty)
+                    while (!ws2.Cells[0, i].Value.IsEmpty && ws2.Cells[0, i].Value.ToString().Length > 0)
                     {
                         table.Rows.Add(ws2.Cells[0, i].Value, ws2.Cells[0, i].Value);
                         i++;
@@ -404,7 +404,7 @@ namespace WizOne.Pagini
                 for (int i = 0; i < dt.Columns.Count; i++)
                 {
                     k = 0;
-                    while (!ws2.Cells[0, k].Value.IsEmpty)
+                    while (!ws2.Cells[0, k].Value.IsEmpty && ws2.Cells[0, k].Value.ToString().Length > 0)
                     {
                         if (ws2.Cells[0, k].Value.ToString().Trim() == dt.Columns[i].ColumnName)
                         {
@@ -425,7 +425,7 @@ namespace WizOne.Pagini
 
                 int j = 1;
                 k = 0;
-                while (!ws2.Cells[j, k].Value.IsEmpty)
+                while (!ws2.Cells[j, k].Value.IsEmpty && ws2.Cells[j, k].Value.ToString().Length > 0)
                 {
                     //if (ws2.Cells[j, k].Value.ToString().Length <= 0)
                     //{
@@ -854,7 +854,7 @@ namespace WizOne.Pagini
                 for (int i = 0; i < dtCombinat.Rows.Count; i++)
                 {
                     k = 0;
-                    while (!ws2.Cells[0, k].Value.IsEmpty)
+                    while (!ws2.Cells[0, k].Value.IsEmpty && ws2.Cells[0, k].Value.ToString().Length > 0)
                     {
                         if (ws2.Cells[0, k].Value.ToString().Trim() == dtCombinat.Rows[i]["ColoanaFisier"].ToString())
                         {
@@ -887,7 +887,7 @@ namespace WizOne.Pagini
                 string idCerere = "";
                 DataTable dtViz = Session["ImportDate_Previz"] as DataTable;
                 int nrCol = Convert.ToInt32(Session["ImportDate_NrColoane"].ToString());
-                while (!ws2.Cells[j, k].Value.IsEmpty)
+                while (!ws2.Cells[j, k].Value.IsEmpty && ws2.Cells[j, k].Value.ToString().Length > 0)
                 {
                     if (ws2.Cells[j, k].Value.ToString().Length <= 0)
                     {

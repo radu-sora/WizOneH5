@@ -86,6 +86,8 @@ namespace WizOne.Pagini
 
                 if (!IsPostBack)
                 {
+                    txtAnLuna.Value = DateTime.Now;
+
                     Session["InformatiaCurenta_TF"] = null;
                     IncarcaAngajati();
                     DataTable dtParam = General.IncarcaDT("SELECT \"Nume\", \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" IN ('TrimitereFluturas_Subiect', 'TrimitereFluturas_Continut')", null);
@@ -170,8 +172,15 @@ namespace WizOne.Pagini
                 Dictionary<int, string> lstMarci = new Dictionary<int, string>();
                 //string[] sablon = new string[11];
 
+                txtLog.Text = "";
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Email" });
+                if (txtAnLuna.Value == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat luna si anul!"), MessageBox.icoError);
+                    return;
+                }
+
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Email", "F10016" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun angajat!"), MessageBox.icoError);
@@ -181,7 +190,7 @@ namespace WizOne.Pagini
                 for (int i = 0; i < lst.Count(); i++)
                 {
                     object[] arr = lst[i] as object[];
-                    lstMarci.Add(Convert.ToInt32(General.Nz(arr[0], -99)), General.Nz(arr[1], "").ToString());
+                    lstMarci.Add(Convert.ToInt32(General.Nz(arr[0], -99)), General.Nz(arr[1], "").ToString() + "_#_$_&_" + General.Nz(arr[2], "").ToString());
                 }
 
                 grDate.Selection.UnselectAll();
@@ -192,15 +201,13 @@ namespace WizOne.Pagini
 
                     string msg = TrimitereFluturasiMail(lstMarci);
                   
-                    if (msg.Length > 0)
-                        MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoError);
-                    else
-                        MessageBox.Show(Dami.TraduCuvant("Trimitere reusita!"), MessageBox.icoSuccess);
+                    //if (msg.Length <= 0)                        
+                    //    MessageBox.Show(Dami.TraduCuvant("Trimitere reusita!"), MessageBox.icoSuccess);
 
-                    //if (err.Length > 0)
-                    //    txtLog.Text = "S-au intalnit urmatoarele erori:\n" + err;
-                    //else
-                    //    txtLog.Text = "";
+                    if (msg.Length > 0)
+                        txtLog.Text = "S-au intalnit urmatoarele erori:\n" + msg;
+                    else
+                        txtLog.Text = "";
                 }
             }
             catch (Exception ex)
@@ -218,9 +225,15 @@ namespace WizOne.Pagini
                 foreach (int key in lstMarci.Keys)
                 {
                     List<Notif.metaAdreseMail> lstOne = new List<Notif.metaAdreseMail>();
-                    lstOne.Add(new Notif.metaAdreseMail { Mail = lstMarci[key], Destinatie = "TO", IncludeLinkAprobare = 0 });
-                    int reportId = 2085;               
-                                 
+                    if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0].Length <= 0)
+                    {
+                        msg += "Angajatul cu marca " + key + " nu are completat e-mail-ul!\n";
+                        continue;
+                    }
+                    lstOne.Add(new Notif.metaAdreseMail { Mail = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0], Destinatie = "TO", IncludeLinkAprobare = 0 });
+                    int reportId = Convert.ToInt32(Dami.ValoareParam("IdRaportFluturasMail", "-99"));
+                    int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
+                    int an = Convert.ToDateTime(txtAnLuna.Value).Year;
 
                     using (var entities = new ReportsEntities())
                     using (var xtraReport = new XtraReport())
@@ -229,11 +242,11 @@ namespace WizOne.Pagini
 
                         using (var memStream = new MemoryStream(report.LayoutData))
                             xtraReport.LoadLayoutFromXml(memStream);
-                       
+
                         var values = new
                         {
                             Implicit = new { UserId = Session?["UserId"] },
-                            Explicit = new { Angajat = key.ToString() }
+                            Explicit = new { Angajat = key.ToString(), Luna = luna, An = an }
                         };
                         var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
                         var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
@@ -253,7 +266,13 @@ namespace WizOne.Pagini
 
                         xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
                         PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
-                        pdfOptions.PasswordSecurityOptions.OpenPassword = "1234";
+                        pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
+
+                        if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
+                        {
+                            msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
+                            continue;
+                        }
 
                         MemoryStream mem = new MemoryStream();
                         xtraReport.ExportToPdf(mem, pdfOptions);
@@ -266,11 +285,14 @@ namespace WizOne.Pagini
                     }
 
                 }
-                MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes!"), MessageBox.icoSuccess);
+                if (msg.Length <= 0)
+                    MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes!"), MessageBox.icoSuccess);
+                else
+                    MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes, dar cu unele erori! Verificati log-ul!"), MessageBox.icoWarning);
             }
             catch (Exception ex)
             {
-                msg = "Eroare la trimitere!";
+                msg += "Eroare la trimitere!\n";
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
@@ -318,6 +340,8 @@ namespace WizOne.Pagini
                 cmbSubDept.Value = null;
                 cmbBirou.Value = null;                
                 cmbCateg.Value = null;
+                cmbMail.Value = null;
+                cmbParola.Value = null;
 
                 cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
                 cmbDept.DataBind();
@@ -423,11 +447,11 @@ namespace WizOne.Pagini
 
                 string strSql = @"SELECT Y.* FROM(
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
-                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025, A.F100894, USERS.""Mail"", USERS.""Parola"",
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025, A.F100894, USERS.""Mail"", F10016,
                                 F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
                                 CASE WHEN (""Mail"" IS NULL OR {6}(""Mail"") = 0) THEN F100894 ELSE ""Mail"" END AS ""Email"",
                                 CASE WHEN (F100894 IS NULL OR {6}(F100894) = 0) AND (""Mail"" IS NULL OR {6}(""Mail"") = 0) THEN 0 ELSE 1 END AS ""AreMail"",
-                                CASE WHEN ""Parola"" IS NULL OR {6}(""Parola"") = 0 THEN 0 ELSE 1 END AS ""AreParola""
+                                CASE WHEN F10016 IS NULL OR {6}(F10016) = 0 THEN 0 ELSE 1 END AS ""AreParola""
                                 {3}
 
                                 FROM ""relGrupAngajat"" B                                
@@ -449,11 +473,11 @@ namespace WizOne.Pagini
                                 UNION
 
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
-                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  , A.F100894, USERS.""Mail"", USERS.""Parola"",
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  , A.F100894, USERS.""Mail"", F10016,
                                 F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
                                 CASE WHEN (""Mail"" IS NULL OR {6}(""Mail"") = 0) THEN F100894 ELSE ""Mail"" END AS ""Email"",
                                 CASE WHEN (F100894 IS NULL OR {6}(F100894) = 0) AND (""Mail"" IS NULL OR {6}(""Mail"") = 0) THEN 0 ELSE 1 END AS ""AreMail"",
-                                CASE WHEN ""Parola"" IS NULL OR {6}(""Parola"") = 0 THEN 0 ELSE 1 END AS ""AreParola""
+                                CASE WHEN F10016 IS NULL OR {6}(F10016) = 0 THEN 0 ELSE 1 END AS ""AreParola""
                                 {3}
 
                                 FROM ""relGrupAngajat"" B                                
@@ -554,9 +578,9 @@ namespace WizOne.Pagini
                 if (areParola != -99)
                 {
                     if (cond.Length <= 0)
-                        cond = " WHERE (CASE WHEN \"Parola\" IS NULL OR {6}(\"Parola\") = 0 THEN 0 ELSE 1 END) = " + areParola;
+                        cond = " WHERE (CASE WHEN F10016 IS NULL OR {6}(F10016) = 0 THEN 0 ELSE 1 END) = " + areParola;
                     else
-                        cond += " AND (CASE WHEN \"Parola\" IS NULL OR {6}(\"Parola\") = 0 THEN 0 ELSE 1 END) = " + areParola;
+                        cond += " AND (CASE WHEN F10016 IS NULL OR {6}(F10016) = 0 THEN 0 ELSE 1 END) = " + areParola;
                 }
 
                 string cmpCateg = @" ,NULL AS ""Categorie"" ";

@@ -240,6 +240,24 @@ namespace WizOne.Pagini
         protected global::DevExpress.Web.ASPxComboBox cmbParola;
 
         /// <summary>
+        /// lblAnLuna control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAnLuna;
+
+        /// <summary>
+        /// txtAnLuna control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxDateEdit txtAnLuna;
+
+        /// <summary>
         /// btnFiltru control.
         /// </summary>
         /// <remarks>

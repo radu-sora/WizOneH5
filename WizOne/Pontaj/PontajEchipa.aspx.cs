@@ -1021,8 +1021,8 @@ namespace WizOne.Pontaj
         #region Transfer F300
 
 
-        protected void btnTransfera_Click(object sender, EventArgs e)
-        {
+        protected void btnTransfera_Click()
+        {//Radu 13.07.2020 - modificata pentru Callback
             int rez = 1;
             int repartProcent = 0;
 
@@ -1031,7 +1031,7 @@ namespace WizOne.Pontaj
             DateTime dtLucru = new DateTime(Convert.ToInt32(Dami.ValoareParam("AnLucru")), Convert.ToInt32(Dami.ValoareParam("LunaLucru")), 1);
             if (ziua.Year != dtLucru.Year || ziua.Month != dtLucru.Month)
             {
-                MessageBox.Show(Dami.TraduCuvant("Luna selectata este diferita de luna de lucru"), MessageBox.icoWarning,"Transfer in salarizare");
+                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Luna selectata este diferita de luna de lucru");
                 return;
             }
 
@@ -1041,7 +1041,7 @@ namespace WizOne.Pontaj
             {
                 if (entS == null || entS.Rows.Count == 0)
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Nu exista date de transferat"));
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista date de transferat");
                     return;
                 }
                 else
@@ -1365,17 +1365,18 @@ namespace WizOne.Pontaj
             catch (Exception ex)
             {
                 rez = 0;
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                grDate.JSProperties["cpAlertMessage"] = ex;
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             if (rez == 1)
             {
-                MessageBox.Show(Dami.TraduCuvant("Date transferate cu succes"));
+                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Date transferate cu succes");
             }
             else
             {
-                MessageBox.Show(Dami.TraduCuvant("Eroare la transfer"));
+                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Eroare la transfer");
             }
 
         }
@@ -1852,6 +1853,10 @@ namespace WizOne.Pontaj
                                 string mesaj = ExecutaProcedura("ProcesAprobare");
                                 grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
                             }
+                            break;
+                        case "btnTransfera":
+                            //Radu 13.07.2020
+                            btnTransfera_Click();
                             break;
                     }
                 }

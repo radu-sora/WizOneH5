@@ -113,6 +113,18 @@
             }
         }
 
+        function OnClickTransfera(s, e) {
+            var luna = txtAnLuna.GetValue();
+            swal({
+                title: trad_string(limba, 'Sunteti sigur/a ?'), text: trad_string(limba, 'Sigur doriti transferul pontajului pentru luna ' + (luna.getMonth() + 1) + '/' + luna.getFullYear() + '?'),
+                type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
+            }, function (isConfirm) {
+                    if (isConfirm) {
+                        grDate.PerformCallback("btnTransfera;");
+                }
+            });
+        }
+
         //function OnInit(s, e) 
         //{
         //    popUpInit.Hide();
@@ -368,8 +380,9 @@
                 <dx:ASPxButton ID="btnStergePontari" ClientInstanceName="btnStergePontari" ClientIDMode="Static" runat="server" Text="Sterge Pontari" AutoPostBack="true" OnClick="btnStergePontari_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnTransfera" ClientInstanceName="btnTransfera" ClientIDMode="Static" runat="server" Text="Transfera" AutoPostBack="true" OnClick="btnTransfera_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnTransfera" ClientInstanceName="btnTransfera" ClientIDMode="Static" runat="server" Text="Transfera" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/duplicare.png"></Image>
+                    <ClientSideEvents Click="function (s,e) { OnClickTransfera(s,e); }"/>
                 </dx:ASPxButton>                
                 <dx:ASPxButton ID="btnPeAng" ClientInstanceName="btnPeAng" ClientIDMode="Static" runat="server" Text="Pontaj pe Angajat" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/n2.png"></Image>

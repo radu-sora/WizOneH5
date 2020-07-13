@@ -907,7 +907,7 @@ namespace WizOne.Pontaj
 
                 string strSql = @"SELECT Y.* FROM(
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
-                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025,
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025, A.F10022, A.F10023,
                                 F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou""
                                 {3}
 
@@ -929,7 +929,7 @@ namespace WizOne.Pontaj
                                 UNION
 
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
-                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  ,
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  , A.F10022, A.F10023,
                                 F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou""
                                 {3}
 
@@ -1060,6 +1060,15 @@ namespace WizOne.Pontaj
                     cond = " WHERE (Y.F10025 = 0 OR Y.F10025 = 999) ";
                 else
                     cond += " AND (Y.F10025 = 0 OR Y.F10025 = 999) ";
+
+                //Radu 10.07.2020
+                if (dtDataStart.Value != null && dtDataSfarsit.Value != null)
+                {
+                    if (cond.Length <= 0)
+                        cond = " WHERE Y.F10022 <= " + General.ToDataUniv(Convert.ToDateTime(dtDataSfarsit.Value)) + " AND Y.F10023 >= " + General.ToDataUniv(Convert.ToDateTime(dtDataStart.Value));
+                    else
+                        cond += " AND Y.F10022 <= " + General.ToDataUniv(Convert.ToDateTime(dtDataSfarsit.Value)) + " AND Y.F10023 >= " + General.ToDataUniv(Convert.ToDateTime(dtDataStart.Value));
+                }
 
                 strSql += cond;
 

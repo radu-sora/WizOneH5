@@ -333,6 +333,12 @@
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                         </dx:ASPxComboBox>
                     </td>
+                    <td id="lbl13Act" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt13Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxComboBox ID="cmb8Act" runat="server" ClientInstanceName="cmb8Act" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
+                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
+                        </dx:ASPxComboBox>
+                    </td>
                     <td id="lbl8Act" runat="server" colspan="2">
                         <dx:ASPxLabel  ID="lblTxt1Act" runat="server"  Visible="false"></dx:ASPxLabel >
                         <dx:ASPxTextBox ID="txt1Act" runat="server"  Visible="false">
@@ -424,6 +430,13 @@
                     <td id="lbl7Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt11Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmb7Nou" runat="server" ClientInstanceName="cmb7Nou" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
+                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
+                            <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
+                        </dx:ASPxComboBox>
+                    </td>
+                    <td id="lbl14Nou" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt14Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxComboBox ID="cmb8Nou" runat="server" ClientInstanceName="cmb8Nou" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
                         </dx:ASPxComboBox>

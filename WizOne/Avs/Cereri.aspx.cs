@@ -3892,7 +3892,8 @@ namespace WizOne.Avs
                             DataTable dtNorma = General.IncarcaDT(sqlNorma, null);
                             if ((dtNorma != null && dtNorma.Rows.Count > 0 && Convert.ToInt32(dtNorma.Rows[0][0].ToString()) != Convert.ToInt32(dtCer.Rows[0]["ProgramLucru"].ToString())) || dtNorma == null || dtNorma.Rows.Count <= 0)
                             {
-                                sqlNorma = "UPDATE \"F100Contracte\" SET \"DataSfarsit\" = " + data + " WHERE F10003 = " + f10003.ToString() + " AND \"DataSfarsit\" = " + General.ToDataUniv(new DateTime(2100, 1, 1));
+                                DateTime tmpDtModif = Convert.ToDateTime(dtCer.Rows[0]["DataModif"]);
+                                sqlNorma = "UPDATE \"F100Contracte\" SET \"DataSfarsit\" = " + General.ToDataUniv(tmpDtModif.AddDays(-1)) + " WHERE F10003 = " + f10003.ToString() + " AND \"DataSfarsit\" = " + General.ToDataUniv(new DateTime(2100, 1, 1));
                                 General.ExecutaNonQuery(sqlNorma);
 
                                 sqlNorma = "INSERT INTO \"F100Contracte\"(F10003, \"IdContract\", \"DataInceput\", \"DataSfarsit\", USER_NO, TIME) VALUES (" + f10003.ToString() + ", " + dtCer.Rows[0]["ProgramLucru"].ToString()
@@ -4326,7 +4327,8 @@ namespace WizOne.Avs
                         ActualizareDet(f10003, ref sql100, ref sql1001);
                         break;
                     case (int)Constante.Atribute.ProgramLucru:
-                        string sqlCtr = "UPDATE \"F100Contracte\" SET \"DataSfarsit\" = " + data + " WHERE F10003 = " + f10003.ToString() + " AND \"DataSfarsit\" = " + General.ToDataUniv(new DateTime(2100, 1, 1));
+                        DateTime tmpDtModif2 = Convert.ToDateTime(dtCer.Rows[0]["DataModif"]);
+                        string sqlCtr = "UPDATE \"F100Contracte\" SET \"DataSfarsit\" = " + General.ToDataUniv(tmpDtModif2.AddDays(-1)) + " WHERE F10003 = " + f10003.ToString() + " AND \"DataSfarsit\" = " + General.ToDataUniv(new DateTime(2100, 1, 1));
                         General.ExecutaNonQuery(sqlCtr);
                         
                         sqlCtr = "INSERT INTO \"F100Contracte\"(F10003, \"IdContract\", \"DataInceput\", \"DataSfarsit\", USER_NO, TIME) VALUES (" + f10003.ToString() + ", " + dtCer.Rows[0]["ProgramLucru"].ToString() 

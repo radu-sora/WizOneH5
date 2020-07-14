@@ -15010,3 +15010,5 @@ insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (34, 'Program d
 commit;
 
 ALTER TABLE "Avs_Cereri" ADD "ProgramLucru" NUMBER(9); 
+
+ALTER TABLE "Admin_Evaluare" Modify "Punctaj" NUMBER(10,2);

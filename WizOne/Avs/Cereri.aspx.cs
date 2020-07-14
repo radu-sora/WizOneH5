@@ -1741,6 +1741,16 @@ namespace WizOne.Avs
                 else
                     de2Nou.Value = new DateTime(2100, 1, 1);
             }
+
+            //Radu 14.07.2020
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.ProgramLucru)
+            {
+                ArataCtl(3, "Program actual", "Program nou", "", "", "", "", "", "", "", "");
+                DataTable dtTemp1 = General.IncarcaDT("select F71802 AS \"Id\", F71804 AS \"Denumire\" from F100, f718 WHERE F10071 = F71802 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                DataTable dtTemp2 = General.IncarcaDT("select F71802 AS \"Id\", F71804 AS \"Denumire\" from f718", null);
+                IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
+
+            }
         }
 
 

@@ -14830,3 +14830,5 @@ COMMIT;
 
 insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (34, 'Program de lucru', 1);
 commit;
+
+ALTER TABLE "Avs_Cereri" ADD "ProgramLucru" NUMBER(9); 

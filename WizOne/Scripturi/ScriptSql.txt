@@ -14151,3 +14151,6 @@ GO
 
 insert into Avs_tblAtribute (id, Denumire, Activ) values (34, 'Program de lucru', 1)
 GO
+
+ALTER TABLE Avs_Cereri ADD ProgramLucru INT NULL DEFAULT 0 
+GO

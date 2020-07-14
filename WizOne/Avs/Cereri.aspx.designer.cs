@@ -348,6 +348,33 @@ namespace WizOne.Avs
         protected global::DevExpress.Web.ASPxComboBox cmb7Act;
 
         /// <summary>
+        /// lbl13Act control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell lbl13Act;
+
+        /// <summary>
+        /// lblTxt13Act control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblTxt13Act;
+
+        /// <summary>
+        /// cmb8Act control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmb8Act;
+
+        /// <summary>
         /// lbl8Act control.
         /// </summary>
         /// <remarks>
@@ -670,6 +697,33 @@ namespace WizOne.Avs
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmb7Nou;
+
+        /// <summary>
+        /// lbl14Nou control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell lbl14Nou;
+
+        /// <summary>
+        /// lblTxt14Nou control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblTxt14Nou;
+
+        /// <summary>
+        /// cmb8Nou control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmb8Nou;
 
         /// <summary>
         /// lbl8Nou control.

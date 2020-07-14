@@ -1328,7 +1328,8 @@ namespace WizOne.Avs
                 dtTemp1 = General.IncarcaDT("select\"Id\", \"Denumire\", \"DenumireInAdmin\" from \"Ptj_Contracte\", \"F100Contracte\" WHERE \"IdContract\" = \"Id\" AND \"DataSfarsit\" = " + General.ToDataUniv(new DateTime(2100, 1, 1)) + " AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 dtTemp2 = General.IncarcaDT("select \"Id\", \"Denumire\", \"DenumireInAdmin\" from \"Ptj_Contracte\"", null);
                 IncarcaComboBox(cmb8Act, cmb8Nou, dtTemp1, dtTemp2);
-                cmb8Nou.Value = cmb8Act.Value;
+                if (Session["Valoare9Noua"] == null)
+                    cmb8Nou.Value = cmb8Act.Value;
 
                 DataTable dtTemp = General.IncarcaDT("SELECT F100964 FROM F1001 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 txt1Act.Text = dtTemp.Rows[0][0].ToString();

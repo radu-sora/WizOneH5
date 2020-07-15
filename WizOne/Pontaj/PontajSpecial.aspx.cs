@@ -115,6 +115,8 @@ namespace WizOne.Pontaj
                             progr += ";";
                     }
                     Session["PtjSpecial_ProgrameJS"] = progr;
+
+                    txtZiStart.Text = "1";
                 }
                 else
                 {
@@ -157,7 +159,7 @@ namespace WizOne.Pontaj
                                 tx.Visible = false;
                             if (lx != null)
                                 lx.Visible = false;
-                        }
+                        }             
                     }             
                 }
 
@@ -253,10 +255,41 @@ namespace WizOne.Pontaj
                 //}
 
 
+                if (txtZiStart.Text.Length <= 0)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati precizat ziua de start!"), MessageBox.icoError);
+                    return;
+                }
+
+                int ziStart = 1;
+                if (!int.TryParse(txtZiStart.Text, out ziStart))
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Ziua de start este invalida!"), MessageBox.icoError);
+                    return;
+                }
+
+                if (ziStart > Convert.ToInt32(cmbNrZileSablon.Value))
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Ziua de start este mai mare decat numarul zilelor din sablon!"), MessageBox.icoError);
+                    return;
+                }
 
                 DataTable table = Session["PtjSpecial_Sabloane"] as DataTable;
+                foreach (DataColumn col in table.Columns)
+                    col.ReadOnly = false;
+
+
                 DataRow sablon = table.Select("Id=" + cmbSablon.Value)[0];
 
+                DataRow sablonSpecial = table.NewRow();
+
+                for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
+                {
+                    sablonSpecial["IdProgram" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "IdProgram" + (i + ziStart - 1) : "IdProgram" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
+                    sablonSpecial["Ziua" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "Ziua" + (i + ziStart - 1) : "Ziua" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
+                    sablonSpecial["ValZiua" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "ValZiua" + (i + ziStart - 1) : "ValZiua" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
+                }
+               
 
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
@@ -281,7 +314,7 @@ namespace WizOne.Pontaj
                         General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month);             
                         dt = dt.AddMonths(1);
                     }
-                    string msg = InitializarePontajSpecial(Convert.ToDateTime(dtDataStart.Value), Convert.ToDateTime(dtDataSfarsit.Value), Convert.ToInt32(cmbNrZileSablon.Value), sablon, lstMarci);
+                    string msg = InitializarePontajSpecial(Convert.ToDateTime(dtDataStart.Value), Convert.ToDateTime(dtDataSfarsit.Value), Convert.ToInt32(cmbNrZileSablon.Value), sablonSpecial, lstMarci);
                   
                     if (msg.Length > 0)
                         MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoError);
@@ -338,7 +371,7 @@ namespace WizOne.Pontaj
 
                     for (DateTime zi = dataStart.AddDays(i - 1); zi <= dataSf; zi = zi.AddDays(nrZile))
                     {
-                        string dtStr = General.ToDataUniv(zi.Date.Year, zi.Date.Month, zi.Date.Day);
+                        string dtStr = General.ToDataUniv(zi.Date.Year, zi.Date.Month, zi.Date.Day);                  
 
                         int nr = dtHolidays.Select("DAY = " + dtStr).Count();
                         int nrZileNel = 0;

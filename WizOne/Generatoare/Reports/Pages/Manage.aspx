@@ -24,7 +24,7 @@
     <dx:ASPxGridView ID="ReportsGridView" ClientInstanceName="reportsGridView" runat="server" AutoGenerateColumns="False" Width="100%"
         DataSourceID="ReportsDataSource" KeyFieldName="Id"
         OnDataBinding="ReportsGridView_DataBinding">
-        <Settings ShowFilterRow="True" VerticalScrollBarMode="Auto" />
+        <Settings ShowFilterRow="True" VerticalScrollBarMode="Auto" ShowFilterRowMenu="true" />
         <SettingsEditing Mode="Inline" />
         <SettingsBehavior AllowSelectByRowClick="true" AllowSelectSingleRowOnly="true" AllowFocusedRow="true" />
         <SettingsCommandButton>
@@ -55,6 +55,10 @@
                     <ValidationSettings Display="Dynamic" ErrorDisplayMode="Text" ErrorTextPosition="Bottom" SetFocusOnError="true">
                         <RequiredField IsRequired="True" ErrorText="Tipul raportului este obligatoriu" />
                     </ValidationSettings>
+                </PropertiesComboBox>
+            </dx:GridViewDataComboBoxColumn>
+            <dx:GridViewDataComboBoxColumn FieldName="IdModul" Caption="Modul" Width="150px">
+                <PropertiesComboBox  ValueField="Id" TextField="Denumire">     
                 </PropertiesComboBox>
             </dx:GridViewDataComboBoxColumn>
             <dx:GridViewDataCheckColumn FieldName="Restricted" Caption="Parola" Width="70px">

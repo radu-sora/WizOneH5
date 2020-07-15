@@ -45,6 +45,9 @@ namespace WizOne.Personal
                 btnTransf.Image.ToolTip = Dami.TraduCuvant("btnTransf", "Transforma candidat in angajat");
                 #endregion
 
+                grDate.SettingsCookies.Enabled = true;
+                grDate.SettingsCookies.StoreFiltering = true;
+
                 string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'AngajatImplicitCandidat'";
                 DataTable dt = General.IncarcaDT(sql, null);
                 if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dt.Rows[0][0].ToString()) == 1)
@@ -714,6 +717,7 @@ namespace WizOne.Personal
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
             }
         }
+
 
     }
 }

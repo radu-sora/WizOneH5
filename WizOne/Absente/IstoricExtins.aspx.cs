@@ -241,7 +241,11 @@ namespace WizOne.Absente
                 //    }
                 //}
 
-
+                //Radu 15.07.2020 - parametru care contine id-urile de IdSuper ce trebuie luate in considerare
+                string lstId = Dami.ValoareParam("Abs_IdSuperIstoricExtins", "");
+                string conditie = "";
+                if (lstId.Length > 0)
+                    conditie = " AND \"IdSuper\" IN (" + lstId + ")";
 
                 if (Constante.tipBD == 1)
                 {
@@ -264,7 +268,7 @@ namespace WizOne.Absente
                             " INNER JOIN (" + strZile.Substring(6) + ") y  on 1=1 " +
                             " LEFT JOIN Ptj_Intrari a on a.F10003 = x.F10003 AND a.Ziua = y.Ziua " +
                             " LEFT JOIN Ptj_tblAbsente c on a.ValStr = c.DenumireScurta " +
-                            " WHERE x.F10003 IN (SELECT DISTINCT F10003 FROM F100Supervizori WHERE IdUser=" + idUser + " UNION SELECT " + f10003 + ") " +
+                            " WHERE x.F10003 IN (SELECT DISTINCT F10003 FROM F100Supervizori WHERE IdUser=" + idUser + conditie + " UNION SELECT " + f10003 + ") " +
                             " UNION " +
                             " SELECT x.Ziua as Zi, a.F10003, b.F10008 + ' ' + b.F10009 as NumeComplet, c.Id as IdAbs, c.Denumire as DenAbs, (SELECT \"Culoare\" FROM \"Ptj_tblStari\" WHERE \"Id\"=4) AS Culoare " +
                             " FROM (" + strZile.Substring(6) + ") x " +
@@ -272,7 +276,7 @@ namespace WizOne.Absente
                             " INNER JOIN F100 b on a.F10003 = b.F10003 " +
                             " INNER JOIN Ptj_tblAbsente c on a.IdAbsenta = c.Id " +
                             " WHERE a.IdStare=4 AND ((MONTH(a.DataInceput)=" + luna + " and YEAR(a.DataInceput)=" + an + ") OR (MONTH(a.DataSfarsit)=" + luna + " and YEAR(a.DataSfarsit)=" + an + ")) " +
-                            " AND a.F10003 IN (SELECT DISTINCT F10003 FROM F100Supervizori WHERE IdUser=" + idUser + " UNION SELECT " + f10003 + ") " +
+                            " AND a.F10003 IN (SELECT DISTINCT F10003 FROM F100Supervizori WHERE IdUser=" + idUser + conditie + " UNION SELECT " + f10003 + ") " +
                             " UNION " +
                             " SELECT x.Ziua as Zi, a.F10003, b.F10008 + ' ' + b.F10009 as NumeComplet, c.Id as IdAbs, c.Denumire as DenAbs, " + culoareGradient + " AS Culoare " +
                             " FROM (" + strZile.Substring(6) + ") x " +
@@ -280,9 +284,9 @@ namespace WizOne.Absente
                             " INNER JOIN F100 b on a.F10003 = b.F10003 " +
                             " INNER JOIN Ptj_tblAbsente c on a.IdAbsenta = c.Id " +
                             " WHERE a.IdStare IN (1,2) AND ((MONTH(a.DataInceput)=" + luna + " and YEAR(a.DataInceput)=" + an + ") OR (MONTH(a.DataSfarsit)=" + luna + " and YEAR(a.DataSfarsit)=" + an + ")) " +
-                            " AND a.F10003 IN (SELECT DISTINCT F10003 FROM F100Supervizori WHERE IdUser=" + idUser + " UNION SELECT " + f10003 + ") " +
+                            " AND a.F10003 IN (SELECT DISTINCT F10003 FROM F100Supervizori WHERE IdUser=" + idUser + conditie + " UNION SELECT " + f10003 + ") " +
                             " ) y on x.F10003=y.F10003 " +
-                            " WHERE x.F10003 IN (SELECT DISTINCT F10003 FROM F100Supervizori WHERE IdUser=" + idUser + " UNION SELECT " + f10003 + ") " +
+                            " WHERE x.F10003 IN (SELECT DISTINCT F10003 FROM F100Supervizori WHERE IdUser=" + idUser + conditie + " UNION SELECT " + f10003 + ") " +
                             " AND X.F10022 <= " + ziSf + " AND " + ziInc + " <= X.F10023 " +
                             filtru +
                             " ) AS source " +
@@ -353,7 +357,7 @@ namespace WizOne.Absente
                             " INNER JOIN (" + strZile.Substring(6) + ") Y ON 1=1 " +
                             " LEFT JOIN \"Ptj_Intrari\" a on x.F10003 = a.F10003 AND a.\"Ziua\" = y.\"Ziua\" " +
                             " LEFT JOIN \"Ptj_tblAbsente\" c on a.\"ValStr\" = c.\"DenumireScurta\" " +
-                            " WHERE x.F10003 IN (SELECT DISTINCT F10003 FROM \"F100Supervizori\" WHERE \"IdUser\"=" + idUser + " UNION SELECT " + f10003 + " FROM Dual) " +
+                            " WHERE x.F10003 IN (SELECT DISTINCT F10003 FROM \"F100Supervizori\" WHERE \"IdUser\"=" + idUser + conditie + " UNION SELECT " + f10003 + " FROM Dual) " +
                             " UNION " +
                             " SELECT x.\"Ziua\" as \"Zi\", a.F10003, b.F10008 || ' ' || b.F10009 as \"NumeComplet\", c.\"Id\" as \"IdAbs\", c.\"Denumire\" as \"DenAbs\", (SELECT \"Culoare\" FROM \"Ptj_tblStari\" WHERE \"Id\"=4) AS \"Culoare\" " +
                             " FROM (" + strZile.Substring(6) + ") x " +
@@ -361,7 +365,7 @@ namespace WizOne.Absente
                             " INNER JOIN F100 b on a.F10003 = b.F10003 " +
                             " INNER JOIN \"Ptj_tblAbsente\" c on a.\"IdAbsenta\" = c.\"Id\" " +
                             " WHERE a.\"IdStare\"=4 AND ((to_char(a.\"DataInceput\",'mm')=" + luna + " and to_char(a.\"DataInceput\",'yyyy')=" + an + ") OR (to_char(a.\"DataSfarsit\",'mm')=" + luna + " and to_char(a.\"DataSfarsit\",'yyyy')=" + an + ")) " +
-                            " AND a.F10003 IN (SELECT DISTINCT F10003 FROM \"F100Supervizori\" WHERE \"IdUser\"=" + idUser + " UNION SELECT " + f10003 + " FROM Dual) " +
+                            " AND a.F10003 IN (SELECT DISTINCT F10003 FROM \"F100Supervizori\" WHERE \"IdUser\"=" + idUser + conditie + " UNION SELECT " + f10003 + " FROM Dual) " +
                             " UNION " +
                             " SELECT x.\"Ziua\" as \"Zi\", a.F10003, b.F10008 || ' ' || b.F10009 as \"NumeComplet\", c.\"Id\" as \"IdAbs\", c.\"Denumire\" as \"DenAbs\", COALESCE(c.\"Culoare\",'#FFFFFF') AS \"Culoare\" " +
                             " FROM (" + strZile.Substring(6) + ") x " +
@@ -369,9 +373,9 @@ namespace WizOne.Absente
                             " INNER JOIN F100 b on a.F10003 = b.F10003 " +
                             " INNER JOIN \"Ptj_tblAbsente\" c on a.\"IdAbsenta\" = c.\"Id\" " +
                             " WHERE a.\"IdStare\" IN (1,2) AND ((to_char(a.\"DataInceput\",'mm')=" + luna + " and to_char(a.\"DataInceput\",'yyyy')=" + an + ") OR (to_char(a.\"DataSfarsit\",'mm')=" + luna + " and to_char(a.\"DataSfarsit\",'yyyy')=" + an + ")) " +
-                            " AND a.F10003 IN (SELECT DISTINCT F10003 FROM \"F100Supervizori\" WHERE \"IdUser\"=" + idUser + " UNION SELECT " + f10003 + " FROM Dual) " +
+                            " AND a.F10003 IN (SELECT DISTINCT F10003 FROM \"F100Supervizori\" WHERE \"IdUser\"=" + idUser + conditie + " UNION SELECT " + f10003 + " FROM Dual) " +
                             " ) y on x.F10003=y.F10003 " +
-                            " WHERE x.F10003 IN (SELECT DISTINCT F10003 FROM \"F100Supervizori\" WHERE \"IdUser\"=" + idUser + " UNION SELECT " + f10003 + " FROM Dual) " +
+                            " WHERE x.F10003 IN (SELECT DISTINCT F10003 FROM \"F100Supervizori\" WHERE \"IdUser\"=" + idUser + conditie + " UNION SELECT " + f10003 + " FROM Dual) " +
                             " AND X.F10022 <= " + ziSf + " AND " + ziInc + " <= X.F10023 " +
                             filtru +
                             " ) " +

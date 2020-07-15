@@ -15003,7 +15003,7 @@ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportFluturasMail', '-99', 'Id Raport pentru trimitere fluturasi pe mail', 0);
 
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(82, 'Trimitere fluturas', 'Trimitere fluturas', 'Pagini\TrimitereFluturasi', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(84, 'Trimitere fluturas', 'Trimitere fluturas', 'Pagini\TrimitereFluturasi', 1, 'm1.png');
 COMMIT;
 
 insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (34, 'Program de lucru', 1);
@@ -15012,3 +15012,19 @@ commit;
 ALTER TABLE "Avs_Cereri" ADD "ProgramLucru" NUMBER(9); 
 
 ALTER TABLE "Admin_Evaluare" Modify "Punctaj" NUMBER(10,2);
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('Abs_IdSuperIstoricExtins', '', 'Contine id-urile de IdSuper care sa fie luate in considerare in Istoric Extins', 1);
+
+
+CREATE TABLE "tblRapoarteDetalii" 
+(	"IdRaport" NUMBER(9,0), 
+    "IdModul" NUMBER(9,0),
+    "AreParola" NUMBER(9,0),
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE
+);
+
+ALTER TABLE "tblRapoarteDetalii" MODIFY ("IdRaport" NOT NULL ENABLE);
+
+insert into "tblRapoarteDetalii"
+select distinct "IdRaport", null, "AreParola", -9, sysdate from "RapoarteGrupuriUtilizatori";

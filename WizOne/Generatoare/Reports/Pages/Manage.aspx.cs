@@ -1,6 +1,7 @@
 ﻿using DevExpress.Web;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace Wizrom.Reports.Pages
             public string Description { get; set; }
             public short TypeId { get; set; }
             public bool Restricted { get; set; }
+            public int IdModul { get; set; }
         }
 
         public class ReportSettingsViewModel
@@ -31,9 +33,10 @@ namespace Wizrom.Reports.Pages
         public static List<ReportViewModel> GetReports()
         {
             var reports = General.RunSqlQuery<ReportViewModel>(
-                "SELECT DISTINCT r.[DynReportId] AS [Id], r.[Name], r.[Description], r.[DynReportTypeId] AS [TypeId], rgu.[AreParola] AS Restricted " +
+                "SELECT DISTINCT r.[DynReportId] AS [Id], r.[Name], r.[Description], r.[DynReportTypeId] AS [TypeId], det.[IdModul], det.[AreParola] AS Restricted " +
                 "FROM [DynReports] r " +
-                "INNER JOIN [RapoarteGrupuriUtilizatori] rgu ON r.[DynReportId] = rgu.[IdRaport] AND rgu.[IdUser] = @1", HttpContext.Current.Session["UserId"]);
+                "INNER JOIN [RapoarteGrupuriUtilizatori] rgu ON r.[DynReportId] = rgu.[IdRaport] AND rgu.[IdUser] = @1" +
+                " LEFT JOIN [tblRapoarteDetalii] det on r.[DynReportId] = det.[IdRaport] ", HttpContext.Current.Session["UserId"]);  //Radu 15.07.2020
 
             return reports;
         }
@@ -43,6 +46,10 @@ namespace Wizrom.Reports.Pages
             //Florin 2020.04.09 - #329 - GitHub
             var reportId = General.RunSqlScalar<int>("INSERT INTO [DynReports]([Name], [Description], [DynReportTypeId], [RegUserId]) VALUES (@1, @2, @3, @4)", "DynReportId",
                 report.Name, report.Description, report.TypeId, Session["UserId"].ToString());
+
+            //Radu 15.07.2020
+            General.RunSqlScalar<int>($"INSERT INTO [tblRapoarteDetalii] ([IdRaport], [IdModul], [AreParola], [USER_NO], [TIME]) VALUES (@1, @2, @3, @4, @5)", null,
+                                reportId, report.IdModul, report.Restricted, Session["UserId"], DateTime.Now);
         }
 
         public void SetReport(ReportViewModel report)
@@ -55,9 +62,13 @@ namespace Wizrom.Reports.Pages
                 "UNION " +
                 "SELECT DISTINCT [IdGrup] FROM [relGrupRaport2] WHERE [IdRaport] = @2", Session["UserId"], report.Id).ForEach(groupId =>
             {
-                if (General.RunSqlScalar<int>($"UPDATE [relGrupRaport2] SET [AreParola] = @1 WHERE [IdGrup] = @2 AND [IdRaport] = @3", null, report.Restricted, groupId, report.Id) == 0)
-                    General.RunSqlScalar<int>($"INSERT INTO [relGrupRaport2] ([IdGrup], [IdRaport], [AreParola], [USER_NO], [TIME]) VALUES (@1, @2, @3, @4, @5)", null, 
-                        groupId, report.Id, report.Restricted, Session["UserId"], DateTime.Now);
+                //Radu 15.07.2020
+                //if (General.RunSqlScalar<int>($"UPDATE [relGrupRaport2] SET [AreParola] = @1 WHERE [IdGrup] = @2 AND [IdRaport] = @3", null, report.Restricted, groupId, report.Id) == 0)
+                //    General.RunSqlScalar<int>($"INSERT INTO [relGrupRaport2] ([IdGrup], [IdRaport], [AreParola], [USER_NO], [TIME]) VALUES (@1, @2, @3, @4, @5)", null, 
+                //       groupId, report.Id, report.Restricted, Session["UserId"], DateTime.Now);
+                if (General.RunSqlScalar<int>($"UPDATE [tblRapoarteDetalii] SET [IdModul] = @2, [AreParola] = @1 WHERE [IdRaport] = @3", null, report.Restricted, report.IdModul, report.Id) == 0)
+                    General.RunSqlScalar<int>($"INSERT INTO [tblRapoarteDetalii] ([IdRaport], [IdModul], [AreParola], [USER_NO], [TIME]) VALUES (@1, @2, @3, @4, @5)", null, 
+                       report.Id, report.IdModul, report.Restricted, Session["UserId"], DateTime.Now);
             });            
         }
 
@@ -65,7 +76,9 @@ namespace Wizrom.Reports.Pages
         {
             General.RunSqlScalar<int>("DELETE FROM [DynReports] WHERE [DynReportId] = @1", null, report.Id);
             // For removing reports from user groups if necessary.
-            General.RunSqlScalar<int>($"DELETE FROM [relGrupRaport2] WHERE [IdRaport] = @1", null, report.Id);
+            //Radu 15.07.2020
+            //General.RunSqlScalar<int>($"DELETE FROM [relGrupRaport2] WHERE [IdRaport] = @1", null, report.Id);            
+            General.RunSqlScalar<int>("DELETE FROM [tblRapoarteDetalii] WHERE [IdRaport] = @1", null, report.Id);
         }
 
         public static ReportSettingsViewModel GetReportSettings(int reportId)
@@ -102,9 +115,21 @@ namespace Wizrom.Reports.Pages
                     col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
                 #endregion
 
+                //Radu 14.07.2020
+                ReportsGridView.SettingsCookies.Enabled = true;
+                ReportsGridView.SettingsCookies.StoreFiltering = true;
+
                 ReportsGridView.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaRap", "10"));
                 if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(ReportsGridView);
             }
+
+            //Radu 15.07.2020
+            string sql = @"SELECT * FROM tblModule ORDER BY Denumire";
+            if (Constante.tipBD == 2)
+                sql = General.SelectOracle("tblModule", "Id") + " ORDER BY \"Denumire\"";
+            DataTable dtModul = General.IncarcaDT(sql, null);
+            GridViewDataComboBoxColumn colModul = (ReportsGridView.Columns["IdModul"] as GridViewDataComboBoxColumn);
+            colModul.PropertiesComboBox.DataSource = dtModul;
         }
         
         protected void ReportsGridView_DataBinding(object sender, EventArgs e)

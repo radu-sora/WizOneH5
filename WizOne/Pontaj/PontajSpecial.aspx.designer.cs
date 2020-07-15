@@ -951,6 +951,24 @@ namespace WizOne.Pontaj
         protected global::DevExpress.Web.ASPxCheckBox chkPlanif;
 
         /// <summary>
+        /// lblZiStart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblZiStart;
+
+        /// <summary>
+        /// txtZiStart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtZiStart;
+
+        /// <summary>
         /// btnFiltru control.
         /// </summary>
         /// <remarks>

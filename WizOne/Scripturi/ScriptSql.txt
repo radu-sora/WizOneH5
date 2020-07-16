@@ -14177,3 +14177,10 @@ GO
 insert into tblRapoarteDetalii
 select distinct IdRaport, null, AreParola, -9, getdate() from RapoarteGrupuriUtilizatori
 GO
+
+
+ALTER TABLE Ptj_tblAdminCC ADD CodF300 INT NULL DEFAULT 0 
+GO
+
+ALTER TABLE Ptj_tblAdminCC ADD SursaF300 INT NULL DEFAULT 0 
+GO

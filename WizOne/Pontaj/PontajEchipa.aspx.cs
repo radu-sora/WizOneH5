@@ -1052,6 +1052,133 @@ namespace WizOne.Pontaj
                 return;
             }
 
+            //Radu 16.07.2020 - transfer in F300 pe centri de cost
+            string sqlCC = "SELECT F10003, F06204, SUM(NrOre1) AS NrOre1, SUM(NrOre2) AS NrOre2, SUM(NrOre3) AS NrOre3, SUM(NrOre4) AS NrOre4, SUM(NrOre5) AS NrOre5, SUM(NrOre6) AS NrOre6, SUM(NrOre7) AS NrOre7, SUM(NrOre8) AS NrOre8, SUM(NrOre9) AS NrOre9, SUM(NrOre10) AS NrOre10 FROM Ptj_CC WHERE MONTH(Ziua) = (SELECT F01012 FROM F010) AND YEAR(ZIUA) = (SELECT F01011 FROM F010) GROUP BY f10003, f06204, convert(varchar, month(ziua)) + convert(varchar, year(ziua))";
+            if (Constante.tipBD == 2)
+                sqlCC = "SELECT F10003, F06204, SUM(\"NrOre1\") AS \"NrOre1\", SUM(\"NrOre2\") AS \"NrOre2\", SUM(\"NrOre3\") AS \"NrOre3\", SUM(\"NrOre4\") AS \"NrOre4\", SUM(\"NrOre5\") AS \"NrOre5\", SUM(\"NrOre6\") AS \"NrOre6\", SUM(\"NrOre7\") AS \"NrOre7\", SUM(\"NrOre8\") AS \"NrOre8\", SUM(\"NrOre9\") AS \"NrOre9\", SUM(\"NrOre10\") AS \"NrOre10\" FROM \"Ptj_CC\" WHERE EXTRACT(MONTH FROM \"Ziua\") = (SELECT F01012 FROM F010) AND EXTRACT(YEAR FROM \"ZIUA\") = (SELECT F01011 FROM F010) GROUP BY f10003, f06204, TO_CHAR(EXTRACT(MONTH FROM \"Ziua\")) || TO_CHAR(EXTRACT(YEAR FROM \"ZIUA\"))";
+            DataTable dtCC = General.IncarcaDT(sqlCC, null);
+
+            if (dtCC != null && dtCC.Rows.Count > 0)
+            {
+                DataTable dtFor = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAdminCC"" WHERE ""CodF300"" IS NOT NULL ORDER BY ""Ordine"" ", null);
+                if (dtFor != null && dtFor.Rows.Count > 0)
+                {
+                    string strSql = @"INSERT INTO F300(f30001,f30002,f30003,f30010,f30013,f30014,f30015,f30042,f30051,f30052,f30004,f30005,f30006, f30007,f30050,f30035,f30036,f30037,f30038,USER_NO,TIME,f30011) 
+                                                VALUES(300, {19}, {0}, {1}, {2}, {3}, {4}, '{5}', 0, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18})";
+                    if (Constante.tipBD == 1)
+                        strSql = @"INSERT INTO F300(f30001,f30002,f30003,f30010,f30013,f30014,f30015,f30042,f30051,f30004,f30005,f30006, f30007,f30050,f30035,f30036,f30037,f30038,USER_NO,TIME,f30011) 
+                                                VALUES(300, {18}, {0}, {1}, {2}, {3}, {4}, '{5}', 0, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17})";
+
+                    for (int i = 0; i < dtCC.Rows.Count; i++)
+                    {
+                        General.IncarcaDT(string.Format("delete from f300 where f30042 in ('WizOnePontaj_CC') and f30003 = {0} and F30050 = {1} ", dtCC.Rows[i]["F10003"].ToString(), dtCC.Rows[i]["F06204"].ToString()), null);
+
+                        metaF300 ent = new metaF300();
+                        ent.F30001 = 300;
+                        ent.F30002 = 1;
+                        ent.F30003 = Convert.ToInt32(dtCC.Rows[i]["F10003"].ToString());
+
+                        ent.F30012 = 0;
+                        ent.F30013 = 0;
+                        ent.F30014 = 0;
+                        ent.F30015 = 0;
+                        ent.F30021 = 0;
+                        ent.F30022 = 0;
+                        ent.F30023 = 0;
+                        ent.F30039 = 0;
+                        ent.F30040 = 0;
+                        ent.F30041 = 0;
+                        ent.F30043 = 0;
+                        ent.F30044 = 0;
+                        ent.F30045 = 0;
+                        ent.F30046 = 0;
+                        ent.F30053 = 0;
+                        ent.F300612 = 0;
+                        ent.F300613 = 0;
+                        ent.F300614 = 0;
+                        ent.F30054 = 0;
+
+                        DataTable entF100 = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + dtCC.Rows[i]["F10003"].ToString(), null);
+                        if (entF100 != null && entF100.Rows.Count > 0)
+                        {
+                            ent.F30002 = Convert.ToInt32(entF100.Rows[0]["F10002"].ToString());
+                            ent.F30004 = Convert.ToInt32(entF100.Rows[0]["F10004"].ToString());
+                            ent.F30005 = Convert.ToInt32(entF100.Rows[0]["F10005"].ToString());
+                            ent.F30006 = Convert.ToInt32(entF100.Rows[0]["F10006"].ToString());
+                            ent.F30007 = Convert.ToInt32(entF100.Rows[0]["F10007"].ToString());
+                        }
+
+                        ent.F30050 = Convert.ToInt32(dtCC.Rows[i]["F06204"].ToString());
+
+                        ent.F30011 = 1;
+                        ent.F30042 = "WizOnePontaj_CC";
+                        ent.F30051 = 0;
+                        ent.F30035 = dtLucru;
+                        ent.F30036 = dtLucru;
+                        ent.F30037 = dtLucru;
+                        ent.F30038 = dtLucru;
+
+                        for (int j = 0; j < dtFor.Rows.Count; j++)
+                        {
+                            ent.F30013 = 0;
+                            ent.F30014 = 0;
+                            ent.F30015 = 0;
+                            ent.F30036 = dtLucru;
+                            ent.F30037 = dtLucru;
+                            ent.F30038 = dtLucru;
+
+                            try
+                            {                               
+                                decimal val = 0;
+                                try
+                                {
+                                    val = Convert.ToDecimal(dtCC.Rows[i][dtFor.Rows[j]["Camp"].ToString()]);
+                                }
+                                catch (Exception) { }
+
+                                if (val != 0)
+                                {
+                                    ent.F30013 = 0;
+                                    ent.F30014 = 0;
+                                    ent.F30015 = 0;
+
+                                    ent.F30010 = (short?)Convert.ToInt32(dtFor.Rows[j]["CodF300"].ToString());
+                                    switch (Convert.ToInt32((dtFor.Rows[j]["SursaF300"] ?? 1).ToString()))
+                                    {
+                                        case 1:
+                                            ent.F30013 = val;
+                                            break;
+                                        case 2:
+                                            ent.F30014 = val * 100;
+                                            ent.F30013 = 1;
+                                            break;
+                                        case 3:
+                                            ent.F30015 = val;
+                                            break;
+                                    }
+
+                                    string strTmp = "";
+                                    if (Constante.tipBD == 1)
+                                        strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString(), ent.F30042,
+                                                ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
+                                                General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
+                                    else
+                                        strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString(), ent.F30042, Dami.NextId("F300"),
+                                                ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
+                                                General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
+
+
+                                    General.IncarcaDT(strTmp, null);
+                                }
+                                
+                            }
+                            catch (Exception ex) { }
+                        }
+                    }
+                }
+            }
+            //end Radu 16.07.2020
+
             DataTable entS = Session["InformatiaCurenta"] as DataTable;
 
             try
@@ -1083,7 +1210,7 @@ namespace WizOne.Pontaj
 
                         for (int i = 0; i < entS.Rows.Count; i++)
                         {
-                            General.IncarcaDT(string.Format("delete from f300 where f30042 in ('WizOnePontaj', 'WizOnePontaj_CC') and f30003 = {0} ", entS.Rows[i]["F10003"].ToString()), null);
+                            General.IncarcaDT(string.Format("delete from f300 where f30042 in ('WizOnePontaj') and f30003 = {0} ", entS.Rows[i]["F10003"].ToString()), null);
 
                             metaF300 ent = new metaF300();
                             ent.F30001 = 300;

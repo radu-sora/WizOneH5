@@ -15028,3 +15028,7 @@ ALTER TABLE "tblRapoarteDetalii" MODIFY ("IdRaport" NOT NULL ENABLE);
 
 insert into "tblRapoarteDetalii"
 select distinct "IdRaport", null, "AreParola", -9, sysdate from "RapoarteGrupuriUtilizatori";
+
+ALTER TABLE "Ptj_tblAdminCC" ADD "CodF300" NUMBER(9);
+
+ALTER TABLE "Ptj_tblAdminCC" ADD "SursaF300" NUMBER(9);

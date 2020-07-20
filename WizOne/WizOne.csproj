@@ -247,6 +247,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Artifacts\ProceseSec.dll</HintPath>
     </Reference>
+    <Reference Include="RapoarteRevisalDLL">
+      <HintPath>..\Artifacts\RapoarteRevisalDLL.dll</HintPath>
+    </Reference>
     <Reference Include="Renci.SshNet">
       <HintPath>..\Artifacts\Renci.SshNet.dll</HintPath>
     </Reference>

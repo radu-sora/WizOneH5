@@ -442,7 +442,7 @@ namespace WizOne.Pagini
                         //{
                         //    k++;
                         //    continue;
-                        //}
+                        //}    
 
                         if (lstIndex.ContainsKey(k))
                             dt.Rows[j - 1][lstIndex[k]] = ws2.Cells[j, k].Value;
@@ -839,13 +839,13 @@ namespace WizOne.Pagini
                       + " (SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = ColoanaBD " 
                       + " UNION SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = 'F1001' and COLUMN_NAME = ColoanaBD) as Tip, Tabela "
                       + "  from TemplateCampuri a " 
-                      + "  left join Template b on a.id = b.Id where b.NumeTabela = '" + numeTabela + "' ";
+                      + "  left join Template b on a.id = b.Id where b.Id = '" + Convert.ToInt32(cmbSablon.Value).ToString()  + "' ";
                 if (Constante.tipBD == 2)
                     sql = " select \"ColoanaFisier\", \"ColoanaBD\" as \"NumeColoana\", \"Obligatoriu\", \"OmiteLaActualizare\", \"ValoareImplicita\", null as \"PozitieFisier\", "
                       + " (SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = \"ColoanaBD\" " 
                       + "UNION SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = 'F1001' and COLUMN_NAME = \"ColoanaBD\") as \"Tip\", \"Tabela\" "
                       + "  from \"TemplateCampuri\" a "
-                      + "  left join \"Template\" b on a.\"Id\" = b.\"Id\" where b.\"NumeTabela\" = '" + numeTabela + "' ";
+                      + "  left join \"Template\" b on a.\"Id\" = b.\"Id\" where b.\"Id\" = '" + Convert.ToInt32(cmbSablon.Value).ToString() + "' ";
                                
                 DataTable dtCombinat = General.IncarcaDT(sql, null);
                 foreach (DataColumn col in dtCombinat.Columns)
@@ -983,7 +983,7 @@ namespace WizOne.Pagini
                         k = 0;
                         j++;
                         continue;
-                    }
+                    }           
 
                     string[] lstCampuri = (campOblig + campNonOblig).Substring(1).Split(',');
                     string camp = "", valoare = "";

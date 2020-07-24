@@ -2922,6 +2922,29 @@ namespace WizOne.Module
             }
         }
 
+        public static DataTable ListaRezultatExamen()
+        {
+            try
+            {
+                DataTable table = new DataTable();
+
+                table.Columns.Add("Id", typeof(int));
+                table.Columns.Add("Denumire", typeof(string));
+
+                table.Rows.Add(1, "Apt");
+                table.Rows.Add(2, "Apt conditionat");
+                table.Rows.Add(3, "Inapt");
+                table.Rows.Add(4, "Inapt temporar");
+
+                return table;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+                return null;
+            }
+        }
+
         public static DataTable GetDurataContract()
         {
             string sql = @"SELECT * FROM F089 ORDER BY F08903";
@@ -5248,6 +5271,14 @@ namespace WizOne.Module
             string sql = @"SELECT * FROM LOCATII ORDER BY LOCATIE";
             if (Constante.tipBD == 2)
                 sql = General.SelectOracle("LOCATII", "NUMAR") + " ORDER BY LOCATIE";
+            return General.IncarcaDT(sql, null);
+        }
+
+        public static DataTable GetNivelHay()
+        {
+            string sql = @"SELECT * FROM ""Org_tblNivelHay"" ORDER BY ""SalariuMin""";
+            if (Constante.tipBD == 2)
+                sql = General.SelectOracle("Org_tblNivelHay", "Id") + " ORDER BY \"SalariuMin\"";
             return General.IncarcaDT(sql, null);
         }
 

@@ -1,6 +1,15 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Cursuri.ascx.cs" Inherits="WizOne.Personal.Cursuri" %>
 
+<script language="javascript" type="text/javascript">
 
+    function OnFileUploadComplete(s, e) {
+        if (e.callbackData !== "") {
+            lblFileName.SetText(e.callbackData);
+        }
+    }
+
+
+</script>
 
 
 <body>
@@ -12,7 +21,7 @@
                     OnRowInserting="grDateCursuri_RowInserting" OnRowUpdating="grDateCursuri_RowUpdating" OnRowDeleting="grDateCursuri_RowDeleting" OnCommandButtonInitialize="grDateCursuri_CommandButtonInitialize">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />   
-                    <ClientSideEvents ContextMenu="ctx" /> 
+                    <ClientSideEvents ContextMenu="ctx"/> 
                     <SettingsEditing Mode="Inline" />   
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <SettingsPopup>
@@ -22,6 +31,15 @@
                         <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true"  ButtonType="Image" Caption=" "  Name="butoaneGrid"/>
                         <dx:GridViewDataTextColumn FieldName="Marca" Name="Marca" Caption="Angajat"  Width="75px" Visible="false" ReadOnly="True"/>
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" />
+                        <dx:GridViewDataTextColumn Visible="false" VisibleIndex="2">
+                            <EditFormSettings Visible="True" />
+                            <EditItemTemplate>
+                                <dx:ASPxUploadControl ID="UploadControlCursuri" runat="server" AutoStartUpload="true" UploadMode="Auto" OnFileUploadComplete="UploadControlCursuri_FileUploadComplete">
+                                    <ClientSideEvents FileUploadComplete="OnFileUploadComplete" />
+                                </dx:ASPxUploadControl>
+                                <dx:ASPxLabel ID="lblFileName" runat="server" ClientInstanceName="lblFileName"></dx:ASPxLabel>           
+                            </EditItemTemplate>
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdTipCurs" Name="IdTipCurs" Caption="Tip curs" Width="100px"  >
                             <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="TipCurs" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
@@ -105,6 +123,7 @@
                             </Styles>
                         </NewButton>
                     </SettingsCommandButton>
+                     <SettingsEditing EditFormColumnCount="1"></SettingsEditing>
                 </dx:ASPxGridView>
                     
             </td>

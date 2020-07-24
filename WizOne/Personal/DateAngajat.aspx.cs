@@ -1332,8 +1332,9 @@ namespace WizOne.Personal
                 lstCtr.Add("deDataModifSal", "F100991");
                 lstCtr.Add("cmbCategAng1", "F10061");
                 lstCtr.Add("cmbCategAng2", "F10062");
-                lstCtr.Add("txtLocAnt", "F10078");
+                lstCtr.Add("txtLocAnt", "F10078");                
                 lstCtr.Add("cmbLocatieInt", "F100966");
+                lstCtr.Add("cmbGrilaSal", "F1001136");
                 lstCtr.Add("cmbTipAng", "F10010");
                 lstCtr.Add("cmbTimpPartial", "F10043");
                 lstCtr.Add("cmbNorma", "F100973");

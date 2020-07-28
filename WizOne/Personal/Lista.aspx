@@ -6,7 +6,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
     <script language="javascript" type="text/javascript">
-
         function grDate_CustomButtonClick(s, e) {
             switch(e.buttonID)
             {
@@ -184,6 +183,7 @@
 
             <td align="left">
                 <dx:ASPxButton ID="btnFiltru" runat="server"  RenderMode="Link" OnClick="btnFiltru_Click" >
+                    <ClientSideEvents Click="function(s, e){ ASPxClientUtils.DeleteCookie('grDatePersonalCookies');   e.processOnServer=true;}" />
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                 </dx:ASPxButton>
             </td>

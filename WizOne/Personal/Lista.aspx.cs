@@ -47,6 +47,7 @@ namespace WizOne.Personal
 
                 grDate.SettingsCookies.Enabled = true;
                 grDate.SettingsCookies.StoreFiltering = true;
+                grDate.SettingsCookies.CookiesID = "grDatePersonalCookies";
 
                 string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'AngajatImplicitCandidat'";
                 DataTable dt = General.IncarcaDT(sql, null);

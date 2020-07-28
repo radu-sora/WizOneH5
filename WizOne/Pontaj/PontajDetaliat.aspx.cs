@@ -67,6 +67,7 @@ namespace WizOne.Pontaj
                         btnRespins.Visible = false;
                         btnInit.Visible = false;
                         btnDelete.Visible = false;
+                        btnIstoricAprobare.Visible = false;
                     }
 
                     CreeazaGrid();
@@ -1618,7 +1619,11 @@ namespace WizOne.Pontaj
                                 inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
                             try
                             {
-                                if (i > 1 && row["Out" + (i - 1)] != DBNull.Value && Convert.ToDateTime(row["Out" + (i - 1)]) > inOut)
+                                //Radu 28.07.2020 - deoarece cheile din obiectul dic sunt ordonate alfabetic, algortimul nu parcurge intrarile si iesirile in ordinea In1, Out1, In2, Out2, ..., In20, Out20
+                                //                  ci in ordinea In1, In2,..., In20, Out1, Out2, ..., Out20; din aceasta cauza, in row["Out" + (i - 1)] se afla valorea veche, nu cea noua
+                                //                  Am inlocuit-o cu upd.NewValues["Out" + (i - 1)]                       
+                                //if (i > 1 && row["Out" + (i - 1)] != DBNull.Value && Convert.ToDateTime(row["Out" + (i - 1)]) > inOut)
+                                if (i > 1 && upd.NewValues["Out" + (i - 1)] != DBNull.Value && Convert.ToDateTime(upd.NewValues["Out" + (i - 1)]) > inOut)
                                     row[numeCol] = inOut.AddDays(1);
                                 else
                                     row[numeCol] = inOut;
@@ -3346,6 +3351,57 @@ namespace WizOne.Pontaj
             }
 
             return strSql;
+        }
+
+        protected void grDateIstoric_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
+        {
+            try
+            {
+
+                string str = e.Parameters;
+                if (str != "")
+                {
+                    string[] arr = e.Parameters.Split(';');
+
+                    switch (arr[0].ToString())
+                    {
+                        case "btnIstoricAprobare":
+                            IncarcaGridIstoric();
+                            break;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        //Radu 27.07.2020
+        private void IncarcaGridIstoric()
+        {
+            string strSql = @"SELECT A.""IdAuto"", A.F10003, A.""An"", A.""Luna"", A.""IdSuper"", A.""IdStare"", D.""Culoare"", A.""DataAprobare"", D.""Denumire"" AS ""NumeStare"",
+                            CASE WHEN COALESCE(B.""NumeComplet"",' ') <> ' ' THEN B.""NumeComplet"" ELSE (CASE WHEN COALESCE(C.F10008,' ') = ' ' THEN B.F70104 ELSE C.F10008 {3} ' ' {3} C.F10009 END) END as ""Nume""
+                            FROM ""Ptj_CumulatIstoric"" A
+                            LEFT JOIN USERS B ON A.""IdUser"" = B.F70102
+                            LEFT JOIN F100 C ON B.F10003 = C.F10003
+                            LEFT JOIN ""Ptj_tblStariPontaj"" D ON A.""IdStare""=D.""Id""
+                            WHERE A.""IdStare"" <>1 AND A.F10003 = {0} AND ""An""={1} AND A.""Luna""={2}
+                            ORDER BY A.""DataAprobare""";
+
+            string op = "+";
+            if (Constante.tipBD == 2) op = "||";
+   
+
+            DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
+
+            strSql = string.Format(strSql, Convert.ToInt32(cmbAng.Value ?? -99), ziua.Year, ziua.Month, op);
+
+            grDateIstoric.DataSource = General.IncarcaDT(strSql, null);
+            grDateIstoric.DataBind();
+
         }
 
     }

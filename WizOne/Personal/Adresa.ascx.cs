@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using DevExpress.Web;
+using DevExpress.CodeParser;
 
 namespace WizOne.Personal
 {
@@ -21,8 +22,7 @@ namespace WizOne.Personal
 
                 if (!IsPostBack)
                 {
-                    Session["MP_CautaAdresa"] = null;
-                    Session["MP_TipArtera"] = General.IncarcaDT("SELECT * FROM \"tblTipStrada\"", null);               
+                    Session["MP_CautaAdresa"] = null;        
                 }
 
                 btnCauta.Visibility = GridViewCustomButtonVisibility.EditableRow;
@@ -106,6 +106,7 @@ namespace WizOne.Personal
 
                 if (!IsPostBack)
                 {
+                    Session["MP_TipArtera"] = General.IncarcaDT("SELECT * FROM \"tblTipStrada\"", null);
                     lblAdresa.Text = DamiAdresa(dt);
                     DataTable dtLoc = General.IncarcaDT("SELECT * FROM LOCALITATI", null);
                     Session["MP_AdresaLocalitati"] = dtLoc;
@@ -669,14 +670,21 @@ namespace WizOne.Personal
                         bool gasit = false;
                         for (int i = 0; i < dtArtera.Rows.Count; i++)
                         {
-                            if (strada.ToUpper().Contains(dtArtera.Rows[i]["Denumire"].ToString().ToUpper()))
+                            if (General.Nz(dtArtera.Rows[i]["Denumire"], "").ToString() != "" && strada.ToUpper().Contains(dtArtera.Rows[i]["Denumire"].ToString().ToUpper()))
                             {
                                 gasit = true;
                                 break;
                             }
                         }
                         if (!gasit)
-                            strada = "str. " + strada;
+                        {
+                            string tipArtera = General.Nz(arr[0]["IdTipStrada"], "").ToString();
+                            DataRow[] drArtera = dtArtera.Select("Id="+tipArtera);
+                            if (drArtera != null && General.Nz(drArtera[0]["Denumire"], "").ToString() != "")
+                                strada = General.Nz(drArtera[0]["Denumire"], "").ToString() + " " + strada;
+                            else
+                                strada = "str. " + strada;
+                        }
                     }
                     string numar = (General.Nz(arr[0]["Numar"], "").ToString() != "") ? " nr. " + General.Nz(arr[0]["Numar"], "").ToString() + "," : "";
                     string bloc = (General.Nz(arr[0]["Bloc"], "").ToString() != "" ) ? " bloc " + General.Nz(arr[0]["Bloc"], "").ToString() + "," : "";

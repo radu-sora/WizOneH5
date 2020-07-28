@@ -3817,6 +3817,60 @@ namespace WizOne.Pontaj
             return mesaj;
         }
 
+        protected void grDateIstoric_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
+        {
+            try
+            {
+
+                string str = e.Parameters;
+                if (str != "")
+                {
+                    string[] arr = e.Parameters.Split(';');   
+
+                    switch (arr[0].ToString())
+                    {
+                        case "btnIstoricAprobare":
+                            IncarcaGridIstoric();
+                            break;
+                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        //Radu 27.07.2020
+        private void IncarcaGridIstoric()
+        {
+            string strSql = @"SELECT A.""IdAuto"", A.F10003, A.""An"", A.""Luna"", A.""IdSuper"", A.""IdStare"", D.""Culoare"", A.""DataAprobare"", D.""Denumire"" AS ""NumeStare"",
+                            CASE WHEN COALESCE(B.""NumeComplet"",' ') <> ' ' THEN B.""NumeComplet"" ELSE (CASE WHEN COALESCE(C.F10008,' ') = ' ' THEN B.F70104 ELSE C.F10008 {3} ' ' {3} C.F10009 END) END as ""Nume""
+                            FROM ""Ptj_CumulatIstoric"" A
+                            LEFT JOIN USERS B ON A.""IdUser"" = B.F70102
+                            LEFT JOIN F100 C ON B.F10003 = C.F10003
+                            LEFT JOIN ""Ptj_tblStariPontaj"" D ON A.""IdStare""=D.""Id""
+                            WHERE A.""IdStare"" <>1 AND A.F10003 = {0} AND ""An""={1} AND A.""Luna""={2}
+                            ORDER BY A.""DataAprobare""";
+
+            string op = "+";
+            if (Constante.tipBD == 2) op = "||";
+
+            List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "AngajatNume" });
+            if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+            object[] arr = lst[0] as object[];
+
+            DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
+
+            strSql = string.Format(strSql, arr[0].ToString(), ziua.Year, ziua.Month, op);
+
+            grDateIstoric.DataSource = General.IncarcaDT(strSql, null);
+            grDateIstoric.DataBind();
+
+        }
+
         //  <dx:GridViewDataComboBoxColumn FieldName="StareDenumire" Name="StareDenumire" Caption="Stare" ReadOnly="true" Width="100px" FixedStyle="Left" VisibleIndex="1" CellStyle-HorizontalAlign="Center" />
         //   <dx:GridViewDataTextColumn FieldName="IdStare" Name="IdStare" Caption="Id Stare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
     }

@@ -17,6 +17,7 @@ namespace WizOne.Reports
 
             CultureInfo newCulture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
             newCulture.DateTimeFormat.DateSeparator = "/";
+            newCulture.NumberFormat.NumberDecimalSeparator = ".";
             System.Threading.Thread.CurrentThread.CurrentCulture = newCulture;
             System.Threading.Thread.CurrentThread.CurrentUICulture = newCulture;
 

@@ -1412,7 +1412,7 @@ namespace WizOne.Pagini
                                 if (dtAbs != null && dtAbs.Rows.Count > 0)
                                 {
                                     estePlanif = Convert.ToInt32(General.Nz(dtAbs.Rows[0]["EstePlanificare"], 0));
-                                    idCircuit = Convert.ToInt32(dtAbs.Rows[0]["IdCircuit"].ToString());
+                                    idCircuitAbs = Convert.ToInt32(dtAbs.Rows[0]["IdCircuit"].ToString());
                                 }
 
                                 if (idCir < 0 && idCircuitAbs < 0)

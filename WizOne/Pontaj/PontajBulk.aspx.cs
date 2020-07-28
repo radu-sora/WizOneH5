@@ -342,7 +342,15 @@ namespace WizOne.Pontaj
             try
             {
                 string filtru = " AND F10003 = " + Session["User_Marca"];
-                if (General.Nz(Session["EsteAdmin"],"").ToString() == "1")
+
+                //Radu 27.07.2020 - se doreste ca utilizatorii cu rol HR sa poata introduce inregistrari pentru toti angajatii
+                bool esteHR = false;
+                string idHR = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
+                string sqlHr = $@"SELECT ""IdUser"" FROM ""F100Supervizori"" WHERE ""IdUser""={Session["UserId"]} AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"" ";
+                DataTable dtHr = General.IncarcaDT(sqlHr, null);
+                if (dtHr != null && dtHr.Rows.Count > 0) esteHR = true;
+
+                if (General.Nz(Session["EsteAdmin"],"").ToString() == "1" || esteHR)
                     filtru = "";
                 DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_CC"" WHERE {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Value))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Value))} {filtru}", null);
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };

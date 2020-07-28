@@ -13,6 +13,10 @@
                 <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static" runat="server" Text="Inapoi" AutoPostBack="true" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" Visible="false" UseSubmitBehavior="false">
                     <Image Url="~/Fisiere/Imagini/Icoane/sgSt.png"></Image>
                 </dx:ASPxButton>
+                <dx:ASPxButton ID="btnIstoricAprobare" ClientInstanceName="btnIstoricAprobare" ClientIDMode="Static" runat="server" Text="Istoric aprobare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/view.png"></Image>
+                    <ClientSideEvents Click="function(s, e) { OnIstoricAprobare(s, e); }" />
+                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnPrint" ClientInstanceName="btnPrint" ClientIDMode="Static" runat="server" Text="Imprima" AutoPostBack="true" OnClick="btnPrint_Click" oncontextMenu="ctx(this,event)" UseSubmitBehavior="false">
                     <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
                 </dx:ASPxButton>
@@ -511,6 +515,43 @@
                             </td>
                         </tr>
                     </table>
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
+
+    <dx:ASPxPopupControl ID="popUpIstoricAprobare" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
+        EnableViewState="False" PopupElementID="popUpInitArea" PopupHorizontalAlign="WindowCenter"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="800px" Height="500px" HeaderText="Istoric aprobare"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpIstoricAprobare" EnableHierarchyRecreation="false">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel6" runat="server">
+                        <table width="100%" >    
+                            <tr>
+                                <td align="left">
+                                    <dx:ASPxGridView ID="grDateIstoric" runat="server" ClientInstanceName="grDateIstoric" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDateIstoric_CustomCallback">
+                                        <SettingsBehavior AllowFocusedRow="true" />
+                                        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />                                   
+                                        <SettingsEditing Mode="Inline" />      
+                                        <ClientSideEvents ContextMenu="ctx" />                                
+                                        <Columns>
+                                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="false" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
+                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" />                                
+                                            <dx:GridViewDataTextColumn FieldName="IdSuper" Name="IdSuper" Caption="IdSuper"  Width="75px" Visible="false" />  
+                                            <dx:GridViewDataTextColumn FieldName="Culoare" Name="Culoare" Caption="Culoare"  Width="75px" Visible="false" />       
+                                            <dx:GridViewDataTextColumn FieldName="Nume" Name="Nume" Caption="Nume"  Width="200px" />
+                                            <dx:GridViewDataTextColumn FieldName="NumeStare" Name="NumeStare" Caption="Stare"  Width="100px"  />
+                                            <dx:GridViewDataDateColumn FieldName="DataAprobare" Name="DataAprobare" Caption="Data aprobare" Width="100px" >         
+                                                    <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                                            </dx:GridViewDataDateColumn>
+                                            <dx:GridViewDataTextColumn FieldName="IdStare" Name="IdStare" Caption="IdStare"  Width="75px" Visible="false" />
+                                        </Columns> 
+                                    </dx:ASPxGridView>
+                                </td>
+                            </tr>  
+                        </table>
                 </asp:Panel>
             </dx:PopupControlContentControl>
         </ContentCollection>
@@ -1114,6 +1155,11 @@
             txtMarcaInc.SetValue(marca);
             txtMarcaSf.SetValue(marca);
             popUpRecalc.Show();
+        }
+
+        function OnIstoricAprobare(s, e) {
+            popUpIstoricAprobare.Show();
+            grDateIstoric.PerformCallback("btnIstoricAprobare;");
         }
     </script>
 

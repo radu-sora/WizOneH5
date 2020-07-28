@@ -14,6 +14,14 @@ namespace WizOne.Personal
 {
     public partial class Cursuri : System.Web.UI.UserControl
     {
+        public class metaUploadFile
+        {
+            public object UploadedFile { get; set; }
+            public object UploadedFileName { get; set; }
+            public object UploadedFileExtension { get; set; }
+
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             grDateCursuri.DataBind();
@@ -33,6 +41,9 @@ namespace WizOne.Personal
             grDateCursuri.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
 
             if (General.VarSession("EsteAdmin").ToString() == "0") General.SecuritatePersonal(grDateCursuri);
+
+            if (!IsPostBack)
+                Session["DocUpload_MP_Cursuri"] = null;
 
         }
 
@@ -136,6 +147,7 @@ namespace WizOne.Personal
 
                 object[] row = new object[ds.Tables["Admin_Cursuri"].Columns.Count];
                 int x = 0;
+                int idAuto = 0;
                 foreach (DataColumn col in ds.Tables["Admin_Cursuri"].Columns)
                 {
                     if (!col.AutoIncrement)
@@ -150,6 +162,7 @@ namespace WizOne.Personal
                                     row[x] = Convert.ToInt32(General.Nz(ds.Tables["Admin_Cursuri"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                                 else
                                     row[x]= Dami.NextId("Admin_Cursuri");
+                                idAuto = Convert.ToInt32(row[x].ToString());
                                 break;
                             case "USER_NO":
                                 row[x] = Session["UserId"];
@@ -166,6 +179,16 @@ namespace WizOne.Personal
                     x++;
                 }
 
+                metaUploadFile itm = Session["DocUpload_MP_Cursuri"] as metaUploadFile;
+                if (itm != null)
+                {          
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles == null)
+                        lstFiles = new Dictionary<int, metaUploadFile>();
+                    lstFiles.Add(idAuto, itm);
+                    Session["List_DocUpload_MP_Cursuri"] = lstFiles;
+                }
+                Session["DocUpload_MP_Cursuri"] = null;
 
                 ds.Tables["Admin_Cursuri"].Rows.Add(row);
                 e.Cancel = true;
@@ -206,6 +229,22 @@ namespace WizOne.Personal
                     }
 
                 }
+
+                int idAuto = Convert.ToInt32(keys[0].ToString());
+
+                metaUploadFile itm = Session["DocUpload_MP_Cursuri"] as metaUploadFile;
+                if (itm != null)
+                {
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles == null)
+                        lstFiles = new Dictionary<int, metaUploadFile>();
+                    if (lstFiles.ContainsKey(idAuto))
+                        lstFiles[idAuto] = itm;
+                    else
+                        lstFiles.Add(idAuto, itm);
+                    Session["List_DocUpload_MP_Cursuri"] = lstFiles;
+                }
+                Session["DocUpload_MP_Cursuri"] = null;
 
                 e.Cancel = true;
                 grDateCursuri.CancelEdit();
@@ -251,6 +290,13 @@ namespace WizOne.Personal
 
                 DataRow row = ds.Tables["Admin_Cursuri"].Rows.Find(keys);
 
+                Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, metaUploadFile>;
+                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(keys[0].ToString())))
+                    lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
+                Session["List_DocUpload_MP_Cursuri"] = lstFiles;
+
+                Session["DocUpload_MP_Cursuri"] = null;
+
                 row.Delete();
 
                 e.Cancel = true;
@@ -264,6 +310,29 @@ namespace WizOne.Personal
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void UploadControlCursuri_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        {
+            try
+            {
+                if (!e.IsValid) return;
+                ASPxUploadControl btnDocUpload = (ASPxUploadControl)sender;
+
+                metaUploadFile itm = new metaUploadFile();
+                itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
+                itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
+                itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
+
+                Session["DocUpload_MP_Cursuri"] = itm;
+
+                btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

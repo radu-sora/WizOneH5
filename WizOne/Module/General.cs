@@ -2421,7 +2421,13 @@ namespace WizOne.Module
                 for (int j = 0; j < dt.Rows.Count; j++)
                 {
                     DataRow dr = dt.Rows[j];
-                    if (Convert.ToInt32(General.Nz(dr["Rol"], -99)) == 77) HR = true;
+
+                    //Radu 29.07.2020                    
+                    string idHR = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
+                    string sqlHr = $@"SELECT ""IdUser"" FROM ""F100Supervizori"" WHERE ""IdUser""={idUser} AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"" ";
+                    DataTable dtHr = General.IncarcaDT(sqlHr, null);
+                    if (dtHr != null && dtHr.Rows.Count > 0) HR = true;
+                    //if (Convert.ToInt32(General.Nz(dr["Rol"], -99)) == 77) HR = true;
 
                     #region Validare stare cerere
                     //Buacata de cod identica cu cea din Cereri -> btnAprobare si btnRespinge

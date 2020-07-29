@@ -1917,12 +1917,14 @@ namespace WizOne.Avs
 
                         if (e.Parameter.Split(';')[1] == "cmb2Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Norma)
                         {
-                            SetTarif(e.Parameter.Split(';')[2]);
+                            if (Convert.ToDateTime(txtDataMod.Value).Month == General.DamiDataLucru().Month && Convert.ToDateTime(txtDataMod.Value).Year == General.DamiDataLucru().Year)
+                                SetTarif(e.Parameter.Split(';')[2]);
                         }
 
                         if (e.Parameter.Split(';')[1] == "cmb1Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Norma && e.Parameter.Split(';')[2] == "2")
                         {
-                            SetTarif(e.Parameter.Split(';')[2]);
+                            if (Convert.ToDateTime(txtDataMod.Value).Month == General.DamiDataLucru().Month && Convert.ToDateTime(txtDataMod.Value).Year == General.DamiDataLucru().Year)
+                                SetTarif(e.Parameter.Split(';')[2]);
                         }
                         break;
                     case "3":
@@ -3007,12 +3009,14 @@ namespace WizOne.Avs
                     break;
                 case (int)Constante.Atribute.Organigrama:
                     //Florin 2018.11.23
-                    camp1 = "\"SubcompanieId\", \"SubcompanieNume\", \"FilialaId\", \"FilialaNume\", \"SectieId\", \"SectieNume\", \"DeptId\", \"DeptNume\"";
+                    camp1 = "\"SubcompanieId\", \"SubcompanieNume\", \"FilialaId\", \"FilialaNume\", \"SectieId\", \"SectieNume\", \"DeptId\", \"DeptNume\", \"SubdeptId\", \"SubdeptNume\", \"BirouId\", \"BirouNume\"";
                     ListEditItem itm = cmbStructOrgNou.SelectedItem;
                     camp2 = itm.GetFieldValue("F00304") + ",'" + itm.GetFieldValue("F00305") + "'," +
                             itm.GetFieldValue("F00405") + ",'" + itm.GetFieldValue("F00406") + "'," +
                             itm.GetFieldValue("F00506") + ",'" + itm.GetFieldValue("F00507") + "'," +
-                            itm.GetFieldValue("F00607") + ",'" + itm.GetFieldValue("F00608") + "'"; 
+                            itm.GetFieldValue("F00607") + ",'" + itm.GetFieldValue("F00608") + "'," +
+                            (itm.GetFieldValue("F00708") == null || itm.GetFieldValue("F00708").ToString().Length <= 0 ? "NULL" : itm.GetFieldValue("F00708")) + ",'" + itm.GetFieldValue("F00709") + "'," +
+                            (itm.GetFieldValue("F00809") == null || itm.GetFieldValue("F00809").ToString().Length <= 0 ? "NULL" : itm.GetFieldValue("F00809")) + ",'" + itm.GetFieldValue("F00810") + "'"; 
                     //ListEditItem linie = cmbStructOrgNou.SelectedItem;
                     //int subc = linie.GetValue("F00304").ToString().Length > 0 ? Convert.ToInt32(linie.GetValue("F00304").ToString()) : -1;
                     //int fil = linie.GetValue("F00405").ToString().Length > 0 ? Convert.ToInt32(linie.GetValue("F00405").ToString()) : -1;
@@ -3028,7 +3032,7 @@ namespace WizOne.Avs
                 case (int)Constante.Atribute.Norma:
                     string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
                     camp1 = "\"TipAngajat\", \"TimpPartial\", \"Norma\", \"TipNorma\", \"DurataTimpMunca\", \"RepartizareTimpMunca\", \"IntervalRepartizare\", \"NrOreLuna\", \"Tarife\", \"ProgramLucru\"";
-                    camp2 = cmb1Nou.Value.ToString() + "," + cmb2Nou.Value.ToString() + "," + cmb3Nou.Value.ToString() + "," + cmb4Nou.Value.ToString() + "," + cmb5Nou.Value.ToString() + "," + cmb6Nou.Value.ToString() + "," + cmb7Nou.Value.ToString() + "," + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text) + "," + "'" + sir + "', " + cmb8Nou.Value.ToString();
+                    camp2 = cmb1Nou.Value.ToString() + "," + cmb2Nou.Value.ToString() + "," + cmb3Nou.Value.ToString() + "," + cmb4Nou.Value.ToString() + "," + cmb5Nou.Value.ToString() + "," + cmb6Nou.Value.ToString() + "," + (cmb7Nou.Value == null ? "NULL" : cmb7Nou.Value.ToString()) + "," + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text) + "," + "'" + sir + "', " + (cmb8Nou.Value == null ? "NULL" : cmb8Nou.Value.ToString());
                     break;
                 case (int)Constante.Atribute.ContrIn:
                     camp1 = "\"NrIntern\", \"DataIntern\"";
@@ -4060,11 +4064,13 @@ namespace WizOne.Avs
                                 act = 1;
                                 sql100 = "UPDATE F100 SET F10004 = " + dtCer.Rows[0]["SubcompanieId"].ToString() + ", F10005 = " + dtCer.Rows[0]["FilialaId"].ToString() + ", F10006 = "
                                     + dtCer.Rows[0]["SectieId"].ToString() + ", F10007 = " + dtCer.Rows[0]["DeptId"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                if (dtF1001 != null && dtF1001.Rows.Count > 0)
+                                    sql1001 = "UPDATE F1001 SET F100958 = " + dtCer.Rows[0]["SubdeptId"].ToString() + ", F100959 = " + dtCer.Rows[0]["BirouId"].ToString() + " WHERE F10003 = " + f10003.ToString();
                             }
-                            sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70414, F70415, F70416, F70417, F70420, USER_NO, TIME) "
+                            sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70414, F70415, F70416, F70417, F70418, F704180, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 5, 'Organigrama', " + data + ", " + dtCer.Rows[0]["DeptId"].ToString() + ", 'Modificari in avans', '"
                             + dateDoc + "', " + dtCer.Rows[0]["SubcompanieId"].ToString() + ", " + dtCer.Rows[0]["FilialaId"].ToString() + ", " + dtCer.Rows[0]["SectieId"].ToString()
-                            + ", " + dtCer.Rows[0]["DeptId"].ToString() + ", " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + ", " + dtCer.Rows[0]["DeptId"].ToString() + ", " + dtCer.Rows[0]["SubdeptId"].ToString() + ", " + dtCer.Rows[0]["BirouId"].ToString() + ",  " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.Componente:

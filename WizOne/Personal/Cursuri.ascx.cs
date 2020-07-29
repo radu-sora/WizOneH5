@@ -107,6 +107,11 @@ namespace WizOne.Personal
             colMonede.PropertiesComboBox.DataSource = dtMonede;
 
 
+            sql = @"SELECT * FROM ""tblOperatorMedMuncii"" ORDER BY ""Denumire""";
+            DataTable dtOperator = General.IncarcaDT(sql, null);
+            GridViewDataComboBoxColumn colOperator = (grDateCursuri.Columns["Operator"] as GridViewDataComboBoxColumn);
+            colOperator.PropertiesComboBox.DataSource = dtOperator;
+
         }
 
         protected void grDateCursuri_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
@@ -144,40 +149,54 @@ namespace WizOne.Personal
             try
             {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataTable dt = ds.Tables["Admin_Cursuri"];
+                DataRow dr = dt.NewRow();
 
-                object[] row = new object[ds.Tables["Admin_Cursuri"].Columns.Count];
-                int x = 0;
-                int idAuto = 0;
-                foreach (DataColumn col in ds.Tables["Admin_Cursuri"].Columns)
-                {
-                    if (!col.AutoIncrement)
-                    {
-                        switch (col.ColumnName.ToUpper())
-                        {
-                            case "MARCA":
-                                row[x] = Session["Marca"];
-                                break;
-                            case "IDAUTO":
-                                if (Constante.tipBD == 1)
-                                    row[x] = Convert.ToInt32(General.Nz(ds.Tables["Admin_Cursuri"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                                else
-                                    row[x]= Dami.NextId("Admin_Cursuri");
-                                idAuto = Convert.ToInt32(row[x].ToString());
-                                break;
-                            case "USER_NO":
-                                row[x] = Session["UserId"];
-                                break;
-                            case "TIME":
-                                row[x] = DateTime.Now;
-                                break;
-                            default:
-                                row[x] = e.NewValues[col.ColumnName];
-                                break;
-                        }
-                    }
+                ASPxDateEdit deDataInceput = grDateCursuri.FindEditFormTemplateControl("deDataInceput") as ASPxDateEdit;
+                ASPxDateEdit deDataSfarsit = grDateCursuri.FindEditFormTemplateControl("deDataSfarsit") as ASPxDateEdit;
+                ASPxDateEdit deDataCurs = grDateCursuri.FindEditFormTemplateControl("deDataCurs") as ASPxDateEdit;
+                ASPxDateEdit deDataExpAut = grDateCursuri.FindEditFormTemplateControl("deDataExpAut") as ASPxDateEdit;
+                ASPxComboBox cmbTipCurs = grDateCursuri.FindEditFormTemplateControl("cmbTipCurs") as ASPxComboBox;
+                ASPxComboBox cmbDescriere = grDateCursuri.FindEditFormTemplateControl("cmbDescriere") as ASPxComboBox;
+                ASPxComboBox cmbOperator = grDateCursuri.FindEditFormTemplateControl("cmbOperator") as ASPxComboBox;
+                ASPxComboBox cmbMoneda = grDateCursuri.FindEditFormTemplateControl("cmbMoneda") as ASPxComboBox;
+                ASPxTextBox txtNumeComplet = grDateCursuri.FindEditFormTemplateControl("txtNumeComplet") as ASPxTextBox;
+                ASPxTextBox txtInfo = grDateCursuri.FindEditFormTemplateControl("txtInfo") as ASPxTextBox;
+                ASPxTextBox txtNrZile = grDateCursuri.FindEditFormTemplateControl("txtNrZile") as ASPxTextBox;
+                ASPxTextBox txtNrOre = grDateCursuri.FindEditFormTemplateControl("txtNrOre") as ASPxTextBox;
+                ASPxTextBox txtNumeFurnizor = grDateCursuri.FindEditFormTemplateControl("txtNumeFurnizor") as ASPxTextBox;
+                ASPxTextBox txtTema = grDateCursuri.FindEditFormTemplateControl("txtTema") as ASPxTextBox;
+                ASPxTextBox txtPerAmortiz = grDateCursuri.FindEditFormTemplateControl("txtPerAmortiz") as ASPxTextBox;
+                ASPxTextBox txtBuget = grDateCursuri.FindEditFormTemplateControl("txtBuget") as ASPxTextBox;
 
-                    x++;
-                }
+                if (Constante.tipBD == 1)
+                    dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                else
+                    dr["IdAuto"] = Dami.NextId("Admin_Cursuri");
+                if (Convert.ToInt32(dr["IdAuto"].ToString()) < 1000000)
+                    dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1000000;
+
+                dr["Marca"] = Session["Marca"];
+
+                dr["IdTipCurs"] = cmbTipCurs.Value ?? DBNull.Value;
+                dr["NumeComplet"] = txtNumeComplet.Value ?? DBNull.Value;
+                dr["Info"] = txtInfo.Value ?? DBNull.Value;
+                dr["DataInceput"] = deDataInceput.Value ?? DBNull.Value;
+                dr["DataSfarsit"] = deDataSfarsit.Value ?? DBNull.Value;
+                dr["NrZile"] = txtNrZile.Value ?? DBNull.Value;
+                dr["NrOre"] = txtNrOre.Value ?? DBNull.Value;
+                dr["IdDescriereCurs"] = cmbDescriere.Value ?? DBNull.Value;
+                dr["NumeFurnizor"] = txtNumeFurnizor.Value ?? DBNull.Value;
+                dr["TemaCurs"] = txtTema.Value ?? DBNull.Value;
+                dr["DataCurs"] = deDataCurs.Value ?? DBNull.Value;
+                dr["Buget"] = txtBuget.Value ?? DBNull.Value;
+                dr["IdMoneda"] = cmbMoneda.Value ?? DBNull.Value;
+                dr["Operator"] = cmbOperator.Value ?? DBNull.Value;
+                dr["PerioadaAmortizare"] = txtPerAmortiz.Value ?? DBNull.Value;
+                dr["AutorizareExpirare"] = deDataExpAut.Value ?? DBNull.Value;
+
+                dr["USER_NO"] = Session["UserId"];
+                dr["TIME"] = DateTime.Now;
 
                 metaUploadFile itm = Session["DocUpload_MP_Cursuri"] as metaUploadFile;
                 if (itm != null)
@@ -185,17 +204,16 @@ namespace WizOne.Personal
                     Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, metaUploadFile>;
                     if (lstFiles == null)
                         lstFiles = new Dictionary<int, metaUploadFile>();
-                    lstFiles.Add(idAuto, itm);
+                    lstFiles.Add(Convert.ToInt32(dr["IdAuto"].ToString()), itm);
                     Session["List_DocUpload_MP_Cursuri"] = lstFiles;
                 }
                 Session["DocUpload_MP_Cursuri"] = null;
 
-                ds.Tables["Admin_Cursuri"].Rows.Add(row);
+                ds.Tables["Admin_Cursuri"].Rows.Add(dr);
                 e.Cancel = true;
                 grDateCursuri.CancelEdit();
                 grDateCursuri.DataSource = ds.Tables["Admin_Cursuri"];
                 grDateCursuri.KeyFieldName = "IdAuto";
-                //grDateBeneficii.AddNewRow();
                 Session["InformatiaCurentaPersonal"] = ds;
 
 
@@ -212,25 +230,51 @@ namespace WizOne.Personal
             try
             {
 
-                object[] keys = new object[e.Keys.Count];
-                for (int i = 0; i < e.Keys.Count; i++)
-                { keys[i] = e.Keys[i]; }
+                var idAuto = e.Keys["IdAuto"];
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
-                DataRow row = ds.Tables["Admin_Cursuri"].Rows.Find(keys);
+                DataRow dr = ds.Tables["Admin_Beneficii"].Rows.Find(idAuto);
 
-                foreach (DataColumn col in ds.Tables["Admin_Cursuri"].Columns)
-                {
-                    if (!col.AutoIncrement && grDateCursuri.Columns[col.ColumnName] != null && grDateCursuri.Columns[col.ColumnName].Visible)
-                    {
-                        var edc = e.NewValues[col.ColumnName];
-                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
-                    }
+                ASPxDateEdit deDataInceput = grDateCursuri.FindEditFormTemplateControl("deDataInceput") as ASPxDateEdit;
+                ASPxDateEdit deDataSfarsit = grDateCursuri.FindEditFormTemplateControl("deDataSfarsit") as ASPxDateEdit;
+                ASPxDateEdit deDataCurs = grDateCursuri.FindEditFormTemplateControl("deDataCurs") as ASPxDateEdit;
+                ASPxDateEdit deDataExpAut = grDateCursuri.FindEditFormTemplateControl("deDataExpAut") as ASPxDateEdit;
+                ASPxComboBox cmbTipCurs = grDateCursuri.FindEditFormTemplateControl("cmbTipCurs") as ASPxComboBox;
+                ASPxComboBox cmbDescriere = grDateCursuri.FindEditFormTemplateControl("cmbDescriere") as ASPxComboBox;
+                ASPxComboBox cmbOperator = grDateCursuri.FindEditFormTemplateControl("cmbOperator") as ASPxComboBox;
+                ASPxComboBox cmbMoneda = grDateCursuri.FindEditFormTemplateControl("cmbMoneda") as ASPxComboBox;
+                ASPxTextBox txtNumeComplet = grDateCursuri.FindEditFormTemplateControl("txtNumeComplet") as ASPxTextBox;
+                ASPxTextBox txtInfo = grDateCursuri.FindEditFormTemplateControl("txtInfo") as ASPxTextBox;
+                ASPxTextBox txtNrZile = grDateCursuri.FindEditFormTemplateControl("txtNrZile") as ASPxTextBox;
+                ASPxTextBox txtNrOre = grDateCursuri.FindEditFormTemplateControl("txtNrOre") as ASPxTextBox;
+                ASPxTextBox txtNumeFurnizor = grDateCursuri.FindEditFormTemplateControl("txtNumeFurnizor") as ASPxTextBox;
+                ASPxTextBox txtTema = grDateCursuri.FindEditFormTemplateControl("txtTema") as ASPxTextBox;
+                ASPxTextBox txtPerAmortiz = grDateCursuri.FindEditFormTemplateControl("txtPerAmortiz") as ASPxTextBox;
+                ASPxTextBox txtBuget = grDateCursuri.FindEditFormTemplateControl("txtBuget") as ASPxTextBox;
 
-                }
+                dr["Marca"] = Session["Marca"];
 
-                int idAuto = Convert.ToInt32(keys[0].ToString());
+                dr["IdTipCurs"] = cmbTipCurs.Value ?? DBNull.Value;
+                dr["NumeComplet"] = txtNumeComplet.Value ?? DBNull.Value;
+                dr["Info"] = txtInfo.Value ?? DBNull.Value;
+                dr["DataInceput"] = deDataInceput.Value ?? DBNull.Value;
+                dr["DataSfarsit"] = deDataSfarsit.Value ?? DBNull.Value;
+                dr["NrZile"] = txtNrZile.Value ?? DBNull.Value;
+                dr["NrOre"] = txtNrOre.Value ?? DBNull.Value;
+                dr["IdDescriereCurs"] = cmbDescriere.Value ?? DBNull.Value;
+                dr["NumeFurnizor"] = txtNumeFurnizor.Value ?? DBNull.Value;
+                dr["TemaCurs"] = txtTema.Value ?? DBNull.Value;
+                dr["DataCurs"] = deDataCurs.Value ?? DBNull.Value;
+                dr["Buget"] = txtBuget.Value ?? DBNull.Value;
+                dr["IdMoneda"] = cmbMoneda.Value ?? DBNull.Value;
+                dr["Operator"] = cmbOperator.Value ?? DBNull.Value;
+                dr["PerioadaAmortizare"] = txtPerAmortiz.Value ?? DBNull.Value;
+                dr["AutorizareExpirare"] = deDataExpAut.Value ?? DBNull.Value;
+
+                dr["USER_NO"] = Session["UserId"];
+                dr["TIME"] = DateTime.Now;
+
 
                 metaUploadFile itm = Session["DocUpload_MP_Cursuri"] as metaUploadFile;
                 if (itm != null)
@@ -238,10 +282,10 @@ namespace WizOne.Personal
                     Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, metaUploadFile>;
                     if (lstFiles == null)
                         lstFiles = new Dictionary<int, metaUploadFile>();
-                    if (lstFiles.ContainsKey(idAuto))
-                        lstFiles[idAuto] = itm;
+                    if (lstFiles.ContainsKey(Convert.ToInt32(dr["IdAuto"].ToString())))
+                        lstFiles[Convert.ToInt32(dr["IdAuto"].ToString())] = itm;
                     else
-                        lstFiles.Add(idAuto, itm);
+                        lstFiles.Add(Convert.ToInt32(dr["IdAuto"].ToString()), itm);
                     Session["List_DocUpload_MP_Cursuri"] = lstFiles;
                 }
                 Session["DocUpload_MP_Cursuri"] = null;
@@ -313,7 +357,7 @@ namespace WizOne.Personal
             }
         }
 
-        protected void UploadControlCursuri_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        protected void btnDocUploadAtas_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
         {
             try
             {
@@ -333,6 +377,60 @@ namespace WizOne.Personal
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+
+        protected void grDateCursuri_HtmlEditFormCreated(object sender, ASPxGridViewEditFormEventArgs e)
+        {
+            try
+            {
+                ASPxComboBox cmbTipCurs = grDateCursuri.FindEditFormTemplateControl("cmbTipCurs") as ASPxComboBox;
+                if (cmbTipCurs != null)
+                {
+                    string sql = @"SELECT * FROM ""Admin_TipCurs"" ORDER BY ""TipCurs""";
+                    if (Constante.tipBD == 2)
+                        sql = General.SelectOracle("Admin_TipCurs", "IdAuto") + " ORDER BY \"TipCurs\"";
+                    DataTable dtTipAutorizatie = General.IncarcaDT(sql, null);
+                    cmbTipCurs.DataSource = dtTipAutorizatie;
+                    cmbTipCurs.DataBindItems();
+                }
+
+                ASPxComboBox cmbDescriere = grDateCursuri.FindEditFormTemplateControl("cmbDescriere") as ASPxComboBox;
+                if (cmbDescriere != null)
+                {
+                    string sql = @"SELECT * FROM ""Admin_DescrCurs"" ORDER BY  ""DescriereCurs""";
+                    if (Constante.tipBD == 2)
+                        sql = General.SelectOracle("Admin_DescrCurs", "IdAuto") + " ORDER BY \"DescriereCurs\"";
+                    DataTable dtDescriereAutorizatie = General.IncarcaDT(sql, null);
+                    cmbDescriere.DataSource = dtDescriereAutorizatie;
+                    cmbDescriere.DataBindItems();
+                }
+
+                ASPxComboBox cmbMoneda = grDateCursuri.FindEditFormTemplateControl("cmbMoneda") as ASPxComboBox;
+                if (cmbMoneda != null)
+                {
+                    string sql = @"SELECT * FROM ""tblMonede"" ORDER BY ""Abreviere""";
+                    if (Constante.tipBD == 2)
+                        sql = General.SelectOracle("tblMonede", "Id") + " ORDER BY \"Abreviere\"";
+                    DataTable dtMonede = General.IncarcaDT(sql, null);
+                    cmbMoneda.DataSource = dtMonede;
+                    cmbMoneda.DataBindItems();
+                }
+
+                ASPxComboBox cmbOperator = grDateCursuri.FindEditFormTemplateControl("cmbOperator") as ASPxComboBox;
+                if (cmbOperator != null)
+                {
+                    string sql = @"SELECT * FROM ""tblOperatorMedMuncii"" ORDER BY ""Denumire""";
+                    DataTable dtOperator = General.IncarcaDT(sql, null);
+                    cmbOperator.DataSource = dtOperator;
+                    cmbOperator.DataBindItems();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

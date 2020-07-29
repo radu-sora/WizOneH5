@@ -834,33 +834,6 @@ namespace WizOne.Avs
         protected global::DevExpress.Web.ASPxDateEdit de2Nou;
 
         /// <summary>
-        /// lbl13Nou control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell lbl13Nou;
-
-        /// <summary>
-        /// lblTxt13Nou control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblTxt13Nou;
-
-        /// <summary>
-        /// de3Nou control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxDateEdit de3Nou;
-
-        /// <summary>
         /// lbl12Nou control.
         /// </summary>
         /// <remarks>
@@ -886,6 +859,33 @@ namespace WizOne.Avs
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbStructOrgNou;
+
+        /// <summary>
+        /// lbl13Nou control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell lbl13Nou;
+
+        /// <summary>
+        /// lblTxt13Nou control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblTxt13Nou;
+
+        /// <summary>
+        /// de3Nou control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxDateEdit de3Nou;
 
         /// <summary>
         /// chk1 control.

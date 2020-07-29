@@ -76,7 +76,7 @@
                             <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataComboBoxColumn FieldName="Manager" Name="Manager" Caption="Manager direct"  Width="150px" >
+                        <dx:GridViewDataComboBoxColumn FieldName="Manager" Name="Manager" Caption="Manager med. muncii"  Width="150px" >
                             <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>

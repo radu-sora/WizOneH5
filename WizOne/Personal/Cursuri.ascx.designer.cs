@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Personal {
-    
-    
-    public partial class Cursuri {
-        
+namespace WizOne.Personal
+{
+
+
+    public partial class Cursuri
+    {
+
         /// <summary>
         /// grDateCursuri control.
         /// </summary>
@@ -20,5 +22,14 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDateCursuri;
+
+        /// <summary>
+        /// btnAtasament control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnAtasament;
     }
 }

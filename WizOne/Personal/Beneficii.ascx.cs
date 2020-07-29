@@ -165,7 +165,7 @@ namespace WizOne.Personal
                 }
 
                 ds.Tables["Admin_Beneficii"].Rows.Add(dr);
-                Session["DocUpload_MP_Medicina"] = null;
+                Session["DocUpload_MP_Beneficii"] = null;
 
                 e.Cancel = true;
                 grDateBeneficii.CancelEdit();
@@ -300,8 +300,8 @@ namespace WizOne.Personal
                 ASPxComboBox cmbCateg = grDateBeneficii.FindEditFormTemplateControl("cmbNumeBen") as ASPxComboBox;
                 if (cmbCateg != null)
                 {
-                    DataTable dtMedicina = General.GetObiecteDinArie("ArieTabBeneficiiDinPersonal");
-                    cmbCateg.DataSource = dtMedicina;
+                    DataTable dtBeneficii = General.GetObiecteDinArie("ArieTabBeneficiiDinPersonal");
+                    cmbCateg.DataSource = dtBeneficii;
                     cmbCateg.DataBindItems();
                 }
             }

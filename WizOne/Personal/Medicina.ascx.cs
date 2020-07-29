@@ -68,6 +68,9 @@ namespace WizOne.Personal
 
                 colChk = (grDateMedicina.Columns["Risc5"] as GridViewDataCheckColumn);
                 colChk.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
+
+                GridViewDataComboBoxColumn colCmb = (grDateMedicina.Columns["Manager"] as GridViewDataComboBoxColumn);
+                colCmb.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
             }
             catch (Exception ex)
             {
@@ -114,11 +117,11 @@ namespace WizOne.Personal
                 GridViewDataComboBoxColumn colMedicina = (grDateMedicina.Columns["IdObiect"] as GridViewDataComboBoxColumn);
                 colMedicina.PropertiesComboBox.DataSource = dtMedicina;
 
-                DataTable dtLocatie = General.IncarcaDT("", null);
+                DataTable dtLocatie = General.IncarcaDT("SELECT * FROM \"tblLocatieMedMuncii\" ORDER BY\"Denumire\"", null);
                 GridViewDataComboBoxColumn colLocatie = (grDateMedicina.Columns["IdLocatie"] as GridViewDataComboBoxColumn);
                 colLocatie.PropertiesComboBox.DataSource = dtLocatie;
 
-                DataTable dtManager = General.IncarcaDT("", null);
+                DataTable dtManager = General.IncarcaDT("SELECT * FROM \"tblManagerMedMuncii\" ORDER BY\"Denumire\"", null);
                 GridViewDataComboBoxColumn colManager = (grDateMedicina.Columns["Manager"] as GridViewDataComboBoxColumn);
                 colManager.PropertiesComboBox.DataSource = dtManager;
 
@@ -423,7 +426,7 @@ namespace WizOne.Personal
                 ASPxComboBox cmbLocatie = grDateMedicina.FindEditFormTemplateControl("cmbLocatie") as ASPxComboBox;
                 if (cmbLocatie != null)
                 {
-                    DataTable dtLocatie = General.IncarcaDT("", null);
+                    DataTable dtLocatie = General.IncarcaDT("SELECT * FROM \"tblLocatieMedMuncii\" ORDER BY\"Denumire\"", null);
                     cmbLocatie.DataSource = dtLocatie;
                     cmbLocatie.DataBindItems();
                 }
@@ -431,7 +434,7 @@ namespace WizOne.Personal
                 ASPxComboBox cmbManager = grDateMedicina.FindEditFormTemplateControl("cmbManager") as ASPxComboBox;
                 if (cmbManager != null)
                 {
-                    DataTable dtManager = General.IncarcaDT("", null);
+                    DataTable dtManager = General.IncarcaDT("SELECT * FROM \"tblManagerMedMuncii\" ORDER BY\"Denumire\"", null);
                     cmbManager.DataSource = dtManager;
                     cmbManager.DataBindItems();
                 }

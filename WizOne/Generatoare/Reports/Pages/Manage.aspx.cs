@@ -118,6 +118,7 @@ namespace Wizrom.Reports.Pages
                 //Radu 14.07.2020
                 ReportsGridView.SettingsCookies.Enabled = true;
                 ReportsGridView.SettingsCookies.StoreFiltering = true;
+                ReportsGridView.SettingsCookies.CookiesID = "ReportsGridViewCookies";
 
                 ReportsGridView.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaRap", "10"));
                 if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(ReportsGridView);

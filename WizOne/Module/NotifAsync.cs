@@ -576,7 +576,7 @@ namespace WizOne.Module
                             string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/1/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + idClient.PadLeft(8, '0') + "/" + numePagina;
 
                             string rsp = General.Encrypt_QueryString(arg);
-                            string hostUrl = baseUrl + VirtualPathUtility.ToAbsolute("~/");
+                            string hostUrl = baseUrl + VirtualPathUtility.ToAbsolute("~/");                           
                             string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
                             str = str.Replace(cuvOriginal + "$#", lnk).ToString();
                         }

@@ -678,7 +678,7 @@ namespace WizOne.Personal
                         }
                         if (!gasit)
                         {
-                            string tipArtera = General.Nz(arr[0]["IdTipStrada"], "").ToString();
+                            string tipArtera = General.Nz(arr[0]["IdTipStrada"], "0").ToString();
                             DataRow[] drArtera = dtArtera.Select("Id="+tipArtera);
                             if (drArtera != null && drArtera.Count() > 0 && General.Nz(drArtera[0]["Denumire"], "").ToString() != "")
                                 strada = General.Nz(drArtera[0]["Denumire"], "").ToString() + " " + strada;

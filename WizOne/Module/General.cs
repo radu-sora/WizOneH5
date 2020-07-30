@@ -5283,9 +5283,9 @@ namespace WizOne.Module
 
         public static DataTable GetNivelHay()
         {
-            string sql = @"SELECT * FROM ""Org_tblNivelHay"" ORDER BY ""SalariuMin""";
+            string sql = @"SELECT * FROM ""Org_tblNivelHay"" ORDER BY ""Id""";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("Org_tblNivelHay", "Id") + " ORDER BY \"SalariuMin\"";
+                sql = General.SelectOracle("Org_tblNivelHay", "Id") + " ORDER BY \"Id\"";
             return General.IncarcaDT(sql, null);
         }
 

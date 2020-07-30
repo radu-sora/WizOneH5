@@ -9,12 +9,12 @@
             switch (e.buttonID) {
                 case "btnDoc":
                     pnlLoading.Show();
-                    grDate.GetRowValues(e.visibleIndex, 'IdAuto', GoToFisierMedMode);
+                    grDate.GetRowValues(e.visibleIndex, 'IdAuto', GoToFisierAtrMode);
                     break;
             }
         }
 
-        function GoToFisierMedMode(Value) {
+        function GoToFisierAtrMode(Value) {
             window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=12&id=' + Value, '_blank ')
             pnlLoading.Hide();
         }

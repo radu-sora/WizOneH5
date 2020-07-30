@@ -234,7 +234,7 @@ namespace WizOne.Personal
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
-                DataRow dr = ds.Tables["Admin_Beneficii"].Rows.Find(idAuto);
+                DataRow dr = ds.Tables["Admin_Cursuri"].Rows.Find(idAuto);
 
                 ASPxDateEdit deDataInceput = grDateCursuri.FindEditFormTemplateControl("deDataInceput") as ASPxDateEdit;
                 ASPxDateEdit deDataSfarsit = grDateCursuri.FindEditFormTemplateControl("deDataSfarsit") as ASPxDateEdit;

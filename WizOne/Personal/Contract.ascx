@@ -1011,12 +1011,7 @@
 							<dx:ASPxLabel  ID="lblGrilaSal" Width="100" runat="server"  Text="Grila salarizare" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsNivelHay"  Value='<%#Eval("F1001136") %>' ID="cmbGrilaSal"  Width="100" TabIndex="17" runat="server" DropDownStyle="DropDown"  ValueField="Id" ValueType="System.Int32">
-                                  <Columns>
-                                    <dx:ListBoxColumn FieldName="SalariuMin" Caption="SalariuMin" Width="100px" />
-                                    <dx:ListBoxColumn FieldName="SalariuMedian" Caption="SalariuMedian" Width="100px" />
-                                    <dx:ListBoxColumn FieldName="SalariuMax" Caption="SalariuMax" Width="100px" />
-                                </Columns>                              
+							<dx:ASPxComboBox DataSourceID="dsNivelHay"  Value='<%#Eval("F1001136") %>' ID="cmbGrilaSal"  Width="100" TabIndex="17" runat="server" DropDownStyle="DropDown" TextField="Id"  ValueField="Id" ValueType="System.Int32">                             
 							</dx:ASPxComboBox >
 						</td>
 					</tr>

@@ -6,12 +6,12 @@
         switch (e.buttonID) {
             case "btnAtasament":
                 pnlLoading.Show();
-                grDateBeneficii.GetRowValues(e.visibleIndex, 'IdAuto', GoToFisierMedMode);
+                grDateBeneficii.GetRowValues(e.visibleIndex, 'IdAuto', GoToFisierBenMode);
                 break;
         }
     }
 
-    function GoToFisierMedMode(Value) {
+    function GoToFisierBenMode(Value) {
         window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=10&id=' + Value, '_blank ')
         pnlLoading.Hide();
     }

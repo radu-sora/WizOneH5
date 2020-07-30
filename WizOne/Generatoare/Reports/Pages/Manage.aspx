@@ -17,7 +17,9 @@
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="ReportViewButton" runat="server" Text="Afisare" Image-Url="~/Fisiere/Imagini/Icoane/arata.png" OnClick="ReportViewButton_Click" oncontextMenu="ctx(this,event)" />
                 <dx:ASPxButton ID="ReportDesignButton" ClientIDMode="Static" ClientInstanceName="btnDesign" runat="server" Text="Design" Image-Url="~/Fisiere/Imagini/Icoane/schimba.png" OnClick="ReportDesignButton_Click" oncontextMenu="ctx(this,event)" />
-                <dx:ASPxButton ID="ExitButton" runat="server" Text="Iesire" Image-Url="~/Fisiere/Imagini/Icoane/iesire.png" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" />
+                <dx:ASPxButton ID="ExitButton" runat="server" Text="Iesire" Image-Url="~/Fisiere/Imagini/Icoane/iesire.png" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) { ASPxClientUtils.DeleteCookie('ReportsGridViewCookies'); }" />
+                </dx:ASPxButton>
             </td>
         </tr>
     </table>

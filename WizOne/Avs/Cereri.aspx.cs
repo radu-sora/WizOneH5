@@ -1917,14 +1917,12 @@ namespace WizOne.Avs
 
                         if (e.Parameter.Split(';')[1] == "cmb2Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Norma)
                         {
-                            if (Convert.ToDateTime(txtDataMod.Value).Month == General.DamiDataLucru().Month && Convert.ToDateTime(txtDataMod.Value).Year == General.DamiDataLucru().Year)
-                                SetTarif(e.Parameter.Split(';')[2]);
+                            SetTarif(e.Parameter.Split(';')[2]);
                         }
 
                         if (e.Parameter.Split(';')[1] == "cmb1Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Norma && e.Parameter.Split(';')[2] == "2")
                         {
-                            if (Convert.ToDateTime(txtDataMod.Value).Month == General.DamiDataLucru().Month && Convert.ToDateTime(txtDataMod.Value).Year == General.DamiDataLucru().Year)
-                                SetTarif(e.Parameter.Split(';')[2]);
+                            SetTarif(e.Parameter.Split(';')[2]);
                         }
                         break;
                     case "3":
@@ -2099,7 +2097,8 @@ namespace WizOne.Avs
                 ds.Tables[0].Rows[0]["F10067"] = sirNou;
             }
             else
-                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu a fost gasit tarif corespunzator normei selectate! Setati tariful manual!");
+                if (Convert.ToDateTime(txtDataMod.Value).Month == General.DamiDataLucru().Month && Convert.ToDateTime(txtDataMod.Value).Year == General.DamiDataLucru().Year)
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu a fost gasit tarif corespunzator normei selectate! Setati tariful manual!");
             Session["AvsCereri"] = ds;
         }
 

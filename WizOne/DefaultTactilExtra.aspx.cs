@@ -120,6 +120,7 @@ namespace WizOne
                             btn8.ClientVisible = true;
                             btn9.ClientVisible = true;
                             btnLog.ClientVisible = true;
+                            btnRev.ClientVisible = true;
                             panouExt.Visible = false;
            
                         }
@@ -318,10 +319,16 @@ namespace WizOne
             btn8.ClientVisible = false;
             btn9.ClientVisible = false;
             btnLog.ClientVisible = false;
+            btnRev.ClientVisible = false;
             panouExt.Visible = true;
             txtPan1.Value = null;
-            txtPan1.Focus();
+            txtPan1.Focus();     
+        }
 
+        protected void btnRev_Click(object sender, EventArgs e)
+        {
+            AscundeButoane();
+            hfPIN.Set("PIN", null);
         }
 
 
@@ -334,10 +341,10 @@ namespace WizOne
 
 
 
-                        //<dx:ASPxButton ID = "btn7" ClientInstanceName="btn7" ClientIDMode="Static" ClientVisible="false" TabIndex="7" runat="server" Height="30px" Text="7" style="font-size:30px;text-align:center" AutoPostBack="false" CssClass="divider"  RenderMode="Outline" oncontextMenu="ctx(this,event)" meta:resourcekey="btn7" >
-                        //        <ClientSideEvents Click = "function(s, e) { RetinePIN(7); }" />
-                        //    <Paddings PaddingBottom="10px" PaddingRight="20px" />
-                        //</dx:ASPxButton>
+        //<dx:ASPxButton ID = "btn7" ClientInstanceName="btn7" ClientIDMode="Static" ClientVisible="false" TabIndex="7" runat="server" Height="30px" Text="7" style="font-size:30px;text-align:center" AutoPostBack="false" CssClass="divider"  RenderMode="Outline" oncontextMenu="ctx(this,event)" meta:resourcekey="btn7" >
+        //        <ClientSideEvents Click = "function(s, e) { RetinePIN(7); }" />
+        //    <Paddings PaddingBottom="10px" PaddingRight="20px" />
+        //</dx:ASPxButton>
 
     }
 }

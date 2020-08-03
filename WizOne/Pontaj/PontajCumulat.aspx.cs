@@ -47,6 +47,7 @@ namespace WizOne.Pontaj
                             c.ToolTip = Dami.TraduCuvant(dt.Rows[i]["ToolTip"].ToString());
                             c.ReadOnly = true;
                             //c.Width = Unit.Pixel(100);
+                            c.Width = Unit.Pixel(Convert.ToInt32(General.Nz(dt.Rows[i]["Latime"], 100)));   //Radu 31.07.2020
                             c.VisibleIndex = 100 + i;
 
                             //Florin 2019.06.24
@@ -76,6 +77,7 @@ namespace WizOne.Pontaj
                             c.ToolTip = Dami.TraduCuvant(dt.Rows[i]["ToolTip"].ToString());
                             c.ReadOnly = true;
                             //c.Width = Unit.Pixel(100);
+                            c.Width = Unit.Pixel(Convert.ToInt32(General.Nz(dt.Rows[i]["Latime"], 100)));   //Radu 31.07.2020
                             c.VisibleIndex = 100 + i;
 
                             c.ReadOnly = !Convert.ToBoolean(General.Nz(dt.Rows[i]["Editabil"], 0));

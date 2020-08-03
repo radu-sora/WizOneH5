@@ -31,7 +31,7 @@ namespace WizOne.Pontaj
                     //DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.ALIAS,CS.COLOANA) ""Caption"" 
                     //                                    FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_AliasF"" AF ON CS.""Coloana"" = AF.""Denumire""
                     //                                    ORDER BY CS.""Ordine""  ", null);
-                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.""Alias"",CS.""Coloana"") ""Caption"",  coalesce(af.""AliasToolTip"", coalesce(AF.""Alias"",CS.""Coloana"")) ""ToolTip"", AF.NumarZecimale 
+                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.""Alias"",CS.""Coloana"") ""Caption"",  coalesce(af.""AliasToolTip"", coalesce(AF.""Alias"",CS.""Coloana"")) ""ToolTip"", AF.NumarZecimale, AF.""Latime"" 
                                                         FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_tblFormuleCumulat"" AF ON CS.""Coloana"" = AF.""Coloana""
                                                         ORDER BY CS.""Ordine""  ", null);
 

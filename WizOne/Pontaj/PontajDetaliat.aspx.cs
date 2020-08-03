@@ -485,11 +485,20 @@ namespace WizOne.Pontaj
         {
             try
             {
+                string ziInc = General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month);
+                string ziSf = General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99);
+
+                if (tip == 2 || tip == 20)
+                {
+                    ziInc = General.ToDataUniv(txtZiua.Date.Year, txtZiua.Date.Month);
+                    ziSf = General.ToDataUniv(txtZiua.Date.Year, txtZiua.Date.Month, 99);
+                }
+
                 //Florinn 2020.05.20
                 DataRow drCnt = General.IncarcaDR($@"
                     SELECT
-                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999) AND F10022 <= {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)}  AND  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)} <= F10023) AS ""NrAng"",
-                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)}) AS ""NrPtj"" {General.FromDual()}");
+                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999) AND F10022 <= {ziInc}  AND  {ziSf} <= F10023) AS ""NrAng"",
+                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {ziInc} <= ""Ziua"" AND ""Ziua"" <=  {ziSf}) AS ""NrPtj"" {General.FromDual()}");                
                 if (drCnt != null)
                 {
                     decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
@@ -639,15 +648,12 @@ namespace WizOne.Pontaj
 
                 //Florin 2020.05.25
                 GridViewCommandColumn grCmd = grDate.Columns[0] as GridViewCommandColumn;
+                grCmd.Visible = false;
                 if ((tip == 2 || tip == 20) && dt.Rows.Count == 1)
-                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.AllDataRows;
-                else
-                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.Invisible;
-
-                if (grCmd.CustomButtons[0].Visibility != GridViewCustomButtonVisibility.Invisible || grCmd.CustomButtons[1].Visibility != GridViewCustomButtonVisibility.Invisible)
+                {
                     grCmd.Visible = true;
-                else
-                    grCmd.Visible = false;
+                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                }
             }
             catch (Exception ex)
             {
@@ -1568,8 +1574,14 @@ namespace WizOne.Pontaj
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
 
                 ASPxDataUpdateValues upd = e.UpdateValues[0] as ASPxDataUpdateValues;
-                object[] keys = new object[] { upd.Keys[0] };
+                if (upd.Keys.Count == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
 
+                object[] keys = new object[] { upd.Keys[0] };
+                
                 DataRow row = dt.Rows.Find(keys);
                 if (row == null) return;
 

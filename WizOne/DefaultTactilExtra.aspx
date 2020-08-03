@@ -39,6 +39,8 @@
 		</div>
         <div id="butoane" runat="server" class="innerbuttonscard">
             <table>
+
+  
                 <tr>
                     <td colspan="3">
                          <input type = "text" id="txtPan1" name="txtPan1" runat="server"  autocomplete="off" class="hide" maxlength="15" onserverchange="txtPan1_TextChanged" onblur="this.focus()"  />
@@ -129,15 +131,23 @@
                         <dx:ASPxButton ID="btnLog" ClientInstanceName="btnLog" ClientIDMode="Static" ClientVisible="false"  TabIndex="10" runat="server" Width="260px" Height="30px" Text="Logare" style="font-size:30px;text-align:center" CssClass="divider" AutoPostBack="true" OnClick="btnLog_Click" oncontextMenu="ctx(this,event)"  RenderMode="Outline" meta:resourcekey="btnLog" >                                                                          
                             <Paddings PaddingBottom="10px" PaddingLeft="30px"  />
                         </dx:ASPxButton>
-                    </td>                 
+                    </td> 
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <dx:ASPxButton ID="btnRev" ClientInstanceName="btnRev" ClientIDMode="Static" ClientVisible="false"  TabIndex="10" runat="server" Width="260px" Height="30px" Text="Revenire" style="font-size:30px;text-align:center" CssClass="divider" AutoPostBack="true" OnClick="btnRev_Click" oncontextMenu="ctx(this,event)"  RenderMode="Outline" meta:resourcekey="btnLog" >                                                                          
+                            <Paddings PaddingBottom="10px" PaddingLeft="30px"  />
+                        </dx:ASPxButton>
+                    </td>                     
                 </tr> 
             </table>
 		</div>
    
-        
+      
 
     <dx:ASPxHiddenField ID="hfPIN" runat="server"></dx:ASPxHiddenField>        
 
     </form>
+
 </body>
 </html>

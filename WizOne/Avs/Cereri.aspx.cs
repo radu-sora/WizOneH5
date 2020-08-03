@@ -2900,6 +2900,22 @@ namespace WizOne.Avs
             DataSet ds = Session["AvsCereri"] as DataSet;
             DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
 
+            if (ds == null)
+            {
+                ds = new DataSet();
+
+                dt = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F100";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                ds.Tables.Add(dt);
+
+                dt = new DataTable();
+                dt = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F1001";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                ds.Tables.Add(dt);
+            }
+
             string sql = "SELECT COUNT(*) FROM \"Avs_Circuit\" WHERE \"IdAtribut\" = " + cmbAtribute.Value.ToString();
             string strSql = "";
             DataTable dtTemp = General.IncarcaDT(sql, null);

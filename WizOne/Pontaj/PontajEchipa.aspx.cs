@@ -617,7 +617,7 @@ namespace WizOne.Pontaj
                     if (nrAng != 0)
                     {
                         decimal rez = ((nrAng - nrPtj)/nrAng) * 100;
-                        if (rez > 15)
+                        if (rez > 25)
                         {
                             grDate.DataSource = null;
                             grDate.DataBind();

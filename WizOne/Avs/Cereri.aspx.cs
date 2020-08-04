@@ -2904,7 +2904,7 @@ namespace WizOne.Avs
             {
                 ds = new DataSet();
 
-                dt = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                DataTable dt = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 dt.TableName = "F100";
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
                 ds.Tables.Add(dt);

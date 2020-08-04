@@ -568,7 +568,7 @@ namespace WizOne.Pontaj
                         sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
 
                     }
-                    if (lstZileGolite != null && lstZileGolite.Count > 0)
+                    if (chkPontare.Checked && lstZileGolite != null && lstZileGolite.Count > 0)
                     {
                         string dataZileGolite = "";
                         foreach (DateTime ziGolita in lstZileGolite)

@@ -1604,7 +1604,7 @@ namespace WizOne.Pontaj
                     if (oldValue != newValue)
                     {
                         //daca sunt valorile temporare ValTmp
-                        if (numeCol.Length >= 5 && numeCol.Substring(0,6).ToLower() == "valtmp" && General.IsNumeric(numeCol.Replace("ValTmp", "")))
+                        if (numeCol.Length >= 6 && numeCol.Substring(0,6).ToLower() == "valtmp" && General.IsNumeric(numeCol.Replace("ValTmp", "")))
                         {
                             string i = numeCol.Replace("ValTmp", "");
                             if (!adaugat)

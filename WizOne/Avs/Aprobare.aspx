@@ -285,6 +285,7 @@
                         <dx:GridViewDataTextColumn FieldName="Culoare" Name="Culoare" Caption="Culoare" ReadOnly="true" Width="75px" Visible="false" />
                         <dx:GridViewDataTextColumn FieldName="IdAtribut" Name="IdAtribut" Caption="IdAtribut" ReadOnly="true" Width="75px" Visible="false" />
                         <dx:GridViewDataTextColumn FieldName="Revisal" Name="Revisal" Caption="Revisal" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="Semnat" Name="Semnat" Caption="Semnat" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="PoateModifica" Name="PoateModifica" Caption="PoateModifica" ReadOnly="true" Width="50px" Visible="false" />
                     </Columns>
                     <SettingsCommandButton>

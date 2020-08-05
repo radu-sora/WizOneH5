@@ -4527,7 +4527,7 @@ namespace WizOne.Avs
                 //return;
             }
 
-            if (dt1.Columns.Count > 2)
+            if (dt1 != null && dt1.Columns.Count > 2)
             {
                 cmbAct.Columns.Clear();
                 for (int i = 0; i < dt2.Columns.Count; i++)
@@ -4538,7 +4538,7 @@ namespace WizOne.Avs
                 }
             }
 
-            if (dt2.Columns.Count > 2)
+            if (dt2 != null && dt2.Columns.Count > 2)
             {
                 cmbNou.Columns.Clear();
                 for (int i = 0; i < dt2.Columns.Count; i++)

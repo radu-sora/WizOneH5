@@ -567,7 +567,7 @@ namespace WizOne.Avs
                 string comentarii = "";
                 string msg = "";
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "IdAtribut", "NumeAngajat", "DataModif", "F10003", "Revisal", "Actualizat", "PoateModifica", "ValoareNoua" });
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "IdAtribut", "NumeAngajat", "DataModif", "F10003", "Revisal", "Actualizat", "PoateModifica", "ValoareNoua", "Semnat" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     if (tipMsg == 0)
@@ -611,6 +611,14 @@ namespace WizOne.Avs
                     if (tipActiune == 3 && Convert.ToInt32(General.Nz(arr[6],0)) == 1)
                     {
                         msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Cererea este trimisa in Revisal") + System.Environment.NewLine;
+                        continue;
+                    }
+
+                    //Florin 2020.08.04
+                    //Nu se poate respinge sau anula o cerere pt program de lucru daca este trimisa in status semnat
+                    if ((tipActiune == 2 || tipActiune == 3) && Convert.ToInt32(General.Nz(arr[2], 0)) == 34 && Convert.ToInt32(General.Nz(arr[10], 0)) == 1)
+                    {
+                        msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Cererea este trimisa la semnat") + System.Environment.NewLine;
                         continue;
                     }
 
@@ -1375,9 +1383,11 @@ namespace WizOne.Avs
                             " when 24 then a.DeptNume  " +
                             " when 25 then convert(nvarchar(20),a.DataInceputCIM,103) + ' - ' + convert(nvarchar(20),a.DataSfarsitCIM,103)  " +
                             " when 26 then convert(nvarchar(20),a.DataInceputCIM,103) + ' - ' + convert(nvarchar(20),a.DataSfarsitCIM,103)  " +
+                            " when 34 then (select \"Ptj_Contracte\".\"Denumire\" from \"Ptj_Contracte\" where \"Ptj_Contracte\".\"Id\" = a.\"ProgramLucru\") " +
                             " end AS ValoareNoua,  " +
                             " a.SalariulNet, a.ScutitImpozit,  " +
                             " COALESCE((SELECT COALESCE(NR.Revisal,0) FROM Admin_NrActAd NR WHERE NR.IdAuto=COALESCE(A.IdActAd,-99)),0) AS Revisal, " +
+                            " COALESCE((SELECT COALESCE(NR.Semnat,0) FROM Admin_NrActAd NR WHERE NR.IdAuto=COALESCE(A.IdActAd,-99)),0) AS Semnat, " +
                             " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.IdAtribut AND X.F70406=A.DataModif),0) AS ActualizatF704, " +
                             " CASE WHEN CHARINDEX('," + General.Nz(cmbRol.Value,-99).ToString() + ",', ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0 THEN 1 ELSE  " +
                             " CASE WHEN " + General.Nz(cmbRol.Value, -99).ToString() + " = 76 AND F.IdUser = " + Session["UserId"] + " THEN 1 ELSE " +
@@ -1414,9 +1424,11 @@ namespace WizOne.Avs
                             " when 24 then a.\"DeptNume\" " +
                             " when 25 then to_char(a.\"DataInceputCIM\",'DD/MM/YYYY') || ' - ' || to_char(a.\"DataSfarsitCIM\",'DD/MM/YYYY') " +
                             " when 26 then to_char(a.\"DataInceputCIM\",'DD/MM/YYYY') || ' - ' || to_char(a.\"DataSfarsitCIM\",'DD/MM/YYYY') " +
+                            " when 34 then (select \"Ptj_Contracte\".\"Denumire\" from \"Ptj_Contracte\" where \"Ptj_Contracte\".\"Id\" = a.\"ProgramLucru\") " +
                             " end AS \"ValoareNoua\", " +
                             " a.\"SalariulNet\", a.\"ScutitImpozit\", " +
                             " COALESCE((SELECT COALESCE(NR.\"Revisal\",0) FROM \"Admin_NrActAd\" NR WHERE NR.\"IdAuto\"=COALESCE(A.\"IdActAd\",-99)),0) AS \"Revisal\", " +
+                            " COALESCE((SELECT COALESCE(NR.\"Semnat\",0) FROM \"Admin_NrActAd\" NR WHERE NR.\"IdAuto\"=COALESCE(A.\"IdActAd\",-99)),0) AS \"Semnat\", " +
                             " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.\"IdAtribut\" AND X.F70406=A.\"DataModif\"),0) AS \"ActualizatF704\", " +
                             " CASE WHEN INSTR(',' + (SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\"='Avans_IDuriRoluriHR') + ',', '," + General.Nz(cmbRol.Value, -99).ToString() + ",') > 0 THEN 1 ELSE  " +
                             " CASE WHEN " + General.Nz(cmbRol.Value, -99).ToString() + " = 76 AND F.\"IdUser\" = " + Session["UserId"] + " THEN 1 ELSE " +

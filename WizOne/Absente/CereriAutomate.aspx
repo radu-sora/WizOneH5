@@ -45,6 +45,17 @@
                 txtNrOreInMinute.SetValue(diff);
             }
         }
+
+        function OnEndCallback(s, e) {
+            pnlLoading.Hide();
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+        }
     </script>
 
 </asp:Content>
@@ -52,7 +63,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
-        <ClientSideEvents EndCallback="function (s,e) { pnlLoading.Hide(); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
+        <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
         <PanelCollection>
             <dx:PanelContent>
 

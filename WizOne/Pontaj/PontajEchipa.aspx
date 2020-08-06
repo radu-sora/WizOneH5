@@ -113,6 +113,18 @@
             }
         }
 
+        function OnClickTransfera(s, e) {
+            var luna = txtAnLuna.GetValue();
+            swal({
+                title: trad_string(limba, 'Sunteti sigur/a ?'), text: trad_string(limba, 'Sigur doriti transferul pontajului pentru luna ' + (luna.getMonth() + 1) + '/' + luna.getFullYear() + '?'),
+                type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
+            }, function (isConfirm) {
+                    if (isConfirm) {
+                        grDate.PerformCallback("btnTransfera;");
+                }
+            });
+        }
+
         //function OnInit(s, e) 
         //{
         //    popUpInit.Hide();
@@ -323,6 +335,19 @@
             return actualValues;
         }
 
+        function OnIstoricAprobare(s, e) {
+            if (grDate.GetSelectedRowCount() > 0) {
+                popUpIstoricAprobare.Show();
+                grDateIstoric.PerformCallback("btnIstoricAprobare;");                  
+            }
+            else {
+                swal({
+                    title: trad_string(limba, ""), text: trad_string(limba, "Nu ati selectat niciun angajat!"),
+                    type: "warning"
+                });
+            }
+        }
+
     </script>
 
 </asp:Content>
@@ -335,6 +360,10 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
+                <dx:ASPxButton ID="btnIstoricAprobare" ClientInstanceName="btnIstoricAprobare" ClientIDMode="Static" runat="server" Text="Istoric aprobare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/view.png"></Image>
+                    <ClientSideEvents Click="function(s, e) { OnIstoricAprobare(s, e); }" />
+                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnValidare" ClientInstanceName="btnValidare" ClientIDMode="Static" runat="server" Text="Validare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                     <ClientSideEvents Click="function (s,e) { grDate.PerformCallback('btnValidare'); }" />
@@ -368,8 +397,9 @@
                 <dx:ASPxButton ID="btnStergePontari" ClientInstanceName="btnStergePontari" ClientIDMode="Static" runat="server" Text="Sterge Pontari" AutoPostBack="true" OnClick="btnStergePontari_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnTransfera" ClientInstanceName="btnTransfera" ClientIDMode="Static" runat="server" Text="Transfera" AutoPostBack="true" OnClick="btnTransfera_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnTransfera" ClientInstanceName="btnTransfera" ClientIDMode="Static" runat="server" Text="Transfera" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/duplicare.png"></Image>
+                    <ClientSideEvents Click="function (s,e) { OnClickTransfera(s,e); }"/>
                 </dx:ASPxButton>                
                 <dx:ASPxButton ID="btnPeAng" ClientInstanceName="btnPeAng" ClientIDMode="Static" runat="server" Text="Pontaj pe Angajat" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/n2.png"></Image>
@@ -649,7 +679,7 @@
     <dx:ASPxPopupControl ID="popUpInit" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
         CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
         EnableViewState="False" PopupElementID="popUpInitArea" PopupHorizontalAlign="WindowCenter"
-        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="350px" Height="220px" HeaderText="Parametrii initializare"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="350px" Height="220px" HeaderText="Parametri initializare"
         FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpInit" EnableHierarchyRecreation="false">
         <ContentCollection>
             <dx:PopupControlContentControl runat="server">
@@ -856,8 +886,46 @@
         </ContentCollection>
     </dx:ASPxPopupControl>
 
+    <dx:ASPxPopupControl ID="popUpIstoricAprobare" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
+        EnableViewState="False" PopupElementID="popUpInitArea" PopupHorizontalAlign="WindowCenter"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="800px" Height="500px" HeaderText="Istoric aprobare"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpIstoricAprobare" EnableHierarchyRecreation="false">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel6" runat="server">
+                        <table width="100%" >    
+                            <tr>
+                                <td align="left">
+                                    <dx:ASPxGridView ID="grDateIstoric" runat="server" ClientInstanceName="grDateIstoric" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDateIstoric_CustomCallback">
+                                        <SettingsBehavior AllowFocusedRow="true" />
+                                        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />                                   
+                                        <SettingsEditing Mode="Inline" />      
+                                        <ClientSideEvents ContextMenu="ctx" />                                
+                                        <Columns>
+                                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="false" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
+                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" />                                
+                                            <dx:GridViewDataTextColumn FieldName="IdSuper" Name="IdSuper" Caption="IdSuper"  Width="75px" Visible="false" />  
+                                            <dx:GridViewDataTextColumn FieldName="Culoare" Name="Culoare" Caption="Culoare"  Width="75px" Visible="false" />       
+                                            <dx:GridViewDataTextColumn FieldName="Nume" Name="Nume" Caption="Nume"  Width="200px" />
+                                            <dx:GridViewDataTextColumn FieldName="NumeStare" Name="NumeStare" Caption="Stare"  Width="100px"  />
+                                            <dx:GridViewDataDateColumn FieldName="DataAprobare" Name="DataAprobare" Caption="Data aprobare" Width="100px" >         
+                                                    <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                                            </dx:GridViewDataDateColumn>
+                                            <dx:GridViewDataTextColumn FieldName="IdStare" Name="IdStare" Caption="IdStare"  Width="75px" Visible="false" />
+                                        </Columns> 
+                                    </dx:ASPxGridView>
+                                </td>
+                            </tr>  
+                        </table>
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
+
     <dx:ASPxGlobalEvents ID="ge" runat="server">
         <ClientSideEvents ControlsInitialized="OnControlsInitialized" />
     </dx:ASPxGlobalEvents>
 
 </asp:Content>
+

@@ -67,6 +67,7 @@ namespace WizOne.Pontaj
                         btnRespins.Visible = false;
                         btnInit.Visible = false;
                         btnDelete.Visible = false;
+                        btnIstoricAprobare.Visible = false;
                     }
 
                     CreeazaGrid();
@@ -484,11 +485,20 @@ namespace WizOne.Pontaj
         {
             try
             {
+                string ziInc = General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month);
+                string ziSf = General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99);
+
+                if (tip == 2 || tip == 20)
+                {
+                    ziInc = General.ToDataUniv(txtZiua.Date.Year, txtZiua.Date.Month);
+                    ziSf = General.ToDataUniv(txtZiua.Date.Year, txtZiua.Date.Month, 99);
+                }
+
                 //Florinn 2020.05.20
                 DataRow drCnt = General.IncarcaDR($@"
                     SELECT
-                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999) AND F10022 <= {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)}  AND  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)} <= F10023) AS ""NrAng"",
-                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)}) AS ""NrPtj"" {General.FromDual()}");
+                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999) AND F10022 <= {ziInc}  AND  {ziSf} <= F10023) AS ""NrAng"",
+                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {ziInc} <= ""Ziua"" AND ""Ziua"" <=  {ziSf}) AS ""NrPtj"" {General.FromDual()}");                
                 if (drCnt != null)
                 {
                     decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
@@ -638,15 +648,12 @@ namespace WizOne.Pontaj
 
                 //Florin 2020.05.25
                 GridViewCommandColumn grCmd = grDate.Columns[0] as GridViewCommandColumn;
+                grCmd.Visible = false;
                 if ((tip == 2 || tip == 20) && dt.Rows.Count == 1)
-                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.AllDataRows;
-                else
-                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.Invisible;
-
-                if (grCmd.CustomButtons[0].Visibility != GridViewCustomButtonVisibility.Invisible || grCmd.CustomButtons[1].Visibility != GridViewCustomButtonVisibility.Invisible)
+                {
                     grCmd.Visible = true;
-                else
-                    grCmd.Visible = false;
+                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                }
             }
             catch (Exception ex)
             {
@@ -702,8 +709,8 @@ namespace WizOne.Pontaj
                     if (General.Nz(cmbFil.Value, "").ToString() != "") filtru += " AND P.F10005=" + cmbFil.Value;
                     if (General.Nz(cmbSec.Value, "").ToString() != "") filtru += " AND P.F10006=" + cmbSec.Value;
                     if (General.Nz(cmbDept.Value, "").ToString() != "") filtru += " AND P.F10007=" + cmbDept.Value;
-                    if (General.Nz(cmbSubDept.Value, "").ToString() != "") filtru += " AND C.F100958 = " + cmbSubDept.Value;
-                    if (General.Nz(cmbBirou.Value, "").ToString() != "") filtru += " AND C.F100959 = " + cmbBirou.Value;
+                    if (General.Nz(cmbSubDept.Value, "").ToString() != "") filtru += " AND P.F100958 = " + cmbSubDept.Value;
+                    if (General.Nz(cmbBirou.Value, "").ToString() != "") filtru += " AND P.F100959 = " + cmbBirou.Value;
 
                     if (General.Nz(cmbCtr.Value, "").ToString() != "") filtru += " AND P.\"IdContract\"=" + cmbCtr.Value;
                     if (General.Nz(cmbStare.Value, "").ToString() != "") filtru += " AND J.\"IdStare\"=" + cmbStare.Value;
@@ -898,7 +905,6 @@ namespace WizOne.Pontaj
                             ABSE.""DenumireScurta"" AS ""ValAbs""                            
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
-                            LEFT JOIN F1001 C ON A.F10003=C.F10003
                             LEFT JOIN F002 E ON P.F10002 = E.F00202
                             LEFT JOIN F003 F ON P.F10004 = F.F00304
                             LEFT JOIN F004 G ON P.F10005 = G.F00405
@@ -909,8 +915,8 @@ namespace WizOne.Pontaj
                             LEFT JOIN ""Ptj_Contracte"" L ON P.""IdContract""=L.""Id""
                             LEFT JOIN ""Ptj_Programe"" M ON P.""IdProgram""=M.""Id""
 
-                            LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
-                            LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
+                            LEFT JOIN F007 S7 ON P.F100958 = S7.F00708
+                            LEFT JOIN F008 S8 ON P.F100959 = S8.F00809
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402
@@ -998,7 +1004,6 @@ namespace WizOne.Pontaj
                             ABSE.""DenumireScurta"" AS ""ValAbs""                            
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
-                            LEFT JOIN F1001 C ON A.F10003=C.F10003
                             LEFT JOIN F002 E ON P.F10002 = E.F00202
                             LEFT JOIN F003 F ON P.F10004 = F.F00304
                             LEFT JOIN F004 G ON P.F10005 = G.F00405
@@ -1009,8 +1014,8 @@ namespace WizOne.Pontaj
                             LEFT JOIN ""Ptj_Contracte"" L ON P.""IdContract""=L.""Id""
                             LEFT JOIN ""Ptj_Programe"" M ON P.""IdProgram""=M.""Id""
 
-                            LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
-                            LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
+                            LEFT JOIN F007 S7 ON P.F100958 = S7.F00708
+                            LEFT JOIN F008 S8 ON P.F100959 = S8.F00809
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
@@ -1569,8 +1574,14 @@ namespace WizOne.Pontaj
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
 
                 ASPxDataUpdateValues upd = e.UpdateValues[0] as ASPxDataUpdateValues;
-                object[] keys = new object[] { upd.Keys[0] };
+                if (upd.Keys.Count == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
 
+                object[] keys = new object[] { upd.Keys[0] };
+                
                 DataRow row = dt.Rows.Find(keys);
                 if (row == null) return;
 
@@ -1593,7 +1604,7 @@ namespace WizOne.Pontaj
                     if (oldValue != newValue)
                     {
                         //daca sunt valorile temporare ValTmp
-                        if (numeCol.Length >= 5 && numeCol.Substring(0,6).ToLower() == "valtmp" && General.IsNumeric(numeCol.Replace("ValTmp", "")))
+                        if (numeCol.Length >= 6 && numeCol.Substring(0,6).ToLower() == "valtmp" && General.IsNumeric(numeCol.Replace("ValTmp", "")))
                         {
                             string i = numeCol.Replace("ValTmp", "");
                             if (!adaugat)
@@ -1620,7 +1631,11 @@ namespace WizOne.Pontaj
                                 inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
                             try
                             {
-                                if (i > 1 && row["Out" + (i - 1)] != DBNull.Value && Convert.ToDateTime(row["Out" + (i - 1)]) > inOut)
+                                //Radu 28.07.2020 - deoarece cheile din obiectul dic sunt ordonate alfabetic, algortimul nu parcurge intrarile si iesirile in ordinea In1, Out1, In2, Out2, ..., In20, Out20
+                                //                  ci in ordinea In1, In2,..., In20, Out1, Out2, ..., Out20; din aceasta cauza, in row["Out" + (i - 1)] se afla valorea veche, nu cea noua
+                                //                  Am inlocuit-o cu upd.NewValues["Out" + (i - 1)]                       
+                                //if (i > 1 && row["Out" + (i - 1)] != DBNull.Value && Convert.ToDateTime(row["Out" + (i - 1)]) > inOut)
+                                if (i > 1 && upd.NewValues["Out" + (i - 1)] != DBNull.Value && Convert.ToDateTime(upd.NewValues["Out" + (i - 1)]) > inOut)
                                     row[numeCol] = inOut.AddDays(1);
                                 else
                                     row[numeCol] = inOut;
@@ -3348,6 +3363,57 @@ namespace WizOne.Pontaj
             }
 
             return strSql;
+        }
+
+        protected void grDateIstoric_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
+        {
+            try
+            {
+
+                string str = e.Parameters;
+                if (str != "")
+                {
+                    string[] arr = e.Parameters.Split(';');
+
+                    switch (arr[0].ToString())
+                    {
+                        case "btnIstoricAprobare":
+                            IncarcaGridIstoric();
+                            break;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        //Radu 27.07.2020
+        private void IncarcaGridIstoric()
+        {
+            string strSql = @"SELECT A.""IdAuto"", A.F10003, A.""An"", A.""Luna"", A.""IdSuper"", A.""IdStare"", D.""Culoare"", A.""DataAprobare"", D.""Denumire"" AS ""NumeStare"",
+                            CASE WHEN COALESCE(B.""NumeComplet"",' ') <> ' ' THEN B.""NumeComplet"" ELSE (CASE WHEN COALESCE(C.F10008,' ') = ' ' THEN B.F70104 ELSE C.F10008 {3} ' ' {3} C.F10009 END) END as ""Nume""
+                            FROM ""Ptj_CumulatIstoric"" A
+                            LEFT JOIN USERS B ON A.""IdUser"" = B.F70102
+                            LEFT JOIN F100 C ON B.F10003 = C.F10003
+                            LEFT JOIN ""Ptj_tblStariPontaj"" D ON A.""IdStare""=D.""Id""
+                            WHERE A.""IdStare"" <>1 AND A.F10003 = {0} AND ""An""={1} AND A.""Luna""={2}
+                            ORDER BY A.""DataAprobare""";
+
+            string op = "+";
+            if (Constante.tipBD == 2) op = "||";
+   
+
+            DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
+
+            strSql = string.Format(strSql, Convert.ToInt32(cmbAng.Value ?? -99), ziua.Year, ziua.Month, op);
+
+            grDateIstoric.DataSource = General.IncarcaDT(strSql, null);
+            grDateIstoric.DataBind();
+
         }
 
     }

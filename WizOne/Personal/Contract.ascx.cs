@@ -89,12 +89,12 @@ namespace WizOne.Personal
           
             if (cmbTipAngajat.Value == null || Convert.ToInt32(cmbTipAngajat.Value.ToString()) == 0)
             {
-                cmbIntervRepTimpMunca.SelectedIndex = 0;
+                //cmbIntervRepTimpMunca.SelectedIndex = 0;
                 cmbIntervRepTimpMunca.ClientEnabled = false;
             }
             if (cmbMotivScutit.Value == null || Convert.ToInt32(cmbMotivScutit.Value.ToString()) == 0)
             {
-                cmbMotivScutit.SelectedIndex = 0;
+                //cmbMotivScutit.SelectedIndex = 0;
                 cmbMotivScutit.ClientEnabled = false;
             }
             if (cmbMotivScutitCAS.Value == null ||Convert.ToInt32(cmbMotivScutitCAS.Value.ToString()) == 0)
@@ -489,7 +489,7 @@ namespace WizOne.Personal
                     bool gasit = false;
                     for (int i = 0; i < dtTarife.Rows.Count; i++)
                     {
-                        if (Convert.ToInt32(dtTarife.Rows[i]["F01114"].ToString()) == 1 && Convert.ToDecimal(dtTarife.Rows[i]["F01108"].ToString()) == ore_lucratoare_luna)                        
+                        if (Convert.ToInt32(General.Nz(dtTarife.Rows[i]["F01114"], "0").ToString()) == 1 && Convert.ToDecimal(General.Nz(dtTarife.Rows[i]["F01108"], "0").ToString()) == ore_lucratoare_luna)                        
                         {
                             gasit = true;
                             poz = Convert.ToInt32(dtTarife.Rows[i]["F01104"].ToString());

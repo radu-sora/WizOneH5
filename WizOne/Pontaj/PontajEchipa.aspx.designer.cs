@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Pontaj {
-    
-    
-    public partial class PontajEchipa {
-        
+namespace WizOne.Pontaj
+{
+
+
+    public partial class PontajEchipa
+    {
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -20,7 +22,16 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
+
+        /// <summary>
+        /// btnIstoricAprobare control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnIstoricAprobare;
+
         /// <summary>
         /// btnValidare control.
         /// </summary>
@@ -29,7 +40,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnValidare;
-        
+
         /// <summary>
         /// btnRefuza control.
         /// </summary>
@@ -38,7 +49,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnRefuza;
-        
+
         /// <summary>
         /// btnExport control.
         /// </summary>
@@ -47,7 +58,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExport;
-        
+
         /// <summary>
         /// btnPrint control.
         /// </summary>
@@ -56,7 +67,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnPrint;
-        
+
         /// <summary>
         /// btnRespins control.
         /// </summary>
@@ -65,7 +76,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnRespins;
-        
+
         /// <summary>
         /// btnAproba control.
         /// </summary>
@@ -74,7 +85,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnAproba;
-        
+
         /// <summary>
         /// btnInit control.
         /// </summary>
@@ -83,7 +94,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnInit;
-        
+
         /// <summary>
         /// btnStergePontari control.
         /// </summary>
@@ -92,7 +103,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnStergePontari;
-        
+
         /// <summary>
         /// btnTransfera control.
         /// </summary>
@@ -101,7 +112,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnTransfera;
-        
+
         /// <summary>
         /// btnPeAng control.
         /// </summary>
@@ -110,7 +121,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnPeAng;
-        
+
         /// <summary>
         /// btnPeZi control.
         /// </summary>
@@ -119,7 +130,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnPeZi;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -128,7 +139,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// pnlCtl control.
         /// </summary>
@@ -137,7 +148,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
-        
+
         /// <summary>
         /// pnlFiltrare control.
         /// </summary>
@@ -146,7 +157,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRoundPanel pnlFiltrare;
-        
+
         /// <summary>
         /// divAnLuna control.
         /// </summary>
@@ -155,7 +166,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAnLuna;
-        
+
         /// <summary>
         /// lblAnLuna control.
         /// </summary>
@@ -164,7 +175,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAnLuna;
-        
+
         /// <summary>
         /// txtAnLuna control.
         /// </summary>
@@ -173,7 +184,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit txtAnLuna;
-        
+
         /// <summary>
         /// divRol control.
         /// </summary>
@@ -182,7 +193,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divRol;
-        
+
         /// <summary>
         /// lblRol control.
         /// </summary>
@@ -191,7 +202,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRol;
-        
+
         /// <summary>
         /// cmbRol control.
         /// </summary>
@@ -200,7 +211,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbRol;
-        
+
         /// <summary>
         /// divAng control.
         /// </summary>
@@ -209,7 +220,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAng;
-        
+
         /// <summary>
         /// lblAng control.
         /// </summary>
@@ -218,7 +229,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAng;
-        
+
         /// <summary>
         /// cmbAng control.
         /// </summary>
@@ -227,7 +238,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbAng;
-        
+
         /// <summary>
         /// divStare control.
         /// </summary>
@@ -236,7 +247,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divStare;
-        
+
         /// <summary>
         /// lblStare control.
         /// </summary>
@@ -245,7 +256,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblStare;
-        
+
         /// <summary>
         /// cmbStare control.
         /// </summary>
@@ -254,7 +265,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbStare;
-        
+
         /// <summary>
         /// divCtr control.
         /// </summary>
@@ -263,7 +274,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCtr;
-        
+
         /// <summary>
         /// lblCtr control.
         /// </summary>
@@ -272,7 +283,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCtr;
-        
+
         /// <summary>
         /// cmbCtr control.
         /// </summary>
@@ -281,7 +292,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDropDownEdit cmbCtr;
-        
+
         /// <summary>
         /// divSub control.
         /// </summary>
@@ -290,7 +301,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSub;
-        
+
         /// <summary>
         /// lblSub control.
         /// </summary>
@@ -299,7 +310,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSub;
-        
+
         /// <summary>
         /// cmbSub control.
         /// </summary>
@@ -308,7 +319,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSub;
-        
+
         /// <summary>
         /// divFil control.
         /// </summary>
@@ -317,7 +328,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divFil;
-        
+
         /// <summary>
         /// lblFil control.
         /// </summary>
@@ -326,7 +337,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblFil;
-        
+
         /// <summary>
         /// cmbFil control.
         /// </summary>
@@ -335,7 +346,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbFil;
-        
+
         /// <summary>
         /// divSec control.
         /// </summary>
@@ -344,7 +355,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSec;
-        
+
         /// <summary>
         /// lblSec control.
         /// </summary>
@@ -353,7 +364,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSec;
-        
+
         /// <summary>
         /// cmbSec control.
         /// </summary>
@@ -362,7 +373,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSec;
-        
+
         /// <summary>
         /// divDept control.
         /// </summary>
@@ -371,7 +382,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDept;
-        
+
         /// <summary>
         /// lblDept control.
         /// </summary>
@@ -380,7 +391,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDept;
-        
+
         /// <summary>
         /// cmbDept control.
         /// </summary>
@@ -389,7 +400,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDropDownEdit cmbDept;
-        
+
         /// <summary>
         /// divSubDept control.
         /// </summary>
@@ -398,7 +409,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSubDept;
-        
+
         /// <summary>
         /// lblSubDept control.
         /// </summary>
@@ -407,7 +418,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSubDept;
-        
+
         /// <summary>
         /// cmbSubDept control.
         /// </summary>
@@ -416,7 +427,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSubDept;
-        
+
         /// <summary>
         /// divBirou control.
         /// </summary>
@@ -425,7 +436,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divBirou;
-        
+
         /// <summary>
         /// lblBirou control.
         /// </summary>
@@ -434,7 +445,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblBirou;
-        
+
         /// <summary>
         /// cmbBirou control.
         /// </summary>
@@ -443,7 +454,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbBirou;
-        
+
         /// <summary>
         /// divCateg control.
         /// </summary>
@@ -452,7 +463,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCateg;
-        
+
         /// <summary>
         /// lblCateg control.
         /// </summary>
@@ -461,7 +472,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCateg;
-        
+
         /// <summary>
         /// cmbCateg control.
         /// </summary>
@@ -470,7 +481,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbCateg;
-        
+
         /// <summary>
         /// rowHovercard control.
         /// </summary>
@@ -479,7 +490,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl rowHovercard;
-        
+
         /// <summary>
         /// btnFiltru control.
         /// </summary>
@@ -488,7 +499,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltru;
-        
+
         /// <summary>
         /// btnFiltruSterge control.
         /// </summary>
@@ -497,7 +508,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltruSterge;
-        
+
         /// <summary>
         /// divHovercard control.
         /// </summary>
@@ -506,7 +517,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divHovercard;
-        
+
         /// <summary>
         /// txtCol control.
         /// </summary>
@@ -515,7 +526,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField txtCol;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>
@@ -524,7 +535,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate;
-        
+
         /// <summary>
         /// popUpInit control.
         /// </summary>
@@ -533,7 +544,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupControl popUpInit;
-        
+
         /// <summary>
         /// Panel1 control.
         /// </summary>
@@ -542,7 +553,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel Panel1;
-        
+
         /// <summary>
         /// btnInitParam control.
         /// </summary>
@@ -551,7 +562,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnInitParam;
-        
+
         /// <summary>
         /// chkNormaZL control.
         /// </summary>
@@ -560,7 +571,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkNormaZL;
-        
+
         /// <summary>
         /// chkNormaSD control.
         /// </summary>
@@ -569,7 +580,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkNormaSD;
-        
+
         /// <summary>
         /// chkNormaSL control.
         /// </summary>
@@ -578,7 +589,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkNormaSL;
-        
+
         /// <summary>
         /// chkCCCu control.
         /// </summary>
@@ -587,7 +598,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkCCCu;
-        
+
         /// <summary>
         /// chkInOut control.
         /// </summary>
@@ -596,7 +607,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkInOut;
-        
+
         /// <summary>
         /// popUpModif control.
         /// </summary>
@@ -605,7 +616,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupControl popUpModif;
-        
+
         /// <summary>
         /// Panel2 control.
         /// </summary>
@@ -614,7 +625,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel Panel2;
-        
+
         /// <summary>
         /// btnModif control.
         /// </summary>
@@ -623,7 +634,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnModif;
-        
+
         /// <summary>
         /// cmbTipAbs control.
         /// </summary>
@@ -632,7 +643,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbTipAbs;
-        
+
         /// <summary>
         /// pnlValuri control.
         /// </summary>
@@ -641,7 +652,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlValuri;
-        
+
         /// <summary>
         /// txtValuri control.
         /// </summary>
@@ -650,7 +661,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField txtValuri;
-        
+
         /// <summary>
         /// popUpExport control.
         /// </summary>
@@ -659,7 +670,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupControl popUpExport;
-        
+
         /// <summary>
         /// Panel3 control.
         /// </summary>
@@ -668,7 +679,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel Panel3;
-        
+
         /// <summary>
         /// btnExp control.
         /// </summary>
@@ -677,7 +688,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExp;
-        
+
         /// <summary>
         /// chkTotaluri control.
         /// </summary>
@@ -686,7 +697,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkTotaluri;
-        
+
         /// <summary>
         /// chkOre control.
         /// </summary>
@@ -695,7 +706,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkOre;
-        
+
         /// <summary>
         /// chkPauza control.
         /// </summary>
@@ -704,7 +715,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkPauza;
-        
+
         /// <summary>
         /// chkLinie control.
         /// </summary>
@@ -713,7 +724,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkLinie;
-        
+
         /// <summary>
         /// chkRoluri control.
         /// </summary>
@@ -722,7 +733,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkRoluri;
-        
+
         /// <summary>
         /// popUpMotiv control.
         /// </summary>
@@ -731,7 +742,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupControl popUpMotiv;
-        
+
         /// <summary>
         /// Panel4 control.
         /// </summary>
@@ -740,7 +751,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel Panel4;
-        
+
         /// <summary>
         /// btnRespingeMtv control.
         /// </summary>
@@ -749,7 +760,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnRespingeMtv;
-        
+
         /// <summary>
         /// txtMtv control.
         /// </summary>
@@ -758,7 +769,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxMemo txtMtv;
-        
+
         /// <summary>
         /// popUpMotivSapt control.
         /// </summary>
@@ -767,7 +778,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupControl popUpMotivSapt;
-        
+
         /// <summary>
         /// Panel5 control.
         /// </summary>
@@ -776,7 +787,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel Panel5;
-        
+
         /// <summary>
         /// btnRefuzaMtv control.
         /// </summary>
@@ -785,7 +796,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnRefuzaMtv;
-        
+
         /// <summary>
         /// txtMtvSapt control.
         /// </summary>
@@ -794,7 +805,34 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxMemo txtMtvSapt;
-        
+
+        /// <summary>
+        /// popUpIstoricAprobare control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxPopupControl popUpIstoricAprobare;
+
+        /// <summary>
+        /// Panel6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel6;
+
+        /// <summary>
+        /// grDateIstoric control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView grDateIstoric;
+
         /// <summary>
         /// ge control.
         /// </summary>

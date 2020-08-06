@@ -289,8 +289,8 @@ namespace WizOne.Absente
                     {
                     }
                 }
-                MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoSuccess);
-
+                //MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoSuccess);
+                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg);
             }
             catch (Exception ex)
             {

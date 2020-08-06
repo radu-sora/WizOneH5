@@ -32,6 +32,10 @@
                             <dx:ASPxLabel ID="lblDenumire" runat="server" Text="Denumire" Width="70"/>
                             <dx:ASPxTextBox ID="txtDenumire" Width="400" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)"/>
                         </div>
+                        <div class="ctl_inline">
+                            <dx:ASPxLabel ID="lblDenumireInAdmin" runat="server" Text="Denumire" Width="70"/>
+                            <dx:ASPxTextBox ID="txtDenumireInAdmin" Width="400" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)"/>
+                        </div>
                     </div>
                 </div>
             </td>

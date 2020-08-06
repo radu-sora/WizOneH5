@@ -12,6 +12,18 @@
             s.cpAlertMessage = null;
         }
     }
+
+    function OnRenunta() {
+        document.getElementById('grAng').style.display = 'none';
+        document.getElementById('legAng').InnerText = "Lista angajati";
+    }
+
+    function OnRaport() {
+        document.getElementById('grAng').style.display = 'block';
+        document.getElementById('legAng').innerText = "Lista angajati - Raport pe salariat";
+    }
+
+
 </script>
     <body>
 
@@ -43,27 +55,20 @@
                         </tr>
                         <tr>
                              <td>&nbsp;</td>
-                        </tr>                        
-                        <tr>
-                            <td align="right">
-                                <dx:ASPxButton ID="btnContrSal" ClientInstanceName="btnContrSal" ClientIDMode="Static" runat="server" Text="Contracte per salariat" Width="180"   OnClick="btnContrSal_Click" oncontextMenu="ctx(this,event)">                    
-                                    
-                                </dx:ASPxButton>
-                            </td>
                         </tr> 
                         <tr>
                              <td>&nbsp;</td>
                         </tr>
                         <tr>
                             <td align="right">
-                                <dx:ASPxButton ID="btnRapSal" ClientInstanceName="btnRapSal" ClientIDMode="Static" runat="server" Text="Raport pe salariat" Width="180"   OnClick="btnRapSal_Click" oncontextMenu="ctx(this,event)">                                
-                                   
+                                <dx:ASPxButton ID="btnRapSal" ClientInstanceName="btnRapSal" ClientIDMode="Static" runat="server" Text="Raport pe salariat" Width="180"  AutoPostBack="false" oncontextMenu="ctx(this,event)">                                
+                                   <ClientSideEvents Click="function(s,e){ OnRaport(); }"    />
                                 </dx:ASPxButton>
                             </td>
                         </tr>                         
                     </table>
                   </fieldset >
-                   <fieldset id="grAng" runat="server" border="0" visible="false">                     
+                   <fieldset id="grAng" runat="server" border="0" style="display:none">                     
                     <legend id="legAng" runat="server" class="legend-border">Lista angajati</legend>            
                     <table width="10%" >
                         <tr>
@@ -86,8 +91,8 @@
                         </tr>
                         <tr>
                             <td align="center">
-                                <dx:ASPxButton ID="btnRen" ClientInstanceName="btnRen" ClientIDMode="Static" runat="server" Text="Renunta" Width="180"  OnClick="btnRen_Click" oncontextMenu="ctx(this,event)" >                                
-                                   
+                                <dx:ASPxButton ID="btnRen" ClientInstanceName="btnRen" ClientIDMode="Static" runat="server" Text="Renunta" Width="180"  AutoPostBack="false" oncontextMenu="ctx(this,event)" >                                
+                                    <ClientSideEvents Click="function(s,e){ OnRenunta(); }"    />
                                 </dx:ASPxButton>
                             </td>
                         </tr>

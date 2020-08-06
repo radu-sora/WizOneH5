@@ -132,7 +132,16 @@
                                         </div>                                         
                                     </td> 
                                  </tr>
-
+                                 <tr>
+                                     <td>
+                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                            <label id="lblAnLuna" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Luna/An</label>                                     
+                                            <dx:ASPxDateEdit ID="txtAnLuna" ClientInstanceName="txtAnLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >               
+                                                <CalendarProperties FirstDayOfWeek="Monday" />
+                                            </dx:ASPxDateEdit>
+                                        </div>
+                                     </td>
+                                 </tr>
      
                                
                             </table>
@@ -184,6 +193,7 @@
                         <dx:GridViewDataTextColumn FieldName="Birou" Caption="Birou" ReadOnly="true" Width="100" />
                         <dx:GridViewDataTextColumn FieldName="Categorie" Caption="Categorie" ReadOnly="true" Width="100" />
                         <dx:GridViewDataTextColumn FieldName="Email" Caption="E-mail" ReadOnly="true" Width="150" />
+                        <dx:GridViewDataTextColumn FieldName="F10016" Caption="Parola" ReadOnly="true" Visible="false" Width="50" />
                         <dx:GridViewDataCheckColumn FieldName="AreMail"  Caption="Are e-mail" ReadOnly="true"  Width="80px"  />
                         <dx:GridViewDataCheckColumn FieldName="AreParola"  Caption="Are parola" ReadOnly="true"  Width="80px"  />
                     </Columns>

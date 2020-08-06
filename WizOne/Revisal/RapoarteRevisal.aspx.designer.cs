@@ -42,15 +42,6 @@ namespace WizOne.Revisal
         protected global::DevExpress.Web.ASPxButton btnRegSal;
 
         /// <summary>
-        /// btnContrSal control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnContrSal;
-
-        /// <summary>
         /// btnRapSal control.
         /// </summary>
         /// <remarks>

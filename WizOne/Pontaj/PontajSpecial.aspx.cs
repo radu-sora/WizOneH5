@@ -115,6 +115,8 @@ namespace WizOne.Pontaj
                             progr += ";";
                     }
                     Session["PtjSpecial_ProgrameJS"] = progr;
+
+                    txtZiStart.Text = "1";
                 }
                 else
                 {
@@ -157,7 +159,7 @@ namespace WizOne.Pontaj
                                 tx.Visible = false;
                             if (lx != null)
                                 lx.Visible = false;
-                        }
+                        }             
                     }             
                 }
 
@@ -253,10 +255,41 @@ namespace WizOne.Pontaj
                 //}
 
 
+                if (txtZiStart.Text.Length <= 0)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati precizat ziua de start!"), MessageBox.icoError);
+                    return;
+                }
+
+                int ziStart = 1;
+                if (!int.TryParse(txtZiStart.Text, out ziStart))
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Ziua de start este invalida!"), MessageBox.icoError);
+                    return;
+                }
+
+                if (ziStart > Convert.ToInt32(cmbNrZileSablon.Value))
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Ziua de start este mai mare decat numarul zilelor din sablon!"), MessageBox.icoError);
+                    return;
+                }
 
                 DataTable table = Session["PtjSpecial_Sabloane"] as DataTable;
+                foreach (DataColumn col in table.Columns)
+                    col.ReadOnly = false;
+
+
                 DataRow sablon = table.Select("Id=" + cmbSablon.Value)[0];
 
+                DataRow sablonSpecial = table.NewRow();
+
+                for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
+                {
+                    sablonSpecial["IdProgram" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "IdProgram" + (i + ziStart - 1) : "IdProgram" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
+                    sablonSpecial["Ziua" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "Ziua" + (i + ziStart - 1) : "Ziua" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
+                    sablonSpecial["ValZiua" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "ValZiua" + (i + ziStart - 1) : "ValZiua" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
+                }
+               
 
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
@@ -281,7 +314,7 @@ namespace WizOne.Pontaj
                         General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month);             
                         dt = dt.AddMonths(1);
                     }
-                    string msg = InitializarePontajSpecial(Convert.ToDateTime(dtDataStart.Value), Convert.ToDateTime(dtDataSfarsit.Value), Convert.ToInt32(cmbNrZileSablon.Value), sablon, lstMarci);
+                    string msg = InitializarePontajSpecial(Convert.ToDateTime(dtDataStart.Value), Convert.ToDateTime(dtDataSfarsit.Value), Convert.ToInt32(cmbNrZileSablon.Value), sablonSpecial, lstMarci);
                   
                     if (msg.Length > 0)
                         MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoError);
@@ -338,7 +371,7 @@ namespace WizOne.Pontaj
 
                     for (DateTime zi = dataStart.AddDays(i - 1); zi <= dataSf; zi = zi.AddDays(nrZile))
                     {
-                        string dtStr = General.ToDataUniv(zi.Date.Year, zi.Date.Month, zi.Date.Day);
+                        string dtStr = General.ToDataUniv(zi.Date.Year, zi.Date.Month, zi.Date.Day);                  
 
                         int nr = dtHolidays.Select("DAY = " + dtStr).Count();
                         int nrZileNel = 0;
@@ -535,7 +568,7 @@ namespace WizOne.Pontaj
                         sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
 
                     }
-                    if (lstZileGolite != null && lstZileGolite.Count > 0)
+                    if (chkPontare.Checked && lstZileGolite != null && lstZileGolite.Count > 0)
                     {
                         string dataZileGolite = "";
                         foreach (DateTime ziGolita in lstZileGolite)
@@ -907,7 +940,7 @@ namespace WizOne.Pontaj
 
                 string strSql = @"SELECT Y.* FROM(
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
-                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025,
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025, A.F10022, A.F10023,
                                 F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou""
                                 {3}
 
@@ -929,7 +962,7 @@ namespace WizOne.Pontaj
                                 UNION
 
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
-                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  ,
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  , A.F10022, A.F10023,
                                 F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou""
                                 {3}
 
@@ -1060,6 +1093,15 @@ namespace WizOne.Pontaj
                     cond = " WHERE (Y.F10025 = 0 OR Y.F10025 = 999) ";
                 else
                     cond += " AND (Y.F10025 = 0 OR Y.F10025 = 999) ";
+
+                //Radu 10.07.2020
+                if (dtDataStart.Value != null && dtDataSfarsit.Value != null)
+                {
+                    if (cond.Length <= 0)
+                        cond = " WHERE Y.F10022 <= " + General.ToDataUniv(Convert.ToDateTime(dtDataSfarsit.Value)) + " AND Y.F10023 >= " + General.ToDataUniv(Convert.ToDateTime(dtDataStart.Value));
+                    else
+                        cond += " AND Y.F10022 <= " + General.ToDataUniv(Convert.ToDateTime(dtDataSfarsit.Value)) + " AND Y.F10023 >= " + General.ToDataUniv(Convert.ToDateTime(dtDataStart.Value));
+                }
 
                 strSql += cond;
 

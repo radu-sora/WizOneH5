@@ -394,6 +394,14 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                            <label id="lblZiStart" runat="server" style="display:inline-block; float:left;   min-width:75px; width:200px;">Initializarea sa inceapa cu ziua</label>
+							                <dx:ASPxTextBox  ID="txtZiStart" style="display:inline-block; float:left; width:50px;" runat="server"  AutoPostBack="false" />
+                                        </div>
+                                    </td>
+                                </tr>
                             </table>
                         </dx:PanelContent>
                     </PanelCollection>

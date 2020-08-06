@@ -333,6 +333,12 @@
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                         </dx:ASPxComboBox>
                     </td>
+                    <td id="lbl13Act" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt13Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxComboBox ID="cmb8Act" runat="server" ClientInstanceName="cmb8Act" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
+                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
+                        </dx:ASPxComboBox>
+                    </td>
                     <td id="lbl8Act" runat="server" colspan="2">
                         <dx:ASPxLabel  ID="lblTxt1Act" runat="server"  Visible="false"></dx:ASPxLabel >
                         <dx:ASPxTextBox ID="txt1Act" runat="server"  Visible="false">
@@ -428,6 +434,13 @@
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
                         </dx:ASPxComboBox>
                     </td>
+                    <td id="lbl14Nou" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt14Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxComboBox ID="cmb8Nou" runat="server" ClientInstanceName="cmb8Nou" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
+                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
+                            <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
+                        </dx:ASPxComboBox>
+                    </td>
                     <td id="lbl8Nou" runat="server" colspan="2">
                         <dx:ASPxLabel  ID="lblTxt1Nou" runat="server"   Visible="false"></dx:ASPxLabel >
                         <dx:ASPxTextBox ID="txt1Nou" runat="server"  Visible="false">
@@ -454,13 +467,6 @@
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </td>
-                    <td id="lbl13Nou" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt13Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxDateEdit ID="de3Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
-                            <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
-                            <CalendarProperties FirstDayOfWeek="Monday" />
-                        </dx:ASPxDateEdit>
-                    </td>
                     <td id="lbl12Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt12Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
 						<dx:ASPxComboBox ID="cmbStructOrgNou" runat="server" ClientInstanceName="cmbStructOrgStrNou" ClientIDMode="Static" Width="600px"  ValueField="IdAuto"  ValueType="System.Int32"  AutoPostBack="false" >
@@ -481,6 +487,13 @@
                             </Columns>
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
 						</dx:ASPxComboBox >
+                    </td>
+                    <td id="lbl13Nou" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt13Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxDateEdit ID="de3Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                            <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
+                            <CalendarProperties FirstDayOfWeek="Monday" />
+                        </dx:ASPxDateEdit>
                     </td>
                   </tr>
                     <tr>

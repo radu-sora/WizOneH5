@@ -684,7 +684,7 @@ namespace WizOne.Personal
                     
                 for (int i = 1; i < ds.Tables.Count; i++)
                 {//Radu 10.06.2019
-                    if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni" || ds.Tables[i].TableName == "F100Studii")
+                    if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni" || ds.Tables[i].TableName == "Admin_Cursuri" || ds.Tables[i].TableName == "F100Studii")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
                     {                     
@@ -767,7 +767,7 @@ namespace WizOne.Personal
                     sql = "UPDATE \"" + tabela + "\" SET ";
                     for (int k = 0; k < dt.Columns.Count; k++)
                     {
-                        if (!dt.Columns[k].AutoIncrement)
+                        if (!dt.Columns[k].AutoIncrement && dt.Columns[k].ColumnName != "Modificabil" && dt.Columns[k].ColumnName != "IdAuto")
                         {
                             string val = "";
                             if (dr[k].GetType() == typeof(int) || dr[k].GetType() == typeof(decimal))
@@ -815,6 +815,16 @@ namespace WizOne.Personal
                             General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
                         }
                     }
+                    if (tabela == "Admin_Cursuri")
+                    {
+                        Dictionary<int, Personal.Cursuri.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, Personal.Cursuri.metaUploadFile>;
+                        if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                        {
+                            sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
+                            General.ExecutaNonQuery(sql, null);
+                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                        }
+                    }
                     if (tabela == "F100Studii")
                     {
                         Dictionary<int, Personal.StudiiNou.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, Personal.StudiiNou.metaUploadFile>;
@@ -834,7 +844,7 @@ namespace WizOne.Personal
                     string sir = "";
                     for (int k = 0; k < dt.Columns.Count; k++)
                     {
-                        if (!dt.Columns[k].AutoIncrement)
+                        if (!dt.Columns[k].AutoIncrement && dt.Columns[k].ColumnName != "Modificabil" && dt.Columns[k].ColumnName != "IdAuto")
                             sir += ",\"" + dt.Columns[k].ColumnName + "\"";
                     }
 
@@ -846,7 +856,7 @@ namespace WizOne.Personal
                     sir = "";
                     for (int k = 0; k < dt.Columns.Count; k++)
                     {
-                        if (!dt.Columns[k].AutoIncrement)
+                        if (!dt.Columns[k].AutoIncrement && dt.Columns[k].ColumnName != "Modificabil" && dt.Columns[k].ColumnName != "IdAuto")
                         {
                             string val = "";
                             if (dr[k].GetType() == typeof(int) || dr[k].GetType() == typeof(decimal))
@@ -905,6 +915,12 @@ namespace WizOne.Personal
                         if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
                             General.IncarcaFisier(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);                   
                     }
+                    if (tabela == "Admin_Cursuri")
+                    {
+                        Dictionary<int, Personal.Cursuri.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, Personal.Cursuri.metaUploadFile>;
+                        if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
+                            General.IncarcaFisier(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);
+                    }
                     if (tabela == "F100Studii")
                     {
                         Dictionary<int, Personal.StudiiNou.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, Personal.StudiiNou.metaUploadFile>;
@@ -923,6 +939,9 @@ namespace WizOne.Personal
             
             if (tabela == "Admin_Sanctiuni")
                 Session["List_DocUpload_MP_Sanctiuni"] = null;
+
+            if (tabela == "Admin_Cursuri")
+                Session["List_DocUpload_MP_Cursuri"] = null;
 
             if (tabela == "F100Studii")
                 Session["List_DocUpload_MP_Studii"] = null;
@@ -1332,8 +1351,9 @@ namespace WizOne.Personal
                 lstCtr.Add("deDataModifSal", "F100991");
                 lstCtr.Add("cmbCategAng1", "F10061");
                 lstCtr.Add("cmbCategAng2", "F10062");
-                lstCtr.Add("txtLocAnt", "F10078");
+                lstCtr.Add("txtLocAnt", "F10078");                
                 lstCtr.Add("cmbLocatieInt", "F100966");
+                lstCtr.Add("cmbGrilaSal", "F1001136");
                 lstCtr.Add("cmbTipAng", "F10010");
                 lstCtr.Add("cmbTimpPartial", "F10043");
                 lstCtr.Add("cmbNorma", "F100973");

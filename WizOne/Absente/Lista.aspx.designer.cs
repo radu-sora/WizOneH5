@@ -69,6 +69,15 @@ namespace WizOne.Absente
         protected global::DevExpress.Web.ASPxButton btnExit;
 
         /// <summary>
+        /// pnlCtl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
+
+        /// <summary>
         /// lblViz control.
         /// </summary>
         /// <remarks>
@@ -157,6 +166,24 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit txtDtSf;
+
+        /// <summary>
+        /// lblAng control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAng;
+
+        /// <summary>
+        /// cmbAng control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbAng;
 
         /// <summary>
         /// btnFiltru control.

@@ -247,6 +247,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Artifacts\ProceseSec.dll</HintPath>
     </Reference>
+    <Reference Include="RapoarteRevisalDLL">
+      <HintPath>..\Artifacts\RapoarteRevisalDLL.dll</HintPath>
+    </Reference>
     <Reference Include="Renci.SshNet">
       <HintPath>..\Artifacts\Renci.SshNet.dll</HintPath>
     </Reference>
@@ -811,6 +814,7 @@
     <Content Include="Organigrama\PosturiValidare.aspx" />
     <Content Include="Pagini\ActeAditionale.aspx" />
     <Content Include="Pagini\ActualizareDate.aspx" />
+    <Content Include="Pagini\AtribuireDocument.aspx" />
     <Content Include="Pagini\CalculVenit.aspx" />
     <Content Include="Pagini\Captcha.aspx" />
     <Content Include="Pagini\CodConfirmare.aspx" />
@@ -1575,6 +1579,13 @@
     </Compile>
     <Compile Include="Pagini\ActualizareDate.aspx.designer.cs">
       <DependentUpon>ActualizareDate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\AtribuireDocument.aspx.cs">
+      <DependentUpon>AtribuireDocument.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\AtribuireDocument.aspx.designer.cs">
+      <DependentUpon>AtribuireDocument.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pagini\CalculVenit.aspx.cs">
       <DependentUpon>CalculVenit.aspx</DependentUpon>

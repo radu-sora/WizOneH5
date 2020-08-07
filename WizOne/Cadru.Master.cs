@@ -375,13 +375,13 @@ namespace WizOne
         {
             try
             {
-                string strSql = @"SELECT B.""IdMeniu"", B.""Parinte"", B.""Nume"", B.""Imagine"", B.""Ordine"", E.""Pagina"", B.""Descriere"" 
+                string strSql = @"SELECT B.""IdMeniu"", B.""Parinte"", B.""Nume"", B.""Imagine"", B.""Ordine"", E.""Pagina"", B.""Descriere"", B.""StareMobil"", B.""NumeMobil"", B.""OrdineMobil""
                                 FROM ""MeniuLinii"" B
                                 INNER JOIN ""relGrupMeniu2"" C ON B.""IdMeniu"" = C.""IdMeniu""
                                 INNER JOIN ""relGrupUser"" D ON C.""IdGrup"" = D.""IdGrup""
                                 LEFT JOIN ""tblMeniuri"" E ON E.""Id"" = B.""IdNomen""
                                 WHERE D.""IdUser"" = @1 AND B.""Stare"" = 1
-                                GROUP BY B.""Parinte"", B.""IdMeniu"", B.""Nume"", B.""Imagine"", B.""Ordine"", E.""Pagina"", B.""Descriere""
+                                GROUP BY B.""Parinte"", B.""IdMeniu"", B.""Nume"", B.""Imagine"", B.""Ordine"", E.""Pagina"", B.""Descriere"", B.""StareMobil"", B.""NumeMobil"", B.""OrdineMobil""
                                 ORDER BY B.""Parinte"", B.""Ordine"" ";
 
                 strSql = string.Format(strSql, Session["UserId"].ToString());
@@ -407,6 +407,19 @@ namespace WizOne
                     
                     mnuSide.Groups.Add(modul);
                 }
+
+                FooterMenu.DataSource = dt.AsEnumerable().
+                    Where(row => (row["StareMobil"] as int? ?? 0) == 1 && !(row["Pagina"] as string ?? "").Contains('[')).
+                    Take(5). // Fixed for now
+                    OrderBy(row => row["OrdineMobil"] as int? ?? 0).
+                    Select(row => new
+                    {
+                        Name = row["NumeMobil"] as string ?? row["Nume"],
+                        Url = ResolveClientUrl(row["Pagina"] as string),
+                        ImageUrl = ResolveClientUrl("Fisiere/Imagini/Icoane/" + row["Imagine"]),
+                        Selected = "/" + (row["Pagina"] as string ?? "").Replace('\\', '/') == Request.RawUrl
+                    });
+                FooterMenu.DataBind();                
             }
             catch (Exception ex)
             {
@@ -504,25 +517,8 @@ namespace WizOne
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }
-
-        //Radu 25.03.2019        
-        protected void OnImageClick(object sender, EventArgs e)
-        {
-            string url = string.Format("{0}://{1}{2}",
-                    HttpContext.Current.Request.Url.Scheme,
-                    HttpContext.Current.Request.ServerVariables["HTTP_HOST"],
-                    (HttpContext.Current.Request.ApplicationPath.Equals("/")) ? string.Empty : HttpContext.Current.Request.ApplicationPath
-                    );
-            
-            Response.Redirect(url + "/Pagini/MainPage.aspx");
-        }
+        }        
     }
-
-
-
-
-
 
     public class GroupTemplate : System.Web.UI.UserControl, ITemplate
     {
@@ -636,13 +632,6 @@ namespace WizOne
                 General.MemoreazaEroarea(ex, Path.GetFileName(this.Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
     }
-
-
-
-
-
-
 }
 

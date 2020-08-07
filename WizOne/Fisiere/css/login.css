@@ -13,7 +13,7 @@ background-size:cover;
 
 .outer{
 width:410px;
-height:450px;
+height:370px;
 position: absolute;
 top:0;
 bottom: 0;
@@ -43,12 +43,10 @@ color:#00588a;
     color: #00588a;
 }
 
-.inner
-{
+.inner {
     position:absolute;
     top:110px;
     left:55px;
-    height: 550px;
     width:290px;
     display:inline-block;
     text-align:left;
@@ -202,5 +200,7 @@ a
     }
 
 .captcha {
-    display:inline-block; bottom:0px; left:50px; position:absolute;
+    position: absolute;
+    top: 370px;
+    left: 50px;
 }

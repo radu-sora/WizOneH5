@@ -212,15 +212,8 @@ namespace WizOne.Pontaj
                 lblSubDept.InnerText = Dami.TraduCuvant("SubDept");
                 lblBirou.InnerText = Dami.TraduCuvant("Birou");
 
-
-                foreach (dynamic c in grDate.Columns)
-                {
-                    try
-                    {
-                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
-                    }
-                    catch (Exception) { }
-                }
+                foreach (var col in grDate.Columns.OfType<GridViewDataColumn>())
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
                 //Radu 13.12.2019
                 foreach (ListBoxColumn col in cmbAng.Columns)
@@ -349,12 +342,6 @@ namespace WizOne.Pontaj
 
                 }
 
-                //Florin 2020.03.30
-                //if (tip == 1 || tip == 10)
-                //{
-                //    grDate.SettingsPager.PageSize = 31;
-                //}
-                //else
                 if (tip == 2 || tip == 20)
                 {
                     string dataRef = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
@@ -3268,7 +3255,6 @@ namespace WizOne.Pontaj
 
                     tdGridTotaluri.Controls.Add(grDate);
                 }
-
             }
             catch (Exception ex)
             {

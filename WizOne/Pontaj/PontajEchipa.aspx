@@ -79,19 +79,19 @@
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divAnLuna" runat="server">
                                     <label id="lblAnLuna" runat="server" oncontextMenu="ctx(this,event)">Luna/An</label><br />
                                     <dx:ASPxDateEdit ID="txtAnLuna" ClientInstanceName="txtAnLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
-                                        <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtAnLuna'); }" />
+                                        <ClientSideEvents ValueChanged="function(s, e) { cmbAng.PerformCallback(); }" />
                                         <CalendarProperties FirstDayOfWeek="Monday" />
                                     </dx:ASPxDateEdit>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divRol" runat="server">
                                     <label id="lblRol" runat="server" oncontextMenu="ctx(this,event)">Roluri</label><br />
                                     <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdRol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRol'); }" />
+                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { cmbAng.PerformCallback(); }" />
                                     </dx:ASPxComboBox>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divAng" runat="server">
                                     <label id="lblAng" runat="server" oncontextMenu="ctx(this,event)">Angajat</label><br />
-                                    <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" SelectInputTextOnClick="true"
+                                    <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" OnCallback="cmbAng_Callback" oncontextMenu="ctx(this,event)" SelectInputTextOnClick="true"
                                                 CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
                                         <Columns>
                                             <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />

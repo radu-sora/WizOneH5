@@ -273,11 +273,13 @@ namespace WizOne.Pontaj
                     Session["InformatiaCurenta"] = null;
 
                     txtAnLuna.Value = DateTime.Now;
-                    
+
                     IncarcaRoluri();
                     IncarcaAngajati();
 
                     SetColoane();
+
+                    #region Filtru Retinut
 
                     if (Request.QueryString["tip"] != null)
                     {
@@ -318,24 +320,34 @@ namespace WizOne.Pontaj
                             }
                         }
                     }
-                }
-                else
-                {
-                    DataTable dtCmb = Session["SurseCombo"] as DataTable;
-                    GridViewDataComboBoxColumn colAbs = (grDate.Columns["ValAbs"] as GridViewDataComboBoxColumn);
-                    if (colAbs != null) colAbs.PropertiesComboBox.DataSource = dtCmb;
 
-                    cmbAng.DataSource = null;
-                    cmbAng.Items.Clear();
+                    #endregion
+
+                    cmbStare.DataSource = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblStariPontaj"" ", null);
+                    cmbStare.DataBind();
+                }
+                else if (pnlCtl.IsCallback)
+                {
+                    //cmbAng.DataSource = null;
+                    //cmbAng.Items.Clear();
                     cmbAng.DataSource = Session["Pontaj_Angajati"];
                     cmbAng.DataBind();
-
+                }
+                else if (grDate.IsCallback)
+                {
                     if (Session["InformatiaCurenta"] != null)
                     {
                         grDate.DataSource = Session["InformatiaCurenta"];
                         grDate.DataBind();
                     }
                 }
+                else
+                {
+                    DataTable dtCmb = Session["SurseCombo"] as DataTable;
+                    GridViewDataComboBoxColumn colAbs = (grDate.Columns["ValAbs"] as GridViewDataComboBoxColumn);
+                    if (colAbs != null) colAbs.PropertiesComboBox.DataSource = dtCmb;
+                }
+
 
                 string dataRef = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
                 cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003 " + 
@@ -378,9 +390,6 @@ namespace WizOne.Pontaj
 
                 cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
                 cmbCateg.DataBind();
-
-                cmbStare.DataSource = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblStariPontaj"" ", null);
-                cmbStare.DataBind();
 
                 ASPxListBox lstCtr = cmbCtr.FindControl("listBox") as ASPxListBox;
                 if (lstCtr != null)
@@ -586,11 +595,11 @@ namespace WizOne.Pontaj
                             (Constante.tipBD == 1 ? "F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : "F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
                         cmbDept.DataBind();
                         return;
-                    case "cmbRol":
-                    case "txtAnLuna":
-                        IncarcaAngajati();
-                        esteStruc = false;
-                        break;
+                    //case "cmbRol":
+                    //case "txtAnLuna":
+                    //    IncarcaAngajati();
+                    //    esteStruc = false;
+                    //    break;
                 }
 
                 if (esteStruc)
@@ -674,7 +683,16 @@ namespace WizOne.Pontaj
         {
             try
             {
-                DataTable dt = General.IncarcaDT(SelectAngajati(), null);
+                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
+                if (Constante.tipBD == 2) cmp = "ROWNUM";
+                string filtru = "";
+                DateTime dtData = Convert.ToDateTime(txtAnLuna.Value);
+
+                string strSql = $@"SELECT {cmp} AS ""IdAuto"", X.* FROM ({SelectComun()}) X 
+                            WHERE X.""IdRol"" = {Convert.ToInt32(cmbRol.Value ?? -99)} AND X.F10022 <= {General.ToDataUniv(dtData.Year, dtData.Month, 99)} AND {General.ToDataUniv(dtData.Year, dtData.Month)} <= X.F10023 {filtru}
+                            ORDER BY X.""NumeComplet"" ";
+
+                DataTable dt = General.IncarcaDT(strSql, null);
 
                 cmbAng.DataSource = null;
                 cmbAng.DataSource = dt;
@@ -686,32 +704,6 @@ namespace WizOne.Pontaj
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }
-
-        private string SelectAngajati(string filtru = "")
-        {
-            string strSql = "";
-
-            try
-            {
-                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
-                if (Constante.tipBD == 2) cmp = "ROWNUM";
-
-                DateTime dtData = Convert.ToDateTime(txtAnLuna.Value);
-
-                strSql = @"SELECT {0} AS ""IdAuto"", X.* FROM ({4}) X 
-                            WHERE X.""IdRol"" = {1} AND X.F10022 <= {2} AND {3} <= X.F10023 {5}
-                            ORDER BY X.""NumeComplet"" ";
-
-                strSql = string.Format(strSql, cmp, Convert.ToInt32(cmbRol.Value ?? -99), General.ToDataUniv(dtData.Year, dtData.Month, 99), General.ToDataUniv(dtData.Year, dtData.Month), SelectComun(), filtru);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return strSql;
         }
 
         private string SelectComun()
@@ -2838,18 +2830,18 @@ namespace WizOne.Pontaj
             grDateIstoric.DataBind();
 
         }
-    
+
+        protected void cmbAng_Callback(object sender, CallbackEventArgsBase e)
+        {
+            try
+            {
+                IncarcaAngajati();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 

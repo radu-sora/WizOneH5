@@ -1809,9 +1809,9 @@ namespace WizOne.Avs
                             if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date)
                             {
                                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");                               
-                            }       
-
-                        break;
+                            }
+                        chkGen.Checked = true;
+                        break;                        
                     case "2":
                         if (e.Parameter.Split(';')[1] == "cmb1Nou")
                             Session["Valoare1Noua"] = e.Parameter.Split(';')[1] + ";" + e.Parameter.Split(';')[2];
@@ -3381,7 +3381,7 @@ namespace WizOne.Avs
             //Florin 2019.07.29
             //s-a adaugat si parametrul cu id-uri excluse
             string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
-            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idAtr + ",") >=0)))
+            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idAtr + ",") >=0) || !chkGen.Checked))
             {
                 TrimiteInF704(idUrm);
                 if (idAtr == 2)

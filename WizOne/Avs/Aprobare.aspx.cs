@@ -1,5 +1,6 @@
 ﻿using DevExpress.Utils;
 using DevExpress.Web;
+using DevExpress.Web.Internal;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -130,6 +131,7 @@ namespace WizOne.Avs
             try
             {
                 IncarcaGrid();
+                chkGen.Checked = true;
             }
             catch (Exception ex)
             {
@@ -917,7 +919,7 @@ namespace WizOne.Avs
                             //Florin 2019.07.29
                             //s-a adaugat si parametrul cu id-uri excluse
                             string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
-                            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + id + ",") >= 0)))
+                            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + id + ",") >= 0) || !chkGen.Checked))
                             {
                                 Cereri pag = new Cereri();
                                 pag.TrimiteInF704(id);

@@ -31,6 +31,13 @@
                     hfPIN.Set('PIN', String(value) + String(nr));
             }
         </script>
+        <asp:ScriptManager ID="ScriptManager1" runat="server">
+        </asp:ScriptManager>
+        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+            <ContentTemplate>
+                <asp:Timer ID="Timer1" runat="server" OnTick="Resetare" Interval="20000" />
+            </ContentTemplate>
+        </asp:UpdatePanel>
 
         <div id="panouExt" runat="server"  class="outer">
             <div  class="inner">
@@ -133,16 +140,8 @@
                         </dx:ASPxButton>
                     </td> 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <dx:ASPxButton ID="btnRev" ClientInstanceName="btnRev" ClientIDMode="Static" ClientVisible="false"  TabIndex="10" runat="server" Width="260px" Height="30px" Text="Revenire" style="font-size:30px;text-align:center" CssClass="divider" AutoPostBack="true" OnClick="btnRev_Click" oncontextMenu="ctx(this,event)"  RenderMode="Outline" meta:resourcekey="btnLog" >                                                                          
-                            <Paddings PaddingBottom="10px" PaddingLeft="30px"  />
-                        </dx:ASPxButton>
-                    </td>                     
-                </tr> 
             </table>
 		</div>
-   
       
 
     <dx:ASPxHiddenField ID="hfPIN" runat="server"></dx:ASPxHiddenField>        

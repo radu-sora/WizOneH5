@@ -286,7 +286,12 @@
                         <dx:ASPxDateEdit ID="deDataRevisal" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" Enabled="false" EditFormat="Custom" >                                 
                         </dx:ASPxDateEdit>
                     </td>
-                </tr>
+                   <td>
+                       <label id="lblGen"   runat="server" style="display:inline-block;"></label>
+                        <dx:ASPxCheckBox ID="chkGen"  runat="server" Width="150" Text="Cu generare document"  TextAlign="Left" Checked="true"  ClientInstanceName="chkGen" >                             
+                        </dx:ASPxCheckBox>
+                    </td>
+               </tr>
             </table>
 
             <table width="40%">
@@ -799,7 +804,7 @@
                     <td colspan="3">
                         <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
                     </td>
-                </tr>
+                </tr> 
         
 
             </table>

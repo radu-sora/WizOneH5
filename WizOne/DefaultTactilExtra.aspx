@@ -35,9 +35,9 @@
         </asp:ScriptManager>
         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>
-                <asp:Timer ID="Timer1" runat="server" OnTick="Resetare" Interval="20000" />
-            </ContentTemplate>
-        </asp:UpdatePanel>
+                <asp:Timer ID="Timer1" runat="server" OnTick="Resetare" Interval="20000" >                    
+                    </asp:Timer>
+
 
         <div id="panouExt" runat="server"  class="outer">
             <div  class="inner">
@@ -143,7 +143,8 @@
             </table>
 		</div>
       
-
+        </ContentTemplate>
+    </asp:UpdatePanel>
     <dx:ASPxHiddenField ID="hfPIN" runat="server"></dx:ASPxHiddenField>        
 
     </form>

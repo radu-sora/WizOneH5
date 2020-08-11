@@ -69,10 +69,10 @@ color:#00588a;
 }
 
 .innerbuttonscard {
-    position:  absolute;
+    position: absolute;
     top: 200px;
-    left: 150px;
-    width: 1000px;
+    left: 750px;
+    width: 400px;
     height: 500px;
     display: inline-block;
     text-align: center;

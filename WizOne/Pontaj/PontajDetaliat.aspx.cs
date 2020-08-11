@@ -485,38 +485,16 @@ namespace WizOne.Pontaj
         {
             try
             {
-                string ziInc = General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month);
-                string ziSf = General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99);
-
+                DateTime dataSelectie = txtAnLuna.Date;
                 if (tip == 2 || tip == 20)
-                {
-                    ziInc = General.ToDataUniv(txtZiua.Date.Year, txtZiua.Date.Month);
-                    ziSf = General.ToDataUniv(txtZiua.Date.Year, txtZiua.Date.Month, 99);
-                }
+                    dataSelectie = txtZiua.Date;
 
-                //Florinn 2020.05.20
-                DataRow drCnt = General.IncarcaDR($@"
-                    SELECT
-                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999) AND F10022 <= {ziInc}  AND  {ziSf} <= F10023) AS ""NrAng"",
-                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {ziInc} <= ""Ziua"" AND ""Ziua"" <=  {ziSf}) AS ""NrPtj"" {General.FromDual()}");                
-                if (drCnt != null)
+                if (!General.EstePontajulInitializat(dataSelectie, General.Nz(cmbCtr.Value, "").ToString()))
                 {
-                    decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
-                    decimal nrPtj = Convert.ToDecimal(General.Nz(drCnt["NrPtj"], 0));
-
-                    if (tip == 1 || tip == 10)
-                        nrAng = DateTime.DaysInMonth(txtAnLuna.Date.Year, txtAnLuna.Date.Month);
-                    if (nrAng != 0)
-                    {
-                        decimal rez = ((nrAng - nrPtj) / nrAng) * 100;
-                        if (rez > 15)
-                        {
-                            grDate.DataSource = null;
-                            grDate.DataBind();
-                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pontajul nu este initializat") + Environment.NewLine + Dami.TraduCuvant("Va rugam ca mai intai sa efectuati initializarea");
-                            return;
-                        }
-                    }
+                    grDate.DataSource = null;
+                    grDate.DataBind();
+                    MessageBox.Show("Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea", MessageBox.icoInfo, "Initializare");
+                    return;
                 }
 
                 IncarcaGrid();

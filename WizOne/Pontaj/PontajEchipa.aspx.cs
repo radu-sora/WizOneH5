@@ -587,44 +587,12 @@ namespace WizOne.Pontaj
         {
             try
             {
-                //Florin 2020.06.30 - am adugat filtrul pt contract
-                //Florinn 2020.05.20
-                string sqlCnt = $@"
-                    SELECT
-                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999)) AS ""NrAng"",
-                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)}) AS ""NrPtj"" {General.FromDual()}";
-
-                if (General.Nz(cmbCtr.Value, "").ToString() != "")
+                if (!General.EstePontajulInitializat(txtAnLuna.Date, General.Nz(cmbCtr.Value, "").ToString()))
                 {
-                    //strFiltru += " AND C.\"Denumire\" IN ('" + cmbCtr.Value.ToString().Replace(",", "','") + "')";
-                    sqlCnt = $@"
-                    SELECT
-                    (SELECT COUNT(*) FROM F100 A
-                    INNER JOIN ""F100Contracte"" B ON A.F10003=B.F10003 AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit""
-                    INNER JOIN ""Ptj_Contracte"" C ON B.""IdContract""=C.""Id"" AND C.""Denumire"" IN ('{cmbCtr.Value.ToString().Replace(",", "','")}')
-                    WHERE A.F10025 IN (0,999)) AS ""NrAng"",
-                    (SELECT COUNT(DISTINCT A.F10003) FROM ""Ptj_Intrari"" A
-                    INNER JOIN ""Ptj_Contracte"" C ON A.""IdContract"" = C.""Id"" AND C.""Denumire"" IN ('{cmbCtr.Value.ToString().Replace(",", "', '")}')
-                    WHERE {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)} <= A.""Ziua"" AND A.""Ziua"" <=  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)}) AS ""NrPtj"" {General.FromDual()}";
-                }
-
-                DataRow drCnt = General.IncarcaDR(sqlCnt);
-                if (drCnt != null)
-                {
-                    decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
-                    decimal nrPtj = Convert.ToDecimal(General.Nz(drCnt["NrPtj"], 0));
-
-                    if (nrAng != 0)
-                    {
-                        decimal rez = ((nrAng - nrPtj)/nrAng) * 100;
-                        if (rez > 25)
-                        {
-                            grDate.DataSource = null;
-                            grDate.DataBind();
-                            MessageBox.Show("Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea", MessageBox.icoInfo,"Initializare");
-                            return;
-                        }
-                    }
+                    grDate.DataSource = null;
+                    grDate.DataBind();
+                    MessageBox.Show("Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea", MessageBox.icoInfo, "Initializare");
+                    return;
                 }
 
                 RetineFiltru("1");

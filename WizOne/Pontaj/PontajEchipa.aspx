@@ -64,7 +64,7 @@
         </tr>
         <tr>
             <td colspan="2" style="margin-top:15px; display:inline-block; width:100%;">
-                <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
+                <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" SettingsLoadingPanel-Enabled="false" >
                     <ClientSideEvents EndCallback="function (s,e) { pnlLoading.Hide(); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
                     <PanelCollection>
                         <dx:PanelContent>
@@ -79,7 +79,7 @@
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divAnLuna" runat="server">
                                     <label id="lblAnLuna" runat="server" oncontextMenu="ctx(this,event)">Luna/An</label><br />
                                     <dx:ASPxDateEdit ID="txtAnLuna" ClientInstanceName="txtAnLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
-                                        <ClientSideEvents ValueChanged="function(s, e) { cmbAng.PerformCallback(); }" />
+                                        <ClientSideEvents ValueChanged="function(s, e) { cmbAng.PerformCallback('txtAnLuna'); }" />
                                         <CalendarProperties FirstDayOfWeek="Monday" />
                                     </dx:ASPxDateEdit>
                                 </div>
@@ -92,7 +92,7 @@
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divAng" runat="server">
                                     <label id="lblAng" runat="server" oncontextMenu="ctx(this,event)">Angajat</label><br />
                                     <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" OnCallback="cmbAng_Callback" oncontextMenu="ctx(this,event)" SelectInputTextOnClick="true"
-                                                CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
+                                                 TextFormatString="{0} {1}"  >
                                         <Columns>
                                             <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
                                             <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
@@ -134,19 +134,19 @@
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divSub" runat="server">
                                     <label id="lblSub" runat="server" oncontextMenu="ctx(this,event)">Subcomp.</label><br />
                                     <dx:ASPxComboBox ID="cmbSub" ClientInstanceName="cmbSub" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdSubcompanie" TextField="Subcompanie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSub'); }" />
+                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { OnCallbackStructura(s); }" />
                                     </dx:ASPxComboBox>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divFil" runat="server">
                                     <label id="lblFil" runat="server" oncontextMenu="ctx(this,event)">Filiala</label><br />
-                                    <dx:ASPxComboBox ID="cmbFil" ClientInstanceName="cmbFil" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdFiliala" TextField="Filiala" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbFil'); }" />
+                                    <dx:ASPxComboBox ID="cmbFil" ClientInstanceName="cmbFil" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdFiliala" TextField="Filiala" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" OnCallback="cmbFil_Callback" oncontextMenu="ctx(this,event)" >
+                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { OnCallbackStructura(s); }" />
                                     </dx:ASPxComboBox>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divSec" runat="server">
                                     <label id="lblSec" runat="server" oncontextMenu="ctx(this,event)">Sectie</label><br />
-                                    <dx:ASPxComboBox ID="cmbSec" ClientInstanceName="cmbSec" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdSectie" TextField="Sectie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSec'); }" />
+                                    <dx:ASPxComboBox ID="cmbSec" ClientInstanceName="cmbSec" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdSectie" TextField="Sectie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" OnCallback="cmbSec_Callback" oncontextMenu="ctx(this,event)" >
+                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { OnCallbackStructura(s); }" />
                                     </dx:ASPxComboBox>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divDept" runat="server">
@@ -154,7 +154,7 @@
                                     <dx:ASPxDropDownEdit ClientIDMode="AutoID" ClientInstanceName="checkComboBox2" ID="cmbDept" Width="250px" runat="server" AnimationType="None">
                                         <DropDownWindowStyle BackColor="#EDEDED" />
                                         <DropDownWindowTemplate>
-                                            <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox2" SelectionMode="CheckColumn" runat="server" ValueField="IdDept" TextField="Dept" ValueType="System.Int32">
+                                            <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox2" SelectionMode="CheckColumn" runat="server" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" OnCallback="listBox_Callback">
                                                 <Border BorderStyle="None" />
                                                 <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e){ OnListBoxSelectionChanged2(s,e); }" />
@@ -174,7 +174,7 @@
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divSubDept" runat="server">
                                     <label id="lblSubDept" runat="server" oncontextMenu="ctx(this,event)">Subdept.</label><br />
-                                    <dx:ASPxComboBox ID="cmbSubDept" ClientInstanceName="cmbSubDept" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdSubDept" TextField="SubDept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
+                                    <dx:ASPxComboBox ID="cmbSubDept" ClientInstanceName="cmbSubDept" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdSubDept" TextField="SubDept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" OnCallback="cmbSubDept_Callback" oncontextMenu="ctx(this,event)" />
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divBirou" runat="server">
                                     <label id="lblBirou" runat="server" oncontextMenu="ctx(this,event)">Birou</label><br />
@@ -604,7 +604,7 @@
             cmbBirou.SetValue(null);
             cmbCateg.SetValue(null);
 
-            pnlCtl.PerformCallback('EmptyFields');
+            checkListBox2.PerformCallback();
         }
 
         function OnClickDetaliat(s, e) {
@@ -807,7 +807,10 @@
             UpdateText2();
 
             if (cmbSec.GetValue() != null)
-                pnlCtl.PerformCallback('cmbDept');
+            {
+                cmbSubDept.PerformCallback();
+                cmbSubDept.SetValue(null);
+            }
         }
         function UpdateSelectAllItemState2() {
             IsAllSelected2() ? checkListBox2.SelectIndices([0]) : checkListBox2.UnselectIndices([0]);
@@ -856,6 +859,33 @@
                     title: trad_string(limba, ""), text: trad_string(limba, "Nu ati selectat niciun angajat!"),
                     type: "warning"
                 });
+            }
+        }
+
+        function OnCallbackStructura(s,e){
+            switch(s.name)
+            {
+                case "cmbSub":
+                    cmbFil.PerformCallback();
+
+                    cmbFil.SetValue(null);
+                    cmbSec.SetValue(null);
+                    checkComboBox2.SetValue(null);
+                    cmbSubDept.SetValue(null);
+                    break;
+                case "cmbFil":
+                    cmbSec.PerformCallback();
+
+                    cmbSec.SetValue(null);
+                    checkComboBox2.SetValue(null);
+                    cmbSubDept.SetValue(null);
+                    break;
+                case "cmbSec":
+                    checkListBox2.PerformCallback();
+
+                    checkComboBox2.SetValue(null);
+                    cmbSubDept.SetValue(null);
+                    break;
             }
         }
 

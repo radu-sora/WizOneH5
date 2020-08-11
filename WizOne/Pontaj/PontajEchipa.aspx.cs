@@ -21,8 +21,6 @@ namespace WizOne.Pontaj
     public partial class PontajEchipa : System.Web.UI.Page
     {
 
-        private string arrZL = "";
-
         public class metaActiuni
         {
             public int F10003 { get; set; }
@@ -153,8 +151,6 @@ namespace WizOne.Pontaj
                 //System.Threading.Thread.CurrentThread.CurrentCulture = newCulture;
                 //System.Threading.Thread.CurrentThread.CurrentUICulture = newCulture;
 
-                
-
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.Chimpex))
                     divHovercard.Visible = false;
 
@@ -278,6 +274,7 @@ namespace WizOne.Pontaj
                     IncarcaAngajati();
 
                     SetColoane();
+                    SetColoaneCuloare();
 
                     #region Filtru Retinut
 
@@ -325,96 +322,37 @@ namespace WizOne.Pontaj
 
                     cmbStare.DataSource = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblStariPontaj"" ", null);
                     cmbStare.DataBind();
+
+                    cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
+                    cmbCateg.DataBind();
+
+                    ASPxListBox lstCtr = cmbCtr.FindControl("listBox") as ASPxListBox;
+                    if (lstCtr != null)
+                    {
+                        lstCtr.DataSource = General.IncarcaDT(
+                            $@"SELECT -5 AS ""Id"", 'Select All' AS ""Denumire"" {General.FromDual()}
+                            UNION
+                            SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte""
+                            ORDER BY ""Id"" ", null);
+                        lstCtr.DataBind();
+                    }
+
+                    cmbBirou.DataSource = General.IncarcaDT($"SELECT F00809, F00810 FROM F008 WHERE F00814 <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= F00815");
+                    cmbBirou.DataBind();
+
+                    IncarcaSubcompanie();
+                    IncarcaDept();
                 }
                 else if (pnlCtl.IsCallback)
                 {
-                    //cmbAng.DataSource = null;
-                    //cmbAng.Items.Clear();
                     cmbAng.DataSource = Session["Pontaj_Angajati"];
                     cmbAng.DataBind();
                 }
                 else if (grDate.IsCallback)
                 {
-                    if (Session["InformatiaCurenta"] != null)
-                    {
-                        grDate.DataSource = Session["InformatiaCurenta"];
-                        grDate.DataBind();
-                    }
+                    grDate.DataSource = Session["InformatiaCurenta"];
+                    grDate.DataBind();
                 }
-                else
-                {
-                    DataTable dtCmb = Session["SurseCombo"] as DataTable;
-                    GridViewDataComboBoxColumn colAbs = (grDate.Columns["ValAbs"] as GridViewDataComboBoxColumn);
-                    if (colAbs != null) colAbs.PropertiesComboBox.DataSource = dtCmb;
-                }
-
-
-                string dataRef = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
-                cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003 " + 
-                    (Constante.tipBD == 1 ? " WHERE F00310 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00311" : " WHERE  F00310 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00311"), null);
-                cmbSub.DataBind();
-                //cmbFil.DataSource = General.IncarcaDT(@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404=" + General.Nz(cmbSub.Value, -99) + 
-                //    (Constante.tipBD == 1 ? " AND F00411 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00412" : " AND F00411 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00412"), null);
-                //cmbFil.DataBind();
-                //cmbSec.DataSource = General.IncarcaDT(@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505=" + General.Nz(cmbFil.Value, -99) + 
-                //    (Constante.tipBD == 1 ? " AND F00513 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00514" : " AND F00513 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00514"), null);
-                //cmbSec.DataBind();
-
-                ASPxListBox lstDept = cmbDept.FindControl("listBox") as ASPxListBox;
-                if (lstDept != null)
-                {
-                    if (cmbSub.Value == null && cmbFil.Value == null && cmbSec.Value == null)
-                    {
-                        lstDept.DataSource = General.IncarcaDT(
-                            @"SELECT -5 AS ""IdDept"", 'Select All' AS ""Dept"" " + General.FromDual() + " UNION " +
-                            @"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE " +
-                            (Constante.tipBD == 1 ? "F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : "F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
-                        lstDept.DataBind();
-                    }
-                    else
-                    {
-                        lstDept.DataSource = General.IncarcaDT(
-                            @"SELECT -5 AS ""IdDept"", 'Select All' AS ""Dept"" " + General.FromDual() + " UNION " +
-                            @"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99) +
-                                (Constante.tipBD == 1 ? " AND F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : " AND F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
-                        lstDept.DataBind();
-                    }
-                }
-
-                //cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 INNER JOIN F006 ON F007.F00707=F006.F00607 WHERE F00608 IN ('" + General.Nz(cmbDept.Value, -99).ToString().Replace(",","','") + "') " +
-                //    (Constante.tipBD == 1 ? " AND F00714 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00715" : " AND F00714 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00715"), null);
-                //cmbSubDept.DataBind();
-                cmbBirou.DataSource = General.IncarcaDT("SELECT F00809, F00810 FROM F008 WHERE " + 
-                    (Constante.tipBD == 1 ? "F00814 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00815" : "F00814 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00815 "), null);
-                cmbBirou.DataBind();
-
-                cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
-                cmbCateg.DataBind();
-
-                ASPxListBox lstCtr = cmbCtr.FindControl("listBox") as ASPxListBox;
-                if (lstCtr != null)
-                {
-                    lstCtr.DataSource = General.IncarcaDT(
-                        $@"SELECT -5 AS ""Id"", 'Select All' AS ""Denumire"" {General.FromDual()}
-                        UNION
-                        SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte""
-                        ORDER BY ""Id"" ", null);
-                    lstCtr.DataBind();
-                }
-
-                DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
-                if (Constante.tipBD == 1)
-                    arrZL = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN A.ZiSapt=6 OR A.ZiSapt=7 OR B.DAY IS NOT NULL THEN 'Ziua' + CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2)) + ';' ELSE '' END 
-                                        FROM tblzile A
-                                        LEFT JOIN HOLIDAYS B ON A.Zi=B.DAY
-                                        WHERE {General.ToDataUniv(ziua.Year, ziua.Month,1)} <= A.Zi AND A.Zi <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}
-                                        FOR XML PATH ('')", null), "").ToString();
-                else
-                    arrZL = General.Nz(General.ExecutaScalar($@"SELECT LISTAGG(CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR B.DAY IS NOT NULL THEN 'Ziua' || CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2))  ELSE '' END,  ';') WITHIN GROUP (ORDER BY A.""Zi"") || ';'
-                                        FROM ""tblZile"" A
-                                        LEFT JOIN HOLIDAYS B ON A.""Zi""=B.DAY
-                                        WHERE {General.ToDataUniv(ziua.Year, ziua.Month, 1)} <= A.""Zi"" AND A.""Zi"" <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}", null), "").ToString();
-
             }
             catch (Exception ex)
             {
@@ -562,83 +500,6 @@ namespace WizOne.Pontaj
             }
         }
 
-        protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
-        {
-            try
-            {
-                bool esteStruc = true;
-                string dataRef = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
-                switch (e.Parameter)
-                {
-                    case "cmbSub":
-                        cmbFil.Value = null;
-                        cmbSec.Value = null;
-                        cmbDept.Value = null;
-                        cmbSubDept.Value = null;
-                        break;
-                    case "cmbFil":
-                        cmbSec.Value = null;
-                        cmbDept.Value = null;
-                        cmbSubDept.Value = null;
-                        break;
-                    case "cmbSec":
-                        cmbDept.Value = null;
-                        cmbSubDept.Value = null;
-                        break;
-                    case "cmbDept":
-                        cmbSubDept.Value = null;
-                        break;
-                    case "EmptyFields":
-                        cmbDept.DataSource = General.IncarcaDT(
-                            @"SELECT -5 AS ""IdDept"", 'Select All' AS ""Dept"" " + General.FromDual() + " UNION " +
-                            @"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE " +
-                            (Constante.tipBD == 1 ? "F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : "F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
-                        cmbDept.DataBind();
-                        return;
-                    //case "cmbRol":
-                    //case "txtAnLuna":
-                    //    IncarcaAngajati();
-                    //    esteStruc = false;
-                    //    break;
-                }
-
-                if (esteStruc)
-                {                 
-                    cmbFil.DataSource = General.IncarcaDT(@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404=" + General.Nz(cmbSub.Value, -99) +
-                        (Constante.tipBD == 1 ? " AND F00411 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00412" : " AND F00411 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00412"), null);
-                    cmbFil.DataBind();
-                    cmbSec.DataSource = General.IncarcaDT(@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505=" + General.Nz(cmbFil.Value, -99) +
-                        (Constante.tipBD == 1 ? " AND F00513 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00514" : " AND F00513 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00514"), null);
-                    cmbSec.DataBind();
-                    if (cmbSub.Value == null && cmbFil.Value == null && cmbSec.Value == null)
-                    {
-                        cmbDept.DataSource = General.IncarcaDT(
-                            @"SELECT -5 AS ""IdDept"", 'Select All' AS ""Dept"" " + General.FromDual() + " UNION " +
-                            @"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE " +
-                            (Constante.tipBD == 1 ? "F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : "F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
-                        cmbDept.DataBind();
-                    }
-                    else
-                    {
-                        cmbDept.DataSource = General.IncarcaDT(
-                            @"SELECT -5 AS ""IdDept"", 'Select All' AS ""Dept"" " + General.FromDual() + " UNION " +
-                            @"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99) +
-                             (Constante.tipBD == 1 ? " AND F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : " AND F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
-                        cmbDept.DataBind();
-                    }
-                    cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 INNER JOIN F006 ON F007.F00707=F006.F00607 WHERE F00608 IN ('" + General.Nz(cmbDept.Value, -99).ToString().Replace(",", "','") + "') " +
-                        (Constante.tipBD == 1 ? " AND F00714 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00715" : " AND F00714 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00715"), null);
-                    cmbSubDept.DataBind();       
-
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
         private void IncarcaGrid()
         {
             try
@@ -647,7 +508,9 @@ namespace WizOne.Pontaj
 
                 grDate.KeyFieldName = "F10003";
 
-                DataTable dt = PontajAfiseaza();
+                string strSql = DamiSelect();
+
+                DataTable dt = General.IncarcaDT(strSql, null);
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
                 grDate.DataSource = dt;
                 Session["InformatiaCurenta"] = dt;
@@ -660,41 +523,22 @@ namespace WizOne.Pontaj
             }
         }
 
-        public DataTable PontajAfiseaza()
-        {
-            string strSql = "";
-            DataTable dt = new DataTable();
-
-            try
-            {
-                strSql = DamiSelect();
-                dt = General.IncarcaDT(strSql, null);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return dt;
-        }
-
         private void IncarcaAngajati()
         {
             try
             {
                 string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
                 if (Constante.tipBD == 2) cmp = "ROWNUM";
-                string filtru = "";
+
                 DateTime dtData = Convert.ToDateTime(txtAnLuna.Value);
 
                 string strSql = $@"SELECT {cmp} AS ""IdAuto"", X.* FROM ({SelectComun()}) X 
-                            WHERE X.""IdRol"" = {Convert.ToInt32(cmbRol.Value ?? -99)} AND X.F10022 <= {General.ToDataUniv(dtData.Year, dtData.Month, 99)} AND {General.ToDataUniv(dtData.Year, dtData.Month)} <= X.F10023 {filtru}
+                            WHERE X.""IdRol"" = {Convert.ToInt32(cmbRol.Value ?? -99)} AND X.F10022 <= {General.ToDataUniv(dtData.Year, dtData.Month, 99)} AND {General.ToDataUniv(dtData.Year, dtData.Month)} <= X.F10023
                             ORDER BY X.""NumeComplet"" ";
 
                 DataTable dt = General.IncarcaDT(strSql, null);
 
-                cmbAng.DataSource = null;
+                //cmbAng.DataSource = null;
                 cmbAng.DataSource = dt;
                 Session["Pontaj_Angajati"] = dt;
                 cmbAng.DataBind();
@@ -821,11 +665,34 @@ namespace WizOne.Pontaj
             }
         }
 
+        private void SetColoaneCuloare()
+        {
+            try
+            {
+                DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
+                if (Constante.tipBD == 1)
+                    ViewState["ZileLIbere"] = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN A.ZiSapt=6 OR A.ZiSapt=7 OR B.DAY IS NOT NULL THEN 'Ziua' + CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2)) + ';' ELSE '' END 
+                                        FROM tblzile A
+                                        LEFT JOIN HOLIDAYS B ON A.Zi=B.DAY
+                                        WHERE {General.ToDataUniv(ziua.Year, ziua.Month, 1)} <= A.Zi AND A.Zi <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}
+                                        FOR XML PATH ('')", null), "").ToString();
+                else
+                    ViewState["ZileLibere"] = General.Nz(General.ExecutaScalar($@"SELECT LISTAGG(CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR B.DAY IS NOT NULL THEN 'Ziua' || CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2))  ELSE '' END,  ';') WITHIN GROUP (ORDER BY A.""Zi"") || ';'
+                                        FROM ""tblZile"" A
+                                        LEFT JOIN HOLIDAYS B ON A.""Zi""=B.DAY
+                                        WHERE {General.ToDataUniv(ziua.Year, ziua.Month, 1)} <= A.""Zi"" AND A.""Zi"" <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}", null), "").ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
         protected void grDate_HtmlDataCellPrepared(object sender, ASPxGridViewTableDataCellEventArgs e)
         {
             try
             {
-
                 if (e.DataColumn.FieldName == "IdStare")
                 {
                     object col = grDate.GetRowValues(e.VisibleIndex, "Culoare");
@@ -834,7 +701,7 @@ namespace WizOne.Pontaj
 
                 if (e.DataColumn.FieldName.Length >= 4 && e.DataColumn.FieldName.ToLower().Substring(0, 4) == "ziua")
                 {
-                    if (arrZL.Length > 0 && arrZL.IndexOf(e.DataColumn.FieldName + ";") >= 0)
+                    if (ViewState["ZileLibere"].ToString().Length > 0 && ViewState["ZileLibere"].ToString().IndexOf(e.DataColumn.FieldName + ";") >= 0)
                         e.Cell.BackColor = System.Drawing.Color.Aquamarine;
                     
                     string val = General.Nz(grDate.GetRowValuesByKeyValue(e.KeyValue, "ZileGri"), "").ToString();
@@ -2831,11 +2698,15 @@ namespace WizOne.Pontaj
 
         }
 
+        #region callback
+
         protected void cmbAng_Callback(object sender, CallbackEventArgsBase e)
         {
             try
             {
                 IncarcaAngajati();
+                if (e.Parameter == "txtAnLuna")
+                    SetColoaneCuloare();
             }
             catch (Exception ex)
             {
@@ -2843,5 +2714,149 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+        protected void cmbFil_Callback(object sender, CallbackEventArgsBase e)
+        {
+            try
+            {
+                IncarcaFiliala();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void cmbSec_Callback(object sender, CallbackEventArgsBase e)
+        {
+            try
+            {
+                IncarcaSectie();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void cmbSubDept_Callback(object sender, CallbackEventArgsBase e)
+        {
+            try
+            {
+                IncarcaSubdept();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void listBox_Callback(object sender, CallbackEventArgsBase e)
+        {
+            try
+            {
+                IncarcaDept();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        #endregion
+
+        #region Incarca Struct. Org.
+
+        private void IncarcaSubcompanie()
+        {
+            try
+            {
+                cmbSub.DataSource = General.IncarcaDT($@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003 WHERE F00310 <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= F00311");
+                cmbSub.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void IncarcaFiliala()
+        {
+            try
+            {
+                cmbFil.DataSource = General.IncarcaDT($@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404={General.Nz(cmbSub.Value, -99)} AND F00411 <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= F00412");
+                cmbFil.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+        
+        private void IncarcaSectie()
+        {
+            try
+            {
+                cmbSec.DataSource = General.IncarcaDT($@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505={General.Nz(cmbFil.Value, -99)} AND F00513 <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= F00514");
+                cmbSec.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void IncarcaDept()
+        {
+            try
+            {
+                ASPxListBox lstDept = cmbDept.FindControl("listBox") as ASPxListBox;
+                if (lstDept == null) return;
+
+                string filtru = "";
+                if (cmbSec.Value != null) filtru = $@" AND F00606={General.Nz(cmbSec.Value, -99)}";
+
+                lstDept.DataSource = General.IncarcaDT(
+                    $@"SELECT -5 AS ""IdDept"", 'Select All' AS ""Dept"" {General.FromDual()} 
+                    UNION
+                    SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00622 <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= F00623 {filtru}");
+                lstDept.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void IncarcaSubdept()
+        {
+            try
+            {
+                cmbSubDept.DataSource = General.IncarcaDT(
+                    $@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 
+                    INNER JOIN F006 ON F007.F00707=F006.F00607 
+                    WHERE F00608 IN ('{General.Nz(cmbDept.Value, -99).ToString().Replace(",", "','")}')
+                    AND F00714 <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= F00715");
+                cmbSubDept.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+
+        #endregion
+
+
     }
 }

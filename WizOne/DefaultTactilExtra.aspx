@@ -35,7 +35,7 @@
         </asp:ScriptManager>
         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>
-                <asp:Timer ID="Timer1" runat="server" OnTick="Resetare" Interval="20000" >                    
+                <asp:Timer ID="Timer1" runat="server" OnTick="Resetare" Interval="15000" >                    
                     </asp:Timer>
 
 

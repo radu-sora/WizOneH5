@@ -86,7 +86,7 @@
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divRol" runat="server">
                                     <label id="lblRol" runat="server" oncontextMenu="ctx(this,event)">Roluri</label><br />
                                     <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdRol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { cmbAng.PerformCallback(); }" />
+                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { cmbAng.PerformCallback('cmbRol'); }" />
                                     </dx:ASPxComboBox>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divAng" runat="server">
@@ -543,9 +543,9 @@
             if (col.length >= 4 && col.substr(0, 4) == 'Ziua') {
                 if (key == 43)              //tasta plus  
                 {
-                    var time = <%= Session["Ptj_DataBlocare"] %>;
+                    var time = grDate.cpDataBlocare;
                     var luna = txtAnLuna.GetValue();
-
+alert(time);
                     var dtBlocare = new Date(Number(time.toString().substring(0, 4)), Number(time.toString().substring(4, 6)) - 1, Number(time.toString().substring(6)));
                     var dtCurr = new Date(luna.getFullYear(), luna.getMonth(), col.replace('Ziua', ''));
 

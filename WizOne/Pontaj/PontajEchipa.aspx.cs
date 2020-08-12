@@ -342,6 +342,8 @@ namespace WizOne.Pontaj
 
                     IncarcaSubcompanie();
                     IncarcaDept();
+
+                    GetDataBlocare();
                 }
                 else if (pnlCtl.IsCallback)
                 {
@@ -483,15 +485,7 @@ namespace WizOne.Pontaj
                     divHovercard.Visible = false;
                 }
 
-                string dataBlocare = "22001231";
-                string strSql = $@"SELECT COALESCE(Ziua,'2200-12-31') FROM Ptj_tblBlocarePontaj WHERE IdRol=@1";
-                if (Constante.tipBD == 2)
-                    strSql = @"SELECT COALESCE(""Ziua"",TO_DATE('31-12-2200','DD-MM-YYYY')) FROM ""Ptj_tblBlocarePontaj"" WHERE ""IdRol""=@1";
-                DataTable dt = General.IncarcaDT(strSql, new object[] { Convert.ToInt32(cmbRol.Value ?? -99) });
-                if (dt != null && dt.Rows.Count > 0 && General.Nz(dt.Rows[0][0],"").ToString() != "" && General.IsDate(dt.Rows[0][0]))
-                    dataBlocare = Convert.ToDateTime(dt.Rows[0][0]).Year + Convert.ToDateTime(dt.Rows[0][0]).Month.ToString().PadLeft(2,'0') + Convert.ToDateTime(dt.Rows[0][0]).Day.ToString().PadLeft(2, '0');
 
-                Session["Ptj_DataBlocare"] = dataBlocare.ToString();
             }
             catch (Exception ex)
             {
@@ -2641,6 +2635,9 @@ namespace WizOne.Pontaj
                 IncarcaAngajati();
                 if (e.Parameter == "txtAnLuna")
                     SetColoaneCuloare();
+
+                if (e.Parameter == "cmbRol")
+                    GetDataBlocare();
             }
             catch (Exception ex)
             {
@@ -2791,6 +2788,24 @@ namespace WizOne.Pontaj
 
         #endregion
 
+        private void GetDataBlocare()
+        {
+            try
+            {
+                string dataBlocare = "22001231";
+                DataTable dt = General.IncarcaDT($@"SELECT ""Ziua"" FROM ""Ptj_tblBlocarePontaj"" WHERE ""IdRol""=@1", new object[] { Convert.ToInt32(cmbRol.Value ?? -99) });
+                if (dt != null && dt.Rows.Count > 0 && General.Nz(dt.Rows[0][0], "").ToString() != "" && General.IsDate(dt.Rows[0][0]))
+                    dataBlocare = Convert.ToDateTime(dt.Rows[0][0]).Year + Convert.ToDateTime(dt.Rows[0][0]).Month.ToString().PadLeft(2, '0') + Convert.ToDateTime(dt.Rows[0][0]).Day.ToString().PadLeft(2, '0');
+
+                Session["Ptj_DataBlocare"] = dataBlocare.ToString();
+                grDate.JSProperties["cpDataBlocare"] = dataBlocare.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
     }
 }

@@ -390,49 +390,49 @@ namespace WizOne.Pontaj
             }
         }
 
-        protected void btnPeAng_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (txtCol.Count > 0 && txtCol["f10003"] != null)
-                {
-                    RetineFiltru("1");
-                    var f10003 = txtCol["f10003"];
-                    Response.Redirect("PontajDetaliat.aspx?tip=10&f10003=" + f10003, false);
-                }
-                else
-                {
-                    MessageBox.Show("Nu s-a selectat nici un angajat", MessageBox.icoInfo, "");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //protected void btnPeAng_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (txtCol.Count > 0 && txtCol["f10003"] != null)
+        //        {
+        //            RetineFiltru("1");
+        //            var f10003 = txtCol["f10003"];
+        //            Response.Redirect("PontajDetaliat.aspx?tip=10&f10003=" + f10003, false);
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Nu s-a selectat nici un angajat", MessageBox.icoInfo, "");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
-        protected void btnPeZi_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (txtCol.Count > 0 && txtCol["coloana"] != null && txtCol["coloana"].ToString().Length >4 && txtCol["coloana"].ToString().Substring(0,4) == "Ziua")
-                {
-                    string ziua = txtCol["coloana"].ToString().Replace("Ziua", "");
-                    RetineFiltru(ziua);
-                    Response.Redirect("PontajDetaliat.aspx?tip=20", false);
-                }
-                else
-                {
-                    MessageBox.Show("Nu s-a selectat nici o zi", MessageBox.icoInfo, "");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //protected void btnPeZi_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (txtCol.Count > 0 && txtCol["coloana"] != null && txtCol["coloana"].ToString().Length >4 && txtCol["coloana"].ToString().Substring(0,4) == "Ziua")
+        //        {
+        //            string ziua = txtCol["coloana"].ToString().Replace("Ziua", "");
+        //            RetineFiltru(ziua);
+        //            Response.Redirect("PontajDetaliat.aspx?tip=20", false);
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Nu s-a selectat nici o zi", MessageBox.icoInfo, "");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         protected void btnFiltru_Click(object sender, EventArgs e)
         {
@@ -538,7 +538,6 @@ namespace WizOne.Pontaj
 
                 DataTable dt = General.IncarcaDT(strSql, null);
 
-                //cmbAng.DataSource = null;
                 cmbAng.DataSource = dt;
                 Session["Pontaj_Angajati"] = dt;
                 cmbAng.DataBind();
@@ -671,13 +670,13 @@ namespace WizOne.Pontaj
             {
                 DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
                 if (Constante.tipBD == 1)
-                    ViewState["ZileLIbere"] = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN A.ZiSapt=6 OR A.ZiSapt=7 OR B.DAY IS NOT NULL THEN 'Ziua' + CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2)) + ';' ELSE '' END 
+                    Session["ZileLibere"] = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN A.ZiSapt=6 OR A.ZiSapt=7 OR B.DAY IS NOT NULL THEN 'Ziua' + CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2)) + ';' ELSE '' END 
                                         FROM tblzile A
                                         LEFT JOIN HOLIDAYS B ON A.Zi=B.DAY
                                         WHERE {General.ToDataUniv(ziua.Year, ziua.Month, 1)} <= A.Zi AND A.Zi <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}
                                         FOR XML PATH ('')", null), "").ToString();
                 else
-                    ViewState["ZileLibere"] = General.Nz(General.ExecutaScalar($@"SELECT LISTAGG(CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR B.DAY IS NOT NULL THEN 'Ziua' || CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2))  ELSE '' END,  ';') WITHIN GROUP (ORDER BY A.""Zi"") || ';'
+                    Session["ZileLibere"] = General.Nz(General.ExecutaScalar($@"SELECT LISTAGG(CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR B.DAY IS NOT NULL THEN 'Ziua' || CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2))  ELSE '' END,  ';') WITHIN GROUP (ORDER BY A.""Zi"") || ';'
                                         FROM ""tblZile"" A
                                         LEFT JOIN HOLIDAYS B ON A.""Zi""=B.DAY
                                         WHERE {General.ToDataUniv(ziua.Year, ziua.Month, 1)} <= A.""Zi"" AND A.""Zi"" <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}", null), "").ToString();
@@ -701,7 +700,7 @@ namespace WizOne.Pontaj
 
                 if (e.DataColumn.FieldName.Length >= 4 && e.DataColumn.FieldName.ToLower().Substring(0, 4) == "ziua")
                 {
-                    if (ViewState["ZileLibere"].ToString().Length > 0 && ViewState["ZileLibere"].ToString().IndexOf(e.DataColumn.FieldName + ";") >= 0)
+                    if (Session["ZileLibere"].ToString().Length > 0 && Session["ZileLibere"].ToString().IndexOf(e.DataColumn.FieldName + ";") >= 0)
                         e.Cell.BackColor = System.Drawing.Color.Aquamarine;
                     
                     string val = General.Nz(grDate.GetRowValuesByKeyValue(e.KeyValue, "ZileGri"), "").ToString();
@@ -1201,7 +1200,7 @@ namespace WizOne.Pontaj
                             btnFiltru_Click(sender, e);
                             break;
                         case "btnAproba":
-                            btnAproba_Click(sender, e);
+                            Actiuni(1);
                             break;
                         case "btnStergePontari":
                             btnStergePontari_Click(sender, e);
@@ -1519,8 +1518,6 @@ namespace WizOne.Pontaj
             }
         }
 
-        #region Pontaj Init
-
         protected void btnInitParam_Click(object sender, EventArgs e)
         {
             try
@@ -1541,8 +1538,6 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-        #endregion
 
         protected void btnStergePontari_Click(object sender, EventArgs e)
         {
@@ -1581,115 +1576,45 @@ namespace WizOne.Pontaj
             }
         }
 
-        protected void btnAproba_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Actiuni(1);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
         private void Actiuni(int actiune, string motiv = "")
         {
             try
             {
-                int select = 0;
+                string msg = "";
                 int idRol = -99;
-
                 if (cmbRol.Value != null) idRol = Convert.ToInt32(cmbRol.Value);
                 if ((idRol == 1 && actiune == 0) || idRol == 4 || idRol == -99)
                 {
-                    if (actiune != 0)
-                        MessageBox.Show(Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie."), MessageBox.icoError, "Eroare !");
-                    else
-                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie.");
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie.");
                     return;
                 }
 
-                List<metaActiuni> ids = new List<metaActiuni>();
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "IdStare" });
-                if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+                if (lst == null) return;
+
+                if (lst.Count() == 0)
+                {
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista date selectate !");
+                    return;
+                }
 
                 for (int i = 0; i < lst.Count(); i++)
                 {
                     object[] arr = lst[i] as object[];
-                    ids.Add(new metaActiuni { F10003 = Convert.ToInt32(General.Nz(arr[0], -99)), IdStare = Convert.ToInt32(General.Nz(arr[1], -99)) });
+                    msg += General.ActiuniExec(actiune, Convert.ToInt32(General.Nz(arr[0], -99)), idRol, Convert.ToInt32(General.Nz(arr[1], -99)), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, "Pontaj.PontajEchipa", Convert.ToInt32(Session["UserId"]), Convert.ToInt32(Session["User_Marca"]), motiv) + System.Environment.NewLine;
                 }
+
+                if (msg != "")
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg);
 
                 grDate.Selection.UnselectAll();
-
-                if (ids.Count > 0)
-                {
-                    DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
-                    string rez = AprobaPontaj(Convert.ToInt32(General.Nz(Session["UserId"], -99)), ziua.Year, ziua.Month, ids, Convert.ToInt32(cmbRol.Value ?? -99), actiune, "Pontaj.Pontaj", motiv);
-
-                    if (actiune != 0)
-                        MessageBox.Show(Dami.TraduCuvant(rez), MessageBox.icoWarning, "Pontajul echipei");
-                    else
-                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(rez);
-                    btnFiltru_Click(null, null);
-                }
-                else
-                {
-                    if (select == 0)
-                    {
-                        if (actiune != 0)
-                            MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate !"), MessageBox.icoWarning, "");
-                        else
-                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista date selectate !");
-                    }
-                    else
-                    {
-                        if (actiune != 0)
-                            MessageBox.Show(Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie."), MessageBox.icoWarning, "");
-                        else
-                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie.");
-                    }
-                }
-
-
+                btnFiltru_Click(null, null);
             }
             catch (Exception ex)
             {
-                if (actiune != 0)
-                    MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                else
-                    grDate.JSProperties["cpAlertMessage"] = ex;
+                grDate.JSProperties["cpAlertMessage"] = ex;
                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }
-
-        public string AprobaPontaj(int idUser, int an, int luna, List<metaActiuni> ids, int idRol, int actiune, string pagina, string motiv = "")
-        {
-            //    Actiune
-            // 1   -  aprobat
-            // 0   -  respins
-            // 2   -  finalizat
-
-            string msg = "";
-
-            try
-            {
-                foreach (var l in ids)
-                {
-                    msg += General.ActiuniExec(actiune, l.F10003, idRol, l.IdStare, Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, "Pontaj.PontajEchipa", Convert.ToInt32(Session["UserId"]), Convert.ToInt32(Session["User_Marca"]), motiv) + System.Environment.NewLine;
-                }
-            }
-            catch (Exception ex)
-            {
-                if (actiune != 0)
-                    MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                else
-                    grDate.JSProperties["cpAlertMessage"] = ex;
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return msg;
         }
 
         private void RetineFiltru(string ziua)
@@ -1728,32 +1653,36 @@ namespace WizOne.Pontaj
         {
             try
             {
-                Session["PontajEchipa_Valuri"] = null;
-                int f10003 = -99;
-                DateTime ziua = DateTime.Now;
-
-                if (txtCol.Count > 0 && txtCol["f10003"] != null && txtCol["f10003"] != null && General.IsNumeric(txtCol["f10003"])) f10003 = Convert.ToInt32(txtCol["f10003"]);
-                if (txtCol.Count > 0 && txtCol["coloana"] != null && txtCol["coloana"].ToString().Length > 4 && txtCol["coloana"].ToString().Substring(0, 4) == "Ziua")
+                string[] arr = e.Parameter.Split(';');
+                switch (arr[0])
                 {
-                    string zi = txtCol["coloana"].ToString().Replace("Ziua", "");
-                    ziua = new DateTime(Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, Convert.ToInt32(zi));
-                }
+                    case "popUpModif":
+                        {
+                            Session["PontajEchipa_Valuri"] = null;
+                            int f10003 = -99;
+                            DateTime ziua = DateTime.Now;
 
-                cmbTipAbs.SelectedIndex = -1;
-                pnlValuri.Controls.Clear();
+                            if (txtCol.Count > 0 && txtCol["f10003"] != null && txtCol["f10003"] != null && General.IsNumeric(txtCol["f10003"])) f10003 = Convert.ToInt32(txtCol["f10003"]);
+                            if (txtCol.Count > 0 && txtCol["coloana"] != null && txtCol["coloana"].ToString().Length > 4 && txtCol["coloana"].ToString().Substring(0, 4) == "Ziua")
+                            {
+                                string zi = txtCol["coloana"].ToString().Replace("Ziua", "");
+                                ziua = new DateTime(Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, Convert.ToInt32(zi));
+                            }
 
+                            cmbTipAbs.SelectedIndex = -1;
+                            pnlValuri.Controls.Clear();
 
-                string strGol = "";
-                string strGol1 = "";
-                if (Constante.tipBD == 1)
-                {
-                    strGol = @"AND X.""DenumireScurta"" <> '' ";
-                    strGol1 = @"AND A.""OreInVal"" <> '' ";
-                }
+                            string strGol = "";
+                            string strGol1 = "";
+                            if (Constante.tipBD == 1)
+                            {
+                                strGol = @"AND X.""DenumireScurta"" <> '' ";
+                                strGol1 = @"AND A.""OreInVal"" <> '' ";
+                            }
 
-                //incarcam combo absente
-                //ne folosim de datele din pontaj (Contract, ziSapt, ziLibera) pt ca sunt deja determinate
-                string sqlAbs = $@"SELECT X.""Id"", X.""DenumireScurta"", X.""Denumire"", P.""ValStr"", CASE WHEN P.""ValStr""=X.""DenumireScurta"" THEN 1 ELSE 0 END AS ""Exista"" from ( 
+                            //incarcam combo absente
+                            //ne folosim de datele din pontaj (Contract, ziSapt, ziLibera) pt ca sunt deja determinate
+                            string sqlAbs = $@"SELECT X.""Id"", X.""DenumireScurta"", X.""Denumire"", P.""ValStr"", CASE WHEN P.""ValStr""=X.""DenumireScurta"" THEN 1 ELSE 0 END AS ""Exista"" from ( 
                             select a.""Id"", b.""IdContract"", c.""IdRol"", a.""Id"" as ""IdAbsenta"" , b.ZL as ""ZileSapt"", b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal"", 0 AS ""Tip""
                             from ""Ptj_tblAbsente"" a
                             inner join ""Ptj_ContracteAbsente"" b on a.""Id"" = b.""IdAbsenta""
@@ -1773,119 +1702,124 @@ namespace WizOne.Pontaj
 							)
                             GROUP BY X.""Id"", X.""DenumireScurta"", X.""Denumire"", P.""ValStr"" ";
 
-                DataTable dtAbs = General.IncarcaDT(sqlAbs, null);
+                            DataTable dtAbs = General.IncarcaDT(sqlAbs, null);
 
-                cmbTipAbs.DataSource = dtAbs;
-                cmbTipAbs.DataBind();
+                            cmbTipAbs.DataSource = dtAbs;
+                            cmbTipAbs.DataBind();
 
-                if (dtAbs.Rows.Count > 0 && dtAbs.Select("Exista=1").Count() > 0)
-                    cmbTipAbs.Value = dtAbs.Rows[0]["ValStr"];                   
+                            if (dtAbs.Rows.Count > 0 && dtAbs.Select("Exista=1").Count() > 0)
+                                cmbTipAbs.Value = dtAbs.Rows[0]["ValStr"];
 
-                //cream textbox valuri
-                string val_uri = "";
-                for(int i=0; i<=20; i++)
-                {
-                    val_uri += ",\"Val" + i + "\"";
-                }
-
-                //Florin 2020.02.04 - am inlocuit Ptj_Contracte.Afisare cu tblParametrii.TipAfisareOre
-                string sqlVal = $@"SELECT P.ValStr, COALESCE(A.""OreInVal"",'') AS ""ValAbs"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", 
-                        COALESCE(A.""VerificareNrMaxOre"",0) AS ""VerificareNrMaxOre"",
-                        COALESCE(A.""NrMax"", 23) AS ""NrMax"" {val_uri}
-                        FROM ""Ptj_tblAbsente"" a
-                        INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
-                        INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
-                        INNER JOIN(SELECT * FROM ""Ptj_Intrari"" Y WHERE {General.ToDataUniv(ziua)} <= CAST(Y.""Ziua"" AS DATE) AND CAST(Y.""Ziua"" AS DATE) <= {General.ToDataUniv(ziua)} AND Y.F10003 = {f10003}) P ON 1 = 1
-                        WHERE A.""OreInVal"" IS NOT NULL {strGol1} AND B.""IdContract"" = P.""IdContract"" AND C.""IdRol"" = {cmbRol.Value} AND
-                        (
-                        (COALESCE(B.ZL,0)<> 0 AND (CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
-                        (COALESCE(B.S,0) <> 0 AND (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR
-                        (COALESCE(B.D,0)<> 0 AND (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0)) OR
-                        (COALESCE(B.SL,0)<> 0 AND COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0))
-                        ) 
-                        GROUP BY P.ValStr, A.""OreInVal"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", A.""NrMax"", A.""VerificareNrMaxOre"" {val_uri}
-                        ORDER BY A.""OreInVal"" ";
-
-                DataTable dtVal = General.IncarcaDT(sqlVal, null);
-
-                Session["PontajEchipa_Valuri"] = dtVal;
-
-                for (int i = 0; i < dtVal.Rows.Count; i++)
-                {
-                    DataRow dr = dtVal.Rows[i];
-                    string id = "txt" + General.Nz(dr["ValAbs"],"Gigi").ToString();
-
-                    HtmlGenericControl divCol = new HtmlGenericControl("div");
-                    divCol.Attributes["class"] = "col-md-3";
-                    divCol.Style["margin-bottom"] = "15px";
-
-                    ASPxLabel lbl = new ASPxLabel();
-                    lbl.Text = General.Nz(dr["DenumireScurta"], "___").ToString();
-                    lbl.ToolTip = General.Nz(dr["Denumire"], "&nbsp;").ToString();
-                    lbl.Width = new Unit(100, UnitType.Percentage);
-
-                    ASPxSpinEdit txt = new ASPxSpinEdit();
-                    txt.ClientInstanceName = id;
-                    txt.ID = id;
-                    txt.ClientIDMode = ClientIDMode.Static;
-                    txt.Width = 70;
-                    txt.MinValue = 0;
-                    txt.ClientSideEvents.ValueChanged = "EmptyCmbAbs";
-                    txt.MaxValue = Convert.ToInt32(dr["NrMax"]);
-
-                    string tipAfisare = Dami.ValoareParam("TipAfisareOre", "1");
-                    if (tipAfisare == "1")
-                    {
-                        txt.DecimalPlaces = 0;
-                        txt.NumberType = SpinEditNumberType.Integer;
-                    }
-                    else
-                    {
-                        txt.DecimalPlaces = 2;
-                        txt.DisplayFormatString = "f2";
-                    }
-
-
-                    if (dtAbs.Rows.Count > 0 && dtAbs.Select("Exista=1").Count() > 0)
-                    {
-                        //inseamna ca este absenta de tip zi
-                    }
-                    else
-                    {
-                        if (General.Nz(dr["ValAbs"], "").ToString() != "")
-                        {
-                            try
+                            //cream textbox valuri
+                            string val_uri = "";
+                            for (int i = 0; i <= 20; i++)
                             {
-                                int min = Convert.ToInt32(General.Nz(dr[dr["ValAbs"].ToString()], "0"));
-                                string val = "0";
+                                val_uri += ",\"Val" + i + "\"";
+                            }
 
-                                switch(tipAfisare)
+                            //Florin 2020.02.04 - am inlocuit Ptj_Contracte.Afisare cu tblParametrii.TipAfisareOre
+                            string sqlVal = $@"SELECT P.ValStr, COALESCE(A.""OreInVal"",'') AS ""ValAbs"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", 
+                                COALESCE(A.""VerificareNrMaxOre"",0) AS ""VerificareNrMaxOre"",
+                                COALESCE(A.""NrMax"", 23) AS ""NrMax"" {val_uri}
+                                FROM ""Ptj_tblAbsente"" a
+                                INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
+                                INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
+                                INNER JOIN(SELECT * FROM ""Ptj_Intrari"" Y WHERE {General.ToDataUniv(ziua)} <= CAST(Y.""Ziua"" AS DATE) AND CAST(Y.""Ziua"" AS DATE) <= {General.ToDataUniv(ziua)} AND Y.F10003 = {f10003}) P ON 1 = 1
+                                WHERE A.""OreInVal"" IS NOT NULL {strGol1} AND B.""IdContract"" = P.""IdContract"" AND C.""IdRol"" = {cmbRol.Value} AND
+                                (
+                                (COALESCE(B.ZL,0)<> 0 AND (CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
+                                (COALESCE(B.S,0) <> 0 AND (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR
+                                (COALESCE(B.D,0)<> 0 AND (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0)) OR
+                                (COALESCE(B.SL,0)<> 0 AND COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0))
+                                ) 
+                                GROUP BY P.ValStr, A.""OreInVal"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", A.""NrMax"", A.""VerificareNrMaxOre"" {val_uri}
+                                ORDER BY A.""OreInVal"" ";
+
+                            DataTable dtVal = General.IncarcaDT(sqlVal, null);
+
+                            Session["PontajEchipa_Valuri"] = dtVal;
+
+                            for (int i = 0; i < dtVal.Rows.Count; i++)
+                            {
+                                DataRow dr = dtVal.Rows[i];
+                                string id = "txt" + General.Nz(dr["ValAbs"], "Gigi").ToString();
+
+                                HtmlGenericControl divCol = new HtmlGenericControl("div");
+                                divCol.Attributes["class"] = "col-md-3";
+                                divCol.Style["margin-bottom"] = "15px";
+
+                                ASPxLabel lbl = new ASPxLabel();
+                                lbl.Text = General.Nz(dr["DenumireScurta"], "___").ToString();
+                                lbl.ToolTip = General.Nz(dr["Denumire"], "&nbsp;").ToString();
+                                lbl.Width = new Unit(100, UnitType.Percentage);
+
+                                ASPxSpinEdit txt = new ASPxSpinEdit();
+                                txt.ClientInstanceName = id;
+                                txt.ID = id;
+                                txt.ClientIDMode = ClientIDMode.Static;
+                                txt.Width = 70;
+                                txt.MinValue = 0;
+                                txt.ClientSideEvents.ValueChanged = "EmptyCmbAbs";
+                                txt.MaxValue = Convert.ToInt32(dr["NrMax"]);
+
+                                string tipAfisare = Dami.ValoareParam("TipAfisareOre", "1");
+                                if (tipAfisare == "1")
                                 {
-                                    case "1":
-                                        val = (min / 60).ToString();
-                                        break;
-                                    case "2":
-                                        var ert = Math.Round(Convert.ToDecimal(min % 60) / 100, 2);
-                                        var edc = (min % 60) / 100;
-
-                                        val = ((min / 60) + Math.Round(Convert.ToDecimal(min % 60) / 100,2)).ToString();
-                                        break;
-                                    case "3":
-                                        val = Math.Round((Convert.ToDecimal(min) / 60), 2).ToString();
-                                        break;
+                                    txt.DecimalPlaces = 0;
+                                    txt.NumberType = SpinEditNumberType.Integer;
+                                }
+                                else
+                                {
+                                    txt.DecimalPlaces = 2;
+                                    txt.DisplayFormatString = "f2";
                                 }
 
-                                txt.Text = val;
-                                txt.Value = Convert.ToDecimal(val);
+
+                                if (dtAbs.Rows.Count > 0 && dtAbs.Select("Exista=1").Count() > 0)
+                                {
+                                    //inseamna ca este absenta de tip zi
+                                }
+                                else
+                                {
+                                    if (General.Nz(dr["ValAbs"], "").ToString() != "")
+                                    {
+                                        try
+                                        {
+                                            int min = Convert.ToInt32(General.Nz(dr[dr["ValAbs"].ToString()], "0"));
+                                            string val = "0";
+
+                                            switch (tipAfisare)
+                                            {
+                                                case "1":
+                                                    val = (min / 60).ToString();
+                                                    break;
+                                                case "2":
+                                                    var ert = Math.Round(Convert.ToDecimal(min % 60) / 100, 2);
+                                                    var edc = (min % 60) / 100;
+
+                                                    val = ((min / 60) + Math.Round(Convert.ToDecimal(min % 60) / 100, 2)).ToString();
+                                                    break;
+                                                case "3":
+                                                    val = Math.Round((Convert.ToDecimal(min) / 60), 2).ToString();
+                                                    break;
+                                            }
+
+                                            txt.Text = val;
+                                            txt.Value = Convert.ToDecimal(val);
+                                        }
+                                        catch (Exception) { }
+                                    }
+                                }
+
+                                divCol.Controls.Add(lbl);
+                                divCol.Controls.Add(txt);
+
+                                pnlValuri.Controls.Add(divCol);
                             }
-                            catch (Exception) { }
                         }
-                    }
-
-                    divCol.Controls.Add(lbl);
-                    divCol.Controls.Add(txt);
-
-                    pnlValuri.Controls.Add(divCol);
+                        break;
+                    case "":
+                        break;
                 }
             }
             catch (Exception ex)

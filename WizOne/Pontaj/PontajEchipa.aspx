@@ -359,35 +359,22 @@
                                     <ClientSideEvents Click="function(s, e) { e.processOnServer = false; OnModif(s,e); }" />
                                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                                 </dx:ASPxButton>
-                                <br />
-                                <br />
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <span style="font-weight:bold; font-size:14px;">Absente de tip zi</span>
-                                <br />
-                                <br />
-                            </div>
+                        <div class="col-md-12" style="margin:15px 0px;">
+                            <span style="font-weight:bold; font-size:14px; margin-bottom:20px; text-align:center;">Absente de tip zi</span>
                         </div>
-                        <div class="row" style="text-align:center;">
-                            <div class="col-md-12">
-                                <div style="display:inline-table;">
-                                    <dx:ASPxComboBox ID="cmbTipAbs" runat="server" ClientIDMode="Static" ClientInstanceName="cmbTipAbs" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="DenumireScurta" AutoPostBack="false" TextFormatString="{0}" AllowNull="true">
-                                        <Columns>
-                                            <dx:ListBoxColumn FieldName="DenumireScurta" Caption="Id" Width="50" />
-                                            <dx:ListBoxColumn FieldName="Denumire" Caption="Denumire" Width="200" />
-                                        </Columns>
-                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { e.processOnServer = false; EmptyVal(s,e); }" />
-                                    </dx:ASPxComboBox>
-                                </div>
-                            </div>
+                        <div class="col-md-12" style="margin-bottom:15px;">
+                            <dx:ASPxComboBox ID="cmbTipAbs" runat="server" ClientIDMode="Static" ClientInstanceName="cmbTipAbs" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="DenumireScurta" AutoPostBack="false" TextFormatString="{0}" AllowNull="true">
+                                <Columns>
+                                    <dx:ListBoxColumn FieldName="DenumireScurta" Caption="Id" Width="50" />
+                                    <dx:ListBoxColumn FieldName="Denumire" Caption="Denumire" Width="200" />
+                                </Columns>
+                                <ClientSideEvents SelectedIndexChanged="function(s, e) { e.processOnServer = false; EmptyVal(s,e); }" />
+                            </dx:ASPxComboBox>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <br /><br /><br />
-                                <span style="font-weight:bold; font-size:14px;">Absente de tip ora</span>
-                            </div>
+                        <div class="col-md-12" style="margin-bottom:15px;">
+                            <span style="font-weight:bold; font-size:14px;">Absente de tip ora</span>
                         </div>
                         <div class="row" id="pnlValuri" runat="server" style="margin:20px 50px 50px 50px;"/>
                     </div>
@@ -584,8 +571,8 @@
                 (cmbRol.GetValue() == 1 && (Value == 1 || Value == 4)) ||
                 (cmbRol.GetValue() == 2 && (Value == 1 || Value == 2 || Value == 4 || Value == 6)) ||
                 (cmbRol.GetValue() == 3)) {
-                popUpModif.Show();
-                popUpModif.PerformCallback();
+                    popUpModif.Show();
+                    popUpModif.PerformCallback('popUpModif;');
             }
 
             pnlLoading.Hide();

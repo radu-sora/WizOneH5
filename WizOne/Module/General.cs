@@ -5612,6 +5612,9 @@ namespace WizOne.Module
                 //Radu 15.05.2020
                 HttpContext.Current.Session["TipInfoChiosc"] = 0;
 
+                //Florin 2020.08.11
+                HttpContext.Current.Session["ZileLibere"] = "";
+
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
 

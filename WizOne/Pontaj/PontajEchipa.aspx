@@ -524,58 +524,86 @@
 
         var limba = "<%= Session["IdLimba"] %>";
 
-        function eventKeyPress(evt, s) {
-            var cell = grDate.GetFocusedCell();
-            if (!cell) return;
-            var col = cell.column.fieldName;
-            var f10003 = grDate.GetRowKey(cell.rowVisibleIndex);
+        //function eventKeyPress(evt, s) {
+        //    var cell = grDate.GetFocusedCell();
+        //    if (!cell) return;
+        //    var col = cell.column.fieldName;
+        //    var f10003 = grDate.GetRowKey(cell.rowVisibleIndex);
 
-            txtCol.Set('coloana', col);
-            txtCol.Set('f10003', f10003);
+        //    txtCol.Set('coloana', col);
+        //    txtCol.Set('f10003', f10003);
 
-            var evt = evt || event;
-            var key = evt.keyCode || evt.which;
-            inOutIndex = s.GetFocusedRowIndex();
+        //    var evt = evt || event;
+        //    var key = evt.keyCode || evt.which;
+        //    inOutIndex = s.GetFocusedRowIndex();
 
-            var cell = grDate.GetFocusedCell();
-            var col = cell.column.fieldName;
+        //    var cell = grDate.GetFocusedCell();
+        //    var col = cell.column.fieldName;
 
-            if (col.length >= 4 && col.substr(0, 4) == 'Ziua') {
-                if (key == 43)              //tasta plus  
-                {
-                    var time = grDate.cpDataBlocare;
-                    var luna = txtAnLuna.GetValue();
+        //    if (col.length >= 4 && col.substr(0, 4) == 'Ziua') {
+        //        if (key == 43)              //tasta plus  
+        //        {
+        //            var time = grDate.cpDataBlocare;
+        //            var luna = txtAnLuna.GetValue();
 
-                    var dtBlocare = new Date(Number(time.toString().substring(0, 4)), Number(time.toString().substring(4, 6)) - 1, Number(time.toString().substring(6)));
-                    var dtCurr = new Date(luna.getFullYear(), luna.getMonth(), col.replace('Ziua', ''));
+        //            var dtBlocare = new Date(Number(time.toString().substring(0, 4)), Number(time.toString().substring(4, 6)) - 1, Number(time.toString().substring(6)));
+        //            var dtCurr = new Date(luna.getFullYear(), luna.getMonth(), col.replace('Ziua', ''));
 
-                    if (dtBlocare < dtCurr) {
-                        if (typeof grDate.cp_ZileLucrate[f10003] != "undefined" && grDate.cp_ZileLucrate[f10003] != null && grDate.cp_ZileLucrate[f10003].indexOf(',' + col) >= 0) {
-                            pnlLoading.Show();
-                            grDate.GetRowValues(grDate.GetFocusedRowIndex(), 'IdStare', OnGetRowValues);
-                        }
-                        else {
-                            swal({
-                                title: "Conexiune pierduta !", text: "Listele nu au fost actualizate, va rugam reintrati.",
-                                type: "warning"
-                            });
-                        }
+        //            if (dtBlocare < dtCurr) {
+        //                if (typeof grDate.cp_ZileLucrate[f10003] != "undefined" && grDate.cp_ZileLucrate[f10003] != null && grDate.cp_ZileLucrate[f10003].indexOf(',' + col) >= 0) {
+        //                    pnlLoading.Show();
+        //                    grDate.GetRowValues(grDate.GetFocusedRowIndex(), 'IdStare', OnGetRowValues);
+        //                }
+        //                else {
+        //                    swal({
+        //                        title: "Conexiune pierduta !", text: "Listele nu au fost actualizate, va rugam reintrati.",
+        //                        type: "warning"
+        //                    });
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        //function OnGetRowValues(Value) {
+
+        //    if ((cmbRol.GetValue() == 0 && (Value == 1 || Value == 4)) ||
+        //        (cmbRol.GetValue() == 1 && (Value == 1 || Value == 4)) ||
+        //        (cmbRol.GetValue() == 2 && (Value == 1 || Value == 2 || Value == 4 || Value == 6)) ||
+        //        (cmbRol.GetValue() == 3)) {
+        //            popUpModif.Show();
+        //            popUpModif.PerformCallback('popUpModif;');
+        //    }
+
+        //    pnlLoading.Hide();
+        //}
+
+        function onDoubleCellClick(ziua, f10003, idStare) {
+            var time = grDate.cpDataBlocare;
+            var luna = txtAnLuna.GetValue();
+
+            var dtBlocare = new Date(Number(time.toString().substring(0, 4)), Number(time.toString().substring(4, 6)) - 1, Number(time.toString().substring(6)));
+            var dtCurr = new Date(luna.getFullYear(), luna.getMonth(), ziua.replace('Ziua', ''));
+
+            if (dtBlocare < dtCurr) {
+                if (typeof grDate.cp_ZileLucrate[f10003] != "undefined" && grDate.cp_ZileLucrate[f10003] != null && grDate.cp_ZileLucrate[f10003].indexOf(',' + ziua) >= 0) {
+                    if ((cmbRol.GetValue() == 0 && (idStare == 1 || idStare == 4)) ||
+                        (cmbRol.GetValue() == 1 && (idStare == 1 || idStare == 4)) ||
+                        (cmbRol.GetValue() == 2 && (idStare == 1 || idStare == 2 || idStare == 4 || idStare == 6)) ||
+                        (cmbRol.GetValue() == 3)) {
+                        txtCol.Set('coloana', ziua);
+                        txtCol.Set('f10003', f10003);
+                        popUpModif.Show();
+                        popUpModif.PerformCallback('popUpModif;' + ziua + ";" + f10003);
                     }
                 }
+                else {
+                    swal({
+                        title: "Conexiune pierduta !", text: "Listele nu au fost actualizate, va rugam reintrati.",
+                        type: "warning"
+                    });
+                }
             }
-        }
-
-        function OnGetRowValues(Value) {
-
-            if ((cmbRol.GetValue() == 0 && (Value == 1 || Value == 4)) ||
-                (cmbRol.GetValue() == 1 && (Value == 1 || Value == 4)) ||
-                (cmbRol.GetValue() == 2 && (Value == 1 || Value == 2 || Value == 4 || Value == 6)) ||
-                (cmbRol.GetValue() == 3)) {
-                    popUpModif.Show();
-                    popUpModif.PerformCallback('popUpModif;');
-            }
-
-            pnlLoading.Hide();
         }
 
         function EmptyFields(s, e) {
@@ -595,33 +623,33 @@
         }
 
         function OnClickDetaliat(s, e) {
-            if (s.name == 'btnPeAng') {
-                pnlLoading.Show();
-                grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + txtCol.Get('coloana') + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
-            }
-            else {
-                if (txtCol.Get('coloana') || txtCol.Get('f10003')) {
-                    var colSel = txtCol.Get('coloana');
-                    if (colSel.length >= 4 && colSel.substr(0, 4).toLowerCase() == 'ziua') {
-                        pnlLoading.Show();
-                        grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + colSel + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
-                    }
-                    else {
-                        swal({
-                            title: "", text: "Trebuie sa selectati o coloana care afiseaza ziua",
-                            type: "warning"
-                        });
-                        e.processOnServer = false;
-                    }
-                }
-                else {
-                    swal({
-                        title: "", text: "Nu exista celula selectata",
-                        type: "warning"
-                    });
-                    e.processOnServer = false;
-                }
-            }
+            //if (s.name == 'btnPeAng') {
+            //    pnlLoading.Show();
+            //    grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + txtCol.Get('coloana') + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
+            //}
+            //else {
+            //    if (txtCol.Get('coloana') || txtCol.Get('f10003')) {
+            //        var colSel = txtCol.Get('coloana');
+            //        if (colSel.length >= 4 && colSel.substr(0, 4).toLowerCase() == 'ziua') {
+            //            pnlLoading.Show();
+            //            grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + colSel + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
+            //        }
+            //        else {
+            //            swal({
+            //                title: "", text: "Trebuie sa selectati o coloana care afiseaza ziua",
+            //                type: "warning"
+            //            });
+            //            e.processOnServer = false;
+            //        }
+            //    }
+            //    else {
+            //        swal({
+            //            title: "", text: "Nu exista celula selectata",
+            //            type: "warning"
+            //        });
+            //        e.processOnServer = false;
+            //    }
+            //}
         }
 
         function OnClickTransfera(s, e) {
@@ -636,8 +664,7 @@
             });
         }
 
-        function OnModif(s, e) {
-
+        function OnModif() {
             var texts = "";
             $('#<% =pnlValuri.ID %> input[type="text"]').each(function () {
                 texts += ";" + $(this).attr('id') + "=" + $(this).val();

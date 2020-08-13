@@ -152,8 +152,8 @@ namespace WizOne.Pontaj
                 {
                     grDate.JSProperties["cpParamMotiv"] = Dami.ValoareParam("AfisareMotivLaRespingereCerere", "0");
 
-                    grDate.Attributes.Add("onkeypress", String.Format("eventKeyPress(event, {0});", grDate.ClientInstanceName));
-                    grDate.Attributes.Add("onclick", String.Format("eventKeyPress(event, {0});", grDate.ClientInstanceName));
+                    //grDate.Attributes.Add("onkeypress", String.Format("eventKeyPress(event, {0});", grDate.ClientInstanceName));
+                    //grDate.Attributes.Add("onclick", String.Format("eventKeyPress(event, {0});", grDate.ClientInstanceName));
 
                     int nrRanduri = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ", "10"));
                     grDate.SettingsPager.PageSize = nrRanduri;
@@ -606,6 +606,9 @@ namespace WizOne.Pontaj
                         e.Cell.BackColor = Color.DarkGray;
                         e.Cell.Enabled = false;
                     }
+
+                    e.Cell.Enabled = false;
+                    e.Cell.Attributes.Add("ondblclick", String.Format("onDoubleCellClick(\"{0}\", \"{1}\", \"{2}\");", e.DataColumn.FieldName, e.KeyValue, grDate.GetRowValues(e.VisibleIndex, "IdStare")));
                 }
             }
             catch (Exception ex)
@@ -1558,23 +1561,18 @@ namespace WizOne.Pontaj
                             int f10003 = -99;
                             DateTime ziua = DateTime.Now;
 
-                            if (txtCol.Count > 0 && txtCol["f10003"] != null && txtCol["f10003"] != null && General.IsNumeric(txtCol["f10003"])) f10003 = Convert.ToInt32(txtCol["f10003"]);
-                            if (txtCol.Count > 0 && txtCol["coloana"] != null && txtCol["coloana"].ToString().Length > 4 && txtCol["coloana"].ToString().Substring(0, 4) == "Ziua")
+                            try
                             {
-                                string zi = txtCol["coloana"].ToString().Replace("Ziua", "");
-                                ziua = new DateTime(Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, Convert.ToInt32(zi));
+                                if (arr.Length >= 3)
+                                {
+                                    f10003 = Convert.ToInt32(arr[1]);
+                                    ziua = new DateTime(Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, Convert.ToInt32(arr[2].Replace("Ziua", "")));
+                                }
                             }
+                            catch (Exception){}
 
                             cmbTipAbs.SelectedIndex = -1;
                             pnlValuri.Controls.Clear();
-
-                            string strGol = "";
-                            string strGol1 = "";
-                            if (Constante.tipBD == 1)
-                            {
-                                strGol = @"AND X.""DenumireScurta"" <> '' ";
-                                strGol1 = @"AND A.""OreInVal"" <> '' ";
-                            }
 
                             #region Incarca ComboBox
 
@@ -1588,7 +1586,7 @@ namespace WizOne.Pontaj
                             WHERE A.""IdTipOre"" = 1
                             group by b.""IdContract"", c.""IdRol"", a.""Id"", b.ZL, b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal"") x
                             INNER JOIN(SELECT * FROM ""Ptj_Intrari"" Y WHERE {General.ToDataUniv(ziua)} <= CAST(Y.""Ziua"" AS DATE) AND CAST(Y.""Ziua"" AS DATE) <= {General.ToDataUniv(ziua)} AND Y.F10003 = {f10003}) P ON 1 = 1
-                            WHERE X.""DenumireScurta"" IS NOT NULL {strGol} AND X.""IdContract"" = P.""IdContract"" and X.""IdRol"" = {cmbRol.Value} AND
+                            WHERE 1=1 {General.FiltrulCuNull("X.DenumireScurta")} AND X.""IdContract"" = P.""IdContract"" and X.""IdRol"" = {cmbRol.Value} AND
                             (
                                 (COALESCE(X.""ZileSapt"",0) <> 0 AND COALESCE(X.""ZileSapt"",0) = (CASE WHEN P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0 THEN 1 ELSE 0 END))
                                 OR
@@ -1627,7 +1625,7 @@ namespace WizOne.Pontaj
                                 INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
                                 INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
                                 INNER JOIN(SELECT * FROM ""Ptj_Intrari"" Y WHERE {General.ToDataUniv(ziua)} <= CAST(Y.""Ziua"" AS DATE) AND CAST(Y.""Ziua"" AS DATE) <= {General.ToDataUniv(ziua)} AND Y.F10003 = {f10003}) P ON 1 = 1
-                                WHERE A.""OreInVal"" IS NOT NULL {strGol1} AND B.""IdContract"" = P.""IdContract"" AND C.""IdRol"" = {cmbRol.Value} AND
+                                WHERE 1=1 {General.FiltrulCuNull("X.OreInVal")} AND B.""IdContract"" = P.""IdContract"" AND C.""IdRol"" = {cmbRol.Value} AND
                                 (
                                 (COALESCE(B.ZL,0)<> 0 AND (CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
                                 (COALESCE(B.S,0) <> 0 AND (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR

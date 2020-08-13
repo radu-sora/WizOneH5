@@ -355,8 +355,8 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div style="display:inline-table; float:right;">
-                                <dx:ASPxButton ID="btnModif" runat="server" Text="Salveaza" AutoPostBack="false" OnClick="btnModif_Click" >
-                                    <ClientSideEvents Click="function(s, e) { e.processOnServer = false; OnModif(s,e); }" />
+                                <dx:ASPxButton ID="btnModif" runat="server" Text="Salveaza" AutoPostBack="false">
+                                    <ClientSideEvents Click="function(s, e) { OnModif(s,e); }" />
                                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                                 </dx:ASPxButton>
                             </div>

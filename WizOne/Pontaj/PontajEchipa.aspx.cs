@@ -21,12 +21,6 @@ namespace WizOne.Pontaj
     public partial class PontajEchipa : System.Web.UI.Page
     {
 
-        public class metaActiuni
-        {
-            public int F10003 { get; set; }
-            public int IdStare { get; set; }
-        }
-
         public class metaF300
         {
             public Nullable<int> F30001 { get; set; }
@@ -164,23 +158,7 @@ namespace WizOne.Pontaj
                     int nrRanduri = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ", "10"));
                     grDate.SettingsPager.PageSize = nrRanduri;
 
-                    //Adaugam f-urile
-                    DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"",0) = 1 ORDER BY COALESCE(""OrdineAfisare"",999999) ", null);
-                    for(int i = 0; i < dt.Rows.Count; i++)
-                    {
-                        GridViewDataTextColumn c = new GridViewDataTextColumn();
-                        c.Name = dt.Rows[i]["Coloana"].ToString();
-                        c.FieldName = dt.Rows[i]["Coloana"].ToString();
-                        c.Caption = Dami.TraduCuvant(General.Nz(dt.Rows[i]["Alias"],dt.Rows[i]["Coloana"]).ToString());
-                        c.ToolTip = Dami.TraduCuvant(General.Nz(dt.Rows[i]["AliasToolTip"], Dami.TraduCuvant(General.Nz(dt.Rows[i]["Alias"], dt.Rows[i]["Coloana"]).ToString())).ToString());
-                        c.ReadOnly = true;
-                        c.Width = Unit.Pixel(Convert.ToInt32(General.Nz(dt.Rows[i]["Latime"], 100)));
-                        c.VisibleIndex = 100 + i;
-
-                        c.PropertiesTextEdit.DisplayFormatString = "N" + General.Nz(dt.Rows[i]["NumarZecimale"], 0);
-
-                        grDate.Columns.Add(c);
-                    }
+                    AdaugaF_uri();
                 }
                 else if(grDate.IsCallback)
                 { 
@@ -392,100 +370,25 @@ namespace WizOne.Pontaj
             }
         }
 
-        //protected void btnPeAng_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (txtCol.Count > 0 && txtCol["f10003"] != null)
-        //        {
-        //            RetineFiltru("1");
-        //            var f10003 = txtCol["f10003"];
-        //            Response.Redirect("PontajDetaliat.aspx?tip=10&f10003=" + f10003, false);
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("Nu s-a selectat nici un angajat", MessageBox.icoInfo, "");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
-
-        //protected void btnPeZi_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (txtCol.Count > 0 && txtCol["coloana"] != null && txtCol["coloana"].ToString().Length >4 && txtCol["coloana"].ToString().Substring(0,4) == "Ziua")
-        //        {
-        //            string ziua = txtCol["coloana"].ToString().Replace("Ziua", "");
-        //            RetineFiltru(ziua);
-        //            Response.Redirect("PontajDetaliat.aspx?tip=20", false);
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("Nu s-a selectat nici o zi", MessageBox.icoInfo, "");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
-
         protected void btnFiltru_Click(object sender, EventArgs e)
         {
             try
             {
-                string sqlCnt = $@"
-                    SELECT
-                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999)) AS ""NrAng"",
-                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)}) AS ""NrPtj"" {General.FromDual()}";
-
-                if (General.Nz(cmbCtr.Value, "").ToString() != "")
+                if (!General.EstePontajulInitializat(txtAnLuna.Date, General.Nz(cmbCtr.Value, "").ToString()))
                 {
-                    sqlCnt = $@"
-                    SELECT
-                    (SELECT COUNT(*) FROM F100 A
-                    INNER JOIN ""F100Contracte"" B ON A.F10003=B.F10003 AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit""
-                    INNER JOIN ""Ptj_Contracte"" C ON B.""IdContract""=C.""Id"" AND C.""Denumire"" IN ('{cmbCtr.Value.ToString().Replace(",", "','")}')
-                    WHERE A.F10025 IN (0,999)) AS ""NrAng"",
-                    (SELECT COUNT(DISTINCT A.F10003) FROM ""Ptj_Intrari"" A
-                    INNER JOIN ""Ptj_Contracte"" C ON A.""IdContract"" = C.""Id"" AND C.""Denumire"" IN ('{cmbCtr.Value.ToString().Replace(",", "', '")}')
-                    WHERE {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)} <= A.""Ziua"" AND A.""Ziua"" <=  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)}) AS ""NrPtj"" {General.FromDual()}";
-                }
-
-                DataRow drCnt = General.IncarcaDR(sqlCnt);
-                if (drCnt != null)
-                {
-                    decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
-                    decimal nrPtj = Convert.ToDecimal(General.Nz(drCnt["NrPtj"], 0));
-
-                    if (nrAng != 0)
-                    {
-                        decimal rez = ((nrAng - nrPtj)/nrAng) * 100;
-                        if (rez > 25)
-                        {
-                            grDate.DataSource = null;
-                            grDate.DataBind();
-                            MessageBox.Show("Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea", MessageBox.icoInfo,"Initializare");
-                            return;
-                        }
-                    }
+                    grDate.DataSource = null;
+                    grDate.DataBind();
+                    grDate.JSProperties["cpAlertMessage"] = "Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea";
+                    return;
                 }
 
                 RetineFiltru("1");
                 SetColoane();
                 IncarcaGrid();
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
-                {
                     divHovercard.Visible = false;
-                }
 
-
+                GetDataBlocare();
             }
             catch (Exception ex)
             {
@@ -711,8 +614,6 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-        #region Transfer F300
 
         protected void btnTransfera_Click()
         {//Radu 13.07.2020 - modificata pentru Callback
@@ -1091,8 +992,6 @@ namespace WizOne.Pontaj
 
         }
 
-        #endregion
-
         protected void grDate_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
         {
             try
@@ -1198,6 +1097,9 @@ namespace WizOne.Pontaj
                             break;
                         case "btnStergePontari":
                             btnStergePontari_Click(sender, e);
+                            break;
+                        case "btnModif":
+                            btnModif_Click(null, null);
                             break;
                     }
                 }
@@ -1674,6 +1576,8 @@ namespace WizOne.Pontaj
                                 strGol1 = @"AND A.""OreInVal"" <> '' ";
                             }
 
+                            #region Incarca ComboBox
+
                             //incarcam combo absente
                             //ne folosim de datele din pontaj (Contract, ziSapt, ziLibera) pt ca sunt deja determinate
                             string sqlAbs = $@"SELECT X.""Id"", X.""DenumireScurta"", X.""Denumire"", P.""ValStr"", CASE WHEN P.""ValStr""=X.""DenumireScurta"" THEN 1 ELSE 0 END AS ""Exista"" from ( 
@@ -1703,6 +1607,10 @@ namespace WizOne.Pontaj
 
                             if (dtAbs.Rows.Count > 0 && dtAbs.Select("Exista=1").Count() > 0)
                                 cmbTipAbs.Value = dtAbs.Rows[0]["ValStr"];
+
+                            #endregion
+
+                            #region Incarca Val-uri
 
                             //cream textbox valuri
                             string val_uri = "";
@@ -1810,9 +1718,9 @@ namespace WizOne.Pontaj
 
                                 pnlValuri.Controls.Add(divCol);
                             }
+
+                            #endregion
                         }
-                        break;
-                    case "":
                         break;
                 }
             }
@@ -2070,12 +1978,6 @@ namespace WizOne.Pontaj
                     zileVal += $@",COALESCE(""Ziua{i}"",'') AS ""Ziua{i}""";
                 }
 
-                for (int i = 1; i <= 100; i++)
-                {
-                    zileF += $@",CAST(COALESCE(X.""F{i}"",0) AS numeric(10)) AS ""F{i}_Tmp""";
-                }
-
-
                 if (Dami.ValoareParam("TipCalculDate") == "2")
                     strInner += $@"LEFT JOIN DamiNorma_Table dn ON dn.F10003=X.F10003 AND dn.dt={dtSf}
 								LEFT JOIN DamiDataPlecare_Table ddp ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
@@ -2083,10 +1985,11 @@ namespace WizOne.Pontaj
                     strInner += $@"OUTER APPLY dbo.DamiNorma(X.F10003, {dtSf}) dn 
                                 OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
 
+                foreach (var col in grDate.Columns.OfType<GridViewDataSpinEditColumn>())
+                    zileF += ",X." + col.FieldName;
+
                 if (Constante.tipBD == 1)
                 {
-                    string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT ',X.' + ""Coloana"" FROM ""Ptj_tblFormuleCumulat"" GROUP BY ""Coloana"" FOR XML Path('')"), "").ToString();
-
                     strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A 
                                 LEFT JOIN Ptj_Contracte C ON A.IdContract=C.Id
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
@@ -2115,7 +2018,7 @@ namespace WizOne.Pontaj
                                 (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
                                 dn.Norma AS AvansNorma, 
                                 CASE WHEN Y.Norma <> dn.Norma THEN (SELECT MAX(F70406) FROM F704 WHERE F70403=pvt.F10003 AND F70404=6 AND YEAR(F70406)={an} AND MONTH(F70406)={luna}) ELSE {General.ToDataUniv(2100, 1, 1)} END AS AvansData,
-                                L.F06205, Fct.F71804 AS Functie, X.F10003, X.IdStare {colCumulat} {zileVal} {zileF}
+                                L.F06205, Fct.F71804 AS Functie, X.F10003, X.IdStare {zileVal} {zileF}
                                 FROM Ptj_Cumulat X 
 		                        LEFT JOIN Ptj_tblStari st on st.Id = x.IdStare
 		                        left join SituatieZileAbsente zabs on zabs.F10003 = x.F10003 and zabs.An = x.An and zabs.IdAbsenta = (select Id from Ptj_tblAbsente where DenumireScurta = 'CO')
@@ -2153,8 +2056,6 @@ namespace WizOne.Pontaj
                 }
                 else
                 {
-                    string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT LISTAGG(',X.' || ""Coloana"") WITHIN GROUP (ORDER BY COALESCE(""Coloana"", '')) FROM (SELECT ""Coloana"" FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"", 0) = 1 GROUP BY ""Coloana"")"), "").ToString();
-
                     strSql = $@"with ""Ptj_Intrari_2"" as (select A.* from ""Ptj_Intrari"" A 
                                 LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContract""=C.""Id""
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
@@ -2183,7 +2084,7 @@ namespace WizOne.Pontaj
                                 (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
                                 ""DamiNorma""(X.F10003, {dtSf}) AS ""AvansNorma"", 
                                 CASE WHEN ""Norma"" <> ""DamiNorma""(X.F10003, {dtSf}) THEN (SELECT MAX(F70406) FROM F704 WHERE F70403=pvt.F10003 AND F70404=6 AND EXTRACT(YEAR FROM F70406)={an} AND EXTRACT(MONTH FROM F70406)={luna}) ELSE {General.ToDataUniv(2100, 1, 1)} END AS ""AvansData"",
-                                L.F06205, Fct.F71804 AS ""Functie"", X.F10003, X.""IdStare"" {colCumulat} {zileVal} {zileF}
+                                L.F06205, Fct.F71804 AS ""Functie"", X.F10003, X.""IdStare"" {zileVal} {zileF}
                                 FROM ""Ptj_Cumulat"" X 
                                 LEFT JOIN ""Ptj_tblStari"" st on st.""Id"" = x.""IdStare""
                                 left join (SELECT * FROM ""SituatieZileAbsente"" WHERE ""IdAbsenta"" = (select ""Id"" from ""Ptj_tblAbsente"" where ""DenumireScurta"" = 'CO')) zabs on zabs.F10003 = x.F10003 and zabs.""An"" = x.""An""
@@ -2334,10 +2235,8 @@ namespace WizOne.Pontaj
                     zileAsCuloare += ", " + strZi + " AS \"CuloareValoare" + i.ToString() + "\"";
                 }
 
-                for (int i = 1; i <= 100; i++)
-                {
-                    zileF += $@",COALESCE(X.""F{i}"",0) AS ""F{i}""";
-                }
+                foreach (var col in grDate.Columns.OfType<GridViewDataSpinEditColumn>())
+                    zileF += ",X." + col.FieldName;
 
                 //Florin 2020.05.21
                 string cmpExpIn = "FirstInPaid";
@@ -2635,9 +2534,6 @@ namespace WizOne.Pontaj
                 IncarcaAngajati();
                 if (e.Parameter == "txtAnLuna")
                     SetColoaneCuloare();
-
-                if (e.Parameter == "cmbRol")
-                    GetDataBlocare();
             }
             catch (Exception ex)
             {
@@ -2799,6 +2695,37 @@ namespace WizOne.Pontaj
 
                 Session["Ptj_DataBlocare"] = dataBlocare.ToString();
                 grDate.JSProperties["cpDataBlocare"] = dataBlocare.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void AdaugaF_uri()
+        {
+            try
+            {
+                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" ORDER BY COALESCE(""OrdineAfisare"",999999) ", null);
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    GridViewDataSpinEditColumn c = new GridViewDataSpinEditColumn();
+                    c.Name = dt.Rows[i]["Coloana"].ToString();
+                    c.FieldName = dt.Rows[i]["Coloana"].ToString();
+                    c.Caption = Dami.TraduCuvant(General.Nz(dt.Rows[i]["Alias"], dt.Rows[i]["Coloana"]).ToString());
+                    c.ToolTip = Dami.TraduCuvant(General.Nz(dt.Rows[i]["AliasToolTip"], Dami.TraduCuvant(General.Nz(dt.Rows[i]["Alias"], dt.Rows[i]["Coloana"]).ToString())).ToString());
+                    c.ReadOnly = true;
+                    c.Width = Unit.Pixel(Convert.ToInt32(General.Nz(dt.Rows[i]["Latime"], 100)));
+                    c.VisibleIndex = 100 + i;
+                    c.PropertiesEdit.NullDisplayText = "0";
+                    c.PropertiesSpinEdit.SpinButtons.Visible = false;
+                    c.Visible = Convert.ToBoolean(General.Nz(dt.Rows[i]["Vizibil"], 0));
+
+                    c.PropertiesSpinEdit.DisplayFormatString = "N" + General.Nz(dt.Rows[i]["NumarZecimale"], 0);
+
+                    grDate.Columns.Add(c);
+                }
             }
             catch (Exception ex)
             {

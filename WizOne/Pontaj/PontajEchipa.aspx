@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="PontajEchipa.aspx.cs" Inherits="WizOne.Pontaj.PontajEchipa" %>
 
 
+<%@ Register TagPrefix="dx" Namespace="DevExpress.Web" Assembly="DevExpress.Web.v19.1" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <table style="width:100%;">      
@@ -241,8 +242,7 @@
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
 
-                        <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains">
-                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="150px" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="Norma" Caption="Norma" ReadOnly="true" FixedStyle="Left" VisibleIndex="4" Width="80px"/>
                         <dx:GridViewDataTextColumn FieldName="DescContract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="5" Width="150px" Settings-AutoFilterCondition="Contains"/>
@@ -361,11 +361,11 @@
                                 </dx:ASPxButton>
                             </div>
                         </div>
-                        <div class="col-md-12" style="margin:15px 0px;">
-                            <span style="font-weight:bold; font-size:14px; margin-bottom:20px; text-align:center;">Absente de tip zi</span>
+                        <div class="col-md-12 margin_top15">
+                            <h5><b>Absente de tip zi</b></h5>
                         </div>
-                        <div class="col-md-12" style="margin-bottom:15px;">
-                            <dx:ASPxComboBox ID="cmbTipAbs" runat="server" ClientIDMode="Static" ClientInstanceName="cmbTipAbs" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="DenumireScurta" AutoPostBack="false" TextFormatString="{0}" AllowNull="true">
+                        <div class="col-md-12 margin_top15">
+                            <dx:ASPxComboBox ID="cmbTipAbs" runat="server" ClientIDMode="Static" ClientInstanceName="cmbTipAbs" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="DenumireScurta" AutoPostBack="false" TextFormatString="{0}" AllowNull="true" CssClass="aspxComboBox_center">
                                 <Columns>
                                     <dx:ListBoxColumn FieldName="DenumireScurta" Caption="Id" Width="50" />
                                     <dx:ListBoxColumn FieldName="Denumire" Caption="Denumire" Width="200" />
@@ -373,10 +373,10 @@
                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { e.processOnServer = false; EmptyVal(s,e); }" />
                             </dx:ASPxComboBox>
                         </div>
-                        <div class="col-md-12" style="margin-bottom:15px;">
-                            <span style="font-weight:bold; font-size:14px;">Absente de tip ora</span>
+                        <div class="col-md-12 margin_top15">
+                            <h5><b>Absente de tip ora</b></h5>
                         </div>
-                        <div class="row" id="pnlValuri" runat="server" style="margin:20px 50px 50px 50px;"/>
+                        <div class="col-md-12" id="pnlValuri" runat="server" style="margin:20px 50px 50px 50px;"/>
                     </div>
                     <dx:ASPxHiddenField ID="txtValuri" runat="server"></dx:ASPxHiddenField>
                 </asp:Panel>
@@ -545,7 +545,7 @@
                 {
                     var time = grDate.cpDataBlocare;
                     var luna = txtAnLuna.GetValue();
-alert(time);
+
                     var dtBlocare = new Date(Number(time.toString().substring(0, 4)), Number(time.toString().substring(4, 6)) - 1, Number(time.toString().substring(6)));
                     var dtCurr = new Date(luna.getFullYear(), luna.getMonth(), col.replace('Ziua', ''));
 
@@ -645,8 +645,7 @@ alert(time);
 
             txtCol.Set('valuri', texts);
             popUpModif.Hide();
-            pnlLoading.Show();
-            e.processOnServer = true;
+            grDate.PerformCallback('btnModif;');
         }
 
         function EmptyVal(s, e) {

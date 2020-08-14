@@ -485,29 +485,16 @@ namespace WizOne.Pontaj
         {
             try
             {
-                //Florinn 2020.05.20
-                DataRow drCnt = General.IncarcaDR($@"
-                    SELECT
-                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999) AND F10022 <= {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)}  AND  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)} <= F10023) AS ""NrAng"",
-                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)}) AS ""NrPtj"" {General.FromDual()}");
-                if (drCnt != null)
-                {
-                    decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
-                    decimal nrPtj = Convert.ToDecimal(General.Nz(drCnt["NrPtj"], 0));
+                DateTime dataSelectie = txtAnLuna.Date;
+                if (tip == 2 || tip == 20)
+                    dataSelectie = txtZiua.Date;
 
-                    if (tip == 1 || tip == 10)
-                        nrAng = DateTime.DaysInMonth(txtAnLuna.Date.Year, txtAnLuna.Date.Month);
-                    if (nrAng != 0)
-                    {
-                        decimal rez = ((nrAng - nrPtj) / nrAng) * 100;
-                        if (rez > 15)
-                        {
-                            grDate.DataSource = null;
-                            grDate.DataBind();
-                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pontajul nu este initializat") + Environment.NewLine + Dami.TraduCuvant("Va rugam ca mai intai sa efectuati initializarea");
-                            return;
-                        }
-                    }
+                if (!General.EstePontajulInitializat(dataSelectie, General.Nz(cmbCtr.Value, "").ToString()))
+                {
+                    grDate.DataSource = null;
+                    grDate.DataBind();
+                    MessageBox.Show("Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea", MessageBox.icoInfo, "Initializare");
+                    return;
                 }
 
                 IncarcaGrid();
@@ -639,15 +626,12 @@ namespace WizOne.Pontaj
 
                 //Florin 2020.05.25
                 GridViewCommandColumn grCmd = grDate.Columns[0] as GridViewCommandColumn;
+                grCmd.Visible = false;
                 if ((tip == 2 || tip == 20) && dt.Rows.Count == 1)
-                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.AllDataRows;
-                else
-                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.Invisible;
-
-                if (grCmd.CustomButtons[0].Visibility != GridViewCustomButtonVisibility.Invisible || grCmd.CustomButtons[1].Visibility != GridViewCustomButtonVisibility.Invisible)
+                {
                     grCmd.Visible = true;
-                else
-                    grCmd.Visible = false;
+                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                }
             }
             catch (Exception ex)
             {
@@ -1568,8 +1552,14 @@ namespace WizOne.Pontaj
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
 
                 ASPxDataUpdateValues upd = e.UpdateValues[0] as ASPxDataUpdateValues;
-                object[] keys = new object[] { upd.Keys[0] };
+                if (upd.Keys.Count == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
 
+                object[] keys = new object[] { upd.Keys[0] };
+                
                 DataRow row = dt.Rows.Find(keys);
                 if (row == null) return;
 
@@ -1592,7 +1582,7 @@ namespace WizOne.Pontaj
                     if (oldValue != newValue)
                     {
                         //daca sunt valorile temporare ValTmp
-                        if (numeCol.Length >= 5 && numeCol.Substring(0,6).ToLower() == "valtmp" && General.IsNumeric(numeCol.Replace("ValTmp", "")))
+                        if (numeCol.Length >= 6 && numeCol.Substring(0,6).ToLower() == "valtmp" && General.IsNumeric(numeCol.Replace("ValTmp", "")))
                         {
                             string i = numeCol.Replace("ValTmp", "");
                             if (!adaugat)

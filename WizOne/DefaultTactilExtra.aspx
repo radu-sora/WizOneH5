@@ -31,14 +31,12 @@
                     hfPIN.Set('PIN', String(value) + String(nr));
             }
         </script>
-        <asp:ScriptManager ID="ScriptManager1" runat="server">
+       <asp:ScriptManager ID="ScriptManager1" runat="server">
         </asp:ScriptManager>
         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>
                 <asp:Timer ID="Timer1" runat="server" OnTick="Resetare" Interval="15000" >                    
                     </asp:Timer>
-
-
         <div id="panouExt" runat="server"  class="outer">
             <div  class="inner">
                 Pentru accesarea aplicatiei va rugam apropiati cardul de cititor
@@ -139,12 +137,13 @@
                             <Paddings PaddingBottom="10px" PaddingLeft="30px"  />
                         </dx:ASPxButton>
                     </td> 
-                </tr>
+                </tr>    
             </table>
 		</div>
-      
-        </ContentTemplate>
-    </asp:UpdatePanel>
+   
+           </ContentTemplate>
+    </asp:UpdatePanel>	   
+
     <dx:ASPxHiddenField ID="hfPIN" runat="server"></dx:ASPxHiddenField>        
 
     </form>

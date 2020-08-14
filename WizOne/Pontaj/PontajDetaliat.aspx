@@ -205,7 +205,7 @@
                                             <div style="float:left; padding:0px 15px; position:relative;">
                                                 <dx:ASPxButton ID="btnFiltruZi" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
-                                                    <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnFiltru'); }" />
+                                                    <ClientSideEvents Click="function(s, e) { grDate.batchEditApi.ResetChanges(0);  grDate.PerformCallback('btnFiltru'); }" />
                                                 </dx:ASPxButton>
                                                 <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>

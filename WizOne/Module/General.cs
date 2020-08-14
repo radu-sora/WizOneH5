@@ -3480,7 +3480,7 @@ namespace WizOne.Module
                     dt = "trunc(sysdate) ";
                     tipData = "NUMBER(9)";
                 }
-                            
+
                 strSql = @"SELECT * FROM (
                             SELECT CAST(A.F10003 AS {8}) AS ""Marca"",A.F10017 AS ""CNP"",A.F10008 {4} ' ' {4} A.F10009 AS ""NumeComplet"",
                             E.F00204 AS ""Companie"",F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00506 AS ""Sectie"",I.F00607 AS ""Departament"", A.F10022 AS ""DataAngajarii"",
@@ -8642,6 +8642,52 @@ namespace WizOne.Module
 
             }
 
+        }
+
+        public static bool EstePontajulInitializat(DateTime dt, string contracte = "")
+        {
+            bool ras = false;
+
+            try
+            {
+                string sqlCnt = $@"
+                    SELECT
+                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999)) AS ""NrAng"",
+                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(dt.Year, dt.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(dt.Year, dt.Month, 99)}) AS ""NrPtj"" {General.FromDual()}";
+
+                if (contracte != "")
+                {
+                    sqlCnt = $@"
+                    SELECT
+                    (SELECT COUNT(*) FROM F100 A
+                    INNER JOIN ""F100Contracte"" B ON A.F10003=B.F10003 AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit""
+                    INNER JOIN ""Ptj_Contracte"" C ON B.""IdContract""=C.""Id"" AND C.""Denumire"" IN ('{contracte.Replace(",", "','")}')
+                    WHERE A.F10025 IN (0,999)) AS ""NrAng"",
+                    (SELECT COUNT(DISTINCT A.F10003) FROM ""Ptj_Intrari"" A
+                    INNER JOIN ""Ptj_Contracte"" C ON A.""IdContract"" = C.""Id"" AND C.""Denumire"" IN ('{contracte.Replace(",", "', '")}')
+                    WHERE {General.ToDataUniv(dt.Year, dt.Month)} <= A.""Ziua"" AND A.""Ziua"" <=  {General.ToDataUniv(dt.Year, dt.Month, 99)}) AS ""NrPtj"" {General.FromDual()}";
+                }
+
+                DataRow drCnt = General.IncarcaDR(sqlCnt);
+                if (drCnt != null)
+                {
+                    decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
+                    decimal nrPtj = Convert.ToDecimal(General.Nz(drCnt["NrPtj"], 0));
+
+                    if (nrAng != 0)
+                    {
+                        decimal rez = (nrPtj / nrAng) * 100;
+                        if (rez > 51)
+                            ras = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "BatchUpdate", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return ras;
         }
 
     }

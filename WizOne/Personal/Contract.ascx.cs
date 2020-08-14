@@ -853,7 +853,7 @@ namespace WizOne.Personal
                     break;
                 case "btnCautaCOR":
                     List<object> lst = Session["CodCORSelectat"] as List<object>;
-                    if (lst != null)
+                    if (lst != null && lst.Count > 0)
                     {
                         object[] codCOR = lst[0] as object[];
                         Session["CodCORSelectat"] = null;

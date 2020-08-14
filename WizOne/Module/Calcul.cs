@@ -9,6 +9,9 @@ namespace WizOne.Module
 {
     public class Calcul
     {
+        public static int minuteIN = 0;
+        public static int minuteOUT = 0;
+
         public static void CalculInOut(DataRow ent, bool salveaza = false, bool recalcul = false)
         {
             try
@@ -1119,8 +1122,7 @@ namespace WizOne.Module
                                 {
                                     //Florin 2016.11.07 Begin ###################################
                                     //aplicam gratierea
-                                    int minuteIN = 0;
-                                    int minuteOUT = 0;
+
                                     DataTable dtProg = General.IncarcaDT(@"SELECT * FROM ""Ptj_Programe"" WHERE ""Id""=" + idProg);
                                     if (dtProg.Rows.Count > 0 && dtProg.Rows[0]["OraIntrare"] != DBNull.Value && dtProg.Rows[0]["OraIesire"] != DBNull.Value)
                                     {
@@ -1839,10 +1841,10 @@ namespace WizOne.Module
                     gridOut = ent["Out" + i];
 
                     //Florin 2020.06.22
-                    if (gridIn != DBNull.Value && Convert.ToDateTime(gridIn) < firstInPaid)
+                    if (gridIn != DBNull.Value && Convert.ToDateTime(gridIn).AddMinutes(-1 * minuteIN) <= firstInPaid)
                         gridIn = firstInPaid;
 
-                    if (gridOut != DBNull.Value && Convert.ToDateTime(gridOut) > lastOutPaid)
+                    if (gridOut != DBNull.Value && Convert.ToDateTime(gridOut).AddMinutes(minuteOUT) >= lastOutPaid)
                         gridOut = lastOutPaid;
 
                     if (gridIn != DBNull.Value && gridOut != DBNull.Value && Convert.ToDateTime(gridIn) < Convert.ToDateTime(gridOut))

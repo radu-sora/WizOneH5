@@ -1369,6 +1369,11 @@ namespace WizOne.Pagini
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"], "").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
+                                                reportParams = new
+                                                {
+                                                    Angajat = obj[0],
+                                                    DataModificare = obj[12]
+                                                };
                                             }
                                         }
 
@@ -1379,6 +1384,11 @@ namespace WizOne.Pagini
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"], "").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
+                                                reportParams = new
+                                                {
+                                                    Angajat = obj[0],
+                                                    DataModificare = obj[12]
+                                                };
                                             }
                                         }
 
@@ -1389,6 +1399,11 @@ namespace WizOne.Pagini
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"], "").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
+                                                reportParams = new
+                                                {
+                                                    Angajat = obj[0],
+                                                    DataModificare = obj[12]
+                                                };
                                             }
                                         }
 
@@ -1399,6 +1414,11 @@ namespace WizOne.Pagini
                                             if (arr.Count() > 0 && General.Nz(arr[0]["IdRaport"], "").ToString() != "")
                                             {
                                                 idRap = arr[0]["IdRaport"].ToString();
+                                                reportParams = new
+                                                {
+                                                    Angajat = obj[0],
+                                                    DataModificare = obj[12]
+                                                };
                                             }
                                         }
 
@@ -1450,7 +1470,7 @@ namespace WizOne.Pagini
                                                 idRap = arr[0]["IdRaport"].ToString();
                                             }
 
-                                            if (idRap_tmp != "" && idRap != idRap_tmp)
+                                            if (idRap_tmp != "-99" && idRap != idRap_tmp)
                                             {
                                                 msg = "Trebuie sa selectati inregistrari care au acelasi tip de modificare";
                                                 break;

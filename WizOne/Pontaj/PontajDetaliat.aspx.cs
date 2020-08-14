@@ -682,7 +682,7 @@ namespace WizOne.Pontaj
                     if (General.Nz(cmbAngZi.Value, "").ToString() != "")
                         filtru += " AND P.F10003=" + cmbAngZi.Value;
                     else
-                        filtru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, 0, -99, idRol, ziua.Day,-99, -99);
+                        filtru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, 0, -99, idRol.ToString(), ziua.Day,-99, -99);
 
                     tipInreg = Convert.ToInt32(General.Nz(cmbPtjZi.Value, 1));
 

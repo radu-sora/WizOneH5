@@ -5943,8 +5943,7 @@ namespace WizOne.Module
             return mesaj;
         }
 
-
-        public static string GetF10003Roluri(int idUser, int an, int luna, int alMeu, decimal F10003, int idRol, int zi = 0, int idDept = -99, int idAngajat = -99)
+        public static string GetF10003Roluri(int idUser, int an, int luna, int alMeu, decimal F10003, string idRol, int zi = 0, int idDept = -99, int idAngajat = -99)
         {
             string str = "";
 
@@ -5958,43 +5957,24 @@ namespace WizOne.Module
                 {
                     string strSql = "";
                     string strFiltru = "";
-                    if (idDept != -99) strFiltru = " AND A.\"F10007\"=" + idDept;
-                    if (idAngajat != -99) strFiltru = " AND A.\"F10003\"=" + idAngajat;
+                    if (idDept != -99) strFiltru = " AND A.F10007=" + idDept;
+                    if (idAngajat != -99) strFiltru = " AND A.F10003=" + idAngajat;
 
-                    if (Constante.tipBD == 1)
-                    {
-                        strSql = " SELECT X.F10003 FROM ( " +
-                                " SELECT B.f10003 FROM relGrupAngajat B" +
-                                " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
-                                " WHERE C.IdSuper =" + idUser + " AND C.IdRol=" + idRol +
-                                " GROUP BY B.f10003" +
-                                " UNION" +
-                                " SELECT B.f10003 FROM relGrupAngajat B" +
-                                " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
-                                " INNER JOIN F100Supervizori D ON D.F10003 = B.F10003 AND D.IdSuper = (-1 * C.IdSuper) AND (100 * " + an + " + " + luna + " BETWEEN isnull(100 * year(D.DataInceput) + MONTH(D.DataInceput), 190000) AND isnull(100 * year(D.DataSfarsit) + MONTH(D.DataSfarsit), 210000)) " +
-                                " WHERE D.IdUser =" + idUser + " AND C.IdRol=" + idRol +
-                                " GROUP BY B.F10003) X " +
-                                " WHERE X.F10003 IN (SELECT S.F10003 FROM F100 S WHERE S.F10025 <> 900 AND CONVERT(date,S.F10022) <> CONVERT(date,S.F100993) " + strFiltru.Replace("A.", "S.") + General.FiltruActivi(an, luna, zi) + ")" +
-                                " GROUP BY X.F10003";
-                    }
-                    else
-                    {
-                        strSql = "SELECT X.F10003 FROM ( " +
-                                " SELECT B.f10003 FROM \"relGrupAngajat\" B " +
-                                " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
-                                " WHERE C.\"IdSuper\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
-                                " GROUP BY B.F10003 " +
-                                " UNION " +
-                                " SELECT B.F10003 FROM \"relGrupAngajat\" B " +
-                                " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
-                                " INNER JOIN \"F100Supervizori\" D ON D.F10003 = B.F10003 AND D.\"IdSuper\" = (-1 * C.\"IdSuper\") AND D.\"DataInceput\" <= " + ToDataUniv(an, luna, 99) + " AND " + ToDataUniv(an, luna, 1) + " <= D.\"DataSfarsit\" " +
-                                " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
-                                " GROUP BY B.F10003) X  " +
-                                " INNER JOIN F100 A ON A.F10003=X.F10003  " +
-                                " WHERE 1=1 AND A.F10025 <> 900 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
-                                " GROUP BY X.F10003";
 
-                    }
+                    strSql = $@"SELECT X.F10003 FROM ( 
+                             SELECT B.F10003 FROM ""relGrupAngajat"" B
+                             INNER JOIN ""Ptj_relGrupSuper"" C ON B.""IdGrup"" = C.""IdGrup""
+                             WHERE C.""IdSuper"" = {idUser} AND C.""IdRol"" IN ({idRol})
+                             GROUP BY B.F10003
+                             UNION
+                             SELECT B.F10003 FROM ""relGrupAngajat"" B
+                             INNER JOIN ""Ptj_relGrupSuper"" C ON B.""IdGrup"" = C.""IdGrup""
+                             INNER JOIN ""F100Supervizori"" D ON D.F10003 = B.F10003 AND D.""IdSuper"" = (-1 * C.""IdSuper"") AND D.""DataInceput"" <= {ToDataUniv(an, luna, 99)} AND {ToDataUniv(an, luna, 1)} <= D.""DataSfarsit""
+                             WHERE D.""IdUser"" = {idUser} AND C.""IdRol"" IN ({idRol}) 
+                             GROUP BY B.F10003) X 
+                             INNER JOIN F100 A ON A.F10003=X.F10003 
+                             WHERE A.F10025 <> 900 AND {General.TruncateDate("A.F10022")} <> {General.TruncateDate("A.F100993")} {strFiltru} {General.FiltruActivi(an, luna, zi)}
+                             GROUP BY X.F10003";
 
                     str = " AND A.F10003 IN (" + strSql + ")";
                 }
@@ -6008,68 +5988,133 @@ namespace WizOne.Module
             return str;
         }
 
-        //Radu 04.02.2020
-        public static string GetF10003RoluriComasate(int idUser, int an, int luna, decimal F10003, List<int> lstRoluri, int zi = 0, int idDept = -99, int idAngajat = -99)
-        {
-            string str = "";
 
-            try
-            {              
-                string strSql = "";
-                string strFiltru = "";
-                if (idDept != -99) strFiltru = " AND A.\"F10007\"=" + idDept;
-                if (idAngajat != -99) strFiltru = " AND A.\"F10003\"=" + idAngajat;
+        //public static string GetF10003Roluri(int idUser, int an, int luna, int alMeu, decimal F10003, string idRol, int zi = 0, int idDept = -99, int idAngajat = -99)
+        //{
+        //    string str = "";
 
-                foreach (int idRol in lstRoluri)
-                {
-                    strSql += "UNION ";
-                    if (Constante.tipBD == 1)
-                    {
-                        strSql += " (SELECT X.F10003 FROM ( " +
-                                " SELECT B.f10003 FROM relGrupAngajat B" +
-                                " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
-                                " WHERE C.IdSuper =" + idUser + " AND C.IdRol=" + idRol +
-                                " GROUP BY B.f10003" +
-                                " UNION" +
-                                " SELECT B.f10003 FROM relGrupAngajat B" +
-                                " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
-                                " INNER JOIN F100Supervizori D ON D.F10003 = B.F10003 AND D.IdSuper = (-1 * C.IdSuper) AND (100 * " + an + " + " + luna + " BETWEEN isnull(100 * year(D.DataInceput) + MONTH(D.DataInceput), 190000) AND isnull(100 * year(D.DataSfarsit) + MONTH(D.DataSfarsit), 210000)) " +
-                                " WHERE D.IdUser =" + idUser + " AND C.IdRol=" + idRol +
-                                " GROUP BY B.F10003) X " +
-                                " WHERE X.F10003 IN (SELECT S.F10003 FROM F100 S WHERE S.F10025 <> 900 AND CONVERT(date,S.F10022) <> CONVERT(date,S.F100993) " + strFiltru.Replace("A.", "S.") + General.FiltruActivi(an, luna, zi) + ")" +
-                                " GROUP BY X.F10003)";
-                    }
-                    else
-                    {
+        //    try
+        //    {
+        //        if (alMeu == 1)
+        //        {
+        //            str = " AND A.F10003 IN (" + F10003 + ")";
+        //        }
+        //        else
+        //        {
+        //            string strSql = "";
+        //            string strFiltru = "";
+        //            if (idDept != -99) strFiltru = " AND A.\"F10007\"=" + idDept;
+        //            if (idAngajat != -99) strFiltru = " AND A.\"F10003\"=" + idAngajat;
 
-                        strSql += " (SELECT X.F10003 FROM ( " +
-                                " SELECT B.f10003 FROM \"relGrupAngajat\" B " +
-                                " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
-                                " WHERE C.\"IdSuper\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
-                                " GROUP BY B.F10003 " +
-                                " UNION " +
-                                " SELECT B.F10003 FROM \"relGrupAngajat\" B " +
-                                " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
-                                " INNER JOIN \"F100Supervizori\" D ON D.F10003 = B.F10003 AND D.\"IdSuper\" = (-1 * C.\"IdSuper\") AND D.\"DataInceput\" <= " + ToDataUniv(an, luna, 99) + " AND " + ToDataUniv(an, luna, 1) + " <= D.\"DataSfarsit\" " +
-                                " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
-                                " GROUP BY B.F10003) X  " +
-                                " INNER JOIN F100 A ON A.F10003=X.F10003  " +
-                                " WHERE 1=1 AND A.F10025 <> 900 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
-                                " GROUP BY X.F10003)";
-                    }
-                }
-                if (strSql.Length > 5)
-                    str = " AND A.F10003 IN (" + strSql.Substring(5) + ")";
-                
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-            }
+        //            if (Constante.tipBD == 1)
+        //            {
+        //                strSql = " SELECT X.F10003 FROM ( " +
+        //                        " SELECT B.f10003 FROM relGrupAngajat B" +
+        //                        " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
+        //                        " WHERE C.IdSuper =" + idUser + " AND C.IdRol=" + idRol +
+        //                        " GROUP BY B.f10003" +
+        //                        " UNION" +
+        //                        " SELECT B.f10003 FROM relGrupAngajat B" +
+        //                        " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
+        //                        " INNER JOIN F100Supervizori D ON D.F10003 = B.F10003 AND D.IdSuper = (-1 * C.IdSuper) AND (100 * " + an + " + " + luna + " BETWEEN isnull(100 * year(D.DataInceput) + MONTH(D.DataInceput), 190000) AND isnull(100 * year(D.DataSfarsit) + MONTH(D.DataSfarsit), 210000)) " +
+        //                        " WHERE D.IdUser =" + idUser + " AND C.IdRol=" + idRol +
+        //                        " GROUP BY B.F10003) X " +
+        //                        " WHERE X.F10003 IN (SELECT S.F10003 FROM F100 S WHERE S.F10025 <> 900 AND CONVERT(date,S.F10022) <> CONVERT(date,S.F100993) " + strFiltru.Replace("A.", "S.") + General.FiltruActivi(an, luna, zi) + ")" +
+        //                        " GROUP BY X.F10003";
+        //            }
+        //            else
+        //            {
+        //                strSql = "SELECT X.F10003 FROM ( " +
+        //                        " SELECT B.f10003 FROM \"relGrupAngajat\" B " +
+        //                        " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+        //                        " WHERE C.\"IdSuper\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+        //                        " GROUP BY B.F10003 " +
+        //                        " UNION " +
+        //                        " SELECT B.F10003 FROM \"relGrupAngajat\" B " +
+        //                        " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+        //                        " INNER JOIN \"F100Supervizori\" D ON D.F10003 = B.F10003 AND D.\"IdSuper\" = (-1 * C.\"IdSuper\") AND D.\"DataInceput\" <= " + ToDataUniv(an, luna, 99) + " AND " + ToDataUniv(an, luna, 1) + " <= D.\"DataSfarsit\" " +
+        //                        " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+        //                        " GROUP BY B.F10003) X  " +
+        //                        " INNER JOIN F100 A ON A.F10003=X.F10003  " +
+        //                        " WHERE 1=1 AND A.F10025 <> 900 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
+        //                        " GROUP BY X.F10003";
 
-            return str;
-        }
+        //            }
+
+        //            str = " AND A.F10003 IN (" + strSql + ")";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return str;
+        //}
+
+        ////Radu 04.02.2020
+        //public static string GetF10003RoluriComasate(int idUser, int an, int luna, decimal F10003, List<int> lstRoluri, int zi = 0, int idDept = -99, int idAngajat = -99)
+        //{
+        //    string str = "";
+
+        //    try
+        //    {              
+        //        string strSql = "";
+        //        string strFiltru = "";
+        //        if (idDept != -99) strFiltru = " AND A.\"F10007\"=" + idDept;
+        //        if (idAngajat != -99) strFiltru = " AND A.\"F10003\"=" + idAngajat;
+
+        //        foreach (int idRol in lstRoluri)
+        //        {
+        //            strSql += "UNION ";
+        //            if (Constante.tipBD == 1)
+        //            {
+        //                strSql += " (SELECT X.F10003 FROM ( " +
+        //                        " SELECT B.f10003 FROM relGrupAngajat B" +
+        //                        " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
+        //                        " WHERE C.IdSuper =" + idUser + " AND C.IdRol=" + idRol +
+        //                        " GROUP BY B.f10003" +
+        //                        " UNION" +
+        //                        " SELECT B.f10003 FROM relGrupAngajat B" +
+        //                        " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
+        //                        " INNER JOIN F100Supervizori D ON D.F10003 = B.F10003 AND D.IdSuper = (-1 * C.IdSuper) AND (100 * " + an + " + " + luna + " BETWEEN isnull(100 * year(D.DataInceput) + MONTH(D.DataInceput), 190000) AND isnull(100 * year(D.DataSfarsit) + MONTH(D.DataSfarsit), 210000)) " +
+        //                        " WHERE D.IdUser =" + idUser + " AND C.IdRol=" + idRol +
+        //                        " GROUP BY B.F10003) X " +
+        //                        " WHERE X.F10003 IN (SELECT S.F10003 FROM F100 S WHERE S.F10025 <> 900 AND CONVERT(date,S.F10022) <> CONVERT(date,S.F100993) " + strFiltru.Replace("A.", "S.") + General.FiltruActivi(an, luna, zi) + ")" +
+        //                        " GROUP BY X.F10003)";
+        //            }
+        //            else
+        //            {
+
+        //                strSql += " (SELECT X.F10003 FROM ( " +
+        //                        " SELECT B.f10003 FROM \"relGrupAngajat\" B " +
+        //                        " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+        //                        " WHERE C.\"IdSuper\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+        //                        " GROUP BY B.F10003 " +
+        //                        " UNION " +
+        //                        " SELECT B.F10003 FROM \"relGrupAngajat\" B " +
+        //                        " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+        //                        " INNER JOIN \"F100Supervizori\" D ON D.F10003 = B.F10003 AND D.\"IdSuper\" = (-1 * C.\"IdSuper\") AND D.\"DataInceput\" <= " + ToDataUniv(an, luna, 99) + " AND " + ToDataUniv(an, luna, 1) + " <= D.\"DataSfarsit\" " +
+        //                        " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+        //                        " GROUP BY B.F10003) X  " +
+        //                        " INNER JOIN F100 A ON A.F10003=X.F10003  " +
+        //                        " WHERE 1=1 AND A.F10025 <> 900 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
+        //                        " GROUP BY X.F10003)";
+        //            }
+        //        }
+        //        if (strSql.Length > 5)
+        //            str = " AND A.F10003 IN (" + strSql.Substring(5) + ")";
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return str;
+        //}
 
         //Florin 2019.12.27
         public static string GetF10003Roluri(int idUser, int an, int luna, int alMeu, decimal F10003, int idRol, int zi = 0, string denDept = "", int idAngajat = -99)

@@ -480,7 +480,7 @@ namespace WizOne.Pontaj
                     inn = @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
                 }
 
-                strFiltru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), an, luna, 0, -99, Convert.ToInt32(cmbRol.Value ?? -99), 0, Convert.ToInt32(cmbDept.Value ?? -99), -99);
+                strFiltru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), an, luna, 0, -99, (cmbRol.Value ?? -99).ToString(), 0, Convert.ToInt32(cmbDept.Value ?? -99), -99);
 
                 //Florin 2019.12.09 - adaugam drepturile
                 int idRol = Convert.ToInt32(General.Nz(cmbRol.Value, 1));

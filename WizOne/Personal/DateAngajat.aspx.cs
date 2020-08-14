@@ -472,7 +472,7 @@ namespace WizOne.Personal
 
                 //Florin 2018-10-30
                 //calculam CO daca se insereaza un angajat
-                bool calcCO = false;
+                //bool calcCO = false;
                 bool esteNou = false;
                 if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                 {
@@ -677,9 +677,9 @@ namespace WizOne.Personal
                 }
                 else
                 {
-                    DateTime dataModif = Convert.ToDateTime(General.ExecutaScalar("SELECT F10023 FROM F100 WHERE F10003=" + General.Nz(Session["Marca"], -99), null));
-                    if (dataModif != Convert.ToDateTime(ds.Tables[1].Rows[0]["F10023"]))
-                        calcCO = true;
+                    //DateTime dataModif = Convert.ToDateTime(General.ExecutaScalar("SELECT F10023 FROM F100 WHERE F10003=" + General.Nz(Session["Marca"], -99), null));
+                    //if (dataModif != Convert.ToDateTime(ds.Tables[1].Rows[0]["F10023"]))
+                    //    calcCO = true;
                 }
                     
                 for (int i = 1; i < ds.Tables.Count; i++)

@@ -1933,11 +1933,6 @@ namespace WizOne.Pontaj
                 }
                 #endregion
 
-                //string strFiltruSpecial = "";
-                //if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                //    strFiltruSpecial = strFiltru.Replace("A.F1006", "C.F1006").Replace(@"A.""DescContract""",@"C.""Denumire""").Replace(@"A.""Dept""", "I.F00608");
-                //else
-                //    strLeg = "";
 
                 foreach (var col in grDate.Columns.OfType<GridViewDataSpinEditColumn>())
                     f_uri += $",COALESCE(X.{col.FieldName},0) AS {col.FieldName}";

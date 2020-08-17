@@ -1920,13 +1920,12 @@ namespace WizOne.Pontaj
                 if (General.Nz(cmbSub.Value, "").ToString() != "") strFiltru += " AND A.F10004 = " + cmbSub.Value;
                 if (General.Nz(cmbFil.Value, "").ToString() != "") strFiltru += " AND A.F10005 = " + cmbFil.Value;
                 if (General.Nz(cmbSec.Value, "").ToString() != "") strFiltru += " AND A.F10006 = " + cmbSec.Value;
-                if (General.Nz(cmbDept.Value, "").ToString() != "") strFiltru += @" AND A.""Dept"" IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
+                if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") != "1") strFiltru += @" AND A.""Dept"" IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
                 if (General.Nz(cmbSubDept.Value, "").ToString() != "") strFiltru += @" AND A.F100958=" + cmbSubDept.Value;
                 if (General.Nz(cmbBirou.Value, "").ToString() != "") strFiltru += @" AND A.F100959=" + cmbBirou.Value;
                 if (General.Nz(cmbStare.Value, "").ToString() != "") strFiltru += @" AND COALESCE(A.""IdStare"",1) = " + cmbStare.Value;
                 if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += $@" AND A.""DescContract"" IN ('{cmbCtr.Value.ToString().Replace(",", "','")}')";
-                //if (General.Nz(cmbAng.Value, "").ToString() == "") strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, Convert.ToInt32(cmbRol.Value ?? -99), 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
-                //if (General.Nz(cmbAng.Value, "").ToString() != "") strFiltru += " AND A.F10003=" + cmbAng.Value;
+                if (General.Nz(cmbAng.Value, "").ToString() != "") strFiltru += " AND A.F10003=" + cmbAng.Value;
                 if (General.Nz(cmbCateg.Value, "").ToString() != "")
                 {
                     strFiltru += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
@@ -1993,9 +1992,20 @@ namespace WizOne.Pontaj
                 string dtSf = General.ToDataUniv(an, luna, 99);
                 string campuri = "";
                 string strFiltru = "";
+                string pvtFiltru = "";
                 string strInner = "";
                 string zile = "";
                 string zileAs = "";
+                string pvtInner = "";
+
+                #region Filtru
+                if (General.Nz(cmbAng.Value, "").ToString() == "") strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, (cmbRol.Value ?? -99).ToString(), 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
+                if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
+                {
+                    pvtFiltru += @" AND B.F00608 IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
+                    pvtInner = " INNER JOIN F006 B ON A.F10007=B.F00607 ";
+                }
+                #endregion
 
                 for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)
                 {
@@ -2021,7 +2031,7 @@ namespace WizOne.Pontaj
                                 FOR XML PATH ('')) AS ""ZileGri""";
                     strInner = $@"INNER JOIN (
                                 SELECT F10003 {zileAs} FROM 
-                                (SELECT F10003, {cmpValStr}, Ziua From Ptj_Intrari WHERE {dtInc} <= CAST(Ziua AS date) AND CAST(Ziua AS date) <= {dtSf}) AS source  
+                                (SELECT A.F10003, A.{cmpValStr}, A.Ziua FROM Ptj_Intrari A {pvtInner} WHERE {dtInc} <= CAST(A.Ziua AS date) AND CAST(A.Ziua AS date) <= {dtSf} {pvtFiltru}) AS source  
                                 PIVOT  (MAX(ValStr) FOR Ziua IN ( {zile.Substring(1)} )) pvt
                             ) pvt ON X.F10003=pvt.F10003" + Environment.NewLine;
                 }
@@ -2039,13 +2049,10 @@ namespace WizOne.Pontaj
                                 ) AS ""ZileGri"" ";
                     strInner = $@"INNER JOIN (
                             SELECT * FROM
-                            (SELECT F10003, ""{cmpValStr}"", TO_CHAR(""Ziua"",'DD-MM-YYYY') AS ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= {dtSf})  source  
+                            (SELECT A.F10003, A.""{cmpValStr}"", TO_CHAR(A.""Ziua"",'DD-MM-YYYY') AS ""Ziua"" FROM ""Ptj_Intrari"" A {pvtInner} WHERE {dtInc} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {dtSf} {pvtFiltru})  source  
                             PIVOT  (MAX(COALESCE(""ValStr"",'')) FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                         ) pvt ON X.F10003=pvt.F10003" + Environment.NewLine;
-                }
-
-                if (General.Nz(cmbAng.Value, "").ToString() == "") strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, (cmbRol.Value ?? -99).ToString(), 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
-                if (General.Nz(cmbAng.Value, "").ToString() != "") strFiltru += " AND A.F10003=" + cmbAng.Value;
+                }                
 
                 strSql = CreeazaSelect(cmpValStr);
                 strSql = string.Format(strSql, campuri, strInner, strFiltru);
@@ -2080,26 +2087,13 @@ namespace WizOne.Pontaj
                 string zileAs = "", zileAsIn = "", zileAsOut = "", zileAsPauza = "", zileAsCuloare = "";
                 string strInner = "";
                 string campuri = "";
-
                 string strFiltru = "";
+                string filtruSursa = "";
 
-                //if (Convert.ToInt32(cmbAng.Value ?? -99) == -99)
-                //{
-                //    if (chkRoluri.Checked)
-                //    {
-                //        List<int> lstRoluri = new List<int>();
-                //        foreach (ListEditItem val in cmbRol.Items)
-                //            lstRoluri.Add(Convert.ToInt32(val.Value));
-                //        strFiltru += General.GetF10003RoluriComasate(idUser, an, luna, f10003, lstRoluri, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
-                //    }
-                //    else
-                //        strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, Convert.ToInt32(cmbRol.Value ?? -99), 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
-                //}
-                //else
-                //    strFiltru += " AND A.F10003=" + cmbAng.Value;
+                #region Filtru
+                if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
+                    filtruSursa += @" AND F10007 IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
 
-
-                if (General.Nz(cmbAng.Value, "").ToString() != "") strFiltru += " AND A.F10003=" + cmbAng.Value;
                 if (General.Nz(cmbAng.Value, "").ToString() == "")
                 {
                     string roluri = (cmbRol.Value ?? -99).ToString();
@@ -2108,6 +2102,7 @@ namespace WizOne.Pontaj
 
                     strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, roluri, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
                 }
+                #endregion
 
                 for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)
                 {
@@ -2142,14 +2137,6 @@ namespace WizOne.Pontaj
                     }
                 }
 
-                //if (chkTotaluri.Checked)
-                //    campuri += $@",pvt.*";
-                //if (chkOre.Checked)
-                //    campuri += $@",pvtIn.*, pvtOut.*";
-                //if (chkPauza.Checked)
-                //    campuri += $@",pvtPauza.*";
-                //campuri += $@",pvtCuloare.*";
-
                 string cmpExpIn = "FirstInPaid";
                 string cmpExpOut = "LastOutPaid";
                 string tipExp = Dami.ValoareParam("InOutInExportPontaj");
@@ -2173,7 +2160,7 @@ namespace WizOne.Pontaj
                 {
                     if (chkTotaluri.Checked)
                         strInner += $@"INNER JOIN (SELECT F10003 {zileAs} FROM 
-                                (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf} {filtruSursa}) source  
                                 PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003" + Environment.NewLine;
 
@@ -2205,7 +2192,7 @@ namespace WizOne.Pontaj
                 {
                     if (chkTotaluri.Checked)
                         strInner += $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf} {filtruSursa}) source  
                                 PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003" + Environment.NewLine;
 

@@ -124,12 +124,20 @@ namespace WizOne.Pagini
 
                     Session["ImportDate_Marca"] = null;
 
-                }             
-                SqlDataSource ds = new SqlDataSource();
-                ds.EnableCaching = false;
-                ds.ConnectionString = Constante.cnnWeb;
-                ds.SelectCommand = "SELECT \"Id\",  \"NumeSablon\" as \"Denumire\", coalesce(DESCRIERE, \"NumeTabela\") as \"Tabela\" FROM \"Template\" left join \"ALIASTAB\" on NUME = \"NumeTabela\" ORDER BY \"Denumire\"";
-                cmbSablon.DataSource = ds;
+                }
+
+                //if (Constante.tipBD == 1)
+                //{
+                //    SqlDataSource ds = new SqlDataSource();
+                //    ds.EnableCaching = false;
+                //    ds.ConnectionString = Constante.cnnWeb;
+                //    ds.SelectCommand = "SELECT \"Id\",  \"NumeSablon\" as \"Denumire\", coalesce(DESCRIERE, \"NumeTabela\") as \"Tabela\" FROM \"Template\" left join \"ALIASTAB\" on NUME = \"NumeTabela\" ORDER BY \"Denumire\"";
+                //    cmbSablon.DataSource = ds;
+                //    cmbSablon.DataBind();
+                //}
+
+                DataTable dtSablon = General.IncarcaDT("SELECT \"Id\",  \"NumeSablon\" as \"Denumire\", coalesce(DESCRIERE, \"NumeTabela\") as \"Tabela\" FROM \"Template\" left join \"ALIASTAB\" on NUME = \"NumeTabela\" ORDER BY \"Denumire\"", null);
+                cmbSablon.DataSource = dtSablon;
                 cmbSablon.DataBind();
 
                 grDateViz.SettingsPager.PageSize = 20;
@@ -934,7 +942,7 @@ namespace WizOne.Pagini
                                         if (Constante.tipBD == 1)
                                             val = "CONVERT(DATETIME#&* '" + ws2.Cells[j, k].Value.ToString() + "'#&* 103)";
                                         else
-                                            val = "TO_DATE('" + ws2.Cells[j, k].Value.ToString() + "'#&* dd/mm/yyyy)";
+                                            val = "TO_DATE('" + ws2.Cells[j, k].Value.ToString() + "'#&* 'dd/mm/yyyy HH24:mi:ss')";
                                     }
                                     break;
                             }
@@ -1393,7 +1401,7 @@ namespace WizOne.Pagini
                                         if (Constante.tipBD == 1)
                                             data = data.Replace("CONVERT(DATETIME#&* '", "").Replace("'#&* 103)", "");
                                         else
-                                            data = data.Replace("TO_DATE('", "").Replace("'#&* dd/mm/yyyy)", "");
+                                            data = data.Replace("TO_DATE('", "").Replace("'#&* 'dd/mm/yyyy HH24:mi:ss')", "");
 
                                         dataInc = Convert.ToDateTime(data);
                                     }

@@ -2420,6 +2420,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="FisiereApp\" />
     <Folder Include="Temp\" />
   </ItemGroup>
   <ItemGroup>

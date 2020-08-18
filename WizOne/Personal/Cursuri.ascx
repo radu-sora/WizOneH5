@@ -1,35 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Cursuri.ascx.cs" Inherits="WizOne.Personal.Cursuri" %>
 
-<script language="javascript" type="text/javascript">
-
-    function grDateCursuri_CustomButtonClick(s, e) {
-        switch (e.buttonID) {
-            case "btnAtasament":
-                pnlLoading.Show();
-                grDateCursuri.GetRowValues(e.visibleIndex, 'IdAuto', GoToFisierCursMode);
-                break;
-        }
-    }
-
-    function GoToFisierCursMode(Value) {
-        window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=12&id=' + Value, '_blank ')
-        pnlLoading.Hide();
-    }
-
-    function StartUpload() {
-        //pnlLoading.Show();
-    }
-
-    function EndUpload(s) {
-        //pnlLoading.Hide();
-        lblDoc.innerText = s.cpDocUploadName;
-        s.cpDocUploadName = null;
-    }
-
-
-</script>
-
-
 <body>
 
     <table width="100%">
@@ -199,7 +169,7 @@
                                                 </BrowseButton>
                                                 <ValidationSettings ShowErrors="False"></ValidationSettings>
 
-                                                <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                                                <ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
                                             </dx:ASPxUploadControl>
                                         </td>
                                     </tr>
@@ -221,6 +191,14 @@
         </tr>
     </table> 
 
+    <script>
+        function grDateCursuri_CustomButtonClick(s, e) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=12&id=' + s.GetRowKey(s.GetFocusedRowIndex()), '_blank ');
+        }
 
-
+        function EndUpload(s) {
+            lblDoc.innerText = s.cpDocUploadName;
+            s.cpDocUploadName = null;
+        }
+    </script>
 </body>

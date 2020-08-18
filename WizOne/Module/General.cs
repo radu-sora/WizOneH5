@@ -1,5 +1,6 @@
 ﻿using DevExpress.Web;
 using DevExpress.Web.Data;
+using DevExpress.XtraRichEdit.Commands.Internal;
 using Oracle.ManagedDataAccess.Client;
 using ProceseSec;
 using System;
@@ -5615,6 +5616,9 @@ namespace WizOne.Module
                 //Florin 2020.08.11
                 HttpContext.Current.Session["ZileLibere"] = "";
 
+                //Florin 2020.08.18
+                HttpContext.Current.Session["FisiereDeSters"] = "";
+
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
 
@@ -8735,6 +8739,52 @@ namespace WizOne.Module
             }
 
             return ras;
+        }
+
+        public static void LoadFile(string numeFisier, object fisier, string tabela, int idAuto)
+        {
+            try
+            {
+                if (Dami.ValoareParam("SalvareFisierInDisc") == "1")
+                {
+                    numeFisier = General.CreazaFisierInDisc(numeFisier, fisier, tabela);
+                    fisier = null;
+                }
+                General.IncarcaFisier(numeFisier, fisier, tabela, idAuto);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "BatchUpdate", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        public static string CreazaFisierInDisc(string numeFisier, object fisier, string tabela)
+        {
+            string tmpNume = numeFisier;
+
+            try
+            {
+                int i = 1;
+                string director = tabela.Replace("Admin_", "").Replace("F100", "");
+                string cale = HostingEnvironment.MapPath("~/FisiereApp/" + director + "/");
+                
+                while(File.Exists(cale + tmpNume))
+                {
+                    tmpNume = Path.GetFileNameWithoutExtension(cale + tmpNume) + "_" + i + Path.GetExtension(cale + tmpNume);
+                    i++;
+                }
+
+                using (FileStream stream = new FileStream(cale + tmpNume, FileMode.Create, FileAccess.Write, FileShare.Read))
+                {
+                    stream.Write((byte[])fisier, 0, ((byte[])fisier).Length);
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "CreazaFisierInDisc", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return tmpNume;
         }
 
     }

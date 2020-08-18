@@ -106,9 +106,6 @@ namespace WizOne.Personal
                     dt.TableName = "Admin_Medicina";
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                     ds.Tables.Add(dt);
-
-                    //DataTable dtGen = General.IncarcaDT(@"SELECT * FROM ""Admin_Medicina"" ", null);
-                    //Session["Admin_Medicina_General"] = dtGen;
                 }
                 grDateMedicina.KeyFieldName = "IdAuto";
                 grDateMedicina.DataSource = dt;
@@ -376,6 +373,8 @@ namespace WizOne.Personal
                 Session["DocUpload_MP_Medicina"] = null;
 
                 row.Delete();
+
+                Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"],"").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Medicina/' {Dami.Operator()} ""FisierNume"" FROM ""tblFisiere"" WHERE ""Tabela""='Admin_Medicina' AND ""Id""={keys[0]}"),"").ToString();
 
                 e.Cancel = true;
                 grDateMedicina.CancelEdit();

@@ -686,10 +686,21 @@ namespace WizOne.Personal
                     if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni" || ds.Tables[i].TableName == "Admin_Cursuri" || ds.Tables[i].TableName == "F100Studii")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
-                    {                     
+                    {
+                        //Florin 2020.08.19
+                        if (Dami.ValoareParam("SalvareFisierInDisc") == "1" && (ds.Tables[i].TableName == "Atasamente" || ds.Tables[i].TableName == "tblFisiere"))
+                        {
+                            string cmp = "Fisier";
+                            if (ds.Tables[i].TableName == "Atasamente") cmp = "Attach";
+
+                            string numeFisier = General.CreazaFisierInDisc(General.Nz(ds.Tables[i].Rows[0]["FisierNume"],"Fisier").ToString(), ds.Tables[i].Rows[0][cmp], ds.Tables[i].TableName);
+                            ds.Tables[i].Rows[0][cmp] = null;
+                            ds.Tables[i].Rows[0]["FisierNume"] = numeFisier;
+                        }
+
                         General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                     }
-                }             
+                }
 
 
                 //Florin 2018-10-30

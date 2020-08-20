@@ -8765,7 +8765,7 @@ namespace WizOne.Module
             try
             {
                 int i = 1;
-                string director = tabela.Replace("Admin_", "").Replace("F100", "");
+                string director = tabela.Replace("Admin_", "").Replace("F100", "").Replace("tbl","");
                 string cale = HostingEnvironment.MapPath("~/FisiereApp/" + director + "/");
                 
                 while(File.Exists(cale + tmpNume))

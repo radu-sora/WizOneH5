@@ -293,7 +293,7 @@
         }
 
         function onOpenAttachment(value) {
-            value && window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=7&id=' + value, '_blank ');
+            value && window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=4&id=' + value, '_blank ');
         }
 
         function onValidateUpload(s, value) {

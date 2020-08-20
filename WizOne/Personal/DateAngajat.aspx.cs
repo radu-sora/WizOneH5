@@ -683,6 +683,8 @@ namespace WizOne.Personal
                     
                 for (int i = 1; i < ds.Tables.Count; i++)
                 {//Radu 10.06.2019
+                    var ert = ds.Tables[i].TableName;
+
                     if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni" || ds.Tables[i].TableName == "Admin_Cursuri" || ds.Tables[i].TableName == "F100Studii")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
@@ -690,12 +692,37 @@ namespace WizOne.Personal
                         //Florin 2020.08.19
                         if (Dami.ValoareParam("SalvareFisierInDisc") == "1" && (ds.Tables[i].TableName == "Atasamente" || ds.Tables[i].TableName == "tblFisiere"))
                         {
-                            string cmp = "Fisier";
-                            if (ds.Tables[i].TableName == "Atasamente") cmp = "Attach";
-
-                            string numeFisier = General.CreazaFisierInDisc(General.Nz(ds.Tables[i].Rows[0]["FisierNume"],"Fisier").ToString(), ds.Tables[i].Rows[0][cmp], ds.Tables[i].TableName);
-                            ds.Tables[i].Rows[0][cmp] = null;
-                            ds.Tables[i].Rows[0]["FisierNume"] = numeFisier;
+                            switch(ds.Tables[i].TableName)
+                            {
+                                case "tblFisiere":
+                                    {
+                                        DataRow[] arr = ds.Tables[i].Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString());
+                                        if (arr != null && arr.Count() > 0 && arr[0] != null)
+                                        {
+                                            DataRow dr = arr[0];
+                                            string numeFisier = General.CreazaFisierInDisc(General.Nz(dr["FisierNume"], "Fisier").ToString(), dr["Fisier"], ds.Tables[i].TableName);
+                                            dr["Fisier"] = null;
+                                            dr["FisierNume"] = numeFisier;
+                                        }
+                                    }
+                                    break;
+                                case "Atasamente":
+                                    {
+                                        Dictionary<int, Personal.Atasamente.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Atasamente"] as Dictionary<int, Personal.Atasamente.metaUploadFile>;
+                                        foreach(var l in lstFiles)
+                                        {
+                                            DataRow[] arr = ds.Tables[i].Select("IdAuto = " + l.Key);
+                                            if (arr != null && arr.Count() > 0 && arr[0] != null)
+                                            {
+                                                DataRow dr = arr[0];
+                                                string numeFisier = General.CreazaFisierInDisc(General.Nz(dr["FisierNume"], "Fisier").ToString(), dr["Attach"], ds.Tables[i].TableName);
+                                                dr["Attach"] = null;
+                                                dr["FisierNume"] = numeFisier;
+                                            }
+                                        }
+                                    }
+                                    break;
+                            }
                         }
 
                         General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
@@ -1736,6 +1763,9 @@ namespace WizOne.Personal
 
                 //Florin 2020.08.18
                 Session["FisiereDeSters"] = "";
+
+                //Florin 2020.08.20
+                Session["List_DocUpload_MP_Atasamente"] = null;
             }
             catch (Exception ex)
             {

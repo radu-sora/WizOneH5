@@ -1,21 +1,16 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.Hosting;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Pagini
 {
     public partial class Fisiere : System.Web.UI.Page
     {
-
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -46,30 +41,33 @@ namespace WizOne.Pagini
                                 break;
                             case "4":
                                 {
-                                    DataTable dt = new DataTable();
-                                    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                                    if (ds.Tables.Contains("Atasamente"))
+                                    //Florin 2020.08.20
+                                    Dictionary<int, Personal.Atasamente.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Atasamente"] as Dictionary<int, Personal.Atasamente.metaUploadFile>;
+                                    if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
                                     {
-                                        dt = ds.Tables["Atasamente"];
-                                        if (dt.Rows.Count != 0)
+                                        scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
+                                    }
+                                    else
+                                    {
+                                        DataTable dtAt = General.IncarcaDT("SELECT * FROM \"Atasamente\"", null);
+                                        DataRow drAt = dtAt.Select("IdAuto = " + id).FirstOrDefault();
+                                        if (drAt != null)
                                         {
-                                            DataRow dr = dt.Select("IdEmpl = " + (Session["Marca"] ?? "").ToString() + " AND IdAuto = " + id).FirstOrDefault();
-                                            if (dr != null)
-                                            {
-                                                string numeFis = (dr["FisierNume"] ?? "").ToString();
-                                                string ext = (dr["FisierExtensie"] ?? ".txt").ToString();
-                                                scrieDoc(ext, (byte[])dr["Attach"], numeFis);
-                                            }
-                                            else
-                                                Response.Write("Nu exista date de afisat !");
+                                            string numeFiser = (drAt["FisierNume"] ?? "").ToString();
+                                            object fisier = General.Nz(drAt["Attach"], null);
+
+                                            string cale = HostingEnvironment.MapPath("~/FisiereApp/Atasamente/") + numeFiser;
+                                            if (fisier == null && File.Exists(cale))
+                                                fisier = File.ReadAllBytes(cale);
+
+                                            scrieDoc((drAt["FisierExtensie"] ?? ".txt").ToString(), (byte[])fisier, numeFiser);
                                         }
                                         else
                                             Response.Write("Nu exista date de afisat !");
                                     }
-                                    else
-                                        Response.Write("Nu exista date de afisat !");
-                                    return;
+                                    tbl = "";
                                 }
+                                break;
                             case "5":
                                 {
                                     tbl = "Admin_Medicina";
@@ -91,18 +89,6 @@ namespace WizOne.Pagini
                                         tbl = "";
                                     }
                                 }
-                                break;
-                            case "7":
-                                DataTable dtAt = General.IncarcaDT("SELECT * FROM \"Atasamente\"", null);
-                                DataRow drAt = dtAt.Select("IdAuto = " + id).FirstOrDefault();
-                                if (drAt != null)
-                                {
-                                    string numeFis = (drAt["FisierNume"] ?? "").ToString();
-                                    string ext = (drAt["FisierExtensie"] ?? ".txt").ToString();
-                                    scrieDoc(ext, (byte[])drAt["Attach"], numeFis);
-                                }
-                                else
-                                    Response.Write("Nu exista date de afisat !");
                                 break;
                             case "8":
                                 tbl = "Admin_NrActAd";

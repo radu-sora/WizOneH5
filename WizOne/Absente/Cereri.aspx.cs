@@ -13,6 +13,7 @@ using WizOne.Module;
 using System.Globalization;
 using System.Web.Hosting;
 using System.Threading;
+using DevExpress.Pdf.Native;
 
 namespace WizOne.Absente
 {
@@ -122,35 +123,17 @@ namespace WizOne.Absente
                             break;
                     }
 
-
-                            //<Buttons>
-                            //    <dx:EditButton Text="Activi" />
-                            //    <dx:EditButton Text="Toti" />
-                            //</Buttons>                            
-
-
                     //Incarcam Angajatii in functie de rol
                     DataTable dtAngFiltrati = dtAng;
-                    //Florin 2018.08.02
-                    //if (cmbRol.Value != null && Convert.ToInt32(cmbRol.Value) != 0 && Convert.ToInt32(cmbRol.Value) != -44) dtAngFiltrati = dtAng.Select("Rol=" + cmbRol.Value).CopyToDataTable();
                     if (cmbRol.Value != null && Convert.ToInt32(cmbRol.Value) != -44 && dtAng != null && dtAng.Rows.Count > 0) dtAngFiltrati = dtAng.Select("Rol=" + cmbRol.Value).CopyToDataTable();
 
-
-                    //Florin 2019.01.17
-                    //prima oara sa apara angajati activi
                     DataTable dtAngActivi = new DataTable();
                     if (dtAngFiltrati != null && dtAngFiltrati.Rows.Count > 0 && dtAngFiltrati.Select("AngajatActiv=1").Count() > 0) dtAngActivi = dtAngFiltrati.Select("AngajatActiv=1").CopyToDataTable();
                     cmbAng.DataSource = dtAngActivi;
                     Session["Cereri_Absente_Angajati"] = dtAngActivi;
-                    //cmbAng.DataSource = dtAngFiltrati;
-                    //Session["Cereri_Absente_Angajati"] = dtAngFiltrati;
                     Session["Cereri_Absente_AngajatiToti"] = dtAngFiltrati;
                     cmbAng.DataBind();
                     if ((dtRol.Rows.Count == 0 || dtRol.Rows.Count == 1) && General.VarSession("User_Marca").ToString() != "-99") cmbAng.Value = General.VarSession("User_Marca");
-
-
-
-
 
                     if (General.VarSession("IstoricExtins_VineDin").ToString() == "2-OK" && Session["Absente_Cereri_Date"] != null)
                     {
@@ -179,31 +162,13 @@ namespace WizOne.Absente
                         cmbInloc.Value = itm.Inlocuitor;
                         txtNrZile.Value = itm.NrZile;
                         txtNrOre.Value = itm.NrOre;
-                        //txtOreCalc.Value = itm.OreCalc;
-                        //txtOreSursa.Value = itm.OreCalc;
-                        //txtData1.Value = itm.Data1;
-                        //txtData2.Value = itm.Data2;
-                        //txtBifa1.Value = itm.Bifa1;
-                        //txtBifa2.Value = itm.BIfa2;
-                        //txtText.Value = itm.CmpText;
                         txtNrZileViitor.Value = itm.NrZileViitor;
                         txtObs.Value = itm.Obs;
                         lblDoc.InnerText = General.Nz(itm.UploadedFileName,"").ToString();
 
-                        //if (dtAbs.Rows.Count > 0)
-                        //{
-                        //    DataRow[] arr = dtAbs.Select("Id=" + cmbAbs.Value);
-                        //    if (arr.Count() > 0) AfiseazaCtl(arr[0]);
-                        //}
-
-
                         //este necesar pt cand se intoarce din IstoricExtins
                         AfiseazaCtl();
-
-                        ////Session["Absente_Cereri_Date"] = null;
                     }
-
-                    //OreCalculate();
                 }
                 else
                 {
@@ -219,7 +184,6 @@ namespace WizOne.Absente
                         cmbInloc.DataBind();
 
                         if (Session["Absente_Cereri_Date_Aditionale"] != null) AfiseazaCtl();
-
                     }
                 }
             }
@@ -236,8 +200,6 @@ namespace WizOne.Absente
             {
                 if (cmbAng.Value == null)
                 {
-                    //MessageBox.Show(Dami.TraduCuvant("Nu exista angajat selectat"), MessageBox.icoWarning);
-                    //return;
                     Session["IstoricExtins_Angajat_Marca"] = Session["User_Marca"];
                     Session["IstoricExtins_Angajat_Nume"] = Session["User_NumeComplet"];
                 }
@@ -260,17 +222,9 @@ namespace WizOne.Absente
                 itm.Inlocuitor = cmbInloc.Value;
                 itm.NrZile = txtNrZile.Value;
                 itm.NrOre = txtNrOre.Value;
-                //itm.OreCalc = txtOreCalc.Value;
-                //itm.OreSursa = txtOreSursa.Value;
-                //itm.Data1 = txtData1.Value;
-                //itm.Data2 = txtData2.Value;
-                //itm.Bifa1 = txtBifa1.Value;
-                //itm.BIfa2 = txtBifa2.Value;
-                //itm.CmpText = txtText.Value;
                 itm.NrZileViitor = txtNrZileViitor.Value;
                 itm.Obs = txtObs.Value;
                 Session["Absente_Cereri_Date"] = itm;
-                
             }
             catch (Exception ex)
             {
@@ -415,16 +369,6 @@ namespace WizOne.Absente
                     {
                         //Afisam explicatiile
                         txtAbsDesc.InnerText = General.Nz(arr[0]["Explicatii"], "").ToString();
-
-                        //calculam nr de zile luate
-
-                        //int nr = 0;
-                        //int nrViitor = 0;
-                        //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
-                        //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
-                        //txtNrZile.Value = nr;
-                        //txtNrZileViitor.Value = nrViitor;
-
                         txtNrZile.Value = General.CalcZile(Convert.ToInt32(cmbAng.Value ?? 0), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(cmbAbs.Value ?? 0));
                     }
                 }
@@ -476,7 +420,7 @@ namespace WizOne.Absente
                         break;
                     case "4":               //btnSave
                         {
-                            SalveazaDate(2);
+                            SalveazaDate();
                             AfiseazaCtl();
                         }
                         break;
@@ -544,12 +488,6 @@ namespace WizOne.Absente
                 itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
 
                 Session["Absente_Cereri_Date"] = itm;
-
-                //Session["Absente_Cereri_UploadedFile"] = btnDocUpload.UploadedFiles[0].FileBytes;
-                //Session["Absente_Cereri_UploadedFileName"] = btnDocUpload.UploadedFiles[0].FileName;
-                //Session["Absente_Cereri_UploadedFileExtension"] = btnDocUpload.UploadedFiles[0].ContentType;
-
-                //lblDoc.InnerText = btnDocUpload.UploadedFiles[0].FileName;
                 btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
             }
             catch (Exception ex)
@@ -569,13 +507,7 @@ namespace WizOne.Absente
                 itm.UploadedFile = null;
                 itm.UploadedFileName = null;
                 itm.UploadedFileExtension = null;
-
-                //Session["Absente_Cereri_UploadedFile"] = null;
-                //Session["Absente_Cereri_UploadedFileName"] = null;
-                //Session["Absente_Cereri_UploadedFileExtension"] = null;
-
                 Session["Absente_Cereri_Date"] = itm;
-
                 lblDoc.InnerHtml = "&nbsp;";
             }
             catch (Exception ex)
@@ -585,53 +517,7 @@ namespace WizOne.Absente
             }
         }
 
-        //Florin 2020.01.22
-        //public string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrOre, int tip)
-        //{
-        //    //tip
-        //    //tip - 1  vine din cererei - unde trebuie sa luam in caclul si valorile care deja exista in pontaj
-        //    //tip - 2  vine din pontaj  - valorile sunt deja in pontaj
-
-
-        //    string msg = "";
-
-        //    try
-        //    {
-        //        //calculam norma
-        //        string strSql = "SELECT * FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
-        //        if (Constante.tipBD == 2) strSql = "SELECT \"DamiNorma\"(" + f10003 + ", " + General.ToDataUniv(dtInc) + ") FROM DUAL";
-        //        int norma = Convert.ToInt32(General.ExecutaScalar(strSql,null));
-
-        //        int sumaPtj = 0;
-        //        if (tip == 1)
-        //        {
-        //            //absentele din pontaj care intra in suma de ore
-        //            string sqlOre = @"SELECT ' + COALESCE(' + OreInVal + ',0)'  FROM Ptj_tblAbsente WHERE COALESCE(VerificareNrMaxOre,0) = 1 FOR XML PATH ('')";
-        //            if (Constante.tipBD == 2) sqlOre = @"SELECT LISTAGG('COALESCE(' || ""OreInVal"" || ')', ' + ') WITHIN GROUP (ORDER BY ""OreInVal"") FROM ""Ptj_tblAbsente"" WHERE COALESCE(VerificareNrMaxOre,0) = 1";
-        //            string strVal = (General.ExecutaScalar(sqlOre, null) ?? "").ToString();
-        //            if (Constante.tipBD == 1) strVal = strVal.Substring(3);
-        //            if (strVal != "") sumaPtj = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM({strVal}), 0) FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(dtInc.Date)}", null));
-        //        }
-
-        //        //suma de ore din Cereri
-        //        int sumaCere = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM(COALESCE(""NrOre"",0)),0) FROM ""Ptj_Cereri"" WHERE F10003={f10003} AND ""DataInceput"" = {General.ToDataUniv(dtInc.Date)} AND ""IdStare"" IN (1,2)", null));
-        //        if (((sumaCere * 60) + sumaPtj + (nrOre * 60)) > (norma * 60))
-        //        {
-        //            msg = "Totalul de ore depaseste norma pe aceasta zi";
-        //            return msg;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-
-        //    return msg;
-        //}
-
-
-        private void SalveazaDate(int tip = 1)
+        private void SalveazaDate()
         {
             try
             {
@@ -648,11 +534,7 @@ namespace WizOne.Absente
 
                 if (strErr != "")
                 {
-                    if (tip == 1)
-                        MessageBox.Show(Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1), MessageBox.icoWarning);
-                    else
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1);
-
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1);
                     return;
                 }
 
@@ -672,11 +554,7 @@ namespace WizOne.Absente
 
                 if (strErr != "")
                 {
-                    if (tip == 1)
-                        MessageBox.Show(Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1), MessageBox.icoWarning);
-                    else
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1);
-
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1);
                     return;
                 }
 
@@ -688,11 +566,7 @@ namespace WizOne.Absente
                     int esteActiv = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM F100 WHERE F10003={cmbAng.Value} AND F10022 <= {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Value))} AND {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Value))} <= F10023", null), 0));
                     if (esteActiv == 0)
                     {
-                        if (tip == 1)
-                            MessageBox.Show(Dami.TraduCuvant("In perioada solicitata, angajatul este inactiv"), MessageBox.icoWarning);
-                        else
-                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("In perioada solicitata, angajatul este inactiv");
-
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("In perioada solicitata, angajatul este inactiv");
                         return;
                     }
                 }
@@ -713,11 +587,7 @@ namespace WizOne.Absente
                             if (Constante.tipBD == 2)
                                 campData = "TO_CHAR(F10023, 'dd/mm/yyyy')";
                             string data = General.Nz(General.ExecutaScalar($@"SELECT {campData} AS F10023 FROM F100 WHERE F10003={cmbInloc.Value}", null), "").ToString();
-                            if (tip == 1)
-                                MessageBox.Show(Dami.TraduCuvant("In perioada solicitata, inlocuitorul este inactiv (ultima zi lucrata: " + data + ")"), MessageBox.icoWarning);
-                            else
-                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("In perioada solicitata, inlocuitorul este inactiv (ultima zi lucrata: " + data + ")");
-
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("In perioada solicitata, inlocuitorul este inactiv (ultima zi lucrata: " + data + ")");
                             return;
                         }
                     }
@@ -745,11 +615,7 @@ namespace WizOne.Absente
 
                 if (strErr != "")
                 {
-                    if (tip == 1)
-                        MessageBox.Show(Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1), MessageBox.icoWarning);
-                    else
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1);
-
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1);
                     return;
                 }
 
@@ -773,21 +639,13 @@ namespace WizOne.Absente
 
                 if (strErr != "")
                 {
-                    if (tip == 1)
-                        MessageBox.Show(strErr, MessageBox.icoWarning);
-                    else
-                        pnlCtl.JSProperties["cpAlertMessage"] = strErr;
-
+                    pnlCtl.JSProperties["cpAlertMessage"] = strErr;
                     return;
                 }
 
                 if (Convert.ToInt32(General.Nz(cmbAng.Value, -98)) == Convert.ToInt32(General.Nz(Session["User_Marca"], -97)) && Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE F10003=@1", new object[] { cmbAng.Value })) == 0)
                 {
-                    if (tip == 1)
-                        MessageBox.Show(Dami.TraduCuvant("Angajatul nu are nici un supervizor"), MessageBox.icoWarning);
-                    else
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Angajatul nu are nici un supervizor");
-
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Angajatul nu are nici un supervizor");
                     return;
                 }
 
@@ -807,11 +665,7 @@ namespace WizOne.Absente
 
                 if (intersec > 0)
                 {
-                    if (tip == 1)
-                        MessageBox.Show(Dami.TraduCuvant("Intervalul se intersecteaza cu altul deja existent"), MessageBox.icoWarning);
-                    else
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Intervalul se intersecteaza cu altul deja existent");
-
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Intervalul se intersecteaza cu altul deja existent");
                     return;
                 }
 
@@ -828,11 +682,7 @@ namespace WizOne.Absente
 
                     if (inlocIts > 0)
                     {
-                        if (tip == 1)
-                            MessageBox.Show(Dami.TraduCuvant("Inlocuitorul are cerere in aceasta perioada"), MessageBox.icoWarning);
-                        else
-                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Inlocuitorul are cerere in aceasta perioada");
-
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Inlocuitorul are cerere in aceasta perioada");
                         return;
                     }
                 }
@@ -850,11 +700,7 @@ namespace WizOne.Absente
 
                     if (inlocOre != "")
                     {
-                        if (tip == 1)
-                            MessageBox.Show(Dami.TraduCuvant("Angajatul este desemnat inlocuitor pentru " + inlocOre), MessageBox.icoWarning);
-                        else
-                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Angajatul este desemnat inlocuitor pentru " + inlocOre);
-
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Angajatul este desemnat inlocuitor pentru " + inlocOre);
                         return;
                     }
                 }
@@ -880,11 +726,7 @@ namespace WizOne.Absente
 
                 if (valoare == -99)
                 {
-                    if (tip == 1)
-                        MessageBox.Show(Dami.TraduCuvant("Nu aveti drepturi sa creati acest tip de absenta"), MessageBox.icoWarning);
-                    else
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti drepturi sa creati acest tip de absenta");
-
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti drepturi sa creati acest tip de absenta");
                     return;
                 }
 
@@ -892,19 +734,9 @@ namespace WizOne.Absente
                 if (txtDataInc.Date < ziDrp.Date)
                 {
                     if (valoare == 13)
-                    {
-                        if (tip == 1)
-                            MessageBox.Show(Dami.TraduCuvant("Pontajul a fost aprobat pentru aceasta perioada"), MessageBox.icoWarning);
-                        else
-                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pontajul a fost aprobat pentru aceasta perioada");
-                    }
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pontajul a fost aprobat pentru aceasta perioada");
                     else
-                    {
-                        if (tip == 1)
-                            MessageBox.Show(Dami.TraduCuvant("Data inceput trebuie sa fie mai mare sau egala decat " + ziDrp.Date.ToShortDateString()), MessageBox.icoWarning);
-                        else
-                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data inceput trebuie sa fie mai mare sau egala decat " + ziDrp.Date.ToShortDateString());
-                    }
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data inceput trebuie sa fie mai mare sau egala decat " + ziDrp.Date.ToShortDateString());
 
                     return;
                 }
@@ -921,10 +753,7 @@ namespace WizOne.Absente
                         }
                 if (eroare)
                 {
-                    if (tip == 1)
-                        MessageBox.Show(Dami.TraduCuvant("Acest tip de cerere nu este disponibil pe intreaga durata a solicitarii!"), MessageBox.icoWarning);
-                    else
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Acest tip de cerere nu este disponibil pe intreaga durata a solicitarii!");
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Acest tip de cerere nu este disponibil pe intreaga durata a solicitarii!");
                     return;
                 }
 
@@ -962,11 +791,7 @@ namespace WizOne.Absente
                         }
                         else
                         {
-                            if (tip == 1)
-                                MessageBox.Show(Dami.TraduCuvant("Contractul nu permite aceasta absenta"), MessageBox.icoWarning);
-                            else
-                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Contractul nu permite aceasta absenta");
-
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Contractul nu permite aceasta absenta");
                             return;
                         }
 
@@ -975,11 +800,7 @@ namespace WizOne.Absente
                             string msgNr = General.VerificareDepasireNorma(Convert.ToInt32(cmbAng.Value), txtDataInc.Date, Convert.ToInt32(txtNrOre.Value ?? 0) * 60, 1);
                             if (msgNr != "")
                             {
-                                if (tip == 1)
-                                    MessageBox.Show(Dami.TraduCuvant(msgNr), MessageBox.icoWarning);
-                                else
-                                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msgNr);
-
+                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msgNr);
                                 return;
                             }
                         }
@@ -1000,12 +821,7 @@ namespace WizOne.Absente
                     //verificam NrMax pe cerere
                     if (Convert.ToDecimal(General.Nz(drAbs["NrMax"], 999)) < Convert.ToDecimal(txtNrOre.Value))
                     {
-                        //strErr += " " + Dami.TraduCuvant("Aveti voie sa cereti un numar maxim de " + Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) + " ore");
-                        if (tip == 1)
-                            MessageBox.Show(Dami.TraduCuvant("Aveti voie sa cereti un numar maxim de") + " " + Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) + " " + Dami.TraduCuvant("ore"), MessageBox.icoWarning);
-                        else
-                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Aveti voie sa cereti un numar maxim de" + " " + Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) + " " + Dami.TraduCuvant("ore"));
-
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Aveti voie sa cereti un numar maxim de" + " " + Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) + " " + Dami.TraduCuvant("ore"));
                         return;
                     }
 
@@ -1016,11 +832,7 @@ namespace WizOne.Absente
 
                     if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && (Convert.ToDecimal(General.Nz(drAn[0], 0)) + Convert.ToDecimal(txtNrOre.Value)) > Convert.ToDecimal(drAbs["NrMaxAn"]))
                     {
-                        if (tip == 1)
-                            MessageBox.Show(Dami.TraduCuvant("Nr total de ore depaseste nr maxim de ore cuvenite in an"), MessageBox.icoWarning);
-                        else
-                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nr total de ore depaseste nr maxim de ore cuvenite in an");
-
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nr total de ore depaseste nr maxim de ore cuvenite in an");
                         return;
                     }
                 }
@@ -1032,11 +844,7 @@ namespace WizOne.Absente
                     //folosim campul txtNrZile pt ca este deja calculat cu nr de zile in functie de parametrul AdunaZileLibere
                     if (txtNrZile.Value != null && drAbs["NrMax"] != null && Convert.ToInt32(txtNrZile.Value) > Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)))
                     {
-                        if (tip == 1)
-                            MessageBox.Show(Dami.TraduCuvant("Nr de zile depaseste nr maxim de zile cuvenite"), MessageBox.icoWarning);
-                        else
-                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nr de zile depaseste nr maxim de zile cuvenite");
-
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nr de zile depaseste nr maxim de zile cuvenite");
                         return;
                     }
 
@@ -1047,11 +855,7 @@ namespace WizOne.Absente
 
                     if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && (Convert.ToInt32(General.Nz(drAn[0], 0)) + Convert.ToInt32(txtNrZile.Value)) > Convert.ToInt32(drAbs["NrMaxAn"]))
                     {
-                        if (tip == 1)
-                            MessageBox.Show(Dami.TraduCuvant("Nr de zile depaseste nr maxim de zile cuvenite in an"), MessageBox.icoWarning);
-                        else
-                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nr de zile depaseste nr maxim de zile cuvenite in an");
-
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nr de zile depaseste nr maxim de zile cuvenite in an");
                         return;
                     }
                 }
@@ -1109,11 +913,7 @@ namespace WizOne.Absente
                 string msg = Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Validare, sqlCer + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                 if (msg != "" && msg.Substring(0, 1) == "2")
                 {
-                    if (tip == 1)
-                        MessageBox.Show(msg.Substring(2), MessageBox.icoWarning);
-                    else
-                        pnlCtl.JSProperties["cpAlertMessage"] = msg.Substring(2);
-
+                    pnlCtl.JSProperties["cpAlertMessage"] = msg.Substring(2);
                     return;
                 }
                 else
@@ -1204,17 +1004,14 @@ namespace WizOne.Absente
 
                 if (msg != "" && msg.Substring(0, 1) != "2")
                 {
-                    if (tip == 1)
-                        MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg), MessageBox.icoWarning);
-                    else
-                        pnlCtl.JSProperties["cp_InfoMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
+                    pnlCtl.JSProperties["cp_InfoMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
                 }
                 else
                 {
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
-                    ASPxPanel.RedirectOnCallback("~/Absente/Lista.aspx");
+                    if (Dami.ValoareParam("IesireDinCereri") == "1")
+                        ASPxPanel.RedirectOnCallback("~/Absente/Lista.aspx");
                 }
-
             }
             catch (Exception ex)
             {
@@ -1325,119 +1122,6 @@ namespace WizOne.Absente
                 }
 
                 AfiseazaCtlExtra();
-
-                #region old
-
-                //if (!string.IsNullOrEmpty(dr["CampData1"].ToString()))
-                //{
-                //    lblData1.InnerText = Dami.TraduCuvant(dr["CampData1"].ToString());
-                //    lblData1.Style["display"] = "inline-block";
-                //    txtData1.Visible = true;
-                //}
-                //else
-                //{
-                //    lblData1.InnerText = "";
-                //    lblData1.Style["display"] = "none";
-                //    txtData1.Visible = false;
-                //    txtData1.Value = null;
-                //}
-
-                //if (!string.IsNullOrEmpty(dr["CampData2"].ToString()))
-                //{
-                //    lblData2.InnerText = Dami.TraduCuvant(dr["CampData2"].ToString());
-                //    lblData2.Style["display"] = "inline-block";
-                //    txtData2.Visible = true;
-                //}
-                //else
-                //{
-                //    lblData2.InnerText = "";
-                //    lblData2.Style["display"] = "none";
-                //    txtData2.Visible = false;
-                //    txtData2.Value = null;
-                //}
-
-                //if (!string.IsNullOrEmpty(dr["CampBifa1"].ToString()))
-                //{
-                //    lblBifa1.InnerText = Dami.TraduCuvant(dr["CampBifa1"].ToString());
-                //    lblBifa1.Style["display"] = "inline-block";
-                //    txtBifa1.Visible = true;
-                //}
-                //else
-                //{
-                //    lblBifa1.InnerText = "";
-                //    lblBifa1.Style["display"] = "none";
-                //    txtBifa1.Visible = false;
-                //    txtBifa1.Value = null;
-                //}
-
-                //if (!string.IsNullOrEmpty(dr["CampBifa2"].ToString()))
-                //{
-                //    lblBifa2.InnerText = Dami.TraduCuvant(dr["CampBifa2"].ToString());
-                //    lblBifa2.Style["display"] = "inline-block";
-                //    txtBifa2.Visible = true;
-                //}
-                //else
-                //{
-                //    lblBifa2.InnerText = "";
-                //    lblBifa2.Style["display"] = "none";
-                //    txtBifa2.Visible = false;
-                //    txtBifa2.Value = null;
-                //}
-
-
-                //if (!string.IsNullOrEmpty(dr["CampText"].ToString()))
-                //{
-                //    lblText.InnerText = Dami.TraduCuvant(dr["CampText"].ToString());
-                //    lblText.Style["display"] = "inline-block";
-                //    txtText.Visible = true;
-                //}
-                //else
-                //{
-                //    lblText.InnerText = "";
-                //    lblText.Style["display"] = "none";
-                //    txtText.Visible = false;
-                //    txtText.Value = null;
-                //}
-
-                //if (!string.IsNullOrEmpty(dr["OreCalculateEticheta"].ToString()))
-                //{
-                //    lblOreCalc.InnerText = Dami.TraduCuvant(dr["OreCalculateEticheta"].ToString());
-                //    lblOreCalc.Style["display"] = "inline-block";
-                //    txtOreCalc.Visible = true;
-                //}
-                //else
-                //{
-                //    lblOreCalc.InnerText = "";
-                //    lblOreCalc.Style["display"] = "none";
-                //    txtOreCalc.Visible = false;
-                //}
-
-                //if (!string.IsNullOrEmpty(dr["OreSursaEticheta"].ToString()))
-                //{
-                //    lblOreSursa.InnerText = Dami.TraduCuvant(dr["OreSursaEticheta"].ToString());
-                //    lblOreSursa.Style["display"] = "inline-block";
-                //    txtOreSursa.Visible = true;
-                //}
-                //else
-                //{
-                //    lblOreSursa.InnerText = "";
-                //    lblOreSursa.Style["display"] = "none";
-                //    txtOreSursa.Visible = false;
-                //}
-
-
-                //if (!string.IsNullOrEmpty(dr["IdTipOre"].ToString()) && dr["IdTipOre"].ToString() == "0")
-                //{
-                //    lblNrOre.Style["display"] = "inline-block";
-                //    txtNrOre.Visible = true;
-                //}
-                //else
-                //{
-                //    lblOreSursa.Style["display"] = "none";
-                //    txtOreSursa.Visible = false;
-                //    txtNrOre.Value = null;
-                //}
-                #endregion
             }
             catch (Exception ex)
             {
@@ -1463,7 +1147,6 @@ namespace WizOne.Absente
                     ctlDiv.Attributes["class"] = "Absente_Cereri_CampuriSup";
 
                     Label lbl = new Label();
-                    //lbl.ID = "lblDinamic" + i;
                     lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
                     lbl.Style.Add("margin", "10px 0px !important");
                     ctlDiv.Controls.Add(lbl);

@@ -14489,3 +14489,6 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('SalvareFisierInDisc', '0', 'Se foloseste in personal si daca are valoarea 1 fisierele se salveaza in directorul special creat FisiereApp iar daca are 0 se salveaza ca si pana acum in baza de date', 3)
 GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IesireDinCereri', '1', 'Se foloseste la introducere cereri de absenta si daca este 1 se iese din pagina de introducere cereri, iar daca este 0 ramane pe aceasta pagina pt introducerea altei cereri', 1)
+GO

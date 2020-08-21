@@ -931,6 +931,7 @@ namespace WizOne.Pagini
                                         val = ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US"));
                                     break;
                                 case "nvarchar":
+                                case "varchar":
                                 case "varchar2":
                                     if (ws2.Cells[j, k].Value != null && ws2.Cells[j, k].Value.ToString().Length > 0)
                                         val = "'" + ws2.Cells[j, k].Value.ToString() + "'";

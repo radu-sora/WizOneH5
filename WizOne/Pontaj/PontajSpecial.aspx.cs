@@ -399,7 +399,12 @@ namespace WizOne.Pontaj
                                 {
                                     if (!lstZileGolite.Contains(k))
                                         lstZileGolite.Add(k);
-                                    nrZileNel++;
+                                    if ((!chkS.Checked && k.DayOfWeek == DayOfWeek.Saturday) || (!chkD.Checked && k.DayOfWeek == DayOfWeek.Sunday))
+                                    {
+                                        //no OP
+                                    }
+                                    else
+                                        nrZileNel++;
                                 }
                             }
                         }

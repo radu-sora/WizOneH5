@@ -1,4 +1,5 @@
 ﻿using DevExpress.Web;
+using DevExpress.Web.ASPxHtmlEditor.Internal;
 using DevExpress.Web.Data;
 using System;
 using System.Collections;
@@ -4005,13 +4006,31 @@ namespace WizOne.Eval
         {
             try
             {
-                Session["PrintDocument"] = "Evaluare";
-                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 20) Session["PrintDocument"] = "EvaluareFilip";
-                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24) Session["PrintDocument"] = "EvaluareCristim";
+                int idRap = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdRaport"], -99));
 
-                Session["PrintParametrii"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1))+ ";" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) + ";" + Session["UserId"] + ";Super" + (Session["Eval_ActiveTab"] ?? "1").ToString() + ";0";
-                Session["PaginaWeb"] = "Eval/EvalDetaliu.aspx";
-                Response.Redirect("~/Reports/Imprima.aspx", true);
+                if (idRap != -99)
+                {
+                    var reportParams = new
+                    {
+                        Angajat = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], -99)),
+                        Perioada = idPerioada
+                    };
+
+                    var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(idRap);
+                    var reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(idRap, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
+
+                    this.ClientScript.RegisterClientScriptBlock(this.GetType(), "Eval_Print", "window.location.href = \"" + ResolveClientUrl(reportUrl) + "\"", true);
+                }
+                else
+                {
+                    Session["PrintDocument"] = "Evaluare";
+                    if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 20) Session["PrintDocument"] = "EvaluareFilip";
+                    if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24) Session["PrintDocument"] = "EvaluareCristim";
+
+                    Session["PrintParametrii"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) + ";" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) + ";" + Session["UserId"] + ";Super" + (Session["Eval_ActiveTab"] ?? "1").ToString() + ";0";
+                    Session["PaginaWeb"] = "Eval/EvalDetaliu.aspx";
+                    Response.Redirect("~/Reports/Imprima.aspx", true);
+                }
             }
             catch (Exception ex)
             {

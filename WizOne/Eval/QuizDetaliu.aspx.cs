@@ -123,6 +123,7 @@ namespace WizOne.Eval
                                 if (lst.Contains("CategorieQuiz")) ds.Tables[0].Rows[0]["CategorieQuiz"] = lst["CategorieQuiz"];
                                 if (lst.Contains("LuatLaCunostinta")) ds.Tables[0].Rows[0]["LuatLaCunostinta"] = lst["LuatLaCunostinta"];
                                 if (lst.Contains("NrZileLuatLaCunostinta")) ds.Tables[0].Rows[0]["NrZileLuatLaCunostinta"] = lst["NrZileLuatLaCunostinta"];
+                                if (lst.Contains("IdRaport")) ds.Tables[0].Rows[0]["IdRaport"] = lst["IdRaport"];
                             }
                         }
                     }

@@ -158,6 +158,7 @@
                                 <dx:GridViewDataCheckColumn FieldName="SuspendareRev" Name="SuspendareRev" Caption="Revenire Suspendare" ReadOnly="true" Width="80px"  />
                                 <dx:GridViewDataCheckColumn FieldName="Detasare" Name="Detasare" Caption="Detasare" ReadOnly="true" Width="80px"  />
                                 <dx:GridViewDataCheckColumn FieldName="DetasareRev" Name="Detasare" Caption="Revenire Detasare" ReadOnly="true" Width="80px"  />
+                                <dx:GridViewDataCheckColumn FieldName="TipContract" Name="TipContract" Caption="Tip Contract" ReadOnly="true" Width="80px"  />
                             </Columns>
                         </dx:GridViewBandColumn>
 

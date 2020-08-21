@@ -616,7 +616,7 @@ namespace WizOne.Avs
 
                     //Florin 2020.08.04
                     //Nu se poate respinge sau anula o cerere pt program de lucru daca este trimisa in status semnat
-                    if ((tipActiune == 2 || tipActiune == 3) && Convert.ToInt32(General.Nz(arr[2], 0)) == 34 && Convert.ToInt32(General.Nz(arr[10], 0)) == 1)
+                    if ((tipActiune == 2 || tipActiune == 3) && (Convert.ToInt32(General.Nz(arr[2], 0)) == 34 || Convert.ToInt32(General.Nz(arr[2], 0)) == 35) && Convert.ToInt32(General.Nz(arr[10], 0)) == 1)
                     {
                         msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Cererea este trimisa la semnat") + System.Environment.NewLine;
                         continue;

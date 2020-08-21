@@ -412,8 +412,6 @@ namespace WizOne.Eval
                     cmbTipObiect.DataBind();
                 }
 
-                
-
             }
             catch (Exception ex)
             {

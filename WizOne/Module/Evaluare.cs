@@ -2666,5 +2666,19 @@ namespace WizOne.Module
             return table;
         }
 
+        public static DataTable GetRapoarte()
+        {
+            DataTable q = null;
+            try
+            {
+                q = General.IncarcaDT("SELECT DynReportId AS Id, Name AS Denumire FROM DynReports");
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            return q;
+        }
+
     }
 }

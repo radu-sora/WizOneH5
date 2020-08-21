@@ -14492,3 +14492,6 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IesireDinCereri', '1', 'Se foloseste la introducere cereri de absenta si daca este 1 se iese din pagina de introducere cereri, iar daca este 0 ramane pe aceasta pagina pt introducerea altei cereri', 1)
 GO
+
+ALTER TABLE Eval_Quiz ADD IdRaport int
+GO

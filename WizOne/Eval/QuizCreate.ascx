@@ -382,6 +382,16 @@
                                                                                             <ClientSideEvents TextChanged="function(s, e){ OnValueChanged(s); }" />
                                                                                         </dx:ASPxTextBox>
                                                                                     </td>
+                                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                                    <td>
+                                                                                        <dx:ASPxLabel ID="lblIdRaport" Width="180" runat="server" Text="Raport" />
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <dx:ASPxComboBox ID="cmbIdRaport" ClientInstanceName="cmbIdRaport" runat="server" DropDownStyle="DropDown" Value='<%# Eval("IdRaport") %>' TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" DataSourceID="dsRaps" >
+                                                                                            <ClientSideEvents SelectedIndexChanged="function(s, e){ OnCMBTipChanged(s); }" />
+                                                                                        </dx:ASPxComboBox>
+                                                                                        <asp:ObjectDataSource runat="server" ID="dsRaps" TypeName="WizOne.Module.Evaluare" SelectMethod="GetRapoarte" />
+                                                                                    </td>
                                                                                  </tr>
                                                                             </table>
                                                                                                                         

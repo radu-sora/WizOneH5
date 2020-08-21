@@ -632,6 +632,12 @@ namespace WizOne.Pontaj
                     grCmd.Visible = true;
                     grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.AllDataRows;
                 }
+
+                if (Dami.ValoareParam("PontajulAreCC") == "1" && (tip == 1 || tip == 10))
+                {
+                    grCmd.Visible = true;
+                    grCmd.CustomButtons[0].Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                }
             }
             catch (Exception ex)
             {

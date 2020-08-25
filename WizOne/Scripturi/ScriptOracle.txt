@@ -15139,3 +15139,9 @@ UPDATE F1001 SET F1001138 = F1001137;
 
 ALTER TABLE F300_CM_AVANS ADD  URGENTA number(9);
 UPDATE F300_CM_AVANS SET URGENTA = 0;
+
+
+ ----	2.2.131	----
+
+
+ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('Avs_CampuriZileProbaPreavizCOR' , '0', '1 - Se afiseaza campuri pentru zile proba/preaviz/demisie la modif. in avans de cod COR; 0 - nu se afiseaza' , 0);

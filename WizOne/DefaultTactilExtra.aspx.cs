@@ -120,7 +120,6 @@ namespace WizOne
                             btn8.ClientVisible = true;
                             btn9.ClientVisible = true;
                             btnLog.ClientVisible = true;
-                            btnRev.ClientVisible = true;
                             panouExt.Visible = false;
            
                         }
@@ -319,13 +318,12 @@ namespace WizOne
             btn8.ClientVisible = false;
             btn9.ClientVisible = false;
             btnLog.ClientVisible = false;
-            btnRev.ClientVisible = false;
             panouExt.Visible = true;
             txtPan1.Value = null;
             txtPan1.Focus();     
         }
 
-        protected void btnRev_Click(object sender, EventArgs e)
+        protected void Resetare(object sender, EventArgs e)
         {
             AscundeButoane();
             hfPIN.Set("PIN", null);

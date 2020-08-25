@@ -331,7 +331,9 @@ namespace WizOne.Personal
                     lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
                 Session["List_DocUpload_MP_Sanctiuni"] = lstFiles;
 
-                row.Delete();                
+                row.Delete();
+
+                Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"], "").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Sanctiuni/' {Dami.Operator()} ""FisierNume"" FROM ""tblFisiere"" WHERE ""Tabela""='Admin_Medicina' AND ""Id""={keys[0]}"), "").ToString();
 
                 e.Cancel = true;
                 grDateSanctiuni.CancelEdit();

@@ -859,6 +859,13 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="FisiereApp\Atasamente\init" />
+    <Content Include="FisiereApp\Beneficii\init" />
+    <Content Include="FisiereApp\Cursuri\init" />
+    <Content Include="FisiereApp\Fisiere\init" />
+    <Content Include="FisiereApp\Medicina\init" />
+    <Content Include="FisiereApp\Sanctiuni\init" />
+    <Content Include="FisiereApp\Studii\init" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

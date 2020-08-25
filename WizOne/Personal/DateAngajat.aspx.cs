@@ -44,7 +44,6 @@ namespace WizOne.Personal
                 {
                     marca = NextMarca().ToString();
                     Session["Marca"] = marca;
-
                     Session["esteNou"] = "true";
 
                     Initializare(ref ds);
@@ -472,7 +471,7 @@ namespace WizOne.Personal
 
                 //Florin 2018-10-30
                 //calculam CO daca se insereaza un angajat
-                bool calcCO = false;
+                //bool calcCO = false;
                 bool esteNou = false;
                 if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                 {
@@ -677,20 +676,58 @@ namespace WizOne.Personal
                 }
                 else
                 {
-                    DateTime dataModif = Convert.ToDateTime(General.ExecutaScalar("SELECT F10023 FROM F100 WHERE F10003=" + General.Nz(Session["Marca"], -99), null));
-                    if (dataModif != Convert.ToDateTime(ds.Tables[1].Rows[0]["F10023"]))
-                        calcCO = true;
+                    //DateTime dataModif = Convert.ToDateTime(General.ExecutaScalar("SELECT F10023 FROM F100 WHERE F10003=" + General.Nz(Session["Marca"], -99), null));
+                    //if (dataModif != Convert.ToDateTime(ds.Tables[1].Rows[0]["F10023"]))
+                    //    calcCO = true;
                 }
                     
                 for (int i = 1; i < ds.Tables.Count; i++)
                 {//Radu 10.06.2019
+                    var ert = ds.Tables[i].TableName;
+
                     if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni" || ds.Tables[i].TableName == "Admin_Cursuri" || ds.Tables[i].TableName == "F100Studii")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
-                    {                     
+                    {
+                        //Florin 2020.08.19
+                        if (Dami.ValoareParam("SalvareFisierInDisc") == "1" && (ds.Tables[i].TableName == "Atasamente" || ds.Tables[i].TableName == "tblFisiere"))
+                        {
+                            switch(ds.Tables[i].TableName)
+                            {
+                                case "tblFisiere":
+                                    {
+                                        DataRow[] arr = ds.Tables[i].Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString());
+                                        if (arr != null && arr.Count() > 0 && arr[0] != null)
+                                        {
+                                            DataRow dr = arr[0];
+                                            string numeFisier = General.CreazaFisierInDisc(General.Nz(dr["FisierNume"], "Fisier").ToString(), dr["Fisier"], ds.Tables[i].TableName);
+                                            dr["Fisier"] = null;
+                                            dr["FisierNume"] = numeFisier;
+                                        }
+                                    }
+                                    break;
+                                case "Atasamente":
+                                    {
+                                        Dictionary<int, Personal.Atasamente.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Atasamente"] as Dictionary<int, Personal.Atasamente.metaUploadFile>;
+                                        foreach(var l in lstFiles)
+                                        {
+                                            DataRow[] arr = ds.Tables[i].Select("IdAuto = " + l.Key);
+                                            if (arr != null && arr.Count() > 0 && arr[0] != null)
+                                            {
+                                                DataRow dr = arr[0];
+                                                string numeFisier = General.CreazaFisierInDisc(General.Nz(dr["FisierNume"], "Fisier").ToString(), dr["Attach"], ds.Tables[i].TableName);
+                                                dr["Attach"] = null;
+                                                dr["FisierNume"] = numeFisier;
+                                            }
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+
                         General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                     }
-                }             
+                }
 
 
                 //Florin 2018-10-30
@@ -740,211 +777,227 @@ namespace WizOne.Personal
 
         protected void SalvareSpeciala(string tabela)
         {
-            string sql = "SELECT * FROM \"" + tabela + "\"";
-            //DataTable dtGen = new DataTable();
-            //dtGen = General.IncarcaDT(sql, null);
-            //dtGen.TableName = tabela;
-            //dtGen.PrimaryKey = new DataColumn[] { dtGen.Columns["IdAuto"] };
-
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-            DataTable dt = ds.Tables[tabela] as DataTable;
-
-            for (int i = 0; i < dt.Rows.Count; i++)
+            try
             {
-                if (dt.Rows[i].RowState == DataRowState.Deleted)
+                string sql = "SELECT * FROM \"" + tabela + "\"";
+                //DataTable dtGen = new DataTable();
+                //dtGen = General.IncarcaDT(sql, null);
+                //dtGen.TableName = tabela;
+                //dtGen.PrimaryKey = new DataColumn[] { dtGen.Columns["IdAuto"] };
+
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataTable dt = ds.Tables[tabela] as DataTable;
+
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    sql = "DELETE FROM \"" + tabela + "\" WHERE \"IdAuto\" = " + dt.Rows[i]["IdAuto", DataRowVersion.Original].ToString();
-                    General.ExecutaNonQuery(sql, null);
-                    sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto", DataRowVersion.Original].ToString();
-                    General.ExecutaNonQuery(sql, null);
-                    continue;
-                }
-
-                if (Convert.ToInt32(dt.Rows[i]["IdAuto"].ToString()) < 1000000)
-                {//UPDATE 
-                    DataRow dr = dt.Select("IdAuto = " + dt.Rows[i]["IdAuto"].ToString()).FirstOrDefault();
-                    string sir = "";
-                    sql = "UPDATE \"" + tabela + "\" SET ";
-                    for (int k = 0; k < dt.Columns.Count; k++)
+                    if (dt.Rows[i].RowState == DataRowState.Deleted)
                     {
-                        if (!dt.Columns[k].AutoIncrement && dt.Columns[k].ColumnName != "Modificabil" && dt.Columns[k].ColumnName != "IdAuto")
-                        {
-                            string val = "";
-                            if (dr[k].GetType() == typeof(int) || dr[k].GetType() == typeof(decimal))
-                                val = dr[k] == null ? "null" : dr[k].ToString();
-                            if (dr[k].GetType() == typeof(string))
-                                val = dr[k] == null ? "null" : "'" + dr[k].ToString() + "'";
-                            if (dr[k].GetType() == typeof(DateTime))
-                                val = dr[k] == null ? "null" : General.ToDataUniv((DateTime)dr[k]);
-                            if (val.Length <= 0)
-                                val = "null";
-                            sir += ",\"" + dt.Columns[k].ColumnName + "\" = " + val;
-                        }
+                        sql = "DELETE FROM \"" + tabela + "\" WHERE \"IdAuto\" = " + dt.Rows[i]["IdAuto", DataRowVersion.Original].ToString();
+                        General.ExecutaNonQuery(sql, null);
+                        sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto", DataRowVersion.Original].ToString();
+                        General.ExecutaNonQuery(sql, null);
+                        continue;
                     }
-                    sql += sir.Substring(1) + " WHERE \"IdAuto\" = " + dt.Rows[i]["IdAuto"].ToString();
-                    General.ExecutaNonQuery(sql, null);
+
+                    if (Convert.ToInt32(dt.Rows[i]["IdAuto"].ToString()) < 1000000)
+                    {//UPDATE 
+                        DataRow dr = dt.Select("IdAuto = " + dt.Rows[i]["IdAuto"].ToString()).FirstOrDefault();
+                        string sir = "";
+                        sql = "UPDATE \"" + tabela + "\" SET ";
+                        for (int k = 0; k < dt.Columns.Count; k++)
+                        {
+                            if (!dt.Columns[k].AutoIncrement && dt.Columns[k].ColumnName != "Modificabil" && dt.Columns[k].ColumnName != "IdAuto")
+                            {
+                                string val = "";
+                                if (dr[k].GetType() == typeof(int) || dr[k].GetType() == typeof(decimal))
+                                    val = dr[k] == null ? "null" : dr[k].ToString();
+                                if (dr[k].GetType() == typeof(string))
+                                    val = dr[k] == null ? "null" : "'" + dr[k].ToString() + "'";
+                                if (dr[k].GetType() == typeof(DateTime))
+                                    val = dr[k] == null ? "null" : General.ToDataUniv((DateTime)dr[k]);
+                                if (val.Length <= 0)
+                                    val = "null";
+                                sir += ",\"" + dt.Columns[k].ColumnName + "\" = " + val;
+                            }
+                        }
+                        sql += sir.Substring(1) + " WHERE \"IdAuto\" = " + dt.Rows[i]["IdAuto"].ToString();
+                        General.ExecutaNonQuery(sql, null);
            
-                    int idAuto = Convert.ToInt32(dt.Rows[i]["IdAuto"].ToString());
-                    if (tabela == "Admin_Beneficii")
-                    {
-                        Dictionary<int, Personal.Beneficii.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, Personal.Beneficii.metaUploadFile>;
-                        if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                        int idAuto = Convert.ToInt32(dt.Rows[i]["IdAuto"].ToString());
+                        if (tabela == "Admin_Beneficii")
                         {
-                            sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
-                            General.ExecutaNonQuery(sql, null);
-                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                            Dictionary<int, Personal.Beneficii.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, Personal.Beneficii.metaUploadFile>;
+                            if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                            {
+                                sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
+                                General.ExecutaNonQuery(sql, null);
+                                General.LoadFile(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                            }
                         }
-                    }
-                    if (tabela == "Admin_Medicina")
-                    {
-                        Dictionary<int, Personal.Medicina.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Medicina"] as Dictionary<int, Personal.Medicina.metaUploadFile>;
-                        if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                        if (tabela == "Admin_Medicina")
                         {
-                            sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
-                            General.ExecutaNonQuery(sql, null);
-                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                            Dictionary<int, Personal.Medicina.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Medicina"] as Dictionary<int, Personal.Medicina.metaUploadFile>;
+                            if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                            {
+                                sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
+                                General.ExecutaNonQuery(sql, null);
+                                General.LoadFile(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                            }
                         }
-                    }
-                    if (tabela == "Admin_Sanctiuni")
-                    {
-                        Dictionary<int, Personal.Sanctiuni.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, Personal.Sanctiuni.metaUploadFile>;
-                        if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                        if (tabela == "Admin_Sanctiuni")
                         {
-                            sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
-                            General.ExecutaNonQuery(sql, null);
-                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                            Dictionary<int, Personal.Sanctiuni.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, Personal.Sanctiuni.metaUploadFile>;
+                            if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                            {
+                                sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
+                                General.ExecutaNonQuery(sql, null);
+                                General.LoadFile(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                            }
                         }
-                    }
-                    if (tabela == "Admin_Cursuri")
-                    {
-                        Dictionary<int, Personal.Cursuri.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, Personal.Cursuri.metaUploadFile>;
-                        if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                        if (tabela == "Admin_Cursuri")
                         {
-                            sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
-                            General.ExecutaNonQuery(sql, null);
-                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                            Dictionary<int, Personal.Cursuri.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, Personal.Cursuri.metaUploadFile>;
+                            if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                            {
+                                sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
+                                General.ExecutaNonQuery(sql, null);
+                                General.LoadFile(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                            }
                         }
-                    }
-                    if (tabela == "F100Studii")
-                    {
-                        Dictionary<int, Personal.StudiiNou.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, Personal.StudiiNou.metaUploadFile>;
-                        if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                        if (tabela == "F100Studii")
                         {
-                            sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
-                            General.ExecutaNonQuery(sql, null);
-                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                            Dictionary<int, Personal.StudiiNou.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, Personal.StudiiNou.metaUploadFile>;
+                            if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                            {
+                                sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
+                                General.ExecutaNonQuery(sql, null);
+                                General.LoadFile(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                            }
                         }
-                    }
-;
-                }
-                else
-                {//INSERT
-                    DataRow dr = dt.Select("IdAuto = " + dt.Rows[i]["IdAuto"].ToString()).FirstOrDefault();
-                    sql = "INSERT INTO \"" + tabela + "\" (";
-                    string sir = "";
-                    for (int k = 0; k < dt.Columns.Count; k++)
-                    {
-                        if (!dt.Columns[k].AutoIncrement && dt.Columns[k].ColumnName != "Modificabil" && dt.Columns[k].ColumnName != "IdAuto")
-                            sir += ",\"" + dt.Columns[k].ColumnName + "\"";
-                    }
-
-                    string rez1 = " OUTPUT Inserted.IdAuto ";
-                    if (Constante.tipBD == 2) rez1 = "";
-
-                    sql += sir.Substring(1) + ") " + rez1 + " VALUES (";
-
-                    sir = "";
-                    for (int k = 0; k < dt.Columns.Count; k++)
-                    {
-                        if (!dt.Columns[k].AutoIncrement && dt.Columns[k].ColumnName != "Modificabil" && dt.Columns[k].ColumnName != "IdAuto")
-                        {
-                            string val = "";
-                            if (dr[k].GetType() == typeof(int) || dr[k].GetType() == typeof(decimal))
-                                val = dr[k] == null ? "null" : dr[k].ToString();
-                            if (dr[k].GetType() == typeof(string))
-                                val = dr[k] == null ? "null" : "'" + dr[k].ToString() + "'";
-                            if (dr[k].GetType() == typeof(DateTime))
-                                val = dr[k] == null ? "null" : General.ToDataUniv((DateTime)dr[k]);
-
-                            //Florin 2019.09.17
-                            //if (val.Length <= 0)
-                            //    val = "''";
-                            if (val.Length <= 0)
-                                val = "null";
-
-
-                            sir += "," + val;
-                        }
-                    }
-
-                    string rez2 = "";
-                    if (Constante.tipBD == 2) rez2 = "  RETURNING \"IdAuto\" INTO @out_1; ";
-
-                    sql += sir.Substring(1) + ") " + rez2;
-
-                    DataTable dtRez = new DataTable();
-                    int idAuto = -99;
-                    if (Constante.tipBD == 1)
-                    {
-                        dtRez = General.IncarcaDT(sql, null);
-                        if (dtRez.Rows.Count > 0)
-                            idAuto = Convert.ToInt32(dtRez.Rows[0]["IdAuto"]);
+    ;
                     }
                     else
-                    {
-                        List<string> lstOut = General.DamiOracleScalar(sql, null);
-                        if (lstOut.Count == 1)
-                            idAuto = Convert.ToInt32(lstOut[0]);
-                    }
-                    int idAuto1 = Convert.ToInt32(dt.Rows[i]["IdAuto"].ToString());
-                    if (tabela == "Admin_Beneficii")
-                    {
-                        Dictionary<int, Personal.Beneficii.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, Personal.Beneficii.metaUploadFile>;
-                        if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
-                            General.IncarcaFisier(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);
-                    }
-                    if (tabela == "Admin_Medicina")
-                    {
-                        Dictionary<int, Personal.Medicina.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Medicina"] as Dictionary<int, Personal.Medicina.metaUploadFile>;
-                        if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
-                            General.IncarcaFisier(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);                    
-                    }
-                    if (tabela == "Admin_Sanctiuni")
-                    {
-                        Dictionary<int, Personal.Sanctiuni.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, Personal.Sanctiuni.metaUploadFile>;
-                        if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
-                            General.IncarcaFisier(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);                   
-                    }
-                    if (tabela == "Admin_Cursuri")
-                    {
-                        Dictionary<int, Personal.Cursuri.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, Personal.Cursuri.metaUploadFile>;
-                        if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
-                            General.IncarcaFisier(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);
-                    }
-                    if (tabela == "F100Studii")
-                    {
-                        Dictionary<int, Personal.StudiiNou.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, Personal.StudiiNou.metaUploadFile>;
-                        if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
-                            General.IncarcaFisier(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);
-                    }
+                    {//INSERT
+                        DataRow dr = dt.Select("IdAuto = " + dt.Rows[i]["IdAuto"].ToString()).FirstOrDefault();
+                        sql = "INSERT INTO \"" + tabela + "\" (";
+                        string sir = "";
+                        for (int k = 0; k < dt.Columns.Count; k++)
+                        {
+                            if (!dt.Columns[k].AutoIncrement && dt.Columns[k].ColumnName != "Modificabil" && dt.Columns[k].ColumnName != "IdAuto")
+                                sir += ",\"" + dt.Columns[k].ColumnName + "\"";
+                        }
+
+                        string rez1 = " OUTPUT Inserted.IdAuto ";
+                        if (Constante.tipBD == 2) rez1 = "";
+
+                        sql += sir.Substring(1) + ") " + rez1 + " VALUES (";
+
+                        sir = "";
+                        for (int k = 0; k < dt.Columns.Count; k++)
+                        {
+                            if (!dt.Columns[k].AutoIncrement && dt.Columns[k].ColumnName != "Modificabil" && dt.Columns[k].ColumnName != "IdAuto")
+                            {
+                                string val = "";
+                                if (dr[k].GetType() == typeof(int) || dr[k].GetType() == typeof(decimal))
+                                    val = dr[k] == null ? "null" : dr[k].ToString();
+                                if (dr[k].GetType() == typeof(string))
+                                    val = dr[k] == null ? "null" : "'" + dr[k].ToString() + "'";
+                                if (dr[k].GetType() == typeof(DateTime))
+                                    val = dr[k] == null ? "null" : General.ToDataUniv((DateTime)dr[k]);
+
+                                //Florin 2019.09.17
+                                //if (val.Length <= 0)
+                                //    val = "''";
+                                if (val.Length <= 0)
+                                    val = "null";
 
 
+                                sir += "," + val;
+                            }
+                        }
+
+                        string rez2 = "";
+                        if (Constante.tipBD == 2) rez2 = "  RETURNING \"IdAuto\" INTO @out_1; ";
+
+                        sql += sir.Substring(1) + ") " + rez2;
+
+                        DataTable dtRez = new DataTable();
+                        int idAuto = -99;
+                        if (Constante.tipBD == 1)
+                        {
+                            dtRez = General.IncarcaDT(sql, null);
+                            if (dtRez.Rows.Count > 0)
+                                idAuto = Convert.ToInt32(dtRez.Rows[0]["IdAuto"]);
+                        }
+                        else
+                        {
+                            List<string> lstOut = General.DamiOracleScalar(sql, null);
+                            if (lstOut.Count == 1)
+                                idAuto = Convert.ToInt32(lstOut[0]);
+                        }
+                        int idAuto1 = Convert.ToInt32(dt.Rows[i]["IdAuto"].ToString());
+                        if (tabela == "Admin_Beneficii")
+                        {
+                            Dictionary<int, Personal.Beneficii.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, Personal.Beneficii.metaUploadFile>;
+                            if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
+                                General.LoadFile(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);
+                        }
+                        if (tabela == "Admin_Medicina")
+                        {
+                            Dictionary<int, Personal.Medicina.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Medicina"] as Dictionary<int, Personal.Medicina.metaUploadFile>;
+                            if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
+                                General.LoadFile(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);                    
+                        }
+                        if (tabela == "Admin_Sanctiuni")
+                        {
+                            Dictionary<int, Personal.Sanctiuni.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, Personal.Sanctiuni.metaUploadFile>;
+                            if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
+                                General.LoadFile(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);                   
+                        }
+                        if (tabela == "Admin_Cursuri")
+                        {
+                            Dictionary<int, Personal.Cursuri.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, Personal.Cursuri.metaUploadFile>;
+                            if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
+                                General.LoadFile(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);
+                        }
+                        if (tabela == "F100Studii")
+                        {
+                            Dictionary<int, Personal.StudiiNou.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, Personal.StudiiNou.metaUploadFile>;
+                            if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
+                                General.LoadFile(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);
+                        }
+                    }
+                }
+                if (tabela == "Admin_Beneficii")
+                    Session["List_DocUpload_MP_Beneficii"] = null;
+
+                if (tabela == "Admin_Medicina")
+                    Session["List_DocUpload_MP_Medicina"] = null;
+            
+                if (tabela == "Admin_Sanctiuni")
+                    Session["List_DocUpload_MP_Sanctiuni"] = null;
+
+                if (tabela == "Admin_Cursuri")
+                    Session["List_DocUpload_MP_Cursuri"] = null;
+
+                if (tabela == "F100Studii")
+                    Session["List_DocUpload_MP_Studii"] = null;
+
+                if (General.Nz(Session["FisiereDeSters"],"").ToString() != "")
+                {
+                    string[] arr = Session["FisiereDeSters"].ToString().Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach(string l in arr)
+                    {
+                        if (File.Exists(HostingEnvironment.MapPath("~/" + l)))
+                            File.Delete(HostingEnvironment.MapPath("~/" + l));
+                    }
                 }
             }
-            if (tabela == "Admin_Beneficii")
-                Session["List_DocUpload_MP_Beneficii"] = null;
-
-            if (tabela == "Admin_Medicina")
-                Session["List_DocUpload_MP_Medicina"] = null;
-            
-            if (tabela == "Admin_Sanctiuni")
-                Session["List_DocUpload_MP_Sanctiuni"] = null;
-
-            if (tabela == "Admin_Cursuri")
-                Session["List_DocUpload_MP_Cursuri"] = null;
-
-            if (tabela == "F100Studii")
-                Session["List_DocUpload_MP_Studii"] = null;
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
 
@@ -1707,6 +1760,12 @@ namespace WizOne.Personal
                 Session["Admin_Sanctiuni"] = null;
                 Session["Sporuri_cmbMaster1"] = null;
                 Session["Tarife_cmbMaster"] = null;
+
+                //Florin 2020.08.18
+                Session["FisiereDeSters"] = "";
+
+                //Florin 2020.08.20
+                Session["List_DocUpload_MP_Atasamente"] = null;
             }
             catch (Exception ex)
             {

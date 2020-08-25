@@ -15139,3 +15139,16 @@ UPDATE F1001 SET F1001138 = F1001137;
 
 ALTER TABLE F300_CM_AVANS ADD  URGENTA number(9);
 UPDATE F300_CM_AVANS SET URGENTA = 0;
+
+
+----  2.2.131  ----
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('SalvareFisierInDisc', '0', 'Se foloseste in personal si daca are valoarea 1 fisierele se salveaza in directorul special creat FisiereApp iar daca are 0 se salveaza ca si pana acum in baza de date', 3);
+COMMIT;
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IesireDinCereri', '1', 'Se foloseste la introducere cereri de absenta si daca este 1 se iese din pagina de introducere cereri, iar daca este 0 ramane pe aceasta pagina pt introducerea altei cereri', 1);
+COMMIT;
+
+ALTER TABLE "Eval_Quiz" ADD "IdRaport" number(10);
+COMMIT;

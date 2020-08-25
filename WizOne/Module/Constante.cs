@@ -108,5 +108,6 @@
 
         internal static string versiune = "1.1.001";
 
+        internal const string fisiereApp = "FisiereApp";
     }
 }

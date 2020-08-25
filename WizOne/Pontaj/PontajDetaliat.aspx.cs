@@ -212,15 +212,8 @@ namespace WizOne.Pontaj
                 lblSubDept.InnerText = Dami.TraduCuvant("SubDept");
                 lblBirou.InnerText = Dami.TraduCuvant("Birou");
 
-
-                foreach (dynamic c in grDate.Columns)
-                {
-                    try
-                    {
-                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
-                    }
-                    catch (Exception) { }
-                }
+                foreach (var col in grDate.Columns.OfType<GridViewDataColumn>())
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
                 //Radu 13.12.2019
                 foreach (ListBoxColumn col in cmbAng.Columns)
@@ -349,12 +342,6 @@ namespace WizOne.Pontaj
 
                 }
 
-                //Florin 2020.03.30
-                //if (tip == 1 || tip == 10)
-                //{
-                //    grDate.SettingsPager.PageSize = 31;
-                //}
-                //else
                 if (tip == 2 || tip == 20)
                 {
                     string dataRef = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
@@ -485,38 +472,16 @@ namespace WizOne.Pontaj
         {
             try
             {
-                string ziInc = General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month);
-                string ziSf = General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99);
-
+                DateTime dataSelectie = txtAnLuna.Date;
                 if (tip == 2 || tip == 20)
-                {
-                    ziInc = General.ToDataUniv(txtZiua.Date.Year, txtZiua.Date.Month);
-                    ziSf = General.ToDataUniv(txtZiua.Date.Year, txtZiua.Date.Month, 99);
-                }
+                    dataSelectie = txtZiua.Date;
 
-                //Florinn 2020.05.20
-                DataRow drCnt = General.IncarcaDR($@"
-                    SELECT
-                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999) AND F10022 <= {ziInc}  AND  {ziSf} <= F10023) AS ""NrAng"",
-                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {ziInc} <= ""Ziua"" AND ""Ziua"" <=  {ziSf}) AS ""NrPtj"" {General.FromDual()}");                
-                if (drCnt != null)
+                if (!General.EstePontajulInitializat(dataSelectie, General.Nz(cmbCtr.Value, "").ToString()))
                 {
-                    decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
-                    decimal nrPtj = Convert.ToDecimal(General.Nz(drCnt["NrPtj"], 0));
-
-                    if (tip == 1 || tip == 10)
-                        nrAng = DateTime.DaysInMonth(txtAnLuna.Date.Year, txtAnLuna.Date.Month);
-                    if (nrAng != 0)
-                    {
-                        decimal rez = ((nrAng - nrPtj) / nrAng) * 100;
-                        if (rez > 15)
-                        {
-                            grDate.DataSource = null;
-                            grDate.DataBind();
-                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pontajul nu este initializat") + Environment.NewLine + Dami.TraduCuvant("Va rugam ca mai intai sa efectuati initializarea");
-                            return;
-                        }
-                    }
+                    grDate.DataSource = null;
+                    grDate.DataBind();
+                    MessageBox.Show("Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea", MessageBox.icoInfo, "Initializare");
+                    return;
                 }
 
                 IncarcaGrid();
@@ -717,7 +682,7 @@ namespace WizOne.Pontaj
                     if (General.Nz(cmbAngZi.Value, "").ToString() != "")
                         filtru += " AND P.F10003=" + cmbAngZi.Value;
                     else
-                        filtru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, 0, -99, idRol, ziua.Day,-99, -99);
+                        filtru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, 0, -99, idRol.ToString(), ziua.Day,-99, -99);
 
                     tipInreg = Convert.ToInt32(General.Nz(cmbPtjZi.Value, 1));
 
@@ -3268,7 +3233,6 @@ namespace WizOne.Pontaj
 
                     tdGridTotaluri.Controls.Add(grDate);
                 }
-
             }
             catch (Exception ex)
             {

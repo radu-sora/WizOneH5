@@ -13669,7 +13669,7 @@ GO
 
 
 
-----	2.2.129	----
+--- 2.2.129	----
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('NrOptiuniExportSAP', '3', 'Numar de optiuni pentru pagina Export SAP (intre 1 si 5)', 0);
 GO
@@ -14218,7 +14218,7 @@ exec sp_executeSql @querydef6
 GO
 
 
-----	2.2.130	----
+---- 2.2.130 ----
 
 
 --https://github.com/wizromRD/WizOne/issues/458
@@ -14480,4 +14480,18 @@ GO
 ALTER TABLE F300_CM_AVANS ADD  URGENTA int
 GO
 UPDATE F300_CM_AVANS SET URGENTA = 0
+GO
+
+
+
+----  2.2.131  ----
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('SalvareFisierInDisc', '0', 'Se foloseste in personal si daca are valoarea 1 fisierele se salveaza in directorul special creat FisiereApp iar daca are 0 se salveaza ca si pana acum in baza de date', 3)
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IesireDinCereri', '1', 'Se foloseste la introducere cereri de absenta si daca este 1 se iese din pagina de introducere cereri, iar daca este 0 ramane pe aceasta pagina pt introducerea altei cereri', 1)
+GO
+
+ALTER TABLE Eval_Quiz ADD IdRaport int
 GO

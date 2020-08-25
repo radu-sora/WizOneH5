@@ -1,5 +1,6 @@
 ﻿using DevExpress.Web;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -156,6 +157,13 @@ namespace WizOne.Personal
                     dr["Attach"] = itm.UploadedFile;
                     dr["FisierNume"] = itm.UploadedFileName;
                     dr["FisierExtensie"] = itm.UploadedFileExtension;
+
+                    //Florin 2020.08.20
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Atasamente"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles == null)
+                        lstFiles = new Dictionary<int, metaUploadFile>();
+                    lstFiles.Add(Convert.ToInt32(dr["IdAuto"].ToString()), itm);
+                    Session["List_DocUpload_MP_Atasamente"] = lstFiles;
                 }
                 //if (itm != null)
                 //{
@@ -173,7 +181,7 @@ namespace WizOne.Personal
                 e.Cancel = true;
                 grDateAtasamente.CancelEdit();
                 grDateAtasamente.KeyFieldName = "IdAuto";
-                grDateAtasamente.DataSource = ds.Tables["Atasamente"];                
+                grDateAtasamente.DataSource = ds.Tables["Atasamente"];
                 Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
@@ -211,6 +219,16 @@ namespace WizOne.Personal
                     //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Atasamente", dr["IdAuto"]);
                     //dr["FisierNume"] = itm.UploadedFileName;
                     //dr["FisierExtensie"] = itm.UploadedFileExtension;
+
+                    //Florin 2020.08.20
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Atasamente"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles == null)
+                        lstFiles = new Dictionary<int, metaUploadFile>();
+                    if (lstFiles.ContainsKey(Convert.ToInt32(idAuto.ToString())))
+                        lstFiles[Convert.ToInt32(idAuto.ToString())] = itm;
+                    else
+                        lstFiles.Add(Convert.ToInt32(idAuto.ToString()), itm);
+                    Session["List_DocUpload_MP_Atasamente"] = lstFiles;
                 }
 
                 Session["DocUpload_MP_Atasamente"] = null;
@@ -242,6 +260,13 @@ namespace WizOne.Personal
                 row.Delete();
 
                 Session["DocUpload_MP_Atasamente"] = null;
+
+                //Florin 2020.08.20
+                Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Atasamente"] as Dictionary<int, metaUploadFile>;
+                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(keys[0].ToString())))
+                    lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
+                Session["List_DocUpload_MP_Atasamente"] = lstFiles;
+                Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"], "").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Atasamente/' {Dami.Operator()} ""FisierNume"" FROM ""Atasamente"" WHERE ""IdAuto""={keys[0]}"), "").ToString();
 
                 e.Cancel = true;
                 grDateAtasamente.CancelEdit();

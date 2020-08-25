@@ -358,7 +358,7 @@ namespace WizOne.Pontaj
 
 
                 string sqlSDSL = "";
-                string cond = "";
+                //string cond = "";
                 List<DateTime> lstInit = new List<DateTime>();
 
                 for (int i = 1; i <= nrZile; i++)
@@ -486,10 +486,10 @@ namespace WizOne.Pontaj
                     }
 
 
-                    if (Constante.tipBD == 1)
-                        cond = " ISNUMERIC(\"ValStr\") = 1 ";
-                    else
-                        cond = " RTRIM(LTRIM(TRANSLATE(\"ValStr\",'0123456789', ' '))) is null ";
+                    //if (Constante.tipBD == 1)
+                    //    cond = " ISNUMERIC(\"ValStr\") = 1 ";
+                    //else
+                    //    cond = " RTRIM(LTRIM(TRANSLATE(\"ValStr\",'0123456789', ' '))) is null ";
 
                     string sql = "";
                     string oraIn = "", oraOut = "", firstIn = "", lastOut = "";

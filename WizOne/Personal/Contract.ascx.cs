@@ -1616,9 +1616,9 @@ namespace WizOne.Personal
                 string filtruIns = " AND F10003=" + Session["Marca"].ToString();
                 string f10003 = Session["Marca"].ToString();
 
-                bool esteNou = false;
-                if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
-                    esteNou = true;
+                //bool esteNou = false;
+                //if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                //    esteNou = true;
 
                 //string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, vechime, esteNou);
                 //Radu 21.04.2020

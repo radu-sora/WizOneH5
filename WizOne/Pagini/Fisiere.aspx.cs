@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Web.Hosting;
 using WizOne.Module;
 
 namespace WizOne.Pagini
 {
     public partial class Fisiere : System.Web.UI.Page
     {
-
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -35,183 +33,121 @@ namespace WizOne.Pagini
                             case "1":
                                 tbl = "Ptj_Cereri";
                                 break;
-                            case "2":   //Radu 13.08.2018
+                            case "2":
                                 tbl = "MP_Cereri";
                                 break;
-                            case "3":   //Florin 2018.09.28
+                            case "3":
                                 tbl = "Org_Posturi";
                                 break;
-                            case "4":   //Florin 2018.12.04 (se citeste din tabela Atasamente)
-                                {//Radu 13.06.2019
-                                    DataTable dt = new DataTable();
-                                    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                                    if (ds.Tables.Contains("Atasamente"))
+                            case "4":
+                                {
+                                    //Florin 2020.08.20
+                                    Dictionary<int, Personal.Atasamente.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Atasamente"] as Dictionary<int, Personal.Atasamente.metaUploadFile>;
+                                    if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
                                     {
-                                        dt = ds.Tables["Atasamente"];
-                                        if (dt.Rows.Count != 0)
+                                        scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
+                                    }
+                                    else
+                                    {
+                                        DataTable dtAt = General.IncarcaDT("SELECT * FROM \"Atasamente\"", null);
+                                        DataRow drAt = dtAt.Select("IdAuto = " + id).FirstOrDefault();
+                                        if (drAt != null)
                                         {
-                                            DataRow dr = dt.Select("IdEmpl = " + (Session["Marca"] ?? "").ToString() + " AND IdAuto = " + id).FirstOrDefault();
-                                            if (dr != null)
-                                            {
-                                                string numeFis = (dr["FisierNume"] ?? "").ToString();
-                                                string ext = (dr["FisierExtensie"] ?? ".txt").ToString();
-                                                //if (numeFis.LastIndexOf(".") >= 0)
-                                                //    ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
-                                                scrieDoc(ext, (byte[])dr["Attach"], numeFis);
-                                            }
-                                            else
-                                                Response.Write("Nu exista date de afisat !");
+                                            string numeFiser = (drAt["FisierNume"] ?? "").ToString();
+                                            object fisier = General.Nz(drAt["Attach"], null);
+
+                                            string cale = HostingEnvironment.MapPath("~/FisiereApp/Atasamente/") + numeFiser;
+                                            if (fisier == null && File.Exists(cale))
+                                                fisier = File.ReadAllBytes(cale);
+
+                                            scrieDoc((drAt["FisierExtensie"] ?? ".txt").ToString(), (byte[])fisier, numeFiser);
                                         }
                                         else
                                             Response.Write("Nu exista date de afisat !");
                                     }
-                                    else
-                                        Response.Write("Nu exista date de afisat !");
-                                    //DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Atasamente"" WHERE ""IdAuto""={id}", null);
-                                    //if (dtAta.Rows.Count > 0)
-                                    //{
-                                    //    string numeFis = (dtAta.Rows[0]["DescrAttach"] ?? "").ToString();
-                                    //    string ext = ".txt";
-                                    //    if (numeFis.LastIndexOf(".") >= 0)
-                                    //        ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
-
-                                    //    scrieDoc(ext, (byte[])dtAta.Rows[0]["Attach"], numeFis);
-                                    //}
-                                    //else
-                                    //    Response.Write("Nu exista date de afisat !");
-                                    
-                                    return;
+                                    tbl = "";
                                 }
+                                break;
                             case "5":
-                                tbl = "Admin_Medicina"; //Radu 22.02.2019    
+                                {
+                                    tbl = "Admin_Medicina";
+                                    Dictionary<int, Personal.Medicina.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Medicina"] as Dictionary<int, Personal.Medicina.metaUploadFile>;
+                                    if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
+                                    {
+                                        scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
+                                        tbl = "";
+                                    }
+                                }
                                 break;
                             case "6":
-                                tbl = "Admin_Sanctiuni"; //Radu 22.02.2019
-                                break;
-                            case "7":
-                                //tbl = "Atasamente"; //Radu 22.02.2019
-                                DataTable dtAt = General.IncarcaDT("SELECT * FROM \"Atasamente\"", null);
-                                DataRow drAt = dtAt.Select("IdAuto = " + id).FirstOrDefault();
-                                if (drAt != null)
                                 {
-                                    string numeFis = (drAt["FisierNume"] ?? "").ToString();
-                                    string ext = (drAt["FisierExtensie"] ?? ".txt").ToString();
-                                    //if (numeFis.LastIndexOf(".") >= 0)
-                                    //    ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
-                                    scrieDoc(ext, (byte[])drAt["Attach"], numeFis);
+                                    tbl = "Admin_Sanctiuni";
+                                    Dictionary<int, Personal.Sanctiuni.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, Personal.Sanctiuni.metaUploadFile>;
+                                    if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
+                                    {
+                                        scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
+                                        tbl = "";
+                                    }
                                 }
-                                else
-                                    Response.Write("Nu exista date de afisat !");
                                 break;
                             case "8":
                                 tbl = "Admin_NrActAd";
-                                break;                                //case "5":   //Florin 2019.12.04 (se citeste din tabela Admin_Medicina)
-                                                                      //    {
-                                                                      //        DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Admin_Medicina"" WHERE ""IdAuto""={id}", null);
-                                                                      //        if (dtAta.Rows.Count > 0)
-                                                                      //            scrieDoc((dtAta.Rows[0]["FisierExtensie"] ?? "").ToString(), (byte[])dtAta.Rows[0]["Fisier"], (dtAta.Rows[0]["FisierNume"] ?? "").ToString());
-                                                                      //        else
-                                                                      //            Response.Write("Nu exista date de afisat !");
-
-                            //        return;
-                            //    }
-                            //case "6":   //Florin 2019.12.07 (se citeste din tabela Admin_Sanctiuni)
-                            //    {
-                            //        DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Admin_Sanctiuni"" WHERE ""IdAuto""={id}", null);
-                            //        if (dtAta.Rows.Count > 0)
-                            //            scrieDoc((dtAta.Rows[0]["FisierExtensie"] ?? "").ToString(), (byte[])dtAta.Rows[0]["Fisier"], (dtAta.Rows[0]["FisierNume"] ?? "").ToString());
-                            //        else
-                            //            Response.Write("Nu exista date de afisat !");
-
-                            //        return;
-                            //    }
+                                break;
                             case "9":
                                 tbl = "Avs_Cereri";
                                 break;
                             case "10":
-                                tbl = "Admin_Beneficii"; //Radu 11.09.2019    
+                                {
+                                    tbl = "Admin_Beneficii";
+                                    Dictionary<int, Personal.Beneficii.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, Personal.Beneficii.metaUploadFile>;
+                                    if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
+                                    {
+                                        scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
+                                        tbl = "";
+                                    }
+                                }
                                 break;
                             case "11":
-                                tbl = "F100Studii"; //Radu 08.05.2020    
+                                {
+                                    tbl = "F100Studii";
+                                    Dictionary<int, Personal.StudiiNou.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, Personal.StudiiNou.metaUploadFile>;
+                                    if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
+                                    {
+                                        scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
+                                        tbl = "";
+                                    }
+                                }
                                 break;
                             case "12":
-                                tbl = "Admin_Cursuri"; //Radu 29.07.2020
+                                {
+                                    tbl = "Admin_Cursuri";
+                                    Dictionary<int, Personal.Cursuri.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, Personal.Cursuri.metaUploadFile>;
+                                    if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
+                                    {
+                                        scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
+                                        tbl = "";
+                                    }
+                                }
                                 break;
                         }
 
-                        if (tbl == "Admin_Medicina" || tbl == "Admin_Sanctiuni" || tbl == "Admin_Beneficii" || tbl == "Admin_Cursuri" || tbl == "F100Studii")
-                        {//Radu 13.06.2019
-                            if (tbl == "Admin_Medicina")
-                            {
-                                Dictionary<int, Personal.Medicina.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Medicina"] as Dictionary<int, Personal.Medicina.metaUploadFile>;
-                                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
-                                {
-                                    scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
-                                    tbl = "";
-                                }
-                            }
-                            if (tbl == "Admin_Sanctiuni")
-                            {
-                                Dictionary<int, Personal.Sanctiuni.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, Personal.Sanctiuni.metaUploadFile>;
-                                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
-                                {
-                                    scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
-                                    tbl = "";
-                                }
-                            }
-                            if (tbl == "Admin_Beneficii")
-                            {
-                                Dictionary<int, Personal.Beneficii.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, Personal.Beneficii.metaUploadFile>;
-                                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
-                                {
-                                    scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
-                                    tbl = "";
-                                }
-                            }
-                            if (tbl == "Admin_Cursuri")
-                            {
-                                Dictionary<int, Personal.Cursuri.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Cursuri"] as Dictionary<int, Personal.Cursuri.metaUploadFile>;
-                                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
-                                {
-                                    scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
-                                    tbl = "";
-                                }
-                            }
-
-                            //Radu 08.05.2020
-                            if (tbl == "F100Studii")
-                            {
-                                Dictionary<int, Personal.StudiiNou.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, Personal.StudiiNou.metaUploadFile>;
-                                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
-                                {
-                                    scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
-                                    tbl = "";
-                                }
-                            }
-                            //if (tbl == "Atasamente")
-                            //{
-                            //    DataTable dt = new DataTable();
-                            //    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                            //    if (ds.Tables.Contains("Atasamente"))
-                            //    {
-                            //        dt = ds.Tables["Atasamente"];
-                            //        if (dt.Rows.Count != 0)                                    
-                            //            scrieDoc("", (byte[])dt.Rows[0]["Attach"], "");                                    
-                            //        else                                    
-                            //            Response.Write("Nu exista date de afisat !");                                    
-                            //    }
-                            //    else
-                            //        Response.Write("Nu exista date de afisat !");
-                            //}
-                        }
-                        
                         if (tbl.Length > 0)
                         {
                             DataTable dt = General.IncarcaDT($@"SELECT * FROM ""tblFisiere"" WHERE ""Tabela""='{tbl}' AND ""Id""={id} AND ""EsteCerere""={tip}", null);
 
                             if (dt.Rows.Count != 0)
                             {
-                                scrieDoc((dt.Rows[0]["FisierExtensie"] ?? "").ToString(), (byte[])dt.Rows[0]["Fisier"], (dt.Rows[0]["FisierNume"] as string ?? "").ToString());
+                                //Florin 2020.08.18
+                                byte[] fis = (byte[])General.Nz(dt.Rows[0]["Fisier"], null);
+                                string director = tbl.Replace("Admin_", "").Replace("F100", "");
+                                string cale = HostingEnvironment.MapPath("~/FisiereApp/" + director + "/") + (dt.Rows[0]["FisierNume"] as string ?? "").ToString();
+                                if (fis == null && File.Exists(cale))
+                                        fis = File.ReadAllBytes(cale);
+
+                                if (fis != null)
+                                    scrieDoc((dt.Rows[0]["FisierExtensie"] ?? "").ToString(), fis, (dt.Rows[0]["FisierNume"] as string ?? "").ToString());
+                                else
+                                    Response.Write("Nu exista date de afisat !");
                             }
                             else
                             {

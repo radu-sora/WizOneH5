@@ -1,36 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Medicina.ascx.cs" Inherits="WizOne.Personal.Medicina" %>
 
-
-
-<script language="javascript" type="text/javascript">
-
-    function grDateMedicina_CustomButtonClick(s, e) {
-        switch (e.buttonID) {
-            case "btnAtasament":
-                pnlLoading.Show();
-                grDateMedicina.GetRowValues(e.visibleIndex, 'IdAuto', GoToFisierMedMode);
-                break;
-        }
-    }
-
-    function GoToFisierMedMode(Value) {
-        window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=5&id=' + Value, '_blank ')
-        pnlLoading.Hide();
-    }
-
-    function StartUpload() {
-        //pnlLoading.Show();
-    }
-
-    function EndUpload(s) {
-        //pnlLoading.Hide();
-        lblDoc.innerText = s.cpDocUploadName;
-        s.cpDocUploadName = null;
-    }
-
-
-</script>
-
 <body>
 
     <table width="100%">
@@ -183,13 +152,6 @@
                                         <td style="padding:10px !important;"><dx:ASPxCheckBox ID="chk3"  runat="server" Width="150" Text="Lucrul in ture de noapte"  TextAlign="Left"  Checked='<%#  Eval("Risc3") == DBNull.Value ? false : Convert.ToBoolean(Eval("Risc3"))%>'  ClientInstanceName="chkbx3" /></td>
                                         <td style="padding:10px !important;"><dx:ASPxCheckBox ID="chk4"  runat="server" Width="150" Text="Lucrul la casca"  TextAlign="Left"  Checked='<%#  Eval("Risc4") == DBNull.Value ? false : Convert.ToBoolean(Eval("Risc4"))%>'  ClientInstanceName="chkbx4" /></td>
                                         <td style="padding:10px !important;"><dx:ASPxCheckBox ID="chk5"  runat="server" Width="150" Text="Zgomot"  TextAlign="Left"  Checked='<%#  Eval("Risc5") == DBNull.Value ? false : Convert.ToBoolean(Eval("Risc5"))%>'  ClientInstanceName="chkbx5" /></td>
-
-                                        
-                                    
-                               
-
-
-
                                      </tr>                                    
                                     <tr>
                                         <td style="padding:10px !important;" colspan="2">
@@ -202,7 +164,7 @@
                                                 </BrowseButton>
                                                 <ValidationSettings ShowErrors="False"></ValidationSettings>
 
-                                                <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                                                <ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
                                             </dx:ASPxUploadControl>
                                         </td>
                                     </tr>
@@ -225,6 +187,15 @@
         </tr>
     </table> 
 
+    <script>
+        function grDateMedicina_CustomButtonClick(s, e) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=5&id=' + s.GetRowKey(s.GetFocusedRowIndex()), '_blank ');
+        }
 
+        function EndUpload(s) {
+            lblDoc.innerText = s.cpDocUploadName;
+            s.cpDocUploadName = null;
+        }
+    </script>
 
 </body>

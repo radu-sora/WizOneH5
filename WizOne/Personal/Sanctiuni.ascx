@@ -1,8 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Sanctiuni.ascx.cs" Inherits="WizOne.Personal.Sanctiuni" %>
 
-
-
-
 <style type="text/css">
     .auto-style2 {
         height: 44px;
@@ -52,43 +49,6 @@
         height: 48px;
     }
 </style>
-
-
-
-
-<script language="javascript" type="text/javascript">
-
-    function grDateSanctiuni_CustomButtonClick(s, e) {
-        switch (e.buttonID) {
-            case "btnAtasament":
-                pnlLoading.Show();
-                grDateSanctiuni.GetRowValues(e.visibleIndex, 'IdAuto', GoToFisierSancMode);
-                break;
-        }
-    }
-
-    function GoToFisierSancMode(Value) {
-        window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=6&id=' + Value, '_blank ')
-        pnlLoading.Hide();
-    }
-
-    function StartUpload() {
-        //pnlLoading.Show();
-    }
-
-    function EndUpload(s) {
-        //pnlLoading.Hide();
-        lblDoc.innerText = s.cpDocUploadName;
-        s.cpDocUploadName = null;
-    }
-
-    function OnValueChanged(s, e) {
-        //if (!txtComponentaComisie.GetValue()) {
-        //    txtComponentaComisie.SetValue(s.GetValue());
-        //}
-    }
-
-</script>
 
 <body>
 
@@ -331,8 +291,7 @@
                                             Numar proces verbal</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxSpinEdit ID="txtNrProcesCercetare" ClientInstanceName="txtNrProcesCercetare" runat="server" Width="110px" Value='<%# Bind("NrProcesCercetare") %>' DecimalPlaces="0">
-                                                <SpinButtons ShowIncrementButtons="false"></SpinButtons>  
-                                                <ClientSideEvents ValueChanged="function(s, e) { OnValueChanged(s, e); }" />
+                                                <SpinButtons ShowIncrementButtons="false"></SpinButtons>
                                             </dx:ASPxSpinEdit>
                                         </td>
                                         <td class="auto-style6" style="padding:10px;">
@@ -353,7 +312,7 @@
                                                 </BrowseButton>
                                                 <ValidationSettings ShowErrors="False">
                                                 </ValidationSettings>
-                                                <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                                                <ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
                                             </dx:ASPxUploadControl>
                                         </td>
                                         <td class="auto-style25" style="padding:10px;">Data inregistrare comisie</td>
@@ -395,6 +354,17 @@
         </tr>
     </table> 
 
-
-
 </body>
+
+<script>
+
+    function grDateSanctiuni_CustomButtonClick(s, e) {
+        window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=6&id=' + s.GetRowKey(s.GetFocusedRowIndex()), '_blank ')
+    }
+
+    function EndUpload(s) {
+        lblDoc.innerText = s.cpDocUploadName;
+        s.cpDocUploadName = null;
+    }
+
+</script>

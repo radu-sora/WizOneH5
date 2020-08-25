@@ -228,6 +228,8 @@ namespace WizOne.Eval
                                 Session["CompletareChestionar_TrebuieSaIaLaCunostinta"] = "0";
                                 Session["CompletareChestionar_ALuatLaCunostinta"] = "0";
 
+                                //Florin 2020.08.21
+                                Session["CompletareChestionar_IdRaport"] = -99;
 
                                 //Florin 2019.01.31  Cerinta de la Claim
                                 //daca utilizatorul logat este HR si avem rolul de HR pe circuit, actualizam in istoric cu userul logat
@@ -262,6 +264,7 @@ namespace WizOne.Eval
                                     Session["CompletareChestionar_TrebuieSaIaLaCunostinta"] = General.Nz(dr["TrebuieSaIaLaCunostinta"], "0");
                                     Session["CompletareChestionar_ALuatLaCunostinta"] = General.Nz(dr["ALuatLaCunostinta"], "0");
                                     Session["CompletareChestionar_Aprobat"] = General.Nz(dr["Aprobat"], "0");
+                                    Session["CompletareChestionar_IdRaport"] = Convert.ToInt32(General.Nz(dr["IdRaport"], -99));
                                 }
 
                                 Session["lstEval_ObiIndividualeTemp"] = null;

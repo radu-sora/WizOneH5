@@ -224,6 +224,11 @@
                 </dx:ASPxDropDownEdit>
 
             </td>
+            <td >
+                 <label id="lblGen" runat="server" style="display:inline-block;"></label>	
+                <dx:ASPxCheckBox ID="chkGen"  runat="server" Width="150" Text="Cu generare document"  TextAlign="Left" Checked="true"  ClientInstanceName="chkGen" >                                    
+                </dx:ASPxCheckBox>
+            </td>
             <td align="left">
                 <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>

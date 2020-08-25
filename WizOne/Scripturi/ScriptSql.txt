@@ -14495,3 +14495,6 @@ GO
 
 ALTER TABLE Eval_Quiz ADD IdRaport int
 GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('Avs_CampuriZileProbaPreavizCOR' , '0', '1 - Se afiseaza campuri pentru zile proba/preaviz/demisie la modif. in avans de cod COR; 0 - nu se afiseaza' , 0)
+GO

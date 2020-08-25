@@ -356,6 +356,18 @@
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox>
                     </td>
+                    <td id="lbl14Act" runat="server" colspan="2">
+                        <dx:ASPxLabel  ID="lblTxt14Act" runat="server"  Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt3Act" runat="server"  Visible="false">
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox>
+                    </td>
+                    <td id="lbl15Act" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt15Act" runat="server"   Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt4Act" runat="server"  Visible="false" >
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox>
+                    </td>
                     <td id="lbl10Act" runat="server">
                         <dx:ASPxLabel  ID="lblTxt5Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxDateEdit ID="de1Act" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
@@ -455,6 +467,18 @@
                     <td id="lbl9Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt2Nou" runat="server"   Visible="false"></dx:ASPxLabel >
                         <dx:ASPxTextBox ID="txt2Nou" runat="server"  Visible="false">
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox> 
+                    </td>
+                    <td id="lbl15Nou" runat="server" colspan="2">
+                        <dx:ASPxLabel  ID="lblTxt15Nou" runat="server"   Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt3Nou" runat="server"  Visible="false">
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox>
+                    </td>
+                    <td id="lbl16Nou" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt16Nou" runat="server"   Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt4Nou" runat="server"  Visible="false">
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox> 
                     </td>

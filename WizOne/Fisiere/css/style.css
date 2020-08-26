@@ -1,6 +1,5 @@
-﻿html {
-    /*overflow-y: scroll;
-    height: 100%;*/
+﻿html, form {
+    height: 100%;
 }
 
 body {
@@ -196,6 +195,20 @@ a, a:focus, a:hover {
     }
 }
 
+/* Content control */
+.content {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    overflow: auto;
+}
+
+@media all and (max-width:768px) {
+    .content {
+        padding: 0;
+    }
+}
+
 /* Footer control */
 @media all and (max-width:768px) {
     .footer {
@@ -374,6 +387,106 @@ a, a:focus, a:hover {
     display:block;
     line-height:1.5;
     padding:0 16px 11px; 
+}
+
+/* Page content layout */
+.page-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+    .page-content > div:nth-child(1) {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+        .page-content > div:nth-child(1) > div:nth-child(1),
+        .page-content > div:nth-child(1) > div:nth-child(2) > * {
+            margin-bottom: 10px;
+        }
+        .page-content > div:nth-child(1) > div:nth-child(2) {
+            float: right;
+        }             
+    .page-content > div:nth-child(2) {
+        height: 100%;
+        overflow: hidden;
+    }    
+
+@media all and (max-width:768px) {
+    .page-content > div:nth-child(1) {        
+        padding: 5px 5px 0;
+    }
+        .page-content > div:nth-child(1) > div:nth-child(1),
+        .page-content > div:nth-child(1) > div:nth-child(2) > * {
+            margin-bottom: 5px;
+        }        
+}
+
+/* DX gridview responsive layout. Works only for VerticalScrollBarMode = Auto */
+.dx-grid-adaptive {
+    width: 100% !important;
+    height: 100%;
+}
+    .dx-grid-adaptive > tbody > tr > td {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+        .dx-grid-adaptive > tbody > tr > td > .dxgvCSD {
+            flex: 1 0 0;
+            height: 100% !important;
+        }
+        .dx-grid-adaptive > tbody > tr > td > .dxAC {
+            flex: 1 0 0;
+        }
+            .dx-grid-adaptive > tbody > tr > td > .dxAC > div {
+                height: 100%;
+            }
+                .dx-grid-adaptive > tbody > tr > td > .dxAC > div > .dxgvCSD {
+                    height: 100% !important;
+                }
+
+@media all and (min-width:768px) {
+    .dx-grid-adaptive.dx-grid-adaptive-hide-desktop-search div[class*="dxgvSearchPanel"] {
+        display: none;
+    }
+}
+
+@media all and (max-width:768px) {
+    /* Fix DX search panel for max width */
+    .dx-grid-adaptive div[class*="dxgvSearchPanel"] {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+        .dx-grid-adaptive div[class*="dxgvSearchPanel"] > table {
+            width: 100%;
+            max-width: 100%;
+        }
+    
+    /* Works only for AdaptivityMode = HideDataCellsWindowLimit */
+    .dx-grid-adaptive div[class*="dxgvAdaptiveHeaderPanel"] + .dxgvHSDC, /* Fix DX adaptive layout bug when using swipe left/right */
+    .dx-grid-adaptive.dx-grid-adaptive-hide-header div[class*="dxgvAdaptiveHeaderPanel"],
+    .dx-grid-adaptive.dx-grid-adaptive-hide-header-column1 div[class*="dxgvAdaptiveHeaderPanel"] > .dxgvADH:nth-child(2),
+    /* Works only for AdaptivityMode = HideDataCells with one column detail section */
+    /* Header section */
+    .dx-grid-adaptive.dx-grid-adaptive-hide-filter .dxgvHSDC > div > table > tbody > tr[class*="dxgvFilterRow"],
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvHSDC > div > table > tbody > tr > td:first-child,
+    /* Data section */
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class="dxgvArm"] > td:first-child,
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td:first-child,
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class*="dxgvDetailRow"] > td:first-child > table > tbody > tr:first-child {
+        display: none;
+    }
+
+    /* Fix DX adaptive layout bug when using swipe left/right with AdaptivityMode = HideDataCells (incomplete!) */
+    /*.dx-grid-adaptive .dxgvRBB > tbody > tr > td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }*/
 }
            
 /* Badge widget */

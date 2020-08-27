@@ -49,6 +49,13 @@ namespace WizOne.Pontaj
                 GridViewDataComboBoxColumn colAct = (grCC.Columns["IdActivitate"] as GridViewDataComboBoxColumn);
                 colAct.PropertiesComboBox.DataSource = dtAct;
 
+                //Radu 26.08.2020
+                string sql = @"SELECT F10003, F10008 + ' ' + f10009 as ""Nume"" FROM F100 ";
+                if (Constante.tipBD == 2) sql = @"SELECT F10003, F10008 || ' ' || f10009 as ""Nume"" FROM F100 ";
+                DataTable dtAng = General.IncarcaDT(sql, null);
+                GridViewDataComboBoxColumn colAng = (grCC.Columns["F10003"] as GridViewDataComboBoxColumn);
+                colAng.PropertiesComboBox.DataSource = dtAng;
+
                 if (!IsPostBack)
                 {
                     txtDataInc.Value = DateTime.Now;
@@ -350,8 +357,14 @@ namespace WizOne.Pontaj
                 DataTable dtHr = General.IncarcaDT(sqlHr, null);
                 if (dtHr != null && dtHr.Rows.Count > 0) esteHR = true;
 
-                if (General.Nz(Session["EsteAdmin"],"").ToString() == "1" || esteHR)
+                if (General.Nz(Session["EsteAdmin"], "").ToString() == "1" || esteHR)
+                {
                     filtru = "";
+                    //Radu 26.08.2020
+                    GridViewDataComboBoxColumn colAng = (grCC.Columns["F10003"] as GridViewDataComboBoxColumn);
+                    colAng.Visible = true;
+                    colAng.ShowInCustomizationForm = true;
+                }
                 DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_CC"" WHERE {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Value))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Value))} {filtru}", null);
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
 

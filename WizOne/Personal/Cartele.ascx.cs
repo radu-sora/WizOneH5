@@ -138,32 +138,35 @@ namespace WizOne.Personal
                 //    {
                 //    }
                 //}
+                int verif = Convert.ToInt32(Dami.ValoareParam("MP_VerifIntervalCartele", "0"));
+                if (verif == 1)
+                {
+                    for (int i = 0; i <= grDateCartele.VisibleRowCount - 1; i++)
+                    {
+                        object[] obj = grDateCartele.GetRowValues(i, new string[] { "DataInceput", "DataSfarsit" }) as object[];
 
-                //for (int i = 0; i <= grDateCartele.VisibleRowCount - 1; i++)
-                //{
-                //    object[] obj = grDateCartele.GetRowValues(i, new string[] { "DataInceput", "DataSfarsit" }) as object[];
+                        DateTime dtInc = Convert.ToDateTime(obj[0]);
+                        DateTime dtSf = Convert.ToDateTime(obj[1]);
 
-                //    DateTime dtInc = Convert.ToDateTime(obj[0]);
-                //    DateTime dtSf = Convert.ToDateTime(obj[1]);
+                        if (dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                        {
+                            try
+                            {
+                                if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
+                                {
+                                    grDateCartele.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent!";
+                                    e.Cancel = true;
+                                    grDateCartele.CancelEdit();
+                                    return;
+                                }
+                            }
+                            catch (Exception)
+                            {
 
-                //    if (dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
-                //    {
-                //        try
-                //        {
-                //            if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
-                //            {
-                //                grDateCartele.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent!";
-                //                e.Cancel = true;
-                //                grDateCartele.CancelEdit();
-                //                return;
-                //            }
-                //        }
-                //        catch (Exception)
-                //        {
-
-                //        }
-                //    }
-                //}
+                            }
+                        }
+                    }
+                }
 
                 object[] row = new object[ds.Tables["F100Cartele2"].Columns.Count];
                 int x = 0;
@@ -238,31 +241,35 @@ namespace WizOne.Personal
                 //    }
                 //}
 
-                //for (int i = 0; i <= grDateCartele.VisibleRowCount - 1; i++)
-                //{
-                //    object[] obj = grDateCartele.GetRowValues(i, new string[] { "DataInceput", "DataSfarsit" }) as object[];
+                int verif = Convert.ToInt32(Dami.ValoareParam("MP_VerifIntervalCartele", "0"));
+                if (verif == 1)
+                {
+                    for (int i = 0; i <= grDateCartele.VisibleRowCount - 1; i++)
+                    {
+                        object[] obj = grDateCartele.GetRowValues(i, new string[] { "DataInceput", "DataSfarsit" }) as object[];
 
-                //    DateTime dtInc = Convert.ToDateTime(obj[0]);
-                //    DateTime dtSf = Convert.ToDateTime(obj[1]);
+                        DateTime dtInc = Convert.ToDateTime(obj[0]);
+                        DateTime dtSf = Convert.ToDateTime(obj[1]);
 
-                //    if (grDateCartele.EditingRowVisibleIndex != i && dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
-                //    {
-                //        try
-                //        {
-                //            if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
-                //            {
-                //                grDateCartele.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent!";
-                //                e.Cancel = true;
-                //                grDateCartele.CancelEdit();
-                //                return;
-                //            }
-                //        }
-                //        catch (Exception)
-                //        {
+                        if (grDateCartele.EditingRowVisibleIndex != i && dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                        {
+                            try
+                            {
+                                if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
+                                {
+                                    grDateCartele.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent!";
+                                    e.Cancel = true;
+                                    grDateCartele.CancelEdit();
+                                    return;
+                                }
+                            }
+                            catch (Exception)
+                            {
 
-                //        }
-                //    }
-                //}
+                            }
+                        }
+                    }
+                }
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 

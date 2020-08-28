@@ -14498,3 +14498,6 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('Avs_CampuriZileProbaPreavizCOR' , '0', '1 - Se afiseaza campuri pentru zile proba/preaviz/demisie la modif. in avans de cod COR; 0 - nu se afiseaza' , 0)
 GO
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(100, 'Nota lichidare', 'Nota lichidare', 'Personal\NotaLichidare', 1, 'm1.png')
+GO

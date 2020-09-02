@@ -15156,5 +15156,22 @@ COMMIT;
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('Avs_CampuriZileProbaPreavizCOR' , '0', '1 - Se afiseaza campuri pentru zile proba/preaviz/demisie la modif. in avans de cod COR; 0 - nu se afiseaza' , 0);
 COMMIT;
 
-  INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('MP_VerifIntervalCartele' , '0', '1 - se verifica daca, la introducerea unei cartele, intervalul se intersecteaza cu cel al unei alte cartele a aceluiasi angajat; 0 - nu se verifica' , 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('MP_VerifIntervalCartele' , '0', '1 - se verifica daca, la introducerea unei cartele, intervalul se intersecteaza cu cel al unei alte cartele a aceluiasi angajat; 0 - nu se verifica' , 0);
 COMMIT;
+
+
+----  2.2.131  ----
+
+
+--https://github.com/wizromRD/WizOne/issues/566
+--In tabela Eval_tblTipValoriLinii nu se salveaza inregistrarile decat pentru primul set de Valori creat in tabela Eval_tblTipValori #566
+ CREATE OR REPLACE TRIGGER "Auto_Eval_tblTipValoriLinii" 
+  BEFORE INSERT ON "Eval_tblTipValoriLinii"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_tblTipValoriLinii_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_tblTipValoriLinii" ENABLE;

@@ -1,16 +1,12 @@
-﻿using DevExpress.Web;
-using Oracle.ManagedDataAccess.Client;
+﻿using Oracle.ManagedDataAccess.Client;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Eval
@@ -261,11 +257,11 @@ namespace WizOne.Eval
                 row["TIME"] = DateTime.Now;
                 row["USER_NO"] = Session["UserId"];
 
-                DataTable dtTemp = General.IncarcaDT("SELECT MAX(\"IdAuto\") + 1 FROM \"Eval_tblTipValoriLinii\"", null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0)
-                    row["IdAuto"] = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
-                else
-                    row["IdAuto"] = 1;
+                //DataTable dtTemp = General.IncarcaDT("SELECT MAX(\"IdAuto\") + 1 FROM \"Eval_tblTipValoriLinii\"", null);
+                //if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0)
+                //    row["IdAuto"] = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
+                //else
+                //    row["IdAuto"] = 1;
 
                 dt.Rows.Add(row);
                 e.Cancel = true;

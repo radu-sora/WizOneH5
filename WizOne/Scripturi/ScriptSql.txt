@@ -14499,5 +14499,20 @@ GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('Avs_CampuriZileProbaPreavizCOR' , '0', '1 - Se afiseaza campuri pentru zile proba/preaviz/demisie la modif. in avans de cod COR; 0 - nu se afiseaza' , 0)
 GO
 
-  INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('MP_VerifIntervalCartele' , '0', '1 - se verifica daca, la introducerea unei cartele, intervalul se intersecteaza cu cel al unei alte cartele a aceluiasi angajat; 0 - nu se verifica' , 0)
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('MP_VerifIntervalCartele' , '0', '1 - se verifica daca, la introducerea unei cartele, intervalul se intersecteaza cu cel al unei alte cartele a aceluiasi angajat; 0 - nu se verifica' , 0)
+GO
+
+
+----  2.2.131  ----
+
+
+--https://github.com/wizromRD/WizOne/issues/566
+--In tabela Eval_tblTipValoriLinii nu se salveaza inregistrarile decat pentru primul set de Valori creat in tabela Eval_tblTipValori #566
+ALTER TABLE Eval_tblTipValoriLinii DROP CONSTRAINT PK_Eval_tblTipValoriLinii
+GO
+ALTER TABLE Eval_tblTipValoriLinii DROP COLUMN IdAuto
+GO
+ALTER TABLE Eval_tblTipValoriLinii ADD IdAuto int IDENTITY(1,1)
+GO
+ALTER TABLE Eval_tblTipValoriLinii ADD CONSTRAINT PK_Eval_tblTipValoriLinii PRIMARY KEY (IdAuto)
 GO

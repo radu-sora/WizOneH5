@@ -3481,13 +3481,13 @@ namespace WizOne.Module
                     dt = "trunc(sysdate) ";
                     tipData = "NUMBER(9)";
                 }
-                            
+
                 strSql = @"SELECT * FROM (
                             SELECT CAST(A.F10003 AS {8}) AS ""Marca"",A.F10017 AS ""CNP"",A.F10008 {4} ' ' {4} A.F10009 AS ""NumeComplet"",
                             E.F00204 AS ""Companie"",F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00506 AS ""Sectie"",I.F00607 AS ""Departament"", A.F10022 AS ""DataAngajarii"",
                             CASE WHEN A.F10025 = 900 THEN '#ffff8000' ELSE CASE WHEN A.F10025 = 999 THEN '#dc96dc' ELSE (CASE WHEN A.F10025 = 0 THEN (CASE WHEN (A.F100925 <> 0 AND F100922 IS NOT NULL AND F100923 IS NOT NULL AND F100923 IS NOT NULL AND F100922 <= {5} AND {5} <= F100923 AND {5} <= F100924) THEN '#ffffffc8' ELSE CASE WHEN (A.F100915 <= {5} AND {5} <= A.F100916) THEN '#FF0066FF' ELSE '#ffc8ffc8' END END) ELSE '#ffffc8c8' END) END END AS ""Culoare"",
                             CASE WHEN A.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN A.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN A.F10025 = 0 THEN (CASE WHEN (A.F100925 <> 0 AND F100922 IS NOT NULL AND F100923 IS NOT NULL AND F100923 IS NOT NULL AND F100922 <= {5} AND {5} <= F100923 AND {5} <= F100924) THEN 'Activ suspendat' ELSE CASE WHEN (A.F100915 <= {5} AND {5} <= A.F100916) THEN 'Activ detasat' ELSE 'Activ' END END) ELSE 'Inactiv' END) END END AS ""Stare"",
-                            (CASE WHEN COALESCE(A.F10083,'') = '' THEN '' ELSE CASE WHEN adr.""IdTipStrada"" IS NULL OR adr.""IdTipStrada"" = 0 THEN ' Str. ' ELSE (SELECT ""Denumire"" FROM ""tblTipStrada"" WHERE ""Id"" = adr.""IdTipStrada"") {4} ' ' END {4} a.F10083 END) {4}
+                            (CASE WHEN COALESCE(A.F10083,'') = '' THEN '' ELSE CASE WHEN adr.F1001021 IS NULL OR adr.F1001021 = 0 THEN ' Str. ' ELSE (SELECT ""Denumire"" FROM ""tblTipStrada"" WHERE ""Id"" = adr.F1001021) {4} ' ' END {4} a.F10083 END) {4}
                             (CASE WHEN COALESCE(A.F10084,'') = '' THEN '' ELSE ' Nr. ' {4} a.F10084 END) {4}
                             (CASE WHEN COALESCE(A.F10085,'') = '' THEN '' ELSE ' Bloc. ' {4} a.F10085 END) {4}
                             (CASE WHEN COALESCE(A.F100892,'') = '' THEN '' ELSE ' Sc. ' {4} a.F100892 END) {4}
@@ -3515,9 +3515,9 @@ namespace WizOne.Module
                             left join Localitati niv1 on niv1.SIRUTA = a.F100921
                             left join Localitati niv2 on niv2.SIRUTA = a.F100914
                             left join Localitati niv3 on niv3.SIRUTA = a.F100897
-                            LEFT JOIN ""F100Adrese"" adr ON adr.F10003 = a.F10003
+                            LEFT JOIN F1001 adr ON adr.F10003 = a.F10003
                             {2} {7}
-                            WHERE 1=1 AND adr.""Principal"" =1 {3}
+                            WHERE 1=1  {3}
                             ) X WHERE 1=1 {0}
                             ORDER BY ""NumeComplet"" ";
 

@@ -15152,3 +15152,9 @@ COMMIT;
 
 ALTER TABLE "Eval_Quiz" ADD "IdRaport" number(10);
 COMMIT;
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('Avs_CampuriZileProbaPreavizCOR' , '0', '1 - Se afiseaza campuri pentru zile proba/preaviz/demisie la modif. in avans de cod COR; 0 - nu se afiseaza' , 0);
+COMMIT;
+
+  INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('MP_VerifIntervalCartele' , '0', '1 - se verifica daca, la introducerea unei cartele, intervalul se intersecteaza cu cel al unei alte cartele a aceluiasi angajat; 0 - nu se verifica' , 0);
+COMMIT;

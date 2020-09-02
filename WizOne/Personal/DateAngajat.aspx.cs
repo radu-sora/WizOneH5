@@ -709,15 +709,18 @@ namespace WizOne.Personal
                                 case "Atasamente":
                                     {
                                         Dictionary<int, Personal.Atasamente.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Atasamente"] as Dictionary<int, Personal.Atasamente.metaUploadFile>;
-                                        foreach(var l in lstFiles)
+                                        if (lstFiles != null)
                                         {
-                                            DataRow[] arr = ds.Tables[i].Select("IdAuto = " + l.Key);
-                                            if (arr != null && arr.Count() > 0 && arr[0] != null)
+                                            foreach (var l in lstFiles)
                                             {
-                                                DataRow dr = arr[0];
-                                                string numeFisier = General.CreazaFisierInDisc(General.Nz(dr["FisierNume"], "Fisier").ToString(), dr["Attach"], ds.Tables[i].TableName);
-                                                dr["Attach"] = null;
-                                                dr["FisierNume"] = numeFisier;
+                                                DataRow[] arr = ds.Tables[i].Select("IdAuto = " + l.Key);
+                                                if (arr != null && arr.Count() > 0 && arr[0] != null)
+                                                {
+                                                    DataRow dr = arr[0];
+                                                    string numeFisier = General.CreazaFisierInDisc(General.Nz(dr["FisierNume"], "Fisier").ToString(), dr["Attach"], ds.Tables[i].TableName);
+                                                    dr["Attach"] = null;
+                                                    dr["FisierNume"] = numeFisier;
+                                                }
                                             }
                                         }
                                     }

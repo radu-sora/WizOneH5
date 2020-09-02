@@ -257,6 +257,12 @@ namespace WizOne.Eval
                 row["TIME"] = DateTime.Now;
                 row["USER_NO"] = Session["UserId"];
 
+                DataTable dtTemp = General.IncarcaDT("SELECT MAX(\"IdAuto\") + 1 FROM \"Eval_tblTipValoriLinii\"", null);
+                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0)
+                    row["IdAuto"] = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
+                else
+                    row["IdAuto"] = 1;
+
                 dt.Rows.Add(row);
                 e.Cancel = true;
                 grDate.CancelEdit();

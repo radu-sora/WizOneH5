@@ -99,24 +99,6 @@ namespace WizOne.Eval
         {
             try
             {
-                //string sqlQuery = string.Empty;
-                //int id = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
-                //DataTable dt = Session["InformatiaCurenta"] as DataTable;
-
-                //#region salvare Eval_ObiectivXActivitate
-                //SqlDataAdapter da = new SqlDataAdapter();
-                //da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_tblTipValoriLinii\" ", null);
-                //SqlCommandBuilder cb = new SqlCommandBuilder(da);
-                //da.Update(dt);
-
-                //da.Dispose();
-                //da = null;
-
-                //HttpContext.Current.Session["Sablon_Tabela"] = "Eval_tblTipValori";
-                //Response.Redirect("~/Pagini/SablonLista.aspx", false);
-                //#endregion
-
-
                 string sqlQuery = string.Empty;
                 int id = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
@@ -154,54 +136,11 @@ namespace WizOne.Eval
                         break;
                 }
 
-                #region salvare Eval_tblTipValori
-                if (Constante.tipBD == 1)
-                {
-                    SqlDataAdapter daHead = new SqlDataAdapter();
-                    daHead.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_tblTipValori\" ", null);
-                    SqlCommandBuilder cbHead = new SqlCommandBuilder(daHead);
-                    daHead.Update(dtHead);
-                }
-                else
-                {
-                    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_tblTipValori\" WHERE ROWNUM = 0", null);
-                    OracleCommandBuilder cbbHead = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(dtHead);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
-
-                }
-                #endregion
-
-                #region salvare Eval_tblTipValoriLinii
-                if (Constante.tipBD == 1)
-                {
-                    SqlDataAdapter da = new SqlDataAdapter();
-                    da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_tblTipValoriLinii\" ", null);
-                    SqlCommandBuilder cb = new SqlCommandBuilder(da);
-                    da.Update(dt);
-
-                    da.Dispose();
-                    da = null;
-                }
-                else
-                {
-                    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_tblTipValoriLinii\" WHERE ROWNUM = 0", null);
-                    OracleCommandBuilder cb = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(dt);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
-
-                }
-                #endregion
+                General.SalveazaDate(dtHead, "Eval_tblTipValori");
+                General.SalveazaDate(dt, "Eval_tblTipValoriLinii");
 
                 HttpContext.Current.Session["Sablon_Tabela"] = "Eval_tblTipValori";
                 Response.Redirect("~/Pagini/SablonLista.aspx", false);
-
-
-
             }
             catch (Exception ex)
             {
@@ -232,19 +171,6 @@ namespace WizOne.Eval
             }
         }
 
-        protected void grDate_AutoFilterCellEditorInitialize(object sender, DevExpress.Web.ASPxGridViewEditorEventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
         protected void grDate_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
         {
             try
@@ -254,14 +180,9 @@ namespace WizOne.Eval
                 int x = dt.Rows.Count;
                 row["Id"] = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
                 row["Valoare"] = e.NewValues["Valoare"];
+                row["Nota"] = e.NewValues["Nota"];
                 row["TIME"] = DateTime.Now;
                 row["USER_NO"] = Session["UserId"];
-
-                DataTable dtTemp = General.IncarcaDT("SELECT MAX(\"IdAuto\") + 1 FROM \"Eval_tblTipValoriLinii\"", null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0)
-                    row["IdAuto"] = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
-                else
-                    row["IdAuto"] = 1;
 
                 dt.Rows.Add(row);
                 e.Cancel = true;
@@ -326,22 +247,5 @@ namespace WizOne.Eval
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-        protected void grDate_CustomErrorText(object sender, DevExpress.Web.ASPxGridViewCustomErrorTextEventArgs e)
-        {
-            try
-            {
-                //e.ErrorText = msgError;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        #region Methods
-
-        #endregion
     }
 }

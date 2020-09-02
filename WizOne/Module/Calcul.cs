@@ -1819,7 +1819,7 @@ namespace WizOne.Module
             int rez = 0;
 
             int ultima = 0;
-            bool prima = true;
+            //bool prima = true;
 
             int dif = 0;
             int total = 0;

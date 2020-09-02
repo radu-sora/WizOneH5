@@ -1,5 +1,7 @@
 ﻿using DevExpress.Web;
+using DevExpress.Web.Data;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -701,22 +703,31 @@ namespace WizOne.Pagini
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow row = dt.Rows.Find(keys);
+                if (row == null) return;
 
-                foreach (DataColumn col in dt.Columns)
+                //Florin 2020.09.02     Begin
+                var dic = e.NewValues.Cast<DictionaryEntry>().OrderBy(r => r.Key).ToDictionary(c => c.Key, d => d.Value);
+
+                string strSql = @"SELECT Camp + ',' FROM ""tblNomenConfig"" WHERE ""Tabela""=@1 AND COALESCE(""IdAutomat"",0)=1 FOR XML PATH('')";
+                if (Constante.tipBD == 2)
+                    strSql = @"SELECT LISTAGG(""Camp"", ',') WITHIN GROUP (ORDER BY ""Camp"") || ',' FROM ""tblNomenConfig"" WHERE ""Tabela"" = 'F006' AND COALESCE(""IdAutomat"",0)=1";
+                string fileds = "," + General.Nz(General.ExecutaScalar(strSql, new object[] { Session["Sablon_Tabela"] }),"").ToString();
+                
+                foreach (var l in dic)
                 {
-                    if (!col.AutoIncrement && (cmp.IndexOf(col.ColumnName.ToUpper() + ",") < 0))
-                    {
-                        //LeonardM 14.01.2018
-                        //modificare pentru salvare col autoincrement ok
-                        DataRow dr = General.IncarcaDR(@"SELECT * FROM ""tblNomenConfig"" WHERE ""Tabela"" = @1 AND ""Camp"" = @2 AND COALESCE(""IdAutomat"",0)=1", new object[] { Session["Sablon_Tabela"], col.ColumnName });
-                        if (General.Nz(dr, "").ToString() == "")
-                        {
-                            var edc = e.NewValues[col.ColumnName];
-                            row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
-                        }
-                    }
+                    string numeCol = l.Key.ToString();
+                    dynamic oldValue = e.OldValues[numeCol];
+                    dynamic newValue = e.NewValues[numeCol];
+                    if (oldValue != null && e.OldValues[numeCol].GetType() == typeof(System.DBNull))
+                        oldValue = null;
 
+                    if (oldValue != newValue && fileds.IndexOf("," + numeCol + ",") < 0)
+                    {
+                        var edc = e.NewValues[numeCol];
+                        row[numeCol] = e.NewValues[numeCol] ?? DBNull.Value;
+                    }
                 }
+                //Florin 2020.09.02     End
 
                 e.Cancel = true;
                 grDate.CancelEdit();

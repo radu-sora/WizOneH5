@@ -25,7 +25,7 @@ namespace WizOne.Personal
         protected void Page_Load(object sender, EventArgs e)
         {
             grDateCursuri.DataBind();
-            //grDateCursuri.AddNewRow();
+
             foreach (dynamic c in grDateCursuri.Columns)
             {
                 try
@@ -342,6 +342,8 @@ namespace WizOne.Personal
                 Session["DocUpload_MP_Cursuri"] = null;
 
                 row.Delete();
+
+                Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"], "").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Cursuri/' {Dami.Operator()} ""FisierNume"" FROM ""tblFisiere"" WHERE ""Tabela""='Admin_Medicina' AND ""Id""={keys[0]}"), "").ToString();
 
                 e.Cancel = true;
                 grDateCursuri.CancelEdit();

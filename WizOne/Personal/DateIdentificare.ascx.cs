@@ -17,6 +17,7 @@ using System.Configuration;
 using System.Text;
 using System.Drawing;
 using System.Diagnostics;
+using System.Web.Hosting;
 
 namespace WizOne.Personal
 {
@@ -208,6 +209,7 @@ namespace WizOne.Personal
             }
         }
 
+        //Florin 20.08.2020 - refacuta
         private void btnIncarca_Click()
         {
             try
@@ -215,30 +217,41 @@ namespace WizOne.Personal
                 if (Session["Marca"] != null)
                 {
                     byte[] fisier = null;
+                    string numeFisier = "";
                     DataTable dt = new DataTable();
                     DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                    DataRow dr = null;
                     if (ds.Tables.Contains("tblFisiere"))
                     {
                         dt = ds.Tables["tblFisiere"];
-                        DataRow dr = null;
-                        if (dt.Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString()).Count() > 0)
-                        {
-                            dr = dt.Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString()).FirstOrDefault();
-                            fisier = dr["Fisier"] as byte[];
-                        }
-                        else
-                        {
-                            fisier = General.IncarcaFotografie(img, Convert.ToInt32(Session["Marca"].ToString()), "F100") as byte[];
-                        }
+                        DataRow[] arr = dt.Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString());
+                        if (arr.Count() > 0) dr = arr[0];
                     }
                     else
+                        dr = General.IncarcaDR($@"SELECT * FROM ""tblFisiere"" WHERE ""Tabela"" = 'F100' AND ""Id"" = {General.Nz(Session["Marca"], -99)}", null);
+                    
+
+                    if (dr != null)
                     {
-                        fisier = General.IncarcaFotografie(img, Convert.ToInt32(Session["Marca"].ToString()), "F100") as byte[];
+                        fisier = (byte[])General.Nz(dr["Fisier"],null);
+                        numeFisier = General.Nz(dr["FisierNume"],"").ToString();
                     }
+
                     if (fisier != null)
                     {
                         string base64String = Convert.ToBase64String(fisier, 0, fisier.Length);
                         img.Src = "data:image/jpg;base64," + base64String;
+                    }
+                    else
+                    {
+                        if (numeFisier != "")
+                        {
+                            string cale = "~/FisiereApp/Fisiere/" + numeFisier;
+                            if (File.Exists(HostingEnvironment.MapPath(cale)))
+                            {
+                                img.Src = cale;
+                            }
+                        }
                     }
                 }
             }
@@ -248,6 +261,48 @@ namespace WizOne.Personal
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+
+        //private void btnIncarca_Click()
+        //{
+        //    try
+        //    {
+        //        if (Session["Marca"] != null)
+        //        {
+        //            byte[] fisier = null;
+        //            DataTable dt = new DataTable();
+        //            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+        //            if (ds.Tables.Contains("tblFisiere"))
+        //            {
+        //                dt = ds.Tables["tblFisiere"];
+        //                DataRow dr = null;
+        //                if (dt.Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString()).Count() > 0)
+        //                {
+        //                    dr = dt.Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString()).FirstOrDefault();
+        //                    fisier = dr["Fisier"] as byte[];
+        //                }
+        //                else
+        //                {
+        //                    fisier = General.IncarcaFotografie(img, Convert.ToInt32(Session["Marca"].ToString()), "F100") as byte[];
+        //                }
+        //            }
+        //            else
+        //            {
+        //                fisier = General.IncarcaFotografie(img, Convert.ToInt32(Session["Marca"].ToString()), "F100") as byte[];
+        //            }
+        //            if (fisier != null)
+        //            {
+        //                string base64String = Convert.ToBase64String(fisier, 0, fisier.Length);
+        //                img.Src = "data:image/jpg;base64," + base64String;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         private void btnSterge_Click()
         {

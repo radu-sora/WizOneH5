@@ -1,16 +1,12 @@
-﻿using DevExpress.Web;
-using Oracle.ManagedDataAccess.Client;
+﻿using Oracle.ManagedDataAccess.Client;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Eval

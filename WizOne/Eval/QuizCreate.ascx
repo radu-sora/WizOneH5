@@ -35,6 +35,9 @@
             case "txtNrZileLuatLaCunostinta":
                 lstValori.Set('NrZileLuatLaCunostinta', s.GetValue());
                 break;
+            case "cmbIdRaport":
+                lstValori.Set('IdRaport', s.GetValue());
+                break;
         }
     }
 
@@ -381,6 +384,16 @@
                                                                                         <dx:ASPxTextBox ID="txtNrZileLuatLaCunostinta" Width="30" ClientInstanceName="txtNrZileLuatLaCunostinta" ClientIDMode="Static" runat="server" Text='<%# Eval("NrZileLuatLaCunostinta") %>' AutoPostBack="false">
                                                                                             <ClientSideEvents TextChanged="function(s, e){ OnValueChanged(s); }" />
                                                                                         </dx:ASPxTextBox>
+                                                                                    </td>
+                                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                                    <td>
+                                                                                        <dx:ASPxLabel ID="lblIdRaport" Width="70" runat="server" Text="Raport" />
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <dx:ASPxComboBox ID="cmbIdRaport" ClientInstanceName="cmbIdRaport" ClientIDMode="Static" runat="server" DropDownStyle="DropDown" Value='<%# Eval("IdRaport") %>' TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" DataSourceID="dsRaps" >
+                                                                                            <ClientSideEvents SelectedIndexChanged="function(s, e){ OnValueChanged(s); }" />
+                                                                                        </dx:ASPxComboBox>
+                                                                                        <asp:ObjectDataSource runat="server" ID="dsRaps" TypeName="WizOne.Module.Evaluare" SelectMethod="GetRapoarte" />
                                                                                     </td>
                                                                                  </tr>
                                                                             </table>

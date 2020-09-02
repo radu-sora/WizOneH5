@@ -120,14 +120,14 @@ namespace WizOne
                                             int idStare = Convert.ToInt32(General.Nz(drCum["IdStare"], -99));
 
                                             string sqlAdr =
-                                                @"SELECT D.F70102 AS ""IdUser"", MAX(COALESCE(C.""IdRol"",1)) AS ""IdRol"", D.F10003 AS ""MarcaUser""
+                                                @"SELECT D.F70102 AS ""IdUser"", MIN(COALESCE(C.""IdRol"",1)) AS ""IdRol"", D.F10003 AS ""MarcaUser""
                                                 FROM ""relGrupAngajat"" B
                                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                                 INNER JOIN USERS D ON C.""IdSuper"" = D.F70102
                                                 WHERE D.""Mail"" = @1 AND B.F10003 = @2
                                                 GROUP BY D.F70102, D.F10003
                                                 UNION
-                                                SELECT D.F70102 AS ""IdUser"", MAX(COALESCE(C.""IdRol"", 1)) AS ""IdRol"", D.F10003 AS ""MarcaUser""
+                                                SELECT D.F70102 AS ""IdUser"", MIN(COALESCE(C.""IdRol"", 1)) AS ""IdRol"", D.F10003 AS ""MarcaUser""
                                                 FROM ""relGrupAngajat"" B
                                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                                 INNER JOIN F100 A ON b.F10003 = a.F10003

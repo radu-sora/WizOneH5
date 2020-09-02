@@ -107,7 +107,7 @@
             // xrTable1
             // 
             this.xrTable1.Dpi = 254F;
-            this.xrTable1.LocationFloat = new DevExpress.Utils.PointFloat(60F, 25F);
+            this.xrTable1.LocationFloat = new DevExpress.Utils.PointFloat(60F, 0F);
             this.xrTable1.Name = "xrTable1";
             this.xrTable1.Rows.AddRange(new DevExpress.XtraReports.UI.XRTableRow[] {
             this.xrTableRow1,
@@ -122,7 +122,7 @@
             this.xrTableRow10,
             this.xrTableRow11,
             this.xrTableRow12});
-            this.xrTable1.SizeF = new System.Drawing.SizeF(967.1971F, 1361.123F);
+            this.xrTable1.SizeF = new System.Drawing.SizeF(967.1971F, 1404.118F);
             // 
             // xrTableRow1
             // 
@@ -656,7 +656,7 @@
             this.xrTableCell26});
             this.xrTableRow10.Dpi = 254F;
             this.xrTableRow10.Name = "xrTableRow10";
-            this.xrTableRow10.Weight = 4.1120611445030439D;
+            this.xrTableRow10.Weight = 4.4787910790485626D;
             // 
             // xrTableCell33
             // 
@@ -688,8 +688,8 @@
             this.xrTableCell25.StylePriority.UseFont = false;
             this.xrTableCell25.StylePriority.UsePadding = false;
             this.xrTableCell25.StylePriority.UseTextAlignment = false;
-            this.xrTableCell25.Text = "[Camp16]\r\n[Camp17]\r\n[Camp18]\r\n[Camp19]\r\n[Camp20]\r\n[Camp21]\r\n[Camp22]\r\n[Camp23]\r\n[" +
-    "Camp24]\r\n[Camp25]\r\n[Camp26]\r\n[Camp27]\r\n[Camp28]";
+            this.xrTableCell25.Text = "[Camp16]\r\n[Camp17]\r\n[Camp18]\r\n[Camp19]\r\n[Camp20]\r\n[Camp21]\r\n[Camp75]\r\n[Camp22]\r\n[" +
+    "Camp23]\r\n[Camp24]\r\n[Camp25]\r\n[Camp26]\r\n[Camp27]\r\n[Camp28]";
             this.xrTableCell25.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
             this.xrTableCell25.Weight = 0.15074897805573462D;
             // 
@@ -736,7 +736,7 @@
             this.xrTableCell28});
             this.xrTableRow11.Dpi = 254F;
             this.xrTableRow11.Name = "xrTableRow11";
-            this.xrTableRow11.Weight = 0.50696642522626634D;
+            this.xrTableRow11.Weight = 0.598647682183812D;
             // 
             // xrTableCell34
             // 
@@ -809,7 +809,7 @@
             this.xrTableCell30});
             this.xrTableRow12.Dpi = 254F;
             this.xrTableRow12.Name = "xrTableRow12";
-            this.xrTableRow12.Weight = 0.50696674132255415D;
+            this.xrTableRow12.Weight = 0.52530284043669073D;
             // 
             // xrTableCell35
             // 

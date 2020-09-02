@@ -1,63 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="StudiiNou.ascx.cs" Inherits="WizOne.Personal.StudiiNou" %>
 
-
-<script type="text/javascript">
-    function OnIndexChangedStudii(s, e) {
-        var val = s.GetValue();
-        if (val >= 0) {        
-            var tb = grDateStudii.GetEditor("NivelISCED");
-            var sir = "<%=Session["MP_ComboStudii"] %>";
-            var res = sir.split(";");
-            for (var i = 0; i < res.length; i++) {
-                var linie = res[i].split(",");
-                if (linie[0] == val) {
-                    tb.SetValue(linie[1]);
-                    break;
-                }
-            }  
-        }
-    }
-
-    function grDateStudii_CustomButtonClick(s, e) {
-        switch (e.buttonID) {
-            case "btnAtasament":
-                pnlLoading.Show();
-                grDateStudii.GetRowValues(e.visibleIndex, 'IdAuto', GoToFisierStudiiMode);
-                break;
-        }
-    }
-
-    function GoToFisierStudiiMode(Value) {
-        window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=11&id=' + Value, '_blank ')
-        pnlLoading.Hide();
-    }
-
-    function StartUpload() {
-        //pnlLoading.Show();
-    }
-
-    function EndUpload(s) {
-        //pnlLoading.Hide();
-        lblDoc.innerText = s.cpDocUploadName;
-        s.cpDocUploadName = null;
-    }
-
-    function OnValueChanged(s, e) {
-        var val = s.GetValue(); 
-        if (val >= 0) {   
-            var sir = "<%=Session["MP_ComboStudii"] %>";
-            var res = sir.split(";");
-            for (var i = 0; i < res.length; i++) {
-                var linie = res[i].split(",");
-                if (linie[0] == val) {
-                    txtNivISCED.SetValue(linie[1]);
-                    break;
-                }
-            }  
-        }   
-    }
-</script>
-
 <body>
 
     <table width="100%">
@@ -227,7 +169,7 @@
                                                 </BrowseButton>
                                                 <ValidationSettings ShowErrors="False">
                                                 </ValidationSettings>
-                                                <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                                                <ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
                                             </dx:ASPxUploadControl>
                                         </td>        
                                     </tr>                 
@@ -254,3 +196,45 @@
 
 
 </body>
+
+<script>
+    function OnIndexChangedStudii(s, e) {
+        var val = s.GetValue();
+        if (val >= 0) {
+            var tb = grDateStudii.GetEditor("NivelISCED");
+            var sir = "<%=Session["MP_ComboStudii"] %>";
+            var res = sir.split(";");
+            for (var i = 0; i < res.length; i++) {
+                var linie = res[i].split(",");
+                if (linie[0] == val) {
+                    tb.SetValue(linie[1]);
+                    break;
+                }
+            }
+        }
+    }
+
+    function grDateStudii_CustomButtonClick(s, e) {
+        window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=11&id=' + s.GetRowKey(s.GetFocusedRowIndex()), '_blank ')
+    }
+
+    function EndUpload(s) {
+        lblDoc.innerText = s.cpDocUploadName;
+        s.cpDocUploadName = null;
+    }
+
+    function OnValueChanged(s, e) {
+        var val = s.GetValue();
+        if (val >= 0) {
+            var sir = "<%=Session["MP_ComboStudii"] %>";
+            var res = sir.split(";");
+            for (var i = 0; i < res.length; i++) {
+                var linie = res[i].split(",");
+                if (linie[0] == val) {
+                    txtNivISCED.SetValue(linie[1]);
+                    break;
+                }
+            }
+        }
+    }
+</script>

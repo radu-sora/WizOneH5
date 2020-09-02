@@ -565,7 +565,7 @@ namespace WizOne.Pagini
                     x++;
                 }
 
-                bool err = false;
+                //bool err = false;
                 //if (e.NewValues["ColoanaBD"] == null || e.NewValues["ColoanaBD"].ToString().Length <= 0)
                 //    err = true;
 
@@ -602,7 +602,7 @@ namespace WizOne.Pagini
                 DataTable dt = Session["ImportDateNomen_Grid"] as DataTable;
 
 
-                bool err = false;
+                //bool err = false;
                 //if (e.NewValues["ColoanaBD"] == null || e.NewValues["ColoanaBD"].ToString().Length <= 0)
                 //    err = true;
 

@@ -412,8 +412,6 @@ namespace WizOne.Eval
                     cmbTipObiect.DataBind();
                 }
 
-                
-
             }
             catch (Exception ex)
             {
@@ -512,6 +510,10 @@ namespace WizOne.Eval
                         break;
                     case "txtConditii":
                         ds.Tables[0].Rows[0]["ConditiiRTF"] = param[1];
+                        Session["InformatiaCurentaEvalQuiz"] = ds;
+                        break;
+                    case "cmbIdRaport":
+                        ds.Tables[0].Rows[0]["IdRaport"] = param[1];
                         Session["InformatiaCurentaEvalQuiz"] = ds;
                         break;
                 }

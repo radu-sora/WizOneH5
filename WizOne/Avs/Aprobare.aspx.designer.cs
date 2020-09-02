@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Avs {
-    
-    
-    public partial class Aprobare {
-        
+namespace WizOne.Avs
+{
+
+
+    public partial class Aprobare
+    {
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
+
         /// <summary>
         /// btnRespinge control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnRespinge;
-        
+
         /// <summary>
         /// btnAproba control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnAproba;
-        
+
         /// <summary>
         /// btnSave control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnSave;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// divRol control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlTableCell divRol;
-        
+
         /// <summary>
         /// lblRol control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRol;
-        
+
         /// <summary>
         /// cmbRol control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbRol;
-        
+
         /// <summary>
         /// lblAngFiltru control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAngFiltru;
-        
+
         /// <summary>
         /// cmbAngFiltru control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbAngFiltru;
-        
+
         /// <summary>
         /// lblAtrFiltru control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAtrFiltru;
-        
+
         /// <summary>
         /// cmbAtributeFiltru control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbAtributeFiltru;
-        
+
         /// <summary>
         /// lblStare control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblStare;
-        
+
         /// <summary>
         /// checkComboBoxStare control.
         /// </summary>
@@ -137,7 +139,25 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDropDownEdit checkComboBoxStare;
-        
+
+        /// <summary>
+        /// lblGen control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblGen;
+
+        /// <summary>
+        /// chkGen control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkGen;
+
         /// <summary>
         /// btnFiltru control.
         /// </summary>
@@ -146,7 +166,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltru;
-        
+
         /// <summary>
         /// btnFiltruSterge control.
         /// </summary>
@@ -155,7 +175,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltruSterge;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>
@@ -164,7 +184,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate;
-        
+
         /// <summary>
         /// btnDelete control.
         /// </summary>
@@ -173,7 +193,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnDelete;
-        
+
         /// <summary>
         /// btnIstoric control.
         /// </summary>
@@ -182,7 +202,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnIstoric;
-        
+
         /// <summary>
         /// btnDetalii control.
         /// </summary>
@@ -191,7 +211,7 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnDetalii;
-        
+
         /// <summary>
         /// btnArata control.
         /// </summary>

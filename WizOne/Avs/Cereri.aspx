@@ -286,7 +286,12 @@
                         <dx:ASPxDateEdit ID="deDataRevisal" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" Enabled="false" EditFormat="Custom" >                                 
                         </dx:ASPxDateEdit>
                     </td>
-                </tr>
+                   <td>
+                       <label id="lblGen"   runat="server" style="display:inline-block;"></label>
+                        <dx:ASPxCheckBox ID="chkGen"  runat="server" Width="150" Text="Cu generare document"  TextAlign="Left" Checked="true"  ClientInstanceName="chkGen" >                             
+                        </dx:ASPxCheckBox>
+                    </td>
+               </tr>
             </table>
 
             <table width="40%">
@@ -348,6 +353,18 @@
                     <td id="lbl9Act" runat="server">
                         <dx:ASPxLabel  ID="lblTxt2Act" runat="server"   Visible="false"></dx:ASPxLabel >
                         <dx:ASPxTextBox ID="txt2Act" runat="server"  Visible="false" >
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox>
+                    </td>
+                    <td id="lbl14Act" runat="server" colspan="2">
+                        <dx:ASPxLabel  ID="lblTxt14Act" runat="server"  Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt3Act" runat="server"  Visible="false">
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox>
+                    </td>
+                    <td id="lbl15Act" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt15Act" runat="server"   Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt4Act" runat="server"  Visible="false" >
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox>
                     </td>
@@ -450,6 +467,18 @@
                     <td id="lbl9Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt2Nou" runat="server"   Visible="false"></dx:ASPxLabel >
                         <dx:ASPxTextBox ID="txt2Nou" runat="server"  Visible="false">
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox> 
+                    </td>
+                    <td id="lbl15Nou" runat="server" colspan="2">
+                        <dx:ASPxLabel  ID="lblTxt15Nou" runat="server"   Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt3Nou" runat="server"  Visible="false">
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox>
+                    </td>
+                    <td id="lbl16Nou" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt16Nou" runat="server"   Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt4Nou" runat="server"  Visible="false">
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox> 
                     </td>
@@ -799,7 +828,7 @@
                     <td colspan="3">
                         <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
                     </td>
-                </tr>
+                </tr> 
         
 
             </table>

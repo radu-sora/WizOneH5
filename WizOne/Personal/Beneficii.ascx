@@ -1,34 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Beneficii.ascx.cs" Inherits="WizOne.Personal.Beneficii" %>
 
-<script language="javascript" type="text/javascript">
-
-    function grDateBeneficii_CustomButtonClick(s, e) {
-        switch (e.buttonID) {
-            case "btnAtasament":
-                pnlLoading.Show();
-                grDateBeneficii.GetRowValues(e.visibleIndex, 'IdAuto', GoToFisierBenMode);
-                break;
-        }
-    }
-
-    function GoToFisierBenMode(Value) {
-        window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=10&id=' + Value, '_blank ')
-        pnlLoading.Hide();
-    }
-
-    function StartUpload() {
-        //pnlLoading.Show();
-    }
-
-    function EndUpload(s) {
-        //pnlLoading.Hide();
-        lblDoc.innerText = s.cpDocUploadName;
-        s.cpDocUploadName = null;
-    }
-
-</script>
-
-
 <body>
 
     <table width="100%">
@@ -126,7 +97,7 @@
                                                 </BrowseButton>
                                                 <ValidationSettings ShowErrors="False"></ValidationSettings>
 
-                                                <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                                                <ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
                                             </dx:ASPxUploadControl>
                                         </td>
                                     </tr>
@@ -149,6 +120,17 @@
         </tr>
     </table> 
 
+    <script>
 
+        function grDateBeneficii_CustomButtonClick(s, e) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=10&id=' + s.GetRowKey(s.GetFocusedRowIndex()), '_blank ')
+        }
+
+        function EndUpload(s) {
+            lblDoc.innerText = s.cpDocUploadName;
+            s.cpDocUploadName = null;
+        }
+
+    </script>
 
 </body>

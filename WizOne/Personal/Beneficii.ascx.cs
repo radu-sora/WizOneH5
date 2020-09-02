@@ -256,6 +256,8 @@ namespace WizOne.Personal
 
                 row.Delete();
 
+                Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"], "").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Beneficii/' {Dami.Operator()} ""FisierNume"" FROM ""tblFisiere"" WHERE ""Tabela""='Admin_Medicina' AND ""Id""={keys[0]}"), "").ToString();
+
                 e.Cancel = true;
                 grDateBeneficii.CancelEdit();
                 Session["InformatiaCurentaPersonal"] = ds;

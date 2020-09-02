@@ -13,6 +13,7 @@ using System.Web.UI.WebControls;
 using System.Globalization;
 using DevExpress.Utils;
 using System.Numerics;
+//using Resources;
 
 namespace WizOne.Avs
 {
@@ -53,6 +54,9 @@ namespace WizOne.Avs
                     Session["AvsCereri"] = null;
                     Session["AvsCereriCalcul"] = null;
                     Session["Avs_Cereri_Date"] = null;
+
+                    Session["Avs_NrLuni"] = "";
+                    Session["Avs_NrZile"] = "";
 
                     if (Session["MP_Avans"] == null)
                     {
@@ -180,6 +184,15 @@ namespace WizOne.Avs
                             cmbRol.SelectedIndex = 0;
                             if (cmbRol.Items.Count == 1)
                                 cmbRol.Enabled = false;
+
+                            if (Convert.ToInt32(arr[1]) == (int)Constante.Atribute.Functie || Convert.ToInt32(arr[1]) == (int)Constante.Atribute.CodCOR)
+                            {
+                                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                                Session["Avs_DurCtr"] = ds.Tables[0].Rows[0]["F1009741"].ToString();
+                                Session["Avs_NrLuni"] = ds.Tables[0].Rows[0]["F100935"].ToString();
+                                Session["Avs_NrZile"] = ds.Tables[0].Rows[0]["F100936"].ToString();
+                                Session["Avs_GrdInv"] = ds.Tables[0].Rows[0]["F10027"].ToString();
+                            }
                         }
                     }
 
@@ -193,6 +206,17 @@ namespace WizOne.Avs
 
                     AscundeCtl();
                     IncarcaDate();
+
+                    DataTable dtNvlFunc = General.IncarcaDT("SELECT \"Id\", \"NrZileLucrProba\", \"NrZileCalProba\", \"NrZileDemisie\", \"NrZileConcediere\", \"Conducere\" FROM \"tblNivelFunctie\"", null);
+                    string nvlFunc = "";
+                    for (int i = 0; i < dtNvlFunc.Rows.Count; i++)
+                    {
+                        nvlFunc += dtNvlFunc.Rows[i]["Id"].ToString() + "," + (dtNvlFunc.Rows[i]["NrZileLucrProba"] as int? ?? 0).ToString() + "," + (dtNvlFunc.Rows[i]["NrZileCalProba"] as int? ?? 0).ToString() + ","
+                            + (dtNvlFunc.Rows[i]["NrZileDemisie"] as int? ?? 0).ToString() + "," + (dtNvlFunc.Rows[i]["NrZileConcediere"] as int? ?? 0).ToString() + "," + (dtNvlFunc.Rows[i]["Conducere"] as int? ?? 0).ToString();
+                        if (i < dtNvlFunc.Rows.Count - 1)
+                            nvlFunc += ";";
+                    }
+                    Session["Avs_NvlFunc"] = nvlFunc;
 
 
                 }
@@ -556,6 +580,8 @@ namespace WizOne.Avs
             lbl11Act.Visible = false;
             lbl12Act.Visible = false;
             lbl13Act.Visible = false;
+            lbl14Act.Visible = false;
+            lbl15Act.Visible = false;
 
             lbl1Nou.Visible = false;
             lbl2Nou.Visible = false;
@@ -570,24 +596,44 @@ namespace WizOne.Avs
             lbl11Nou.Visible = false;
             lbl12Nou.Visible = false;
             lbl14Nou.Visible = false;
+            lbl13Nou.Visible = false;
+            lbl15Nou.Visible = false;
+            lbl16Nou.Visible = false;
 
             lblTxt1Act.Visible = false;
             lblTxt1Act.Text = "";
             lblTxt2Act.Visible = false;
             lblTxt2Act.Text = "";
+            lblTxt14Act.Visible = false;
+            lblTxt14Act.Text = "";
+            lblTxt15Act.Visible = false;
+            lblTxt15Act.Text = "";
             txt1Nou.Text = "";
             txt2Nou.Text = "";
+            txt3Nou.Text = "";
+            txt4Nou.Text = "";
             txt1Act.Visible = false;
             txt1Act.Enabled = false;
             txt2Act.Visible = false;
             txt2Act.Enabled = false;
+            txt3Act.Visible = false;
+            txt3Act.Enabled = false;
+            txt4Act.Visible = false;
+            txt4Act.Enabled = false;
+
 
             lblTxt1Nou.Visible = false;
             lblTxt1Nou.Text = "";
             lblTxt2Nou.Visible = false;
             lblTxt2Nou.Text = "";
+            lblTxt15Nou.Visible = false;
+            lblTxt15Nou.Text = "";
+            lblTxt16Nou.Visible = false;
+            lblTxt16Nou.Text = "";
             txt1Nou.Visible = false;
             txt2Nou.Visible = false;
+            txt3Nou.Visible = false;
+            txt4Nou.Visible = false;
 
             lblTxt3Act.Visible = false;
             lblTxt3Act.Text = "";
@@ -1215,6 +1261,75 @@ namespace WizOne.Avs
                 chk4.Visible = true;
                 chk5.Visible = true;
             }
+            if (nr == 16)
+            {// 2 x CB + 4 x TB
+                lbl1Act.Visible = true;
+                lbl1Nou.Visible = true;
+                if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Functie)
+                {
+                    lbl2Act.Visible = true;
+                    lbl2Nou.Visible = true;
+                }
+                lbl8Act.Visible = true;
+                lbl8Nou.Visible = true;
+                lbl9Act.Visible = true;
+                lbl9Nou.Visible = true;
+                lbl14Act.Visible = true;
+                lbl15Nou.Visible = true;
+                lbl15Act.Visible = true;
+                lbl16Nou.Visible = true;
+                lblTxt3Act.Visible = true;
+                lblTxt3Act.Text = text1;
+                cmb1Act.Visible = true;
+                cmb1Act.Enabled = false;
+                lblTxt3Nou.Visible = true;
+                lblTxt3Nou.Text = text2;
+                cmb1Nou.Visible = true;
+                cmb1Nou.Enabled = true;
+
+                if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Functie)
+                {
+                    lblTxt4Act.Visible = true;
+                    lblTxt4Act.Text = text3;
+                    cmb2Act.Visible = true;
+                    cmb2Act.Enabled = false;
+                    lblTxt4Nou.Visible = true;
+                    lblTxt4Nou.Text = text4;
+                    cmb2Nou.Visible = true;
+                    cmb2Nou.Enabled = true;
+                }
+
+                lblTxt1Act.Visible = true;
+                lblTxt1Act.Text = text5;
+                lblTxt2Act.Visible = true;
+                lblTxt2Act.Text = text6;
+                lblTxt14Act.Visible = true;
+                lblTxt14Act.Text = text7;
+                lblTxt15Act.Visible = true;
+                lblTxt15Act.Text = text8;
+                txt1Act.Visible = true;
+                txt1Act.Enabled = false;
+                txt2Act.Visible = true;
+                txt2Act.Enabled = false;
+                txt3Act.Visible = true;
+                txt3Act.Enabled = false;
+                txt4Act.Visible = true;
+                txt4Act.Enabled = false;
+
+                lblTxt1Nou.Visible = true;
+                lblTxt1Nou.Text = text5;
+                lblTxt2Nou.Visible = true;
+                lblTxt2Nou.Text = text6;
+                lblTxt15Nou.Visible = true;
+                lblTxt15Nou.Text = text7;
+                lblTxt16Nou.Visible = true;
+                lblTxt16Nou.Text = text8;
+                txt1Nou.Visible = true;
+                txt2Nou.Visible = true;
+                txt3Nou.Visible = true;
+                txt4Nou.Visible = true;
+
+            }
 
         }
 
@@ -1238,16 +1353,37 @@ namespace WizOne.Avs
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Functie)
             {
-                ArataCtl(3, "Functia actuala", "Functia noua", "", "", "", "", "", "", "", "");
+                //ArataCtl(3, "Functia actuala", "Functia noua", "", "", "", "", "", "", "", "");
+                ArataCtl(16, "Functia actuala", "Functia noua", "Nivel actual", "Nivel nou", "Per. proba zile lucratoare", "Per. proba zile calendaristice", "Nr. zile preaviz demisie", "Nr. zile preaviz concediere", "", "");
                 DataTable dtTemp1 = General.IncarcaDT("select F71802 AS \"Id\", F71804 AS \"Denumire\" from F100, f718 WHERE F10071 = F71802 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 DataTable dtTemp2 = General.IncarcaDT("select F71802 AS \"Id\", F71804 AS \"Denumire\" from f718", null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
 
+                dtTemp1 = General.IncarcaDT("SELECT \"Id\", \"Denumire\" FROM \"tblNivelFunctie\" left join F718 on F71813 = \"Id\" LEFT JOIN F100 on F10071=F71802 WHERE F10003 = "+ cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " ORDER BY \"Denumire\"", null);
+                dtTemp2 = General.IncarcaDT("SELECT \"Id\", \"Denumire\" FROM \"tblNivelFunctie\" ORDER BY \"Denumire\"", null);
+                IncarcaComboBox(cmb2Act, cmb2Nou, dtTemp1, dtTemp2);
+
+                DataTable dtTemp = General.IncarcaDT("SELECT F100975 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                txt1Act.Text = dtTemp.Rows[0][0].ToString();
+
+                dtTemp = General.IncarcaDT("SELECT F1001063 FROM F1001 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                txt2Act.Text = dtTemp.Rows[0][0].ToString();
+
+                dtTemp = General.IncarcaDT("SELECT F1009742 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                txt3Act.Text = dtTemp.Rows[0][0].ToString();
+
+                dtTemp = General.IncarcaDT("SELECT F100931 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                txt4Act.Text = dtTemp.Rows[0][0].ToString();
+                
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.CodCOR)
             {
-                ArataCtl(3, "Cod COR actual", "Cod COR nou", "", "", "", "", "", "", "", "");
+                int afisare = Convert.ToInt32(Dami.ValoareParam("Avs_CampuriZileProbaPreavizCOR", "0"));
+                if (afisare == 0)
+                    ArataCtl(3, "Cod COR actual", "Cod COR nou", "", "", "", "", "", "", "", "");
+                else
+                    ArataCtl(16, "Cod COR actual", "Cod COR nou", "", "", "Per. proba zile lucratoare", "Per. proba zile calendaristice", "Nr. zile preaviz demisie", "Nr. zile preaviz concediere", "", "");
                 string sql = "";
                 if (Constante.tipBD == 1)
                     sql = "select F72202 AS \"Id\", CONVERT(VARCHAR, F72202) + ' - '  +  F72204 AS \"Denumire\" from F100 LEFT JOIN F1001 ON F100.F10003 = F1001.F10003 LEFT JOIN f722 ON F10098 = F72202 WHERE F1001082=F72206 AND F100.F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
@@ -1260,6 +1396,21 @@ namespace WizOne.Avs
                     sql = "select F72202 AS \"Id\", F72202 || ' - '  ||  F72204 AS \"Denumire\" from f722 WHERE f72206 = (select max(f72206) from f722) "; ;
                 DataTable dtTemp2 = General.IncarcaDT(sql, null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
+
+                if (afisare == 1)
+                {
+                    DataTable dtTemp = General.IncarcaDT("SELECT F100975 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                    txt1Act.Text = dtTemp.Rows[0][0].ToString();
+
+                    dtTemp = General.IncarcaDT("SELECT F1001063 FROM F1001 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                    txt2Act.Text = dtTemp.Rows[0][0].ToString();
+
+                    dtTemp = General.IncarcaDT("SELECT F1009742 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                    txt3Act.Text = dtTemp.Rows[0][0].ToString();
+
+                    dtTemp = General.IncarcaDT("SELECT F100931 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                    txt4Act.Text = dtTemp.Rows[0][0].ToString();
+                }
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.MotivPlecare)
@@ -1809,9 +1960,17 @@ namespace WizOne.Avs
                             if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date)
                             {
                                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");                               
-                            }       
-
-                        break;
+                            }
+                        chkGen.Checked = true;
+                        if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR)
+                        {
+                            DataTable dtCtr = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                            Session["Avs_DurCtr"] = dtCtr.Rows[0]["F1009741"].ToString();
+                            Session["Avs_NrLuni"] = dtCtr.Rows[0]["F100935"].ToString();
+                            Session["Avs_NrZile"] = dtCtr.Rows[0]["F100936"].ToString();
+                            Session["Avs_GrdInv"] = dtCtr.Rows[0]["F10027"].ToString();                            
+                        }
+                        break;                        
                     case "2":
                         if (e.Parameter.Split(';')[1] == "cmb1Nou")
                             Session["Valoare1Noua"] = e.Parameter.Split(';')[1] + ";" + e.Parameter.Split(';')[2];
@@ -1923,6 +2082,18 @@ namespace WizOne.Avs
                         if (e.Parameter.Split(';')[1] == "cmb1Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Norma && e.Parameter.Split(';')[2] == "2")
                         {
                             SetTarif(e.Parameter.Split(';')[2]);
+                        }
+
+                        if (e.Parameter.Split(';')[1] == "cmb2Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Functie)
+                        {
+                            CompletareZile();
+                            ValidareZile(1);
+                        }
+
+                        if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Functie || Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.CodCOR)
+                        {
+                            if (e.Parameter.Split(';')[1] == "txt1Nou" || e.Parameter.Split(';')[1] == "txt2Nou" || e.Parameter.Split(';')[1] == "txt3Nou" || e.Parameter.Split(';')[1] == "txt4Nou")
+                                ValidareZile(0);
                         }
                         break;
                     case "3":
@@ -2329,6 +2500,27 @@ namespace WizOne.Avs
                         return false;
                     }
 
+                int afisare = Convert.ToInt32(Dami.ValoareParam("Avs_CampuriZileProbaPreavizCOR", "0"));
+                if (idAtr == (int)Constante.Atribute.Functie || (afisare == 1 && idAtr == (int)Constante.Atribute.CodCOR))
+                {
+                    if (Dami.ValoareParam("ValidariPersonal") == "1")
+                    {
+                        string mesajF = "";
+                        if ((txt1Nou.Text.Length <= 0 || txt1Nou.Text == "0") && (txt2Nou.Text.Length <= 0 || txt2Nou.Text == "0"))
+                            mesajF += " - perioada de proba (zile lucratoare sau zile calendaristice)" + Environment.NewLine;
+                        if (txt3Nou.Text.Length <= 0 || txt3Nou.Text == "0")
+                            mesajF += " - nr zile preaviz demisie" + Environment.NewLine;
+                        if (txt4Nou.Text.Length <= 0 || txt4Nou.Text == "0")
+                            mesajF += " - nr zile preaviz concediere" + Environment.NewLine;
+
+                        if (mesajF.Length > 0)
+                        {
+                            pnlCtl.JSProperties["cpAlertMessage"] = "Nu ati completat: " + Environment.NewLine + mesajF;
+                            return false;
+                        }
+                    }
+                }
+
                 if (idAtr == (int)Constante.Atribute.Suspendare || idAtr == (int)Constante.Atribute.Detasare)
                 {
                     if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de1Nou.Value).Date && val == 1)
@@ -2497,6 +2689,7 @@ namespace WizOne.Avs
                         break;
                     case (int)Constante.Atribute.Functie:
                         if (cmb1Nou.Value == null) strErr += ", functia";
+                        if (cmb2Nou.Value == null) strErr += ", nivel functie";
                         break;
                     case (int)Constante.Atribute.CodCOR:
                         if (cmb1Nou.Value == null) strErr += ", cod COR";
@@ -3003,7 +3196,7 @@ namespace WizOne.Avs
                 dataModif = " TO_DATE('" + dm.Day.ToString().PadLeft(2, '0') + "/" + dm.Month.ToString().PadLeft(2, '0') + "/" + dm.Year.ToString() + "', 'dd/mm/yyyy') ";
 
             idAtr = Convert.ToInt32((cmbAtribute.Value ?? -99));
-            string camp1 = "", camp2 = "";
+            string camp1 = "", camp2 = "", sqlFunc = "";
             switch (idAtr)
             {
                 case (int)Constante.Atribute.Salariul:
@@ -3011,12 +3204,19 @@ namespace WizOne.Avs
                     camp2 = txt1Nou.Text + ", " + txt2Nou.Text;
                     break;
                 case (int)Constante.Atribute.Functie:
-                    camp1 = "\"FunctieId\", \"FunctieNume\"";
-                    camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "'";
+                    camp1 = "\"FunctieId\", \"FunctieNume\", \"PerProbaZL\", \"PerProbaZC\", \"PreavizDemisie\", \"PreavizConcediere\"";
+                    camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', " + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text) + ", " + (txt2Nou.Text.Length <= 0 ? "NULL" : txt2Nou.Text) + ", " + (txt3Nou.Text.Length <= 0 ? "NULL" : txt3Nou.Text) + ", " + (txt4Nou.Text.Length <= 0 ? "NULL" : txt4Nou.Text);
+                    sqlFunc = "UPDATE F718 SET F71813 = " + cmb2Nou.Value.ToString() + " WHERE F71802 = " + cmb1Nou.Value.ToString();
                     break;
                 case (int)Constante.Atribute.CodCOR:
                     camp1 = "\"CORCod\", \"CORNume\"";
                     camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "'";
+                    int afisare = Convert.ToInt32(Dami.ValoareParam("Avs_CampuriZileProbaPreavizCOR", "0"));
+                    if (afisare == 1)
+                    {
+                        camp1 = "\"CORCod\", \"CORNume\", \"PerProbaZL\", \"PerProbaZC\", \"PreavizDemisie\", \"PreavizConcediere\"";
+                        camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', " + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text) + ", " + (txt2Nou.Text.Length <= 0 ? "NULL" : txt2Nou.Text) + ", " + (txt3Nou.Text.Length <= 0 ? "NULL" : txt3Nou.Text) + ", " + (txt4Nou.Text.Length <= 0 ? "NULL" : txt4Nou.Text);
+                    }
                     break;
                 case (int)Constante.Atribute.MotivPlecare:
                     camp1 = "\"MotivId\", \"MotivNume\"";
@@ -3319,6 +3519,8 @@ namespace WizOne.Avs
             sql = string.Format(sql, camp1, camp2);
             General.ExecutaNonQuery(sql, null);
 
+            if (sqlFunc.Length > 0)
+                General.ExecutaNonQuery(sqlFunc, null);
 
             if (Session["Avs_Cereri_Date"] != null)
             {
@@ -3381,7 +3583,7 @@ namespace WizOne.Avs
             //Florin 2019.07.29
             //s-a adaugat si parametrul cu id-uri excluse
             string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
-            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idAtr + ",") >=0)))
+            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idAtr + ",") >=0) || !chkGen.Checked))
             {
                 TrimiteInF704(idUrm);
                 if (idAtr == 2)
@@ -3825,7 +4027,10 @@ namespace WizOne.Avs
                             if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                             {
                                 act = 1;
-                                sql100 = "UPDATE F100 SET F10071 = " + dtCer.Rows[0]["FunctieId"].ToString() + ", F100992 = " + data + " WHERE F10003 = " + f10003.ToString();
+                                sql100 = "UPDATE F100 SET F10071 = " + dtCer.Rows[0]["FunctieId"].ToString() + ", F100992 = " + data + ", F100975 = " + dtCer.Rows[0]["PerProbaZL"].ToString() 
+                                    + ", F1009742 = " + dtCer.Rows[0]["PreavizDemisie"].ToString() + ", F100931 = " + dtCer.Rows[0]["PreavizConcediere"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                if (dtF1001 != null && dtF1001.Rows.Count > 0)
+                                    sql1001 = "UPDATE F1001 SET F1001063 = " + dtCer.Rows[0]["PerProbaZC"].ToString() + " WHERE F10003 = " + f10003.ToString();
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 2, 'Functie', " + data + ", " + dtCer.Rows[0]["FunctieId"].ToString() + ", 'Modificari in avans', '"
@@ -3840,6 +4045,16 @@ namespace WizOne.Avs
                                 sql100 = "UPDATE F100 SET F10098 = " + dtCer.Rows[0]["CORCod"].ToString() + " WHERE F10003 = " + f10003.ToString();
                                 if (dtF1001 != null && dtF1001.Rows.Count > 0)
                                     sql1001 = "UPDATE F1001 SET F100956 = " + data + " WHERE F10003 = " + f10003.ToString();
+
+                                int afisare = Convert.ToInt32(Dami.ValoareParam("Avs_CampuriZileProbaPreavizCOR", "0"));
+                                if (afisare == 1)
+                                {
+                                    sql100 = "UPDATE F100 SET F10098 = " + dtCer.Rows[0]["CORCod"].ToString() + ", F100975 = " + dtCer.Rows[0]["PerProbaZL"].ToString()
+                                            + ", F1009742 = " + dtCer.Rows[0]["PreavizDemisie"].ToString() + ", F100931 = " + dtCer.Rows[0]["PreavizConcediere"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                    if (dtF1001 != null && dtF1001.Rows.Count > 0)
+                                        sql1001 = "UPDATE F1001 SET F100956 = " + data + ", F1001063 = " + dtCer.Rows[0]["PerProbaZC"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                }
+
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 3, 'Cod COR', " + data + ", " + dtCer.Rows[0]["CORCod"].ToString() + ", 'Modificari in avans', '"
@@ -6048,6 +6263,144 @@ namespace WizOne.Avs
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+
+        private  void CompletareZile()
+        {
+            if (cmbAtribute.Value != null && Convert.ToInt32(cmbAtribute.Value) == 2 && cmb2Nou.Value != null)
+            { 
+                string nvlFunc = Session["Avs_NvlFunc"].ToString();
+                string[] resNF = nvlFunc.Split(';');
+                for (int i = 0; i < resNF.Length; i++)
+                {
+                    string[] linieNF = resNF[i].Split(',');
+                    if (Convert.ToInt32(linieNF[0]) == Convert.ToInt32(cmb2Nou.Value))
+                    {
+                        if (linieNF[1].Length > 0)
+                            txt1Nou.Text = linieNF[1];
+                        else
+                            txt1Nou.Text = "0";
+                        if (linieNF[2].Length > 0)
+                            txt2Nou.Text = linieNF[2];
+                        else
+                            txt2Nou.Text = "0";
+                        if (linieNF[3].Length > 0)
+                            txt3Nou.Text = linieNF[3];
+                        else
+                            txt3Nou.Text = "0";
+                        if (linieNF[4].Length > 0)
+                            txt4Nou.Text = linieNF[4];
+                        else
+                            txt4Nou.Text = "0";
+                    }
+                }
+            }
+        }
+        private void ValidareZile(int tip)
+        {
+            if (cmbAtribute.Value != null && Convert.ToInt32(cmbAtribute.Value) == 2)
+            {
+                string mesaj = "";
+                bool conducere = false;
+                string nvlFunc = Session["Avs_NvlFunc"].ToString();
+                string durCtr = Session["Avs_DurCtr"].ToString();
+                string nrLuni = Session["Avs_NrLuni"].ToString();
+                string nrZile = Session["Avs_NrZile"].ToString();
+                string grdInv = Session["Avs_GrdInv"].ToString();
+                string[] resNF = nvlFunc.Split(';');
+                if (cmb2Nou.Value != null)
+                    for (int i = 0; i < resNF.Length; i++)
+                    {
+                        string[] linieNF = resNF[i].Split(',');
+                        if (Convert.ToInt32(linieNF[0]) == Convert.ToInt32(cmb2Nou.Value))
+                        {
+                            if (Convert.ToInt32(linieNF[5]) == 1)
+                                conducere = true;
+                        }
+                    }
+
+                if (Convert.ToInt32(durCtr) == 2 && txt1Nou.Text != "" && nrLuni != "" && nrZile != "")
+                {
+                    if (Convert.ToInt32(nrLuni) != 0 || Convert.ToInt32(nrZile) != 0)
+                    {
+                        if (Convert.ToInt32(nrLuni) < 3 && Convert.ToInt32(txt1Nou.Text) > 5)
+                        {
+                            mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 5 zile!\n";
+                            if (tip == 1)
+                                txt1Nou.Text = "5";
+                        }
+                        if (Convert.ToInt32(nrLuni) >= 3 && Convert.ToInt32(nrLuni) < 6 && Convert.ToInt32(txt1Nou.Text) > 15)
+                        {
+                            mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 15 zile!\n";
+                            if (tip == 1)
+                                txt1Nou.Text = "15";
+                        }
+                        if (Convert.ToInt32(nrLuni) >= 6 && !conducere && Convert.ToInt32(txt1Nou.Text) > 30)
+                        {
+                            mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 30 zile!\n";
+                            if (tip == 1)
+                                txt1Nou.Text = "30";
+                        }
+                        if (Convert.ToInt32(nrLuni) >= 6 && conducere && Convert.ToInt32(txt1Nou.Text) > 45)
+                        {
+                            mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 45 zile!\n";
+                            if (tip == 1)
+                                txt1Nou.Text = "45";
+                        }
+                        //txtPerProbaZC.SetValue("0");
+                    }
+                }
+
+                if (Convert.ToInt32(durCtr) == 1 && txt2Nou.Text != "")
+                {
+                    if (!conducere && Convert.ToInt32(txt2Nou.Text) > 90)
+                    {
+                        mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 90 zile!\n";
+                        if (tip == 1)
+                            txt2Nou.Text = "90";
+                    }
+                    if (conducere && Convert.ToInt32(txt2Nou.Text) > 120)
+                    {
+                        mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 120 zile!\n";
+                        if (tip == 1)
+                            txt2Nou.Text = "120";
+                    }
+                    if ((Convert.ToInt32(grdInv) == 2 || Convert.ToInt32(grdInv) == 3) && Convert.ToInt32(txt2Nou.Text) > 30)
+                    {
+                        mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 30 zile!\n";
+                        if (tip == 1)
+                            txt2Nou.Text = "30";
+                    }
+                    //txtPerProbaZL.SetValue("0");
+                }
+
+                if (txt3Nou.Text != "")
+                {
+                    if (!conducere && Convert.ToInt32(txt3Nou.Text) > 20)
+                    {
+                        mesaj += "Numar zile preaviz demisie: - valoarea maxima cf. legii este de 20 zile!\n";
+                        if (tip == 1)
+                            txt3Nou.Text = "20";
+                    }
+                    if (conducere && Convert.ToInt32(txt3Nou.Text) > 45)
+                    {
+                        mesaj += "Numar zile preaviz demisie: - valoarea maxima cf. legii este de 45 zile!\n";
+                        if (tip == 1)
+                            txt3Nou.Text = "45";
+                    }
+                }
+
+                if (txt4Nou.Text.Length <= 0 || Convert.ToInt32(txt4Nou.Text) < 20)
+                {
+                    mesaj += "Numar zile preaviz concediere: - valoarea minima cf. legii este de 20 zile!\n";
+                    if (tip == 1)
+                        txt4Nou.Text = "20";
+                }
+
+                if (mesaj.Length > 0)
+                    pnlCtl.JSProperties["cpAlertMessage"] = mesaj;
             }
         }
 

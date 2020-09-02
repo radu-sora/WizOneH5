@@ -121,7 +121,7 @@ namespace WizOne
                             btn9.ClientVisible = true;
                             btnLog.ClientVisible = true;
                             panouExt.Visible = false;
-           
+
                         }
                         else
                             VerificaCartela();
@@ -320,7 +320,7 @@ namespace WizOne
             btnLog.ClientVisible = false;
             panouExt.Visible = true;
             txtPan1.Value = null;
-            txtPan1.Focus();     
+            txtPan1.Focus();
         }
 
         protected void Resetare(object sender, EventArgs e)
@@ -328,6 +328,7 @@ namespace WizOne
             AscundeButoane();
             hfPIN.Set("PIN", null);
         }
+
 
 
         //      <div class="outer">

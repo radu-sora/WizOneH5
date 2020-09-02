@@ -1,4 +1,5 @@
 ﻿using DevExpress.Web;
+using Org.BouncyCastle.Asn1.Cmp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -516,14 +517,43 @@ namespace WizOne.Eval
                 //End Florin 2019.10.02
 
                 //Florin 2020.05.04
+                //Radu 27.08.2020 - se doreste ca aceste sabloane sa fie copiate si reintroduse, nu sa se ia alte sabloane existente
                 string sqlTemp = "";
                 DataTable dtTemp = General.IncarcaDT($@"SELECT * FROM ""Eval_QuizIntrebari"" WHERE ""IdQuiz""={idUrm} AND (COALESCE(""TemplateIdObiectiv"",0)>0 OR COALESCE(""TemplateIdCompetenta"",0)>0)");
                 for(int i=0; i<dtTemp.Rows.Count; i++)
                 {
-                    if (Convert.ToInt32(General.Nz(dtTemp.Rows[i]["TemplateIdObiectiv"],"-99")) > 0)
-                        sqlTemp += $@"UPDATE ""Eval_QuizIntrebari"" SET ""TemplateIdObiectiv""=(SELECT MIN(""TemplateId"") FROM ""Eval_ConfigObTemplate"" WHERE ""TemplateId"" NOT IN (SELECT DISTINCT ""TemplateIdObiectiv"" FROM ""Eval_QuizIntrebari"" WHERE ""TemplateIdObiectiv"" IS NOT NULL)) WHERE ""Id""={dtTemp.Rows[i]["Id"]};" + Environment.NewLine;
+                    if (Convert.ToInt32(General.Nz(dtTemp.Rows[i]["TemplateIdObiectiv"], "-99")) > 0)
+                    {
+                        //sqlTemp += $@"UPDATE ""Eval_QuizIntrebari"" SET ""TemplateIdObiectiv""=(SELECT MIN(""TemplateId"") FROM ""Eval_ConfigObTemplate"" WHERE ""TemplateId"" NOT IN (SELECT DISTINCT ""TemplateIdObiectiv"" FROM ""Eval_QuizIntrebari"" WHERE ""TemplateIdObiectiv"" IS NOT NULL)) WHERE ""Id""={dtTemp.Rows[i]["Id"]};" + Environment.NewLine;
+                        string camp = "'Template ' +  CONVERT(VARCHAR, (SELECT max(TemplateId) + 1 FROM  Eval_ConfigObTemplate))";
+                        if (Constante.tipBD == 2) camp = "'Template ' || (SELECT max(\"TemplateId\") + 1 FROM  \"Eval_ConfigObTemplate\")";
+                        General.ExecutaNonQuery("INSERT INTO \"Eval_ConfigObTemplate\" (\"TemplateId\", \"TemplateName\", \"NrMinObiective\", \"NrMaxObiective\", \"PoateAdauga\", \"PoateSterge\", \"PoateModifica\") " +
+                            " SELECT (SELECT max(\"TemplateId\") + 1 FROM  \"Eval_ConfigObTemplate\"), " + camp + ", \"NrMinObiective\", \"NrMaxObiective\", \"PoateAdauga\", \"PoateSterge\", \"PoateModifica\" " +
+                            " FROM \"Eval_ConfigObTemplate\" WHERE \"TemplateId\" = " + dtTemp.Rows[i]["TemplateIdObiectiv"].ToString(), null);
+
+                        DataTable dtOb = General.IncarcaDT("SELECT * FROM \"Eval_ConfigObTemplateDetail\" WHERE \"TemplateId\" = " + dtTemp.Rows[i]["TemplateIdObiectiv"].ToString(), null);
+                        for (int j = 0; j < dtOb.Rows.Count; j++)
+                            General.ExecutaNonQuery("INSERT INTO \"Eval_ConfigObTemplateDetail\" (\"Id\", \"TemplateId\", \"ColumnName\", \"Width\", \"Obligatoriu\", \"Citire\", \"Editare\", \"Vizibil\", \"IdNomenclator\") " +
+                                " SELECT " + (j + 1).ToString() + ", (SELECT max(\"TemplateId\") FROM  \"Eval_ConfigObTemplate\"), max(\"ColumnName\"), max(\"Width\"), max(\"Obligatoriu\"), max(\"Citire\"), max(\"Editare\"), max(\"Vizibil\"), max(\"IdNomenclator\") FROM \"Eval_ConfigObTemplateDetail\" " +
+                                " WHERE \"TemplateId\" = " + dtTemp.Rows[i]["TemplateIdObiectiv"].ToString() + " AND \"ColumnName\" = '" + dtOb.Rows[j]["ColumnName"].ToString() + "'", null);
+
+                        General.ExecutaNonQuery($@"UPDATE ""Eval_QuizIntrebari"" SET ""TemplateIdObiectiv""=(SELECT MAX(""TemplateId"") FROM ""Eval_ConfigObTemplate"") WHERE ""Id""={dtTemp.Rows[i]["Id"]}", null);
+                    }
                     if (Convert.ToInt32(General.Nz(dtTemp.Rows[i]["TemplateIdCompetenta"], "-99")) > 0)
-                        sqlTemp += $@"UPDATE ""Eval_QuizIntrebari"" SET ""TemplateIdCompetenta""=(SELECT MIN(""TemplateId"") FROM ""Eval_ConfigCompTemplate"" WHERE ""TemplateId"" NOT IN (SELECT DISTINCT ""TemplateIdCompetenta"" FROM ""Eval_QuizIntrebari"" WHERE ""TemplateIdCompetenta"" IS NOT NULL)) WHERE ""Id""={dtTemp.Rows[i]["Id"]};" + Environment.NewLine;
+                    {
+                        //sqlTemp += $@"UPDATE ""Eval_QuizIntrebari"" SET ""TemplateIdCompetenta""=(SELECT MIN(""TemplateId"") FROM ""Eval_ConfigCompTemplate"" WHERE ""TemplateId"" NOT IN (SELECT DISTINCT ""TemplateIdCompetenta"" FROM ""Eval_QuizIntrebari"" WHERE ""TemplateIdCompetenta"" IS NOT NULL)) WHERE ""Id""={dtTemp.Rows[i]["Id"]};" + Environment.NewLine;
+                        string camp = "'Template ' +  CONVERT(VARCHAR, (SELECT max(TemplateId) + 1 FROM  Eval_ConfigCompTemplate))";
+                        if (Constante.tipBD == 2) camp = "'Template ' || (SELECT max(\"TemplateId\") + 1 FROM  \"Eval_ConfigCompTemplate\")";
+                        General.ExecutaNonQuery("INSERT INTO \"Eval_ConfigCompTemplate\" (\"TemplateId\", \"TemplateName\") " +
+                            " SELECT (SELECT max(\"TemplateId\") + 1 FROM  \"Eval_ConfigCompTemplate\"), " + camp + " FROM \"Eval_ConfigCompTemplate\" WHERE \"TemplateId\" = " + dtTemp.Rows[i]["TemplateIdCompetenta"].ToString(), null);
+
+                        DataTable dtComp = General.IncarcaDT("SELECT * FROM \"Eval_ConfigCompTemplateDetail\" WHERE \"TemplateId\" = " + dtTemp.Rows[i]["TemplateIdCompetenta"].ToString(), null);
+                        for (int j = 0; j < dtComp.Rows.Count; j++)
+                            General.ExecutaNonQuery("INSERT INTO \"Eval_ConfigCompTemplateDetail\" (\"Id\", \"TemplateId\", \"ColumnName\", \"Width\", \"Obligatoriu\", \"Citire\", \"Editare\", \"Vizibil\", \"IdNomenclator\") " +
+                                " SELECT " + (j + 1).ToString() + ", (SELECT max(\"TemplateId\") FROM  \"Eval_ConfigCompTemplate\"), max(\"ColumnName\"), max(\"Width\"), max(\"Obligatoriu\"), max(\"Citire\"), max(\"Editare\"), max(\"Vizibil\"), max(\"IdNomenclator\") FROM \"Eval_ConfigCompTemplateDetail\" " +
+                                " WHERE \"TemplateId\" = " + dtTemp.Rows[i]["TemplateIdCompetenta"].ToString() + " AND \"ColumnName\" = '" + dtComp.Rows[j]["ColumnName"].ToString() + "'", null);
+                        General.ExecutaNonQuery($@"UPDATE ""Eval_QuizIntrebari"" SET ""TemplateIdCompetenta""=(SELECT MAX(""TemplateId"") FROM ""Eval_ConfigCompTemplate"") WHERE ""Id""={dtTemp.Rows[i]["Id"]}", null);
+                    }
                 }
                 if (sqlTemp != "")
                     General.ExecutaNonQuery("BEGIN" + Environment.NewLine +

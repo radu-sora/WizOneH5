@@ -744,7 +744,7 @@
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfObiectiv" ClientInstanceName="hfObiectiv" />
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfObiectivColName" ClientInstanceName="hfObiectivColName" />
                                                                                 <dx:ASPxGridView ID="grDateObiective" runat="server" ClientInstanceName="grDateObiective" ClientIDMode="Static" 
-                                                                                    Width="900px" AutoGenerateColumns="false" 
+                                                                                    Width="1000px" AutoGenerateColumns="false" 
                                                                                     OnAutoFilterCellEditorInitialize="grDateObiective_AutoFilterCellEditorInitialize" 
                                                                                     OnCellEditorInitialize="grDateObiective_CellEditorInitialize"
                                                                                     OnRowUpdating="grDateObiective_RowUpdating" 
@@ -771,7 +771,7 @@
                                                                                         <dx:GridViewDataCheckColumn FieldName="Editare" Name="Editare" Caption="Editare"  Width="70px" VisibleIndex="4" />
                                                                                         <dx:GridViewDataCheckColumn FieldName="Vizibil" Name="Vizibil" Caption="Vizibil"  Width="70px" VisibleIndex="5" />
                                                                                         <dx:GridViewDataComboBoxColumn FieldName="TipValoare" Name="TipValoare" Caption="Tip Valoare" Width="150" VisibleIndex="6" >
-                                                                                            <PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown" >
+                                                                                            <PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown">
                                                                                                 <ValidationSettings RequiredField-IsRequired="true" Display="None" />
                                                                                                 <ClientSideEvents SelectedIndexChanged="cmbObiectivTipLista_SelectedIndexChanged" />
                                                                                             </PropertiesComboBox>
@@ -780,7 +780,7 @@
                                                                                             <PropertiesComboBox TextField="DenNomenclator" ValueField="IdNomenclator" ValueType="System.Int32" DropDownStyle="DropDown" EnableCallbackMode="true" 
                                                                                                 OnItemRequestedByValue="Unnamed_ItemRequestedByValue" OnItemsRequestedByFilterCondition="Unnamed_ItemsRequestedByFilterCondition" />
                                                                                         </dx:GridViewDataComboBoxColumn>
-
+                                                                                        <dx:GridViewDataSpinEditColumn FieldName="Ordine" Name ="Ordine" Caption="Ordine" VisibleIndex="9" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false" PropertiesSpinEdit-MinValue="1" PropertiesSpinEdit-MaxValue="99"/>
                                                                                     </Columns>
                                                                                     <SettingsCommandButton>
                                                                                         <EditButton>
@@ -836,7 +836,7 @@
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfCompetente" ClientInstanceName="hfCompetente" />
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfCompetenteColName" ClientInstanceName="hfCompetenteColName" />
                                                                                 <dx:ASPxGridView ID="grDateCompetente" runat="server" ClientInstanceName="grDateCompetente" ClientIDMode="Static"
-                                                                                    Width="1000px" AutoGenerateColumns="false"
+                                                                                    Width="1100px" AutoGenerateColumns="false"
                                                                                     OnAutoFilterCellEditorInitialize="grDateCompetente_AutoFilterCellEditorInitialize"
                                                                                     OnCellEditorInitialize="grDateCompetente_CellEditorInitialize"
                                                                                     OnRowUpdating="grDateCompetente_RowUpdating"
@@ -867,6 +867,7 @@
                                                                                                 OnItemRequestedByValue="Unnamed_ItemRequestedByValue1" OnItemsRequestedByFilterCondition="Unnamed_ItemsRequestedByFilterCondition1"
                                                                                                   />
                                                                                         </dx:GridViewDataComboBoxColumn>
+                                                                                        <dx:GridViewDataSpinEditColumn FieldName="Ordine" Name ="Ordine" Caption="Ordine" VisibleIndex="9" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false" PropertiesSpinEdit-MinValue="1" PropertiesSpinEdit-MaxValue="99"/>
                                                                                     </Columns>
                                                                                     <SettingsCommandButton>
                                                                                         <EditButton>

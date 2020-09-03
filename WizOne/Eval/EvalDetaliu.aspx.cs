@@ -1851,7 +1851,7 @@ namespace WizOne.Eval
                 #region AddColumns
 
                 int y = 34;
-                foreach (Eval_ConfigObTemplateDetail clsConfigDetail in lstEval_ConfigObTemplateDetail.Where(p=>p.TemplateId==TemplateIdObiectiv))
+                foreach (Eval_ConfigObTemplateDetail clsConfigDetail in lstEval_ConfigObTemplateDetail.Where(p=>p.TemplateId==TemplateIdObiectiv).OrderBy(p => p.Ordine ?? 99))
                 {
                     y++;
                     if (clsConfigDetail.Vizibil == true)
@@ -3596,7 +3596,7 @@ namespace WizOne.Eval
 
                 #region AddColumns
 
-                foreach (Eval_ConfigCompTemplateDetail clsConfigDetail in lstEval_ConfigCompTemplateDetail.Where(p=>p.TemplateId==TemplateIdCompetenta))
+                foreach (Eval_ConfigCompTemplateDetail clsConfigDetail in lstEval_ConfigCompTemplateDetail.Where(p=>p.TemplateId==TemplateIdCompetenta).OrderBy(p => p.Ordine ?? 99))
                 {
                     if (clsConfigDetail.Vizibil == true)
                     {

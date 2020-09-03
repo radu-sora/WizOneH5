@@ -14516,3 +14516,9 @@ ALTER TABLE Eval_tblTipValoriLinii ADD IdAuto int IDENTITY(1,1)
 GO
 ALTER TABLE Eval_tblTipValoriLinii ADD CONSTRAINT PK_Eval_tblTipValoriLinii PRIMARY KEY (IdAuto)
 GO
+
+ALTER TABLE Eval_ConfigObTemplateDetail ADD Ordine int
+GO
+
+ALTER TABLE Eval_ConfigCompTemplateDetail ADD Ordine int
+GO

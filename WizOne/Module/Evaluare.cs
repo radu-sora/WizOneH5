@@ -725,6 +725,7 @@ namespace WizOne.Module
         public bool Vizibil { get; set; }
         public int TipValoare { get; set; }
         public int IdNomenclator { get; set; }
+        public int? Ordine { get; set; }
 
         public Eval_ConfigObTemplateDetail() { }
 
@@ -745,7 +746,7 @@ namespace WizOne.Module
             //Vizibil = columns.Contains("Vizibil") == true ? Convert.ToInt32(dr["Vizibil"].ToString() == string.Empty ? "0" : dr["Vizibil"].ToString()) : 0;
             TipValoare = columns.Contains("TipValoare") == true ? Convert.ToInt32(dr["TipValoare"].ToString() == string.Empty ? "-99" : dr["TipValoare"].ToString()) : -99;
             IdNomenclator = columns.Contains("IdNomenclator") == true ? Convert.ToInt32(dr["IdNomenclator"].ToString() == string.Empty ? "-99" : dr["IdNomenclator"].ToString()) : -99;
-
+            Ordine = columns.Contains("Ordine") == true ? (General.IsNumeric(dr["Ordine"]) ? (int?)dr["Ordine"] : null) : null;
         }
     }
 
@@ -982,6 +983,7 @@ namespace WizOne.Module
         public bool Editare { get; set; }
         public bool Vizibil { get; set; }
         public int IdNomenclator { get; set; }
+        public int? Ordine { get; set; }
 
         public Eval_ConfigCompTemplateDetail() { }
         public Eval_ConfigCompTemplateDetail(DataRow dr)
@@ -997,6 +999,7 @@ namespace WizOne.Module
             Editare = columns.Contains("Editare") == true ? Convert.ToBoolean(dr["Editare"].ToString() == string.Empty ? "False" : (dr["Editare"].ToString() == "0" ? "False" : "True")) : false;
             Vizibil = columns.Contains("Vizibil") == true ? Convert.ToBoolean(dr["Vizibil"].ToString() == string.Empty ? "False" : (dr["Vizibil"].ToString() == "0" ? "False" : "True")) : false;
             IdNomenclator = columns.Contains("IdNomenclator") == true ? Convert.ToInt32(dr["IdNomenclator"].ToString() == string.Empty ? "-99" : dr["IdNomenclator"].ToString()) : -99;
+            Ordine = columns.Contains("Ordine") == true ? (General.IsNumeric(dr["Ordine"]) ? (int?)dr["Ordine"] : null) : null;
         }
     }
 

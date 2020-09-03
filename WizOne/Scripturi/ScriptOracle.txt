@@ -15175,3 +15175,10 @@ COMMIT;
 END;
 /
 ALTER TRIGGER "Auto_Eval_tblTipValoriLinii" ENABLE;
+/
+
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "Ordine" number(10);
+/
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "Ordine" number(10);
+/

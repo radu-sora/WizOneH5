@@ -14522,3 +14522,6 @@ GO
 
 ALTER TABLE Eval_ConfigCompTemplateDetail ADD Ordine int
 GO
+
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 68, 'Link', 0)
+GO

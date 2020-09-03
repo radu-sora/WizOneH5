@@ -15182,3 +15182,6 @@ ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "Ordine" number(10);
 
 ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "Ordine" number(10);
 /
+
+INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare") VALUES(1, 68, 'Link', 0);
+COMMIT;

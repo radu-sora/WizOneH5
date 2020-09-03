@@ -1,4 +1,5 @@
-﻿using DevExpress.Web;
+﻿using DevExpress.PivotGrid.OLAP.Mdx;
+using DevExpress.Web;
 using DevExpress.Web.ASPxHtmlEditor.Internal;
 using DevExpress.Web.Data;
 using System;
@@ -1156,6 +1157,9 @@ namespace WizOne.Eval
                         case 55: //tabel din view Others
                             ctl = CreazaTabelOthers();
                             break;
+                        case 68: //tabel din view Others
+                            ctl = CreeazaLink(ent.Descriere, ent.Id);
+                            break;
                     }
 
                     if (ctl != null)
@@ -1200,7 +1204,7 @@ namespace WizOne.Eval
                         //Florin 2019.10.23  END
 
 
-                        if (ent.TipData == 9 || ent.TipData == 16 || ent.TipData == 24) //este eticheta sau rating global
+                        if (ent.TipData == 9 || ent.TipData == 16 || ent.TipData == 24 || ent.TipData == 68) //este eticheta sau rating global
                         {
                             HtmlTableRow row = new HtmlTableRow();
                             HtmlTableCell cell = new HtmlTableCell();
@@ -1409,7 +1413,7 @@ namespace WizOne.Eval
             //13 - NumeComplet
             //14 - Structura org.
             //15 - Post
-
+            
             ASPxTextBox txt = new ASPxTextBox();            
             try
             {
@@ -1447,6 +1451,8 @@ namespace WizOne.Eval
                         txt.DisplayFormatString = "N0";
                         break;
                 }
+
+                
             }
             catch (Exception ex)
             {
@@ -4611,7 +4617,30 @@ namespace WizOne.Eval
             }
         }
 
+        private ASPxHyperLink CreeazaLink(string valoare, int idCtl)
+        {
+            ASPxHyperLink lnk = new ASPxHyperLink();
 
+            try
+            {
+                lnk.Text = valoare;
+                lnk.Font.Underline = true;
+                lnk.NavigateUrl = valoare;
+                lnk.Target = "_blank";
+                lnk.ID = "lnk_" + idCtl;
+                lnk.Wrap = DevExpress.Utils.DefaultBoolean.True;
+                lnk.ForeColor = Evaluare.CuloareBrush("#FF000099");
+                lnk.Font.Size = 12;
+                lnk.Style.Add("margin-bottom", "10px");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return lnk;
+        }
 
     }
 }

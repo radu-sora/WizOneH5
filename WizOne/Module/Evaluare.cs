@@ -1043,7 +1043,7 @@ namespace WizOne.Module
         public int IdCompetenta { get; set; }
         public string Competenta { get; set; }
         public decimal Pondere { get; set; }
-        public int IdCalificativ { get; set; }
+        public int? IdCalificativ { get; set; }
         public string Calificativ { get; set; }
         public string ExplicatiiCalificativ { get; set; }
         public string Explicatii { get; set; }
@@ -1069,7 +1069,8 @@ namespace WizOne.Module
             IdCompetenta = columns.Contains("IdCompetenta") == true ? Convert.ToInt32(dr["IdCompetenta"].ToString() == string.Empty ? "-99" : dr["IdCompetenta"].ToString()) : -99;
             Competenta = columns.Contains("Competenta") == true ? dr["Competenta"].ToString() : "";
             Pondere = columns.Contains("Pondere") == true ? Convert.ToDecimal(dr["Pondere"].ToString() == string.Empty ? "-99" : dr["Pondere"].ToString()) : -99;
-            IdCalificativ = columns.Contains("IdCalificativ") == true ? Convert.ToInt32(dr["IdCalificativ"].ToString() == string.Empty ? "-99" : dr["IdCalificativ"].ToString()) : -99;
+            //IdCalificativ = columns.Contains("IdCalificativ") == true ? Convert.ToInt32(dr["IdCalificativ"].ToString() == string.Empty ? "-99" : dr["IdCalificativ"].ToString()) : -99;
+            IdCalificativ = columns.Contains("IdCalificativ") == true ? (General.IsNumeric(dr["IdCalificativ"]) ? (int?)dr["IdCalificativ"] : null) : null;
             Calificativ = columns.Contains("Calificativ") == true ? dr["Calificativ"].ToString() : "";
             ExplicatiiCalificativ = columns.Contains("ExplicatiiCalificativ") == true ? dr["ExplicatiiCalificativ"].ToString() : "";
             Explicatii = columns.Contains("Explicatii") == true ? dr["Explicatii"].ToString() : "";

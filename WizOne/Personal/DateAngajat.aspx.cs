@@ -66,7 +66,7 @@ namespace WizOne.Personal
                     }
 
                     //Radu 20.02.2020 - citire securitate
-                    string sqlSec = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"", MIN(X.""IdForm"") AS ""IdForm"" FROM (
+                    string sqlSec = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"", X.""IdForm""  FROM (
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat"", A.""IdForm""
                                 FROM ""Securitate"" A
                                 INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
@@ -75,7 +75,7 @@ namespace WizOne.Personal
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat"", A.""IdForm""
                                 FROM ""Securitate"" A
                                 WHERE A.""IdGrup"" = -1 AND A.""IdForm"" like 'Personal.%' ) X
-                                GROUP BY X.""IdControl"", X.""IdColoana""";
+                                GROUP BY X.""IdControl"", X.""IdColoana"", X.""IdForm""";
                     sqlSec = string.Format(sqlSec, Session["UserId"].ToString());
                     DataTable dtSec = General.IncarcaDT(sqlSec, null);
                     Session["SecuritatePersonal"] = dtSec;           

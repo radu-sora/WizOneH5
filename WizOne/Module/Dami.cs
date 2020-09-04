@@ -1585,7 +1585,7 @@ namespace WizOne.Module
 
             try
             {
-                rez = Convert.ToInt32((DateTime.Now - dataNasterii).TotalDays / 365);
+                rez = (int)(DateTime.Now - dataNasterii).TotalDays / 365;
             }
             catch (Exception ex)
             {

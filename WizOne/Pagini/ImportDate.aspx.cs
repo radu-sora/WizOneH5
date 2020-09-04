@@ -161,7 +161,8 @@ namespace WizOne.Pagini
                     file.Delete();
                 }
 
-                string path = folder.FullName + "\\Temp.xlsx";
+                string path = folder.FullName + "\\Temp." + btnDocUpload.UploadedFiles[0].FileName.Split('.')[1];
+                Session["ImportDate_Extensie"] = btnDocUpload.UploadedFiles[0].FileName.Split('.')[1];
                 File.WriteAllBytes(path, btnDocUpload.UploadedFiles[0].FileBytes);  
 
                 if (cmbSablon.Text.Length > 0)
@@ -183,10 +184,14 @@ namespace WizOne.Pagini
                 if (!folder.Exists)
                     folder.Create();
 
-                if (File.Exists(folder.FullName + "\\Temp.xlsx"))
+                if (Session["ImportDate_Extensie"] == null)
+                    return;
+
+                if (File.Exists(folder.FullName + "\\Temp." + Session["ImportDate_Extensie"].ToString()))
                 {
                     DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
-                    workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                    workbook.LoadDocument(folder.FullName + "\\Temp." + Session["ImportDate_Extensie"].ToString(), 
+                        (Session["ImportDate_Extensie"].ToString().ToUpper() == "XLSX" ? DevExpress.Spreadsheet.DocumentFormat.Xlsx : DevExpress.Spreadsheet.DocumentFormat.Xls));
 
              
                     DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
@@ -402,8 +407,12 @@ namespace WizOne.Pagini
                         dt.Columns.Add(obj["ColoanaFisier"].ToString(), typeof(string));
                 }
 
+                if (Session["ImportDate_Extensie"] == null)
+                    return;
+
                 DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
-                workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                workbook.LoadDocument(folder.FullName + "\\Temp." + Session["ImportDate_Extensie"].ToString(),
+                    (Session["ImportDate_Extensie"].ToString().ToUpper() == "XLSX" ? DevExpress.Spreadsheet.DocumentFormat.Xlsx : DevExpress.Spreadsheet.DocumentFormat.Xls));
 
                 DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
                 Dictionary<int, int> lstIndex = new Dictionary<int, int>();
@@ -788,8 +797,12 @@ namespace WizOne.Pagini
                     return;
                 }
 
+                if (Session["ImportDate_Extensie"] == null)
+                    return;
+
                 DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
-                workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                workbook.LoadDocument(folder.FullName + "\\Temp." + Session["ImportDate_Extensie"].ToString(),
+                    (Session["ImportDate_Extensie"].ToString().ToUpper() == "XLSX" ? DevExpress.Spreadsheet.DocumentFormat.Xlsx : DevExpress.Spreadsheet.DocumentFormat.Xls));
 
                 DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
 
@@ -933,6 +946,7 @@ namespace WizOne.Pagini
                                 case "nvarchar":
                                 case "varchar":
                                 case "varchar2":
+                                case "nvarchar2":
                                     if (ws2.Cells[j, k].Value != null && ws2.Cells[j, k].Value.ToString().Length > 0)
                                         val = "'" + ws2.Cells[j, k].Value.ToString() + "'";
                                     break;

@@ -492,7 +492,7 @@ namespace WizOne.Eval
                 object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdQuiz", "F10003", "PozitiePeCircuit", "Finalizat", "CategorieQuiz", "ALuatLaCunostinta" }) as object[];
                 if (obj == null || obj.Count() == 0)
                 {
-                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista linie selectata1");
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista linie selectata!");
                     return;
                 }
 
@@ -524,7 +524,7 @@ namespace WizOne.Eval
                 {//cautare utilizator conectat in istoric
                     string sql = "select  case when b.\"IdSuper\" > 0 and {0} = b.\"IdUser\" then 1 "
                             + "  when b.\"IdSuper\" < 0 and {0} in (select a.\"IdUser\" from \"F100Supervizori\" a where a.\"IdSuper\" = -1 * b.\"IdSuper\" and a.f10003 = b.f10003) then 1 "
-                            + " else 0 end as drept from \"Eval_RaspunsIstoric\" b where \"IdQuiz = {1} and f10003 = {2} and \"Pozitie\" = 2";
+                            + " else 0 end as drept from \"Eval_RaspunsIstoric\" b where \"IdQuiz\" = {1} and f10003 = {2} and \"Pozitie\" = 2";
                     sql = string.Format(sql, Session["UserId"].ToString(), obj[0], obj[1]);
                     DataTable dt = General.IncarcaDT(sql, null);
                     if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dt.Rows[0][0].ToString()) == 1)

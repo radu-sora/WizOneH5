@@ -1,67 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="ListaObiective.aspx.cs" Inherits="WizOne.Eval.ListaObiective" %>
 
-
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <script language="javascript" type="text/javascript">
-
-        var idObi = null;
-
-        function OnObiectivChanged(cmbObi) {
-            if (grDate.GetEditor("IdActivitate").InCallback())
-                idObi = cmbObi.GetValue().toString();
-            else
-                grDate.GetEditor("IdActivitate").PerformCallback(cmbObi.GetValue().toString());
-
-            var ert = cmbObi.GetValue();
-            hf.Set("CurrentObjective", ert);
-            var wswx = grDate.GetEditor("IdActivitate");
-        }
-
-        function OnEndCallback(s, e) {
-            if (idObi) {
-                grDate.GetEditor("IdActivitate").PerformCallback(idObi);
-                idObi = null;
-            }
-        }
-
-
-
-        //var currentEditingIndex;
-        //var lastObjective;
-        //var isCustomCascadingCallback = false;
-
-        //function RefreshData(objectiveValue) {
-        //    hf.Set("CurrentObjective", objectiveValue);
-        //    ActivityEditor.PerformCallback();
-        //}
-
-        //function cmbObiectiv_SelectedIndexChanged(s, e) {
-        //    grDate.PerformCallback();
-        //    //lastObjective = s.GetValue();
-        //    //isCustomCascadingCallback = true;
-        //    //RefreshData(lastObjective);
-        //}
-
-        //function cmbActivity_EndCallBack(s, e) {
-        //    if (isCustomCascadingCallback) {
-        //        if (s.GetItemCount() > 0)
-        //            grDate.BatchEditApi.SetCellValue(currentEditingIndex, "IdActivitate", s.GetItem(0).value);
-        //        isCustomCascadingCallback = false;
-        //    }
-        //}
-
-        //function OnBatchEditStartEditing(s, e) {
-        //    currentEditingIndex = e.visibleIndex;
-        //    var currentObjective = grid.BatchEditApi.GetCellValue(currentEditingIndex, "IdObiectiv");
-        //    if (currentObjective != lastObjective && e.focusedColumn.fieldName == "IdActivitate" && currentObjective != null) {
-        //        lastObjective = currentObjective;
-        //        RefreshData(currentObjective);
-        //    }
-        //}
-    </script>
-</asp:Content>
-
-
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <table width="100%">
         <tr>
@@ -119,7 +57,7 @@
                 <dx:ASPxHiddenField runat="server" ID="hf" ClientInstanceName="hf" />
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" OnRowDeleting="grDate_RowDeleting" Width="100%" 
                     AutoGenerateColumns="false" OnAutoFilterCellEditorInitialize="grDate_AutoFilterCellEditorInitialize" OnCellEditorInitialize="grDate_CellEditorInitialize"
-                    OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnInitNewRow="grDate_InitNewRow" OnCustomErrorText="grDate_CustomErrorText">
+                    OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnInitNewRow="grDate_InitNewRow">
                     <SettingsBehavior AllowFocusedRow="true" EnableCustomizationWindow="true" AllowSelectByRowClick="true" ColumnResizeMode="NextColumn" />
                     <Settings ShowFilterRow="true" ShowGroupPanel="true" HorizontalScrollBarMode="Auto" />
                     <SettingsSearchPanel Visible="true" />
@@ -131,20 +69,20 @@
                         <dx:GridViewDataTextColumn FieldName="IdLista" Name="IdLista" Caption="IdLista" Visible="false" />
                         
                         <dx:GridViewDataComboBoxColumn FieldName="IdObiectiv" Name="IdObiectiv" Caption="Obiectiv" Width="250px" VisibleIndex="1" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" EnableSynchronization="false" IncrementalFilteringMode="StartsWith" DropDownStyle="DropDown" >
+                            <PropertiesComboBox TextField="Obiectiv" ValueField="IdObiectiv" ValueType="System.Int32" EnableSynchronization="false" IncrementalFilteringMode="StartsWith" DropDownStyle="DropDown" >
                                 <ValidationSettings RequiredField-IsRequired="true" Display="None" />
                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { OnObiectivChanged(s); }" />
                             </PropertiesComboBox>
                         </dx:GridViewDataComboBoxColumn>
 
                         <dx:GridViewDataComboBoxColumn FieldName="IdActivitate" Name="IdActivitate" Caption="Activitate" Width="250px" VisibleIndex="2">
-                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" EnableSynchronization="false" IncrementalFilteringMode="StartsWith">
-                                <ClientSideEvents EndCallback="OnEndCallback" />
+                            <PropertiesComboBox TextField="Activitate" ValueField="IdActivitate" ValueType="System.Int32" DropDownStyle="DropDown" EnableSynchronization="false" IncrementalFilteringMode="StartsWith">
+                                <ClientSideEvents EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                             </PropertiesComboBox>
                         </dx:GridViewDataComboBoxColumn>
 
                         <dx:GridViewDataComboBoxColumn FieldName="IdSetAngajat" Name="IdSetAngajat" Caption="Set angajat" Width="250px" VisibleIndex="3">
-                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" EnableCallbackMode="true" />
+                            <PropertiesComboBox TextField="DenSet" ValueField="IdSetAng" ValueType="System.Int32" DropDownStyle="DropDown" EnableCallbackMode="true" />
                         </dx:GridViewDataComboBoxColumn>
 
                         <dx:GridViewDataTextColumn FieldName="Target" Name="Target" Caption="Target" Width="150px" VisibleIndex="4" >
@@ -188,4 +126,27 @@
             </td>
         </tr>
     </table>
+
+    <script>
+
+        var idObi = null;
+
+        function OnObiectivChanged(cmbObi) {
+            if (grDate.GetEditor("IdActivitate").InCallback())
+                idObi = cmbObi.GetValue().toString();
+            else
+                grDate.GetEditor("IdActivitate").PerformCallback(cmbObi.GetValue().toString());
+
+            var ert = cmbObi.GetValue();
+            hf.Set("CurrentObjective", ert);
+            var wswx = grDate.GetEditor("IdActivitate");
+        }
+
+        function OnEndCallback(s, e) {
+            if (idObi) {
+                grDate.GetEditor("IdActivitate").PerformCallback(idObi);
+                idObi = null;
+            }
+        }
+    </script>
 </asp:Content>

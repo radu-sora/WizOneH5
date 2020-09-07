@@ -15185,3 +15185,49 @@ ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "Ordine" number(10);
 
 INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare") VALUES(1, 68, 'Link', 0);
 COMMIT;
+
+--https://github.com/wizromRD/WizOne/issues/563
+--Pe formularele duplicate daca adaug linii noi in chestionar le inverseaza ordinea dupa salvare. De renuntat la tabela TableSYSInfo_NextId si de pus conditie de Max+1 #563
+CREATE SEQUENCE "Eval_SetCalificativDet_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_SetCalificativDet" 
+  BEFORE INSERT ON "Eval_SetCalificativDet"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_SetCalificativDet_SEQ".nextval
+    INTO :new."IdCalificativ"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_SetCalificativDet" ENABLE;
+/
+
+
+CREATE SEQUENCE "Eval_CategCompetenteDet_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_CategCompetenteDet" 
+  BEFORE INSERT ON "Eval_CategCompetenteDet"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_CategCompetenteDet_SEQ".nextval
+    INTO :new."IdCompetenta"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_CategCompetenteDet" ENABLE;
+/
+
+
+CREATE SEQUENCE "Eval_ListaObiectivDet_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_ListaObiectivDet" 
+  BEFORE INSERT ON "Eval_ListaObiectivDet"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_ListaObiectivDet_SEQ".nextval
+    INTO :new."Id"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_ListaObiectivDet" ENABLE;
+/

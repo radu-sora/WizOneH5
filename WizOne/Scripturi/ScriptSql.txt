@@ -14525,3 +14525,34 @@ GO
 
 INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 68, 'Link', 0)
 GO
+
+--https://github.com/wizromRD/WizOne/issues/563
+--Pe formularele duplicate daca adaug linii noi in chestionar le inverseaza ordinea dupa salvare. De renuntat la tabela TableSYSInfo_NextId si de pus conditie de Max+1 #563
+ALTER TABLE Eval_SetCalificativDet DROP CONSTRAINT PK_Eval_SetCalificativDet
+GO
+ALTER TABLE Eval_SetCalificativDet DROP COLUMN IdCalificativ
+GO
+ALTER TABLE Eval_SetCalificativDet ADD IdCalificativ int IDENTITY(1,1)
+GO
+ALTER TABLE Eval_SetCalificativDet ADD CONSTRAINT PK_Eval_SetCalificativDet PRIMARY KEY (IdCalificativ)
+GO
+
+
+ALTER TABLE Eval_CategCompetenteDet DROP CONSTRAINT PK_Eval_CategCompetenteDet
+GO
+ALTER TABLE Eval_CategCompetenteDet DROP COLUMN IdCompetenta
+GO
+ALTER TABLE Eval_CategCompetenteDet ADD IdCompetenta int IDENTITY(1,1)
+GO
+ALTER TABLE Eval_CategCompetenteDet ADD CONSTRAINT PK_Eval_CategCompetenteDet PRIMARY KEY (IdCompetenta)
+GO
+
+
+ALTER TABLE Eval_ListaObiectivDet DROP CONSTRAINT PK_Eval_ListaObiectivDet
+GO
+ALTER TABLE Eval_ListaObiectivDet DROP COLUMN Id
+GO
+ALTER TABLE Eval_ListaObiectivDet ADD Id int IDENTITY(1,1)
+GO
+ALTER TABLE Eval_ListaObiectivDet ADD CONSTRAINT PK_Eval_ListaObiectivDet PRIMARY KEY (Id)
+GO

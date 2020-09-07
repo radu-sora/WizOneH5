@@ -1,16 +1,11 @@
 ﻿using DevExpress.Web;
-using Oracle.ManagedDataAccess.Client;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Eval
@@ -23,7 +18,6 @@ namespace WizOne.Eval
             try
             {
                 Dami.AccesApp();
-
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 #region Traducere
@@ -49,7 +43,7 @@ namespace WizOne.Eval
                         case "Clone":
                             {
                                 //incarcare header
-                                DataTable dtHead = General.IncarcaDT("select * from \"Eval_SetCalificativ\" where \"IdSet\"=@1 ", new string[] { IdSetCalificativ.ToString() });
+                                DataTable dtHead = General.IncarcaDT(@"SELECT * FROM ""Eval_SetCalificativ"" WHERE ""IdSet""=@1 ", new object[] { IdSetCalificativ });
                                 if (dtHead.Rows.Count != 0)
                                 {
                                     txtId.Text = dtHead.Rows[0]["IdSet"].ToString();
@@ -60,22 +54,10 @@ namespace WizOne.Eval
                             break;
                     }
 
-                    DataSet ds = new DataSet();
-                    string gridKey = "";
-                    string sqlQuery = string.Empty;
-                    sqlQuery = "select * from \"Eval_SetCalificativDet\" where \"IdSet\" ={0}";
-                    sqlQuery = string.Format(sqlQuery, IdSetCalificativ);
-                    DataTable dt = General.IncarcaDT(sqlQuery, null);
-
-                    DataColumn[] keys = dt.PrimaryKey;
-                    for (int i = 0; i < keys.Count(); i++)
-                        gridKey += ";" + keys[i].ToString();
-
+                    DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Eval_SetCalificativDet"" WHERE ""IdSet""=@1", new object[] { IdSetCalificativ });
                     Session["InformatiaCurenta"] = dt;
-
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.KeyFieldName = "IdCalificativ";
-                    if (gridKey != "") grDate.KeyFieldName = gridKey.Substring(1);
                     grDate.DataBind();
                 }
                 else
@@ -83,7 +65,6 @@ namespace WizOne.Eval
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.DataBind();
                 }
-
             }
             catch (Exception ex)
             {
@@ -110,19 +91,16 @@ namespace WizOne.Eval
         {
             try
             {
-                string sqlQuery = string.Empty;
                 int id = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                sqlQuery = "select * from \"Eval_SetCalificativ\" where \"IdSet\" = {0} ";
-                sqlQuery = string.Format(sqlQuery, id);
-                DataTable dtHead = General.IncarcaDT(sqlQuery, null);
+                DataTable dtHead = General.IncarcaDT(@"SELECT * FROM ""Eval_SetCalificativ"" WHERE ""IdSet""=@1", new object[] { id });
 
                 switch (Session["Sablon_TipActiune"].ToString())
                 {
                     case "New":
                     case "Clone":
                         {
-                            id = Dami.NextId("Eval_SetCalificativ");
+                            id = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""IdSet"",0)) FROM ""Eval_SetCalificativ"" "),0)) + 1;
                             DataRow drHead = dtHead.NewRow();
                             drHead["IdSet"] = id;
                             drHead["CodSet"] = txtCodSet.Text;
@@ -131,8 +109,6 @@ namespace WizOne.Eval
                             drHead["USER_NO"] = Session["UserId"];
                             dtHead.Rows.Add(drHead);
 
-                            int nrInreg = dt.Rows.Count;
-                            int Id = Dami.NextId("Eval_SetCalificativDet", nrInreg);
                             foreach (DataRow dr in dt.Rows)
                             {
                                 dr["IdSet"] = id;
@@ -144,55 +120,14 @@ namespace WizOne.Eval
                         dtHead.Rows[0]["DenSet"] = txtDenSet.Text;
                         foreach (DataRow dr in dt.Rows)
                         {
-                            dr["IdSet"] = id;
+                            if (dr.RowState != DataRowState.Deleted)
+                                dr["IdSet"] = id;
                         }
                         break;
                 }
 
-                #region salvare Eval_ListaObiectiv
-                if (Constante.tipBD == 1)
-                {
-                    SqlDataAdapter daHead = new SqlDataAdapter();
-                    daHead.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_SetCalificativ\" ", null);
-                    SqlCommandBuilder cbHead = new SqlCommandBuilder(daHead);
-                    daHead.Update(dtHead);
-                    daHead.Dispose();
-                    daHead = null;
-                }
-                else
-                {
-                    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_SetCalificativ\" WHERE ROWNUM = 0", null);
-                    OracleCommandBuilder cbbHead = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(dtHead);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
-
-                }
-                #endregion
-
-                #region salvare Eval_ListaObiectivDet
-                if (Constante.tipBD == 1)
-                {
-                    SqlDataAdapter da = new SqlDataAdapter();
-                    da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_SetCalificativDet\" ", null);
-                    SqlCommandBuilder cb = new SqlCommandBuilder(da);
-                    da.Update(dt);
-
-                    da.Dispose();
-                    da = null;
-                }
-                else
-                {
-                    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_SetCalificativDet\" WHERE ROWNUM = 0", null);
-                    OracleCommandBuilder cb = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(dt);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
-
-                }
-                #endregion
+                General.SalveazaDate(dtHead, "Eval_SetCalificativ");
+                General.SalveazaDate(dt, "Eval_SetCalificativDet");
 
                 HttpContext.Current.Session["Sablon_Tabela"] = "Eval_SetCalificativ";
                 Response.Redirect("~/Pagini/SablonLista.aspx", false);
@@ -257,8 +192,7 @@ namespace WizOne.Eval
             {
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow row = dt.NewRow();
-                int x = Dami.NextId("Eval_SetCalificativDet");
-                row["IdCalificativ"] = x;
+
                 row["Denumire"] = e.NewValues["Denumire"];
                 row["Nota"] = e.NewValues["Nota"];
                 row["RatingMin"] = e.NewValues["RatingMin"];
@@ -289,9 +223,7 @@ namespace WizOne.Eval
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow row = dt.Rows.Find(keys);
-
                 DataColumn[] colPrimaryKey = dt.PrimaryKey;
-
                 foreach (DataColumn col in dt.Columns)
                 {
                     if ((!col.AutoIncrement && (cmp.IndexOf(col.ColumnName.ToUpper() + ",") < 0)) && colPrimaryKey.Where(p => p.ColumnName == col.ColumnName).Count() == 0)
@@ -299,7 +231,6 @@ namespace WizOne.Eval
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                     }
-
                 }
 
                 e.Cancel = true;
@@ -318,23 +249,9 @@ namespace WizOne.Eval
         {
             try
             {
-                DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 e.NewValues["TIME"] = DateTime.Now;
                 e.NewValues["USER_NO"] = Session["UserId"];
-                e.NewValues["IdCalificativ"] = dt.Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie! ");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void grDate_CustomErrorText(object sender, DevExpress.Web.ASPxGridViewCustomErrorTextEventArgs e)
-        {
-            try
-            {
-
+                e.NewValues["IdCalificativ"] = 1;
             }
             catch (Exception ex)
             {

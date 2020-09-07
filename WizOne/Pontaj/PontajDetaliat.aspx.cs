@@ -480,7 +480,8 @@ namespace WizOne.Pontaj
                 {
                     grDate.DataSource = null;
                     grDate.DataBind();
-                    MessageBox.Show("Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea", MessageBox.icoInfo, "Initializare");
+                    grDate.JSProperties["cpAlertMessage"] = "Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea";
+                    //MessageBox.Show("Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea", MessageBox.icoInfo, "Initializare");
                     return;
                 }
 
@@ -614,10 +615,16 @@ namespace WizOne.Pontaj
                 //Florin 2020.05.25
                 GridViewCommandColumn grCmd = grDate.Columns[0] as GridViewCommandColumn;
                 grCmd.Visible = false;
-                if ((tip == 2 || tip == 20) && dt.Rows.Count == 1)
+                if (dt.Rows.Count == 1)
                 {
                     grCmd.Visible = true;
                     grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                }
+
+                if (Dami.ValoareParam("PontajulAreCC") == "1" && (tip == 1 || tip == 10))
+                {
+                    grCmd.Visible = true;
+                    grCmd.CustomButtons[0].Visibility = GridViewCustomButtonVisibility.AllDataRows;
                 }
             }
             catch (Exception ex)

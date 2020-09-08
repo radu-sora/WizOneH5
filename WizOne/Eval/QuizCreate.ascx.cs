@@ -412,6 +412,12 @@ namespace WizOne.Eval
                     cmbTipObiect.DataBind();
                 }
 
+                if (!IsPostBack)
+                {
+                    Session["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigObTemplate"" "), 0)) + 1;
+                    Session["TemplateIdCompetenta"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigCompTemplate"" "), 0)) + 1;
+                    Session["QuizIntrebari_Id"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""Id"",0)) FROM ""Eval_QuizIntrebari"" "), 0)) + 1;
+                }
             }
             catch (Exception ex)
             {
@@ -654,7 +660,8 @@ namespace WizOne.Eval
 
                     int OrdineIntrebare = dtIntrebari.AsEnumerable().Where(row => row.Field<Int32>("Parinte") == Convert.ToInt32(rowSelected["Parinte"].ToString())).AsEnumerable().Select(row => row.Field<int>("OrdineInt")).Distinct().ToList().Max();
 
-                    int idNewIntrebare = Dami.NextId("Eval_QuizIntrebari");
+                    Session["QuizIntrebari_Id"] = Convert.ToInt32(Session["QuizIntrebari_Id"]) + 1;
+                    int idNewIntrebare = Convert.ToInt32(Session["QuizIntrebari_Id"]);
                     DataRow rwNewSectiune = dtIntrebari.NewRow();
                     rwNewSectiune["Id"] = idNewIntrebare;
                     rwNewSectiune["Parinte"] = idSelectat;
@@ -745,7 +752,8 @@ namespace WizOne.Eval
                     else
                         OrdineIntrebare = dtIntrebari.AsEnumerable().Where(row => row.Field<Int32>("Parinte") == idIntrebare).AsEnumerable().Select(row => row.Field<int>("OrdineInt")).Distinct().ToList().Max();
 
-                    int idNewIntrebare = Dami.NextId("Eval_QuizIntrebari");
+                    Session["QuizIntrebari_Id"] = Convert.ToInt32(Session["QuizIntrebari_Id"]) + 1;
+                    int idNewIntrebare = Convert.ToInt32(Session["QuizIntrebari_Id"]);
                     DataRow rwNewSectiune = dtIntrebari.NewRow();
                     rwNewSectiune["Id"] = idNewIntrebare;
                     rwNewSectiune["Parinte"] = idIntrebare;
@@ -831,8 +839,8 @@ namespace WizOne.Eval
                                 Session["isEditingObiectivTemplate"] = 1;
                                 Session["isEditingCompetenteTemplate"] = null;
 
-                                int TemplateId = rwDataCurrent["TemplateIdObiectiv"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigObTemplate", 1) :
-                                                Convert.ToInt32(rwDataCurrent["TemplateIdObiectiv"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwDataCurrent["TemplateIdObiectiv"], Session["TemplateIdObiectiv"]));
+                                
                                 rwDataCurrent["TemplateIdObiectiv"] = TemplateId;
                                 ShowTemplateObiectiv(TemplateId);
 
@@ -851,9 +859,7 @@ namespace WizOne.Eval
                                 Session["isEditingObiectivTemplate"] = null;
                                 Session["isEditingCompetenteTemplate"] = 1;
 
-                                int TemplateId;
-                                TemplateId = rwDataCurrent["TemplateIdCompetenta"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigCompTemplate", 1) :
-                                    Convert.ToInt32(rwDataCurrent["TemplateIdCompetenta"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwDataCurrent["TemplateIdCompetenta"], Session["TemplateIdCompetenta"]));
                                 rwDataCurrent["TemplateIdCompetenta"] = TemplateId;
                                 ShowTemplateCompetente(TemplateId);
 
@@ -1186,9 +1192,7 @@ namespace WizOne.Eval
                                 lblPerioadaObi.Visible = IdTipObiect == 23 ? true : false;// chkObiective.Checked == true ? true : false;
                                 cmbPerioadaObi.Visible = IdTipObiect == 23 ? true : false; //chkObiective.Checked == true ? true : false;
 
-                                int TemplateId;
-                                TemplateId = rwIntrebare["TemplateIdObiectiv"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigObTemplate", 1) :
-                                                         Convert.ToInt32(rwIntrebare["TemplateIdObiectiv"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwIntrebare["TemplateIdObiectiv"], Session["TemplateIdObiectiv"]));
                                 rwIntrebare["TemplateIdObiectiv"] = IdTipObiect == 23 ? TemplateId : -99;
                                 if (IdTipObiect == 23)
                                 {
@@ -1222,9 +1226,7 @@ namespace WizOne.Eval
                                 lblPerioadaComp.Visible = IdTipObiectCompetente == 5 ? true : false; //chkCompetente.Checked == true ? true : false;
                                 cmbPerioadaComp.Visible = IdTipObiectCompetente == 5 ? true : false; //chkCompetente.Checked == true ? true : false;
 
-                                int TemplateId;
-                                TemplateId = rwIntrebare["TemplateIdCompetenta"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigCompTemplate", 1) :
-                                                         Convert.ToInt32(rwIntrebare["TemplateIdCompetenta"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwIntrebare["TemplateIdCompetenta"], Session["TemplateIdCompetenta"]));
                                 rwIntrebare["TemplateIdCompetenta"] = IdTipObiectCompetente == 5 ? TemplateId : -99;
                                 ShowTemplateCompetente(TemplateId);
                                 cmbTemplateCompetente.DataSource = lstEval_ConfigCompTemplate;
@@ -1252,9 +1254,7 @@ namespace WizOne.Eval
                                 Session["isEditingObiectivTemplate"] = 1;
                                 Session["isEditingCompetenteTemplate"] = null;
 
-                                int TemplateId;
-                                TemplateId = rwIntrebare["TemplateIdObiectiv"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigObTemplate", 1) :
-                                                        Convert.ToInt32(rwIntrebare["TemplateIdObiectiv"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwIntrebare["TemplateIdObiectiv"], Session["TemplateIdObiectiv"]));
                                 rwIntrebare["TemplateIdObiectiv"] = TemplateId;
                                 ShowTemplateObiectiv(TemplateId);
                                 cmbTemplateObiective.DataSource = lstEval_ConfigObTemplate;
@@ -1277,9 +1277,7 @@ namespace WizOne.Eval
                                 Session["isEditingObiectivTemplate"] = null;
                                 Session["isEditingCompetenteTemplate"] = 1;
 
-                                int TemplateId;
-                                TemplateId = rwIntrebare["TemplateIdCompetenta"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigCompTemplate", 1) :
-                                                        Convert.ToInt32(rwIntrebare["TemplateIdCompetenta"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwIntrebare["TemplateIdCompetenta"], Session["TemplateIdCompetenta"]));
                                 rwIntrebare["TemplateIdCompetenta"] = TemplateId;
                                 ShowTemplateCompetente(TemplateId);
                                 cmbTemplateCompetente.DataSource = lstEval_ConfigCompTemplate;

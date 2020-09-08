@@ -15244,3 +15244,6 @@ END;
 /
 ALTER TRIGGER "Auto_Eval_relGrupAngajatQuiz" ENABLE;
 /
+
+DROP TABLE "TableSYSInfo_NextId";
+/

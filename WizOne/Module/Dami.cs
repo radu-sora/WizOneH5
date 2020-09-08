@@ -1323,66 +1323,26 @@ namespace WizOne.Module
                         break;
                 }
 
-                ///LeonardM 16.10.2017
-                ///in momentul in care avem de a face cu tabele ce tin de modulul de Evaluare
-                ///atunci intentia e ca pentru coloanele de id sa preluam valoarea cu ajutorul procedurii GetNextId
-                ///
-                if (tabela.Contains("Eval"))
+                if (Constante.tipBD == 1)                   //SQL
                 {
-                    #region varianta prin procedura GetNextId
-                    string sqlQuery = string.Empty;
-                    if (Constante.tipBD == 1)           //SQL
+                    int vers = Convert.ToInt32(ValoareParam("VersiuneSQL", "2008"));
+                    if (vers > 2008)
                     {
-                        sqlQuery = "exec \"GetNextId\" '{0}', {1}";
-                        sqlQuery = string.Format(sqlQuery, tabela, nrInreg);
-                        General.ExecutaNonQuery(sqlQuery, null);
-                    }
-                    else
-                    {
-                        //Oracle
-                        sqlQuery = "exec \"GetNextId\" ('{0}', {1})";
-                        sqlQuery = string.Format(sqlQuery, tabela, nrInreg);
-                        General.ExecutaNonQueryOracle("\"GetNextId\"", new object[] { "tableName=" + tabela, "nrInreg=" + nrInreg });
-                    }
-
-                    sqlQuery = "select \"NextId\" from \"TableSYSInfo_NextId\" where \"TableName\" ='{0}'";
-                    sqlQuery = string.Format(sqlQuery, tabela);
-                    id = Convert.ToInt32(General.ExecutaScalar(sqlQuery, null));
-                    #endregion
-                }
-                else
-                {
-                    #region varianta standard/ secvente
-                    if (Constante.tipBD == 1)                   //SQL
-                    {
-                        int vers = Convert.ToInt32(ValoareParam("VersiuneSQL", "2008"));
-
-                        if (vers > 2008)
-                        {
-                            //Radu 09.01.2018
-                            //int cnt = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[@1]') AND type = 'SO'", new object[] { seq }));
-                            int cnt = Convert.ToInt32(General.ExecutaScalar("SELECT COUNT(*) FROM sys.objects WHERE name = '" + seq + "' AND type = 'SO'", null));
-                            if (cnt == 0)
-                            {
-                                //id = Convert.ToInt32(General.ExecutaScalar("SELECT MAX(COALESCE(Id,0)) FROM " + tabela, null)) + 1;
-                                id = -99;
-                            }
-                            else
-                                //Radu 16.04.2018
-                                //id = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR @1", new object[] { seq }));
-                                id = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR " + seq, null));
-                        }
+                        int cnt = Convert.ToInt32(General.ExecutaScalar("SELECT COUNT(*) FROM sys.objects WHERE name = '" + seq + "' AND type = 'SO'", null));
+                        if (cnt == 0)
+                            id = -99;
                         else
-                        {
-                            id = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""IdAutoCereri"" FROM ""tblConfig"" WHERE ""Id"" = 1", null)) + 1;
-                            General.ExecutaNonQuery($@"UPDATE ""tblConfig"" SET ""IdAutoCereri"" = {id} WHERE ""Id"" = 1", null);
-                        }
+                            id = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR " + seq, null));
                     }
-                    else                                   //Oracle
-                    {
-                        id = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""{seq}"".NEXTVAL FROM DUAL", null));
-                    }
-                    #endregion
+                    id = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"
+                            BEGIN
+                                UPDATE ""tblConfig"" SET ""IdAutoCereri"" = COALESCE(""IdAutoCereri"",0)+1 WHERE ""Id"" = 1;
+                                SELECT ""IdAutoCereri"" FROM ""tblConfig"" WHERE ""Id"" = 1;
+                            END; "),1));
+                }
+                else                                   //Oracle
+                {
+                    id = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""{seq}"".NEXTVAL FROM DUAL", null));
                 }
             }
             catch (Exception)
@@ -1392,6 +1352,112 @@ namespace WizOne.Module
 
             return id;
         }
+
+
+        //internal static int NextId(string tabela, int nrInreg = 1)
+        //{
+        //    int id = 1;
+
+        //    try
+        //    {
+        //        string seq = tabela + "_SEQ";
+
+        //        //daca tabela se gaseste in switch-ul de mai jos se ia secventa indicata acolo, daca nu se ia cea implicita de deasupra de forma Tabela + _SEQ
+        //        //exista cazul in care pt aceeasi tabela exista mai multe secvente
+        //        switch (tabela.ToUpper())
+        //        {
+        //            case "PTJ_CERERI":
+        //                seq = "Ptj_Cereri_Id_SEQ";
+        //                break;
+        //            case "ORGANIGRAMA":
+        //                seq = "Organigrama_Id_SEQ";
+        //                break;
+        //            case "F100":
+        //                seq = "F100MARCA";
+        //                break;
+        //            case "MP_CERERI":
+        //                seq = "MP_Cereri_SEQ";
+        //                break;
+        //            case "F300":
+        //                seq = "F300_SEQ";
+        //                break;
+        //            case "BP_PRIME":
+        //                seq = "BP_Prime_SEQ";
+        //                break;
+        //            case "OBIINDIVIDUALE":
+        //                seq = "ObiIndividuale_SEQ";
+        //                break;
+        //        }
+
+        //        ///LeonardM 16.10.2017
+        //        ///in momentul in care avem de a face cu tabele ce tin de modulul de Evaluare
+        //        ///atunci intentia e ca pentru coloanele de id sa preluam valoarea cu ajutorul procedurii GetNextId
+        //        ///
+        //        if (tabela.Contains("Eval"))
+        //        {
+        //            #region varianta prin procedura GetNextId
+        //            string sqlQuery = string.Empty;
+        //            if (Constante.tipBD == 1)           //SQL
+        //            {
+        //                sqlQuery = "exec \"GetNextId\" '{0}', {1}";
+        //                sqlQuery = string.Format(sqlQuery, tabela, nrInreg);
+        //                General.ExecutaNonQuery(sqlQuery, null);
+        //            }
+        //            else
+        //            {
+        //                //Oracle
+        //                sqlQuery = "exec \"GetNextId\" ('{0}', {1})";
+        //                sqlQuery = string.Format(sqlQuery, tabela, nrInreg);
+        //                General.ExecutaNonQueryOracle("\"GetNextId\"", new object[] { "tableName=" + tabela, "nrInreg=" + nrInreg });
+        //            }
+
+        //            sqlQuery = "select \"NextId\" from \"TableSYSInfo_NextId\" where \"TableName\" ='{0}'";
+        //            sqlQuery = string.Format(sqlQuery, tabela);
+        //            id = Convert.ToInt32(General.ExecutaScalar(sqlQuery, null));
+        //            #endregion
+        //        }
+        //        else
+        //        {
+        //            #region varianta standard/ secvente
+        //            if (Constante.tipBD == 1)                   //SQL
+        //            {
+        //                int vers = Convert.ToInt32(ValoareParam("VersiuneSQL", "2008"));
+
+        //                if (vers > 2008)
+        //                {
+        //                    //Radu 09.01.2018
+        //                    //int cnt = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[@1]') AND type = 'SO'", new object[] { seq }));
+        //                    int cnt = Convert.ToInt32(General.ExecutaScalar("SELECT COUNT(*) FROM sys.objects WHERE name = '" + seq + "' AND type = 'SO'", null));
+        //                    if (cnt == 0)
+        //                    {
+        //                        //id = Convert.ToInt32(General.ExecutaScalar("SELECT MAX(COALESCE(Id,0)) FROM " + tabela, null)) + 1;
+        //                        id = -99;
+        //                    }
+        //                    else
+        //                        //Radu 16.04.2018
+        //                        //id = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR @1", new object[] { seq }));
+        //                        id = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR " + seq, null));
+        //                }
+        //                else
+        //                {
+        //                    id = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""IdAutoCereri"" FROM ""tblConfig"" WHERE ""Id"" = 1", null)) + 1;
+        //                    General.ExecutaNonQuery($@"UPDATE ""tblConfig"" SET ""IdAutoCereri"" = {id} WHERE ""Id"" = 1", null);
+        //                }
+        //            }
+        //            else                                   //Oracle
+        //            {
+        //                id = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""{seq}"".NEXTVAL FROM DUAL", null));
+        //            }
+        //            #endregion
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        // srvGeneral.MemoreazaEroarea(ex.ToString(), "srvGeneral", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return id;
+        //}
 
         internal static DateTime DataDrepturi(int tip, int nrZile, DateTime dtInc, int f10003=-99, int idRol = 0)
         {

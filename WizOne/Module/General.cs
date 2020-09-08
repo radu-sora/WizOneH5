@@ -5619,6 +5619,12 @@ namespace WizOne.Module
                 //Florin 2020.08.18
                 HttpContext.Current.Session["FisiereDeSters"] = "";
 
+                //Florin 2020.09.08
+                HttpContext.Current.Session["TemplateIdObiectiv"] = 1;
+                HttpContext.Current.Session["TemplateIdCompetenta"] = 1;
+                HttpContext.Current.Session["QuizIntrebari_Id"] = 1;
+
+
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
 

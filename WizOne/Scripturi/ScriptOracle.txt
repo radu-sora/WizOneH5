@@ -15231,3 +15231,16 @@ END;
 /
 ALTER TRIGGER "Auto_Eval_ListaObiectivDet" ENABLE;
 /
+
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_relGrupAngajatQuiz" 
+  BEFORE INSERT ON "Eval_relGrupAngajatQuiz"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_relGrupAngajatQuiz_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_relGrupAngajatQuiz" ENABLE;
+/

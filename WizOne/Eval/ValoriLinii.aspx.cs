@@ -1,7 +1,5 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
+﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,13 +12,11 @@ namespace WizOne.Eval
     public partial class ValoriLinii : System.Web.UI.Page
     {
         string cmp = "USER_NO,TIME,IDAUTO,";
-
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
                 Dami.AccesApp();
-
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 #region Traducere
@@ -37,35 +33,29 @@ namespace WizOne.Eval
                 int id = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
                 if (!IsPostBack)
                 {
-                    DataSet ds = new DataSet();
-                    string gridKey = "";
-                    string sqlQuery = string.Empty;
-                    sqlQuery = "select * from \"Eval_tblTipValoriLinii\" where \"Id\" = {0}";
-                    sqlQuery = string.Format(sqlQuery, id);
-                    DataTable dt = General.IncarcaDT(sqlQuery, null);
-
-                    DataColumn[] keys = dt.PrimaryKey;
-                    for(int i=0;i<keys.Count(); i++)
+                    switch (Session["Sablon_TipActiune"].ToString())
                     {
-                        gridKey += ";" + keys[i].ToString();
+                        case "New":
+                            break;
+                        case "Edit":
+                        case "Clone":
+                            {
+                                //incarcare header
+                                DataTable dtHead = General.IncarcaDT(@"SELECT * FROM ""Eval_tblTipValori"" WHERE ""Id""=@1 ", new object[] { id });
+                                if (dtHead.Rows.Count != 0)
+                                {
+                                    txtId.Text = dtHead.Rows[0]["Id"].ToString();
+                                    txtValoare.Text = dtHead.Rows[0]["Denumire"].ToString();
+                                }
+                            }
+                            break;
                     }
 
+                    DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Eval_tblTipValoriLinii"" WHERE ""Id""=@1", new object[] { id });
                     Session["InformatiaCurenta"] = dt;
-
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.KeyFieldName = "IdAuto";
-                    if (gridKey != "") grDate.KeyFieldName = gridKey.Substring(1);
                     grDate.DataBind();
-
-                    sqlQuery = @"select * from ""Eval_tblTipValori"" where ""Id"" = {0}";
-                    sqlQuery = string.Format(sqlQuery, id);
-                    DataTable dtValoare = General.IncarcaDT(sqlQuery, null);
-
-                    if (dtValoare != null && dtValoare.Rows.Count > 0 && dtValoare.Rows[0][0] != null)
-                    {
-                        txtId.Text = dtValoare.Rows[0]["Id"].ToString();
-                        txtValoare.Text = dtValoare.Rows[0]["Denumire"].ToString();
-                    }
                 }
                 else
                 {
@@ -99,19 +89,16 @@ namespace WizOne.Eval
         {
             try
             {
-                string sqlQuery = string.Empty;
                 int id = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                sqlQuery = "select * from \"Eval_tblTipValori\" where \"Id\" = {0} ";
-                sqlQuery = string.Format(sqlQuery, id);
-                DataTable dtHead = General.IncarcaDT(sqlQuery, null);
+                DataTable dtHead = General.IncarcaDT(@"SELECT * FROM ""Eval_tblTipValori"" WHERE ""Id""=@1", new object[] { id });
 
                 switch (Session["Sablon_TipActiune"].ToString())
                 {
                     case "New":
                     case "Clone":
                         {
-                            id = Dami.NextId("Eval_tblTipValori");
+                            id = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""Id"",0)) FROM ""Eval_tblTipValori"" "), 0)) + 1;
                             DataRow drHead = dtHead.NewRow();
                             drHead["Id"] = id;
                             drHead["Denumire"] = txtValoare.Text;
@@ -119,8 +106,6 @@ namespace WizOne.Eval
                             drHead["USER_NO"] = Session["UserId"];
                             dtHead.Rows.Add(drHead);
 
-                            int nrInreg = dt.Rows.Count;
-                            int Id = Dami.NextId("Eval_tblTipValoriLinii", nrInreg);
                             foreach (DataRow dr in dt.Rows)
                             {
                                 dr["Id"] = id;
@@ -131,7 +116,8 @@ namespace WizOne.Eval
                         dtHead.Rows[0]["Denumire"] = txtValoare.Text;
                         foreach (DataRow dr in dt.Rows)
                         {
-                            dr["Id"] = id;
+                            if (dr.RowState != DataRowState.Deleted)
+                                dr["Id"] = id;
                         }
                         break;
                 }
@@ -177,8 +163,7 @@ namespace WizOne.Eval
             {
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow row = dt.NewRow();
-                int x = dt.Rows.Count;
-                row["Id"] = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
+                
                 row["Valoare"] = e.NewValues["Valoare"];
                 row["Nota"] = e.NewValues["Nota"];
                 row["TIME"] = DateTime.Now;
@@ -189,7 +174,6 @@ namespace WizOne.Eval
                 grDate.CancelEdit();
                 Session["InformatiaCurenta"] = dt;
                 grDate.DataSource = dt;
-
             }
             catch(Exception ex)
             {
@@ -216,8 +200,6 @@ namespace WizOne.Eval
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                     }
-                    if (col.ColumnName == "Id")
-                        row[col.ColumnName] = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
                 }
 
                 e.Cancel = true;
@@ -225,9 +207,9 @@ namespace WizOne.Eval
                 Session["InformatiaCurenta"] = dt;
                 grDate.DataSource = dt;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, MessageBox.icoError, "");
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie! ");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -236,12 +218,11 @@ namespace WizOne.Eval
         {
             try
             {
-                DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 e.NewValues["TIME"] = DateTime.Now;
                 e.NewValues["USER_NO"] = Session["UserId"];
-                e.NewValues["Id"] = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
+                e.NewValues["Id"] = 1;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);

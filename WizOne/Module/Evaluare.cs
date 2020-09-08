@@ -1131,49 +1131,49 @@ namespace WizOne.Module
     internal static class Evaluare
     {
 
-        public static DataTable GetEval_Quiz(int? IdPerioada, DateTime? dtInceput, DateTime? dtSfarsit)
-        {
-            DataTable q = null;
-            try
-            {
-                string strSql = @"select eval.""Id"", eval.""Denumire"", eval.""Titlu"", eval.""DataInceput""
-                                         , eval.""DataSfarsit"", per.""DenPerioada"" ""Perioada""
-                                    from ""Eval_Quiz"" eval
-                                    left join ""Eval_Perioada"" per on eval.""Anul"" = per.""IdPerioada""
-                                where eval.""Anul"" = {2}
-                                and {0}
-                                and {1}";
-                if (Constante.tipBD == 1) //SQL
-                {
-                    strSql = string.Format(strSql,
-                                           (dtInceput == new DateTime(1900, 1, 1) ? "1=1" : @"datepart(yyyy, eval.""DataInceput"") * 10000 + datepart(MM, eval.""DataInceput"") * 100 
-                                            + datepart(dd, eval.""DataInceput"") >= 
-                                           " + (dtInceput.Value.Year * 10000 + dtInceput.Value.Month * 100 + dtInceput.Value.Day).ToString()),
-                                           (dtSfarsit == new DateTime(1900, 1, 1) ? "1=1" : @"datepart(yyyy, eval.""DataSfarsit"") * 10000 + datepart(MM, eval.""DataSfarsit"") * 100 
-                                            + datepart(dd, eval.""DataSfarsit"") <= 
-                                            " + (dtSfarsit.Value.Year * 10000 + dtSfarsit.Value.Month * 100 + dtSfarsit.Value.Day).ToString()),
-                                           (IdPerioada == -99 ? @"eval.""Anul""" : IdPerioada.ToString())
-                                           );
+        //public static DataTable GetEval_Quiz(int? IdPerioada, DateTime? dtInceput, DateTime? dtSfarsit)
+        //{
+        //    DataTable q = null;
+        //    try
+        //    {
+        //        string strSql = @"select eval.""Id"", eval.""Denumire"", eval.""Titlu"", eval.""DataInceput""
+        //                                 , eval.""DataSfarsit"", per.""DenPerioada"" ""Perioada""
+        //                            from ""Eval_Quiz"" eval
+        //                            left join ""Eval_Perioada"" per on eval.""Anul"" = per.""IdPerioada""
+        //                        where eval.""Anul"" = {2}
+        //                        and {0}
+        //                        and {1}";
+        //        if (Constante.tipBD == 1) //SQL
+        //        {
+        //            strSql = string.Format(strSql,
+        //                                   (dtInceput == new DateTime(1900, 1, 1) ? "1=1" : @"datepart(yyyy, eval.""DataInceput"") * 10000 + datepart(MM, eval.""DataInceput"") * 100 
+        //                                    + datepart(dd, eval.""DataInceput"") >= 
+        //                                   " + (dtInceput.Value.Year * 10000 + dtInceput.Value.Month * 100 + dtInceput.Value.Day).ToString()),
+        //                                   (dtSfarsit == new DateTime(1900, 1, 1) ? "1=1" : @"datepart(yyyy, eval.""DataSfarsit"") * 10000 + datepart(MM, eval.""DataSfarsit"") * 100 
+        //                                    + datepart(dd, eval.""DataSfarsit"") <= 
+        //                                    " + (dtSfarsit.Value.Year * 10000 + dtSfarsit.Value.Month * 100 + dtSfarsit.Value.Day).ToString()),
+        //                                   (IdPerioada == -99 ? @"eval.""Anul""" : IdPerioada.ToString())
+        //                                   );
 
-                }
-                else //ORCL
-                {
-                    strSql = string.Format(strSql,
-                                           (dtInceput == new DateTime(1900, 1, 1) ? "1=1" : @"to_number(to_char(eval.""DataInceput"", 'yyyyMMdd')) >= " +
-                                           (dtInceput.Value.Year * 10000 + dtInceput.Value.Month * 100 + dtInceput.Value.Day).ToString()),
-                                           (dtSfarsit == new DateTime(1900, 1, 1) ? "1=1" : @"to_number(to_char(eval.""DataSfarsit"", 'yyyyMMdd'))  <= "
-                                            + (dtSfarsit.Value.Year * 10000 + dtSfarsit.Value.Month * 100 + dtSfarsit.Value.Day).ToString()),
-                                           (IdPerioada == -99 ? @"eval.""Anul""" : IdPerioada.ToString())
-                                           );
-                }
-                q = General.IncarcaDT(strSql, null);
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-            return q;
-        }
+        //        }
+        //        else //ORCL
+        //        {
+        //            strSql = string.Format(strSql,
+        //                                   (dtInceput == new DateTime(1900, 1, 1) ? "1=1" : @"to_number(to_char(eval.""DataInceput"", 'yyyyMMdd')) >= " +
+        //                                   (dtInceput.Value.Year * 10000 + dtInceput.Value.Month * 100 + dtInceput.Value.Day).ToString()),
+        //                                   (dtSfarsit == new DateTime(1900, 1, 1) ? "1=1" : @"to_number(to_char(eval.""DataSfarsit"", 'yyyyMMdd'))  <= "
+        //                                    + (dtSfarsit.Value.Year * 10000 + dtSfarsit.Value.Month * 100 + dtSfarsit.Value.Day).ToString()),
+        //                                   (IdPerioada == -99 ? @"eval.""Anul""" : IdPerioada.ToString())
+        //                                   );
+        //        }
+        //        q = General.IncarcaDT(strSql, null);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //    return q;
+        //}
 
         //public static DataTable GetEval_Quiz(int? IdPerioada, DateTime? dtInceput, DateTime? dtSfarsit)
         //{

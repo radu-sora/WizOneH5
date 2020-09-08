@@ -14556,3 +14556,13 @@ ALTER TABLE Eval_ListaObiectivDet ADD Id int IDENTITY(1,1)
 GO
 ALTER TABLE Eval_ListaObiectivDet ADD CONSTRAINT PK_Eval_ListaObiectivDet PRIMARY KEY (Id)
 GO
+
+
+ALTER TABLE Eval_tblTipValoriLinii DROP CONSTRAINT PK_Eval_tblTipValoriLinii
+GO
+ALTER TABLE Eval_tblTipValoriLinii DROP COLUMN IdAuto
+GO
+ALTER TABLE Eval_tblTipValoriLinii ADD IdAuto int IDENTITY(1,1)
+GO
+ALTER TABLE Eval_tblTipValoriLinii ADD CONSTRAINT PK_Eval_tblTipValoriLinii PRIMARY KEY (IdAuto)
+GO

@@ -67,9 +67,6 @@ namespace WizOne.Eval
                             case "IDQUIZ":
                                 row[x] = Session["IdEvalQuiz"];
                                 break;
-                            //case "IDAUTO":
-                            //    row[x] = Dami.NextId("Eval_relGrupAngajatQuiz");
-                            //    break;
                             case "USER_NO":
                                 row[x] = Session["UserId"];
                                 break;
@@ -136,17 +133,7 @@ namespace WizOne.Eval
         {
             try
             {
-                //DataSet ds = Session["InformatiaCurentaEvalQuiz"] as DataSet;
-                //DataTable dt = ds.Tables["Eval_relGrupAngajatQuiz"];
-                //if (dt.Columns["IdAuto"] != null)
-                //{
-                //    if (dt != null && dt.Rows.Count > 0)
-                //    {
-                //        e.NewValues["IdAuto"] = Dami.NextId("Eval_relGrupAngajatQuiz");
-                //    }
-                //    else
-                        e.NewValues["IdAuto"] = 1;
-                //}
+                e.NewValues["IdAuto"] = 1;
             }
             catch (Exception ex)
             {

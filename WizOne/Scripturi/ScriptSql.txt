@@ -14649,3 +14649,15 @@ GO
 
  INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('MP_VerifIntervalCartele' , '0', '1 - se verifica daca, la introducerea unei cartele, intervalul se intersecteaza cu cel al unei alte cartele a aceluiasi angajat; 0 - nu se verifica' , 0)
 GO
+
+ALTER TABLE Avs_Cereri ADD PerProbaZL int
+GO
+ALTER TABLE Avs_Cereri ADD PerProbaZC int
+GO
+ALTER TABLE Avs_Cereri ADD PreavizDemisie int
+GO
+ALTER TABLE Avs_Cereri ADD PreavizConcediere int
+GO
+
+ALTER TABLE Avs_Cereri ADD GenerareDoc int
+GO

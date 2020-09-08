@@ -149,6 +149,9 @@ namespace WizOne.Pagini
                 if (idExcluseCircuitDoc != "")
                     filtruSup = $@" AND A.""IdAtribut"" NOT IN ({idExcluseCircuitDoc})";
 
+                //Radu 08.09.2020 - trebuie excluse si cele care nu au bifata optiunea Generare document
+                filtruSup += " AND A.\"GenerareDoc\" = 1";
+
 
                 //Florin 2020.04.28
                 DateTime dtInit = new DateTime(2018, 1, 1);

@@ -3211,6 +3211,7 @@ namespace WizOne.Pontaj
                     grDate.ClientInstanceName = "grDateTotaluri";
                     grDate.Width = Unit.Percentage(100);
                     grDate.AutoGenerateColumns = false;
+                    grDate.CustomCallback += grDateTotaluri_CustomCallback;
 
                     for (int i = 0; i < dtCol.Rows.Count; i++)
                     {
@@ -3385,6 +3386,20 @@ namespace WizOne.Pontaj
             grDateIstoric.DataSource = General.IncarcaDT(strSql, null);
             grDateIstoric.DataBind();
 
+        }
+
+        protected void grDateTotaluri_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
+        {
+            try
+            {
+                if (tip == 1 || tip == 10)
+                    CreeazaGridTotaluri();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
     }

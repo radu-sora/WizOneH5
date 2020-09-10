@@ -104,7 +104,10 @@
                                              <div class="ptj_filtru" style="display:inline-block;">
                                                 <dx:ASPxButton ID="btnFiltruAng" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
-                                                    <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnFiltru'); grDateTotaluri.PerformCallback(); }" />
+                                                    <ClientSideEvents Click="function(s, e) { 
+                                                        grDate.PerformCallback('btnFiltru'); 
+                                                        if (typeof grDateTotaluri !== 'undefined' && ASPxClientUtils.IsExists(grDateTotaluri))
+                                                            grDateTotaluri.PerformCallback(); }" />
                                                 </dx:ASPxButton>
     	                                        <div class="hovercard" id="divHovercardAng" runat="server">
 			                                        <div class="hovercard-container">

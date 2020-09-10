@@ -1021,14 +1021,17 @@ namespace WizOne.Pontaj
                         case "btnPeAng":
                             {
                                 RetineFiltru("1");
-                                ASPxWebControl.RedirectOnCallback("PontajDetaliat.aspx?tip=10&f10003=" + txtCol["f10003"] + "&idxPag=" + grDate.PageIndex + "&idxRow=" + grDate.FocusedRowIndex);
+                                string marca = General.Nz(grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "F10003" }),"").ToString();
+                                ASPxWebControl.RedirectOnCallback("PontajDetaliat.aspx?tip=10&f10003=" + marca + "&idxPag=" + grDate.PageIndex + "&idxRow=" + grDate.FocusedRowIndex);
                             }                            
                             break;
                         case "btnPeZi":
                             {
-                                string ziua = txtCol["coloana"].ToString().Replace("Ziua", "");
-                                RetineFiltru(ziua);
-                                ASPxWebControl.RedirectOnCallback("PontajDetaliat.aspx?tip=20&idxPag=" + grDate.PageIndex + "&idxRow=" + grDate.FocusedRowIndex);
+                                if (arr.Length == 2)
+                                {
+                                    RetineFiltru(arr[1].ToLower().Replace("ziua",""));
+                                    ASPxWebControl.RedirectOnCallback("PontajDetaliat.aspx?tip=20&idxPag=" + grDate.PageIndex + "&idxRow=" + grDate.FocusedRowIndex);
+                                }
                             }
                             break;
                         case "grDate":

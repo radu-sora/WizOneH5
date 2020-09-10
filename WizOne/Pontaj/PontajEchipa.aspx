@@ -233,7 +233,8 @@
                     <ClientSideEvents ContextMenu="ctx" 
                         RowDblClick="function(s, e) { OnClickDetaliat(s, e); }" 
                         Init="function(s,e) { OnGridInit(); }"
-                        EndCallback="function(s, e) { OnEndCallback(s); }" />                    
+                        EndCallback="function(s, e) { OnEndCallback(s); }"
+                         FocusedCellChanging="function(s,e) { OnFocusedCellChanging(s,e); }" />
                     <Columns>
                         
                         <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" FixedStyle="Left" SelectAllCheckboxMode="AllPages" />
@@ -570,15 +571,14 @@
 
         function OnClickDetaliat(s, e) {
             if (s.name == 'btnPeAng') {
-                pnlLoading.Show();
-                grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + txtCol.Get('coloana') + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
+                //pnlLoading.Show();
+                grDate.PerformCallback(s.name);
             }
             else {
-                if (txtCol.Get('coloana') || txtCol.Get('f10003')) {
-                    var colSel = txtCol.Get('coloana');
-                    if (colSel.length >= 4 && colSel.substr(0, 4).toLowerCase() == 'ziua') {
+                if (fieldName != "") {
+                    if (fieldName.length >= 4 && fieldName.substr(0, 4).toLowerCase() == 'ziua') {
                         pnlLoading.Show();
-                        grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + colSel + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
+                        grDate.PerformCallback(s.name + ";" + fieldName);
                     }
                     else {
                         swal({
@@ -848,6 +848,10 @@
             }
         }
 
+        var fieldName = "";
+        function OnFocusedCellChanging(s, e) {
+            fieldName = e.cellInfo.column.fieldName;  
+        }
     </script>
 
 </asp:Content>

@@ -149,10 +149,6 @@ namespace WizOne.Pagini
                 if (idExcluseCircuitDoc != "")
                     filtruSup = $@" AND A.""IdAtribut"" NOT IN ({idExcluseCircuitDoc})";
 
-                //Radu 08.09.2020 - trebuie excluse si cele care nu au bifata optiunea Generare document
-                filtruSup += " AND A.\"GenerareDoc\" = 1";
-
-
                 //Florin 2020.04.28
                 DateTime dtInit = new DateTime(2018, 1, 1);
                 string paramDt = Dami.ValoareParam("CircuitDocumenteDataInceput").Trim();
@@ -230,7 +226,7 @@ namespace WizOne.Pagini
                             FROM Avs_Cereri A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
-                            WHERE A.IdStare = 3 AND A.DataModif >= {General.ToDataUniv(dtInit)} {companie} {filtruSup}
+                            WHERE A.IdStare = 3 AND A.DataModif >= {General.ToDataUniv(dtInit)} {companie} {filtruSup} AND COALESCE(A.""GenerareDoc"",1)=1
                             GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
@@ -301,7 +297,7 @@ namespace WizOne.Pagini
                             FROM ""Avs_Cereri"" A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""
-                            WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= {General.ToDataUniv(dtInit)} {companie}
+                            WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= {General.ToDataUniv(dtInit)} {companie} {filtruSup} AND COALESCE(A.""GenerareDoc"",1)=1
                             GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente"", B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",

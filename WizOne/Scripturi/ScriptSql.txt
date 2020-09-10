@@ -14666,5 +14666,8 @@ GO
 ALTER TABLE Avs_Cereri ADD PreavizConcediere int
 GO
 
-ALTER TABLE Avs_Cereri ADD GenerareDoc int
+ALTER TABLE Avs_Cereri ADD GenerareDoc int DEFAULT(1)
+GO
+
+UPDATE Avs_Cereri SET GenerareDoc=1
 GO

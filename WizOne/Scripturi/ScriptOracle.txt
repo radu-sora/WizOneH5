@@ -15160,9 +15160,14 @@ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('
 COMMIT;
 
 
-  ALTER TABLE "Avs_Cereri" ADD "PerProbaZL" number(9);
+ALTER TABLE "Avs_Cereri" ADD "PerProbaZL" number(9);
 ALTER TABLE "Avs_Cereri" ADD "PerProbaZC" number(9);
 ALTER TABLE "Avs_Cereri" ADD "PreavizDemisie" number(9);
 ALTER TABLE "Avs_Cereri" ADD "PreavizConcediere" number(9);
+/
 
-ALTER TABLE "Avs_Cereri" ADD "GenerareDoc" number(9);
+ALTER TABLE "Avs_Cereri" ADD "GenerareDoc" number(10) DEFAULT(1);
+/
+
+UPDATE "Avs_Cereri" SET "GenerareDoc"=1;
+COMMIT;

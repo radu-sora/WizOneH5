@@ -451,7 +451,7 @@
                                                                                     <Settings GridLines="Both" HorizontalScrollBarMode="Visible" ShowRoot="true" />
                                                                                     <SettingsBehavior AutoExpandAllNodes="true" AllowFocusedNode="true" FocusNodeOnLoad="false" ProcessFocusedNodeChangedOnServer="True" />
                                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
-                                                                                    <ClientSideEvents NodeClick="function(s, e) {
+                                                                                    <ClientSideEvents FocusedNodeChanged="function(s, e) {
 	                                                                                            hf.Set('Id',s.GetFocusedNodeKey());
                                                                                                 hf1.Set('Id','');
                                                                                                 panel2.PerformCallback();

@@ -85,6 +85,8 @@
 	        Detasare = 32,
             RevenireDetasare = 33,
             ProgramLucru = 34,
+            TipContract = 35,
+            DurataContract = 36,
             NumePrenume = 101,
             CASS = 102,
             Studii = 103,

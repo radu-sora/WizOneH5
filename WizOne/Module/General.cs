@@ -2888,12 +2888,17 @@ namespace WizOne.Module
              
                 table.Rows.Add(0, "Altele");
                 table.Rows.Add(9, "Cenzor/CA");
+                table.Rows.Add(34, "CIM cu clauza de telemunca");
+                table.Rows.Add(33, "CIM tineri dezavantajati (Legea 189 / 2018)");
+                table.Rows.Add(30, "Consiliu Supraveghere");
+                table.Rows.Add(31, "Consiliu Supraveghere straini");
                 table.Rows.Add(97, "Ctr. Agent");
                 table.Rows.Add(99, "Ctr./conventii cf. Cod Civil");
                 table.Rows.Add(3, "Ctr. de munca la domiciliu");
                 table.Rows.Add(2, "Ctr. de munca temporar");            
                 table.Rows.Add(4, "Ctr. de ucenicie la locul de munca");
-                table.Rows.Add(1, "Ctr. individual de munca"); 
+                table.Rows.Add(1, "Ctr. individual de munca");
+                table.Rows.Add(32, "Ctr. internship");
                 table.Rows.Add(8, "Ctr. mandat");                                    
                 table.Rows.Add(98, "Drepturi de autor si drepturi conexe");
 
@@ -8690,5 +8695,177 @@ namespace WizOne.Module
             return ras;
         }
 
+
+        public static DateTime FindDataConsemnare(int marca)
+        {
+            string sqlDatesF100 = "";
+            string sqlDatesF704_1 = "";
+            string sqlDatesF704_2 = "";
+            string sqlHistory = "";   
+            string sz_input = "", dataselect = "", dataperdet = "";
+
+            List<DateTime> listDates = new List<DateTime>(); 
+
+            DateTime dataazi = DateTime.Now;
+            string azi = "";
+
+            if (Constante.tipBD == 1)
+                sz_input = "select CONVERT(VARCHAR, DATEADD(dd,CASE WHEN DATEDIFF(dd,0,getdate())%7 > 3 THEN 7-DATEDIFF(dd,0,getdate())%7 ELSE 1 END,getdate()), 103) FROM F010";
+            else 
+                sz_input = "select TO_CHAR(SYSDATE + (CASE WHEN MOD(to_number(to_char(sysdate, 'j')),7) > 3 THEN 7 -  MOD(to_number(to_char(sysdate, 'j')),7) ELSE 1 END), 'DD/MM/YYYY') as ladata from F010";
+
+            DataTable dtDataAzi = IncarcaDT(sz_input, null);
+            if (dtDataAzi == null || dtDataAzi.Rows.Count <= 0)
+                return dataazi;
+
+            azi = dtDataAzi.Rows[0][0].ToString();
+            if (azi.Length == 10)
+                dataazi = new DateTime(Convert.ToInt32(azi.Substring(6, 4)), Convert.ToInt32(azi.Substring(3, 2)), Convert.ToInt32(azi.Substring(0, 2)), 0, 0, 0);
+
+            string dataAng = "CONVERT(VARCHAR, F10022, 103)";
+            string dataSal = "CONVERT(VARCHAR, F100991, 103)";
+            string dataCOR = "CONVERT(VARCHAR, F100956, 103)";
+            string dataNorma = "CONVERT(VARCHAR, F100955, 103)";
+            string dataSpor = "CONVERT(VARCHAR, F100957, 103)";
+            string dataIncet = "CONVERT(VARCHAR, F100993, 103)";
+            string dataContr = "CONVERT(VARCHAR, F100986, 103)";
+            string dataPerDet = "CONVERT(VARCHAR, F100933, 103)";
+            string dataModifTCtr = "CONVERT(VARCHAR, F1001137, 103)";
+            string dataModifDCtr = "CONVERT(VARCHAR, F1001138, 103)";
+            string dataConsemn = "CONVERT(VARCHAR, F1001109, 103) ";
+            string dataModif = " CONVERT(VARCHAR, F70406, 103)";
+            string dataTerm = "CONVERT(VARCHAR, MAX(F09506), 103)";
+
+            if (Constante.tipBD == 2)
+            {
+                dataAng = "TO_CHAR(F10022, 'dd/mm/yyyy')";
+                dataSal = "TO_CHAR(F100991, 'dd/mm/yyyy')";
+                dataCOR = "TO_CHAR(F100956, 'dd/mm/yyyy')";
+                dataNorma = "TO_CHAR(F100955, 'dd/mm/yyyy')";
+                dataSpor = "TO_CHAR(F100957, 'dd/mm/yyyy')";
+                dataIncet = "TO_CHAR(F100993, 'dd/mm/yyyy')";
+                dataContr = "TO_CHAR(F100986, 'dd/mm/yyyy')";
+                dataPerDet = "TO_CHAR(F100933, 'dd/mm/yyyy')";
+                dataModifTCtr = "TO_CHAR(F1001137, 'dd/mm/yyyy')";
+                dataModifDCtr = "TO_CHAR(F1001138, 'dd/mm/yyyy')";
+                dataConsemn = "TO_CHAR(F1001109, 'dd/mm/yyyy') ";
+                dataModif = "TO_CHAR(F70406, 'dd/mm/yyyy')";
+                dataTerm = "TO_CHAR(MAX(F09506), 'dd/mm/yyyy')";
+            }
+
+
+            sz_input = "SELECT " + dataAng + " AS DataAng, " + dataSal + " AS DataSal,  " + dataCOR + " AS DataCor, ";
+            sz_input += dataNorma + " AS DataNorma, " + dataSpor + " AS DataSpor, " + dataIncet + "  AS DataIncet, " + dataContr + " AS DataContr, ";
+            sz_input += "CASE WHEN F100933 IS NULL THEN '01/01/2100' ELSE " + dataPerDet + " END AS DataPerDet, " + dataModifTCtr + " AS DataModifTCtr,  " + dataModifDCtr + " AS DataModifDCtr, " + dataConsemn + " AS DataConsemnare ";
+            sz_input += " FROM F100, F1001 WHERE F100.F10003=F1001.F10003 AND F100.F10003 = {0}";
+            sqlDatesF100 = string.Format(sz_input, marca);
+
+            sz_input = "SELECT " + dataModif + ", F70404, F70407, F70420 FROM F704 WHERE F70420=0 AND (F70404=1 OR F70404=3 OR F70404=6 OR F70404=11 OR F70404=15 OR F70404=35 OR F70404=36) AND F70403 = {0} AND F70406 <= {1}";
+            sqlDatesF704_1=  string.Format(sz_input, marca, (Constante.tipBD == 1 ? "CONVERT(DATETIME,'" + azi + "',103)" : "TO_DATE('" + azi + "', 'dd/mm/yyyy')"));
+            sz_input = "SELECT " + dataModif + ", F70404, F70420 FROM F100 LEFT JOIN F704 ON F10003=F70403 WHERE (F70420 = 0 OR (F70420=1 AND F100993=F70406)) AND F70404 = 4 AND F70403 = {0}";
+            sqlDatesF704_2 = string.Format(sz_input, marca);
+            sz_input = "SELECT " + dataTerm + " AS DataTerm FROM F095, F100 WHERE F09503 = {0} AND F09506 <> {1}  AND F09504 = F100985";    
+            sqlHistory = string.Format(sz_input, marca, (Constante.tipBD == 1 ? " CONVERT(DATETIME,'01/01/2100', 103)" : " TO_DATE('01/01/2100', 'dd/mm/yyyy')"));
+          
+            DateTime datas;
+            DataTable dtData100 = IncarcaDT(sqlDatesF100, null);
+
+            if (dtData100 == null || dtData100.Rows.Count <= 0)
+                return dataazi;
+
+            for (int i = 0; i < dtData100.Columns.Count; i++)
+            {
+                dataselect = dtData100.Rows[0][i].ToString();
+
+                if (dataselect.Length == 10)
+                {
+                    if (i == 7)
+                        dataperdet = dataselect;
+                    datas = new DateTime(Convert.ToInt32(dataselect.Substring(6, 4)), Convert.ToInt32(dataselect.Substring(3, 2)), Convert.ToInt32(dataselect.Substring(0, 2)), 0, 0, 0);
+
+                    if (dataselect != "01/01/2100" && dataselect != "01/01/1900" && datas <= dataazi)
+                    {
+                        listDates.Add(datas);
+                    }
+                }
+            }
+
+
+            //Radu 15.04.2013 - adaugare data terminarii ultimului contract pe perioada determinata, in cazul in care actualul e pe perioada nedeterminata               
+            if (dataperdet == "01/01/2100" || dataperdet == "01/01/1900")
+            {//daca actualul contract e pe perioada nedeterminata
+                DataTable dtIst = IncarcaDT(sqlHistory, null);
+                if (dtIst == null || dtIst.Rows.Count <= 0)
+                    return dataazi;
+
+                dataselect = dtIst.Rows[0][0].ToString();
+                if (dataselect.Length == 10)
+                {
+                    datas = new DateTime(Convert.ToInt32(dataselect.Substring(6, 4)), Convert.ToInt32(dataselect.Substring(3, 2)), Convert.ToInt32(dataselect.Substring(0, 2)), 0, 0, 0);
+
+                    if (dataselect != "01/01/2100" && dataselect != "01/01/1900" && datas <= dataazi)
+                    {
+                        listDates.Add(datas);
+                    }
+                }                
+            }
+
+
+            //F704_1
+            DataTable dtF704_1 = IncarcaDT(sqlDatesF704_1, null);
+            if (dtF704_1 == null || dtF704_1.Rows.Count <= 0)
+                return dataazi;
+   
+            for (int i = 0; i < dtF704_1.Rows.Count; i++)
+            {
+                dataselect = dtF704_1.Rows[i][0].ToString();
+                if (dataselect.Length == 10)
+                {
+                    datas = new DateTime(Convert.ToInt32(dataselect.Substring(6, 4)), Convert.ToInt32(dataselect.Substring(3, 2)), Convert.ToInt32(dataselect.Substring(0, 2)), 0, 0, 0);
+
+                    if (dataselect != "01/01/2100" && dataselect != "01/01/1900" && datas <= dataazi)
+                    {
+                        listDates.Add(datas);
+                    }
+                }
+            }
+
+            //F704_2
+            DataTable dtF704_2 = IncarcaDT(sqlDatesF704_2, null);
+            if (dtF704_2 == null || dtF704_2.Rows.Count <= 0)
+                return dataazi;
+
+            for (int i = 0; i < dtF704_2.Rows.Count; i++)
+            {
+                dataselect = dtF704_2.Rows[i][0].ToString();
+                if (dataselect.Length == 10)
+                {
+                    datas = new DateTime(Convert.ToInt32(dataselect.Substring(6, 4)), Convert.ToInt32(dataselect.Substring(3, 2)), Convert.ToInt32(dataselect.Substring(0, 2)), 0, 0, 0);
+
+                    if (dataselect != "01/01/2100" && dataselect != "01/01/1900" && datas <= dataazi)
+                    {
+                        listDates.Add(datas);
+                    }
+                }
+            }
+
+
+            //Aleg elementul cel mai mare
+            DateTime dataConsemnare = dataazi;
+            if (listDates.Count > 0)
+            {
+                dataConsemnare = listDates.ElementAt(0);
+                for (int i = 0; i < listDates.Count; i++)
+                {
+                    DateTime element = listDates.ElementAt(i);
+                    if (element > dataConsemnare)
+                    {
+                        dataConsemnare = element;
+                    }
+                }
+            }
+            return dataConsemnare;
+
+        }
     }
 }

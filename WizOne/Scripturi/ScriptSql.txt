@@ -14569,3 +14569,6 @@ GO
 
 DROP TABLE TableSYSInfo_NextId
 GO
+
+ALTER TABLE Eval_QuizIntrebari ADD OrdineAfisare int
+GO

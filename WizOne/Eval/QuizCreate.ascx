@@ -438,23 +438,30 @@
                                                                                     <ClientSideEvents Click="function(s, e){ DeleteSectiuneSauIntrebare(s); }" />
                                                                                     <Image Url="../Fisiere/Imagini/Icoane/sterge.png" />
                                                                                 </dx:ASPxButton>
+                                                                                <dx:ASPxButton ID="btnSalvareOrdine" runat="server" ClientIDMode="Static" ClientInstanceName="btnSalvareOrdine" Text="Adauga Ordine Afisare" AutoPostBack="false">
+                                                                                    <ClientSideEvents Click="function(s, e){ grDateIntrebari.UpdateEdit(); }" />
+                                                                                    <Image Url="../Fisiere/Imagini/Icoane/adauga.png" />
+                                                                                </dx:ASPxButton>
                                                                             </td>
                                                                          </tr>
                                                                         <tr>
                                                                             <td>
                                                                                 <dx:ASPxTreeList ID="grDateIntrebari" ClientInstanceName="grDateIntrebari" ClientIDMode="Static" runat="server" AutoGenerateColumns="false"
-                                                                                    KeyFieldName="Id" ParentFieldName="Parinte" Width="780px" >
+                                                                                    KeyFieldName="Id" ParentFieldName="Parinte" Width="780px" OnBatchUpdate="grDateIntrebari_BatchUpdate" >
                                                                                     <Settings GridLines="Both" HorizontalScrollBarMode="Visible" ShowRoot="true" />
                                                                                     <SettingsBehavior AutoExpandAllNodes="true" AllowFocusedNode="true" FocusNodeOnLoad="false" ProcessFocusedNodeChangedOnServer="True" />
-                                                                                    <SettingsEditing Mode="Inline" />
-                                                                                    <ClientSideEvents  FocusedNodeChanged="function(s, e) {
+                                                                                    <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
+                                                                                    <ClientSideEvents NodeClick="function(s, e) {
 	                                                                                            hf.Set('Id',s.GetFocusedNodeKey());
                                                                                                 hf1.Set('Id','');
                                                                                                 panel2.PerformCallback();
-                                                                                            }"  />
+                                                                                            }"  
+
+                                                                                        />
                                                                                     <Columns>
                                                                                         <dx:TreeListTextColumn FieldName="Id" Visible="false" />
-                                                                                        <dx:TreeListTextColumn FieldName="Descriere" Caption="Descriere" Visible="true" VisibleIndex="0" Width="100%" />
+                                                                                        <dx:TreeListTextColumn FieldName="Descriere" Caption="Descriere" Visible="true" VisibleIndex="0" Width="100%" ReadOnly="true" />
+                                                                                        <dx:TreeListTextColumn FieldName="OrdineAfisare" />
                                                                                         <dx:TreeListTextColumn FieldName="Parinte" Visible="false" />
                                                                                     </Columns>
                                                                                 </dx:ASPxTreeList>

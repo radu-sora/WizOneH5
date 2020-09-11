@@ -15247,3 +15247,6 @@ ALTER TRIGGER "Auto_Eval_relGrupAngajatQuiz" ENABLE;
 
 DROP TABLE "TableSYSInfo_NextId";
 /
+
+ALTER TABLE "Eval_QuizIntrebari" ADD "OrdineAfisare" number(10);
+/

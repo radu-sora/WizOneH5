@@ -357,6 +357,9 @@ namespace WizOne.Module
         public int IdPeriod { get; set; }
         public int IdPeriodComp { get; set; }
 
+        //Florin 2020.09.10
+        public int OrdineAfisare { get; set; }
+
         //Florin 2020.01.03
         public int? IdCategObiective { get; set; }
 
@@ -386,6 +389,8 @@ namespace WizOne.Module
             IdPeriodComp = columns.Contains("IdPeriodComp") == true ? Convert.ToInt32(dr["IdPeriodComp"].ToString() == string.Empty ? "-99" : dr["IdPeriodComp"].ToString()) : -99;
             //Florin 2020.01.03
             IdCategObiective = columns.Contains("IdCategObiective") == true ? (dr["IdCategObiective"] != DBNull.Value ? (int?)dr["IdCategObiective"] : null) : null;
+            //Florin 2020.09.10
+            OrdineAfisare = columns.Contains("OrdineAfisare") == true ? (dr["OrdineAfisare"] == DBNull.Value ? 99999 : Convert.ToInt32(dr["OrdineAfisare"])) : 99999;
         }
     }
 

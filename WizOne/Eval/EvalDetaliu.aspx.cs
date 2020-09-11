@@ -615,7 +615,7 @@ namespace WizOne.Eval
                 var entRoot = lstEval_QuizIntrebari.Where(p => p.Parinte == 0 && p.Descriere == "Root").FirstOrDefault();
                 if (entRoot != null) idRoot = entRoot.Id;
 
-                var entSec = lstEval_QuizIntrebari.Where(p => p.Parinte == idRoot && p.EsteSectiune == 1).OrderBy(p => p.Id);
+                var entSec = lstEval_QuizIntrebari.Where(p => p.Parinte == idRoot && p.EsteSectiune == 1).OrderBy(p => p.OrdineAfisare);
 
                 foreach (var ent in entSec)
                 {
@@ -1035,7 +1035,7 @@ namespace WizOne.Eval
                 grIntrebari.Width = "100%";
                 int idParinte = lstSec.ElementAt(indexSec);
 
-                var arrIntre = lstEval_QuizIntrebari.Where(p => p.Ordine != null && p.Ordine.Contains("-" + idParinte + "-")).OrderBy(p => p.Id);
+                var arrIntre = lstEval_QuizIntrebari.Where(p => p.Ordine != null && p.Ordine.Contains("-" + idParinte + "-")).OrderBy(p => p.OrdineAfisare);
                 if (arrIntre.Any())
                 {
                     foreach (var ent in arrIntre)

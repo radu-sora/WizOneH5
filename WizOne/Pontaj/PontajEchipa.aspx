@@ -495,20 +495,19 @@
                         <table width="100%" >    
                             <tr>
                                 <td align="left">
-                                    <dx:ASPxGridView ID="grDateIstoric" runat="server" ClientInstanceName="grDateIstoric" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDateIstoric_CustomCallback">
+                                    <dx:ASPxGridView ID="grDateIstoric" runat="server" ClientInstanceName="grDateIstoric" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnHtmlDataCellPrepared="grDateIstoric_HtmlDataCellPrepared" OnCustomCallback="grDateIstoric_CustomCallback">
                                         <SettingsBehavior AllowFocusedRow="true" />
                                         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />                                   
                                         <SettingsEditing Mode="Inline" />      
                                         <ClientSideEvents ContextMenu="ctx" />                                
-                                        <Columns>
-                                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="false" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
+                                        <Columns>                                   
                                             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" />                                
                                             <dx:GridViewDataTextColumn FieldName="IdSuper" Name="IdSuper" Caption="IdSuper"  Width="75px" Visible="false" />  
                                             <dx:GridViewDataTextColumn FieldName="Culoare" Name="Culoare" Caption="Culoare"  Width="75px" Visible="false" />       
                                             <dx:GridViewDataTextColumn FieldName="Nume" Name="Nume" Caption="Nume"  Width="200px" />
                                             <dx:GridViewDataTextColumn FieldName="NumeStare" Name="NumeStare" Caption="Stare"  Width="100px"  />
                                             <dx:GridViewDataDateColumn FieldName="DataAprobare" Name="DataAprobare" Caption="Data aprobare" Width="100px" >         
-                                                    <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                                                    <PropertiesDateEdit DisplayFormatString="dd.MM.yyyy HH:mm"></PropertiesDateEdit>
                                             </dx:GridViewDataDateColumn>
                                             <dx:GridViewDataTextColumn FieldName="IdStare" Name="IdStare" Caption="IdStare"  Width="75px" Visible="false" />
                                         </Columns> 

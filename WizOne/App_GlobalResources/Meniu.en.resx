@@ -124,13 +124,13 @@
     <value>Administration</value>
   </data>
   <data name="Angajati" xml:space="preserve">
-    <value>Employee</value>
+    <value>Employees</value>
   </data>
   <data name="AsiganreMeniuriPeGrupuri" xml:space="preserve">
-    <value>Asiganre meniuri pe grupuri</value>
+    <value>Asign menus per groups</value>
   </data>
   <data name="AsignareAngajatiPeGrupuri" xml:space="preserve">
-    <value>Asiganre angajati pe grupuri</value>
+    <value>Asign employees per groups</value>
   </data>
   <data name="Asignareintropegrupuri" xml:space="preserve">
     <value>Asignare intro pe grupuri</value>
@@ -196,7 +196,7 @@
     <value>Rapoarte - Rapoarte - Extensive history</value>
   </data>
   <data name="IstoricExtins" xml:space="preserve">
-    <value>Extensive history</value>
+    <value>Extended history</value>
   </data>
   <data name="btnRespins" xml:space="preserve">
     <value>Reject</value>
@@ -205,19 +205,19 @@
     <value>Employees</value>
   </data>
   <data name="ZileCuveniteCO" xml:space="preserve">
-    <value>Due days CO</value>
+    <value>Due vacation days</value>
   </data>
   <data name="ActualizareDatePontaj" xml:space="preserve">
-    <value>Update timing data</value>
+    <value>Update timesheet data</value>
   </data>
   <data name="PontareAutomata" xml:space="preserve">
-    <value>Automatic timing</value>
+    <value>Automatic timesheet</value>
   </data>
   <data name="PontajCumulat" xml:space="preserve">
-    <value>Cumulative timing</value>
+    <value>Cumulative timesheet</value>
   </data>
   <data name="AsignareSupervizorPeAngajat" xml:space="preserve">
-    <value>Assign the supervisor to the employee</value>
+    <value>Assign supervisors to employees</value>
   </data>
   <data name="AsignareUsersPeGrupuri" xml:space="preserve">
     <value>Assign users to groups</value>
@@ -243,10 +243,112 @@
   <data name="Filiala" xml:space="preserve">
     <value>Branch</value>
   </data>
+<data name="Transformacandidatinangajat" xml:space="preserve">
+    <value>Convert candidate to employee</value>
+  </data>															  		 
   <data name="pnlContent1_ContentPlaceHolder1_ReportViewButton" xml:space="preserve">
-    <value>Dysplay</value>
+    <value>Display</value>
   </data>
   <data name="Afisare" xml:space="preserve">
-    <value>Dysplay</value>
+    <value>Display</value>
   </data>
+  <data name="Legenda" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+<data name="DataInceput" xml:space="preserve">
+    <value>From date</value>
+  </data>
+<data name="Centruldecost" xml:space="preserve">
+    <value>Cost center</value>
+  </data>
+<data name="MarcaInceput" xml:space="preserve">
+    <value>From employee ID</value>
+  </data>
+<data name="MarcaSfarsit" xml:space="preserve">
+    <value>To employee ID</value>
+  </data>
+<data name="btnStergeFiltru" xml:space="preserve">
+    <value>Clear filter</value>
+  </data>
+
+<data name="Tipurideabsente" xml:space="preserve">
+    <value>Absence Types</value>
+  </data>
+ <data name="Grupurideabsente" xml:space="preserve">
+    <value>Absence groups</value>
+  </data>
+<data name="Asignareabsentepegrupuri" xml:space="preserve">
+    <value>Assignment by absence groups</value>
+  </data>
+<data name="Stari" xml:space="preserve">
+    <value>Status</value>
+  </data>
+<data name="Circuitaprobare" xml:space="preserve">
+    <value>Approval workflow</value>
+  </data>
+<data name="Programe" xml:space="preserve">
+    <value>Programs</value>
+  </data>
+<data name="Contracte" xml:space="preserve">
+    <value>Contract Types</value>
+  </data>
+<data name="PontajCCAprobare" xml:space="preserve">
+    <value>CC Timesheet Approval</value>
+  </data>
+<data name="PontajAdminColoane" xml:space="preserve">
+    <value>Admin Timesheet Columns</value>
+  </data>
+<data name="Campurinotificari" xml:space="preserve">
+    <value>Notifications fields</value>
+  </data>
+<data name="ManageriPontaj" xml:space="preserve">
+    <value>Timesheet Managers</value>
+  </data>
+<data name="DepartamentePontaj" xml:space="preserve">
+    <value>Departments timesheet</value>
+  </data>
+<data name="Configcampuriextra" xml:space="preserve">
+    <value>Config extra fields</value>
+  </data>
+<data name="Supervizori" xml:space="preserve">
+    <value>Supervisors</value>
+  </data>
+<data name="ConfigurareNomenclatoare" xml:space="preserve">
+    <value>Master data setup</value>
+  </data>
+<data name="Asignareintropegrupuri" xml:space="preserve">
+    <value>Intro Assignment by groups</value>
+  </data>
+<data name="Introducere" xml:space="preserve">
+    <value>Introduction</value>
+  </data>
+<data name="Paginadestart" xml:space="preserve">
+    <value>Start page</value>
+  </data>
+<data name="Drepturicereri" xml:space="preserve">
+    <value>Requests rights</value>
+  </data>
+<data name="ContracteAbsente" xml:space="preserve">
+    <value>Absences Contracts</value>
+  </data>
+<data name="InchidereLuna" xml:space="preserve">
+    <value>Close Month</value>
+  </data>
+<data name="MeniuDrepturi" xml:space="preserve">
+    <value>Rights Menu</value>
+  </data>
+<data name="AsignareStiriPeGrupuri" xml:space="preserve">
+    <value>News Assignment by groups</value>
+  </data>
+<data name="PontajCumulatSetari" xml:space="preserve">
+    <value>Settings Cumulative timesheet</value>
+  </data>
+<data name="AdminFormulreCumulat" xml:space="preserve">
+    <value>Admin Forms Cumulat</value>
+  </data>
+<data name="lblTermenRevisal" xml:space="preserve">
+    <value>DueDateRevisal</value>
+  </data>
+
+
 </root>

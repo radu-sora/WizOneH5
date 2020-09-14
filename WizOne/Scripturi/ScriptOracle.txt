@@ -15250,3 +15250,21 @@ DROP TABLE "TableSYSInfo_NextId";
 
 ALTER TABLE "Eval_QuizIntrebari" ADD "OrdineAfisare" number(10);
 /
+
+alter table "Eval_ObiIndividuale" add "Total1" CLOB;
+/
+alter table "Eval_ObiIndividuale" add "Total2" CLOB;
+/
+alter table "Eval_ObiIndividualeTemp" add "Total1" CLOB;
+/
+alter table "Eval_ObiIndividualeTemp" add "Total2" CLOB;
+/
+
+alter table "Eval_CompetenteAngajat" add "Total1" CLOB;
+/
+alter table "Eval_CompetenteAngajat" add "Total2" CLOB;
+/
+alter table "Eval_CompetenteAngajatTemp" add "Total1" CLOB;
+/
+alter table "Eval_CompetenteAngajatTemp" add "Total2" CLOB;
+/

@@ -14572,3 +14572,55 @@ GO
 
 ALTER TABLE Eval_QuizIntrebari ADD OrdineAfisare int
 GO
+
+
+--https://github.com/wizromRD/WizOne/issues/560
+--#560 - De adaugat 1, 2 campuri in template destinate pentru formula Sql intre 2, 3 alte campuri din template. Pe formular sa faca calcul la nivel de linie. #560
+
+--  Competente
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(6, @i, 'Total1', 100, 0, 0, 0, 0, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(7, @i, 'Total2', 100, 0, 0, 0, 0, -99);
+
+    SET @i = @i + 1
+END
+GO
+
+--  Obiective
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+    IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(14, @i, 'Total1', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(15, @i, 'Total2', 100, 0, 0, 0, 0, -99, -99);
+
+    SET @i = @i + 1
+END
+GO
+
+alter table Eval_ObiIndividuale add Total1 nvarchar(max)
+GO
+alter table Eval_ObiIndividuale add Total2 nvarchar(max)
+GO
+alter table Eval_ObiIndividualeTemp add Total1 nvarchar(max)
+GO
+alter table Eval_ObiIndividualeTemp add Total2 nvarchar(max)
+GO
+
+alter table Eval_CompetenteAngajat add Total1 nvarchar(max)
+GO
+alter table Eval_CompetenteAngajat add Total2 nvarchar(max)
+GO
+alter table Eval_CompetenteAngajatTemp add Total1 nvarchar(max)
+GO
+alter table Eval_CompetenteAngajatTemp add Total2 nvarchar(max)
+GO

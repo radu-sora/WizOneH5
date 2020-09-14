@@ -226,6 +226,16 @@
 
     //end LeonardM 22.11.2017
 
+    function OnFocusedCellChanging(s, e) {
+        //if (e.cellInfo.column.fieldName == "Descriere") {
+            hf.Set('Id', s.GetFocusedNodeKey());
+            hf1.Set('Id', '');
+        panel2.PerformCallback();
+        var ert = grDateIntrebari.GetFocusedNodeKey();
+        var edc = grDateIntrebari.GetEditingNodeKey();
+        //}
+    }
+
 </script>
 
 
@@ -450,14 +460,8 @@
                                                                                     KeyFieldName="Id" ParentFieldName="Parinte" Width="780px" OnBatchUpdate="grDateIntrebari_BatchUpdate" >
                                                                                     <Settings GridLines="Both" HorizontalScrollBarMode="Visible" ShowRoot="true" />
                                                                                     <SettingsBehavior AutoExpandAllNodes="true" AllowFocusedNode="true" FocusNodeOnLoad="false" ProcessFocusedNodeChangedOnServer="True" />
-                                                                                    <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
-                                                                                    <ClientSideEvents FocusedNodeChanged="function(s, e) {
-	                                                                                            hf.Set('Id',s.GetFocusedNodeKey());
-                                                                                                hf1.Set('Id','');
-                                                                                                panel2.PerformCallback();
-                                                                                            }"  
-
-                                                                                        />
+                                                                                    <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="DblClick" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
+                                                                                    <ClientSideEvents FocusedCellChanging="function(s, e) { OnFocusedCellChanging(s,e); }" />
                                                                                     <Columns>
                                                                                         <dx:TreeListTextColumn FieldName="Id" Visible="false" />
                                                                                         <dx:TreeListTextColumn FieldName="Descriere" Caption="Descriere" Visible="true" VisibleIndex="0" Width="100%" ReadOnly="true" />

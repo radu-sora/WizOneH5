@@ -1567,7 +1567,11 @@ namespace WizOne.Eval
                     row.TipValoare = Convert.ToInt32(e.NewValues["TipValoare"] ?? -99);
                     row.Editare = Convert.ToBoolean(e.NewValues["Editare"] ?? DBNull.Value);
                     row.Width = Convert.ToInt32(e.NewValues["Width"] ?? DBNull.Value);
-                    row.Ordine = Convert.ToInt32(e.NewValues["Ordine"] ?? DBNull.Value);
+                    if (e.NewValues["Ordine"] != null)
+                        row.Ordine = Convert.ToInt32(e.NewValues["Ordine"]);
+                    else
+                        row.Ordine = null;
+                    row.FormulaSql = e.NewValues["FormulaSql"] != null ? e.NewValues["FormulaSql"].ToString() : null;
                 }
 
                 Session["createEval_ConfigObTemplateDetail"] = lstEval_ConfigObTemplateDetail;
@@ -1804,7 +1808,11 @@ namespace WizOne.Eval
                     row.Editare = Convert.ToBoolean(e.NewValues["Editare"] ?? DBNull.Value);
                     row.IdNomenclator = Convert.ToInt32(e.NewValues["IdNomenclator"] ?? -99);
                     row.Width = Convert.ToInt32(e.NewValues["Width"] ?? DBNull.Value);
-                    row.Ordine = Convert.ToInt32(e.NewValues["Ordine"] ?? DBNull.Value);
+                    if (e.NewValues["Ordine"] != null)
+                        row.Ordine = Convert.ToInt32(e.NewValues["Ordine"]);
+                    else
+                        row.Ordine = null;
+                    row.FormulaSql = e.NewValues["FormulaSql"] != null ? e.NewValues["FormulaSql"].ToString() : null;
                 }
 
                 Session["createEval_ConfigCompTemplateDetail"] = lstEval_ConfigCompTemplateDetail;

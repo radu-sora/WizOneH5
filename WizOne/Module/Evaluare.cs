@@ -731,6 +731,7 @@ namespace WizOne.Module
         public int TipValoare { get; set; }
         public int IdNomenclator { get; set; }
         public int? Ordine { get; set; }
+        public string FormulaSql { get; set; }
 
         public Eval_ConfigObTemplateDetail() { }
 
@@ -752,6 +753,7 @@ namespace WizOne.Module
             TipValoare = columns.Contains("TipValoare") == true ? Convert.ToInt32(dr["TipValoare"].ToString() == string.Empty ? "-99" : dr["TipValoare"].ToString()) : -99;
             IdNomenclator = columns.Contains("IdNomenclator") == true ? Convert.ToInt32(dr["IdNomenclator"].ToString() == string.Empty ? "-99" : dr["IdNomenclator"].ToString()) : -99;
             Ordine = columns.Contains("Ordine") == true ? (General.IsNumeric(dr["Ordine"]) ? (int?)dr["Ordine"] : null) : null;
+            FormulaSql = columns.Contains("FormulaSql") == true ? (dr["FormulaSql"] != DBNull.Value ? dr["FormulaSql"].ToString() : null) : null;
         }
     }
 
@@ -862,6 +864,12 @@ namespace WizOne.Module
         //Florin 2020.01.03
         public int? IdCategObiective { get; set; }
 
+        //Florin 2020.09.15
+        public string Total1 { get; set; }
+        public string Total2 { get; set; }
+        public string FormulaSql1 { get; set; }
+        public string FormulaSql2 { get; set; }
+
         public Eval_ObiIndividualeTemp() { }
 
         public Eval_ObiIndividualeTemp(DataRow dr)
@@ -904,6 +912,9 @@ namespace WizOne.Module
 
             //Florin 2020.01.03
             IdCategObiective = columns.Contains("IdCategObiective") == true ? (dr["IdCategObiective"] != DBNull.Value ? (int?)dr["IdCategObiective"] : null) : null;
+
+            Total1 = columns.Contains("Total1") == true ? (dr["Total1"] != DBNull.Value ? dr["Total1"].ToString() : null) : null;
+            Total2 = columns.Contains("Total2") == true ? (dr["Total2"] != DBNull.Value ? dr["Total2"].ToString() : null) : null;
         }
     }
 
@@ -989,6 +1000,7 @@ namespace WizOne.Module
         public bool Vizibil { get; set; }
         public int IdNomenclator { get; set; }
         public int? Ordine { get; set; }
+        public string FormulaSql { get; set; }
 
         public Eval_ConfigCompTemplateDetail() { }
         public Eval_ConfigCompTemplateDetail(DataRow dr)
@@ -1005,6 +1017,7 @@ namespace WizOne.Module
             Vizibil = columns.Contains("Vizibil") == true ? Convert.ToBoolean(dr["Vizibil"].ToString() == string.Empty ? "False" : (dr["Vizibil"].ToString() == "0" ? "False" : "True")) : false;
             IdNomenclator = columns.Contains("IdNomenclator") == true ? Convert.ToInt32(dr["IdNomenclator"].ToString() == string.Empty ? "-99" : dr["IdNomenclator"].ToString()) : -99;
             Ordine = columns.Contains("Ordine") == true ? (General.IsNumeric(dr["Ordine"]) ? (int?)dr["Ordine"] : null) : null;
+            FormulaSql = columns.Contains("FormulaSql") == true ? (dr["FormulaSql"] != DBNull.Value ? dr["FormulaSql"].ToString() : null) : null;
         }
     }
 
@@ -1066,6 +1079,10 @@ namespace WizOne.Module
         public int? USER_NO { get; set; }
         public DateTime? TIME { get; set; }
 
+        public string Total1 { get; set; }
+        public string Total2 { get; set; }
+        public string FormulaSql1 { get; set; }
+        public string FormulaSql2 { get; set; }
 
         public Eval_CompetenteAngajatTemp() { }
         public Eval_CompetenteAngajatTemp(DataRow dr)
@@ -1092,7 +1109,8 @@ namespace WizOne.Module
             IdUnic = columns.Contains("IdUnic") == true ? Convert.ToInt32(dr["IdUnic"].ToString() == string.Empty ? "-99" : dr["IdUnic"].ToString()) : -99;
             USER_NO = columns.Contains("USER_NO") == true ? (General.IsNumeric(dr["USER_NO"]) ? (int?)dr["USER_NO"] : null) : null;
             TIME = columns.Contains("TIME") == true ? (dr["TIME"] != DBNull.Value ? (DateTime?)dr["TIME"] : null) : null;
-
+            Total1 = columns.Contains("Total1") == true ? (dr["Total1"] != DBNull.Value ? dr["Total1"].ToString() : null) : null;
+            Total2 = columns.Contains("Total2") == true ? (dr["Total2"] != DBNull.Value ? dr["Total2"].ToString() : null) : null;
         }
     }
 

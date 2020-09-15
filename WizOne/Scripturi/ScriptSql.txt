@@ -14624,3 +14624,20 @@ alter table Eval_CompetenteAngajatTemp add Total1 nvarchar(max)
 GO
 alter table Eval_CompetenteAngajatTemp add Total2 nvarchar(max)
 GO
+
+ALTER TABLE Eval_ConfigCompTemplateDetail ADD FormulaSql nvarchar(max)
+GO
+ALTER TABLE Eval_ConfigObTemplateDetail ADD FormulaSql nvarchar(max)
+GO
+
+
+INSERT INTO Eval_ConfigCompetente(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(6, 'Total1', 'System.String', 6, 1)
+GO
+INSERT INTO Eval_ConfigCompetente(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(7, 'Total2', 'System.String', 7, 1)
+GO
+
+
+INSERT INTO Eval_ConfigObiective(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(14, 'Total1', 'System.String', 14, 1)
+GO
+INSERT INTO Eval_ConfigObiective(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(15, 'Total2', 'System.String', 15, 1)
+GO

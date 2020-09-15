@@ -790,6 +790,7 @@
                                                                                                 OnItemRequestedByValue="Unnamed_ItemRequestedByValue" OnItemsRequestedByFilterCondition="Unnamed_ItemsRequestedByFilterCondition" />
                                                                                         </dx:GridViewDataComboBoxColumn>
                                                                                         <dx:GridViewDataSpinEditColumn FieldName="Ordine" Name ="Ordine" Caption="Ordine" VisibleIndex="9" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false" PropertiesSpinEdit-MinValue="1" PropertiesSpinEdit-MaxValue="99"/>
+                                                                                        <dx:GridViewDataTextColumn FieldName="FormulaSql" Name="FormulaSql" Caption="FormulaSql" VisibleIndex="10" />
                                                                                     </Columns>
                                                                                     <SettingsCommandButton>
                                                                                         <EditButton>
@@ -877,6 +878,7 @@
                                                                                                   />
                                                                                         </dx:GridViewDataComboBoxColumn>
                                                                                         <dx:GridViewDataSpinEditColumn FieldName="Ordine" Name ="Ordine" Caption="Ordine" VisibleIndex="9" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false" PropertiesSpinEdit-MinValue="1" PropertiesSpinEdit-MaxValue="99"/>
+                                                                                        <dx:GridViewDataTextColumn FieldName="FormulaSql" Name="FormulaSql" Caption="FormulaSql" VisibleIndex="10" />
                                                                                     </Columns>
                                                                                     <SettingsCommandButton>
                                                                                         <EditButton>

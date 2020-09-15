@@ -15268,3 +15268,19 @@ alter table "Eval_CompetenteAngajatTemp" add "Total1" CLOB;
 /
 alter table "Eval_CompetenteAngajatTemp" add "Total2" CLOB;
 /
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "FormulaSql" CLOB;
+/
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "FormulaSql" CLOB;
+/
+
+INSERT INTO "Eval_ConfigCompetente"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(6, 'Total1', 'System.String', 6, 1);
+COMMIT;
+INSERT INTO "Eval_ConfigCompetente"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(7, 'Total2', 'System.String', 7, 1);
+COMMIT;
+
+
+INSERT INTO "Eval_ConfigObiective"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(14, 'Total1', 'System.String', 14, 1);
+COMMIT;
+INSERT INTO "Eval_ConfigObiective"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(15, 'Total2', 'System.String', 15, 1);
+COMMIT;

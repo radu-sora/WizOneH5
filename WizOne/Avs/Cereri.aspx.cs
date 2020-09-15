@@ -1339,6 +1339,7 @@ namespace WizOne.Avs
                 lbl14Act.Visible = true;
                 lbl15Nou.Visible = true;
                 lbl14Act.Visible = true;
+                lbl15Act.Visible = true;
                 lbl16Nou.Visible = true;
                 lbl10Act.Visible = true;
                 lbl10Nou.Visible = true;
@@ -2976,9 +2977,6 @@ namespace WizOne.Avs
                     case (int)Constante.Atribute.DurataContract:
                         if (cmb1Nou.Value == null) strErr += ", tip contract";
                         if ((cmb2Nou.Value == null || Convert.ToInt32(cmb2Nou.Value) != 1) && (de1Nou.Value == null || de2Nou.Value == null)) strErr += ", date durata contract";
-                        dtTemp = General.IncarcaDT("SELECT F1009741 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
-                        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString() == "1" && Convert.ToInt32(cmb2Nou.Value) != 1)
-                            strErr += ", prelungirea se face doar pt. contractele pe perioada determinata";
                         break;
                 }
 

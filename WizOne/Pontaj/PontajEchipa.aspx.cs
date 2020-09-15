@@ -3812,6 +3812,23 @@ namespace WizOne.Pontaj
             }
         }
 
+        protected void grDateIstoric_HtmlDataCellPrepared(object sender, ASPxGridViewTableDataCellEventArgs e)
+        {
+            try
+            {
+                if (e.DataColumn.FieldName == "NumeStare")
+                {
+                    object col = grDateIstoric.GetRowValues(e.VisibleIndex, "Culoare");
+                    if (col != null) e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(col.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
         //Radu 27.07.2020
         private void IncarcaGridIstoric()
         {

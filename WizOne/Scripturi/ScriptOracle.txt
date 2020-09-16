@@ -15289,3 +15289,6 @@ ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "Alias" varchar2(250);
 /
 ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "Alias" varchar2(250);
 /
+
+ALTER TABLE "Ptj_Intrari" ADD "ModifInOut" varchar2(500)
+/

@@ -14651,3 +14651,6 @@ ALTER TABLE Eval_ConfigCompTemplateDetail ADD Alias nvarchar(250)
 GO
 ALTER TABLE Eval_ConfigObTemplateDetail ADD Alias nvarchar(250)
 GO
+
+ALTER TABLE Ptj_Intrari ADD ModifInOut nvarchar(500)
+GO

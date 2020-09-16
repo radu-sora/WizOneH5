@@ -1059,12 +1059,6 @@
 <data name="CategorieAngajat1" xml:space="preserve">
     <value>Employee category 1</value>
   </data>
-<data name="Locatiemunca" xml:space="preserve">
-    <value>Work location</value>
-  </data>
-<data name="Unitatelocalastatistica" xml:space="preserve">
-    <value>Local statistics unit</value>
-  </data>
 <data name="Supervizor" xml:space="preserve">
     <value>Supervisor</value>
   </data>
@@ -1697,9 +1691,6 @@
   </data>
 <data name="Locanterior" xml:space="preserve">
     <value>Previous location</value>
-  </data>
-<data name="Categorieangajat1" xml:space="preserve">
-    <value>Employee category 1</value>
   </data>
 <data name="Categorieangajat2" xml:space="preserve">
     <value>Employee category 2</value>

@@ -160,12 +160,6 @@ namespace WizOne.Pontaj
 
                     AdaugaF_uri();
                 }
-                else if(grDate.IsCallback)
-                { 
-                    DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
-                    GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                    colStari.PropertiesComboBox.DataSource = dtStari;
-                }
             }
             catch (Exception ex)
             {
@@ -298,7 +292,11 @@ namespace WizOne.Pontaj
 
                     #endregion
 
-                    cmbStare.DataSource = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblStariPontaj"" ", null);
+                    DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
+                    Session["Ptj_tblStariPontaj"] = dtStari;
+                    GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
+                    colStari.PropertiesComboBox.DataSource = dtStari;
+                    cmbStare.DataSource = dtStari;
                     cmbStare.DataBind();
 
                     cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
@@ -332,6 +330,9 @@ namespace WizOne.Pontaj
                 {
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.DataBind();
+
+                    GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
+                    colStari.PropertiesComboBox.DataSource = Session["Ptj_tblStariPontaj"];
                 }
             }
             catch (Exception ex)
@@ -409,7 +410,7 @@ namespace WizOne.Pontaj
             {
                 General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, cmbCtr.Value == null ? "" : cmbCtr.Value.ToString().Replace(",", "', '"));
 
-                grDate.KeyFieldName = "F10003";
+                //grDate.KeyFieldName = "F10003";
 
                 string strSql = DamiSelect();
 
@@ -1927,7 +1928,7 @@ namespace WizOne.Pontaj
                 if (General.Nz(cmbSubDept.Value, "").ToString() != "") strFiltru += @" AND A.F100958=" + cmbSubDept.Value;
                 if (General.Nz(cmbBirou.Value, "").ToString() != "") strFiltru += @" AND A.F100959=" + cmbBirou.Value;
                 if (General.Nz(cmbStare.Value, "").ToString() != "") strFiltru += @" AND COALESCE(A.""IdStare"",1) = " + cmbStare.Value;
-                if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += $@" AND A.""DescContract"" IN ('{cmbCtr.Value.ToString().Replace(",", "','")}')";
+                if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += $@" AND C.""Denumire"" IN ('{cmbCtr.Value.ToString().Replace(",", "','")}')";
                 if (General.Nz(cmbAng.Value, "").ToString() != "") strFiltru += " AND A.F10003=" + cmbAng.Value;
                 if (General.Nz(cmbCateg.Value, "").ToString() != "")
                 {

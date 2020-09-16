@@ -15284,3 +15284,8 @@ INSERT INTO "Eval_ConfigObiective"("Id", "ColumnName", "ColumnType", "Ordine", "
 COMMIT;
 INSERT INTO "Eval_ConfigObiective"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(15, 'Total2', 'System.String', 15, 1);
 COMMIT;
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "Alias" varchar2(250);
+/
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "Alias" varchar2(250);
+/

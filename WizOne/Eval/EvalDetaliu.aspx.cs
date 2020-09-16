@@ -1876,6 +1876,8 @@ namespace WizOne.Eval
 
                 #region AddColumns
 
+                string formulaSql1 = "";
+                string formulaSql2 = "";
                 int y = 34;
                 foreach (Eval_ConfigObTemplateDetail clsConfigDetail in lstEval_ConfigObTemplateDetail.Where(p=>p.TemplateId==TemplateIdObiectiv).OrderBy(p => p.Ordine ?? 99))
                 {
@@ -1891,6 +1893,9 @@ namespace WizOne.Eval
                         colFormula.Visible = false;
 
                         grDateObiective.Columns.Add(colFormula);
+
+                        if (clsConfigDetail.ColumnName == "Total1") formulaSql1 = clsConfigDetail.FormulaSql;
+                        if (clsConfigDetail.ColumnName == "Total2") formulaSql2 = clsConfigDetail.FormulaSql;
                     }
                     //Florin 2020.09.14 End
 
@@ -1964,7 +1969,7 @@ namespace WizOne.Eval
                                 GridViewDataComboBoxColumn colObiectiv = new GridViewDataComboBoxColumn();
                                 colObiectiv.FieldName = "IdObiectiv";
                                 colObiectiv.Name = "IdObiectiv";
-                                colObiectiv.Caption = Dami.TraduCuvant("Obiectiv");
+                                colObiectiv.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Obiectiv");
                                 colObiectiv.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colObiectiv.ReadOnly = !clsConfigDetail.Editare;
@@ -1992,7 +1997,7 @@ namespace WizOne.Eval
                                 colObiectiv.PropertiesMemoEdit.Rows = 5;
                                 colObiectiv.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                 colObiectiv.Name = "Obiectiv";
-                                colObiectiv.Caption = Dami.TraduCuvant("Obiectiv");
+                                colObiectiv.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Obiectiv");
                                 colObiectiv.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colObiectiv.ReadOnly = !clsConfigDetail.Editare;
@@ -2063,7 +2068,7 @@ namespace WizOne.Eval
                                 GridViewDataComboBoxColumn colActivitate = new GridViewDataComboBoxColumn();
                                 colActivitate.FieldName = "IdActivitate";
                                 colActivitate.Name = "IdActivitate";
-                                colActivitate.Caption = Dami.TraduCuvant("Activitate") + " - " + y;
+                                colActivitate.Caption = (clsConfigDetail.Alias ?? Dami.TraduCuvant("Activitate")) + " - " + y;
                                 colActivitate.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colActivitate.ReadOnly = !clsConfigDetail.Editare;
@@ -2100,7 +2105,7 @@ namespace WizOne.Eval
                                 colActivitate.PropertiesMemoEdit.Rows = 5;
                                 colActivitate.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                 colActivitate.Name = "Activitate";
-                                colActivitate.Caption = Dami.TraduCuvant("Activitate");
+                                colActivitate.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Activitate");
                                 colActivitate.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colActivitate.ReadOnly = !clsConfigDetail.Editare;
@@ -2143,7 +2148,7 @@ namespace WizOne.Eval
                                 GridViewDataComboBoxColumn colCalificativ = new GridViewDataComboBoxColumn();
                                 colCalificativ.FieldName = "IdCalificativ";
                                 colCalificativ.Name = "IdCalificativ";
-                                colCalificativ.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colCalificativ.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colCalificativ.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colCalificativ.ReadOnly = !clsConfigDetail.Editare;
@@ -2164,7 +2169,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colCalificativ = new GridViewDataTextColumn();
                                 colCalificativ.FieldName = "Calificativ";
                                 colCalificativ.Name = "Calificativ";
-                                colCalificativ.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colCalificativ.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colCalificativ.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colCalificativ.ReadOnly = !clsConfigDetail.Editare;
@@ -2188,7 +2193,7 @@ namespace WizOne.Eval
                                 GridViewDataMemoColumn colString = new GridViewDataMemoColumn();
                                 colString.FieldName = clsConfigDetail.ColumnName;
                                 colString.Name = clsConfigDetail.ColumnName;
-                                colString.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colString.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colString.PropertiesMemoEdit.Rows = 5;
                                 colString.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                 colString.Width = clsConfigDetail.Width;
@@ -2202,7 +2207,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colDecimal = new GridViewDataTextColumn();
                                 colDecimal.FieldName = clsConfigDetail.ColumnName;
                                 colDecimal.Name = clsConfigDetail.ColumnName;
-                                colDecimal.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colDecimal.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colDecimal.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colDecimal.ReadOnly = !clsConfigDetail.Editare;
@@ -2217,7 +2222,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colInt = new GridViewDataTextColumn();
                                 colInt.FieldName = clsConfigDetail.ColumnName;
                                 colInt.Name = clsConfigDetail.ColumnName;
-                                colInt.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colInt.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colInt.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colInt.ReadOnly = !clsConfigDetail.Editare;
@@ -2269,7 +2274,18 @@ namespace WizOne.Eval
 
                 #endregion
 
-                grDateObiective.DataSource = lstEval_ObiIndividualeTemp.Where(p => p.IdLinieQuiz == id && p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"]) && p.IdQuiz == Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1))).ToList();
+                List<Eval_ObiIndividualeTemp> lst = lstEval_ObiIndividualeTemp.Where(p => p.IdLinieQuiz == id && p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"]) && p.IdQuiz == Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1))).ToList();
+                if (formulaSql1 != "" || formulaSql2 != "")
+                {
+                    foreach (Eval_ObiIndividualeTemp l in lst)
+                    {
+                        if (formulaSql1 != "")
+                            l.FormulaSql1 = formulaSql1;
+                        if (formulaSql2 != "")
+                            l.FormulaSql2 = formulaSql2;
+                    }
+                }
+                grDateObiective.DataSource = lst;
                 grDateObiective.KeyFieldName = "IdAuto";
                 grDateObiective.DataBind();
 
@@ -3662,21 +3678,21 @@ namespace WizOne.Eval
                 foreach (Eval_ConfigCompTemplateDetail clsConfigDetail in lstEval_ConfigCompTemplateDetail.Where(p=>p.TemplateId==TemplateIdCompetenta).OrderBy(p => p.Ordine ?? 99))
                 {
                     //Florin 2020.09.14 Begin
-                    //if ((clsConfigDetail.ColumnName == "Total1" || clsConfigDetail.ColumnName == "Total2") && clsConfigDetail.FormulaSql != "")
-                    //{
-                    //    GridViewDataTextColumn colFormula = new GridViewDataTextColumn();
-                    //    string colName = clsConfigDetail.ColumnName.Replace("Total", "FormulaSql");
-                    //    colFormula.FieldName = colName;
-                    //    colFormula.Name = colName;
-                    //    colFormula.UnboundType = DevExpress.Data.UnboundColumnType.String;
-                    //    colFormula.UnboundExpression = clsConfigDetail.FormulaSql;
-                    //    colFormula.Visible = false;
+                    if ((clsConfigDetail.ColumnName == "Total1" || clsConfigDetail.ColumnName == "Total2") && clsConfigDetail.FormulaSql != "")
+                    {
+                        GridViewDataTextColumn colFormula = new GridViewDataTextColumn();
+                        string colName = clsConfigDetail.ColumnName.Replace("Total", "FormulaSql");
+                        colFormula.FieldName = colName;
+                        colFormula.Name = colName;
+                        colFormula.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        colFormula.UnboundExpression = clsConfigDetail.FormulaSql;
+                        colFormula.Visible = false;
 
-                    //    grDateCompetente.Columns.Add(colFormula);
+                        grDateCompetente.Columns.Add(colFormula);
 
-                    //    if (clsConfigDetail.ColumnName == "Total1") formulaSql1 = clsConfigDetail.FormulaSql;
-                    //    if (clsConfigDetail.ColumnName == "Total2") formulaSql2 = clsConfigDetail.FormulaSql;
-                    //}
+                        if (clsConfigDetail.ColumnName == "Total1") formulaSql1 = clsConfigDetail.FormulaSql;
+                        if (clsConfigDetail.ColumnName == "Total2") formulaSql2 = clsConfigDetail.FormulaSql;
+                    }
                     //Florin 2020.09.14 End
 
                     if (clsConfigDetail.Vizibil == true)
@@ -3717,7 +3733,7 @@ namespace WizOne.Eval
                             GridViewDataComboBoxColumn colCompetenta = new GridViewDataComboBoxColumn();
                             colCompetenta.FieldName = "IdCompetenta";
                             colCompetenta.Name = "IdCompetenta";
-                            colCompetenta.Caption = Dami.TraduCuvant("Competenta");
+                            colCompetenta.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                             colCompetenta.Width = clsConfigDetail.Width;
                             colCompetenta.PropertiesComboBox.TextField = "Denumire";
                             colCompetenta.PropertiesComboBox.ValueField = "Id";
@@ -3760,7 +3776,7 @@ namespace WizOne.Eval
                             GridViewDataComboBoxColumn colCalificativ = new GridViewDataComboBoxColumn();
                             colCalificativ.FieldName = "IdCalificativ";
                             colCalificativ.Name = "IdCalificativ";
-                            colCalificativ.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                            colCalificativ.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                             colCalificativ.Width = clsConfigDetail.Width;
 
                             colCalificativ.PropertiesComboBox.TextField = "Denumire";
@@ -3784,7 +3800,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colString = new GridViewDataTextColumn();
                                 colString.FieldName = clsConfigDetail.ColumnName;
                                 colString.Name = clsConfigDetail.ColumnName;
-                                colString.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colString.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colString.Width = clsConfigDetail.Width;
 
                                 grDateCompetente.Columns.Add(colString);
@@ -3793,7 +3809,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colDecimal = new GridViewDataTextColumn();
                                 colDecimal.FieldName = clsConfigDetail.ColumnName;
                                 colDecimal.Name = clsConfigDetail.ColumnName;
-                                colDecimal.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colDecimal.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colDecimal.Width = clsConfigDetail.Width;
 
                                 colDecimal.PropertiesTextEdit.DisplayFormatString = "n3";
@@ -3805,7 +3821,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colInt = new GridViewDataTextColumn();
                                 colInt.FieldName = clsConfigDetail.ColumnName;
                                 colInt.Name = clsConfigDetail.ColumnName;
-                                colInt.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colInt.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colInt.Width = clsConfigDetail.Width;
 
                                 colInt.PropertiesTextEdit.DisplayFormatString = "n0";
@@ -3866,16 +3882,16 @@ namespace WizOne.Eval
                 #endregion
 
                 List<Eval_CompetenteAngajatTemp> lst = lstEval_CompetenteAngajatTemp.Where(p => p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.IdLinieQuiz == id && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"])).ToList();
-                //if (formulaSql1 != "" || formulaSql2 != "")
-                //{
-                //    foreach(Eval_CompetenteAngajatTemp l in lst)
-                //    {
-                //        if (formulaSql1 != "")
-                //            l.FormulaSql1 = formulaSql1;
-                //        if (formulaSql2 != "")
-                //            l.FormulaSql2 = formulaSql2;
-                //    }
-                //}
+                if (formulaSql1 != "" || formulaSql2 != "")
+                {
+                    foreach (Eval_CompetenteAngajatTemp l in lst)
+                    {
+                        if (formulaSql1 != "")
+                            l.FormulaSql1 = formulaSql1;
+                        if (formulaSql2 != "")
+                            l.FormulaSql2 = formulaSql2;
+                    }
+                }
                 grDateCompetente.DataSource = lst;
                 grDateCompetente.KeyFieldName = "IdAuto";
                 grDateCompetente.DataBind();

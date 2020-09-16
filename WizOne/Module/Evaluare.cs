@@ -732,6 +732,7 @@ namespace WizOne.Module
         public int IdNomenclator { get; set; }
         public int? Ordine { get; set; }
         public string FormulaSql { get; set; }
+        public string Alias { get; set; }
 
         public Eval_ConfigObTemplateDetail() { }
 
@@ -754,6 +755,7 @@ namespace WizOne.Module
             IdNomenclator = columns.Contains("IdNomenclator") == true ? Convert.ToInt32(dr["IdNomenclator"].ToString() == string.Empty ? "-99" : dr["IdNomenclator"].ToString()) : -99;
             Ordine = columns.Contains("Ordine") == true ? (General.IsNumeric(dr["Ordine"]) ? (int?)dr["Ordine"] : null) : null;
             FormulaSql = columns.Contains("FormulaSql") == true ? (dr["FormulaSql"] != DBNull.Value ? dr["FormulaSql"].ToString() : null) : null;
+            Alias = columns.Contains("Alias") == true ? (dr["Alias"] != DBNull.Value ? dr["Alias"].ToString() : null) : null;
         }
     }
 
@@ -1001,6 +1003,7 @@ namespace WizOne.Module
         public int IdNomenclator { get; set; }
         public int? Ordine { get; set; }
         public string FormulaSql { get; set; }
+        public string Alias { get; set; }
 
         public Eval_ConfigCompTemplateDetail() { }
         public Eval_ConfigCompTemplateDetail(DataRow dr)
@@ -1018,6 +1021,7 @@ namespace WizOne.Module
             IdNomenclator = columns.Contains("IdNomenclator") == true ? Convert.ToInt32(dr["IdNomenclator"].ToString() == string.Empty ? "-99" : dr["IdNomenclator"].ToString()) : -99;
             Ordine = columns.Contains("Ordine") == true ? (General.IsNumeric(dr["Ordine"]) ? (int?)dr["Ordine"] : null) : null;
             FormulaSql = columns.Contains("FormulaSql") == true ? (dr["FormulaSql"] != DBNull.Value ? dr["FormulaSql"].ToString() : null) : null;
+            Alias = columns.Contains("Alias") == true ? (dr["Alias"] != DBNull.Value ? dr["Alias"].ToString() : null) : null;
         }
     }
 

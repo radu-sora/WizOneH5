@@ -1572,6 +1572,7 @@ namespace WizOne.Eval
                     else
                         row.Ordine = null;
                     row.FormulaSql = e.NewValues["FormulaSql"] != null ? e.NewValues["FormulaSql"].ToString() : null;
+                    row.Alias = e.NewValues["Alias"] != null ? e.NewValues["Alias"].ToString() : null;
                 }
 
                 Session["createEval_ConfigObTemplateDetail"] = lstEval_ConfigObTemplateDetail;
@@ -1813,6 +1814,7 @@ namespace WizOne.Eval
                     else
                         row.Ordine = null;
                     row.FormulaSql = e.NewValues["FormulaSql"] != null ? e.NewValues["FormulaSql"].ToString() : null;
+                    row.Alias = e.NewValues["Alias"] != null ? e.NewValues["Alias"].ToString() : null;
                 }
 
                 Session["createEval_ConfigCompTemplateDetail"] = lstEval_ConfigCompTemplateDetail;

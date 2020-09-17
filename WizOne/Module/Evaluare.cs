@@ -733,6 +733,7 @@ namespace WizOne.Module
         public int? Ordine { get; set; }
         public string FormulaSql { get; set; }
         public string Alias { get; set; }
+        public int? TotalColoana { get; set; }
 
         public Eval_ConfigObTemplateDetail() { }
 
@@ -756,6 +757,7 @@ namespace WizOne.Module
             Ordine = columns.Contains("Ordine") == true ? (General.IsNumeric(dr["Ordine"]) ? (int?)dr["Ordine"] : null) : null;
             FormulaSql = columns.Contains("FormulaSql") == true ? (dr["FormulaSql"] != DBNull.Value ? dr["FormulaSql"].ToString() : null) : null;
             Alias = columns.Contains("Alias") == true ? (dr["Alias"] != DBNull.Value ? dr["Alias"].ToString() : null) : null;
+            TotalColoana = columns.Contains("TotalColoana") == true ? (General.IsNumeric(dr["TotalColoana"]) ? (int?)dr["TotalColoana"] : null) : null;
         }
     }
 
@@ -1004,6 +1006,7 @@ namespace WizOne.Module
         public int? Ordine { get; set; }
         public string FormulaSql { get; set; }
         public string Alias { get; set; }
+        public int? TotalColoana { get; set; }
 
         public Eval_ConfigCompTemplateDetail() { }
         public Eval_ConfigCompTemplateDetail(DataRow dr)
@@ -1022,6 +1025,7 @@ namespace WizOne.Module
             Ordine = columns.Contains("Ordine") == true ? (General.IsNumeric(dr["Ordine"]) ? (int?)dr["Ordine"] : null) : null;
             FormulaSql = columns.Contains("FormulaSql") == true ? (dr["FormulaSql"] != DBNull.Value ? dr["FormulaSql"].ToString() : null) : null;
             Alias = columns.Contains("Alias") == true ? (dr["Alias"] != DBNull.Value ? dr["Alias"].ToString() : null) : null;
+            TotalColoana = columns.Contains("TotalColoana") == true ? (General.IsNumeric(dr["TotalColoana"]) ? (int?)dr["TotalColoana"] : null) : null;
         }
     }
 

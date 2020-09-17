@@ -448,7 +448,7 @@ namespace WizOne.Eval
                                     clsObiIndividuale.Id, clsObiIndividuale.IdLinieQuiz,
                                     clsObiIndividuale.ColoanaSuplimentara1, clsObiIndividuale.ColoanaSuplimentara2, clsObiIndividuale.ColoanaSuplimentara3, clsObiIndividuale.ColoanaSuplimentara4,
                                     General.Nz(clsObiIndividuale.USER_NO, Session["UserId"]), General.Nz(clsObiIndividuale.TIME, DateTime.Now), clsObiIndividuale.IdPeriod, clsObiIndividuale.IdCategObiective,
-                                    clsObiIndividuale.Total1, clsObiIndividuale.Total2, clsObiIndividuale.Pondere, clsObiIndividuale.Target, clsObiIndividuale.Realizat });
+                                    General.Nz(clsObiIndividuale.Total1, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.Total2, "0").ToString().Replace(",", "."), clsObiIndividuale.Pondere, clsObiIndividuale.Target, clsObiIndividuale.Realizat });
                             }
                             catch (Exception ex)
                             {
@@ -536,7 +536,7 @@ namespace WizOne.Eval
                                 General.ExecutaNonQuery(sqlCmp, new object[] { clsCompetenta.IdCategCompetenta, clsCompetenta.CategCompetenta, clsCompetenta.IdCompetenta, clsCompetenta.Competenta,
                                                                         General.Nz(clsCompetenta.Pondere, "0").ToString().Replace(",", "."), clsCompetenta.IdCalificativ, clsCompetenta.Calificativ, clsCompetenta.ExplicatiiCalificativ,
                                                                         clsCompetenta.Explicatii, clsCompetenta.IdQuiz, clsCompetenta.F10003, clsCompetenta.Pozitie, clsCompetenta.Id, clsCompetenta.IdLinieQuiz, clsCompetenta.IdAuto, General.Nz(clsCompetenta.USER_NO, Session["UserId"]), General.Nz(clsCompetenta.TIME, DateTime.Now), 
-                                                                        clsCompetenta.IdPeriod, clsCompetenta.Pondere, clsCompetenta.Total1, clsCompetenta.Total2});
+                                                                        clsCompetenta.IdPeriod, clsCompetenta.Pondere, General.Nz(clsCompetenta.Total1, "0").ToString().Replace(",", "."), General.Nz(clsCompetenta.Total2, "0").ToString().Replace(",", ".")});
                             }
                             catch (Exception ex)
                             {
@@ -1896,6 +1896,21 @@ namespace WizOne.Eval
 
                         if (clsConfigDetail.ColumnName == "Total1") formulaSql1 = clsConfigDetail.FormulaSql;
                         if (clsConfigDetail.ColumnName == "Total2") formulaSql2 = clsConfigDetail.FormulaSql;
+
+                        if (Convert.ToString(clsConfigDetail.TotalColoana) != "")
+                        {
+                            grDateObiective.Settings.ShowFooter = true;
+                            grDateObiective.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                            ASPxSummaryItem s = new ASPxSummaryItem();
+                            s.FieldName = clsConfigDetail.ColumnName;
+                            if (clsConfigDetail.TotalColoana == 0)
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                            if (clsConfigDetail.TotalColoana == 4)
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                            s.DisplayFormat = "{0}";
+
+                            grDateObiective.TotalSummary.Add(s);
+                        }
                     }
                     //Florin 2020.09.14 End
 
@@ -3692,6 +3707,21 @@ namespace WizOne.Eval
 
                         if (clsConfigDetail.ColumnName == "Total1") formulaSql1 = clsConfigDetail.FormulaSql;
                         if (clsConfigDetail.ColumnName == "Total2") formulaSql2 = clsConfigDetail.FormulaSql;
+
+                        if (Convert.ToString(clsConfigDetail.TotalColoana) != "")
+                        {
+                            grDateCompetente.Settings.ShowFooter = true;
+                            grDateCompetente.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                            ASPxSummaryItem s = new ASPxSummaryItem();
+                            s.FieldName = clsConfigDetail.ColumnName;
+                            if (clsConfigDetail.TotalColoana == 0)
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                            if (clsConfigDetail.TotalColoana == 4)
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                            s.DisplayFormat = "{0}";
+
+                            grDateCompetente.TotalSummary.Add(s);
+                        }
                     }
                     //Florin 2020.09.14 End
 

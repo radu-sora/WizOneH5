@@ -14607,22 +14607,22 @@ BEGIN
 END
 GO
 
-alter table Eval_ObiIndividuale add Total1 nvarchar(max)
+alter table Eval_ObiIndividuale add Total1 decimal(18,2)
 GO
-alter table Eval_ObiIndividuale add Total2 nvarchar(max)
+alter table Eval_ObiIndividuale add Total2 decimal(18,2)
 GO
-alter table Eval_ObiIndividualeTemp add Total1 nvarchar(max)
+alter table Eval_ObiIndividualeTemp add Total1 decimal(18,2)
 GO
-alter table Eval_ObiIndividualeTemp add Total2 nvarchar(max)
+alter table Eval_ObiIndividualeTemp add Total2 decimal(18,2)
 GO
 
-alter table Eval_CompetenteAngajat add Total1 nvarchar(max)
+alter table Eval_CompetenteAngajat add Total1 decimal(18,2)
 GO
-alter table Eval_CompetenteAngajat add Total2 nvarchar(max)
+alter table Eval_CompetenteAngajat add Total2 decimal(18,2)
 GO
-alter table Eval_CompetenteAngajatTemp add Total1 nvarchar(max)
+alter table Eval_CompetenteAngajatTemp add Total1 decimal(18,2)
 GO
-alter table Eval_CompetenteAngajatTemp add Total2 nvarchar(max)
+alter table Eval_CompetenteAngajatTemp add Total2 decimal(18,2)
 GO
 
 ALTER TABLE Eval_ConfigCompTemplateDetail ADD FormulaSql nvarchar(max)
@@ -14631,15 +14631,15 @@ ALTER TABLE Eval_ConfigObTemplateDetail ADD FormulaSql nvarchar(max)
 GO
 
 
-INSERT INTO Eval_ConfigCompetente(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(6, 'Total1', 'System.String', 6, 1)
+INSERT INTO Eval_ConfigCompetente(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(6, 'Total1', 'System.Decimal', 6, 1)
 GO
-INSERT INTO Eval_ConfigCompetente(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(7, 'Total2', 'System.String', 7, 1)
+INSERT INTO Eval_ConfigCompetente(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(7, 'Total2', 'System.Decimal', 7, 1)
 GO
 
 
-INSERT INTO Eval_ConfigObiective(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(14, 'Total1', 'System.String', 14, 1)
+INSERT INTO Eval_ConfigObiective(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(14, 'Total1', 'System.Decimal', 14, 1)
 GO
-INSERT INTO Eval_ConfigObiective(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(15, 'Total2', 'System.String', 15, 1)
+INSERT INTO Eval_ConfigObiective(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(15, 'Total2', 'System.Decimal', 15, 1)
 GO
 
 ALTER TABLE Eval_ConfigCompTemplateDetail ADD FormulaSql nvarchar(max)
@@ -14653,4 +14653,9 @@ ALTER TABLE Eval_ConfigObTemplateDetail ADD Alias nvarchar(250)
 GO
 
 ALTER TABLE Ptj_Intrari ADD ModifInOut nvarchar(500)
+GO
+
+ALTER TABLE Eval_ConfigCompTemplateDetail ADD TotalColoana int
+GO
+ALTER TABLE Eval_ConfigObTemplateDetail ADD TotalColoana int
 GO

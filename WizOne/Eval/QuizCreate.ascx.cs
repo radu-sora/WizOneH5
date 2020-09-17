@@ -24,6 +24,12 @@ namespace WizOne.Eval
             public string Denumire { get; set; }
             public int Parinte { get;set;}
         }
+
+        public class metaCmb
+        {
+            public int Id { get; set; }
+            public string Denumire { get; set; }
+        }
         List<metaDate> lstEval_tblCategTipCamp = new List<metaDate>();
         List<metaDate> lstEval_tblTipCamp = new List<metaDate>();
         List<metaDate> lstEval_tblTipValori = new List<metaDate>();
@@ -463,6 +469,15 @@ namespace WizOne.Eval
                     cmbCategObi.DataSource = dt;
                     cmbCategObi.DataBind();
                 }
+
+                //List<metaCmb> lst = new List<metaCmb>();
+                //lst.Add(new metaCmb() { Id = 0, Denumire = "Suma" });
+                //lst.Add(new metaCmb() { Id = 4, Denumire = "Medie" });
+
+                //GridViewDataComboBoxColumn totalColoanaObi = (grDateObiective.Columns["TotalColoana"] as GridViewDataComboBoxColumn);
+                //totalColoanaObi.PropertiesComboBox.DataSource = lst;
+                //GridViewDataComboBoxColumn totalColoanaCmp = (grDateCompetente.Columns["TotalColoana"] as GridViewDataComboBoxColumn);
+                //totalColoanaCmp.PropertiesComboBox.DataSource = lst;
             }
             catch (Exception ex)
             {
@@ -1573,6 +1588,10 @@ namespace WizOne.Eval
                         row.Ordine = null;
                     row.FormulaSql = e.NewValues["FormulaSql"] != null ? e.NewValues["FormulaSql"].ToString() : null;
                     row.Alias = e.NewValues["Alias"] != null ? e.NewValues["Alias"].ToString() : null;
+                    if (e.NewValues["TotalColoana"] != null)
+                        row.TotalColoana = Convert.ToInt32(e.NewValues["TotalColoana"]);
+                    else
+                        row.TotalColoana = null;
                 }
 
                 Session["createEval_ConfigObTemplateDetail"] = lstEval_ConfigObTemplateDetail;
@@ -1815,6 +1834,10 @@ namespace WizOne.Eval
                         row.Ordine = null;
                     row.FormulaSql = e.NewValues["FormulaSql"] != null ? e.NewValues["FormulaSql"].ToString() : null;
                     row.Alias = e.NewValues["Alias"] != null ? e.NewValues["Alias"].ToString() : null;
+                    if (e.NewValues["TotalColoana"] != null)
+                        row.TotalColoana = Convert.ToInt32(e.NewValues["TotalColoana"]);
+                    else
+                        row.TotalColoana = null;
                 }
 
                 Session["createEval_ConfigCompTemplateDetail"] = lstEval_ConfigCompTemplateDetail;

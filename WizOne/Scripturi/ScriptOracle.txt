@@ -15292,3 +15292,8 @@ ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "Alias" varchar2(250);
 
 ALTER TABLE "Ptj_Intrari" ADD "ModifInOut" varchar2(500)
 /
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "TotalColoana" number(10);
+/
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "TotalColoana" number(10);
+/

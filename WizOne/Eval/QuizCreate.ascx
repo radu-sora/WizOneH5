@@ -752,7 +752,7 @@
                                                                             <td colspan="9">
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfObiectiv" ClientInstanceName="hfObiectiv" />
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfObiectivColName" ClientInstanceName="hfObiectivColName" />
-                                                                                <dx:ASPxGridView ID="grDateObiective" runat="server" ClientInstanceName="grDateObiective" ClientIDMode="Static" 
+                                                                                <dx:ASPxGridView ID="grDateObiective" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateObiective" ClientIDMode="Static" 
                                                                                     Width="1000px" AutoGenerateColumns="false" 
                                                                                     OnAutoFilterCellEditorInitialize="grDateObiective_AutoFilterCellEditorInitialize" 
                                                                                     OnCellEditorInitialize="grDateObiective_CellEditorInitialize"
@@ -792,6 +792,9 @@
                                                                                         <dx:GridViewDataSpinEditColumn FieldName="Ordine" Name ="Ordine" Caption="Ordine" VisibleIndex="9" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false" PropertiesSpinEdit-MinValue="1" PropertiesSpinEdit-MaxValue="99"/>
                                                                                         <dx:GridViewDataTextColumn FieldName="FormulaSql" Name="FormulaSql" Caption="FormulaSql" VisibleIndex="10" />
                                                                                         <dx:GridViewDataTextColumn FieldName="Alias" Name="Alias" Caption="Alias" VisibleIndex="12" />
+                                                                                        <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14">
+                                                                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList" />
+                                                                                        </dx:GridViewDataComboBoxColumn>
                                                                                     </Columns>
                                                                                     <SettingsCommandButton>
                                                                                         <EditButton>
@@ -846,7 +849,7 @@
                                                                             <td colspan="2">
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfCompetente" ClientInstanceName="hfCompetente" />
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfCompetenteColName" ClientInstanceName="hfCompetenteColName" />
-                                                                                <dx:ASPxGridView ID="grDateCompetente" runat="server" ClientInstanceName="grDateCompetente" ClientIDMode="Static"
+                                                                                <dx:ASPxGridView ID="grDateCompetente" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateCompetente" ClientIDMode="Static"
                                                                                     Width="1100px" AutoGenerateColumns="false"
                                                                                     OnAutoFilterCellEditorInitialize="grDateCompetente_AutoFilterCellEditorInitialize"
                                                                                     OnCellEditorInitialize="grDateCompetente_CellEditorInitialize"
@@ -881,6 +884,9 @@
                                                                                         <dx:GridViewDataSpinEditColumn FieldName="Ordine" Name ="Ordine" Caption="Ordine" VisibleIndex="9" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false" PropertiesSpinEdit-MinValue="1" PropertiesSpinEdit-MaxValue="99"/>
                                                                                         <dx:GridViewDataTextColumn FieldName="FormulaSql" Name="FormulaSql" Caption="FormulaSql" VisibleIndex="10" />
                                                                                         <dx:GridViewDataTextColumn FieldName="Alias" Name="Alias" Caption="Alias" VisibleIndex="12" />
+                                                                                        <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14">
+                                                                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList" />
+                                                                                        </dx:GridViewDataComboBoxColumn>
                                                                                     </Columns>
                                                                                     <SettingsCommandButton>
                                                                                         <EditButton>

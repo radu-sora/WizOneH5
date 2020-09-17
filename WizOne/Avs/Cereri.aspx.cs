@@ -4823,13 +4823,13 @@ namespace WizOne.Avs
                             if (modifTip)
                                 sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                                     + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 35, 'Tip contract', " + data + ", " + dtCer.Rows[0]["TipContract"].ToString() + ", 'Modificari in avans', '"
-                                    + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                                    + dateDoc + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
 
                             if (modifDur)
                                 sql1 = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70468, F70469, F70409, F70410, F70420, USER_NO, TIME) "
                                     + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 36, 'Durata contract', " + data + ", " + dtCer.Rows[0]["DurataContract"].ToString() + "," +
                                     (dtCer.Rows[0]["DurataContract"].ToString() == "1" ? General.ToDataUniv(new DateTime(2100, 1, 1)) + ", " + General.ToDataUniv(new DateTime(2100, 1, 1)) + ", " : data9 + ", " + data10 + ", ") 
-                                    + " 'Modificari in avans', '" + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                                    + " 'Modificari in avans', '" + dateDoc + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
 
                             //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO   
                             if (dtSf.Year > DateTime.Now.Year)

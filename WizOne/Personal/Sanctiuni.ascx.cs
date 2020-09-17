@@ -9,6 +9,7 @@ using WizOne.Module;
 using DevExpress.Web;
 using System.IO;
 using System.Diagnostics;
+using System.Web.UI.HtmlControls;
 
 namespace WizOne.Personal
 {
@@ -45,6 +46,12 @@ namespace WizOne.Personal
                     Session["DocUpload_MP_Sanctiuni"] = null;
 
                 if (General.VarSession("EsteAdmin").ToString() == "0") General.SecuritatePersonal(grDateSanctiuni);
+
+
+                //HtmlTableCell lblDesc = grDateSanctiuni.FindEditFormTemplateControl("lblDesc") as HtmlTableCell;
+                //lblDesc.InnerText = Dami.TraduCuvant("Descriere");
+
+                
             }
             catch (Exception ex)
             {

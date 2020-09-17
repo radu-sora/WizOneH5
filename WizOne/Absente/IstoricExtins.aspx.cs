@@ -42,6 +42,9 @@ namespace WizOne.Absente
 
                 grLeg.Caption = Dami.TraduCuvant("Legenda");
 
+                btnLunaAnt.Text = Dami.TraduCuvant("btnLunaAnt", "Luna precedenta");
+                btnLunaUrm.Text = Dami.TraduCuvant("btnLunaUrm", "Luna urmatoare");
+
                 txtTitlu.Text = General.VarSession("Titlu").ToString() + " - " + Dami.TraduCuvant("Istoric Extins");
 
                 #endregion

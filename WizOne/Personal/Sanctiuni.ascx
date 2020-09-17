@@ -175,8 +175,8 @@
                             <div style="padding: 4px 3px 4px">
                                 <table class="auto-style8">
                                     <tr>
-                                        <td style="padding-left:10px;" class="auto-style2">Descriere</td>
-                                        <td style="padding-left:10px;" colspan="2" class="auto-style26">Sanctiune aplicata</td>
+                                        <td id="lblDesc" runat="server" style="padding-left:10px;" class="auto-style2">Descriere</td>
+                                        <td id="lblSanc" runat="server" style="padding-left:10px;" colspan="2" class="auto-style26">Sanctiune aplicata</td>
                                         <td style="padding: 10px !important;" colspan="2">
                                             <dx:ASPxComboBox ID="cmbObi" runat="server" AutoPostBack="false" DropDownWidth="200" TextField="NumeCompus" Value='<%# Bind("IdObiect") %>' ValueField="IdObiect" ValueType="System.Int32" Width="225px" />
                                             <td class="auto-style6" style="padding:10px;">&nbsp;</td>
@@ -186,15 +186,15 @@
                                     </tr>
                                     <tr>
                                         <td rowspan="3" style="vertical-align:top;padding:10px;" class="auto-style3"><dx:ASPxMemo ID="txtDesc" runat="server" Width="500px" Height="150" Text='<%# Bind("Descriere") %>' /></td>
-                                        <td style="padding:10px;" aria-multiline="True" class="auto-style9">Data cercetarii</td>
+                                        <td id="lblDataCercet" runat="server" style="padding:10px;" aria-multiline="True" class="auto-style9">Data cercetarii</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="txtDataCercetare" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" DisplayFormatString="dd/MM/yyyy" UseMaskBehavior="true" Value='<%# Bind("DataCercetare") %>' Width="110px" />
                                             </td>
-                                            <td class="auto-style9" style="padding: 10px;">Data inceput</td>
+                                            <td id="lblDataInc" runat="server" class="auto-style9" style="padding: 10px;">Data inceput</td>
                                             <td class="auto-style9" style="padding:10px;">
                                                 <dx:ASPxDateEdit ID="txtDataInc" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" DisplayFormatString="dd/MM/yyyy" UseMaskBehavior="true" Value='<%# Bind("DataInceput") %>' Width="110" />
                                             </td>
-                                            <td class="auto-style9" style="padding:10px;">Data sfarsit</td>
+                                            <td id="lblDataSf" runat="server" class="auto-style9" style="padding:10px;">Data sfarsit</td>
                                             <td class="auto-style6" style="padding:10px;">
                                                 <dx:ASPxDateEdit ID="txtDataSf" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" DisplayFormatString="dd/MM/yyyy" UseMaskBehavior="true" Value='<%# Bind("DataInceput") %>' Width="110" />
                                             </td>
@@ -203,13 +203,13 @@
                                     <tr>
                                         <td aria-multiline="True" class="auto-style31" style="padding:10px;">&nbsp;</td>
                                         <td aria-multiline="True" class="auto-style9" style="padding:10px;">&nbsp;</td>
-                                        <td class="auto-style18" style="padding:10px;">Valoare</td>
+                                        <td id="lblVal" runat="server" class="auto-style18" style="padding:10px;">Valoare</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxSpinEdit ID="txtVal" ClientInstanceName="txtVal" runat="server" Width="110px" Value='<%# Bind("ValoareAbsoluta") %>' DecimalPlaces="0">
                                                 <SpinButtons ShowIncrementButtons="false"></SpinButtons>  
                                             </dx:ASPxSpinEdit>
                                         </td>
-                                        <td class="auto-style18">Valoare%</td>
+                                        <td id="lblValProc" runat="server" class="auto-style18">Valoare%</td>
                                         <td class="auto-style30" style="padding:10px;">
                                             <dx:ASPxSpinEdit ID="txtProc" ClientInstanceName="txtProc" runat="server" Width="110px" Value='<%# Bind("ValoareProcent") %>' DecimalPlaces="0">
                                                 <SpinButtons ShowIncrementButtons="false"></SpinButtons>  
@@ -231,20 +231,20 @@
                                             &nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td aria-multiline="True" class="auto-style22" style="padding:10px;">Materiale doveditoare</td>
-                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">Numar inregistrare sesizare</td>
+                                        <td id="lblMatDov" runat="server" aria-multiline="True" class="auto-style22" style="padding:10px;">Materiale doveditoare</td>
+                                        <td id="lblNrInregSes" runat="server" aria-multiline="True" class="auto-style9" style="padding:10px;">Numar inregistrare sesizare</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxSpinEdit ID="txtNrInregSesizare" ClientInstanceName="txtNrInregSesizare" runat="server" Width="110px" Value='<%# Bind("NrInregSesizare") %>' DecimalPlaces="0">
                                                 <SpinButtons ShowIncrementButtons="false"></SpinButtons>  
                                             </dx:ASPxSpinEdit>
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">Numar inregistrare convocare</td>
+                                        <td id="lblNrInregConv" runat="server" class="auto-style6" style="padding:10px;">Numar inregistrare convocare</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxSpinEdit ID="txtNrInregConvocare" ClientInstanceName="txtNrInregConvocare" runat="server" Width="110px" Value='<%# Bind("NrInregConvocare") %>' DecimalPlaces="0">
                                                 <SpinButtons ShowIncrementButtons="false"></SpinButtons>  
                                             </dx:ASPxSpinEdit>
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">Numar decizie</td>
+                                        <td id="lblNrDecizie" runat="server" class="auto-style6" style="padding:10px;">Numar decizie</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxSpinEdit ID="txtNrDecizie" ClientInstanceName="txtNrDecizie" runat="server" Width="110px" Value='<%# Bind("NrDecizie") %>' DecimalPlaces="0">
                                                 <SpinButtons ShowIncrementButtons="false"></SpinButtons>  
@@ -255,17 +255,17 @@
                                         <td class="auto-style23" rowspan="3" style="padding:10px;">
                                             <dx:ASPxMemo ID="txtMaterialeDoveditoare" runat="server" Height="150px" Text='<%# Bind("MaterialeDoveditoare") %>' Width="500px" />
                                         </td>
-                                        <td class="auto-style25" style="padding:10px;" aria-multiline="True">
+                                        <td id="lblDataInregSes" runat="server" class="auto-style25" style="padding:10px;" aria-multiline="True">
                                             Data inregistrare sesizare</td>
                                         <td class="auto-style25" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="txtDataInregSesizare" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" DisplayFormatString="dd/MM/yyyy" UseMaskBehavior="true" Value='<%# Bind("DataInregSesizare") %>' Width="110px" />
                                         </td>
-                                        <td class="auto-style25" style="padding:10px;">
+                                        <td id="lblDataInregConv" runat="server" class="auto-style25" style="padding:10px;">
                                             Data inregistrare convocare</td>
                                         <td class="auto-style25" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="txtDataInregConvocare" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" DisplayFormatString="dd/MM/yyyy" UseMaskBehavior="true" Value='<%# Bind("DataInregConvocare") %>' Width="110px" />
                                         </td>
-                                        <td class="auto-style25" style="padding:10px;">Data decizie
+                                        <td id="lblDataDecizie" runat="server" class="auto-style25" style="padding:10px;">Data decizie
                                         </td>
                                         <td class="auto-style25" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="txtDataDecizie" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" DisplayFormatString="dd/MM/yyyy" UseMaskBehavior="true" Value='<%# Bind("DataDecizie") %>' Width="110px" />
@@ -280,21 +280,21 @@
                                         <td class="auto-style6" style="padding:10px;">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td class="auto-style6" style="padding:10px;">Numar inregistrare comisie
+                                        <td id="lblNrInregComisie" runat="server" class="auto-style6" style="padding:10px;">Numar inregistrare comisie
                                         </td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxSpinEdit ID="txtNrInregComisie" ClientInstanceName="txtNrInregComisie" runat="server" Width="110px" Value='<%# Bind("NrInregComisie") %>' DecimalPlaces="0">
                                                 <SpinButtons ShowIncrementButtons="false"></SpinButtons>  
                                             </dx:ASPxSpinEdit>
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">
+                                        <td id="lblNrProcVerb" runat="server" class="auto-style6" style="padding:10px;">
                                             Numar proces verbal</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxSpinEdit ID="txtNrProcesCercetare" ClientInstanceName="txtNrProcesCercetare" runat="server" Width="110px" Value='<%# Bind("NrProcesCercetare") %>' DecimalPlaces="0">
                                                 <SpinButtons ShowIncrementButtons="false"></SpinButtons>
                                             </dx:ASPxSpinEdit>
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">
+                                        <td id="lblDataComDecizie" runat="server" class="auto-style6" style="padding:10px;">
                                             Data comunicare decizie</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="txtDataComunicareDecizie" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" DisplayFormatString="dd/MM/yyyy" UseMaskBehavior="true" Value='<%# Bind("DataComunicareDecizie") %>' Width="110px" />
@@ -315,22 +315,22 @@
                                                 <ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
                                             </dx:ASPxUploadControl>
                                         </td>
-                                        <td class="auto-style25" style="padding:10px;">Data inregistrare comisie</td>
+                                        <td id="lblDataInregComisie" runat="server" class="auto-style25" style="padding:10px;">Data inregistrare comisie</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="txtDataInregComisie" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" DisplayFormatString="dd/MM/yyyy" UseMaskBehavior="true" Value='<%# Bind("DataInregComisie") %>' Width="110px" />
                                         </td>
-                                        <td class="auto-style9" style="padding:10px;">Data proces verbal</td>
+                                        <td id="lblDataProcVerb" runat="server" class="auto-style9" style="padding:10px;">Data proces verbal</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="txtDataProcesCercetare" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" DisplayFormatString="dd/MM/yyyy" UseMaskBehavior="true" Value='<%# Bind("DataProcesCercetare") %>' Width="110px" />
                                         </td>
-                                        <td class="auto-style9" style="padding:10px;">Data radiere sanctiune</td>
+                                        <td id="lblDataRadSanc" runat="server" class="auto-style9" style="padding:10px;">Data radiere sanctiune</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="txtDataRadiereSanctiune" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" DisplayFormatString="dd/MM/yyyy" UseMaskBehavior="true" Value='<%# Bind("DataRadiereSanctiune") %>' Width="110px" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="auto-style33" colspan="1" style="padding:10px;">&nbsp;</td>
-                                        <td class="auto-style6" style="padding:10px;">Componenta&nbsp; comisiei</td>
+                                        <td id="lblCompComisie" runat="server" class="auto-style6" style="padding:10px;">Componenta&nbsp; comisiei</td>
                                         <td class="auto-style6" style="padding:10px;" colspan="5">
                                             <dx:ASPxMemo ID="txtComponentaComisie" ClientInstanceName="txtComponentaComisie" ClientIDMode="Static" runat="server" Height="150px" Text='<%# Bind("ComponentaComisie") %>' Width="500px" />
                                         </td>

@@ -293,9 +293,6 @@ namespace WizOne.Pontaj
                     #endregion
 
                     DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
-                    Session["Ptj_tblStariPontaj"] = dtStari;
-                    GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                    colStari.PropertiesComboBox.DataSource = dtStari;
                     cmbStare.DataSource = dtStari;
                     cmbStare.DataBind();
 
@@ -330,9 +327,6 @@ namespace WizOne.Pontaj
                 {
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.DataBind();
-
-                    GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                    colStari.PropertiesComboBox.DataSource = Session["Ptj_tblStariPontaj"];
                 }
             }
             catch (Exception ex)
@@ -596,7 +590,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                if (e.DataColumn.FieldName == "IdStare")
+                if (e.DataColumn.FieldName == "Stare")
                 {
                     object col = grDate.GetRowValues(e.VisibleIndex, "Culoare");
                     if (col != null) e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(col.ToString());
@@ -1941,7 +1935,7 @@ namespace WizOne.Pontaj
                 foreach (var col in grDate.Columns.OfType<GridViewDataSpinEditColumn>())
                     f_uri += $",COALESCE(X.{col.FieldName},0) AS {col.FieldName}";
 
-                strSql = "SELECT X.F10003, A.F10008  " + Dami.Operator() + "  ' '  " + Dami.Operator() + "  A.F10009 AS \"AngajatNume\", Y.\"Norma\", C.\"Denumire\" AS \"DescContract\", L.F06205, FCT.F71804 AS \"Functie\", A.F100901, COALESCE(K.\"Culoare\", '#FFFFFFFF') AS \"Culoare\", X.\"IdStare\", " +
+                strSql = "SELECT X.F10003, A.F10008  " + Dami.Operator() + "  ' '  " + Dami.Operator() + "  A.F10009 AS \"AngajatNume\", Y.\"Norma\", C.\"Denumire\" AS \"DescContract\", L.F06205, FCT.F71804 AS \"Functie\", A.F100901, COALESCE(K.\"Culoare\", '#FFFFFFFF') AS \"Culoare\", X.\"IdStare\", K.\"Denumire\" AS \"Stare\", " +
                         "S2.F00204 AS \"Companie\", S3.F00305 AS \"Subcompanie\", S4.F00406 AS \"Filiala\", H.F00507 AS \"Sectie\",I.F00608 AS \"Dept\", S7.F00709 AS \"Subdept\", S8.F00810 AS \"Birou\" " +
                         f_uri + 
                         "{0}" +

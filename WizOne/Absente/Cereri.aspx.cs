@@ -71,6 +71,8 @@ namespace WizOne.Absente
                 btnDocUpload.ToolTip = Dami.TraduCuvant("incarca document");
                 btnDocSterge.ToolTip = Dami.TraduCuvant("sterge document");
 
+                txtAbsDesc.InnerText = Dami.TraduCuvant("Fara descriere");
+
                 //Radu 09.12.2019
                 foreach (ListBoxColumn col in cmbAng.Columns)
                     col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);

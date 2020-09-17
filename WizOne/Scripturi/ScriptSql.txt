@@ -14683,3 +14683,5 @@ INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('Blocheaza
 GO
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('SalvareBDIncLunaWS', '1', 'La inchiderea de luna salvarea se face automat')
 GO
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('Rap_GrupareImplicitaModule', '0', '1 - se afiseaza implicit grid-ul de Rapoarte grupat dupa Module; 0 - se afiseaza normal')
+GO

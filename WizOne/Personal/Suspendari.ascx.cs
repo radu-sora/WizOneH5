@@ -581,9 +581,9 @@ namespace WizOne.Personal
             }
             if (param == 2)
             {               
-                string data = General.ToDataUniv(2100, 1, 1);
-                if (dt.Select("F11107 IS NULL OR F11107 = " + data, "F11105 ASC") != null && dt.Select("F11107 IS NULL OR F11107 = " + data, "F11105 ASC").Count() > 0)
-                    dtSuspAng = dt.Select("F11107 IS NULL OR F11107 = " + data, "F11105 ASC").CopyToDataTable();
+                //string data = General.ToDataUniv(2100, 1, 1);
+                if (dt.Select("F11107 IS NULL OR F11107 = '2100-01-01'", "F11105 ASC") != null && dt.Select("F11107 IS NULL OR F11107 = '2100-01-01'", "F11105 ASC").Count() > 0)
+                    dtSuspAng = dt.Select("F11107 IS NULL OR F11107 = '2100-01-01'", "F11105 ASC").CopyToDataTable();
             }
             if (dtSuspAng != null && dtSuspAng.Rows.Count > 0)
             {

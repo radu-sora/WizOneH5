@@ -297,12 +297,12 @@ namespace WizOne.Personal
             ds.Tables[1].Rows[0]["F100936"] = nrZile;
             Session["InformatiaCurentaPersonal"] = ds;
 
-            string[] etichete = new string[63] { "lblNrCtrInt", "lblDataCtrInt", "lblDataAng", "lblTipCtrMunca", "lblDurCtr", "lblDeLaData", "lblLaData", "lblNrLuni", "lblNrZile", "lblPrel", "lblExcIncet","lblCASSAngajat",
+            string[] etichete = new string[64] { "lblNrCtrInt", "lblDataCtrInt", "lblDataAng", "lblTipCtrMunca", "lblDurCtr", "lblDeLaData", "lblLaData", "lblNrLuni", "lblNrZile", "lblPrel", "lblExcIncet","lblCASSAngajat",
                                                  "lblCASSAngajator", "lblSalariu", "lblDataModifSal", "lblCategAng1", "lblCategAng2", "lblLocAnt", "lblLocatieInt", "lblTipAng", "lblTimpPartial", "lblNorma", "lblDataModifNorma",
                                                  "lblTipNorma", "lblDurTimpMunca", "lblRepTimpMunca", "lblIntervRepTimpMunca", "lblNrOre", "lblCOR", "lblDataModifCOR", "lblFunctie", "lblDataModifFunctie", "lblMeserie",
                                                  "lblPerioadaProba", "lblZL", "lblZC", "lblNrZilePreavizDemisie", "lblNrZilePreavizConc", "lblUltimaZiLucr", "lblMotivPlecare", "lblDataPlecarii", "lblDataReintegr", "lblGradInvalid",
                                                  "lblDataValabInvalid", "lblVechimeComp", "lblVechCompAni", "lblVechCompLuni", "lblVechimeCarteMunca", "lblVechCarteMuncaAni", "lblVechCarteMuncaLuni", "lblGrila", "lblZileCOFidel",
-                                                 "lblZileCOAnAnt", "lblZileCOCuvAnCrt", "lblZLP", "lblZLPCuv", "lblDataPrimeiAng", "lblMotivScutit", "lblMotivScutitCAS", "lblCtrRadiat", "lblTermenRevisal", "lblNivelFunctie", "lblZileCOAnCrt"};
+                                                 "lblZileCOAnAnt", "lblZileCOCuvAnCrt", "lblZLP", "lblZLPCuv", "lblDataPrimeiAng", "lblMotivScutit", "lblMotivScutitCAS", "lblCtrRadiat", "lblTermenRevisal", "lblNivelFunctie", "lblZileCOAnCrt", "lblGrilaSal"};
             for (int i = 0; i < etichete.Count(); i++)
             {
                 ASPxLabel lbl = Contract_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;

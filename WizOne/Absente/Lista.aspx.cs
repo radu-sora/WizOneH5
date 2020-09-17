@@ -706,6 +706,22 @@ namespace WizOne.Absente
                 int nrViitor = 0;
                 nr = General.CalcZile(Convert.ToInt32(obj[1] ?? 0), dtIncOri, dtSfOri, Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(obj[2] ?? 0));
 
+                //Radu 10.02.2020 - daca chkAnulare este bifata, IdStare = -1
+                string idStare = @"""IdStare""";
+                if (chkAnulare.Checked)
+                    idStare = "-1";
+
+                string msg = "";
+                if (chkAnulare.Checked)
+                {  
+                    msg = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT Z.*, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                } 
+                if (msg != "" && msg.Substring(0, 1) == "2")
+                {
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg.Substring(2));
+                    return;
+                }
+
                 string sqlOri = $@"UPDATE ""Ptj_Cereri"" SET 
                                     ""DataSfarsit"" = {General.ToDataUniv(dtSfOri)},
                                     ""IdCerereDivizata""={obj[0]},
@@ -719,14 +735,11 @@ namespace WizOne.Absente
                 nrViitor = 0;
                 nr = General.CalcZile(Convert.ToInt32(obj[1] ?? 0), dtIncDes, dtSfDes, Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(obj[2] ?? 0));
 
-                //Radu 10.02.2020 - daca chkAnulare este bifata, IdStare = -1
-                string idStare = @"""IdStare""";
-                if (chkAnulare.Checked)
-                    idStare = "-1";
+
 
                 string sqlDes = $@"INSERT INTO ""Ptj_Cereri""(F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", USER_NO, TIME, ""Id"", ""TrimiteLa"", ""IdCerereDivizata"", ""Comentarii"", ""NrOre"")
                                 OUTPUT Inserted.Id                                
-                                SELECT F10003, ""IdAbsenta"", {General.ToDataUniv(dtIncDes)} AS""DataInceput"", {General.ToDataUniv(dtSfDes)} AS ""DataSfarsit"", {nr} AS ""NrZile"", {nrViitor} AS ""NrZileViitor"", ""Observatii"", {idStare}, ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", {Session["UserId"]}, {General.CurrentDate()}, {sqlIdCerere} AS ""Id"", ""TrimiteLa"", {obj[0]} AS ""IdCerereDivizata"", ""Comentarii"", ""NrOre"" FROM ""Ptj_Cereri"" WHERE ""Id""={obj[0]}";
+                                SELECT F10003, ""IdAbsenta"", {General.ToDataUniv(dtIncDes)} AS""DataInceput"", {General.ToDataUniv(dtSfDes)} AS ""DataSfarsit"", {nr} AS ""NrZile"", {nrViitor} AS ""NrZileViitor"", ""Observatii"", {idStare} AS ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", {Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME, {sqlIdCerere} AS ""Id"", ""TrimiteLa"", {obj[0]} AS ""IdCerereDivizata"", ""Comentarii"", ""NrOre"" FROM ""Ptj_Cereri"" WHERE ""Id""={obj[0]}";
 
                 string sqlGen = "BEGIN TRAN " + "\n\r" +
                                 sqlOri + "; " + "\n\r" +

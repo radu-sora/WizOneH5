@@ -15182,6 +15182,7 @@ ALTER TABLE F704 ADD F70469 DATE;
 
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('BlocheazaSuspendariWS', '1', 'Suspendarile se opereaza doar prin WizOne, tabul WS blocat');
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('SalvareBDIncLunaWS', '1', 'La inchiderea de luna salvarea se face automat');
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('Rap_GrupareImplicitaModule', '0', '1 - se afiseaza implicit grid-ul de Rapoarte grupat dupa Module; 0 - se afiseaza normal');
 
 insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (35, 'Tip contract', 1);
 insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (36, 'Durata contract', 1);

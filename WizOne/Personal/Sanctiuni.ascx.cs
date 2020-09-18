@@ -47,11 +47,6 @@ namespace WizOne.Personal
 
                 if (General.VarSession("EsteAdmin").ToString() == "0") General.SecuritatePersonal(grDateSanctiuni);
 
-
-                //HtmlTableCell lblDesc = grDateSanctiuni.FindEditFormTemplateControl("lblDesc") as HtmlTableCell;
-                //lblDesc.InnerText = Dami.TraduCuvant("Descriere");
-
-                
             }
             catch (Exception ex)
             {
@@ -388,6 +383,54 @@ namespace WizOne.Personal
                     cmbCateg.DataSource = dtSanc;
                     cmbCateg.DataBindItems();
                 }
+
+                HtmlTableCell lblDesc = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblDesc");
+                lblDesc.InnerText = Dami.TraduCuvant("Descriere");
+                HtmlTableCell lblSanc = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblSanc");
+                lblSanc.InnerText = Dami.TraduCuvant("Sanctiune aplicata");
+                HtmlTableCell lblDataCercet = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblDataCercet");
+                lblDataCercet.InnerText = Dami.TraduCuvant("Data cercetarii");
+                HtmlTableCell lblDataInc = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblDataInc");
+                lblDataInc.InnerText = Dami.TraduCuvant("Data inceput");
+                HtmlTableCell lblDataSf = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblDataSf");
+                lblDataSf.InnerText = Dami.TraduCuvant("Data sfarsit");
+                HtmlTableCell lblVal = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblVal");
+                lblVal.InnerText = Dami.TraduCuvant("Valoare sanctiune");
+                HtmlTableCell lblValProc = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblValProc");
+                lblValProc.InnerText = Dami.TraduCuvant("Valoare%");
+                HtmlTableCell lblMatDov = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblMatDov");
+                lblMatDov.InnerText = Dami.TraduCuvant("Materiale doveditoare");
+                HtmlTableCell lblNrInregSes = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblNrInregSes");
+                lblNrInregSes.InnerText = Dami.TraduCuvant("Numar inregistrare sesizare");
+                HtmlTableCell lblNrInregConv = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblNrInregConv");
+                lblNrInregConv.InnerText = Dami.TraduCuvant("Numar inregistrare convocare");
+                HtmlTableCell lblNrDecizie = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblNrDecizie");
+                lblNrDecizie.InnerText = Dami.TraduCuvant("Numar decizie");
+                HtmlTableCell lblDataInregSes = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblDataInregSes");
+                lblDataInregSes.InnerText = Dami.TraduCuvant("Data inregistrare sesizare");
+                HtmlTableCell lblDataInregConv = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblDataInregConv");
+                lblDataInregConv.InnerText = Dami.TraduCuvant("Data inregistrare convocare");
+                HtmlTableCell lblDataDecizie = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblDataDecizie");
+                lblDataDecizie.InnerText = Dami.TraduCuvant("Data decizie");
+                HtmlTableCell lblNrInregComisie = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblNrInregComisie");
+                lblNrInregComisie.InnerText = Dami.TraduCuvant("Numar inregistrare comisie");
+                HtmlTableCell lblNrProcVerb = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblNrProcVerb");
+                lblNrProcVerb.InnerText = Dami.TraduCuvant("Numar proces verbal");
+                HtmlTableCell lblDataComDecizie = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblDataComDecizie");
+                lblDataComDecizie.InnerText = Dami.TraduCuvant("Data comunicare decizie");
+                HtmlTableCell lblDataInregComisie = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblDataInregComisie");
+                lblDataInregComisie.InnerText = Dami.TraduCuvant("Data inregistrare comisie");
+                HtmlTableCell lblDataProcVerb = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblDataProcVerb");
+                lblDataProcVerb.InnerText = Dami.TraduCuvant("Data proces verbal");
+                HtmlTableCell lblDataRadSanc = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblDataRadSanc");
+                lblDataRadSanc.InnerText = Dami.TraduCuvant("Data radiere sanctiune");
+                HtmlTableCell lblCompComisie = (HtmlTableCell)grDateSanctiuni.FindEditFormTemplateControl("lblCompComisie");
+                lblCompComisie.InnerText = Dami.TraduCuvant("Componenta comisiei");
+
+                ASPxUploadControl btnDocUploadSanc = (ASPxUploadControl)grDateSanctiuni.FindEditFormTemplateControl("btnDocUploadSanc");
+                btnDocUploadSanc.BrowseButton.Text = Dami.TraduCuvant("Incarca Document");
+                btnDocUploadSanc.ToolTip = Dami.TraduCuvant("Incarca Document");
+
             }
             catch (Exception ex)
             {

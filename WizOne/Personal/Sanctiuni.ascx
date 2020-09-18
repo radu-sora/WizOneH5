@@ -85,7 +85,9 @@
                         <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit" Width="100px" VisibleIndex="6" >
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="ValoareAbsoluta" Name="ValoareAbsoluta" Caption="Valoare"  Width="70px" VisibleIndex="7"  />                        
+                        <dx:GridViewDataTextColumn FieldName="ValoareAbsoluta" Name="ValoareAbsoluta" Caption="Valoare sanctiune"  Width="70px" VisibleIndex="7"  >                        
+                            <HeaderStyle Wrap="True" />
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewDataTextColumn FieldName="ValoareProcent" Name="ValoareProcent" Caption="Valoare %"  Width="70px" VisibleIndex="8"  />  
                         <dx:GridViewDataMemoColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" VisibleIndex="9" Width="230px"/>
 
@@ -175,8 +177,8 @@
                             <div style="padding: 4px 3px 4px">
                                 <table class="auto-style8">
                                     <tr>
-                                        <td id="lblDesc" runat="server" style="padding-left:10px;" class="auto-style2">Descriere</td>
-                                        <td id="lblSanc" runat="server" style="padding-left:10px;" colspan="2" class="auto-style26">Sanctiune aplicata</td>
+                                        <td id="lblDesc" runat="server"  style="padding-left:10px;" class="auto-style2">Descriere</td>
+                                        <td id="lblSanc" runat="server"  style="padding-left:10px;" colspan="2" class="auto-style26">Sanctiune aplicata</td>
                                         <td style="padding: 10px !important;" colspan="2">
                                             <dx:ASPxComboBox ID="cmbObi" runat="server" AutoPostBack="false" DropDownWidth="200" TextField="NumeCompus" Value='<%# Bind("IdObiect") %>' ValueField="IdObiect" ValueType="System.Int32" Width="225px" />
                                             <td class="auto-style6" style="padding:10px;">&nbsp;</td>
@@ -203,7 +205,7 @@
                                     <tr>
                                         <td aria-multiline="True" class="auto-style31" style="padding:10px;">&nbsp;</td>
                                         <td aria-multiline="True" class="auto-style9" style="padding:10px;">&nbsp;</td>
-                                        <td id="lblVal" runat="server" class="auto-style18" style="padding:10px;">Valoare</td>
+                                        <td id="lblVal" runat="server" class="auto-style18" style="padding:10px;">Valoare sanctiune</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxSpinEdit ID="txtVal" ClientInstanceName="txtVal" runat="server" Width="110px" Value='<%# Bind("ValoareAbsoluta") %>' DecimalPlaces="0">
                                                 <SpinButtons ShowIncrementButtons="false"></SpinButtons>  
@@ -330,7 +332,7 @@
                                     </tr>
                                     <tr>
                                         <td class="auto-style33" colspan="1" style="padding:10px;">&nbsp;</td>
-                                        <td id="lblCompComisie" runat="server" class="auto-style6" style="padding:10px;">Componenta&nbsp; comisiei</td>
+                                        <td id="lblCompComisie" runat="server" class="auto-style6" style="padding:10px;">Componenta comisiei</td>
                                         <td class="auto-style6" style="padding:10px;" colspan="5">
                                             <dx:ASPxMemo ID="txtComponentaComisie" ClientInstanceName="txtComponentaComisie" ClientIDMode="Static" runat="server" Height="150px" Text='<%# Bind("ComponentaComisie") %>' Width="500px" />
                                         </td>

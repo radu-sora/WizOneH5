@@ -415,7 +415,7 @@ namespace WizOne.Module
             {
                 DataTable dt = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_ContracteSchimburi"" WHERE ""IdContract""={0} AND ""TipSchimb""={1}", idCtr, ziSapt));
 
-                if (dt.Rows.Count > 0 && firstIn != null && lastOut != null)
+                if (dt.Rows.Count > 0 && (firstIn != null || lastOut != null))
                 {
                     foreach (DataRow rand in dt.Rows)
                     {
@@ -423,25 +423,36 @@ namespace WizOne.Module
                         if (rand["OraInceputDeLa"] == DBNull.Value || rand["OraInceputLa"] == DBNull.Value || rand["OraSfarsitDeLa"] == DBNull.Value || rand["OraSfarsitLa"] == DBNull.Value)
                             continue;
 
+                        int modVerificare = Convert.ToInt32(General.Nz(rand["ModVerificare"], -99));
+
                         //ora de inceput
                         DateTime oraIncDeLa = Convert.ToDateTime(rand["OraInceputDeLa"]);
                         DateTime oraIncLa = Convert.ToDateTime(rand["OraInceputLa"]);
 
-                        oraIncDeLa = new DateTime(firstIn.Value.Year, firstIn.Value.Month, firstIn.Value.Day, oraIncDeLa.Hour, oraIncDeLa.Minute, oraIncDeLa.Second);
-                        oraIncLa = new DateTime(firstIn.Value.Year, firstIn.Value.Month, firstIn.Value.Day, oraIncLa.Hour, oraIncLa.Minute, oraIncLa.Second);
+                        if (firstIn != null)
+                        {
+                            oraIncDeLa = new DateTime(firstIn.Value.Year, firstIn.Value.Month, firstIn.Value.Day, oraIncDeLa.Hour, oraIncDeLa.Minute, oraIncDeLa.Second);
+                            oraIncLa = new DateTime(firstIn.Value.Year, firstIn.Value.Month, firstIn.Value.Day, oraIncLa.Hour, oraIncLa.Minute, oraIncLa.Second);
 
-                        if (oraIncDeLa > oraIncLa) oraIncLa = new DateTime(firstIn.Value.AddDays(1).Year, firstIn.Value.AddDays(1).Month, firstIn.Value.AddDays(1).Day, oraIncLa.Hour, oraIncLa.Minute, oraIncLa.Second);
+                            if (oraIncDeLa > oraIncLa) oraIncLa = new DateTime(firstIn.Value.AddDays(1).Year, firstIn.Value.AddDays(1).Month, firstIn.Value.AddDays(1).Day, oraIncLa.Hour, oraIncLa.Minute, oraIncLa.Second);
+                        }
 
                         //ora de sfarsit
                         DateTime oraSfDeLa = Convert.ToDateTime(rand["OraSfarsitDeLa"]);
                         DateTime oraSfLa = Convert.ToDateTime(rand["OraSfarsitLa"]);
 
-                        oraSfDeLa = new DateTime(lastOut.Value.Year, lastOut.Value.Month, lastOut.Value.Day, oraSfDeLa.Hour, oraSfDeLa.Minute, oraSfDeLa.Second);
-                        oraSfLa = new DateTime(lastOut.Value.Year, lastOut.Value.Month, lastOut.Value.Day, oraSfLa.Hour, oraSfLa.Minute, oraSfLa.Second);
+                        if (lastOut != null)
+                        {
+                            oraSfDeLa = new DateTime(lastOut.Value.Year, lastOut.Value.Month, lastOut.Value.Day, oraSfDeLa.Hour, oraSfDeLa.Minute, oraSfDeLa.Second);
+                            oraSfLa = new DateTime(lastOut.Value.Year, lastOut.Value.Month, lastOut.Value.Day, oraSfLa.Hour, oraSfLa.Minute, oraSfLa.Second);
 
-                        if (oraSfDeLa > oraSfLa) oraSfLa = new DateTime(lastOut.Value.AddDays(1).Year, lastOut.Value.AddDays(1).Month, lastOut.Value.AddDays(1).Day, oraSfLa.Hour, oraSfLa.Minute, oraSfLa.Second);
+                            if (oraSfDeLa > oraSfLa) oraSfLa = new DateTime(lastOut.Value.AddDays(1).Year, lastOut.Value.AddDays(1).Month, lastOut.Value.AddDays(1).Day, oraSfLa.Hour, oraSfLa.Minute, oraSfLa.Second);
+                        }
 
-                        switch (Convert.ToInt32(General.Nz(rand["ModVerificare"], -99)))
+                        if (firstIn != null && lastOut == null) modVerificare = 1;
+                        if (firstIn == null && lastOut != null) modVerificare = 2;
+
+                        switch (modVerificare)
                         {
                             case 1:         //intrare
                                 if ((Convert.ToDateTime(firstIn) - oraIncDeLa).TotalMinutes >= 0 && (oraIncLa - Convert.ToDateTime(firstIn)).TotalMinutes >= 0) idProg = Convert.ToInt32(General.Nz(rand["IdProgram"], -99));

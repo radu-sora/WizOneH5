@@ -240,6 +240,7 @@ namespace WizOne.Pontaj
                 btnPeZi.Text = Dami.TraduCuvant("btnPeZi", "Pontaj pe Zi");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnExport.Text = Dami.TraduCuvant("btnExport", "Export");
+                btnIstoricAprobare.Text = Dami.TraduCuvant("btnIstoricAprobare", "Istoric aprobare");
 
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                 btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");

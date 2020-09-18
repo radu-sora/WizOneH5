@@ -5056,12 +5056,16 @@ namespace WizOne.Avs
             if (e.Column.FieldName == "DataRevisal")
             {
                 string data = "";
-                string dt = e.GetListSourceFieldValue("DataModif").ToString();
-                DateTime dataMod = new DateTime(Convert.ToInt32(dt.Substring(6, 4)), Convert.ToInt32(dt.Substring(3, 2)), Convert.ToInt32(dt.Substring(0, 2)));
+                if (e.GetListSourceFieldValue("DataModif") != null && e.GetListSourceFieldValue("DataModif").ToString().Length > 0)
+                {
 
-                SetDataRevisal(2, dataMod, Convert.ToInt32(e.GetListSourceFieldValue("IdAtribut").ToString()), out data);
+                    DateTime dt = Convert.ToDateTime(e.GetListSourceFieldValue("DataModif").ToString());
+                    DateTime dataMod = new DateTime(dt.Year, dt.Month, dt.Day);
 
-                e.Value = data;
+                    SetDataRevisal(2, dataMod, Convert.ToInt32(e.GetListSourceFieldValue("IdAtribut").ToString()), out data);
+
+                    e.Value = data;
+                }
             }
         }
 

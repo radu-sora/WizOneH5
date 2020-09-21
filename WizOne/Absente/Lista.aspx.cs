@@ -81,6 +81,7 @@ namespace WizOne.Absente
                 lblStare.InnerText = Dami.TraduCuvant("Stare");
                 lblDtInc.InnerText = Dami.TraduCuvant("Data Inceput");
                 lblDtSf.InnerText = Dami.TraduCuvant("Data Sfarsit");
+                lblAng.InnerText = Dami.TraduCuvant("Angajat");
 
                 lblViz.InnerText = Dami.TraduCuvant("Vizualizare");
                 lblRol.InnerText = Dami.TraduCuvant("Roluri");

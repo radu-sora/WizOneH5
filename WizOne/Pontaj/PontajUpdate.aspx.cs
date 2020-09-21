@@ -175,6 +175,7 @@ namespace WizOne.Pontaj
                 string ziSfarsit = General.ToDataUniv(ziSf.Year, ziSf.Month, 99);
 
                 string sqlPrg = "";
+                string sqlCalc = "";
 
                 if (Constante.tipBD == 1)
                 {
@@ -273,8 +274,10 @@ namespace WizOne.Pontaj
                         if (act != "") act = act.Substring(1);
                         strSql = string.Format(strSql, angIn, angSf, General.ToDataUniv(ziIn), General.ToDataUniv(ziSf), act, inn);
 
+                        //Florin 2020.09.07 - adaugat recalcul
                         //Florin 2019.12.10 - daca este contract, actualizam si programul
                         if (chkCtr == true)
+                        {
                             sqlPrg = $@"UPDATE X
                                     SET X.IdProgram=
                                     CASE WHEN (COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
@@ -290,6 +293,15 @@ namespace WizOne.Pontaj
                                     FROM Ptj_Intrari X
                                     INNER JOIN Ptj_Contracte Y ON X.IdContract = Y.Id
                                     WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.Ziua AND X.Ziua <= @4 AND COALESCE(X.ModifProgram,0) = 0";
+
+                            sqlCalc = $@"SELECT CONVERT(nvarchar(20),A.F10003) + ';' + CONVERT(nvarchar(10),A.Ziua,103) + '#'
+                                    FROM Ptj_Intrari A
+                                    INNER JOIN F100 B ON A.F10003=B.F10003                        
+                                    WHERE @1 <= A.F10003 AND A.F10003 <= @2 AND @3 <= A.Ziua AND A.Ziua <= @4
+                                    AND COALESCE(A.ModifProgram,0) <> 1 AND
+                                    A.IdContract <> (SELECT MAX(B.IdContract) AS IdContract FROM F100Contracte B WHERE A.F10003 = B.F10003 AND CAST(B.DataInceput AS Date) <= CAST(A.Ziua AS Date) AND CAST(A.Ziua AS Date) <= CAST(B.DataSfarsit AS Date)) 
+                                    FOR XML PATH('')";
+                        }
                     }
                 }
                 else
@@ -385,8 +397,10 @@ namespace WizOne.Pontaj
                         strSql = "BEGIN " + strSql + " END;";
                     }
 
+                    //Florin 2020.09.07 - adaugat recalcul
                     //Florin 2019.12.10 - daca este contract, actualizam si programul
                     if (chkCtr == true)
+                    {
                         sqlPrg = $@"UPDATE ""Ptj_Intrari"" X
                                 SET X.""IdProgram"" =
                                 (SELECT
@@ -402,7 +416,20 @@ namespace WizOne.Pontaj
                                 END END
                                 FROM ""Ptj_Contracte"" Y WHERE X.""IdContract"" = Y.""Id"")
                                 WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.""Ziua"" AND X.""Ziua"" <= @4 AND COALESCE(X.""ModifProgram"",0) = 0";
+
+                        sqlCalc = $@"SELECT LISTAGG(A.F10003 || ';' || TO_CHAR(A.""Ziua"",'DD/MM/YYYY'), '#') WITHIN GROUP (ORDER BY A.F10003, A.""Ziua"") 
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN F100 B ON A.F10003=B.F10003                        
+                                WHERE @1 <= A.F10003 AND A.F10003 <= @2 AND @3 <= A.""Ziua"" AND A.""Ziua"" <= @4
+                                AND COALESCE(A.""ModifProgram"",0) <> 1 AND
+                                A.""IdContract"" <> (SELECT MAX(B.""IdContract"") AS ""IdContract"" FROM ""F100Contracte"" B WHERE A.F10003 = B.F10003 AND TRUNC(B.""DataInceput"") <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= TRUNC(B.""DataSfarsit"")) ";
+                    }
                 }
+
+                //Florin 2020.09.07 - adaugat recalcul
+                string sirCalc = "";
+                if (sqlCalc.Length > 0)
+                    sirCalc = General.Nz(General.ExecutaScalar(sqlCalc, new object[] { angIn, angSf, ziIn, ziSf }), "").ToString();
 
                 if (strSql.Length > 0)
                     ras = General.ExecutaNonQuery(strSql, null);
@@ -410,6 +437,21 @@ namespace WizOne.Pontaj
                 if (sqlPrg.Length > 0)
                     General.ExecutaNonQuery(sqlPrg, new object[] { angIn, angSf, ziIn, ziSf });
 
+                //Florin 2020.09.07 - adaugat recalcul
+                if (sirCalc != "")
+                {
+                    string[] arr = sirCalc.Split(new string[] { "#" }, StringSplitOptions.RemoveEmptyEntries);
+                    for(int i =0; i < arr.Length; i++)
+                    {
+                        string[] l = arr[i].Split(';');
+                        if (l.Length == 2)
+                        {
+                            DateTime zi = DateTime.Now;
+                            if (DateTime.TryParse(l[1], out zi))
+                                General.CalculFormule(l[0], null, zi);   
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {

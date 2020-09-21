@@ -356,18 +356,6 @@
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox>
                     </td>
-                    <td id="lbl14Act" runat="server" colspan="2">
-                        <dx:ASPxLabel  ID="lblTxt14Act" runat="server"  Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt3Act" runat="server"  Visible="false">
-                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
-                        </dx:ASPxTextBox>
-                    </td>
-                    <td id="lbl15Act" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt15Act" runat="server"   Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt4Act" runat="server"  Visible="false" >
-                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
-                        </dx:ASPxTextBox>
-                    </td>
                     <td id="lbl10Act" runat="server">
                         <dx:ASPxLabel  ID="lblTxt5Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxDateEdit ID="de1Act" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
@@ -379,6 +367,18 @@
                         <dx:ASPxDateEdit ID="de2Act" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
+                    </td>
+                    <td id="lbl14Act" runat="server" colspan="2">
+                        <dx:ASPxLabel  ID="lblTxt14Act" runat="server"  Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt3Act" runat="server"  Visible="false">
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox>
+                    </td>
+                    <td id="lbl15Act" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt15Act" runat="server"   Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt4Act" runat="server"  Visible="false" >
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox>
                     </td>
                     <td id="lbl12Act" runat="server">
                         <dx:ASPxLabel  ID="lblTxt12Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
@@ -470,18 +470,6 @@
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox> 
                     </td>
-                    <td id="lbl15Nou" runat="server" colspan="2">
-                        <dx:ASPxLabel  ID="lblTxt15Nou" runat="server"   Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt3Nou" runat="server"  Visible="false">
-                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
-                        </dx:ASPxTextBox>
-                    </td>
-                    <td id="lbl16Nou" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt16Nou" runat="server"   Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt4Nou" runat="server"  Visible="false">
-                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
-                        </dx:ASPxTextBox> 
-                    </td>
                     <td id="lbl10Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt5Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxDateEdit ID="de1Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
@@ -495,6 +483,18 @@
                             <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
+                    </td>
+                    <td id="lbl15Nou" runat="server" colspan="2">
+                        <dx:ASPxLabel  ID="lblTxt15Nou" runat="server"   Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt3Nou" runat="server"  Visible="false">
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox>
+                    </td>
+                    <td id="lbl16Nou" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt16Nou" runat="server"   Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt4Nou" runat="server"  Visible="false">
+                            <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                        </dx:ASPxTextBox> 
                     </td>
                     <td id="lbl12Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt12Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >

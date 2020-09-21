@@ -14519,7 +14519,7 @@ COMMIT;
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportNotaLichidare', '-99', 'Id Raport pentru Nota Lichidare', 0);
 COMMIT;
 
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(81, 'Nota lichidare', 'Nota lichidare', 'Personal\NotaLichidare', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(100, 'Nota lichidare', 'Nota lichidare', 'Personal\NotaLichidare', 1, 'm1.png');
 COMMIT;
 
 
@@ -15158,3 +15158,32 @@ COMMIT;
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('MP_VerifIntervalCartele' , '0', '1 - se verifica daca, la introducerea unei cartele, intervalul se intersecteaza cu cel al unei alte cartele a aceluiasi angajat; 0 - nu se verifica' , 0);
 COMMIT;
+
+
+ALTER TABLE "Avs_Cereri" ADD "PerProbaZL" number(9);
+ALTER TABLE "Avs_Cereri" ADD "PerProbaZC" number(9);
+ALTER TABLE "Avs_Cereri" ADD "PreavizDemisie" number(9);
+ALTER TABLE "Avs_Cereri" ADD "PreavizConcediere" number(9);
+/
+
+ALTER TABLE "Avs_Cereri" ADD "GenerareDoc" number(10) DEFAULT(1);
+/
+
+UPDATE "Avs_Cereri" SET "GenerareDoc"=1;
+COMMIT;
+
+ALTER TABLE "Avs_Cereri" ADD "TipContract" number(9);
+ALTER TABLE "Avs_Cereri" ADD "TipContractNume" varchar(250);
+ALTER TABLE "Avs_Cereri" ADD "DurataContractNume" varchar(20);
+
+ALTER TABLE F704 ADD F70468 DATE;
+ALTER TABLE F704 ADD F70469 DATE;
+
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('BlocheazaSuspendariWS', '1', 'Suspendarile se opereaza doar prin WizOne, tabul WS blocat');
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('SalvareBDIncLunaWS', '1', 'La inchiderea de luna salvarea se face automat');
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('Rap_GrupareImplicitaModule', '0', '1 - se afiseaza implicit grid-ul de Rapoarte grupat dupa Module; 0 - se afiseaza normal');
+
+insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (35, 'Tip contract', 1);
+insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (36, 'Durata contract', 1);
+commit;

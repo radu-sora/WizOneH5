@@ -66,7 +66,7 @@ namespace WizOne.Personal
                     }
 
                     //Radu 20.02.2020 - citire securitate
-                    string sqlSec = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"", MIN(X.""IdForm"") AS ""IdForm"" FROM (
+                    string sqlSec = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"", X.""IdForm""  FROM (
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat"", A.""IdForm""
                                 FROM ""Securitate"" A
                                 INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
@@ -75,7 +75,7 @@ namespace WizOne.Personal
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat"", A.""IdForm""
                                 FROM ""Securitate"" A
                                 WHERE A.""IdGrup"" = -1 AND A.""IdForm"" like 'Personal.%' ) X
-                                GROUP BY X.""IdControl"", X.""IdColoana""";
+                                GROUP BY X.""IdControl"", X.""IdColoana"", X.""IdForm""";
                     sqlSec = string.Format(sqlSec, Session["UserId"].ToString());
                     DataTable dtSec = General.IncarcaDT(sqlSec, null);
                     Session["SecuritatePersonal"] = dtSec;           
@@ -466,8 +466,10 @@ namespace WizOne.Personal
                     MessageBox.Show(msg.Substring(2), MessageBox.icoWarning);
                     return;
                 }
-                                         
 
+                //Radu 09.09.2020 - completare data consemnare
+                ds.Tables[0].Rows[0]["F1001109"] = General.FindDataConsemnare(Convert.ToInt32(ds.Tables[1].Rows[0]["F10003"].ToString()));
+                ds.Tables[2].Rows[0]["F1001109"] = General.FindDataConsemnare(Convert.ToInt32(ds.Tables[1].Rows[0]["F10003"].ToString()));
 
                 //Florin 2018-10-30
                 //calculam CO daca se insereaza un angajat
@@ -1468,6 +1470,10 @@ namespace WizOne.Personal
                 lstCtr.Add("txtNrZile", "F100936");
                 //Radu 12.09.2019 - caz special
                 lstCtr.Add("cmbNivelFunctie", "F71813");
+
+                lstCtr.Add("deDataModTipCtr", "F1001137");
+                lstCtr.Add("deDataModDurCtr", "F1001138");
+                lstCtr.Add("deDataConsemn", "F1001109");
 
                 #endregion
 

@@ -98,7 +98,7 @@
                     }
                     else {
                         cmbNorma.SetEnabled(true);
-                        if (varsta <= 18) {
+                        if (varsta < 18) {
                             cmbNorma.SetValue(6);
                             cmbNorma.SetEnabled(false);
                             cmbTimpPartial.SetValue(6);

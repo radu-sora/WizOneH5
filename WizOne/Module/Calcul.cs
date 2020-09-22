@@ -2007,8 +2007,8 @@ namespace WizOne.Module
                 }
 
                 //se afla intre min si max
-                if (timp < TransformaInMinute(Convert.ToDateTime(entAlte["ValMin"]))) timp = 0;
-                if (TransformaInMinute(Convert.ToDateTime(entAlte["ValMax"])) < timp) timp = TransformaInMinute(Convert.ToDateTime(entAlte["ValMax"]));
+                if (entAlte["ValMin"] != DBNull.Value && timp < TransformaInMinute(Convert.ToDateTime(entAlte["ValMin"]))) timp = 0;
+                if (entAlte["ValMax"] != DBNull.Value && TransformaInMinute(Convert.ToDateTime(entAlte["ValMax"])) < timp) timp = TransformaInMinute(Convert.ToDateTime(entAlte["ValMax"]));
 
                 //valoare fixa
                 if (entAlte["ValFixa"] != DBNull.Value && TransformaInMinute(Convert.ToDateTime(entAlte["ValFixa"])) > 0 && timp > 0) timp = TransformaInMinute(Convert.ToDateTime(entAlte["ValFixa"]));
@@ -2016,8 +2016,8 @@ namespace WizOne.Module
                 //multiplicator
                 if (Convert.ToInt32(General.Nz(entAlte["Multiplicator"], -99)) > 0) timp = Convert.ToInt32(timp * Convert.ToInt32(General.Nz(entAlte["Multiplicator"], -99)));
 
-                string ert = entAlte["Camp"].ToString();
-                if ((entAlte["Camp"].ToString()) != "" && timp > 0) ent[entAlte["Camp"].ToString()] = timp;
+                string ert = Convert.ToString(entAlte["Camp"]);
+                if (Convert.ToString(entAlte["Camp"]) != "" && timp > 0) ent[entAlte["Camp"].ToString()] = timp;
             }
             catch (Exception ex)
             {

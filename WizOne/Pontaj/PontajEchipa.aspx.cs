@@ -1928,7 +1928,7 @@ namespace WizOne.Pontaj
                 if (General.Nz(cmbCateg.Value, "").ToString() != "")
                 {
                     strFiltru += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
-                    strInner += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 " + Environment.NewLine;
+                    strInner += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON X.F10003 = CTG.F10003 " + Environment.NewLine;
                 }
                 #endregion
 

@@ -486,7 +486,7 @@ namespace WizOne.Pontaj
                 int idRol = Convert.ToInt32(General.Nz(cmbRol.Value, 1));
                 strSql = $@"SELECT C.*, 
                         CASE WHEN ({idRol} = 0 AND (C.""IdStare"" = 1 OR C.""IdStare"" = 4)) OR 
-					    ({idRol} = 1 AND (C.""IdStare"" = 1 OR C.""IdStare"" = 4)) OR 
+					    (({idRol} = 1 OR {idRol} = 0) AND (C.""IdStare"" = 1 OR C.""IdStare"" = 4)) OR 
 					    ({idRol} = 2 AND (C.""IdStare"" = 1 OR C.""IdStare"" = 2 OR C.""IdStare"" = 4 OR C.""IdStare"" = 6)) OR 
 					    {idRol} = 3 THEN 1 ELSE 0 END ""DrepturiModif""
                         FROM ""Ptj_Cumulat"" C

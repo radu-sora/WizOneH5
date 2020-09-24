@@ -576,7 +576,15 @@
 						    </td>
 						    <td align="left">
 							    <dx:ASPxLabel   Width="275" runat="server"  Text="Coduri tranzactii separate prin + (plus)" ></dx:ASPxLabel >	
-						    </td>		
+						    </td>	
+						    <td align="left">
+							    <dx:ASPxLabel   Width="100" runat="server"  Text="     " ></dx:ASPxLabel >	
+						    </td>
+                            <td align="left">                             
+                                    <dx:ASPxCheckBox ID="chkDIS"  runat="server" Width="300"  Text="Doar suspendarile din intervalul raportat" TextAlign="Right" ClientInstanceName="chkDIS" >
+                                         <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />
+                                    </dx:ASPxCheckBox>   
+                             </td>                             
                         </tr> 
                     </table>
                   </fieldset >

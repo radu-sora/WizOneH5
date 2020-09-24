@@ -69,7 +69,7 @@ namespace WizOne.Personal
             grDateSituatieCO.DataSource = null;
             grDateSituatieCO.DataBind();
 
-            string sqlFinal = "SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + Session["Marca"].ToString() + " ORDER BY \"An\" ";
+            string sqlFinal = "SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + HttpContext.Current.Session["Marca"].ToString() + " ORDER BY \"An\" ";
             DataTable dt = new DataTable();
             dt = General.IncarcaDT(sqlFinal, null);
                        

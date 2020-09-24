@@ -60,6 +60,24 @@ namespace WizOne.Pontaj
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
 
         /// <summary>
+        /// lblRol control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRol;
+
+        /// <summary>
+        /// cmbRol control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbRol;
+
+        /// <summary>
         /// lblAng control.
         /// </summary>
         /// <remarks>
@@ -132,24 +150,6 @@ namespace WizOne.Pontaj
         protected global::DevExpress.Web.ASPxComboBox cmbSec;
 
         /// <summary>
-        /// lblCateg control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCateg;
-
-        /// <summary>
-        /// cmbCateg control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbCateg;
-
-        /// <summary>
         /// lblDept control.
         /// </summary>
         /// <remarks>
@@ -220,6 +220,24 @@ namespace WizOne.Pontaj
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbCtr;
+
+        /// <summary>
+        /// lblCateg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCateg;
+
+        /// <summary>
+        /// cmbCateg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCateg;
 
         /// <summary>
         /// lblDeLa control.

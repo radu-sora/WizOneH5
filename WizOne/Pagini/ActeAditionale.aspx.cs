@@ -149,7 +149,6 @@ namespace WizOne.Pagini
                 if (idExcluseCircuitDoc != "")
                     filtruSup = $@" AND A.""IdAtribut"" NOT IN ({idExcluseCircuitDoc})";
 
-
                 //Florin 2020.04.28
                 DateTime dtInit = new DateTime(2018, 1, 1);
                 string paramDt = Dami.ValoareParam("CircuitDocumenteDataInceput").Trim();
@@ -209,7 +208,7 @@ namespace WizOne.Pagini
 							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
                             MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 16 THEN 1 ELSE 0 END) AS ""PunctLucru"",
                             MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 34 THEN 1 ELSE 0 END) AS ""ProgramLucru"",
-                            MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 35 THEN 1 ELSE 0 END) AS ""TipContract"",
+                            MAX(CASE WHEN (COALESCE(""IdAtribut"", 0) = 35 OR COALESCE(""IdAtribut"", 0) = 36) THEN 1 ELSE 0 END) AS ""TipContract"",
                             MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 11 AND A.""Explicatii""= 'Inserat automat la inchidere luna' THEN 1 ELSE 0 END) AS ""SporVechime"",
                             CONVERT(nvarchar(10),J.DocNr) AS DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct, 
@@ -221,13 +220,13 @@ namespace WizOne.Pagini
                             WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,'1900-01-01')=COALESCE(J.DocData,'1900-01-01')
                             AND COALESCE((SELECT CHARINDEX(',' + CAST(AA.IdAtribut AS nvarchar(20)) + ',', ',' + Valoare + ',') FROM tblParametrii WHERE Nume='IdExcluseCircuitDoc'),0) = 0                            
                             AND (CASE WHEN AA.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN AA.""IdAtribut"" ELSE 0 END) = (CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END) 
-                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31, 32, 33, 35) THEN AA.""IdAtribut"" ELSE 0 END
+                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31, 32, 33, 35) THEN AA.""IdAtribut"" ELSE (CASE WHEN AA.""IdAtribut"" IN (35,36) THEN 35 ELSE 0 END) END
                             FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente,
                             0 AS CandidatAngajat
                             FROM Avs_Cereri A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
-                            WHERE A.IdStare = 3 AND A.DataModif >= {General.ToDataUniv(dtInit)} {companie} {filtruSup}
+                            WHERE A.IdStare = 3 AND A.DataModif >= {General.ToDataUniv(dtInit)} {companie} {filtruSup} AND COALESCE(A.""GenerareDoc"",1)=1
                             GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
@@ -279,7 +278,7 @@ namespace WizOne.Pagini
 							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
                             MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 16 THEN 1 ELSE 0 END) AS ""PunctLucru"",
                             MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 34 THEN 1 ELSE 0 END) AS ""ProgramLucru"",
-                            MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 35 THEN 1 ELSE 0 END) AS ""TipContract"",
+                            MAX(CASE WHEN (COALESCE(""IdAtribut"", 0) = 35 OR COALESCE(""IdAtribut"", 0) = 36) THEN 1 ELSE 0 END) AS ""TipContract"",
                             MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 11 AND A.""Explicatii""= 'Inserat automat la inchidere luna' THEN 1 ELSE 0 END) AS ""SporVechime"",
                             CAST(J.""DocNr"" AS varchar2(20)) AS ""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"", 
@@ -292,13 +291,13 @@ namespace WizOne.Pagini
                             AND NVL(JJ.""DocData"",'01-01-2000') = NVL(J.""DocData"",'01-01-2000')
                             AND COALESCE((SELECT INSTR(',' || CAST(AA.""IdAtribut"" AS varchar2(20)) || ',', ',' || ""Valoare"" || ',') FROM ""tblParametrii"" WHERE ""Nume"" ='IdExcluseCircuitDoc'),0) = 0
                             AND (CASE WHEN AA.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN AA.""IdAtribut"" ELSE 0 END) = (CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END) 
-                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31, 32, 33, 35) THEN AA.""IdAtribut"" ELSE 0 END
+                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31, 32, 33, 35) THEN AA.""IdAtribut"" ELSE (CASE WHEN AA.""IdAtribut"" IN (35,36) THEN 35 ELSE 0 END) END
                             ) AS ""IdAvans"", B.F10022, B.F100993, J.""IdAutoAtasamente"",
                             0 AS ""CandidatAngajat""
                             FROM ""Avs_Cereri"" A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""
-                            WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= {General.ToDataUniv(dtInit)} {companie}
+                            WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= {General.ToDataUniv(dtInit)} {companie} {filtruSup} AND COALESCE(A.""GenerareDoc"",1)=1
                             GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente"", B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",

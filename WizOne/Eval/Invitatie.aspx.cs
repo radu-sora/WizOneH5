@@ -363,9 +363,12 @@ namespace WizOne.Eval
                 if (General.Nz(cmbPar.Value, "").ToString() != "")
                 {
                     ListEditItem li = cmbPar.SelectedItem;
-                    string usr_f10003 = General.Nz(li.GetFieldValue("F10003"), -99).ToString();
-                    idUser = Convert.ToInt32(General.Nz(cmbPar.Value,-99));
-                    f10003 = Convert.ToInt32(General.Nz(usr_f10003,-99));
+                    if (li != null)
+                    {
+                        string usr_f10003 = General.Nz(li.GetFieldValue("F10003"), -99).ToString();
+                        idUser = Convert.ToInt32(General.Nz(cmbPar.Value, -99));
+                        f10003 = Convert.ToInt32(General.Nz(usr_f10003, -99));
+                    }
                 }
 
                 dt = General.IncarcaDT(CreazaSelect(f10003, idUser, tipQuiz) + " ORDER BY A.TIME DESC", null);

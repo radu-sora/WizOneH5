@@ -9,6 +9,7 @@ using WizOne.Module;
 using DevExpress.Web;
 using System.IO;
 using System.Diagnostics;
+using System.Web.UI.HtmlControls;
 
 namespace WizOne.Personal
 {
@@ -73,9 +74,9 @@ namespace WizOne.Personal
         private void IncarcaGrid()
         {
 
-            string sqlFinal = "SELECT * FROM \"F100Studii\" WHERE F10003 = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT * FROM \"F100Studii\" WHERE F10003 = " + HttpContext.Current.Session["Marca"].ToString();
             DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("F100Studii"))
             {
                 dt = ds.Tables["F100Studii"];
@@ -117,7 +118,7 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colLoc = (grDateStudii.Columns["SirutaLocalitate"] as GridViewDataComboBoxColumn);
             colLoc.PropertiesComboBox.DataSource = dtLoc;
 
-
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
         }
 
         protected void grDateStudii_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
@@ -458,6 +459,36 @@ namespace WizOne.Personal
                     cmbLocalitate.DataBindItems();
                 }
 
+                HtmlTableCell lblTipInv = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblTipInv");
+                lblTipInv.InnerText = Dami.TraduCuvant("Tip invatamant");
+                HtmlTableCell lblNivStudii = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblNivStudii");
+                lblNivStudii.InnerText = Dami.TraduCuvant("Nivel studii");
+                HtmlTableCell lblNivISCED = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblNivISCED");
+                lblNivISCED.InnerText = Dami.TraduCuvant("Nivel ISCED");
+                HtmlTableCell lblTipInstInv = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblTipInstInv");
+                lblTipInstInv.InnerText = Dami.TraduCuvant("Tip institutie de invatamant");
+                HtmlTableCell lblNumeInst = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblNumeInst");
+                lblNumeInst.InnerText = Dami.TraduCuvant("Nume institutie");
+                HtmlTableCell lblNrClase = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblNrClase");
+                lblNrClase.InnerText = Dami.TraduCuvant("Numar clase");
+                HtmlTableCell lblLocalitate = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblLocalitate");
+                lblLocalitate.InnerText = Dami.TraduCuvant("Localitate");
+                HtmlTableCell lblSpecializ = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblSpecializ");
+                lblSpecializ.InnerText = Dami.TraduCuvant("Specializare");
+                HtmlTableCell lblProfil = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblProfil");
+                lblProfil.InnerText = Dami.TraduCuvant("Profil");
+                HtmlTableCell lblDomenStud = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblDomenStud");
+                lblDomenStud.InnerText = Dami.TraduCuvant("Domeniu studiat");
+                HtmlTableCell lblCalif = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblCalif");
+                lblCalif.InnerText = Dami.TraduCuvant("Calificare");
+                HtmlTableCell lblDeLaData = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblDeLaData");
+                lblDeLaData.InnerText = Dami.TraduCuvant("De la data");
+                HtmlTableCell lblLaData = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblLaData");
+                lblLaData.InnerText = Dami.TraduCuvant("La data");
+
+                ASPxUploadControl btnDocUploadStudii = (ASPxUploadControl)grDateStudii.FindEditFormTemplateControl("btnDocUploadStudii");
+                btnDocUploadStudii.BrowseButton.Text = Dami.TraduCuvant("Incarca Document");
+                btnDocUploadStudii.ToolTip = Dami.TraduCuvant("Incarca Document");
 
             }
             catch (Exception ex)

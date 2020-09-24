@@ -33,7 +33,7 @@ namespace WizOne.Personal
             try
             {
                 IncarcaObiecte();
-                IncarcaObiectDiferenta(Session["Marca"].ToString());
+                IncarcaObiectDiferenta(HttpContext.Current.Session["Marca"].ToString());
             }
             catch (Exception)
             {

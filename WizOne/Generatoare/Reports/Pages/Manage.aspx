@@ -26,7 +26,7 @@
     <dx:ASPxGridView ID="ReportsGridView" ClientInstanceName="reportsGridView" runat="server" AutoGenerateColumns="False" Width="100%"
         DataSourceID="ReportsDataSource" KeyFieldName="Id"
         OnDataBinding="ReportsGridView_DataBinding">
-        <Settings ShowFilterRow="True" VerticalScrollBarMode="Auto" ShowFilterRowMenu="true" />
+        <Settings ShowFilterRow="True" VerticalScrollBarMode="Auto" ShowFilterRowMenu="true" ShowGroupPanel="True" />
         <SettingsEditing Mode="Inline" />
         <SettingsBehavior AllowSelectByRowClick="true" AllowSelectSingleRowOnly="true" AllowFocusedRow="true" />
         <SettingsCommandButton>

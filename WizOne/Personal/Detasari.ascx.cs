@@ -76,7 +76,7 @@ namespace WizOne.Personal
 
         private void IncarcaGrid()
         {
-            string sqlFinal = "SELECT * FROM F112 WHERE F11203 = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT * FROM F112 WHERE F11203 = " + HttpContext.Current.Session["Marca"].ToString();
             DataTable dt = new DataTable();
             dt = General.IncarcaDT(sqlFinal, null);
             grDateDetasari.KeyFieldName = "IdAuto";

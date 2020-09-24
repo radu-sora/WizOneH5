@@ -157,6 +157,12 @@
                                 <tr>
                                     <td>
                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                            <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Rol</label>
+                                            <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdRol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                                                <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRol'); }" />
+                                            </dx:ASPxComboBox>
+                                        </div>
+                                        <div style="float:left; padding-right:15px;">
                                             <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Angajat</label>
                                             <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" SelectInputTextOnClick="true"
                                                         CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
@@ -187,10 +193,6 @@
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSec'); }" />
                                             </dx:ASPxComboBox>
                                         </div>
-                                        <div style="float:left; padding-right:15px;">
-                                            <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Categorie</label>
-                                            <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.String" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />                                
-                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -213,7 +215,11 @@
                                         <div style="float:left; padding-right:15px;">
                                             <label id="lblCtr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Contract</label>
                                             <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" />
-                                        </div>                                                                                                                                                            
+                                        </div>    
+                                        <div style="float:left; padding-right:15px;">
+                                            <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Categorie</label>
+                                            <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.String" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />                                
+                                        </div>                                        
                                     </td> 
                                  </tr>
                                 <tr>

@@ -55,11 +55,11 @@ namespace WizOne.Personal
             if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null)
                 valMin = dtParam.Rows[0][0].ToString();
 
-            string sqlFinal = "SELECT a.*, CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"F100CentreCost\" a WHERE F10003 = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT a.*, CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"F100CentreCost\" a WHERE F10003 = " + HttpContext.Current.Session["Marca"].ToString();
             if (Constante.tipBD == 2)
                 sqlFinal = "SELECT " + General.SelectListaCampuriOracle("F100CentreCost2", "IdCentruCost") + ", CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"F100CentreCost\" a WHERE F10003 = " + Session["Marca"].ToString();
             DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("F100CentreCost2"))
             {
                 dt = ds.Tables["F100CentreCost2"];
@@ -80,6 +80,8 @@ namespace WizOne.Personal
             DataTable dtCC = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colCC = (grDateCentreCost.Columns["IdCentruCost"] as GridViewDataComboBoxColumn);
             colCC.PropertiesComboBox.DataSource = dtCC;
+
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
 
         }
 

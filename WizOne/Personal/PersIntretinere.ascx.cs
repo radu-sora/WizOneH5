@@ -64,9 +64,9 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colInv = (grDatePersIntr.Columns["F11014"] as GridViewDataComboBoxColumn);
             colInv.PropertiesComboBox.DataSource = dtInv;
 
-            string sqlFinal = "SELECT * FROM F110 WHERE F11003 = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT * FROM F110 WHERE F11003 = " + HttpContext.Current.Session["Marca"].ToString();
             DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("F110"))
             {
                 dt = ds.Tables["F110"];
@@ -81,6 +81,7 @@ namespace WizOne.Personal
             grDatePersIntr.KeyFieldName = "F11007";
             grDatePersIntr.DataSource = dt;
 
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
         }
 
 

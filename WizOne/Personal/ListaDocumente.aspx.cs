@@ -4,6 +4,7 @@ using System;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Web;
 using System.Web.UI;
 using WizOne.Module;
 
@@ -33,7 +34,7 @@ namespace WizOne.Personal
                     string inn = "";
                     if (General.VarSession("EsteAdmin").ToString() == "0")
                     {
-                        filtru += " and c.\"IdUser\" = " + Session["UserId"].ToString();
+                        filtru += " and c.\"IdUser\" = " + HttpContext.Current.Session["UserId"].ToString();
                         inn = @" inner join ""relGrupUser"" c on b.""IdGrup"" = c.""IdGrup"" ";
                     }
 

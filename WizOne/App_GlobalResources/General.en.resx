@@ -208,7 +208,7 @@
     <value>CO Days Performed</value>
   </data>
   <data name="ZileCORamase" xml:space="preserve">
-    <value>CO Days Remaining</value>
+    <value>Left vacation days</value>
   </data>
   <data name="ConfirmaParola" xml:space="preserve">
     <value>Confirm password</value>
@@ -240,6 +240,9 @@
   <data name="Modifica" xml:space="preserve">
     <value>Edit</value>
   </data>
+<data name="Transformacandidatinangajat" xml:space="preserve">
+    <value>Convert candidate to employee</value>
+  </data>															  		 
   <data name="Sterge" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -256,13 +259,13 @@
     <value>Clone</value>
   </data>
   <data name="ZileCOAnanterior" xml:space="preserve">
-    <value>CO Days Previous Year</value>
+    <value>Previous year vacation days</value>
   </data>
   <data name="ZileCOCuvenite" xml:space="preserve">
-    <value>CO Days Due</value>
+    <value>Due vacation days</value>
   </data>
   <data name="ZileCOcuvenitetotal" xml:space="preserve">
-    <value>CO Days Total Due</value>
+    <value>Total due vacation days</value>
   </data>
   <data name="btnRespinge" xml:space="preserve">
     <value>Reject</value>
@@ -283,25 +286,25 @@
     <value>Request type</value>
   </data>
   <data name="NrZile" xml:space="preserve">
-    <value>Nr. days</value>
+    <value>Number of days</value>
   </data>
   <data name="NrOre" xml:space="preserve">
-    <value>Nr. hours</value>
+    <value>Number of hours</value>
   </data>
   <data name="Observatii" xml:space="preserve">
-    <value>Notifications</value>
+    <value>Remarks</value>
   </data>
   <data name="CORamaseDeEfectuat" xml:space="preserve">
-    <value>CO days remaining</value>
+    <value>Left vacation days</value>
   </data>
   <data name="CORamaseDePlanificat" xml:space="preserve">
-    <value>CO days remaining planned</value>
-  </data>
+    <value>Vacation days left to be planned</value>
+</data>
   <data name="Roluri" xml:space="preserve">
     <value>Roles</value>
   </data>
   <data name="DeAprobat" xml:space="preserve">
-    <value>To be approved</value>
+    <value>Pending approval</value>
   </data>
   <data name="ToateCererile" xml:space="preserve">
     <value>All requests</value>
@@ -387,6 +390,9 @@
   <data name="Nuavetidrepturisacreatiacesttipdeabsenta" xml:space="preserve">
     <value>You have no rights to create this type of absence</value>
   </data>
+<data name="CNP/CUI:" xml:space="preserve">
+    <value>PIN/Fiscal code</value>
+  </data>										   	 
   <data name="Pontajulafostaprobatpentruaceastaperioada" xml:space="preserve">
     <value>The timesheet was approved for this period</value>
   </data>
@@ -547,7 +553,7 @@
     <value>Team assignment</value>
   </data>
   <data name="Marcainceputestemaimaredecatmarcasfarsit" xml:space="preserve">
-    <value>The starting mark is larger than the end mark</value>
+    <value>The start employee ID is larger than the end employee ID</value>
   </data>
   <data name="Datainceputestemaimaredecatdatasfarsit" xml:space="preserve">
     <value>The start date is longer than the end date</value>
@@ -571,7 +577,7 @@
     <value>Status</value>
   </data>
   <data name="F10003" xml:space="preserve">
-    <value>Mark</value>
+    <value>Employee ID</value>
   </data>
   <data name="AngajatNume" xml:space="preserve">
     <value>Employee Name</value>
@@ -634,7 +640,7 @@
     <value>Show Attachment</value>
   </data>
   <data name="btnIstoric" xml:space="preserve">
-    <value>Historic</value>
+    <value>History</value>
   </data>
   <data name="btnLoad" xml:space="preserve">
     <value>Load</value>
@@ -642,11 +648,26 @@
   <data name="Incarca" xml:space="preserve">
     <value>Load</value>
   </data>
+<data name="incarcadocument" xml:space="preserve">
+    <value>Load document</value>
+  </data>
+<data name="stergedocument" xml:space="preserve">
+    <value>Delete document</value>
+  </data>												  		 
   <data name="An" xml:space="preserve">
     <value>Year</value>
   </data>
   <data name="Afisare" xml:space="preserve">
-    <value>Dysplay</value>
+    <value>Display</value>
+  </data>
+<data name="RamaseAnAnterior" xml:space="preserve">
+    <value>Previous year balance</value>
+  </data>
+<data name="CuveniteAnCurent" xml:space="preserve">
+    <value>Due current year</value>
+  </data>
+<data name="TotalAnCurent" xml:space="preserve">
+    <value>Total current year</value>
   </data>
   <data name="Modificasaucreazarapoartenoi" xml:space="preserve">
     <value>Modify or create new reports</value>
@@ -724,13 +745,13 @@
     <value>Due for current year</value>
   </data>
   <data name="Total" xml:space="preserve">
-    <value>Total days of annual leave</value>
+    <value>Total vacation days</value>
   </data>
   <data name="Aprobate" xml:space="preserve">
     <value>Approved days</value>
   </data>
   <data name="Ramase" xml:space="preserve">
-    <value>Left to be take</value>
+    <value>Left to be taken</value>
   </data>
   <data name="Solicitate" xml:space="preserve">
     <value>Requested</value>
@@ -739,10 +760,10 @@
     <value>Planned</value>
   </data>
   <data name="RamaseDePlanificat" xml:space="preserve">
-    <value>Left to be plann</value>
+    <value>Left to be planned</value>
   </data>
   <data name="concediideodihna" xml:space="preserve">
-    <value>Annual leave days</value>
+    <value>Vacation days</value>
   </data>
   <data name="anuala" xml:space="preserve">
     <value>Annual review information</value>
@@ -751,10 +772,10 @@
     <value>Monthly review information</value>
   </data>
   <data name="COPlanificat" xml:space="preserve">
-    <value>Planned annual leave days</value>
+    <value>Planned vacation days</value>
   </data>
   <data name="Marca" xml:space="preserve">
-    <value>Badge</value>
+    <value>Employee ID</value>
   </data>
   <data name="Absenta" xml:space="preserve">
     <value>Absence</value>
@@ -762,11 +783,11 @@
   <data name="Pontaj" xml:space="preserve">
     <value>Timesheet</value>
   </data>
-  <data name="StergeFiltru" xml:space="preserve">
-    <value>Delete filter</value>
+  <data name="btnFiltruSterge" xml:space="preserve">
+    <value>Clear filter</value>
   </data>
   <data name="IstoricExtins" xml:space="preserve">
-    <value>Extensive history</value>
+    <value>Extended history</value>
   </data>
   <data name="NumeComplet" xml:space="preserve">
     <value>Full name</value>
@@ -796,7 +817,7 @@
     <value>Contracts</value>
   </data>
   <data name="SituatieCO" xml:space="preserve">
-    <value>Annual leave days</value>
+    <value>Vacation days</value>
   </data>
   <data name="Atentie" xml:space="preserve">
     <value>Atention</value>
@@ -837,59 +858,62 @@
   <data name="CNPvechi" xml:space="preserve">
     <value>Old CNP</value>
   </data>
+<data name="CNP" xml:space="preserve">
+    <value>PIN</value>			  
+  </data>
   <data name="Nrcontract" xml:space="preserve">
-    <value>Contract Nr</value>
+    <value>Contract number</value>
   </data>
   <data name="Numeant" xml:space="preserve">
     <value>Previous name</value>
   </data>
   <data name="Panaladata" xml:space="preserve">
-    <value>Until date	</value>
+    <value>Until date</value>
   </data>
   <data name="Alegestructuraorganizatorica" xml:space="preserve">
     <value>Choose the organizational structure	</value>
   </data>
   <data name="BirouEchipa" xml:space="preserve">
-    <value>Office/Team	</value>
+    <value>Office/Team</value>
   </data>
   <data name="Ultimaziplata" xml:space="preserve">
-    <value>Last payday	</value>
+    <value>Last payday</value>
   </data>
   <data name="Motivplecare" xml:space="preserve">
-    <value>Reason of ending	</value>
+    <value>Termination reason</value>
   </data>
   <data name="Timppartial" xml:space="preserve">
-    <value>Partial time	</value>
+    <value>Partial time</value>
   </data>
   <data name="Categorieangajat" xml:space="preserve">
-    <value>Employee category </value>
+    <value>Employee category</value>
   </data>
   <data name="Centrucost" xml:space="preserve">
-    <value>Cost center </value>
+    <value>Cost center</value>
   </data>
   <data name="Punctdelucru" xml:space="preserve">
-    <value>Working point </value>
+    <value>Working point</value>
   </data>
   <data name="TotalCuvenite" xml:space="preserve">
-    <value>Total due </value>
+    <value>Total due</value>
   </data>
   <data name="RamaseCurent" xml:space="preserve">
-    <value>Left days </value>
+    <value>Left days</value>
   </data>
   <data name="Salveaza" xml:space="preserve">
-    <value>Save </value>
+    <value>Save</value>
   </data>
   <data name="Inapoi" xml:space="preserve">
-    <value>Back </value>
+    <value>Back</value>
   </data>
   <data name="Subcompanie" xml:space="preserve">
-    <value>Business unit </value>
+    <value>Business unit</value>
   </data>
   <data name="Structura" xml:space="preserve">
-    <value>Structure </value>
+    <value>Structure</value>
   </data>
   <data name="DatanasteriisiSex" xml:space="preserve">
-    <value>Birth day and sex</value>
+    <value>Birth date and gender</value>
   </data>
   <data name="Dateunicedeidentificare" xml:space="preserve">
     <value>Identification data</value>
@@ -901,7 +925,7 @@
     <value>Name and surname</value>
   </data>
   <data name="btnCalc" xml:space="preserve">
-    <value>CO Formula</value>
+    <value>Annual leave calculation</value>
   </data>
   <data name="btnCalcSI" xml:space="preserve">
     <value>SI Formula</value>
@@ -949,7 +973,7 @@
     <value>Actively suspended</value>
   </data>
   <data name="Angajatinavans" xml:space="preserve">
-    <value>Employee registered in advance</value>
+    <value>Engaged in advance</value>
   </data>
   <data name="Candidat" xml:space="preserve">
     <value>Candidate</value>
@@ -962,66 +986,795 @@
   </data>
   <data name="Pontajechipa" xml:space="preserve">
     <value>Team timesheet</value>
-  </data>
+  </data>  
   <data name="(Selectietoate)" xml:space="preserve">
     <value>(Select all)</value>
-  </data>
+  </data>  
   <data name="Solicitat" xml:space="preserve">
     <value>Requested</value>
-  </data>
+  </data> 
   <data name="Incurs" xml:space="preserve">
-    <value>Running</value>
-  </data>
+    <value>Pending</value>
+  </data> 
   <data name="Aprobat" xml:space="preserve">
     <value>Approved</value>
-  </data>
+  </data> 
   <data name="Respins" xml:space="preserve">
     <value>Rejected</value>
-  </data>
+  </data> 
   <data name="Anulat" xml:space="preserve">
     <value>Canceled</value>
-  </data>
-  <data name="Planificat" xml:space="preserve">
+  </data> 
+ <data name="Planificat" xml:space="preserve">
     <value>Planned</value>
-  </data>
-  <data name="btnInchide" xml:space="preserve">
+  </data>  
+ <data name="btnInchide" xml:space="preserve">
     <value>Close</value>
-  </data>
-  <data name="chkTotaluri" xml:space="preserve">
+  </data> 
+<data name="Sex" xml:space="preserve">
+    <value>Gender</value>
+  </data> 
+<data name="Departament" xml:space="preserve">
+    <value>Department</value>
+  </data> 
+<data name="Subdepartament" xml:space="preserve">
+    <value>Subdepartment</value>
+  </data> 
+<data name="Amuitatparola" xml:space="preserve">
+    <value>Forgot password</value>
+  </data> 
+<data name="Modificaricontract" xml:space="preserve">
+    <value>Contract changes</value>
+  </data> 
+<data name="Istoricmodificari" xml:space="preserve">
+    <value>History of changes</value>
+  </data> 
+ <data name="chkTotaluri" xml:space="preserve">
     <value>totals</value>
-  </data>
-  <data name="chkOre" xml:space="preserve">
+  </data> 
+ <data name="chkOre" xml:space="preserve">
     <value>in and out hours</value>
-  </data>
-  <data name="chkPauza" xml:space="preserve">
+  </data> 
+ <data name="chkPauza" xml:space="preserve">
     <value>pause</value>
-  </data>
-  <data name="chkLinie" xml:space="preserve">
+  </data> 
+ <data name="chkLinie" xml:space="preserve">
     <value>listing on one line</value>
-  </data>
-  <data name="Foaiecolectivadeprezenta" xml:space="preserve">
+  </data>  
+ <data name="Foaiecolectivadeprezenta" xml:space="preserve">
     <value>Collective sheet for attendance</value>
-  </data>
-  <data name="Numemanager" xml:space="preserve">
+  </data>  
+ <data name="Numemanager" xml:space="preserve">
     <value>Manager name</value>
-  </data>
+  </data> 
   <data name="Numeoperator" xml:space="preserve">
     <value>Operator name</value>
+  </data> 
+ <data name="Parolarapoarte" xml:space="preserve">
+    <value>Reports password</value>
   </data>
-  <data name="Activi" xml:space="preserve">
+<data name="ConfirmaParolaRapoarte" xml:space="preserve">
+    <value>Confirm reports password</value>
+  </data>
+<data name="CategorieAngajat1" xml:space="preserve">
+    <value>Employee category 1</value>
+  </data>
+<data name="Supervizor" xml:space="preserve">
+    <value>Supervisor</value>
+  </data>
+<data name="acelasidepartament" xml:space="preserve">
+    <value>same department</value>
+  </data>
+<data name="toateinregistrarile" xml:space="preserve">
+    <value>all records</value>
+  </data>
+<data name="aceeasisectie" xml:space="preserve">
+    <value>same section</value>
+  </data>
+<data name="aceeasifiliala" xml:space="preserve">
+    <value>same branch</value>
+  </data>
+<data name="Tipinregistrare" xml:space="preserve">
+    <value>Registration type</value>
+  </data>
+<data name="Erori" xml:space="preserve">
+    <value>Errors</value>
+  </data>
+<data name="Lipsapontari" xml:space="preserve">
+    <value>No IN/OUT data</value>
+  </data>
+<data name="Erorisilipsapontari" xml:space="preserve">
+    <value>Errors and no IN/OUT data</value>
+</data>  
+    <data name="Activi" xml:space="preserve">
     <value>Active</value>
   </data>
   <data name="Toti" xml:space="preserve">
     <value>All</value>
-  </data>
+  </data>  
   <data name="Tipmunca" xml:space="preserve">
     <value>Work type</value>
   </data>
-  <data name="aaparutoeroare" xml:space="preserve">
-    <value>an error occurred</value>
+ <data name="Plecati" xml:space="preserve">
+    <value>Inactive</value>
   </data>
-  <data name="DateInsuficiente" xml:space="preserve">
-    <value>Insufficient data</value>
+<data name="Inavans" xml:space="preserve">
+    <value>In advance</value>
+  </data>
+<data name="DenumireScurta" xml:space="preserve">
+    <value>ShortName</value>
+  </data>
+<data name="Prezenta" xml:space="preserve">
+    <value>Attendance</value>
+  </data>
+<data name="Culoare" xml:space="preserve">
+    <value>Color</value>
+  </data>
+<data name="IdGrupAbsenta" xml:space="preserve">
+    <value>IdAbsenceGroup</value>
+  </data>
+<data name="IdTipOre" xml:space="preserve">
+    <value>IdHoursType</value>
+  </data>
+<data name="Compensare" xml:space="preserve">
+    <value>Compensation</value>
+  </data>
+<data name="Explicatii" xml:space="preserve">
+    <value>Explanations</value>
+  </data>
+<data name="Anulare" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+<data name="CompensarePlata" xml:space="preserve">
+    <value>PaymentCompensation</value>
+  </data>
+<data name="CompensareBanca" xml:space="preserve">
+    <value>BankCompensation</value>
+  </data>
+<data name="ArataInlocuitor" xml:space="preserve">
+    <value>ShowSubstitute</value>
+  </data>
+<data name="AdunaZileLibere" xml:space="preserve">
+    <value>AddDaysOff</value>
+  </data>
+<data name="AnulareAltii" xml:space="preserve">
+    <value>OthersCancellation</value>
+  </data>
+<data name="DenumireIstoricExtins" xml:space="preserve">
+    <value>ExtensiveHistoryName</value>
+  </data>
+<data name="GrupOre" xml:space="preserve">
+    <value>HoursGroup</value>
+  </data>
+<data name="OreInVal" xml:space="preserve">
+    <value>InValHours</value>
+  </data>
+<data name="GrupOreDeVerificat" xml:space="preserve">
+    <value>HoursGroupToCheck</value>
+  </data>
+<data name="AbsenteCFPInCalculCO" xml:space="preserve">
+    <value>UnpaidVacationAbsencesInPaidVacationCalcul</value>
+  </data>
+<data name="Planificare" xml:space="preserve">
+    <value>Planning</value>
+  </data>
+<data name="AngajatulPoateAproba" xml:space="preserve">
+    <value>EmployeeAbleToApprove</value>
+  </data>
+<data name="VerificaCereriInlocuitor" xml:space="preserve">
+    <value>CheckSubstituteRequests</value>
+  </data>
+<data name="NuTrimiteInPontaj" xml:space="preserve">
+    <value>DoNotSendInTimesheet</value>
+  </data>
+<data name="VerificareNrMaxOre" xml:space="preserve">
+    <value>CheckMaxNoHours</value>
+  </data>
+<data name="NrMax" xml:space="preserve">
+    <value>MaxNo</value>
+  </data>
+<data name="NrMaxAn" xml:space="preserve">
+    <value>MaxNoYear</value>
+  </data>
+<data name="AdaugaAtasament" xml:space="preserve">
+    <value>AddAttachment</value>
+  </data>
+<data name="AbsentaTipOraFolosesteInterval" xml:space="preserve">
+    <value>AbsenceTypeHourUseInterval</value>
+  </data>
+<data name="AbsentaTipOraPerioada" xml:space="preserve">
+    <value>AbsenceTypeHourPeriod</value>
+  </data>
+<data name="SoldAnterior" xml:space="preserve">
+    <value>PreviousBalance</value>
+  </data>
+<data name="Efectuate" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+<data name="CuveniteAn" xml:space="preserve">
+    <value>EntitledYear</value>
+  </data>
+<data name="TrimiteLaInlocuitor" xml:space="preserve">
+    <value>SendToSubstitute</value>
+  </data>
+<data name="DataMinCerere" xml:space="preserve">
+    <value>MinDateRequest</value>
+  </data>
+<data name="RespectaOrdinea" xml:space="preserve">
+    <value>FollowOrder</value>
+  </data>
+<data name="IdGrupAngajat" xml:space="preserve">
+    <value>IdEmployeeGroup</value>
+  </data>
+<data name="IdGrupAbsente" xml:space="preserve">
+    <value>IdAbsenceGroup</value>
+  </data>
+<data name="Functie" xml:space="preserve">
+    <value>Function</value>
+  </data>
+<data name="Categorie" xml:space="preserve">
+    <value>Category</value>
+  </data>
+<data name="IdGrup" xml:space="preserve">
+    <value>IdGroup</value>
+  </data>
+<data name="IdStire" xml:space="preserve">
+    <value>IdNews</value>
+  </data>
+<data name="Descriere" xml:space="preserve">
+    <value>Description</value>
+  </data>
+ <data name="Centruldecost" xml:space="preserve"> 										 
+    <value>Cost center</value>
+  </data> 
+<data name="Pagina" xml:space="preserve">
+    <value>Page</value>
+  </data>
+<data name="Icoana" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+<data name="ModululCereriAbsente" xml:space="preserve">
+    <value>RequestsAbsenceModule</value>
+  </data>
+<data name="Valoare" xml:space="preserve">
+    <value>Value</value>
+  </data>
+<data name="Rol" xml:space="preserve">
+    <value>Role</value>
+  </data>
+<data name="Nr.Zile" xml:space="preserve">
+    <value>Days No.</value>
+  </data>
+<data name="InPontajAnual" xml:space="preserve">
+    <value>InAnnualTimesheet</value>
+  </data>
+<data name="Camp" xml:space="preserve">
+    <value>Field</value>
+  </data>
+<data name="TipCamp" xml:space="preserve">
+    <value>FieldType</value>
+  </data>
+<data name="Sursa" xml:space="preserve">
+    <value>Source</value>
+  </data>
+<data name="IdCampExtra" xml:space="preserve">
+    <value>IdExtraField</value>
+  </data>
+<data name="Obligatoriu" xml:space="preserve">
+    <value>Mandatory</value>
+  </data>
+<data name="Vizibil" xml:space="preserve">
+    <value>Visible</value>
+  </data>
+<data name="Tabela" xml:space="preserve">
+    <value>Table</value>
+  </data>
+<data name="SursaCombo" xml:space="preserve">
+    <value>ComboSource</value>
+  </data>
+<data name="TipData" xml:space="preserve">
+    <value>DataType</value>
+  </data>
+<data name="EsteMail" xml:space="preserve">
+    <value>eMail</value>
+  </data>
+<data name="CampSelect" xml:space="preserve">
+    <value>SelectField</value>
+  </data>
+<data name="Ordine" xml:space="preserve">
+    <value>Order</value>
+  </data>
+<data name="Prioritate" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+<data name="ExtensiiPermise" xml:space="preserve">
+    <value>AllowedExtensions</value>
+  </data>
+<data name="MeniuRestrans" xml:space="preserve">
+    <value>LimiteddMenu</value>
+  </data>
+<data name="Coloana" xml:space="preserve">
+    <value>Column</value>
+  </data>
+<data name="Latime" xml:space="preserve">
+    <value>Width</value>
+  </data>
+<data name="Blocat" xml:space="preserve">
+    <value>Blocked</value>
+  </data>
+<data name="TipColoana" xml:space="preserve">
+    <value>ColumnType</value>
+  </data>
+<data name="Lungime" xml:space="preserve">
+    <value>Length</value>
+  </data>
+<data name="TextAfisare" xml:space="preserve">
+    <value>ListedText</value>
+  </data>
+<data name="Aliniere" xml:space="preserve">
+    <value>Alignment</value>
+  </data>
+<data name="MarimeText" xml:space="preserve">
+    <value>LengthText</value>
+  </data>
+<data name="OrdineAfisare" xml:space="preserve">
+    <value>ViewOrder</value>
+  </data>
+<data name="OrdineAfisarePontajDetaliat" xml:space="preserve">
+    <value>ViewOrderDetailedTimesheet</value>
+  </data>
+<data name="Editabil" xml:space="preserve">
+    <value>Editable</value>
+  </data>
+<data name="Tippontare" xml:space="preserve">
+    <value>TimesheetType</value>
+  </data>
+<data name="ParolaExpira" xml:space="preserve">
+    <value>PasswordEx</value>
+  </data>
+<data name="ResetareParola" xml:space="preserve">
+    <value>Reset password</value>
+  </data>
+<data name="ParolaComplexa" xml:space="preserve">
+    <value>Complex password</value>
+  </data>
+<data name="in..zile" xml:space="preserve">
+    <value>In..days</value>
+  </data>
+<data name="CaleSalvari" xml:space="preserve">
+    <value>SavePath</value>
+  </data>
+<data name="SchimbaParola" xml:space="preserve">
+    <value>ChangePassword</value>
+  </data>
+<data name="Pontajpezi" xml:space="preserve">
+    <value>Daily timesheet</value>
+  </data>
+ <data name="MarcaInceput" xml:space="preserve">
+    <value>From employee ID</value>
+  </data>
+<data name="Anul" xml:space="preserve">
+    <value>Year</value>
+  </data>
+<data name="Data" xml:space="preserve">
+    <value>Date</value>
+  </data>
+<data name="TipContract" xml:space="preserve">
+    <value>Contract Type</value>
+  </data>
+<data name="btnStergepontari" xml:space="preserve">
+    <value>Delete timesheet</value>
+  </data>
+<data name="btnActualizeazaAbsenta" xml:space="preserve">
+    <value>Update absence</value>
+  </data>
+<data name="btnStergeAbs" xml:space="preserve">
+    <value>Delete absence</value>
+  </data>
+<data name="ContractInceput" xml:space="preserve">
+    <value>Start Contract</value>
+  </data>
+<data name="ContractSfarsit" xml:space="preserve">
+    <value>End Contract</value>
+  </data>
+<data name="btnInchidereluna" xml:space="preserve">
+    <value>Close month</value>
+  </data>
+<data name="Inchidereluna" xml:space="preserve">
+    <value>Close month</value>
+  </data>
+<data name="Actiune" xml:space="preserve">
+    <value>Act</value>
+  </data>
+ <data name="MarcaSfarsit" xml:space="preserve">
+    <value>To employee ID</value> 
+   </data> 
+<data name="Grupdeangajati" xml:space="preserve">
+    <value>Employees Group</value>
+  </data>
+<data name="btnCO" xml:space="preserve">
+    <value>VD Formula</value>
+  </data>
+<data name="btnSI" xml:space="preserve">
+    <value>SI Formula</value>
+  </data>
+<data name="F06205" xml:space="preserve">
+    <value>Cost center</value>
+  </data>
+<data name="btnAct" xml:space="preserve">
+    <value>Update</value>
+  </data>
+<data name="btnValStr" xml:space="preserve">
+    <value>ValStr Syntax</value>
+  </data>
+<data name="btnSte" xml:space="preserve">
+    <value>Delete absence</value>
+  </data>
+<data name="btnClose" xml:space="preserve">
+    <value>Close month</value>
+  </data>
+<data name="IdAbs" xml:space="preserve">
+    <value>Absence</value>
+  </data>
+<data name="IdRol" xml:space="preserve">
+    <value>Role</value>
+  </data>
+<data name="F70104" xml:space="preserve">
+    <value>Name</value>
+  </data>
+<data name="F70103" xml:space="preserve">
+    <value>Password</value>
+  </data>
+<data name="Contractzilnic" xml:space="preserve">
+    <value>Daily contract</value>
+  </data>
+<data name="Pontaredoarprimaintraresiultimaiesire" xml:space="preserve">
+    <value>Records only first in and last out</value>
+  </data>
+<data name="F70111" xml:space="preserve">
+    <value>Password expires</value>
+  </data>
+<data name="F70121" xml:space="preserve">
+    <value>in..days</value>
+  </data>
+<data name="F70112" xml:space="preserve">
+    <value>Strong password</value>
+  </data>
+<data name="F70113" xml:space="preserve">
+    <value>Reset password</value>
+  </data>
+<data name="F70114" xml:space="preserve">
+    <value>User locked</value>
+  </data>
+<data name="F70123" xml:space="preserve">
+    <value>Back-up location</value>
+  </data>
+<data name="IdLimba" xml:space="preserve">
+    <value>Language</value>
+  </data>
+<data name="ZileCOramasedeefectuat" xml:space="preserve">
+    <value>CO Days Due</value>
+  </data>
+<data name="DA" xml:space="preserve">
+    <value>YES</value>
+  </data>
+<data name="NU" xml:space="preserve">
+    <value>NO</value>
+  </data>
+  <data name="LimbiStraine" xml:space="preserve">
+    <value>Foreign Languages</value>
+  </data>
+<data name="Atasamente" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+<data name="Grupuri" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+<data name="DateAngajare" xml:space="preserve">
+    <value>Employment Details</value>
+  </data>
+<data name="LocatieMunca" xml:space="preserve">
+    <value>Work Location</value>
+  </data>
+<data name="UnitateLocalaStatistica" xml:space="preserve">
+    <value>Statistics Local Unit</value>
+  </data>
+<data name="Nivelvorbit" xml:space="preserve">
+    <value>Speaking Level</value>
+  </data>
+<data name="Nr.anivorbit" xml:space="preserve">
+    <value>No.years of Speaking</value>
+  </data>
+<data name="Perioada" xml:space="preserve">
+    <value>Period</value>
+  </data>
+<data name="SituatieCO" xml:space="preserve">
+    <value>Vacation balance</value>
+  </data>
+<data name="Termendepunere" xml:space="preserve">
+    <value>Submission DueDate</value>
+  </data>
+<data name="RamaseAnAnterior" xml:space="preserve">
+    <value>Days Left Previous Year</value>
+  </data>
+<data name="CuveniteAnCurent" xml:space="preserve">
+    <value>VacationDays Current Year</value>
+  </data>
+<data name="TotalAnCurent" xml:space="preserve">
+    <value>Total Current Year</value>
+  </data>
+<data name="Tipinregistrare" xml:space="preserve">
+    <value>Registration type</value>
+  </data>
+<data name="btnRecalc" xml:space="preserve">
+    <value>Recalculate</value>
+  </data>
+<data name="btnFiltruSterge" xml:space="preserve">
+    <value>Clear filter</value>
+  </data>
+<data name="TypeId" xml:space="preserve">
+    <value>Report type</value>
+  </data>
+<data name="Restricted" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="NrLuni" xml:space="preserve">
+    <value>No. months</value>
+  </data>
+<data name="LaData" xml:space="preserve">
+    <value>To date</value>
+  </data>
+  <data name="DeLaData" xml:space="preserve">
+    <value>From date</value>
+  </data>
+<data name="DurCtr" xml:space="preserve">
+    <value>Contract duration</value>
+  </data>
+<data name="TipCtrMunca" xml:space="preserve">
+    <value>Contract type</value>
+  </data>
+<data name="DataCtrInt" xml:space="preserve">
+    <value>Internal ctr. date</value>
+  </data>
+<data name="NrCtrInt" xml:space="preserve">
+    <value>Internal ctr. No.</value>
+  </data>
+<data name="Salariu" xml:space="preserve">
+    <value>Salary</value>
+  </data>
+<data name="TipNorma" xml:space="preserve">
+    <value>Program type</value>
+  </data>
+<data name="Functiedebaza" xml:space="preserve">
+    <value>Base function</value>
+  </data>  
+<data name="Tipangajat" xml:space="preserve">
+    <value>Employee type</value>
+  </data>
+<data name="Perioadadeproba" xml:space="preserve">
+    <value>Trial period</value>
+  </data>
+<data name="Dataplecarii" xml:space="preserve">
+    <value>Leave Date</value>
+  </data>
+<data name="DataIncetare" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+<data name="Gradinvaliditate" xml:space="preserve">
+    <value>Invalidity grade</value>
+  </data>
+<data name="Pensionar" xml:space="preserve">
+    <value>Pensionary</value>
+  </data>
+<data name="Cotaforfetara" xml:space="preserve">
+    <value>Lump share</value>
+  </data>
+<data name="Contractradiat" xml:space="preserve">
+    <value>Radiated Contract</value>
+  </data>
+<data name="Datareintegrare" xml:space="preserve">
+    <value>Reintegration date</value>
+  </data>
+<data name="Grila" xml:space="preserve">
+    <value>Grid</value>
+  </data>
+<data name="ani" xml:space="preserve">
+    <value>years</value>
+  </data>
+<data name="luni" xml:space="preserve">
+    <value>months</value>
+  </data>
+<data name="zilelucratoare" xml:space="preserve">
+    <value>working days</value>
+  </data>
+<data name="zilecalendaristice" xml:space="preserve">
+    <value>calendar days</value>
+  </data>
+<data name="Ultimazilucrata" xml:space="preserve">
+    <value>Last worked day</value>
+  </data>
+<data name="Datavalabilitateinvaliditate" xml:space="preserve">
+    <value>Validity date of invalidity </value>
+  </data>
+<data name="ZileCOFidelitate" xml:space="preserve">
+    <value>Constancy CO Days</value>
+  </data>
+<data name="ZileCOAncurent" xml:space="preserve">
+    <value>CO Days current year</value>
+  </data>
+<data name="Zilelibereplatite" xml:space="preserve">
+    <value>Paid Free Days</value>
+  </data>
+<data name="Dataprimeiangajari" xml:space="preserve">
+    <value>Employment first date</value>
+  </data>
+<data name="ZileCOcuvenitecfgrila" xml:space="preserve">
+    <value>CO Days according to grid</value>
+  </data>
+<data name="Zilelibereplatitecuvenite" xml:space="preserve">
+    <value>Paid due free days</value>
+  </data>
+<data name="Vechimeincompanie" xml:space="preserve">
+    <value>EmploymentTime in the company</value>
+  </data>
+<data name="Vechimepecarteademunca" xml:space="preserve">
+    <value>EmploymentTime registred in workbook</value>
+  </data>
+<data name="Datamodificarenorma" xml:space="preserve">
+    <value>Update norm date</value>
+  </data>
+<data name="Meserie" xml:space="preserve">
+    <value>Job</value>
+  </data>
+<data name="Duratatimpmunca" xml:space="preserve">
+    <value>Worktime program</value>
+  </data>
+<data name="Repartizaretimpmunca" xml:space="preserve">
+    <value>Worktime allocation</value>
+  </data>
+<data name="Intervalrepartizaretimpmunca" xml:space="preserve">
+    <value>Worktime Allocation Interval</value>
+  </data>
+<data name="Scutitimpozit" xml:space="preserve">
+    <value>Without holding tax</value>
+  </data>
+<data name="MotivScutireimpozit" xml:space="preserve">
+    <value>Reason WithoutHolding Tax</value>
+  </data>
+<data name="Detasatdelaaltangajator" xml:space="preserve">
+    <value>Detached for another employer</value>
+  </data>
+<data name="Datamodificaresalariu" xml:space="preserve">
+    <value>Salary update date</value>
+  </data>
+<data name="Tipcontractmunca" xml:space="preserve">
+    <value>Contract type</value>
+  </data>
+<data name="Duratacontract" xml:space="preserve">
+    <value>Contract term</value>
+  </data>
+<data name="Prelungirecontract" xml:space="preserve">
+    <value>Extend Contract</value>
+  </data>
+<data name="Exceptieincetare" xml:space="preserve">
+    <value>Exception resiliation</value>
+  </data>
+<data name="Termendepunererevisal" xml:space="preserve">
+    <value>Revisal deadline</value>
+  </data>
+<data name="Datamodificarefunctie" xml:space="preserve">
+    <value>Function update date</value>
+  </data>
+<data name="Nrzilepreavizdemisie" xml:space="preserve">
+    <value>Days no. resignation notice</value>
+  </data>
+<data name="Nrzilepreavizconcediere" xml:space="preserve">
+    <value>Days no. dismissal notice</value>
+  </data>
+<data name="Scutitdelapragulminimcasssicasasigurat" xml:space="preserve">
+    <value>Exempted from minimum threshold CASS and CAS insured</value>
+  </data>
+<data name="Motivscutiredelapragulminimcasssicasasigurat" xml:space="preserve">
+    <value>Reason exemption from minimum threshold CASS and CAS insured</value>
+  </data>
+<data name="Datamodificarecor" xml:space="preserve">
+    <value>COR update date</value>
+  </data>
+<data name="Calculactivitateconstructii(indiferentdevenit)" xml:space="preserve">
+    <value>Calculation construction activity (regardless of income)</value>
+  </data>
+<data name="Salariuminimconformstudiisuperioare" xml:space="preserve">
+    <value>Minimum salary according to superior studies</value>
+  </data>
+<data name="Locatieinterna" xml:space="preserve">
+    <value>Internal location</value>
+  </data>
+<data name="Locanterior" xml:space="preserve">
+    <value>Previous location</value>
+  </data>
+<data name="Categorieangajat2" xml:space="preserve">
+    <value>Employee category 2</value>
+  </data>
+<data name="Nrctrintern" xml:space="preserve">
+    <value>Internal ctr. no.</value>
+  </data>
+  <data name="Actualizeaza" xml:space="preserve">
+    <value>Update</value>
+  </data> 
+<data name="Datactrintern" xml:space="preserve">
+    <value>Internal ctr. date</value>
+  </data>
+  <data name="Ziliberalegala" xml:space="preserve">
+    <value>Legal holiday</value>
+  </data>
+<data name="SambatasauDuminica" xml:space="preserve">
+    <value>Saturday or Sunday</value>
+  </data>
+<data name="Casasanatate" xml:space="preserve">
+    <value>Health insure institution</value>
+  </data>
+<data name="Nrorepelunasaptamana" xml:space="preserve">
+    <value>Hours per month/week</value>
+  </data>
+<data name="Calculdeducerifb" xml:space="preserve">
+    <value>Deductions FB calc</value>
+  </data>
+<data name="Nranivorbit" xml:space="preserve">
+    <value>Years of speaking</value>
+  </data>
+<data name="Nivelfunctie" xml:space="preserve">
+    <value>Level function</value>
+  </data>  
+<data name="Modificaricontract" xml:space="preserve">
+    <value>Edit contract</value>
+  </data>  
+<data name="Istoricmodificari" xml:space="preserve">
+    <value>History Changes</value>
+  </data>  
+<data name="Randnou" xml:space="preserve">
+    <value>New row</value>
+  </data>  
+<data name="incarcadocument" xml:space="preserve">
+    <value>Upload document</value>
+  </data>  
+<data name="stergedocument" xml:space="preserve">
+    <value>Delete document</value>
+  </data>
+ <data name="generalaconcedii" xml:space="preserve">
+    <value>Co general</value>
+  </data>
+ <data name="acelasidepartament" xml:space="preserve">
+    <value>same department</value>
+  </data>
+ <data name="aceeasisectie" xml:space="preserve">
+    <value>same section</value>
+  </data>
+ <data name="aceeasifiliala" xml:space="preserve">
+    <value>same branch</value>
+  </data>
+ <data name="toateinregistrarile" xml:space="preserve">
+    <value>all records</value>
+  </data>
+ <data name="Setarefiltrudeselectie" xml:space="preserve">
+    <value>Set selection filter</value>
+  </data>
+ <data name="Actualizeaza" xml:space="preserve">
+    <value>Update</value>
+  </data>
+ <data name="Renunta" xml:space="preserve">
+    <value>Return without saving</value>
+  </data>
+ <data name="Ziliberalegala" xml:space="preserve">
+    <value>Legal free day</value>
+  </data>
+ <data name="SambatasauDuminica" xml:space="preserve">
+    <value>Saturday or Sunday</value>
+  </data>
+ <data name="aaparutoeroare" xml:space="preserve">
+    <value>an error occurred</value>
+ </data>
+ <data name="DateInsuficiente" xml:space="preserve">
+     <value>Insufficient data</value>
   </data>
   <data name="EsteDejaAnulata" xml:space="preserve">
     <value>is already canceled</value>

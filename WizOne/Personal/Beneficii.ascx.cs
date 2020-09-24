@@ -9,6 +9,7 @@ using WizOne.Module;
 using DevExpress.Web;
 using System.IO;
 using System.Diagnostics;
+using System.Web.UI.HtmlControls;
 
 namespace WizOne.Personal
 {
@@ -62,9 +63,9 @@ namespace WizOne.Personal
         private void IncarcaGrid()
         {
 
-            string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + HttpContext.Current.Session["Marca"].ToString();
             DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("Admin_Beneficii"))
             {
                 dt = ds.Tables["Admin_Beneficii"];
@@ -83,7 +84,7 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colBen = (grDateBeneficii.Columns["IdObiect"] as GridViewDataComboBoxColumn);
             colBen.PropertiesComboBox.DataSource = dtBen;
 
-            Session["InformatiaCurentaPersonal"] = ds;
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
 
         }
 
@@ -272,7 +273,7 @@ namespace WizOne.Personal
             }
         }
 
-        protected void btnDocUploadAtas_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        protected void btnDocUploadBen_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
         {
             try
             {
@@ -306,6 +307,19 @@ namespace WizOne.Personal
                     cmbCateg.DataSource = dtBeneficii;
                     cmbCateg.DataBindItems();
                 }
+
+                HtmlTableCell lblNume = (HtmlTableCell)grDateBeneficii.FindEditFormTemplateControl("lblNume");
+                lblNume.InnerText = Dami.TraduCuvant("Nume beneficiu");
+                HtmlTableCell lblDataPrimire = (HtmlTableCell)grDateBeneficii.FindEditFormTemplateControl("lblDataPrimire");
+                lblDataPrimire.InnerText = Dami.TraduCuvant("Data primire");
+                HtmlTableCell lblDataExp = (HtmlTableCell)grDateBeneficii.FindEditFormTemplateControl("lblDataExp");
+                lblDataExp.InnerText = Dami.TraduCuvant("Data expirare");
+                HtmlTableCell lblCaract = (HtmlTableCell)grDateBeneficii.FindEditFormTemplateControl("lblCaract");
+                lblCaract.InnerText = Dami.TraduCuvant("Caracteristica echipament");
+
+                ASPxUploadControl btnDocUploadBen = (ASPxUploadControl)grDateBeneficii.FindEditFormTemplateControl("btnDocUploadBen");
+                btnDocUploadBen.BrowseButton.Text = Dami.TraduCuvant("Incarca Document");
+                btnDocUploadBen.ToolTip = Dami.TraduCuvant("Incarca Document");
             }
             catch (Exception ex)
             {

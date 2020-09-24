@@ -122,6 +122,10 @@ namespace Wizrom.Reports.Pages
 
                 ReportsGridView.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaRap", "10"));
                 if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(ReportsGridView);
+
+                //Radu 16.09.2020
+                if (Dami.ValoareParam("Rap_GrupareImplicitaModule", "0") == "1")
+                    ReportsGridView.GroupBy(ReportsGridView.Columns["IdModul"]);
             }
 
             //Radu 15.07.2020

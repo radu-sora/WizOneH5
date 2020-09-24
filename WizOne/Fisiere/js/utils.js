@@ -1,11 +1,14 @@
 ﻿var __reqSec = "";
 var __colGrid = "";
+var __sourceId = "";
 
 function ctx(s, e)
 { 
     if (e.objectType == "header")
     {
-        var idCtl = "grDate";
+        //var idCtl = "grDate";
+        var idCtl = e.htmlEvent.currentTarget.id.split("_")[0];
+        __sourceId = idCtl;
         __reqSec = "IdControl=" + idCtl + "&IdColoana=" + s.columns[e.index].fieldName;
         __colGrid = s.columns[e.index].fieldName;
         mnuCtx.ShowAtPos(ASPxClientUtils.GetEventX(e.htmlEvent), ASPxClientUtils.GetEventY(e.htmlEvent));
@@ -92,10 +95,18 @@ function OnItemPressed(s, e) {
                 popGen.SetContentUrl(getAbsoluteUrl + "/Pagini/Profile.aspx");
                 popGen.SetHeaderText("Profile");
                 popGen.Show();
-                callBackProfile.PerformCallback();
+                callBackProfile.PerformCallback("grDate");
             }
             else {
-                swal({ title: '', text: 'Nu exista obiect pentru care sa se seteze profil', type: 'warning' });
+                var tmpDatePers = document.getElementById(__sourceId);
+                if (tmpDatePers != null && __sourceId.substring(0, 6) == "grDate") {
+                    popGen.SetContentUrl(getAbsoluteUrl + "/Pagini/Profile.aspx");
+                    popGen.SetHeaderText("Profile");
+                    popGen.Show();
+                    callBackProfile.PerformCallback(__sourceId);
+                }
+                else
+                    swal({ title: '', text: 'Nu exista obiect pentru care sa se seteze profil', type: 'warning' });
             }
             break;
         case "colChooser":

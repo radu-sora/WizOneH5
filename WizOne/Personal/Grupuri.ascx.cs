@@ -56,13 +56,13 @@ namespace WizOne.Personal
             if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null)
                 valMin = dtParam.Rows[0][0].ToString();
 
-            string sqlFinal = "SELECT a.*, CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"relGrupAngajat\" a WHERE F10003 = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT a.*, CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"relGrupAngajat\" a WHERE F10003 = " + HttpContext.Current.Session["Marca"].ToString();
             if (Constante.tipBD == 2)
                 sqlFinal = "SELECT " + General.SelectListaCampuriOracle("relGrupAngajat2", "IdGrup") + ", CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"relGrupAngajat\" a WHERE F10003 = " + Session["Marca"].ToString();
             DataTable dt = new DataTable();
             //string sqlFinal = "SELECT * FROM \"relGrupAngajat2\" WHERE F10003 = " + Session["Marca"].ToString();
             //DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("relGrupAngajat2"))
             {
                 dt = ds.Tables["relGrupAngajat2"];
@@ -84,6 +84,7 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colGrup = (grDateGrupuri.Columns["IdGrup"] as GridViewDataComboBoxColumn);
             colGrup.PropertiesComboBox.DataSource = dtGrup;
 
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
         }
 
         protected void grDateGrupuri_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)

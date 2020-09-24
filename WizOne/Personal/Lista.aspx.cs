@@ -45,6 +45,8 @@ namespace WizOne.Personal
                 btnTransf.Image.ToolTip = Dami.TraduCuvant("btnTransf", "Transforma candidat in angajat");
                 #endregion
 
+                Session["PaginaWeb"] = "Personal.Lista";
+
                 grDate.SettingsCookies.Enabled = true;
                 grDate.SettingsCookies.StoreFiltering = true;
                 grDate.SettingsCookies.CookiesID = "grDatePersonalCookies";

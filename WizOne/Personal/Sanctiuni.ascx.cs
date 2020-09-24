@@ -72,15 +72,15 @@ namespace WizOne.Personal
         {
             try
             {
-                DataTable dt = new DataTable();
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataTable dt = new DataTable();           
+                DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
                 if (ds.Tables.Contains("Admin_Sanctiuni"))
                 {
                     dt = ds.Tables["Admin_Sanctiuni"];
                 }
                 else
                 {
-                    dt = General.IncarcaDT($@"SELECT * FROM ""Admin_Sanctiuni"" WHERE ""Marca""=@1", new object[] { Session["Marca"] });
+                    dt = General.IncarcaDT($@"SELECT * FROM ""Admin_Sanctiuni"" WHERE ""Marca""=@1", new object[] { HttpContext.Current.Session["Marca"] });
                     dt.TableName = "Admin_Sanctiuni";
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                     ds.Tables.Add(dt);
@@ -94,6 +94,8 @@ namespace WizOne.Personal
                 DataTable dtSanc = General.GetObiecteDinArie("ArieTabSanctiuniDinPersonal");
                 GridViewDataComboBoxColumn colSanc = (grDateSanctiuni.Columns["IdObiect"] as GridViewDataComboBoxColumn);
                 colSanc.PropertiesComboBox.DataSource = dtSanc;
+
+                HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
             {

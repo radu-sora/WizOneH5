@@ -154,6 +154,11 @@ namespace WizOne.Pagini
                 }
 
                 drHead["Pagina"] = General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", ".");
+                if (Session["Profil_GridPersonal"] != null)
+                {//Radu 23.09.2020 
+                    drHead["Grid"] = Session["Profil_GridPersonal"].ToString();
+                    Session["Profil_GridPersonal"] = null;
+                }
                 drHead["Denumire"] = txtDenumire.Text;
                 drHead["Activ"] = chkActiv.Checked;
                 drHead["Implicit"] = chkImplicit.Checked;

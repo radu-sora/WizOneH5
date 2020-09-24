@@ -38,6 +38,8 @@ namespace WizOne.Personal
                 Response.AppendHeader("Pragma", "no-cache");
                 Response.Expires = 0;
 
+                Session["PaginaWeb"] = "Personal.DateAngajat";
+
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 string marca = Session["Marca"] as string;
                 if (ds == null && marca == null)

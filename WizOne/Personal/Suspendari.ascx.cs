@@ -108,11 +108,11 @@ namespace WizOne.Personal
         {
             try
             {
-                DataTable dt = General.IncarcaDT("SELECT * FROM F111 WHERE F11103 = " + Session["Marca"].ToString() + " ORDER BY F11105", null);
+                DataTable dt = General.IncarcaDT("SELECT * FROM F111 WHERE F11103 = " + HttpContext.Current.Session["Marca"].ToString() + " ORDER BY F11105", null);
                 grDateSuspendari.KeyFieldName = "F11103;F11104;F11105;F11106;F11107";
                 grDateSuspendari.DataSource = dt;
                 grDateSuspendari.DataBind();
-                Session["MP_Suspendari"] = dt;
+                HttpContext.Current.Session["MP_Suspendari"] = dt;
             }
             catch (Exception ex)
             {

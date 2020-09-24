@@ -118,14 +118,14 @@
                             <div style="padding: 4px 3px 4px">
                                 <table>
                                     <tr>
-                                        <td style="padding-left:10px !important;">Tip curs</td>
-                                        <td style="padding:10px !important;"  >Nume complet</td> 
-                                        <td style="padding:10px !important;"  >Info</td> 
-                                        <td style="padding:10px !important;"  >Descriere curs</td>
-                                        <td style="padding:10px !important;">Data inceput</td>
-                                        <td style="padding:10px !important;">Data sfarsit</td>
-                                        <td style="padding:10px !important;">Numar zile</td>
-                                        <td style="padding:10px !important;">Numar ore</td>
+                                        <td id="lblTipCurs" runat="server" style="padding-left:10px !important;">Tip curs</td>
+                                        <td id="lblNumeComp" runat="server" style="padding:10px !important;"  >Nume complet</td> 
+                                        <td id="lblInfo" runat="server" style="padding:10px !important;"  >Info</td> 
+                                        <td id="lblDesc" runat="server" style="padding:10px !important;"  >Descriere curs</td>
+                                        <td id="lblDataInc" runat="server" style="padding:10px !important;">Data inceput</td>
+                                        <td id="lblDataSf" runat="server" style="padding:10px !important;">Data sfarsit</td>
+                                        <td id="lblNrZile" runat="server" style="padding:10px !important;">Numar zile</td>
+                                        <td id="lblNrOre" runat="server" style="padding:10px !important;">Numar ore</td>
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;" ><dx:ASPxComboBox ID="cmbTipCurs" runat="server" Width="250px" ValueField="IdAuto" DropDownWidth="200" TextField="TipCurs" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("IdTipCurs") %>' />
@@ -138,14 +138,14 @@
                                         <td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtNrOre" runat="server" Width="100px" Value='<%# Bind("NrOre") %>' /></td>
                                     </tr>
                                     <tr>
-                                        <td style="padding-left:10px !important;">Nume furnizor</td>
-                                        <td style="padding:10px !important;">Tema curs</td>
-                                        <td style="padding:10px !important;">Nume operator</td>
-                                        <td style="padding:10px !important;">Perioada amortizare</td>
-                                        <td style="padding:10px !important;">Data curs</td>
-                                        <td style="padding:10px !important;">Data expirare autorizare</td>
-                                        <td style="padding:10px !important;">Buget</td>
-                                        <td style="padding:10px !important;">Moneda</td>
+                                        <td id="lblNumeFurn" runat="server" style="padding-left:10px !important;">Nume furnizor</td>
+                                        <td id="lblTema" runat="server" style="padding:10px !important;">Tema curs</td>
+                                        <td id="lblNumeOp" runat="server" style="padding:10px !important;">Nume operator</td>
+                                        <td id="lblPerAmort" runat="server" style="padding:10px !important;">Perioada amortizare</td>
+                                        <td id="lblDataCurs" runat="server" style="padding:10px !important;">Data curs</td>
+                                        <td id="lblDataExpAut" runat="server" style="padding:10px !important;">Data expirare autorizare</td>
+                                        <td id="lblBuget" runat="server" style="padding:10px !important;">Buget</td>
+                                        <td id="lblMoneda" runat="server" style="padding:10px !important;">Moneda</td>
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtNumeFurnizor" runat="server" Width="250px" Value='<%# Bind("NumeFurnizor") %>' /></td>

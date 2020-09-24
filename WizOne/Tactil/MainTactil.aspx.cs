@@ -129,6 +129,7 @@ namespace WizOne.Tactil
                     };
 
                     // New report access interface
+                    MessageBox.Show("Fluturasul se printeaza!", MessageBox.icoSuccess, "");
                     Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
                 }
                 else
@@ -159,6 +160,8 @@ namespace WizOne.Tactil
                             dlreport.PrinterName = numeImprimanta;
 
                         dlreport.CreateDocument();
+
+                        MessageBox.Show("Fluturasul se printeaza!", MessageBox.icoSuccess, "");
 
                         ReportPrintTool pt = new ReportPrintTool(dlreport);
                         pt.Print();

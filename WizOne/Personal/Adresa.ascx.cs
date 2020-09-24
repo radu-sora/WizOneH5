@@ -71,11 +71,11 @@ namespace WizOne.Personal
         {
             try
             {
-                string sqlFinal = "SELECT * FROM \"F100Adrese\" WHERE F10003 = " + Session["Marca"].ToString();
+                string sqlFinal = "SELECT * FROM \"F100Adrese\" WHERE F10003 = " + HttpContext.Current.Session["Marca"].ToString();
                 if (Constante.tipBD == 2)
-                    sqlFinal = General.SelectOracle("F100Adrese", "IdAuto") + " WHERE F10003 = " + Session["Marca"].ToString();
+                    sqlFinal = General.SelectOracle("F100Adrese", "IdAuto") + " WHERE F10003 = " + HttpContext.Current.Session["Marca"].ToString();
                 DataTable dt = new DataTable();
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
                 if (ds.Tables.Contains("F100Adrese"))
                 {
                     dt = ds.Tables["F100Adrese"];
@@ -106,11 +106,13 @@ namespace WizOne.Personal
 
                 if (!IsPostBack)
                 {
-                    Session["MP_TipArtera"] = General.IncarcaDT("SELECT * FROM \"tblTipStrada\"", null);
+                    HttpContext.Current.Session["MP_TipArtera"] = General.IncarcaDT("SELECT * FROM \"tblTipStrada\"", null);
                     lblAdresa.Text = DamiAdresa(dt);
                     DataTable dtLoc = General.IncarcaDT("SELECT * FROM LOCALITATI", null);
-                    Session["MP_AdresaLocalitati"] = dtLoc;
+                    HttpContext.Current.Session["MP_AdresaLocalitati"] = dtLoc;
                 }
+
+                HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
             {

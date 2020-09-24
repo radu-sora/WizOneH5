@@ -52,9 +52,9 @@ namespace WizOne.Personal
         private void IncarcaGrid()
         {
 
-            string sqlFinal = "SELECT * FROM \"F100Contacte\" WHERE F10003 = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT * FROM \"F100Contacte\" WHERE F10003 = " + HttpContext.Current.Session["Marca"].ToString();
             DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("F100Contacte"))
             {
                 dt = ds.Tables["F100Contacte"];
@@ -87,7 +87,7 @@ namespace WizOne.Personal
             colPrincipal.PropertiesComboBox.DataSource = General.ListaContacteF100();
 
 
-
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
         }
 
         protected void grDateContacte_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)

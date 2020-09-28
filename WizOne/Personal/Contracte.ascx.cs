@@ -55,13 +55,13 @@ namespace WizOne.Personal
             if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null)
                 valMin = dtParam.Rows[0][0].ToString();
 
-            string sqlFinal = "SELECT a.*, CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"F100Contracte\" a WHERE F10003 = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT a.*, CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"F100Contracte\" a WHERE F10003 = " + HttpContext.Current.Session["Marca"].ToString();
             if (Constante.tipBD == 2)
                 sqlFinal = "SELECT " + General.SelectListaCampuriOracle("F100Contracte2", "IdContract") + ", CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"F100Contracte\" a WHERE F10003 = " + Session["Marca"].ToString();
             DataTable dt = new DataTable();
             //string sqlFinal = "SELECT * FROM \"F100Contracte2\" WHERE F10003 = " + Session["Marca"].ToString();
             //DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("F100Contracte2"))
             {
                 dt = ds.Tables["F100Contracte2"];
@@ -82,6 +82,8 @@ namespace WizOne.Personal
             DataTable dtCtr = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colCtr = (grDateContracte.Columns["IdContract"] as GridViewDataComboBoxColumn);
             colCtr.PropertiesComboBox.DataSource = dtCtr;
+
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
 
         }
 

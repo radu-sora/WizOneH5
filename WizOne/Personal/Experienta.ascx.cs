@@ -51,9 +51,9 @@ namespace WizOne.Personal
         private void IncarcaGrid()
         {
 
-            string sqlFinal = "SELECT * FROM \"Admin_Experienta\" WHERE \"Marca\" = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT * FROM \"Admin_Experienta\" WHERE \"Marca\" = " + HttpContext.Current.Session["Marca"].ToString();
             DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("Admin_Experienta"))
             {
                 dt = ds.Tables["Admin_Experienta"];
@@ -72,7 +72,7 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colExp = (grDateExperienta.Columns["IdObiect"] as GridViewDataComboBoxColumn);
             colExp.PropertiesComboBox.DataSource = dtExp;
 
-
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
 
         }
 
@@ -233,19 +233,23 @@ namespace WizOne.Personal
                 string vechime = " {0} {1} {2} {3} {4} {5} ";
                 DateTime dataStart = DateTime.Now, dataSfarsit = DateTime.Now;
 
-                string dtStart = e.GetListSourceFieldValue("DataInceput").ToString();
-                string dtSfarsit = e.GetListSourceFieldValue("DataSfarsit").ToString();
+                if (e.GetListSourceFieldValue("DataInceput") != null && e.GetListSourceFieldValue("DataSfarsit") != null && e.GetListSourceFieldValue("DataInceput").ToString().Length > 0 && e.GetListSourceFieldValue("DataSfarsit").ToString().Length > 0)
+                {
 
-                dataStart = new DateTime(Convert.ToInt32(dtStart.Substring(6, 4)), Convert.ToInt32(dtStart.Substring(3, 2)), Convert.ToInt32(dtStart.Substring(0, 2)));
-                dataSfarsit = new DateTime(Convert.ToInt32(dtSfarsit.Substring(6, 4)), Convert.ToInt32(dtSfarsit.Substring(3, 2)), Convert.ToInt32(dtSfarsit.Substring(0, 2)));
+                    DateTime dtStart = Convert.ToDateTime(e.GetListSourceFieldValue("DataInceput").ToString());
+                    DateTime dtSfarsit = Convert.ToDateTime(e.GetListSourceFieldValue("DataSfarsit").ToString());
 
-                CalculVechime(dataStart, dataSfarsit, out nrAni, out nrLuni, out nrZile);
+                    dataStart = new DateTime(dtStart.Year, dtStart.Month, dtStart.Day);
+                    dataSfarsit = new DateTime(dtSfarsit.Year, dtSfarsit.Month, dtSfarsit.Day);
 
-                vechime = string.Format(vechime, (nrAni > 0 ? nrAni.ToString() : ""), (nrAni > 0 ? (nrAni == 1 ? "an" : "ani") : ""),
-                                                 (nrLuni > 0 ? nrLuni.ToString() : ""), (nrLuni > 0 ? (nrLuni == 1 ? "luna" : "luni") : ""),
-                                                 (nrZile > 0 ? nrZile.ToString() : ""), (nrZile > 0 ? (nrZile == 1 ? "zi" : "zile") : ""));
+                    CalculVechime(dataStart, dataSfarsit, out nrAni, out nrLuni, out nrZile);
 
-                e.Value = vechime;
+                    vechime = string.Format(vechime, (nrAni > 0 ? nrAni.ToString() : ""), (nrAni > 0 ? (nrAni == 1 ? "an" : "ani") : ""),
+                                                     (nrLuni > 0 ? nrLuni.ToString() : ""), (nrLuni > 0 ? (nrLuni == 1 ? "luna" : "luni") : ""),
+                                                     (nrZile > 0 ? nrZile.ToString() : ""), (nrZile > 0 ? (nrZile == 1 ? "zi" : "zile") : ""));
+
+                    e.Value = vechime;
+                }
             }
         }
 

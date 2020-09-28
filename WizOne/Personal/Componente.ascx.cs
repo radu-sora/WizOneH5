@@ -48,11 +48,11 @@ namespace WizOne.Personal
 
         private void IncarcaGrid()
         {
-            string tabela = "F100", id = Session["Marca"].ToString();
-            if ((Session["esteNou"] ?? "false").ToString() == "true")
+            string tabela = "F100", id = HttpContext.Current.Session["Marca"].ToString();
+            if ((HttpContext.Current.Session["esteNou"] ?? "false").ToString() == "true")
             {
                 tabela = "F099";
-                id = Session["IdSablon"].ToString();
+                id = HttpContext.Current.Session["IdSablon"].ToString();
             }
 
             string sql = " select F02104, " + tabela + "690 as \"Suma\" from f021 join " + tabela + " on f02104 = 4001 and " + tabela + "690 > 0 and " + tabela + "03 = " + id
@@ -76,7 +76,7 @@ namespace WizOne.Personal
                         + "select F02104, " + tabela + "699 as \"Suma\" from f021 join " + tabela + " on f02104 = 4010 and " + tabela + "699 > 0 and " + tabela + "03 = " + id + " ORDER BY F02104";
             DataTable dt = new DataTable();
            
-            DataSet ds = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonalCalcul"] as DataSet;
             if (ds != null && ds.Tables.Contains("Componente"))
             {
                 dt = ds.Tables["Componente"];
@@ -102,7 +102,7 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colComp = (grDateComponente.Columns["F02104"] as GridViewDataComboBoxColumn);
             colComp.PropertiesComboBox.DataSource = dtGrup;
 
-            Session["InformatiaCurentaPersonalCalcul"] = ds;
+            HttpContext.Current.Session["InformatiaCurentaPersonalCalcul"] = ds;
 
         }
 

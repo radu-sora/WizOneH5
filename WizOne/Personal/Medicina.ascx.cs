@@ -5,6 +5,8 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Web;
+using System.Web.UI.HtmlControls;
 using WizOne.Module;
 
 namespace WizOne.Personal
@@ -95,14 +97,14 @@ namespace WizOne.Personal
             try
             {
                 DataTable dt = new DataTable();
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
                 if (ds.Tables.Contains("Admin_Medicina"))
                 {
                     dt = ds.Tables["Admin_Medicina"];
                 }
                 else
                 {
-                    dt = General.IncarcaDT(@"SELECT * FROM ""Admin_Medicina"" WHERE ""Marca""=@1", new object[] { Session["Marca"] });
+                    dt = General.IncarcaDT(@"SELECT * FROM ""Admin_Medicina"" WHERE ""Marca""=@1", new object[] { HttpContext.Current.Session["Marca"] });
                     dt.TableName = "Admin_Medicina";
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                     ds.Tables.Add(dt);
@@ -130,7 +132,7 @@ namespace WizOne.Personal
                 GridViewDataComboBoxColumn colRez = (grDateMedicina.Columns["RezultatExamen"] as GridViewDataComboBoxColumn);
                 colRez.PropertiesComboBox.DataSource = dtRez;
 
-                Session["InformatiaCurentaPersonal"] = ds;
+                HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
             {
@@ -453,6 +455,52 @@ namespace WizOne.Personal
                     cmbRez.DataSource = dtRez;
                     cmbRez.DataBindItems();
                 }
+
+                HtmlTableCell lblObs = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblObs");
+                lblObs.InnerText = Dami.TraduCuvant("Observatii");
+                HtmlTableCell lblMedMunc = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblMedMunc");
+                lblMedMunc.InnerText = Dami.TraduCuvant("Medicina muncii/PSI");
+                HtmlTableCell lblDataElib = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblDataElib");
+                lblDataElib.InnerText = Dami.TraduCuvant("Data eliberarii");
+                HtmlTableCell lblDataExp = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblDataExp");
+                lblDataExp.InnerText = Dami.TraduCuvant("Data expirarii");
+                HtmlTableCell lblSerieNr = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblSerieNr");
+                lblSerieNr.InnerText = Dami.TraduCuvant("Serie si nr. doc.");
+                HtmlTableCell lblEmitent = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblEmitent");
+                lblEmitent.InnerText = Dami.TraduCuvant("Emitent");
+                HtmlTableCell lblDataElibCtrlMed = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblDataElibCtrlMed");
+                lblDataElibCtrlMed.InnerText = Dami.TraduCuvant("Data eliberare control medical");
+                HtmlTableCell lblPerValab = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblPerValab");
+                lblPerValab.InnerText = Dami.TraduCuvant("Perioada valabilitate");
+                HtmlTableCell lblDataUrmCtrl = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblDataUrmCtrl");
+                lblDataUrmCtrl.InnerText = Dami.TraduCuvant("Data urmatorului control");
+                HtmlTableCell lblLocatie = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblLocatie");
+                lblLocatie.InnerText = Dami.TraduCuvant("Locatie");
+                HtmlTableCell lblManagerDir = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblManagerDir");
+                lblManagerDir.InnerText = Dami.TraduCuvant("Manager direct");
+                HtmlTableCell lblSectAlim = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblSectAlim");
+                lblSectAlim.InnerText = Dami.TraduCuvant("Sector alimentar");
+                HtmlTableCell lblRezExamen = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblRezExamen");
+                lblRezExamen.InnerText = Dami.TraduCuvant("Rezultat examen");
+                HtmlTableCell lblAlteRisc = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblAlteRisc");
+                lblAlteRisc.InnerText = Dami.TraduCuvant("Alte riscuri");
+                HtmlTableCell lblRiscuri = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblRiscuri");
+                lblRiscuri.InnerText = Dami.TraduCuvant("Riscuri");
+
+                ASPxUploadControl btnDocUploadAtas = (ASPxUploadControl)grDateMedicina.FindEditFormTemplateControl("btnDocUploadAtas");
+                btnDocUploadAtas.BrowseButton.Text = Dami.TraduCuvant("Incarca Document");
+                btnDocUploadAtas.ToolTip = Dami.TraduCuvant("Incarca Document");
+
+                ASPxCheckBox chk1 = grDateMedicina.FindEditFormTemplateControl("chk1") as ASPxCheckBox;
+                chk1.Text = Dami.TraduCuvant("Auto/ Categoria ...");
+                ASPxCheckBox chk2 = grDateMedicina.FindEditFormTemplateControl("chk2") as ASPxCheckBox;
+                chk2.Text = Dami.TraduCuvant("Lucrul la inaltime");
+                ASPxCheckBox chk3 = grDateMedicina.FindEditFormTemplateControl("chk3") as ASPxCheckBox;
+                chk3.Text = Dami.TraduCuvant("Lucrul in ture de noapte");
+                ASPxCheckBox chk4 = grDateMedicina.FindEditFormTemplateControl("chk4") as ASPxCheckBox;
+                chk4.Text = Dami.TraduCuvant("Lucrul la casca");
+                ASPxCheckBox chk5 = grDateMedicina.FindEditFormTemplateControl("chk5") as ASPxCheckBox;
+                chk5.Text = Dami.TraduCuvant("Zgomot");
             }
             catch (Exception ex)
             {

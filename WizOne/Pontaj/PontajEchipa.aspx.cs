@@ -160,12 +160,6 @@ namespace WizOne.Pontaj
 
                     AdaugaF_uri();
                 }
-                else if(grDate.IsCallback)
-                { 
-                    DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
-                    GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                    colStari.PropertiesComboBox.DataSource = dtStari;
-                }
             }
             catch (Exception ex)
             {
@@ -199,6 +193,7 @@ namespace WizOne.Pontaj
                 btnPeZi.Text = Dami.TraduCuvant("btnPeZi", "Pontaj pe Zi");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnExport.Text = Dami.TraduCuvant("btnExport", "Export");
+                btnIstoricAprobare.Text = Dami.TraduCuvant("btnIstoricAprobare", "Istoric aprobare");
 
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                 btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
@@ -298,7 +293,8 @@ namespace WizOne.Pontaj
 
                     #endregion
 
-                    cmbStare.DataSource = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblStariPontaj"" ", null);
+                    DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
+                    cmbStare.DataSource = dtStari;
                     cmbStare.DataBind();
 
                     cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
@@ -409,7 +405,7 @@ namespace WizOne.Pontaj
             {
                 General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, cmbCtr.Value == null ? "" : cmbCtr.Value.ToString().Replace(",", "', '"));
 
-                grDate.KeyFieldName = "F10003";
+                //grDate.KeyFieldName = "F10003";
 
                 string strSql = DamiSelect();
 
@@ -595,7 +591,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                if (e.DataColumn.FieldName == "IdStare")
+                if (e.DataColumn.FieldName == "Stare")
                 {
                     object col = grDate.GetRowValues(e.VisibleIndex, "Culoare");
                     if (col != null) e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(col.ToString());
@@ -1021,14 +1017,17 @@ namespace WizOne.Pontaj
                         case "btnPeAng":
                             {
                                 RetineFiltru("1");
-                                ASPxWebControl.RedirectOnCallback("PontajDetaliat.aspx?tip=10&f10003=" + txtCol["f10003"] + "&idxPag=" + grDate.PageIndex + "&idxRow=" + grDate.FocusedRowIndex);
+                                string marca = General.Nz(grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "F10003" }),"").ToString();
+                                ASPxWebControl.RedirectOnCallback("PontajDetaliat.aspx?tip=10&f10003=" + marca + "&idxPag=" + grDate.PageIndex + "&idxRow=" + grDate.FocusedRowIndex);
                             }                            
                             break;
                         case "btnPeZi":
                             {
-                                string ziua = txtCol["coloana"].ToString().Replace("Ziua", "");
-                                RetineFiltru(ziua);
-                                ASPxWebControl.RedirectOnCallback("PontajDetaliat.aspx?tip=20&idxPag=" + grDate.PageIndex + "&idxRow=" + grDate.FocusedRowIndex);
+                                if (arr.Length == 2)
+                                {
+                                    RetineFiltru(arr[1].ToLower().Replace("ziua",""));
+                                    ASPxWebControl.RedirectOnCallback("PontajDetaliat.aspx?tip=20&idxPag=" + grDate.PageIndex + "&idxRow=" + grDate.FocusedRowIndex);
+                                }
                             }
                             break;
                         case "grDate":
@@ -1924,7 +1923,7 @@ namespace WizOne.Pontaj
                 if (General.Nz(cmbSubDept.Value, "").ToString() != "") strFiltru += @" AND A.F100958=" + cmbSubDept.Value;
                 if (General.Nz(cmbBirou.Value, "").ToString() != "") strFiltru += @" AND A.F100959=" + cmbBirou.Value;
                 if (General.Nz(cmbStare.Value, "").ToString() != "") strFiltru += @" AND COALESCE(A.""IdStare"",1) = " + cmbStare.Value;
-                if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += $@" AND A.""DescContract"" IN ('{cmbCtr.Value.ToString().Replace(",", "','")}')";
+                if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += $@" AND C.""Denumire"" IN ('{cmbCtr.Value.ToString().Replace(",", "','")}')";
                 if (General.Nz(cmbAng.Value, "").ToString() != "") strFiltru += " AND A.F10003=" + cmbAng.Value;
                 if (General.Nz(cmbCateg.Value, "").ToString() != "")
                 {
@@ -1937,7 +1936,7 @@ namespace WizOne.Pontaj
                 foreach (var col in grDate.Columns.OfType<GridViewDataSpinEditColumn>())
                     f_uri += $",COALESCE(X.{col.FieldName},0) AS {col.FieldName}";
 
-                strSql = "SELECT X.F10003, A.F10008  " + Dami.Operator() + "  ' '  " + Dami.Operator() + "  A.F10009 AS \"AngajatNume\", Y.\"Norma\", C.\"Denumire\" AS \"DescContract\", L.F06205, FCT.F71804 AS \"Functie\", A.F100901, COALESCE(K.\"Culoare\", '#FFFFFFFF') AS \"Culoare\", X.\"IdStare\", " +
+                strSql = "SELECT X.F10003, A.F10008  " + Dami.Operator() + "  ' '  " + Dami.Operator() + "  A.F10009 AS \"AngajatNume\", Y.\"Norma\", C.\"Denumire\" AS \"DescContract\", L.F06205, FCT.F71804 AS \"Functie\", A.F100901, COALESCE(K.\"Culoare\", '#FFFFFFFF') AS \"Culoare\", X.\"IdStare\", K.\"Denumire\" AS \"Stare\", " +
                         "S2.F00204 AS \"Companie\", S3.F00305 AS \"Subcompanie\", S4.F00406 AS \"Filiala\", H.F00507 AS \"Sectie\",I.F00608 AS \"Dept\", S7.F00709 AS \"Subdept\", S8.F00810 AS \"Birou\" " +
                         f_uri + 
                         "{0}" +
@@ -2287,6 +2286,23 @@ namespace WizOne.Pontaj
                             break;                   
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateIstoric_HtmlDataCellPrepared(object sender, ASPxGridViewTableDataCellEventArgs e)
+        {
+            try
+            {
+                if (e.DataColumn.FieldName == "NumeStare")
+                {
+                    object col = grDateIstoric.GetRowValues(e.VisibleIndex, "Culoare");
+                    if (col != null) e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(col.ToString());
+                }                
             }
             catch (Exception ex)
             {

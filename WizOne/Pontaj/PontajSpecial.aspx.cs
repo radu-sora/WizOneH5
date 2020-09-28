@@ -44,7 +44,8 @@ namespace WizOne.Pontaj
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                 btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
 
-            
+
+                lblRol.InnerText = Dami.TraduCuvant("Rol");
                 lblAng.InnerText = Dami.TraduCuvant("Angajat");
                 lblSub.InnerText = Dami.TraduCuvant("Subcompanie");
                 lblFil.InnerText = Dami.TraduCuvant("Filiala");
@@ -52,7 +53,8 @@ namespace WizOne.Pontaj
                 lblDept.InnerText = Dami.TraduCuvant("Dept");
                 lblSubDept.InnerText = Dami.TraduCuvant("SubDept");
                 lblBirou.InnerText = Dami.TraduCuvant("Birou");
-
+                lblCtr.InnerText = Dami.TraduCuvant("Contract");
+                lblCateg.InnerText = Dami.TraduCuvant("Categorie");
 
                 foreach (dynamic c in grDate.Columns)
                 {
@@ -76,7 +78,9 @@ namespace WizOne.Pontaj
                 {
                     Session["InformatiaCurenta_PS"] = null;
                     Session["PtjSpecial_Id"] = "-1";
+                    IncarcaRoluri();
                     IncarcaAngajati();
+           
 
                     //General.ExecutaNonQuery("DELETE FROM \"PtjSpecial_Sabloane\" WHERE \"Denumire\" IS NULL", null);                
                     string sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram1\",  NULL AS \"IdProgram2\", NULL AS \"IdProgram3\", NULL AS \"IdProgram4\", NULL AS \"IdProgram5\", NULL AS \"IdProgram6\", NULL AS \"IdProgram7\", NULL AS \"IdProgram8\", NULL AS \"IdProgram9\", NULL AS \"IdProgram10\","
@@ -208,6 +212,92 @@ namespace WizOne.Pontaj
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+        private void IncarcaRoluri()
+        {
+            try
+            {
+                string cond = "";
+                if (dtDataStart.Value != null && dtDataSfarsit.Value != null)                
+                    cond = " WHERE X.F10022 <= " + General.ToDataUniv(Convert.ToDateTime(dtDataSfarsit.Value)) + " AND X.F10023 >= " + General.ToDataUniv(Convert.ToDateTime(dtDataStart.Value));                        
+
+                string strSql = $@"SELECT X.""IdRol"", X.""RolDenumire"" FROM ({SelectComun()}) X 
+                                {cond}
+                                GROUP BY X.""IdRol"", X.""RolDenumire""
+                                ORDER BY X.""IdRol"" DESC";
+
+                DataTable dtRol = General.IncarcaDT(strSql, null);
+
+                cmbRol.DataSource = dtRol;
+                cmbRol.DataBind();
+
+                if (dtRol.Rows.Count > 0) cmbRol.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private string SelectComun()
+        {
+            string strSql = "";
+            try
+            {
+                string semn = "+";
+                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
+                if (Constante.tipBD == 2)
+                {
+                    semn = "||";
+                    cmp = "ROWNUM";
+                }
+
+
+                strSql = @"SELECT B.F10003 AS F10003, A.F10008 {1} ' ' {1} a.F10009 AS ""NumeComplet"", A.F10008 AS ""Nume"", A.F10009 AS ""Prenume"", 
+                                A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"",A.F10011 AS ""NrContract"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", 
+                                G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament"", D.F71804 AS ""Functia"", 
+                                CAST(COALESCE(A.F10043,0) AS int) AS ""Norma"", A.F100901, A.F10022, A.F10023, COALESCE(C.""IdRol"",1) AS ""IdRol"", COALESCE(S.""Denumire"", '') AS ""RolDenumire"", COALESCE(A.F10025,0) AS F10025
+                                FROM ""relGrupAngajat"" B
+                                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
+                                INNER JOIN F100 A ON b.F10003 = a.F10003
+                                LEFT JOIN F718 D ON A.F10071 = D.F71802
+                                LEFT JOIN F002 E ON A.F10002 = E.F00202
+                                LEFT JOIN F003 F ON A.F10004 = F.F00304
+                                LEFT JOIN F004 G ON A.F10005 = G.F00405
+                                LEFT JOIN F005 H ON A.F10006 = H.F00506
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
+                                LEFT JOIN ""Ptj_tblRoluri"" S ON C.""IdRol""=S.""Id""
+                                WHERE C.""IdSuper"" = {0}
+                                UNION
+                                SELECT B.F10003 AS F10003, A.F10008 {1} ' ' {1} a.F10009 AS ""NumeComplet"", A.F10008 AS ""Nume"", A.F10009 AS ""Prenume"", 
+                                A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"",A.F10011 AS ""NrContract"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", 
+                                G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament"", D.F71804 AS ""Functia"", 
+                                CAST(COALESCE(A.F10043,0) as int) AS ""Norma"", A.F100901, A.F10022, A.F10023, COALESCE(C.""IdRol"",1) AS ""IdRol"", COALESCE(S.""Denumire"", '') AS ""RolDenumire"", COALESCE(A.F10025,0) AS F10025
+                                FROM ""relGrupAngajat"" B
+                                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
+                                INNER JOIN F100 A ON b.F10003 = a.F10003
+                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")
+                                LEFT JOIN F718 D ON A.F10071 = D.F71802
+                                LEFT JOIN F002 E ON A.F10002 = E.F00202
+                                LEFT JOIN F003 F ON A.F10004 = F.F00304
+                                LEFT JOIN F004 G ON A.F10005 = G.F00405
+                                LEFT JOIN F005 H ON A.F10006 = H.F00506
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
+                                LEFT JOIN ""Ptj_tblRoluri"" S ON C.""IdRol""=S.""Id""
+                                WHERE J.""IdUser"" = {0}";
+
+                strSql = string.Format(strSql, Session["UserId"], semn, cmp);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
         }
 
         protected void btnInit_Click(object sender, EventArgs e)
@@ -662,6 +752,9 @@ namespace WizOne.Pontaj
                 string sql = "";
                 switch (e.Parameter)
                 {
+                    case "cmbRol":
+                        IncarcaAngajati();
+                        break;
                     case "cmbSub":
                         cmbFil.Value = null;
                         cmbSec.Value = null;
@@ -1129,6 +1222,8 @@ namespace WizOne.Pontaj
             {
                 DataTable dt = General.IncarcaDT(SelectAngajati(), null);
 
+
+
                 cmbAng.DataSource = null;
                 cmbAng.DataSource = dt;
                 Session["PontajSpecial_Angajati"] = dt;
@@ -1154,12 +1249,13 @@ namespace WizOne.Pontaj
                     semn = "||";
                     cmp = "ROWNUM";
                 }
+              
 
                 strSql = @"SELECT {2} AS ""IdAuto"", X.* FROM (
                                 SELECT B.F10003 AS F10003, A.F10008 {1} ' ' {1} a.F10009 AS ""NumeComplet"", A.F10008 AS ""Nume"", A.F10009 AS ""Prenume"", 
                                 A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"",A.F10011 AS ""NrContract"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", 
                                 G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament"", D.F71804 AS ""Functia"", 
-                                CAST(COALESCE(A.F10043,0) AS int) AS ""Norma"", A.F100901, A.F10022, A.F10023, COALESCE(C.""IdRol"",1) AS ""IdRol"", COALESCE(A.F10025,0) AS F10025
+                                CAST(COALESCE(A.F10043,0) AS int) AS ""Norma"", A.F100901, A.F10022, A.F10023, COALESCE(C.""IdRol"",1) AS ""IdRol"", COALESCE(S.""Denumire"", '') AS ""RolDenumire"", COALESCE(A.F10025,0) AS F10025
                                 FROM ""relGrupAngajat"" B
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                 INNER JOIN F100 A ON b.F10003 = a.F10003
@@ -1169,12 +1265,13 @@ namespace WizOne.Pontaj
                                 LEFT JOIN F004 G ON A.F10005 = G.F00405
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
+                                LEFT JOIN ""Ptj_tblRoluri"" S ON C.""IdRol""=S.""Id""
                                 WHERE C.""IdSuper"" = {0}
                                 UNION
                                 SELECT B.F10003 AS F10003, A.F10008 {1} ' ' {1} a.F10009 AS ""NumeComplet"", A.F10008 AS ""Nume"", A.F10009 AS ""Prenume"", 
                                 A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"",A.F10011 AS ""NrContract"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", 
                                 G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament"", D.F71804 AS ""Functia"", 
-                                CAST(COALESCE(A.F10043,0) as int) AS ""Norma"", A.F100901, A.F10022, A.F10023, COALESCE(C.""IdRol"",1) AS ""IdRol"", COALESCE(A.F10025,0) AS F10025
+                                CAST(COALESCE(A.F10043,0) as int) AS ""Norma"", A.F100901, A.F10022, A.F10023, COALESCE(C.""IdRol"",1) AS ""IdRol"", COALESCE(S.""Denumire"", '') AS ""RolDenumire"", COALESCE(A.F10025,0) AS F10025
                                 FROM ""relGrupAngajat"" B
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                 INNER JOIN F100 A ON b.F10003 = a.F10003
@@ -1185,9 +1282,10 @@ namespace WizOne.Pontaj
                                 LEFT JOIN F004 G ON A.F10005 = G.F00405
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
-                                WHERE J.""IdUser"" = {0} ) X WHERE F10025 IN (0, 999) ORDER BY X.""NumeComplet"" ";
+                                LEFT JOIN ""Ptj_tblRoluri"" S ON C.""IdRol""=S.""Id""
+                                WHERE J.""IdUser"" = {0} ) X WHERE F10025 IN (0, 999) AND  X.""IdRol"" = {3} ORDER BY X.""NumeComplet"" ";
 
-                strSql = string.Format(strSql, Session["UserId"].ToString(), semn, cmp);    
+                strSql = string.Format(strSql, Session["UserId"].ToString(), semn, cmp, Convert.ToInt32(cmbRol.Value ?? -99));    
 
             }
             catch (Exception ex)

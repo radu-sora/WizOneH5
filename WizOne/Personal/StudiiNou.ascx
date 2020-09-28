@@ -100,29 +100,29 @@
                             <div style="padding: 4px 3px 4px">
                                 <table class="auto-style8">
                                     <tr>
-                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">Tip invatamant</td>
+                                        <td id="lblTipInv" runat="server" aria-multiline="True" class="auto-style9" style="padding:10px;">Tip invatamant</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxComboBox ID="cmbTipInv" runat="server" AutoPostBack="false" DropDownWidth="200" TextField="Denumire" Value='<%# Bind("IdTipInvatamant") %>' ValueField="Id" ValueType="System.Int32" Width="225px" />
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">Nivel studii</td>
+                                        <td id="lblNivStudii" runat="server" class="auto-style6" style="padding:10px;">Nivel studii</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxComboBox ID="cmbNivStudii" runat="server" AutoPostBack="false" DropDownWidth="200" TextField="F71204" Value='<%# Bind("IdNivel") %>' ValueField="F71202" ValueType="System.Int32" Width="225px" >
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { OnValueChanged(s, e); }" />
                                             </dx:ASPxComboBox>
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">Nivel ISCED</td>
+                                        <td id="lblNivISCED" runat="server" class="auto-style6" style="padding:10px;">Nivel ISCED</td>
                                         <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtNivISCED" ClientInstanceName="txtNivISCED" runat="server" Width="100" ReadOnly="true" Value='<%# Bind("NivelISCED") %>' /></td>
                                     </tr>
                                     <tr>                                       
-                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">Tip institutie de invatamant</td>
+                                        <td id="lblTipInstInv" runat="server" aria-multiline="True" class="auto-style9" style="padding:10px;">Tip institutie de invatamant</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxComboBox ID="cmbTipInst" runat="server" AutoPostBack="false" DropDownWidth="200" TextField="Denumire" Value='<%# Bind("IdTipInstitutie") %>' ValueField="Id" ValueType="System.Int32" Width="225px" />
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">Nume institutie</td>
+                                        <td id="lblNumeInst" runat="server" class="auto-style6" style="padding:10px;">Nume institutie</td>
                                          <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtNumeInst" runat="server" Width="225" Value='<%# Bind("NumeInstitutie") %>' /></td>
-                                        <td class="auto-style6" style="padding:10px;">Numar clase</td>
+                                        <td id="lblNrClase" runat="server" class="auto-style6" style="padding:10px;">Numar clase</td>
                                         <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtNrClase" runat="server" Width="100" Value='<%# Bind("NrClase") %>' /></td>  
-                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">Localitate</td>
+                                        <td id="lblLocalitate" runat="server" aria-multiline="True" class="auto-style9" style="padding:10px;">Localitate</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxComboBox ID="cmbLocalitate" runat="server" AutoPostBack="false" DropDownWidth="200" TextField="Nivel3" Value='<%# Bind("SirutaLocalitate") %>' ValueField="SIRUTA" ValueType="System.Int32" Width="225px" >
                                                 <Columns>
@@ -134,26 +134,26 @@
                                         </td>                                        
                                     </tr>  
                                     <tr>
-                                        <td class="auto-style6" style="padding:10px;">Specializare</td>
+                                        <td id="lblSpecializ" runat="server" class="auto-style6" style="padding:10px;">Specializare</td>
                                          <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtSpec" runat="server" Width="225" Value='<%# Bind("Specializare") %>' /></td>
-                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">Profil</td>
+                                        <td id="lblProfil" runat="server" aria-multiline="True" class="auto-style9" style="padding:10px;">Profil</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxComboBox ID="cmbProfil" runat="server" AutoPostBack="false" DropDownWidth="200" TextField="Denumire" Value='<%# Bind("IdProfil") %>' ValueField="Id" ValueType="System.Int32" Width="225px" />
                                         </td>
-                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">Domeniu studiat</td>
+                                        <td id="lblDomenStud" runat="server" aria-multiline="True" class="auto-style9" style="padding:10px;">Domeniu studiat</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxComboBox ID="cmbDomeniu" runat="server" AutoPostBack="false" DropDownWidth="200" TextField="Denumire" Value='<%# Bind("IdDomeniu") %>' ValueField="Id" ValueType="System.Int32" Width="225px" />
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">Calificare</td>
+                                        <td id="lblCalif" runat="server" class="auto-style6" style="padding:10px;">Calificare</td>
                                          <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtCalif" runat="server" Width="225" Value='<%# Bind("Calificare") %>' /></td>
                                     </tr>
                                     <tr>            
-                                        <td class="auto-style6" style="padding:10px;">
+                                        <td id="lblDeLaData" runat="server" class="auto-style6" style="padding:10px;">
                                             De la data</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="deDeLaData" runat="server" EditFormat="Date" EditFormatString="MM/yyyy" DisplayFormatString="MM/yyyy" PickerType="Months" UseMaskBehavior="true" Value='<%# Bind("DeLaData") %>' Width="110px" />
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">
+                                        <td id="lblLaData" runat="server" class="auto-style6" style="padding:10px;">
                                             La data</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="deLaData" runat="server" EditFormat="Date" EditFormatString="MM/yyyy" DisplayFormatString="MM/yyyy" PickerType="Months" UseMaskBehavior="true" Value='<%# Bind("LaData") %>' Width="110px" />

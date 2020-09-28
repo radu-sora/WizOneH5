@@ -52,9 +52,9 @@ namespace WizOne.Personal
         private void IncarcaGrid()
         {
 
-            string sqlFinal = "SELECT * FROM \"Admin_Evaluare\" WHERE \"Marca\" = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT * FROM \"Admin_Evaluare\" WHERE \"Marca\" = " + HttpContext.Current.Session["Marca"].ToString();
             DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("Admin_Evaluare"))
             {
                 dt = ds.Tables["Admin_Evaluare"];
@@ -69,6 +69,7 @@ namespace WizOne.Personal
             grDateEvaluare.KeyFieldName = "IdAuto";
             grDateEvaluare.DataSource = dt;
 
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
         }
 
         protected void grDateEvaluare_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)

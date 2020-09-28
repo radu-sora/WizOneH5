@@ -226,21 +226,20 @@
             <td colspan="2" style="margin-top:15px;">
                 <br />
                 <dx:ASPxHiddenField ID="txtCol" runat="server" ClientInstanceName="txtCol" ClientIDMode="Static"></dx:ASPxHiddenField>
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnCustomCallback="grDate_CustomCallback" OnDataBound="grDate_DataBound" >
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" KeyFieldName="F10003" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnCustomCallback="grDate_CustomCallback" OnDataBound="grDate_DataBound" >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowStatusBar="Hidden" HorizontalScrollBarMode="Visible" ShowFilterRow="True" VerticalScrollBarMode="Visible" AutoFilterCondition="Contains" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" />
                     <ClientSideEvents ContextMenu="ctx" 
                         RowDblClick="function(s, e) { OnClickDetaliat(s, e); }" 
                         Init="function(s,e) { OnGridInit(); }"
-                        EndCallback="function(s, e) { OnEndCallback(s); }" />                    
+                        EndCallback="function(s, e) { OnEndCallback(s); }"
+                         FocusedCellChanging="function(s,e) { OnFocusedCellChanging(s,e); }" />
                     <Columns>
                         
                         <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" FixedStyle="Left" SelectAllCheckboxMode="AllPages" />
-                                                                     
-                        <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" FixedStyle="Left" VisibleIndex="1" CellStyle-HorizontalAlign="Center" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                        </dx:GridViewDataComboBoxColumn>
+                        
+                        <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" ReadOnly="true" FixedStyle="Left" VisibleIndex="1" CellStyle-HorizontalAlign="Center" />
 
                         <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="150px" Settings-AutoFilterCondition="Contains"/>
@@ -494,20 +493,19 @@
                         <table width="100%" >    
                             <tr>
                                 <td align="left">
-                                    <dx:ASPxGridView ID="grDateIstoric" runat="server" ClientInstanceName="grDateIstoric" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDateIstoric_CustomCallback">
+                                    <dx:ASPxGridView ID="grDateIstoric" runat="server" ClientInstanceName="grDateIstoric" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnHtmlDataCellPrepared="grDateIstoric_HtmlDataCellPrepared" OnCustomCallback="grDateIstoric_CustomCallback">
                                         <SettingsBehavior AllowFocusedRow="true" />
                                         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />                                   
                                         <SettingsEditing Mode="Inline" />      
                                         <ClientSideEvents ContextMenu="ctx" />                                
-                                        <Columns>
-                                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="false" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
+                                        <Columns>                                   
                                             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" />                                
                                             <dx:GridViewDataTextColumn FieldName="IdSuper" Name="IdSuper" Caption="IdSuper"  Width="75px" Visible="false" />  
                                             <dx:GridViewDataTextColumn FieldName="Culoare" Name="Culoare" Caption="Culoare"  Width="75px" Visible="false" />       
                                             <dx:GridViewDataTextColumn FieldName="Nume" Name="Nume" Caption="Nume"  Width="200px" />
                                             <dx:GridViewDataTextColumn FieldName="NumeStare" Name="NumeStare" Caption="Stare"  Width="100px"  />
                                             <dx:GridViewDataDateColumn FieldName="DataAprobare" Name="DataAprobare" Caption="Data aprobare" Width="100px" >         
-                                                    <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                                                    <PropertiesDateEdit DisplayFormatString="dd.MM.yyyy HH:mm"></PropertiesDateEdit>
                                             </dx:GridViewDataDateColumn>
                                             <dx:GridViewDataTextColumn FieldName="IdStare" Name="IdStare" Caption="IdStare"  Width="75px" Visible="false" />
                                         </Columns> 
@@ -570,15 +568,14 @@
 
         function OnClickDetaliat(s, e) {
             if (s.name == 'btnPeAng') {
-                pnlLoading.Show();
-                grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + txtCol.Get('coloana') + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
+                //pnlLoading.Show();
+                grDate.PerformCallback(s.name);
             }
             else {
-                if (txtCol.Get('coloana') || txtCol.Get('f10003')) {
-                    var colSel = txtCol.Get('coloana');
-                    if (colSel.length >= 4 && colSel.substr(0, 4).toLowerCase() == 'ziua') {
+                if (fieldName != "") {
+                    if (fieldName.length >= 4 && fieldName.substr(0, 4).toLowerCase() == 'ziua') {
                         pnlLoading.Show();
-                        grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + colSel + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
+                        grDate.PerformCallback(s.name + ";" + fieldName);
                     }
                     else {
                         swal({
@@ -848,6 +845,10 @@
             }
         }
 
+        var fieldName = "";
+        function OnFocusedCellChanging(s, e) {
+            fieldName = e.cellInfo.column.fieldName;  
+        }
     </script>
 
 </asp:Content>

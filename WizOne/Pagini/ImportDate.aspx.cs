@@ -57,7 +57,7 @@ namespace WizOne.Pagini
                         colBDCol.PropertiesComboBox.DataSource = table;
 
                     }
-
+     
 
                     DataTable dt = new DataTable();
                     if (Session["ImportDateSablon_Grid"] == null)
@@ -68,12 +68,12 @@ namespace WizOne.Pagini
                     {
                         dt = Session["ImportDateSablon_Grid"] as DataTable;
                     }
-
+                                       
                     grDate.DataSource = dt;
                     grDate.KeyFieldName = "Id";
                     grDate.DataBind();
                     Session["ImportDateSablon_Grid"] = dt;
-
+                    
 
                     if (Session["ImportDateNomen_Grid"] == null)
                     {
@@ -107,7 +107,7 @@ namespace WizOne.Pagini
                 else
                 {
                     DataTable dt = new DataTable();
-                    dt = General.IncarcaDT("SELECT * FROM \"Template\" ", null);
+                    dt = General.IncarcaDT("SELECT * FROM \"Template\" ", null);               
 
                     grDate.DataSource = dt;
                     grDate.KeyFieldName = "Id";
@@ -143,7 +143,7 @@ namespace WizOne.Pagini
                 grDateViz.SettingsPager.PageSize = 20;
             }
             catch (Exception ex)
-            {
+            {               
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -161,8 +161,9 @@ namespace WizOne.Pagini
                     file.Delete();
                 }
 
-                string path = folder.FullName + "\\Temp.xlsx";
-                File.WriteAllBytes(path, btnDocUpload.UploadedFiles[0].FileBytes);
+                string path = folder.FullName + "\\Temp." + btnDocUpload.UploadedFiles[0].FileName.Split('.')[1];
+                Session["ImportDate_Extensie"] = btnDocUpload.UploadedFiles[0].FileName.Split('.')[1];
+                File.WriteAllBytes(path, btnDocUpload.UploadedFiles[0].FileBytes);  
 
                 if (cmbSablon.Text.Length > 0)
                     IncarcaGrid();
@@ -177,18 +178,22 @@ namespace WizOne.Pagini
 
         public void IncarcaGrid()
         {
-            try
+            try 
             {
                 var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Temp/ImportDate"));
                 if (!folder.Exists)
                     folder.Create();
 
-                if (File.Exists(folder.FullName + "\\Temp.xlsx"))
+                if (Session["ImportDate_Extensie"] == null)
+                    return;
+
+                if (File.Exists(folder.FullName + "\\Temp." + Session["ImportDate_Extensie"].ToString()))
                 {
                     DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
-                    workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                    workbook.LoadDocument(folder.FullName + "\\Temp." + Session["ImportDate_Extensie"].ToString(), 
+                        (Session["ImportDate_Extensie"].ToString().ToUpper() == "XLSX" ? DevExpress.Spreadsheet.DocumentFormat.Xlsx : DevExpress.Spreadsheet.DocumentFormat.Xls));
 
-
+             
                     DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
 
                     DataTable table = new DataTable();
@@ -228,14 +233,14 @@ namespace WizOne.Pagini
                         if (Constante.tipBD == 1)
                         {
                             sql = " SELECT COLUMN_NAME, coalesce(DESCRIERE, COLUMN_NAME) FROM INFORMATION_SCHEMA.COLUMNS left join ALIASCMP ON TABELA = TABLE_NAME AND COLUMN_NAME = CAMP WHERE  TABLE_NAME = '" + dtSablon.Rows[0]["NumeTabela"].ToString().Trim() + "'";
-                            if (dtSablon.Rows[0]["NumeTabela"].ToString().Trim() == "F100")
-                                sql += " UNION SELECT COLUMN_NAME, coalesce(DESCRIERE, COLUMN_NAME) FROM INFORMATION_SCHEMA.COLUMNS left join ALIASCMP ON TABELA = TABLE_NAME AND COLUMN_NAME = CAMP WHERE  TABLE_NAME = 'F1001'";
+                            if (dtSablon.Rows[0]["NumeTabela"].ToString().Trim() == "F100")                            
+                                sql += " UNION SELECT COLUMN_NAME, coalesce(DESCRIERE, COLUMN_NAME) FROM INFORMATION_SCHEMA.COLUMNS left join ALIASCMP ON TABELA = TABLE_NAME AND COLUMN_NAME = CAMP WHERE  TABLE_NAME = 'F1001'";                            
                         }
                         else
                         {
                             sql = "SELECT COLUMN_NAME, COALESCE(DESCRIERE, COLUMN_NAME) FROM user_tab_columns left join ALIASCMP ON TABELA = TABLE_NAME AND CAMP = COLUMN_NAME WHERE  TABLE_NAME = '" + dtSablon.Rows[0]["NumeTabela"].ToString().Trim() + "'";
-                            if (dtSablon.Rows[0]["NumeTabela"].ToString().Trim() == "F100")
-                                sql += " UNION SELECT COLUMN_NAME, COALESCE(DESCRIERE, COLUMN_NAME) FROM user_tab_columns left join ALIASCMP ON TABELA = TABLE_NAME AND CAMP = COLUMN_NAME WHERE  TABLE_NAME = 'F1001'";
+                            if (dtSablon.Rows[0]["NumeTabela"].ToString().Trim() == "F100")                            
+                                sql += " UNION SELECT COLUMN_NAME, COALESCE(DESCRIERE, COLUMN_NAME) FROM user_tab_columns left join ALIASCMP ON TABELA = TABLE_NAME AND CAMP = COLUMN_NAME WHERE  TABLE_NAME = 'F1001'";                            
                         }
 
                         DataTable dt = General.IncarcaDT(sql, null);
@@ -250,7 +255,7 @@ namespace WizOne.Pagini
 
                         grDateNomen.DataBind();
                     }
-                }
+                }      
             }
             catch (Exception ex)
             {
@@ -275,7 +280,7 @@ namespace WizOne.Pagini
                         {
                             case "Id":
                                 row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("Id")), 0)) + 1;
-                                break;
+                                break;                       
                             default:
                                 row[x] = e.NewValues[col.ColumnName];
                                 break;
@@ -402,13 +407,17 @@ namespace WizOne.Pagini
                         dt.Columns.Add(obj["ColoanaFisier"].ToString(), typeof(string));
                 }
 
+                if (Session["ImportDate_Extensie"] == null)
+                    return;
+
                 DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
-                workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                workbook.LoadDocument(folder.FullName + "\\Temp." + Session["ImportDate_Extensie"].ToString(),
+                    (Session["ImportDate_Extensie"].ToString().ToUpper() == "XLSX" ? DevExpress.Spreadsheet.DocumentFormat.Xlsx : DevExpress.Spreadsheet.DocumentFormat.Xls));
 
                 DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
                 Dictionary<int, int> lstIndex = new Dictionary<int, int>();
 
-                int k = 0, nrCol = 0;
+                int k = 0, nrCol = 0;                
                 for (int i = 0; i < dt.Columns.Count; i++)
                 {
                     k = 0;
@@ -459,7 +468,7 @@ namespace WizOne.Pagini
                     j++;
                     k = 0;
                 }
-
+                
                 dt.Columns.Add("Actiune", typeof(string));
                 dt.Columns.Add("MesajEroare", typeof(string));
 
@@ -476,7 +485,7 @@ namespace WizOne.Pagini
         protected void grDate_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
         {
             try
-            {
+            { 
             }
             catch (Exception ex)
             {
@@ -547,10 +556,10 @@ namespace WizOne.Pagini
                                 {
                                     if (dtSablon.Rows[0]["NumeTabela"].ToString().Trim() == "F100" && e.NewValues["ColoanaBD"] != null)
                                     {
-                                        if (Constante.tipBD == 1)
-                                            sql = " SELECT TABLE_NAME FROM INFORMATION_SCHEMA.COLUMNS  WHERE  (TABLE_NAME = 'F100' OR  TABLE_NAME = 'F1001') AND COLUMN_NAME = '" + e.NewValues["ColoanaBD"].ToString() + "' ORDER BY TABLE_NAME";
-                                        else
-                                            sql = "SELECT TABLE_NAME FROM user_tab_columns  WHERE  (TABLE_NAME = 'F100' OR  TABLE_NAME = 'F1001') AND COLUMN_NAME = '" + e.NewValues["ColoanaBD"].ToString() + "' ORDER BY TABLE_NAME";
+                                        if (Constante.tipBD == 1)                                        
+                                            sql = " SELECT TABLE_NAME FROM INFORMATION_SCHEMA.COLUMNS  WHERE  (TABLE_NAME = 'F100' OR  TABLE_NAME = 'F1001') AND COLUMN_NAME = '" + e.NewValues["ColoanaBD"].ToString() + "' ORDER BY TABLE_NAME";                                        
+                                        else                                                                                  
+                                            sql = "SELECT TABLE_NAME FROM user_tab_columns  WHERE  (TABLE_NAME = 'F100' OR  TABLE_NAME = 'F1001') AND COLUMN_NAME = '" + e.NewValues["ColoanaBD"].ToString() + "' ORDER BY TABLE_NAME";                       
 
                                         DataTable dtTab = General.IncarcaDT(sql, null);
                                         row[x] = dtTab.Rows[0][0].ToString();
@@ -573,7 +582,7 @@ namespace WizOne.Pagini
                 //    err = true;
 
                 //if (!err)
-                dt.Rows.Add(row);
+                    dt.Rows.Add(row);
                 e.Cancel = true;
                 grDateNomen.CancelEdit();
                 grDateNomen.DataSource = dt;
@@ -704,7 +713,7 @@ namespace WizOne.Pagini
                     id = Convert.ToInt32(cmbSablon.Value);
 
                 if (e.Parameters.Equals("2"))
-                {
+                {                    
                     object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "NumeSablon", "NumeTabela" }) as object[];
                     if (obj != null && obj.Count() > 0)
                         id = Convert.ToInt32(obj[0]);
@@ -773,23 +782,27 @@ namespace WizOne.Pagini
         protected void btnImport_Click()
         {
             try
-            {
+            {   
                 var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Temp/ImportDate"));
 
                 if (folder.GetFiles().Count() <= 0)
                 {
                     MessageBox.Show("Nu ati incarcat niciun fisier!", MessageBox.icoError, "");
                     return;
-                }
-
+                }  
+                
                 if (cmbSablon.Text.Length <= 0)
                 {
                     MessageBox.Show("Nu ati selectat sablonul!", MessageBox.icoError, "");
                     return;
                 }
 
+                if (Session["ImportDate_Extensie"] == null)
+                    return;
+
                 DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
-                workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                workbook.LoadDocument(folder.FullName + "\\Temp." + Session["ImportDate_Extensie"].ToString(),
+                    (Session["ImportDate_Extensie"].ToString().ToUpper() == "XLSX" ? DevExpress.Spreadsheet.DocumentFormat.Xlsx : DevExpress.Spreadsheet.DocumentFormat.Xls));
 
                 DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
 
@@ -844,17 +857,17 @@ namespace WizOne.Pagini
                 //            + "group by \"NumeColoana\", \"PozitieFisier\"";
 
                 sql = " select ColoanaFisier, ColoanaBD as NumeColoana, Obligatoriu, OmiteLaActualizare, ValoareImplicita, null as PozitieFisier, "
-                      + " (SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = ColoanaBD "
+                      + " (SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = ColoanaBD " 
                       + " UNION SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = 'F1001' and COLUMN_NAME = ColoanaBD) as Tip, Tabela "
-                      + "  from TemplateCampuri a "
-                      + "  left join Template b on a.id = b.Id where b.Id = '" + Convert.ToInt32(cmbSablon.Value).ToString() + "' ";
+                      + "  from TemplateCampuri a " 
+                      + "  left join Template b on a.id = b.Id where b.Id = '" + Convert.ToInt32(cmbSablon.Value).ToString()  + "' ";
                 if (Constante.tipBD == 2)
                     sql = " select \"ColoanaFisier\", \"ColoanaBD\" as \"NumeColoana\", \"Obligatoriu\", \"OmiteLaActualizare\", \"ValoareImplicita\", null as \"PozitieFisier\", "
-                      + " (SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = \"ColoanaBD\" "
+                      + " (SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = \"ColoanaBD\" " 
                       + "UNION SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = 'F1001' and COLUMN_NAME = \"ColoanaBD\") as \"Tip\", \"Tabela\" "
                       + "  from \"TemplateCampuri\" a "
                       + "  left join \"Template\" b on a.\"Id\" = b.\"Id\" where b.\"Id\" = '" + Convert.ToInt32(cmbSablon.Value).ToString() + "' ";
-
+                               
                 DataTable dtCombinat = General.IncarcaDT(sql, null);
                 foreach (DataColumn col in dtCombinat.Columns)
                     col.ReadOnly = false;
@@ -873,7 +886,7 @@ namespace WizOne.Pagini
                     }
                 }
 
-                bool utilizator = false, timp = false;
+                bool utilizator = false, timp = false;                
                 sql = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = 'USER_NO'";
                 if (Constante.tipBD == 2)
                     sql = "SELECT COUNT(*) FROM user_tab_columns WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = 'USER_NO'";
@@ -933,6 +946,7 @@ namespace WizOne.Pagini
                                 case "nvarchar":
                                 case "varchar":
                                 case "varchar2":
+                                case "nvarchar2":
                                     if (ws2.Cells[j, k].Value != null && ws2.Cells[j, k].Value.ToString().Length > 0)
                                         val = "'" + ws2.Cells[j, k].Value.ToString() + "'";
                                     break;
@@ -979,7 +993,7 @@ namespace WizOne.Pagini
                                         campNonObligAct += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
                                 }
                                 if (dr[0]["NumeColoana"].ToString() == "F10096" && val != "NULL")
-                                    idSablon = Convert.ToInt32(val);
+                                    idSablon = Convert.ToInt32(val);                    
                             }
                         }
                         k++;
@@ -992,7 +1006,7 @@ namespace WizOne.Pagini
                         k = 0;
                         j++;
                         continue;
-                    }
+                    }           
 
                     string[] lstCampuri = (campOblig + campNonOblig).Substring(1).Split(',');
                     string camp = "", valoare = "";
@@ -1021,7 +1035,7 @@ namespace WizOne.Pagini
                                     valAltele = "'" + drAltele[z]["ValoareImplicita"].ToString() + "'";
                             }
                             if (valAltele.Length <= 0)
-                                valAltele = "NULL";
+                                valAltele = "NULL";                        
 
                             if (drAltele[z]["NumeColoana"].ToString().ToString() == "F10096" && valAltele != "NULL")
                                 idSablon = Convert.ToInt32(valAltele);
@@ -1054,7 +1068,7 @@ namespace WizOne.Pagini
                                     campNonObligAct2 += ", \"" + drAltele[z]["NumeColoana"].ToString() + "\" = " + valAltele;
                                 else
                                     campNonObligAct += ", \"" + drAltele[z]["NumeColoana"].ToString() + "\" = " + valAltele;
-                            }
+                            }                                
                         }
                     }
 
@@ -1106,10 +1120,10 @@ namespace WizOne.Pagini
                     string sql1001 = "";
                     if (dtTest != null && dtTest.Rows.Count > 0 && dtTest.Rows[0][0] != null && Convert.ToInt32(dtTest.Rows[0][0].ToString()) > 0)
                     {
-                        sql = "UPDATE \"" + numeTabela + "\" SET " + campNonObligAct.Substring(1).Replace("#&*", ",") + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");
+                        sql = "UPDATE \"" + numeTabela + "\" SET " + campNonObligAct.Substring(1).Replace("#&*", ",") + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");                      
                         if (numeTabela == "F100" && campNonObligAct2.Length > 0)
                             sql1001 = "UPDATE F1001 SET " + campNonObligAct2.Substring(1).Replace("#&*", ",") + " WHERE F10003 IN (SELECT F10003 FROM F100 WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",") + ")";
-                        dtViz.Rows[j - 1]["Actiune"] = "UPDATE";
+                        dtViz.Rows[j - 1]["Actiune"] = "UPDATE";                       
                     }
                     else
                     {
@@ -1132,7 +1146,7 @@ namespace WizOne.Pagini
                         }
                         else
                         {
-                            sql = "INSERT INTO \"" + numeTabela + "\" (" + camp.Substring(1) + ")  VALUES (" + valoare.Substring(1) + ")";
+                            sql = "INSERT INTO \"" + numeTabela + "\" (" + camp.Substring(1) + ")  VALUES (" + valoare.Substring(1) + ")";                    
                         }
                         dtViz.Rows[j - 1]["Actiune"] = "INSERT";
                     }
@@ -1168,7 +1182,7 @@ namespace WizOne.Pagini
                                 if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "IdCircuit")
                                     idCircuit = Convert.ToInt32(lstCampuri[x].Split('=')[1].Trim());
                             }
-                            sql = "SELECT COUNT(*) FROM \"Avs_Circuit\" WHERE \"IdAtribut\" = " + idAtribut;
+                            sql = "SELECT COUNT(*) FROM \"Avs_Circuit\" WHERE \"IdAtribut\" = " + idAtribut;                            
                             DataTable dtAtr = General.IncarcaDT(sql, null);
                             int nr = Convert.ToInt32(dtAtr.Rows[0][0].ToString());
                             if (nr > 0)
@@ -1211,7 +1225,7 @@ namespace WizOne.Pagini
                                 else
                                     dtCir = General.IncarcaDT("SELECT  * FROM \"Avs_Circuit\" WHERE \"Id\" = " + idCircuit, null);
 
-                                if (idCircuit == -99 || idCircuit == 0)
+                                if (idCircuit == -99 || idCircuit == 0)                                                                   
                                     dtViz.Rows[j - 1]["MesajEroare"] += (dtViz.Rows[j - 1]["MesajEroare"] == null || dtViz.Rows[j - 1]["MesajEroare"].ToString().Length <= 0 ? "" : " / ") + "Angajatul nu are supervizor pe circuit!";
                                 else
                                 {
@@ -1316,7 +1330,7 @@ namespace WizOne.Pagini
                                                     if (poz == total) idSt = 3;
                                                     camp3 = ", \"Aprobat\", \"DataAprobare\", \"IdStare\", \"Culoare\"";
                                                     camp4 = ", 1, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", " + idSt + ", (SELECT \"Culoare\" FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idSt.ToString() + ")";
-                                                }
+                                                }        
 
                                                 strSql = "INSERT INTO \"Avs_CereriIstoric\" (\"Id\", \"IdCircuit\", \"IdSuper\", \"Pozitie\", USER_NO, TIME, \"Inlocuitor\", \"IdUser\" {0}) "
                                                     + "VALUES (" + idUrm + ", " + idCircuit + ", " + Convert.ToInt32(valId) + ", " + poz + ", " + Session["UserId"].ToString() + ", "
@@ -1329,7 +1343,7 @@ namespace WizOne.Pagini
 
                                     sql = "UPDATE \"Avs_Cereri\" SET \"IdStare\" =  " + idSt.ToString() + ", \"Culoare\" = (SELECT \"Culoare\" FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idSt.ToString() + "), \"TotalCircuit\" = " + total.ToString() + ", \"Pozitie\" = " + pozUser.ToString() + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");
                                     General.ExecutaNonQuery(sql, null);
-                                }
+                                }                                
                             }
                             else
                                 dtViz.Rows[j - 1]["MesajEroare"] += (dtViz.Rows[j - 1]["MesajEroare"] == null || dtViz.Rows[j - 1]["MesajEroare"].ToString().Length <= 0 ? "" : " / ") + "Atributul nu are circuit alocat!";
@@ -1414,7 +1428,7 @@ namespace WizOne.Pagini
                                 //string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) FROM ""Ptj_Cereri"") ";
                                 //DataTable dtId = General.IncarcaDT(sqlIdCerere, null);
 
-                                int estePlanif = 0, idCircuitAbs = -1;
+                                int estePlanif = 0, idCircuitAbs = -1;                                
 
                                 DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(marcaInit, dataInc), null);
 
@@ -1444,7 +1458,7 @@ namespace WizOne.Pagini
                                 General.ExecutaNonQuery(sqlIst, null);
 
                                 string strTop = "";
-                                if (Constante.tipBD == 1) strTop = "TOP 1";
+                                if (Constante.tipBD == 1) strTop = "TOP 1";   
                                 string sqlTotal = @"(SELECT COUNT(*) FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere""=" + idCerere + ")";
                                 string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={idCerere} ORDER BY ""Pozitie"" DESC)";
                                 string sqlPozitie = $@"(SELECT {strTop} ""Pozitie"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={idCerere} ORDER BY ""Pozitie"" DESC)";
@@ -1474,7 +1488,7 @@ namespace WizOne.Pagini
                             }
                             break;
                     }
-
+                
                 }
 
                 grDateViz.DataSource = dtViz;
@@ -1488,16 +1502,16 @@ namespace WizOne.Pagini
                 }
 
                 //scriere in log
-                StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "ImportDateLog.csv", false);
-                for (int i = 0; i < dtViz.Columns.Count; i++)
-                    sw.Write(dtViz.Columns[i].ColumnName + "\t");
+                StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "ImportDateLog.csv", false);   
+                for (int i = 0; i < dtViz.Columns.Count; i++)                
+                    sw.Write(dtViz.Columns[i].ColumnName + "\t");                
                 sw.Write("\r\n");
                 for (int p = 0; p < dtViz.Rows.Count; p++)
                 {
                     for (int q = 0; q < dtViz.Columns.Count; q++)
                         sw.Write(dtViz.Rows[p][q] + "\t");
                     sw.Write("\r\n");
-                }
+                } 
                 sw.Close();
                 sw.Dispose();
 
@@ -1508,9 +1522,9 @@ namespace WizOne.Pagini
             }
         }
 
-
+        
         protected void cmbSablon_Callback(object sender, CallbackEventArgsBase e)
-        {
+        {      
             //cmbTabela.DataSource = null;
             //cmbTabela.DataBind();
             //string id = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";
@@ -1522,7 +1536,7 @@ namespace WizOne.Pagini
             //ds.SelectCommand = "SELECT " + id + "\"Id\", a.* from (select distinct \"NumeTabela\" as \"Denumire\" FROM \"ImportDateNomen\") a ORDER BY \"Denumire\"";
             //cmbTabela.DataSource = ds;
             //cmbTabela.DataBind();
-
+                        
         }
 
         //protected void btnViz_Click(object sender, EventArgs e)
@@ -1530,7 +1544,7 @@ namespace WizOne.Pagini
         protected void btnViz_Click()
         {
             try
-            {
+            {     
                 int id = -99;
                 if (cmbSablon.Value != null)
                     id = Convert.ToInt32(cmbSablon.Value);
@@ -1548,7 +1562,7 @@ namespace WizOne.Pagini
 
                 DataTable dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" = " + id, null);
 
-
+    
 
                 grDateNomen.KeyFieldName = "Id;IdAuto";
                 grDateNomen.DataSource = dt;
@@ -1562,6 +1576,6 @@ namespace WizOne.Pagini
 
         }
 
-
+   
     }
 }

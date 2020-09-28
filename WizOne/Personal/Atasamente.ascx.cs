@@ -5,7 +5,9 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using WizOne.Module;
 
 namespace WizOne.Personal
@@ -67,14 +69,14 @@ namespace WizOne.Personal
             try
             {
                 DataTable dt = new DataTable();
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
                 if (ds.Tables.Contains("Atasamente"))
                 {
                     dt = ds.Tables["Atasamente"];
                 }
                 else
                 {
-                    dt = General.IncarcaDT(@"SELECT * FROM ""Atasamente"" WHERE ""IdEmpl"" = @1", new object[] { Session["Marca"] });
+                    dt = General.IncarcaDT(@"SELECT * FROM ""Atasamente"" WHERE ""IdEmpl"" = @1", new object[] { HttpContext.Current.Session["Marca"] });
                     dt.TableName = "Atasamente";
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                     ds.Tables.Add(dt);
@@ -88,6 +90,8 @@ namespace WizOne.Personal
                 DataTable dtCategAt = General.IncarcaDT(sql, null);
                 GridViewDataComboBoxColumn colCategAt = (grDateAtasamente.Columns["IdCategory"] as GridViewDataComboBoxColumn);
                 colCategAt.PropertiesComboBox.DataSource = dtCategAt;
+
+                HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
             {
@@ -316,6 +320,17 @@ namespace WizOne.Personal
                     cmbCateg.DataSource = dtCateg;
                     cmbCateg.DataBindItems();
                 }
+
+                HtmlTableCell lblDesc = (HtmlTableCell)grDateAtasamente.FindEditFormTemplateControl("lblDesc");
+                lblDesc.InnerText = Dami.TraduCuvant("Descriere");
+                HtmlTableCell lblCateg = (HtmlTableCell)grDateAtasamente.FindEditFormTemplateControl("lblCateg");
+                lblCateg.InnerText = Dami.TraduCuvant("Categorie");
+                HtmlTableCell lblData = (HtmlTableCell)grDateAtasamente.FindEditFormTemplateControl("lblData");
+                lblData.InnerText = Dami.TraduCuvant("Data");
+
+                ASPxUploadControl btnDocUploadAtas = (ASPxUploadControl)grDateAtasamente.FindEditFormTemplateControl("btnDocUploadAtas");
+                btnDocUploadAtas.BrowseButton.Text = Dami.TraduCuvant("Incarca Document");
+                btnDocUploadAtas.ToolTip = Dami.TraduCuvant("Incarca Document");
             }
             catch (Exception ex)
             {

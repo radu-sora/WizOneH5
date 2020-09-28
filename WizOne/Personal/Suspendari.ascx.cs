@@ -108,11 +108,11 @@ namespace WizOne.Personal
         {
             try
             {
-                DataTable dt = General.IncarcaDT("SELECT * FROM F111 WHERE F11103 = " + Session["Marca"].ToString() + " ORDER BY F11105", null);
+                DataTable dt = General.IncarcaDT("SELECT * FROM F111 WHERE F11103 = " + HttpContext.Current.Session["Marca"].ToString() + " ORDER BY F11105", null);
                 grDateSuspendari.KeyFieldName = "F11103;F11104;F11105;F11106;F11107";
                 grDateSuspendari.DataSource = dt;
                 grDateSuspendari.DataBind();
-                Session["MP_Suspendari"] = dt;
+                HttpContext.Current.Session["MP_Suspendari"] = dt;
             }
             catch (Exception ex)
             {
@@ -581,9 +581,9 @@ namespace WizOne.Personal
             }
             if (param == 2)
             {               
-                string data = General.ToDataUniv(2100, 1, 1);
-                if (dt.Select("F11107 IS NULL OR F11107 = " + data, "F11105 ASC") != null && dt.Select("F11107 IS NULL OR F11107 = " + data, "F11105 ASC").Count() > 0)
-                    dtSuspAng = dt.Select("F11107 IS NULL OR F11107 = " + data, "F11105 ASC").CopyToDataTable();
+                //string data = General.ToDataUniv(2100, 1, 1);
+                if (dt.Select("F11107 IS NULL OR F11107 = '2100-01-01'", "F11105 ASC") != null && dt.Select("F11107 IS NULL OR F11107 = '2100-01-01'", "F11105 ASC").Count() > 0)
+                    dtSuspAng = dt.Select("F11107 IS NULL OR F11107 = '2100-01-01'", "F11105 ASC").CopyToDataTable();
             }
             if (dtSuspAng != null && dtSuspAng.Rows.Count > 0)
             {

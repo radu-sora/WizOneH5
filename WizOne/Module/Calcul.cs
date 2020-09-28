@@ -9,9 +9,6 @@ namespace WizOne.Module
 {
     public class Calcul
     {
-        public static int minuteIN = 0;
-        public static int minuteOUT = 0;
-
         public static void CalculInOut(DataRow ent, bool salveaza = false, bool recalcul = false)
         {
             try
@@ -45,14 +42,19 @@ namespace WizOne.Module
 
                 int timpPauzaDedusa = CalculPauzaBis(ent);
 
-                int oreLucrate = CalculOreLucrateBis(ent, timpPauzaDedusa);
+                //Florin 2020.09.09
+                int oreLucrate = 0;
+                int minuteIN = 0;
+                int minuteOUT = 0;
+
+                CalculOreLucrateBis(ent, timpPauzaDedusa, out oreLucrate, out minuteIN, out minuteOUT);
 
                 int on = CalculOreNormale(ent, oreLucrate);
                 int os = CalculOreSuplimentare(ent, oreLucrate);
 
-                CalculAlteOre(ent);
+                CalculAlteOre(ent, minuteIN, minuteOUT);
 
-                CalculOreNoapte(ent);
+                CalculOreNoapte(ent, minuteIN, minuteOUT);
 
                 ent["USER_NO"] = -93;
                 ent["TIME"] = DateTime.Now;
@@ -413,7 +415,7 @@ namespace WizOne.Module
             {
                 DataTable dt = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_ContracteSchimburi"" WHERE ""IdContract""={0} AND ""TipSchimb""={1}", idCtr, ziSapt));
 
-                if (dt.Rows.Count > 0 && firstIn != null && lastOut != null)
+                if (dt.Rows.Count > 0 && (firstIn != null || lastOut != null))
                 {
                     foreach (DataRow rand in dt.Rows)
                     {
@@ -421,25 +423,36 @@ namespace WizOne.Module
                         if (rand["OraInceputDeLa"] == DBNull.Value || rand["OraInceputLa"] == DBNull.Value || rand["OraSfarsitDeLa"] == DBNull.Value || rand["OraSfarsitLa"] == DBNull.Value)
                             continue;
 
+                        int modVerificare = Convert.ToInt32(General.Nz(rand["ModVerificare"], -99));
+
                         //ora de inceput
                         DateTime oraIncDeLa = Convert.ToDateTime(rand["OraInceputDeLa"]);
                         DateTime oraIncLa = Convert.ToDateTime(rand["OraInceputLa"]);
 
-                        oraIncDeLa = new DateTime(firstIn.Value.Year, firstIn.Value.Month, firstIn.Value.Day, oraIncDeLa.Hour, oraIncDeLa.Minute, oraIncDeLa.Second);
-                        oraIncLa = new DateTime(firstIn.Value.Year, firstIn.Value.Month, firstIn.Value.Day, oraIncLa.Hour, oraIncLa.Minute, oraIncLa.Second);
+                        if (firstIn != null)
+                        {
+                            oraIncDeLa = new DateTime(firstIn.Value.Year, firstIn.Value.Month, firstIn.Value.Day, oraIncDeLa.Hour, oraIncDeLa.Minute, oraIncDeLa.Second);
+                            oraIncLa = new DateTime(firstIn.Value.Year, firstIn.Value.Month, firstIn.Value.Day, oraIncLa.Hour, oraIncLa.Minute, oraIncLa.Second);
 
-                        if (oraIncDeLa > oraIncLa) oraIncLa = new DateTime(firstIn.Value.AddDays(1).Year, firstIn.Value.AddDays(1).Month, firstIn.Value.AddDays(1).Day, oraIncLa.Hour, oraIncLa.Minute, oraIncLa.Second);
+                            if (oraIncDeLa > oraIncLa) oraIncLa = new DateTime(firstIn.Value.AddDays(1).Year, firstIn.Value.AddDays(1).Month, firstIn.Value.AddDays(1).Day, oraIncLa.Hour, oraIncLa.Minute, oraIncLa.Second);
+                        }
 
                         //ora de sfarsit
                         DateTime oraSfDeLa = Convert.ToDateTime(rand["OraSfarsitDeLa"]);
                         DateTime oraSfLa = Convert.ToDateTime(rand["OraSfarsitLa"]);
 
-                        oraSfDeLa = new DateTime(lastOut.Value.Year, lastOut.Value.Month, lastOut.Value.Day, oraSfDeLa.Hour, oraSfDeLa.Minute, oraSfDeLa.Second);
-                        oraSfLa = new DateTime(lastOut.Value.Year, lastOut.Value.Month, lastOut.Value.Day, oraSfLa.Hour, oraSfLa.Minute, oraSfLa.Second);
+                        if (lastOut != null)
+                        {
+                            oraSfDeLa = new DateTime(lastOut.Value.Year, lastOut.Value.Month, lastOut.Value.Day, oraSfDeLa.Hour, oraSfDeLa.Minute, oraSfDeLa.Second);
+                            oraSfLa = new DateTime(lastOut.Value.Year, lastOut.Value.Month, lastOut.Value.Day, oraSfLa.Hour, oraSfLa.Minute, oraSfLa.Second);
 
-                        if (oraSfDeLa > oraSfLa) oraSfLa = new DateTime(lastOut.Value.AddDays(1).Year, lastOut.Value.AddDays(1).Month, lastOut.Value.AddDays(1).Day, oraSfLa.Hour, oraSfLa.Minute, oraSfLa.Second);
+                            if (oraSfDeLa > oraSfLa) oraSfLa = new DateTime(lastOut.Value.AddDays(1).Year, lastOut.Value.AddDays(1).Month, lastOut.Value.AddDays(1).Day, oraSfLa.Hour, oraSfLa.Minute, oraSfLa.Second);
+                        }
 
-                        switch (Convert.ToInt32(General.Nz(rand["ModVerificare"], -99)))
+                        if (firstIn != null && lastOut == null) modVerificare = 1;
+                        if (firstIn == null && lastOut != null) modVerificare = 2;
+
+                        switch (modVerificare)
                         {
                             case 1:         //intrare
                                 if ((Convert.ToDateTime(firstIn) - oraIncDeLa).TotalMinutes >= 0 && (oraIncLa - Convert.ToDateTime(firstIn)).TotalMinutes >= 0) idProg = Convert.ToInt32(General.Nz(rand["IdProgram"], -99));
@@ -1032,9 +1045,12 @@ namespace WizOne.Module
             return tpd;
         }
 
-        private static int CalculOreLucrateBis(DataRow ent, int timpPauzaDedusa)
+        private static void CalculOreLucrateBis(DataRow ent, int timpPauzaDedusa, out int rez, out int minuteIN, out int minuteOUT)
         {
-            int rez = 0;
+            minuteIN = 0;
+            minuteOUT = 0;
+
+            rez = 0;
             int norma = 0;
             int pontare = 1;
 
@@ -1094,15 +1110,16 @@ namespace WizOne.Module
                     case 3:                     //Pontare doar prima intrare si ultima iesire
                         try
                         {
-                            if (firstIn == null || lastOut == null) return rez;
-
-                            int tp = Convert.ToInt32((Convert.ToDateTime(lastOutPaid) - Convert.ToDateTime(firstInPaid)).TotalMinutes);
-                            try
+                            if (firstIn != null && lastOut != null)
                             {
-                                if (entPont["OreLucrateMin"].ToString() != "" && TransformaInMinute(Convert.ToDateTime(entPont["OreLucrateMin"])) <= tp) tp = tp - timpPauzaDedusa;
+                                int tp = Convert.ToInt32((Convert.ToDateTime(lastOutPaid) - Convert.ToDateTime(firstInPaid)).TotalMinutes);
+                                try
+                                {
+                                    if (entPont["OreLucrateMin"].ToString() != "" && TransformaInMinute(Convert.ToDateTime(entPont["OreLucrateMin"])) <= tp) tp = tp - timpPauzaDedusa;
+                                }
+                                catch (Exception) { }
+                                if (tp >= 0) rez = tp;
                             }
-                            catch (Exception) { }
-                            if (tp >= 0) rez = tp;
                         }
                         catch (Exception)
                         {
@@ -1112,129 +1129,130 @@ namespace WizOne.Module
                         int total = 0;
                         int os = 0;
 
-                        if (firstIn == null || lastOut == null) return rez;
-
-                        for (int i = 1; i <= 20; i++)
+                        if (firstIn != null && lastOut != null)
                         {
-                            if (ent["In" + i] != DBNull.Value && ent["Out" + i] != DBNull.Value)
+                            for (int i = 1; i <= 20; i++)
                             {
-                                try
+                                if (ent["In" + i] != DBNull.Value && ent["Out" + i] != DBNull.Value)
                                 {
-                                    //Florin 2016.11.07 Begin ###################################
-                                    //aplicam gratierea
-
-                                    DataTable dtProg = General.IncarcaDT(@"SELECT * FROM ""Ptj_Programe"" WHERE ""Id""=" + idProg);
-                                    if (dtProg.Rows.Count > 0 && dtProg.Rows[0]["OraIntrare"] != DBNull.Value && dtProg.Rows[0]["OraIesire"] != DBNull.Value)
+                                    try
                                     {
-                                        //gratiere pentru intrare tarzie
-                                        if (Convert.ToDateTime(ent["In" + i]) == firstIn && TransformaInMinute(Convert.ToDateTime(ent["In" + i])) > TransformaInMinute(Convert.ToDateTime(dtProg.Rows[0]["OraIntrare"])))
+                                        //Florin 2016.11.07 Begin ###################################
+                                        //aplicam gratierea
+
+                                        DataTable dtProg = General.IncarcaDT(@"SELECT * FROM ""Ptj_Programe"" WHERE ""Id""=" + idProg);
+                                        if (dtProg.Rows.Count > 0 && dtProg.Rows[0]["OraIntrare"] != DBNull.Value && dtProg.Rows[0]["OraIesire"] != DBNull.Value)
                                         {
-                                            int dif = TransformaInMinute(Convert.ToDateTime(ent["In" + i])) - TransformaInMinute(Convert.ToDateTime(dtProg.Rows[0]["OraIntrare"]));
-                                            int grat = TransformaInMinute(dtProg.Rows[0]["InPesteDiferentaPlata"]);
-                                            if (dif <= grat)
+                                            //gratiere pentru intrare tarzie
+                                            if (Convert.ToDateTime(ent["In" + i]) == firstIn && TransformaInMinute(Convert.ToDateTime(ent["In" + i])) > TransformaInMinute(Convert.ToDateTime(dtProg.Rows[0]["OraIntrare"])))
                                             {
-                                                minuteIN = dif;
+                                                int dif = TransformaInMinute(Convert.ToDateTime(ent["In" + i])) - TransformaInMinute(Convert.ToDateTime(dtProg.Rows[0]["OraIntrare"]));
+                                                int grat = TransformaInMinute(dtProg.Rows[0]["InPesteDiferentaPlata"]);
+                                                if (dif <= grat)
+                                                {
+                                                    minuteIN = dif;
+                                                }
+                                            }
+
+                                            //gratiere pentru iesire anticipata
+                                            if (Convert.ToDateTime(ent["Out" + i]) == lastOut && TransformaInMinute(Convert.ToDateTime(ent["Out" + i])) < TransformaInMinute(Convert.ToDateTime(dtProg.Rows[0]["OraIesire"])))
+                                            {
+                                                int dif = TransformaInMinute(Convert.ToDateTime(dtProg.Rows[0]["OraIesire"])) - TransformaInMinute(Convert.ToDateTime(ent["Out" + i]));
+                                                int grat = TransformaInMinute(dtProg.Rows[0]["OutSubDiferentaPlata"]);
+                                                if (dif <= grat)
+                                                {
+                                                    minuteOUT = dif;
+                                                }
                                             }
                                         }
 
-                                        //gratiere pentru iesire anticipata
-                                        if (Convert.ToDateTime(ent["Out" + i]) == lastOut && TransformaInMinute(Convert.ToDateTime(ent["Out" + i])) < TransformaInMinute(Convert.ToDateTime(dtProg.Rows[0]["OraIesire"])))
+
+                                        //Florin 2016.12.06  Begin
+                                        //s-a adaugat else-ul si s-a modificat si prima ramura pentru a calcula timpul lucrat din afara intervalului orar FirstInPaid - LatOutPaid
+                                        //Este cazul de la Vrancart unde vor sa stie cate ore au lucrat in timpul programului si cate suplimentar fara compensare
+                                        //de ex: s-a lucart 6 ore intre 07 - 15:30 si apoi a mai lucrat 2 ore dupa 15:30; deci 6 ore lucrate si 2 ore suplimnetare
+
+                                        //intersectam fiecare interval In-Out cu intervalul de plata firstInPaid - lastOutPaid
+                                        if (Convert.ToDateTime(ent["In" + i]).AddMinutes(-1 * minuteIN) <= Convert.ToDateTime(lastOutPaid) && Convert.ToDateTime(firstInPaid) <= Convert.ToDateTime(ent["Out" + i]).AddMinutes(minuteOUT))
                                         {
-                                            int dif = TransformaInMinute(Convert.ToDateTime(dtProg.Rows[0]["OraIesire"])) - TransformaInMinute(Convert.ToDateTime(ent["Out" + i]));
-                                            int grat = TransformaInMinute(dtProg.Rows[0]["OutSubDiferentaPlata"]);
-                                            if (dif <= grat)
-                                            {
-                                                minuteOUT = dif;
-                                            }
+                                            DateTime gridIn = Convert.ToDateTime(ent["In" + i]).AddMinutes(-1 * minuteIN) > Convert.ToDateTime(firstInPaid) ? Convert.ToDateTime(ent["In" + i]).AddMinutes(-1 * minuteIN) : Convert.ToDateTime(firstInPaid);
+                                            DateTime gridOut = Convert.ToDateTime(ent["Out" + i]).AddMinutes(minuteOUT) < Convert.ToDateTime(lastOutPaid) ? Convert.ToDateTime(ent["Out" + i]).AddMinutes(minuteOUT) : Convert.ToDateTime(lastOutPaid);
+
+                                            int difTmp = Convert.ToInt32((Convert.ToDateTime(gridOut) - Convert.ToDateTime(gridIn)).TotalMinutes);
+                                            if (difTmp > 0) total += difTmp;
+
+                                            int difOs = Convert.ToInt32((Convert.ToDateTime(ent["Out" + i]) - Convert.ToDateTime(ent["In" + i])).TotalMinutes) - difTmp;
+                                            if (difOs > 0) os += difOs;
                                         }
+                                        else
+                                        {
+                                            int difOs = Convert.ToInt32((Convert.ToDateTime(ent["Out" + i]) - Convert.ToDateTime(ent["In" + i])).TotalMinutes);
+                                            if (difOs > 0) os += difOs;
+                                        }
+
+                                        //Florin 2020.05.28
+                                        if (ent.Table.Columns["TimpOSReal"] != null)
+                                            ent["TimpOSReal"] = os;
+
+                                        //Florin 2016.12.06  End
+                                        //Florin 2016.11.07 End  ###################################
                                     }
-
-
-                                    //Florin 2016.12.06  Begin
-                                    //s-a adaugat else-ul si s-a modificat si prima ramura pentru a calcula timpul lucrat din afara intervalului orar FirstInPaid - LatOutPaid
-                                    //Este cazul de la Vrancart unde vor sa stie cate ore au lucrat in timpul programului si cate suplimentar fara compensare
-                                    //de ex: s-a lucart 6 ore intre 07 - 15:30 si apoi a mai lucrat 2 ore dupa 15:30; deci 6 ore lucrate si 2 ore suplimnetare
-
-                                    //intersectam fiecare interval In-Out cu intervalul de plata firstInPaid - lastOutPaid
-                                    if (Convert.ToDateTime(ent["In" + i]).AddMinutes(-1 * minuteIN) <= Convert.ToDateTime(lastOutPaid) && Convert.ToDateTime(firstInPaid) <= Convert.ToDateTime(ent["Out" + i]).AddMinutes(minuteOUT))
+                                    catch (Exception)
                                     {
-                                        DateTime gridIn = Convert.ToDateTime(ent["In" + i]).AddMinutes(-1 * minuteIN) > Convert.ToDateTime(firstInPaid) ? Convert.ToDateTime(ent["In" + i]).AddMinutes(-1 * minuteIN) : Convert.ToDateTime(firstInPaid);
-                                        DateTime gridOut = Convert.ToDateTime(ent["Out" + i]).AddMinutes(minuteOUT) < Convert.ToDateTime(lastOutPaid) ? Convert.ToDateTime(ent["Out" + i]).AddMinutes(minuteOUT) : Convert.ToDateTime(lastOutPaid);
-
-                                        int difTmp = Convert.ToInt32((Convert.ToDateTime(gridOut) - Convert.ToDateTime(gridIn)).TotalMinutes);
-                                        if (difTmp > 0) total += difTmp;
-
-                                        int difOs = Convert.ToInt32((Convert.ToDateTime(ent["Out" + i]) - Convert.ToDateTime(ent["In" + i])).TotalMinutes) - difTmp;
-                                        if (difOs > 0) os += difOs;
                                     }
-                                    else
-                                    {
-                                        int difOs = Convert.ToInt32((Convert.ToDateTime(ent["Out" + i]) - Convert.ToDateTime(ent["In" + i])).TotalMinutes);
-                                        if (difOs > 0) os += difOs;
-                                    }
-
-                                    //Florin 2020.05.28
-                                    if (ent.Table.Columns["TimpOSReal"] != null)
-                                        ent["TimpOSReal"] = os;
-
-                                    //Florin 2016.12.06  End
-                                    //Florin 2016.11.07 End  ###################################
-                                }
-                                catch (Exception)
-                                {
                                 }
                             }
-                        }
 
-                        try
-                        {
-                            if (entPont["OreLucrateMin"].ToString() != "" && TransformaInMinute(Convert.ToDateTime(entPont["OreLucrateMin"])) <= total) total = total - timpPauzaDedusa;
-                        }
-                        catch (Exception) { }
+                            try
+                            {
+                                if (entPont["OreLucrateMin"].ToString() != "" && TransformaInMinute(Convert.ToDateTime(entPont["OreLucrateMin"])) <= total) total = total - timpPauzaDedusa;
+                            }
+                            catch (Exception) { }
 
-                        if (total > 0) rez = total;
+                            if (total > 0) rez = total;
+                        }
                         break;
                     case 5:                     //Pontare prima intrare, ultima iesire minus pauzele mai mari de x minute
                         int pz = 0;
                         object pzIn = DBNull.Value;
                         object pzOut = DBNull.Value;
 
-                        if (firstIn == null || lastOut == null) return rez;
-
-                        for (int i = 1; i < 20; i++)
+                        if (firstIn != null && lastOut != null)
                         {
-                            pzIn = ent["In" + (i + 1)];
-                            pzOut = ent["Out" + i];
-
-                            if (pzIn != DBNull.Value && pzOut != DBNull.Value)
+                            for (int i = 1; i < 20; i++)
                             {
-                                try
+                                pzIn = ent["In" + (i + 1)];
+                                pzOut = ent["Out" + i];
+
+                                if (pzIn != DBNull.Value && pzOut != DBNull.Value)
                                 {
-                                    int tmpPz = Convert.ToInt32((Convert.ToDateTime(pzIn) - Convert.ToDateTime(pzOut)).TotalMinutes);
-                                    int tmpMin = TransformaInMinute(Convert.ToDateTime(entPont["PauzaMin"]));
-                                    if (tmpPz >= tmpMin) pz += tmpPz;
-                                }
-                                catch (Exception)
-                                {
+                                    try
+                                    {
+                                        int tmpPz = Convert.ToInt32((Convert.ToDateTime(pzIn) - Convert.ToDateTime(pzOut)).TotalMinutes);
+                                        int tmpMin = TransformaInMinute(Convert.ToDateTime(entPont["PauzaMin"]));
+                                        if (tmpPz >= tmpMin) pz += tmpPz;
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
                                 }
                             }
-                        }
 
 
-                        try
-                        {
-                            int tp = Convert.ToInt32((Convert.ToDateTime(lastOutPaid) - Convert.ToDateTime(firstInPaid)).TotalMinutes - pz);
                             try
                             {
-                                if (entPont["OreLucrateMin"].ToString() != "" && TransformaInMinute(Convert.ToDateTime(entPont["OreLucrateMin"])) <= tp) tp = tp - timpPauzaDedusa;
+                                int tp = Convert.ToInt32((Convert.ToDateTime(lastOutPaid) - Convert.ToDateTime(firstInPaid)).TotalMinutes - pz);
+                                try
+                                {
+                                    if (entPont["OreLucrateMin"].ToString() != "" && TransformaInMinute(Convert.ToDateTime(entPont["OreLucrateMin"])) <= tp) tp = tp - timpPauzaDedusa;
+                                }
+                                catch (Exception) { }
+                                if (tp >= 0) rez = tp;
                             }
-                            catch (Exception) { }
-                            if (tp >= 0) rez = tp;
+                            catch (Exception)
+                            {
+                            }
                         }
-                        catch (Exception)
-                        {
-                        }
-
                         break;
                 }
 
@@ -1244,7 +1262,7 @@ namespace WizOne.Module
                 General.MemoreazaEroarea(ex.ToString(), "Calcul Ceasuri", "CalculOreLucrateBis");
             }
 
-            return rez;
+            //return rez;
         }
 
         private static int CalculOreNormale(DataRow ent, int oreLucrate)
@@ -1438,7 +1456,7 @@ namespace WizOne.Module
             return n;
         }
 
-        private static void CalculOreNoapte(DataRow ent)
+        private static void CalculOreNoapte(DataRow ent, int minuteIN, int minuteOUT)
         {
             int idProg = Convert.ToInt32(General.Nz(ent["IdProgram"], -99));
             var ert = ent["FirstInPaid"].GetType();
@@ -1540,15 +1558,15 @@ namespace WizOne.Module
                         case 4:                     //Pontare toate intrarile si iesirile
                             if (firstInPaid != null && lastOutPaid != null)
                             {
-                                int total = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap));
+                                int total = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap), minuteIN, minuteOUT);
                                 if (total > 0) CalculMinute(ent, entOre, total);
                             }
                             break;
                         case 5:                     //Pontare prima intrare, ultima iesire minus pauzele mai mari de x minute
                             if (firstIn != null && lastOut != null && firstInPaid != null && lastOutPaid != null)
                             {
-                                int interv = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap));
-                                int pz = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), 2, TransformaInMinute(Convert.ToDateTime(entPont["PauzaMin"])), Convert.ToInt32(rap));
+                                int interv = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap), minuteIN, minuteOUT);
+                                int pz = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), 2, minuteIN, minuteOUT, TransformaInMinute(Convert.ToDateTime(entPont["PauzaMin"])), Convert.ToInt32(rap));
                                 int total = interv + pz;
 
                                 if (total > 0) CalculMinute(ent, entOre, total);
@@ -1563,7 +1581,131 @@ namespace WizOne.Module
             }
         }
 
-        private static void CalculAlteOreH5(DataRow ent)
+        //private static void CalculAlteOreH5(DataRow ent)
+        //{
+        //    int idProg = Convert.ToInt32(General.Nz(ent["IdProgram"], -99));
+        //    var ert = ent["FirstInPaid"].GetType();
+
+        //    int idCtr = Convert.ToInt32(General.Nz(ent["IdContract"], -99));
+        //    DataTable dtCtr = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""={0}", idCtr));
+        //    object rap = 1;
+        //    if (dtCtr.Rows.Count > 0)
+        //    {
+        //        rap = dtCtr.Rows[0]["TipRaportareOreNoapte"];
+        //        if (rap != null)
+        //            rap = dtCtr.Rows[0]["TipRaportareOreNoapte"];
+        //        else
+        //            rap = 1;
+        //    }
+
+        //    DateTime? objFirstIn = null;
+        //    if (ent["FirstIn"] != DBNull.Value) objFirstIn = Convert.ToDateTime(ent["FirstIn"]);
+        //    DateTime? objLastOut = null;
+        //    if (ent["LastOut"] != DBNull.Value) objLastOut = Convert.ToDateTime(ent["LastOut"]);
+        //    DateTime? firstInPaid = null;
+        //    if (ent["FirstInPaid"] != DBNull.Value) firstInPaid = Convert.ToDateTime(ent["FirstInPaid"]);
+        //    DateTime? lastOutPaid = null;
+        //    if (ent["LastOutPaid"] != DBNull.Value) lastOutPaid = Convert.ToDateTime(ent["LastOutPaid"]);
+
+        //    int pontare = 1;
+
+        //    DateTime? firstIn = null;
+        //    DateTime? lastOut = null;
+
+        //    try
+        //    {
+        //        if (objFirstIn != null) firstIn = Convert.ToDateTime(objFirstIn);
+        //        if (objLastOut != null) lastOut = Convert.ToDateTime(objLastOut);
+        //    }
+        //    catch (Exception)
+        //    {
+        //    }
+
+        //    try
+        //    {
+        //        if (idProg == -99) return;
+
+        //        //obtinem intervalul de intersectat
+        //        if (firstInPaid == null) firstInPaid = firstIn;
+        //        if (lastOutPaid == null) lastOutPaid = lastOut;
+
+        //        DataRow entPont = General.IncarcaDR(string.Format(@"SELECT * FROM ""Ptj_Programe"" WHERE ""Id""={0}", idProg));
+        //        if (entPont != null) pontare = Convert.ToInt32(General.Nz(entPont["TipPontare"], -99));
+
+        //        switch (pontare)
+        //        {
+        //            case 1:                     //pontare automata
+        //            case 2:                     //Pontare automata la minim o citire card
+        //                try
+        //                {
+        //                    DateTime oraInc = Convert.ToDateTime(entPont["OraIntrare"]);
+        //                    DateTime oraSf = Convert.ToDateTime(entPont["OraIesire"]);
+        //                    DateTime dt = Convert.ToDateTime(ent["Ziua"]);
+
+        //                    oraInc = new DateTime(dt.Year, dt.Month, dt.Day, oraInc.Hour, oraInc.Minute, oraInc.Second);
+        //                    oraSf = new DateTime(dt.Year, dt.Month, dt.Day, oraSf.Hour, oraSf.Minute, oraSf.Second);
+
+        //                    if (oraInc > oraSf) oraSf = new DateTime(dt.AddDays(1).Year, dt.AddDays(1).Month, dt.AddDays(1).Day, oraSf.Hour, oraSf.Minute, oraSf.Second);
+
+        //                    firstInPaid = oraInc;
+        //                    lastOutPaid = oraSf;
+        //                }
+        //                catch (Exception)
+        //                {
+        //                }
+        //                break;
+        //            case 3:                     //Pontare doar prima intrare si ultima iesire
+        //                break;
+        //            case 4:                     //Pontare toate intrarile si iesirile
+        //                break;
+        //            case 5:                     //Pontare prima intrare, ultima iesire minus pauzele mai mari de x minute
+        //                break;
+        //        }
+
+
+        //        //pt fiecare linie din alte ore facem, intersectia
+        //        DataTable dtAlte = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_ProgrameAlteOre"" WHERE ""IdProgram""={0}", idProg));
+
+        //        foreach (DataRow entOre in dtAlte.Rows)
+        //        {
+        //            switch (pontare)
+        //            {
+        //                case 1:                     //pontare automata
+        //                case 2:                     //Pontare automata la minim o citire card
+        //                case 3:                     //Pontare doar prima intrare si ultima iesire
+        //                    if (firstInPaid != null && lastOutPaid != null && entOre["OraInceput"].ToString() != "" && entOre["OraSfarsit"].ToString() != "")
+        //                    {
+        //                        int timp = CalculTimp(Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap));
+        //                        if (timp > 0) CalculMinute(ent, entOre, timp);
+        //                    }
+        //                    break;
+        //                case 4:                     //Pontare toate intrarile si iesirile
+        //                    if (firstInPaid != null && lastOutPaid != null)
+        //                    {
+        //                        int total = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap));
+        //                        if (total > 0) CalculMinute(ent, entOre, total);
+        //                    }
+        //                    break;
+        //                case 5:                     //Pontare prima intrare, ultima iesire minus pauzele mai mari de x minute
+        //                    if (firstIn != null && lastOut != null && firstInPaid != null && lastOutPaid != null)
+        //                    {
+        //                        int interv = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap));
+        //                        int pz = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), 2, TransformaInMinute(Convert.ToDateTime(entPont["PauzaMin"])), Convert.ToInt32(rap));
+        //                        int total = interv + pz;
+
+        //                        if (total > 0) CalculMinute(ent, entOre, total);
+        //                    }
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex.ToString(), "Calcul Ceasuri", "CalculAlteOre");
+        //    }
+        //}
+
+        private static void CalculAlteOre(DataRow ent, int minuteIN, int minuteOUT)
         {
             int idProg = Convert.ToInt32(General.Nz(ent["IdProgram"], -99));
             var ert = ent["FirstInPaid"].GetType();
@@ -1664,15 +1806,15 @@ namespace WizOne.Module
                         case 4:                     //Pontare toate intrarile si iesirile
                             if (firstInPaid != null && lastOutPaid != null)
                             {
-                                int total = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap));
+                                int total = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap), minuteIN, minuteOUT);
                                 if (total > 0) CalculMinute(ent, entOre, total);
                             }
                             break;
                         case 5:                     //Pontare prima intrare, ultima iesire minus pauzele mai mari de x minute
                             if (firstIn != null && lastOut != null && firstInPaid != null && lastOutPaid != null)
                             {
-                                int interv = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap));
-                                int pz = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), 2, TransformaInMinute(Convert.ToDateTime(entPont["PauzaMin"])), Convert.ToInt32(rap));
+                                int interv = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap), minuteIN, minuteOUT);
+                                int pz = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), 2, minuteIN, minuteOUT, TransformaInMinute(Convert.ToDateTime(entPont["PauzaMin"])), Convert.ToInt32(rap));
                                 int total = interv + pz;
 
                                 if (total > 0) CalculMinute(ent, entOre, total);
@@ -1687,131 +1829,7 @@ namespace WizOne.Module
             }
         }
 
-        private static void CalculAlteOre(DataRow ent)
-        {
-            int idProg = Convert.ToInt32(General.Nz(ent["IdProgram"], -99));
-            var ert = ent["FirstInPaid"].GetType();
-
-            int idCtr = Convert.ToInt32(General.Nz(ent["IdContract"], -99));
-            DataTable dtCtr = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""={0}", idCtr));
-            object rap = 1;
-            if (dtCtr.Rows.Count > 0)
-            {
-                rap = dtCtr.Rows[0]["TipRaportareOreNoapte"];
-                if (rap != null)
-                    rap = dtCtr.Rows[0]["TipRaportareOreNoapte"];
-                else
-                    rap = 1;
-            }
-
-            DateTime? objFirstIn = null;
-            if (ent["FirstIn"] != DBNull.Value) objFirstIn = Convert.ToDateTime(ent["FirstIn"]);
-            DateTime? objLastOut = null;
-            if (ent["LastOut"] != DBNull.Value) objLastOut = Convert.ToDateTime(ent["LastOut"]);
-            DateTime? firstInPaid = null;
-            if (ent["FirstInPaid"] != DBNull.Value) firstInPaid = Convert.ToDateTime(ent["FirstInPaid"]);
-            DateTime? lastOutPaid = null;
-            if (ent["LastOutPaid"] != DBNull.Value) lastOutPaid = Convert.ToDateTime(ent["LastOutPaid"]);
-
-            int pontare = 1;
-
-            DateTime? firstIn = null;
-            DateTime? lastOut = null;
-
-            try
-            {
-                if (objFirstIn != null) firstIn = Convert.ToDateTime(objFirstIn);
-                if (objLastOut != null) lastOut = Convert.ToDateTime(objLastOut);
-            }
-            catch (Exception)
-            {
-            }
-
-            try
-            {
-                if (idProg == -99) return;
-
-                //obtinem intervalul de intersectat
-                if (firstInPaid == null) firstInPaid = firstIn;
-                if (lastOutPaid == null) lastOutPaid = lastOut;
-
-                DataRow entPont = General.IncarcaDR(string.Format(@"SELECT * FROM ""Ptj_Programe"" WHERE ""Id""={0}", idProg));
-                if (entPont != null) pontare = Convert.ToInt32(General.Nz(entPont["TipPontare"], -99));
-
-                switch (pontare)
-                {
-                    case 1:                     //pontare automata
-                    case 2:                     //Pontare automata la minim o citire card
-                        try
-                        {
-                            DateTime oraInc = Convert.ToDateTime(entPont["OraIntrare"]);
-                            DateTime oraSf = Convert.ToDateTime(entPont["OraIesire"]);
-                            DateTime dt = Convert.ToDateTime(ent["Ziua"]);
-
-                            oraInc = new DateTime(dt.Year, dt.Month, dt.Day, oraInc.Hour, oraInc.Minute, oraInc.Second);
-                            oraSf = new DateTime(dt.Year, dt.Month, dt.Day, oraSf.Hour, oraSf.Minute, oraSf.Second);
-
-                            if (oraInc > oraSf) oraSf = new DateTime(dt.AddDays(1).Year, dt.AddDays(1).Month, dt.AddDays(1).Day, oraSf.Hour, oraSf.Minute, oraSf.Second);
-
-                            firstInPaid = oraInc;
-                            lastOutPaid = oraSf;
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        break;
-                    case 3:                     //Pontare doar prima intrare si ultima iesire
-                        break;
-                    case 4:                     //Pontare toate intrarile si iesirile
-                        break;
-                    case 5:                     //Pontare prima intrare, ultima iesire minus pauzele mai mari de x minute
-                        break;
-                }
-
-
-                //pt fiecare linie din alte ore facem, intersectia
-                DataTable dtAlte = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_ProgrameAlteOre"" WHERE ""IdProgram""={0}", idProg));
-
-                foreach (DataRow entOre in dtAlte.Rows)
-                {
-                    switch (pontare)
-                    {
-                        case 1:                     //pontare automata
-                        case 2:                     //Pontare automata la minim o citire card
-                        case 3:                     //Pontare doar prima intrare si ultima iesire
-                            if (firstInPaid != null && lastOutPaid != null && entOre["OraInceput"].ToString() != "" && entOre["OraSfarsit"].ToString() != "")
-                            {
-                                int timp = CalculTimp(Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap));
-                                if (timp > 0) CalculMinute(ent, entOre, timp);
-                            }
-                            break;
-                        case 4:                     //Pontare toate intrarile si iesirile
-                            if (firstInPaid != null && lastOutPaid != null)
-                            {
-                                int total = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap));
-                                if (total > 0) CalculMinute(ent, entOre, total);
-                            }
-                            break;
-                        case 5:                     //Pontare prima intrare, ultima iesire minus pauzele mai mari de x minute
-                            if (firstIn != null && lastOut != null && firstInPaid != null && lastOutPaid != null)
-                            {
-                                int interv = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), Convert.ToInt32(rap));
-                                int pz = CalculIntervale(ent, Convert.ToDateTime(entOre["OraInceput"]), Convert.ToDateTime(entOre["OraSfarsit"]), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(firstInPaid), Convert.ToDateTime(lastOutPaid), 2, TransformaInMinute(Convert.ToDateTime(entPont["PauzaMin"])), Convert.ToInt32(rap));
-                                int total = interv + pz;
-
-                                if (total > 0) CalculMinute(ent, entOre, total);
-                            }
-                            break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex.ToString(), "Calcul Ceasuri", "CalculAlteOre");
-            }
-        }
-
-        private static int CalculIntervale(DataRow ent, DateTime OraInceput, DateTime OraSfarsit, DateTime ziua, DateTime firstInPaid, DateTime lastOutPaid, int rap, int tip = 1, int pauzaMin = 0)
+        private static int CalculIntervale(DataRow ent, DateTime OraInceput, DateTime OraSfarsit, DateTime ziua, DateTime firstInPaid, DateTime lastOutPaid, int rap, int minuteIN, int minuteOUT, int tip = 1, int pauzaMin = 0)
         {
             //tip 1 = intervale IN OUT   -   ore lucrate
             //tip 2 = intervale OUT IN < pauz  - pauze

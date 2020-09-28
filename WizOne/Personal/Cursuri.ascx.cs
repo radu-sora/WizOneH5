@@ -9,6 +9,7 @@ using WizOne.Module;
 using DevExpress.Web;
 using System.IO;
 using System.Diagnostics;
+using System.Web.UI.HtmlControls;
 
 namespace WizOne.Personal
 {
@@ -67,9 +68,9 @@ namespace WizOne.Personal
             if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null)
                 valMin = dtParam.Rows[0][0].ToString();
 
-            string sqlFinal = "SELECT a.*, CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"Admin_Cursuri_VIEW\" a WHERE \"Marca\" = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT a.*, CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"Admin_Cursuri_VIEW\" a WHERE \"Marca\" = " + HttpContext.Current.Session["Marca"].ToString();
             DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("Admin_Cursuri"))
             {
                 dt = ds.Tables["Admin_Cursuri"];
@@ -112,6 +113,7 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colOperator = (grDateCursuri.Columns["Operator"] as GridViewDataComboBoxColumn);
             colOperator.PropertiesComboBox.DataSource = dtOperator;
 
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
         }
 
         protected void grDateCursuri_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
@@ -428,6 +430,44 @@ namespace WizOne.Personal
                     cmbOperator.DataSource = dtOperator;
                     cmbOperator.DataBindItems();
                 }
+
+                HtmlTableCell lblTipCurs = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblTipCurs");
+                lblTipCurs.InnerText = Dami.TraduCuvant("Tip curs");
+                HtmlTableCell lblNumeComp = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblNumeComp");
+                lblNumeComp.InnerText = Dami.TraduCuvant("Nume complet");
+                HtmlTableCell lblInfo = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblInfo");
+                lblInfo.InnerText = Dami.TraduCuvant("Info");
+                HtmlTableCell lblDesc = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblDesc");
+                lblDesc.InnerText = Dami.TraduCuvant("Descriere curs");
+                HtmlTableCell lblDataInc = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblDataInc");
+                lblDataInc.InnerText = Dami.TraduCuvant("Data inceput");
+                HtmlTableCell lblDataSf = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblDataSf");
+                lblDataSf.InnerText = Dami.TraduCuvant("Data sfarsit");
+                HtmlTableCell lblNrZile = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblNrZile");
+                lblNrZile.InnerText = Dami.TraduCuvant("Numar zile");
+                HtmlTableCell lblNrOre = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblNrOre");
+                lblNrOre.InnerText = Dami.TraduCuvant("Numar ore");
+                HtmlTableCell lblNumeFurn = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblNumeFurn");
+                lblNumeFurn.InnerText = Dami.TraduCuvant("Nume furnizor");
+                HtmlTableCell lblTema = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblTema");
+                lblTema.InnerText = Dami.TraduCuvant("Tema curs");
+                HtmlTableCell lblNumeOp = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblNumeOp");
+                lblNumeOp.InnerText = Dami.TraduCuvant("Nume operator");
+                HtmlTableCell lblPerAmort = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblPerAmort");
+                lblPerAmort.InnerText = Dami.TraduCuvant("Perioada amortizare");
+                HtmlTableCell lblDataCurs = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblDataCurs");
+                lblDataCurs.InnerText = Dami.TraduCuvant("Data curs");
+                HtmlTableCell lblDataExpAut = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblDataExpAut");
+                lblDataExpAut.InnerText = Dami.TraduCuvant("Data expirare autorizare");
+                HtmlTableCell lblBuget = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblBuget");
+                lblBuget.InnerText = Dami.TraduCuvant("Buget");
+                HtmlTableCell lblMoneda = (HtmlTableCell)grDateCursuri.FindEditFormTemplateControl("lblMoneda");
+                lblMoneda.InnerText = Dami.TraduCuvant("Moneda");
+
+                ASPxUploadControl btnDocUploadAtas = (ASPxUploadControl)grDateCursuri.FindEditFormTemplateControl("btnDocUploadAtas");
+                btnDocUploadAtas.BrowseButton.Text = Dami.TraduCuvant("Incarca Document");
+                btnDocUploadAtas.ToolTip = Dami.TraduCuvant("Incarca Document");
+
             }
             catch (Exception ex)
             {

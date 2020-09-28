@@ -139,9 +139,12 @@
     <value>You have no rights for this operation</value>
   </data>
   <data name="pnlContent1_ContentPlaceHolder1_ReportViewButton" xml:space="preserve">
-    <value>Dysplay</value>
+    <value>Display</value>
   </data>
   <data name="Afisare" xml:space="preserve">
-    <value>Dysplay</value>
+    <value>Display</value>
   </data>
+<data name="Transformacandidatinangajat" xml:space="preserve">
+    <value>Convert candidate to employee</value>
+  </data>				 
 </root>

@@ -2082,11 +2082,18 @@ namespace WizOne.Pontaj
                 string strInner = "";
                 string campuri = "";
                 string strFiltru = "";
-                string filtruSursa = "";
+                string pvtFiltru = "";
+                string pvtInner = "";
 
                 #region Filtru
+                //if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
+                //    filtruSursa += @" AND F10007 IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
+
                 if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                    filtruSursa += @" AND F10007 IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
+                {
+                    pvtFiltru += @" AND B.F00608 IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
+                    pvtInner = " INNER JOIN F006 B ON A.F10007=B.F00607 ";
+                }
 
                 if (General.Nz(cmbAng.Value, "").ToString() == "")
                 {
@@ -2154,7 +2161,7 @@ namespace WizOne.Pontaj
                 {
                     if (chkTotaluri.Checked)
                         strInner += $@"INNER JOIN (SELECT F10003 {zileAs} FROM 
-                                (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf} {filtruSursa}) source  
+                                (SELECT A.F10003, {cmpValStr}, A.""Ziua"" FROM ""Ptj_Intrari"" A {pvtInner} WHERE {dtInc} <= CAST(A.""Ziua"" AS date) AND CAST(A.""Ziua"" AS date) <= {dtSf} {pvtFiltru}) source  
                                 PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003" + Environment.NewLine;
 
@@ -2186,31 +2193,31 @@ namespace WizOne.Pontaj
                 {
                     if (chkTotaluri.Checked)
                         strInner += $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf} {filtruSursa}) source  
+                                (SELECT A.F10003, {cmpValStr}, A.""Ziua"" FROM ""Ptj_Intrari"" A {pvtInner} WHERE {dtInc} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {dtSf} {pvtFiltru}) source  
                                 PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003" + Environment.NewLine;
 
                     if (chkOre.Checked)
                     {
                         strInner += $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""{cmpExpIn}"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                (SELECT F10003, ""{cmpExpIn}"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= {dtSf}) source  
                                 PIVOT (MAX(""{cmpExpIn}"") FOR ""Ziua"" IN ( {zileAsIn.Substring(1)} )) pvt
                                 ) pvtIn ON X.F10003=pvtIn.F10003" + Environment.NewLine;
 
                         strInner += $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""{cmpExpOut}"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                (SELECT F10003, ""{cmpExpOut}"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= {dtSf}) source  
                                 PIVOT (MAX(""{cmpExpOut}"") FOR ""Ziua"" IN ( {zileAsOut.Substring(1)} )) pvt
                                 ) pvtOut ON X.F10003=pvtOut.F10003" + Environment.NewLine;
                     }
 
                     if (chkPauza.Checked)
                         strInner += $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= {dtSf}) source  
                                 PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zileAsPauza.Substring(1)} )) pvt
                                 ) pvtPauza ON X.F10003=pvtPauza.F10003" + Environment.NewLine;
 
                     strInner += $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= {dtSf}) source  
                                 PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zileAsCuloare.Substring(1)} )) pvt
                                 ) pvtCuloare ON X.F10003=pvtCuloare.F10003" + Environment.NewLine;
                 }

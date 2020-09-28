@@ -6563,8 +6563,8 @@ namespace WizOne.Module
                         string strUp = @"UPDATE A SET 
                                         A.""ValStr"" = dn.Norma , 
                                         A.""Val0""   = dn.Norma * 60,
-                                        In1  = (SELECT DATETIMEFROMPARTS(YEAR(A.Ziua), MONTH(A.Ziua), DAY(A.Ziua), DATEPART(HOUR, OraInInitializare), DATEPART(MINUTE, OraInInitializare), 0, 0) FROM Ptj_Contracte WHERE Id = A.IdContract),
-                                        Out1 = (SELECT DATETIMEFROMPARTS(YEAR(A.Ziua), MONTH(A.Ziua), DAY(A.Ziua), DATEPART(HOUR, OraOutInitializare), DATEPART(MINUTE, OraOutInitializare), 0, 0) FROM Ptj_Contracte WHERE Id = A.IdContract)
+                                        In1  = ISNULL(In1,(SELECT DATETIMEFROMPARTS(YEAR(A.Ziua), MONTH(A.Ziua), DAY(A.Ziua), DATEPART(HOUR, OraInInitializare), DATEPART(MINUTE, OraInInitializare), 0, 0) FROM Ptj_Contracte WHERE Id = A.IdContract)),
+                                        Out1 = ISNULL(Out1,(SELECT DATETIMEFROMPARTS(YEAR(A.Ziua), MONTH(A.Ziua), DAY(A.Ziua), DATEPART(HOUR, OraOutInitializare), DATEPART(MINUTE, OraOutInitializare), 0, 0) FROM Ptj_Contracte WHERE Id = A.IdContract))
                                         FROM ""Ptj_Intrari"" A
                                         INNER JOIN F100 C ON A.F10003=C.F10003 AND CONVERT(date, C.F10022) <= CONVERT(date, A.Ziua) AND CONVERT(date, A.Ziua) <= CONVERT(date, C.F10023)
                                         LEFT JOIN HOLIDAYS B ON A.Ziua=B.DAY

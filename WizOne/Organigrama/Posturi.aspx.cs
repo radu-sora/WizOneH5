@@ -68,60 +68,7 @@ namespace WizOne.Organigrama
                 cmbFunc.DataSource = dtFunc;
                 cmbFunc.DataBind();
 
-                //incarcam beneficiile
-                string strSql = $@"SELECT B.""Id"" AS ""CategId"", B.""Denumire"" AS ""CategDenumire"", C.""Id"" AS ""ObiectId"", C.""Denumire"" AS ""ObiectDenumire"", B.""OrdineInPosturi""
-                    FROM ""Admin_Arii"" A
-                    INNER JOIN ""Admin_Categorii"" B ON A.""Id""=B.""IdArie""
-                    INNER JOIN ""Admin_Obiecte"" C ON B.""Id""=C.""IdCategorie""
-                    WHERE (A.""Denumire"" = 'Beneficii' OR A.""Denumire"" = 'atribute posturi') AND B.""OrdineInPosturi"" IS NOT NULL AND ""OrdineInPosturi"" <> 0
-                    ORDER BY B.""OrdineInPosturi"", B.""Id"", B.""Denumire"" ";
-                DataTable dtBen = General.IncarcaDT(strSql, null);
-
-                int x = 1;
-                int id = -99;
-                string nume = "";
-                DataTable src = new DataTable();
-                src.Columns.Add("ObiectId", typeof(Int32));
-                src.Columns.Add("ObiectDenumire", typeof(string));
-
-                for (int j=0; j<dtBen.Rows.Count;j++)
-                {
-                    DataRow dr = dtBen.Rows[j];
-                    if (id != Convert.ToInt32(General.Nz(dr["CategId"], -99)) && id != -99)
-                    {
-                        HtmlGenericControl lbl = pnlCtl.FindControl("lblBenf" + x) as HtmlGenericControl;
-                        lbl.InnerText = nume;
-                        lbl.Attributes["class"] = "vizibil";
-
-                        ASPxComboBox cmb = pnlCtl.FindControl("cmbBenf" + x) as ASPxComboBox;
-                        cmb.DataSource = src;
-                        cmb.DataBind();
-                        cmb.CssClass = "vizibil";
-
-                        src = new DataTable();
-                        src.Columns.Add("ObiectId", typeof(Int32));
-                        src.Columns.Add("ObiectDenumire", typeof(string));
-
-                        x++;
-                    }
-
-                    DataRow row = src.NewRow();
-                    row["ObiectId"] = dr["ObiectId"];
-                    row["ObiectDenumire"] = dr["ObiectDenumire"];
-                    src.Rows.Add(row);
-
-                    id = Convert.ToInt32(General.Nz(dr["CategId"], -99));
-                    nume = General.Nz(dr["CategDenumire"], "").ToString();
-                }
-
-                HtmlGenericControl lbl2 = pnlCtl.FindControl("lblBenf" + x) as HtmlGenericControl;
-                lbl2.InnerText = nume;
-                lbl2.Attributes["class"] = "vizibil";
-
-                ASPxComboBox cmb2 = pnlCtl.FindControl("cmbBenf" + x) as ASPxComboBox;
-                cmb2.DataSource = src;
-                cmb2.DataBind();
-                cmb2.CssClass = "vizibil";
+                DataRow dr = null;
 
                 //daca este modificare incarcam valorile din baza de date
                 if (!IsPostBack)
@@ -130,10 +77,9 @@ namespace WizOne.Organigrama
 
                     if (dt.Rows.Count > 0)
                     {
-                        DataRow dr = dt.Rows[0];
+                        dr = dt.Rows[0];
                         txtId.Value = dr["Id"];
                         txtDen.Text = General.Nz(dr["Denumire"],"").ToString();
-                        //dr["F10002"] = 1;
                         cmbCmp.Value = dr["F10002"];
                         cmbSub.Value = dr["F10004"];
                         cmbFil.Value = dr["F10005"];
@@ -153,26 +99,12 @@ namespace WizOne.Organigrama
                         txtDtSf.Value = dr["DataSfarsit"];
                         txtCodBuget.Text = General.Nz(dr["CodBuget"],"").ToString();
                         cmbCor.Value = dr["CodCOR"];
-                        txtAtr.Text = General.Nz(dr["Atribute"],"").ToString();
-                        txtCrt.Text = General.Nz(dr["Criterii"],"").ToString();
-                        txtObs.Text = General.Nz(dr["ObservatiiModif"], "").ToString();
 
                         txtDenRO.Text = General.Nz(dr["DenumireRO"], "").ToString();
                         txtDenEN.Text = General.Nz(dr["DenumireEN"], "").ToString();
 
                         txtGrupRO.Text = General.Nz(dr["NumeGrupRO"], "").ToString();
                         txtGrupEN.Text = General.Nz(dr["NumeGrupEN"], "").ToString();
-
-                        cmbBenf1.Value = dr["IdBeneficiu1"];
-                        cmbBenf2.Value = dr["IdBeneficiu2"];
-                        cmbBenf3.Value = dr["IdBeneficiu3"];
-                        cmbBenf4.Value = dr["IdBeneficiu4"];
-                        cmbBenf5.Value = dr["IdBeneficiu5"];
-                        cmbBenf6.Value = dr["IdBeneficiu6"];
-                        cmbBenf7.Value = dr["IdBeneficiu7"];
-                        cmbBenf8.Value = dr["IdBeneficiu8"];
-                        cmbBenf9.Value = dr["IdBeneficiu9"];
-                        cmbBenf10.Value = dr["IdBeneficiu10"];
 
                         cmbFunc.Value = dr["IdFunctie"];
 
@@ -194,6 +126,8 @@ namespace WizOne.Organigrama
                         txtDtInc.Value = Convert.ToDateTime(Session["DataVigoare"]);
                         txtDtSf.Value = new DateTime(2100, 1, 1);
                     }
+
+                    AdaugaDosar();
                 }
 
 
@@ -216,6 +150,10 @@ namespace WizOne.Organigrama
                     cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99), null);
                     cmbDept.DataBind();
                 }
+
+                AdaugaCampuriExtra(dr);
+                AdaugaBeneficiile(dr);
+                
             }
             catch (Exception ex)
             {
@@ -288,11 +226,12 @@ namespace WizOne.Organigrama
                 sqlIns = @"INSERT INTO ""Org_Posturi""(
                     ""Id"", ""Denumire"",""DataInceput"", ""DataSfarsit"", F10002, F10004, F10005, F10006, F10007, ""Stare"", ""IdSuperior"", ""IdSuperiorFunctional"", 
                     ""NivelIerarhic"", ""PlanHC"", ""NivelHay"", ""SalariuMin"", ""SalariuMed"", ""SalariuMax"", 
-                    ""CodBuget"", ""CodCOR"", ""Atribute"", ""Criterii"", ""ObservatiiModif"", 
+                    ""CodBuget"", ""CodCOR"", USER_NO, TIME, ""DenumireRO"", ""DenumireEN"", ""NumeGrupRO"", ""NumeGrupEN"", ""HCAprobat"", ""IdFunctie"",
                     ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"", 
-                    USER_NO, TIME, ""DenumireRO"", ""DenumireEN"", ""NumeGrupRO"", ""NumeGrupEN"", ""HCAprobat"", ""IdFunctie"") 
+                    ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", 
+                    ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
                     OUTPUT Inserted.IdAuto
-                    SELECT @2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@19,@20,@21,@22,@23,@24,@25,@26,@27,@28,@29,@30,@31,@32,@33,@34,@35,@36,@37,@38,@39,@40,@41,@42";
+                    SELECT @2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@19,@20,@21,@22,@23,@24,@25,@26,@27,@28,@29,@30,@31,@32,@33,@34,@35,@36,@37,@38,@39,@40,@41,@42,@43,@44,@45,@46,@47,@48,@49,@50,@51,@52,@53,@54,@55,@56,@57,@58,@59";
 
 
                 if (General.Nz(Session["IdAuto"], "-99").ToString() == "-97")
@@ -315,7 +254,7 @@ namespace WizOne.Organigrama
                         FROM ""Org_Posturi"" WHERE ""IdAuto""=@1", new object[] { Session["IdAuto"], 1, cmbSub.Value, cmbFil.Value, cmbSec.Value, cmbDept.Value, cmbCor.Value, cmbFunc.Value ?? -99 });
 
                     //daca este post existent
-                    if ((drModif != null && drModif["modifStruc"].ToString() == "0" && drModif["modifCor"].ToString() == "0" && drModif["modifFunctia"].ToString() == "0") 
+                    if ((drModif != null && drModif["modifStruc"].ToString() == "0" && drModif["modifCor"].ToString() == "0" && drModif["modifFunctia"].ToString() == "0")
                         || Convert.ToDateTime(txtDtInc.Value).Date == Convert.ToDateTime(Session["DataVigoare"]).Date)
                     {
                         //daca intra in vigoare cu aceeasi data ca data inceput
@@ -324,9 +263,10 @@ namespace WizOne.Organigrama
                         sqlUpd = $@"UPDATE ""Org_Posturi"" SET
                             ""Denumire""=@3, F10002=@6, F10004=@7, F10005=@8, F10006=@9, F10007=@10, ""Stare""=@11, ""IdSuperior""=@12, ""IdSuperiorFunctional""=@13, 
                             ""NivelIerarhic""=@14, ""PlanHC""=@15, ""NivelHay""=@16, ""SalariuMin""=@17, ""SalariuMed""=@18, ""SalariuMax""=@19, 
-                            ""CodBuget""=@20, ""CodCOR""=@21, ""Atribute""=@22, ""Criterii""=@23, ""ObservatiiModif""=@24, 
-                            ""IdBeneficiu1""=@25, ""IdBeneficiu2""=@26, ""IdBeneficiu3""=@27, ""IdBeneficiu4""=@28, ""IdBeneficiu5""=@29, ""IdBeneficiu6""=@30, ""IdBeneficiu7""=@31, ""IdBeneficiu8""=@32, ""IdBeneficiu9""=@33, ""IdBeneficiu10""=@34, USER_NO=@35, TIME=GetDate(),
-                            ""DenumireRO""=@37, ""DenumireEN""=@38, ""NumeGrupRO""=@39, ""NumeGrupEN""=@40, ""HCAprobat""=@41, ""IdFunctie""=@42
+                            ""CodBuget""=@20, ""CodCOR""=@21, USER_NO=@22, TIME=@23, ""DenumireRO""=@24, ""DenumireEN""=@25, ""NumeGrupRO""=@26, ""NumeGrupEN""=@27, ""HCAprobat""=@28, ""IdFunctie""=@29,
+                            ""IdBeneficiu1""=@30, ""IdBeneficiu2""=@31, ""IdBeneficiu3""=@32, ""IdBeneficiu4""=@33, ""IdBeneficiu5""=@34, ""IdBeneficiu6""=@35, ""IdBeneficiu7""=@36, ""IdBeneficiu8""=@37, ""IdBeneficiu9""=@38, ""IdBeneficiu10""=@39,
+                            ""CampExtra1""=@40, ""CampExtra2""=@41, ""CampExtra3""=@42, ""CampExtra4""=@43, ""CampExtra5""=@44, ""CampExtra6""=@45, ""CampExtra7""=@46, ""CampExtra8""=@47, ""CampExtra9""=@48, ""CampExtra10""=@49, 
+                            ""CampExtra11""=@50, ""CampExtra12""=@51, ""CampExtra13""=@52, ""CampExtra14""=@53, ""CampExtra15""=@54, ""CampExtra16""=@55, ""CampExtra17""=@56, ""CampExtra18""=@57, ""CampExtra19""=@58, ""CampExtra20""=@59
                             WHERE ""IdAuto"" = @1";
                     }
                     else
@@ -342,25 +282,32 @@ namespace WizOne.Organigrama
                     General.SchimbaInPlanificat(Convert.ToDateTime(Session["DataVigoare"]), id, Convert.ToInt32(drModif["modifStruc"]), Convert.ToInt32(drModif["modifCor"]), Convert.ToInt32(drModif["modifFunctia"]), 0);
                 }
 
-
-                int idAuto = Convert.ToInt32(General.Nz(Session["IdAuto"],-97));
+                int idAuto = Convert.ToInt32(General.Nz(Session["IdAuto"], -97));
 
                 object[] objs = new object[] {
                     Session["IdAuto"], id, txtDen.Text, dtInc, dtSf, General.Nz(cmbCmp.Value,1), cmbSub.Value, cmbFil.Value, cmbSec.Value, cmbDept.Value, 1, cmbSup.Value, cmbSupFunc.Value,
                     hfNivelIer.Contains("val") && General.Nz(hfNivelIer["val"],"").ToString() != "" ? hfNivelIer["val"] : "N",
                     General.Nz(txtPlan.Text,"").ToString() == "" ? "null" : txtPlan.Text,
                     cmbHay.Value, txtSalMin.Value, txtSalMed.Value, txtSalMax.Value,
-                    txtCodBuget.Value, cmbCor.Value,
-                    General.Nz(txtAtr.Text,"").ToString() == "" ? null : txtAtr.Text,
-                    General.Nz(txtCrt.Text,"").ToString() == "" ? null : txtCrt.Text,
-                    General.Nz(txtObs.Text,"").ToString() == "" ? null : txtObs.Text,
-                    cmbBenf1.Value,cmbBenf2.Value,cmbBenf3.Value,cmbBenf4.Value,cmbBenf5.Value,cmbBenf6.Value,cmbBenf7.Value,cmbBenf8.Value,cmbBenf9.Value,cmbBenf10.Value,Session["UserId"], DateTime.Now,
+                    txtCodBuget.Value, cmbCor.Value, Session["UserId"], DateTime.Now,
                     General.Nz(txtDenRO.Text,"").ToString() == "" ? null : txtDenRO.Text,
                     General.Nz(txtDenEN.Text,"").ToString() == "" ? null : txtDenEN.Text,
                     General.Nz(txtGrupRO.Text,"").ToString() == "" ? null : txtGrupRO.Text,
                     General.Nz(txtGrupEN.Text,"").ToString() == "" ? null : txtGrupEN.Text,
                     General.Nz(txtHCAProbat.Text,"").ToString() == "" ? null : txtHCAProbat.Text,
                     cmbFunc.Value };
+
+                for (int i = 1; i <= 10; i++)
+                {
+                    Array.Resize(ref objs, objs.Length + 1);
+                    objs[objs.Length - 1] = divBenef.FindControl("cmbBenef" + i) != null ? ((ASPxComboBox)divBenef.FindControl("cmbBenef" + i)).Value : null;
+                }
+
+                for (int i = 1; i <= 20; i++)
+                {
+                    Array.Resize(ref objs, objs.Length + 1);
+                    objs[objs.Length - 1] = divExtra.FindControl("cmpExtra" + i) != null ? ((ASPxMemo)divExtra.FindControl("cmpExtra" + i)).Value : null;
+                }
 
                 if (sqlUpd != "")
                     General.ExecutaNonQuery(sqlUpd, objs);
@@ -385,6 +332,23 @@ namespace WizOne.Organigrama
                     }
                 }
 
+                string sqlDosar = "";
+                //salvam Dosarul Personal
+                foreach(var item in lstDosar.SelectedValues)
+                {
+                    
+                    sqlDosar += $@"INSERT INTO ""Org_PosturiDosar""(""IdPost"", ""IdObiect"") VALUES({id},{item});" + Environment.NewLine;
+                }
+
+                if (sqlDosar != "")
+                {
+                    General.ExecutaNonQuery(
+                        $@"BEGIN
+                        DELETE FROM ""Org_PosturiDosar"" WHERE ""IdPost""={id};
+                        {sqlDosar}
+                        END;", null);
+                }
+
                 Iesire();
             }
             catch (Exception ex)
@@ -401,34 +365,28 @@ namespace WizOne.Organigrama
         //        string strErr = "";
 
         //        if (txtDen.Visible == true && txtDen.Value == null) strErr += ", " + Dami.TraduCuvant("denumire");
+        //        if (cmbCmp.Visible == true && cmbCmp.Value == null) strErr += ", " + Dami.TraduCuvant("companie");
         //        if (cmbSub.Visible == true && cmbSub.Value == null) strErr += ", " + Dami.TraduCuvant("subcompanie");
         //        if (cmbFil.Visible == true && cmbFil.Value == null) strErr += ", " + Dami.TraduCuvant("filiala");
         //        if (cmbSec.Visible == true && cmbSec.Value == null) strErr += ", " + Dami.TraduCuvant("sectie");
         //        if (cmbDept.Visible == true && cmbDept.Value == null) strErr += ", " + Dami.TraduCuvant("departament");
         //        if (cmbSup.Visible == true && cmbSup.Value == null) strErr += ", " + Dami.TraduCuvant("post superior");
         //        if (cmbSupFunc.Visible == true && cmbSupFunc.Value == null) strErr += ", " + Dami.TraduCuvant("post superior functional");
-        //        if (hfNivelIer.Visible == true && (!hfNivelIer.Contains("val") || General.Nz(hfNivelIer["val"],"").ToString() == "")) strErr += ", " + Dami.TraduCuvant("nivel ierarhic");
+        //        if (hfNivelIer.Visible == true && (!hfNivelIer.Contains("val") || General.Nz(hfNivelIer["val"], "").ToString() == "")) strErr += ", " + Dami.TraduCuvant("nivel ierarhic");
         //        if (txtPlan.Visible == true && txtPlan.Value == null) strErr += ", " + Dami.TraduCuvant("plan HC");
-        //        if (cmbHay.Visible == true && cmbHay.Value == null) strErr += ", " + Dami.TraduCuvant("nivel Hay");
-        //        if (txtSalMin.Visible == true && txtSalMin.Value == null) strErr += ", " + Dami.TraduCuvant("salariul min");
-        //        if (txtSalMed.Visible == true && txtSalMed.Value == null) strErr += ", " + Dami.TraduCuvant("salariul median");
-        //        if (txtSalMax.Visible == true && txtSalMax.Value == null) strErr += ", " + Dami.TraduCuvant("salariul max");
+        //        if (txtHCAProbat.Visible == true && txtHCAProbat.Value == null) strErr += ", " + Dami.TraduCuvant("HC aprobat");
         //        if (txtDtInc.Visible == true && txtDtInc.Value == null) strErr += ", " + Dami.TraduCuvant("data inceput");
         //        if (txtDtSf.Visible == true && txtDtSf.Value == null) strErr += ", " + Dami.TraduCuvant("data sfarsit");
-        //        if (txtCodBuget.Visible == true && txtCodBuget.Value == null) strErr += ", " + Dami.TraduCuvant("cod buget");
         //        if (cmbCor.Visible == true && cmbCor.Value == null) strErr += ", " + Dami.TraduCuvant("cod COR");
-        //        if (txtAtr.Visible == true && txtAtr.Value == null) strErr += ", " + Dami.TraduCuvant("atribute");
-        //        if (txtCrt.Visible == true && txtCrt.Value == null) strErr += ", " + Dami.TraduCuvant("criterii");
+        //        if (cmbFunc.Visible == true && cmbFunc.Value == null) strErr += ", " + Dami.TraduCuvant("functia");
 
         //        if (strErr != "")
         //        {
         //            MessageBox.Show(Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1), MessageBox.icoError, "");
-        //            //pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1);
         //            return;
         //        }
 
-
-        //        DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Org_Posturi"" WHERE ""IdAuto""=@1", new object [] { General.Nz(Session["IdAuto"], "-97") });
+        //        DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Org_Posturi"" WHERE ""IdAuto""=@1", new object[] { General.Nz(Session["IdAuto"], "-97") });
         //        DataRow dr = dt.NewRow();
 
         //        bool nou = true;
@@ -465,13 +423,8 @@ namespace WizOne.Organigrama
         //        else
         //            dr["Id"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(Id),0) FROM ""Org_Posturi"" ", null), 0)) + 1;
 
-        //        //if (dt.Rows.Count > 0)
-        //        //    dr = dt.Rows[0];
-        //        //else
-        //        //    dr["Id"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(Id),0) FROM ""Org_Posturi"" ",null),0)) + 1;
-
         //        dr["Denumire"] = txtDen.Text;
-        //        dr["F10002"] = 1;
+        //        dr["F10002"] = cmbCmp.Value ?? DBNull.Value;
         //        dr["F10004"] = cmbSub.Value ?? DBNull.Value;
         //        dr["F10005"] = cmbFil.Value ?? DBNull.Value;
         //        dr["F10006"] = cmbSec.Value ?? DBNull.Value;
@@ -479,7 +432,7 @@ namespace WizOne.Organigrama
         //        dr["Stare"] = 1;
         //        dr["IdSuperior"] = cmbSup.Value ?? DBNull.Value;
         //        dr["IdSuperiorFunctional"] = cmbSupFunc.Value ?? DBNull.Value;
-        //        if (hfNivelIer.Contains("val")) dr["NivelIerarhic"] = General.Nz(hfNivelIer["val"],"");
+        //        if (hfNivelIer.Contains("val")) dr["NivelIerarhic"] = General.Nz(hfNivelIer["val"], "");
         //        dr["PlanHC"] = txtPlan.Text;
         //        dr["NivelHay"] = cmbHay.Value ?? DBNull.Value;
         //        dr["SalariuMin"] = txtSalMin.Value ?? DBNull.Value;
@@ -487,9 +440,6 @@ namespace WizOne.Organigrama
         //        dr["SalariuMax"] = txtSalMax.Value ?? DBNull.Value;
         //        dr["CodBuget"] = txtCodBuget.Text;
         //        dr["CodCOR"] = cmbCor.Value ?? DBNull.Value;
-        //        dr["Atribute"] = txtAtr.Text;
-        //        dr["Criterii"] = txtCrt.Text;
-        //        dr["ObservatiiModif"] = txtObs.Text;
 
         //        dr["IdBeneficiu1"] = cmbBenf1.Value ?? DBNull.Value;
         //        dr["IdBeneficiu2"] = cmbBenf2.Value ?? DBNull.Value;
@@ -503,6 +453,7 @@ namespace WizOne.Organigrama
         //        dr["IdBeneficiu10"] = cmbBenf10.Value ?? DBNull.Value;
 
         //        dr["IdAuto"] = 100000000;
+
         //        dr["USER_NO"] = Session["UserId"];
         //        dr["TIME"] = DateTime.Now;
 
@@ -511,18 +462,14 @@ namespace WizOne.Organigrama
         //        {
         //            AdaugaInF718(General.Nz(dr["Denumire"], "").ToString());
         //        }
-        //        else
-        //        {
-        //            //daca se modifica un post existent
-        //        }
 
-        //        //if (dt.Rows.Count == 0)
-        //        //    dt.Rows.Add(dr);
+        //        int idAuto = Convert.ToInt32(General.Nz(Session["IdAuto"], 1));
 
         //        if (nou)
+        //        {
         //            dt.Rows.Add(dr);
-
-        //        var ert = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState == DataRowState.Added).Max(p => p.Field<int?>("IdAuto")), 0));
+        //            idAuto = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState == DataRowState.Added).Max(p => p.Field<int?>("IdAuto")), 0));
+        //        }
 
         //        //salvam documentul
         //        if (Session["Posturi_Upload"] != null)
@@ -530,16 +477,17 @@ namespace WizOne.Organigrama
         //            metaCereriDate itm = Session["Posturi_Upload"] as metaCereriDate;
         //            if (itm.UploadedFile != null)
         //            {
-        //                string sqlFis = $@"INSERT INTO tblFisiere(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
-        //                    SELECT @1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()} " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+        //                string sqlFis = 
+        //                    $@"INSERT INTO tblFisiere(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
+        //                    VALUES(@1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()})";
 
-        //                General.ExecutaNonQuery(sqlFis, new object[] { "Org_Posturi", Session["IdAuto"], itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
+        //                General.ExecutaNonQuery(sqlFis, new object[] { "Org_Posturi", idAuto, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
         //            }
         //        }
 
         //        General.SalveazaDate(dt, "Org_Posturi");
 
-        //        ert = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState == DataRowState.Added).Max(p => p.Field<int?>("IdAuto")), 0));
+        //        var ert = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState == DataRowState.Added).Max(p => p.Field<int?>("IdAuto")), 0));
 
         //        Iesire();
         //    }
@@ -1160,5 +1108,158 @@ namespace WizOne.Organigrama
             }
         }
 
+        private void AdaugaCampuriExtra(DataRow dr)
+        {
+            try
+            {
+                HtmlGenericControl divRow = new HtmlGenericControl("div");
+                divRow.Attributes["class"] = "row";
+                HtmlGenericControl divCol = new HtmlGenericControl("div");
+                divCol.Attributes["class"] = "col-md-12";
+
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Org_tblConfig"" WHERE COALESCE(""Vizibil"",0)=1", null);
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    HtmlGenericControl lbl = new HtmlGenericControl("label");
+                    lbl.Style["width"] = "100%";
+                    lbl.Style["margin-top"] = "20px";
+                    lbl.InnerText = Dami.TraduCuvant(General.Nz(dt.Rows[i]["Eticheta"],"").ToString());
+
+                    ASPxMemo txt = new ASPxMemo();
+                    txt.ID = "cmpExtra" + General.Nz(dt.Rows[i]["Id"], 1).ToString();
+                    txt.Width = Unit.Percentage(100);
+                    txt.Height = Unit.Pixel(100);
+                    if (dr != null)
+                        txt.Value = dr["CampExtra" + General.Nz(dt.Rows[i]["Id"], 1).ToString()];
+
+                    divCol.Controls.Add(lbl);
+                    divCol.Controls.Add(txt);
+                }
+
+                divRow.Controls.Add(divCol);
+                divExtra.Controls.Add(divRow);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void AdaugaBeneficiile(DataRow dr)
+        {
+            try
+            {
+                string strSql = $@"SELECT B.""Id"" AS ""IdCateg"", B.""Denumire"" AS ""Eticheta"", C.""Id"", C.""Denumire"", B.""OrdineInPosturi""
+                    FROM ""Admin_Arii"" A
+                    INNER JOIN ""Admin_Categorii"" B ON A.""Id"" = B.""IdArie""
+                    INNER JOIN ""Admin_Obiecte"" C ON B.""Id"" = C.""IdCategorie""
+                    WHERE (A.""Denumire"" = 'Beneficii' OR A.""Denumire"" = 'atribute posturi') AND B.""OrdineInPosturi"" IS NOT NULL AND ""OrdineInPosturi"" <> 0
+                    ORDER BY B.""OrdineInPosturi"", B.""Id"", B.""Denumire"" ";
+                DataTable dtBen = General.IncarcaDT(strSql, null);
+
+                HtmlGenericControl divRow = new HtmlGenericControl("div");
+                divRow.Attributes["class"] = "row";
+
+                DataTable dt = dtBen.DefaultView.ToTable(true, new string[] { "IdCateg", "Eticheta" });
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    HtmlGenericControl divCol = new HtmlGenericControl("div");
+                    divCol.Attributes["class"] = "col-md-6";
+
+                    HtmlGenericControl lbl = new HtmlGenericControl("label");
+                    lbl.Style["width"] = "100%";
+                    lbl.Style["margin-top"] = "20px";
+                    lbl.InnerText = Dami.TraduCuvant(General.Nz(dt.Rows[i]["Eticheta"], "").ToString());
+
+                    ASPxComboBox cmb = new ASPxComboBox();
+                    cmb.ID = "cmbBenef" + (i + 1).ToString();
+                    cmb.Width = Unit.Pixel(300);
+                    cmb.AutoPostBack = false;
+                    cmb.AllowNull = true;
+                    cmb.ValueField = "Id";
+                    cmb.ValueType = typeof(System.Int32);
+                    cmb.TextField = "Denumire";
+                    DataView view = dtBen.DefaultView;
+                    view.RowFilter = "IdCateg=" + Convert.ToInt32(General.Nz(dt.Rows[i]["IdCateg"], -99));
+                    cmb.DataSource = view;
+                    cmb.DataBind();
+
+                    if (dr != null)
+                        cmb.Value = dr["IdBeneficiu" + (i + 1).ToString()];
+
+                    divCol.Controls.Add(lbl);
+                    divCol.Controls.Add(cmb);
+
+                    divRow.Controls.Add(divCol);
+                }
+
+                divBenef.Controls.Add(divRow);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void AdaugaDosar()
+        {
+            try
+            {
+                //<dx:ASPxCheckBoxList ID="checkBoxList" runat="server" DataSourceID="ProgLanguages"
+                //    ValueField="ID" TextField="Name" RepeatColumns="4" RepeatLayout="Flow" >
+                //    <CaptionSettings Position="Top" />
+                //</dx:ASPxCheckBoxList>
+
+                DataTable dtTab = General.IncarcaDT($@"
+                    SELECT C.""Id"", C.""Denumire"", CASE WHEN D.""IdObiect"" IS NULL THEN 0 ELSE 1 END AS ""Bifat""
+                    FROM ""Admin_Arii"" A
+                    INNER JOIN ""Admin_Categorii"" B ON A.""Id""=B.""IdArie""
+                    INNER JOIN ""Admin_Obiecte"" C ON B.""Id""=C.""IdCategorie""
+                    LEFT JOIN ""Org_PosturiDosar"" D ON C.""Id"" = D.""IdObiect""
+                    WHERE A.""Id"" = (SELECT COALESCE(""Valoare"",'') FROM ""tblParametrii"" WHERE ""Nume""='ArieTabDosarPersonalDinPersonal')
+                    AND B.""Denumire""='Documente Post'", null);
+
+                lstDosar.DataSource = dtTab;
+                lstDosar.DataBind();
+
+                //ASPxCheckBoxList lst = new ASPxCheckBoxList();
+                //lst.ID = "lstDosar";
+                //lst.TextField = "Denumire";
+                //lst.ValueField = "Id";
+                //lst.RepeatColumns = 1;
+                //lst.RepeatDirection = RepeatDirection.Vertical;
+                //lst.RepeatLayout = RepeatLayout.Table;
+                //lst.DataSource = dtTab;
+                //lst.DataBind();
+
+                //divDosar.Controls.Add(lst);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void lstDosar_DataBound(object sender, EventArgs e)
+        {
+            try
+            {
+                var lstDosar = (ASPxCheckBoxList)sender;
+                DataTable dt = lstDosar.DataSource as DataTable;
+
+                for (int i = 0; i < lstDosar.Items.Count; i++)
+                {
+                    lstDosar.Items[i].Selected = Convert.ToBoolean(General.Nz(dt.Rows[i]["Bifat"],0));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

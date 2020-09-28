@@ -14,13 +14,7 @@
                 for (var i = 0; i < nodeKeys.length; i++) {
                     if (s.GetNodeHtmlElement(nodeKeys[i]) == e.targetElement) {
                         var targetNodeKey = nodeKeys[i];
-
                         grDate.GetNodeValues(targetNodeKey, "IdAuto", GetNodeValueDes);
-
-                        //hf.Set("Nod", e.nodeKey);
-                        //hf.Set("Target", targetNodeKey);
-                        //popUpMotiv.Show();
-                        //e.cancel = !confirm('Confirm move node ' + s.cpNodeText[e.nodeKey] + ' to ' + s.cpNodeText[targetNodeKey]);
                         break;
                     }
                 }
@@ -38,7 +32,6 @@
 
         function GetNodeValueOri(selectedValues) {
             hf.Set("Nod", selectedValues);
-            //popUpMotiv.Show();
         }
         function GetNodeValueDes(selectedValues) {
             hf.Set("Target", selectedValues);
@@ -46,8 +39,6 @@
         }
 
         function OnModifStruc(s, e) {
-            //alert(cmbMotiv.GetValue("Id"));
-            //alert(cmbMotiv.GetSelectedItem().value);
             if (!cmbMotiv.GetValue("Id")) {
                 e.processOnServer = false;
                 swal({
@@ -157,15 +148,15 @@
                     <ClientSideEvents EndDragNode="OnEndDragNode" />
                     <Columns>
                         
-                        <dx:TreeListDataColumn FieldName="Denumire" Name="Denumire" Caption="Denumire" ReadOnly="true" Width="150px" VisibleIndex="1" />
-                        <dx:TreeListDataColumn FieldName="Id" Name="Cod" Caption="Cod" ReadOnly="true" Width="150px" VisibleIndex="2" />
-                        <dx:TreeListCheckColumn FieldName="Activ" Caption="Activ" Width="50px" VisibleIndex="3" />
+                        <dx:TreeListDataColumn FieldName="Denumire" Name="Denumire" Caption="Denumire" ReadOnly="true" Width="150px" VisibleIndex="1" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
+                        <dx:TreeListDataColumn FieldName="Id" Name="Cod" Caption="Cod" ReadOnly="true" Width="150px" VisibleIndex="2" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
+                        <dx:TreeListCheckColumn FieldName="Activ" Caption="Activ" Width="50px" VisibleIndex="3" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
 
-                        <dx:TreeListDataColumn FieldName="Companie" Name="Companie" Caption="Companie" ReadOnly="true" Width="250px" VisibleIndex="5"/>
-                        <dx:TreeListDataColumn FieldName="Subcompanie" Name="Subcompanie" Caption="Subcompanie" ReadOnly="true" Width="250px" VisibleIndex="6" />
-                        <dx:TreeListDataColumn FieldName="Filiala" Name="Filiala" Caption="Filiala" ReadOnly="true" Width="250px" VisibleIndex="7" />
-                        <dx:TreeListDataColumn FieldName="Sectie" Name="Sectie" Caption="Sectie" ReadOnly="true" Width="250px" VisibleIndex="8" />
-                        <dx:TreeListDataColumn FieldName="Dept" Name="Dept" Caption="Dept" ReadOnly="true" Width="250px" VisibleIndex="9" />
+                        <dx:TreeListDataColumn FieldName="Companie" Name="Companie" Caption="Companie" ReadOnly="true" Width="250px" VisibleIndex="5" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList"/>
+                        <dx:TreeListDataColumn FieldName="Subcompanie" Name="Subcompanie" Caption="Subcompanie" ReadOnly="true" Width="250px" VisibleIndex="6" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
+                        <dx:TreeListDataColumn FieldName="Filiala" Name="Filiala" Caption="Filiala" ReadOnly="true" Width="250px" VisibleIndex="7" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
+                        <dx:TreeListDataColumn FieldName="Sectie" Name="Sectie" Caption="Sectie" ReadOnly="true" Width="250px" VisibleIndex="8" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
+                        <dx:TreeListDataColumn FieldName="Dept" Name="Dept" Caption="Dept" ReadOnly="true" Width="250px" VisibleIndex="9" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
 
                         <dx:TreeListDataColumn FieldName="IdSuperior" Visible="false" ShowInCustomizationForm="false" VisibleIndex="10" />
                         <dx:TreeListDataColumn FieldName="IdAuto" Visible="false" ShowInCustomizationForm="false" VisibleIndex="19" />

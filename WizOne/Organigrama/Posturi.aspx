@@ -314,43 +314,17 @@
                         <dx:ASPxTextBox ID="txtHCAProbat" runat="server" Width="60px"/>
                     </div>
                 </div>
+                <br /><br />
 
-                <div id="divExtra" runat="server">
-                    <div class="row">
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;">
-                            <label id="lblAnLuna" runat="server">Luna/An</label><br />
-                            <dx:ASPxDateEdit ID="txtAnLuna" ClientInstanceName="txtAnLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
-                                <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtAnLuna'); }" />
-                                <CalendarProperties FirstDayOfWeek="Monday" />
-                            </dx:ASPxDateEdit>
-                        </div>
-                    </div>
-
-
+                <div id="divDosar" runat="server" style="width:815px;">
+                    <dx:ASPxCheckBoxList ID="lstDosar" runat="server" ValueField="Id" TextField="Denumire" RepeatColumns="1" RepeatLayout="Table" OnDataBound="lstDosar_DataBound" >
+                        <CaptionSettings Position="Top" />
+                    </dx:ASPxCheckBoxList>
                 </div>
 
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblAtr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Atribute speciale</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxMemo ID="txtAtr" runat="server" Width="700px" Height="100px" />
-                    </div>   
-                </div>
-    
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblCrt" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Criterii evaluare</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxMemo ID="txtCrt" runat="server" Width="700px" Height="100px" />
-                    </div>   
+                <div id="divExtra" runat="server" style="width:815px;">
                 </div>
 
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblObs" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Observatii</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxMemo ID="txtObs" runat="server" Width="700px" Height="100px" />
-                    </div>   
-                </div>
-
-                
                 <div class="Absente_divOuter margin_top15" style="display:none;">
 		            <label id="lblCom" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Competente</label>
                     <dx:ASPxGridView ID="grDate" runat="server" Width="700px">
@@ -361,75 +335,10 @@
                     </dx:ASPxGridView>
                 </div>
 
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf1" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns" >Beneficiul 1</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf1" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
+                <div id="divBenef" runat="server" style="width:815px;">
                 </div>
 
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf2" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 2</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf2" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf3" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 3</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf3" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf4" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 4</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf4" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf5" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 5</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf5" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf6" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 6</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf6" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf7" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 7</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf7" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf8" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 8</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf8" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf9" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 9</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf9" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf10" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 10</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf10" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
+                <br /><br /><br /><br />
 
             </dx:PanelContent>
         </PanelCollection>

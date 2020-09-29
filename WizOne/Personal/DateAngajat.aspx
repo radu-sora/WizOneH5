@@ -12,6 +12,16 @@
                 pnlLoading.Hide();
             }
         }
+        function OnActiveTabChanging(s, e) {
+            UpdateGrid();
+        }
+
+        function UpdateGrid() {
+            if (modifDosar && typeof grDateDosar !== 'undefined' && ASPxClientUtils.IsExists(grDateDosar)) {
+                grDateDosar.UpdateEdit();
+                modifDosar = false;
+            }
+        }
     </script>
 
 	<table width="100%">
@@ -30,6 +40,7 @@
                 <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)">
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
+                        UpdateGrid();
                         e.processOnServer = true;
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
@@ -44,7 +55,7 @@
     <div>
         <dx:ASPxLabel  ID="lblDateAngajat" runat="server"  Text="" ></dx:ASPxLabel >	
         <dx:ASPxPageControl ID="ASPxPageControl2" runat="server" Width="100%" TabSpacing="0px" CssClass="pcTemplates" SkinID="None" EnableViewState="false" EnableHierarchyRecreation="false" OnCallback="ASPxPageControl2_Callback">
-            <ClientSideEvents TabClick="OnTabClick" />
+            <ClientSideEvents TabClick="OnTabClick" ActiveTabChanging="OnActiveTabChanging"  />
                 <TabPages>
                 </TabPages>     
             <Paddings Padding="0px" PaddingLeft="12px" />

@@ -1538,6 +1538,7 @@ namespace WizOne.Avs
 
                 dtTemp1 = General.IncarcaDT("select F09602 AS \"Id\", F09603 AS \"Denumire\" from F100, F096 WHERE F100939 = F09602 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 dtTemp2 = General.IncarcaDT("select F09602 AS \"Id\", F09603 AS \"Denumire\" from F096", null);
+                dtTemp2.TableName = "F096";
                 IncarcaComboBox(cmb7Act, cmb7Nou, dtTemp1, dtTemp2);
 
                 dtTemp1 = General.IncarcaDT("select\"Id\", \"Denumire\", \"DenumireInAdmin\" from \"Ptj_Contracte\", \"F100Contracte\" WHERE \"IdContract\" = \"Id\" AND \"DataSfarsit\" = " + General.ToDataUniv(new DateTime(2100, 1, 1)) + " AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
@@ -5004,6 +5005,11 @@ namespace WizOne.Avs
                 string[] param = Session["Valoare7Noua"].ToString().Split(';');
                 cmb7Nou.Value = Convert.ToInt32(param[1]);
                 //return;
+            }
+            else
+            {
+                if (dt2.TableName == "F096")
+                    cmb7Nou.SelectedIndex = 0;
             }
 
             if (Session["Valoare8Noua"] != null)

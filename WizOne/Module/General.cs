@@ -8058,9 +8058,9 @@ namespace WizOne.Module
             }
         }
 
+
         public static void CalculFormulePeZi(string filtru)
         {
-            //Florin 2020.09.23
             try
             {
                 string strSql = "";
@@ -8074,27 +8074,22 @@ namespace WizOne.Module
                         continue;
                     }
 
-                    strSql += $@", ent.""{row["Coloana"]}""=({row["FormulaSql"]})" + Environment.NewLine; 
-                    //if (Constante.tipBD == 1)
-                    //    strSql += @"UPDATE ent
-                    //    SET ent.{0}=({1})
-                    //    FROM Ptj_Intrari ent
-                    //    WHERE {2};" + Environment.NewLine;
-                    //else
-                    //    strSql += @"UPDATE ""Ptj_Intrari"" ent 
-                    //    SET ent.""{0}""=({1}) 
-                    //    WHERE {2};" + Environment.NewLine;
+                    if (Constante.tipBD == 1)
+                        strSql += @"UPDATE ent
+                        SET ent.{0}=({1})
+                        FROM Ptj_Intrari ent
+                        WHERE {2};" + Environment.NewLine;
+                    else
+                        strSql += @"UPDATE ""Ptj_Intrari"" ent 
+                        SET ent.""{0}""=({1}) 
+                        WHERE {2};" + Environment.NewLine;
 
                     strSql = string.Format(strSql, row["Coloana"].ToString(), row["FormulaSql"].ToString(), filtru);
                 }
 
                 if (strSql != "")
                 {
-                    string sqlCum = "";
-                    if (Constante.tipBD == 1)
-                        sqlCum = $@"UPDATE ent SET {strSql.Substring(1)} FROM Ptj_Intrari ent WHERE {filtru}";
-                    else
-                        sqlCum = $@"UPDATE ""Ptj_Intrari"" ent SET {strSql.Substring(1)} WHERE {filtru}";
+                    string sqlCum = "BEGIN" + "\n\r" + strSql + "\n\r" + "END;";
                     ExecutaNonQuery(sqlCum, null);
                 }
             }
@@ -8107,7 +8102,7 @@ namespace WizOne.Module
         public static void CalculFormuleCumulat(string filtru)
         {
             string sqlCum = "";
-            //Florin 2020.09.23
+
             try
             {
                 string strSql = "";
@@ -8124,25 +8119,21 @@ namespace WizOne.Module
                             continue;
                         }
 
-                        strSql += $@", ent.""{row["Coloana"]}""=({row["CampSelect"]})" + Environment.NewLine;
-                        //if (Constante.tipBD == 1)
-                        //    strSql += $@"UPDATE ent 
-                        //    SET ent.{row["Coloana"]} = ({row["CampSelect"]}) 
-                        //    FROM ""Ptj_Cumulat"" ent
-                        //    WHERE {filtru};" + Environment.NewLine;
-                        //else
-                        //    strSql += $@"UPDATE ""Ptj_Cumulat"" ent 
-                        //    SET ent.{row["Coloana"]} = ({row["CampSelect"]}) 
-                        //    WHERE {filtru};" + Environment.NewLine;
+                        if (Constante.tipBD == 1)
+                            strSql += $@"UPDATE ent 
+                            SET ent.{row["Coloana"]} = ({row["CampSelect"]}) 
+                            FROM ""Ptj_Cumulat"" ent
+                            WHERE {filtru};" + Environment.NewLine;
+                        else
+                            strSql += $@"UPDATE ""Ptj_Cumulat"" ent 
+                            SET ent.{row["Coloana"]} = ({row["CampSelect"]}) 
+                            WHERE {filtru};" + Environment.NewLine;
                     }
                 }
 
                 if (strSql != "")
                 {
-                    if (Constante.tipBD == 1)
-                        sqlCum = $@"UPDATE ent SET {strSql.Substring(1)} FROM ""Ptj_Cumulat"" ent WHERE {filtru}";
-                    else
-                        sqlCum = $@"UPDATE ""Ptj_Cumulat"" ent SET {strSql.Substring(1)} WHERE {filtru}";
+                    sqlCum = "BEGIN" + "\n\r" + strSql + "\n\r" + "END;";
                     General.ExecutaNonQuery(sqlCum, null);
 
                     if (Dami.ValoareParam("LogFormuleCumulat") == "1") General.CreazaLogFormuleCumulat(sqlCum, "PontajDetaliat");

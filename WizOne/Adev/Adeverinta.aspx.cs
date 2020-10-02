@@ -58,6 +58,7 @@ namespace WizOne.Adev
                 lblDept.InnerText = Dami.TraduCuvant("Dept");
                 lblSubDept.InnerText = Dami.TraduCuvant("SubDept");
                 lblBirou.InnerText = Dami.TraduCuvant("Birou");
+                lblDataPlec.InnerText = Dami.TraduCuvant("Data plecarii");
 
                 foreach (dynamic c in grDate.Columns)
                 {
@@ -570,7 +571,7 @@ namespace WizOne.Adev
             {
                 grDate.KeyFieldName = "F10003";
 
-                DataTable dt = GetF100NumeComplet(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToDateTime(deDataAng.Value ?? new DateTime(2100, 1, 1)), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99),
+                DataTable dt = GetF100NumeComplet(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToDateTime(deDataPlec.Value ?? new DateTime(2100, 1, 1)), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99),
                     Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbSubDept.Value ?? -99), Convert.ToInt32(cmbBirou.Value ?? -99), Convert.ToInt32(cmbAngBulk.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), Convert.ToInt32(cmbCateg.Value ?? -99));
 
                 grDate.DataSource = dt;
@@ -587,7 +588,7 @@ namespace WizOne.Adev
             }
         }
 
-        public DataTable GetF100NumeComplet(int idUser, DateTime dataAng, int idSubcomp = -99, int idFiliala = -99, int idSectie = -99, int idDept = -99, int idSubdept = -99, int idBirou = -99, int idAngajat = -9, int idCtr = -99, int idCateg = -99)
+        public DataTable GetF100NumeComplet(int idUser, DateTime dataPlec, int idSubcomp = -99, int idFiliala = -99, int idSectie = -99, int idDept = -99, int idSubdept = -99, int idBirou = -99, int idAngajat = -9, int idCtr = -99, int idCateg = -99)
         {
             DataTable dt = new DataTable();
 
@@ -737,9 +738,9 @@ namespace WizOne.Adev
                         cond += " AND (Y.F10025 = 0 OR Y.F10025 = 999) ";
                 }
 
-                if (dataAng != new DateTime(2100, 1, 1))
+                if (dataPlec != new DateTime(2100, 1, 1))
                 {
-                    tmp = string.Format(Constante.tipBD == 1 ? "  Y.F10022 = CONVERT(DATETIME, '{0}/{1}/{2}', 103) " : " TO_DATE('{0}/{1}/{2}', 'dd/mm/yyyy')  ", dataAng.Day.ToString().PadLeft(2, '0'), dataAng.Month.ToString().PadLeft(2, '0'), dataAng.Year.ToString());
+                    tmp = string.Format(Constante.tipBD == 1 ? "  Y.F100993 = CONVERT(DATETIME, '{0}/{1}/{2}', 103) " : " TO_DATE('{0}/{1}/{2}', 'dd/mm/yyyy')  ", dataPlec.Day.ToString().PadLeft(2, '0'), dataPlec.Month.ToString().PadLeft(2, '0'), dataPlec.Year.ToString());
                     if (cond.Length <= 0)
                         cond = " WHERE " + tmp;
                     else

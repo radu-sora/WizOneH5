@@ -2004,86 +2004,87 @@ namespace WizOne.Avs
             //Radu 10.09.2020
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.TipContract || Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.DurataContract)
             {
-                ArataCtl(17, "Tip contract actual", "Tip contract nou", "Duarata contract actual", "Durata contract nou", "Nr. luni", "Nr. zile", "Data Inceput", "Data Sfarsit", "", "");
+                //ArataCtl(17, "Tip contract actual", "Tip contract nou", "Duarata contract actual", "Durata contract nou", "Nr. luni", "Nr. zile", "Data Inceput", "Data Sfarsit", "", "");
+                ArataCtl(3, "Tip contract actual", "Tip contract nou", "", "", "", "", "", "", "", "");
 
                 DataTable dtTempCtr = General.IncarcaDT("select * from F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 DataTable dtTemp1 = General.GetTipContract().Select("Id = " + dtTempCtr.Rows[0]["F100984"].ToString()).CopyToDataTable();
                 DataTable dtTemp2 = General.GetTipContract();
                 IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
 
-                dtTemp1 = General.IncarcaDT("select F08902 AS \"Id\", F08903 AS \"Denumire\" from F100, F089 WHERE F08902 = F1009741 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
-                dtTemp2 = General.IncarcaDT("select F08902 AS \"Id\", F08903 AS \"Denumire\" from F089", null);
-                IncarcaComboBox(cmb2Act, cmb2Nou, dtTemp1, dtTemp2);
+                //dtTemp1 = General.IncarcaDT("select F08902 AS \"Id\", F08903 AS \"Denumire\" from F100, F089 WHERE F08902 = F1009741 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                //dtTemp2 = General.IncarcaDT("select F08902 AS \"Id\", F08903 AS \"Denumire\" from F089", null);
+                //IncarcaComboBox(cmb2Act, cmb2Nou, dtTemp1, dtTemp2);
 
-                string data1 = "", data2 = "";
-                if (Constante.tipBD == 1)
-                {
-                    data1 = " CONVERT(VARCHAR, F100933, 103) ";
-                    data2 = " CONVERT(VARCHAR, F100934, 103) ";
-                }
-                else
-                {
-                    data1 = " TO_CHAR(F100933, 'dd/mm/yyyy') ";
-                    data2 = " TO_CHAR(F100934, 'dd/mm/yyyy') ";
-                }
+                //string data1 = "", data2 = "";
+                //if (Constante.tipBD == 1)
+                //{
+                //    data1 = " CONVERT(VARCHAR, F100933, 103) ";
+                //    data2 = " CONVERT(VARCHAR, F100934, 103) ";
+                //}
+                //else
+                //{
+                //    data1 = " TO_CHAR(F100933, 'dd/mm/yyyy') ";
+                //    data2 = " TO_CHAR(F100934, 'dd/mm/yyyy') ";
+                //}
 
-                DataTable dtTemp = General.IncarcaDT("SELECT " + data1 + " AS F100933, " + data2 + " AS F100934 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
-                de1Act.Date = Convert.ToDateTime(dtTemp.Rows[0][0].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][0].ToString());
-                de2Act.Date = Convert.ToDateTime(dtTemp.Rows[0][1].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][1].ToString());
+                //DataTable dtTemp = General.IncarcaDT("SELECT " + data1 + " AS F100933, " + data2 + " AS F100934 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                //de1Act.Date = Convert.ToDateTime(dtTemp.Rows[0][0].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][0].ToString());
+                //de2Act.Date = Convert.ToDateTime(dtTemp.Rows[0][1].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][1].ToString());
 
-                int nrLuni = 0, nrZile = 0;
-                Personal.Contract ctr = new Personal.Contract();
-                ctr.CalculLuniSiZile(Convert.ToDateTime(de1Act.Date), Convert.ToDateTime(de2Act.Date), out nrLuni, out nrZile);
-                txt3Act.Value = nrLuni;
-                txt4Act.Value = nrZile;
+                //int nrLuni = 0, nrZile = 0;
+                //Personal.Contract ctr = new Personal.Contract();
+                //ctr.CalculLuniSiZile(Convert.ToDateTime(de1Act.Date), Convert.ToDateTime(de2Act.Date), out nrLuni, out nrZile);
+                //txt3Act.Value = nrLuni;
+                //txt4Act.Value = nrZile;
 
-                if (cmb2Act != null && cmb2Act.Value != null && Convert.ToInt32(cmb2Act.Value) == 1)
-                {
-                    lblTxt14Act.Visible = false;
-                    lblTxt15Act.Visible = false;
-                    txt3Act.Visible = false;
-                    txt4Act.Visible = false;
-                    lblTxt5Act.Visible = false;
-                    lblTxt6Act.Visible = false;
-                    de1Act.Visible = false;
-                    de2Act.Visible = false;
-                }
-                else
-                {
-                    lblTxt14Act.Visible = true;
-                    lblTxt15Act.Visible = true;
-                    txt3Act.Visible = true;
-                    txt4Act.Visible = true;
-                    lblTxt5Act.Visible = true;
-                    lblTxt6Act.Visible = true;
-                    de1Act.Visible = true;
-                    de2Act.Visible = true;
-                }
+                //if (cmb2Act != null && cmb2Act.Value != null && Convert.ToInt32(cmb2Act.Value) == 1)
+                //{
+                //    lblTxt14Act.Visible = false;
+                //    lblTxt15Act.Visible = false;
+                //    txt3Act.Visible = false;
+                //    txt4Act.Visible = false;
+                //    lblTxt5Act.Visible = false;
+                //    lblTxt6Act.Visible = false;
+                //    de1Act.Visible = false;
+                //    de2Act.Visible = false;
+                //}
+                //else
+                //{
+                //    lblTxt14Act.Visible = true;
+                //    lblTxt15Act.Visible = true;
+                //    txt3Act.Visible = true;
+                //    txt4Act.Visible = true;
+                //    lblTxt5Act.Visible = true;
+                //    lblTxt6Act.Visible = true;
+                //    de1Act.Visible = true;
+                //    de2Act.Visible = true;
+                //}
 
-                if (cmb2Nou != null && cmb2Nou.Value != null && Convert.ToInt32(cmb2Nou.Value) == 1)
-                {
-                    lblTxt15Nou.Visible = false;
-                    lblTxt16Nou.Visible = false;
-                    txt3Nou.Visible = false;
-                    txt4Nou.Visible = false;
-                    lblTxt5Nou.Visible = false;
-                    lblTxt6Nou.Visible = false;
-                    de1Nou.Visible = false;
-                    de2Nou.Visible = false;
-                    de1Nou.Value = new DateTime(2100, 1, 1);
-                    de2Nou.Value = new DateTime(2100, 1, 1);
-                }
-                else
-                {
-                    lblTxt15Nou.Visible = true;
-                    lblTxt16Nou.Visible = true;
-                    txt3Nou.Visible = true;
-                    txt4Nou.Visible = true;
-                    lblTxt5Nou.Visible = true;
-                    lblTxt6Nou.Visible = true;
-                    de1Nou.Visible = true;
-                    de2Nou.Visible = true;
-                }
+                //if (cmb2Nou != null && cmb2Nou.Value != null && Convert.ToInt32(cmb2Nou.Value) == 1)
+                //{
+                //    lblTxt15Nou.Visible = false;
+                //    lblTxt16Nou.Visible = false;
+                //    txt3Nou.Visible = false;
+                //    txt4Nou.Visible = false;
+                //    lblTxt5Nou.Visible = false;
+                //    lblTxt6Nou.Visible = false;
+                //    de1Nou.Visible = false;
+                //    de2Nou.Visible = false;
+                //    de1Nou.Value = new DateTime(2100, 1, 1);
+                //    de2Nou.Value = new DateTime(2100, 1, 1);
+                //}
+                //else
+                //{
+                //    lblTxt15Nou.Visible = true;
+                //    lblTxt16Nou.Visible = true;
+                //    txt3Nou.Visible = true;
+                //    txt4Nou.Visible = true;
+                //    lblTxt5Nou.Visible = true;
+                //    lblTxt6Nou.Visible = true;
+                //    de1Nou.Visible = true;
+                //    de2Nou.Visible = true;
+                //}
 
             }
         }
@@ -2977,7 +2978,7 @@ namespace WizOne.Avs
                     case (int)Constante.Atribute.TipContract:
                     case (int)Constante.Atribute.DurataContract:
                         if (cmb1Nou.Value == null) strErr += ", tip contract";
-                        if ((cmb2Nou.Value == null || Convert.ToInt32(cmb2Nou.Value) != 1) && (de1Nou.Value == null || de2Nou.Value == null)) strErr += ", date durata contract";
+                        //if ((cmb2Nou.Value == null || Convert.ToInt32(cmb2Nou.Value) != 1) && (de1Nou.Value == null || de2Nou.Value == null)) strErr += ", date durata contract";
                         break;
                 }
 
@@ -3602,9 +3603,12 @@ namespace WizOne.Avs
                     break;
                 case (int)Constante.Atribute.TipContract:
                 case (int)Constante.Atribute.DurataContract:
-                    camp1 = "\"DataInceputCIM\", \"DataSfarsitCIM\", \"DurataContract\", \"TipContract\", \"TipContractNume\", \"DurataContractNume\"";
-                    camp2 = (Constante.tipBD == 1 ? " CONVERT(DATETIME, '" + de1Nou.Text + "', 103)" : "TO_DATE('" + de1Nou.Text + "', 'dd/mm/yyyy') ") + ", "
-                        + (Constante.tipBD == 1 ? " CONVERT(DATETIME, '" + de2Nou.Text + "', 103)" : "TO_DATE('" + de2Nou.Text + "', 'dd/mm/yyyy') ") + ", " + cmb2Nou.Value.ToString() + ", " + cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', '" + cmb2Nou.Text + "'";
+                    //camp1 = "\"DataInceputCIM\", \"DataSfarsitCIM\", \"DurataContract\", \"TipContract\", \"TipContractNume\", \"DurataContractNume\"";
+                    //camp2 = (Constante.tipBD == 1 ? " CONVERT(DATETIME, '" + de1Nou.Text + "', 103)" : "TO_DATE('" + de1Nou.Text + "', 'dd/mm/yyyy') ") + ", "
+                    //    + (Constante.tipBD == 1 ? " CONVERT(DATETIME, '" + de2Nou.Text + "', 103)" : "TO_DATE('" + de2Nou.Text + "', 'dd/mm/yyyy') ") + ", " + cmb2Nou.Value.ToString() + ", " + cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', '" + cmb2Nou.Text + "'";
+                    camp1 = "\"TipContract\", \"TipContractNume\"";
+                    camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "'";
+
                     break;
             }
 
@@ -3636,6 +3640,27 @@ namespace WizOne.Avs
                         total++;
                     }
                 }
+            }
+
+            //validari
+            string sqlCer = @"SELECT " +
+                                idUrm.ToString() + " AS \"Id\", " +
+                                F10003.ToString() + " AS \"F10003\", " +
+                                idAtr.ToString() + " AS \"IdAtribut\", " +
+                                idCircuit.ToString() + " AS \"IdCircuit\", " +
+                                dataModif + " AS \"DataModif\", " +
+                                idStare.ToString() + " AS \"IdStare\", " +
+                                Session["UserId"] + " AS \"UserIntrod\", " +
+                                "(SELECT \"Culoare\" FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idStare.ToString() + ") AS \"Culoare\", " +
+                                total.ToString() + " AS \"TotalCircuit\", " +
+                                pozUser.ToString() + " AS \"Pozitie\", " +
+                                (chkGen.Checked ? "1" : "0") + " AS \"GenerareDoc\", " +
+                                Session["UserId"] + " AS USER_NO, " + General.CurrentDate() + " AS TIME ";
+            string msg = Notif.TrimiteNotificare("Avs.Cereri", (int)Constante.TipNotificare.Validare, sqlCer + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+            if (msg != "" && msg.Substring(0, 1) == "2")
+            {
+                pnlCtl.JSProperties["cpAlertMessage"] = msg.Substring(2);
+                return false;
             }
 
 

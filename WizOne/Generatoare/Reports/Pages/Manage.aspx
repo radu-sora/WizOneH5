@@ -16,12 +16,12 @@
                     }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="ReportViewButton" runat="server" Text="Afisare" Image-Url="~/Fisiere/Imagini/Icoane/arata.png" OnClick="ReportViewButton_Click" oncontextMenu="ctx(this,event)" />
-                <dx:ASPxButton ID="ReportDesignButton" ClientIDMode="Static" ClientInstanceName="btnDesign" runat="server" Text="Design" Image-Url="~/Fisiere/Imagini/Icoane/schimba.png" OnClick="ReportDesignButton_Click" oncontextMenu="ctx(this,event)" />
-                <dx:ASPxButton ID="ExitButton" runat="server" Text="Iesire" Image-Url="~/Fisiere/Imagini/Icoane/iesire.png" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" />
+                <dx:ASPxButton ID="ReportDesignButton" ClientIDMode="Static" ClientInstanceName="btnDesign" runat="server" Text="Design" Image-Url="~/Fisiere/Imagini/Icoane/schimba.png" CssClass="hidden-xs" OnClick="ReportDesignButton_Click" oncontextMenu="ctx(this,event)" />
+                <dx:ASPxButton ID="ExitButton" runat="server" Text="Iesire" Image-Url="~/Fisiere/Imagini/Icoane/iesire.png" PostBackUrl="~/Pagini/MainPage.aspx" CssClass="hidden-xs" oncontextMenu="ctx(this,event)" />
             </div>        
         </div>        
         <div class="invisible">
-            <dx:ASPxGridView ID="ReportsGridView" ClientInstanceName="reportsGridView" runat="server" Width="100%" CssClass="dx-grid-adaptive dx-grid-adaptive-hide-desktop-search dx-grid-adaptive-hide-header-column1"
+            <dx:ASPxGridView ID="ReportsGridView" ClientInstanceName="reportsGridView" runat="server" Width="100%" CssClass="dx-grid-adaptive dx-grid-adaptive-hide-desktop-search dx-grid-adaptive-hide-header"
                 DataSourceID="ReportsDataSource" AutoGenerateColumns="False" KeyFieldName="Id"
                 OnDataBinding="ReportsGridView_DataBinding">
                 <Settings ShowFilterRow="True" VerticalScrollBarMode="Auto" />        
@@ -100,7 +100,7 @@
             },            
             /* Events */
             onControlsInitialized: function (pageControl) {
-                pageControl.pageContent.find('> div:nth-child(2)').removeClass('invisible'); // Useful for hiding DX GridView layout problems on page load.
+                pageControl.pageContent.find('> div[class="invisible"]').removeClass('invisible'); // Useful for hiding DX GridView layout issues from page loading.
             },            
             onReportNewButtonClick: function () {
                 reportsGridView.AddNewRow();

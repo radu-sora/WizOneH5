@@ -21,7 +21,7 @@
 
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="form1" runat="server" class="dx-popup-adaptive-fullscreen">
         <asp:ScriptManager ID="ScriptManager1" runat="server" >
             <Scripts>
                 <asp:ScriptReference Path="~/Scripts/jquery-3.1.1.min.js" />
@@ -276,11 +276,12 @@
             EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
             PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="900px" MinHeight="600px"
             Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGen" EnableHierarchyRecreation="True">
-                <ClientSideEvents CloseUp="function(s, e) { s.PerformCallback(); }" />
-                <ContentCollection>
-                    <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
-                    </dx:PopupControlContentControl>
-                </ContentCollection>
+            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchAtWindowInnerWidth="768" FixedHeader="true" MinWidth="100%" MinHeight="100%" />
+            <ClientSideEvents CloseUp="function(s, e) { s.PerformCallback(); }" />
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>            
         </dx:ASPxPopupControl>
 
         <dx:ASPxPopupControl ID="popGenIst" runat="server" AllowDragging="True" AllowResize="True"
@@ -288,10 +289,10 @@
             EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
             PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="850px" MinHeight="500px"
             Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGenIst" EnableHierarchyRecreation="True">                
-                <ContentCollection>
-                    <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
-                    </dx:PopupControlContentControl>
-                </ContentCollection>
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>
         </dx:ASPxPopupControl>
 
         <dx:ASPxPopupControl ID="popGenD112" runat="server" AllowDragging="True" AllowResize="True"
@@ -299,10 +300,10 @@
             EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
             PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="500px" MinHeight="400px"
             Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGenD112" EnableHierarchyRecreation="True">                
-                <ContentCollection>
-                    <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
-                    </dx:PopupControlContentControl>
-                </ContentCollection>
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>
         </dx:ASPxPopupControl>
 
         <dx:ASPxPopupControl ID="popGenDetalii" runat="server" AllowDragging="True" AllowResize="True"
@@ -310,10 +311,10 @@
             EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
             PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="1500px" MinHeight="600px"
             Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGenDetalii" EnableHierarchyRecreation="True">                
-                <ContentCollection>
-                    <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
-                    </dx:PopupControlContentControl>
-                </ContentCollection>
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>
         </dx:ASPxPopupControl>
 
         <dx:ASPxCallback ID="callBackProfile" runat="server" ClientInstanceName="callBackProfile" OnCallback="callBackProfile_Callback" />

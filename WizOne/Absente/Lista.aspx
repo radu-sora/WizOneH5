@@ -1,9 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Lista.aspx.cs" Inherits="WizOne.Absente.Lista" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-
     
-    <script language="javascript" type="text/javascript">
+    <script type="text/javascript">
 
         var limba = "<%= Session["IdLimba"] %>";
 
@@ -99,8 +98,6 @@
                 });
                 s.cpAlertMessage = null;
             }
-
-            AdjustSize();
         }
 
         function GoToDivide(values) {
@@ -221,348 +218,284 @@
             //pnlLoading.Hide();
             //lblDoc.innerText = s.cpDocUploadName;
             //s.cpDocUploadName = null;
-        }
-
-
-
-
-
-
-
-
-        var textSeparator = ",";
-        function OnListBoxSelectionChanged(listBox, args) {
-            if (args.index == 0)
-                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
-            UpdateSelectAllItemState();
-            UpdateText();
-        }
-        function UpdateSelectAllItemState() {
-            IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
-        }
-        function IsAllSelected() {
-            var selectedDataItemCount = checkListBox.GetItemCount() - (checkListBox.GetItem(0).selected ? 0 : 1);
-            return checkListBox.GetSelectedItems().length == selectedDataItemCount;
-        }
-        function UpdateText() {
-            var selectedItems = checkListBox.GetSelectedItems();
-            cmbStare.SetText(GetSelectedItemsText(selectedItems));
-        }
-        function SynchronizeListBoxValues(dropDown, args) {
-            checkListBox.UnselectAll();
-            var texts = dropDown.GetText().split(textSeparator);
-            var values = GetValuesByTexts(texts);
-            checkListBox.SelectValues(values);
-            UpdateSelectAllItemState();
-            UpdateText();
-        }
-        function GetSelectedItemsText(items) {
-            var texts = [];
-            for (var i = 0; i < items.length; i++)
-                if (items[i].index != 0)
-                    texts.push(items[i].text);
-            return texts.join(textSeparator);
-        }
-        function GetValuesByTexts(texts) {
-            var actualValues = [];
-            var item;
-            for (var i = 0; i < texts.length; i++) {
-                item = checkListBox.FindItemByText(texts[i]);
-                if (item != null)
-                    actualValues.push(item.value);
-            }
-            return actualValues;
-        }
-
-
-
-
-
-
-
-        function OnInitGrid(s, e) {
-            AdjustSize();
-        }
-
-        function OnControlsInitialized(s, e) {
-            ASPxClientUtils.AttachEventToElement(window, "resize", function (evt) {
-                AdjustSize();
-            });
-        }
-
-        function AdjustSize() {
-            var height = Math.max(0, document.documentElement.clientHeight) - 220;
-            grDate.SetHeight(height);
-        }
-
-
+        }        
     </script>
 
 </asp:Content>
 
-
-<asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-
-    <table width="100%">
-        <tr>
-            <td align="left">
+<asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <div class="page-content">
+        <div>
+            <div>
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
-            </td>
-            <td align="right">
+            </div>
+            <div>
                 <dx:ASPxButton ID="btnSolNoua" ClientInstanceName="btnSolNoua" Font-Bold="true" ClientIDMode="Static" runat="server" Text="Solicitare noua" OnClick="btnNew_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnIstoricExtins" ClientInstanceName="btnIstoricExtins" ClientIDMode="Static" runat="server" Text="Istoric Extins" AutoPostBack="true" OnClick="btnIstoricExtins_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnIstoricExtins" ClientInstanceName="btnIstoricExtins" ClientIDMode="Static" runat="server" Text="Istoric Extins" AutoPostBack="true" CssClass="hidden-xs" OnClick="btnIstoricExtins_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/istoric.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnRespinge" ClientInstanceName="btnRespinge" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) {
-                       OnRespinge(s,e);
-                    }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
+                    <ClientSideEvents Click="function(s, e) { OnRespinge(s, e); }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) { OnAproba(s,e); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
+                    <ClientSideEvents Click="function(s, e) { OnAproba(s, e); }" />
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" CssClass="hidden-xs" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                 </dx:ASPxButton>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <div style="display:inline-block; line-height:22px; vertical-align:middle; padding:15px 0px 15px 0px;">
-                    <label id="lblViz" runat="server" style="display:inline-block; float:left; padding:0px 15px;"></label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbViz" ClientInstanceName="cmbViz" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="false" >
-                            <ClientSideEvents SelectedIndexChanged="function(s,e) { SetComboViz(); }" Init="function(s,e) { SetComboViz(); }" />
-                        </dx:ASPxComboBox>
-                    </div>
-                    <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px;">Roluri</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
-                    </div>
-                    <label id="lblStare" runat="server" style="display:inline-block; float:left; padding-right:15px;">Stare</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxDropDownEdit ClientInstanceName="cmbStare" ID="cmbStare" Width="150px" runat="server" AnimationType="None">
-                            <DropDownWindowStyle BackColor="#EDEDED" />
-                            <DropDownWindowTemplate>
-                                <dx:ASPxListBox Width="100%" ID="listBoxStare" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
-                                    <Border BorderStyle="None" />
-                                    <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
-                                    <Items>
-                                        <dx:ListEditItem Text="(Selectie toate)" />
-                                        <dx:ListEditItem Text="Solicitat" Value="1" />
-                                        <dx:ListEditItem Text="In Curs" Value="2" />
-                                        <dx:ListEditItem Text="Aprobat" Value="3" />
-                                        <dx:ListEditItem Text="Respins" Value="0" />
-                                        <dx:ListEditItem Text="Anulat" Value="-1" />
-                                        <dx:ListEditItem Text="Planificat" Value="4" />
-                                    </Items>
-                                    <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged" />
-                                </dx:ASPxListBox>
-                               <table style="width: 100%">
-                                    <tr>
-                                        <td style="padding: 4px">
-                                            <dx:ASPxButton ID="btnInchide" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
-                                                <ClientSideEvents Click="function(s, e){ cmbStare.HideDropDown(); }" />
-                                            </dx:ASPxButton>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </DropDownWindowTemplate>
-                            <ClientSideEvents TextChanged="SynchronizeListBoxValues" DropDown="SynchronizeListBoxValues" />
-                        </dx:ASPxDropDownEdit>
-                    </div>
-                    <label id="lblDtInc" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data Inceput</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxDateEdit ID="txtDtInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
-                            <CalendarProperties FirstDayOfWeek="Monday" />
-                        </dx:ASPxDateEdit>
-                    </div>
-                    <label id="lblDtSf" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data Sfarsit</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxDateEdit ID="txtDtSf" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
-                            <CalendarProperties FirstDayOfWeek="Monday" />
-                        </dx:ASPxDateEdit>
-                    </div>                    
-                    <div style="float:left;">
-                        <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
-                            <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
-                        </dx:ASPxButton>
-                    </div>
+            </div>            
+        </div>
+        <div>
+            <div class="row row-fix">
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                    <dx:ASPxLabel ID="lblViz" runat="server" AssociatedControlID="cmbViz" Text="Vizualizare" Font-Bold="true" />
+                    <dx:ASPxComboBox ID="cmbViz" ClientInstanceName="cmbViz" ClientIDMode="Static" runat="server" Width="100%" AutoPostBack="false">
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                        <ClientSideEvents SelectedIndexChanged="function(s,e) { SetComboViz(); }" Init="function(s,e) { SetComboViz(); }" />
+                    </dx:ASPxComboBox>
                 </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                    <dx:ASPxLabel ID="lblRol" runat="server" AssociatedControlID="cmbRol" Text="Rol" Font-Bold="true" />
+                    <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="100%" AutoPostBack="false"
+                        ValueField="Id" TextField="Denumire" ValueType="System.Int32">
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                    </dx:ASPxComboBox>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">                        
+                    <dx:ASPxLabel ID="lblStare" runat="server" AssociatedControlID="cmbStare" Text="Stare" Font-Bold="true" />
+                    <dx:ASPxDropDownEdit ID="cmbStare" ClientInstanceName="cmbStare" runat="server" Width="100%">
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" ModalDropDownCaption="Choose Values" />
+                        <DropDownApplyButton Visibility="ModalDropDown" />                        
+                        <DropDownWindowStyle CssClass="dx-dropdownwindow-adaptive" />
+                        <DropDownWindowTemplate>
+                            <dx:ASPxListBox ID="lstStare" ClientInstanceName="lstStare" runat="server" SelectionMode="CheckColumn" Width="100%" Height="170px" 
+                                EnableSelectAll="true" SelectAllText="(Selectie toate)">                                
+                                <Items>                                
+                                    <dx:ListEditItem Text="Solicitat" Value="1" />
+                                    <dx:ListEditItem Text="In Curs" Value="2" />
+                                    <dx:ListEditItem Text="Aprobat" Value="3" />
+                                    <dx:ListEditItem Text="Respins" Value="0" />
+                                    <dx:ListEditItem Text="Anulat" Value="-1" />
+                                    <dx:ListEditItem Text="Planificat" Value="4" />
+                                </Items>
+                                <ClientSideEvents SelectedIndexChanged="function(s, e) { updateComboBoxText(cmbStare, lstStare); }" />
+                            </dx:ASPxListBox>
+                            <dx:ASPxButton ID="btnInchide" runat="server" AutoPostBack="False" Text="Inchide" CssClass="pull-right hidden-xs" style="margin:7px">
+                                <ClientSideEvents Click="function(s, e) { cmbStare.HideDropDown(); }" />
+                            </dx:ASPxButton>                                                
+                        </DropDownWindowTemplate>
+                        <ClientSideEvents 
+                            TextChanged="function(s, e) { updateListBoxValues(cmbStare, lstStare); }" 
+                            DropDown="function(s, e) { updateListBoxValues(cmbStare, lstStare); }" 
+                            DropDownCommandButtonClick="function(s, e) { cmbStare.HideDropDown(); }" />
+                    </dx:ASPxDropDownEdit>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                    <dx:ASPxLabel ID="lblDtInc" runat="server" AssociatedControlID="txtDtInc" Text="Data Inceput" Font-Bold="true" />
+                    <dx:ASPxDateEdit ID="txtDtInc" runat="server" Width="100%" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto">
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                        <CalendarProperties FirstDayOfWeek="Monday" />
+                    </dx:ASPxDateEdit>                        
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                    <dx:ASPxLabel ID="lblDtSf" runat="server" AssociatedControlID="txtDtSf" Text="Data Sfarsit" Font-Bold="true" />
+                    <dx:ASPxDateEdit ID="txtDtSf" runat="server" Width="100%" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto">
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                        <CalendarProperties FirstDayOfWeek="Monday" />
+                    </dx:ASPxDateEdit>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                    <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
+                        <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
+                    </dx:ASPxButton>
+                </div>
+            </div>            
+        </div>
+        <div class="invisible">
+            <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"
+                CssClass="dx-grid-adaptive dx-grid-adaptive-hide-group dx-grid-adaptive-hide-header dx-grid-adaptive-fullscreen-popup"
+                OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCustomUnboundColumnData="grDate_CustomUnboundColumnData">
+                <Settings ShowFilterRow="True" ShowFilterRowMenu="true" ShowGroupPanel="True" HorizontalScrollBarMode="Auto" VerticalScrollBarMode="Auto" />
+                <SettingsAdaptivity AdaptivityMode="HideDataCellsWindowLimit" AdaptiveDetailColumnCount="1" HideDataCellsAtWindowInnerWidth="768" />
+                <SettingsEditing Mode="PopupEditForm" />
+                <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
+                <SettingsSearchPanel Visible="true" />                
+                <SettingsPopup>
+                    <EditForm Modal="true" HorizontalAlign="WindowCenter" VerticalAlign="WindowCenter">
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchAtWindowInnerWidth="768" FixedHeader="true" MinWidth="100%" MinHeight="100%" />
+                    </EditForm>
+                </SettingsPopup>
+                <SettingsCommandButton>
+                    <UpdateButton ButtonType="Button" Text="Actualizeaza">
+                        <Styles>
+                            <Style Font-Bold="true" />
+                        </Styles>
+                    </UpdateButton>
+                    <CancelButton ButtonType="Button" Text="Renunta">
+                        <Styles>
+                            <Style Font-Bold="true" />
+                        </Styles>
+                    </CancelButton>
 
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCustomUnboundColumnData="grDate_CustomUnboundColumnData">
-                    <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                    <Settings ShowFilterRow="True" ShowGroupPanel="True" HorizontalScrollBarMode="Auto" ShowFilterRowMenu="true" VerticalScrollBarMode="Visible" />
-                    <SettingsEditing Mode="EditFormAndDisplayRow" />
-                    <SettingsSearchPanel Visible="true" />
-                    <SettingsLoadingPanel Mode="ShowAsPopup" />
-                    <ClientSideEvents 
-                        CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" 
-                        EndCallback="function(s,e) { OnEndCallback(s,e); }"
-                        Init="OnInitGrid"  />
-                    <Columns>
+                    <EditButton>
+                        <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+                        <Styles>
+                            <Style Paddings-PaddingRight="5px" />
+                        </Styles>
+                    </EditButton>
+                </SettingsCommandButton>                
+                <Columns>
 
-                        <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" />
+                    <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" />
 
-                        <dx:GridViewCommandColumn Width="160px" VisibleIndex="1" ButtonType="Image" ShowEditButton="true" Caption=" " Name="butoaneGrid" >
-                            <CustomButtons>
-                                <dx:GridViewCommandColumnCustomButton ID="btnDelete">
-                                    <Image ToolTip="Anulare" Url="~/Fisiere/Imagini/Icoane/sterge.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                                <dx:GridViewCommandColumnCustomButton ID="btnIstoric">
-                                    <Image ToolTip="Istoric" Url="~/Fisiere/Imagini/Icoane/motive.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                                <dx:GridViewCommandColumnCustomButton ID="btnDivide">
-                                    <Image ToolTip="Divide" Url="~/Fisiere/Imagini/Icoane/divide.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                                <dx:GridViewCommandColumnCustomButton ID="btnCerere">
-                                    <Image ToolTip="Arata cerere" Url="~/Fisiere/Imagini/Icoane/arata.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                                <dx:GridViewCommandColumnCustomButton ID="btnAtasament">
-                                    <Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/view.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                                <dx:GridViewCommandColumnCustomButton ID="btnPlanif">
-                                    <Image ToolTip="Transforma in solicitat" Url="~/Fisiere/Imagini/Icoane/notif.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                            </CustomButtons>
-                        </dx:GridViewCommandColumn>
+                    <dx:GridViewCommandColumn Width="160px" VisibleIndex="1" ButtonType="Image" ShowEditButton="true" Caption=" " Name="butoaneGrid" >
+                        <CustomButtons>
+                            <dx:GridViewCommandColumnCustomButton ID="btnDelete">
+                                <Image ToolTip="Anulare" Url="~/Fisiere/Imagini/Icoane/sterge.png" />
+                            </dx:GridViewCommandColumnCustomButton>
+                            <dx:GridViewCommandColumnCustomButton ID="btnIstoric">
+                                <Image ToolTip="Istoric" Url="~/Fisiere/Imagini/Icoane/motive.png" />
+                            </dx:GridViewCommandColumnCustomButton>
+                            <dx:GridViewCommandColumnCustomButton ID="btnDivide">
+                                <Image ToolTip="Divide" Url="~/Fisiere/Imagini/Icoane/divide.png" />
+                            </dx:GridViewCommandColumnCustomButton>
+                            <dx:GridViewCommandColumnCustomButton ID="btnCerere">
+                                <Image ToolTip="Arata cerere" Url="~/Fisiere/Imagini/Icoane/arata.png" />
+                            </dx:GridViewCommandColumnCustomButton>
+                            <dx:GridViewCommandColumnCustomButton ID="btnAtasament">
+                                <Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/view.png" />
+                            </dx:GridViewCommandColumnCustomButton>
+                            <dx:GridViewCommandColumnCustomButton ID="btnPlanif">
+                                <Image ToolTip="Transforma in solicitat" Url="~/Fisiere/Imagini/Icoane/notif.png" />
+                            </dx:GridViewCommandColumnCustomButton>
+                        </CustomButtons>
+                    </dx:GridViewCommandColumn>
 
-                        <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="250px" VisibleIndex="2" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
-                        </dx:GridViewDataComboBoxColumn>
+                    <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="250px" VisibleIndex="2" >
+                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                        <Settings FilterMode="DisplayText" />
+                    </dx:GridViewDataComboBoxColumn>
 
-                        <dx:GridViewDataTextColumn FieldName="Actiune" Name="Actiune" Caption="Actiune" ReadOnly="true" Width="150px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="Rol" Name="Rol" Caption="Rol" ReadOnly="true" Width="150px" Visible="false" ShowInCustomizationForm="false" />
+                    <dx:GridViewDataTextColumn FieldName="Actiune" Name="Actiune" Caption="Actiune" ReadOnly="true" Width="150px" Visible="false" ShowInCustomizationForm="false" />
+                    <dx:GridViewDataTextColumn FieldName="Rol" Name="Rol" Caption="Rol" ReadOnly="true" Width="150px" Visible="false" ShowInCustomizationForm="false" />
 
-                        <dx:GridViewDataTextColumn FieldName="F10003" Name="Marca" Caption="Marca" ReadOnly="true" Width="100px" VisibleIndex="3" Settings-AutoFilterCondition="Equals" />
-                        <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="250px" VisibleIndex="4" Settings-AutoFilterCondition="Contains" />
-                        <dx:GridViewDataTextColumn FieldName="EID" Name="EID" Caption="EID" ReadOnly="true" Width="100px" VisibleIndex="5" Settings-AutoFilterCondition="Equals" />
+                    <dx:GridViewDataTextColumn FieldName="F10003" Name="Marca" Caption="Marca" ReadOnly="true" Width="100px" VisibleIndex="3" Settings-AutoFilterCondition="Equals" />
+                    <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="250px" VisibleIndex="4" Settings-AutoFilterCondition="Contains" />
+                    <dx:GridViewDataTextColumn FieldName="EID" Name="EID" Caption="EID" ReadOnly="true" Width="100px" VisibleIndex="5" Settings-AutoFilterCondition="Equals" />
 
-                        <dx:GridViewDataComboBoxColumn FieldName="IdAbsenta" Name="IdAbsenta" Caption="Absenta" ReadOnly="true" Width="250px" VisibleIndex="6">
-                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
-                        </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data Inceput" ReadOnly="true" Width="100px" VisibleIndex="7" >
-                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                        </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data Sfarsit" ReadOnly="true" Width="100px" VisibleIndex="8" >
-                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                        </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="NrZile" Name="NrZile" Caption="Nr. zile" ReadOnly="true" Width="70px" VisibleIndex="9" />
-                        <dx:GridViewDataTextColumn FieldName="NumarOre" Name="NumarOre" Caption="Nr. ore" ReadOnly="true"  Width="100px" UnboundType="String" VisibleIndex="10"/>
-                        <dx:GridViewDataTextColumn FieldName="NrOre" Name="NrOre" ReadOnly="true" Width="70px" Visible="false"  />
-                        <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii" Width="250px" VisibleIndex="11" >
-                            <EditFormSettings Visible="False"/>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="NumeInlocuitor" Name="NumeInlocuitor" Caption="Inlocuitor" ReadOnly="true" Width="250px" ShowInCustomizationForm="false" VisibleIndex="12" />
+                    <dx:GridViewDataComboBoxColumn FieldName="IdAbsenta" Name="IdAbsenta" Caption="Absenta" ReadOnly="true" Width="250px" VisibleIndex="6">
+                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                        <Settings FilterMode="DisplayText" />
+                    </dx:GridViewDataComboBoxColumn>
+                    <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data Inceput" ReadOnly="true" Width="100px" VisibleIndex="7" >
+                        <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                    </dx:GridViewDataDateColumn>
+                    <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data Sfarsit" ReadOnly="true" Width="100px" VisibleIndex="8" >
+                        <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                    </dx:GridViewDataDateColumn>
+                    <dx:GridViewDataTextColumn FieldName="NrZile" Name="NrZile" Caption="Nr. zile" ReadOnly="true" Width="70px" VisibleIndex="9" />
+                    <dx:GridViewDataTextColumn FieldName="NumarOre" Name="NumarOre" Caption="Nr. ore" ReadOnly="true"  Width="100px" UnboundType="String" VisibleIndex="10"/>
+                    <dx:GridViewDataTextColumn FieldName="NrOre" Name="NrOre" ReadOnly="true" Width="70px" Visible="false"  />
+                    <dx:GridViewDataMemoColumn FieldName="Observatii" Name="Observatii" Caption="Observatii" Width="250px" VisibleIndex="11">
+                        <PropertiesMemoEdit Width="100%" Height="60px" />
+                    </dx:GridViewDataMemoColumn>                    
+                    <dx:GridViewDataComboBoxColumn FieldName="NumeInlocuitor" Name="NumeInlocuitor" Caption="Inlocuitor" Width="250px" ShowInCustomizationForm="false" VisibleIndex="12">
+                        <PropertiesComboBox DropDownStyle="DropDownList" ValueField="NumeComplet" ValueType="System.String" TextField="NumeComplet" Width="100%">
+                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                        </PropertiesComboBox>
+                    </dx:GridViewDataComboBoxColumn>
+
+                    <dx:GridViewDataComboBoxColumn FieldName="TrimiteLa" Name="TrimiteLa" Caption="Tip aditional solicitare" Width="250px" VisibleIndex="14">
+                        <PropertiesComboBox DropDownStyle="DropDownList" ValueField="Denumire" ValueType="System.String" TextField="Denumire" Width="100%">
+                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                        </PropertiesComboBox>
+                    </dx:GridViewDataComboBoxColumn>                                           
+                    <dx:GridViewDataMemoColumn FieldName="Comentarii" Name="Comentarii" Caption="Comentarii" Width="250px" VisibleIndex="15">
+                        <PropertiesMemoEdit Width="100%" Height="60px" />
+                    </dx:GridViewDataMemoColumn>
+                    <dx:GridViewDataTextColumn FieldName="DateConcatenate" Name="DateConcatenate" Caption="Informatii aditionale" ReadOnly="true" Width="250px" VisibleIndex="16" />
                         
-                        <dx:GridViewDataTextColumn FieldName="TrimiteLa" Name="TrimiteLa" Caption="Tip aditional solicitare" Width="250px" VisibleIndex="14" />
-                        <dx:GridViewDataTextColumn FieldName="Comentarii" Name="Comentarii" Caption="Comentarii" Width="250px" VisibleIndex="15" />
-                        <dx:GridViewDataTextColumn FieldName="DateConcatenate" Name="DateConcatenate" Caption="Informatii aditionale" ReadOnly="true" Width="250px" VisibleIndex="16" />
-                        
-                        <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="17" />
-                        <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="F10003" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="18" />
-                        <dx:GridViewDataTextColumn FieldName="Inlocuitor" Name="Inlocuitor" Caption="Inlocuitor" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="19" />
+                    <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="17" />
+                    <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="F10003" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="18" />
+                    <dx:GridViewDataTextColumn FieldName="Inlocuitor" Name="Inlocuitor" Caption="Inlocuitor" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="19" />
 
-                        <dx:GridViewDataTextColumn FieldName="Compensare" Name="Compensare" Caption="Trimite la" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="20" />
-                        <dx:GridViewDataTextColumn FieldName="CompensarePlata" Name="CompensarePlata" Caption="Trimite la plata" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="21" />
-                        <dx:GridViewDataTextColumn FieldName="CompensarePlataDenumire" Name="CompensarePlataDenumire" Caption="Trimite la plata" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="22" />
-                        <dx:GridViewDataTextColumn FieldName="CompensareBanca" Name="CompensareBanca" Caption="Trimite la banca" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="23" />
-                        <dx:GridViewDataTextColumn FieldName="CompensareBancaDenumire" Name="CompensareBancaDenumire" Caption="Trimite la banca" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="24" />
+                    <dx:GridViewDataTextColumn FieldName="Compensare" Name="Compensare" Caption="Trimite la" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="20" />
+                    <dx:GridViewDataTextColumn FieldName="CompensarePlata" Name="CompensarePlata" Caption="Trimite la plata" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="21" />
+                    <dx:GridViewDataTextColumn FieldName="CompensarePlataDenumire" Name="CompensarePlataDenumire" Caption="Trimite la plata" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="22" />
+                    <dx:GridViewDataTextColumn FieldName="CompensareBanca" Name="CompensareBanca" Caption="Trimite la banca" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="23" />
+                    <dx:GridViewDataTextColumn FieldName="CompensareBancaDenumire" Name="CompensareBancaDenumire" Caption="Trimite la banca" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="24" />
 
-                        <dx:GridViewDataTextColumn FieldName="AdaugaAtasament" Name="AdaugaAtasament" Caption="Adauga Atasament" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="25" />
+                    <dx:GridViewDataTextColumn FieldName="AdaugaAtasament" Name="AdaugaAtasament" Caption="Adauga Atasament" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="25" />
 
-                        <dx:GridViewDataTextColumn FieldName="Anulare_Valoare" Name="Anulare_Valoare" Caption="Anulare - tip" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="26" />
-                        <dx:GridViewDataTextColumn FieldName="Anulare_NrZile" Name="Anulare_NrZile" Caption="Anulare - nr zile" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="27" />
+                    <dx:GridViewDataTextColumn FieldName="Anulare_Valoare" Name="Anulare_Valoare" Caption="Anulare - tip" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="26" />
+                    <dx:GridViewDataTextColumn FieldName="Anulare_NrZile" Name="Anulare_NrZile" Caption="Anulare - nr zile" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="27" />
 
-                        <dx:GridViewDataTextColumn FieldName="CampBifa" Name="CampBifa" Caption="CampBifa" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="28" />
+                    <dx:GridViewDataCheckColumn FieldName="CampBifa" Name="CampBifa" Caption="CampBifa" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="28">
+                        <EditFormSettings Visible="true" />
+                    </dx:GridViewDataCheckColumn>
 
-                    </Columns>
-
-                    <SettingsCommandButton>
-                        <UpdateButton ButtonType="Link" Text="Actualizeaza">
-                            <Styles>
-                                <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10" Font-Bold="true">
-                                </Style>
-                            </Styles>
-                        </UpdateButton>
-                        <CancelButton ButtonType="Link" Text="Renunta">
-                            <Styles>
-                                <Style Font-Bold="true" />
-                            </Styles>
-                        </CancelButton>
-
-                        <EditButton Image-ToolTip="Edit">
-                            <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
-                            <Styles>
-                                <Style Paddings-PaddingRight="5px" />
-                            </Styles>
-                        </EditButton>
-                    </SettingsCommandButton>
-
-                    <Templates>
-                        <EditForm>
-                            <div style="padding: 4px 3px 4px">
-                                <table>
-                                    <tr>
-                                        <td>Observatii</td>
-                                        <td style="padding-left:10px !important;">Comentarii</td>
-                                    </tr>
-                                    <tr>
-                                        <td><dx:ASPxMemo ID="txtObs" runat="server" Width="500px" Height="150" Text='<%# Bind("Observatii") %>' OnInit="oObservatiiMemo_Init" /></td>
-                                        <td style="padding:10px !important;"><dx:ASPxMemo ID="txtCom" runat="server" Width="500px" Height="150" Text='<%# Bind("Comentarii") %>' OnInit="comentariiMemo_Init" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <div style="float:left; margin-right:230px; margin-bottom:15px;">
-                                                <dx:ASPxLabel ID="lblInl" runat="server" ClientIDMode="Static" ClientInstanceName="lblInl" Text="Inlocuitor" CssClass="label_left"></dx:ASPxLabel>
-                                                <dx:ASPxComboBox ID="cmbInl" runat="server" ClientInstanceName="cmbInl" ClientIDMode="Static" Width="215px" ValueField="F10003" DropDownWidth="200" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" />
-                                            </div>
-                                            <div>
-                                                <dx:ASPxLabel ID="lblCps" runat="server" ClientIDMode="Static" ClientInstanceName="lblCps" Text="Tip aditional solicitare" CssClass="label_left"></dx:ASPxLabel>
-                                                <dx:ASPxComboBox ID="cmbCps" runat="server" ClientInstanceName="cmbCps" ClientIDMode="Static" Width="215px" ValueField="Id" DropDownWidth="200" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <dx:ASPxUploadControl ID="btnDocUpload" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
-                                                BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
-                                                ClientInstanceName="UploadImage" OnFileUploadComplete="btnDocUpload_FileUploadComplete" ValidationSettings-ShowErrors="false" meta:resourcekey="btnDocUploadResource1">
-                                                <BrowseButton>
-                                                    <Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
-                                                </BrowseButton>
-                                                <ValidationSettings ShowErrors="False"></ValidationSettings>
-
-                                                <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
-                                            </dx:ASPxUploadControl>
-                                            <dx:ASPxCheckBox ID="chkBifa" runat="server" Text="Camp bifa" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"CampBifa").ToString()=="1"%>'></dx:ASPxCheckBox>
-                                        </td>
-                                    </tr>
-                                </table>
+                </Columns>                
+                <Templates>
+                    <EditForm>      
+                        <div class="panel panel-slim panel-adaptive-fullscreen">
+                          <div class="panel-body">
+                            <div class="row row-fix">
+                                <div class="col-sm-6 col-xs-12">
+                                    <dx:ASPxLabel ID="ObservatiiTemplateLabel" runat="server" AssociatedControlID="ObservatiiTemplate" Text="Observatii" Font-Bold="true" />
+                                    <dx:ASPxGridViewTemplateReplacement ID="ObservatiiTemplate" runat="server" ReplacementType="EditFormCellEditor" ColumnID="Observatii" />                                            
+                                </div>
+                                <div class="col-sm-6 col-xs-12">
+                                    <dx:ASPxLabel ID="ComentariiTemplateLabel" runat="server" AssociatedControlID="ComentariiTemplate" Text="Comentarii" Font-Bold="true" />
+                                    <dx:ASPxGridViewTemplateReplacement ID="ComentariiTemplate" runat="server" ReplacementType="EditFormCellEditor" ColumnID="Comentarii" />                                        
+                                </div>
                             </div>
-                            <div style="text-align: left; padding: 2px; font-weight:bold; font-size:32px;">
-                                <dx:ASPxGridViewTemplateReplacement ID="UpdateButton" ReplacementType="EditFormUpdateButton" runat="server"></dx:ASPxGridViewTemplateReplacement>
-                                <dx:ASPxGridViewTemplateReplacement ID="CancelButton" ReplacementType="EditFormCancelButton" runat="server"></dx:ASPxGridViewTemplateReplacement>
+                            <div class="row row-fix">
+                                <div id="InlocuitorEditContainer" runat="server" class="col-sm-6 col-xs-12">
+                                    <dx:ASPxLabel ID="InlocuitorTemplateLabel" runat="server" AssociatedControlID="InlocuitorTemplate" Text="Inlocuitor" Font-Bold="true" />
+                                    <dx:ASPxGridViewTemplateReplacement ID="InlocuitorTemplate" runat="server" ReplacementType="EditFormCellEditor" ColumnID="NumeInlocuitor" />                                    
+                                </div>
+                                <div id="SolicitareEditContainer" runat="server" class="col-sm-6 col-xs-12">
+                                    <dx:ASPxLabel ID="SolicitareTemplateLabel" runat="server" AssociatedControlID="SolicitareTemplate" Text="Tip aditional solicitare" Font-Bold="true" />
+                                    <dx:ASPxGridViewTemplateReplacement ID="SolicitareTemplate" runat="server" ReplacementType="EditFormCellEditor" ColumnID="TrimiteLa" />                                    
+                                </div>
                             </div>
-                        </EditForm>
-                    </Templates>
-                    
-                </dx:ASPxGridView>
-                    
-            </td>
-        </tr>
-    </table>
+                            <div class="row row-fix">
+                                <div id="UploadEditContainer" runat="server" class="col-xs-6">
+                                    <dx:ASPxUploadControl ID="btnDocUpload" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
+                                        BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
+                                        ClientInstanceName="UploadImage" OnFileUploadComplete="btnDocUpload_FileUploadComplete" ValidationSettings-ShowErrors="false" meta:resourcekey="btnDocUploadResource1">
+                                        <BrowseButton>
+                                            <Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
+                                        </BrowseButton>
+                                        <ValidationSettings ShowErrors="False"></ValidationSettings>
 
+                                        <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                                    </dx:ASPxUploadControl>                                    
+                                </div>
+                                <div id="CampBifaEditContainer" runat="server" class="col-xs-6">
+                                    <dx:ASPxLabel ID="CampBifaTemplateLabel" runat="server" AssociatedControlID="CampBifaTemplate" Text="Camp bifa" Font-Bold="true" CssClass="label-inline" />                                    
+                                    <dx:ASPxGridViewTemplateReplacement ID="CampBifaTemplate" runat="server" ReplacementType="EditFormCellEditor" ColumnID="CampBifa" />
+                                </div>
+                            </div>                            
+                          </div>
+                          <div class="panel-footer panel-footer-commandbox">
+                              <dx:ASPxGridViewTemplateReplacement ID="UpdateButton" runat="server" ReplacementType="EditFormUpdateButton" />
+                              <dx:ASPxGridViewTemplateReplacement ID="CancelButton" runat="server" ReplacementType="EditFormCancelButton" />
+                          </div>
+                        </div>                                                             
+                    </EditForm>                    
+                </Templates>
+                <ClientSideEvents 
+                    CustomButtonClick="grDate_CustomButtonClick" 
+                    ContextMenu="ctx" 
+                    EndCallback="function(s,e) { OnEndCallback(s,e); }" />
+            </dx:ASPxGridView>
+        </div>
+    </div>
     
     <dx:ASPxPopupControl ID="popUpDivide" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
         CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
@@ -633,12 +566,60 @@
                 </asp:Panel>
             </dx:PopupControlContentControl>
         </ContentCollection>
-    </dx:ASPxPopupControl>
+    </dx:ASPxPopupControl>   
 
+    <script>       
+        var textSeparator = ',';
+        
+        function updateComboBoxText(comboBox, listBox) {            
+            comboBox.SetText(getSelectedItemsText(listBox));
+        }
+        function updateListBoxValues(comboBox, listBox) {
+            listBox.UnselectAll();
+            listBox.SelectValues(getValuesByTexts(comboBox, listBox));            
+        }
+        function getSelectedItemsText(listBox) {
+            var items = listBox.GetSelectedItems();
+            var texts = [];
 
-    <dx:ASPxGlobalEvents ID="ge" runat="server">
-        <ClientSideEvents ControlsInitialized="OnControlsInitialized" />
-    </dx:ASPxGlobalEvents>
+            for (var i = 0; i < items.length; i++) {
+                texts.push(items[i].text);
+            }
 
+            return texts.join(textSeparator);
+        }
+        function getValuesByTexts(comboBox, listBox) {
+            var texts = comboBox.GetText().split(textSeparator);
+            var values = [];
+            var item;
+
+            for (var i = 0; i < texts.length; i++) {
+                (item = listBox.FindItemByText(texts[i])) && values.push(item.value);                
+            }
+
+            return values;
+        }     
+
+        /* Page control */
+        var pageControl = {
+            /* Data */
+            pageContent: null,
+            /* Interface */
+            init: function () {
+                var self = this;
+
+                self.pageContent = $('.page-content');
+                ASPxClientControl.GetControlCollection().ControlsInitialized.AddHandler(function () {
+                    self.onControlsInitialized(self);
+                });
+            },
+            /* Events */
+            onControlsInitialized: function (pageControl) {
+                pageControl.pageContent.find('> div[class="invisible"]').removeClass('invisible'); // Useful for hiding DX GridView layout issues from page loading.
+            }            
+        };
+
+        pageControl.init();
+    </script>
 
 </asp:Content>

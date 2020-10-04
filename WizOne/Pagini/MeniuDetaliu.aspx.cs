@@ -127,18 +127,15 @@ namespace WizOne.Pagini
                             break;
                     }
 
-                    (grDate.Columns["Imagine"] as TreeListComboBoxColumn).PropertiesComboBox.DataSource = Session["Icons"] = IncarcaIcoane();
-                    (grDate.Columns["IdNomen"] as TreeListComboBoxColumn).PropertiesComboBox.DataSource = Session["Menus"] = General.IncarcaDT(@"SELECT * FROM ""tblMeniuri"" ", null);
-                    grDate.DataSource = Session["InformatiaCurenta"] = dt;
-                    grDate.DataBind();
-                }
-                else
-                {
-                    (grDate.Columns["Imagine"] as TreeListComboBoxColumn).PropertiesComboBox.DataSource = Session["Icons"];
-                    (grDate.Columns["IdNomen"] as TreeListComboBoxColumn).PropertiesComboBox.DataSource = Session["Menus"];
-                    grDate.DataSource = Session["InformatiaCurenta"];
-                    grDate.DataBind();
-                }
+                    Session["Icons"] = IncarcaIcoane();
+                    Session["Menus"] = General.IncarcaDT(@"SELECT * FROM ""tblMeniuri"" ", null);
+                    Session["InformatiaCurenta"] = dt;                    
+                }                
+
+                (grDate.Columns["Imagine"] as TreeListComboBoxColumn).PropertiesComboBox.DataSource = Session["Icons"];
+                (grDate.Columns["IdNomen"] as TreeListComboBoxColumn).PropertiesComboBox.DataSource = Session["Menus"];
+                grDate.DataSource = Session["InformatiaCurenta"];
+                grDate.DataBind();
             }
             catch (Exception ex)
             {

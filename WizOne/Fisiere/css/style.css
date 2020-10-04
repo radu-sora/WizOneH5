@@ -396,31 +396,35 @@ a, a:focus, a:hover {
     width: 100%;
     height: 100%;
 }
-    .page-content > div:nth-child(1) {
+    .page-content > div:first-child {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
         width: 100%;
     }
-        .page-content > div:nth-child(1) > div:nth-child(1),
-        .page-content > div:nth-child(1) > div:nth-child(2) > * {
+        .page-content > div:first-child > div:nth-child(1),
+        .page-content > div:first-child > div:nth-child(2) > * {
             margin-bottom: 10px;
         }
-        .page-content > div:nth-child(1) > div:nth-child(2) {
+        .page-content > div:first-child > div:nth-child(2) {
             float: right;
         }             
-    .page-content > div:nth-child(2) {
+    .page-content > div:last-child {
         height: 100%;
         overflow: hidden;
     }    
 
 @media all and (max-width:768px) {
-    .page-content > div:nth-child(1) {        
-        padding: 5px 5px 0;
+    .page-content > div:first-child {
+        padding-top: 5px;
     }
-        .page-content > div:nth-child(1) > div:nth-child(1),
-        .page-content > div:nth-child(1) > div:nth-child(2) > * {
+    .page-content > div:not(:last-child) {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+        .page-content > div:first-child > div:nth-child(1),
+        .page-content > div:first-child > div:nth-child(2) > * {
             margin-bottom: 5px;
         }        
 }
@@ -456,6 +460,14 @@ a, a:focus, a:hover {
 }
 
 @media all and (max-width:768px) {
+    /* Fix DX gridview main container */
+    .dx-grid-adaptive {
+        border: none;
+    }
+        .dx-grid-adaptive > tbody > tr > td {
+            padding: 0 !important;
+        }
+
     /* Fix DX search panel for max width */
     .dx-grid-adaptive div[class*="dxgvSearchPanel"] {
         padding-left: 5px;
@@ -468,6 +480,8 @@ a, a:focus, a:hover {
     
     /* Works only for AdaptivityMode = HideDataCellsWindowLimit */
     .dx-grid-adaptive div[class*="dxgvAdaptiveHeaderPanel"] + .dxgvHSDC, /* Fix DX adaptive layout bug when using swipe left/right */
+    .dx-grid-adaptive.dx-grid-adaptive-hide-group div[class*="dxgvGroupPanel"],
+    .dx-grid-adaptive.dx-grid-adaptive-hide-group div[class*="dxgvAdaptiveGroupPanel"],
     .dx-grid-adaptive.dx-grid-adaptive-hide-header div[class*="dxgvAdaptiveHeaderPanel"],
     .dx-grid-adaptive.dx-grid-adaptive-hide-header-column1 div[class*="dxgvAdaptiveHeaderPanel"] > .dxgvADH:nth-child(2),
     /* Works only for AdaptivityMode = HideDataCells with one column detail section */
@@ -487,6 +501,116 @@ a, a:focus, a:hover {
         text-overflow: ellipsis;
         white-space: nowrap;
     }*/
+
+    /* DX gridview popup support for adaptive fullscreen */
+    .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys,
+    .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW,
+    .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv {
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+        .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv .dxgPEFTW > tbody > tr > td,
+        .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv .dxgPEFTW > tbody > tr > td > div {
+            height: 100%;
+        }
+}
+
+/* DX dropdown responsive editor */
+.dx-dropdownwindow-adaptive {
+    font-size: 0;
+    padding-bottom: 20px;
+}
+
+@media all and (min-width:768px) {
+    .dx-dropdownwindow-adaptive > div:last-child > table[class*="dxeListBox_"] {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+    }
+    .dx-dropdownwindow-adaptive > div:last-child > table[class*="dxeListBox_"][class*="dxeFocused_"] {
+        border-bottom-color: transparent;
+    }
+}
+
+@media all and (max-width:768px) {
+    .dx-dropdownwindow-adaptive > div:last-child {
+        margin: 20px 20px 0;
+        width: calc(100% - 40px) !important;
+        min-width: 250px;
+    }
+}
+
+/* DX popup support for adaptive fullscreen (set at container level) */
+@media all and (max-width:768px) {
+    .dx-popup-adaptive-fullscreen > .dxmodalSys,
+    .dx-popup-adaptive-fullscreen > .dxmodalSys > .dxpclW,
+    .dx-popup-adaptive-fullscreen > .dxmodalSys > .dxpclW > .dxpc-mainDiv {
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+}
+
+/* BS fix for vertical/horizontal space between rows and wrapped cols. Make BS cols same height. */
+.row.row-fix {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    line-height: 0.8;
+    margin-left: -10px;
+    margin-right: -10px;
+    
+}    
+    .row.row-fix > div[class^="col-"],
+    .row.row-fix > div[class*=" col-"] {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+
+@media all and (max-width:768px) {
+    .row.row-fix {
+        margin-left: -5px;
+        margin-right: -5px;        
+    }        
+        .row.row-fix > div[class^="col-"],
+        .row.row-fix > div[class*=" col-"] {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 5px;
+        }
+}
+
+/* BS panel support for slim, command box and adaptive layout */
+.panel.panel-slim {
+    border: none;
+    margin-bottom: 0;
+}
+.panel-footer.panel-footer-commandbox {
+    display: flex;
+    justify-content: flex-end;
+}
+    .panel-footer.panel-footer-commandbox > *:not(:first-child) {
+        margin-left: 5px;
+    }
+
+@media all and (max-width:768px) {
+    .panel.panel-adaptive-fullscreen {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+        .panel.panel-adaptive-fullscreen > .panel-body {
+            flex: 1 0 0;
+            overflow-y: auto;
+        }
+}
+
+/* BS label support for inline fields */
+.label-inline {
+    margin-bottom: 0;
+    vertical-align: middle;
 }
            
 /* Badge widget */

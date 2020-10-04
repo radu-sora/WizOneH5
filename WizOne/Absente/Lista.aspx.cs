@@ -8,20 +8,23 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Absente
 {
-    public partial class Lista : System.Web.UI.Page
+    public partial class Lista : Page
     {
-
         bool esteHr = false;
-
-        internal class metaDate
+        
+        private bool IsMobileDevice
         {
-            public int Id { get; set; }
-            public string Denumire { get; set; }
+            get
+            {
+                var userAgent = Request.ServerVariables["HTTP_USER_AGENT"];
+                var devices = new string[] { "iPhone", "iPad", "Android", "Windows Phone" }; // Add more devices
+
+                return devices.Any(d => userAgent.Contains(d));
+            }
         }
 
         protected void Page_Init(object sender, EventArgs e)
@@ -38,6 +41,14 @@ namespace WizOne.Absente
                 DataTable dtStari = General.IncarcaDT($@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
                 GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 colStari.PropertiesComboBox.DataSource = dtStari;
+
+                (grDate.Columns["NumeInlocuitor"] as GridViewDataComboBoxColumn).PropertiesComboBox.DataSource = General.IncarcaDT(General.SelectInlocuitori(-55, new DateTime(1900, 1, 1), new DateTime(2200, 1, 1)), null);
+                (grDate.Columns["TrimiteLa"] as GridViewDataComboBoxColumn).PropertiesComboBox.DataSource = General.IncarcaDT(
+                    "SELECT Id, Denumire FROM Ptj_tblAbsente WHERE Id IN (SELECT CompensareBanca FROM Ptj_tblAbsente WHERE Compensare > 0 UNION SELECT CompensarePlata FROM Ptj_tblAbsente WHERE Compensare > 0) " +
+                    "UNION " +
+                   $"SELECT -13 AS Id, '{Dami.TraduCuvant("Banca")}' AS Denumire " +
+                    "UNION " +
+                   $"SELECT -14 AS Id, '{Dami.TraduCuvant("Plata")}' AS Denumire");                    
 
                 grDate.JSProperties["cpParamMotiv"] = Dami.ValoareParam("AfisareMotivLaRespingereCerere","0");
 
@@ -78,12 +89,12 @@ namespace WizOne.Absente
                 btnAtasament.Image.ToolTip = Dami.TraduCuvant("btnAtasament", "Arata Atasament");
                 btnPlanif.Image.ToolTip = Dami.TraduCuvant("btnPlanif", "Transforma in solicitat");
 
-                lblStare.InnerText = Dami.TraduCuvant("Stare");
-                lblDtInc.InnerText = Dami.TraduCuvant("Data Inceput");
-                lblDtSf.InnerText = Dami.TraduCuvant("Data Sfarsit");
+                lblStare.Text = Dami.TraduCuvant("Stare");
+                lblDtInc.Text = Dami.TraduCuvant("Data Inceput");
+                lblDtSf.Text = Dami.TraduCuvant("Data Sfarsit");
 
-                lblViz.InnerText = Dami.TraduCuvant("Vizualizare");
-                lblRol.InnerText = Dami.TraduCuvant("Roluri");
+                lblViz.Text = Dami.TraduCuvant("Vizualizare");
+                lblRol.Text = Dami.TraduCuvant("Roluri");
 
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
 
@@ -104,7 +115,7 @@ namespace WizOne.Absente
                 }
 
                 //Radu 27.11.2019             
-                ASPxListBox nestedListBox = cmbStare.FindControl("listBoxStare") as ASPxListBox;
+                ASPxListBox nestedListBox = cmbStare.FindControl("lstStare") as ASPxListBox;
                 foreach (ListEditItem item in nestedListBox.Items)                
                     item.Text = Dami.TraduCuvant(item.Text);
                 ASPxButton btnInchide = cmbStare.FindControl("btnInchide") as ASPxButton;
@@ -151,9 +162,9 @@ namespace WizOne.Absente
                             cmbRol.SelectedIndex = 0;
                             break;
                         case 2:
-                            //lblRol.Visible = false;
-                            //cmbRol.Visible = false;
-                            //break;
+                        //lblRol.Visible = false;
+                        //cmbRol.Visible = false;
+                        //break;
                         default:
                             cmbRol.DataSource = dt;
                             cmbRol.DataBind();
@@ -163,25 +174,16 @@ namespace WizOne.Absente
 
                     //determinam daca este angajat sau manager pentru a selecta in cmbViz
                     DataTable dtViz = General.IncarcaDT(@"SELECT * FROM ""F100Supervizori"" WHERE ""IdUser""=@1", new object[] { Session["UserId"].ToString() });
-                    if (dtViz == null || dtViz.Rows.Count == 0 || (dtViz.Rows.Count == 1 && General.Nz(dtViz.Rows[0]["IdSuper"], "0").ToString() == "0"))
-                    {
-                        cmbViz.Items.Add(Dami.TraduCuvant("Toate cererile", "Toate cererile"), 2);
-                    }
-                    else
-                    {
-                        cmbViz.Items.Add(Dami.TraduCuvant("De aprobat", "De aprobat"), 1);
-                        cmbViz.Items.Add(Dami.TraduCuvant("Toate cererile", "Toate cererile"), 2);
-                    }
+                    bool esteMng = !(dtViz == null || dtViz.Rows.Count == 0 || (dtViz.Rows.Count == 1 && General.Nz(dtViz.Rows[0]["IdSuper"], "0").ToString() == "0"));
 
-                    cmbViz.SelectedIndex = 0;
+                    if (esteMng)
+                        cmbViz.Items.Add(Dami.TraduCuvant("De aprobat", "De aprobat"), 1);
 
                     if (esteHr)
-                    {
-                        ListEditItem itm = new ListEditItem();
-                        itm.Text = Dami.TraduCuvant("Toti angajatii", "Toti angajatii");
-                        itm.Value = 3;
-                        cmbViz.Items.Add(itm);
-                    }
+                        cmbViz.Items.Add(Dami.TraduCuvant("Toti angajatii", "Toti angajatii"), 3);
+
+                    cmbViz.Items.Add(Dami.TraduCuvant("Toate cererile", "Toate cererile"), 2);
+                    cmbViz.SelectedIndex = 0;
 
                     //Florin2019.07.17
                     NameValueCollection lst = HttpUtility.ParseQueryString((Session["Filtru_CereriAbs"] ?? "").ToString());
@@ -195,9 +197,21 @@ namespace WizOne.Absente
 
                         Session["Filtru_CereriAbs"] = "";
                     }
+                                        
+                    if (IsMobileDevice)
+                        grDate.Settings.HorizontalScrollBarMode = ScrollBarMode.Hidden;
+
+                    if (!esteMng && !esteHr)
+                    {
+                        btnAproba.Visible = false;
+                        btnRespinge.Visible = false;
+                        grDate.Columns["F10003"].Visible = false;
+                        grDate.Columns["NumeAngajat"].Visible = false;
+                        grDate.Columns["EID"].Visible = false;
+                    }
 
                     grDate.DataBind();
-                }
+                }                                
 
                 if (General.Nz(cmbViz.Value,"").ToString() == "3")
                     cmbRol.Value = -1;
@@ -207,15 +221,14 @@ namespace WizOne.Absente
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }
+        }        
 
         protected void grDate_DataBinding(object sender, EventArgs e)
         {
             try
-            {
+            {                
                 IncarcaGrid();
                 if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);
-                
             }
             catch (Exception ex)
             {
@@ -258,7 +271,7 @@ namespace WizOne.Absente
         {
             try
             {
-                grDate.DataBind();
+                grDate.DataBind();                
             }
             catch (Exception ex)
             {
@@ -325,8 +338,6 @@ namespace WizOne.Absente
 
         private void IncarcaGrid()
         {
-            DataTable dt = new DataTable();
-
             try
             {
                 string filtru = "";
@@ -337,20 +348,24 @@ namespace WizOne.Absente
                 if (txtDtInc.Date != null) filtru += " AND " + General.ToDataUniv(txtDtInc.Date) + @" <= A.""DataSfarsit"" ";
 
                 string sqlFinal = Dami.SelectCereri(Convert.ToInt32(cmbViz.Value ?? -99)) + $@" {filtru} ORDER BY A.TIME DESC";
-                dt = General.IncarcaDT(sqlFinal, null);
-                grDate.KeyFieldName = "Id; Rol";
+                var dtTemp = General.IncarcaDT(sqlFinal, null);
+                var dt = new DataTable();
+
+                dt.Columns.Add("CampBifa", typeof(bool));                
+                dt.Load(dtTemp.CreateDataReader(), LoadOption.OverwriteChanges);                
+                dt.Columns["Observatii"].ReadOnly = false;
+                dt.Columns["Comentarii"].ReadOnly = false;
+                dt.Columns["NumeInlocuitor"].ReadOnly = false;
+                dt.Columns["TrimiteLa"].ReadOnly = false;
+
+                grDate.KeyFieldName = "Id; Rol";                               
                 grDate.DataSource = dt;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-            finally
-            {
-                dt.Dispose();
-                dt = null;
-            }
+            }            
         }
 
         protected void grDate_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
@@ -753,21 +768,11 @@ namespace WizOne.Absente
             {
                 var id = e.Keys["Id"];
 
-                object cps = null;
-                object inl = null;
-                object cb = null;
-
-                ASPxComboBox cmbCps = grDate.FindEditFormTemplateControl("cmbCps") as ASPxComboBox;
-                if (cmbCps != null && cmbCps.SelectedIndex != -1 && cmbCps.Value != null) cps = cmbCps.Value;
-
-                ASPxComboBox cmbInl = grDate.FindEditFormTemplateControl("cmbInl") as ASPxComboBox;
-                if (cmbInl != null && cmbInl.SelectedIndex != -1 && cmbInl.Value != null) inl = cmbInl.Value;
-
-                ASPxCheckBox chk = grDate.FindEditFormTemplateControl("chkBifa") as ASPxCheckBox;
-                if (chk != null && chk.Value != null) cb = chk.Value;
-
+                object cps = (grDate.FindEditFormTemplateControl("SolicitareTemplate").Controls[0] as ASPxComboBox).SelectedItem?.GetFieldValue("Id");
+                object inl = (grDate.FindEditFormTemplateControl("InlocuitorTemplate").Controls[0] as ASPxComboBox).SelectedItem?.GetFieldValue("F10003");                
+                
                 General.ExecutaNonQuery($@"UPDATE ""Ptj_Cereri"" SET ""Observatii""=@1, ""Comentarii""=@2, ""TrimiteLa""=@3, ""Inlocuitor""=@4, ""CampBifa""=@6 WHERE ""Id""=@5", 
-                    new object[] { e.NewValues["Observatii"], e.NewValues["Comentarii"], cps, inl, id, cb });
+                    new object[] { e.NewValues["Observatii"], e.NewValues["Comentarii"], cps, inl, id, ((bool?)e.NewValues["CampBifa"] ?? false) ? 1 : 0 });
 
                 e.Cancel = true;
                 grDate.CancelEdit();
@@ -823,33 +828,7 @@ namespace WizOne.Absente
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-        protected void grDate_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
-        {
-            try
-            {
-                if (e.Column.FieldName == "Comentarii")
-                {
-                    if (Dami.ValoareParam("InlocuitorEditabilInAprobare", "0") == "1")
-                    {
-                        e.Editor.Visible = true;
-                        e.Editor.Caption = "Comentarii";
-                    }
-                    else
-                    {
-                        e.Editor.Visible = false;
-                        e.Editor.Caption = "";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-
+        
         protected void grDate_CustomButtonInitialize(object sender, ASPxGridViewCustomButtonEventArgs e)
         {
             try
@@ -861,126 +840,46 @@ namespace WizOne.Absente
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }
-
-        protected void oObservatiiMemo_Init(object sender, EventArgs e)
-        {
-            try
-            {
-                ASPxMemo txt = sender as ASPxMemo;
-                GridViewDataColumn col = grDate.Columns["Observatii"] as GridViewDataColumn;
-                txt.Enabled = !col.ReadOnly;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void comentariiMemo_Init(object sender, EventArgs e)
-        {
-            try
-            {
-                ASPxMemo txt = sender as ASPxMemo;
-                GridViewDataColumn col = grDate.Columns["Comentarii"] as GridViewDataColumn;
-                txt.Enabled = !col.ReadOnly;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        }        
 
         protected void grDate_HtmlEditFormCreated(object sender, ASPxGridViewEditFormEventArgs e)
         {
             try
             {
-                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Compensare", "CompensareBanca", "CompensarePlata", "CompensareBancaDenumire", "CompensarePlataDenumire", "Inlocuitor", "TrimiteLa", "AdaugaAtasament", "IdStare" }) as object[];
-               
-                ASPxMemo txtObs = grDate.FindEditFormTemplateControl("txtObs") as ASPxMemo;
-                ASPxMemo txtCom = grDate.FindEditFormTemplateControl("txtCom") as ASPxMemo;
+                var editForm = ((e.EditForm as DevExpress.Web.Rendering.GridHtmlEditFormPopupContainer).NamingContainer as ASPxPopupControl);
+                var obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "NumeAngajat", "DataInceput", "Compensare", "CompensareBanca", "CompensarePlata", "AdaugaAtasament", "IdStare" }) as object[];
 
-                ASPxLabel lbl = grDate.FindEditFormTemplateControl("lblInl") as ASPxLabel;
-                ASPxComboBox cmbInl = grDate.FindEditFormTemplateControl("cmbInl") as ASPxComboBox;
-
-                if (Dami.ValoareParam("InlocuitorEditabilInAprobare", "0") == "1")
-                {
-                    DataTable dtInl = General.IncarcaDT(General.SelectInlocuitori(-55, new DateTime(1900, 1, 1), new DateTime(2200, 1, 1)), null);
-                    cmbInl.DataSource = dtInl;
-                    if (Convert.ToInt32(General.Nz(obj[5], -1)) == -1)
-                        cmbInl.Value = null;
-                    else
-                        cmbInl.Value = Convert.ToInt32(General.Nz(obj[5],-1));
-
-                    lbl.Visible = true;
-                    cmbInl.Visible = true;
-                }
+                if (grDate.Columns["NumeAngajat"].Visible)
+                    editForm.HeaderText = $"{Dami.TraduCuvant("Modificare cerere")} {obj[0]}, {Dami.TraduCuvant("data")} {obj[1]:dd/MM/yyyy}";
                 else
-                {
-                    lbl.Visible = false;
-                    cmbInl.Visible = false;
-                }
-
-                ASPxLabel lblCps = grDate.FindEditFormTemplateControl("lblCps") as ASPxLabel;
-                ASPxComboBox cmbCps = grDate.FindEditFormTemplateControl("cmbCps") as ASPxComboBox;
-
-                if (obj[0] != null && (int)obj[0] == 1)
-                {
-                    lblCps.Visible = true;
-                    cmbCps.Visible = true;
-
-                    // id = -13 este banca
-                    // id = -14 este plata
-                    List<metaDate> lst = new List<metaDate>();
-                    metaDate ent = new metaDate();
-                    ent.Id = Convert.ToInt32(General.Nz(obj[1],(int)Constante.IdCompensareDefault.LaBanca));
-                    ent.Denumire = General.Nz(obj[3], Dami.TraduCuvant("Banca")).ToString();
-                    lst.Add(ent);
-
-                    metaDate ent2 = new metaDate();
-                    ent2.Id = Convert.ToInt32(General.Nz(obj[2], (int)Constante.IdCompensareDefault.LaPlata));
-                    ent2.Denumire = General.Nz(obj[4], Dami.TraduCuvant("Plata")).ToString();
-                    lst.Add(ent2);
-
-                    cmbCps.DataSource = lst;
-                    cmbCps.Value = obj[6];
-                }
-                else
-                {
-                    lblCps.Visible = false;
-                    cmbCps.Visible = false;
-                }
-
-                ASPxUploadControl btn = grDate.FindEditFormTemplateControl("btnDocUpload") as ASPxUploadControl;
-                if (btn != null)
-                {
-                    if (General.Nz(obj[7], "0").ToString() == "1")
-                        btn.Visible = true;
-                    else
-                        btn.Visible = false;
-                }
-
-                //daca starea cererii este aprobata si rolul este cel de hr afisam campul bifa
+                    editForm.HeaderText = Dami.TraduCuvant("Modificare cerere");
+                
+                string rolHr = Dami.ValoareParam("Cereri_IDuriRoluriHR");
                 string rolCmp = Dami.ValoareParam("CampBifa_IDuriRoluri");
-                ASPxCheckBox chk = grDate.FindEditFormTemplateControl("chkBifa") as ASPxCheckBox;
-                chk.Text = Dami.TraduCuvant("Camp bifa");
-                if (chk != null)
-                {
-                    if (General.Nz(obj[8], "0").ToString() == "3" && (esteHr || rolCmp.IndexOf((cmbRol.Value ?? "qwerty").ToString()) >= 0))
-                        chk.Visible = true;
-                    else
-                        chk.Visible = false;
-                }
 
                 //daca are rol de HR il lasam sa completeze observatii
-                string rolHr = Dami.ValoareParam("Cereri_IDuriRoluriHR");
-                if (rolHr.IndexOf((cmbRol.Value ?? "").ToString()) >= 0 || General.Nz(cmbViz.Value,"").ToString() == "3")
+                if (!(rolHr.IndexOf((cmbRol.Value ?? "").ToString()) >= 0 || General.Nz(cmbViz.Value, "").ToString() == "3"))
                 {
-                    txtObs.ReadOnly = false;
-                    txtObs.Enabled = true;
+                    var obsMemo = grDate.FindEditFormTemplateControl("ObservatiiTemplate").Controls[0] as ASPxMemo;
+
+                    obsMemo.ReadOnly = true;
+                    obsMemo.Enabled = false;
                 }
+
+                grDate.FindEditFormTemplateControl("InlocuitorEditContainer").Visible = Dami.ValoareParam("InlocuitorEditabilInAprobare", "0") == "1";
+                
+                if (obj[2] != null && (int)obj[2] == 1)
+                {
+                    var solicitareCombo = grDate.FindEditFormTemplateControl("SolicitareTemplate").Controls[0] as ASPxComboBox;
+
+                    solicitareCombo.DataSource = (solicitareCombo.DataSource as DataTable).Select($"Id IN ({General.Nz(obj[3], (int)Constante.IdCompensareDefault.LaBanca)}, {General.Nz(obj[4], (int)Constante.IdCompensareDefault.LaPlata)})").CopyToDataTable();                    
+                }
+                else                
+                    grDate.FindEditFormTemplateControl("SolicitareEditContainer").Visible = false;
+                
+                grDate.FindEditFormTemplateControl("UploadEditContainer").Visible = General.Nz(obj[5], "0").ToString() == "1";
+                grDate.FindEditFormTemplateControl("CampBifaEditContainer").Visible = //daca starea cererii este aprobata si rolul este cel de hr afisam campul bifa
+                    General.Nz(obj[6], "0").ToString() == "3" && (esteHr || rolCmp.IndexOf((cmbRol.Value ?? "qwerty").ToString()) >= 0);
             }
             catch (Exception ex)
             {
@@ -1064,7 +963,7 @@ namespace WizOne.Absente
             try
             {
                 if (General.Nz(cmbStare.Value,"").ToString() != "")
-                {
+                {                    
                     val = cmbStare.Value.ToString().Replace(Dami.TraduCuvant("Solicitat"), "1").Replace(Dami.TraduCuvant("In Curs"), "2").Replace(Dami.TraduCuvant("Aprobat"), "3").Replace(Dami.TraduCuvant("Respins"), "0").Replace(Dami.TraduCuvant("Anulat"), "-1").Replace(Dami.TraduCuvant("Planificat"), "4");
                 }
             }
@@ -1098,9 +997,6 @@ namespace WizOne.Absente
 
                 
             }
-        }
-
-
-
+        }        
     }
 }

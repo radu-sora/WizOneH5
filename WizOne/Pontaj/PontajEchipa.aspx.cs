@@ -1938,9 +1938,9 @@ namespace WizOne.Pontaj
 
                 strSql = "SELECT X.F10003, A.F10008  " + Dami.Operator() + "  ' '  " + Dami.Operator() + "  A.F10009 AS \"AngajatNume\", Y.\"Norma\", C.\"Denumire\" AS \"DescContract\", L.F06205, FCT.F71804 AS \"Functie\", A.F100901, COALESCE(K.\"Culoare\", '#FFFFFFFF') AS \"Culoare\", X.\"IdStare\", K.\"Denumire\" AS \"Stare\", " +
                         "S2.F00204 AS \"Companie\", S3.F00305 AS \"Subcompanie\", S4.F00406 AS \"Filiala\", H.F00507 AS \"Sectie\",I.F00608 AS \"Dept\", S7.F00709 AS \"Subdept\", S8.F00810 AS \"Birou\" " +
+                        "{0} " +
                         f_uri + 
-                        "{0}" +
-                        "FROM \"Ptj_Cumulat\" X  " +
+                        " FROM \"Ptj_Cumulat\" X  " +
                         strInner +
                         "{1}" +
                         "LEFT JOIN F100 A ON A.F10003=X.F10003  " +

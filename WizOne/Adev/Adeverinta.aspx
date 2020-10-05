@@ -164,7 +164,7 @@
                                 </dx:ASPxComboBox>
                             </div>
                             <div style="float:left; padding-right:15px;">
-                                <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Categorie</label>
+                                <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:120px;">Categorie</label>
                                 <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="150px" ValueField="F72402" TextField="F72404" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
                             </div>
                         </td>
@@ -189,7 +189,13 @@
                             <div style="float:left; padding-right:15px;">
                                 <label id="lblCtr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Contract</label>
                                 <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" />
-                            </div>                                                                                                                                                            
+                            </div>   
+                            <div style="float:left; padding-right:15px;">
+                                <label id="lblDataPlec" runat="server" style="display:inline-block; float:left; padding-right:15px; width:120px;">Data plecarii</label>
+                                <dx:ASPxDateEdit ID="deDataPlec" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                                    <CalendarProperties FirstDayOfWeek="Monday" />
+                                </dx:ASPxDateEdit>
+                            </div>                               
                         </td> 
                         </tr>
                         <tr>
@@ -576,7 +582,15 @@
 						    </td>
 						    <td align="left">
 							    <dx:ASPxLabel   Width="275" runat="server"  Text="Coduri tranzactii separate prin + (plus)" ></dx:ASPxLabel >	
-						    </td>		
+						    </td>	
+						    <td align="left">
+							    <dx:ASPxLabel   Width="100" runat="server"  Text="     " ></dx:ASPxLabel >	
+						    </td>
+                            <td align="left">                             
+                                    <dx:ASPxCheckBox ID="chkDIS"  runat="server" Width="300"  Text="Doar suspendarile din intervalul raportat" TextAlign="Right" ClientInstanceName="chkDIS" >
+                                         <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />
+                                    </dx:ASPxCheckBox>   
+                             </td>                             
                         </tr> 
                     </table>
                   </fieldset >

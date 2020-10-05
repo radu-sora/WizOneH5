@@ -8058,6 +8058,7 @@ namespace WizOne.Module
             }
         }
 
+
         public static void CalculFormulePeZi(string filtru)
         {
             try

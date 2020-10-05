@@ -507,7 +507,6 @@ namespace WizOne.Personal
                     {
                         try
                         {
-                            var ert = Convert.ToInt32(General.Nz(ds.Tables[1].Rows[0]["F10025"], 0));
                             if (Convert.ToInt32(General.Nz(ds.Tables[1].Rows[0]["F10025"],0)) == 999  && Convert.ToDateTime(ds.Tables[1].Rows[0]["F10022"]) < General.DamiDataLucru().AddMonths(1))
                             {
                                 MessageBox.Show("Data angajarii este mai mica decat luna de salarizare", MessageBox.icoError, "");
@@ -685,8 +684,6 @@ namespace WizOne.Personal
                     
                 for (int i = 1; i < ds.Tables.Count; i++)
                 {//Radu 10.06.2019
-                    var ert = ds.Tables[i].TableName;
-
                     if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni" || ds.Tables[i].TableName == "Admin_Cursuri" || ds.Tables[i].TableName == "F100Studii")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
@@ -751,6 +748,59 @@ namespace WizOne.Personal
                     }
                     catch (Exception) { }
                 }
+
+
+                string sqlFiltru = $@"F10003=@1 AND CONVERT(DATE,""DataInceput"") = {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE,""DataSfarsit"")";
+                string sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND CONVERT(DATE,""DataSfarsit"")=CONVERT(DATE,{General.CurrentDate()}-1)";
+                string dtMinus = $"CONVERT(DATE,{General.CurrentDate()}-1)";
+                if (Constante.tipBD == 2)
+                {
+                    sqlFiltru = $@"F10003=@1 AND TRUNCATE(""DataInceput"") = {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
+                    sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND TRUNCATE(""DataSfarsit"")=TRUNCATE({General.CurrentDate()}-1)";
+                    dtMinus = $"TRUNCATE({General.CurrentDate()}-1)";
+                }
+                
+                //Florin 2020.10.02
+                //salvam postul
+                string sqlPost =
+                    $@"BEGIN
+                        IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE {sqlFiltru}) <> 0)
+                            BEGIN
+                                IF ({General.Nz(Session["MP_IdPost"],-99)} <> -99)
+                                    BEGIN
+                                        IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE {sqlDupaZi}) = 1)
+                                            BEGIN
+                                                DELETE ""Org_relPostAngajat"" WHERE {sqlFiltru};
+                                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={General.ToDataUniv(2100,1,1)} WHERE {sqlDupaZi};
+                                            END;
+                                        ELSE
+                                            UPDATE ""Org_relPostAngajat"" SET ""IdPost"" = @2 WHERE {sqlFiltru}
+                                    END;                                
+                                ELSE
+                                    DELETE ""Org_relPostAngajat"" WHERE {sqlFiltru};
+                            END;
+                        ELSE
+                            BEGIN
+                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={dtMinus} WHERE {sqlFiltru.Replace("=","<=").Replace("<<","<")};
+                                IF ({General.Nz(Session["MP_IdPost"], -99)} <> -99)                                
+                                    INSERT INTO ""Org_relPostAngajat""(""IdPost"", F10003, ""DataInceput"", ""DataSfarsit"", ""IdPostVechi"", USER_NO, TIME) VALUES(@2, @1, {General.CurrentDate(true)}, 
+                                    COALESCE((SELECT ""DataSfarsit"" FROM ""Org_relPostAngajat"" WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")}), {General.ToDataUniv(2100,1,1)}), 
+                                    (SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")}), @3, {General.CurrentDate()});
+                            END;                     
+                    END;";
+                //if (Constante.tipBD == 2)
+                //    sqlPost = $@"BEGIN
+                //                IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND TRUNCATE(""DataInceput"") = {General.CurrentDate(true)}  AND {General.CurrentDate(true)}  <= TRUNCATE(""DataSfarsit"")) <> 0)
+                //                    UPDATE ""Org_relPostAngajat"" SET ""IdPost"" = @2 WHERE F10003=@1 AND TRUNCATE(""DataInceput"") = {General.CurrentDate(true)}  AND {General.CurrentDate(true)}  <= TRUNCATE(""DataSfarsit"")
+                //                ELSE
+                //                    BEGIN
+                //                        UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={General.CurrentDate(true)}-1 WHERE F10003=@1 AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"");
+                //                        INSERT INTO ""Org_relPostAngajat""(""IdPost"", F10003, ""DataInceput"", ""DataSfarsit"", ""IdPostVechi"", USER_NO, TIME) VALUES(@2, @1, {General.CurrentDate(true)}, 
+                //                        COALESCE((SELECT ""DataSfarsit"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")), '2100-01-01'), 
+                //                        (SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")), @3, {General.CurrentDate()});
+                //                    END;                             
+                //            END;";
+                General.ExecutaNonQuery(sqlPost, new object[] { Session["Marca"], Session["MP_IdPost"], Session["UserId"] });
 
 
                 //Florin 2019.09.23
@@ -1775,6 +1825,9 @@ namespace WizOne.Personal
 
                 //Florin 2020.08.20
                 Session["List_DocUpload_MP_Atasamente"] = null;
+
+                //Florin 2020.10.02
+                Session["MP_IdPost"] = null;
             }
             catch (Exception ex)
             {

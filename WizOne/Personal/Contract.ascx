@@ -736,11 +736,11 @@
 
     <table width="100%">
 		<tr>
-			<td align="left">					
+			<td align="left">
 			</td>
-		</tr>			
+		</tr>
 	</table>
-				
+
 
 
    <dx:ASPxCallbackPanel ID = "Contract_pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtlContract" runat="server" OnCallback="pnlCtlContract_Callback" SettingsLoadingPanel-Enabled="false">
@@ -1237,7 +1237,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsFunctie"  Value='<%#Eval("F10071") %>' ID="cmbFunctie" Width="130" TabIndex="34" runat="server" DropDownStyle="DropDown"  TextField="F71804" ValueField="F71802" ValueType="System.Int32">
-                                
+                                <ClientSideEvents SelectedIndexChanged="function(s,e) { pnlLoading.Show(); pnlCtlContract.PerformCallback(s.name); }" />
 							</dx:ASPxComboBox >
 						</td>
                         <td>
@@ -1299,7 +1299,17 @@
                                 <Paddings PaddingLeft="10px"/>
                             </dx:ASPxButton>
                         </td>
-					</tr>  
+					</tr>
+                    <tr>
+                        <td>
+                            <dx:ASPxLabel ID="lblPost" runat="server" Text="Post" />
+                        </td>
+                        <td>
+                            <dx:ASPxComboBox ID="cmbPost" runat="server" TextField="Denumire" ValueField="Id" DropDownStyle="DropDownList" ValueType="System.Int32" Width="130" TabIndex="37" AllowNull="true">
+                                <ClientSideEvents SelectedIndexChanged="function(s,e) { pnlCtlContract.PerformCallback(s.name); }" />
+                            </dx:ASPxComboBox>
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <dx:ASPxCheckBox ID="chkFunctieBaza"  runat="server" Width="150" Text="Functie de baza" TextAlign="Left" TabIndex="38"  Checked='<%#  Eval("F10032") == DBNull.Value ? false : Convert.ToBoolean(Eval("F10032"))%>' ClientInstanceName="chkbx4" >

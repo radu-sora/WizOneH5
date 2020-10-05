@@ -5624,6 +5624,9 @@ namespace WizOne.Module
                 //Florin 2020.08.18
                 HttpContext.Current.Session["FisiereDeSters"] = "";
 
+                //Florin 2020.10.02
+                HttpContext.Current.Session["MP_IdPost"] = null;
+
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
 

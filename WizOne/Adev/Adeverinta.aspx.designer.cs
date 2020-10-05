@@ -231,22 +231,22 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxComboBox cmbCtr;
 
         /// <summary>
-        /// lblDataAng control.
+        /// lblDataPlec control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDataAng;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDataPlec;
 
         /// <summary>
-        /// deDataAng control.
+        /// deDataPlec control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxDateEdit deDataAng;
+        protected global::DevExpress.Web.ASPxDateEdit deDataPlec;
 
         /// <summary>
         /// btnFiltru control.

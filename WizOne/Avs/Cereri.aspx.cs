@@ -1453,7 +1453,20 @@ namespace WizOne.Avs
 
                 dtTemp = General.IncarcaDT("SELECT F100931 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 txt4Act.Text = dtTemp.Rows[0][0].ToString();
-                
+
+                string sqlPost = $@"SELECT Id, Denumire FROM Org_Posturi WHERE IdFunctie={General.Nz(cmb1Act.Value, -99)} AND CONVERT(DATE, DataInceput) <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE, DataSfarsit)";
+                string sqlIdPost = $"SELECT IdPost FROM Org_relPostAngajat WHERE F10003=@1 AND CONVERT(DATE, DataInceput) <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE, DataSfarsit)";
+                if (Constante.tipBD == 2)
+                {
+                    sqlPost = $@"SELECT ""Id"", ""Denumire"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmb1Act.Value, -99)} AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
+                    sqlIdPost = $@"SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
+                }
+                DataTable dtPost = General.IncarcaDT(sqlPost);
+                cmb3Act.DataSource = dtPost;
+                cmb3Act.DataBind();
+                cmb3Nou.DataSource = dtPost;
+                cmb3Nou.DataBind();
+                cmb3Act.Value = General.ExecutaScalar(sqlIdPost, new object[] { cmbAng.Value });
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.CodCOR)
@@ -2302,6 +2315,18 @@ namespace WizOne.Avs
                             if (e.Parameter.Split(';')[1] == "txt1Nou" || e.Parameter.Split(';')[1] == "txt2Nou" || e.Parameter.Split(';')[1] == "txt3Nou" || e.Parameter.Split(';')[1] == "txt4Nou")
                                 ValidareZile(0);
                         }
+
+                        //Florin 2020.10.05
+                        if (e.Parameter.Split(';')[1] == "cmb1Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Functie)
+                        {
+                            string sqlPost = $@"SELECT Id, Denumire FROM Org_Posturi WHERE IdFunctie={General.Nz(cmb1Nou.Value, -99)} AND CONVERT(DATE, DataInceput) <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE, DataSfarsit)";
+                            if (Constante.tipBD == 2)
+                                sqlPost = $@"SELECT ""Id"", ""Denumire"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmb1Nou.Value, -99)} AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
+                            DataTable dtPost = General.IncarcaDT(sqlPost);
+                            cmb3Nou.DataSource = dtPost;
+                            cmb3Nou.DataBind();
+                        }
+
                         break;
                     case "3":
                         {
@@ -3810,6 +3835,9 @@ namespace WizOne.Avs
                     General.ModificaFunctieAngajat(F10003, Convert.ToInt32(General.Nz(cmb1Nou.Value,-99)), Convert.ToDateTime(txtDataMod.Value), new DateTime(2100,1,1));
             }
 
+            //Florin 2020.10.05
+            if (idStare == 3 && idAtr == (int)Constante.Atribute.Functie && cmb3Nou.Value != null && cmb3Act.Value != cmb3Nou.Value)
+                General.SalveazaPost(cmbAng.Value, General.Nz(cmb3Nou.Value, -99), Session["UserId"]);
 
             string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 

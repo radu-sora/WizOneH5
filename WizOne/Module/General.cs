@@ -8979,5 +8979,54 @@ namespace WizOne.Module
 
         }
 
+        public static void SalveazaPost(object f10003, object idPost, object idUser)
+        {
+            try
+            {
+                //{General.Nz(Session["MP_IdPost"], -99)}
+                string sqlFiltru = $@"F10003=@1 AND CONVERT(DATE,""DataInceput"") = {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE,""DataSfarsit"")";
+                string sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND CONVERT(DATE,""DataSfarsit"")=CONVERT(DATE,{General.CurrentDate()}-1)";
+                string dtMinus = $"CONVERT(DATE,{General.CurrentDate()}-1)";
+                if (Constante.tipBD == 2)
+                {
+                    sqlFiltru = $@"F10003=@1 AND TRUNCATE(""DataInceput"") = {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
+                    sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND TRUNCATE(""DataSfarsit"")=TRUNCATE({General.CurrentDate()}-1)";
+                    dtMinus = $"TRUNCATE({General.CurrentDate()}-1)";
+                }
+
+                string sqlPost =
+                    $@"BEGIN
+                        IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE {sqlFiltru}) <> 0)
+                            BEGIN
+                                IF (@2 <> -99)
+                                    BEGIN
+                                        IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE {sqlDupaZi}) = 1)
+                                            BEGIN
+                                                DELETE ""Org_relPostAngajat"" WHERE {sqlFiltru};
+                                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={General.ToDataUniv(2100, 1, 1)} WHERE {sqlDupaZi};
+                                            END;
+                                        ELSE
+                                            UPDATE ""Org_relPostAngajat"" SET ""IdPost"" = @2 WHERE {sqlFiltru}
+                                    END;                                
+                                ELSE
+                                    DELETE ""Org_relPostAngajat"" WHERE {sqlFiltru};
+                            END;
+                        ELSE
+                            BEGIN
+                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={dtMinus} WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")};
+                                IF (@2 <> -99)                                
+                                    INSERT INTO ""Org_relPostAngajat""(""IdPost"", F10003, ""DataInceput"", ""DataSfarsit"", ""IdPostVechi"", USER_NO, TIME) VALUES(@2, @1, {General.CurrentDate(true)}, 
+                                    COALESCE((SELECT ""DataSfarsit"" FROM ""Org_relPostAngajat"" WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")}), {General.ToDataUniv(2100, 1, 1)}), 
+                                    (SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")}), @3, {General.CurrentDate()});
+                            END;                     
+                    END;";
+                General.ExecutaNonQuery(sqlPost, new object[] { f10003, idPost, idUser });
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "CreazaFisierInDisc", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
     }
 }

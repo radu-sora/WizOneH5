@@ -750,6 +750,8 @@ namespace WizOne.Personal
                 }
 
 
+                //Florin 2020.10.02
+                //salvam postul
                 string sqlFiltru = $@"F10003=@1 AND CONVERT(DATE,""DataInceput"") = {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE,""DataSfarsit"")";
                 string sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND CONVERT(DATE,""DataSfarsit"")=CONVERT(DATE,{General.CurrentDate()}-1)";
                 string dtMinus = $"CONVERT(DATE,{General.CurrentDate()}-1)";
@@ -759,9 +761,7 @@ namespace WizOne.Personal
                     sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND TRUNCATE(""DataSfarsit"")=TRUNCATE({General.CurrentDate()}-1)";
                     dtMinus = $"TRUNCATE({General.CurrentDate()}-1)";
                 }
-                
-                //Florin 2020.10.02
-                //salvam postul
+
                 string sqlPost =
                     $@"BEGIN
                         IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE {sqlFiltru}) <> 0)
@@ -788,18 +788,6 @@ namespace WizOne.Personal
                                     (SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")}), @3, {General.CurrentDate()});
                             END;                     
                     END;";
-                //if (Constante.tipBD == 2)
-                //    sqlPost = $@"BEGIN
-                //                IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND TRUNCATE(""DataInceput"") = {General.CurrentDate(true)}  AND {General.CurrentDate(true)}  <= TRUNCATE(""DataSfarsit"")) <> 0)
-                //                    UPDATE ""Org_relPostAngajat"" SET ""IdPost"" = @2 WHERE F10003=@1 AND TRUNCATE(""DataInceput"") = {General.CurrentDate(true)}  AND {General.CurrentDate(true)}  <= TRUNCATE(""DataSfarsit"")
-                //                ELSE
-                //                    BEGIN
-                //                        UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={General.CurrentDate(true)}-1 WHERE F10003=@1 AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"");
-                //                        INSERT INTO ""Org_relPostAngajat""(""IdPost"", F10003, ""DataInceput"", ""DataSfarsit"", ""IdPostVechi"", USER_NO, TIME) VALUES(@2, @1, {General.CurrentDate(true)}, 
-                //                        COALESCE((SELECT ""DataSfarsit"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")), '2100-01-01'), 
-                //                        (SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")), @3, {General.CurrentDate()});
-                //                    END;                             
-                //            END;";
                 General.ExecutaNonQuery(sqlPost, new object[] { Session["Marca"], Session["MP_IdPost"], Session["UserId"] });
 
 

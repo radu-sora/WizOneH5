@@ -1297,6 +1297,21 @@ namespace WizOne.Avs
                     lblTxt4Nou.Text = text4;
                     cmb2Nou.Visible = true;
                     cmb2Nou.Enabled = true;
+
+                    //Florin 2020.10.05
+                    lbl3Act.Visible = true;
+                    lblTxt7Act.Visible = true;
+                    lblTxt7Act.Text = "Post";
+                    cmb3Act.Visible = true;
+                    cmb3Act.Enabled = true;
+                    cmb3Act.Width = 250;
+
+                    lbl3Nou.Visible = true;
+                    lblTxt7Nou.Visible = true;
+                    lblTxt7Nou.Text = "Post";
+                    cmb3Nou.Visible = true;
+                    cmb3Nou.Enabled = true;
+                    cmb3Nou.Width = 250;
                 }
 
                 lblTxt1Act.Visible = true;

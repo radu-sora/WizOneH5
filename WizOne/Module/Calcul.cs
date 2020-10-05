@@ -980,7 +980,7 @@ namespace WizOne.Module
                                         DateTime? sfDeLa = TransformaInData(zi, dr["OraSfarsitDeLa"].ToString());
                                         DateTime? sfLa = TransformaInData(zi, dr["OraSfarsitLa"].ToString());
 
-                                        if (dr["DeNoapte"].ToString() == "1")
+                                        if (General.Nz(entProg["DeNoapte"], 0).ToString() == "1")
                                         {
                                             if (Convert.ToInt32(rap) == 1)
                                             {

@@ -18,17 +18,59 @@ namespace WizOne.Organigrama
 {
     public partial class Diagrama : System.Web.UI.Page
     {
+        public class Posturi
+        {
+            public int Id { get; set; }
+            public int IdSuperior { get; set; }
+            public string Denumire { get; set; }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
-                DataTable dt = General.IncarcaDT("");
-                ASPxDiagram diag = new ASPxDiagram();
-                diag.ID = "Diagrama";
-                diag.Mappings.Node.Key = "";
-                diag.Mappings.Node.ParentKey = "";
-                diag.Mappings.Node.Text = "";
-                diag.NodeDataSource = dt;
+                DataTable dt = General.IncarcaDT(
+                    @"WITH tree AS  
+                    (
+                    SELECT Id, IdSuperior, NivelIerarhic, 1 as Level,
+                    COALESCE(DenumireRO, Denumire) AS DenumireRO, COALESCE(DenumireEN, Denumire) AS DenumireEN,
+                    COALESCE(NumeGrupRO, Denumire) AS NumeGrupRO, COALESCE(NumeGrupEN, Denumire) AS NumeGrupEN
+                    FROM Org_Posturi as parent
+                    WHERE Id = 1 AND CONVERT(DATE, DataInceput, 103) <= CONVERT(DATE, CONVERT(date, '2020-10-06'), 103) AND CONVERT(DATE, CONVERT(date, '2020-10-06'), 103) <= CONVERT(DATE, DataSfarsit, 103) AND Stare = 1
+                    UNION ALL
+                    SELECT child.Id, child.IdSuperior, child.NivelIerarhic, parent.Level + 1,
+                    COALESCE(child.DenumireRO, child.Denumire) AS DenumireRO, COALESCE(child.DenumireEN, child.Denumire) AS DenumireEN,
+                    COALESCE(child.NumeGrupRO, child.Denumire) AS NumeGrupRO, COALESCE(child.NumeGrupEN, child.Denumire) AS NumeGrupEN
+                    FROM Org_Posturi as child
+                    JOIN tree parent on parent.Id = child.IdSuperior
+                    WHERE CONVERT(DATE, child.DataInceput, 103) <= CONVERT(DATE, CONVERT(date, '2020-10-06'), 103) AND CONVERT(DATE, CONVERT(date, '2020-10-06'), 103) <= CONVERT(DATE, child.DataSfarsit, 103) AND child.Stare = 1
+                    )
+                    SELECT Id, IdSuperior, NivelIerarhic, Level,
+                    CASE WHEN(Level = 3 AND(SELECT COUNT(*) FROM Org_Posturi X WHERE X.IdSuperior = tree.Id) <> 0) THEN DenumireRO ELSE DenumireRO END AS DenumireRO,
+                    CASE WHEN(Level = 3 AND(SELECT COUNT(*) FROM Org_Posturi X WHERE X.IdSuperior = tree.Id) <> 0) THEN DenumireEN ELSE DenumireEN END AS DenumireEN,
+                    dbo.[DamiHC](1, Id, CONVERT(date, '2020-10-06')) AS PlanHC,
+                    dbo.[DamiHC](2, Id, CONVERT(date, '2020-10-06')) AS HCAprobat,
+                    dbo.[DamiHC](3, Id, CONVERT(date, '2020-10-06')) AS HCEfectiv
+                    FROM tree
+                    where Level <= 3");
+                ASPxDiagram diagram = new ASPxDiagram();
+                diagram.ID = "Diagrama123";
+                diagram.SettingsToolbox.Visibility = DiagramPanelVisibility.Collapsed;
+                diagram.Width = new Unit(100, UnitType.Percentage);
+                diagram.Height = new Unit(100, UnitType.Percentage);
+                diagram.SimpleView = true;
+                diagram.Mappings.Node.Key = "Id";
+                diagram.Mappings.Node.ParentKey = "IdSuperior";
+                diagram.Mappings.Node.Text = "DenumireRO";
+
+                List<Posturi> lst = new List<Posturi>();
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    lst.Add(new Posturi { Id = Convert.ToInt32(dt.Rows[i]["Id"]), IdSuperior = Convert.ToInt32(dt.Rows[i]["IdSuperior"]), Denumire = Convert.ToString(dt.Rows[i]["DenumireRO"]) });
+                }
+
+                diagram.NodeDataSource = lst;
+                pnlCont.Controls.Add(diagram);
 
 
                 //DataTable dtMtv = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Org_MotiveModif"" ", null);

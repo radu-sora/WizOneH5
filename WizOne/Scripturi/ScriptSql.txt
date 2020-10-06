@@ -14835,3 +14835,11 @@ GO
 
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('Rap_GrupareImplicitaModule', '0', '1 - se afiseaza implicit grid-ul de Rapoarte grupat dupa Module; 0 - se afiseaza normal')
 GO
+
+
+-----
+
+ALTER TABLE Avs_Cereri ADD PostId int
+GO
+ALTER TABLE Avs_Cereri ADD PostNume nvarchar(500)
+GO

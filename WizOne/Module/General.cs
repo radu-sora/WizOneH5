@@ -8979,19 +8979,19 @@ namespace WizOne.Module
 
         }
 
-        public static void SalveazaPost(object f10003, object idPost, object idUser)
+        public static void SalveazaPost(object f10003, object idPost, DateTime dtModif)
         {
             try
             {
                 //{General.Nz(Session["MP_IdPost"], -99)}
-                string sqlFiltru = $@"F10003=@1 AND CONVERT(DATE,""DataInceput"") = {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE,""DataSfarsit"")";
-                string sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND CONVERT(DATE,""DataSfarsit"")=CONVERT(DATE,{General.CurrentDate()}-1)";
-                string dtMinus = $"CONVERT(DATE,{General.CurrentDate()}-1)";
+                string sqlFiltru = $@"F10003=@1 AND CONVERT(DATE,""DataInceput"") = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= CONVERT(DATE,""DataSfarsit"")";
+                string sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND CONVERT(DATE,""DataSfarsit"")={General.ToDataUniv(dtModif.AddDays(-1))}";
+                //string dtMinus = General.ToDataUniv(dtModif.AddDays(-1));
                 if (Constante.tipBD == 2)
                 {
-                    sqlFiltru = $@"F10003=@1 AND TRUNCATE(""DataInceput"") = {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
-                    sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND TRUNCATE(""DataSfarsit"")=TRUNCATE({General.CurrentDate()}-1)";
-                    dtMinus = $"TRUNCATE({General.CurrentDate()}-1)";
+                    sqlFiltru = $@"F10003=@1 AND TRUNCATE(""DataInceput"") = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= TRUNCATE(""DataSfarsit"")";
+                    sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND TRUNCATE(""DataSfarsit"")={General.ToDataUniv(dtModif.AddDays(-1))}";
+                    //dtMinus = $"TRUNCATE({General.CurrentDate()}-1)";
                 }
 
                 string sqlPost =
@@ -9013,14 +9013,14 @@ namespace WizOne.Module
                             END;
                         ELSE
                             BEGIN
-                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={dtMinus} WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")};
+                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={General.ToDataUniv(dtModif.AddDays(-1))} WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")};
                                 IF (@2 <> -99)                                
-                                    INSERT INTO ""Org_relPostAngajat""(""IdPost"", F10003, ""DataInceput"", ""DataSfarsit"", ""IdPostVechi"", USER_NO, TIME) VALUES(@2, @1, {General.CurrentDate(true)}, 
+                                    INSERT INTO ""Org_relPostAngajat""(""IdPost"", F10003, ""DataInceput"", ""DataSfarsit"", ""IdPostVechi"", USER_NO, TIME) VALUES(@2, @1, {General.ToDataUniv(dtModif)}, 
                                     COALESCE((SELECT ""DataSfarsit"" FROM ""Org_relPostAngajat"" WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")}), {General.ToDataUniv(2100, 1, 1)}), 
                                     (SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")}), @3, {General.CurrentDate()});
                             END;                     
                     END;";
-                General.ExecutaNonQuery(sqlPost, new object[] { f10003, idPost, idUser });
+                General.ExecutaNonQuery(sqlPost, new object[] { f10003, idPost, HttpContext.Current.Session["UserId"] });
             }
             catch (Exception ex)
             {

@@ -1467,6 +1467,7 @@ namespace WizOne.Avs
                 cmb3Nou.DataSource = dtPost;
                 cmb3Nou.DataBind();
                 cmb3Act.Value = General.ExecutaScalar(sqlIdPost, new object[] { cmbAng.Value });
+                cmb3Nou.Value = cmb3Act.Value;
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.CodCOR)
@@ -3442,8 +3443,9 @@ namespace WizOne.Avs
                     camp2 = txt1Nou.Text + ", " + txt2Nou.Text;
                     break;
                 case (int)Constante.Atribute.Functie:
-                    camp1 = "\"FunctieId\", \"FunctieNume\", \"PerProbaZL\", \"PerProbaZC\", \"PreavizDemisie\", \"PreavizConcediere\"";
-                    camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', " + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text) + ", " + (txt2Nou.Text.Length <= 0 ? "NULL" : txt2Nou.Text) + ", " + (txt3Nou.Text.Length <= 0 ? "NULL" : txt3Nou.Text) + ", " + (txt4Nou.Text.Length <= 0 ? "NULL" : txt4Nou.Text);
+                    //Florin 2020.10.05 - am adaugat IdPost
+                    camp1 = "\"FunctieId\", \"FunctieNume\", \"PerProbaZL\", \"PerProbaZC\", \"PreavizDemisie\", \"PreavizConcediere\", \"PostId\", \"PostNume\"";
+                    camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', " + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text) + ", " + (txt2Nou.Text.Length <= 0 ? "NULL" : txt2Nou.Text) + ", " + (txt3Nou.Text.Length <= 0 ? "NULL" : txt3Nou.Text) + ", " + (txt4Nou.Text.Length <= 0 ? "NULL" : txt4Nou.Text) + ", " + (cmb3Nou.Value ?? "null").ToString() + "," + (cmb3Nou.Value == null ? "null" : cmb3Nou.Text);
                     if (cmb2Nou.Value != null)
                         sqlFunc = "UPDATE F718 SET F71813 = " + cmb2Nou.Value.ToString() + " WHERE F71802 = " + cmb1Nou.Value.ToString();
                     break;
@@ -3834,10 +3836,6 @@ namespace WizOne.Avs
                 if (idAtr == 2)
                     General.ModificaFunctieAngajat(F10003, Convert.ToInt32(General.Nz(cmb1Nou.Value,-99)), Convert.ToDateTime(txtDataMod.Value), new DateTime(2100,1,1));
             }
-
-            //Florin 2020.10.05
-            if (idStare == 3 && idAtr == (int)Constante.Atribute.Functie && cmb3Nou.Value != null && cmb3Act.Value != cmb3Nou.Value)
-                General.SalveazaPost(cmbAng.Value, General.Nz(cmb3Nou.Value, -99), Session["UserId"]);
 
             string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
@@ -4283,6 +4281,9 @@ namespace WizOne.Avs
                                     + ", F1009742 = " + dtCer.Rows[0]["PreavizDemisie"].ToString() + ", F100931 = " + dtCer.Rows[0]["PreavizConcediere"].ToString() + " WHERE F10003 = " + f10003.ToString();
                                 if (dtF1001 != null && dtF1001.Rows.Count > 0)
                                     sql1001 = "UPDATE F1001 SET F1001063 = " + dtCer.Rows[0]["PerProbaZC"].ToString() + " WHERE F10003 = " + f10003.ToString();
+
+                                //Florin 2020.10.06
+                                General.SalveazaPost(f10003, dtCer.Rows[0]["PostId"], Convert.ToDateTime(dtCer.Rows[0]["DataModif"]));
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 2, 'Functie', " + data + ", " + dtCer.Rows[0]["FunctieId"].ToString() + ", 'Modificari in avans', '"
@@ -4888,10 +4889,10 @@ namespace WizOne.Avs
                         return;
                 }
 
-                if (sql.Length > 0) General.IncarcaDT(sql, null);
-                if (sql1.Length > 0) General.IncarcaDT(sql1, null);
-                if (sql100.Length > 0) General.IncarcaDT(sql100, null);
-                if (sql1001.Length > 0) General.IncarcaDT(sql1001, null);
+                if (sql.Length > 0) General.ExecutaNonQuery(sql);
+                if (sql1.Length > 0) General.ExecutaNonQuery(sql1);
+                if (sql100.Length > 0) General.ExecutaNonQuery(sql100);
+                if (sql1001.Length > 0) General.ExecutaNonQuery(sql1001);
 
 
                 //Radu 09.09.2020 - actualizare data consemnare
@@ -4906,7 +4907,7 @@ namespace WizOne.Avs
                 //procesul acesta s-a mutat din ActeAditionale aici
                 //marcam campul Actualizat din Avs_Cereri cand se duce in F100
                 if (act == 1)
-                General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""Actualizat""=1 WHERE ""Id""=@1", new object[] { id });
+                    General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""Actualizat""=1 WHERE ""Id""=@1", new object[] { id });
 
             }
             catch (Exception)

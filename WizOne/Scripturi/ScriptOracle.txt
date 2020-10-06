@@ -15187,3 +15187,12 @@ INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('Rap_Grupa
 insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (35, 'Tip contract', 1);
 insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (36, 'Durata contract', 1);
 commit;
+
+
+----------  Organigrama
+
+ALTER TABLE "Avs_Cereri" ADD "PostId" number(10);
+/
+ALTER TABLE "Avs_Cereri" ADD "PostNume" varchar2(500)
+/
+

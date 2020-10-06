@@ -391,7 +391,7 @@
             var dtInc = new Date(tmpInc.getFullYear(), tmpInc.getMonth(), tmpInc.getDate(), 0, 0, 0, 0);
             var dtSf = new Date(tmpSf.getFullYear(), tmpSf.getMonth(), tmpSf.getDate(), 0, 0, 0, 0);
             var dif = (dtSf - dtInc) / (1000 * 60 * 60 * 24);
-            if (dif > 30) {
+            if (dif > 31) {
                 txtDtSf.SetValue(txtDtInc.GetValue());
                 swal({
                     title: "Atentie",

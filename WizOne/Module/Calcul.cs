@@ -1045,10 +1045,10 @@ namespace WizOne.Module
             return tpd;
         }
 
-        private static void CalculOreLucrateBis(DataRow ent, int timpPauzaDedusa, out int rez, out int minuteIN, out int minuteOUT)
+        private static void CalculOreLucrateBis(DataRow ent, int timpPauzaDedusa, out int rez, out int tmpMinuteIN, out int tmpMinuteOUT)
         {
-            minuteIN = 0;
-            minuteOUT = 0;
+            tmpMinuteIN = 0;
+            tmpMinuteOUT = 0;
 
             rez = 0;
             int norma = 0;
@@ -1140,6 +1140,9 @@ namespace WizOne.Module
                                         //Florin 2016.11.07 Begin ###################################
                                         //aplicam gratierea
 
+                                        int minuteIN = 0;
+                                        int minuteOUT = 0;
+
                                         DataTable dtProg = General.IncarcaDT(@"SELECT * FROM ""Ptj_Programe"" WHERE ""Id""=" + idProg);
                                         if (dtProg.Rows.Count > 0 && dtProg.Rows[0]["OraIntrare"] != DBNull.Value && dtProg.Rows[0]["OraIesire"] != DBNull.Value)
                                         {
@@ -1151,6 +1154,7 @@ namespace WizOne.Module
                                                 if (dif <= grat)
                                                 {
                                                     minuteIN = dif;
+                                                    tmpMinuteIN = dif;
                                                 }
                                             }
 
@@ -1162,6 +1166,7 @@ namespace WizOne.Module
                                                 if (dif <= grat)
                                                 {
                                                     minuteOUT = dif;
+                                                    tmpMinuteOUT = dif;
                                                 }
                                             }
                                         }
@@ -2007,8 +2012,8 @@ namespace WizOne.Module
                 }
 
                 //se afla intre min si max
-                if (timp < TransformaInMinute(Convert.ToDateTime(entAlte["ValMin"]))) timp = 0;
-                if (TransformaInMinute(Convert.ToDateTime(entAlte["ValMax"])) < timp) timp = TransformaInMinute(Convert.ToDateTime(entAlte["ValMax"]));
+                if (entAlte["ValMin"] != DBNull.Value && timp < TransformaInMinute(Convert.ToDateTime(entAlte["ValMin"]))) timp = 0;
+                if (entAlte["ValMax"] != DBNull.Value && TransformaInMinute(Convert.ToDateTime(entAlte["ValMax"])) < timp) timp = TransformaInMinute(Convert.ToDateTime(entAlte["ValMax"]));
 
                 //valoare fixa
                 if (entAlte["ValFixa"] != DBNull.Value && TransformaInMinute(Convert.ToDateTime(entAlte["ValFixa"])) > 0 && timp > 0) timp = TransformaInMinute(Convert.ToDateTime(entAlte["ValFixa"]));
@@ -2016,8 +2021,8 @@ namespace WizOne.Module
                 //multiplicator
                 if (Convert.ToInt32(General.Nz(entAlte["Multiplicator"], -99)) > 0) timp = Convert.ToInt32(timp * Convert.ToInt32(General.Nz(entAlte["Multiplicator"], -99)));
 
-                string ert = entAlte["Camp"].ToString();
-                if ((entAlte["Camp"].ToString()) != "" && timp > 0) ent[entAlte["Camp"].ToString()] = timp;
+                string ert = Convert.ToString(entAlte["Camp"]);
+                if (Convert.ToString(entAlte["Camp"]) != "" && timp > 0) ent[entAlte["Camp"].ToString()] = timp;
             }
             catch (Exception ex)
             {

@@ -8983,41 +8983,37 @@ namespace WizOne.Module
         {
             try
             {
-                //{General.Nz(Session["MP_IdPost"], -99)}
-                string sqlFiltru = $@"F10003=@1 AND CONVERT(DATE,""DataInceput"") = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= CONVERT(DATE,""DataSfarsit"")";
-                string sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND CONVERT(DATE,""DataSfarsit"")={General.ToDataUniv(dtModif.AddDays(-1))}";
-                //string dtMinus = General.ToDataUniv(dtModif.AddDays(-1));
-                if (Constante.tipBD == 2)
-                {
-                    sqlFiltru = $@"F10003=@1 AND TRUNCATE(""DataInceput"") = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= TRUNCATE(""DataSfarsit"")";
-                    sqlDupaZi = $@"F10003=@1 AND ""IdPost""=@2 AND TRUNCATE(""DataSfarsit"")={General.ToDataUniv(dtModif.AddDays(-1))}";
-                    //dtMinus = $"TRUNCATE({General.CurrentDate()}-1)";
-                }
+                if (f10003 == null || idPost == null) return;
 
                 string sqlPost =
                     $@"BEGIN
-                        IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE {sqlFiltru}) <> 0)
+                        IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND {General.TruncateDate("DataInceput")} = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= {General.TruncateDate("DataSfarsit")}) <> 0)
                             BEGIN
                                 IF (@2 <> -99)
                                     BEGIN
-                                        IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE {sqlDupaZi}) = 1)
+                                        IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND ""IdPost""=@2 AND {General.TruncateDate("DataSfarsit")}={General.ToDataUniv(dtModif.AddDays(-1))}) = 1)
                                             BEGIN
-                                                DELETE ""Org_relPostAngajat"" WHERE {sqlFiltru};
-                                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={General.ToDataUniv(2100, 1, 1)} WHERE {sqlDupaZi};
+                                                DELETE ""Org_relPostAngajat"" WHERE F10003=@1 AND {General.TruncateDate("DataInceput")}  = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= {General.TruncateDate("DataSfarsit")};
+                                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={General.ToDataUniv(2100, 1, 1)} WHERE F10003=@1 AND ""IdPost""=@2 AND {General.TruncateDate("DataSfarsit")}={General.ToDataUniv(dtModif.AddDays(-1))};
                                             END;
                                         ELSE
-                                            UPDATE ""Org_relPostAngajat"" SET ""IdPost"" = @2 WHERE {sqlFiltru}
+                                            UPDATE ""Org_relPostAngajat"" SET ""IdPost"" = @2 WHERE F10003=@1 AND {General.TruncateDate("DataInceput")}  = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= {General.TruncateDate("DataSfarsit")}
                                     END;                                
                                 ELSE
-                                    DELETE ""Org_relPostAngajat"" WHERE {sqlFiltru};
+                                    DELETE ""Org_relPostAngajat"" WHERE F10003=@1 AND {General.TruncateDate("DataInceput")}  = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= {General.TruncateDate("DataSfarsit")};
                             END;
                         ELSE
                             BEGIN
-                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={General.ToDataUniv(dtModif.AddDays(-1))} WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")};
-                                IF (@2 <> -99)                                
-                                    INSERT INTO ""Org_relPostAngajat""(""IdPost"", F10003, ""DataInceput"", ""DataSfarsit"", ""IdPostVechi"", USER_NO, TIME) VALUES(@2, @1, {General.ToDataUniv(dtModif)}, 
-                                    COALESCE((SELECT ""DataSfarsit"" FROM ""Org_relPostAngajat"" WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")}), {General.ToDataUniv(2100, 1, 1)}), 
-                                    (SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE {sqlFiltru.Replace("=", "<=").Replace("<<", "<")}), @3, {General.CurrentDate()});
+			                    DECLARE @Id int
+			                    SELECT @Id=IdAuto FROM ""Org_relPostAngajat"" WHERE  F10003=@1 AND {General.TruncateDate("DataInceput")}  <= {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= {General.TruncateDate("DataSfarsit")};
+
+                                IF (@2 <> -99)
+                                    BEGIN
+                                        INSERT INTO ""Org_relPostAngajat""(""IdPost"", F10003, ""DataInceput"", ""DataSfarsit"", ""IdPostVechi"", USER_NO, TIME) VALUES(@2, @1, {General.ToDataUniv(dtModif)}, 
+                                        COALESCE((SELECT ""DataSfarsit"" FROM ""Org_relPostAngajat"" WHERE IdAuto=@Id), {General.ToDataUniv(2100, 1, 1)}), 
+                                        (SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE IdAuto=@Id), @3, {General.CurrentDate()});
+                                    END;                            
+                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={General.ToDataUniv(dtModif.AddDays(-1))} WHERE IdAuto=@Id;
                             END;                     
                     END;";
                 General.ExecutaNonQuery(sqlPost, new object[] { f10003, idPost, HttpContext.Current.Session["UserId"] });

@@ -1467,7 +1467,7 @@ namespace WizOne.Avs
                 cmb3Nou.DataSource = dtPost;
                 cmb3Nou.DataBind();
                 cmb3Act.Value = General.ExecutaScalar(sqlIdPost, new object[] { cmbAng.Value });
-                cmb3Nou.Value = cmb3Act.Value;
+                //cmb3Nou.Value = cmb3Act.Value;
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.CodCOR)
@@ -3445,7 +3445,7 @@ namespace WizOne.Avs
                 case (int)Constante.Atribute.Functie:
                     //Florin 2020.10.05 - am adaugat IdPost
                     camp1 = "\"FunctieId\", \"FunctieNume\", \"PerProbaZL\", \"PerProbaZC\", \"PreavizDemisie\", \"PreavizConcediere\", \"PostId\", \"PostNume\"";
-                    camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', " + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text) + ", " + (txt2Nou.Text.Length <= 0 ? "NULL" : txt2Nou.Text) + ", " + (txt3Nou.Text.Length <= 0 ? "NULL" : txt3Nou.Text) + ", " + (txt4Nou.Text.Length <= 0 ? "NULL" : txt4Nou.Text) + ", " + (cmb3Nou.Value ?? "null").ToString() + "," + (cmb3Nou.Value == null ? "null" : cmb3Nou.Text);
+                    camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', " + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text) + ", " + (txt2Nou.Text.Length <= 0 ? "NULL" : txt2Nou.Text) + ", " + (txt3Nou.Text.Length <= 0 ? "NULL" : txt3Nou.Text) + ", " + (txt4Nou.Text.Length <= 0 ? "NULL" : txt4Nou.Text) + ", " + (cmb3Nou.Value ?? "null").ToString() + "," + (cmb3Nou.Value == null ? "null" : "'" + cmb3Nou.Text + "'");
                     if (cmb2Nou.Value != null)
                         sqlFunc = "UPDATE F718 SET F71813 = " + cmb2Nou.Value.ToString() + " WHERE F71802 = " + cmb1Nou.Value.ToString();
                     break;
@@ -3833,8 +3833,10 @@ namespace WizOne.Avs
             if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idAtr + ",") >=0) || !chkGen.Checked))
             {
                 TrimiteInF704(idUrm);
-                if (idAtr == 2)
-                    General.ModificaFunctieAngajat(F10003, Convert.ToInt32(General.Nz(cmb1Nou.Value,-99)), Convert.ToDateTime(txtDataMod.Value), new DateTime(2100,1,1));
+
+                //Florin 2020.10.07 - se trateaza cazul in functia TrimiteInF704
+                //if (idAtr == 2)
+                //    General.ModificaFunctieAngajat(F10003, Convert.ToInt32(General.Nz(cmb1Nou.Value,-99)), Convert.ToDateTime(txtDataMod.Value), new DateTime(2100,1,1));
             }
 
             string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };

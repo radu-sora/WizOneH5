@@ -1033,8 +1033,10 @@ namespace WizOne.Pagini
                                                 {
                                                     Cereri pag = new Cereri();
                                                     pag.TrimiteInF704(Convert.ToInt32(General.Nz(dr["Id"], -99)));
-                                                    if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
-                                                        General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
+
+                                                    //Florin 2020.10.07 - se trateaza cazul in functia TrimiteInF704
+                                                    //if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
+                                                    //    General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
                                                 }
                                             }
                                         }

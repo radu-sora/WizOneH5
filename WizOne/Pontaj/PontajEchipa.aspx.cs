@@ -1920,8 +1920,8 @@ namespace WizOne.Pontaj
                 if (General.Nz(cmbFil.Value, "").ToString() != "") strFiltru += " AND A.F10005 = " + cmbFil.Value;
                 if (General.Nz(cmbSec.Value, "").ToString() != "") strFiltru += " AND A.F10006 = " + cmbSec.Value;
                 if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") != "1") strFiltru += @" AND A.""Dept"" IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
-                if (General.Nz(cmbSubDept.Value, "").ToString() != "") strFiltru += @" AND A.F100958=" + cmbSubDept.Value;
-                if (General.Nz(cmbBirou.Value, "").ToString() != "") strFiltru += @" AND A.F100959=" + cmbBirou.Value;
+                if (General.Nz(cmbSubDept.Value, "").ToString() != "") strFiltru += @" AND Y.F100958=" + cmbSubDept.Value;
+                if (General.Nz(cmbBirou.Value, "").ToString() != "") strFiltru += @" AND Y.F100959=" + cmbBirou.Value;
                 if (General.Nz(cmbStare.Value, "").ToString() != "") strFiltru += @" AND COALESCE(A.""IdStare"",1) = " + cmbStare.Value;
                 if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += $@" AND C.""Denumire"" IN ('{cmbCtr.Value.ToString().Replace(",", "','")}')";
                 if (General.Nz(cmbAng.Value, "").ToString() != "") strFiltru += " AND A.F10003=" + cmbAng.Value;

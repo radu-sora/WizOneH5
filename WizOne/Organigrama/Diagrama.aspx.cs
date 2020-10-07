@@ -23,65 +23,24 @@ namespace WizOne.Organigrama
         {
             try
             {
-                txtDtVig.Value = DateTime.Now;
+                if (!IsPostBack)
+                {
+                    txtDtVig.Value = DateTime.Now;
+                    txtNivel.Value = 3;
 
-                DataTable dtPar = General.IncarcaDT(@"SELECT ""Camp"", ""Denumire"" FROM ""Org_tblParinte"" ", null);
-                cmbParinte.DataSource = dtPar;
-                cmbParinte.DataBind();
+                    DataTable dtPar = General.IncarcaDT(@"SELECT ""Camp"", ""Denumire"" FROM ""Org_tblParinte"" ", null);
+                    cmbParinte.DataSource = dtPar;
+                    cmbParinte.DataBind();
+                    if (dtPar.Rows.Count > 0)
+                        cmbParinte.SelectedIndex = 0;
 
-                DataTable dtPost = General.IncarcaDT($@"SELECT ""Id"", ""Denumire"" FROM ""Org_Posturi"" WHERE {General.TruncateDate("DataInceput")} <= {General.CurrentDate()} AND {General.CurrentDate()} <= {General.TruncateDate("DataSfarsit")}");
-                cmbPost.DataSource = dtPost;
-                cmbPost.DataBind();
-                DataRow[] arr = dtPost.Select("IdSuperior=0");
-                if (arr.Length > 0)
-                    cmbPost.Value = arr[0];
-
-                //DataTable dt = General.IncarcaDT(
-                //    @"WITH tree AS  
-                //    (
-                //    SELECT Id, IdSuperior, NivelIerarhic, 1 as Level,
-                //    COALESCE(DenumireRO, Denumire) AS DenumireRO, COALESCE(DenumireEN, Denumire) AS DenumireEN,
-                //    COALESCE(NumeGrupRO, Denumire) AS NumeGrupRO, COALESCE(NumeGrupEN, Denumire) AS NumeGrupEN
-                //    FROM Org_Posturi as parent
-                //    WHERE Id = 1 AND CONVERT(DATE, DataInceput, 103) <= CONVERT(DATE, CONVERT(date, '2020-10-06'), 103) AND CONVERT(DATE, CONVERT(date, '2020-10-06'), 103) <= CONVERT(DATE, DataSfarsit, 103) AND Stare = 1
-                //    UNION ALL
-                //    SELECT child.Id, child.IdSuperior, child.NivelIerarhic, parent.Level + 1,
-                //    COALESCE(child.DenumireRO, child.Denumire) AS DenumireRO, COALESCE(child.DenumireEN, child.Denumire) AS DenumireEN,
-                //    COALESCE(child.NumeGrupRO, child.Denumire) AS NumeGrupRO, COALESCE(child.NumeGrupEN, child.Denumire) AS NumeGrupEN
-                //    FROM Org_Posturi as child
-                //    JOIN tree parent on parent.Id = child.IdSuperior
-                //    WHERE CONVERT(DATE, child.DataInceput, 103) <= CONVERT(DATE, CONVERT(date, '2020-10-06'), 103) AND CONVERT(DATE, CONVERT(date, '2020-10-06'), 103) <= CONVERT(DATE, child.DataSfarsit, 103) AND child.Stare = 1
-                //    )
-                //    SELECT Id, IdSuperior, NivelIerarhic, Level,
-                //    CASE WHEN(Level = 3 AND(SELECT COUNT(*) FROM Org_Posturi X WHERE X.IdSuperior = tree.Id) <> 0) THEN DenumireRO ELSE DenumireRO END AS DenumireRO,
-                //    CASE WHEN(Level = 3 AND(SELECT COUNT(*) FROM Org_Posturi X WHERE X.IdSuperior = tree.Id) <> 0) THEN DenumireEN ELSE DenumireEN END AS DenumireEN,
-                //    dbo.[DamiHC](1, Id, CONVERT(date, '2020-10-06')) AS PlanHC,
-                //    dbo.[DamiHC](2, Id, CONVERT(date, '2020-10-06')) AS HCAprobat,
-                //    dbo.[DamiHC](3, Id, CONVERT(date, '2020-10-06')) AS HCEfectiv
-                //    FROM tree
-                //    where Level <= 3");
-                //ASPxDiagram diagram = new ASPxDiagram();
-                //diagram.ID = "Diagrama123";
-                //diagram.SettingsToolbox.Visibility = DiagramPanelVisibility.Collapsed;
-                //diagram.Width = new Unit(100, UnitType.Percentage);
-                //diagram.Height = new Unit(100, UnitType.Percentage);
-                //diagram.SimpleView = true;
-                //diagram.Mappings.Node.Key = "Id";
-                //diagram.Mappings.Node.ParentKey = "IdSuperior";
-                //diagram.Mappings.Node.Text = "DenumireRO";
-
-                //List<Posturi> lst = new List<Posturi>();
-                //for (int i = 0; i < dt.Rows.Count; i++)
-                //{
-                //    lst.Add(new Posturi { Id = Convert.ToInt32(dt.Rows[i]["Id"]), IdSuperior = Convert.ToInt32(dt.Rows[i]["IdSuperior"]), Denumire = Convert.ToString(dt.Rows[i]["DenumireRO"]) });
-                //}
-
-                ////diagram.NodeDataSource = lst;
-                //pnlCont.Controls.Add(diagram);
-
-                //dgPost.NodeDataSource = dt;
-                //dgPost.DataBind();
-
+                    DataTable dtPost = General.IncarcaDT($@"SELECT ""Id"", ""Denumire"", ""IdSuperior"" FROM ""Org_Posturi"" WHERE {General.TruncateDate("DataInceput")} <= {General.CurrentDate()} AND {General.CurrentDate()} <= {General.TruncateDate("DataSfarsit")}");
+                    cmbPost.DataSource = dtPost;
+                    cmbPost.DataBind();
+                    DataRow[] arr = dtPost.Select("IdSuperior=0");
+                    if (arr.Length > 0)
+                        cmbPost.Value = Convert.ToInt32(arr[0]["Id"]);
+                }
             }
             catch (Exception ex)
             {
@@ -94,7 +53,7 @@ namespace WizOne.Organigrama
         {
             try
             {
-                IncarcaGrid(Convert.ToDateTime(txtDtVig.Value), Convert.ToInt32(General.Nz(txtNivel.Value, 1)), 1, 1);
+                IncarcaGrid(Convert.ToDateTime(txtDtVig.Value), Convert.ToInt32(General.Nz(txtNivel.Value, 1)), 1);
             }
             catch (Exception ex)
             {
@@ -104,7 +63,7 @@ namespace WizOne.Organigrama
         }
 
 
-        private string IncarcaGrid(DateTime dtRef, int nivel, int idPost, int activ)
+        private string IncarcaGrid(DateTime dtRef, int nivel, int idPost)
         {
             string numeFis = "";
 
@@ -114,27 +73,56 @@ namespace WizOne.Organigrama
 
                 if (Constante.tipBD == 1)
                 {
+                    //strSql = $@"WITH tree AS  
+                    //        (
+                    //        SELECT Id, IdSuperior, NivelIerarhic, 1 as Level,
+                    //        COALESCE(DenumireRO, Denumire) AS DenumireRO, COALESCE(DenumireEN,Denumire) AS DenumireEN, 
+                    //        COALESCE(NumeGrupRO, Denumire) AS NumeGrupRO, COALESCE(NumeGrupEN,Denumire) AS NumeGrupEN
+                    //        FROM Org_Posturi as parent 
+                    //        WHERE Id = {idPost} AND CONVERT(DATE, DataInceput, 103)<=CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) AND CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) <= CONVERT(DATE, DataSfarsit, 103) AND Stare = {activ}
+                    //        UNION ALL
+                    //        SELECT child.Id, child.IdSuperior, child.NivelIerarhic, parent.Level + 1,
+                    //        COALESCE(child.DenumireRO, child.Denumire) AS DenumireRO, COALESCE(child.DenumireEN,child.Denumire) AS DenumireEN,
+                    //        COALESCE(child.NumeGrupRO, child.Denumire) AS NumeGrupRO, COALESCE(child.NumeGrupEN,child.Denumire) AS NumeGrupEN
+                    //        FROM Org_Posturi as child
+                    //        JOIN tree parent on parent.Id = child.IdSuperior
+                    //        WHERE CONVERT(DATE, child.DataInceput, 103)<=CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) AND CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) <= CONVERT(DATE, child.DataSfarsit, 103) AND child.Stare = {activ}
+                    //        )
+                    //        SELECT Id, IdSuperior, NivelIerarhic, Level,
+                    //        CASE WHEN (Level = {nivel} AND (SELECT COUNT(*) FROM Org_Posturi X WHERE X.{cmbParinte.Value} = tree.Id) <> 0) THEN {("1" == "1" ? "DenumireRO" : "NumeGrupRO")} ELSE DenumireRO END AS DenumireRO,
+                    //        CASE WHEN (Level = {nivel} AND (SELECT COUNT(*) FROM Org_Posturi X WHERE X.{cmbParinte.Value} = tree.Id) <> 0) THEN {("1" == "1" ? "DenumireEN" : "NumeGrupEN")} ELSE DenumireEN END AS DenumireEN,
+                    //        dbo.[DamiHC](1, Id, {General.ToDataUniv(dtRef.Date)}) AS PlanHC, 
+                    //        dbo.[DamiHC](2, Id, {General.ToDataUniv(dtRef.Date)}) AS HCAprobat, 
+                    //        dbo.[DamiHC](3, Id, {General.ToDataUniv(dtRef.Date)}) AS HCEfectiv
+                    //        FROM tree
+                    //        where Level <= {nivel}";
+
+                    string camp = "";
+                    if (General.Nz(cmbAfisare.Value, 1).ToString() == "1")
+                        camp += "Denumire" + General.Nz(cmbLimbi.Value, "RO").ToString();
+                    else
+                        camp += "NumeGrup" + General.Nz(cmbLimbi.Value, "RO").ToString();
+
+                    if (chkPlan.Checked) camp += $" + ', Plan: ' + CONVERT(nvarchar(10),dbo.[DamiHC](1, Id, {General.ToDataUniv(dtRef.Date)}))";
+                    if (chkAprobat.Checked) camp += $" + ', Aprobat: ' + CONVERT(nvarchar(10),dbo.[DamiHC](2, Id, {General.ToDataUniv(dtRef.Date)}))";
+                    if (chkEfectiv.Checked) camp += $" + ', Efectiv: ' + CONVERT(nvarchar(10),dbo.[DamiHC](3, Id, {General.ToDataUniv(dtRef.Date)}))";
+
                     strSql = $@"WITH tree AS  
                             (
                             SELECT Id, IdSuperior, NivelIerarhic, 1 as Level,
                             COALESCE(DenumireRO, Denumire) AS DenumireRO, COALESCE(DenumireEN,Denumire) AS DenumireEN, 
                             COALESCE(NumeGrupRO, Denumire) AS NumeGrupRO, COALESCE(NumeGrupEN,Denumire) AS NumeGrupEN
                             FROM Org_Posturi as parent 
-                            WHERE Id = {idPost} AND CONVERT(DATE, DataInceput, 103)<=CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) AND CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) <= CONVERT(DATE, DataSfarsit, 103) AND Stare = {activ}
+                            WHERE Id = {idPost} AND CONVERT(DATE, DataInceput, 103)<=CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) AND CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) <= CONVERT(DATE, DataSfarsit, 103) AND Stare = 1
                             UNION ALL
                             SELECT child.Id, child.IdSuperior, child.NivelIerarhic, parent.Level + 1,
                             COALESCE(child.DenumireRO, child.Denumire) AS DenumireRO, COALESCE(child.DenumireEN,child.Denumire) AS DenumireEN,
                             COALESCE(child.NumeGrupRO, child.Denumire) AS NumeGrupRO, COALESCE(child.NumeGrupEN,child.Denumire) AS NumeGrupEN
                             FROM Org_Posturi as child
                             JOIN tree parent on parent.Id = child.IdSuperior
-                            WHERE CONVERT(DATE, child.DataInceput, 103)<=CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) AND CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) <= CONVERT(DATE, child.DataSfarsit, 103) AND child.Stare = {activ}
+                            WHERE CONVERT(DATE, child.DataInceput, 103)<=CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) AND CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) <= CONVERT(DATE, child.DataSfarsit, 103) AND child.Stare = 1
                             )
-                            SELECT Id, IdSuperior, NivelIerarhic, Level,
-                            CASE WHEN (Level = {nivel} AND (SELECT COUNT(*) FROM Org_Posturi X WHERE X.{cmbParinte.Value} = tree.Id) <> 0) THEN {("1" == "1" ? "DenumireRO" : "NumeGrupRO")} ELSE DenumireRO END AS DenumireRO,
-                            CASE WHEN (Level = {nivel} AND (SELECT COUNT(*) FROM Org_Posturi X WHERE X.{cmbParinte.Value} = tree.Id) <> 0) THEN {("1" == "1" ? "DenumireEN" : "NumeGrupEN")} ELSE DenumireEN END AS DenumireEN,
-                            dbo.[DamiHC](1, Id, {General.ToDataUniv(dtRef.Date)}) AS PlanHC, 
-                            dbo.[DamiHC](2, Id, {General.ToDataUniv(dtRef.Date)}) AS HCAprobat, 
-                            dbo.[DamiHC](3, Id, {General.ToDataUniv(dtRef.Date)}) AS HCEfectiv
+                            SELECT Id, IdSuperior, NivelIerarhic, Level, {camp} AS Denumire
                             FROM tree
                             where Level <= {nivel}";
                 }
@@ -151,7 +139,7 @@ namespace WizOne.Organigrama
                                     " and TRUNC(\"DataInceput\")<=to_date('" + strRef + "','DD-MM-YYYY') AND to_date('" + strRef + "','DD-MM-YYYY') <=TRUNC(\"DataSfarsit\") " +
                                     " start with \"Id\"=" + idPost + " connect by nocycle prior \"Id\" = \"IdSuperior\" " +      //Radu 26.05.2016 - am adaugat nocycle pentru a opri bucla infinita
                                    " and TRUNC(\"DataInceput\")<=to_date('" + strRef + "','DD-MM-YYYY') AND to_date('" + strRef + "','DD-MM-YYYY') <=TRUNC(\"DataSfarsit\") " + //Radu 09.01.2017 - conditie pentru a nu returna decat un post activ								
-                                   " and \"Stare\" = " + activ;     //Radu 07.02.2017
+                                   " and \"Stare\" = 1";     //Radu 07.02.2017
 
                 }
 
@@ -196,6 +184,9 @@ namespace WizOne.Organigrama
             return numeFis;
         }
 
-
+        protected void pnlCall_Callback(object sender, DevExpress.Web.CallbackEventArgsBase e)
+        {
+            IncarcaGrid(Convert.ToDateTime(txtDtVig.Value), Convert.ToInt32(General.Nz(txtNivel.Value, 1)), 1);
+        }
     }
 }

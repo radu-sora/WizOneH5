@@ -177,6 +177,15 @@ namespace WizOne.Organigrama
         protected global::DevExpress.Web.ASPxButton btnFiltru;
 
         /// <summary>
+        /// pnlCall control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCall;
+
+        /// <summary>
         /// dgPost control.
         /// </summary>
         /// <remarks>

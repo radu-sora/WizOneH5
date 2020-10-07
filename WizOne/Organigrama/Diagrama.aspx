@@ -29,7 +29,7 @@
 
                     <label id="Label1" runat="server" style="display:inline-block; float:left; padding-right:15px;">De la postul</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbPost" runat="server" Width="130px" ValueField="Id" TextField="Denumire" />
+                        <dx:ASPxComboBox ID="cmbPost" runat="server" Width="130px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" />
                     </div>
 
                     <label id="lblLimbi" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Alege limba</label>
@@ -64,7 +64,8 @@
                     </div>
 
                     <div style="float:left;">
-                        <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
+                        <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                            <ClientSideEvents Click="function(s,e) { pnlCall.PerformCallback(); }" />
                             <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                         </dx:ASPxButton>
                     </div>
@@ -73,11 +74,18 @@
         </tr>
         <tr>
             <td colspan="2">
-                <dx:ASPxDiagram runat="server" ID="dgPost" SimpleView="true" Width="100%" Height="100%">
-                    <Mappings>
-                        <Node Key="Id" ParentKey="IdSuperior" Text="DenumireRO" />
-                    </Mappings>
-                </dx:ASPxDiagram>
+                <dx:ASPxCallbackPanel ID="pnlCall" runat="server" OnCallback="pnlCall_Callback">
+                    
+                    <PanelCollection>
+                        <dx:PanelContent>
+                            <dx:ASPxDiagram runat="server" ID="dgPost" SimpleView="true" Width="100%" Height="100%">
+                                <Mappings>
+                                    <Node Key="Id" ParentKey="IdSuperior" Text="Denumire" />
+                                </Mappings>
+                            </dx:ASPxDiagram>
+                        </dx:PanelContent>
+                    </PanelCollection>
+                </dx:ASPxCallbackPanel>
             </td>
         </tr>
     </table>

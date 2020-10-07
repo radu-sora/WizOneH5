@@ -16,25 +16,26 @@
         </tr>
         <tr>
             <td colspan="2">
-                <div style="display:inline-block; line-height:22px; vertical-align:middle; padding:15px 0px 15px 0px;">
-                    <label id="lblDtVig" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Data selectie</label>
-                    <div style="float:left; padding-right:15px;">
+                <div class="Absente_divOuter" style="display:flex; align-items:flex-end; margin:15px 0px;">
+
+                    <div class="Absente_Cereri_CampuriSup">
+                        <label id="lblDtVig" runat="server" style="display:inline-block;">Data selectie</label>
                         <dx:ASPxDateEdit id="txtDtVig" ClientIDMode="Static" ClientInstanceName="txtDtVig" runat="server" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" Width="100px" AllowNull="false" />
                     </div>
 
-                    <label id="lblParinte" runat="server" style="display:inline-block; float:left; padding-right:15px;">Superior</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbParinte" runat="server" Width="130px" ValueField="Camp" TextField="Denumire" />
+                    <div class="Absente_Cereri_CampuriSup">
+                        <label id="lblParinte" runat="server" style="display:inline-block;">Superior</label>
+                        <dx:ASPxComboBox ID="cmbParinte" runat="server" Width="200px" ValueField="Camp" TextField="Denumire" />
                     </div>
 
-                    <label id="Label1" runat="server" style="display:inline-block; float:left; padding-right:15px;">De la postul</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbPost" runat="server" Width="130px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" />
+                    <div class="Absente_Cereri_CampuriSup">
+                        <label id="lblPost" runat="server" style="display:inline-block;">Incepand de la</label>
+                        <dx:ASPxComboBox ID="cmbPost" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" />
                     </div>
 
-                    <label id="lblLimbi" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Alege limba</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbLimbi" runat="server" AutoPostBack ="false">
+                    <div class="Absente_Cereri_CampuriSup">
+                        <label id="lblLimbi" runat="server" style="display:inline-block;">Limba</label>
+                        <dx:ASPxComboBox ID="cmbLimbi" runat="server" AutoPostBack ="false" Width="100px">
                             <Items>
                                 <dx:ListEditItem Value="RO" Text="Romana" Selected="true" />
                                 <dx:ListEditItem Value="EN" Text="Engleza" />
@@ -42,14 +43,14 @@
                         </dx:ASPxComboBox>
                     </div>
 
-                    <label id="lblNivel" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Alege nr niveluri</label>
-                    <div style="float:left; padding-right:15px;">
-                         <dx:ASPxSpinEdit ID="txtNivel" runat="server" Width="100px" DecimalPlaces="0" MaxLength="3" MinValue="1" MaxValue="100" />
+                    <div class="Absente_Cereri_CampuriSup">
+                        <label id="lblNivel" runat="server" style="display:inline-block;">Nr niveluri</label>
+                         <dx:ASPxSpinEdit ID="txtNivel" runat="server" Width="50px" DecimalPlaces="0" MaxLength="3" MinValue="1" MaxValue="100" />
                     </div>
 
-                    <label id="lblAfis" runat="server" style="display:inline-block; float:left; padding-right:15px;">Afisare ultimul nivel</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbAfisare" runat="server" AutoPostBack ="false">
+                    <div class="Absente_Cereri_CampuriSup">
+                        <label id="lblAfis" runat="server" style="display:inline-block;">Afisare ultimul nivel</label>
+                        <dx:ASPxComboBox ID="cmbAfisare" runat="server" AutoPostBack ="false" Width="100px">
                             <Items>
                                 <dx:ListEditItem Value="1" Text="Nume Post" Selected="true" />
                                 <dx:ListEditItem Value="2" Text="Nume Grup" />
@@ -74,11 +75,11 @@
         </tr>
         <tr>
             <td colspan="2">
-                <dx:ASPxCallbackPanel ID="pnlCall" runat="server" OnCallback="pnlCall_Callback">
-                    
+                <dx:ASPxCallbackPanel ID="pnlCall" runat="server" ClientInstanceName="pnlCall" OnCallback="pnlCall_Callback">
                     <PanelCollection>
                         <dx:PanelContent>
-                            <dx:ASPxDiagram runat="server" ID="dgPost" SimpleView="true" Width="100%" Height="100%">
+                            <dx:ASPxDiagram ID="dgPost" ClientInstanceName="dgPost" runat="server" SimpleView="true" SettingsToolbox-Visibility="Collapsed" SettingsGrid-Visible="false">
+                                <SettingsAutoLayout Type="Tree" />
                                 <Mappings>
                                     <Node Key="Id" ParentKey="IdSuperior" Text="Denumire" />
                                 </Mappings>
@@ -90,6 +91,9 @@
         </tr>
     </table>
 
+    <script>
+        dgPost.SetFullscreenMode(true);
+    </script>
 
 
 </asp:Content>

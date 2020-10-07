@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using WizOne.Module;
 using System.Data;
-using System.IO;
 using System.Diagnostics;
-using DevExpress.Web.ASPxTreeList;
-using DevExpress.Web.Internal;
-using DevExpress.Spreadsheet;
-using System.Web.Hosting;
-using DevExpress.Web.ASPxDiagram;
+using System.IO;
+using System.Web.UI;
+using WizOne.Module;
 
 namespace WizOne.Organigrama
 {
@@ -23,8 +14,33 @@ namespace WizOne.Organigrama
         {
             try
             {
+                Dami.AccesApp();
+
                 if (!IsPostBack)
                 {
+                    txtTitlu.Text = General.VarSession("Titlu").ToString();
+
+                    #region Traducere
+                    string ctlPost = Request.Params["__EVENTTARGET"];
+                    if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
+
+                    btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+
+                    lblDtVig.InnerText = Dami.TraduCuvant("Data Selectie");
+                    lblParinte.InnerText = Dami.TraduCuvant("Superior");
+                    lblPost.InnerText = Dami.TraduCuvant("Incepand de la");
+                    lblLimbi.InnerText = Dami.TraduCuvant("Limba");
+                    lblNivel.InnerText = Dami.TraduCuvant("Nr niveluri");
+                    lblAfis.InnerText = Dami.TraduCuvant("Afisare ultimul nivel");
+                    lblParinte.InnerText = Dami.TraduCuvant("Superior");
+
+                    chkPlan.Text = Dami.TraduCuvant("Plan HC");
+                    chkAprobat.Text = Dami.TraduCuvant("HC Aprobat");
+                    chkEfectiv.Text = Dami.TraduCuvant("HC Efectiv");
+
+                    btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                    #endregion
+
                     txtDtVig.Value = DateTime.Now;
                     txtNivel.Value = 3;
 
@@ -41,19 +57,6 @@ namespace WizOne.Organigrama
                     if (arr.Length > 0)
                         cmbPost.Value = Convert.ToInt32(arr[0]["Id"]);
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void btnFiltru_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                IncarcaGrid(Convert.ToDateTime(txtDtVig.Value), Convert.ToInt32(General.Nz(txtNivel.Value, 1)), 1);
             }
             catch (Exception ex)
             {
@@ -124,7 +127,8 @@ namespace WizOne.Organigrama
                             )
                             SELECT Id, IdSuperior, NivelIerarhic, Level, {camp} AS Denumire
                             FROM tree
-                            where Level <= {nivel}";
+                            where Level <= {nivel}
+                            ORDER BY Level, IdSuperior";
                 }
                 else
                 {
@@ -147,34 +151,6 @@ namespace WizOne.Organigrama
 
                 dgPost.NodeDataSource = dt;
                 dgPost.DataBind();
-
-                //int x = 0;
-
-                //for(int i = 0; i < dt.Rows.Count; i++)
-                //{
-                //    x = i + 1;
-                //    DataRow dr = dt.Rows[i];
-                //    ws2.Cells["A" + x].Value = General.Nz(dr["Id"],"").ToString();
-                //    if (General.Nz(dr["Id"], "").ToString() == idPost.ToString())
-                //        ws2.Cells["B" + x].Value = 0;
-                //    else
-                //        ws2.Cells["B" + x].Value = General.Nz(dr["IdSuperior"], "").ToString();
-
-                //    string den = General.Nz(dr["DenumireRO"], "").ToString();
-                //    //string den = General.Nz(dr["Denumire"], "").ToString();
-                //    //if (rbRO.Checked) den = General.Nz(dr["DenumireRO"], "").ToString();
-                //    if (General.Nz(cmbLimbi.Value,"RO").ToString() == "EN") den = General.Nz(dr["DenumireEN"], "").ToString();
-
-                //    string hc = "";
-                //    if (chkPlan.Checked) hc += ",Plan: " + General.Nz(dr["PlanHC"],0);
-                //    if (chkAprobat.Checked) hc += ",Aprobat: " + General.Nz(dr["HCAprobat"], 0);
-                //    if (chkEfectiv.Checked) hc += ",Efectiv: " + General.Nz(dr["HCEfectiv"], 0);
-                //    if (hc != "") hc = " (" + hc.Substring(1) + ")";
-
-                //    ws2.Cells["C" + x].Value = den + hc;
-                //}
-
-
             }
             catch (Exception ex)
             {
@@ -186,7 +162,15 @@ namespace WizOne.Organigrama
 
         protected void pnlCall_Callback(object sender, DevExpress.Web.CallbackEventArgsBase e)
         {
-            IncarcaGrid(Convert.ToDateTime(txtDtVig.Value), Convert.ToInt32(General.Nz(txtNivel.Value, 1)), 1);
+            try
+            {
+                IncarcaGrid(Convert.ToDateTime(txtDtVig.Value), Convert.ToInt32(General.Nz(txtNivel.Value, 1)), Convert.ToInt32(General.Nz(cmbPost.Value, 1)));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
     }
 }

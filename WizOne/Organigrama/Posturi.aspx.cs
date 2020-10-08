@@ -78,8 +78,14 @@ namespace WizOne.Organigrama
                     if (dt.Rows.Count > 0)
                     {
                         dr = dt.Rows[0];
-                        txtId.Value = dr["Id"];
-                        txtDen.Text = General.Nz(dr["Denumire"],"").ToString();
+                        if (General.Nz(Session["Org_Duplicare"],0).ToString() == "1")
+                            txtDen.Text = General.Nz(dr["Denumire"], "").ToString() + " - Copie";
+                        else
+                        {
+                            txtId.Value = dr["Id"];
+                            txtDen.Text = General.Nz(dr["Denumire"], "").ToString();
+                        }
+
                         cmbCmp.Value = dr["F10002"];
                         cmbSub.Value = dr["F10004"];
                         cmbFil.Value = dr["F10005"];
@@ -119,6 +125,12 @@ namespace WizOne.Organigrama
                             itm.UploadedFileExtension = dtDoc.Rows[0]["FisierExtensie"];
 
                             Session["Posturi_Upload"] = itm;
+                        }
+
+                        if (General.Nz(Session["Org_Duplicare"], 0).ToString() == "1")
+                        {
+                            Session["Org_Duplicare"] = "0";
+                            Session["IdAuto"] = -97;
                         }
                     }
                     else

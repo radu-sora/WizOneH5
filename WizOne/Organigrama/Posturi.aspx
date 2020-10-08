@@ -1,64 +1,13 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Posturi.aspx.cs" Inherits="WizOne.Organigrama.Posturi" %>
 
-
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-
-    <script language="javascript" type="text/javascript">
-        function StartUpload() {
-            //pnlLoading.Show();
-        }
-
-        function EndUpload(s) {
-            //pnlLoading.Hide();
-            lblDoc.innerText = s.cpDocUploadName;
-            s.cpDocUploadName = null;
-        }
-
-        function NivelHay(s)
-        {
-            txtSalMin.SetValue(s.GetSelectedItem().texts[1]);
-            txtSalMed.SetValue(s.GetSelectedItem().texts[2]);
-            txtSalMax.SetValue(s.GetSelectedItem().texts[3]);
-        }
-
-        function NivelIerarhic(s)
-        {
-            var nvl = s.GetSelectedItem().texts[2].replace('N-', '');
-            if (nvl == 'N') nvl=0;
-            txtNivelIer.SetValue('N-' + (Number(nvl) + 1));
-            hfNivelIer.Set('val','N-' + (Number(nvl) + 1));
-
-            cmbSupFunc.SetValue(s.GetValue());
-            cmbSupFunc.SetText(s.GetText());
-        }
-
-        function OnEndCallback(s, e) {
-            if (s.cpAlertMessage != null) {
-                swal({
-                    title: trad_string(limba, ""), text: s.cpAlertMessage,
-                    type: "warning"
-                });
-                s.cpAlertMessage = null;
-            }
-            pnlLoading.Hide();
-        }
-
-        function ShowDoc()
-        {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tbl=3&id=' + <%=Session["IdAuto"] %>, '_blank ')
-        }
-
-    </script>
-
-</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <table width="100%">
+    <table style="width:100%">
         <tr>
-            <td align="left">
+            <td class="pull-left">
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Font-Size="14px" Font-Bold="True" ForeColor="#00578A" Font-Underline="True" />
             </td>
-            <td align="right">
+            <td class="pull-right">
                 <dx:ASPxButton ID="btnPrint" ClientInstanceName="btnPrint" ClientIDMode="Static" runat="server" Text="Imprima" AutoPostBack="true" OnClick="btnPrint_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
                 </dx:ASPxButton>
@@ -78,9 +27,6 @@
         </tr>
     </table>
     
-
-
-
     <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
         <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
         <PanelCollection>
@@ -112,7 +58,7 @@
                                         </BrowseButton>
                                         <ValidationSettings ShowErrors="False"></ValidationSettings>
 
-                                        <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                                        <ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
                                     </dx:ASPxUploadControl>
                                 </td>
                                 <td style="padding-right:10px;">
@@ -344,5 +290,44 @@
         </PanelCollection>
     </dx:ASPxCallbackPanel>
 
+    <script>
+
+        function EndUpload(s) {
+            lblDoc.innerText = s.cpDocUploadName;
+            s.cpDocUploadName = null;
+        }
+
+        function NivelHay(s) {
+            txtSalMin.SetValue(s.GetSelectedItem().texts[1]);
+            txtSalMed.SetValue(s.GetSelectedItem().texts[2]);
+            txtSalMax.SetValue(s.GetSelectedItem().texts[3]);
+        }
+
+        function NivelIerarhic(s) {
+            var nvl = s.GetSelectedItem().texts[2].replace('N-', '');
+            if (nvl == 'N') nvl = 0;
+            txtNivelIer.SetValue('N-' + (Number(nvl) + 1));
+            hfNivelIer.Set('val', 'N-' + (Number(nvl) + 1));
+
+            cmbSupFunc.SetValue(s.GetValue());
+            cmbSupFunc.SetText(s.GetText());
+        }
+
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: trad_string(limba, ""), text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+            pnlLoading.Hide();
+        }
+
+        function ShowDoc() {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tbl=3&id=' + <%=Session["IdAuto"] %>, '_blank ')
+        }
+
+    </script>
 
 </asp:Content>

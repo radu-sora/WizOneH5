@@ -1,79 +1,18 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Lista.aspx.cs" Inherits="WizOne.Organigrama.Lista" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-
-    <script type="text/javascript">
-
-        function OnEndDragNode(s, e) {
-            var jsDate = txtDtVig.GetDate();
-            
-            if (jsDate.getDate() == 1) {
-                grDate.GetNodeValues(e.nodeKey, "IdAuto", GetNodeValueOri);
-
-                var nodeKeys = s.GetVisibleNodeKeys();
-                for (var i = 0; i < nodeKeys.length; i++) {
-                    if (s.GetNodeHtmlElement(nodeKeys[i]) == e.targetElement) {
-                        var targetNodeKey = nodeKeys[i];
-                        grDate.GetNodeValues(targetNodeKey, "IdAuto", GetNodeValueDes);
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                swal({
-                    title: "Operatie nepermisa", text: "Data de selectie trebuie sa fie prima zi din luna !",
-                    type: "warning"
-                });
-            }
-
-            e.cancel = true;
-        }
-
-        function GetNodeValueOri(selectedValues) {
-            hf.Set("Nod", selectedValues);
-        }
-        function GetNodeValueDes(selectedValues) {
-            hf.Set("Target", selectedValues);
-            popUpMotiv.Show();
-        }
-
-        function OnModifStruc(s, e) {
-            if (!cmbMotiv.GetValue("Id")) {
-                e.processOnServer = false;
-                swal({
-                    title: "Operatie nepermisa", text: "Pentru a putea modifica este nevoie de un motiv",
-                    type: "warning"
-                });
-            }
-            else {
-                e.processOnServer = true;
-            }
-
-            popUpMotiv.Hide();
-        }
-
-        function OnExport(s, e) {
-            popUpLevel.Show();
-        }
-
-        function OnOkLevel(s, e) {
-            popUpLevel.Hide();
-        }
-
-    </script>
-</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <dx:ASPxHiddenField ID="hf" runat="server" ClientIDMode="Static" ClientInstanceName="hf" />
-    <table width="100%">
+    <table style="width:100%">
         <tr>
-            <td align="left">
+            <td class="pull-left">
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
-            <td align="right">
-                <dx:ASPxButton ID="btnExport" ClientInstanceName="btnExport" ClientIDMode="Static" runat="server" Text="Exporta document" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) { OnExport(s,e); }" />
+            <td class="pull-right">
+                <dx:ASPxButton ID="btnExport" ClientInstanceName="btnExport" ClientIDMode="Static" runat="server" Text="Diagrama" OnClick="btnExport_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
+                </dx:ASPxButton>
+                <dx:ASPxButton ID="btnDuplicare" ClientInstanceName="btnDuplicare" ClientIDMode="Static" runat="server" Text="Duplicare" OnClick="btnDuplicare_Click" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/duplicare.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnModifStruc" ClientInstanceName="btnModifStruc" ClientIDMode="Static" runat="server" Text="Modifica" AutoPostBack="true" OnClick="btnModif_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/schimba.png"></Image>
@@ -111,18 +50,17 @@
                         </dx:ASPxComboBox>
                     </div>
 
-
                     <label id="lblParinte" runat="server" style="display:inline-block; float:left; padding-right:15px;">Superior</label>
                     <div style="float:left; padding-right:15px;">
                         <dx:ASPxComboBox ID="cmbParinte" runat="server" Width="130px" ValueField="Camp" TextField="Denumire" />
                     </div>
 
-
                     <div style="float:left;">
                         <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
                             <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                         </dx:ASPxButton>
-                        <dx:ASPxButton ID="btnExpand" runat="server" Text="Expand" OnClick="btnExpand_Click" oncontextMenu="ctx(this,event)" >
+                        <dx:ASPxButton ID="btnExpand" runat="server" Text="Expand" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                            <ClientSideEvents Click="function(s,e) { grDate.ExpandAll(); }" />
                             <Image Url="~/Fisiere/Imagini/Icoane/stare.png"></Image>
                         </dx:ASPxButton>
                     </div>
@@ -145,7 +83,7 @@
                     <SettingsLoadingPanel Enabled="true" />
                     <SettingsEditing AllowNodeDragDrop="true" />
                     <Settings GridLines="Both" />
-                    <ClientSideEvents EndDragNode="OnEndDragNode" />
+                    <ClientSideEvents EndDragNode="function(s, e) { OnEndDragNode(s,e); }" />
                     <Columns>
                         
                         <dx:TreeListDataColumn FieldName="Denumire" Name="Denumire" Caption="Denumire" ReadOnly="true" Width="150px" VisibleIndex="1" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
@@ -208,80 +146,60 @@
         </ContentCollection>
     </dx:ASPxPopupControl>
 
+    <script type="text/javascript">
 
+        function OnEndDragNode(s, e) {
+            var jsDate = txtDtVig.GetDate();
 
-    <dx:ASPxPopupControl ID="popUpLevel" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
-        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
-        EnableViewState="False" PopupElementID="popUpLevelArea" PopupHorizontalAlign="WindowCenter"
-        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="350px" Height="250px" HeaderText="Nivel export"
-        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpLevel" EnableHierarchyRecreation="false">
-        <ContentCollection>
-            <dx:PopupControlContentControl runat="server">
-                <asp:Panel ID="Panel2" runat="server">
-                    <table width="100%">
-                        <tr>
-                            <td colspan="2" align="right">
-                                <dx:ASPxButton ID="btnOkLevel" runat="server" Text="Exporta" AutoPostBack="true" OnClick="btnOkLevel_Click" >
-                                    <ClientSideEvents Click="function(s, e) { OnOkLevel(s,e); }" />
-                                    <Image Url="~/Fisiere/Imagini/Icoane/creion.png"></Image>
-                                </dx:ASPxButton>
-                                &nbsp;&nbsp;&nbsp;
-                                <dx:ASPxButton ID="btnNuLevel" runat="server" Text="Renunta" AutoPostBack="false" >
-                                    <ClientSideEvents Click="function(s, e) { popUpLevel.Hide(); }" />
-                                    <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
-                                </dx:ASPxButton>
-                                <br /><br /><br />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="left">
-                                Alege limba<br /><br />
-                            </td>
-                            <td>
-                                <dx:ASPxComboBox ID="cmbLimbi" runat="server" AutoPostBack ="false">
-                                    <Items>
-                                        <dx:ListEditItem Value="RO" Text="Romana" Selected="true" />
-                                        <dx:ListEditItem Value="EN" Text="Engleza" />
-                                    </Items>
-                                </dx:ASPxComboBox>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="left">
-                                Alege nr niveluri<br /><br />
-                            </td>
-                            <td>
-                                <dx:ASPxSpinEdit ID="txtNivel" runat="server" Width="100px" DecimalPlaces="0" MaxLength="3" MinValue="1" MaxValue="100" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="left">
-                                Afisare ultimul nivel<br /><br />
-                            </td>
-                            <td>
-                                <dx:ASPxComboBox ID="cmbAfisare" runat="server" AutoPostBack ="false">
-                                    <Items>
-                                        <dx:ListEditItem Value="1" Text="Nume Post" Selected="true" />
-                                        <dx:ListEditItem Value="2" Text="Nume Grup" />
-                                    </Items>
-                                </dx:ASPxComboBox>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <table width="100%">
-                                    <tr>
-                                        <td><dx:ASPxCheckBox ID="chkPlan" Text="Plan HC" runat="server" Checked="true" /></td>
-                                        <td><dx:ASPxCheckBox ID="chkAprobat" Text="HC Aprobat" runat="server" Checked="true" /></td>
-                                        <td><dx:ASPxCheckBox ID="chkEfectiv" Text="HC Efectiv" runat="server" Checked="true" /></td>
-                                    </tr>
-                                </table>                                
-                            </td>
-                        </tr>
-                    </table>
-                </asp:Panel>
-            </dx:PopupControlContentControl>
-        </ContentCollection>
-    </dx:ASPxPopupControl>
+            if (jsDate.getDate() == 1) {
+                grDate.GetNodeValues(e.nodeKey, "IdAuto", GetNodeValueOri);
+
+                var nodeKeys = s.GetVisibleNodeKeys();
+                for (var i = 0; i < nodeKeys.length; i++) {
+                    if (s.GetNodeHtmlElement(nodeKeys[i]) == e.targetElement) {
+                        var targetNodeKey = nodeKeys[i];
+                        grDate.GetNodeValues(targetNodeKey, "IdAuto", GetNodeValueDes);
+                        break;
+                    }
+                }
+            }
+            else {
+                swal({
+                    title: "Operatie nepermisa", text: "Data de selectie trebuie sa fie prima zi din luna !",
+                    type: "warning"
+                });
+            }
+
+            e.cancel = true;
+        }
+
+        function GetNodeValueOri(selectedValues) {
+            hf.Set("Nod", selectedValues);
+        }
+        function GetNodeValueDes(selectedValues) {
+            hf.Set("Target", selectedValues);
+            popUpMotiv.Show();
+        }
+
+        function OnModifStruc(s, e) {
+            if (!cmbMotiv.GetValue("Id")) {
+                e.processOnServer = false;
+                swal({
+                    title: "Operatie nepermisa", text: "Pentru a putea modifica este nevoie de un motiv",
+                    type: "warning"
+                });
+            }
+            else {
+                e.processOnServer = true;
+            }
+
+            popUpMotiv.Hide();
+        }
+
+        function OnOkLevel(s, e) {
+            popUpLevel.Hide();
+        }
+
+    </script>
 
 </asp:Content>

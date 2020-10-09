@@ -1237,28 +1237,28 @@ namespace WizOne.Absente
                 }
 
                 Dictionary<string, string> dic = new Dictionary<string, string>();
-                dic.Add("id", sqlIdCerere);
-                dic.Add("f10003", marca.ToString());
-                dic.Add("idabsenta", cmbAbs.Value.ToString());
-                dic.Add("datainceput", General.ToDataUniv(dtDataInc.Date));
-                dic.Add("datasfarsit", General.ToDataUniv(dtDataSf.Date));
-                dic.Add("nrzile", (nrZile == null ? "NULL" : nrZile));
-                dic.Add("nrzileviitor", "NULL");
-                dic.Add("observatii", (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'"));
-                dic.Add("idstare", (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()));
-                dic.Add("idcircuit", idCircuit);
-                dic.Add("userintrod", General.Nz(Session["UserId"], "-99").ToString());
-                dic.Add("culoare", (sqlCuloare == null ? "NULL" : sqlCuloare));
-                dic.Add("inlocuitor", (sqlInloc == null ? "NULL" : sqlInloc));
-                dic.Add("totalsupercircuit", (sqlTotal == null ? "NULL" : sqlTotal));
-                dic.Add("pozitie", (sqlPozitie == null ? "NULL" : sqlPozitie));
-                dic.Add("trimitela", "NULL");
-                dic.Add("nrore", (sqlNrOre == null ? "NULL" : sqlNrOre));
-                dic.Add("orainceput", sqlOraInc);
-                dic.Add("orasfarsit", sqlOraSf);
-                dic.Add("areatas", "0");
-                dic.Add("user_no", General.Nz(Session["UserId"], "-99").ToString());
-                dic.Add("time", General.CurrentDate());
+                dic.Add("Id", sqlIdCerere);
+                dic.Add("F10003", marca.ToString());
+                dic.Add("IdAbsenta", cmbAbs.Value.ToString());
+                dic.Add("DataInceput", General.ToDataUniv(dtDataInc.Date));
+                dic.Add("DataSfarsit", General.ToDataUniv(dtDataSf.Date));
+                dic.Add("NrZile", (nrZile == null ? "NULL" : nrZile));
+                dic.Add("NrZileViitor", "NULL");
+                dic.Add("Observatii", (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'"));
+                dic.Add("IdStare", (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()));
+                dic.Add("IdCircuit", idCircuit);
+                dic.Add("UserIntrod", General.Nz(Session["UserId"], "-99").ToString());
+                dic.Add("Culoare", (sqlCuloare == null ? "NULL" : sqlCuloare));
+                dic.Add("Inlocuitor", (sqlInloc == null ? "NULL" : sqlInloc));
+                dic.Add("TotalSuperCircuit", (sqlTotal == null ? "NULL" : sqlTotal));
+                dic.Add("Pozitie", (sqlPozitie == null ? "NULL" : sqlPozitie));
+                dic.Add("TrimiteLa", "NULL");
+                dic.Add("NrOre", (sqlNrOre == null ? "NULL" : sqlNrOre));
+                dic.Add("OraInceput", sqlOraInc);
+                dic.Add("OraSfarsit", sqlOraSf);
+                dic.Add("AreAtas", "0");
+                dic.Add("USER_NO", General.Nz(Session["UserId"], "-99").ToString());
+                dic.Add("TIME", General.CurrentDate());
 
                 #region Campuri Extra
 
@@ -1309,7 +1309,10 @@ namespace WizOne.Absente
                     {
                         foreach (KeyValuePair<string, string> l in dic)
                         {
-                            val = val.ToUpper().Replace("ENT." + l.Key.ToUpper(), l.Value);
+                            if (tip == 1)
+                                val = val.ToUpper().Replace("ENT." + l.Key.ToUpper(), l.Value);
+                            else
+                                val = val.Replace("ent." + l.Key, l.Value);
                         }
                     }
                     if (tip == 1)

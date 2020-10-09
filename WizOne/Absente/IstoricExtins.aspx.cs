@@ -842,6 +842,7 @@ namespace WizOne.Absente
                     DataRowView obj = grLeg.GetRow(i) as DataRowView;
                     ws2.Cells[row, col].Value = obj["Denumire"].ToString();
                     ws2.Cells[row, col + 1].FillColor = General.Culoare(obj["Culoare"].ToString());
+                    ws2.Cells[row, col + 1].Fill.PatternType = DevExpress.Spreadsheet.PatternType.LightTrellis;
                     row++;
                 }
 

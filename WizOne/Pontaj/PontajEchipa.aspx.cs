@@ -741,11 +741,11 @@ namespace WizOne.Pontaj
 
                                     string strTmp = "";
                                     if (Constante.tipBD == 1)
-                                        strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString(), ent.F30042,
+                                        strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString().Replace(",", "."), ent.F30042,
                                                 ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
                                                 General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
                                     else
-                                        strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString(), ent.F30042, Dami.NextId("F300"),
+                                        strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString().Replace(",", "."), ent.F30042, Dami.NextId("F300"),
                                                 ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
                                                 General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
 
@@ -917,11 +917,11 @@ namespace WizOne.Pontaj
 
                                             string strTmp = "";
                                             if (Constante.tipBD == 1)
-                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString(), ent.F30042,
+                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString().Replace(",", "."), ent.F30042,
                                                         ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
                                                         General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
                                             else
-                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString(), ent.F30042, Dami.NextId("F300"),
+                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString().Replace(",", "."), ent.F30042, Dami.NextId("F300"),
                                                         ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
                                                         General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
 
@@ -960,11 +960,11 @@ namespace WizOne.Pontaj
 
                                             string strTmp = "";
                                             if (Constante.tipBD == 1)
-                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString(), ent.F30042,
+                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString().Replace(",", "."), ent.F30042,
                                                         ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
                                                         General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
                                             else
-                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString(), ent.F30042, Dami.NextId("F300"),
+                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString().Replace(",", "."), ent.F30042, Dami.NextId("F300"),
                                                         ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
                                                         General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
 
@@ -1928,7 +1928,7 @@ namespace WizOne.Pontaj
                 if (General.Nz(cmbCateg.Value, "").ToString() != "")
                 {
                     strFiltru += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
-                    strInner += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 " + Environment.NewLine;
+                    strInner += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON X.F10003 = CTG.F10003 " + Environment.NewLine;
                 }
                 #endregion
 
@@ -2082,11 +2082,18 @@ namespace WizOne.Pontaj
                 string strInner = "";
                 string campuri = "";
                 string strFiltru = "";
-                string filtruSursa = "";
+                string pvtFiltru = "";
+                string pvtInner = "";
 
                 #region Filtru
+                //if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
+                //    filtruSursa += @" AND F10007 IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
+
                 if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                    filtruSursa += @" AND F10007 IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
+                {
+                    pvtFiltru += @" AND B.F00608 IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
+                    pvtInner = " INNER JOIN F006 B ON A.F10007=B.F00607 ";
+                }
 
                 if (General.Nz(cmbAng.Value, "").ToString() == "")
                 {
@@ -2154,7 +2161,7 @@ namespace WizOne.Pontaj
                 {
                     if (chkTotaluri.Checked)
                         strInner += $@"INNER JOIN (SELECT F10003 {zileAs} FROM 
-                                (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf} {filtruSursa}) source  
+                                (SELECT A.F10003, {cmpValStr}, A.""Ziua"" FROM ""Ptj_Intrari"" A {pvtInner} WHERE {dtInc} <= CAST(A.""Ziua"" AS date) AND CAST(A.""Ziua"" AS date) <= {dtSf} {pvtFiltru}) source  
                                 PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003" + Environment.NewLine;
 
@@ -2186,31 +2193,31 @@ namespace WizOne.Pontaj
                 {
                     if (chkTotaluri.Checked)
                         strInner += $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf} {filtruSursa}) source  
+                                (SELECT A.F10003, {cmpValStr}, A.""Ziua"" FROM ""Ptj_Intrari"" A {pvtInner} WHERE {dtInc} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {dtSf} {pvtFiltru}) source  
                                 PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003" + Environment.NewLine;
 
                     if (chkOre.Checked)
                     {
                         strInner += $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""{cmpExpIn}"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                (SELECT F10003, ""{cmpExpIn}"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= {dtSf}) source  
                                 PIVOT (MAX(""{cmpExpIn}"") FOR ""Ziua"" IN ( {zileAsIn.Substring(1)} )) pvt
                                 ) pvtIn ON X.F10003=pvtIn.F10003" + Environment.NewLine;
 
                         strInner += $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""{cmpExpOut}"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                (SELECT F10003, ""{cmpExpOut}"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= {dtSf}) source  
                                 PIVOT (MAX(""{cmpExpOut}"") FOR ""Ziua"" IN ( {zileAsOut.Substring(1)} )) pvt
                                 ) pvtOut ON X.F10003=pvtOut.F10003" + Environment.NewLine;
                     }
 
                     if (chkPauza.Checked)
                         strInner += $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= {dtSf}) source  
                                 PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zileAsPauza.Substring(1)} )) pvt
                                 ) pvtPauza ON X.F10003=pvtPauza.F10003" + Environment.NewLine;
 
                     strInner += $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= {dtSf}) source  
                                 PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zileAsCuloare.Substring(1)} )) pvt
                                 ) pvtCuloare ON X.F10003=pvtCuloare.F10003" + Environment.NewLine;
                 }

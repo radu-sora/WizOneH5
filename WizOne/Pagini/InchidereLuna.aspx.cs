@@ -192,7 +192,7 @@ namespace WizOne.Pagini
                             {dr["F704660"] ?? null},{dr["F704661"] ?? null},{dr["F704662"] ?? null},{dr["F704663"] ?? null},{dr["F704664"] ?? null},{dr["F704665"] ?? null},{dr["F704666"] ?? null},{dr["F704667"] ?? null},{dr["F704668"]},{dr["F704669"] ?? null});
                             END;";
                         General.ExecutaNonQuery(strSql, null);
-                    }                  
+                    }
                 }
 
                 //Florin 2020.10.06

@@ -15196,3 +15196,5 @@ ALTER TABLE "Avs_Cereri" ADD "PostId" number(10);
 ALTER TABLE "Avs_Cereri" ADD "PostNume" varchar2(500)
 /
 
+ALTER TABLE "Org_Posturi" ADD "StudiiSuperioare" number(10);
+/

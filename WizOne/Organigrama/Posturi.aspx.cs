@@ -1229,7 +1229,7 @@ namespace WizOne.Organigrama
                     FROM ""Admin_Arii"" A
                     INNER JOIN ""Admin_Categorii"" B ON A.""Id""=B.""IdArie""
                     INNER JOIN ""Admin_Obiecte"" C ON B.""Id""=C.""IdCategorie""
-                    LEFT JOIN ""Org_PosturiDosar"" D ON C.""Id"" = D.""IdObiect""
+                    LEFT JOIN ""Org_PosturiDosar"" D ON C.""Id"" = D.""IdObiect"" AND ""IdPost""={General.Nz(txtId.Value,-99)}
                     WHERE A.""Id"" = (SELECT COALESCE(""Valoare"",'') FROM ""tblParametrii"" WHERE ""Nume""='ArieTabDosarPersonalDinPersonal')
                     AND B.""Denumire""='Documente Post'", null);
 

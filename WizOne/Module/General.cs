@@ -5629,7 +5629,7 @@ namespace WizOne.Module
 
                 //Florin 2020.10.08
                 HttpContext.Current.Session["Org_Duplicare"] = "0";
-                HttpContext.Current.Session["Filtru_Posturi"] = "{}";
+                HttpContext.Current.Session["Filtru_Posturi"] = null;
 
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";

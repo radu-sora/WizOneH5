@@ -4326,6 +4326,9 @@ namespace WizOne.Avs
                             General.IncarcaDT(sql100Temp, null);
                             //}
 
+                            //Florin 2020.10.09
+                            //Inactivam angajatul pe post
+                            General.ExecutaNonQuery($@"UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit"" = {General.ToDataUniv(Convert.ToDateTime(dtCer.Rows[0]["DataModif"]))} WHERE F10003=3537 AND ""DataSfarsit"" >= {General.ToDataUniv(Convert.ToDateTime(dtCer.Rows[0]["DataModif"]))}");
 
                             //sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             //+ " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", " + dtCer.Rows[0]["MotivId"].ToString() + ", 'Modificari in avans', '"

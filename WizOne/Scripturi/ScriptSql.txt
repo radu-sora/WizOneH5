@@ -14843,3 +14843,6 @@ ALTER TABLE Avs_Cereri ADD PostId int
 GO
 ALTER TABLE Avs_Cereri ADD PostNume nvarchar(500)
 GO
+
+ALTER TABLE Org_Posturi ADD StudiiSuperioare int
+GO

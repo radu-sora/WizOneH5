@@ -8,7 +8,8 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td class="pull-right">
-                <dx:ASPxButton ID="btnExport" ClientInstanceName="btnExport" ClientIDMode="Static" runat="server" Text="Diagrama" OnClick="btnExport_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnExport" ClientInstanceName="btnExport" ClientIDMode="Static" runat="server" Text="Diagrama" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s,e) { grDate.PerformCallback(); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnDuplicare" ClientInstanceName="btnDuplicare" ClientIDMode="Static" runat="server" Text="Duplicare" OnClick="btnDuplicare_Click" oncontextMenu="ctx(this,event)" >
@@ -77,13 +78,13 @@
         </tr>
         <tr>
             <td colspan="2">
-                <dx:ASPxTreeList ID="grDate" runat="server" ClientInstanceName="grDate" SettingsEditing-AllowNodeDragDrop="true" KeyFieldName="Id" AutoGenerateColumns="true" OnHtmlRowPrepared="grDate_HtmlRowPrepared" >
+                <dx:ASPxTreeList ID="grDate" runat="server" ClientInstanceName="grDate" SettingsEditing-AllowNodeDragDrop="true" KeyFieldName="Id" AutoGenerateColumns="true" OnHtmlRowPrepared="grDate_HtmlRowPrepared" OnCustomCallback="grDate_CustomCallback" >
                     <SettingsBehavior AllowFocusedNode="true" />
                     <SettingsSearchPanel Visible="true" />
                     <SettingsLoadingPanel Enabled="true" />
                     <SettingsEditing AllowNodeDragDrop="true" />
                     <Settings GridLines="Both" />
-                    <ClientSideEvents EndDragNode="function(s, e) { OnEndDragNode(s,e); }" />
+                    <ClientSideEvents EndDragNode="function(s, e) { OnEndDragNode(s,e); }" EndCallback="function(s,e) { onGridEndCallback(s); }" />
                     <Columns>
                         
                         <dx:TreeListDataColumn FieldName="Denumire" Name="Denumire" Caption="Denumire" ReadOnly="true" Width="150px" VisibleIndex="1" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
@@ -198,6 +199,13 @@
 
         function OnOkLevel(s, e) {
             popUpLevel.Hide();
+        }
+
+        function onGridEndCallback(s) {
+            if (s.cpReportUrl) {
+                window.location.href = s.cpReportUrl;
+                delete s.cpReportUrl;
+            }
         }
 
     </script>

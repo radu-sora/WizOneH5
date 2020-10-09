@@ -26,12 +26,35 @@ namespace WizOne.Organigrama
                 
                 if (!IsPostBack)
                 {
-
-                    if (dtPar.Rows.Count > 0) cmbParinte.SelectedIndex = 0;
-
-                    txtDtVig.Value = DateTime.Now;
+                    int idPost = 0;
                     Session["InformatiaCurenta"] = null;
+
+                    if (Session["Filtru_Posturi"] == null)
+                    {
+                        txtDtVig.Value = DateTime.Now;
+                        if (dtPar.Rows.Count > 0) cmbParinte.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        Dictionary<string, object> dic = Session["Filtru_Posturi"] as Dictionary<string, object>;
+                        if (dic != null)
+                        {
+                            txtDtVig.Value = (DateTime?)dic["Ziua"];
+                            chkActiv.Value = (bool?)dic["Activ"];
+                            cmbParinte.Value = dic["Parinte"];
+                            cmbAng.Value = dic["StareAng"];
+                            idPost = Convert.ToInt32(dic["IdPost"] ?? 1);
+                        }
+                        Session["Filtru_Posturi"] = null;
+                    }
+
                     IncarcaGrid();
+                       
+                    if (grDate.FindNodesByFieldValue("Id", idPost).Count>0)
+                    {
+                        grDate.ExpandAll();
+                        grDate.FindNodesByFieldValue("Id", idPost)[0].Focus();
+                    }
                 }
                 else
                 {
@@ -272,36 +295,6 @@ namespace WizOne.Organigrama
             }
         }
 
-        protected void btnExport_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Dictionary
-                string req = "";
-
-                req += "&Zi=" + Convert.ToDateTime(txtDtVig.Value).Day;
-                req += "&Luna=" + Convert.ToDateTime(txtDtVig.Value).Month;
-                req += "&An=" + Convert.ToDateTime(txtDtVig.Value).Year;
-                
-                if (chkActiv.Value != null) req += "&Activ=" + chkActiv.Value;
-                if (cmbAng.Value != null) req += "&Ang=" + cmbAng.Value;
-                if (cmbParinte.Value != null) req += "&Parinte=" + cmbParinte.Value;
-                if (cmbAng.Value != null) req += "&IdAng=" + cmbAng.Value;
-
-                if (Convert.ToInt32(General.Nz(grDate.FocusedNode.Key, 0)) > 0)
-                    req += "&IdPost=" + grDate.FocusedNode.GetValue("Id");
-                else
-                    req += "&IdPost=" + 1;
-
-                Session["Filtru_Posturi"] = req;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
         protected void btnNou_Click(object sender, EventArgs e)
         {
             try
@@ -426,7 +419,6 @@ namespace WizOne.Organigrama
             }
         }
 
-
         private void ExecutaModif(int target_idAuto, int idAuto, int id, DateTime dtInc, bool adaugaSuperior = false)
         {
             try
@@ -523,6 +515,30 @@ namespace WizOne.Organigrama
             }
         }
 
+        protected void grDate_CustomCallback(object sender, DevExpress.Web.ASPxTreeList.TreeListCustomCallbackEventArgs e)
+        {
+            try
+            {
+                Dictionary<string, object> dic = new Dictionary<string, object>();
 
+                dic.Add("Ziua", Convert.ToDateTime(txtDtVig.Value));
+                dic.Add("Activ", chkActiv.Value);
+                dic.Add("Parinte", cmbParinte.Value);
+                dic.Add("StareAng", cmbAng.Value);
+            
+                if (Convert.ToInt32(General.Nz(grDate.FocusedNode.Key, 0)) > 0)
+                    dic.Add("IdPost", grDate.FocusedNode.GetValue("Id"));
+                else
+                    dic.Add("IdPost", 1);
+
+                Session["Filtru_Posturi"] = dic;
+                grDate.JSProperties["cpReportUrl"] = ResolveClientUrl("~/Organigrama/Diagrama");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

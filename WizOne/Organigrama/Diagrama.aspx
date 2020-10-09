@@ -9,6 +9,10 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td class="pull-right">
+                <dx:ASPxButton ID="btnOrg" runat="server" Text="Organigrama" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s,e) { window.history.back(); }" />
+                    <Image Url="~/Fisiere/Imagini/Icoane/stare.png"></Image>
+                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                 </dx:ASPxButton>
@@ -17,7 +21,7 @@
         <tr>
             <td colspan="2">
                 <div class="Absente_divOuter" style="display:flex; align-items:flex-end; margin:15px 0px;">
-
+                    
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblDtVig" runat="server" style="display:inline-block;">Data selectie</label>
                         <dx:ASPxDateEdit id="txtDtVig" ClientIDMode="Static" ClientInstanceName="txtDtVig" runat="server" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" Width="100px" AllowNull="false" />

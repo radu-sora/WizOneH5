@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Organigrama {
-    
-    
-    public partial class Posturi {
-        
+namespace WizOne.Organigrama
+{
+
+
+    public partial class Posturi
+    {
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
+
         /// <summary>
         /// btnPrint control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnPrint;
-        
+
         /// <summary>
         /// btnSterge control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnSterge;
-        
+
         /// <summary>
         /// btnSave control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnSave;
-        
+
         /// <summary>
         /// btnBack control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnBack;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// pnlCtl control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
-        
+
         /// <summary>
         /// txtIdAuto control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField txtIdAuto;
-        
+
         /// <summary>
         /// lblId control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblId;
-        
+
         /// <summary>
         /// txtId control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtId;
-        
+
         /// <summary>
         /// lblActiv control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblActiv;
-        
+
         /// <summary>
         /// chkActiv control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkActiv;
-        
+
         /// <summary>
         /// lblBuget control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblBuget;
-        
+
         /// <summary>
         /// txtCodBuget control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtCodBuget;
-        
+
         /// <summary>
         /// btnDocUpload control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxUploadControl btnDocUpload;
-        
+
         /// <summary>
         /// btnDocSterge control.
         /// </summary>
@@ -155,7 +157,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnDocSterge;
-        
+
         /// <summary>
         /// btnDocArata control.
         /// </summary>
@@ -164,7 +166,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnDocArata;
-        
+
         /// <summary>
         /// lblDoc control.
         /// </summary>
@@ -173,7 +175,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDoc;
-        
+
         /// <summary>
         /// lblDen control.
         /// </summary>
@@ -182,7 +184,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDen;
-        
+
         /// <summary>
         /// txtDen control.
         /// </summary>
@@ -191,7 +193,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtDen;
-        
+
         /// <summary>
         /// lblDtInc control.
         /// </summary>
@@ -200,7 +202,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDtInc;
-        
+
         /// <summary>
         /// txtDtInc control.
         /// </summary>
@@ -209,7 +211,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit txtDtInc;
-        
+
         /// <summary>
         /// lblDtSf control.
         /// </summary>
@@ -218,7 +220,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDtSf;
-        
+
         /// <summary>
         /// txtDtSf control.
         /// </summary>
@@ -227,7 +229,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit txtDtSf;
-        
+
         /// <summary>
         /// lblDenRO control.
         /// </summary>
@@ -236,7 +238,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDenRO;
-        
+
         /// <summary>
         /// txtDenRO control.
         /// </summary>
@@ -245,7 +247,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtDenRO;
-        
+
         /// <summary>
         /// lblDenEN control.
         /// </summary>
@@ -254,7 +256,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDenEN;
-        
+
         /// <summary>
         /// txtDenEN control.
         /// </summary>
@@ -263,7 +265,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtDenEN;
-        
+
         /// <summary>
         /// lblGrupRO control.
         /// </summary>
@@ -272,7 +274,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblGrupRO;
-        
+
         /// <summary>
         /// txtGrupRO control.
         /// </summary>
@@ -281,7 +283,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtGrupRO;
-        
+
         /// <summary>
         /// lblGrupEN control.
         /// </summary>
@@ -290,7 +292,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblGrupEN;
-        
+
         /// <summary>
         /// txtGrupEN control.
         /// </summary>
@@ -299,7 +301,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtGrupEN;
-        
+
         /// <summary>
         /// lblCmp control.
         /// </summary>
@@ -308,7 +310,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCmp;
-        
+
         /// <summary>
         /// cmbCmp control.
         /// </summary>
@@ -317,7 +319,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbCmp;
-        
+
         /// <summary>
         /// lblSub control.
         /// </summary>
@@ -326,7 +328,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSub;
-        
+
         /// <summary>
         /// cmbSub control.
         /// </summary>
@@ -335,7 +337,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSub;
-        
+
         /// <summary>
         /// lblFil control.
         /// </summary>
@@ -344,7 +346,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblFil;
-        
+
         /// <summary>
         /// cmbFil control.
         /// </summary>
@@ -353,7 +355,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbFil;
-        
+
         /// <summary>
         /// lblSec control.
         /// </summary>
@@ -362,7 +364,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSec;
-        
+
         /// <summary>
         /// cmbSec control.
         /// </summary>
@@ -371,7 +373,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSec;
-        
+
         /// <summary>
         /// lblDept control.
         /// </summary>
@@ -380,7 +382,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDept;
-        
+
         /// <summary>
         /// cmbDept control.
         /// </summary>
@@ -389,7 +391,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbDept;
-        
+
         /// <summary>
         /// lblSup control.
         /// </summary>
@@ -398,7 +400,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSup;
-        
+
         /// <summary>
         /// cmbSup control.
         /// </summary>
@@ -407,7 +409,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSup;
-        
+
         /// <summary>
         /// lblSupFunc control.
         /// </summary>
@@ -416,7 +418,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSupFunc;
-        
+
         /// <summary>
         /// cmbSupFunc control.
         /// </summary>
@@ -425,7 +427,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSupFunc;
-        
+
         /// <summary>
         /// lblFunc control.
         /// </summary>
@@ -434,7 +436,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblFunc;
-        
+
         /// <summary>
         /// cmbFunc control.
         /// </summary>
@@ -443,7 +445,25 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbFunc;
-        
+
+        /// <summary>
+        /// lblStudiiSup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblStudiiSup;
+
+        /// <summary>
+        /// chkStudii control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkStudii;
+
         /// <summary>
         /// lblNivelHay control.
         /// </summary>
@@ -452,7 +472,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblNivelHay;
-        
+
         /// <summary>
         /// cmbHay control.
         /// </summary>
@@ -461,7 +481,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbHay;
-        
+
         /// <summary>
         /// lblSalMin control.
         /// </summary>
@@ -470,7 +490,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSalMin;
-        
+
         /// <summary>
         /// txtSalMin control.
         /// </summary>
@@ -479,7 +499,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxSpinEdit txtSalMin;
-        
+
         /// <summary>
         /// lblSalMed control.
         /// </summary>
@@ -488,7 +508,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSalMed;
-        
+
         /// <summary>
         /// txtSalMed control.
         /// </summary>
@@ -497,7 +517,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxSpinEdit txtSalMed;
-        
+
         /// <summary>
         /// lblSalMax control.
         /// </summary>
@@ -506,7 +526,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSalMax;
-        
+
         /// <summary>
         /// txtSalMax control.
         /// </summary>
@@ -515,7 +535,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxSpinEdit txtSalMax;
-        
+
         /// <summary>
         /// lblNivelIer control.
         /// </summary>
@@ -524,7 +544,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblNivelIer;
-        
+
         /// <summary>
         /// txtNivelIer control.
         /// </summary>
@@ -533,7 +553,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtNivelIer;
-        
+
         /// <summary>
         /// hfNivelIer control.
         /// </summary>
@@ -542,7 +562,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField hfNivelIer;
-        
+
         /// <summary>
         /// lblCor control.
         /// </summary>
@@ -551,7 +571,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCor;
-        
+
         /// <summary>
         /// cmbCor control.
         /// </summary>
@@ -560,7 +580,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbCor;
-        
+
         /// <summary>
         /// lblPLan control.
         /// </summary>
@@ -569,7 +589,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPLan;
-        
+
         /// <summary>
         /// txtPlan control.
         /// </summary>
@@ -578,7 +598,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtPlan;
-        
+
         /// <summary>
         /// lblHCAprobat control.
         /// </summary>
@@ -587,7 +607,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblHCAprobat;
-        
+
         /// <summary>
         /// txtHCAProbat control.
         /// </summary>
@@ -596,7 +616,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtHCAProbat;
-        
+
         /// <summary>
         /// divDosar control.
         /// </summary>
@@ -605,7 +625,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDosar;
-        
+
         /// <summary>
         /// lstDosar control.
         /// </summary>
@@ -614,7 +634,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBoxList lstDosar;
-        
+
         /// <summary>
         /// divExtra control.
         /// </summary>
@@ -623,7 +643,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divExtra;
-        
+
         /// <summary>
         /// lblCom control.
         /// </summary>
@@ -632,7 +652,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCom;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>
@@ -641,7 +661,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate;
-        
+
         /// <summary>
         /// divBenef control.
         /// </summary>

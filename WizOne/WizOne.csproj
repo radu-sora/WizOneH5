@@ -978,8 +978,6 @@
       <DependentUpon>ReportsModel.edmx</DependentUpon>
     </None>
     <Content Include="Generatoare\Reports\Pages\Download.ashx" />
-    <Content Include="Organigrama\Diagrama.xlsm" />
-    <Content Include="Organigrama\Temp\Diagrama1078.xlsm" />
     <Content Include="LocalSTS.exe.config" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsOraModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

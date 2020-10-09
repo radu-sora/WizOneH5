@@ -202,8 +202,16 @@
 
                 <div class="Absente_divOuter margin_top15">
                     <label id="lblFunc" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Functie</label>
-                    <dx:ASPxComboBox ID="cmbFunc" runat="server" Width="300px" ValueField="F71802" TextField="F71804" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)"
+                    <div style="float:left; padding-right:15px;"> 
+                        <dx:ASPxComboBox ID="cmbFunc" runat="server" Width="300px" ValueField="F71802" TextField="F71804" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)"
                         IncrementalFilteringMode="Contains" CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0}" />
+                    </div>
+                        
+                    <label id="lblStudiiSup" runat="server" style="display:inline-block; float:left; padding-right:15px; width:120px;">Studii Superioare</label>
+                    <div style="float:left; padding-right:15px;"> 
+                        <dx:ASPxCheckBox ID="chkStudii" runat="server" />
+                    </div>
+
                 </div>
 
                 <div class="Absente_divOuter margin_top15">

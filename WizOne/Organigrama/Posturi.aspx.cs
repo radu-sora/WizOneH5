@@ -105,6 +105,7 @@ namespace WizOne.Organigrama
                         txtDtSf.Value = dr["DataSfarsit"];
                         txtCodBuget.Text = General.Nz(dr["CodBuget"],"").ToString();
                         cmbCor.Value = dr["CodCOR"];
+                        chkStudii.Value = General.Nz(dr["StudiiSuperioare"],0);
 
                         txtDenRO.Text = General.Nz(dr["DenumireRO"], "").ToString();
                         txtDenEN.Text = General.Nz(dr["DenumireEN"], "").ToString();
@@ -234,17 +235,7 @@ namespace WizOne.Organigrama
                 string sqlIns = "";
                 string sqlUpd = "";
 
-
-                sqlIns = @"INSERT INTO ""Org_Posturi""(
-                    ""Id"", ""Denumire"",""DataInceput"", ""DataSfarsit"", F10002, F10004, F10005, F10006, F10007, ""Stare"", ""IdSuperior"", ""IdSuperiorFunctional"", 
-                    ""NivelIerarhic"", ""PlanHC"", ""NivelHay"", ""SalariuMin"", ""SalariuMed"", ""SalariuMax"", 
-                    ""CodBuget"", ""CodCOR"", USER_NO, TIME, ""DenumireRO"", ""DenumireEN"", ""NumeGrupRO"", ""NumeGrupEN"", ""HCAprobat"", ""IdFunctie"",
-                    ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"", 
-                    ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", 
-                    ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
-                    OUTPUT Inserted.IdAuto
-                    SELECT @2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@19,@20,@21,@22,@23,@24,@25,@26,@27,@28,@29,@30,@31,@32,@33,@34,@35,@36,@37,@38,@39,@40,@41,@42,@43,@44,@45,@46,@47,@48,@49,@50,@51,@52,@53,@54,@55,@56,@57,@58,@59";
-
+                sqlIns = "DUMY";
 
                 if (General.Nz(Session["IdAuto"], "-99").ToString() == "-97")
                 {
@@ -271,15 +262,15 @@ namespace WizOne.Organigrama
                     {
                         //daca intra in vigoare cu aceeasi data ca data inceput
                         sqlIns = "";
-
-                        sqlUpd = $@"UPDATE ""Org_Posturi"" SET
-                            ""Denumire""=@3, F10002=@6, F10004=@7, F10005=@8, F10006=@9, F10007=@10, ""Stare""=@11, ""IdSuperior""=@12, ""IdSuperiorFunctional""=@13, 
-                            ""NivelIerarhic""=@14, ""PlanHC""=@15, ""NivelHay""=@16, ""SalariuMin""=@17, ""SalariuMed""=@18, ""SalariuMax""=@19, 
-                            ""CodBuget""=@20, ""CodCOR""=@21, USER_NO=@22, TIME=@23, ""DenumireRO""=@24, ""DenumireEN""=@25, ""NumeGrupRO""=@26, ""NumeGrupEN""=@27, ""HCAprobat""=@28, ""IdFunctie""=@29,
-                            ""IdBeneficiu1""=@30, ""IdBeneficiu2""=@31, ""IdBeneficiu3""=@32, ""IdBeneficiu4""=@33, ""IdBeneficiu5""=@34, ""IdBeneficiu6""=@35, ""IdBeneficiu7""=@36, ""IdBeneficiu8""=@37, ""IdBeneficiu9""=@38, ""IdBeneficiu10""=@39,
-                            ""CampExtra1""=@40, ""CampExtra2""=@41, ""CampExtra3""=@42, ""CampExtra4""=@43, ""CampExtra5""=@44, ""CampExtra6""=@45, ""CampExtra7""=@46, ""CampExtra8""=@47, ""CampExtra9""=@48, ""CampExtra10""=@49, 
-                            ""CampExtra11""=@50, ""CampExtra12""=@51, ""CampExtra13""=@52, ""CampExtra14""=@53, ""CampExtra15""=@54, ""CampExtra16""=@55, ""CampExtra17""=@56, ""CampExtra18""=@57, ""CampExtra19""=@58, ""CampExtra20""=@59
-                            WHERE ""IdAuto"" = @1";
+                        sqlUpd = "DUMY";
+                        //sqlUpd = $@"UPDATE ""Org_Posturi"" SET
+                        //    ""Denumire""=@3, F10002=@6, F10004=@7, F10005=@8, F10006=@9, F10007=@10, ""Stare""=@11, ""IdSuperior""=@12, ""IdSuperiorFunctional""=@13, 
+                        //    ""NivelIerarhic""=@14, ""PlanHC""=@15, ""NivelHay""=@16, ""SalariuMin""=@17, ""SalariuMed""=@18, ""SalariuMax""=@19, 
+                        //    ""CodBuget""=@20, ""CodCOR""=@21, USER_NO=@22, TIME=@23, ""DenumireRO""=@24, ""DenumireEN""=@25, ""NumeGrupRO""=@26, ""NumeGrupEN""=@27, ""HCAprobat""=@28, ""IdFunctie""=@29,
+                        //    ""IdBeneficiu1""=@30, ""IdBeneficiu2""=@31, ""IdBeneficiu3""=@32, ""IdBeneficiu4""=@33, ""IdBeneficiu5""=@34, ""IdBeneficiu6""=@35, ""IdBeneficiu7""=@36, ""IdBeneficiu8""=@37, ""IdBeneficiu9""=@38, ""IdBeneficiu10""=@39,
+                        //    ""CampExtra1""=@40, ""CampExtra2""=@41, ""CampExtra3""=@42, ""CampExtra4""=@43, ""CampExtra5""=@44, ""CampExtra6""=@45, ""CampExtra7""=@46, ""CampExtra8""=@47, ""CampExtra9""=@48, ""CampExtra10""=@49, 
+                        //    ""CampExtra11""=@50, ""CampExtra12""=@51, ""CampExtra13""=@52, ""CampExtra14""=@53, ""CampExtra15""=@54, ""CampExtra16""=@55, ""CampExtra17""=@56, ""CampExtra18""=@57, ""CampExtra19""=@58, ""CampExtra20""=@59
+                        //    WHERE ""IdAuto"" = @1";
                     }
                     else
                     {
@@ -296,40 +287,95 @@ namespace WizOne.Organigrama
 
                 int idAuto = Convert.ToInt32(General.Nz(Session["IdAuto"], -97));
 
-                object[] objs = new object[] {
-                    Session["IdAuto"], id, txtDen.Text, dtInc, dtSf, General.Nz(cmbCmp.Value,1), cmbSub.Value, cmbFil.Value, cmbSec.Value, cmbDept.Value, 1, cmbSup.Value, cmbSupFunc.Value,
-                    hfNivelIer.Contains("val") && General.Nz(hfNivelIer["val"],"").ToString() != "" ? hfNivelIer["val"] : "N",
-                    General.Nz(txtPlan.Text,"").ToString() == "" ? "null" : txtPlan.Text,
-                    cmbHay.Value, txtSalMin.Value, txtSalMed.Value, txtSalMax.Value,
-                    txtCodBuget.Value, cmbCor.Value, Session["UserId"], DateTime.Now,
-                    General.Nz(txtDenRO.Text,"").ToString() == "" ? null : txtDenRO.Text,
-                    General.Nz(txtDenEN.Text,"").ToString() == "" ? null : txtDenEN.Text,
-                    General.Nz(txtGrupRO.Text,"").ToString() == "" ? null : txtGrupRO.Text,
-                    General.Nz(txtGrupEN.Text,"").ToString() == "" ? null : txtGrupEN.Text,
-                    General.Nz(txtHCAProbat.Text,"").ToString() == "" ? null : txtHCAProbat.Text,
-                    cmbFunc.Value };
+                Dictionary<string, object> dic = new Dictionary<string, object>();
+                dic.Add("IdAuto", Session["IdAuto"]);
+                dic.Add("Id", id);
+                dic.Add("Denumire", txtDen.Text);
+                dic.Add("DataInceput", dtInc);
+                dic.Add("DataSfarsit", dtSf);
+                dic.Add("F10002", General.Nz(cmbCmp.Value, 1));
+                dic.Add("F10004", cmbSub.Value);
+                dic.Add("F10005", cmbFil.Value);
+                dic.Add("F10006", cmbSec.Value);
+                dic.Add("F10007", cmbDept.Value);
+                dic.Add("Stare", 1);
+                dic.Add("IdSuperior", cmbSup.Value);
+                dic.Add("IdSuperiorFunctional", cmbSupFunc.Value);
+                dic.Add("NivelIerarhic", hfNivelIer.Contains("val") && General.Nz(hfNivelIer["val"], "").ToString() != "" ? hfNivelIer["val"] : "N");
+                dic.Add("PlanHC", txtPlan.Value);
+                dic.Add("HCAprobat", txtHCAProbat.Text);
+                dic.Add("NivelHay", cmbHay.Value);
+                dic.Add("SalariuMin", txtSalMin.Value);
+                dic.Add("SalariuMed", txtSalMed.Value);
+                dic.Add("SalariuMax", txtSalMax.Value);
+                dic.Add("CodBuget", txtCodBuget.Value);
+                dic.Add("CodCOR", cmbCor.Value);
+                dic.Add("DenumireRO", txtDenRO.Text);
+                dic.Add("DenumireEN", txtDenEN.Text);
+                dic.Add("NumeGrupRO", txtGrupRO.Text);
+                dic.Add("NumeGrupEN", txtGrupEN.Text);
+                dic.Add("IdFunctie", cmbFunc.Value);
+                dic.Add("USER_NO", Session["UserId"]);
+                dic.Add("TIME", DateTime.Now);
+
+
+                //object[] objs = new object[] {
+                //    Session["IdAuto"], id, txtDen.Text, dtInc, dtSf, General.Nz(cmbCmp.Value,1), cmbSub.Value, cmbFil.Value, cmbSec.Value, cmbDept.Value, 1, cmbSup.Value, cmbSupFunc.Value,
+                //    hfNivelIer.Contains("val") && General.Nz(hfNivelIer["val"],"").ToString() != "" ? hfNivelIer["val"] : "N",
+                //    General.Nz(txtPlan.Text,"").ToString() == "" ? "null" : txtPlan.Text,
+                //    cmbHay.Value, txtSalMin.Value, txtSalMed.Value, txtSalMax.Value,
+                //    txtCodBuget.Value, cmbCor.Value, Session["UserId"], DateTime.Now,
+                //    General.Nz(txtDenRO.Text,"").ToString() == "" ? null : txtDenRO.Text,
+                //    General.Nz(txtDenEN.Text,"").ToString() == "" ? null : txtDenEN.Text,
+                //    General.Nz(txtGrupRO.Text,"").ToString() == "" ? null : txtGrupRO.Text,
+                //    General.Nz(txtGrupEN.Text,"").ToString() == "" ? null : txtGrupEN.Text,
+                //    General.Nz(txtHCAProbat.Text,"").ToString() == "" ? null : txtHCAProbat.Text,
+                //    cmbFunc.Value };
+
+                object[] objs = new object[dic.Count + 30];
+                string campuriInsert = "";
+                string campuriUpdate = "";
+                string valoriInsert = "";
+                int x = 0;
+                foreach (var item in dic)
+                {
+                    objs[x] = item.Value;
+                    campuriInsert += $@",""{item.Key}""";
+                    campuriUpdate += $@",""{item.Key}""=@{x + 3}";
+                    valoriInsert += $",@{x + 2}";
+                    x++;
+                }
 
                 for (int i = 1; i <= 10; i++)
                 {
-                    Array.Resize(ref objs, objs.Length + 1);
                     objs[objs.Length - 1] = divBenef.FindControl("cmbBenef" + i) != null ? ((ASPxComboBox)divBenef.FindControl("cmbBenef" + i)).Value : null;
+                    campuriInsert += $@",""IdBeneficiu{i}""";
+                    campuriUpdate += $@",""IdBeneficiu{i}""=@{x + 3}";
+                    valoriInsert += $",@{x + 2}";
+                    x++;
                 }
 
                 for (int i = 1; i <= 20; i++)
                 {
-                    Array.Resize(ref objs, objs.Length + 1);
                     objs[objs.Length - 1] = divExtra.FindControl("cmpExtra" + i) != null ? ((ASPxMemo)divExtra.FindControl("cmpExtra" + i)).Value : null;
+                    campuriInsert += $@",""CampExtra{i}""";
+                    campuriUpdate += $@",""CampExtra{i}""=@{x + 3}";
+                    valoriInsert += $",@{x + 2}";
+                    x++;
                 }
 
                 if (sqlUpd != "")
+                {
+                    if (sqlUpd == "DUMY")
+                        sqlUpd = $@"UPDATE ""Org_Posturi"" SET {campuriUpdate.Substring(1)} WHERE ""IdAuto"" = @1";
                     General.ExecutaNonQuery(sqlUpd, objs);
+                }
 
                 if (sqlIns != "")
+                {
+                    sqlIns = $@"INSERT INTO ""Org_Posturi""({campuriInsert.Substring(1)} OUTPUT Inserted.IdAuto SELECT {valoriInsert.Substring(1)}";
                     idAuto = Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlIns, objs), 1));
-
-                ////daca este post nou
-                //if (sqlIns != "")
-                //    AdaugaInF718(General.Nz(txtDen.Text, "").ToString());
+                }
 
                 //salvam documentul
                 if (Session["Posturi_Upload"] != null)
@@ -344,9 +390,9 @@ namespace WizOne.Organigrama
                     }
                 }
 
-                string sqlDosar = "";
                 //salvam Dosarul Personal
-                foreach(var item in lstDosar.SelectedValues)
+                string sqlDosar = "";
+                foreach (var item in lstDosar.SelectedValues)
                 {
                     
                     sqlDosar += $@"INSERT INTO ""Org_PosturiDosar""(""IdPost"", ""IdObiect"") VALUES({id},{item});" + Environment.NewLine;
@@ -369,146 +415,6 @@ namespace WizOne.Organigrama
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-        //protected void btnSave_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        string strErr = "";
-
-        //        if (txtDen.Visible == true && txtDen.Value == null) strErr += ", " + Dami.TraduCuvant("denumire");
-        //        if (cmbCmp.Visible == true && cmbCmp.Value == null) strErr += ", " + Dami.TraduCuvant("companie");
-        //        if (cmbSub.Visible == true && cmbSub.Value == null) strErr += ", " + Dami.TraduCuvant("subcompanie");
-        //        if (cmbFil.Visible == true && cmbFil.Value == null) strErr += ", " + Dami.TraduCuvant("filiala");
-        //        if (cmbSec.Visible == true && cmbSec.Value == null) strErr += ", " + Dami.TraduCuvant("sectie");
-        //        if (cmbDept.Visible == true && cmbDept.Value == null) strErr += ", " + Dami.TraduCuvant("departament");
-        //        if (cmbSup.Visible == true && cmbSup.Value == null) strErr += ", " + Dami.TraduCuvant("post superior");
-        //        if (cmbSupFunc.Visible == true && cmbSupFunc.Value == null) strErr += ", " + Dami.TraduCuvant("post superior functional");
-        //        if (hfNivelIer.Visible == true && (!hfNivelIer.Contains("val") || General.Nz(hfNivelIer["val"], "").ToString() == "")) strErr += ", " + Dami.TraduCuvant("nivel ierarhic");
-        //        if (txtPlan.Visible == true && txtPlan.Value == null) strErr += ", " + Dami.TraduCuvant("plan HC");
-        //        if (txtHCAProbat.Visible == true && txtHCAProbat.Value == null) strErr += ", " + Dami.TraduCuvant("HC aprobat");
-        //        if (txtDtInc.Visible == true && txtDtInc.Value == null) strErr += ", " + Dami.TraduCuvant("data inceput");
-        //        if (txtDtSf.Visible == true && txtDtSf.Value == null) strErr += ", " + Dami.TraduCuvant("data sfarsit");
-        //        if (cmbCor.Visible == true && cmbCor.Value == null) strErr += ", " + Dami.TraduCuvant("cod COR");
-        //        if (cmbFunc.Visible == true && cmbFunc.Value == null) strErr += ", " + Dami.TraduCuvant("functia");
-
-        //        if (strErr != "")
-        //        {
-        //            MessageBox.Show(Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1), MessageBox.icoError, "");
-        //            return;
-        //        }
-
-        //        DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Org_Posturi"" WHERE ""IdAuto""=@1", new object[] { General.Nz(Session["IdAuto"], "-97") });
-        //        DataRow dr = dt.NewRow();
-
-        //        bool nou = true;
-        //        if (General.Nz(Session["IdAuto"], "-99").ToString() == "-97")
-        //        {
-        //            //daca este post nou
-        //            nou = true;
-        //            dr["Id"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(Id),0) FROM ""Org_Posturi"" ", null), 0)) + 1;
-        //            dr["DataInceput"] = txtDtInc.Value;
-        //            dr["DataSfarsit"] = txtDtSf.Value;
-        //        }
-        //        else
-        //        {
-        //            //daca este post existent
-        //            var drOrg = dt.Rows[0];
-        //            if (Convert.ToDateTime(drOrg["DataInceput"]).Date == Convert.ToDateTime(Session["DataVigoare"]).Date)
-        //            {
-        //                //daca intra in vigoare cu aceeasi data ca data inceput
-        //                nou = false;
-        //                dr = dt.Rows[0];
-        //            }
-        //            else
-        //            {
-        //                //daca intra in vigoare cu o alta data decat data inceput
-        //                nou = true;
-        //                dr.ItemArray = drOrg.ItemArray.Clone() as object[];
-        //                drOrg["DataSfarsit"] = Convert.ToDateTime(Session["DataVigoare"]).AddDays(-1);
-        //                dr["DataInceput"] = Convert.ToDateTime(Session["DataVigoare"]);
-        //            }
-        //        }
-
-        //        if (!nou)
-        //            dr = dt.Rows[0];
-        //        else
-        //            dr["Id"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(Id),0) FROM ""Org_Posturi"" ", null), 0)) + 1;
-
-        //        dr["Denumire"] = txtDen.Text;
-        //        dr["F10002"] = cmbCmp.Value ?? DBNull.Value;
-        //        dr["F10004"] = cmbSub.Value ?? DBNull.Value;
-        //        dr["F10005"] = cmbFil.Value ?? DBNull.Value;
-        //        dr["F10006"] = cmbSec.Value ?? DBNull.Value;
-        //        dr["F10007"] = cmbDept.Value ?? DBNull.Value;
-        //        dr["Stare"] = 1;
-        //        dr["IdSuperior"] = cmbSup.Value ?? DBNull.Value;
-        //        dr["IdSuperiorFunctional"] = cmbSupFunc.Value ?? DBNull.Value;
-        //        if (hfNivelIer.Contains("val")) dr["NivelIerarhic"] = General.Nz(hfNivelIer["val"], "");
-        //        dr["PlanHC"] = txtPlan.Text;
-        //        dr["NivelHay"] = cmbHay.Value ?? DBNull.Value;
-        //        dr["SalariuMin"] = txtSalMin.Value ?? DBNull.Value;
-        //        dr["SalariuMed"] = txtSalMed.Value ?? DBNull.Value;
-        //        dr["SalariuMax"] = txtSalMax.Value ?? DBNull.Value;
-        //        dr["CodBuget"] = txtCodBuget.Text;
-        //        dr["CodCOR"] = cmbCor.Value ?? DBNull.Value;
-
-        //        dr["IdBeneficiu1"] = cmbBenf1.Value ?? DBNull.Value;
-        //        dr["IdBeneficiu2"] = cmbBenf2.Value ?? DBNull.Value;
-        //        dr["IdBeneficiu3"] = cmbBenf3.Value ?? DBNull.Value;
-        //        dr["IdBeneficiu4"] = cmbBenf4.Value ?? DBNull.Value;
-        //        dr["IdBeneficiu5"] = cmbBenf5.Value ?? DBNull.Value;
-        //        dr["IdBeneficiu6"] = cmbBenf6.Value ?? DBNull.Value;
-        //        dr["IdBeneficiu7"] = cmbBenf7.Value ?? DBNull.Value;
-        //        dr["IdBeneficiu8"] = cmbBenf8.Value ?? DBNull.Value;
-        //        dr["IdBeneficiu9"] = cmbBenf9.Value ?? DBNull.Value;
-        //        dr["IdBeneficiu10"] = cmbBenf10.Value ?? DBNull.Value;
-
-        //        dr["IdAuto"] = 100000000;
-
-        //        dr["USER_NO"] = Session["UserId"];
-        //        dr["TIME"] = DateTime.Now;
-
-        //        //daca este post nou
-        //        if (General.Nz(Session["IdAuto"], "-99").ToString() == "-97")
-        //        {
-        //            AdaugaInF718(General.Nz(dr["Denumire"], "").ToString());
-        //        }
-
-        //        int idAuto = Convert.ToInt32(General.Nz(Session["IdAuto"], 1));
-
-        //        if (nou)
-        //        {
-        //            dt.Rows.Add(dr);
-        //            idAuto = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState == DataRowState.Added).Max(p => p.Field<int?>("IdAuto")), 0));
-        //        }
-
-        //        //salvam documentul
-        //        if (Session["Posturi_Upload"] != null)
-        //        {
-        //            metaCereriDate itm = Session["Posturi_Upload"] as metaCereriDate;
-        //            if (itm.UploadedFile != null)
-        //            {
-        //                string sqlFis = 
-        //                    $@"INSERT INTO tblFisiere(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
-        //                    VALUES(@1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()})";
-
-        //                General.ExecutaNonQuery(sqlFis, new object[] { "Org_Posturi", idAuto, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
-        //            }
-        //        }
-
-        //        General.SalveazaDate(dt, "Org_Posturi");
-
-        //        var ert = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState == DataRowState.Added).Max(p => p.Field<int?>("IdAuto")), 0));
-
-        //        Iesire();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
 
         protected void btnSterge_Click(object sender, EventArgs e)
         {
@@ -536,43 +442,6 @@ namespace WizOne.Organigrama
             }
         }
         
-        //protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
-        //{
-        //    try
-        //    {
-        //        string tip = e.Parameter;
-        //        DataTable dtAbs = new DataTable();
-
-        //        switch (tip)
-        //        {
-        //            case "4":               //btnSave
-        //                {
-        //                    SalveazaDate(2);
-        //                }
-        //                break;
-        //            case "5":               //btnDocSterge
-        //                {
-        //                    metaCereriDate itm = new metaCereriDate();
-        //                    if (Session["CereriDiverse_Upload"] != null) itm = Session["CereriDiverse_Upload"] as metaCereriDate;
-
-        //                    itm.UploadedFile = null;
-        //                    itm.UploadedFileName = null;
-        //                    itm.UploadedFileExtension = null;
-
-        //                    Session["CereriDiverse_Upload"] = itm;
-
-        //                    lblDoc.InnerHtml = "&nbsp;";
-        //                }
-        //                break;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
-
         protected void btnDocUpload_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
         {
             try

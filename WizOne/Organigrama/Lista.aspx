@@ -78,7 +78,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <dx:ASPxTreeList ID="grDate" runat="server" ClientInstanceName="grDate" SettingsEditing-AllowNodeDragDrop="true" KeyFieldName="Id" AutoGenerateColumns="true" OnHtmlRowPrepared="grDate_HtmlRowPrepared" OnCustomCallback="grDate_CustomCallback" >
+                <dx:ASPxTreeList ID="grDate" runat="server" ClientInstanceName="grDate" SettingsEditing-AllowNodeDragDrop="true" Height="100%" KeyFieldName="Id" AutoGenerateColumns="true" OnHtmlRowPrepared="grDate_HtmlRowPrepared" OnCustomCallback="grDate_CustomCallback" >
                     <SettingsBehavior AllowFocusedNode="true" />
                     <SettingsSearchPanel Visible="true" />
                     <SettingsLoadingPanel Enabled="true" />

@@ -105,7 +105,7 @@ namespace WizOne.Organigrama
                         txtDtSf.Value = dr["DataSfarsit"];
                         txtCodBuget.Text = General.Nz(dr["CodBuget"],"").ToString();
                         cmbCor.Value = dr["CodCOR"];
-                        chkStudii.Value = General.Nz(dr["StudiiSuperioare"],0);
+                        chkStudii.Value = Convert.ToBoolean(General.Nz(dr["StudiiSuperioare"],0));
 
                         txtDenRO.Text = General.Nz(dr["DenumireRO"], "").ToString();
                         txtDenEN.Text = General.Nz(dr["DenumireEN"], "").ToString();
@@ -257,29 +257,17 @@ namespace WizOne.Organigrama
                         FROM ""Org_Posturi"" WHERE ""IdAuto""=@1", new object[] { Session["IdAuto"], 1, cmbSub.Value, cmbFil.Value, cmbSec.Value, cmbDept.Value, cmbCor.Value, cmbFunc.Value ?? -99 });
 
                     //daca este post existent
-                    if ((drModif != null && drModif["modifStruc"].ToString() == "0" && drModif["modifCor"].ToString() == "0" && drModif["modifFunctia"].ToString() == "0")
-                        || Convert.ToDateTime(txtDtInc.Value).Date == Convert.ToDateTime(Session["DataVigoare"]).Date)
+                    if ((drModif != null && drModif["modifStruc"].ToString() == "0" && drModif["modifCor"].ToString() == "0" && drModif["modifFunctia"].ToString() == "0") || Convert.ToDateTime(txtDtInc.Value).Date == Convert.ToDateTime(Session["DataVigoare"]).Date)
                     {
                         //daca intra in vigoare cu aceeasi data ca data inceput
                         sqlIns = "";
                         sqlUpd = "DUMY";
-                        //sqlUpd = $@"UPDATE ""Org_Posturi"" SET
-                        //    ""Denumire""=@3, F10002=@6, F10004=@7, F10005=@8, F10006=@9, F10007=@10, ""Stare""=@11, ""IdSuperior""=@12, ""IdSuperiorFunctional""=@13, 
-                        //    ""NivelIerarhic""=@14, ""PlanHC""=@15, ""NivelHay""=@16, ""SalariuMin""=@17, ""SalariuMed""=@18, ""SalariuMax""=@19, 
-                        //    ""CodBuget""=@20, ""CodCOR""=@21, USER_NO=@22, TIME=@23, ""DenumireRO""=@24, ""DenumireEN""=@25, ""NumeGrupRO""=@26, ""NumeGrupEN""=@27, ""HCAprobat""=@28, ""IdFunctie""=@29,
-                        //    ""IdBeneficiu1""=@30, ""IdBeneficiu2""=@31, ""IdBeneficiu3""=@32, ""IdBeneficiu4""=@33, ""IdBeneficiu5""=@34, ""IdBeneficiu6""=@35, ""IdBeneficiu7""=@36, ""IdBeneficiu8""=@37, ""IdBeneficiu9""=@38, ""IdBeneficiu10""=@39,
-                        //    ""CampExtra1""=@40, ""CampExtra2""=@41, ""CampExtra3""=@42, ""CampExtra4""=@43, ""CampExtra5""=@44, ""CampExtra6""=@45, ""CampExtra7""=@46, ""CampExtra8""=@47, ""CampExtra9""=@48, ""CampExtra10""=@49, 
-                        //    ""CampExtra11""=@50, ""CampExtra12""=@51, ""CampExtra13""=@52, ""CampExtra14""=@53, ""CampExtra15""=@54, ""CampExtra16""=@55, ""CampExtra17""=@56, ""CampExtra18""=@57, ""CampExtra19""=@58, ""CampExtra20""=@59
-                        //    WHERE ""IdAuto"" = @1";
                     }
                     else
                     {
                         //daca intra in vigoare cu o alta data decat data inceput
                         dtInc = Convert.ToDateTime(Session["DataVigoare"]);
-
-                        sqlUpd = $@"UPDATE ""Org_Posturi"" SET
-                                ""DataSfarsit""={General.ToDataUniv(Convert.ToDateTime(Session["DataVigoare"]).AddDays(-1))}
-                                WHERE ""IdAuto"" = @1";
+                        sqlUpd = $@"UPDATE ""Org_Posturi"" SET ""DataSfarsit""={General.ToDataUniv(Convert.ToDateTime(Session["DataVigoare"]).AddDays(-1))} WHERE ""IdAuto"" = @1";
                     }
 
                     General.SchimbaInPlanificat(Convert.ToDateTime(Session["DataVigoare"]), id, Convert.ToInt32(drModif["modifStruc"]), Convert.ToInt32(drModif["modifCor"]), Convert.ToInt32(drModif["modifFunctia"]), 0);
@@ -315,22 +303,9 @@ namespace WizOne.Organigrama
                 dic.Add("NumeGrupRO", txtGrupRO.Text);
                 dic.Add("NumeGrupEN", txtGrupEN.Text);
                 dic.Add("IdFunctie", cmbFunc.Value);
+                dic.Add("StudiiSuperioare", chkStudii.Value);
                 dic.Add("USER_NO", Session["UserId"]);
                 dic.Add("TIME", DateTime.Now);
-
-
-                //object[] objs = new object[] {
-                //    Session["IdAuto"], id, txtDen.Text, dtInc, dtSf, General.Nz(cmbCmp.Value,1), cmbSub.Value, cmbFil.Value, cmbSec.Value, cmbDept.Value, 1, cmbSup.Value, cmbSupFunc.Value,
-                //    hfNivelIer.Contains("val") && General.Nz(hfNivelIer["val"],"").ToString() != "" ? hfNivelIer["val"] : "N",
-                //    General.Nz(txtPlan.Text,"").ToString() == "" ? "null" : txtPlan.Text,
-                //    cmbHay.Value, txtSalMin.Value, txtSalMed.Value, txtSalMax.Value,
-                //    txtCodBuget.Value, cmbCor.Value, Session["UserId"], DateTime.Now,
-                //    General.Nz(txtDenRO.Text,"").ToString() == "" ? null : txtDenRO.Text,
-                //    General.Nz(txtDenEN.Text,"").ToString() == "" ? null : txtDenEN.Text,
-                //    General.Nz(txtGrupRO.Text,"").ToString() == "" ? null : txtGrupRO.Text,
-                //    General.Nz(txtGrupEN.Text,"").ToString() == "" ? null : txtGrupEN.Text,
-                //    General.Nz(txtHCAProbat.Text,"").ToString() == "" ? null : txtHCAProbat.Text,
-                //    cmbFunc.Value };
 
                 object[] objs = new object[dic.Count + 30];
                 string campuriInsert = "";
@@ -340,9 +315,13 @@ namespace WizOne.Organigrama
                 foreach (var item in dic)
                 {
                     objs[x] = item.Value;
-                    campuriInsert += $@",""{item.Key}""";
-                    campuriUpdate += $@",""{item.Key}""=@{x + 3}";
-                    valoriInsert += $",@{x + 2}";
+                    if (x > 0)
+                    {
+                        campuriInsert += $@",""{item.Key}""";
+                        valoriInsert += $",@{x + 1}";
+                    }
+                    if (x > 1)
+                        campuriUpdate += $@",""{item.Key}""=@{x + 1}";
                     x++;
                 }
 
@@ -350,8 +329,8 @@ namespace WizOne.Organigrama
                 {
                     objs[objs.Length - 1] = divBenef.FindControl("cmbBenef" + i) != null ? ((ASPxComboBox)divBenef.FindControl("cmbBenef" + i)).Value : null;
                     campuriInsert += $@",""IdBeneficiu{i}""";
-                    campuriUpdate += $@",""IdBeneficiu{i}""=@{x + 3}";
-                    valoriInsert += $",@{x + 2}";
+                    campuriUpdate += $@",""IdBeneficiu{i}""=@{x + 1}";
+                    valoriInsert += $",@{x + 1}";
                     x++;
                 }
 
@@ -359,8 +338,8 @@ namespace WizOne.Organigrama
                 {
                     objs[objs.Length - 1] = divExtra.FindControl("cmpExtra" + i) != null ? ((ASPxMemo)divExtra.FindControl("cmpExtra" + i)).Value : null;
                     campuriInsert += $@",""CampExtra{i}""";
-                    campuriUpdate += $@",""CampExtra{i}""=@{x + 3}";
-                    valoriInsert += $",@{x + 2}";
+                    campuriUpdate += $@",""CampExtra{i}""=@{x + 1}";
+                    valoriInsert += $",@{x + 1}";
                     x++;
                 }
 
@@ -373,7 +352,7 @@ namespace WizOne.Organigrama
 
                 if (sqlIns != "")
                 {
-                    sqlIns = $@"INSERT INTO ""Org_Posturi""({campuriInsert.Substring(1)} OUTPUT Inserted.IdAuto SELECT {valoriInsert.Substring(1)}";
+                    sqlIns = $@"INSERT INTO ""Org_Posturi""({campuriInsert.Substring(1)}) OUTPUT Inserted.IdAuto SELECT {valoriInsert.Substring(1)}";
                     idAuto = Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlIns, objs), 1));
                 }
 

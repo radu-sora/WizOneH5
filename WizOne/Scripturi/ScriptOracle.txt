@@ -15187,3 +15187,21 @@ INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('Rap_Grupa
 insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (35, 'Tip contract', 1);
 insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (36, 'Durata contract', 1);
 commit;
+
+
+----  2.2.132  ----
+
+
+CREATE TABLE "tblAdevRestrictii"(
+	"IdSuper" NUMBER(9) NOT NULL,
+	"IdAdev" NUMBER(9) NOT NULL,
+	USER_NO NUMBER(9),
+	TIME DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_tblAdevRestrictii" ON "tblAdevRestrictii" ("IdSuper", "IdAdev") ;
+
+ALTER TABLE "tblAdevRestrictii" ADD CONSTRAINT "PK_tblAdevRestrictii" PRIMARY KEY ("IdSuper", "IdAdev");
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Adev_Restrictii', '0', '1 - se restrictioneaza adeverintele cf. tblAdevRestrictii; 0 - nu sunt restrictii', 3);
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Adev_IdSuper', '', 'Contine id-urile de IdSuper care sa fie luate in considerare la Adeverinte', 3);
+commit;

@@ -14835,3 +14835,25 @@ GO
 
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('Rap_GrupareImplicitaModule', '0', '1 - se afiseaza implicit grid-ul de Rapoarte grupat dupa Module; 0 - se afiseaza normal')
 GO
+
+
+----  2.2.132  ----
+
+
+CREATE TABLE tblAdevRestrictii(
+	[IdSuper] [int] NOT NULL,
+	[IdAdev] [int] NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_tblAdevRestrictii] PRIMARY KEY CLUSTERED 
+(
+	[IdSuper] ASC,
+	[IdAdev] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Adev_Restrictii', '0', '1 - se restrictioneaza adeverintele cf. tblAdevRestrictii; 0 - nu sunt restrictii', 3)
+GO
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Adev_IdSuper', '', 'Contine id-urile de IdSuper care sa fie luate in considerare la Adeverinte', 3)
+GO

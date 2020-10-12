@@ -17,12 +17,6 @@ namespace WizOne.Absente
 
         bool esteHr = false;
 
-        internal class metaDate
-        {
-            public int Id { get; set; }
-            public string Denumire { get; set; }
-        }
-
         protected void Page_Init(object sender, EventArgs e)
         {
             try
@@ -970,18 +964,9 @@ namespace WizOne.Absente
 
                     // id = -13 este banca
                     // id = -14 este plata
-                    List<metaDate> lst = new List<metaDate>();
-                    metaDate ent = new metaDate();
-                    ent.Id = Convert.ToInt32(General.Nz(obj[1],(int)Constante.IdCompensareDefault.LaBanca));
-                    ent.Denumire = General.Nz(obj[3], Dami.TraduCuvant("Banca")).ToString();
-                    lst.Add(ent);
-
-                    metaDate ent2 = new metaDate();
-                    ent2.Id = Convert.ToInt32(General.Nz(obj[2], (int)Constante.IdCompensareDefault.LaPlata));
-                    ent2.Denumire = General.Nz(obj[4], Dami.TraduCuvant("Plata")).ToString();
-                    lst.Add(ent2);
-
-                    cmbCps.DataSource = lst;
+                    cmbCps.Items.Add(new ListEditItem { Value = Convert.ToInt32(General.Nz(obj[1], (int)Constante.IdCompensareDefault.LaBanca)), Text = General.Nz(obj[3], Dami.TraduCuvant("Banca")).ToString() });
+                    cmbCps.Items.Add(new ListEditItem { Value = Convert.ToInt32(General.Nz(obj[2], (int)Constante.IdCompensareDefault.LaPlata)), Text = General.Nz(obj[4], Dami.TraduCuvant("Plata")).ToString() });
+                    cmbCps.DataBindItems();
                     cmbCps.Value = obj[6];
                 }
                 else

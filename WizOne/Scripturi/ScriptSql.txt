@@ -14982,10 +14982,6 @@ GO
 INSERT INTO Eval_ConfigObiective(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(15, 'Total2', 'System.Decimal', 15, 1)
 GO
 
-ALTER TABLE Eval_ConfigCompTemplateDetail ADD FormulaSql nvarchar(max)
-GO
-ALTER TABLE Eval_ConfigObTemplateDetail ADD FormulaSql nvarchar(max)
-GO
 
 ALTER TABLE Eval_ConfigCompTemplateDetail ADD Alias nvarchar(250)
 GO

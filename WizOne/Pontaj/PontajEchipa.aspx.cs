@@ -173,7 +173,7 @@ namespace WizOne.Pontaj
             try
             {
                 if (Request["pp"] != null)
-                    txtTitlu.Text = "Prima Pagina - Pontaj";
+                    txtTitlu.Text = Dami.TraduCuvant("Prima Pagina - Pontaj");
                 else
                     txtTitlu.Text = General.VarSession("Titlu").ToString();
 
@@ -235,6 +235,8 @@ namespace WizOne.Pontaj
                 foreach (ListBoxColumn col in cmbAng.Columns)
                     col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
+
+                popUpIstoricAprobare.HeaderText = Dami.TraduCuvant("Istoric aprobare");
                 #endregion
 
                 if (!IsPostBack)
@@ -1867,7 +1869,7 @@ namespace WizOne.Pontaj
                     IncarcaGrid();
 
                     if (msg != "")
-                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment") + ": " + Dami.TraduCuvant(msg);
                 }
             }
             catch (Exception ex)
@@ -1914,20 +1916,24 @@ namespace WizOne.Pontaj
                 string f_uri = "";
                 string strFiltru = "";
                 string strInner = "";
+                string campCategorie = @"NULL AS ""Categorie""";
 
                 #region filtru 
                 if (General.Nz(cmbSub.Value, "").ToString() != "") strFiltru += " AND A.F10004 = " + cmbSub.Value;
                 if (General.Nz(cmbFil.Value, "").ToString() != "") strFiltru += " AND A.F10005 = " + cmbFil.Value;
                 if (General.Nz(cmbSec.Value, "").ToString() != "") strFiltru += " AND A.F10006 = " + cmbSec.Value;
                 if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") != "1") strFiltru += @" AND A.""Dept"" IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
-                if (General.Nz(cmbSubDept.Value, "").ToString() != "") strFiltru += @" AND A.F100958=" + cmbSubDept.Value;
-                if (General.Nz(cmbBirou.Value, "").ToString() != "") strFiltru += @" AND A.F100959=" + cmbBirou.Value;
-                if (General.Nz(cmbStare.Value, "").ToString() != "") strFiltru += @" AND COALESCE(A.""IdStare"",1) = " + cmbStare.Value;
+                if (General.Nz(cmbSubDept.Value, "").ToString() != "") strFiltru += @" AND Y.F100958=" + cmbSubDept.Value;
+                if (General.Nz(cmbBirou.Value, "").ToString() != "") strFiltru += @" AND Y.F100959=" + cmbBirou.Value;
+                if (General.Nz(cmbStare.Value, "").ToString() != "") strFiltru += @" AND COALESCE(X.""IdStare"",1) = " + cmbStare.Value;
                 if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += $@" AND C.""Denumire"" IN ('{cmbCtr.Value.ToString().Replace(",", "','")}')";
                 if (General.Nz(cmbAng.Value, "").ToString() != "") strFiltru += " AND A.F10003=" + cmbAng.Value;
-                if (General.Nz(cmbCateg.Value, "").ToString() != "")
+                if (General.Nz(cmbCateg.Value, "").ToString() != "") strFiltru += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
+
+                int countCateg = Convert.ToInt32(General.Nz(General.ExecutaScalar("SELECT COUNT(*) FROM viewCategoriePontaj"),0));
+                if (countCateg > 0)
                 {
-                    strFiltru += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
+                    campCategorie = @" CTG.""Denumire"" AS ""Categorie""";
                     strInner += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON X.F10003 = CTG.F10003 " + Environment.NewLine;
                 }
                 #endregion
@@ -1936,11 +1942,11 @@ namespace WizOne.Pontaj
                 foreach (var col in grDate.Columns.OfType<GridViewDataSpinEditColumn>())
                     f_uri += $",COALESCE(X.{col.FieldName},0) AS {col.FieldName}";
 
-                strSql = "SELECT X.F10003, A.F10008  " + Dami.Operator() + "  ' '  " + Dami.Operator() + "  A.F10009 AS \"AngajatNume\", Y.\"Norma\", C.\"Denumire\" AS \"DescContract\", L.F06205, FCT.F71804 AS \"Functie\", A.F100901, COALESCE(K.\"Culoare\", '#FFFFFFFF') AS \"Culoare\", X.\"IdStare\", K.\"Denumire\" AS \"Stare\", " +
-                        "S2.F00204 AS \"Companie\", S3.F00305 AS \"Subcompanie\", S4.F00406 AS \"Filiala\", H.F00507 AS \"Sectie\",I.F00608 AS \"Dept\", S7.F00709 AS \"Subdept\", S8.F00810 AS \"Birou\" " +
+                strSql = "SELECT X.F10003, A.F10008  " + Dami.Operator() + "  ' '  " + Dami.Operator() + "  A.F10009 AS \"AngajatNume\", Y.\"Norma\", C.\"Denumire\" AS \"DescContract\", L.F06205, FCT.F71804 AS \"Functie\", A.F100901 AS EID, COALESCE(K.\"Culoare\", '#FFFFFFFF') AS \"Culoare\", X.\"IdStare\", K.\"Denumire\" AS \"Stare\", " +
+                        "S2.F00204 AS \"Companie\", S3.F00305 AS \"Subcompanie\", S4.F00406 AS \"Filiala\", H.F00507 AS \"Sectie\",I.F00608 AS \"Dept\", S7.F00709 AS \"Subdept\", S8.F00810 AS \"Birou\", " + campCategorie + " " +
+                        "{0} " +
                         f_uri + 
-                        "{0}" +
-                        "FROM \"Ptj_Cumulat\" X  " +
+                        " FROM \"Ptj_Cumulat\" X  " +
                         strInner +
                         "{1}" +
                         "LEFT JOIN F100 A ON A.F10003=X.F10003  " +

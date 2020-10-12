@@ -82,7 +82,7 @@ namespace WizOne.Absente
                 if (!IsPostBack)
                 {
                     if (Request["pp"] != null)
-                        txtTitlu.Text = "Prima Pagina - Cereri";
+                        txtTitlu.Text = Dami.TraduCuvant("Prima Pagina - Cereri");
                     else
                         txtTitlu.Text = General.VarSession("Titlu").ToString();
 
@@ -1006,7 +1006,7 @@ namespace WizOne.Absente
 
                 if (msg != "" && msg.Substring(0, 1) != "2")
                 {
-                    pnlCtl.JSProperties["cp_InfoMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
+                    pnlCtl.JSProperties["cp_InfoMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment") + ": " + Dami.TraduCuvant(msg);
                 }
                 else
                 {

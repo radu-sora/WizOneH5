@@ -257,7 +257,8 @@
 
                         <dx:GridViewDataTextColumn FieldName="Functie" Caption="Functie" ReadOnly="true" Visible="false" />
 
-                        <dx:GridViewDataTextColumn FieldName="F100901" Caption="EID" ReadOnly="true" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="EID" Caption="EID" ReadOnly="true" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="Categorie" Caption="Categorie" ReadOnly="true" Visible="false" />
 
                         <dx:GridViewDataTextColumn FieldName="Ziua1" Caption="1" ReadOnly="true" />
                         <dx:GridViewDataTextColumn FieldName="Ziua2" Caption="2" ReadOnly="true" />

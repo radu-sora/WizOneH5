@@ -49,8 +49,9 @@ namespace WizOne.Pagini
                                     }
                                     else
                                     {
-                                        DataTable dtAt = General.IncarcaDT("SELECT * FROM \"Atasamente\"", null);
-                                        DataRow drAt = dtAt.Select("IdAuto = " + id).FirstOrDefault();
+                                        //DataTable dtAt = General.IncarcaDT("SELECT * FROM \"Atasamente\"", null);
+                                        //DataRow drAt = dtAt.Select("IdAuto = " + id).FirstOrDefault();
+                                        DataRow drAt = General.IncarcaDR(@"SELECT * FROM ""Atasamente"" WHERE ""IdAuto""=@1", new object[] { id });
                                         if (drAt != null)
                                         {
                                             string numeFiser = (drAt["FisierNume"] ?? "").ToString();

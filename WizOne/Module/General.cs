@@ -5946,13 +5946,13 @@ namespace WizOne.Module
                 switch (actiune)
                 {
                     case 0:                     // respins
-                        mesaj = "Marca " + f10003 + ": pontajul a fost respins";
+                        mesaj = Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("pontajul a fost respins");
                         break;
                     case 1:                     // aprobat
-                        mesaj = "Marca " + f10003 + ": pontajul a fost aprobat";
+                        mesaj = Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("pontajul a fost aprobat");
                         break;
                     case 2:                     // finalizat
-                        mesaj = "Marca " + f10003 + ": pontajul a fost finalizat";
+                        mesaj = Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("pontajul a fost finalizat");
                         break;
                 }
             }
@@ -6492,7 +6492,7 @@ namespace WizOne.Module
                     //if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
                     if (denDept != "") strFiltru += @" AND A.F10007 IN (SELECT F00607 FROM F006 WHERE F00608 IN ('" + denDept.Replace(",", "','") + "'))";
 
-                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
+                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, F100958, F100959, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
 
                     //Florin 2020.06.30 am modificat 1 cu cuNormaZL
@@ -6813,7 +6813,9 @@ namespace WizOne.Module
                     strSql = @" SELECT A.F10003, X.Ziua, CASE WHEN datepart(dw,X.Ziua) - 1 = 0 THEN 7 ELSE datepart(dw,X.Ziua) - 1 END AS ZiSapt,
                                 CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 THEN 1 ELSE 0 END AS ZiLibera, 
                                 0 as Parinte, 0 as Linia, -1 as F06204, 
-                                G.F00603 AS F10002, G.F00604 AS F10004, G.F00605 AS F10005, G.F00606 AS F10006, G.F00607 as F10007,
+                                G.F00603 AS F10002, G.F00604 AS F10004, G.F00605 AS F10005, G.F00606 AS F10006, G.F00607 as F10007, 
+                                COALESCE(sd.Subdept, (SELECT C.F100958 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100958, 
+                                COALESCE(br.Birou, (SELECT C.F100959 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100959,
                                 '#00FFFFFF' as CuloareValoare, 
                                 dn.Norma AS Norma, 
                                 (SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"") AS IdContract, 
@@ -6841,6 +6843,8 @@ namespace WizOne.Module
                                 left join (select F10003, ""Ziua"", count(*) as CNT from ""Ptj_Intrari"" where YEAR(Ziua)={3} AND MONTH(Ziua)={4} AND F06204=-1 GROUP BY F10003, ""Ziua"") D on D.F10003=A.F10003 AND D.""Ziua"" = x.ZIUA
                                 {5}
                                 LEFT JOIN F006 G ON G.F00607 = dd.Dept
+                                OUTER APPLY dbo.DamiSubdept(A.F10003, X.Ziua) sd
+                                OUTER APPLY dbo.DamiBirou(A.F10003, X.Ziua) br
                                 LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")
                                 where isnull(D.CNT,0) = 0";
 
@@ -6870,6 +6874,8 @@ namespace WizOne.Module
                                 (SELECT C.F00605 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10005,
                                 (SELECT C.F00606 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10006,
                                 ""DamiDept""(A.F10003, X.""Ziua"") AS F10007,
+                                COALESCE(""DamiSubdept""(A.F10003, X.""Ziua""), (SELECT C.F100958 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100958,
+                                COALESCE(""DamiBirou""(A.F10003, X.""Ziua""), (SELECT C.F100959 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100958,
                                 '#00FFFFFF' as ""CuloareValoare"", 
                                 ""DamiNorma""(A.F10003, X.""Ziua"") as ""Norma"", 
                                 (SELECT ""IdContract"" FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"" and ROWNUM <= 1) AS ""IdContract"", 

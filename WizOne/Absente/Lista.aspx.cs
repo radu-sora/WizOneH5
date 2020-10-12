@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Absente
@@ -177,12 +176,19 @@ namespace WizOne.Absente
                     cmbViz.SelectedIndex = 0;
 
                     if (esteHr)
-                    {
-                        ListEditItem itm = new ListEditItem();
-                        itm.Text = Dami.TraduCuvant("Toti angajatii", "Toti angajatii");
-                        itm.Value = 3;
-                        cmbViz.Items.Add(itm);
-                    }
+                        cmbViz.Items.Add(Dami.TraduCuvant("Toti angajatii - Rol HR", "Toti angajatii - Rol HR"), 3);
+
+                    //if (esteHr)
+                    //{
+                    //    ListEditItem itm = new ListEditItem();
+                    //    itm.Text = Dami.TraduCuvant("Toti angajatii - Rol HR", "Toti angajatii - Rol HR");
+                    //    itm.Value = 3;
+                    //    cmbViz.Items.Add(itm);
+                    //}
+
+                    string idViz = Dami.ValoareParam("Cereri_IDuriRoluriVizualizare", "-99");
+                    if (idViz != "" && Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE ""IdUser""={Session["UserId"]} AND ""IdSuper"" IN ({idViz}) GROUP BY ""IdUser"" "),0)) > 0)
+                        cmbViz.Items.Add(Dami.TraduCuvant("Toti angajatii - Rol Vizualizare", "Toti angajatii - Rol Vizualizare"), 4);
 
                     //Florin2019.07.17
                     NameValueCollection lst = HttpUtility.ParseQueryString((Session["Filtru_CereriAbs"] ?? "").ToString());
@@ -220,8 +226,7 @@ namespace WizOne.Absente
             try
             {
                 IncarcaGrid();
-                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);
-                
+                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate); 
             }
             catch (Exception ex)
             {
@@ -252,19 +257,6 @@ namespace WizOne.Absente
                 Session["Sablon_CheiePrimara"] = -99;
                 Session["Sablon_TipActiune"] = "New";
                 Response.Redirect("~/Absente/Cereri.aspx", false);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void btnFiltru_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                grDate.DataBind();
             }
             catch (Exception ex)
             {
@@ -339,6 +331,7 @@ namespace WizOne.Absente
                 dt = General.IncarcaDT(strSql, null);
                 grDate.KeyFieldName = "Id; Rol";
                 grDate.DataSource = dt;
+                grDate.DataBind();
             }
             catch (Exception ex)
             {
@@ -624,6 +617,10 @@ namespace WizOne.Absente
                             break;
                         case "colHide":
                             grDate.Columns[arr[1]].Visible = false;
+                            break;
+                        case "btnFiltru":
+                            IncarcaGrid();
+                            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);
                             break;
                     }
                 }
@@ -1132,8 +1129,6 @@ namespace WizOne.Absente
 
                     e.Value = ore;
                 }           
-
-                
             }
         }
 
@@ -1159,6 +1154,25 @@ namespace WizOne.Absente
                         if (dt.Select("F10003=" + General.Nz(cmbAng.Value, -99)).Count() == 0)
                             cmbAng.Value = null;
                         break;
+                }
+
+                if (tip == "cmbViz")
+                {
+                    //bool stare = true;
+                    //if (Convert.ToInt32(cmbViz.Value ?? 1)== 4)
+                    //    stare = false;
+
+                    //btnAproba.Enabled = stare;
+                    //btnRespinge.Enabled = stare;
+                    //GridViewCommandColumn cmbCol = grDate.Columns[1] as GridViewCommandColumn;
+                    //cmbAng.Enabled = stare;
+                    if (Convert.ToInt32(cmbViz.Value ?? 1) == 4)
+                    {
+                        btnAproba.Enabled = false;
+                        btnRespinge.Enabled = false;
+                        GridViewCommandColumn cmbCol = grDate.Columns[1] as GridViewCommandColumn;
+                        cmbAng.Enabled = false;
+                    }
                 }
             }
             catch (Exception ex)

@@ -15013,3 +15013,8 @@ INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES 
 GO
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Adev_IdSuper', '', 'Contine id-urile de IdSuper care sa fie luate in considerare la Adeverinte', 3)
 GO
+
+--Rol vizualizare in Cereri #612
+--https://github.com/wizromRD/WizOne/issues/612
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", "Criptat") VALUES('Cereri_IDuriRoluriVizualizare','1,2,3,4,5,6','se foloseste in modulul de cereri, are aceeasi functionalitate cu parametrul Cereri_IDuriRoluriHR cu diferenta ca nu are drepturi de modificare are doar de vizualizare',1,0)
+GO

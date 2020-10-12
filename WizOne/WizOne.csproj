@@ -866,6 +866,8 @@
     <Content Include="FisiereApp\Medicina\init" />
     <Content Include="FisiereApp\Sanctiuni\init" />
     <Content Include="FisiereApp\Studii\init" />
+    <Content Include="Fisiere\BDReferintaORA.csv" />
+    <Content Include="Fisiere\BDReferintaSQL.csv" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

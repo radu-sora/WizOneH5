@@ -87,6 +87,8 @@ namespace WizOne
                 lblParolaRap.Text = Dami.TraduCuvant("Parola rapoarte");
                 lblConfirmaRap.Text = Dami.TraduCuvant("ConfirmaParolaRapoarte");
 
+                popGen.HeaderText = Dami.TraduCuvant("Istoric");
+
                 #endregion
 
                 if (General.VarSession("EsteAdmin").ToString() != "1")

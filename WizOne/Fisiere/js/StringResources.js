@@ -28,7 +28,7 @@ function trad_string(idLimba, expresie)
             if (idLimba == "EN") rez = "Yes, cancel it !";
             break;
         case "Renunta":
-            if (idLimba == "EN") rez = "Dissmis";
+            if (idLimba == "EN") rez = "Dismiss";
             break;
         case "":
             if (idLimba == "EN") rez = "Attention !";

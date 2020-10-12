@@ -5933,13 +5933,13 @@ namespace WizOne.Module
                 switch (actiune)
                 {
                     case 0:                     // respins
-                        mesaj = "Marca " + f10003 + ": pontajul a fost respins";
+                        mesaj = Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("pontajul a fost respins");
                         break;
                     case 1:                     // aprobat
-                        mesaj = "Marca " + f10003 + ": pontajul a fost aprobat";
+                        mesaj = Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("pontajul a fost aprobat");
                         break;
                     case 2:                     // finalizat
-                        mesaj = "Marca " + f10003 + ": pontajul a fost finalizat";
+                        mesaj = Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("pontajul a fost finalizat");
                         break;
                 }
             }

@@ -173,7 +173,7 @@ namespace WizOne.Pontaj
             try
             {
                 if (Request["pp"] != null)
-                    txtTitlu.Text = "Prima Pagina - Pontaj";
+                    txtTitlu.Text = Dami.TraduCuvant("Prima Pagina - Pontaj");
                 else
                     txtTitlu.Text = General.VarSession("Titlu").ToString();
 
@@ -235,6 +235,8 @@ namespace WizOne.Pontaj
                 foreach (ListBoxColumn col in cmbAng.Columns)
                     col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
+
+                popUpIstoricAprobare.HeaderText = Dami.TraduCuvant("Istoric aprobare");
                 #endregion
 
                 if (!IsPostBack)
@@ -1867,7 +1869,7 @@ namespace WizOne.Pontaj
                     IncarcaGrid();
 
                     if (msg != "")
-                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment") + ": " + Dami.TraduCuvant(msg);
                 }
             }
             catch (Exception ex)

@@ -793,7 +793,12 @@
                                                                                         <dx:GridViewDataTextColumn FieldName="FormulaSql" Name="FormulaSql" Caption="FormulaSql" VisibleIndex="10" />
                                                                                         <dx:GridViewDataTextColumn FieldName="Alias" Name="Alias" Caption="Alias" VisibleIndex="12" />
                                                                                         <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14">
-                                                                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList" />
+                                                                                            <PropertiesComboBox>
+                                                                                                <Items>
+                                                                                                    <dx:ListEditItem Value="0" Text="Suma" />
+                                                                                                    <dx:ListEditItem Value="4" Text="Medie" />
+                                                                                                </Items>
+                                                                                            </PropertiesComboBox>
                                                                                         </dx:GridViewDataComboBoxColumn>
                                                                                     </Columns>
                                                                                     <SettingsCommandButton>
@@ -885,7 +890,12 @@
                                                                                         <dx:GridViewDataTextColumn FieldName="FormulaSql" Name="FormulaSql" Caption="FormulaSql" VisibleIndex="10" />
                                                                                         <dx:GridViewDataTextColumn FieldName="Alias" Name="Alias" Caption="Alias" VisibleIndex="12" />
                                                                                         <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14">
-                                                                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList" />
+                                                                                            <PropertiesComboBox>
+                                                                                                <Items>
+                                                                                                    <dx:ListEditItem Value="0" Text="Suma" />
+                                                                                                    <dx:ListEditItem Value="4" Text="Medie" />
+                                                                                                </Items>
+                                                                                            </PropertiesComboBox>
                                                                                         </dx:GridViewDataComboBoxColumn>
                                                                                     </Columns>
                                                                                     <SettingsCommandButton>

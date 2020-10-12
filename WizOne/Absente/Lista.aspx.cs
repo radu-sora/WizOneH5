@@ -111,6 +111,9 @@ namespace WizOne.Absente
                 if (btnInchide != null)
                     btnInchide.Text = Dami.TraduCuvant("btnInchide", "Inchide");
 
+                popUpDivide.HeaderText = Dami.TraduCuvant("Alege data de divizare");
+                btnOKDivide.Text = Dami.TraduCuvant("btnOKDivide", "Divide");
+                chkAnulare.Text = Dami.TraduCuvant("chkAnulare", "Anulare concediu incepand cu ziua urmatoare acestei date");
                 #endregion
 
                 if (Request["pp"] != null)

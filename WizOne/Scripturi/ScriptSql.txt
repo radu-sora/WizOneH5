@@ -14921,11 +14921,11 @@ GO
 
 DECLARE @i INT
 SET @i = 1
-WHILE (@i <= 300)
+WHILE (@i <= 500)
 BEGIN
-	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0)
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0 AND (SELECT COUNT(*) FROM Eval_ConfigObTemplate WHERE TemplateId=@i) > 0)
 	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(6, @i, 'Total1', 100, 0, 0, 0, 0, -99);
-	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0)
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0 AND (SELECT COUNT(*) FROM Eval_ConfigObTemplate WHERE TemplateId=@i) > 0)
 	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(7, @i, 'Total2', 100, 0, 0, 0, 0, -99);
 
     SET @i = @i + 1
@@ -14936,11 +14936,11 @@ GO
 
 DECLARE @i INT
 SET @i = 1
-WHILE (@i <= 300)
+WHILE (@i <= 500)
 BEGIN
-    IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0)
+    IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0 AND (SELECT COUNT(*) FROM Eval_ConfigObTemplate WHERE TemplateId=@i) > 0)
 	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(14, @i, 'Total1', 100, 0, 0, 0, 0, -99, -99);
-	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0)
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0 AND (SELECT COUNT(*) FROM Eval_ConfigObTemplate WHERE TemplateId=@i) > 0)
 	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(15, @i, 'Total2', 100, 0, 0, 0, 0, -99, -99);
 
     SET @i = @i + 1

@@ -293,7 +293,9 @@ namespace WizOne.Absente
                     ids.Add(new Module.General.metaCereriRol { Id = Convert.ToInt32(General.Nz(arr[0], 0)), Rol = Convert.ToInt32(General.Nz(arr[5], 0)) });
                 }
 
-                if (ids.Count != 0) msg += General.MetodeCereri(1, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), "",  Convert.ToInt32(General.Nz(cmbRol.Value,0)));
+                bool esteHR = false;
+                if (Convert.ToInt32(General.Nz(cmbViz.Value, 1)) == 3) esteHR = true;
+                if (ids.Count != 0) msg += General.MetodeCereri(1, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), "",  esteHR);
                 grDate.JSProperties["cpAlertMessage"] = msg;
                 grDate.DataBind();
                 grDate.Selection.UnselectAll();
@@ -1041,8 +1043,11 @@ namespace WizOne.Absente
 
                     ids.Add(new Module.General.metaCereriRol { Id = Convert.ToInt32(General.Nz(arr[0], 0)), Rol = Convert.ToInt32(General.Nz(arr[5], 0)) });
                 }
-                General.MemoreazaEroarea("Vine din Absente Lista");
-                if (ids.Count != 0) msg += General.MetodeCereri(2, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), motiv, Convert.ToInt32(General.Nz(cmbRol.Value, 0)));
+
+                bool esteHR = false;
+                if (Convert.ToInt32(General.Nz(cmbViz.Value, 1)) == 3) esteHR = true;
+
+                if (ids.Count != 0) msg += General.MetodeCereri(2, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), motiv, esteHR);
                 grDate.JSProperties["cpAlertMessage"] = msg;
                 grDate.DataBind();
                 grDate.Selection.UnselectAll();

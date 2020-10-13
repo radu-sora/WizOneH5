@@ -237,6 +237,15 @@ namespace WizOne.Pontaj
 
 
                 popUpIstoricAprobare.HeaderText = Dami.TraduCuvant("Istoric aprobare");
+
+                foreach (dynamic c in grDateIstoric.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.Caption);
+                    }
+                    catch (Exception) { }
+                }
                 #endregion
 
                 if (!IsPostBack)

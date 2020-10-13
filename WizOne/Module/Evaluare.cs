@@ -357,6 +357,9 @@ namespace WizOne.Module
         public int IdPeriod { get; set; }
         public int IdPeriodComp { get; set; }
 
+        //Florin 2020.09.10
+        public int OrdineAfisare { get; set; }
+
         //Florin 2020.01.03
         public int? IdCategObiective { get; set; }
 
@@ -386,6 +389,8 @@ namespace WizOne.Module
             IdPeriodComp = columns.Contains("IdPeriodComp") == true ? Convert.ToInt32(dr["IdPeriodComp"].ToString() == string.Empty ? "-99" : dr["IdPeriodComp"].ToString()) : -99;
             //Florin 2020.01.03
             IdCategObiective = columns.Contains("IdCategObiective") == true ? (dr["IdCategObiective"] != DBNull.Value ? (int?)dr["IdCategObiective"] : null) : null;
+            //Florin 2020.09.10
+            OrdineAfisare = columns.Contains("OrdineAfisare") == true ? (dr["OrdineAfisare"] == DBNull.Value ? 99999 : Convert.ToInt32(dr["OrdineAfisare"])) : 99999;
         }
     }
 
@@ -725,6 +730,10 @@ namespace WizOne.Module
         public bool Vizibil { get; set; }
         public int TipValoare { get; set; }
         public int IdNomenclator { get; set; }
+        public int? Ordine { get; set; }
+        public string FormulaSql { get; set; }
+        public string Alias { get; set; }
+        public int? TotalColoana { get; set; }
 
         public Eval_ConfigObTemplateDetail() { }
 
@@ -745,7 +754,10 @@ namespace WizOne.Module
             //Vizibil = columns.Contains("Vizibil") == true ? Convert.ToInt32(dr["Vizibil"].ToString() == string.Empty ? "0" : dr["Vizibil"].ToString()) : 0;
             TipValoare = columns.Contains("TipValoare") == true ? Convert.ToInt32(dr["TipValoare"].ToString() == string.Empty ? "-99" : dr["TipValoare"].ToString()) : -99;
             IdNomenclator = columns.Contains("IdNomenclator") == true ? Convert.ToInt32(dr["IdNomenclator"].ToString() == string.Empty ? "-99" : dr["IdNomenclator"].ToString()) : -99;
-
+            Ordine = columns.Contains("Ordine") == true ? (General.IsNumeric(dr["Ordine"]) ? (int?)dr["Ordine"] : null) : null;
+            FormulaSql = columns.Contains("FormulaSql") == true ? (dr["FormulaSql"] != DBNull.Value ? dr["FormulaSql"].ToString() : null) : null;
+            Alias = columns.Contains("Alias") == true ? (dr["Alias"] != DBNull.Value ? dr["Alias"].ToString() : null) : null;
+            TotalColoana = columns.Contains("TotalColoana") == true ? (General.IsNumeric(dr["TotalColoana"]) ? (int?)dr["TotalColoana"] : null) : null;
         }
     }
 
@@ -856,6 +868,12 @@ namespace WizOne.Module
         //Florin 2020.01.03
         public int? IdCategObiective { get; set; }
 
+        //Florin 2020.09.15
+        public string Total1 { get; set; }
+        public string Total2 { get; set; }
+        public string FormulaSql1 { get; set; }
+        public string FormulaSql2 { get; set; }
+
         public Eval_ObiIndividualeTemp() { }
 
         public Eval_ObiIndividualeTemp(DataRow dr)
@@ -898,6 +916,9 @@ namespace WizOne.Module
 
             //Florin 2020.01.03
             IdCategObiective = columns.Contains("IdCategObiective") == true ? (dr["IdCategObiective"] != DBNull.Value ? (int?)dr["IdCategObiective"] : null) : null;
+
+            Total1 = columns.Contains("Total1") == true ? (dr["Total1"] != DBNull.Value ? dr["Total1"].ToString() : null) : null;
+            Total2 = columns.Contains("Total2") == true ? (dr["Total2"] != DBNull.Value ? dr["Total2"].ToString() : null) : null;
         }
     }
 
@@ -982,6 +1003,10 @@ namespace WizOne.Module
         public bool Editare { get; set; }
         public bool Vizibil { get; set; }
         public int IdNomenclator { get; set; }
+        public int? Ordine { get; set; }
+        public string FormulaSql { get; set; }
+        public string Alias { get; set; }
+        public int? TotalColoana { get; set; }
 
         public Eval_ConfigCompTemplateDetail() { }
         public Eval_ConfigCompTemplateDetail(DataRow dr)
@@ -997,6 +1022,10 @@ namespace WizOne.Module
             Editare = columns.Contains("Editare") == true ? Convert.ToBoolean(dr["Editare"].ToString() == string.Empty ? "False" : (dr["Editare"].ToString() == "0" ? "False" : "True")) : false;
             Vizibil = columns.Contains("Vizibil") == true ? Convert.ToBoolean(dr["Vizibil"].ToString() == string.Empty ? "False" : (dr["Vizibil"].ToString() == "0" ? "False" : "True")) : false;
             IdNomenclator = columns.Contains("IdNomenclator") == true ? Convert.ToInt32(dr["IdNomenclator"].ToString() == string.Empty ? "-99" : dr["IdNomenclator"].ToString()) : -99;
+            Ordine = columns.Contains("Ordine") == true ? (General.IsNumeric(dr["Ordine"]) ? (int?)dr["Ordine"] : null) : null;
+            FormulaSql = columns.Contains("FormulaSql") == true ? (dr["FormulaSql"] != DBNull.Value ? dr["FormulaSql"].ToString() : null) : null;
+            Alias = columns.Contains("Alias") == true ? (dr["Alias"] != DBNull.Value ? dr["Alias"].ToString() : null) : null;
+            TotalColoana = columns.Contains("TotalColoana") == true ? (General.IsNumeric(dr["TotalColoana"]) ? (int?)dr["TotalColoana"] : null) : null;
         }
     }
 
@@ -1043,7 +1072,7 @@ namespace WizOne.Module
         public int IdCompetenta { get; set; }
         public string Competenta { get; set; }
         public decimal Pondere { get; set; }
-        public int IdCalificativ { get; set; }
+        public int? IdCalificativ { get; set; }
         public string Calificativ { get; set; }
         public string ExplicatiiCalificativ { get; set; }
         public string Explicatii { get; set; }
@@ -1058,6 +1087,10 @@ namespace WizOne.Module
         public int? USER_NO { get; set; }
         public DateTime? TIME { get; set; }
 
+        public string Total1 { get; set; }
+        public string Total2 { get; set; }
+        public string FormulaSql1 { get; set; }
+        public string FormulaSql2 { get; set; }
 
         public Eval_CompetenteAngajatTemp() { }
         public Eval_CompetenteAngajatTemp(DataRow dr)
@@ -1069,7 +1102,8 @@ namespace WizOne.Module
             IdCompetenta = columns.Contains("IdCompetenta") == true ? Convert.ToInt32(dr["IdCompetenta"].ToString() == string.Empty ? "-99" : dr["IdCompetenta"].ToString()) : -99;
             Competenta = columns.Contains("Competenta") == true ? dr["Competenta"].ToString() : "";
             Pondere = columns.Contains("Pondere") == true ? Convert.ToDecimal(dr["Pondere"].ToString() == string.Empty ? "-99" : dr["Pondere"].ToString()) : -99;
-            IdCalificativ = columns.Contains("IdCalificativ") == true ? Convert.ToInt32(dr["IdCalificativ"].ToString() == string.Empty ? "-99" : dr["IdCalificativ"].ToString()) : -99;
+            //IdCalificativ = columns.Contains("IdCalificativ") == true ? Convert.ToInt32(dr["IdCalificativ"].ToString() == string.Empty ? "-99" : dr["IdCalificativ"].ToString()) : -99;
+            IdCalificativ = columns.Contains("IdCalificativ") == true ? (General.IsNumeric(dr["IdCalificativ"]) ? (int?)dr["IdCalificativ"] : null) : null;
             Calificativ = columns.Contains("Calificativ") == true ? dr["Calificativ"].ToString() : "";
             ExplicatiiCalificativ = columns.Contains("ExplicatiiCalificativ") == true ? dr["ExplicatiiCalificativ"].ToString() : "";
             Explicatii = columns.Contains("Explicatii") == true ? dr["Explicatii"].ToString() : "";
@@ -1083,7 +1117,8 @@ namespace WizOne.Module
             IdUnic = columns.Contains("IdUnic") == true ? Convert.ToInt32(dr["IdUnic"].ToString() == string.Empty ? "-99" : dr["IdUnic"].ToString()) : -99;
             USER_NO = columns.Contains("USER_NO") == true ? (General.IsNumeric(dr["USER_NO"]) ? (int?)dr["USER_NO"] : null) : null;
             TIME = columns.Contains("TIME") == true ? (dr["TIME"] != DBNull.Value ? (DateTime?)dr["TIME"] : null) : null;
-
+            Total1 = columns.Contains("Total1") == true ? (dr["Total1"] != DBNull.Value ? dr["Total1"].ToString() : null) : null;
+            Total2 = columns.Contains("Total2") == true ? (dr["Total2"] != DBNull.Value ? dr["Total2"].ToString() : null) : null;
         }
     }
 
@@ -1127,49 +1162,49 @@ namespace WizOne.Module
     internal static class Evaluare
     {
 
-        public static DataTable GetEval_Quiz(int? IdPerioada, DateTime? dtInceput, DateTime? dtSfarsit)
-        {
-            DataTable q = null;
-            try
-            {
-                string strSql = @"select eval.""Id"", eval.""Denumire"", eval.""Titlu"", eval.""DataInceput""
-                                         , eval.""DataSfarsit"", per.""DenPerioada"" ""Perioada""
-                                    from ""Eval_Quiz"" eval
-                                    left join ""Eval_Perioada"" per on eval.""Anul"" = per.""IdPerioada""
-                                where eval.""Anul"" = {2}
-                                and {0}
-                                and {1}";
-                if (Constante.tipBD == 1) //SQL
-                {
-                    strSql = string.Format(strSql,
-                                           (dtInceput == new DateTime(1900, 1, 1) ? "1=1" : @"datepart(yyyy, eval.""DataInceput"") * 10000 + datepart(MM, eval.""DataInceput"") * 100 
-                                            + datepart(dd, eval.""DataInceput"") >= 
-                                           " + (dtInceput.Value.Year * 10000 + dtInceput.Value.Month * 100 + dtInceput.Value.Day).ToString()),
-                                           (dtSfarsit == new DateTime(1900, 1, 1) ? "1=1" : @"datepart(yyyy, eval.""DataSfarsit"") * 10000 + datepart(MM, eval.""DataSfarsit"") * 100 
-                                            + datepart(dd, eval.""DataSfarsit"") <= 
-                                            " + (dtSfarsit.Value.Year * 10000 + dtSfarsit.Value.Month * 100 + dtSfarsit.Value.Day).ToString()),
-                                           (IdPerioada == -99 ? @"eval.""Anul""" : IdPerioada.ToString())
-                                           );
+        //public static DataTable GetEval_Quiz(int? IdPerioada, DateTime? dtInceput, DateTime? dtSfarsit)
+        //{
+        //    DataTable q = null;
+        //    try
+        //    {
+        //        string strSql = @"select eval.""Id"", eval.""Denumire"", eval.""Titlu"", eval.""DataInceput""
+        //                                 , eval.""DataSfarsit"", per.""DenPerioada"" ""Perioada""
+        //                            from ""Eval_Quiz"" eval
+        //                            left join ""Eval_Perioada"" per on eval.""Anul"" = per.""IdPerioada""
+        //                        where eval.""Anul"" = {2}
+        //                        and {0}
+        //                        and {1}";
+        //        if (Constante.tipBD == 1) //SQL
+        //        {
+        //            strSql = string.Format(strSql,
+        //                                   (dtInceput == new DateTime(1900, 1, 1) ? "1=1" : @"datepart(yyyy, eval.""DataInceput"") * 10000 + datepart(MM, eval.""DataInceput"") * 100 
+        //                                    + datepart(dd, eval.""DataInceput"") >= 
+        //                                   " + (dtInceput.Value.Year * 10000 + dtInceput.Value.Month * 100 + dtInceput.Value.Day).ToString()),
+        //                                   (dtSfarsit == new DateTime(1900, 1, 1) ? "1=1" : @"datepart(yyyy, eval.""DataSfarsit"") * 10000 + datepart(MM, eval.""DataSfarsit"") * 100 
+        //                                    + datepart(dd, eval.""DataSfarsit"") <= 
+        //                                    " + (dtSfarsit.Value.Year * 10000 + dtSfarsit.Value.Month * 100 + dtSfarsit.Value.Day).ToString()),
+        //                                   (IdPerioada == -99 ? @"eval.""Anul""" : IdPerioada.ToString())
+        //                                   );
 
-                }
-                else //ORCL
-                {
-                    strSql = string.Format(strSql,
-                                           (dtInceput == new DateTime(1900, 1, 1) ? "1=1" : @"to_number(to_char(eval.""DataInceput"", 'yyyyMMdd')) >= " +
-                                           (dtInceput.Value.Year * 10000 + dtInceput.Value.Month * 100 + dtInceput.Value.Day).ToString()),
-                                           (dtSfarsit == new DateTime(1900, 1, 1) ? "1=1" : @"to_number(to_char(eval.""DataSfarsit"", 'yyyyMMdd'))  <= "
-                                            + (dtSfarsit.Value.Year * 10000 + dtSfarsit.Value.Month * 100 + dtSfarsit.Value.Day).ToString()),
-                                           (IdPerioada == -99 ? @"eval.""Anul""" : IdPerioada.ToString())
-                                           );
-                }
-                q = General.IncarcaDT(strSql, null);
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-            return q;
-        }
+        //        }
+        //        else //ORCL
+        //        {
+        //            strSql = string.Format(strSql,
+        //                                   (dtInceput == new DateTime(1900, 1, 1) ? "1=1" : @"to_number(to_char(eval.""DataInceput"", 'yyyyMMdd')) >= " +
+        //                                   (dtInceput.Value.Year * 10000 + dtInceput.Value.Month * 100 + dtInceput.Value.Day).ToString()),
+        //                                   (dtSfarsit == new DateTime(1900, 1, 1) ? "1=1" : @"to_number(to_char(eval.""DataSfarsit"", 'yyyyMMdd'))  <= "
+        //                                    + (dtSfarsit.Value.Year * 10000 + dtSfarsit.Value.Month * 100 + dtSfarsit.Value.Day).ToString()),
+        //                                   (IdPerioada == -99 ? @"eval.""Anul""" : IdPerioada.ToString())
+        //                                   );
+        //        }
+        //        q = General.IncarcaDT(strSql, null);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //    return q;
+        //}
 
         //public static DataTable GetEval_Quiz(int? IdPerioada, DateTime? dtInceput, DateTime? dtSfarsit)
         //{

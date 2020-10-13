@@ -18,7 +18,6 @@ namespace WizOne.Eval
     public partial class ActivitatiObiective : System.Web.UI.Page
     {
         string cmp = "USER_NO,TIME,IDAUTO,";
-
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -112,7 +111,7 @@ namespace WizOne.Eval
                     case "New":
                     case "Clone":
                         {
-                            id = Dami.NextId("EvalObiectiv");
+                            id = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""IdObiectiv"",0)) FROM ""Eval_Obiectiv"" "), 0)) + 1;
                             DataRow drHead = dtHead.NewRow();
                             drHead["IdObiectiv"] = id;
                             drHead["Obiectiv"] = txtObiectiv.Text;
@@ -120,69 +119,29 @@ namespace WizOne.Eval
                             drHead["USER_NO"] = Session["UserId"];
                             dtHead.Rows.Add(drHead);
 
-                            int nrInreg = dt.Rows.Count;
-                            int IdActivitate = Dami.NextId("Eval_ObiectivXActivitate", nrInreg);
                             foreach(DataRow dr in dt.Rows)
                             {
                                 dr["IdObiectiv"] = id;
-                                dr["IdActivitate"] = IdActivitate - Convert.ToInt32(General.Nz(dr["IdActivitate"], 0));
                             }
-
                         }
                         break;
                     case "Edit":
                         dtHead.Rows[0]["Obiectiv"] = txtObiectiv.Text;
                         dtHead.Rows[0]["IdObiectiv"] = txtId.Text;
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            if (dr.RowState != DataRowState.Deleted)
+                                dr["IdObiectiv"] = id;
+                        }
                         break;
                 }
 
-                #region salvare Eval_Obiectiv
-                if (Constante.tipBD == 1)
-                {
-                    SqlDataAdapter daHead = new SqlDataAdapter();
-                    daHead.SelectCommand = General.DamiSqlCommand(@"select top 0 * from ""Eval_Obiectiv"" ", null);
-                    SqlCommandBuilder cbHead = new SqlCommandBuilder(daHead);
-                    daHead.Update(dtHead);
-                    daHead.Dispose();
-                    daHead = null;
-                }
-                else
-                {
-                    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_Obiectiv\" WHERE ROWNUM = 0", null);
-                    OracleCommandBuilder cbbHead = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(dtHead);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
 
-                }
-                #endregion
-
-                #region salvare Eval_ObiectivXActivitate
-                if (Constante.tipBD == 1)
-                {
-                    SqlDataAdapter da = new SqlDataAdapter();
-                    da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_ObiectivXActivitate\" ", null);
-                    SqlCommandBuilder cb = new SqlCommandBuilder(da);
-                    da.Update(dt);
-
-                    da.Dispose();
-                    da = null;
-                }
-                else
-                {
-                    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_ObiectivXActivitate\" WHERE ROWNUM = 0", null);
-                    OracleCommandBuilder cb = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(dt);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
-
-                }
+                General.SalveazaDate(dtHead, "Eval_Obiectiv");
+                General.SalveazaDate(dt, "Eval_ObiectivXActivitate");
 
                 HttpContext.Current.Session["Sablon_Tabela"] = "Eval_Obiectiv";
                 Response.Redirect("~/Pagini/SablonLista.aspx", false);
-                #endregion
             }
             catch (Exception ex)
             {
@@ -244,10 +203,8 @@ namespace WizOne.Eval
             {
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow row = dt.NewRow();
-                int x = dt.Rows.Count;
-                row["IdActivitate"] = Dami.NextId("Eval_ObiectivXActivitate");
+
                 row["Activitate"] = e.NewValues["Activitate"];
-                row["IdObiectiv"] = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
                 row["TIME"] = DateTime.Now;
                 row["USER_NO"] = Session["UserId"];
 
@@ -278,12 +235,11 @@ namespace WizOne.Eval
                 DataColumn[] colPrimaryKey = dt.PrimaryKey;
                 foreach (DataColumn col in dt.Columns)
                 {
-                    if ((!col.AutoIncrement && (cmp.IndexOf(col.ColumnName.ToUpper() + ",") < 0)) && colPrimaryKey.Where(p => p.ColumnName == col.ColumnName).Count() == 0 && col.ColumnName != "IdObiectiv")
+                    if ((!col.AutoIncrement && (cmp.IndexOf(col.ColumnName.ToUpper() + ",") < 0)) && colPrimaryKey.Where(p => p.ColumnName == col.ColumnName).Count() == 0)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                     }
-
                 }
 
                 e.Cancel = true;
@@ -302,11 +258,9 @@ namespace WizOne.Eval
         {
             try
             {
-                DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 e.NewValues["TIME"] = DateTime.Now;
                 e.NewValues["USER_NO"] = Session["UserId"];
-                e.NewValues["IdObiectiv"] = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
-                e.NewValues["IdActivitate"] = Dami.NextId("Eval_ObiectivXActivitate");
+                e.NewValues["IdActivitate"] = 1;
             }
             catch(Exception ex)
             {
@@ -314,22 +268,5 @@ namespace WizOne.Eval
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-        protected void grDate_CustomErrorText(object sender, DevExpress.Web.ASPxGridViewCustomErrorTextEventArgs e)
-        {
-            try
-            {
-                //e.ErrorText = msgError;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        #region Methods
-
-        #endregion
     }
 }

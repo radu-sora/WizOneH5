@@ -226,6 +226,14 @@
 
     //end LeonardM 22.11.2017
 
+    function OnFocusedCellChanging(s, e) {
+        if (e.cellInfo.column.fieldName == "Descriere") {
+            hf.Set('Id', e.cellInfo.nodeKey);
+            hf1.Set('Id', '');
+            panel2.PerformCallback();
+        }
+    }
+
 </script>
 
 
@@ -438,23 +446,24 @@
                                                                                     <ClientSideEvents Click="function(s, e){ DeleteSectiuneSauIntrebare(s); }" />
                                                                                     <Image Url="../Fisiere/Imagini/Icoane/sterge.png" />
                                                                                 </dx:ASPxButton>
+                                                                                <dx:ASPxButton ID="btnSalvareOrdine" runat="server" ClientIDMode="Static" ClientInstanceName="btnSalvareOrdine" Text="Adauga Ordine Afisare" AutoPostBack="false">
+                                                                                    <ClientSideEvents Click="function(s, e){ grDateIntrebari.UpdateEdit(); }" />
+                                                                                    <Image Url="../Fisiere/Imagini/Icoane/adauga.png" />
+                                                                                </dx:ASPxButton>
                                                                             </td>
                                                                          </tr>
                                                                         <tr>
                                                                             <td>
                                                                                 <dx:ASPxTreeList ID="grDateIntrebari" ClientInstanceName="grDateIntrebari" ClientIDMode="Static" runat="server" AutoGenerateColumns="false"
-                                                                                    KeyFieldName="Id" ParentFieldName="Parinte" Width="780px" >
+                                                                                    KeyFieldName="Id" ParentFieldName="Parinte" Width="780px" OnBatchUpdate="grDateIntrebari_BatchUpdate" >
                                                                                     <Settings GridLines="Both" HorizontalScrollBarMode="Visible" ShowRoot="true" />
-                                                                                    <SettingsBehavior AutoExpandAllNodes="true" AllowFocusedNode="true" FocusNodeOnLoad="false" ProcessFocusedNodeChangedOnServer="True" />
-                                                                                    <SettingsEditing Mode="Inline" />
-                                                                                    <ClientSideEvents  FocusedNodeChanged="function(s, e) {
-	                                                                                            hf.Set('Id',s.GetFocusedNodeKey());
-                                                                                                hf1.Set('Id','');
-                                                                                                panel2.PerformCallback();
-                                                                                            }"  />
+                                                                                    <SettingsBehavior AutoExpandAllNodes="true" FocusNodeOnLoad="false" ProcessFocusedNodeChangedOnServer="True" />
+                                                                                    <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
+                                                                                    <ClientSideEvents FocusedCellChanging="function(s, e) { OnFocusedCellChanging(s,e); }" />
                                                                                     <Columns>
                                                                                         <dx:TreeListTextColumn FieldName="Id" Visible="false" />
-                                                                                        <dx:TreeListTextColumn FieldName="Descriere" Caption="Descriere" Visible="true" VisibleIndex="0" Width="100%" />
+                                                                                        <dx:TreeListTextColumn FieldName="Descriere" Caption="Descriere" Visible="true" VisibleIndex="0" Width="100%" ReadOnly="true" />
+                                                                                        <dx:TreeListTextColumn FieldName="OrdineAfisare" VisibleIndex="2"/>
                                                                                         <dx:TreeListTextColumn FieldName="Parinte" Visible="false" />
                                                                                     </Columns>
                                                                                 </dx:ASPxTreeList>
@@ -743,8 +752,8 @@
                                                                             <td colspan="9">
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfObiectiv" ClientInstanceName="hfObiectiv" />
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfObiectivColName" ClientInstanceName="hfObiectivColName" />
-                                                                                <dx:ASPxGridView ID="grDateObiective" runat="server" ClientInstanceName="grDateObiective" ClientIDMode="Static" 
-                                                                                    Width="900px" AutoGenerateColumns="false" 
+                                                                                <dx:ASPxGridView ID="grDateObiective" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateObiective" ClientIDMode="Static" 
+                                                                                    Width="1000px" AutoGenerateColumns="false" 
                                                                                     OnAutoFilterCellEditorInitialize="grDateObiective_AutoFilterCellEditorInitialize" 
                                                                                     OnCellEditorInitialize="grDateObiective_CellEditorInitialize"
                                                                                     OnRowUpdating="grDateObiective_RowUpdating" 
@@ -771,7 +780,7 @@
                                                                                         <dx:GridViewDataCheckColumn FieldName="Editare" Name="Editare" Caption="Editare"  Width="70px" VisibleIndex="4" />
                                                                                         <dx:GridViewDataCheckColumn FieldName="Vizibil" Name="Vizibil" Caption="Vizibil"  Width="70px" VisibleIndex="5" />
                                                                                         <dx:GridViewDataComboBoxColumn FieldName="TipValoare" Name="TipValoare" Caption="Tip Valoare" Width="150" VisibleIndex="6" >
-                                                                                            <PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown" >
+                                                                                            <PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown">
                                                                                                 <ValidationSettings RequiredField-IsRequired="true" Display="None" />
                                                                                                 <ClientSideEvents SelectedIndexChanged="cmbObiectivTipLista_SelectedIndexChanged" />
                                                                                             </PropertiesComboBox>
@@ -780,7 +789,12 @@
                                                                                             <PropertiesComboBox TextField="DenNomenclator" ValueField="IdNomenclator" ValueType="System.Int32" DropDownStyle="DropDown" EnableCallbackMode="true" 
                                                                                                 OnItemRequestedByValue="Unnamed_ItemRequestedByValue" OnItemsRequestedByFilterCondition="Unnamed_ItemsRequestedByFilterCondition" />
                                                                                         </dx:GridViewDataComboBoxColumn>
-
+                                                                                        <dx:GridViewDataSpinEditColumn FieldName="Ordine" Name ="Ordine" Caption="Ordine" VisibleIndex="9" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false" PropertiesSpinEdit-MinValue="1" PropertiesSpinEdit-MaxValue="99"/>
+                                                                                        <dx:GridViewDataTextColumn FieldName="FormulaSql" Name="FormulaSql" Caption="FormulaSql" VisibleIndex="10" />
+                                                                                        <dx:GridViewDataTextColumn FieldName="Alias" Name="Alias" Caption="Alias" VisibleIndex="12" />
+                                                                                        <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14">
+                                                                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList" />
+                                                                                        </dx:GridViewDataComboBoxColumn>
                                                                                     </Columns>
                                                                                     <SettingsCommandButton>
                                                                                         <EditButton>
@@ -835,8 +849,8 @@
                                                                             <td colspan="2">
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfCompetente" ClientInstanceName="hfCompetente" />
                                                                                 <dx:ASPxHiddenField runat="server" ID="hfCompetenteColName" ClientInstanceName="hfCompetenteColName" />
-                                                                                <dx:ASPxGridView ID="grDateCompetente" runat="server" ClientInstanceName="grDateCompetente" ClientIDMode="Static"
-                                                                                    Width="1000px" AutoGenerateColumns="false"
+                                                                                <dx:ASPxGridView ID="grDateCompetente" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateCompetente" ClientIDMode="Static"
+                                                                                    Width="1100px" AutoGenerateColumns="false"
                                                                                     OnAutoFilterCellEditorInitialize="grDateCompetente_AutoFilterCellEditorInitialize"
                                                                                     OnCellEditorInitialize="grDateCompetente_CellEditorInitialize"
                                                                                     OnRowUpdating="grDateCompetente_RowUpdating"
@@ -866,6 +880,12 @@
                                                                                             <PropertiesComboBox TextField="DenNomenclator" ValueField="IdNomenclator" ValueType="System.Int32" DropDownStyle="DropDown" EnableCallbackMode="true"
                                                                                                 OnItemRequestedByValue="Unnamed_ItemRequestedByValue1" OnItemsRequestedByFilterCondition="Unnamed_ItemsRequestedByFilterCondition1"
                                                                                                   />
+                                                                                        </dx:GridViewDataComboBoxColumn>
+                                                                                        <dx:GridViewDataSpinEditColumn FieldName="Ordine" Name ="Ordine" Caption="Ordine" VisibleIndex="9" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false" PropertiesSpinEdit-MinValue="1" PropertiesSpinEdit-MaxValue="99"/>
+                                                                                        <dx:GridViewDataTextColumn FieldName="FormulaSql" Name="FormulaSql" Caption="FormulaSql" VisibleIndex="10" />
+                                                                                        <dx:GridViewDataTextColumn FieldName="Alias" Name="Alias" Caption="Alias" VisibleIndex="12" />
+                                                                                        <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14">
+                                                                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList" />
                                                                                         </dx:GridViewDataComboBoxColumn>
                                                                                     </Columns>
                                                                                     <SettingsCommandButton>

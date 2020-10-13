@@ -35,7 +35,6 @@ namespace WizOne.Eval
 
     public partial class QuizDetaliu : System.Web.UI.Page
     {
-
         #region Events
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -46,15 +45,12 @@ namespace WizOne.Eval
                 #endregion
 
                 DataSet ds = Session["InformatiaCurentaEvalQuiz"] as DataSet;
-                string IdQuiz = Session["IdEvalQuiz"] as string;
-                if(ds==null && IdQuiz==null)
+                if (ds==null && General.Nz(Session["IdEvalQuiz"],"").ToString() == "")
                 {
-                    IdQuiz = GetNextIdEval().ToString();
-                    Session["IdEvalQuiz"] = IdQuiz;
+                    Session["IdEvalQuiz"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""Id"",0)) FROM ""Eval_Quiz"" "), 0)) + 1;
                     Session["esteQuizNou"] = "true";
                     Initializare(ds);
                 }
-
 
                 DataTable dt = General.IncarcaDT("select \"Denumire\", \"Pagina\" from \"Eval_QuizTaburi\" order by \"Ordine\" ", null);
 
@@ -81,7 +77,6 @@ namespace WizOne.Eval
                         ctrl = this.LoadControl(dt.Rows[i]["Pagina"].ToString() + ".ascx");                        
                         tabPage.Controls.Add(ctrl);
                     }                  
-              
 
                     this.ASPxPageControl2.TabPages.Add(tabPage);                  
                 }
@@ -139,24 +134,7 @@ namespace WizOne.Eval
 
                 for (int i = 0; i < ds.Tables.Count; i++)
                 {
-                    if (Constante.tipBD == 1)
-                    {
-                        da = new SqlDataAdapter();
-                        da.SelectCommand = General.DamiSqlCommand(@"select top 0 * from """ + ds.Tables[i].TableName + @""" ", null);
-                        cb = new SqlCommandBuilder(da);
-                        da.Update(ds.Tables[i]);
-                        da.Dispose();
-                        da = null;
-                    }
-                    else
-                    {
-                        oledbAdapter = new OracleDataAdapter();
-                        oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"" + ds.Tables[i].TableName + "\" WHERE ROWNUM = 0", null);
-                        cbOle = new OracleCommandBuilder(oledbAdapter);
-                        oledbAdapter.Update(ds.Tables[i]);
-                        oledbAdapter.Dispose();
-                        oledbAdapter = null;
-                    }
+                    General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                 }
 
                 #region salvare Template Obiective
@@ -170,27 +148,11 @@ namespace WizOne.Eval
                         sqlEval_ConfigObTemplate = "delete from \"Eval_ConfigObTemplate\" ";
                         General.ExecutaNonQuery(sqlEval_ConfigObTemplate, null);
                     }
-                    if (Constante.tipBD == 1)
-                    {
-                        da = new SqlDataAdapter();
-                        da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_ConfigObTemplate\" ", null);
-                        cb = new SqlCommandBuilder(da);
-                        da.Update(Evaluare.ToDataTable<Eval_ConfigObTemplate>(lstConfigObTemplate));
-                        da.Dispose();
-                        da = null;
-                    }
-                    else
-                    {
-                        oledbAdapter = new OracleDataAdapter();
-                        oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_ConfigObTemplate\" WHERE ROWNUM = 0", null);
-                        cbOle = new OracleCommandBuilder(oledbAdapter);
-                        oledbAdapter.Update(Evaluare.ToDataTable<Eval_ConfigObTemplate>(lstConfigObTemplate));
-                        oledbAdapter.Dispose();
-                        oledbAdapter = null;
-                    }
-                    //Session["createEval_ConfigObTemplate"] = null;
+                    General.SalveazaDate(Evaluare.ToDataTable<Eval_ConfigObTemplate>(lstConfigObTemplate), "Eval_ConfigObTemplate");
                 }
                 catch { }
+
+
                 //salvare Eval_ConfigObTemplateDetail
                 try
                 {                    
@@ -201,30 +163,10 @@ namespace WizOne.Eval
                         sqlEval_ConfigObTemplateDetail = "delete from \"Eval_ConfigObTemplateDetail\" ";
                         General.ExecutaNonQuery(sqlEval_ConfigObTemplateDetail, null);
                     }
-                    if (Constante.tipBD == 1)
-                    {
-                        da = new SqlDataAdapter();
-                        da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_ConfigObTemplateDetail\" ", null);
-                        cb = new SqlCommandBuilder(da);
-
-                        da.Update(Evaluare.ToDataTable<Eval_ConfigObTemplateDetail>(lstConfigObTemplateDetail));
-                        da.Dispose();
-                        da = null;
-                    }
-                    else
-                    {
-                        oledbAdapter = new OracleDataAdapter();
-                        oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_ConfigObTemplateDetail\" WHERE ROWNUM = 0", null);
-                        cbOle = new OracleCommandBuilder(oledbAdapter);
-                        oledbAdapter.Update(Evaluare.ToDataTable<Eval_ConfigObTemplateDetail>(lstConfigObTemplateDetail));
-                        oledbAdapter.Dispose();
-                        oledbAdapter = null;
-                    }
-                    //Session["createEval_ConfigObTemplateDetail"] = null;
+                    General.SalveazaDate(Evaluare.ToDataTable<Eval_ConfigObTemplateDetail>(lstConfigObTemplateDetail), "Eval_ConfigObTemplateDetail");
                 }
                 catch { }
                 #endregion
-
 
                 #region salvare Template Competente
                 //salvare Eval_ConfigCompTemplate
@@ -237,28 +179,10 @@ namespace WizOne.Eval
                         sqlEval_ConfigCompTemplate = "delete from \"Eval_ConfigCompTemplate\" ";
                         General.ExecutaNonQuery(sqlEval_ConfigCompTemplate, null);
                     }
-                    if (Constante.tipBD == 1)
-                    {
-                        da = new SqlDataAdapter();
-                        da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_ConfigCompTemplate\" ", null);
-                        cb = new SqlCommandBuilder(da);
-                        da.Update(Evaluare.ToDataTable<Eval_ConfigCompTemplate>(lstConfigCompTemplate));
-                        da.Dispose();
-                        da = null;
-                    }
-                    else
-                    {
-                        oledbAdapter = new OracleDataAdapter();
-                        oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_ConfigCompTemplate\" WHERE ROWNUM = 0", null);
-                        cbOle = new OracleCommandBuilder(oledbAdapter);
-                        oledbAdapter.Update(Evaluare.ToDataTable<Eval_ConfigCompTemplate>(lstConfigCompTemplate));
-                        oledbAdapter.Dispose();
-                        oledbAdapter = null;
-                    }
-
-                    //Session["createEval_ConfigCompTemplate"] = null;
+                    General.SalveazaDate(Evaluare.ToDataTable<Eval_ConfigCompTemplate>(lstConfigCompTemplate), "Eval_ConfigCompTemplate");
                 }
                 catch { }
+
                 //salvare Eval_ConfigCompTemplateDetail
                 try
                 {                   
@@ -269,59 +193,36 @@ namespace WizOne.Eval
                         sqlEval_ConfigCompTemplateDetail = "delete from \"Eval_ConfigCompTemplateDetail\" ";
                         General.ExecutaNonQuery(sqlEval_ConfigCompTemplateDetail, null);
                     }
-                    if (Constante.tipBD == 1)
-                    {
-                        da = new SqlDataAdapter();
-                        da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_ConfigCompTemplateDetail\" ", null);
-                        cb = new SqlCommandBuilder(da);
-
-                        da.Update(Evaluare.ToDataTable<Eval_ConfigCompTemplateDetail>(lstConfigCompTemplateDetail));
-                        da.Dispose();
-                        da = null;
-                    }
-                    else
-                    {
-                        oledbAdapter = new OracleDataAdapter();
-                        oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_ConfigCompTemplateDetail\" WHERE ROWNUM = 0", null);
-                        cbOle = new OracleCommandBuilder(oledbAdapter);
-                        oledbAdapter.Update(Evaluare.ToDataTable<Eval_ConfigCompTemplateDetail>(lstConfigCompTemplateDetail));
-                        oledbAdapter.Dispose();
-                        oledbAdapter = null;
-                    }
-                    //Session["createEval_ConfigCompTemplateDetail"] = null;
+                    General.SalveazaDate(Evaluare.ToDataTable<Eval_ConfigCompTemplateDetail>(lstConfigCompTemplateDetail), "Eval_ConfigCompTemplateDetail");
                 }
                 catch { }
                 #endregion
 
                 #region Salvare ordine corecta Eval_QuizIntrebari
                 int idQuiz = Convert.ToInt32(Session["IdEvalQuiz"].ToString());
-                string sqlOrdine = string.Empty;
-                sqlOrdine = @"
-                            select '-' {1} cast(rot.""Id"" as {0}) {1} '-' {1} cast(sec.""Id"" as {0}) {1} '-' {1} cast(intre.""Id"" as {0}) {1} '-' as ""Ordine"", intre.""Id""
+                string tip = "nvarchar(10)";
+                if (Constante.tipBD == 2)
+                    tip = "varchar2(10)";
+                
+                string sqlOrdine = $@"
+                            select '-' {Dami.Operator()} cast(rot.""Id"" as {tip}) {Dami.Operator()} '-' {Dami.Operator()} cast(sec.""Id"" as {tip}) {Dami.Operator()} '-' {Dami.Operator()} cast(intre.""Id"" as {tip}) {Dami.Operator()} '-' as ""Ordine"", intre.""Id""
                             from ""Eval_QuizIntrebari"" intre
                             join ""Eval_QuizIntrebari"" sec on intre.""Parinte"" = sec.""Id""
                             join ""Eval_QuizIntrebari"" rot on sec.""Parinte"" = rot.""Id""
                             left join ""Eval_QuizIntrebari"" cop on intre.""Id"" = cop.""Parinte""
                             where cop.""Id"" is null
-                            and intre.""IdQuiz"" = {2}
+                            and intre.""IdQuiz"" = {idQuiz}
                             union all
-                            select '-' {1} cast(rot.""Id"" as {0}) {1} '-' {1} cast(sec.""Id"" as {0}) {1} '-' as ""Ordine"", sec.""Id""
+                            select '-' {Dami.Operator()} cast(rot.""Id"" as {tip}) {Dami.Operator()} '-' {Dami.Operator()} cast(sec.""Id"" as {tip}) {Dami.Operator()} '-' as ""Ordine"", sec.""Id""
                             from ""Eval_QuizIntrebari"" rot
                             join ""Eval_QuizIntrebari"" sec on rot.""Id"" = sec.""Parinte""
-                            where rot.""IdQuiz"" = {2}
+                            where rot.""IdQuiz"" = {idQuiz}
                             and rot.""Descriere"" ='Root'
                             union all
-                            select '-' {1} CAST(rot.""Id"" as {0}) {1} '-' as ""Ordine"", rot.""Id""
+                            select '-' {Dami.Operator()} CAST(rot.""Id"" as {tip}) {Dami.Operator()} '-' as ""Ordine"", rot.""Id""
                             from ""Eval_QuizIntrebari"" rot
-                            where rot.""IdQuiz"" = {2}
+                            where rot.""IdQuiz"" = {idQuiz}
                             and rot.""Descriere"" = 'Root'";
-                if (Constante.tipBD == 1)//SQL
-                    sqlOrdine = string.Format(sqlOrdine, "varchar(10)", "+", idQuiz);
-                else
-                    sqlOrdine = string.Format(sqlOrdine, "varchar2(10)", "||", idQuiz);
-
-                string sqlUpdateOrdine, sqlUpdateOrdineTemp = string.Empty;
-                sqlUpdateOrdine = @"update ""Eval_QuizIntrebari"" set ""Ordine"" = '{0}' where ""Id"" = {1}";
 
                 DataTable dtOrdine = General.IncarcaDT(sqlOrdine, null);
                 if (dtOrdine != null && dtOrdine.Rows.Count != 0)
@@ -329,9 +230,7 @@ namespace WizOne.Eval
                     foreach (DataRow dr in dtOrdine.Rows)
                     {
                         metaOrdine clsOrdine = new metaOrdine(dr);
-                        sqlUpdateOrdineTemp = sqlUpdateOrdine;
-                        sqlUpdateOrdineTemp = string.Format(sqlUpdateOrdineTemp, clsOrdine.Ordine, clsOrdine.Id);
-                        General.ExecutaNonQuery(sqlUpdateOrdineTemp, null);
+                        General.ExecutaNonQuery(@"UPDATE ""Eval_QuizIntrebari"" SET ""Ordine"" = @1 WHERE ""Id"" = @2", new object[] { clsOrdine.Ordine, clsOrdine.Id });
                     }
                 }
 
@@ -407,7 +306,7 @@ namespace WizOne.Eval
                             rowEval_QuizIntrebari[x] = DateTime.Now;
                             break;
                         case "ID":
-                            rowEval_QuizIntrebari[x] = Dami.NextId("Eval_QuizIntrebari");
+                            rowEval_QuizIntrebari[x] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""Id"",0)) FROM ""Eval_QuizIntrebari"" "), 0)) + 1;
                             break;
                         case "DESCRIERE":
                             rowEval_QuizIntrebari[x] = "Root";
@@ -446,9 +345,6 @@ namespace WizOne.Eval
                         case "TIME":
                             rowEval_Circuit[x] = DateTime.Now;
                             break;
-                        case "IDAUTO":
-                            rowEval_Circuit[x] = Dami.NextId("Eval_Circuit");
-                            break;
                     }
                     x++;
                 }
@@ -476,9 +372,6 @@ namespace WizOne.Eval
                             break;
                         case "TIME":
                             rowEval_Drepturi[x] = DateTime.Now;
-                            break;
-                        case "IDAUTO":
-                            rowEval_Drepturi[x] = Dami.NextId("Eval_Drepturi");
                             break;
                         case "POZITIE":
                             rowEval_Drepturi[x] = 1;
@@ -512,95 +405,10 @@ namespace WizOne.Eval
         {
             try
             {
-                SqlDataAdapter da = new SqlDataAdapter();
-                SqlCommandBuilder cb = new SqlCommandBuilder();
-
-                OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-                OracleCommandBuilder cbOle = new OracleCommandBuilder();
-
-                #region Salvare Eval_Quiz
-                if (Constante.tipBD == 1)
-                {
-                    da = new SqlDataAdapter();
-                    da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_Quiz\"", null);
-                    cb = new SqlCommandBuilder(da);
-                    da.Update(ctQuiz);
-                    da.Dispose();
-                    da = null;
-                }
-                else
-                {
-                    oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_Quiz\" WHERE ROWNUM = 0", null);
-                    cbOle = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(ctQuiz);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
-                }
-                #endregion
-
-                #region salvare Eval_QuizIntrebari
-                if (Constante.tipBD == 1)
-                {
-                    da = new SqlDataAdapter();
-                    da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_QuizIntrebari\" ", null);
-                    cb = new SqlCommandBuilder(da);
-                    da.Update(ctQuizIntrebari);
-                    da.Dispose();
-                    da = null;
-                }
-                else
-                {
-                    oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_QuizIntrebari\" WHERE ROWNUM = 0", null);
-                    cbOle = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(ctQuizIntrebari);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
-                }
-                #endregion
-
-                #region salvare Eval_Circuit
-                if (Constante.tipBD == 1)
-                {
-                    da = new SqlDataAdapter();
-                    da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_Circuit\" ", null);
-                    cb = new SqlCommandBuilder(da);
-                    da.Update(ctCircuit);
-                    da.Dispose();
-                    da = null;
-                }
-                else
-                {
-                    oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_Circuit\" WHERE ROWNUM = 0", null);
-                    cbOle = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(ctCircuit);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
-                }
-                #endregion
-
-                #region salvare Eval_Drepturi
-                if (Constante.tipBD == 1)
-                {
-                    da = new SqlDataAdapter();
-                    da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_Drepturi\" ", null);
-                    cb = new SqlCommandBuilder(da);
-                    da.Update(ctDrepturi);
-                    da.Dispose();
-                    da = null;
-                }
-                else
-                {
-                    oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_Drepturi\" WHERE ROWNUM = 0", null);
-                    cbOle = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(ctDrepturi);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
-                }
-                #endregion
+                General.SalveazaDate(ctQuiz, "Eval_Quiz");
+                General.SalveazaDate(ctQuizIntrebari, "Eval_QuizIntrebari");
+                General.SalveazaDate(ctCircuit, "Eval_Circuit");
+                General.SalveazaDate(ctDrepturi, "Eval_Drepturi");
             }
             catch (Exception ex)
             {
@@ -608,19 +416,6 @@ namespace WizOne.Eval
             }
         }
 
-        public int GetNextIdEval()
-        {
-            int IdEvalQuiz = 1;
-            try
-            {
-                IdEvalQuiz = Dami.NextId("Eval_Quiz");
-            }
-            catch(Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-            return IdEvalQuiz;
-        }
         #endregion
     }
 }

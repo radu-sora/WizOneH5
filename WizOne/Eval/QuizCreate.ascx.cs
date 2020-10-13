@@ -1,6 +1,8 @@
 ﻿using DevExpress.Web;
 using DevExpress.Web.ASPxTreeList;
+using DevExpress.Web.Data;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -21,6 +23,12 @@ namespace WizOne.Eval
             public int Id { get; set; }
             public string Denumire { get; set; }
             public int Parinte { get;set;}
+        }
+
+        public class metaCmb
+        {
+            public int Id { get; set; }
+            public string Denumire { get; set; }
         }
         List<metaDate> lstEval_tblCategTipCamp = new List<metaDate>();
         List<metaDate> lstEval_tblTipCamp = new List<metaDate>();
@@ -412,6 +420,12 @@ namespace WizOne.Eval
                     cmbTipObiect.DataBind();
                 }
 
+                if (!IsPostBack)
+                {
+                    Session["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigObTemplate"" "), 0)) + 1;
+                    Session["TemplateIdCompetenta"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigCompTemplate"" "), 0)) + 1;
+                    Session["QuizIntrebari_Id"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""Id"",0)) FROM ""Eval_QuizIntrebari"" "), 0)) + 1;
+                }
             }
             catch (Exception ex)
             {
@@ -455,6 +469,15 @@ namespace WizOne.Eval
                     cmbCategObi.DataSource = dt;
                     cmbCategObi.DataBind();
                 }
+
+                //List<metaCmb> lst = new List<metaCmb>();
+                //lst.Add(new metaCmb() { Id = 0, Denumire = "Suma" });
+                //lst.Add(new metaCmb() { Id = 4, Denumire = "Medie" });
+
+                //GridViewDataComboBoxColumn totalColoanaObi = (grDateObiective.Columns["TotalColoana"] as GridViewDataComboBoxColumn);
+                //totalColoanaObi.PropertiesComboBox.DataSource = lst;
+                //GridViewDataComboBoxColumn totalColoanaCmp = (grDateCompetente.Columns["TotalColoana"] as GridViewDataComboBoxColumn);
+                //totalColoanaCmp.PropertiesComboBox.DataSource = lst;
             }
             catch (Exception ex)
             {
@@ -654,7 +677,8 @@ namespace WizOne.Eval
 
                     int OrdineIntrebare = dtIntrebari.AsEnumerable().Where(row => row.Field<Int32>("Parinte") == Convert.ToInt32(rowSelected["Parinte"].ToString())).AsEnumerable().Select(row => row.Field<int>("OrdineInt")).Distinct().ToList().Max();
 
-                    int idNewIntrebare = Dami.NextId("Eval_QuizIntrebari");
+                    Session["QuizIntrebari_Id"] = Convert.ToInt32(Session["QuizIntrebari_Id"]) + 1;
+                    int idNewIntrebare = Convert.ToInt32(Session["QuizIntrebari_Id"]);
                     DataRow rwNewSectiune = dtIntrebari.NewRow();
                     rwNewSectiune["Id"] = idNewIntrebare;
                     rwNewSectiune["Parinte"] = idSelectat;
@@ -745,7 +769,8 @@ namespace WizOne.Eval
                     else
                         OrdineIntrebare = dtIntrebari.AsEnumerable().Where(row => row.Field<Int32>("Parinte") == idIntrebare).AsEnumerable().Select(row => row.Field<int>("OrdineInt")).Distinct().ToList().Max();
 
-                    int idNewIntrebare = Dami.NextId("Eval_QuizIntrebari");
+                    Session["QuizIntrebari_Id"] = Convert.ToInt32(Session["QuizIntrebari_Id"]) + 1;
+                    int idNewIntrebare = Convert.ToInt32(Session["QuizIntrebari_Id"]);
                     DataRow rwNewSectiune = dtIntrebari.NewRow();
                     rwNewSectiune["Id"] = idNewIntrebare;
                     rwNewSectiune["Parinte"] = idIntrebare;
@@ -831,8 +856,8 @@ namespace WizOne.Eval
                                 Session["isEditingObiectivTemplate"] = 1;
                                 Session["isEditingCompetenteTemplate"] = null;
 
-                                int TemplateId = rwDataCurrent["TemplateIdObiectiv"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigObTemplate", 1) :
-                                                Convert.ToInt32(rwDataCurrent["TemplateIdObiectiv"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwDataCurrent["TemplateIdObiectiv"], Session["TemplateIdObiectiv"]));
+                                
                                 rwDataCurrent["TemplateIdObiectiv"] = TemplateId;
                                 ShowTemplateObiectiv(TemplateId);
 
@@ -851,9 +876,7 @@ namespace WizOne.Eval
                                 Session["isEditingObiectivTemplate"] = null;
                                 Session["isEditingCompetenteTemplate"] = 1;
 
-                                int TemplateId;
-                                TemplateId = rwDataCurrent["TemplateIdCompetenta"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigCompTemplate", 1) :
-                                    Convert.ToInt32(rwDataCurrent["TemplateIdCompetenta"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwDataCurrent["TemplateIdCompetenta"], Session["TemplateIdCompetenta"]));
                                 rwDataCurrent["TemplateIdCompetenta"] = TemplateId;
                                 ShowTemplateCompetente(TemplateId);
 
@@ -1186,9 +1209,7 @@ namespace WizOne.Eval
                                 lblPerioadaObi.Visible = IdTipObiect == 23 ? true : false;// chkObiective.Checked == true ? true : false;
                                 cmbPerioadaObi.Visible = IdTipObiect == 23 ? true : false; //chkObiective.Checked == true ? true : false;
 
-                                int TemplateId;
-                                TemplateId = rwIntrebare["TemplateIdObiectiv"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigObTemplate", 1) :
-                                                         Convert.ToInt32(rwIntrebare["TemplateIdObiectiv"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwIntrebare["TemplateIdObiectiv"], Session["TemplateIdObiectiv"]));
                                 rwIntrebare["TemplateIdObiectiv"] = IdTipObiect == 23 ? TemplateId : -99;
                                 if (IdTipObiect == 23)
                                 {
@@ -1222,9 +1243,7 @@ namespace WizOne.Eval
                                 lblPerioadaComp.Visible = IdTipObiectCompetente == 5 ? true : false; //chkCompetente.Checked == true ? true : false;
                                 cmbPerioadaComp.Visible = IdTipObiectCompetente == 5 ? true : false; //chkCompetente.Checked == true ? true : false;
 
-                                int TemplateId;
-                                TemplateId = rwIntrebare["TemplateIdCompetenta"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigCompTemplate", 1) :
-                                                         Convert.ToInt32(rwIntrebare["TemplateIdCompetenta"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwIntrebare["TemplateIdCompetenta"], Session["TemplateIdCompetenta"]));
                                 rwIntrebare["TemplateIdCompetenta"] = IdTipObiectCompetente == 5 ? TemplateId : -99;
                                 ShowTemplateCompetente(TemplateId);
                                 cmbTemplateCompetente.DataSource = lstEval_ConfigCompTemplate;
@@ -1252,9 +1271,7 @@ namespace WizOne.Eval
                                 Session["isEditingObiectivTemplate"] = 1;
                                 Session["isEditingCompetenteTemplate"] = null;
 
-                                int TemplateId;
-                                TemplateId = rwIntrebare["TemplateIdObiectiv"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigObTemplate", 1) :
-                                                        Convert.ToInt32(rwIntrebare["TemplateIdObiectiv"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwIntrebare["TemplateIdObiectiv"], Session["TemplateIdObiectiv"]));
                                 rwIntrebare["TemplateIdObiectiv"] = TemplateId;
                                 ShowTemplateObiectiv(TemplateId);
                                 cmbTemplateObiective.DataSource = lstEval_ConfigObTemplate;
@@ -1277,9 +1294,7 @@ namespace WizOne.Eval
                                 Session["isEditingObiectivTemplate"] = null;
                                 Session["isEditingCompetenteTemplate"] = 1;
 
-                                int TemplateId;
-                                TemplateId = rwIntrebare["TemplateIdCompetenta"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigCompTemplate", 1) :
-                                                        Convert.ToInt32(rwIntrebare["TemplateIdCompetenta"].ToString());
+                                int TemplateId = Convert.ToInt32(General.Nz(rwIntrebare["TemplateIdCompetenta"], Session["TemplateIdCompetenta"]));
                                 rwIntrebare["TemplateIdCompetenta"] = TemplateId;
                                 ShowTemplateCompetente(TemplateId);
                                 cmbTemplateCompetente.DataSource = lstEval_ConfigCompTemplate;
@@ -1567,6 +1582,16 @@ namespace WizOne.Eval
                     row.TipValoare = Convert.ToInt32(e.NewValues["TipValoare"] ?? -99);
                     row.Editare = Convert.ToBoolean(e.NewValues["Editare"] ?? DBNull.Value);
                     row.Width = Convert.ToInt32(e.NewValues["Width"] ?? DBNull.Value);
+                    if (e.NewValues["Ordine"] != null)
+                        row.Ordine = Convert.ToInt32(e.NewValues["Ordine"]);
+                    else
+                        row.Ordine = null;
+                    row.FormulaSql = e.NewValues["FormulaSql"] != null ? e.NewValues["FormulaSql"].ToString() : null;
+                    row.Alias = e.NewValues["Alias"] != null ? e.NewValues["Alias"].ToString() : null;
+                    if (e.NewValues["TotalColoana"] != null)
+                        row.TotalColoana = Convert.ToInt32(e.NewValues["TotalColoana"]);
+                    else
+                        row.TotalColoana = null;
                 }
 
                 Session["createEval_ConfigObTemplateDetail"] = lstEval_ConfigObTemplateDetail;
@@ -1803,6 +1828,16 @@ namespace WizOne.Eval
                     row.Editare = Convert.ToBoolean(e.NewValues["Editare"] ?? DBNull.Value);
                     row.IdNomenclator = Convert.ToInt32(e.NewValues["IdNomenclator"] ?? -99);
                     row.Width = Convert.ToInt32(e.NewValues["Width"] ?? DBNull.Value);
+                    if (e.NewValues["Ordine"] != null)
+                        row.Ordine = Convert.ToInt32(e.NewValues["Ordine"]);
+                    else
+                        row.Ordine = null;
+                    row.FormulaSql = e.NewValues["FormulaSql"] != null ? e.NewValues["FormulaSql"].ToString() : null;
+                    row.Alias = e.NewValues["Alias"] != null ? e.NewValues["Alias"].ToString() : null;
+                    if (e.NewValues["TotalColoana"] != null)
+                        row.TotalColoana = Convert.ToInt32(e.NewValues["TotalColoana"]);
+                    else
+                        row.TotalColoana = null;
                 }
 
                 Session["createEval_ConfigCompTemplateDetail"] = lstEval_ConfigCompTemplateDetail;
@@ -1940,8 +1975,36 @@ namespace WizOne.Eval
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
         #endregion
 
+        protected void grDateIntrebari_BatchUpdate(object sender, ASPxTreeListBatchUpdateEventArgs e)
+        {
+            try
+            {
+                grDateIntrebari.CancelEdit();
 
+                DataSet ds = Session["InformatiaCurentaEvalQuiz"] as DataSet;
+                DataTable dt = ds.Tables["Eval_QuizIntrebari"];
+                
+                foreach (var l in e.UpdateValues)
+                {
+                    DataRow row = dt.Rows.Find(l.NewValues["Id"]);
+                    if (row == null) continue;
+
+                    row["OrdineAfisare"] = l.NewValues["OrdineAfisare"];
+                    row["Descriere"] = l.NewValues["Descriere"];
+                }
+                
+                grDateIntrebari.DataSource = dt;
+                grDateIntrebari.DataBind();
+
+                e.Handled = true;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

@@ -80,7 +80,6 @@ namespace WizOne.Pagini
                     DataTable dtKey = General.IncarcaDT(strSql, null);
                     if (dtKey.Rows.Count > 0)
                     {
-                        //DataColumn[] keys = new DataColumn[dtKey.Rows.Count];
                         keys = new DataColumn[dtKey.Rows.Count];
 
                         for (int i = 0; i < dtKey.Rows.Count; i++)
@@ -106,7 +105,7 @@ namespace WizOne.Pagini
                                     FROM ""Securitate"" A
                                     WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = '{"tbl." + Session["Sablon_Tabela"].ToString()}' AND A.""IdControl"" = 'grDate') X
                                     GROUP BY X.""IdColoana"" ";
-                    //DataTable dtSec = General.IncarcaDT(sqlSec, new string[] { "tbl." + Session["Sablon_Tabela"].ToString(), Session["UserId"].ToString() });
+
                     DataTable dtSec = General.IncarcaDT(sqlSec, new string[] { Session["UserId"].ToString() });
 
                     List<metaTblNomenConfig_SelectStr> lst = new List<metaTblNomenConfig_SelectStr>();
@@ -203,9 +202,6 @@ namespace WizOne.Pagini
 
                                         if (sursa != "" && lst.Where(p => p.SelectStr == sursa).Count() > 0)
                                         {
-                                            //dtCmb = ds.Tables["dt" + lst.Where(p => p.SelectStr == sursa).FirstOrDefault().Id];
-                                            //dtCmb = ds.Tables[lst.Where(p => p.SelectStr == sursa).FirstOrDefault().NumeCamp];
-
                                             var ent = lst.Where(p => p.SelectStr == sursa).FirstOrDefault();
                                             if (ent != null)
                                             {
@@ -216,14 +212,12 @@ namespace WizOne.Pagini
                                         else
                                         {
                                             dtCmb = General.IncarcaDT(sursa, null);
-                                            //dtCmb.TableName = "dt" + x;
                                             dtCmb.TableName = c.FieldName;
                                             lst.Add(new metaTblNomenConfig_SelectStr { Id = x, SelectStr = sursa, NumeCamp = c.FieldName, NumeCampDuplicat="", dt = dtCmb });
                                             ds.Tables.Add(dtCmb);
                                             x++;
                                         }
 
-                                        //DataTable dtCmb = General.IncarcaDT(dr["SursaCombo"].ToString(), null);
                                         c.PropertiesComboBox.DataSource = dtCmb;
                                         c.PropertiesComboBox.ValueField = dtCmb.Columns[0].ColumnName;
                                         c.PropertiesComboBox.ValueType = dtCmb.Columns[0].GetType();
@@ -236,7 +230,6 @@ namespace WizOne.Pagini
                                                 c.PropertiesComboBox.TextField = dtCmb.Columns[1].ColumnName;
                                                 break;
                                         }
-
                                     }
 
                                     grDate.Columns.Add(c);
@@ -302,7 +295,7 @@ namespace WizOne.Pagini
 
                                     c.Width = Unit.Pixel(200);
                                     if (col.MaxLength != -1) c.PropertiesTextEdit.MaxLength = col.MaxLength;
-                                    //if (col.ColumnName == "F70103") c.PropertiesTextEdit.Password = true;
+
                                     grDate.Columns.Add(c);
                                 }
                                 break;
@@ -347,9 +340,6 @@ namespace WizOne.Pagini
 
                                         if (sursa != "" && lst.Where(p => p.SelectStr == sursa).Count() > 0)
                                         {
-                                            //dtCmb = ds.Tables["dt" + lst.Where(p => p.SelectStr == sursa).FirstOrDefault().Id];
-                                            //dtCmb = ds.Tables[lst.Where(p => p.SelectStr == sursa).FirstOrDefault().NumeCamp];
-
                                             var ent = lst.Where(p => p.SelectStr == sursa).FirstOrDefault();
                                             if (ent != null)
                                             {
@@ -360,14 +350,12 @@ namespace WizOne.Pagini
                                         else
                                         {
                                             dtCmb = General.IncarcaDT(sursa, null);
-                                            //dtCmb.TableName = "dt" + x;
                                             dtCmb.TableName = c.FieldName;
                                             lst.Add(new metaTblNomenConfig_SelectStr { Id = x, SelectStr = sursa, NumeCamp = c.FieldName, NumeCampDuplicat = "", dt = dtCmb });
                                             ds.Tables.Add(dtCmb);
                                             x++;
                                         }
 
-                                        //DataTable dtCmb = General.IncarcaDT(dr["SursaCombo"].ToString(), null);
                                         c.PropertiesComboBox.DataSource = dtCmb;
                                         c.PropertiesComboBox.ValueField = dtCmb.Columns[0].ColumnName;
                                         c.PropertiesComboBox.ValueType = dtCmb.Columns[0].GetType();                                        
@@ -403,9 +391,6 @@ namespace WizOne.Pagini
 
                     Session["SurseCombo"] = ds;
                     Session["SurseCombo_BIS"] = lst;
-
-                    //ds.Clear();
-                    //ds = null;
                 }
                 else
                 {
@@ -438,26 +423,10 @@ namespace WizOne.Pagini
                                         GridViewDataComboBoxColumn cmb = (GridViewDataComboBoxColumn)c;
                                         cmb.PropertiesComboBox.DataSource = entBis.dt;
                                     }
-
                                 }
                             }
-
-
-
-                            //DataTable dt = ds.Tables[col.FieldName];
-                            //if (dt != null)
-                            //{
-                            //    GridViewDataComboBoxColumn cmb = (GridViewDataComboBoxColumn)c;
-                            //    cmb.PropertiesComboBox.DataSource = dt;
-                            //}
                         }
                         catch (Exception) { }
-
-                        //if (c.GetType().ToString() == "DevExpress.Web.GridViewDataColumn")
-                        //{
-                        //    string m = (string)HttpContext.GetGlobalResourceObject("General", ((GridViewDataColumn)c).FieldName.Replace(" ", "").Replace("!", "").Replace("/", ""), new CultureInfo(Session["IdLimba"]));
-                        //    if (m != null && m != "") ((GridViewDataColumn)c).Caption = m;
-                        //}
                     }
 
                     grDate.DataSource = Session["InformatiaCurenta"];
@@ -492,131 +461,6 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-        //protected void grDate_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
-        //{
-        //    try
-        //    {
-        //        string strSql = "SELECT COLUMN_NAME, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + Session["Sablon_Tabela"] + "' AND COLUMN_DEFAULT IS NOT NULL";
-        //        if (Constante.tipBD == 2)
-        //            strSql = "SELECT COLUMN_NAME, DATA_DEFAULT AS COLUMN_DEFAULT FROM COLS WHERE TABLE_NAME = '" + Session["Sablon_Tabela"] + "' AND DATA_DEFAULT IS NOT NULL";
-        //        DataTable dt = Session["InformatiaCurenta"] as DataTable;
-        //        //DataTable dtDef = General.IncarcaDT(@"SELECT COLUMN_NAME, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @1 AND COLUMN_DEFAULT IS NOT NULL ", new object[] { Session["Sablon_Tabela"] });
-        //        DataTable dtDef = General.IncarcaDT(strSql, null);
-        //        object[] row = new object[dt.Columns.Count];
-        //        int x = 0;
-        //        foreach (DataColumn col in dt.Columns)
-        //        {
-        //            if (!col.AutoIncrement)
-        //            {
-        //                if (grDate.Columns[col.ColumnName] == null || grDate.Columns[col.ColumnName].Visible == false)
-        //                {
-        //                    ////punem valoare default daca are
-        //                    //DataRow[] lst = dtDef.Select("COLUMN_NAME='" + col.ColumnName + "'");
-        //                    //if (lst.Count() > 0 && General.Nz(lst[0]["COLUMN_DEFAULT"], "").ToString() != "")
-        //                    //{
-        //                    //    if (lst[0]["COLUMN_DEFAULT"].ToString().Replace("(", "").Replace(")", "").Replace("N'", "").ToUpper() == "GETDATE")
-        //                    //        row[x] = DateTime.Now;
-        //                    //    else
-        //                    //        row[x] = lst[0]["COLUMN_DEFAULT"].ToString().Replace("(", "").Replace(")", "").Replace("N'", "");
-        //                    //}
-
-        //                    switch (col.ColumnName.ToUpper())
-        //                    {
-        //                        case "IDAUTO":
-        //                            ////row[x] = dt.AsEnumerable().Max(p => p.Field<int>("IdAuto")) + 1;
-        //                            //row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-        //                            row[x] = Dami.NextId(Session["Sablon_Tabela"].ToString());
-        //                            break;
-        //                        case "USER_NO":
-        //                            row[x] = Session["UserId"];
-        //                            break;
-        //                        case "TIME":
-        //                            row[x] = DateTime.Now;
-        //                            break;
-        //                        default:
-        //                            //suprascriem valoarea default cu id automat daca asa a fost setat
-        //                            DataRow dr = General.IncarcaDR(@"SELECT * FROM ""tblNomenConfig"" WHERE ""Tabela"" = @1 AND ""Camp"" = @2 AND COALESCE(""IdAutomat"",0)=1", new object[] { Session["Sablon_Tabela"], col.ColumnName });
-        //                            if (General.Nz(dr, "").ToString() != "")
-        //                                row[x] = Dami.NextId(Session["Sablon_Tabela"].ToString());
-        //                            else
-        //                                row[x] = e.NewValues[col.ColumnName];
-        //                            break;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    switch (col.ColumnName.ToUpper())
-        //                    {
-        //                        case "IDAUTO":
-        //                            //row[x] = dt.AsEnumerable().Max(p => p.Field<int>("IdAuto")) + 1;
-        //                            //row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-        //                            row[x] = Dami.NextId(Session["Sablon_Tabela"].ToString());
-        //                            break;
-        //                        case "USER_NO":
-        //                            row[x] = Session["UserId"];
-        //                            break;
-        //                        case "TIME":
-        //                            row[x] = DateTime.Now;
-        //                            break;
-        //                        default:
-        //                            row[x] = e.NewValues[col.ColumnName];
-        //                            break;
-        //                    }
-        //                }
-        //            }
-
-        //            x++;
-        //        }
-
-        //        dt.Rows.Add(row);
-        //        e.Cancel = true;
-        //        grDate.CancelEdit();
-        //        Session["InformatiaCurenta"] = dt;
-        //        grDate.DataSource = dt;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        msgError = ex.Message;
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
-
-        //protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
-        //{
-        //    try
-        //    {
-        //        object[] keys = new object[e.Keys.Count];
-        //        for (int i = 0; i < e.Keys.Count; i++)
-        //        { keys[i] = e.Keys[i]; }
-
-        //        DataTable dt = Session["InformatiaCurenta"] as DataTable;
-        //        DataRow row = dt.Rows.Find(keys);
-
-        //        foreach (DataColumn col in dt.Columns)
-        //        {
-        //            if (!col.AutoIncrement && (cmp.IndexOf(col.ColumnName.ToUpper() + ",") < 0))
-        //            {
-        //                var edc = e.NewValues[col.ColumnName];
-        //                row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
-        //            }
-
-        //        }
-
-        //        e.Cancel = true;
-        //        grDate.CancelEdit();
-        //        Session["InformatiaCurenta"] = dt;
-        //        grDate.DataSource = dt;
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        msgError = ex.Message;
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
 
         protected void grDate_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
         {
@@ -691,7 +535,6 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
 
         protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
@@ -772,16 +615,15 @@ namespace WizOne.Pagini
                     }
                 }
 
-
                 //id automat daca asa a fost setat
                 DataRow dr = General.IncarcaDR(@"SELECT * FROM ""tblNomenConfig"" WHERE ""Tabela"" = @1 AND COALESCE(""IdAutomat"",0)=1", new object[] { Session["Sablon_Tabela"] });
                 if (General.Nz(dr, "").ToString() != "")
                 {
-                    int ert = Dami.NextId(Session["Sablon_Tabela"].ToString());
-                    if (ert == -99)
+                    int idNext = Dami.NextId(Session["Sablon_Tabela"].ToString());
+                    if (idNext == -99)
                         e.NewValues[dr["Camp"]] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>(dr["Camp"].ToString())), 0)) + 1;
                     else
-                        e.NewValues[dr["Camp"]] = Dami.NextId(Session["Sablon_Tabela"].ToString());
+                        e.NewValues[dr["Camp"]] = idNext;
                 }
             }
             catch (Exception ex)
@@ -796,13 +638,6 @@ namespace WizOne.Pagini
             try
             {
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                //SqlDataAdapter da = new SqlDataAdapter();
-                //da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM " + Session["Sablon_Tabela"], null);
-                //SqlCommandBuilder cb = new SqlCommandBuilder(da);
-                //da.Update(dt);
-
-                //da.Dispose();
-                //da = null;
                 General.SalveazaDate(dt, Session["Sablon_Tabela"].ToString());
 
                 #region Generare SetAngajatiDetail
@@ -812,27 +647,6 @@ namespace WizOne.Pagini
                 {
                     string sqlDelete, sqlDeleteTemp = string.Empty;
                     string sqlInsert, sqlInsertTemp = string.Empty;
-
-                    //Radu 24.04.2018 - se transforma tabela Eval_SetAngajatiDetail in view, deoarece altfel nu sunt actualizate automat informatiile despre angajati
-                    //sqlDelete = @"delete from ""Eval_SetAngajatiDetail"" where ""IdSetAng"" = {0}";
-                    //sqlInsert = @"insert into ""Eval_SetAngajatiDetail""(""IdSetAng"", ""Id"", ""Cod"", ""Denumire"")
-                    //              select ang.""IdSetAng"", cte.""Id"", cte.""Cod"", cte.""Denumire""
-                    //              from ""Eval_SetAngajati"" ang
-                    //              join ({0}) cte on 1 = 1
-                    //              where ang.""IdSetAng"" = {1}";
-
-                    //foreach (DataRow dr in dt.Rows)
-                    //{
-                    //    Eval_SetAngajati clsSetAngajati = new Eval_SetAngajati(dr);
-                    //    sqlDeleteTemp = sqlDelete;
-                    //    sqlDeleteTemp = string.Format(sqlDeleteTemp, clsSetAngajati.IdSetAng);
-                    //    General.ExecutaNonQuery(sqlDeleteTemp, null);
-
-                    //    sqlInsertTemp = sqlInsert;
-                    //    sqlInsertTemp = string.Format(sqlInsertTemp, clsSetAngajati.SelectQuery, clsSetAngajati.IdSetAng);
-                    //    General.ExecutaNonQuery(sqlInsertTemp, null);
-                    //}
-
                     string sqltmp = "";
                     if (Constante.tipBD == 2)
                         sqltmp = "SELECT COUNT(*) CNT FROM user_tables WHERE TABLE_NAME = 'Eval_SetAngajatiDetail'";
@@ -872,8 +686,6 @@ namespace WizOne.Pagini
                         MessageBox.Show("Eroare la salvare!", MessageBox.icoSuccess);
                         return;
                     }
-
-
                 }
                 /*end LeonardM 11.11.2017*/
                 #endregion
@@ -902,35 +714,6 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-        //protected void upPanel_Unload(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        RegisterUpdatePanel((UpdatePanel)sender);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
-
-        //protected void RegisterUpdatePanel(UpdatePanel panel)
-        //{
-        //    try
-        //    {
-        //        var sType = typeof(ScriptManager);
-        //        var mInfo = sType.GetMethod("System.Web.UI.IScriptManagerInternal.RegisterUpdatePanel", BindingFlags.NonPublic | BindingFlags.Instance);
-        //        if (mInfo != null)
-        //            mInfo.Invoke(ScriptManager.GetCurrent(Page), new object[] { panel });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
 
         protected void cmbExport_SelectedIndexChanged(object sender, EventArgs e)
         {

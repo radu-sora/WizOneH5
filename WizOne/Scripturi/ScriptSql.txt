@@ -14483,6 +14483,8 @@ UPDATE F300_CM_AVANS SET URGENTA = 0
 GO
 
 
+
+
 ALTER FUNCTION [dbo].[CalculCO] (
         @f10003 INT,
    @zi datetime,
@@ -14637,6 +14639,9 @@ INSERT INTO @CalculCO
 
   RETURN;
  END
+ 
+ 
+
 
 ----  2.2.131  ----
 
@@ -14655,6 +14660,7 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('MP_VerifIntervalCartele' , '0', '1 - se verifica daca, la introducerea unei cartele, intervalul se intersecteaza cu cel al unei alte cartele a aceluiasi angajat; 0 - nu se verifica' , 0)
 GO
+
 
 
 ALTER TABLE Avs_Cereri ADD PerProbaZL int
@@ -14839,6 +14845,156 @@ GO
 
 ----  2.2.132  ----
 
+
+--https://github.com/wizromRD/WizOne/issues/566
+--In tabela Eval_tblTipValoriLinii nu se salveaza inregistrarile decat pentru primul set de Valori creat in tabela Eval_tblTipValori #566
+ALTER TABLE Eval_tblTipValoriLinii DROP CONSTRAINT PK_Eval_tblTipValoriLinii
+GO
+ALTER TABLE Eval_tblTipValoriLinii DROP COLUMN IdAuto
+GO
+ALTER TABLE Eval_tblTipValoriLinii ADD IdAuto int IDENTITY(1,1)
+GO
+ALTER TABLE Eval_tblTipValoriLinii ADD CONSTRAINT PK_Eval_tblTipValoriLinii PRIMARY KEY (IdAuto)
+GO
+
+ALTER TABLE Eval_ConfigObTemplateDetail ADD Ordine int
+GO
+
+ALTER TABLE Eval_ConfigCompTemplateDetail ADD Ordine int
+GO
+
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 68, 'Link', 0)
+GO
+
+--https://github.com/wizromRD/WizOne/issues/563
+--Pe formularele duplicate daca adaug linii noi in chestionar le inverseaza ordinea dupa salvare. De renuntat la tabela TableSYSInfo_NextId si de pus conditie de Max+1 #563
+ALTER TABLE Eval_SetCalificativDet DROP CONSTRAINT PK_Eval_SetCalificativDet
+GO
+ALTER TABLE Eval_SetCalificativDet DROP COLUMN IdCalificativ
+GO
+ALTER TABLE Eval_SetCalificativDet ADD IdCalificativ int IDENTITY(1,1)
+GO
+ALTER TABLE Eval_SetCalificativDet ADD CONSTRAINT PK_Eval_SetCalificativDet PRIMARY KEY (IdCalificativ)
+GO
+
+
+ALTER TABLE Eval_CategCompetenteDet DROP CONSTRAINT PK_Eval_CategCompetenteDet
+GO
+ALTER TABLE Eval_CategCompetenteDet DROP COLUMN IdCompetenta
+GO
+ALTER TABLE Eval_CategCompetenteDet ADD IdCompetenta int IDENTITY(1,1)
+GO
+ALTER TABLE Eval_CategCompetenteDet ADD CONSTRAINT PK_Eval_CategCompetenteDet PRIMARY KEY (IdCompetenta)
+GO
+
+
+ALTER TABLE Eval_ListaObiectivDet DROP CONSTRAINT PK_Eval_ListaObiectivDet
+GO
+ALTER TABLE Eval_ListaObiectivDet DROP COLUMN Id
+GO
+ALTER TABLE Eval_ListaObiectivDet ADD Id int IDENTITY(1,1)
+GO
+ALTER TABLE Eval_ListaObiectivDet ADD CONSTRAINT PK_Eval_ListaObiectivDet PRIMARY KEY (Id)
+GO
+
+
+ALTER TABLE Eval_tblTipValoriLinii DROP CONSTRAINT PK_Eval_tblTipValoriLinii
+GO
+ALTER TABLE Eval_tblTipValoriLinii DROP COLUMN IdAuto
+GO
+ALTER TABLE Eval_tblTipValoriLinii ADD IdAuto int IDENTITY(1,1)
+GO
+ALTER TABLE Eval_tblTipValoriLinii ADD CONSTRAINT PK_Eval_tblTipValoriLinii PRIMARY KEY (IdAuto)
+GO
+
+DROP TABLE TableSYSInfo_NextId
+GO
+
+ALTER TABLE Eval_QuizIntrebari ADD OrdineAfisare int
+GO
+
+
+--https://github.com/wizromRD/WizOne/issues/560
+--#560 - De adaugat 1, 2 campuri in template destinate pentru formula Sql intre 2, 3 alte campuri din template. Pe formular sa faca calcul la nivel de linie. #560
+
+--  Competente
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(6, @i, 'Total1', 100, 0, 0, 0, 0, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(7, @i, 'Total2', 100, 0, 0, 0, 0, -99);
+
+    SET @i = @i + 1
+END
+GO
+
+--  Obiective
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+    IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(14, @i, 'Total1', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(15, @i, 'Total2', 100, 0, 0, 0, 0, -99, -99);
+
+    SET @i = @i + 1
+END
+GO
+
+alter table Eval_ObiIndividuale add Total1 decimal(18,2)
+GO
+alter table Eval_ObiIndividuale add Total2 decimal(18,2)
+GO
+alter table Eval_ObiIndividualeTemp add Total1 decimal(18,2)
+GO
+alter table Eval_ObiIndividualeTemp add Total2 decimal(18,2)
+GO
+
+alter table Eval_CompetenteAngajat add Total1 decimal(18,2)
+GO
+alter table Eval_CompetenteAngajat add Total2 decimal(18,2)
+GO
+alter table Eval_CompetenteAngajatTemp add Total1 decimal(18,2)
+GO
+alter table Eval_CompetenteAngajatTemp add Total2 decimal(18,2)
+GO
+
+ALTER TABLE Eval_ConfigCompTemplateDetail ADD FormulaSql nvarchar(max)
+GO
+ALTER TABLE Eval_ConfigObTemplateDetail ADD FormulaSql nvarchar(max)
+GO
+
+
+INSERT INTO Eval_ConfigCompetente(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(6, 'Total1', 'System.Decimal', 6, 1)
+GO
+INSERT INTO Eval_ConfigCompetente(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(7, 'Total2', 'System.Decimal', 7, 1)
+GO
+
+
+INSERT INTO Eval_ConfigObiective(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(14, 'Total1', 'System.Decimal', 14, 1)
+GO
+INSERT INTO Eval_ConfigObiective(Id, ColumnName, ColumnType, Ordine, Vizibil) VALUES(15, 'Total2', 'System.Decimal', 15, 1)
+GO
+
+
+ALTER TABLE Eval_ConfigCompTemplateDetail ADD Alias nvarchar(250)
+GO
+ALTER TABLE Eval_ConfigObTemplateDetail ADD Alias nvarchar(250)
+GO
+
+ALTER TABLE Ptj_Intrari ADD ModifInOut nvarchar(500)
+GO
+
+ALTER TABLE Eval_ConfigCompTemplateDetail ADD TotalColoana int
+GO
+ALTER TABLE Eval_ConfigObTemplateDetail ADD TotalColoana int
+GO
 
 CREATE TABLE tblAdevRestrictii(
 	[IdSuper] [int] NOT NULL,

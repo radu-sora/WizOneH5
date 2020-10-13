@@ -399,7 +399,7 @@ namespace WizOne.Pontaj
 
                             CASE WHEN {idRol} = 3 THEN 1 ELSE 
                             CASE WHEN ({idRol} = 2 AND ((COALESCE(J.""IdStare"",1)=1 OR COALESCE(J.""IdStare"",1) = 2 OR COALESCE(J.""IdStare"",1) = 4 OR COALESCE(J.""IdStare"",1) = 6))) THEN 1 ELSE 
-                            CASE WHEN ({idRol} = 1 AND(COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
+                            CASE WHEN (({idRol} = 1 OR {idRol} = 0) AND (COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
                             END END END AS ""DrepturiModif""
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
@@ -955,7 +955,7 @@ namespace WizOne.Pontaj
 
                 //Florin 2020.02.07
                 if (msg != "" && msg.Substring(0, 1) != "2")
-                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment") + ": " + Dami.TraduCuvant(msg);
                 else
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
 

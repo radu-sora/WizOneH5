@@ -15159,7 +15159,6 @@ COMMIT;
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('MP_VerifIntervalCartele' , '0', '1 - se verifica daca, la introducerea unei cartele, intervalul se intersecteaza cu cel al unei alte cartele a aceluiasi angajat; 0 - nu se verifica' , 0);
 COMMIT;
 
-
 ALTER TABLE "Avs_Cereri" ADD "PerProbaZL" number(9);
 ALTER TABLE "Avs_Cereri" ADD "PerProbaZC" number(9);
 ALTER TABLE "Avs_Cereri" ADD "PreavizDemisie" number(9);
@@ -15192,16 +15191,154 @@ commit;
 ----  2.2.132  ----
 
 
+--https://github.com/wizromRD/WizOne/issues/566
+--In tabela Eval_tblTipValoriLinii nu se salveaza inregistrarile decat pentru primul set de Valori creat in tabela Eval_tblTipValori #566
+ CREATE OR REPLACE TRIGGER "Auto_Eval_tblTipValoriLinii" 
+  BEFORE INSERT ON "Eval_tblTipValoriLinii"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_tblTipValoriLinii_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_tblTipValoriLinii" ENABLE;
+/
+
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "Ordine" number(10);
+/
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "Ordine" number(10);
+/
+
+INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare") VALUES(1, 68, 'Link', 0);
+COMMIT;
+
+--https://github.com/wizromRD/WizOne/issues/563
+--Pe formularele duplicate daca adaug linii noi in chestionar le inverseaza ordinea dupa salvare. De renuntat la tabela TableSYSInfo_NextId si de pus conditie de Max+1 #563
+CREATE SEQUENCE "Eval_SetCalificativDet_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_SetCalificativDet" 
+  BEFORE INSERT ON "Eval_SetCalificativDet"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_SetCalificativDet_SEQ".nextval
+    INTO :new."IdCalificativ"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_SetCalificativDet" ENABLE;
+/
+
+
+CREATE SEQUENCE "Eval_CategCompetenteDet_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_CategCompetenteDet" 
+  BEFORE INSERT ON "Eval_CategCompetenteDet"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_CategCompetenteDet_SEQ".nextval
+    INTO :new."IdCompetenta"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_CategCompetenteDet" ENABLE;
+/
+
+
+CREATE SEQUENCE "Eval_ListaObiectivDet_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_ListaObiectivDet" 
+  BEFORE INSERT ON "Eval_ListaObiectivDet"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_ListaObiectivDet_SEQ".nextval
+    INTO :new."Id"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_ListaObiectivDet" ENABLE;
+/
+
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_relGrupAngajatQuiz" 
+  BEFORE INSERT ON "Eval_relGrupAngajatQuiz"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_relGrupAngajatQuiz_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_relGrupAngajatQuiz" ENABLE;
+/
+
+DROP TABLE "TableSYSInfo_NextId";
+/
+
+ALTER TABLE "Eval_QuizIntrebari" ADD "OrdineAfisare" number(10);
+/
+
+alter table "Eval_ObiIndividuale" add "Total1" CLOB;
+/
+alter table "Eval_ObiIndividuale" add "Total2" CLOB;
+/
+alter table "Eval_ObiIndividualeTemp" add "Total1" CLOB;
+/
+alter table "Eval_ObiIndividualeTemp" add "Total2" CLOB;
+/
+
+alter table "Eval_CompetenteAngajat" add "Total1" CLOB;
+/
+alter table "Eval_CompetenteAngajat" add "Total2" CLOB;
+/
+alter table "Eval_CompetenteAngajatTemp" add "Total1" CLOB;
+/
+alter table "Eval_CompetenteAngajatTemp" add "Total2" CLOB;
+/
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "FormulaSql" CLOB;
+/
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "FormulaSql" CLOB;
+/
+
+INSERT INTO "Eval_ConfigCompetente"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(6, 'Total1', 'System.String', 6, 1);
+COMMIT;
+INSERT INTO "Eval_ConfigCompetente"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(7, 'Total2', 'System.String', 7, 1);
+COMMIT;
+
+
+INSERT INTO "Eval_ConfigObiective"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(14, 'Total1', 'System.String', 14, 1);
+COMMIT;
+INSERT INTO "Eval_ConfigObiective"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(15, 'Total2', 'System.String', 15, 1);
+COMMIT;
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "Alias" varchar2(250);
+/
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "Alias" varchar2(250);
+/
+
+ALTER TABLE "Ptj_Intrari" ADD "ModifInOut" varchar2(500)
+/
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "TotalColoana" number(10);
+/
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "TotalColoana" number(10);
+/
+
+
 CREATE TABLE "tblAdevRestrictii"(
 	"IdSuper" NUMBER(9) NOT NULL,
 	"IdAdev" NUMBER(9) NOT NULL,
 	USER_NO NUMBER(9),
 	TIME DATE DEFAULT SYSDATE);
-  
-  CREATE UNIQUE INDEX "PK_tblAdevRestrictii" ON "tblAdevRestrictii" ("IdSuper", "IdAdev") ;
+	
+	 CREATE UNIQUE INDEX "PK_tblAdevRestrictii" ON "tblAdevRestrictii" ("IdSuper", "IdAdev") ;
 
 ALTER TABLE "tblAdevRestrictii" ADD CONSTRAINT "PK_tblAdevRestrictii" PRIMARY KEY ("IdSuper", "IdAdev");
 
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Adev_Restrictii', '0', '1 - se restrictioneaza adeverintele cf. tblAdevRestrictii; 0 - nu sunt restrictii', 3);
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Adev_IdSuper', '', 'Contine id-urile de IdSuper care sa fie luate in considerare la Adeverinte', 3);
 commit;
+
+

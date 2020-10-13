@@ -841,35 +841,50 @@
                                 else {
 
 
+
                                     if (key == 45)              // scade o zi   tasta -
                                     {
-                                        var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
-                                        if (cell.key == dt.getDate() || cell.key == (dt.getDate() - 1)) {
-                                            grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-                                            var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, dt.getHours(), dt.getMinutes(), 0, 0);
-                                            grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
-                                            grDate.batchEditApi.EndEdit();
-                                            swal({
-                                                title: "",
-                                                text: "Proces realizat cu succes",
-                                                type: "warning"
-                                            });
-                                        }
+                                        swal({
+                                            title: "Atentie", text: "Sunteti sigur/a ca doriti sa continuati modificarea datei de rapoartare a In/Out-ului?",
+                                            type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da!", cancelButtonText: "Nu", closeOnConfirm: true
+                                        }, function (isConfirm) {
+                                            if (isConfirm) {
+                                                var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                                if (cell.key == dt.getDate() || cell.key == (dt.getDate() - 1)) {
+                                                    grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                                    var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                                    grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                                    grDate.batchEditApi.EndEdit();
+                                                    swal({
+                                                        title: "",
+                                                        text: "Proces realizat cu succes",
+                                                        type: "warning"
+                                                    });
+                                                }
+                                            }
+                                        });
                                     }
                                     else if (key == 43)        // adauga o zi  tasta +
                                     {
-                                        var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
-                                        if (cell.key == dt.getDate() || cell.key == (dt.getDate() + 1)) {
-                                            grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-                                            var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, dt.getHours(), dt.getMinutes(), 0, 0);
-                                            grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
-                                            grDate.batchEditApi.EndEdit();
-                                            swal({
-                                                title: "",
-                                                text: "Proces realizat cu succes",
-                                                type: "warning"
-                                            });
-                                        }
+                                        swal({
+                                            title: "Atentie", text: "Sunteti sigur/a ca doriti sa continuati modificarea datei de rapoartare a In/Out-ului?",
+                                            type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da!", cancelButtonText: "Nu", closeOnConfirm: true
+                                        }, function (isConfirm) {
+                                            if (isConfirm) {
+                                                var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                                if (cell.key == dt.getDate() || cell.key == (dt.getDate() + 1)) {
+                                                    grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                                    var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                                    grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                                    grDate.batchEditApi.EndEdit();
+                                                    swal({
+                                                        title: "",
+                                                        text: "Proces realizat cu succes",
+                                                        type: "warning"
+                                                    });
+                                                }
+                                            }
+                                        });
                                     }
                                     else if (key == 93)         ////insereaza celula   tasta   ]
                                     {

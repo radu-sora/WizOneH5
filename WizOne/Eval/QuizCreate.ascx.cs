@@ -469,15 +469,6 @@ namespace WizOne.Eval
                     cmbCategObi.DataSource = dt;
                     cmbCategObi.DataBind();
                 }
-
-                //List<metaCmb> lst = new List<metaCmb>();
-                //lst.Add(new metaCmb() { Id = 0, Denumire = "Suma" });
-                //lst.Add(new metaCmb() { Id = 4, Denumire = "Medie" });
-
-                //GridViewDataComboBoxColumn totalColoanaObi = (grDateObiective.Columns["TotalColoana"] as GridViewDataComboBoxColumn);
-                //totalColoanaObi.PropertiesComboBox.DataSource = lst;
-                //GridViewDataComboBoxColumn totalColoanaCmp = (grDateCompetente.Columns["TotalColoana"] as GridViewDataComboBoxColumn);
-                //totalColoanaCmp.PropertiesComboBox.DataSource = lst;
             }
             catch (Exception ex)
             {

@@ -1727,10 +1727,7 @@
   </data>  
 <data name="Modificaricontract" xml:space="preserve">
     <value>Edit contract</value>
-  </data>  
-<data name="Istoricmodificari" xml:space="preserve">
-    <value>History Changes</value>
-  </data>  
+  </data> 
 <data name="Randnou" xml:space="preserve">
     <value>New row</value>
   </data>  
@@ -1793,5 +1790,20 @@
   </data>
   <data name="EsteDejaRespinsa" xml:space="preserve">
     <value>is already rejected</value>
+  </data> 
+  <data name="PrimaPaginaPontaj" xml:space="preserve">
+    <value>First Page - Timesheet</value>
+  </data> 
+    <data name="PrimaPaginaCereri" xml:space="preserve">
+    <value>First Page - Requests</value>
   </data>
+    <data name="Istoric" xml:space="preserve">
+    <value>History</value>
+  </data>
+      <data name="IstoricAprobare" xml:space="preserve">
+    <value>Approve history</value>
+  </data>
+      <data name="ProcesRealizatCuSuccesDarCuUrmatorulAvertisment" xml:space="preserve">
+    <value>Process finished succesfully. but with the following warning</value>
+  </data>   
 </root>

@@ -812,6 +812,7 @@
     <Content Include="Pagini\ActeAditionale.aspx" />
     <Content Include="Pagini\ActualizareDate.aspx" />
     <Content Include="Pagini\CalculVenit.aspx" />
+    <Content Include="Pagini\Calendar.aspx" />
     <Content Include="Pagini\Captcha.aspx" />
     <Content Include="Pagini\CodConfirmare.aspx" />
     <Content Include="Pagini\Delegari.aspx" />
@@ -1582,6 +1583,13 @@
     </Compile>
     <Compile Include="Pagini\CalculVenit.aspx.designer.cs">
       <DependentUpon>CalculVenit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\Calendar.aspx.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Calendar.aspx.designer.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pagini\Captcha.aspx.cs">
       <DependentUpon>Captcha.aspx</DependentUpon>

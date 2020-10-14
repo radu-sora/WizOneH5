@@ -58,15 +58,15 @@ namespace WizOne.Absente
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
                 btnIstoricExtins.Text = Dami.TraduCuvant("btnIstoricExtins", "Istoric Extins");
 
-                lblRol.InnerText = Dami.TraduCuvant("Rol");
-                lblAng.InnerText = Dami.TraduCuvant("Angajat");
-                lblTip.InnerText = Dami.TraduCuvant("Tip Cerere");         
-                lblDataInc.InnerText = Dami.TraduCuvant("Data Inceput");
-                lblDataSf.InnerText = Dami.TraduCuvant("Data Sfarsit");
-                lblInl.InnerText = Dami.TraduCuvant("Inlocuitor");
-                lblNrZile.InnerText = Dami.TraduCuvant("Nr. zile");
-                lblNrOre.InnerText = Dami.TraduCuvant("Nr. ore");
-                lblObs.InnerText = Dami.TraduCuvant("Observatii");
+                lblRol.Text = Dami.TraduCuvant("Rol");
+                lblAng.Text = Dami.TraduCuvant("Angajat");
+                lblTip.Text = Dami.TraduCuvant("Tip Cerere");         
+                lblDataInc.Text = Dami.TraduCuvant("Data Inceput");
+                lblDataSf.Text = Dami.TraduCuvant("Data Sfarsit");
+                lblInl.Text = Dami.TraduCuvant("Inlocuitor");
+                lblNrZile.Text = Dami.TraduCuvant("Nr. zile");
+                lblNrOre.Text = Dami.TraduCuvant("Nr. ore");
+                lblObs.Text = Dami.TraduCuvant("Observatii");
 
                 btnDocUpload.ToolTip = Dami.TraduCuvant("incarca document");
                 btnDocSterge.ToolTip = Dami.TraduCuvant("sterge document");
@@ -166,10 +166,16 @@ namespace WizOne.Absente
                     cmbAbs.DataBind();
                     Session["Cereri_Absente_Absente"] = dtAbs;
 
-                    //Incarcam Inlocuitorii
+                    //Incarcam Inlocuitorii                    
                     DataTable dtInl = General.IncarcaDT(General.SelectInlocuitori(Convert.ToInt32(General.Nz(cmbAng.Value,-99)), txtDataInc.Date, txtDataSf.Date), null);
                     cmbInloc.DataSource = dtInl;
                     cmbInloc.DataBind();
+
+                    divInloc.Visible = false;
+                    divNrOre.Visible = false;
+                    divOraInc.Visible = false;
+                    divOraSf.Visible = false;
+                    divNrZileViitor.Visible = false;
 
                     //Populam campurile
                     if (General.VarSession("IstoricExtins_VineDin").ToString() == "2-OK" && Session["Absente_Cereri_Date"] != null)
@@ -1256,16 +1262,7 @@ namespace WizOne.Absente
                     }
                 }
 
-                if (arataInloc == "2" || arataInloc == "3")
-                {
-                    lblInl.Style["display"] = "inline-block";
-                    cmbInloc.Visible = true;
-                }
-                else
-                {
-                    lblInl.Style["display"] = "none";
-                    cmbInloc.Visible = false;
-                }
+                divInloc.Visible = arataInloc == "2" || arataInloc == "3";                
 
                 if (arataAtas == "2" || arataAtas == "3")
                 {
@@ -1279,8 +1276,8 @@ namespace WizOne.Absente
                 }
 
                 if (idOre == "0")
-                {
-                    lblNrOre.Style["display"] = "inline-block";
+                {                    
+                    //lblNrOre.Style["display"] = "inline-block";
                     txtNrOre.ClientVisible = true;
                     txtNrOre.DecimalPlaces = 0;
                     txtNrOre.NumberType = SpinEditNumberType.Integer;
@@ -1289,13 +1286,9 @@ namespace WizOne.Absente
                     {
                         List<Module.Dami.metaGeneral2> lst = ListaInterval(perioada);
 
-                        lblOraInc.Style["display"] = "inline-block";
-                        cmbOraInc.Visible = true;
                         cmbOraInc.DataSource = lst;
                         cmbOraInc.DataBind();
 
-                        lblOraSf.Style["display"] = "inline-block";
-                        cmbOraSf.Visible = true;
                         cmbOraSf.DataSource = lst;
                         cmbOraSf.DataBind();
 
@@ -1306,21 +1299,23 @@ namespace WizOne.Absente
 
                         txtNrOreTime.ClientVisible = true;
 
-                        lblNrOre.InnerText = Dami.TraduCuvant("Nr. ore");
+                        lblNrOre.Text = Dami.TraduCuvant("Nr. ore");
+                    }
+                    else
+                    {
+                        divOraInc.Visible = false;
+                        divOraSf.Visible = false;
                     }
                 }
                 else
                 {
-                    lblNrOre.Style["display"] = "none";
-                    txtNrOre.ClientVisible = false;
+                    divNrOre.Visible = false;
                     txtNrOre.Value = null;
 
-                    lblOraInc.Style["display"] = "none";
-                    cmbOraInc.Visible = false;
+                    divOraInc.Visible = false;                    
                     cmbOraInc.Value = null;
 
-                    lblOraSf.Style["display"] = "none";
-                    cmbOraSf.Visible = false;
+                    divOraSf.Visible = false;
                     cmbOraSf.Value = null;
                 }
 
@@ -1453,22 +1448,33 @@ namespace WizOne.Absente
                 divDateExtra.Controls.Clear();
 
                 string ids = "";
-
                 DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { General.Nz(cmbAbs.Value,"-99") });
+                HtmlGenericControl ctlRow = null, ctlCol;
+
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow dr = dt.Rows[i];
 
-                    HtmlGenericControl ctlDiv = new HtmlGenericControl("div");
-                    ctlDiv.Attributes["class"] = "Absente_Cereri_CampuriSup";
+                    if (i == 0 || (i + 1) % 6 == 0)
+                    {
+                        ctlRow = new HtmlGenericControl("div");
+                        ctlRow.Attributes["class"] = "row row-fix";
+                        divDateExtra.Controls.Add(ctlRow);
+                    }
 
-                    Label lbl = new Label();
-                    //lbl.ID = "lblDinamic" + i;
-                    lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
-                    lbl.Style.Add("margin", "10px 0px !important");
-                    ctlDiv.Controls.Add(lbl);
+                    ctlCol = new HtmlGenericControl("div");
+                    ctlCol.Attributes["class"] = "col-lg-2 col-md-4 col-sm-4 col-xs-6";
+                    ctlRow.Controls.Add(ctlCol);
 
                     string ctlId = "ctlDinamic" + i;
+                    ASPxLabel lbl = new ASPxLabel();
+
+                    //lbl.ID = "lblDinamic" + i;
+                    lbl.AssociatedControlID = ctlId;
+                    lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
+                    lbl.Font.Bold = true;
+                    ctlCol.Controls.Add(lbl);
+                    
                     switch (General.Nz(dr["TipCamp"], "").ToString())
                     {
                         case "0":                   //text
@@ -1476,7 +1482,7 @@ namespace WizOne.Absente
                             txt.ID = ctlId;
                             txt.ClientIDMode = ClientIDMode.Static;
                             txt.ClientInstanceName = "ctlDinamic" + i;
-                            txt.Width = Unit.Pixel(70);
+                            txt.Width = Unit.Percentage(100);
                             txt.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
                             if (General.Nz(dr["Sursa"], "").ToString() != "")
                             {
@@ -1487,13 +1493,14 @@ namespace WizOne.Absente
                                     txt.Value = val.ToString();
                                 }
                             }
-                            ctlDiv.Controls.Add(txt);
+                            ctlCol.Controls.Add(txt);
                             break;
                         case "1":                   //checkBox
                             ASPxCheckBox chk = new ASPxCheckBox();
                             chk.ID = ctlId;
                             chk.ClientIDMode = ClientIDMode.Static;
                             chk.ClientInstanceName = "ctlDinamic" + i;
+                            chk.Width = Unit.Percentage(100);
                             chk.Checked = false;
                             chk.AllowGrayed = false;
                             chk.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
@@ -1506,15 +1513,17 @@ namespace WizOne.Absente
                                     chk.Value = val.ToString();
                                 }
                             }
-                            ctlDiv.Controls.Add(chk);
+                            ctlCol.Controls.Add(chk);
                             break;
                         case "2":                   //combobox
                             ASPxComboBox cmb = new ASPxComboBox();
                             cmb.ID = ctlId;
                             cmb.ClientIDMode = ClientIDMode.Static;
                             cmb.ClientInstanceName = "ctlDinamic" + i;
-                            cmb.Width = Unit.Pixel(200);
+                            cmb.Width = Unit.Percentage(100);
                             cmb.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
+                            cmb.SettingsAdaptivity.Mode = DropDownEditAdaptivityMode.OnWindowInnerWidth;
+                            cmb.SettingsAdaptivity.SwitchToModalAtWindowInnerWidth = 768;
                             try
                             {
                                 if (General.Nz(dr["Sursa"], "").ToString() != "")
@@ -1534,18 +1543,21 @@ namespace WizOne.Absente
                             {
                                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), "Incarcare combobox camp extra");
                             }
-                            ctlDiv.Controls.Add(cmb);
+                            ctlCol.Controls.Add(cmb);
                             break;
                         case "3":                   //dateTime
                             ASPxDateEdit dte = new ASPxDateEdit();
                             dte.ID = ctlId;
                             dte.ClientIDMode = ClientIDMode.Static;
                             dte.ClientInstanceName = "ctlDinamic" + i;
-                            dte.Width = Unit.Pixel(100);
+                            dte.Width = Unit.Percentage(100);
                             dte.DisplayFormatString = "dd/MM/yyyy";
                             dte.EditFormat = EditFormat.Custom;
                             dte.EditFormatString = "dd/MM/yyyy";
                             dte.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
+                            dte.PickerDisplayMode = DatePickerDisplayMode.Auto;
+                            dte.SettingsAdaptivity.Mode = DropDownEditAdaptivityMode.OnWindowInnerWidth;
+                            dte.SettingsAdaptivity.SwitchToModalAtWindowInnerWidth = 768;
                             if (General.Nz(dr["Sursa"], "").ToString() != "")
                             {
                                 string sel = InlocuiesteCampuri(dr["Sursa"].ToString());
@@ -1555,17 +1567,14 @@ namespace WizOne.Absente
                                     dte.Value = val.ToString();
                                 }
                             }
-                            ctlDiv.Controls.Add(dte);
+                            ctlCol.Controls.Add(dte);
                             break;
                     }
-
-                    divDateExtra.Controls.Add(ctlDiv);
-
+                    
                     ids += ctlId + ";";
                 }
 
-                Session["Absente_Cereri_Date_Aditionale"] = ids;
-
+                Session["Absente_Cereri_Date_Aditionale"] = ids;                
             }
             catch (Exception ex)
             {

@@ -396,37 +396,37 @@ a, a:focus, a:hover {
     width: 100%;
     height: 100%;
 }
-    .page-content > div:first-child {
+    .page-content > div.page-content-header {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
         width: 100%;
     }
-        .page-content > div:first-child > div:nth-child(1),
-        .page-content > div:first-child > div:nth-child(2) > * {
+        .page-content > div.page-content-header > div:nth-child(1),
+        .page-content > div.page-content-header > div:nth-child(2) > * {
             margin-bottom: 10px;
         }
-        .page-content > div:first-child > div:nth-child(2) {
+        .page-content > div.page-content-header > div:nth-child(2) {
             float: right;
-        }             
-    .page-content > div:last-child {
+        }
+    .page-content > div.page-content-data {
         height: 100%;
         overflow: hidden;
     }    
 
 @media all and (max-width:768px) {
-    .page-content > div:first-child {
+    .page-content > div.page-content-header {
         padding-top: 5px;
     }
-    .page-content > div:not(:last-child) {
+        .page-content > div.page-content-header > div:nth-child(1),
+        .page-content > div.page-content-header > div:nth-child(2) > * {
+            margin-bottom: 5px;
+        }
+    .page-content > div:not(.page-content-data) {
         padding-left: 5px;
         padding-right: 5px;
     }
-        .page-content > div:first-child > div:nth-child(1),
-        .page-content > div:first-child > div:nth-child(2) > * {
-            margin-bottom: 5px;
-        }        
 }
 
 /* DX gridview responsive layout. Works only for VerticalScrollBarMode = Auto */
@@ -552,12 +552,28 @@ a, a:focus, a:hover {
     }
 }
 
+/* DX scheduler responsive layout. Works only for VerticalScrollBarMode = Auto */
+.dx-scheduler-adaptive {
+    width: 100%;
+    height: 100%;
+}
+    .dx-scheduler-adaptive > tbody > tr:first-child {
+        height: 0;
+    }
+    .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > div:nth-child(3) {
+        height: 100%;
+        overflow-y: auto !important;
+    }
+        .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > div:nth-child(3) > div:first-child {
+            right: 0 !important;
+        }
+
 /* BS fix for vertical/horizontal space between rows and wrapped cols. Make BS cols same height. */
 .row.row-fix {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    line-height: 0.8;
+    /*line-height: 0.8;*/
     margin-left: -10px;
     margin-right: -10px;
     
@@ -612,6 +628,22 @@ a, a:focus, a:hover {
     margin-bottom: 0;
     vertical-align: middle;
 }
+
+/* File uploader custom control */
+.file-uploader {
+    display: flex;
+    align-items: flex-end;
+}
+    .file-uploader > *:not(:last-child) {
+        margin-right: 10px;
+    }
+    .file-uploader > label {
+        margin-bottom: 0;
+        line-height: 1.1;
+        overflow: hidden;
+    }
+
+
            
 /* Badge widget */
 .badgeContainer {
@@ -760,29 +792,25 @@ a, a:focus, a:hover {
 
 
 
-.Absente_Cereri_AbsDesc
-{
-    position:relative;
-    float:left;
-    width:20px;
-    height:20px;
+.Absente_Cereri_AbsDesc {
+    position: relative;
+    float: left;
+    /*width:20px;*/
+    /*height:20px;*/
     /*margin-left:15px;*/
-    text-align:left;
+    margin-right: 5px;
+    text-align: left;
 }
 
-#txtAbsDesc
-{
-    visibility:hidden;
-    position:absolute;
-    z-index:1500 !important;
-    width:250px !important;
-    height:auto !important;
-    top:30px;
-    left:-20px;
-    border:solid 1px gray;
+#txtAbsDesc {
+    visibility: hidden;
+    position: absolute;
+    z-index: 1500 !important;    
+    top: 18px;
+    border: solid 1px gray;
     border-radius: 15px;
-    padding:10px;
-    background-color:#fff !important;
+    padding: 10px;
+    background-color: #fff !important;
 }
 
 

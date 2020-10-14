@@ -66,3 +66,25 @@ ALTER TABLE [dbo].[MeniuLinii] ADD  CONSTRAINT [DF_MeniuLinii_Activ]  DEFAULT ((
 GO
 ALTER TABLE [dbo].[MeniuLinii] ADD  CONSTRAINT [DF_MeniuLinii_TIME]  DEFAULT (getdate()) FOR [TIME]
 GO
+/****** Object:  View [dbo].[Schedule]    Script Date: 10/14/2020 12:41:02 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE view [dbo].[Schedule]
+as 
+SELECT 'CR' + CAST(ce.IdAuto AS VARCHAR) AS Id, 1 AS Type, ce.F10003 AS EmployeeId, 
+		ab.Denumire AS Name, ce.Observatii AS Remarks, ce.IdAbsenta AS LabelId, ce.IdStare AS StatusId,
+		ce.DataInceput AS StartDate, ce.DataSfarsit AS EndDate 
+FROM Ptj_Cereri AS ce
+INNER JOIN Ptj_tblAbsente AS ab ON ce.IdAbsenta = ab.Id
+INNER JOIN Ptj_tblStari AS st ON ce.IdStare = st.Id
+UNION
+SELECT 'CC' + CAST(cc.IdAuto AS VARCHAR) AS Id, 2 AS Type, cc.F10003 AS EmployeeId, 
+		fcc.F06205 AS Name, cc.Observatii AS Remarks, 0 AS LabelId, cc.IdStare AS StatusId,		
+		ISNULL(cc.De, DATEADD(HH, 9, CAST(cc.Ziua AS DATETIME))) AS StartDate, 
+		ISNULL(cc.La, DATEADD(MI, (9 * 60) + ISNULL(cc.NrOre1, 0) + ISNULL(cc.NrOre2, 0) + ISNULL(cc.NrOre3, 0), CAST(cc.Ziua AS DATETIME))) AS EndDate
+FROM Ptj_CC AS cc
+INNER JOIN F062 AS fcc ON cc.F06204 = fcc.F06204
+INNER JOIN Ptj_tblStari AS st ON cc.IdStare = st.Id;
+GO

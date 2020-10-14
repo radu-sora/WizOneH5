@@ -225,7 +225,7 @@
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="page-content">
-        <div>
+        <div class="page-content-header">
             <div>
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </div>
@@ -315,7 +315,7 @@
                 </div>
             </div>            
         </div>
-        <div class="invisible">
+        <div class="page-content-data invisible">
             <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"
                 CssClass="dx-grid-adaptive dx-grid-adaptive-hide-group dx-grid-adaptive-hide-header dx-grid-adaptive-fullscreen-popup"
                 OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCustomUnboundColumnData="grDate_CustomUnboundColumnData">
@@ -615,7 +615,7 @@
             },
             /* Events */
             onControlsInitialized: function (pageControl) {
-                pageControl.pageContent.find('> div[class="invisible"]').removeClass('invisible'); // Useful for hiding DX GridView layout issues from page loading.
+                pageControl.pageContent.find('> div[class*="invisible"]').removeClass('invisible'); // To hide DX controls UI init issues.
             }            
         };
 

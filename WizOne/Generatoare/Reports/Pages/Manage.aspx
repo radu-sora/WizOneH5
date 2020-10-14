@@ -5,7 +5,7 @@
 
     <!-- Page content -->
     <div class="page-content">
-        <div>
+        <div class="page-content-header">
             <div>
                 <dx:ASPxLabel ID="TitleLabel" runat="server" Text="Modifica sau creaza rapoarte noi" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </div>
@@ -20,7 +20,7 @@
                 <dx:ASPxButton ID="ExitButton" runat="server" Text="Iesire" Image-Url="~/Fisiere/Imagini/Icoane/iesire.png" PostBackUrl="~/Pagini/MainPage.aspx" CssClass="hidden-xs" oncontextMenu="ctx(this,event)" />
             </div>        
         </div>        
-        <div class="invisible">
+        <div class="page-content-data invisible">
             <dx:ASPxGridView ID="ReportsGridView" ClientInstanceName="reportsGridView" runat="server" Width="100%" CssClass="dx-grid-adaptive dx-grid-adaptive-hide-desktop-search dx-grid-adaptive-hide-header"
                 DataSourceID="ReportsDataSource" AutoGenerateColumns="False" KeyFieldName="Id"
                 OnDataBinding="ReportsGridView_DataBinding">
@@ -55,6 +55,7 @@
                     <dx:GridViewDataTextColumn FieldName="Description" Caption="Descriere" />
                     <dx:GridViewDataComboBoxColumn FieldName="TypeId" Caption="Tip raport" Width="150px">
                         <PropertiesComboBox DataSourceID="ReportTypesDataSource" ValueField="ReportTypeId" TextField="Name">
+                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
                             <ValidationSettings Display="Dynamic" ErrorDisplayMode="Text" ErrorTextPosition="Bottom" SetFocusOnError="true">
                                 <RequiredField IsRequired="True" ErrorText="Tipul raportului este obligatoriu" />
                             </ValidationSettings>
@@ -100,7 +101,7 @@
             },            
             /* Events */
             onControlsInitialized: function (pageControl) {
-                pageControl.pageContent.find('> div[class="invisible"]').removeClass('invisible'); // Useful for hiding DX GridView layout issues from page loading.
+                pageControl.pageContent.find('> div[class*="invisible"]').removeClass('invisible'); // To hide DX controls UI init issues.
             },            
             onReportNewButtonClick: function () {
                 reportsGridView.AddNewRow();

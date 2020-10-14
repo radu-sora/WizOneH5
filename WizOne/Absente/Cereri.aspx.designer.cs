@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Absente {
-    
-    
-    public partial class Cereri {
-        
+namespace WizOne.Absente
+{
+
+
+    public partial class Cereri
+    {
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
+
         /// <summary>
         /// btnBack control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnBack;
-        
+
         /// <summary>
         /// btnIstoricExtins control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnIstoricExtins;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// pnlCtl control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
-        
+
         /// <summary>
         /// divRol control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divRol;
-        
+
         /// <summary>
         /// lblRol control.
         /// </summary>
@@ -73,8 +75,8 @@ namespace WizOne.Absente {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRol;
-        
+        protected global::DevExpress.Web.ASPxLabel lblRol;
+
         /// <summary>
         /// cmbRol control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbRol;
-        
+
         /// <summary>
         /// lblAng control.
         /// </summary>
@@ -91,8 +93,8 @@ namespace WizOne.Absente {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAng;
-        
+        protected global::DevExpress.Web.ASPxLabel lblAng;
+
         /// <summary>
         /// cmbAng control.
         /// </summary>
@@ -101,25 +103,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbAng;
-        
-        /// <summary>
-        /// lblTip control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblTip;
-        
-        /// <summary>
-        /// cmbAbs control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbAbs;
-        
+
         /// <summary>
         /// txtAbsDesc control.
         /// </summary>
@@ -128,7 +112,25 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl txtAbsDesc;
-        
+
+        /// <summary>
+        /// lblTip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblTip;
+
+        /// <summary>
+        /// cmbAbs control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbAbs;
+
         /// <summary>
         /// lblDataInc control.
         /// </summary>
@@ -136,8 +138,8 @@ namespace WizOne.Absente {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDataInc;
-        
+        protected global::DevExpress.Web.ASPxLabel lblDataInc;
+
         /// <summary>
         /// txtDataInc control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit txtDataInc;
-        
+
         /// <summary>
         /// lblDataSf control.
         /// </summary>
@@ -154,8 +156,8 @@ namespace WizOne.Absente {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDataSf;
-        
+        protected global::DevExpress.Web.ASPxLabel lblDataSf;
+
         /// <summary>
         /// txtDataSf control.
         /// </summary>
@@ -164,16 +166,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit txtDataSf;
-        
-        /// <summary>
-        /// lblDoc control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDoc;
-        
+
         /// <summary>
         /// btnDocUpload control.
         /// </summary>
@@ -182,7 +175,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxUploadControl btnDocUpload;
-        
+
         /// <summary>
         /// btnDocSterge control.
         /// </summary>
@@ -191,25 +184,25 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnDocSterge;
-        
+
         /// <summary>
-        /// btnSave control.
+        /// lblDoc control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSave;
-        
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDoc;
+
         /// <summary>
-        /// divDateSup control.
+        /// divInloc control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDateSup;
-        
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divInloc;
+
         /// <summary>
         /// lblInl control.
         /// </summary>
@@ -217,8 +210,8 @@ namespace WizOne.Absente {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblInl;
-        
+        protected global::DevExpress.Web.ASPxLabel lblInl;
+
         /// <summary>
         /// cmbInloc control.
         /// </summary>
@@ -227,7 +220,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbInloc;
-        
+
         /// <summary>
         /// lblNrZile control.
         /// </summary>
@@ -235,8 +228,8 @@ namespace WizOne.Absente {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblNrZile;
-        
+        protected global::DevExpress.Web.ASPxLabel lblNrZile;
+
         /// <summary>
         /// txtNrZile control.
         /// </summary>
@@ -245,7 +238,16 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtNrZile;
-        
+
+        /// <summary>
+        /// divNrOre control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divNrOre;
+
         /// <summary>
         /// lblNrOre control.
         /// </summary>
@@ -253,8 +255,8 @@ namespace WizOne.Absente {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblNrOre;
-        
+        protected global::DevExpress.Web.ASPxLabel lblNrOre;
+
         /// <summary>
         /// txtNrOre control.
         /// </summary>
@@ -263,7 +265,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxSpinEdit txtNrOre;
-        
+
         /// <summary>
         /// txtNrOreTime control.
         /// </summary>
@@ -272,7 +274,16 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTimeEdit txtNrOreTime;
-        
+
+        /// <summary>
+        /// divOraInc control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divOraInc;
+
         /// <summary>
         /// lblOraInc control.
         /// </summary>
@@ -280,8 +291,8 @@ namespace WizOne.Absente {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblOraInc;
-        
+        protected global::DevExpress.Web.ASPxLabel lblOraInc;
+
         /// <summary>
         /// cmbOraInc control.
         /// </summary>
@@ -290,7 +301,16 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbOraInc;
-        
+
+        /// <summary>
+        /// divOraSf control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divOraSf;
+
         /// <summary>
         /// lblOraSf control.
         /// </summary>
@@ -298,8 +318,8 @@ namespace WizOne.Absente {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblOraSf;
-        
+        protected global::DevExpress.Web.ASPxLabel lblOraSf;
+
         /// <summary>
         /// cmbOraSf control.
         /// </summary>
@@ -308,7 +328,16 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbOraSf;
-        
+
+        /// <summary>
+        /// divNrZileViitor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divNrZileViitor;
+
         /// <summary>
         /// txtNrZileViitor control.
         /// </summary>
@@ -317,7 +346,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtNrZileViitor;
-        
+
         /// <summary>
         /// divDateExtra control.
         /// </summary>
@@ -326,7 +355,7 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDateExtra;
-        
+
         /// <summary>
         /// lblObs control.
         /// </summary>
@@ -334,8 +363,8 @@ namespace WizOne.Absente {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblObs;
-        
+        protected global::DevExpress.Web.ASPxLabel lblObs;
+
         /// <summary>
         /// txtObs control.
         /// </summary>
@@ -344,5 +373,14 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxMemo txtObs;
+
+        /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnSave;
     }
 }

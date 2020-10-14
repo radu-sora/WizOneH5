@@ -226,11 +226,10 @@
 
     //end LeonardM 22.11.2017
 
-    function OnFocusedCellChanging(s, e) {
-        if (e.cellInfo.column.fieldName == "Descriere") {
-            hf.Set('Id', e.cellInfo.nodeKey);
-            hf1.Set('Id', '');
-            panel2.PerformCallback();
+    function Ordonare() {
+        if (typeof grDateOrdonare !== 'undefined' && (hf1.Get("Id") == -1 || hf1.Get("Id") == 1 || hf1.Get("Id") == 2)) {
+            grDateOrdonare.UpdateEdit();
+            grDateOrdonare.PerformCallback();
         }
     }
 
@@ -428,7 +427,7 @@
                     <tr>
                         <td>
                             <dx:ASPxCallbackPanel ID="panel2" ClientInstanceName="panel2" runat="server" Width="200px" OnCallback="panel2_Callback" SettingsLoadingPanel-Enabled="false">
-                                <ClientSideEvents BeginCallback="function (s,e) { pnlLoading.Show(); }" EndCallback="function (s,e) { pnlLoading.Hide(); }" />
+                                <ClientSideEvents BeginCallback="function (s,e) { pnlLoading.Show(); }" EndCallback="function (s,e) { pnlLoading.Hide(); Ordonare(); }" />
                                 <PanelCollection>
                                     <dx:PanelContent runat="server">
 
@@ -446,24 +445,23 @@
                                                                                     <ClientSideEvents Click="function(s, e){ DeleteSectiuneSauIntrebare(s); }" />
                                                                                     <Image Url="../Fisiere/Imagini/Icoane/sterge.png" />
                                                                                 </dx:ASPxButton>
-                                                                                <dx:ASPxButton ID="btnSalvareOrdine" runat="server" ClientIDMode="Static" ClientInstanceName="btnSalvareOrdine" Text="Adauga Ordine Afisare" AutoPostBack="false">
-                                                                                    <ClientSideEvents Click="function(s, e){ grDateIntrebari.UpdateEdit(); }" />
-                                                                                    <Image Url="../Fisiere/Imagini/Icoane/adauga.png" />
-                                                                                </dx:ASPxButton>
                                                                             </td>
                                                                          </tr>
                                                                         <tr>
                                                                             <td>
                                                                                 <dx:ASPxTreeList ID="grDateIntrebari" ClientInstanceName="grDateIntrebari" ClientIDMode="Static" runat="server" AutoGenerateColumns="false"
-                                                                                    KeyFieldName="Id" ParentFieldName="Parinte" Width="780px" OnBatchUpdate="grDateIntrebari_BatchUpdate" >
+                                                                                    KeyFieldName="Id" ParentFieldName="Parinte" Width="780px" >
                                                                                     <Settings GridLines="Both" HorizontalScrollBarMode="Visible" ShowRoot="true" />
-                                                                                    <SettingsBehavior AutoExpandAllNodes="true" FocusNodeOnLoad="false" ProcessFocusedNodeChangedOnServer="True" />
-                                                                                    <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
-                                                                                    <ClientSideEvents FocusedCellChanging="function(s, e) { OnFocusedCellChanging(s,e); }" />
+                                                                                    <SettingsBehavior AutoExpandAllNodes="true" AllowFocusedNode="true" FocusNodeOnLoad="false" ProcessFocusedNodeChangedOnServer="True" />
+                                                                                    <SettingsEditing Mode="Inline"/>
+                                                                                    <ClientSideEvents FocusedNodeChanged="function(s, e) {
+	                                                                                            hf.Set('Id',s.GetFocusedNodeKey());
+                                                                                                hf1.Set('Id','');
+                                                                                                panel2.PerformCallback();
+                                                                                            }" />
                                                                                     <Columns>
                                                                                         <dx:TreeListTextColumn FieldName="Id" Visible="false" />
                                                                                         <dx:TreeListTextColumn FieldName="Descriere" Caption="Descriere" Visible="true" VisibleIndex="0" Width="100%" ReadOnly="true" />
-                                                                                        <dx:TreeListTextColumn FieldName="OrdineAfisare" VisibleIndex="2"/>
                                                                                         <dx:TreeListTextColumn FieldName="Parinte" Visible="false" />
                                                                                     </Columns>
                                                                                 </dx:ASPxTreeList>

@@ -39,9 +39,6 @@ namespace WizOne.Eval
                     row["Descriere"] = l.NewValues["Descriere"];
                 }
 
-                grDateOrdonare.DataSource = dt;
-                grDateOrdonare.DataBind();
-
                 e.Handled = true;
             }
             catch (Exception ex)
@@ -73,6 +70,18 @@ namespace WizOne.Eval
 
                 grDateOrdonare.DataSource = tableIntrebari;
                 grDateOrdonare.DataBind();
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateOrdonare_CustomCallback(object sender, DevExpress.Web.ASPxTreeList.TreeListCustomCallbackEventArgs e)
+        {
+            try
+            {
+                IncarcaGrid();
             }
             catch (Exception ex)
             {

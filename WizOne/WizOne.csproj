@@ -399,6 +399,7 @@
     <Content Include="Eval\QuizDrepturi.ascx" />
     <Content Include="Eval\QuizInit.aspx" />
     <Content Include="Eval\QuizLista.aspx" />
+    <Content Include="Eval\QuizOrdonare.ascx" />
     <Content Include="Eval\ValoriLinii.aspx" />
     <Content Include="FederationMetadata\2007-06\FederationMetadata.xml" />
     <Content Include="Fisiere\css\login.css" />
@@ -1462,6 +1463,13 @@
     </Compile>
     <Compile Include="Eval\QuizLista.aspx.designer.cs">
       <DependentUpon>QuizLista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\QuizOrdonare.ascx.cs">
+      <DependentUpon>QuizOrdonare.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\QuizOrdonare.ascx.designer.cs">
+      <DependentUpon>QuizOrdonare.ascx</DependentUpon>
     </Compile>
     <Compile Include="Eval\ValoriLinii.aspx.cs">
       <DependentUpon>ValoriLinii.aspx</DependentUpon>

@@ -810,6 +810,7 @@
     <Content Include="Generatoare\Reports\Pages\View.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Info.aspx" />
+    <Content Include="LogOut.aspx" />
     <Content Include="Organigrama\Lista.aspx" />
     <Content Include="Organigrama\Posturi.aspx" />
     <Content Include="Organigrama\PosturiValidare.aspx" />
@@ -1553,6 +1554,13 @@
     </Compile>
     <Compile Include="Info.aspx.designer.cs">
       <DependentUpon>Info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LogOut.aspx.cs">
+      <DependentUpon>LogOut.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LogOut.aspx.designer.cs">
+      <DependentUpon>LogOut.aspx</DependentUpon>
     </Compile>
     <Compile Include="Module\Calcul.cs" />
     <Compile Include="Module\ConcediiMedicale.cs" />

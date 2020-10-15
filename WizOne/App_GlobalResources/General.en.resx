@@ -1746,4 +1746,10 @@
   <data name="TotiangajatiiRolVizualizare" xml:space="preserve">
     <value>All employees - Visualization role</value>
   </data>
+  <data name="AtiFostDelogatCuSucces" xml:space="preserve">
+    <value>You have been successfully logged out</value>
+  </data>
+  <data name="InapoiInSite" xml:space="preserve">
+    <value>Back to the application</value>
+  </data>
 </root>

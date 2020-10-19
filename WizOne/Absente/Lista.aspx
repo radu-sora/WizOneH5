@@ -178,16 +178,16 @@
 
         function SetEnabled() {
             if (typeof cmbViz !== 'undefined') {
-                if (cmbViz.GetValue() == 4) {
-                    btnRespinge.SetEnabled(false);
-                    btnAproba.SetEnabled(false);
-                    btnSolNoua.SetEnabled(false);
-                }
-                else {
-                    btnRespinge.SetEnabled(true);
-                    btnAproba.SetEnabled(true);
-                    btnSolNoua.SetEnabled(true);
-                }
+                var esteActiv = true;
+                if (cmbViz.GetValue() == 4)
+                    esteActiv = false;
+
+                if (typeof btnRespinge !== 'undefined')
+                    btnRespinge.SetEnabled(esteActiv);
+                if (typeof btnRespinge !== 'undefined')
+                    btnAproba.SetEnabled(esteActiv);
+                if (typeof btnRespinge !== 'undefined')
+                    btnSolNoua.SetEnabled(esteActiv);
             }
         }
 

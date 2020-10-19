@@ -388,7 +388,10 @@ namespace WizOne.Personal
             }
             cmbPost.DataSource = General.IncarcaDT(sqlPost);
             cmbPost.DataBind();
-            cmbPost.Value = General.ExecutaScalar(sqlIdPost, new object[] { Session["Marca"] });
+            if (Session["MP_IdPost"] != null)
+                cmbPost.Value = Session["MP_IdPost"];
+            else
+                cmbPost.Value = General.ExecutaScalar(sqlIdPost, new object[] { Session["Marca"] });
 
             General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));
 

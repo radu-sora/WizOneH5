@@ -114,8 +114,16 @@ namespace WizOne.Personal
                     lblText.Text = "Campurile insemnate cu gri sunt obligatoriu de completat";                    
                 }
 
-
+                if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
+                {
+                    cmbPost.Visible = true;
+                    DataTable dtPost = General.IncarcaDT($@"SELECT ""Id"", ""Denumire"" FROM ""Org_Posturi"" WHERE {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}", null);
+                    cmbPost.DataSource = dtPost;
+                    cmbPost.DataBind();
+                    //if (!IsPostBack && dtPost.Rows.Count > 0)
+                    //    cmbPost.Value = Convert.ToInt32(General.Nz(dtPost.Rows[0]["Id"], -99));
                 }
+            }
             catch (Exception ex)
             {
                 //MessageBox.Show(this, ex, MessageBox.icoError, "");
@@ -709,6 +717,9 @@ namespace WizOne.Personal
                         Session["MP_Candidat"] = chkCandidat.Checked ? 1 : 0;
                         Session["MP_CreareUtilizator"] = chkUser.Checked ? 1 : 0;
                         ASPxWebControl.RedirectOnCallback("~/Personal/DateAngajat.aspx");
+                        break;
+                    case "Post":
+                        Session["MP_IdPost"] = cmbPost.Value;
                         break;
                 }
 

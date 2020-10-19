@@ -379,13 +379,9 @@ namespace WizOne.Personal
             //Florin 2020.10.02
             ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
             ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
-            string sqlPost = $@"SELECT Id, Denumire FROM Org_Posturi WHERE IdFunctie={General.Nz(cmbFunctie.Value, -99)} AND CONVERT(DATE, DataInceput) <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE, DataSfarsit)";
-            string sqlIdPost = $"SELECT IdPost FROM Org_relPostAngajat WHERE F10003=@1 AND CONVERT(DATE, DataInceput) <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE, DataSfarsit)";
-            if (Constante.tipBD == 2)
-            {
-                sqlPost = $@"SELECT ""Id"", ""Denumire"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
-                sqlIdPost = $@"SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
-            }
+            string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
+            string sqlIdPost = $@"SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
+
             cmbPost.DataSource = General.IncarcaDT(sqlPost);
             cmbPost.DataBind();
             if (Session["MP_IdPost"] != null)
@@ -883,6 +879,8 @@ namespace WizOne.Personal
                     {
                         ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
                         Session["MP_IdPost"] = cmbPost.Value;
+                        Session["MP_SalariulMinPost"] = cmbPost.SelectedItem.GetFieldValue("SalariuMin");
+                        Contract_pnlCtl.JSProperties["cpControl"] = "cmbPost";
                     }
                     break;
                 case "cmbFunctie":
@@ -890,9 +888,7 @@ namespace WizOne.Personal
                         //Florin 2020.10.02
                         ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
                         ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
-                        string sqlPost = $@"SELECT Id, Denumire FROM Org_Posturi WHERE IdFunctie={General.Nz(cmbFunctie.Value,-99)} AND CONVERT(DATE, DataInceput) <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE, DataSfarsit)";
-                        if (Constante.tipBD == 2)
-                            sqlPost = $@"SELECT ""Id"", ""Denumire"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
+                        string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
                         cmbPost.DataSource = General.IncarcaDT(sqlPost);
                         cmbPost.DataBind();
                         cmbPost.Value = null;

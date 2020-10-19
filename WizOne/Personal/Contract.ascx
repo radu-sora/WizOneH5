@@ -151,6 +151,11 @@
             });
             s.cpAlertMessage = null;
         }
+
+        if (s.cpControl == "cmbPost") {
+            VerifSalariu(txtSalariu.GetValue(), cmbTimpPartial.GetValue());
+        }
+
         pnlLoading.Hide();
     }
 
@@ -614,11 +619,22 @@
  
     function VerifSalariu(sal, timp) {
         if (sal == null || sal.length <= 0)      
-            return;        
+            return;
+
+        var txt = "";
         var salMin = parseInt("<%=Session["MP_SalMin"] %>");
         if (parseInt(salMin) * parseInt(timp) / 8 > parseInt(sal) && cmbIntRepTimpMunca.GetValue() <= 1 && (cmbTipCtrMunca.GetValue() == 1 || cmbTipCtrMunca.GetValue() == 2
             || cmbTipCtrMunca.GetValue() == 3 || cmbTipCtrMunca.GetValue() == 4 || cmbTipCtrMunca.GetValue() == 33 || cmbTipCtrMunca.GetValue() == 34))
-            swal({ title: "", text: "Salariul introdus este mai mic decat cel minim raportat la norma si conditiile salariale ale angajatului!", type: "warning" });
+            txt = "Salariul introdus este mai mic decat cel minim raportat la norma si conditiile salariale ale angajatului!";
+
+        var salMinPost = parseInt("<%=Session["MP_SalariulMinPost"] %>");
+        if (salMinPost > sal) {
+            if (txt != "") txt += "\n"
+            txt += "Salariul introdus este mai mic decat salariul minim al postului selectat";
+        }
+
+        if (txt != "")
+            swal({ title: "", text: txt, type: "warning" });
     }
 
     function CompletareZile(s) { 
@@ -1714,4 +1730,5 @@
         </dx:ASPxCallbackPanel>    
   <dx:ASPxHiddenField runat="server" ID="hfTipAngajat" ClientInstanceName="hfTipAngajat" />
   <dx:ASPxHiddenField runat="server" ID="hfIntRepTM" ClientInstanceName="hfIntRepTM" />
+    <dx:ASPxHiddenField runat="server" ID="hfSalMin" ClientInstanceName="hfSalMin" />
 </body>

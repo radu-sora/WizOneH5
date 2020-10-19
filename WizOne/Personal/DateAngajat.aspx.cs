@@ -1134,7 +1134,8 @@ namespace WizOne.Personal
                             ds.Tables["F100"].Rows[0]["F10098"] = dr["CodCOR"];
                         }
                         
-                        //Mivel functie - se face automat in Page_init din Personal/Contract
+                        //Nivel functie - se face automat in Page_init din Personal/Contract
+
                         //structura organizatorica
                         if (dr["F10002"] != DBNull.Value)
                         {
@@ -1161,6 +1162,8 @@ namespace WizOne.Personal
                             ds.Tables[0].Rows[0]["F10007"] = dr["F10007"];
                             ds.Tables["F100"].Rows[0]["F10007"] = dr["F10007"];
                         }
+
+                        Session["MP_SalariulMinPost"] = Convert.ToInt32(General.Nz(dr["SalariuMin"],0));
                     }
                 }
 
@@ -1829,6 +1832,7 @@ namespace WizOne.Personal
 
                 //Florin 2020.10.02
                 Session["MP_IdPost"] = null;
+                Session["MP_SalariulMinPost"] = 0;
             }
             catch (Exception ex)
             {

@@ -5982,7 +5982,7 @@ namespace WizOne.Module
                              WHERE D.""IdUser"" = {idUser} AND C.""IdRol"" IN ({idRol}) 
                              GROUP BY B.F10003) X 
                              INNER JOIN F100 A ON A.F10003=X.F10003 
-                             WHERE A.F10025 <> 900 AND {General.TruncateDate("A.F10022")} <> {General.TruncateDate("A.F100993")} {strFiltru} {General.FiltruActivi(an, luna, zi)}
+                             WHERE A.F10025 <> 900 AND COALESCE({General.TruncateDate("A.F10022")},{General.CurrentDate()}) <> COALESCE({General.TruncateDate("A.F100993")},{General.CurrentDate()}) {strFiltru} {General.FiltruActivi(an, luna, zi)}
                              GROUP BY X.F10003";
 
                     str = " AND A.F10003 IN (" + strSql + ")";

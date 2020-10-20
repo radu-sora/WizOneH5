@@ -14950,7 +14950,7 @@ where f100.f10003 =altf10003
       WHEN OTHERS THEN RETURN 8;
 
 END;
-
+/
 
 
 create or replace FUNCTION "DamiBirou" (altF10003 IN NUMBER, "dt" IN DATE) RETURN NUMBER
@@ -14989,7 +14989,7 @@ where f100.f10003 =altf10003
       WHEN OTHERS THEN RETURN 8;
 
 END;
-
+/
 
 --https://github.com/wizromRD/WizOne/issues/496
 --Adaugare program de lucru in modificari in avans/Circuit Documente pentru generare AA #496

@@ -61,7 +61,6 @@ namespace WizOne.Personal
 
         private void IncarcaGrid()
         {
-
             string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + Session["Marca"].ToString();
             DataTable dt = new DataTable();
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
@@ -84,7 +83,6 @@ namespace WizOne.Personal
             colBen.PropertiesComboBox.DataSource = dtBen;
 
             Session["InformatiaCurentaPersonal"] = ds;
-
         }
 
         protected void grDateBeneficii_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)

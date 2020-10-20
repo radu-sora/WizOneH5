@@ -327,7 +327,7 @@ namespace WizOne.Organigrama
 
                 for (int i = 1; i <= 10; i++)
                 {
-                    objs[objs.Length - 1] = divBenef.FindControl("cmbBenef" + i) != null ? ((ASPxComboBox)divBenef.FindControl("cmbBenef" + i)).Value : null;
+                    objs[x] = divBenef.FindControl("cmbBenef" + i) != null ? ((ASPxComboBox)divBenef.FindControl("cmbBenef" + i)).Value : null;
                     campuriInsert += $@",""IdBeneficiu{i}""";
                     campuriUpdate += $@",""IdBeneficiu{i}""=@{x + 1}";
                     valoriInsert += $",@{x + 1}";
@@ -336,7 +336,7 @@ namespace WizOne.Organigrama
 
                 for (int i = 1; i <= 20; i++)
                 {
-                    objs[objs.Length - 1] = divExtra.FindControl("cmpExtra" + i) != null ? ((ASPxMemo)divExtra.FindControl("cmpExtra" + i)).Value : null;
+                    objs[x] = divExtra.FindControl("cmpExtra" + i) != null ? ((ASPxMemo)divExtra.FindControl("cmpExtra" + i)).Value : null;
                     campuriInsert += $@",""CampExtra{i}""";
                     campuriUpdate += $@",""CampExtra{i}""=@{x + 1}";
                     valoriInsert += $",@{x + 1}";

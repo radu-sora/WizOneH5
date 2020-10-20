@@ -1164,6 +1164,28 @@ namespace WizOne.Personal
                         }
 
                         Session["MP_SalariulMinPost"] = Convert.ToInt32(General.Nz(dr["SalariuMin"],0));
+
+                        //Adaugam beneficiile
+                        DataTable dtBen = General.IncarcaDT(@"SELECT * FROM ""Admin_Beneficii"" WHERE ""Marca"" = @1", new object[] { Session["Marca"] });
+                        dtBen.TableName = "Admin_Beneficii";
+                        dtBen.PrimaryKey = new DataColumn[] { dtBen.Columns["IdAuto"] };
+                        
+                        for (int i = 1; i <= 10; i++)
+                        {
+                            if (dr["IdBeneficiu" + i] != DBNull.Value)
+                            {
+                                DataRow drBen = dtBen.NewRow();
+                                drBen["Marca"] = Session["Marca"];
+                                drBen["IdObiect"] = dr["IdBeneficiu" + i];
+                                drBen["DataPrimire"] = DateTime.Now;
+                                drBen["DataExpirare"] = new DateTime(2100, 1, 1);
+                                drBen["TIME"] = DateTime.Now;
+                                drBen["USER_NO"] = Session["UserId"] ?? DBNull.Value;
+                                dtBen.Rows.Add(drBen);
+                            }
+                        }
+
+                        ds.Tables.Add(dtBen);
                     }
                 }
 

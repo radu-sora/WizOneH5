@@ -1253,7 +1253,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsFunctie"  Value='<%#Eval("F10071") %>' ID="cmbFunctie" Width="130" TabIndex="34" runat="server" DropDownStyle="DropDown"  TextField="F71804" ValueField="F71802" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e) { pnlLoading.Show(); pnlCtlContract.PerformCallback(s.name); }" />
+                                <ClientSideEvents SelectedIndexChanged="function(s,e) { cmbPost.PerformCallback('cmbFunctie'); }" />
 							</dx:ASPxComboBox >
 						</td>
                         <td>
@@ -1321,8 +1321,8 @@
                             <dx:ASPxLabel ID="lblPost" runat="server" Text="Post" />
                         </td>
                         <td>
-                            <dx:ASPxComboBox ID="cmbPost" runat="server" TextField="Denumire" ValueField="Id" DropDownStyle="DropDownList" ValueType="System.Int32" Width="130" TabIndex="37" AllowNull="true">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e) { pnlCtlContract.PerformCallback(s.name); }" />
+                            <dx:ASPxComboBox ID="cmbPost" ClientInstanceName="cmbPost" runat="server" TextField="Denumire" ValueField="Id" DropDownStyle="DropDownList" ValueType="System.Int32" Width="130" TabIndex="37" AllowNull="true" OnCallback="cmbPost_Callback">
+                                <ClientSideEvents />
                             </dx:ASPxComboBox>
                         </td>
                     </tr>

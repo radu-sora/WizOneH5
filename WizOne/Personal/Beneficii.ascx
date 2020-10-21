@@ -9,7 +9,7 @@
                     OnRowInserting="grDateBeneficii_RowInserting" OnRowUpdating="grDateBeneficii_RowUpdating" OnRowDeleting="grDateBeneficii_RowDeleting" OnHtmlEditFormCreated="grDateBeneficii_HtmlEditFormCreated">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
-                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateBeneficii_CustomButtonClick(s, e); }" ContextMenu="ctx" />                                      
+                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateBeneficii_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnEndCallbackBeneficii(s,e); }" ContextMenu="ctx" />                                      
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
@@ -129,6 +129,16 @@
         function EndUpload(s) {
             lblDoc.innerText = s.cpDocUploadName;
             s.cpDocUploadName = null;
+        }
+
+        function OnEndCallbackBeneficii(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
         }
 
     </script>

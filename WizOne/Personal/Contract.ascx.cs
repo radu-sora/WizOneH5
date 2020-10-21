@@ -370,12 +370,12 @@ namespace WizOne.Personal
                     cmbPost.Value = General.ExecutaScalar(sqlIdPost, new object[] { Session["Marca"] });
                 }
             }
-            else if (cmbPost.IsCallback) {
+            else if (Contract_pnlCtl.IsCallback) {
                 cmbPost.DataSource = Session["MP_cmbPost"];
                 cmbPost.DataBind();
             }
 
-        General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));
+    General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));
         }
 
         protected void pnlCtlContract_Callback(object source, CallbackEventArgsBase e)
@@ -543,11 +543,11 @@ namespace WizOne.Personal
                             dtBen.PrimaryKey = new DataColumn[] { dtBen.Columns["IdAuto"] };
                             ds.Tables.Add(dtBen);
                         }
-                        
+
                         for (int i = 1; i <= 10; i++)
                         {
-                            int idBen = Convert.ToInt32(General.Nz(drPost["IdBeneficiu" + i],-99));
-                            if (idBen != -99 && dtBen.Select("IdObiect=" + idBen).Count() < 0)
+                            int idBen = Convert.ToInt32(General.Nz(drPost["IdBeneficiu" + i], -99));
+                            if (idBen != -99 && dtBen.Select("IdObiect=" + idBen).Count() <= 0)
                             {
                                 DataRow drBen = ds.Tables["Admin_Beneficii"].NewRow();
                                 drBen["Marca"] = Session["Marca"];
@@ -556,14 +556,16 @@ namespace WizOne.Personal
                                 drBen["DataExpirare"] = new DateTime(2100, 1, 1);
                                 drBen["TIME"] = DateTime.Now;
                                 drBen["USER_NO"] = Session["UserId"] ?? DBNull.Value;
+
+                                if (Constante.tipBD == 1)
+                                    drBen["IdAuto"] = Convert.ToInt32(General.Nz(dtBen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                else
+                                    drBen["IdAuto"] = Dami.NextId("Admin_Beneficii");
+                                if (Convert.ToInt32(drBen["IdAuto"].ToString()) < 1000000)
+                                    drBen["IdAuto"] = Convert.ToInt32(drBen["IdAuto"].ToString()) + 1000000;
+
                                 dtBen.Rows.Add(drBen);
                             }
-                        }
-
-                        ASPxGridView grDateBeneficii = FindControlRecursive(this.Parent.Parent.Parent.Parent, "grDateBeneficii") as ASPxGridView;
-                        if (grDateBeneficii != null)
-                        {
-                            grDateBeneficii.DataBind();
                         }
                     }
                     break;
@@ -573,7 +575,8 @@ namespace WizOne.Personal
                         ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
                         ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
                         string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"", ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
-                        cmbPost.DataSource = General.IncarcaDT(sqlPost);
+                        Session["MP_cmbPost"] = General.IncarcaDT(sqlPost);
+                        cmbPost.DataSource = Session["MP_cmbPost"];
                         cmbPost.DataBind();
                         cmbPost.Value = null;
                     }
@@ -943,95 +946,6 @@ namespace WizOne.Personal
                 txtNrZilePreavizConc.Text = (dt.Rows[0]["NrZileConcediere"] as int? ?? 0).ToString();
             }
         }
-
-        public static Control FindControlRecursive(Control root, string id)
-        {
-            if (root.ID == id)
-                return root;
-
-            return root.Controls.Cast<Control>()
-               .Select(c => FindControlRecursive(c, id))
-               .FirstOrDefault(c => c != null);
-        }
-
-
-        //Florin 2020.10.20
-        protected void cmbPost_Callback(object sender, CallbackEventArgsBase e)
-        {
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-            string[] arr = e.Parameter.Split(';');
-
-            switch (arr[0])
-            {
-                case "cmbPost":
-                    {
-                        //ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
-                        //Session["MP_IdPost"] = arr[1];
-                        //Contract_pnlCtl.JSProperties["cpControl"] = "cmbPost";
-                        //DataTable dtPost = cmbPost.DataSource as DataTable;
-                        //DataRow drPost = null;
-                        //if (dtPost != null)
-                        //{
-                        //    DataRow[] arrDr = dtPost.Select("Id=" + General.Nz(arr[1],-99));
-                        //    if (arrDr.Count() > 0)
-                        //        drPost = arrDr[0];
-                        //}
-
-                        //if (drPost == null) return;
-
-                        //Session["MP_SalariulMinPost"] = drPost["SalariuMin"];
-                        ////Adaugam beneficiile
-                        //string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + Session["Marca"].ToString();
-                        //DataTable dtBen = new DataTable();
-                        //if (ds.Tables.Contains("Admin_Beneficii"))
-                        //{
-                        //    dtBen = ds.Tables["Admin_Beneficii"];
-                        //}
-                        //else
-                        //{
-                        //    dtBen = General.IncarcaDT(sqlFinal, null);
-                        //    dtBen.TableName = "Admin_Beneficii";
-                        //    dtBen.PrimaryKey = new DataColumn[] { dtBen.Columns["IdAuto"] };
-                        //    ds.Tables.Add(dtBen);
-                        //}
-
-                        //for (int i = 1; i <= 10; i++)
-                        //{
-                        //    int idBen = Convert.ToInt32(General.Nz(drPost["IdBeneficiu" + i], -99));
-                        //    if (idBen != -99 && dtBen.Select("IdObiect=" + idBen).Count() <= 0)
-                        //    {
-                        //        DataRow drBen = ds.Tables["Admin_Beneficii"].NewRow();
-                        //        drBen["Marca"] = Session["Marca"];
-                        //        drBen["IdObiect"] = idBen;
-                        //        drBen["DataPrimire"] = DateTime.Now;
-                        //        drBen["DataExpirare"] = new DateTime(2100, 1, 1);
-                        //        drBen["TIME"] = DateTime.Now;
-                        //        drBen["USER_NO"] = Session["UserId"] ?? DBNull.Value;
-                        //        dtBen.Rows.Add(drBen);
-                        //    }
-                        //}
-
-                        //ASPxGridView grDateBeneficii = FindControlRecursive(this.Parent.Parent.Parent.Parent, "grDateBeneficii") as ASPxGridView;
-                        //if (grDateBeneficii != null)
-                        //{
-                        //    grDateBeneficii.DataBind();
-                        //}
-                    }
-                    break;
-                case "cmbFunctie":
-                    {
-                        //Florin 2020.10.02
-                        ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
-                        ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
-                        string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"", ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
-                        Session["MP_cmbPost"] = General.IncarcaDT(sqlPost);
-                        cmbPost.DataSource = Session["MP_cmbPost"];
-                        cmbPost.DataBind();
-                        cmbPost.Value = null;
-                    }
-                    break;
-            }
-
-        }
+    
     }
 }

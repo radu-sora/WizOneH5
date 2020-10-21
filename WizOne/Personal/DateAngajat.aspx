@@ -21,6 +21,26 @@
                 grDateDosar.UpdateEdit();
                 modifDosar = false;
             }
+
+            if (typeof grDateBeneficii !== 'undefined' && ASPxClientUtils.IsExists(grDateBeneficii)) {
+                //grDateBeneficii.Refresh();
+            }
+        }
+
+        function OnActiveTabChanged(s, e) {
+            switch (s.GetActiveTab().name) {
+                case "Beneficii":
+                    if (typeof grDateBeneficii !== 'undefined' && ASPxClientUtils.IsExists(grDateBeneficii)) {
+                        grDateBeneficii.Refresh();
+                    }
+                    break;
+                case "Dosar":
+                    if (modifDosar && typeof grDateDosar !== 'undefined' && ASPxClientUtils.IsExists(grDateDosar)) {
+                        grDateDosar.UpdateEdit();
+                        modifDosar = false;
+                    }
+                    break;
+            }
         }
     </script>
 
@@ -54,8 +74,8 @@
 				
     <div>
         <dx:ASPxLabel  ID="lblDateAngajat" runat="server"  Text="" ></dx:ASPxLabel >	
-        <dx:ASPxPageControl ID="ASPxPageControl2" runat="server" Width="100%" TabSpacing="0px" CssClass="pcTemplates" SkinID="None" EnableViewState="false" EnableHierarchyRecreation="false" OnCallback="ASPxPageControl2_Callback">
-            <ClientSideEvents TabClick="OnTabClick" ActiveTabChanging="OnActiveTabChanging"  />
+        <dx:ASPxPageControl ID="ASPxPageControl2" runat="server" Width="100%" TabSpacing="0px" CssClass="pcTemplates" SkinID="None" EnableViewState="false" EnableHierarchyRecreation="false">
+            <ClientSideEvents TabClick="OnTabClick" ActiveTabChanged="function(s,e) { OnActiveTabChanged(s,e); }" ActiveTabChanging="OnActiveTabChanging"  />
                 <TabPages>
                 </TabPages>     
             <Paddings Padding="0px" PaddingLeft="12px" />

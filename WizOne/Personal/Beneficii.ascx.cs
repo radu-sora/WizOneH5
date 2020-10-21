@@ -54,7 +54,6 @@ namespace WizOne.Personal
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -131,6 +130,14 @@ namespace WizOne.Personal
                 ASPxComboBox cmbNumeBen = grDateBeneficii.FindEditFormTemplateControl("cmbNumeBen") as ASPxComboBox;
                 ASPxTextBox txtCaract = grDateBeneficii.FindEditFormTemplateControl("txtCaract") as ASPxTextBox;
 
+                if (cmbNumeBen.Value == null || txtDataPrim.Value ==null || txtDataExp.Value == null)
+                {
+                    e.Cancel = true;
+                    grDateBeneficii.CancelEdit();
+                    grDateBeneficii.JSProperties["cpAlertMessage"] = "Lipsesc date";
+                    return;
+                }
+
                 if (Constante.tipBD == 1)
                     dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                 else
@@ -149,12 +156,6 @@ namespace WizOne.Personal
                 metaUploadFile itm = Session["DocUpload_MP_Beneficii"] as metaUploadFile;
                 if (itm != null)
                 {
-                    //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Medicina", Convert.ToInt32(dr["IdAuto"].ToString()) + (Constante.tipBD == 1 ? 0 : 1));
-                    //if (Constante.tipBD == 2)
-                    //    dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1;
-                    //dr["Fisier"] = itm.UploadedFile;
-                    //dr["FisierNume"] = itm.UploadedFileName;
-                    //dr["FisierExtensie"] = itm.UploadedFileExtension;
                     Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, metaUploadFile>;
                     if (lstFiles == null)
                         lstFiles = new Dictionary<int, metaUploadFile>();
@@ -170,12 +171,10 @@ namespace WizOne.Personal
                 grDateBeneficii.DataSource = ds.Tables["Admin_Beneficii"];
                 grDateBeneficii.KeyFieldName = "IdAuto";
                 Session["InformatiaCurentaPersonal"] = ds;
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -194,6 +193,14 @@ namespace WizOne.Personal
                 ASPxComboBox cmbNumeBen = grDateBeneficii.FindEditFormTemplateControl("cmbNumeBen") as ASPxComboBox;
                 ASPxTextBox txtCaract = grDateBeneficii.FindEditFormTemplateControl("txtCaract") as ASPxTextBox;
 
+                if (cmbNumeBen.Value == null || txtDataPrim.Value == null || txtDataExp.Value == null)
+                {
+                    e.Cancel = true;
+                    grDateBeneficii.CancelEdit();
+                    grDateBeneficii.JSProperties["cpAlertMessage"] = "Lipsesc date";
+                    return;
+                }
+
                 dr["Marca"] = Session["Marca"];
                 dr["IdObiect"] = cmbNumeBen.Value ?? DBNull.Value;
                 dr["DataPrimire"] = txtDataPrim.Value ?? DBNull.Value;
@@ -205,10 +212,6 @@ namespace WizOne.Personal
                 metaUploadFile itm = Session["DocUpload_MP_Beneficii"] as metaUploadFile;
                 if (itm != null)
                 {
-                    //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Medicina", dr["IdAuto"]);
-                    //dr["Fisier"] = itm.UploadedFile;
-                    //dr["FisierNume"] = itm.UploadedFileName;
-                    //dr["FisierExtensie"] = itm.UploadedFileExtension;
                     Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, metaUploadFile>;
                     if (lstFiles == null)
                         lstFiles = new Dictionary<int, metaUploadFile>();
@@ -229,7 +232,6 @@ namespace WizOne.Personal
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -260,13 +262,10 @@ namespace WizOne.Personal
                 grDateBeneficii.CancelEdit();
                 Session["InformatiaCurentaPersonal"] = ds;
                 grDateBeneficii.DataSource = ds.Tables["Admin_Beneficii"];
-
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -289,7 +288,6 @@ namespace WizOne.Personal
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -308,7 +306,6 @@ namespace WizOne.Personal
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

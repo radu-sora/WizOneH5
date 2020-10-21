@@ -771,7 +771,6 @@ namespace WizOne.Personal
                 //Florin 2018.11.22
                 //trimitem la lista de angajati        
                 Response.Redirect("~/Personal/Lista.aspx", false);
-
             }
             catch (Exception ex)
             {
@@ -786,11 +785,6 @@ namespace WizOne.Personal
             try
             {
                 string sql = "SELECT * FROM \"" + tabela + "\"";
-                //DataTable dtGen = new DataTable();
-                //dtGen = General.IncarcaDT(sql, null);
-                //dtGen.TableName = tabela;
-                //dtGen.PrimaryKey = new DataColumn[] { dtGen.Columns["IdAuto"] };
-
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataTable dt = ds.Tables[tabela] as DataTable;
 
@@ -880,7 +874,6 @@ namespace WizOne.Personal
                                 General.LoadFile(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
                             }
                         }
-    ;
                     }
                     else
                     {//INSERT
@@ -916,7 +909,6 @@ namespace WizOne.Personal
                                 //    val = "''";
                                 if (val.Length <= 0)
                                     val = "null";
-
 
                                 sir += "," + val;
                             }
@@ -1319,20 +1311,6 @@ namespace WizOne.Personal
             blocat = false;
             try
             {
-
-                //string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
-                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                //                FROM ""Securitate"" A
-                //                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                //                WHERE B.""IdUser"" = {1} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" = '{0}'
-                //                UNION
-                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                //                FROM ""Securitate"" A
-                //                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" = '{0}') X
-                //                GROUP BY X.""IdControl"", X.""IdColoana""";
-                //strSql = string.Format(strSql, numeTab, Session["UserId"].ToString());
-                //DataTable dt = General.IncarcaDT(strSql, null);
-
                 DataTable dtSec = HttpContext.Current.Session["SecuritatePersonal"] as DataTable;
                 DataTable dt = new DataTable();
                 if (dtSec != null && dtSec.Rows.Count > 0)
@@ -1361,20 +1339,6 @@ namespace WizOne.Personal
             List<string> lista = new List<string>();
             try
             {
-
-                //string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
-                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                //                FROM ""Securitate"" A
-                //                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                //                WHERE B.""IdUser"" = {0} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" like '%_I%'
-                //                UNION
-                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                //                FROM ""Securitate"" A
-                //                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl""  like '%_I%') X
-                //                GROUP BY X.""IdControl"", X.""IdColoana""";
-                //strSql = string.Format(strSql, Session["UserId"].ToString());
-                //DataTable dt = General.IncarcaDT(strSql, null);
-
                 DataTable dtSec = HttpContext.Current.Session["SecuritatePersonal"] as DataTable;
                 DataTable dt = new DataTable();
                 if (dtSec != null && dtSec.Rows.Count > 0)
@@ -1397,49 +1361,6 @@ namespace WizOne.Personal
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
             return lista;
-        }
-
-        protected void ASPxPageControl2_Callback(object sender, CallbackEventArgsBase e)
-        {
-            try
-            {
-                ASPxPageControl ctl = sender as ASPxPageControl;
-                if (ctl == null) return;
-                //TabPage tab = ctl.ActiveTabPage;
-                
-                //if (Session["PreluareDate"] != null && Session["PreluareDate"].ToString() == "1")
-                //{
-                //    Session["PreluareDate"] = 0;
-                //    foreach (TabPage tab in ctl.TabPages)
-                //    {
-                //        for (int j = 0; j < tab.Controls[0].Controls.Count; j++)
-                //        {
-                //            if (tab.Controls[0].Controls[j].GetType() == typeof(DevExpress.Web.ASPxCallbackPanel))
-                //            {
-                //                ASPxCallbackPanel cb = tab.Controls[0].Controls[j] as ASPxCallbackPanel;
-                //                for (int k = 0; k < cb.Controls.Count; k++)
-                //                {
-                //                    if (cb.Controls[k].GetType() == typeof(DataList))
-                //                    {
-                //                        DataList dl = cb.Controls[k] as DataList;
-                //                        DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                //                        DataTable table = ds.Tables[0];
-                //                        dl.DataSource = table;
-                //                        dl.DataBind();
-                //                        break;
-                //                    }
-                //                }
-                //                break;
-                //            }
-                //        }
-                //    }
-                //}
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
         }
 
         private void AdaugaValorile()

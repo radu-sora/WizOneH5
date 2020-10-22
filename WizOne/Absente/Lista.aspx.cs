@@ -136,7 +136,7 @@ namespace WizOne.Absente
                     chkAnulare.Checked = true;
 
                     //Florin 2018.10.15
-                    switch(dt.Rows.Count)
+                    switch (dt.Rows.Count)
                     {
                         case 0:
                             lblRol.Visible = false;
@@ -148,9 +148,9 @@ namespace WizOne.Absente
                             cmbRol.SelectedIndex = 0;
                             break;
                         case 2:
-                            //lblRol.Visible = false;
-                            //cmbRol.Visible = false;
-                            //break;
+                        //lblRol.Visible = false;
+                        //cmbRol.Visible = false;
+                        //break;
                         default:
                             cmbRol.DataSource = dt;
                             cmbRol.DataBind();
@@ -184,14 +184,14 @@ namespace WizOne.Absente
                     //}
 
                     string idViz = Dami.ValoareParam("Cereri_IDuriRoluriVizualizare", "-99");
-                    if (idViz != "" && Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE ""IdUser""={Session["UserId"]} AND ""IdSuper"" IN ({idViz}) GROUP BY ""IdUser"" "),0)) > 0)
+                    if (idViz != "" && Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE ""IdUser""={Session["UserId"]} AND ""IdSuper"" IN ({idViz}) GROUP BY ""IdUser"" "), 0)) > 0)
                         cmbViz.Items.Add(Dami.TraduCuvant("Toti angajatii - Rol Vizualizare", "Toti angajatii - Rol Vizualizare"), 4);
 
                     //Florin2019.07.17
                     NameValueCollection lst = HttpUtility.ParseQueryString((Session["Filtru_CereriAbs"] ?? "").ToString());
                     if (lst.Count > 0)
                     {
-                        if (General.Nz(lst["Viz"], "").ToString() != "") cmbViz.SelectedIndex = Convert.ToInt32(lst["Viz"])-1;
+                        if (General.Nz(lst["Viz"], "").ToString() != "") cmbViz.SelectedIndex = Convert.ToInt32(lst["Viz"]) - 1;
                         if (General.Nz(lst["Rol"], "").ToString() != "") cmbRol.Value = Convert.ToInt32(lst["Rol"]);
                         if (General.Nz(lst["Stare"], "").ToString() != "") cmbStare.Text = lst["Stare"].ToString();
                         if (General.Nz(lst["DtInc"], "").ToString() != "") txtDtInc.Value = Convert.ToDateTime(lst["DtInc"]);
@@ -201,6 +201,9 @@ namespace WizOne.Absente
                     }
 
                     grDate.DataBind();
+                }
+                else if (grDate.IsCallback) {
+                    IncarcaGrid();
                 }
 
                 if (General.Nz(cmbViz.Value,"").ToString() == "3")

@@ -1157,7 +1157,8 @@ namespace WizOne.Personal
 
                         Session["MP_SalariulMinPost"] = Convert.ToInt32(General.Nz(dr["SalariuMin"],0));
 
-                        //Adaugam beneficiile
+                        #region Adaugam beneficiile
+
                         DataTable dtBen = General.IncarcaDT(@"SELECT * FROM ""Admin_Beneficii"" WHERE ""Marca"" = @1", new object[] { Session["Marca"] });
                         dtBen.TableName = "Admin_Beneficii";
                         dtBen.PrimaryKey = new DataColumn[] { dtBen.Columns["IdAuto"] };
@@ -1178,7 +1179,29 @@ namespace WizOne.Personal
                         }
 
                         ds.Tables.Add(dtBen);
+
+                        #endregion
                     }
+
+                    #region Adaugam documentele obligatorii din post (OPIS)
+                    DataTable dtDosar = General.IncarcaDT($@"SELECT * FROM ""Org_PosturiDosar"" WHERE ""IdPost""=@1", new object[] { Session["MP_IdPost"] });
+                    DataTable dtAdmin_Dosar = General.IncarcaDT(@"SELECT * FROM ""Admin_Dosar"" WHERE 1=2");
+                    for (int i = 0; i < dtDosar.Rows.Count; i++)
+                    {
+                        DataRow drDsr = dtAdmin_Dosar.NewRow();
+                        drDsr["F10003"] = Session["Marca"];
+                        drDsr["IdObiect"] = dtDosar.Rows[i]["IdObiect"];
+                        drDsr["AreFisier"] = 0;
+                        drDsr["TIME"] = DateTime.Now;
+                        drDsr["USER_NO"] = Session["UserId"] ?? DBNull.Value;
+                        dtAdmin_Dosar.Rows.Add(drDsr);
+                    }
+
+                    dtAdmin_Dosar.TableName = "Admin_Dosar";
+                    dtAdmin_Dosar.PrimaryKey = new DataColumn[] { dtDosar.Columns["F10003"], dtDosar.Columns["IdObiect"] };
+                    ds.Tables.Add(dtAdmin_Dosar);
+
+                    #endregion
                 }
 
                 Session["InformatiaCurentaPersonal"] = ds;

@@ -12,20 +12,20 @@
                 pnlLoading.Hide();
             }
         }
-        function OnActiveTabChanging(s, e) {
-            UpdateGrid();
-        }
+        //function OnActiveTabChanging(s, e) {
+        //    UpdateGrid();
+        //}
 
-        function UpdateGrid() {
-            if (modifDosar && typeof grDateDosar !== 'undefined' && ASPxClientUtils.IsExists(grDateDosar)) {
-                grDateDosar.UpdateEdit();
-                modifDosar = false;
-            }
+        //function UpdateGrid() {
+        //    if (modifDosar && typeof grDateDosar !== 'undefined' && ASPxClientUtils.IsExists(grDateDosar)) {
+        //        grDateDosar.UpdateEdit();
+        //        modifDosar = false;
+        //    }
 
-            if (typeof grDateBeneficii !== 'undefined' && ASPxClientUtils.IsExists(grDateBeneficii)) {
-                //grDateBeneficii.Refresh();
-            }
-        }
+        //    if (typeof grDateBeneficii !== 'undefined' && ASPxClientUtils.IsExists(grDateBeneficii)) {
+        //        //grDateBeneficii.Refresh();
+        //    }
+        //}
 
         function OnActiveTabChanged(s, e) {
             switch (s.GetActiveTab().name) {
@@ -35,11 +35,15 @@
                     }
                     break;
                 case "Dosar":
-                    if (modifDosar && typeof grDateDosar !== 'undefined' && ASPxClientUtils.IsExists(grDateDosar)) {
-                        grDateDosar.UpdateEdit();
-                        modifDosar = false;
+                    if (typeof grDateDosar !== 'undefined' && ASPxClientUtils.IsExists(grDateDosar)) {
+                        grDateDosar.Refresh();
                     }
                     break;
+                    //if (modifDosar && typeof grDateDosar !== 'undefined' && ASPxClientUtils.IsExists(grDateDosar)) {
+                    //    grDateDosar.UpdateEdit();
+                    //    modifDosar = false;
+                    //}
+                    //break;
             }
         }
     </script>
@@ -60,7 +64,7 @@
                 <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)">
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
-                        UpdateGrid();
+                        //UpdateGrid();
                         e.processOnServer = true;
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>

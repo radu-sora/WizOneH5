@@ -9028,5 +9028,97 @@ namespace WizOne.Module
             }
         }
 
+        public static void AdaugaBeneficiile(ref DataSet ds, object f10003, DataRow drPost)
+        {
+            try
+            {
+                string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + f10003.ToString();
+                DataTable dtBen = new DataTable();
+                if (ds.Tables.Contains("Admin_Beneficii"))
+                {
+                    dtBen = ds.Tables["Admin_Beneficii"];
+                }
+                else
+                {
+                    dtBen = General.IncarcaDT($@"SELECT * FROM ""Admin_Beneficii"" WHERE ""Marca"" = @1", new object[] {  f10003 });
+                    dtBen.TableName = "Admin_Beneficii";
+                    dtBen.PrimaryKey = new DataColumn[] { dtBen.Columns["IdAuto"] };
+                    ds.Tables.Add(dtBen);
+                }
+
+                for (int i = 1; i <= 10; i++)
+                {
+                    int idBen = Convert.ToInt32(General.Nz(drPost["IdBeneficiu" + i], -99));
+                    if (idBen != -99 && dtBen.Select("IdObiect=" + idBen).Count() <= 0)
+                    {
+                        DataRow drBen = ds.Tables["Admin_Beneficii"].NewRow();
+                        drBen["Marca"] = f10003;
+                        drBen["IdObiect"] = idBen;
+                        drBen["DataPrimire"] = DateTime.Now;
+                        drBen["DataExpirare"] = new DateTime(2100, 1, 1);
+                        drBen["TIME"] = DateTime.Now;
+                        drBen["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
+
+                        if (Constante.tipBD == 1)
+                            drBen["IdAuto"] = Convert.ToInt32(General.Nz(dtBen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                        else
+                            drBen["IdAuto"] = Dami.NextId("Admin_Beneficii");
+                        if (Convert.ToInt32(drBen["IdAuto"].ToString()) < 1000000)
+                            drBen["IdAuto"] = Convert.ToInt32(drBen["IdAuto"].ToString()) + 1000000;
+
+                        dtBen.Rows.Add(drBen);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "CreazaFisierInDisc", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        public static void AdaugaDosar(ref DataSet ds, object f10003)
+        {
+            try
+            {
+                DataTable dtDosar = new DataTable();
+                if (ds.Tables.Contains("Admin_Dosar"))
+                {
+                    dtDosar = ds.Tables["Admin_Dosar"];
+                }
+                else
+                {
+                    dtDosar = General.IncarcaDT(@"SELECT * FROM ""Admin_Dosar"" WHERE F10003=@1", new object[] { f10003 });
+                    dtDosar.TableName = "Admin_Dosar";
+                    dtDosar.PrimaryKey = new DataColumn[] { dtDosar.Columns["F10003"], dtDosar.Columns["IdObiect"] };
+                    ds.Tables.Add(dtDosar);
+                }
+
+                DataTable dtOrg = General.IncarcaDT($@"SELECT * FROM ""Org_PosturiDosar"" WHERE ""IdPost""=@1 AND ""IdObiect"" NOT IN (SELECT ""IdObiect"" FROM ""Admin_Dosar"" WHERE F10003=@2)", new object[] { HttpContext.Current.Session["MP_IdPost"], f10003 });
+                
+                for (int i = 0; i < dtOrg.Rows.Count; i++)
+                {
+                    DataRow drDsr = dtDosar.NewRow();
+                    drDsr["F10003"] = f10003;
+                    drDsr["IdObiect"] = dtOrg.Rows[i]["IdObiect"];
+                    drDsr["AreFisier"] = 0;
+                    drDsr["TIME"] = DateTime.Now;
+                    drDsr["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
+
+                    if (Constante.tipBD == 1)
+                        drDsr["IdAuto"] = Convert.ToInt32(General.Nz(dtDosar.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                    else
+                        drDsr["IdAuto"] = Dami.NextId("Admin_Dosar");
+                    if (Convert.ToInt32(drDsr["IdAuto"].ToString()) < 1000000)
+                        drDsr["IdAuto"] = Convert.ToInt32(drDsr["IdAuto"].ToString()) + 1000000;
+
+                    dtDosar.Rows.Add(drDsr);
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "CreazaFisierInDisc", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
     }
 }

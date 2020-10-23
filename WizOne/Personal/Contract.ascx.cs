@@ -526,47 +526,60 @@ namespace WizOne.Personal
                                 drPost = arr[0];
                         }
 
-                        if (drPost == null) return;
-
-                        Session["MP_SalariulMinPost"] = drPost["SalariuMin"];
-                        //Adaugam beneficiile
-                        string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + Session["Marca"].ToString();
-                        DataTable dtBen = new DataTable();
-                        if (ds.Tables.Contains("Admin_Beneficii"))
+                        if (drPost != null)
                         {
-                            dtBen = ds.Tables["Admin_Beneficii"];
-                        }
-                        else
-                        {
-                            dtBen = General.IncarcaDT(sqlFinal, null);
-                            dtBen.TableName = "Admin_Beneficii";
-                            dtBen.PrimaryKey = new DataColumn[] { dtBen.Columns["IdAuto"] };
-                            ds.Tables.Add(dtBen);
+                            Session["MP_SalariulMinPost"] = drPost["SalariuMin"];
+                            General.AdaugaBeneficiile(ref ds, Session["Marca"], drPost);
                         }
 
-                        for (int i = 1; i <= 10; i++)
-                        {
-                            int idBen = Convert.ToInt32(General.Nz(drPost["IdBeneficiu" + i], -99));
-                            if (idBen != -99 && dtBen.Select("IdObiect=" + idBen).Count() <= 0)
-                            {
-                                DataRow drBen = ds.Tables["Admin_Beneficii"].NewRow();
-                                drBen["Marca"] = Session["Marca"];
-                                drBen["IdObiect"] = idBen;
-                                drBen["DataPrimire"] = DateTime.Now;
-                                drBen["DataExpirare"] = new DateTime(2100, 1, 1);
-                                drBen["TIME"] = DateTime.Now;
-                                drBen["USER_NO"] = Session["UserId"] ?? DBNull.Value;
 
-                                if (Constante.tipBD == 1)
-                                    drBen["IdAuto"] = Convert.ToInt32(General.Nz(dtBen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                                else
-                                    drBen["IdAuto"] = Dami.NextId("Admin_Beneficii");
-                                if (Convert.ToInt32(drBen["IdAuto"].ToString()) < 1000000)
-                                    drBen["IdAuto"] = Convert.ToInt32(drBen["IdAuto"].ToString()) + 1000000;
+                        #region Adaugam beneficiile
 
-                                dtBen.Rows.Add(drBen);
-                            }
-                        }
+                        //string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + Session["Marca"].ToString();
+                        //DataTable dtBen = new DataTable();
+                        //if (ds.Tables.Contains("Admin_Beneficii"))
+                        //{
+                        //    dtBen = ds.Tables["Admin_Beneficii"];
+                        //}
+                        //else
+                        //{
+                        //    dtBen = General.IncarcaDT(sqlFinal, null);
+                        //    dtBen.TableName = "Admin_Beneficii";
+                        //    dtBen.PrimaryKey = new DataColumn[] { dtBen.Columns["IdAuto"] };
+                        //    ds.Tables.Add(dtBen);
+                        //}
+
+                        //for (int i = 1; i <= 10; i++)
+                        //{
+                        //    int idBen = Convert.ToInt32(General.Nz(drPost["IdBeneficiu" + i], -99));
+                        //    if (idBen != -99 && dtBen.Select("IdObiect=" + idBen).Count() <= 0)
+                        //    {
+                        //        DataRow drBen = ds.Tables["Admin_Beneficii"].NewRow();
+                        //        drBen["Marca"] = Session["Marca"];
+                        //        drBen["IdObiect"] = idBen;
+                        //        drBen["DataPrimire"] = DateTime.Now;
+                        //        drBen["DataExpirare"] = new DateTime(2100, 1, 1);
+                        //        drBen["TIME"] = DateTime.Now;
+                        //        drBen["USER_NO"] = Session["UserId"] ?? DBNull.Value;
+
+                        //        if (Constante.tipBD == 1)
+                        //            drBen["IdAuto"] = Convert.ToInt32(General.Nz(dtBen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                        //        else
+                        //            drBen["IdAuto"] = Dami.NextId("Admin_Beneficii");
+                        //        if (Convert.ToInt32(drBen["IdAuto"].ToString()) < 1000000)
+                        //            drBen["IdAuto"] = Convert.ToInt32(drBen["IdAuto"].ToString()) + 1000000;
+
+                        //        dtBen.Rows.Add(drBen);
+                        //    }
+                        //}
+
+                        #endregion
+
+                        #region Adaugam documentele obligatorii din post (OPIS)
+
+                        General.AdaugaDosar(ref ds, Session["Marca"]);
+
+                        #endregion
                     }
                     break;
                 case "cmbFunctie":

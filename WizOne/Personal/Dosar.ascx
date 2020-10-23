@@ -3,41 +3,7 @@
 
 
 <body>
-    <script>
-
-        var modifDosar = false;
-
-        function GoToAtasMode(Value) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=11&id=' + Value, '_blank ')
-        }
-
-        function OnEndCallback(s, e) {
-            if (s.cpAlertMessage != null) {
-                swal({ title: "", text: s.cpAlertMessage, type: "warning" });
-                s.cpAlertMessage = null;
-            }
-        }
-
-        function grDateDosar_CustomButtonClick(s, e) {
-            switch (e.buttonID) {
-                case "btnSterge":
-                    grDateDosar.PerformCallback('btnSterge;' + s.GetRowKey(e.visibleIndex));
-                    break;
-            }
-        }
-
-        function RiseFlag() {
-            modifDosar = true;
-        }
-
-    </script>
-
-    <dx:ASPxButton ID="btnSolNoua" ClientInstanceName="btnSolNoua" ClientIDMode="Static" runat="server" Text="Solicitare noua" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-        <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
-        <ClientSideEvents Click="function(s, e) { grDateDosar.UpdateEdit(); }" />
-    </dx:ASPxButton>
-
-    <table width="100%">
+    <table style="width:100%">
         <tr>
             <td >
                 <dx:ASPxGridView ID="grDateDosar" runat="server" ClientInstanceName="grDateDosar" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" 
@@ -48,7 +14,7 @@
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
                     <SettingsSearchPanel Visible="false" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
-                    <ClientSideEvents EndCallback="function(s,e) { OnEndCallback(s,e); }" CustomButtonClick="grDateDosar_CustomButtonClick" BatchEditStartEditing="RiseFlag" ContextMenu="ctx" /> 
+                    <ClientSideEvents EndCallback="function(s,e) { OnEndCallbackDosar(s,e); }" CustomButtonClick="function (s,e) { OnCustomButtonClickDosar(s,e); }" ContextMenu="ctx" /> 
                     <Columns>
                         <dx:GridViewCommandColumn Width="60px" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" ">
                             <CustomButtons>
@@ -90,6 +56,7 @@
                                 <dx:GridViewDataColumn Width="100px" Caption="Vizualizare" CellStyle-HorizontalAlign="Center" Name="colArata" Settings-ShowEditorInBatchEditMode="false">
                                     <DataItemTemplate>
                                         <dx:ASPxButton ID="btnArata" runat="server" Text="" AutoPostBack="false" ToolTip="Arata document" HorizontalAlign="Center" oncontextMenu="ctx(this,event)" >
+                                            <ClientSideEvents Click="function(s,e) { GoToAtasModeDosar(s,e); }" />
                                             <Image Url="~/Fisiere/Imagini/Icoane/arata.png"></Image>
                                         </dx:ASPxButton>
                                     </DataItemTemplate>
@@ -122,6 +89,33 @@
         </tr>
     </table> 
 
+    <script>
 
+        var modifDosar = false;
+
+        function GoToAtasModeDosar(Value) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=11&id=' + Value, '_blank ')
+        }
+
+        function OnEndCallbackDosar(s, e) {
+            if (s.cpAlertMessage) {
+                swal({
+                    title: trad_string(limba, "Atentie"),
+                    text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                delete s.cpAlertMessage;
+            }
+        }
+
+        function OnCustomButtonClickDosar(s, e) {
+            switch (e.buttonID) {
+                case "btnSterge":
+                    grDateDosar.PerformCallback('btnSterge;' + s.GetRowKey(e.visibleIndex));
+                    break;
+            }
+        }
+
+    </script>
 
 </body>

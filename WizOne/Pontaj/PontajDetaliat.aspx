@@ -548,7 +548,7 @@
                                             <dx:GridViewDataTextColumn FieldName="Nume" Name="Nume" Caption="Nume"  Width="200px" />
                                             <dx:GridViewDataTextColumn FieldName="NumeStare" Name="NumeStare" Caption="Stare"  Width="100px"  />
                                             <dx:GridViewDataDateColumn FieldName="DataAprobare" Name="DataAprobare" Caption="Data aprobare" Width="100px" >         
-                                                    <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                                                    <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy HH:mm"></PropertiesDateEdit>
                                             </dx:GridViewDataDateColumn>
                                             <dx:GridViewDataTextColumn FieldName="IdStare" Name="IdStare" Caption="IdStare"  Width="75px" Visible="false" />
                                         </Columns> 

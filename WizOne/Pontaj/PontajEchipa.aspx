@@ -809,7 +809,7 @@
         function OnIstoricAprobare(s, e) {
             if (grDate.GetSelectedRowCount() > 0) {
                 popUpIstoricAprobare.Show();
-                grDateIstoric.PerformCallback("btnIstoricAprobare;");
+                grDateIstoric.PerformCallback("btnIstoricAprobare;" + grDate.GetRowKey(grDate.GetFocusedRowIndex()));
             }
             else {
                 swal({

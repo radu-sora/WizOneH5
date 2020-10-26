@@ -367,7 +367,8 @@ namespace WizOne.Personal
                 else
                 {
                     string sqlIdPost = $@"SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
-                    cmbPost.Value = General.ExecutaScalar(sqlIdPost, new object[] { Session["Marca"] });
+                    Session["MP_IdPost"] = General.ExecutaScalar(sqlIdPost, new object[] { Session["Marca"] });
+                    cmbPost.Value = Session["MP_IdPost"];
                 }
             }
             else if (Contract_pnlCtl.IsCallback) {
@@ -375,7 +376,7 @@ namespace WizOne.Personal
                 cmbPost.DataBind();
             }
 
-    General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));
+            General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));
         }
 
         protected void pnlCtlContract_Callback(object source, CallbackEventArgsBase e)

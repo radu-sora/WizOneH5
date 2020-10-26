@@ -41,7 +41,16 @@ namespace WizOne.Personal
 
             if (!IsPostBack)
             {
-                IncarcaGrid();
+                //IncarcaGrid();
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                General.AdaugaDosar(ref ds, Session["Marca"]);
+
+                DataTable dtAll = ds.Tables["Admin_Dosar"];
+                Session["Tmp_Admin_Dosar"] = dtAll;
+
+                grDateDosar.KeyFieldName = "IdObiect";
+                grDateDosar.DataSource = dtAll;
+                grDateDosar.DataBind();
             }
             else
             {
@@ -56,7 +65,7 @@ namespace WizOne.Personal
             try
             {
                 string strSql =
-                    $@"SELECT A.F10003, A.""IdObiect"", A.""Fisier"", A.""FisierNume"", A.""FisierExtensie"", A.""Descriere"", A.""AreFisier"", A.USER_NO, A.TIME, 0 AS ""Dinamic""
+                    $@"SELECT A.F10003, A.""IdObiect"", A.""Fisier"", A.""FisierNume"", A.""FisierExtensie"", A.""Descriere"", A.""AreFisier"", A.USER_NO, A.TIME, A.""Obligatoriu"", 0 AS ""Dinamic""
                 FROM ""Admin_Dosar"" A
                 INNER JOIN ""Org_relPostAngajat"" B ON A.F10003=B.F10003 AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit""
                 LEFT JOIN ""Org_PosturiDosar"" C ON B.""IdPost"" = C.""IdPost"" AND A.""IdObiect""=C.""IdObiect""
@@ -77,7 +86,7 @@ namespace WizOne.Personal
                     ds.Tables.Add(dt);
                 }
 
-                string sqlAll = $@"SELECT {Session["Marca"]} AS F10003, A.""IdObiect"", null AS ""Fisier"", null AS ""FisierNume"", null AS ""FisierExtensie"", null AS ""Descriere"", 0 AS ""AreFisier"", {Session["UserId"]}, {General.CurrentDate()}, 1 AS Dinamic
+                string sqlAll = $@"SELECT {Session["Marca"]} AS F10003, A.""IdObiect"", null AS ""Fisier"", null AS ""FisierNume"", null AS ""FisierExtensie"", null AS ""Descriere"", 0 AS ""AreFisier"", {Session["UserId"]}, {General.CurrentDate()}, A.""Obligatoriu"", 1 AS Dinamic
                 FROM ""Org_PosturiDosar"" A
                 INNER JOIN ""Org_relPostAngajat"" B ON A.""IdPost""=B.""IdPost"" AND B.""DataInceput"" <= GetDate() AND GetDate() <= B.""DataSfarsit""
                 LEFT JOIN ""Admin_Dosar"" C ON B.F10003=C.F10003 AND A.""IdObiect""=C.""IdObiect""
@@ -345,7 +354,8 @@ namespace WizOne.Personal
             {
                 if (e.ButtonID == "btnSterge")
                 {
-                    if (General.Nz(((ASPxGridView)sender).GetRowValues(e.VisibleIndex, "Dinamic"),0).ToString() == "1")
+                    //if (General.Nz(((ASPxGridView)sender).GetRowValues(e.VisibleIndex, "Dinamic"),0).ToString() == "1")
+                    if (General.Nz(((ASPxGridView)sender).GetRowValues(e.VisibleIndex, "Obligatoriu"), 0).ToString() == "1")
                         e.Visible = DevExpress.Utils.DefaultBoolean.False;
                 }
             }

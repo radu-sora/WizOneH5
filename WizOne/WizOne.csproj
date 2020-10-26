@@ -848,6 +848,8 @@
     <Content Include="Personal\Tarife.ascx" />
     <Content Include="Pontaj\PlanificareSchimburi.aspx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
+    <Content Include="Posturi\FormCreate.aspx" />
+    <Content Include="Posturi\FormLista.aspx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
     <Content Include="Revisal\RapoarteRevisal.aspx" />
     <Content Include="Revisal\Revisal.aspx" />
@@ -1826,6 +1828,20 @@
     </Compile>
     <Compile Include="Pontaj\PontajSpecial.aspx.designer.cs">
       <DependentUpon>PontajSpecial.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Posturi\FormCreate.aspx.cs">
+      <DependentUpon>FormCreate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Posturi\FormCreate.aspx.designer.cs">
+      <DependentUpon>FormCreate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Posturi\FormLista.aspx.cs">
+      <DependentUpon>FormLista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Posturi\FormLista.aspx.designer.cs">
+      <DependentUpon>FormLista.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\AdeverintaGenerala.cs">
       <SubType>Component</SubType>

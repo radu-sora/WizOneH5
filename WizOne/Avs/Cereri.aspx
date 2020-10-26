@@ -288,7 +288,7 @@
                     </td>
                    <td>
                        <label id="lblGen"   runat="server" style="display:inline-block;"></label>
-                        <dx:ASPxCheckBox ID="chkGen"  runat="server" Width="150" Text="Cu generare document"  TextAlign="Left" Checked="true"  ClientInstanceName="chkGen" >                             
+                        <dx:ASPxCheckBox ID="chkGen"  runat="server" Width="150" Text="Cu generare document"  TextAlign="Left" Checked="false" ClientVisible="false"  ClientInstanceName="chkGen" >                             
                         </dx:ASPxCheckBox>
                     </td>
                </tr>

@@ -107,6 +107,43 @@ namespace WizOne.Tactil
             }
         }
 
+
+        
+    //<script type = "text/javascript" >
+    //    var limba = "<%= Session["IdLimba"] %>";
+
+    //    function Navigate()
+    //    {
+    //        swal({
+    //        title: trad_string(limba, "Printare"), text: trad_string(limba, "Documentul a fost trimis spre printare. Va rugam verificati!"),
+    //            type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: trad_string(limba, "Continuare"), cancelButtonText: trad_string(limba, "Iesire"), closeOnConfirm: true
+    //        }, function(isConfirm) {
+    //            debugger;
+    //            if (isConfirm)
+    //            {
+
+    //            }
+    //        });
+    //    }
+
+    //</script>
+
+
+
+        //window.location = '<%: ResolveClientUrl("~/Tactil/Main.aspx") %>';
+
+
+        //                    else {
+        //                var tipInfoChiosc = <%= Session["TipInfoChiosc"] %>;
+        //var pagina = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
+        //                if (tipInfoChiosc == 1 || tipInfoChiosc == 2)
+        //                    pagina = '<%: ResolveClientUrl("~/DefaultTactilFaraCard.aspx") %>';
+        //                if (tipInfoChiosc == 3)
+        //                    pagina = '<%: ResolveClientUrl("~/DefaultTactilExtra.aspx") %>';
+        //                window.location = pagina;
+        //            }
+
+
         protected void lnlPri_Click(object sender, EventArgs e)
         {
             try

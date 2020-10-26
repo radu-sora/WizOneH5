@@ -148,6 +148,20 @@ namespace WizOne.Pagini
                         grDate.Columns["IdStare"].Visible = false;
                         dt = General.IncarcaDT(strSql, new object[] { id });
                         break;
+                    case 7:         //Org_DateIstoric
+                        string op = "+";
+                        if (Constante.tipBD == 2) op = "||";
+                        strSql = "SELECT a.\"IdAuto\", a.\"Id\", a.\"IdCircuit\", a.\"IdUser\", a.\"IdStare\", a.\"Aprobat\", a.\"Culoare\", CASE WHEN a.\"Pozitie\" is null THEN 0 ELSE a.\"Pozitie\" AS \"Pozitie\", "
+                            + " a.\"DataAprobare\", CASE WHEN j2.F10008 IS NULL or j2.F10008 = '' THEN j1.F70104 ELSE  j2.F10008 " + op + " ' ' " + op + " j2.F10009 END as \"Nume\", "
+                            + " CASE WHEN j8.F10008 IS NULL or j8.F10008 = '' THEN j7.F70104 ELSE  j8.F10008 " + op + " ' ' " + op + " j8.F10009 END as \"Inlocuitor\", '' AS \"Stare\" "
+                            + " FROM \"Org_DateIstoric\" a "
+                            + " JOIN USERS j1 on a.\"IdUser\" = j1.F70102 "
+                            + " JOIN F100 j2 ON j1.F10003 = j2.F10003 "
+                            + " JOIN USERS j7 on a.\"IdUserInlocuitor\" = j7.F70102 "
+                            + " JOIN F100 j8 on j7.F10003 = j8.F10003 "
+                            + " WHERE a.\"Id\" = " + id + " order by a.\"Pozitie\" ";                        
+                        dt = General.IncarcaDT(strSql, null);
+                        break;
                     default:
                         //tabela = "Ptj_CereriIstoric";
                         break;

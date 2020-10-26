@@ -54,6 +54,16 @@ namespace WizOne
                     Response.Redirect("../Default.aspx", false);
                 }
 
+                //Radu 26.10.2020
+                string limbi = Dami.ValoareParam("LimbiTraduse", "");
+                string[] sirLimbi = limbi.Split(',');
+                for (int i = 0; i < sirLimbi.Length; i++)
+                {
+                    LinkButton lnk = (LinkButton)pnlHeader.FindControl("a" + sirLimbi[i]);
+                    if (lnk != null)
+                        lnk.Visible = true;
+                }
+
 
                 if (!IsPostBack)
                 {

@@ -91,7 +91,7 @@ namespace WizOne.Eval
                 #endregion
 
                 if (Request["pp"] != null)
-                    txtTitlu.Text = "Prima Pagina - Evaluare 360";
+                    txtTitlu.Text = Dami.TraduCuvant("Prima Pagina - Evaluare 360");
                 else
                     txtTitlu.Text = General.VarSession("Titlu").ToString();
 

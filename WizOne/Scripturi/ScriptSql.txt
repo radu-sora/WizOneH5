@@ -15013,3 +15013,7 @@ INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES 
 GO
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Adev_IdSuper', '', 'Contine id-urile de IdSuper care sa fie luate in considerare la Adeverinte', 3)
 GO
+
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('LimbiTraduse', 'Ro,En,Fr,Bg', 'Limbi care sunt traduse; trebuie introduse de forma: Ro,En,Bg,Fr etc.', 0)
+GO

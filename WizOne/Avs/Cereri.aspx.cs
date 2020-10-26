@@ -2114,7 +2114,19 @@ namespace WizOne.Avs
                             {
                                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");                               
                             }
-                        chkGen.Checked = true;
+
+
+                        string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
+                        if (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idAtr + ",") >= 0))
+                        {
+                            chkGen.ClientVisible = false;
+                            chkGen.Checked = false;
+                        }
+                        else
+                        {
+                            chkGen.ClientVisible = true;
+                            chkGen.Checked = true;
+                        }
                         if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR)
                         {
                             DataTable dtCtr = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);

@@ -15342,3 +15342,5 @@ INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES 
 commit;
 
 
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('LimbiTraduse', 'Ro,En,Fr,Bg', 'Limbi care sunt traduse; trebuie introduse de forma: Ro,En,Bg,Fr etc.', 0);
+commit

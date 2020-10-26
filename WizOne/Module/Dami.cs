@@ -1334,11 +1334,14 @@ namespace WizOne.Module
                         else
                             id = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR " + seq, null));
                     }
-                    id = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"
+                    else
+                    {
+                        id = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"
                             BEGIN
                                 UPDATE ""tblConfig"" SET ""IdAutoCereri"" = COALESCE(""IdAutoCereri"",0)+1 WHERE ""Id"" = 1;
                                 SELECT ""IdAutoCereri"" FROM ""tblConfig"" WHERE ""Id"" = 1;
-                            END; "),1));
+                            END; "), 1));
+                    }
                 }
                 else                                   //Oracle
                 {
@@ -1626,15 +1629,27 @@ namespace WizOne.Module
         {
             try
             {
+                //Radu 26.10.2020
+                string limbi = Dami.ValoareParam("LimbiTraduse", "");
+                string[] sirLimbi = limbi.ToUpper().Split(',');
+
                 List<metaGeneral2> list = new List<metaGeneral2>();
-                list.Add(new metaGeneral2() { Id = "RO", Denumire = "Română" });
-                list.Add(new metaGeneral2() { Id = "EN", Denumire = "English" });
-                list.Add(new metaGeneral2() { Id = "FR", Denumire = "Français" });
-                list.Add(new metaGeneral2() { Id = "ES", Denumire = "Español" });
-                list.Add(new metaGeneral2() { Id = "DE", Denumire = "Deutsch" });
-                list.Add(new metaGeneral2() { Id = "IT", Denumire = "Italiano" });
-                list.Add(new metaGeneral2() { Id = "BG", Denumire = "български" });
-                list.Add(new metaGeneral2() { Id = "RU", Denumire = "русский" });
+                if (sirLimbi.Contains("RO"))
+                    list.Add(new metaGeneral2() { Id = "RO", Denumire = "Română" });
+                if (sirLimbi.Contains("EN"))
+                    list.Add(new metaGeneral2() { Id = "EN", Denumire = "English" });
+                if (sirLimbi.Contains("FR"))
+                    list.Add(new metaGeneral2() { Id = "FR", Denumire = "Français" });
+                if (sirLimbi.Contains("ES"))
+                    list.Add(new metaGeneral2() { Id = "ES", Denumire = "Español" });
+                if (sirLimbi.Contains("DE"))
+                    list.Add(new metaGeneral2() { Id = "DE", Denumire = "Deutsch" });
+                if (sirLimbi.Contains("IT"))
+                    list.Add(new metaGeneral2() { Id = "IT", Denumire = "Italiano" });
+                if (sirLimbi.Contains("BG"))
+                    list.Add(new metaGeneral2() { Id = "BG", Denumire = "български" });
+                if (sirLimbi.Contains("RU"))
+                    list.Add(new metaGeneral2() { Id = "RU", Denumire = "русский" });
 
                 return list;
             }

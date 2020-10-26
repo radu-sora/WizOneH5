@@ -622,7 +622,6 @@
     }
 
     function CompletareZile(s) { 
-        debugger;
         var nvlFunc = "<%=Session["MP_NvlFunc"] %>";
         var resNF = nvlFunc.split(";");
         for (var i = 0; i < resNF.length; i++) {

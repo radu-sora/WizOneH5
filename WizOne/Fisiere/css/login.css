@@ -204,3 +204,12 @@ a
 .captcha {
     display:inline-block; bottom:0px; left:50px; position:absolute;
 }
+
+.logOut {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 340px;
+    max-width:400px;
+    padding:20px;
+}

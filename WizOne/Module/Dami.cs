@@ -552,8 +552,6 @@ namespace WizOne.Module
                 // 77  -  Drepturi depline
                 // 76  -  Fara supervizor (cazul cand pe circuit, in loc de id supervizor, se pune codul de user (F70102)
 
-
-                string idHR = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
                 string selectInloc = "-99";
                 if (Dami.ValoareParam("InlocuitorulVedeCererile", "0") == "1")
                 {
@@ -613,11 +611,18 @@ namespace WizOne.Module
                                 (SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={HttpContext.Current.Session["UserId"]} AND ""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= ""DataSfarsit"") {condSuplim}";
 
 
+                //Florin 2020.10.12 - am adaugat si conditia pt rolul de vizualizare
                 //Florin 2020.06.23 - am schimbat 77 AS ""Rol"" cu  B."IdSuper" AS ""Rol""
-                if (totiAngajatii == 3)
+                if (totiAngajatii == 3 || totiAngajatii == 4)
+                {
+                    string idRol = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
+                    if (totiAngajatii == 4)
+                        idRol = Dami.ValoareParam("Cereri_IDuriRoluriVizualizare", "-99");
+
                     strSql = $@"SELECT DISTINCT A.*, B.""IdSuper"" AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
                                FROM ""Ptj_Cereri"" A
-                               INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idHR}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}";
+                               INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idRol}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}";
+                }
 
                 //Florin 2019.09.25 - optimizare
                 //Anulare_Valoare, Anulare_NrZile se transforma din subselecturi in LEFT JOIN

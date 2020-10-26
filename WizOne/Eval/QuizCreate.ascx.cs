@@ -1,14 +1,11 @@
 ﻿using DevExpress.Web;
 using DevExpress.Web.ASPxTreeList;
-using DevExpress.Web.Data;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
@@ -469,15 +466,6 @@ namespace WizOne.Eval
                     cmbCategObi.DataSource = dt;
                     cmbCategObi.DataBind();
                 }
-
-                //List<metaCmb> lst = new List<metaCmb>();
-                //lst.Add(new metaCmb() { Id = 0, Denumire = "Suma" });
-                //lst.Add(new metaCmb() { Id = 4, Denumire = "Medie" });
-
-                //GridViewDataComboBoxColumn totalColoanaObi = (grDateObiective.Columns["TotalColoana"] as GridViewDataComboBoxColumn);
-                //totalColoanaObi.PropertiesComboBox.DataSource = lst;
-                //GridViewDataComboBoxColumn totalColoanaCmp = (grDateCompetente.Columns["TotalColoana"] as GridViewDataComboBoxColumn);
-                //totalColoanaCmp.PropertiesComboBox.DataSource = lst;
             }
             catch (Exception ex)
             {
@@ -1978,33 +1966,5 @@ namespace WizOne.Eval
 
         #endregion
 
-        protected void grDateIntrebari_BatchUpdate(object sender, ASPxTreeListBatchUpdateEventArgs e)
-        {
-            try
-            {
-                grDateIntrebari.CancelEdit();
-
-                DataSet ds = Session["InformatiaCurentaEvalQuiz"] as DataSet;
-                DataTable dt = ds.Tables["Eval_QuizIntrebari"];
-                
-                foreach (var l in e.UpdateValues)
-                {
-                    DataRow row = dt.Rows.Find(l.NewValues["Id"]);
-                    if (row == null) continue;
-
-                    row["OrdineAfisare"] = l.NewValues["OrdineAfisare"];
-                    row["Descriere"] = l.NewValues["Descriere"];
-                }
-                
-                grDateIntrebari.DataSource = dt;
-                grDateIntrebari.DataBind();
-
-                e.Handled = true;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
     }
 }

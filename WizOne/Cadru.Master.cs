@@ -587,27 +587,33 @@ namespace WizOne
             try
             {
                 string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
-                if (tipVerif == "5")
-                    General.SignOut();
-                else
+
+                switch (tipVerif)
                 {
-                    //Florin 2020.01.27
+                    case "5":
+                        General.SignOut();
+                        break;
+                    case "6":
+                        if (Page.IsCallback)
+                            ASPxWebControl.RedirectOnCallback("~/LogOut.aspx");
+                        else
+                            Response.Redirect("~/LogOut.aspx", false);
 
-                    string url = "~/Default.aspx";
-                    if (Constante.esteTactil)
-                        url = "~/Tactil/MainTactil.aspx";
+                        //Pastram limba setata pt a putea traduce fraza din pagina de log out
+                        string idLimba = General.Nz(Session["IdLimba"],"RO").ToString();
+                        General.InitSessionVariables();
+                        Session["IdLimba"] = idLimba;
+                        break;
+                    default:
+                        string url = "~/Default.aspx";
+                        if (Constante.esteTactil)
+                            url = "~/Tactil/MainTactil.aspx";
 
-                    if (Page.IsCallback)
-                        ASPxWebControl.RedirectOnCallback(url);
-                    else
-                        Response.Redirect(url, false);
-
-                    ////Radu 20.07.2018 - am inlocuit ../ cu ~/
-                    //if (Constante.esteTactil)
-                    //    //Response.Redirect("~/DefaultTactil.aspx", false);
-                    //    Response.Redirect("~/Tactil/MainTactil.aspx", false);
-                    //else
-                    //    Response.Redirect("~/Default.aspx", false);
+                        if (Page.IsCallback)
+                            ASPxWebControl.RedirectOnCallback(url);
+                        else
+                            Response.Redirect(url, false);
+                        break;
                 }
             }
             catch (Exception ex)

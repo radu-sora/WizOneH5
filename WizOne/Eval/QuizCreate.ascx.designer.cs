@@ -78,15 +78,6 @@ namespace WizOne.Eval
         protected global::DevExpress.Web.ASPxButton btnDeleteSectiune;
 
         /// <summary>
-        /// btnSalvareOrdine control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSalvareOrdine;
-
-        /// <summary>
         /// grDateIntrebari control.
         /// </summary>
         /// <remarks>

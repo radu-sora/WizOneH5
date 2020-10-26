@@ -5,7 +5,7 @@
     <table>
         <tr>
             <td>
-                <dx:ASPxGridView ID="grDateCircuit" runat="server" ClientInstanceName =" grDateCircuit" ClientIDMode="Static" OnRowDeleting="grDateCircuit_RowDeleting" OnDataBinding="grDateCircuit_DataBinding"
+                <dx:ASPxGridView ID="grDateCircuit" runat="server" ClientInstanceName="grDateCircuit" ClientIDMode="Static" OnRowDeleting="grDateCircuit_RowDeleting" OnDataBinding="grDateCircuit_DataBinding"
                     AutoGenerateColumns="false" OnRowInserting="grDateCircuit_RowInserting" OnRowUpdating="grDateCircuit_RowUpdating" OnInitNewRow="grDateCircuit_InitNewRow">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="false" />

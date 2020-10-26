@@ -99,7 +99,7 @@ namespace WizOne
                                                     List<General.metaCereriRol> lst = new List<General.metaCereriRol>();
                                                     lst.Add(new General.metaCereriRol { Id = Convert.ToInt32(idCerere), Rol = rol });
                                                     General.MemoreazaEroarea("Vine din Raspuns");
-                                                    string rez = General.MetodeCereri(Convert.ToInt32(tipActiune), lst, idUser, marcaUser, "", rol);
+                                                    string rez = General.MetodeCereri(Convert.ToInt32(tipActiune), lst, idUser, marcaUser, "");
                                                     Response.Write(rez);
                                                 }
                                             }

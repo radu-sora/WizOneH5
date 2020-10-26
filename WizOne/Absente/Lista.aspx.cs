@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Absente
@@ -17,12 +16,6 @@ namespace WizOne.Absente
     {
 
         bool esteHr = false;
-
-        internal class metaDate
-        {
-            public int Id { get; set; }
-            public string Denumire { get; set; }
-        }
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -143,7 +136,7 @@ namespace WizOne.Absente
                     chkAnulare.Checked = true;
 
                     //Florin 2018.10.15
-                    switch(dt.Rows.Count)
+                    switch (dt.Rows.Count)
                     {
                         case 0:
                             lblRol.Visible = false;
@@ -155,9 +148,9 @@ namespace WizOne.Absente
                             cmbRol.SelectedIndex = 0;
                             break;
                         case 2:
-                            //lblRol.Visible = false;
-                            //cmbRol.Visible = false;
-                            //break;
+                        //lblRol.Visible = false;
+                        //cmbRol.Visible = false;
+                        //break;
                         default:
                             cmbRol.DataSource = dt;
                             cmbRol.DataBind();
@@ -180,18 +173,25 @@ namespace WizOne.Absente
                     cmbViz.SelectedIndex = 0;
 
                     if (esteHr)
-                    {
-                        ListEditItem itm = new ListEditItem();
-                        itm.Text = Dami.TraduCuvant("Toti angajatii", "Toti angajatii");
-                        itm.Value = 3;
-                        cmbViz.Items.Add(itm);
-                    }
+                        cmbViz.Items.Add(Dami.TraduCuvant("Toti angajatii - Rol HR", "Toti angajatii - Rol HR"), 3);
+
+                    //if (esteHr)
+                    //{
+                    //    ListEditItem itm = new ListEditItem();
+                    //    itm.Text = Dami.TraduCuvant("Toti angajatii - Rol HR", "Toti angajatii - Rol HR");
+                    //    itm.Value = 3;
+                    //    cmbViz.Items.Add(itm);
+                    //}
+
+                    string idViz = Dami.ValoareParam("Cereri_IDuriRoluriVizualizare", "-99");
+                    if (idViz != "" && Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE ""IdUser""={Session["UserId"]} AND ""IdSuper"" IN ({idViz}) GROUP BY ""IdUser"" "), 0)) > 0)
+                        cmbViz.Items.Add(Dami.TraduCuvant("Toti angajatii - Rol Vizualizare", "Toti angajatii - Rol Vizualizare"), 4);
 
                     //Florin2019.07.17
                     NameValueCollection lst = HttpUtility.ParseQueryString((Session["Filtru_CereriAbs"] ?? "").ToString());
                     if (lst.Count > 0)
                     {
-                        if (General.Nz(lst["Viz"], "").ToString() != "") cmbViz.SelectedIndex = Convert.ToInt32(lst["Viz"])-1;
+                        if (General.Nz(lst["Viz"], "").ToString() != "") cmbViz.SelectedIndex = Convert.ToInt32(lst["Viz"]) - 1;
                         if (General.Nz(lst["Rol"], "").ToString() != "") cmbRol.Value = Convert.ToInt32(lst["Rol"]);
                         if (General.Nz(lst["Stare"], "").ToString() != "") cmbStare.Text = lst["Stare"].ToString();
                         if (General.Nz(lst["DtInc"], "").ToString() != "") txtDtInc.Value = Convert.ToDateTime(lst["DtInc"]);
@@ -201,6 +201,9 @@ namespace WizOne.Absente
                     }
 
                     grDate.DataBind();
+                }
+                else if (grDate.IsCallback) {
+                    IncarcaGrid();
                 }
 
                 if (General.Nz(cmbViz.Value,"").ToString() == "3")
@@ -223,8 +226,7 @@ namespace WizOne.Absente
             try
             {
                 IncarcaGrid();
-                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);
-                
+                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate); 
             }
             catch (Exception ex)
             {
@@ -255,19 +257,6 @@ namespace WizOne.Absente
                 Session["Sablon_CheiePrimara"] = -99;
                 Session["Sablon_TipActiune"] = "New";
                 Response.Redirect("~/Absente/Cereri.aspx", false);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void btnFiltru_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                grDate.DataBind();
             }
             catch (Exception ex)
             {
@@ -307,7 +296,9 @@ namespace WizOne.Absente
                     ids.Add(new Module.General.metaCereriRol { Id = Convert.ToInt32(General.Nz(arr[0], 0)), Rol = Convert.ToInt32(General.Nz(arr[5], 0)) });
                 }
 
-                if (ids.Count != 0) msg += General.MetodeCereri(1, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), "",  Convert.ToInt32(General.Nz(cmbRol.Value,0)));
+                bool esteHR = false;
+                if (Convert.ToInt32(General.Nz(cmbViz.Value, 1)) == 3) esteHR = true;
+                if (ids.Count != 0) msg += General.MetodeCereri(1, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), "",  esteHR);
                 grDate.JSProperties["cpAlertMessage"] = msg;
                 grDate.DataBind();
                 grDate.Selection.UnselectAll();
@@ -342,6 +333,7 @@ namespace WizOne.Absente
                 dt = General.IncarcaDT(strSql, null);
                 grDate.KeyFieldName = "Id; Rol";
                 grDate.DataSource = dt;
+                grDate.DataBind();
             }
             catch (Exception ex)
             {
@@ -627,6 +619,10 @@ namespace WizOne.Absente
                             break;
                         case "colHide":
                             grDate.Columns[arr[1]].Visible = false;
+                            break;
+                        case "btnFiltru":
+                            IncarcaGrid();
+                            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);
                             break;
                     }
                 }
@@ -973,18 +969,9 @@ namespace WizOne.Absente
 
                     // id = -13 este banca
                     // id = -14 este plata
-                    List<metaDate> lst = new List<metaDate>();
-                    metaDate ent = new metaDate();
-                    ent.Id = Convert.ToInt32(General.Nz(obj[1],(int)Constante.IdCompensareDefault.LaBanca));
-                    ent.Denumire = General.Nz(obj[3], Dami.TraduCuvant("Banca")).ToString();
-                    lst.Add(ent);
-
-                    metaDate ent2 = new metaDate();
-                    ent2.Id = Convert.ToInt32(General.Nz(obj[2], (int)Constante.IdCompensareDefault.LaPlata));
-                    ent2.Denumire = General.Nz(obj[4], Dami.TraduCuvant("Plata")).ToString();
-                    lst.Add(ent2);
-
-                    cmbCps.DataSource = lst;
+                    cmbCps.Items.Add(new ListEditItem { Value = Convert.ToInt32(General.Nz(obj[1], (int)Constante.IdCompensareDefault.LaBanca)), Text = General.Nz(obj[3], Dami.TraduCuvant("Banca")).ToString() });
+                    cmbCps.Items.Add(new ListEditItem { Value = Convert.ToInt32(General.Nz(obj[2], (int)Constante.IdCompensareDefault.LaPlata)), Text = General.Nz(obj[4], Dami.TraduCuvant("Plata")).ToString() });
+                    cmbCps.DataBindItems();
                     cmbCps.Value = obj[6];
                 }
                 else
@@ -1059,8 +1046,11 @@ namespace WizOne.Absente
 
                     ids.Add(new Module.General.metaCereriRol { Id = Convert.ToInt32(General.Nz(arr[0], 0)), Rol = Convert.ToInt32(General.Nz(arr[5], 0)) });
                 }
-                General.MemoreazaEroarea("Vine din Absente Lista");
-                if (ids.Count != 0) msg += General.MetodeCereri(2, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), motiv, Convert.ToInt32(General.Nz(cmbRol.Value, 0)));
+
+                bool esteHR = false;
+                if (Convert.ToInt32(General.Nz(cmbViz.Value, 1)) == 3) esteHR = true;
+
+                if (ids.Count != 0) msg += General.MetodeCereri(2, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), motiv, esteHR);
                 grDate.JSProperties["cpAlertMessage"] = msg;
                 grDate.DataBind();
                 grDate.Selection.UnselectAll();
@@ -1135,8 +1125,6 @@ namespace WizOne.Absente
 
                     e.Value = ore;
                 }           
-
-                
             }
         }
 
@@ -1162,6 +1150,25 @@ namespace WizOne.Absente
                         if (dt.Select("F10003=" + General.Nz(cmbAng.Value, -99)).Count() == 0)
                             cmbAng.Value = null;
                         break;
+                }
+
+                if (tip == "cmbViz")
+                {
+                    //bool stare = true;
+                    //if (Convert.ToInt32(cmbViz.Value ?? 1)== 4)
+                    //    stare = false;
+
+                    //btnAproba.Enabled = stare;
+                    //btnRespinge.Enabled = stare;
+                    //GridViewCommandColumn cmbCol = grDate.Columns[1] as GridViewCommandColumn;
+                    //cmbAng.Enabled = stare;
+                    if (Convert.ToInt32(cmbViz.Value ?? 1) == 4)
+                    {
+                        btnAproba.Enabled = false;
+                        btnRespinge.Enabled = false;
+                        GridViewCommandColumn cmbCol = grDate.Columns[1] as GridViewCommandColumn;
+                        cmbAng.Enabled = false;
+                    }
                 }
             }
             catch (Exception ex)

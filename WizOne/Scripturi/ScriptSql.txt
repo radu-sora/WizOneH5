@@ -14921,11 +14921,11 @@ GO
 
 DECLARE @i INT
 SET @i = 1
-WHILE (@i <= 300)
+WHILE (@i <= 500)
 BEGIN
-	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0)
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0 AND (SELECT COUNT(*) FROM Eval_ConfigObTemplate WHERE TemplateId=@i) > 0)
 	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(6, @i, 'Total1', 100, 0, 0, 0, 0, -99);
-	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0)
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0 AND (SELECT COUNT(*) FROM Eval_ConfigObTemplate WHERE TemplateId=@i) > 0)
 	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(7, @i, 'Total2', 100, 0, 0, 0, 0, -99);
 
     SET @i = @i + 1
@@ -14936,11 +14936,11 @@ GO
 
 DECLARE @i INT
 SET @i = 1
-WHILE (@i <= 300)
+WHILE (@i <= 500)
 BEGIN
-    IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0)
+    IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total1')=0 AND (SELECT COUNT(*) FROM Eval_ConfigObTemplate WHERE TemplateId=@i) > 0)
 	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(14, @i, 'Total1', 100, 0, 0, 0, 0, -99, -99);
-	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0)
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Total2')=0 AND (SELECT COUNT(*) FROM Eval_ConfigObTemplate WHERE TemplateId=@i) > 0)
 	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(15, @i, 'Total2', 100, 0, 0, 0, 0, -99, -99);
 
     SET @i = @i + 1
@@ -15014,6 +15014,10 @@ GO
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Adev_IdSuper', '', 'Contine id-urile de IdSuper care sa fie luate in considerare la Adeverinte', 3)
 GO
 
+--Rol vizualizare in Cereri #612
+--https://github.com/wizromRD/WizOne/issues/612
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", "Criptat") VALUES('Cereri_IDuriRoluriVizualizare','1,2,3,4,5,6','se foloseste in modulul de cereri, are aceeasi functionalitate cu parametrul Cereri_IDuriRoluriHR cu diferenta ca nu are drepturi de modificare are doar de vizualizare',1,0)
+GO
 
-INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('LimbiTraduse', 'Ro,En,Fr,Bg', 'Limbi care sunt traduse; trebuie introduse de forma: Ro,En,Bg,Fr etc.', 0)
+INSERT INTO "Eval_QuizTaburi"("Denumire", "Pagina", "Ordine") VALUES('Ordine afisare','QuizOrdonare',5)
 GO

@@ -2304,7 +2304,7 @@ namespace WizOne.Pontaj
                     switch (arr[0].ToString())
                     {
                         case "btnIstoricAprobare":
-                            IncarcaGridIstoric();
+                            IncarcaGridIstoric(arr[1]);
                             break;                   
                     }
                 }
@@ -2334,7 +2334,7 @@ namespace WizOne.Pontaj
         }
 
         //Radu 27.07.2020
-        private void IncarcaGridIstoric()
+        private void IncarcaGridIstoric(object f10003)
         {
             string strSql = @"SELECT A.""IdAuto"", A.F10003, A.""An"", A.""Luna"", A.""IdSuper"", A.""IdStare"", D.""Culoare"", A.""DataAprobare"", D.""Denumire"" AS ""NumeStare"",
                             CASE WHEN COALESCE(B.""NumeComplet"",' ') <> ' ' THEN B.""NumeComplet"" ELSE (CASE WHEN COALESCE(C.F10008,' ') = ' ' THEN B.F70104 ELSE C.F10008 {3} ' ' {3} C.F10009 END) END as ""Nume""
@@ -2348,13 +2348,15 @@ namespace WizOne.Pontaj
             string op = "+";
             if (Constante.tipBD == 2) op = "||";
 
-            List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "AngajatNume" });
-            if (lst == null || lst.Count() == 0 || lst[0] == null) return;
-            object[] arr = lst[0] as object[];
+            //List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "AngajatNume" });
+            //if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+            //object[] arr = lst[0] as object[];
 
             DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
 
-            strSql = string.Format(strSql, arr[0].ToString(), ziua.Year, ziua.Month, op);
+            //strSql = string.Format(strSql, arr[0].ToString(), ziua.Year, ziua.Month, op);
+
+            strSql = string.Format(strSql, General.Nz(f10003,-99), ziua.Year, ziua.Month, op);
 
             grDateIstoric.DataSource = General.IncarcaDT(strSql, null);
             grDateIstoric.DataBind();

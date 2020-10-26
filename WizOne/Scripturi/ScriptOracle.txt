@@ -14950,7 +14950,7 @@ where f100.f10003 =altf10003
       WHEN OTHERS THEN RETURN 8;
 
 END;
-
+/
 
 
 create or replace FUNCTION "DamiBirou" (altF10003 IN NUMBER, "dt" IN DATE) RETURN NUMBER
@@ -14989,7 +14989,7 @@ where f100.f10003 =altf10003
       WHEN OTHERS THEN RETURN 8;
 
 END;
-
+/
 
 --https://github.com/wizromRD/WizOne/issues/496
 --Adaugare program de lucru in modificari in avans/Circuit Documente pentru generare AA #496
@@ -15342,5 +15342,10 @@ INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES 
 commit;
 
 
-INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('LimbiTraduse', 'Ro,En,Fr,Bg', 'Limbi care sunt traduse; trebuie introduse de forma: Ro,En,Bg,Fr etc.', 0);
-commit
+--Rol vizualizare in Cereri #612
+--https://github.com/wizromRD/WizOne/issues/612
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", "Criptat") VALUES('Cereri_IDuriRoluriVizualizare','1,2,3,4,5,6','se foloseste in modulul de cereri, are aceeasi functionalitate cu parametrul Cereri_IDuriRoluriHR cu diferenta ca nu are drepturi de modificare are doar de vizualizare',1,0);
+COMMIT;
+
+INSERT INTO "Eval_QuizTaburi"("Denumire", "Pagina", "Ordine") VALUES('Ordine afisare','QuizOrdonare',5);
+COMMIT;

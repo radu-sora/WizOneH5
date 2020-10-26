@@ -2,17 +2,12 @@
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Hosting;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Eval
@@ -131,7 +126,6 @@ namespace WizOne.Eval
                     Session["esteQuizNou"] = "false";
                 }
 
-
                 for (int i = 0; i < ds.Tables.Count; i++)
                 {
                     General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
@@ -236,7 +230,8 @@ namespace WizOne.Eval
 
                 #endregion
 
-                MessageBox.Show("Proces realizat cu succes!", MessageBox.icoSuccess);
+                //MessageBox.Show("Proces realizat cu succes!", MessageBox.icoSuccess);
+                ASPxPageControl2.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces finalizat cu succes");
             }
             catch (Exception ex)
             {

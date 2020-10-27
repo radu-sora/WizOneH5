@@ -43,9 +43,6 @@ namespace WizOne.Personal
 
             grDateDosar.DataBind();
 
-            if (!IsPostBack)
-                Session["DocUpload_MP_Dosar"] = null;
-
             if (General.VarSession("EsteAdmin").ToString() == "0") General.SecuritatePersonal(grDateDosar);
         }
 
@@ -84,12 +81,10 @@ namespace WizOne.Personal
                 DataTable dt = ds.Tables["Admin_Dosar"];
                 DataRow dr = dt.NewRow();
 
-                ASPxDateEdit txtDataPrim = grDateDosar.FindEditFormTemplateControl("txtDataPrim") as ASPxDateEdit;
-                ASPxDateEdit txtDataExp = grDateDosar.FindEditFormTemplateControl("txtDataExp") as ASPxDateEdit;
                 ASPxComboBox cmbNumeBen = grDateDosar.FindEditFormTemplateControl("cmbNumeBen") as ASPxComboBox;
-                ASPxTextBox txtCaract = grDateDosar.FindEditFormTemplateControl("txtCaract") as ASPxTextBox;
+                ASPxTextBox txtDesc = grDateDosar.FindEditFormTemplateControl("txtDesc") as ASPxTextBox;
 
-                if (cmbNumeBen.Value == null || txtDataPrim.Value == null || txtDataExp.Value == null)
+                if (cmbNumeBen.Value == null)
                 {
                     e.Cancel = true;
                     grDateDosar.CancelEdit();
@@ -97,38 +92,36 @@ namespace WizOne.Personal
                     return;
                 }
 
-                if (Constante.tipBD == 1)
-                    dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                else
-                    dr["IdAuto"] = Dami.NextId("Admin_Dosar");
-                if (Convert.ToInt32(dr["IdAuto"].ToString()) < 1000000)
-                    dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1000000;
+                //if (Constante.tipBD == 1)
+                //    dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                //else
+                //    dr["IdAuto"] = Dami.NextId("Admin_Dosar");
+                //if (Convert.ToInt32(dr["IdAuto"].ToString()) < 1000000)
+                //    dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1000000;
 
-                dr["Marca"] = Session["Marca"];
+                dr["F10003"] = Session["Marca"];
                 dr["IdObiect"] = cmbNumeBen.Value ?? DBNull.Value;
-                dr["DataPrimire"] = txtDataPrim.Value ?? DBNull.Value;
-                dr["DataExpirare"] = txtDataExp.Value ?? DBNull.Value;
-                dr["Caracteristica"] = txtCaract.Value ?? DBNull.Value;
+                dr["Descriere"] = txtDesc.Value ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
 
-                metaUploadFile itm = Session["DocUpload_MP_Beneficii"] as metaUploadFile;
-                if (itm != null)
-                {
-                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, metaUploadFile>;
-                    if (lstFiles == null)
-                        lstFiles = new Dictionary<int, metaUploadFile>();
-                    lstFiles.Add(Convert.ToInt32(dr["IdAuto"].ToString()), itm);
-                    Session["List_DocUpload_MP_Beneficii"] = lstFiles;
-                }
+                //metaUploadFile itm = Session["DocUpload_MP_Beneficii"] as metaUploadFile;
+                //if (itm != null)
+                //{
+                //    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, metaUploadFile>;
+                //    if (lstFiles == null)
+                //        lstFiles = new Dictionary<int, metaUploadFile>();
+                //    lstFiles.Add(Convert.ToInt32(dr["IdAuto"].ToString()), itm);
+                //    Session["List_DocUpload_MP_Beneficii"] = lstFiles;
+                //}
 
                 ds.Tables["Admin_Dosar"].Rows.Add(dr);
-                Session["DocUpload_MP_Beneficii"] = null;
+                //Session["DocUpload_MP_Beneficii"] = null;
 
                 e.Cancel = true;
                 grDateDosar.CancelEdit();
                 grDateDosar.DataSource = ds.Tables["Admin_Dosar"];
-                grDateDosar.KeyFieldName = "IdAuto";
+                //grDateDosar.KeyFieldName = "F10003;IdObiect";
                 Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
@@ -141,18 +134,14 @@ namespace WizOne.Personal
         {
             try
             {
-                var idAuto = e.Keys["IdAuto"];
-
+                //var idAuto = e.Keys["IdAuto"];
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataRow dr = ds.Tables["Admin_Dosar"].Rows.Find(new object[] { e.Keys["IdAuto"], e.Keys["IdObiect"] });
 
-                DataRow dr = ds.Tables["Admin_Dosar"].Rows.Find(idAuto);
-
-                ASPxDateEdit txtDataPrim = grDateDosar.FindEditFormTemplateControl("txtDataPrim") as ASPxDateEdit;
-                ASPxDateEdit txtDataExp = grDateDosar.FindEditFormTemplateControl("txtDataExp") as ASPxDateEdit;
                 ASPxComboBox cmbNumeBen = grDateDosar.FindEditFormTemplateControl("cmbNumeBen") as ASPxComboBox;
-                ASPxTextBox txtCaract = grDateDosar.FindEditFormTemplateControl("txtCaract") as ASPxTextBox;
+                ASPxTextBox txtDesc = grDateDosar.FindEditFormTemplateControl("txtDesc") as ASPxTextBox;
 
-                if (cmbNumeBen.Value == null || txtDataPrim.Value == null || txtDataExp.Value == null)
+                if (cmbNumeBen.Value == null)
                 {
                     e.Cancel = true;
                     grDateDosar.CancelEdit();
@@ -160,33 +149,31 @@ namespace WizOne.Personal
                     return;
                 }
 
-                dr["Marca"] = Session["Marca"];
-                dr["IdObiect"] = cmbNumeBen.Value ?? DBNull.Value;
-                dr["DataPrimire"] = txtDataPrim.Value ?? DBNull.Value;
-                dr["DataExpirare"] = txtDataExp.Value ?? DBNull.Value;
-                dr["Caracteristica"] = txtCaract.Value ?? DBNull.Value;
+                //dr["F10003"] = Session["Marca"];
+                //dr["IdObiect"] = cmbNumeBen.Value ?? DBNull.Value;
+                dr["Descriere"] = txtDesc.Value ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
 
-                metaUploadFile itm = Session["DocUpload_MP_Beneficii"] as metaUploadFile;
-                if (itm != null)
-                {
-                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, metaUploadFile>;
-                    if (lstFiles == null)
-                        lstFiles = new Dictionary<int, metaUploadFile>();
-                    if (lstFiles.ContainsKey(Convert.ToInt32(idAuto.ToString())))
-                        lstFiles[Convert.ToInt32(idAuto.ToString())] = itm;
-                    else
-                        lstFiles.Add(Convert.ToInt32(idAuto.ToString()), itm);
-                    Session["List_DocUpload_MP_Beneficii"] = lstFiles;
-                }
-                Session["DocUpload_MP_Beneficii"] = null;
+                //metaUploadFile itm = Session["DocUpload_MP_Beneficii"] as metaUploadFile;
+                //if (itm != null)
+                //{
+                //    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, metaUploadFile>;
+                //    if (lstFiles == null)
+                //        lstFiles = new Dictionary<int, metaUploadFile>();
+                //    if (lstFiles.ContainsKey(Convert.ToInt32(idAuto.ToString())))
+                //        lstFiles[Convert.ToInt32(idAuto.ToString())] = itm;
+                //    else
+                //        lstFiles.Add(Convert.ToInt32(idAuto.ToString()), itm);
+                //    Session["List_DocUpload_MP_Beneficii"] = lstFiles;
+                //}
+                //Session["DocUpload_MP_Beneficii"] = null;
 
                 e.Cancel = true;
                 grDateDosar.CancelEdit();
-                Session["InformatiaCurentaPersonal"] = ds;
                 grDateDosar.DataSource = ds.Tables["Admin_Dosar"];
-                grDateDosar.KeyFieldName = "IdAuto";
+                //grDateDosar.KeyFieldName = "F10003;IdObiect";
+                Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
             {
@@ -206,21 +193,22 @@ namespace WizOne.Personal
 
                 DataRow row = ds.Tables["Admin_Dosar"].Rows.Find(keys);
 
-                Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, metaUploadFile>;
-                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(keys[0].ToString())))
-                    lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
-                Session["List_DocUpload_MP_Beneficii"] = lstFiles;
+                //Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, metaUploadFile>;
+                //if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(keys[0].ToString())))
+                //    lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
+                //Session["List_DocUpload_MP_Beneficii"] = lstFiles;
 
-                Session["DocUpload_MP_MBeneficii"] = null;
+                //Session["DocUpload_MP_MBeneficii"] = null;
 
-                row.Delete();
+                if (General.Nz(e.Values["Obligatoriu"], 0).ToString() == "0" && (General.Nz(e.Values["Obligatoriu"],0).ToString() == "1" && e.Values[""] == null))
+                    row.Delete();
 
-                Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"], "").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Beneficii/' {Dami.Operator()} ""FisierNume"" FROM ""tblFisiere"" WHERE ""Tabela""='Admin_Medicina' AND ""Id""={keys[0]}"), "").ToString();
+                //Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"], "").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Beneficii/' {Dami.Operator()} ""FisierNume"" FROM ""tblFisiere"" WHERE ""Tabela""='Admin_Medicina' AND ""Id""={keys[0]}"), "").ToString();
 
                 e.Cancel = true;
                 grDateDosar.CancelEdit();
-                Session["InformatiaCurentaPersonal"] = ds;
                 grDateDosar.DataSource = ds.Tables["Admin_Dosar"];
+                Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
             {
@@ -385,7 +373,7 @@ namespace WizOne.Personal
                     if (dr == null)
                     {
                         dr = dt.NewRow();
-                        dr["F10003"] = Session["Marca"];
+                        dr["F10003"] = obj[0];
                         dr["IdObiect"] = obj[1];
                         dt.Rows.Add(dr);
                     }

@@ -7,7 +7,7 @@
     <table style="width:100%">
         <tr>
             <td>
-                <dx:ASPxGridView ID="grDateDosar" runat="server" ClientInstanceName="grDateDosar" ClientIDMode="Static" Width="65%" AutoGenerateColumns="false"  OnDataBinding="grDateDosar_DataBinding"  OnInitNewRow="grDateDosar_InitNewRow"
+                <dx:ASPxGridView ID="grDateDosar" runat="server" ClientInstanceName="grDateDosar" ClientIDMode="Static" Width="65%" AutoGenerateColumns="false" KeyFieldName="F10003;IdObiect" OnDataBinding="grDateDosar_DataBinding"  OnInitNewRow="grDateDosar_InitNewRow"
                     OnRowInserting="grDateDosar_RowInserting" OnRowUpdating="grDateDosar_RowUpdating" OnRowDeleting="grDateDosar_RowDeleting" OnHtmlEditFormCreated="grDateDosar_HtmlEditFormCreated">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  

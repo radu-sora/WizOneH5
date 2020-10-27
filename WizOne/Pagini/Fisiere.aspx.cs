@@ -137,7 +137,7 @@ namespace WizOne.Pagini
                                     if (drAt != null)
                                     {
                                         string numeFiser = (drAt["FisierNume"] ?? "").ToString();
-                                        object fisier = General.Nz(drAt["Attach"], null);
+                                        object fisier = General.Nz(drAt["Fisier"], null);
 
                                         string cale = HostingEnvironment.MapPath("~/FisiereApp/Atasamente/") + numeFiser;
                                         if (fisier == null && File.Exists(cale))

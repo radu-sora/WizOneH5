@@ -24,12 +24,12 @@ namespace WizOne.Personal
         protected global::DevExpress.Web.ASPxGridView grDateDosar;
 
         /// <summary>
-        /// btnSterge control.
+        /// btnAtasament control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnSterge;
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnAtasament;
     }
 }

@@ -4,7 +4,7 @@
 
     <table width="100%">
         <tr>
-            <td >
+            <td>
                 <dx:ASPxGridView ID="grDateBeneficii" runat="server" ClientInstanceName="grDateBeneficii" ClientIDMode="Static" Width="65%" AutoGenerateColumns="false"  OnDataBinding="grDateBeneficii_DataBinding"  OnInitNewRow="grDateBeneficii_InitNewRow"
                     OnRowInserting="grDateBeneficii_RowInserting" OnRowUpdating="grDateBeneficii_RowUpdating" OnRowDeleting="grDateBeneficii_RowDeleting" OnHtmlEditFormCreated="grDateBeneficii_HtmlEditFormCreated">
                     <SettingsBehavior AllowFocusedRow="true" />

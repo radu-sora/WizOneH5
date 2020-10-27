@@ -3,32 +3,25 @@
 
 
 <body>
+
     <table style="width:100%">
         <tr>
-            <td >
-                <dx:ASPxGridView ID="grDateDosar" runat="server" ClientInstanceName="grDateDosar" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" 
-                    OnBatchUpdate="grDateDosar_BatchUpdate" OnInitNewRow="grDateDosar_InitNewRow" OnCustomButtonInitialize="grDateDosar_CustomButtonInitialize"
-                    OnCustomCallback="grDateDosar_CustomCallback" OnHtmlRowCreated="grDateDosar_HtmlRowCreated">
-                    <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="true" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                    <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
-                    <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
-                    <SettingsSearchPanel Visible="false" />
-                    <SettingsLoadingPanel Mode="ShowAsPopup" />
-                    <ClientSideEvents EndCallback="function(s,e) { OnEndCallbackDosar(s,e); }" CustomButtonClick="function (s,e) { OnCustomButtonClickDosar(s,e); }" ContextMenu="ctx" /> 
+            <td>
+                <dx:ASPxGridView ID="grDateDosar" runat="server" ClientInstanceName="grDateDosar" ClientIDMode="Static" Width="65%" AutoGenerateColumns="false"  OnDataBinding="grDateDosar_DataBinding"  OnInitNewRow="grDateDosar_InitNewRow"
+                    OnRowInserting="grDateDosar_RowInserting" OnRowUpdating="grDateDosar_RowUpdating" OnRowDeleting="grDateDosar_RowDeleting" OnHtmlEditFormCreated="grDateDosar_HtmlEditFormCreated">
+                    <SettingsBehavior AllowFocusedRow="true" />
+                    <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
+                    <ClientSideEvents CustomButtonClick="function(s, e) { OnCustomButtonClickDosar(s, e); }" EndCallback="function(s,e) { OnEndCallbackDosar(s,e); }" ContextMenu="ctx" />                                      
+                    <SettingsEditing Mode="EditFormAndDisplayRow" />
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
-                        <dx:GridViewCommandColumn Width="60px" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" ">
+                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid">
                             <CustomButtons>
-                                <dx:GridViewCommandColumnCustomButton ID="btnSterge">
-                                    <Image ToolTip="Sterge" Url="~/Fisiere/Imagini/Icoane/sterge.png" />
+                                <dx:GridViewCommandColumnCustomButton ID="btnAtasament">
+                                    <Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/view.png" />
                                 </dx:GridViewCommandColumnCustomButton>
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
-
-                        <dx:GridViewDataColumn Caption=" " VisibleIndex="0" Width="50px"  Settings-ShowEditorInBatchEditMode="false" CellStyle-HorizontalAlign="Center">
-                            <DataItemTemplate>
-                                <img id="imgExista" runat="server" title="Indica daca are sau nu are fisier" src='<%# GetImagePath(Eval("AreFisier")) %>' />
-                            </DataItemTemplate>
-                        </dx:GridViewDataColumn>
                         <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Angajat"  Width="75px" Visible="false" ShowInCustomizationForm="false"/>
                         <dx:GridViewDataComboBoxColumn FieldName="IdObiect" Name="IdObiect" Caption="Denumire" Width="250px" >
                             <PropertiesComboBox TextField="NumeCompus" ValueField="IdObiect" ValueType="System.Int32" DropDownStyle="DropDown" />
@@ -37,81 +30,103 @@
                         <dx:GridViewDataTextColumn FieldName="FisierNume" Name="FisierNume" Caption="Nume"  Width="250px" Settings-ShowEditorInBatchEditMode="false" />
                         <dx:GridViewDataTextColumn FieldName="FisierExtensie" Name="FisierExtensie" Caption="Extensie"  Width="250px" Settings-ShowEditorInBatchEditMode="false" />
 
-                        <dx:GridViewBandColumn Caption="Atasamente" HeaderStyle-HorizontalAlign="Center" Name="colAtas">
-                            <Columns>
-                                <dx:GridViewDataColumn Width="100px" Caption="Incarca" CellStyle-HorizontalAlign="Center" Name="colUpload" Settings-ShowEditorInBatchEditMode="false" BatchEditModifiedCellStyle-HorizontalAlign="Center">
-                                    <DataItemTemplate>
-                                        <dx:ASPxUploadControl ID="btnDocUpload" runat="server" ShowProgressPanel="true" Height="28px"
-                                            BrowseButton-Text="" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
-                                            OnFileUploadComplete="btnDocUpload_FileUploadComplete" ValidationSettings-ShowErrors="false">
-                                            <BrowseButton>
-                                                <Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
-                                            </BrowseButton>
-                                            <ValidationSettings ShowErrors="False"></ValidationSettings>
-                                        </dx:ASPxUploadControl>
-                                    </DataItemTemplate>
-                                </dx:GridViewDataColumn>
-                        
-                                <dx:GridViewDataColumn Width="100px" Caption="Vizualizare" CellStyle-HorizontalAlign="Center" Name="colArata" Settings-ShowEditorInBatchEditMode="false">
-                                    <DataItemTemplate>
-                                        <dx:ASPxButton ID="btnArata" runat="server" Text="" AutoPostBack="false" ToolTip="Arata document" HorizontalAlign="Center" oncontextMenu="ctx(this,event)" >
-                                            <ClientSideEvents Click="function(s,e) { GoToAtasModeDosar(s,e); }" />
-                                            <Image Url="~/Fisiere/Imagini/Icoane/arata.png"></Image>
-                                        </dx:ASPxButton>
-                                    </DataItemTemplate>
-                                </dx:GridViewDataColumn>
-                                
-                                <dx:GridViewDataColumn Width="100px" Caption="Stergere" CellStyle-HorizontalAlign="Center" Name="colSterge" Settings-ShowEditorInBatchEditMode="false">
-                                    <DataItemTemplate>
-                                        <dx:ASPxButton ID="btnStergeFisier" runat="server" Text="" AutoPostBack="false" ToolTip="Sterge document" oncontextMenu="ctx(this,event)" >
-                                            <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
-                                        </dx:ASPxButton>
-                                    </DataItemTemplate>
-                                </dx:GridViewDataColumn>
-                            </Columns>
-                        </dx:GridViewBandColumn>
-
                         <dx:GridViewDataDateColumn FieldName="AreFisier" Name="AreFisier" Caption="AreFisier" Visible="false" ShowInCustomizationForm="false" /> 
-                        <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
-                        <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />                                              
+                        <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" />						
+                        <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" />
                     </Columns>
                     <SettingsCommandButton>
-                        <NewButton>
-                            <Image Url="~/Fisiere/Imagini/Icoane/new.png" AlternateText="Adauga" ToolTip="Adauga" />
-                        </NewButton>
-                        <DeleteButton>
-                            <Image Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" ToolTip="Sterge" />
+                        <UpdateButton ButtonType="Link" Text="Actualizeaza">
+                            <Styles>
+                                <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
+                                </Style>
+                            </Styles>
+                        </UpdateButton>
+                        <CancelButton ButtonType="Link" Text="Renunta">
+                        </CancelButton>
+
+                        <EditButton Image-ToolTip="Edit">
+                            <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+                            <Styles>
+                                <Style Paddings-PaddingRight="5px" />
+                            </Styles>
+                        </EditButton>
+                        <DeleteButton Image-ToolTip="Sterge">
+                            <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" />
                         </DeleteButton>
+                        <NewButton Image-ToolTip="Rand nou">
+                            <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+                            <Styles>
+                                <Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
+                            </Styles>
+                        </NewButton>
                     </SettingsCommandButton>
-                </dx:ASPxGridView>                    
+
+                    <Templates>
+                        <EditForm>
+                            <div style="padding: 4px 3px 4px">
+                                <table>
+                                    <tr>
+                                        <td style="padding-left:10px !important;" colspan="2">Nume beneficiu</td>
+                                    </tr>
+                                    <tr><td style="padding:10px !important;" colspan="2"><dx:ASPxComboBox ID="cmbNumeBen" runat="server" Width="250px" ValueField="IdObiect" DropDownWidth="200" TextField="NumeCompus" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("IdObiect") %>' />
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px !important;"  colspan="2">Descriere</td>                                      
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px !important;"  colspan="2"><dx:ASPxTextBox ID="txtDesc" runat="server" Width="250px" Value='<%# Bind("Descriere") %>' /></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px !important;" colspan="2">
+                                            <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp;</label>
+                                            <dx:ASPxUploadControl ID="btnDocUploadDosar" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
+                                                BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
+                                                ClientInstanceName="btnDocUploadDosar" OnFileUploadComplete="btnDocUploadDosar_FileUploadComplete" ValidationSettings-ShowErrors="false">
+                                                <BrowseButton>
+                                                    <Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
+                                                </BrowseButton>
+                                                <ValidationSettings ShowErrors="False"></ValidationSettings>
+                                                <ClientSideEvents FileUploadComplete="function(s,e) { OnEndUploadDosar(s); }" />
+                                            </dx:ASPxUploadControl>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px !important;">
+                                            <div style="text-align: left; padding: 2px; font-weight:bold; font-size:32px;">
+                                                <dx:ASPxGridViewTemplateReplacement ID="UpdateButton" ReplacementType="EditFormUpdateButton" runat="server"></dx:ASPxGridViewTemplateReplacement>
+                                                <dx:ASPxGridViewTemplateReplacement ID="CancelButton" ReplacementType="EditFormCancelButton" runat="server"></dx:ASPxGridViewTemplateReplacement>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </EditForm>
+                    </Templates>
+
+                </dx:ASPxGridView>
+                    
             </td>
         </tr>
     </table> 
 
     <script>
 
-        var modifDosar = false;
+        function OnCustomButtonClickDosar(s, e) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=13&id=' + s.GetRowKey(s.GetFocusedRowIndex()), '_blank ')
+        }
 
-        function GoToAtasModeDosar(Value) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=13&id=' + Value, '_blank ')
+        function OnEndUploadDosar(s) {
+            lblDoc.innerText = s.cpDocUploadName;
+            s.cpDocUploadName = null;
         }
 
         function OnEndCallbackDosar(s, e) {
-            if (s.cpAlertMessage) {
+            if (s.cpAlertMessage != null) {
                 swal({
-                    title: trad_string(limba, "Atentie"),
-                    text: s.cpAlertMessage,
+                    title: "", text: s.cpAlertMessage,
                     type: "warning"
                 });
-                delete s.cpAlertMessage;
-            }
-        }
-
-        function OnCustomButtonClickDosar(s, e) {
-            switch (e.buttonID) {
-                case "btnSterge":
-                    grDateDosar.PerformCallback('btnSterge;' + s.GetRowKey(e.visibleIndex));
-                    break;
+                s.cpAlertMessage = null;
             }
         }
 

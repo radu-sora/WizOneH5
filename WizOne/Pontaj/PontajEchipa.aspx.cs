@@ -1208,8 +1208,10 @@ namespace WizOne.Pontaj
                     {
                         int nrCol = 0;              
                         int idZile = 0, colZile = 0;
+                        bool ignorare = false;
                         for (int i = 0; i < dt.Columns.Count; i++)
-                        {
+                        {                    
+
                             if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
                             {
                                 if (idZile > 0 && colZile > 0)
@@ -1221,10 +1223,20 @@ namespace WizOne.Pontaj
                                 {
                                     //ws2.Cells[1, nrCol].Value = lista[dt.Columns[i].ColumnName];
                                     //ws2.Cells[1, nrCol++].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
-                                    ws2.Cells[1, listaId[dt.Columns[i].ColumnName] - 1].Value = lista[dt.Columns[i].ColumnName];
-                                    ws2.Cells[1, listaId[dt.Columns[i].ColumnName] - 1].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
-                                    if (listaId[dt.Columns[i].ColumnName] > nrCol)
-                                        nrCol = listaId[dt.Columns[i].ColumnName];
+                                    if (listaId[dt.Columns[i].ColumnName] > listaId["Zilele 1-31"])
+                                    {
+                                        colZile = 30 + listaId["Zilele 1-31"];
+                                        ignorare = true;
+                                        ws2.Cells[1, colZile + listaId[dt.Columns[i].ColumnName] - listaId["Zilele 1-31"]].Value = lista[dt.Columns[i].ColumnName];
+                                        ws2.Cells[1, colZile + listaId[dt.Columns[i].ColumnName] - listaId["Zilele 1-31"]].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);            
+                                    }
+                                    else
+                                    {
+                                        ws2.Cells[1, listaId[dt.Columns[i].ColumnName] - 1].Value = lista[dt.Columns[i].ColumnName];
+                                        ws2.Cells[1, listaId[dt.Columns[i].ColumnName] - 1].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
+                                        if (listaId[dt.Columns[i].ColumnName] > nrCol)
+                                            nrCol = listaId[dt.Columns[i].ColumnName];
+                                    }
                                 }
 
                             }
@@ -1243,7 +1255,8 @@ namespace WizOne.Pontaj
                                 ws2.Cells[1, nrCol].ColumnWidth = Convert.ToInt32(listaLung["Zilele 1-31"]);
                                 nrCol++;                          
                                 idZile = listaId["Zilele 1-31"];
-                                colZile = nrCol;
+                                if (!ignorare)
+                                    colZile = nrCol;
                             }
                         }
 
@@ -1277,11 +1290,22 @@ namespace WizOne.Pontaj
                                         //if (nrZec > 0)
                                         //    ws2.Cells[row + 2, nrCol].NumberFormat = format;
                                         //ws2.Cells[row + 2, nrCol++].Value = dt.Rows[row][i].ToString();
-                                        if (nrZec > 0)
-                                            ws2.Cells[row + 2, listaId[dt.Columns[i].ColumnName] - 1].NumberFormat = format;
-                                        ws2.Cells[row + 2, listaId[dt.Columns[i].ColumnName] - 1].Value = dt.Rows[row][i].ToString();
-                                        if (listaId[dt.Columns[i].ColumnName] > nrCol)
-                                            nrCol = listaId[dt.Columns[i].ColumnName];
+                                        if (listaId[dt.Columns[i].ColumnName] > listaId["Zilele 1-31"])
+                                        {
+                                            colZile = 30 + listaId["Zilele 1-31"];
+                                            ignorare = true;
+                                            if (nrZec > 0)
+                                                ws2.Cells[row + 2, colZile + listaId[dt.Columns[i].ColumnName] - listaId["Zilele 1-31"]].NumberFormat = format;
+                                            ws2.Cells[row + 2, colZile + listaId[dt.Columns[i].ColumnName] - listaId["Zilele 1-31"]].Value = dt.Rows[row][i].ToString();                     
+                                        }
+                                        else
+                                        {
+                                            if (nrZec > 0)
+                                                ws2.Cells[row + 2, listaId[dt.Columns[i].ColumnName] - 1].NumberFormat = format;
+                                            ws2.Cells[row + 2, listaId[dt.Columns[i].ColumnName] - 1].Value = dt.Rows[row][i].ToString();
+                                            if (listaId[dt.Columns[i].ColumnName] > nrCol)
+                                                nrCol = listaId[dt.Columns[i].ColumnName];
+                                        }
                                     }
                                 }
 
@@ -1303,7 +1327,8 @@ namespace WizOne.Pontaj
                                         ws2.Cells[row + 2, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
                                     nrCol++;
                                     idZile = listaId["Zilele 1-31"];
-                                    colZile = nrCol;                                    
+                                    if (!ignorare)
+                                        colZile = nrCol;                                    
 
                                 }
                             }
@@ -1312,8 +1337,9 @@ namespace WizOne.Pontaj
                     else
                     {
                         int nrCol = 0;
-                        int rand = 0;
+                        int rand = 0; 
                         int idZile = 0, colZile = 0;
+                        bool ignorare = false;
                         for (int i = 0; i < dt.Columns.Count; i++)
                         {
                             if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
@@ -1325,8 +1351,18 @@ namespace WizOne.Pontaj
                                 }
                                 else
                                 {
-                                    ws2.Cells[1, nrCol].Value = lista[dt.Columns[i].ColumnName];
-                                    ws2.Cells[1, nrCol++].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
+                                    if (listaId[dt.Columns[i].ColumnName] > listaId["Zilele 1-31"])
+                                    {
+                                        colZile = 30 + listaId["Zilele 1-31"];
+                                        ignorare = true;
+                                        ws2.Cells[1, colZile + listaId[dt.Columns[i].ColumnName] - listaId["Zilele 1-31"]].Value = lista[dt.Columns[i].ColumnName];
+                                        ws2.Cells[1, colZile + listaId[dt.Columns[i].ColumnName] - listaId["Zilele 1-31"]].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
+                                    }
+                                    else
+                                    {
+                                        ws2.Cells[1, nrCol].Value = lista[dt.Columns[i].ColumnName];
+                                        ws2.Cells[1, nrCol++].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
+                                    }
                                 }
                             }
                             else if (dt.Columns[i].ColumnName.Contains("Ziua") && !dt.Columns[i].ColumnName.Contains("I") && !dt.Columns[i].ColumnName.Contains("O") && !dt.Columns[i].ColumnName.Contains("P"))
@@ -1334,7 +1370,8 @@ namespace WizOne.Pontaj
                                 ws2.Cells[1, nrCol].Value = dt.Columns[i].ColumnName.Replace("Ziua", "");
                                 ws2.Cells[1, nrCol++].ColumnWidth = Convert.ToInt32(listaLung["Zilele 1-31"]);
                                 idZile = listaId["Zilele 1-31"];
-                                colZile = nrCol - 1;
+                                if (!ignorare)
+                                    colZile = nrCol - 1;
                             }
                         }
 
@@ -1377,9 +1414,20 @@ namespace WizOne.Pontaj
                                     }
                                     else
                                     {
-                                        if (nrZec > 0)
-                                            ws2.Cells[4 * row + 3 + rand - 1, nrCol].NumberFormat = format;
-                                        ws2.Cells[4 * row + 3 + rand - 1, nrCol].Value = dt.Rows[row][i].ToString();
+                                        if (listaId[dt.Columns[i].ColumnName] > listaId["Zilele 1-31"])
+                                        {
+                                            colZile = 30 + listaId["Zilele 1-31"];
+                                            ignorare = true;
+                                            if (nrZec > 0)
+                                                ws2.Cells[4 * row + 3 + rand - 1, colZile + listaId[dt.Columns[i].ColumnName] - listaId["Zilele 1-31"]].NumberFormat = format;
+                                            ws2.Cells[4 * row + 3 + rand - 1, colZile + listaId[dt.Columns[i].ColumnName] - listaId["Zilele 1-31"]].Value = dt.Rows[row][i].ToString();
+                                        }
+                                        else
+                                        {
+                                            if (nrZec > 0)
+                                                ws2.Cells[4 * row + 3 + rand - 1, nrCol].NumberFormat = format;
+                                            ws2.Cells[4 * row + 3 + rand - 1, nrCol].Value = dt.Rows[row][i].ToString();
+                                        }
                                     }
 
                                     if (dt.Columns[i].ColumnName.Contains("Ziua"))
@@ -1398,7 +1446,8 @@ namespace WizOne.Pontaj
                                         if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
                                             ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
                                         idZile = listaId["Zilele 1-31"];
-                                        colZile = nrCol;
+                                        if (!ignorare)
+                                            colZile = nrCol;
                                     }
                                 }
 

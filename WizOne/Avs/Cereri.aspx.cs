@@ -4518,12 +4518,12 @@ namespace WizOne.Avs
                                 + " VALUES (95, '" + dtF100.Rows[0]["F10017"].ToString() + "', " + dtF100.Rows[0]["F10003"].ToString() + ", '" + dtF100.Rows[0]["F10011"].ToString() + "', " + data9 + ", " + data10
                                 + ", " + nrLuni.ToString() + ", " + nrZile.ToString() + ", " + dtF100.Rows[0]["F100929"].ToString() + ", 1, " + (Convert.ToInt32(dtCer.Rows[0]["DurataContract"].ToString()) == 1 ? "'Nedeterminat'" : "'Determinat'") + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                             General.IncarcaDT(sql095, null);
-                            //}
+                            //}                           
 
-                            //string sqlTmp = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
-                            //    + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", " + Convert.ToInt32(dtCer.Rows[0]["IdAtribut"].ToString()) + ", 'Prelungire CIM', " + data + ", " + dtCer.Rows[0]["MeserieId"].ToString() + ", 'Modificari in avans', '"
-                            //    + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
-                            //General.IncarcaDT(sqlTmp, null);
+                            //Radu 26.10.2020
+                            sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
+                                + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", " + dtCer.Rows[0]["IdAtribut"].ToString() + ", 'Prelungire CIM', " + data + ", " + dtCer.Rows[0]["DurataContract"].ToString() + ", 'Modificari in avans', '"
+                                + dateDoc + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
 
 
                             //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO   

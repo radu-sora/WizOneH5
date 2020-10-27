@@ -15021,3 +15021,9 @@ GO
 
 INSERT INTO "Eval_QuizTaburi"("Denumire", "Pagina", "Ordine") VALUES('Ordine afisare','QuizOrdonare',5)
 GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('LimbiTraduse', 'Ro,En,Fr,Bg,Es,De,It,Ru', 'Limbi care sunt traduse; trebuie introduse de forma: Ro,En,Bg,Fr etc.', 0)
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('FiltruAngajati_AscunsiAppWS', 'F10025 <> 900', 'Conditie pentru afisarea angajatilor in WizSalary', 3)
+GO

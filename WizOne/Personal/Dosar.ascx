@@ -48,7 +48,6 @@
                                                 <Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
                                             </BrowseButton>
                                             <ValidationSettings ShowErrors="False"></ValidationSettings>
-                                            <ClientSideEvents FileUploadComplete="function(s,e) { grDateDosar.PerformCallback('btnDocUpload'); }" />
                                         </dx:ASPxUploadControl>
                                     </DataItemTemplate>
                                 </dx:GridViewDataColumn>
@@ -94,7 +93,7 @@
         var modifDosar = false;
 
         function GoToAtasModeDosar(Value) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=11&id=' + Value, '_blank ')
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=13&id=' + Value, '_blank ')
         }
 
         function OnEndCallbackDosar(s, e) {

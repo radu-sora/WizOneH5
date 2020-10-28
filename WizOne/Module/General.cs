@@ -9102,7 +9102,7 @@ namespace WizOne.Module
                 //stergem inregistrarile
                 for (int i = 0; i < dtDosar.Rows.Count; i++)
                 {
-                    if (dtDosar.Rows[i].RowState != DataRowState.Deleted && General.Nz(dtDosar.Rows[1]["Obligatoriu"],0).ToString() == "1" && dtDosar.Rows[1]["Fisier"] == DBNull.Value)
+                    if (dtDosar.Rows[i].RowState != DataRowState.Deleted && General.Nz(dtDosar.Rows[i]["Obligatoriu"],0).ToString() == "1" && dtDosar.Rows[i]["Fisier"] == DBNull.Value)
                         dtDosar.Rows[i].Delete();
                 }
 

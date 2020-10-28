@@ -60,7 +60,10 @@ namespace WizOne.Pagini
                                             if (fisier == null && File.Exists(cale))
                                                 fisier = File.ReadAllBytes(cale);
 
-                                            scrieDoc((drAt["FisierExtensie"] ?? ".txt").ToString(), (byte[])fisier, numeFiser);
+                                            if (fisier != null)
+                                                scrieDoc((drAt["FisierExtensie"] ?? ".txt").ToString(), (byte[])fisier, numeFiser);
+                                            else
+                                                Response.Write("Nu exista date de afisat !");
                                         }
                                         else
                                             Response.Write("Nu exista date de afisat !");
@@ -131,7 +134,7 @@ namespace WizOne.Pagini
                                 break;
                             case "13":
                                 {
-                                    string[] arr = id.Split(';');
+                                    string[] arr = id.Split('|');
                                     if (arr.Length != 2) return;
                                     DataRow drAt = General.IncarcaDR(@"SELECT * FROM ""Admin_Dosar"" WHERE F10003=@1 AND ""IdObiect""=@2", new object[] { arr[0], arr[1] });   // dtAt.Select("IdAuto = " + id).FirstOrDefault();
                                     if (drAt != null)
@@ -143,7 +146,10 @@ namespace WizOne.Pagini
                                         if (fisier == null && File.Exists(cale))
                                             fisier = File.ReadAllBytes(cale);
 
-                                        scrieDoc((drAt["FisierExtensie"] ?? ".txt").ToString(), (byte[])fisier, numeFiser);
+                                        if (fisier != null)
+                                            scrieDoc((drAt["FisierExtensie"] ?? ".txt").ToString(), (byte[])fisier, numeFiser);
+                                        else
+                                            Response.Write("Nu exista date de afisat !");
                                     }
                                     else
                                         Response.Write("Nu exista date de afisat !");

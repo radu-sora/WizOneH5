@@ -1,21 +1,17 @@
-﻿using System;
+﻿using DevExpress.Web;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using DevExpress.Web;
 using WizOne.Module;
-using System.Data.SqlClient;
-using System.Reflection;
-using System.IO;
-using System.Globalization;
-using System.Web.UI.HtmlControls;
-using DevExpress.Data;
-using System.Web.Hosting;
-using System.Drawing;
-using System.Diagnostics;
 
 namespace WizOne.Personal
 {

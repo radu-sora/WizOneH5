@@ -21,7 +21,7 @@
     <div>
 
 
-    <dx:ASPxPageControl SkinID="None" Width="100%"  EnableViewState="false" ID="ASPxPageControl2" ClientInstanceName="pageCtl" OnCallback="ASPxPageControl2_Callback"
+    <dx:ASPxPageControl SkinID="None" Width="100%"  EnableViewState="false" ID="ASPxPageControl2" ClientInstanceName="pageCtl"
         runat="server" ActiveTabIndex="0" TabSpacing="0px" CssClass="pcTemplates" EnableHierarchyRecreation="true">
         <ClientSideEvents EndCallback="function(s,e) { onGridEndCallback(s); }" />
         <Paddings Padding="30px" PaddingLeft="12px" />

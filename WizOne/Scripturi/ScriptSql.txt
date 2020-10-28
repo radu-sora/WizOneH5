@@ -13710,7 +13710,7 @@ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('
 GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_NrCeas', '', 'se enumera terminalele care sunt incluse in procesul de control al angajatilor; restul se ignora; daca nu este nici o valoare se iau in calcul toate;', 0);
 GO
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_FontSize', '', 'se enumera terminalele care sunt incluse in procesul de control al angajatilor; restul se ignora; daca nu este nici o valoare se iau in calcul toate;', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_FontSize', '50', 'marimea fontului cu care se va afisa textul pe ecran', 0);
 GO
 
 ALTER TABLE "Ptj_Intrari" ADD "TimpOSReal" int

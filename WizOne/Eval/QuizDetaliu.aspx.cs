@@ -412,5 +412,10 @@ namespace WizOne.Eval
         }
 
         #endregion
+
+        protected void ASPxPageControl2_Callback(object sender, CallbackEventArgsBase e)
+        {
+            btnSave_Click(null, null);
+        }
     }
 }

@@ -4,6 +4,7 @@ using DevExpress.DataAccess.Wizard.Services;
 using DevExpress.XtraReports.UI;
 using DevExpress.XtraReports.Web.Extensions;
 using DevExpress.XtraReports.Web.ReportDesigner;
+using DevExpress.XtraReports.Web.WebDocumentViewer;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using System;
 using System.Collections;
@@ -86,6 +87,7 @@ namespace Wizrom.Reports.Code
             // DX
             DefaultReportDesignerContainer.RegisterDataSourceWizardConnectionStringsProvider<ReportDataSourceWizardConnectionStringsProvider>(true);
             DefaultReportDesignerContainer.EnableCustomSql();
+            DefaultWebDocumentViewerContainer.DisableCachedDocumentSource();
             ReportStorageWebExtension.RegisterExtensionGlobal(new EntityReportStorageWebExtension());
             // Reports
             DynamicModuleUtility.RegisterModule(typeof(ReportSessionModule));

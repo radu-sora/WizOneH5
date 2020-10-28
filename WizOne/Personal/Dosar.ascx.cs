@@ -36,7 +36,8 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colEchip = (grDateDosar.Columns["IdObiect"] as GridViewDataComboBoxColumn);
             colEchip.PropertiesComboBox.DataSource = dtEchip;
 
-            grDateDosar.DataBind();
+            if (!IsPostBack)
+                grDateDosar.DataBind();
 
             if (General.VarSession("EsteAdmin").ToString() == "0") General.SecuritatePersonal(grDateDosar);
         }
@@ -59,7 +60,6 @@ namespace WizOne.Personal
             try
             {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                General.AdaugaDosar(ref ds, Session["Marca"]);
                 grDateDosar.DataSource = ds.Tables["Admin_Dosar"];
             }
             catch (Exception ex)
@@ -94,6 +94,15 @@ namespace WizOne.Personal
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
 
+                metaUploadFile itm = Session["DocUpload_MP_Dosar"] as metaUploadFile;
+                if (itm != null)
+                {
+                    dr["Fisier"] = itm.UploadedFile;
+                    dr["FisierNume"] = itm.UploadedFileName;
+                    dr["FisierExtensie"] = itm.UploadedFileExtension;
+                }
+                Session["DocUpload_MP_Dosar"] = null;
+
                 ds.Tables["Admin_Dosar"].Rows.Add(dr);
 
                 e.Cancel = true;
@@ -124,6 +133,15 @@ namespace WizOne.Personal
                     dr["Descriere"] = txtDesc.Value ?? DBNull.Value;
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;
+
+                    metaUploadFile itm = Session["DocUpload_MP_Dosar"] as metaUploadFile;
+                    if (itm != null)
+                    {
+                        dr["Fisier"] = itm.UploadedFile;
+                        dr["FisierNume"] = itm.UploadedFileName;
+                        dr["FisierExtensie"] = itm.UploadedFileExtension;
+                    }
+                    Session["DocUpload_MP_Dosar"] = null;
                 }
                 else
                     grDateDosar.JSProperties["cpAlertMessage"] = "Lipsesc date";
@@ -152,7 +170,10 @@ namespace WizOne.Personal
                 DataRow dr = ds.Tables["Admin_Dosar"].Rows.Find(new object[] { e.Keys["F10003"], e.Keys["IdObiect"] });
 
                 if (General.Nz(e.Values["Obligatoriu"], 0).ToString() == "0")
+                {
                     dr.Delete();
+                    Session["DocUpload_MP_Dosar"] = null;
+                }
                 else
                     grDateDosar.JSProperties["cpAlertMessage"] = "Acest tip de document vine din fisa postului, este obligatoriu si nu se poate sterge";
 
@@ -185,34 +206,16 @@ namespace WizOne.Personal
         {
             try
             {
-                object[] obj = grDateDosar.GetRowValues(grDateDosar.FocusedRowIndex, new string[] { "F10003", "IdObiect" }) as object[];
+                if (!e.IsValid) return;
 
-                if (Convert.ToInt32(General.Nz(obj[0], -99)) == -99) return;
+                metaUploadFile itm = new metaUploadFile();
+                itm.UploadedFile = e.UploadedFile.FileBytes;
+                itm.UploadedFileName = e.UploadedFile.FileName;
+                itm.UploadedFileExtension = Path.GetExtension(e.UploadedFile.FileName);
 
-                DataTable dt = new DataTable();
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                if (ds.Tables.Contains("Admin_Dosar"))
-                {
-                    dt = ds.Tables["Admin_Dosar"];
+                Session["DocUpload_MP_Dosar"] = itm;
 
-                    DataRow dr = dt.Rows.Find(new object[] { obj[0], obj[1] });
-
-                    if (dr == null)
-                    {
-                        dr = dt.NewRow();
-                        dr["F10003"] = obj[0];
-                        dr["IdObiect"] = obj[1];
-                        dt.Rows.Add(dr);
-                    }
-
-                    string extensie = Path.GetExtension(e.UploadedFile.FileName);
-                    dr["Fisier"] = e.UploadedFile.FileBytes;
-                    dr["FisierNume"] = e.UploadedFile.FileName;
-                    dr["FisierExtensie"] = extensie;
-                    dr["AreFisier"] = 1;
-
-                    Session["InformatiaCurentaPersonal"] = ds;
-                }
+                ((ASPxUploadControl)sender).JSProperties["cpDocUploadName"] = e.UploadedFile.FileName;
             }
             catch (Exception ex)
             {

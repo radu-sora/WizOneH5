@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using WizOne.Module;
-using System.Drawing;
-using System.Web.UI.HtmlControls;
 
 namespace WizOne.Personal
 {
@@ -362,14 +361,8 @@ namespace WizOne.Personal
                 cmbPost.DataSource = Session["MP_cmbPost"];
                 cmbPost.DataBind();
 
-                if (Session["MP_IdPost"] != null)
-                    cmbPost.Value = Session["MP_IdPost"];
-                else
-                {
-                    string sqlIdPost = $@"SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
-                    Session["MP_IdPost"] = General.ExecutaScalar(sqlIdPost, new object[] { Session["Marca"] });
-                    cmbPost.Value = Session["MP_IdPost"];
-                }
+                General.AflaIdPost();
+                cmbPost.Value = Session["MP_IdPost"];
             }
             else if (Contract_pnlCtl.IsCallback) {
                 cmbPost.DataSource = Session["MP_cmbPost"];
@@ -533,54 +526,7 @@ namespace WizOne.Personal
                             General.AdaugaBeneficiile(ref ds, Session["Marca"], drPost);
                         }
 
-
-                        #region Adaugam beneficiile
-
-                        //string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + Session["Marca"].ToString();
-                        //DataTable dtBen = new DataTable();
-                        //if (ds.Tables.Contains("Admin_Beneficii"))
-                        //{
-                        //    dtBen = ds.Tables["Admin_Beneficii"];
-                        //}
-                        //else
-                        //{
-                        //    dtBen = General.IncarcaDT(sqlFinal, null);
-                        //    dtBen.TableName = "Admin_Beneficii";
-                        //    dtBen.PrimaryKey = new DataColumn[] { dtBen.Columns["IdAuto"] };
-                        //    ds.Tables.Add(dtBen);
-                        //}
-
-                        //for (int i = 1; i <= 10; i++)
-                        //{
-                        //    int idBen = Convert.ToInt32(General.Nz(drPost["IdBeneficiu" + i], -99));
-                        //    if (idBen != -99 && dtBen.Select("IdObiect=" + idBen).Count() <= 0)
-                        //    {
-                        //        DataRow drBen = ds.Tables["Admin_Beneficii"].NewRow();
-                        //        drBen["Marca"] = Session["Marca"];
-                        //        drBen["IdObiect"] = idBen;
-                        //        drBen["DataPrimire"] = DateTime.Now;
-                        //        drBen["DataExpirare"] = new DateTime(2100, 1, 1);
-                        //        drBen["TIME"] = DateTime.Now;
-                        //        drBen["USER_NO"] = Session["UserId"] ?? DBNull.Value;
-
-                        //        if (Constante.tipBD == 1)
-                        //            drBen["IdAuto"] = Convert.ToInt32(General.Nz(dtBen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                        //        else
-                        //            drBen["IdAuto"] = Dami.NextId("Admin_Beneficii");
-                        //        if (Convert.ToInt32(drBen["IdAuto"].ToString()) < 1000000)
-                        //            drBen["IdAuto"] = Convert.ToInt32(drBen["IdAuto"].ToString()) + 1000000;
-
-                        //        dtBen.Rows.Add(drBen);
-                        //    }
-                        //}
-
-                        #endregion
-
-                        #region Adaugam documentele obligatorii din post (OPIS)
-
                         General.AdaugaDosar(ref ds, Session["Marca"]);
-
-                        #endregion
                     }
                     break;
                 case "cmbFunctie":

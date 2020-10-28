@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using DevExpress.Web;
+using System;
+using System.Data;
+using System.IO;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using DevExpress.Web;
 using WizOne.Module;
-using System.Data.SqlClient;
-using System.Reflection;
-using System.IO;
-using System.Globalization;
-using System.Web.UI.HtmlControls;
-using Oracle.ManagedDataAccess.Client;
 
 namespace WizOne.Personal
 {
     public partial class Lista : System.Web.UI.Page
     {
-        //string cmp = "USER_NO,TIME,IDAUTO,";
         protected void Page_Load(object sender, EventArgs e)
         {
             try

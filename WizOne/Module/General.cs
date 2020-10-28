@@ -9138,5 +9138,21 @@ namespace WizOne.Module
             }
         }
 
+        public static void AflaIdPost()
+        {
+            try
+            {
+                if (HttpContext.Current.Session["MP_IdPost"] == null)
+                {
+                    string sqlIdPost = $@"SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
+                    HttpContext.Current.Session["MP_IdPost"] = General.ExecutaScalar(sqlIdPost, new object[] { HttpContext.Current.Session["Marca"] });
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "AdaugaDosar", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
     }
 }

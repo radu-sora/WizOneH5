@@ -26,10 +26,10 @@
                         <dx:GridViewDataComboBoxColumn FieldName="IdObiect" Name="IdObiect" Caption="Denumire document" Width="450px" >
                             <PropertiesComboBox TextField="NumeCompus" ValueField="IdObiect" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" Width="150px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="FisierNume" Name="FisierNume" Caption="Nume fisier"  Width="350px" Settings-ShowEditorInBatchEditMode="false" />
                         <dx:GridViewDataTextColumn FieldName="FisierExtensie" Name="FisierExtensie" Caption="Extensie fisier"  Width="150px" Settings-ShowEditorInBatchEditMode="false" />
 
+                        <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" Width="150px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Angajat"  Width="75px" Visible="false" ShowInCustomizationForm="false"/>
                         <dx:GridViewDataDateColumn FieldName="Obligatoriu" Name="Obligatoriu" Caption="Obligatoriu" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataDateColumn FieldName="AreFisier" Name="AreFisier" Caption="AreFisier" Visible="false" ShowInCustomizationForm="false" />

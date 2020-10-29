@@ -258,15 +258,21 @@
                             </Columns>
                         </dx:ASPxComboBox>
                     </div>
+                </div>
 
-		            <label id="lblPLan" runat="server" style="display:inline-block; float:left; padding-right:15px;">Plan HC</label>
+                <div class="Absente_divOuter margin_top15">
+		            <label id="lblPLan" runat="server" style="display:inline-block; float:left; padding-right:15px;">Nr pozitii</label>
                     <div style="float:left; padding-right:15px;">
                         <dx:ASPxTextBox ID="txtPlan" runat="server" Width="60px"/>
                     </div>
-                	<label id="lblHCAprobat" runat="server" style="display:inline-block; float:left; padding-right:15px;">HC Aprobat</label>
+                	<label id="lblHCAprobat" runat="server" style="display:inline-block; float:left; padding-right:15px;">Nr pozitii aprobate</label>
                     <div style="float:left; padding-right:15px;">
                         <dx:ASPxTextBox ID="txtHCAProbat" runat="server" Width="60px"/>
                     </div>
+                    <dx:ASPxButton ID="btnPozitii" runat="server" ToolTip="istoric numar pozitii" AutoPostBack="false" Height="28px" Text="...">
+                        <Paddings PaddingLeft="0px" PaddingRight="0px" />
+                        <ClientSideEvents Click="function(s,e) { popUpIstoric.Show(); }" />
+                    </dx:ASPxButton>
                 </div>
                 <br /><br />
 
@@ -297,6 +303,46 @@
             </dx:PanelContent>
         </PanelCollection>
     </dx:ASPxCallbackPanel>
+
+
+    <dx:ASPxPopupControl ID="popUpIstoric" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
+        EnableViewState="False" PopupElementID="popUpInitArea" PopupHorizontalAlign="WindowCenter"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="800px" Height="500px" HeaderText="Istoric numar pozitii aprobate"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpIstoric" EnableHierarchyRecreation="false">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel6" runat="server">
+
+                    <dx:ASPxGridView ID="grDateIstoric" runat="server" ClientInstanceName="grDateIstoric" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false">
+                        <SettingsBehavior AllowFocusedRow="true" />
+                        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />
+                        <SettingsEditing Mode="Inline" />
+                        <ClientSideEvents ContextMenu="ctx" />
+                        <Columns>
+                            <dx:GridViewCommandColumn Width="25px" ShowDeleteButton="true" ShowEditButton="false" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
+                                                           
+                            <dx:GridViewDataSpinEditColumn FieldName="Pozitii" Name="Pozitii" Caption="Pozitii"  Width="75px">
+                                <PropertiesSpinEdit MaxValue="99" MinValue="1" MaxLength="2"></PropertiesSpinEdit>
+                            </dx:GridViewDataSpinEditColumn>
+                            <dx:GridViewDataSpinEditColumn FieldName="PozitiiAprobate" Name="PozitiiAprobate" Caption="Pozitii Aprobate"  Width="75px">
+                                <PropertiesSpinEdit MaxValue="99" MinValue="1" MaxLength="2"></PropertiesSpinEdit>
+                            </dx:GridViewDataSpinEditColumn>
+                            <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data Inceput"  Width="100px">
+                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            </dx:GridViewDataDateColumn>
+                            <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data Sfarsit"  Width="100px">
+                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            </dx:GridViewDataDateColumn>
+                            
+                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" ShowInCustomizationForm="false" /> 
+                        </Columns> 
+                    </dx:ASPxGridView>
+
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
 
     <script>
 

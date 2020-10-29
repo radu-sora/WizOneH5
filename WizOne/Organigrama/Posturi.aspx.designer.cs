@@ -618,6 +618,15 @@ namespace WizOne.Organigrama
         protected global::DevExpress.Web.ASPxTextBox txtHCAProbat;
 
         /// <summary>
+        /// btnPozitii control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnPozitii;
+
+        /// <summary>
         /// divDosar control.
         /// </summary>
         /// <remarks>
@@ -670,5 +679,32 @@ namespace WizOne.Organigrama
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divBenef;
+
+        /// <summary>
+        /// popUpIstoric control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxPopupControl popUpIstoric;
+
+        /// <summary>
+        /// Panel6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel6;
+
+        /// <summary>
+        /// grDateIstoric control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView grDateIstoric;
     }
 }

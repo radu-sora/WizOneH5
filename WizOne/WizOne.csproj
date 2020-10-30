@@ -851,6 +851,7 @@
     <Content Include="Pontaj\PlanificareSchimburi.aspx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
     <Content Include="Posturi\FormCreate.aspx" />
+    <Content Include="Posturi\FormDetaliu.aspx" />
     <Content Include="Posturi\FormLista.aspx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
     <Content Include="Revisal\RapoarteRevisal.aspx" />
@@ -1851,6 +1852,13 @@
     </Compile>
     <Compile Include="Posturi\FormCreate.aspx.designer.cs">
       <DependentUpon>FormCreate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Posturi\FormDetaliu.aspx.cs">
+      <DependentUpon>FormDetaliu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Posturi\FormDetaliu.aspx.designer.cs">
+      <DependentUpon>FormDetaliu.aspx</DependentUpon>
     </Compile>
     <Compile Include="Posturi\FormLista.aspx.cs">
       <DependentUpon>FormLista.aspx</DependentUpon>

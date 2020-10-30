@@ -196,6 +196,7 @@ namespace WizOne
                                                         var ert = Session["Profil_DataGrid"];
 
                                                         string prof = "";
+                                                      
                                                         DataRow[] lst = dtPro.Select("Implicit=1 AND Grid = '" + dtPro.Rows[i]["Grid"].ToString() + "'");
                                                         if (lst.Count() > 0)
                                                         {
@@ -207,6 +208,7 @@ namespace WizOne
                                                             prof = (dtPro.Rows[i]["Continut"] ?? "").ToString();
                                                             cmbProfile.Value = dtPro.Rows[i]["Id"];
                                                         }
+
 
                                                         //adugam profilul original al gridului
 
@@ -221,8 +223,9 @@ namespace WizOne
 
                                                         //incarcam profilul implicit
                                                         ctl.LoadClientLayout(prof);
+                                                        
 
-
+                                                        
                                                         gasit = true;
                                                         break;
                                                     }

@@ -27,6 +27,12 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
+                <dx:ASPxButton ID="btnPreviz" ClientInstanceName="btnPreviz" ClientIDMode="Static" runat="server" Text="Previzualizare" AutoPostBack="true" OnClick="btnPreviz_Click" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/new.png"></Image>
+                </dx:ASPxButton>
+                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salvare" AutoPostBack="true" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
+                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="../Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                 </dx:ASPxButton>
@@ -40,13 +46,13 @@
         <PanelCollection>
             <dx:PanelContent>
 
-            <table width="40%">
+            <table width="20%">
                 <tr>
 
                     <td>
-                        <label id="lblAngFiltru" runat="server" style="display:inline-block;">Formular</label>
+                        <label id="lblForm" runat="server" style="display:inline-block;">Formular</label>
                         <dx:ASPxComboBox ID="cmbForm" ClientInstanceName="cmbForm" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false"
-                                    CallbackPageSize="15" EnableCallbackMode="true"  >                              
+                                    CallbackPageSize="15" EnableCallbackMode="true"  >    
                         </dx:ASPxComboBox>
                     </td>
                    								
@@ -63,27 +69,59 @@
                 </tr>
             </table>
           
-             <table width="90%"> 
-			        <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting"  >
+             <table width="65%"> 
+			        <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="65%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting"  >
                         <SettingsBehavior AllowFocusedRow="true" />
-                        <Settings ShowFilterRow="False" ShowColumnHeaders="true" />
+                        <Settings  ShowFilterRow="False" ShowColumnHeaders="true" />
                         <ClientSideEvents ContextMenu="ctx" />
                         <SettingsEditing Mode="Inline" />
                         <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>                        
 				        <Columns>                      
-                            <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"/>
+                            <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0"  ButtonType="Image" Caption=" "  Name="butoaneGrid"/>
 					        <dx:GridViewDataTextColumn FieldName="Rand" Name="Rand" Caption="Rand"  Width="50px"/>
 					        <dx:GridViewDataTextColumn FieldName="Pozitie" Name="Pozitie" Caption="Pozitie"  Width="50px" />
                             <dx:GridViewDataComboBoxColumn FieldName="TipControl" Name="TipControl" Caption="Tip control" Width="100px" >
                                 <Settings SortMode="DisplayText" />
                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                             </dx:GridViewDataComboBoxColumn>
-					        <dx:GridViewDataTextColumn FieldName="NumeEticheta" Name="NumeEticheta" Caption="Nume eticheta"  Width="250px" />
+                            <dx:GridViewDataTextColumn FieldName="NumeEticheta" Name="NumeEticheta" Caption="Nume eticheta"  Width="250px" />
+                            <dx:GridViewDataTextColumn FieldName="Sursa" Name="Sursa" Caption="Sursa"  Width="250px" />					
                             <dx:GridViewDataComboBoxColumn FieldName="ColoanaBD" Name="ColoanaBD" Caption="Coloana din BD" Width="150px" >
                                 <Settings SortMode="DisplayText" />
                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.String" DropDownStyle="DropDown" />
                             </dx:GridViewDataComboBoxColumn>
+                            <dx:GridViewDataTextColumn FieldName="Latime" Name="Latime" Caption="Latime"  Width="100px" />	
+                            <dx:GridViewDataTextColumn FieldName="IdFormular" Name="IdFormular" Caption="IdFormular"  Width="50px" Visible="false" ShowInCustomizationForm="false"/>
+                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="50px" Visible="false" ShowInCustomizationForm="false"/>
+                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO"  Width="50px" Visible="false" ShowInCustomizationForm="false"/>
+                            <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME"  Width="50px" Visible="false" ShowInCustomizationForm="false"/>
 				        </Columns>
+                        <SettingsCommandButton>
+                            <UpdateButton ButtonType="Link" Text="Actualizeaza">
+                                <Styles>
+                                    <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
+                                    </Style>
+                                </Styles>
+                            </UpdateButton>
+                            <CancelButton ButtonType="Link" Text="Renunta">
+                            </CancelButton>
+
+                            <EditButton Image-ToolTip="Edit">
+                                <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+                                <Styles>
+                                    <Style Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </EditButton>
+                            <DeleteButton Image-ToolTip="Sterge">
+                                <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" />
+                            </DeleteButton>
+                            <NewButton Image-ToolTip="Rand nou">
+                                <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+                                <Styles>
+                                    <Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </NewButton>
+                        </SettingsCommandButton>
 			        </dx:ASPxGridView>
               </table>
        

@@ -1752,4 +1752,7 @@
   <data name="InapoiInSite" xml:space="preserve">
     <value>Back to the application</value>
   </data>
+  <data name="PrimaPaginaCereri" xml:space="preserve">
+    <value>First Page - Requests</value>
+  </data>  
 </root>

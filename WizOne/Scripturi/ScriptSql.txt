@@ -15027,3 +15027,28 @@ GO
 
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('FiltruAngajati_AscunsiAppWS', 'F10025 <> 900', 'Conditie pentru afisarea angajatilor in WizSalary', 3)
 GO
+
+
+CREATE TABLE Org_FormCreate(
+	[IdFormular] [int] NOT NULL,
+	[Rand] [int] NOT NULL,
+	[Pozitie] [int] NOT NULL,
+	[TipControl] [int] NOT NULL,
+	[NumeEticheta] nvarchar(250) NOT NULL,
+	[Sursa] nvarchar(max) NULL,
+	[ColoanaBD] nvarchar(250) NOT NULL,
+	[Latime] [int] NULL,
+	[IdAuto] [int]  NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_Org_FormCreate] PRIMARY KEY CLUSTERED 
+(	
+	IdAuto ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(121, 'Creare formular', 'Creare formular', 'Posturi\FormCreate', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(122, 'Lista formulare', 'Lista formulare', 'Posturi\FormLista', 1, 'm1.png')
+GO

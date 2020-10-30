@@ -231,6 +231,15 @@ namespace WizOne.Posturi
         protected global::DevExpress.Web.ASPxPopupControl popUpNou;
 
         /// <summary>
+        /// pnlCtl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
+
+        /// <summary>
         /// Panel1 control.
         /// </summary>
         /// <remarks>

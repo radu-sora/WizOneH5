@@ -11,7 +11,7 @@ namespace WizOne.Posturi
 {
 
 
-    public partial class FormCreate
+    public partial class FormDetaliu
     {
 
         /// <summary>
@@ -24,13 +24,13 @@ namespace WizOne.Posturi
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
 
         /// <summary>
-        /// btnPreviz control.
+        /// btnBack control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnPreviz;
+        protected global::DevExpress.Web.ASPxButton btnBack;
 
         /// <summary>
         /// btnSave control.
@@ -42,57 +42,21 @@ namespace WizOne.Posturi
         protected global::DevExpress.Web.ASPxButton btnSave;
 
         /// <summary>
-        /// btnExit control.
+        /// btnPrint control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnExit;
+        protected global::DevExpress.Web.ASPxButton btnPrint;
 
         /// <summary>
-        /// pnlCtl control.
+        /// div control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
-
-        /// <summary>
-        /// lblForm control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblForm;
-
-        /// <summary>
-        /// cmbForm control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbForm;
-
-        /// <summary>
-        /// btnFiltru control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnFiltru;
-
-        /// <summary>
-        /// grDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDate;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl div;
     }
 }

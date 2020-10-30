@@ -58,40 +58,44 @@ namespace WizOne.Posturi
 
                 #endregion
 
-                txtTitlu.Text = General.VarSession("Titlu").ToString();
+                txtTitlu.Text = General.VarSession("Titlu").ToString();               
 
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Id", typeof(int));
+                dt.Columns.Add("Denumire", typeof(string));
+                dt.Rows.Add(1, "Nivelul meu");
+                dt.Rows.Add(2, "Toate");
+
+                cmbNivel.DataSource = dt;
+                cmbNivel.DataBind();
+
+                DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
+                GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
+                colStari.PropertiesComboBox.DataSource = dtStari;
 
                 IncarcaGrid();
 
+                DataTable dtForm = GetFormulareUser(Convert.ToInt32(Session["UserId"].ToString()));
+                cmbForm.DataSource = dtForm;
+                cmbForm.DataBind();
+
+                cmbFormNou.DataSource = dtForm;
+                cmbFormNou.DataBind();
+                
+
+                cmbRecrut.DataSource = GetCereriRecrutare();
+                cmbRecrut.DataBind();
+
                 if (!IsPostBack)
                 {
-                    DataTable dt = new DataTable();
-                    dt.Columns.Add("Id", typeof(int));
-                    dt.Columns.Add("Denumire", typeof(string));
-                    dt.Rows.Add(1, "Nivelul meu");
-                    dt.Rows.Add(2, "Toate");
-
-                    cmbNivel.DataSource = dt;
-                    cmbNivel.DataBind();
-
-                    DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
-                    GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                    colStari.PropertiesComboBox.DataSource = dtStari;
-
-                    DataTable dtForm = GetFormulareUser(Convert.ToInt32(Session["UserId"].ToString()));
-                    cmbForm.DataSource = dtForm;
-                    cmbForm.DataBind();
-
-                    cmbFormNou.DataSource = dtForm;
-                    cmbFormNou.DataBind();
-
-                    cmbRecrut.DataSource = GetCereriRecrutare();
-                    cmbRecrut.DataBind();
-
+                    lblDataVig.Visible = false;
+                    deDataVig.ClientVisible = false;
                     lblRecrut.Visible = false;
                     cmbRecrut.ClientVisible = false;
                     lblAng.Visible = false;
                     cmbAng.ClientVisible = false;
+                    cmbFormNou.SelectedIndex = 0;
                 }
 
 
@@ -184,18 +188,6 @@ namespace WizOne.Posturi
             }
         }
 
-        protected void btnNou_Click(object sender, EventArgs e)
-        {
-            try
-            {
-             
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
 
         protected void btnDuplica_Click(object sender, EventArgs e)
         {
@@ -278,101 +270,88 @@ namespace WizOne.Posturi
                     {
                         case "btnDelete":
                             {
-                                MetodeCereri(3,1);
+                                MetodeCereri(3, 1);
                                 IncarcaGrid();
                             }
                             break;
                         case "btnEdit":
-                            List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "IdFormular", "NumeComplet", "DataInceput", "F10003", "UserIntrod", "IdPost", "IdRol", "Pozitie", "PoateModifica", "DescFormular", "DescPost" });
-                            if (lst == null || lst.Count() == 0 || lst[0] == null)
-                            {
-                                grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
-                                return;
-                            }
+                            DataTable dt = Session["FormLista_Grid"] as DataTable;
+                            DataRow[] dr = dt.Select("Id = " + arr[1]);                            
 
-                            object[] sirDate = lst[0] as object[];  
-                            
-
-                            int id = Convert.ToInt32(sirDate[0]);
-                            int idFormular = Convert.ToInt32(sirDate[2]);
-                            int idPost = Convert.ToInt32(sirDate[7] ?? -99);
-                            int f10003 = Convert.ToInt32(sirDate[5] ?? -99); 
-                            int idRol = Convert.ToInt32(sirDate[8] ?? -99);
-                            int pozitie = Convert.ToInt32(sirDate[9] ?? -99);
-                            int poateModif = Convert.ToInt32(sirDate[10] ?? 0); 
-                            int idStare = Convert.ToInt32(sirDate[1] ?? -99);
+                            int id = Convert.ToInt32(dr[0]["Id"].ToString());
+                            int idFormular = Convert.ToInt32(dr[0]["IdFormular"].ToString());
+                            int idPost = Convert.ToInt32(dr[0]["IdPost"] == DBNull.Value ? "-99" : dr[0]["IdPost"].ToString());
+                            int f10003 = Convert.ToInt32(dr[0]["F10003"] == DBNull.Value ? "-99" : dr[0]["F10003"].ToString());
+                            int idRol = Convert.ToInt32(dr[0]["IdRol"] == DBNull.Value ? "-99" : dr[0]["IdRol"].ToString());
+                            int pozitie = Convert.ToInt32(dr[0]["Pozitie"] == DBNull.Value ? "-99" : dr[0]["Pozitie"].ToString());
+                            int poateModif = Convert.ToInt32(dr[0]["PoateModifica"] == DBNull.Value ? "0" : dr[0]["PoateModifica"].ToString());
+                            int idStare = Convert.ToInt32(dr[0]["IdStare"] == DBNull.Value ? "0" : dr[0]["IdStare"].ToString());
 
                             //daca formularul este inca in stadiul Solicitat, cel care l-a initiat sa-l poata modifica
-                            if (idStare == 1 && Convert.ToInt32(Session["UserId"].ToString()) == Convert.ToInt32(sirDate[6] ?? -99))
-                                poateModif = 1;
+                            if (idStare == 1 && Convert.ToInt32(Session["UserId"].ToString()) == Convert.ToInt32(dr[0]["UserIntrod"] == DBNull.Value ? "-99" : dr[0]["UserIntrod"].ToString()))
+                                Session["FormDetaliu_PoateModifica"] = 1;
 
-                            string descFormular = (sirDate[11] ?? "").ToString();
-                            string descPost = (sirDate[12] ?? "").ToString();
-                            DateTime dtVigoare = Convert.ToDateTime(sirDate[4] ?? DateTime.Now);
+                            string descFormular = (dr[0]["DescFormular"] == DBNull.Value ? "" : dr[0]["DescFormular"].ToString());
+                            string descPost = (dr[0]["DescPost"] == DBNull.Value ? "" : dr[0]["DescPost"].ToString());
+                            DateTime dtVigoare = dr[0]["DataInceput"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(dr[0]["DataInceput"].ToString());
 
-                            switch (idFormular)
-                            {
-                                //case 20:
-                                //    {
-                                //        Posturi.FormDate20 pag20 = new Posturi.FormDate20();
-
-                                //        pag20.id = id;
-                                //        pag20.idFormular = idFormular;
-                                //        pag20.idPost = idPost;
-                                //        pag20.idStare = idStare;
-                                //        pag20.f10003 = f10003;
-                                //        pag20.dtVigoare = dtVigoare;
-                                //        pag20.idRol = idRol;
-                                //        pag20.pozitie = pozitie;
-                                //        pag20.poateModif = poateModif;
-
-                                //        pag20.esteNou = false;
-                                //        pag20.titlu = (barTitlu.Content ?? "").ToString();
-
-                                //        pag20.txtData.EditValue = dtVigoare;
-                                //        pag20.txtPost.Text = descPost;
-                                //        pag20.txtForm.EditValue = descFormular;
-
-                                //        pag20.lblData.Visibility = System.Windows.Visibility.Collapsed;
-                                //        pag20.txtData.Visibility = System.Windows.Visibility.Collapsed;
-
-                                //        pag20.txtPost.IsEnabled = true;
-
-                                //        pag20.lblAng.Visibility = System.Windows.Visibility.Collapsed;
-                                //        pag20.cmbAng.Visibility = System.Windows.Visibility.Collapsed;
+                            string url = "~/Posturi/FormDetaliu.aspx";
+                            Session["FormDetaliu_Id"] = id;
+                            Session["FormDetaliu_IdFormular"] = idFormular;                            
+                            Session["FormDetaliu_IdStare"] = idStare;                   
+                            Session["FormDetaliu_PoateModifica"] = poateModif;
+                            Session["FormDetaliu_EsteNou"] = null;
+                            Session["FormDetaliu_NumeFormular"] = descFormular;
+                            Session["FormDetaliu_DataVigoare"] = dtVigoare;
 
 
-                                //        pag20.dds.QueryParameters.Clear();
-                                //        pag20.dds.QueryParameters.Add(new Parameter { ParameterName = "id", Value = id });
+                            if (Page.IsCallback)
+                                ASPxWebControl.RedirectOnCallback(url);
+                            else
+                                Response.Redirect(url, false);
 
-                                //        pnl.Content = pag20;
-                                //    }
-                                //    break;
-                                //case 21:
-                                //    Posturi.FormDate21 pag21 = new Posturi.FormDate21();
+                            //switch (idFormular)
+                            //{
+                            //   case 20:
+                            //        string url = "~/Posturi/FormDetaliu.aspx";
+                            //        Session["FormDetaliu_Id"] = id;
+                            //        Session["FormDetaliu_IdFormular"] = idFormular;
+                            //        //pag20.idPost = idPost;
+                            //        Session["FormDetaliu_IdStare"] = idStare;
+                            //        //pag20.f10003 = f10003;
+                            //        //pag20.dtVigoare = dtVigoare;
+                            //        //pag20.idRol = idRol;
+                            //        //pag20.pozitie = pozitie;
+                            //        Session["FormDetaliu_PoateModifica"] = poateModif;
 
-                                //    pag21.id = id;
-                                //    pag21.idFormular = idFormular;
-                                //    pag21.idPost = idPost;
-                                //    pag21.idStare = idStare;
-                                //    pag21.f10003 = f10003;
-                                //    pag21.dtVigoare = dtVigoare;
-                                //    pag21.idRol = idRol;
-                                //    pag21.pozitie = pozitie;
-                                //    pag21.poateModif = poateModif;
+                            //        Session["FormDetaliu_EsteNou"] = null;
+                            //        //Session["FormDetaliu_Titlu"] = (barTitlu.Content ?? "").ToString();
 
-                                //    pag21.esteNou = false;
-                                //    pag21.titlu = (barTitlu.Content ?? "").ToString();
+                            //        //pag20.txtData.EditValue = dtVigoare;
+                            //        //pag20.txtPost.Text = descPost;
+                            //        //pag20.txtForm.EditValue = descFormular;
+                            //        if (Page.IsCallback)
+                            //            ASPxWebControl.RedirectOnCallback(url);
+                            //        else
+                            //            Response.Redirect(url, false);
 
-                                //    pag21.txtPost.Text = descPost;
-                                //    pag21.txtForm.EditValue = descFormular;
 
-                                //    pag21.dds.QueryParameters.Clear();
-                                //    pag21.dds.QueryParameters.Add(new Parameter { ParameterName = "id", Value = id });
+                            //        break;
+                            //    case 21:
+                            //        Session["FormDetaliu_Id"] = id;
+                            //        Session["FormDetaliu_IdFormular"] = idFormular;
+                            //        //pag21.idPost = idPost;
+                            //        Session["FormDetaliu_IdStare"] = idStare;
+                            //        //pag21.f10003 = f10003;
+                            //        //pag21.dtVigoare = dtVigoare;
+                            //        //pag21.idRol = idRol;
+                            //        //pag21.pozitie = pozitie;
+                            //        Session["FormDetaliu_PoateModifica"] = poateModif;
 
-                                //    pnl.Content = pag21;
-                                //    break;
-                            }
+                            //        Session["FormDetaliu_EsteNou"] = null;
+                            //        //pag21.titlu = (barTitlu.Content ?? "").ToString();                                 
+                            //        break;
+                            //}
                             break;
                     }
                 }
@@ -432,43 +411,7 @@ namespace WizOne.Posturi
         {
             try
             {
-                if (e.VisibleIndex == -1) return;
 
-                if (e.ButtonID == "btnDelete")
-                {
-
-                }
-
-                if (e.VisibleIndex >= 0)
-                {
-                    DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
-                    if (values != null)
-                    {
-                        int idAtr = Convert.ToInt32(values.Row["IdAtribut"].ToString());
-                        if (e.ButtonID == "btnDetalii")
-                        {
-                            if (idAtr != (int)Constante.Atribute.Sporuri && idAtr != (int)Constante.Atribute.SporTranzactii
-                                && idAtr != (int)Constante.Atribute.Componente && idAtr != (int)Constante.Atribute.Tarife)
-                            {
-                                e.Visible = DefaultBoolean.False;
-
-                            }
-                        }
-
-                        if (e.ButtonID == "btnArata")
-                        {
-                            if (idAtr == (int)Constante.Atribute.BancaSalariu || idAtr == (int)Constante.Atribute.BancaGarantii
-                                || idAtr == (int)Constante.Atribute.DocId || idAtr == (int)Constante.Atribute.PermisAuto)
-                            {
-                                e.Visible = DefaultBoolean.True;
-
-                            }
-                            else
-                                e.Visible = DefaultBoolean.False;
-                        }
-
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -522,31 +465,37 @@ namespace WizOne.Posturi
                 string comentarii = "";
                 string msg = "";
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "IdFormular", "NumeComplet", "DataInceput", "F10003", "UserIntrod" });
-                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                object[] lst = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "IdStare", "IdFormular", "NumeComplet", "DataInceput", "F10003", "UserIntrod" }) as object[];
+                if (lst == null || lst.Count() == 0)
                 {
                     if (tipMsg == 0)
                         MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "");
                     else
                         grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
                     return;
-                }
+                }     
 
-                for (int i = 0; i < lst.Count(); i++)
+                if (tipActiune == 3 && Convert.ToInt32(Session["UserId"].ToString()) != Convert.ToInt32(lst[6] ?? "-99"))
                 {
-                    object[] arr = lst[i] as object[];
-
-                    if (Convert.ToInt32(Session["UserId"].ToString()) != Convert.ToInt32(arr[6] ?? "-99"))
-                    {
-                        if (tipMsg == 0)
-                            MessageBox.Show("Nu puteti anula o cerere care nu va apartine!", MessageBox.icoWarning, "");
-                        else
-                            grDate.JSProperties["cpAlertMessage"] = "Nu puteti anula o cerere care nu va apartine!";
-                        return;
-                    }
-
+                    if (tipMsg == 0)
+                        MessageBox.Show("Nu puteti anula o cerere care nu va apartine!", MessageBox.icoWarning, "");
+                    else
+                        grDate.JSProperties["cpAlertMessage"] = "Nu puteti anula o cerere care nu va apartine!";
+                    return;
                 }
-                msg = msg + AprobaFormular(Convert.ToInt32(Session["UserId"].ToString()), ids, idsAtr, lstDataModif, lstMarci, nrSel, tipActiune, General.ListaCuloareValoare()[5], false, comentarii, Convert.ToInt32(Session["User_Marca"].ToString()));
+
+
+
+                if ((lst[1] ?? "0").ToString() == "1" || (lst[1] ?? "0").ToString() == "2")
+                {
+                    ids += lst[0].ToString() + ";";
+                    nrSel++;
+                }
+
+                if (tipActiune == 1 || tipActiune == 2)
+                    msg = msg + AprobaFormular(Convert.ToInt32(Session["UserId"].ToString()), ids, idsAtr, lstDataModif, lstMarci, nrSel, tipActiune, General.ListaCuloareValoare()[5], false, comentarii, Convert.ToInt32(Session["User_Marca"].ToString()));
+                else
+                    msg = msg + AnuleazaFormular(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(lst[0].ToString()), Convert.ToInt32(Session["User_Marca"].ToString()));
 
                 if (tipMsg == 0)
                     MessageBox.Show(msg, MessageBox.icoWarning, "");
@@ -666,7 +615,7 @@ namespace WizOne.Posturi
                             string culoare = "";
                             sql = "SELECT * FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idStare.ToString();
                             DataTable dtCul = General.IncarcaDT(sql, null);
-                            if (dtCul != null && dtCul.Rows.Count > 0 && dtCul.Rows[0]["Culoare"] != null && dtCul.Rows[0]["Culoare"].ToString().Length > 0)
+                            if (dtCul != null && dtCul.Rows.Count > 0 && dtCul.Rows[0]["Culoare"] != DBNull.Value && dtCul.Rows[0]["Culoare"].ToString().Length > 0)
                                 culoare = dtCul.Rows[0]["Culoare"].ToString();
                             else
                                 culoare = "#FFFFFFFF";
@@ -878,7 +827,7 @@ namespace WizOne.Posturi
                                 " left join \"Org_Posturi\" c on a.\"IdPost\" = c.\"Id\"  and c.\"DataInceput\" <= a.\"DataInceput\" and a.\"DataInceput\" <= c.\"DataSfarsit\" " +
                                 " left join F100 d on a.F10003 = d.F10003  " +
                                 " left join \"Org_DateGenerale\" org1 on a.\"Id\" = org1.\"Id\" " +
-                                " left join \"Org_DateIstoric\" g on a.\"Id\" = g.\"Id\" and g.\"IdUser\"=" + idUser + " " +
+                                " left join \"Org_DateIstoric\" g on  a.\"Id\" = g.\"Id\" and g.\"IdUser\"=" + idUser + " " +
                                 " left join \"tblSupervizori\" h on (-1 * g.\"IdRol\") = h.\"Id\" " +
                                 " LEFT JOIN F002 x1 ON c.F10002 = x1.F00202 " +
                                 " LEFT JOIN F003 x2 ON c.F10004 = x2.F00304 " +
@@ -945,7 +894,7 @@ namespace WizOne.Posturi
                 sql = "SELECT * FROM \"Ptj_tblStari\" WHERE \"Id\" = 1";
                 DataTable dtCul = General.IncarcaDT(sql, null);
                 string culoare = "#FFFFFFFF";
-                if (dtCul != null && dtCul.Rows.Count > 0 && dtCul.Rows[0]["Culoare"] != null)
+                if (dtCul != null && dtCul.Rows.Count > 0 && dtCul.Rows[0]["Culoare"] != DBNull.Value)
                     culoare = dtCul.Rows[0]["Culoare"].ToString();
 
                 DateTime dtInc = Convert.ToDateTime(dtFor.Rows[0]["DataInceput"].ToString());
@@ -1019,59 +968,7 @@ namespace WizOne.Posturi
             return q;
         }
 
-        protected void cmbAng_Callback(object sender, CallbackEventArgsBase e)
-        {          
 
-            try
-            {                
-              
-                DataTable dtAng = GetF100NumeCompletPost(Convert.ToInt32(cmbFormNou.Value ?? -99), Convert.ToInt32(Session["UserId"].ToString()), Convert.ToDateTime(deDataVig.Value ?? DateTime.Now));
-                cmbAng.DataSource = dtAng;
-                cmbAng.DataBind();   
-
-                int idFrm = Convert.ToInt32(cmbFormNou.Value ?? -99);
-                switch (idFrm)
-                {
-                    case 20:
-                        lblDataVig.Visible = false;
-                        deDataVig.ClientVisible = false;
-                        deDataVig.Value = null;
-                        lblRecrut.Visible = false;
-                        cmbRecrut.ClientVisible = false;
-                        cmbRecrut.Value = null;
-                        lblAng.Visible = false;
-                        cmbAng.ClientVisible = false;
-                        cmbAng.Value = null;
-                        break;
-                    case 21:
-                        lblDataVig.Visible = false;
-                        deDataVig.ClientVisible = false;
-                        deDataVig.Value = null;
-                        lblRecrut.Visible = true;
-                        cmbRecrut.ClientVisible = true;
-                        cmbRecrut.Value = null;
-                        lblAng.Visible = false;
-                        cmbAng.ClientVisible = false;
-                        cmbAng.Value = null;
-                        break;
-                    case 22:
-                        lblDataVig.Visible = true;
-                        deDataVig.ClientVisible = true;
-                        deDataVig.Value = null;
-                        lblRecrut.Visible = false;
-                        cmbRecrut.ClientVisible = false;
-                        cmbRecrut.Value = null;
-                        lblAng.Visible = true;
-                        cmbAng.ClientVisible = true;
-                        cmbAng.Value = null;
-                        break;
-                }   
-            }
-            catch (Exception)
-            {
-               
-            }
-        }
 
 
 
@@ -1100,13 +997,13 @@ namespace WizOne.Posturi
                 if (Constante.tipBD == 2) op = "||";
                 bool esteConsRU = false;
                 DataTable dtCons = General.IncarcaDT("SELECT COUNT(*) FROM \"F100Supervizori\" WHERE \"IdSuper\" = 12 AND \"IdUser\" = " + idUser, null);
-                if (dtCons != null && dtCons.Rows.Count > 0 && dtCons.Rows[0][0] != null && Convert.ToInt32(dtCons.Rows[0][0].ToString()) > 0)
+                if (dtCons != null && dtCons.Rows.Count > 0 && dtCons.Rows[0][0] != DBNull.Value && Convert.ToInt32(dtCons.Rows[0][0].ToString()) > 0)
                     esteConsRU = true;
 
                 if (esteConsRU)                      //cand este consultant RU aratam toti angajatii
                     sql = "SELECT   a.F10003, a.F10008 " + op + " ' ' " + op + " F10009 AS \"NumeComplet\", a.F10017 AS CNP, b.F00204 AS \"Companie\", c.F00305 AS \"Subcompanie\", d.F00406 AS \" Filiala\", "
                         + " e.F00507 AS  \"Sectie\", f.F00608 AS \"Departament\", F10022 as \"DataAngajarii\", F10023 AS \"DataPlecarii\", F10011 AS \"NrContract\", " + condStare + " AS \"Stare\", "
-                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  FROM  F100 a "
+                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  FROM  F100 a "
                         + " LEFT JOIN F002 b on a.F10002 = b.F00202 "
                         + " LEFT JOIN F003 c on a.F10004 = c.F00304 "
                         + " LEFT JOIN F004 d on a.F10005 = d.F00405 "
@@ -1117,14 +1014,14 @@ namespace WizOne.Posturi
                         + " LEFT JOIN F704 h on a.F10003 = h.F70403 "
                         + " WHERE F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
                         + " AND " + condDifLuni 
-                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, a.F10025, x.F71804, h.F70407"
+                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804, h.F70407"
                         + " ORDER BY \"NumeComplet\"";
                 else
                     sql = "SELECT   a.F10003, a.F10008 " + op + " ' ' " + op + " F10009 AS \"NumeComplet\", a.F10017 AS CNP, b.F00204 AS \"Companie\", c.F00305 AS \"Subcompanie\", d.F00406 AS \" Filiala\", "
                         + " e.F00507 AS  \"Sectie\", f.F00608 AS \"Departament\", F10022 as \"DataAngajarii\", F10023 AS \"DataPlecarii\", F10011 AS \"NrContract\", " + condStare + " AS \"Stare\", "
-                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  " 
+                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  "
                         + " FROM \"F100Supervizori\" z "
-                        + " JOIN \"Org_Circuit\" y on z.\"IdSuper\" = -1 * y.\"Super1\" "
+                        + " JOIN \"Org_Circuit\" y on z.\"IdSuper\" = -1 * y.\"Super2\" "
                         + " JOIN  F100 a ON z.F10003 = a.F10003"
                         + " LEFT JOIN F002 b on a.F10002 = b.F00202 "
                         + " LEFT JOIN F003 c on a.F10004 = c.F00304 "
@@ -1134,10 +1031,12 @@ namespace WizOne.Posturi
                         + " LEFT JOIN USERS g on a.F10003 = g.F10003 "
                         + " LEFT JOIN F718 x on a.F10071 = x.F71802 "
                         + " LEFT JOIN F704 h on a.F10003 = h.F70403 "
-                        + " WHERE y.\"Id\" = " + idFormular + " AND z.\"IdUser\" = " + idUser + " AND F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
+                        + " WHERE y.\"Id\" = (SELECT \"IdCircuit\" FROM \"Org_relFormularCircuit\" WHERE \"IdFormular\" = " + idFormular + ") AND z.\"IdUser\" = " + idUser + " AND F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
                         + " AND " + condDifLuni
-                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, a.F10025, x.F71804, h.F70407"
-                        + " ORDER BY \"NumeComplet\"";      
+                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804, h.F70407"
+                        + " ORDER BY \"NumeComplet\"";
+
+                q = General.IncarcaDT(sql, null);
 
             }
             catch (Exception ex)
@@ -1163,6 +1062,7 @@ namespace WizOne.Posturi
                 int idFrm = Convert.ToInt32(cmbFormNou.Value ?? -99);
                 int idRec = Convert.ToInt32(cmbRecrut.Value ?? -99);
                 int f10003 = Convert.ToInt32(cmbAng.Value ?? -99);
+                string numeAng = cmbAng.Text;
                 int idPost = -99;
                 DateTime dtVigoare = Convert.ToDateTime(deDataVig.Value ?? DateTime.Now);
 
@@ -1170,13 +1070,28 @@ namespace WizOne.Posturi
                 {
                     if (idFrm == 20 || idFrm == 21) f10003 = Convert.ToInt32(Session["User_Marca"] == DBNull.Value ? "-99" : Session["User_Marca"].ToString());
               
-                    int id = AdaugaFormularGenerali(Convert.ToInt32(Session["UserId"].ToString()), idFrm, idPost, idRec, dtVigoare, f10003);
+                    int id = AdaugaFormularGenerali(Convert.ToInt32(Session["UserId"].ToString()), idFrm, idPost, idRec, dtVigoare, f10003, numeAng, Convert.ToInt32(Session["User_Marca"] == DBNull.Value ? "-99" : Session["User_Marca"].ToString()));
                     
                     if (id == -1 && id == -99)
                     {
                         MessageBox.Show(Dami.TraduCuvant("Eroare la creare referat"), MessageBox.icoError, "Atentie !");
                         return;
-                    }
+                    }            
+
+                    string url = "~/Posturi/FormDetaliu.aspx";
+                    Session["FormDetaliu_Id"] = id;
+                    Session["FormDetaliu_IdFormular"] = idFrm;
+                    Session["FormDetaliu_IdStare"] = 0;
+                    Session["FormDetaliu_PoateModifica"] = 1;
+                    Session["FormDetaliu_EsteNou"] = 1;
+
+                    Session["FormDetaliu_NumeFormular"] = cmbFormNou.Text;
+                    Session["FormDetaliu_DataVigoare"] = dtVigoare;
+
+                    if (Page.IsCallback)
+                        ASPxWebControl.RedirectOnCallback(url);
+                    else
+                        Response.Redirect(url, false);
 
                     //switch (idFrm)
                     //{
@@ -1229,8 +1144,8 @@ namespace WizOne.Posturi
                     //        pnl.Content = pag21;
                     //        break;
                     //}
-                        
-                    
+
+
                 }
             }
             catch (Exception ex)
@@ -1239,7 +1154,7 @@ namespace WizOne.Posturi
             }
         }
 
-        public int AdaugaFormularGenerali(int idUser, int idFormular, int? idPost, int? idRec, DateTime dtVigoare, int f10003)
+        public int AdaugaFormularGenerali(int idUser, int idFormular, int? idPost, int? idRec, DateTime dtVigoare, int f10003_Ang, string numeAng, int f10003)
         {
             int idUrm = 1;        
 
@@ -1248,21 +1163,21 @@ namespace WizOne.Posturi
                 string sql = "SELECT MAX(\"Id\") + 1 FROM \"Org_Date\" ";
                 DataTable dtFor = General.IncarcaDT(sql, null);
 
-                if (dtFor != null && dtFor.Rows.Count > 0)
+                if (dtFor != null && dtFor.Rows.Count > 0 && dtFor.Rows[0][0] != DBNull.Value)
                     idUrm = Convert.ToInt32(dtFor.Rows[0][0].ToString());
 
 
                 sql = "SELECT * FROM \"Org_relFormularCircuit\" WHERE \"IdFormular\" =  " + idFormular;
                 DataTable dtFormCirc = General.IncarcaDT(sql, null);
 
-                if (dtFormCirc == null || dtFormCirc.Rows.Count <= 0 || dtFormCirc.Rows[0]["IdCircuit"] == null)
+                if (dtFormCirc == null || dtFormCirc.Rows.Count <= 0 || dtFormCirc.Rows[0]["IdCircuit"] == DBNull.Value)
                     return -123;
            
                 int idCircuit = Convert.ToInt32(dtFormCirc.Rows[0]["IdCircuit"].ToString());
                 sql = "SELECT * FROM \"Ptj_tblStari\" WHERE \"Id\" = 1";
                 DataTable dtCul = General.IncarcaDT(sql, null);
                 string culoare = "#FFFFFFFF";
-                if (dtCul != null && dtCul.Rows.Count > 0 && dtCul.Rows[0]["Culoare"] != null)
+                if (dtCul != null && dtCul.Rows.Count > 0 && dtCul.Rows[0]["Culoare"] != DBNull.Value)
                     culoare = dtCul.Rows[0]["Culoare"].ToString();
 
 
@@ -1285,7 +1200,7 @@ namespace WizOne.Posturi
                 //aflam totalul de users din circuit
                 for (int i = 1; i <= 20; i++)
                 {
-                    if (dtCirc.Rows[0]["Super" + i] != null)
+                    if (dtCirc.Rows[0]["Super" + i] != DBNull.Value)
                     {
                         int idSuper = Convert.ToInt32(dtCirc.Rows[0]["Super" + i].ToString());
                         if (Convert.ToInt32(idSuper) != -99)
@@ -1296,7 +1211,7 @@ namespace WizOne.Posturi
                                 int idSpr = Convert.ToInt32(idSuper);
                                 sql = "SELECT * FROM \"F100Supervizori\" WHERE \"IdSuper\" =  -1 * " + idSpr + " AND F10003 = " + f10003;
                                 DataTable dtUser = General.IncarcaDT(sql, null);
-                                if (dtUser == null || dtUser.Rows.Count <= 0 || dtUser.Rows[0]["IdUser"] == null)
+                                if (dtUser == null || dtUser.Rows.Count <= 0 || dtUser.Rows[0]["IdUser"] == DBNull.Value)
                                 {
                                     continue;
                                 }
@@ -1317,7 +1232,7 @@ namespace WizOne.Posturi
                 {
                     string aprobat = "NULL", dataAprobare = "NULL";
                     int idSuper = -99;
-                    if (dtCirc.Rows[0]["Super" + i] != null)
+                    if (dtCirc.Rows[0]["Super" + i] != DBNull.Value)
                     {
                         idSuper = Convert.ToInt32(dtCirc.Rows[0]["Super" + i].ToString());
                         if (Convert.ToInt32(idSuper) != -99)
@@ -1328,7 +1243,7 @@ namespace WizOne.Posturi
                                 //idUserCalc = idUser;
                                 sql = "SELECT * FROM USERS WHERE F10003 = " + f10003;
                                 DataTable dtUser = General.IncarcaDT(sql, null);
-                                if (dtUser != null && dtUser.Rows.Count > 0 && dtUser.Rows[0]["F70102"] != null)
+                                if (dtUser != null && dtUser.Rows.Count > 0 && dtUser.Rows[0]["F70102"] != DBNull.Value)
                                 {
                                     idUserCalc = Convert.ToInt32(dtUser.Rows[0]["F70102"].ToString());
                                 }
@@ -1341,7 +1256,7 @@ namespace WizOne.Posturi
                                 //astfel se rezolva problema cand, de exemplu, un angajat are mai multi AdminRu
                                 sql = "SELECT * FROM \"F100Supervizori\" WHERE \"IdSuper\" =  -1 * " + idSpr + " AND F10003 = " + f10003 + " AND \"IdUser\" = " + idUser;
                                 DataTable dtUserLogat = General.IncarcaDT(sql, null);
-                                if (dtUserLogat != null && dtUserLogat.Rows.Count > 0 && dtUserLogat.Rows[0]["IdUser"] != null)
+                                if (dtUserLogat != null && dtUserLogat.Rows.Count > 0 && dtUserLogat.Rows[0]["IdUser"] != DBNull.Value)
                                 {
                                     idUserCalc = Convert.ToInt32(dtUserLogat.Rows[0]["IdUser"].ToString());
                                 }
@@ -1350,7 +1265,7 @@ namespace WizOne.Posturi
                                     //ne asiguram ca exista user pentru supervizorul din circuit
                                     sql = "SELECT * FROM \"F100Supervizori\" WHERE \"IdSuper\" =  -1 * " + idSpr + " AND F10003 = " + f10003;
                                     DataTable dtUser = General.IncarcaDT(sql, null);
-                                    if (dtUser == null || dtUser.Rows.Count <= 0 || dtUser.Rows[0]["IdUser"] == null)
+                                    if (dtUser == null || dtUser.Rows.Count <= 0 || dtUser.Rows[0]["IdUser"] == DBNull.Value)
                                     {
                                         continue;
                                     }
@@ -1367,7 +1282,7 @@ namespace WizOne.Posturi
 
                                 sql = "SELECT * FROM \"F100Supervizori\" WHERE \"IdSuper\" =  -1 * " + idSpr + " AND F10003 = " + f10003;
                                 DataTable dtUser = General.IncarcaDT(sql, null);
-                                if (dtUser == null || dtUser.Rows.Count <= 0 || dtUser.Rows[0]["IdUser"] == null)
+                                if (dtUser == null || dtUser.Rows.Count <= 0 || dtUser.Rows[0]["IdUser"] == DBNull.Value)
                                 {
                                     continue;
                                 }
@@ -1440,14 +1355,12 @@ namespace WizOne.Posturi
                                     break;
                             }
                         }
-                    }
-                   
-                    string strSqlIst = "INSERT INTO \"Org_DateIstoric\"(\"Id\", \"IdCircuit\", \"IdPost\", \"IdUser\", \"IdStare\",  \"Pozitie\", \"Culoare\", \"Aprobat\", \"DataAprobare\", \"Inlocuitor\", \"IdUserInlocuitor\", \"IdRol\",  USER_NO, TIME) "
-                        + " VALUES ({0}, {1}, {2}, {3}, {4}, {5}, '{6}', {7}, {8}, {9}, {10}, {11}, {12}, {13})";
-                    strSqlIst = string.Format(strSqlIst, idUrm, idCircuit, idPost == null ? "NULL" : idPost.ToString(), idUserCalc, idStare, poz, ("(SELECT CASE WHEN \"Culoare\" IS NULL THEN '#FFFFFFFF' ELSE \"Culoare\" END FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idStare + ")"),
-                        aprobat, dataAprobare, "0", "NULL", idSuper, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
-                    General.ExecutaNonQuery(strSqlIst, null);                    
-
+                        string strSqlIst = "INSERT INTO \"Org_DateIstoric\"(\"Id\", \"IdCircuit\", \"IdPost\", \"IdUser\", \"IdStare\",  \"Pozitie\", \"Culoare\", \"Aprobat\", \"DataAprobare\", \"Inlocuitor\", \"IdUserInlocuitor\", \"IdRol\",  USER_NO, TIME) "
+                                + " VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13})";
+                        strSqlIst = string.Format(strSqlIst, idUrm, idCircuit, idPost == null ? "NULL" : idPost.ToString(), idUserCalc, idStare, poz, ("(SELECT CASE WHEN \"Culoare\" IS NULL THEN '#FFFFFFFF' ELSE \"Culoare\" END FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idStare + ")"),
+                            aprobat, dataAprobare, "0", "NULL", idSuper, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
+                        General.ExecutaNonQuery(strSqlIst, null);
+                    } 
                 }
                 #endregion
 
@@ -1478,22 +1391,29 @@ namespace WizOne.Posturi
                                 if (dtRec != null && dtRec.Rows.Count > 0)
                                 {
                                     string sqlGen = "INSERT INTO \"Org_DateGenerale\" (\"Id\", \"PostDenumire\", \"FunctieCOR\", \"ContractDurata\", \"TipContract\", \"NrOre\", \"Locatie\", \"Salariul\", \"CentruCost\", " 
-                                        + " \"Companie\", \"Subcompanie\", \"Filiala\", \"Sectie\", \"Dept\", USER_NO, TIME) "
+                                        + " \"Companie\", \"Subcompanie\", \"Filiala\", \"Sectie\", \"Dept\", \"Masina\", \"Calculator\", \"Telefon\", \"CertificatVPN\", USER_NO, TIME) "
                                         + " SELECT " + idUrm + ", \"PostDenumire\", \"FunctieCOR\", \"ContractDurata\", \"TipContract\", \"NrOre\", \"Locatie\", \"Salariul\", \"CentruCost\", "
-                                        + " \"Companie\", \"Subcompanie\", \"Filiala\", \"Sectie\", \"Dept\", " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + " FROM \"Org_DateGenerale\" WHERE \"Id\" = " + idRec;
+                                        + " \"Companie\", \"Subcompanie\", \"Filiala\", \"Sectie\", \"Dept\", 0, 1, 1, 0, " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + " FROM \"Org_DateGenerale\" WHERE \"Id\" = " + idRec;
                                     General.ExecutaNonQuery(sqlGen, null);
                                 }
                                 else
                                 {
-                                    string sqlGen = "INSERT INTO \"Org_DateGenerale\" (\"Id\", USER_NO, TIME) VALUES (" + idUrm + ", " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ")";
+                                    string sqlGen = "INSERT INTO \"Org_DateGenerale\" (\"Id\", \"Masina\", \"Calculator\", \"Telefon\", \"CertificatVPN\", USER_NO, TIME) VALUES (" + idUrm + ", 0, 1, 1, 0, " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ")";
                                     General.ExecutaNonQuery(sqlGen, null);
                                 }
                             }
                             else
                             {
-                                string sqlGen = "INSERT INTO \"Org_DateGenerale\" (\"Id\", USER_NO, TIME) VALUES (" + idUrm + ", " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ")";
+                                string sqlGen = "INSERT INTO \"Org_DateGenerale\" (\"Id\", \"Masina\", \"Calculator\", \"Telefon\", \"CertificatVPN\", USER_NO, TIME) VALUES (" + idUrm + ", 0, 1, 1, 0, " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ")";
                                 General.ExecutaNonQuery(sqlGen, null);
                             }                         
+                        }
+                        break;
+                    case 22:
+                        {
+                            string sqlGen = "INSERT INTO \"Org_DateGenerale\" (\"Id\", \"DataVigoare\", \"DataInceput\", F10003, \"NumeComplet\", USER_NO, TIME) VALUES (" 
+                                + idUrm + ", " + dataInceput + ", " + dataInceput + ", " + f10003_Ang + ", '" + numeAng + "', " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ")";
+                            General.ExecutaNonQuery(sqlGen, null);
                         }
                         break;
                 }           
@@ -1505,6 +1425,118 @@ namespace WizOne.Posturi
 
             return idUrm;
         }
+
+
+
+        protected void pnlCtl_Callback(object sender, CallbackEventArgsBase e)
+        {
+            try
+            {
+
+                DataTable dtAng = GetF100NumeCompletPost(Convert.ToInt32(cmbFormNou.Value ?? -99), Convert.ToInt32(Session["UserId"].ToString()), Convert.ToDateTime(deDataVig.Value ?? DateTime.Now));
+                cmbAng.DataSource = dtAng;
+                cmbAng.DataBind();
+
+                int idFrm = Convert.ToInt32(e.Parameter);
+                switch (idFrm)
+                {
+                    case 20:
+                        lblDataVig.Visible = false;
+                        deDataVig.ClientVisible = false;
+                        deDataVig.Value = null;
+                        lblRecrut.Visible = false;
+                        cmbRecrut.ClientVisible = false;
+                        cmbRecrut.Value = null;
+                        lblAng.Visible = false;
+                        cmbAng.ClientVisible = false;
+                        cmbAng.Value = null;
+                        break;
+                    case 21:
+                        lblDataVig.Visible = false;
+                        deDataVig.ClientVisible = false;
+                        deDataVig.Value = null;
+                        lblRecrut.Visible = true;
+                        cmbRecrut.ClientVisible = true;
+                        cmbRecrut.Value = null;
+                        lblAng.Visible = false;
+                        cmbAng.ClientVisible = false;
+                        cmbAng.Value = null;
+                        break;
+                    case 22:
+                        lblDataVig.Visible = true;
+                        deDataVig.ClientVisible = true;
+                        deDataVig.Value = null;
+                        lblRecrut.Visible = false;
+                        cmbRecrut.ClientVisible = false;
+                        cmbRecrut.Value = null;
+                        lblAng.Visible = true;
+                        cmbAng.ClientVisible = true;
+                        cmbAng.Value = null;
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+        }
+
+        public string AnuleazaFormular(int idUser, int id, int f10003)
+        {
+            string msg = "";
+
+            try
+            {
+                if (id == -99) return msg;
+
+                string sql = "SELECT * FROM \"Org_Date\" WHERE \"Id\" = " + id.ToString();
+                DataTable dtCer = General.IncarcaDT(sql, null);
+
+                if (dtCer != null && dtCer.Rows.Count > 0)
+                {
+                    sql = "SELECT * FROM \"Ptj_tblStari\" WHERE \"Id\" = -1";
+                    DataTable dtCul = General.IncarcaDT(sql, null);
+                    string culoare = "#FFFFFFFF";
+                    if (dtCul != null && dtCul.Rows.Count > 0 && dtCul.Rows[0]["Culoare"] != DBNull.Value)
+                        culoare = dtCul.Rows[0]["Culoare"].ToString();
+
+                    //schimbam statusul
+                    General.ExecutaNonQuery("UPDATE \"Org_Date\" SET \"IdStare\" = -1, \"Culoare\" = '" + culoare + "' WHERE \"Id\" = " + id, null);
+
+                    //introducem o linie de anulare in Ptj_CereriIstoric
+                    sql = "INSERT INTO \"Org_DateIstoric\" (\"Id\", \"IdCircuit\", \"IdUser\", \"IdStare\", \"Pozitie\", \"Culoare\", \"Aprobat\", \"DataAprobare\", USER_NO, TIME, \"Inlocuitor\", \"IdRol\") "
+                        + " VALUES (" + id + ", " + dtCer.Rows[0]["IdCircuit"].ToString() + ", " + idUser + ", -1, 22, '" + culoare + "', 1, "  + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") 
+                        + ", " + idUser + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ", 0, " + (dtCer.Rows[0]["IdRol"] == DBNull.Value ? "NULL" : dtCer.Rows[0]["IdRol"].ToString()) + ") ";
+                    General.ExecutaNonQuery(sql, null);
+           
+
+                    //stergem din relatie Post Angajat, si actualizam data de sfarsit a penultimei linii (procesul in oglinda din functia ActualizeazaInRel
+                    //var entRel = ctx.Org_relPostAngajat.Where(p => p.F10003 == ent.F10003 && p.IdPost == ent.IdPost && p.DataReferinta == ent.DataInceput).FirstOrDefault();
+                    //if (entRel != null)
+                    //{
+                    //    var entOld = ctx.Org_relPostAngajat.Where(p => p.F10003 == ent.F10003 && p.IdPost == ent.IdPost && p.DataSfarsit == ent.DataInceput.Value.AddDays(-1)).FirstOrDefault();
+                    //    if (entOld != null)
+                    //    {
+                    //        entOld.DataSfarsit = new DateTime(2100, 1, 1);
+                    //    }
+                    //    ctx.Org_relPostAngajat.DeleteObject(entRel);
+                    //}  
+
+
+                    msg = "Proces finalizat cu succes";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name); 
+            }
+
+            return msg;
+        }
+
 
     }
 }

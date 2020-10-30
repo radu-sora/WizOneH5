@@ -53,10 +53,7 @@
         }
 
 
-
-        function CloseDeferedWindow() {
-            popUpDivide.Hide();
-        }
+   
 
 
         function OnEndCallback(s, e) {
@@ -68,6 +65,8 @@
                 s.cpAlertMessage = null;
             }
         }
+
+     
 
 
         var textSeparator = ",";
@@ -142,11 +141,8 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnNou"  runat="server" Text="Adauga" OnClick="btnNou_Click" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
-                    }" />
+                <dx:ASPxButton ID="btnNou"  runat="server" Text="Adauga" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function (s,e) { popUpNou.Show(); pnlCtl.PerformCallback(cmbFormNou.GetValue()); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/new.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnDuplica"  runat="server" Text="Duplica" OnClick="btnDuplica_Click" oncontextMenu="ctx(this,event)" >
@@ -316,67 +312,76 @@
         FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpNou" EnableHierarchyRecreation="false">
         <ContentCollection>
             <dx:PopupControlContentControl runat="server">
-                <asp:Panel ID="Panel1" runat="server">
-                    <table style="width:100%;">
-                        <tr>
-                            <td align="right">
-                                <dx:ASPxButton ID="btnSave" runat="server" Text="Salvare" AutoPostBack="true" OnClick="btnSalvare_Click" >
-                                    <ClientSideEvents Click="function(s, e) { popUpExport.Hide(); e.processOnServer = true; }" />
-                                    <Image Url="~/Fisiere/Imagini/Icoane/save.png"></Image>
-                                </dx:ASPxButton>
-                                <br />
-                                <br />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width:100%; padding-left:70px;">
-                                <label id="lblDataVig" runat="server" style="display:inline-block;">Data vigoare</label>
-                                <br />
-				                <dx:ASPxDateEdit  ID="deDataVig" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
-                                        <CalendarProperties FirstDayOfWeek="Monday" />                                                   
-				                </dx:ASPxDateEdit>
-                                <br />
-                                <label id="lblFormNou" runat="server" style="display:inline-block;">Formular</label>
-                                <br />
-                                <dx:ASPxComboBox ID="cmbFormNou" runat="server" ClientIDMode="Static" ClientInstanceName="cmbFormNou" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="Denumire" AutoPostBack="false"  AllowNull="true" CssClass="aspxComboBox_center">
-                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { cmbAng.PerformCallback(); }" />
-                                </dx:ASPxComboBox>
-                                <br />
-                                <label id="lblRecrut" runat="server" style="display:inline-block;">Cerere recrutare</label>
-                                <br />
-                                <dx:ASPxComboBox ID="cmbRecrut" runat="server" ClientIDMode="Static" ClientInstanceName="cmbRecrut" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="PostDenumire" AutoPostBack="false"  AllowNull="true" CssClass="aspxComboBox_center">
-                                    <Columns>
-                                        <dx:ListBoxColumn FieldName="Id" Caption="Id" Width="50" />
-                                        <dx:ListBoxColumn FieldName="PostDenumire" Caption="Post" Width="200" />
-                                        <dx:ListBoxColumn FieldName="Companie" Caption="Companie" Width="100" />
-                                        <dx:ListBoxColumn FieldName="Subcompanie" Caption="Subcompanie" Width="100" />
-                                        <dx:ListBoxColumn FieldName="Filiala" Caption="Directie" Width="100" />
-                                        <dx:ListBoxColumn FieldName="Sectie" Caption="Dept" Width="100" />
-                                        <dx:ListBoxColumn FieldName="Departament" Caption="Birou" Width="100" />
-                                        <dx:ListBoxColumn FieldName="Solicitant" Caption="Solicitant" Width="150" />
-                                        <dx:ListBoxColumn FieldName="Total" Caption="Total" Width="50" />
-                                        <dx:ListBoxColumn FieldName="Finalizate" Caption="Finalizate" Width="50" />
-                                        <dx:ListBoxColumn FieldName="InCurs" Caption="InCurs" Width="50" />
-                                        <dx:ListBoxColumn FieldName="Ramase" Caption="Ramase" Width="50" />		
-                                    </Columns>
-                                </dx:ASPxComboBox>
-                                <br />
-                                <label id="lblAng" runat="server" style="display:inline-block;">Angajat</label>
-                                <br />
-                                <dx:ASPxComboBox ID="cmbAng" runat="server" OnCallback="cmbAng_Callback" ClientIDMode="Static" ClientInstanceName="cmbAng" Width="200px" DropDownWidth="350px" ValueField="F10003" TextField="NumeComplet" AutoPostBack="false"  AllowNull="true" CssClass="aspxComboBox_center">
-                                    <Columns>
-                                        <dx:ListBoxColumn FieldName="NumeComplet" Caption="Nume complet" Width="200" />
-                                        <dx:ListBoxColumn FieldName="Functia" Caption="Functia" Width="90" />
-                                        <dx:ListBoxColumn FieldName="Sectie" Caption="Dept" Width="90" />
-                                        <dx:ListBoxColumn FieldName="DataFunctie" Caption="Data preluare fct." Width="90" />
-                                        <dx:ListBoxColumn FieldName="Locatie" Caption="Locatie" Width="120" />
-                                    </Columns>
-                                </dx:ASPxComboBox>
-                                <br />
-                            </td>
-                        </tr>
-                    </table>
-                </asp:Panel>
+
+                <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server"  OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
+                    <ClientSideEvents EndCallback="function (s,e) { pnlLoading.Hide(); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
+                    <PanelCollection>
+                        <dx:PanelContent>
+
+                            <asp:Panel ID="Panel1" runat="server">
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td align="right">
+                                            <dx:ASPxButton ID="btnSave" runat="server" Text="Salvare" AutoPostBack="true" OnClick="btnSalvare_Click" >
+                                                <ClientSideEvents Click="function(s, e) { popUpNou.Hide(); e.processOnServer = true; }" />
+                                                <Image Url="~/Fisiere/Imagini/Icoane/save.png"></Image>
+                                            </dx:ASPxButton>
+                                            <br />
+                                            <br />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:100%;">
+                                            <label id="lblDataVig" runat="server"  >Data vigoare</label>
+                                            <br />
+				                            <dx:ASPxDateEdit  ID="deDataVig" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" ClientInstanceName="deDataVig"  AutoPostBack="false" CssClass="aspxComboBox_center" >
+                                                    <CalendarProperties FirstDayOfWeek="Monday" />                                                   
+				                            </dx:ASPxDateEdit>
+                                            <br />
+                                            <label id="lblFormNou" runat="server" >Formular</label>
+                                            <br />
+                                            <dx:ASPxComboBox ID="cmbFormNou" runat="server" ClientIDMode="Static" ClientInstanceName="cmbFormNou" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="Denumire" AutoPostBack="false"  AllowNull="true" CssClass="aspxComboBox_center">
+                                                <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback(s.GetValue()); }" />
+                                            </dx:ASPxComboBox>
+                                            <br />
+                                            <label id="lblRecrut" runat="server"  >Cerere recrutare</label>
+                                            <br />
+                                            <dx:ASPxComboBox ID="cmbRecrut" runat="server" ClientIDMode="Static"  ClientInstanceName="cmbRecrut" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="PostDenumire" AutoPostBack="false"  AllowNull="true" CssClass="aspxComboBox_center">
+                                                <Columns>
+                                                    <dx:ListBoxColumn FieldName="Id" Caption="Id" Width="50" />
+                                                    <dx:ListBoxColumn FieldName="PostDenumire" Caption="Post" Width="200" />
+                                                    <dx:ListBoxColumn FieldName="Companie" Caption="Companie" Width="100" />
+                                                    <dx:ListBoxColumn FieldName="Subcompanie" Caption="Subcompanie" Width="100" />
+                                                    <dx:ListBoxColumn FieldName="Filiala" Caption="Directie" Width="100" />
+                                                    <dx:ListBoxColumn FieldName="Sectie" Caption="Dept" Width="100" />
+                                                    <dx:ListBoxColumn FieldName="Departament" Caption="Birou" Width="100" />
+                                                    <dx:ListBoxColumn FieldName="Solicitant" Caption="Solicitant" Width="150" />
+                                                    <dx:ListBoxColumn FieldName="Total" Caption="Total" Width="50" />
+                                                    <dx:ListBoxColumn FieldName="Finalizate" Caption="Finalizate" Width="50" />
+                                                    <dx:ListBoxColumn FieldName="InCurs" Caption="InCurs" Width="50" />
+                                                    <dx:ListBoxColumn FieldName="Ramase" Caption="Ramase" Width="50" />		
+                                                </Columns>
+                                            </dx:ASPxComboBox>
+                                            <br />
+                                            <label id="lblAng" runat="server" >Angajat</label>
+                                            <br />
+                                            <dx:ASPxComboBox ID="cmbAng" runat="server"  ClientIDMode="Static" ClientInstanceName="cmbAng" Width="200px" DropDownWidth="350px" ValueField="F10003" TextField="NumeComplet" AutoPostBack="false"  AllowNull="true" CssClass="aspxComboBox_center">
+                                                <Columns>
+                                                    <dx:ListBoxColumn FieldName="NumeComplet" Caption="Nume complet" Width="200" />
+                                                    <dx:ListBoxColumn FieldName="Functia" Caption="Functia" Width="90" />
+                                                    <dx:ListBoxColumn FieldName="Sectie" Caption="Dept" Width="90" />
+                                                    <dx:ListBoxColumn FieldName="DataFunctie" Caption="Data preluare fct." Width="90" />                                                    
+                                                </Columns>
+                                            </dx:ASPxComboBox>
+                                            <br />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </asp:Panel>
+
+                        </dx:PanelContent>
+                    </PanelCollection>
+                </dx:ASPxCallbackPanel>
             </dx:PopupControlContentControl>
         </ContentCollection>
     </dx:ASPxPopupControl>

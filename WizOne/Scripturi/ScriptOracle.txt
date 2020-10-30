@@ -15355,3 +15355,40 @@ commit;
 
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('FiltruAngajati_AscunsiAppWS', 'F10025 <> 900', 'Conditie pentru afisarea angajatilor in WizSalary', 3);
 commit;
+
+
+
+CREATE TABLE "Org_FormCreate"(
+	"IdFormular" NUMBER(9) NOT NULL,
+	"Rand" NUMBER(9) NOT NULL,
+	"Pozitie" NUMBER(9) NOT NULL,
+	"TipControl" NUMBER(9) NOT NULL,
+	"NumeEticheta" varchar2(250) NOT NULL,
+	"Sursa" varchar2(4000) NULL,
+	"ColoanaBD" varchar2(250) NOT NULL,
+	"Latime" NUMBER(9) NULL,
+	"IdAuto" NUMBER(9)  NOT NULL,
+    "USER_NO" NUMBER(9), 
+    "TIME" DATE DEFAULT SYSDATE);
+  
+    CREATE UNIQUE INDEX "PK_Org_FormCreate" ON "Org_FormCreate" ("IdAuto") ;
+
+ALTER TABLE "Org_FormCreate" ADD CONSTRAINT "PK_Org_FormCreate" PRIMARY KEY ("IdAuto");
+
+CREATE SEQUENCE "Org_FormCreate_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+  CREATE OR REPLACE TRIGGER "Auto_Org_FormCreate" 
+  BEFORE INSERT ON "Org_FormCreate"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Org_FormCreate_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Org_FormCreate" ENABLE;
+
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(121, 'Creare formular', 'Creare formular', 'Posturi\FormCreate', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(122, 'Lista formulare', 'Lista formulare', 'Posturi\FormLista', 1, 'm1.png');
+commit;

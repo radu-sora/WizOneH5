@@ -1146,16 +1146,19 @@ namespace WizOne.Eval
                         case 17: //Tabel
                             ctl = CreeazaTabel(ent.Id, super);
                             break;
-                        case 18: //Nume Manager
-                            ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));
-                            break;
+                        case 18: //Nume Manager  
                         case 19: //Post Manager
-                            ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));
-                            break;
-                        case 20: //Nume Manager N + 2
-                            ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));
-                            break;
+                        case 20: //Nume Manager N + 2  
                         case 21: // Post Manager N + 2
+                        case 60: //Supervizor3 Nume
+                        case 61: //Supervizor3 Post
+                        case 62: //Supervizor4 Nume
+                        case 63: //Supervizor4 Post
+                        case 64: //Supervizor5 Nume
+                        case 65: //Supervizor5 Post
+                        case 66: //Supervizor6 Nume
+                        case 67: //Supervizor6 Post
+                            //Radu 30.10.2020 - am grupat toate optiunile de mai sus
                             ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));
                             break;
                         case 23: //Obiective individuale

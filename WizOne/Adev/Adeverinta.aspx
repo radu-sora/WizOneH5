@@ -132,7 +132,13 @@
                 <table style="margin-left:15px;">
                     <tr id="bulk1" runat="server">
                         <td>
-                            <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                            <div style="float:left; padding-right:15px;  padding-bottom:10px;">
+                                <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px">Roluri</label>
+                                <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" >
+                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlLoading.Show(); pnlCtl.PerformCallback('cmbRol'); }" />
+                                </dx:ASPxComboBox>
+                            </div>
+                            <div style="float:left; padding-right:15px;">
                                 <label id="lblAngBulk" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Angajat</label>
                                 <dx:ASPxComboBox ID="cmbAngBulk" ClientInstanceName="cmbAngBulk" ClientIDMode="Static" runat="server" Width="150px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)"
                                             CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >

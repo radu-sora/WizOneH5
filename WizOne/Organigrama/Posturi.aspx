@@ -183,7 +183,7 @@
                         </dx:ASPxComboBox>
                     </div>
         
-                    <label id="lblSupFunc" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:85px;">Superior functional</label>
+                    <label id="lblSupFunc" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Superior functional</label>
                     <div style="float:left; padding-right:15px;">    
                         <dx:ASPxComboBox ID="cmbSupFunc" ClientInstanceName="cmbSupFunc" ClientIDMode="Static" runat="server" Width="300px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" 
                                     IncrementalFilteringMode="Contains" CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
@@ -261,13 +261,13 @@
                 </div>
 
                 <div class="Absente_divOuter margin_top15">
-		            <label id="lblPLan" runat="server" style="display:inline-block; float:left; padding-right:15px;">Nr pozitii</label>
+		            <label id="lblPozitii" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Nr pozitii</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtPlan" runat="server" Width="60px"/>
+                        <dx:ASPxTextBox ID="txtPozitii" runat="server" Width="60px" Enabled="false" ReadOnly="true"/>
                     </div>
-                	<label id="lblHCAprobat" runat="server" style="display:inline-block; float:left; padding-right:15px;">Nr pozitii aprobate</label>
+                	<label id="lblPozitiiAprobate" runat="server" style="display:inline-block; float:left; padding-right:15px;">Nr pozitii aprobate</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtHCAProbat" runat="server" Width="60px"/>
+                        <dx:ASPxTextBox ID="txtPozitiiAprobate" runat="server" Width="60px" Enabled="false" ReadOnly="true"/>
                     </div>
                     <dx:ASPxButton ID="btnPozitii" runat="server" ToolTip="istoric numar pozitii" AutoPostBack="false" Height="28px" Text="...">
                         <Paddings PaddingLeft="0px" PaddingRight="0px" />
@@ -306,7 +306,7 @@
 
 
     <dx:ASPxPopupControl ID="popUpIstoric" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
-        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Right" ContentStyle-VerticalAlign="Top"
         EnableViewState="False" PopupElementID="popUpInitArea" PopupHorizontalAlign="WindowCenter"
         PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="800px" Height="500px" HeaderText="Istoric numar pozitii aprobate"
         FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpIstoric" EnableHierarchyRecreation="false">
@@ -314,29 +314,73 @@
             <dx:PopupControlContentControl runat="server">
                 <asp:Panel ID="Panel6" runat="server">
 
-                    <dx:ASPxGridView ID="grDateIstoric" runat="server" ClientInstanceName="grDateIstoric" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false">
+                    <dx:ASPxGridView ID="grDateIstoric" runat="server" ClientInstanceName="grDateIstoric" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" KeyFieldName="IdAuto" 
+                         OnInitNewRow="grDateIstoric_InitNewRow" OnRowUpdating="grDateIstoric_RowUpdating" OnRowDeleting="grDateIstoric_RowDeleting" OnRowInserting="grDateIstoric_RowInserting" >
                         <SettingsBehavior AllowFocusedRow="true" />
-                        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />
+                        <Settings ShowFilterRow="False" ShowColumnHeaders="true" ShowStatusBar="Hidden" />
                         <SettingsEditing Mode="Inline" />
-                        <ClientSideEvents ContextMenu="ctx" />
+                        <ClientSideEvents EndCallback="function(s,e) { OnEndCallbackGridIstoric(s,e); }" ContextMenu="ctx" />
                         <Columns>
-                            <dx:GridViewCommandColumn Width="25px" ShowDeleteButton="true" ShowEditButton="false" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
+                            <dx:GridViewCommandColumn Width="25px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
                                                            
-                            <dx:GridViewDataSpinEditColumn FieldName="Pozitii" Name="Pozitii" Caption="Pozitii"  Width="75px">
-                                <PropertiesSpinEdit MaxValue="99" MinValue="1" MaxLength="2"></PropertiesSpinEdit>
+                            <dx:GridViewDataSpinEditColumn FieldName="Pozitii" Name="Pozitii" Caption="Pozitii">
+                                <PropertiesSpinEdit MaxValue="99" MinValue="1" MaxLength="2">
+                                    <ValidationSettings>
+                                        <RequiredField IsRequired="true" ErrorText="Acest camp este obligatoriu" />
+                                    </ValidationSettings>
+                                </PropertiesSpinEdit>
                             </dx:GridViewDataSpinEditColumn>
-                            <dx:GridViewDataSpinEditColumn FieldName="PozitiiAprobate" Name="PozitiiAprobate" Caption="Pozitii Aprobate"  Width="75px">
-                                <PropertiesSpinEdit MaxValue="99" MinValue="1" MaxLength="2"></PropertiesSpinEdit>
+                            <dx:GridViewDataSpinEditColumn FieldName="PozitiiAprobate" Name="PozitiiAprobate" Caption="Pozitii Aprobate">
+                                <PropertiesSpinEdit MaxValue="99" MinValue="1" MaxLength="2">
+                                    <ValidationSettings>
+                                        <RequiredField IsRequired="true" ErrorText="Acest camp este obligatoriu" />
+                                    </ValidationSettings>
+                                </PropertiesSpinEdit>
                             </dx:GridViewDataSpinEditColumn>
-                            <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data Inceput"  Width="100px">
-                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data Inceput">
+                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
+                                    <ValidationSettings>
+                                        <RequiredField IsRequired="true" ErrorText="Acest camp este obligatoriu" />
+                                    </ValidationSettings>
+                                </PropertiesDateEdit>
                             </dx:GridViewDataDateColumn>
-                            <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data Sfarsit"  Width="100px">
-                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data Sfarsit">
+                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
+                                    <ValidationSettings>
+                                        <RequiredField IsRequired="true" ErrorText="Acest camp este obligatoriu" />
+                                    </ValidationSettings>
+                                </PropertiesDateEdit>
                             </dx:GridViewDataDateColumn>
                             
                             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" ShowInCustomizationForm="false" /> 
-                        </Columns> 
+                            <dx:GridViewDataTextColumn FieldName="IdPost" Name="IdPost" Caption="IdPost"  Width="75px" Visible="false" ShowInCustomizationForm="false" /> 
+                        </Columns>
+
+                        <SettingsCommandButton>
+                            <UpdateButton>
+                                <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png" AlternateText="Save" ToolTip="Actualizeaza" />
+                                <Styles>
+                                    <Style Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </UpdateButton>
+                            <CancelButton>
+                                <Image Url="~/Fisiere/Imagini/Icoane/renunta.png" AlternateText="Renunta" ToolTip="Renunta" />
+                            </CancelButton>
+
+                            <EditButton>
+                                <Image Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" ToolTip="Edit" />
+                                <Styles>
+                                    <Style Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </EditButton>
+                            <DeleteButton>
+                                <Image Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" ToolTip="Sterge" />
+                            </DeleteButton>
+                            <NewButton>
+                                <Image Url="~/Fisiere/Imagini/Icoane/new.png" AlternateText="Adauga" ToolTip="Adauga" />
+                            </NewButton>
+                        </SettingsCommandButton>
+
                     </dx:ASPxGridView>
 
                 </asp:Panel>
@@ -370,7 +414,7 @@
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: trad_string(limba, ""), text: s.cpAlertMessage,
+                    title: "Atentie", text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;
@@ -380,6 +424,16 @@
 
         function ShowDoc() {
             window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tbl=3&id=' + <%=Session["IdAuto"] %>, '_blank ')
+        }
+
+        function OnEndCallbackGridIstoric(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
         }
 
     </script>

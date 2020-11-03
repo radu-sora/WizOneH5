@@ -582,40 +582,40 @@ namespace WizOne.Organigrama
         protected global::DevExpress.Web.ASPxComboBox cmbCor;
 
         /// <summary>
-        /// lblPLan control.
+        /// lblPozitii control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPLan;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPozitii;
 
         /// <summary>
-        /// txtPlan control.
+        /// txtPozitii control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtPlan;
+        protected global::DevExpress.Web.ASPxTextBox txtPozitii;
 
         /// <summary>
-        /// lblHCAprobat control.
+        /// lblPozitiiAprobate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblHCAprobat;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPozitiiAprobate;
 
         /// <summary>
-        /// txtHCAProbat control.
+        /// txtPozitiiAprobate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtHCAProbat;
+        protected global::DevExpress.Web.ASPxTextBox txtPozitiiAprobate;
 
         /// <summary>
         /// btnPozitii control.

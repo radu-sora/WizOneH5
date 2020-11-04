@@ -15387,8 +15387,16 @@ CREATE SEQUENCE "Org_FormCreate_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT
 END;
 /
 ALTER TRIGGER "Auto_Org_FormCreate" ENABLE;
-
+/
 
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(121, 'Creare formular', 'Creare formular', 'Posturi\FormCreate', 1, 'm1.png');
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(122, 'Lista formulare', 'Lista formulare', 'Posturi\FormLista', 1, 'm1.png');
 commit;
+
+ALTER TABLE "Eval_tblTipCamp" ADD "Activ" number(10) DEFAULT 1;
+/
+
+UPDATE "Eval_tblTipCamp" SET "Activ"=1;
+COMMIT;
+UPDATE "Eval_tblTipCamp" SET "Activ"=0 WHERE "Id" NOT IN (1,2,3,4,5,8,9,10,11,13,14,15,17,18,19,20,21,23,53,54,55,60,61,62,63,64,65,66,67,68);
+COMMIT;

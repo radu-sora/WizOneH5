@@ -22,13 +22,21 @@ namespace WizOne.Eval
             public int Parinte { get;set;}
         }
 
+        public class metaEval_tblTipCamp
+        {
+            public int Id { get; set; }
+            public string Denumire { get; set; }
+            public int Parinte { get; set; }
+            public int Activ { get; set; }
+        }
+
         public class metaCmb
         {
             public int Id { get; set; }
             public string Denumire { get; set; }
         }
         List<metaDate> lstEval_tblCategTipCamp = new List<metaDate>();
-        List<metaDate> lstEval_tblTipCamp = new List<metaDate>();
+        List<metaEval_tblTipCamp> lstEval_tblTipCamp = new List<metaEval_tblTipCamp>();
         List<metaDate> lstEval_tblTipValori = new List<metaDate>();
         List<metaDate> lstEval_tblIntrebari = new List<metaDate>();
         List<metaDate> lstEval_Perioada = new List<metaDate>();
@@ -100,13 +108,14 @@ namespace WizOne.Eval
                 {
                     string strSQL = "select * from \"Eval_tblTipCamp\" ";
                     DataTable dtEval_tblTipCamp = General.IncarcaDT(strSQL, null);
-                    lstEval_tblTipCamp = new List<metaDate>();
+                    lstEval_tblTipCamp = new List<metaEval_tblTipCamp>();
                     foreach (DataRow rwEval_tblTipCamp in dtEval_tblTipCamp.Rows)
                     {
-                        metaDate clsMeta = new metaDate();
+                        metaEval_tblTipCamp clsMeta = new metaEval_tblTipCamp();
                         clsMeta.Id = Convert.ToInt32(rwEval_tblTipCamp["Id"].ToString());
                         clsMeta.Denumire = rwEval_tblTipCamp["Denumire"].ToString();
                         clsMeta.Parinte = Convert.ToInt32(rwEval_tblTipCamp["IdCategorie"].ToString());
+                        clsMeta.Activ = Convert.ToInt32(General.Nz(rwEval_tblTipCamp["Activ"],0));
                         lstEval_tblTipCamp.Add(clsMeta);
                     }
 
@@ -114,8 +123,8 @@ namespace WizOne.Eval
                 }
                 else
                 {
-                    lstEval_tblTipCamp = new List<metaDate>();
-                    lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaDate>;
+                    lstEval_tblTipCamp = new List<metaEval_tblTipCamp>();
+                    lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaEval_tblTipCamp>;
                 }
 
                 if (Session["nomenEval_tblTipValori"] == null)
@@ -413,7 +422,7 @@ namespace WizOne.Eval
                 if (Session["Eval_QuizIntrebari_IdCategorieData"] != null)
                 {
                     int idCategorieTipCamp = Convert.ToInt32(Session["Eval_QuizIntrebari_IdCategorieData"].ToString());
-                    cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == idCategorieTipCamp);
+                    cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == idCategorieTipCamp && p.Activ == 1);
                     cmbTipObiect.DataBind();
                 }
 
@@ -828,12 +837,12 @@ namespace WizOne.Eval
                     //Categorie Tip Camp & Tip Camp
                     if (!string.IsNullOrEmpty(rwDataCurrent["TipData"].ToString()))
                     {
-                        lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaDate>;
+                        lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaEval_tblTipCamp>;
                         if (lstEval_tblTipCamp.Where(p => p.Id == Convert.ToInt32(rwDataCurrent["TipData"].ToString())).Count() != 0)
                         {
                             int IdCategorieTipCamp = lstEval_tblTipCamp.Where(p => p.Id == Convert.ToInt32(rwDataCurrent["TipData"].ToString())).FirstOrDefault().Parinte;
                             cmbTip.Value = IdCategorieTipCamp;
-                            cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == IdCategorieTipCamp);
+                            cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == IdCategorieTipCamp && p.Activ == 1);
                             cmbTipObiect.DataBind();
                             cmbTipObiect.Value = rwDataCurrent["TipData"];
 
@@ -1014,7 +1023,7 @@ namespace WizOne.Eval
 
                     txtDenSectiune.Text = rwDataSectiune["Descriere"].ToString();
                     int TipValoare = Convert.ToInt32((rwDataCurrent["TipData"].ToString() == string.Empty ? "-99" : rwDataCurrent["TipData"]) ?? -99);
-                    metaDate cls = lstEval_tblTipCamp.Where(p => p.Id == TipValoare).FirstOrDefault();
+                    metaEval_tblTipCamp cls = lstEval_tblTipCamp.Where(p => p.Id == TipValoare).FirstOrDefault();
                     if (cls != null)
                     {
                         cmbTip.Value = cls.Parinte;
@@ -1163,8 +1172,8 @@ namespace WizOne.Eval
                     {
                         case "cmbTip":
                             int idCategorieTipCamp = Convert.ToInt32(arr[1]);
-                            lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaDate>;
-                            cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == idCategorieTipCamp);
+                            lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaEval_tblTipCamp>;
+                            cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == idCategorieTipCamp && p.Activ == 1);
                             cmbTipObiect.DataBind();
 
                             Session["Eval_QuizIntrebari_IdCategorieData"] = idCategorieTipCamp;

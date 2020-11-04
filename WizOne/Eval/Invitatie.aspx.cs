@@ -28,7 +28,7 @@ namespace WizOne.Eval
                 //Florin 2020.02.12
                 //string sqlUsr = $@"SELECT F70102, CASE WHEN ""NumeComplet"" IS NULL THEN F70104 ELSE ""NumeComplet"" END AS ""NumeComplet"", F10003 FROM USERS";
                 string sqlUsr = 
-                    $@"SELECT F70102, CASE WHEN ""NumeComplet"" IS NULL THEN F70104 ELSE ""NumeComplet"" END AS ""NumeComplet"", F10003 FROM USERS WHERE F10003 IS NULL
+                    $@"SELECT F70102, CASE WHEN ""NumeComplet"" IS NULL THEN F70104 ELSE ""NumeComplet"" END AS ""NumeComplet"", F10003 FROM USERS WHERE F10003 IS NULL OR F10003 <= 0
                     UNION
                     SELECT A.F70102, CASE WHEN A.""NumeComplet"" IS NULL THEN A.F70104 ELSE A.""NumeComplet"" END AS ""NumeComplet"", A.F10003 
                     FROM USERS A 

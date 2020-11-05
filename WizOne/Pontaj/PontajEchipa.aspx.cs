@@ -328,6 +328,7 @@ namespace WizOne.Pontaj
                 }
                 else if (grDate.IsCallback)
                 {
+                    SetColoane();
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.DataBind();
                 }

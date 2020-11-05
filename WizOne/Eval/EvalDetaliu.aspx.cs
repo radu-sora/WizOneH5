@@ -2843,7 +2843,7 @@ namespace WizOne.Eval
                                 break;
                             case "IdCalificativ":
                                 clsNew.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ) != null)
                                     clsNew.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ).Text;
                                 break;
                             case "Calificativ":
@@ -2904,7 +2904,7 @@ namespace WizOne.Eval
                                 break;
                             case "IdCalificativ":
                                 clsUpd.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ) != null)
                                     clsUpd.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ).Text;
                                 break;
                             case "Calificativ":

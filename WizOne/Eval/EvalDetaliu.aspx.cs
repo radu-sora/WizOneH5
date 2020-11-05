@@ -1811,7 +1811,7 @@ namespace WizOne.Eval
                 grDateObiective.BatchUpdate += GrDateObiective_BatchUpdate;
                 Session["NumeGriduri"] += ";" + grDateObiective.ID;
 
-
+                grDateObiective.CustomSummaryCalculate += GrDateObiective_CustomSummaryCalculate;
 
                 //Radu 19.04.2019
                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24 || Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 25)
@@ -1891,7 +1891,7 @@ namespace WizOne.Eval
                         string colName = clsConfigDetail.ColumnName.Replace("Total", "FormulaSql");
                         colFormula.FieldName = colName;
                         colFormula.Name = colName;
-                        colFormula.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        colFormula.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
                         colFormula.UnboundExpression = clsConfigDetail.FormulaSql;
                         colFormula.Visible = false;
 
@@ -1906,11 +1906,38 @@ namespace WizOne.Eval
                             grDateObiective.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
                             ASPxSummaryItem s = new ASPxSummaryItem();
                             s.FieldName = clsConfigDetail.ColumnName;
-                            if (clsConfigDetail.TotalColoana == 0)
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-                            if (clsConfigDetail.TotalColoana == 4)
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
-                            s.DisplayFormat = "{0}";
+                            switch (clsConfigDetail.TotalColoana)
+                            {
+                                case 1:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N0}";
+                                    break;
+                                case 2:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N2}";
+                                    break;
+                                case 3:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N0}";
+                                    break;
+                                case 4:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N2}";
+                                    break;
+                                case 5:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
+                                    s.DisplayFormat = "Val. min. {0}";
+                                    break;
+                                case 6:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
+                                    s.DisplayFormat = "Val. max. {0}";
+                                    break;
+                            }
+                            //if (clsConfigDetail.TotalColoana == 0)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                            //if (clsConfigDetail.TotalColoana == 4)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                            //s.DisplayFormat = "{0}";
 
                             grDateObiective.TotalSummary.Add(s);
                         }
@@ -2348,6 +2375,44 @@ namespace WizOne.Eval
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
             return grDateObiective;
+        }
+
+        private void GrDateObiective_CustomSummaryCalculate(object sender, DevExpress.Data.CustomSummaryEventArgs e)
+        {
+            try
+            {
+                ASPxSummaryItem itm = e.Item as ASPxSummaryItem;
+                if (itm.DisplayFormat.ToLower().IndexOf("max") >= 0)
+                {
+                    // Initialization. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                        e.TotalValue = 0;
+                    else
+                    // Calculation. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                    {
+                        if (Convert.ToDecimal(e.FieldValue) > Convert.ToDecimal(e.TotalValue))
+                            e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                    }
+                }
+                else
+                {
+                    // Initialization. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                        e.TotalValue = 9999;
+                    else
+                    // Calculation. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                    {
+                        if (Convert.ToDecimal(e.FieldValue) < Convert.ToDecimal(e.TotalValue))
+                            e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
 
@@ -3702,7 +3767,7 @@ namespace WizOne.Eval
                         string colName = clsConfigDetail.ColumnName.Replace("Total", "FormulaSql");
                         colFormula.FieldName = colName;
                         colFormula.Name = colName;
-                        colFormula.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        colFormula.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
                         colFormula.UnboundExpression = clsConfigDetail.FormulaSql;
                         colFormula.Visible = false;
 
@@ -3717,11 +3782,38 @@ namespace WizOne.Eval
                             grDateCompetente.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
                             ASPxSummaryItem s = new ASPxSummaryItem();
                             s.FieldName = clsConfigDetail.ColumnName;
-                            if (clsConfigDetail.TotalColoana == 0)
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-                            if (clsConfigDetail.TotalColoana == 4)
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
-                            s.DisplayFormat = "{0}";
+                            switch (clsConfigDetail.TotalColoana)
+                            {
+                                case 1:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N0}";
+                                    break;
+                                case 2:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N2}";
+                                    break;
+                                case 3:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N0}";
+                                    break;
+                                case 4:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N2}";
+                                    break;
+                                case 5:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Min;
+                                    s.DisplayFormat = "Valoarea minima {0}";
+                                    break;
+                                case 6:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Max;
+                                    s.DisplayFormat = "Valoarea maxima {0}";
+                                    break;
+                            }
+                            //if (clsConfigDetail.TotalColoana == 0)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                            //if (clsConfigDetail.TotalColoana == 4)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                            //s.DisplayFormat = "{0}";
 
                             grDateCompetente.TotalSummary.Add(s);
                         }

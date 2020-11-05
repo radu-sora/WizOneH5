@@ -793,8 +793,12 @@
                                                                                         <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14">
                                                                                             <PropertiesComboBox>
                                                                                                 <Items>
-                                                                                                    <dx:ListEditItem Value="0" Text="Suma" />
-                                                                                                    <dx:ListEditItem Value="4" Text="Medie" />
+                                                                                                    <dx:ListEditItem Value="1" Text="Suma fara zecimale" />
+                                                                                                    <dx:ListEditItem Value="2" Text="Suma cu 2 zecimale" />
+                                                                                                    <dx:ListEditItem Value="3" Text="Medie fara zecimale" />
+                                                                                                    <dx:ListEditItem Value="4" Text="Medie cu 2 zecimale" />
+                                                                                                    <dx:ListEditItem Value="5" Text="Valoare minima" />
+                                                                                                    <dx:ListEditItem Value="6" Text="Valoare maxima" />
                                                                                                 </Items>
                                                                                             </PropertiesComboBox>
                                                                                         </dx:GridViewDataComboBoxColumn>

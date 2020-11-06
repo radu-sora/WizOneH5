@@ -580,10 +580,9 @@ namespace WizOne.Eval
 
                 #endregion
 
-                if (Dami.ValoareParam("PreluareDateAutomat", "0") == "1" && idCateg == "0")
+                //Florin 2020.11.06
+                if (General.Nz(Session["CompletareChestionar_Sincronizare"],0).ToString() == "1" && idCateg == "0")
                     PreluareDateAutomat(pozitie);
-
-
 
                 //Florin 2019.10.16
                 if (General.Nz(Session["NumeGriduri"], "").ToString() != "")

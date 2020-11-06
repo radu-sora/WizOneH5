@@ -411,6 +411,7 @@ namespace WizOne.Module
         public int LuatUser { get; set; }
         public DateTime? LuatData { get; set; }
         public int LuatAutomat { get; set; }
+        public int Sincronizare { get; set; }
 
         public Eval_Raspuns() { }
 
@@ -435,6 +436,7 @@ namespace WizOne.Module
             if (columns.Contains("LuatData") && dr["LuatData"] != DBNull.Value)
                 LuatData = Convert.ToDateTime(dr["LuatData"]);
             LuatAutomat = columns.Contains("LuatAutomat") == true ? Convert.ToInt32(dr["LuatAutomat"].ToString() == string.Empty ? "-99" : dr["LuatAutomat"].ToString()) : -99;
+            Sincronizare = columns.Contains("Sincronizare") == true ? (dr["Sincronizare"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Sincronizare"])) : 0;
         }
 
     }
@@ -1303,7 +1305,7 @@ namespace WizOne.Module
                 //Radu 07.05.2019 - am eliminat conditia de CategorieQuiz pentru Culoare       (COALESCE(chest.""CategorieQuiz"",0)=1 OR COALESCE(chest.""CategorieQuiz"",0)=2) AND 
 
                 strSQL = @"
-                select distinct rasp.""IdAuto"", rasp.""IdQuiz"", rasp.""F10003"", chest.""Denumire"", ctg.""Denumire"" AS ""DenumireCategorie"", chest.""CategorieQuiz"", chest.""IdRaport"",
+                select distinct rasp.""IdAuto"", rasp.""IdQuiz"", rasp.""F10003"", chest.""Denumire"", ctg.""Denumire"" AS ""DenumireCategorie"", chest.""CategorieQuiz"", chest.""IdRaport"", chest.""Sincronizare"",
 	                chest.""DataInceput"", chest.""DataSfarsit"", {0}(fnume.""F10009"", '') {1} ' ' {1} {0}(fnume.""F10008"", '') as ""Utilizator"",
 	                CASE WHEN COALESCE((SELECT MIN(COALESCE(""Aprobat"",0)) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz"" = rasp.""IdQuiz"" AND ""IdUser"" = {11}),0)=1 THEN '#FFE18030' ELSE '#FFFFFF00' END AS ""Culoare"",
 	                case

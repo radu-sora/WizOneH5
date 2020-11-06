@@ -38,6 +38,9 @@
             case "cmbIdRaport":
                 lstValori.Set('IdRaport', s.GetValue());
                 break;
+            case "chkSinc":
+                lstValori.Set('Sincronizare', s.GetValue());
+                break;
         }
     }
 
@@ -373,11 +376,14 @@
                                                                                     </td>
                                                                                 </tr>
                                                                             </table>
-
+                                                                            <br />
                                                                             <table width="30">
                                                                                 <tr>
+                                                                                    <td>
+                                                                                        <dx:ASPxLabel ID="lblLuatLaCunostinta" Width="100" runat="server" Text="Luat la cunostinta" />
+                                                                                    </td>
                                                                                    <td>
-                                                                                        <dx:ASPxCheckBox ID="chkLuatLaCunostinta" Width="120" runat="server" Text="Luat la cunostinta"
+                                                                                        <dx:ASPxCheckBox ID="chkLuatLaCunostinta" Width="20" runat="server"
                                                                                             TextAlign="Left" Checked='<%#  Eval("LuatLaCunostinta") == DBNull.Value ? false : Convert.ToBoolean(Eval("LuatLaCunostinta"))%>'
                                                                                             ClientInstanceName="chkLuatLaCunostinta" ClientIDMode="Static">
                                                                                             <ClientSideEvents ValueChanged="function(s, e){ OnValueChanged(s); }" />
@@ -385,7 +391,7 @@
                                                                                     </td>
                                                                                     <td>&nbsp;&nbsp;&nbsp;</td>
                                                                                     <td>
-                                                                                        <dx:ASPxLabel ID="lblNrZile" Width="180" runat="server" Text="Numar zile luat la cunostinta" />
+                                                                                        <dx:ASPxLabel ID="lblNrZile" Width="160" runat="server" Text="Numar zile luat la cunostinta" />
                                                                                     </td>
                                                                                     <td>
                                                                                         <dx:ASPxTextBox ID="txtNrZileLuatLaCunostinta" Width="30" ClientInstanceName="txtNrZileLuatLaCunostinta" ClientIDMode="Static" runat="server" Text='<%# Eval("NrZileLuatLaCunostinta") %>' AutoPostBack="false">
@@ -394,13 +400,22 @@
                                                                                     </td>
                                                                                     <td>&nbsp;&nbsp;&nbsp;</td>
                                                                                     <td>
-                                                                                        <dx:ASPxLabel ID="lblIdRaport" Width="70" runat="server" Text="Raport" />
+                                                                                        <dx:ASPxLabel ID="lblIdRaport" Width="50" runat="server" Text="Raport" />
                                                                                     </td>
                                                                                     <td>
                                                                                         <dx:ASPxComboBox ID="cmbIdRaport" ClientInstanceName="cmbIdRaport" ClientIDMode="Static" runat="server" DropDownStyle="DropDown" Value='<%# Eval("IdRaport") %>' TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" DataSourceID="dsRaps" >
                                                                                             <ClientSideEvents SelectedIndexChanged="function(s, e){ OnValueChanged(s); }" />
                                                                                         </dx:ASPxComboBox>
                                                                                         <asp:ObjectDataSource runat="server" ID="dsRaps" TypeName="WizOne.Module.Evaluare" SelectMethod="GetRapoarte" />
+                                                                                    </td>
+                                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                                    <td>
+                                                                                        <dx:ASPxLabel ID="lblSinc" Width="144" runat="server" Text="Sincronizare raspunsuri" />
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <dx:ASPxCheckBox ID="chkSinc" Width="20" runat="server" ClientInstanceName="chkSinc" ClientIDMode="Static" Checked='<%#  Eval("Sincronizare") == DBNull.Value ? false : Convert.ToBoolean(Eval("Sincronizare"))%>' >
+                                                                                            <ClientSideEvents ValueChanged="function(s, e){ OnValueChanged(s); }" />
+                                                                                        </dx:ASPxCheckBox>
                                                                                     </td>
                                                                                  </tr>
                                                                             </table>

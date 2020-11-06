@@ -538,6 +538,10 @@ namespace WizOne.Eval
                         ds.Tables[0].Rows[0]["IdRaport"] = param[1];
                         Session["InformatiaCurentaEvalQuiz"] = ds;
                         break;
+                    case "chkSinc":
+                        ds.Tables[0].Rows[0]["Sincronizare"] = (param[1] == "true" ? 1 : 0);
+                        Session["InformatiaCurentaEvalQuiz"] = ds;
+                        break;
                 }
             }
             catch(Exception ex)

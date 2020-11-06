@@ -798,6 +798,7 @@ namespace WizOne.Eval
                 #endregion
 
                 #region Asignare Date
+
                 if (General.Nz(hf["Id"], "").ToString() != "" && String.IsNullOrEmpty(e.Parameter))
                 {
                     int IdQuizIntrebare = Convert.ToInt32(hf["Id"]);
@@ -889,12 +890,12 @@ namespace WizOne.Eval
 
                             //Florin 2020.01.03 - daca tipul de control ales este obiectiv si exista inregistrari in tabela de categori de obiective, atunci afisam combobox-ul de categ obi
                             DataTable dtCtgObi = Session["Eval_tblCategorieObiective"] as DataTable;
-                            if (dtCtgObi != null && dtCtgObi.Rows.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value,-1)) == 4)
+                            if (dtCtgObi != null && dtCtgObi.Rows.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 4)
                             {
                                 lblCategObi.ClientVisible = true;
                                 cmbCategObi.ClientVisible = true;
                                 if (Convert.ToInt32(General.Nz(rwDataCurrent["IdCategObiective"], -99)) != -99)
-                                    cmbCategObi.Value = Convert.ToInt32(General.Nz(rwDataCurrent["IdCategObiective"],-1));
+                                    cmbCategObi.Value = Convert.ToInt32(General.Nz(rwDataCurrent["IdCategObiective"], -1));
                             }
                             else
                             {
@@ -929,6 +930,19 @@ namespace WizOne.Eval
                     {
                         chkOrizontal.Checked = false;
                         chkVertical.Checked = false;
+                    }
+
+                    //Florin 2020.11.06
+                    List<metaDate> tmpListaTblTipValori = Session["nomenEval_tblTipValori"] as List<metaDate>;
+                    if (tmpListaTblTipValori.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 1 && Convert.ToInt32(General.Nz(cmbTipObiect.Value, -1)) == 2)
+                    {
+                        lblSursaDate.ClientVisible = true;
+                        cmbSursaDate.ClientVisible = true;
+                    }
+                    else
+                    {
+                        lblSursaDate.ClientVisible = false;
+                        cmbSursaDate.ClientVisible = false;
                     }
 
                     //Sursa date
@@ -1029,6 +1043,33 @@ namespace WizOne.Eval
                         cmbTip.Value = cls.Parinte;
                     }
                     return;
+                }
+
+                //Florin 2020.11.06 - este pusa de 2 ori (este si mai sus din cauza return-ului de deasupra)
+                //Florin 2020.11.06- daca tipul de control ales este obiectiv si exista inregistrari in tabela de categori de obiective, atunci afisam combobox-ul de categ obi
+                DataTable dtCtgObi2 = Session["Eval_tblCategorieObiective"] as DataTable;
+                if (dtCtgObi2 != null && dtCtgObi2.Rows.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 4)
+                {
+                    lblCategObi.ClientVisible = true;
+                    cmbCategObi.ClientVisible = true;
+                }
+                else
+                {
+                    lblCategObi.ClientVisible = false;
+                    cmbCategObi.ClientVisible = false;
+                }
+
+                //Florin 2020.11.06 - este pusa de 2 ori (este si mai sus din cauza return-ului de deasupra)
+                List<metaDate> tmpListaTblTipValori2 = Session["nomenEval_tblTipValori"] as List<metaDate>;
+                if (tmpListaTblTipValori2.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 1 && Convert.ToInt32(General.Nz(cmbTipObiect.Value, -1)) == 2)
+                {
+                    lblSursaDate.ClientVisible = true;
+                    cmbSursaDate.ClientVisible = true;
+                }
+                else
+                {
+                    lblSursaDate.ClientVisible = false;
+                    cmbSursaDate.ClientVisible = false;
                 }
 
                 #endregion

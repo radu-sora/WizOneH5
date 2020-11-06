@@ -591,32 +591,32 @@
                                                                         <dx:ASPxLabel ID="lblGrup" runat="server" Width="40" Text="Grup" />
                                                                     </td>
                                                                     <td>
-                                                                        <dx:ASPxComboBox ID="cmbGrup" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" 
+                                                                        <dx:ASPxComboBox ID="cmbGrup" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" CssClass="margin_rightt15"
                                                                             AutoPostBack="false" ValueType="System.Int32" />
                                                                     </td>
                                                                     <td>
-                                                                        <dx:ASPxLabel ID="lblSursaDate" runat="server" Width="100" Text="Sursa date" />
+                                                                        <dx:ASPxLabel ID="lblSursaDate" runat="server" Width="100" Text="Sursa date" ClientVisible="false" />
                                                                     </td>
                                                                     <td>
-                                                                        <dx:ASPxComboBox ID="cmbSursaDate" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id"
-                                                                            AutoPostBack="false" ValueType="System.Int32" ClientInstanceName="cmbSursaDate" >
+                                                                        <dx:ASPxComboBox ID="cmbSursaDate" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" CssClass="margin_rightt15"
+                                                                            AutoPostBack="false" ValueType="System.Int32" ClientInstanceName="cmbSursaDate" ClientVisible="false">
                                                                             <ClientSideEvents SelectedIndexChanged="function(s, e){ OnCMBTipChanged(s); }" />
                                                                         </dx:ASPxComboBox>
                                                                     </td>
-                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                    <td></td>
                                                                     <td>
-                                                                        <dx:ASPxLabel ID="lblCategObi" runat="server" Width="90" Text="Categ. obiectiv" ClientVisible="false" />
+                                                                        <dx:ASPxLabel ID="lblCategObi" runat="server" Width="100" Text="Categ. obiectiv" ClientVisible="false" />
                                                                     </td>
                                                                     <td>
-                                                                        <dx:ASPxComboBox ID="cmbCategObi" ClientInstanceName="cmbCategObi" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" ClientVisible="true"/>
+                                                                        <dx:ASPxComboBox ID="cmbCategObi" ClientInstanceName="cmbCategObi" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" ClientVisible="false" CssClass="margin_rightt15"/>
                                                                     </td>                                                                    
-                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                    <td></td>
                                                                     <td>
-                                                                        <dx:ASPxCheckBox ID="chkObligatoriu" runat="server" Text="Obligatoriu" TextAlign="Left" ClientInstanceName="chkObligatoriu" AutoPostBack="false">
+                                                                        <dx:ASPxCheckBox ID="chkObligatoriu" runat="server" Text="Obligatoriu" TextAlign="Left" ClientInstanceName="chkObligatoriu" AutoPostBack="false" Width="100px" CssClass="margin_rightt15">
                                                                             <ClientSideEvents ValueChanged="function(s, e){ OnCHKChanged(s); }" />
                                                                         </dx:ASPxCheckBox>
                                                                     </td>
-                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                    <td></td>
                                                                      <td>
                                                                         <dx:ASPxLabel ID="lblPrelObi" runat="server" Text="Preluare obiective:" Width="100" />
                                                                     </td>

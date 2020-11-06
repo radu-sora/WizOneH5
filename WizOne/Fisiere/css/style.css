@@ -610,6 +610,14 @@ table#grAnual div.IstEx_Zi
     margin-top:15px;
 }
 
+.margin_left15 {
+    margin-left: 15px;
+}
+
+.margin_rightt15 {
+    margin-right: 15px;
+}
+
 .vizibil{
     display:inline-block;
     /*border:solid 1px red !important;*/

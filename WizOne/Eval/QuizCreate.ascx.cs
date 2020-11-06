@@ -393,11 +393,12 @@ namespace WizOne.Eval
                 }
                 else
                 {
-                    cmbTemplateObiective.DataSource = lstEval_ConfigObTemplate;
-                    cmbTemplateObiective.DataBind();
+                    //Florin 2020.11.06 - s-a mutat in panel2_callback
+                    //cmbTemplateObiective.DataSource = lstEval_ConfigObTemplate;
+                    //cmbTemplateObiective.DataBind();
 
-                    int TemplateIdObiectiv = Convert.ToInt32(Session["editingObiectivTemplate"].ToString());
-                    cmbTemplateObiective.Value = TemplateIdObiectiv;
+                    //int TemplateIdObiectiv = Convert.ToInt32(Session["editingObiectivTemplate"].ToString());
+                    //cmbTemplateObiective.Value = TemplateIdObiectiv;
                 }
 
                 if (Session["isEditingCompetenteTemplate"] == null || Session["isEditingCompetenteTemplate"].ToString() == "0")
@@ -411,11 +412,12 @@ namespace WizOne.Eval
                 }
                 else
                 {
-                    cmbTemplateCompetente.DataSource = lstEval_ConfigCompTemplate;
-                    cmbTemplateCompetente.DataBind();
+                    //Florin 2020.11.06 - s-a mutat in panel2_callback
+                    //cmbTemplateCompetente.DataSource = lstEval_ConfigCompTemplate;
+                    //cmbTemplateCompetente.DataBind();
 
-                    int TemplateIdCompetente = Convert.ToInt32(Session["editingCompetenteTemplate"].ToString());
-                    cmbTemplateCompetente.Value = TemplateIdCompetente;
+                    //int TemplateIdCompetente = Convert.ToInt32(Session["editingCompetenteTemplate"].ToString());
+                    //cmbTemplateCompetente.Value = TemplateIdCompetente;
                 }
 
 
@@ -864,6 +866,12 @@ namespace WizOne.Eval
                                 chkObiective.Visible = true;
                                 lblPerioadaObi.Visible = true; // chkObiective.Checked == true ? true : false;
                                 cmbPerioadaObi.Visible = true; // chkObiective.Checked == true ? true : false;
+
+                                //Florin 2020.11.06
+                                cmbTemplateObiective.DataSource = lstEval_ConfigObTemplate;
+                                cmbTemplateObiective.DataBind();
+                                int TemplateIdObiectiv = Convert.ToInt32(Session["editingObiectivTemplate"].ToString());
+                                cmbTemplateObiective.Value = TemplateIdObiectiv;
                             }
                             #endregion
 
@@ -883,6 +891,13 @@ namespace WizOne.Eval
                                 chkCompetente.Visible = true;
                                 lblPerioadaComp.Visible = true; //chkCompetente.Checked == true ? true : false;
                                 cmbPerioadaComp.Visible = true; //chkCompetente.Checked == true ? true : false;
+
+                                //Florin 2020.11.06
+                                cmbTemplateCompetente.DataSource = lstEval_ConfigCompTemplate;
+                                cmbTemplateCompetente.DataBind();
+
+                                int TemplateIdCompetente = Convert.ToInt32(Session["editingCompetenteTemplate"].ToString());
+                                cmbTemplateCompetente.Value = TemplateIdCompetente;
                             }
                             #endregion
 

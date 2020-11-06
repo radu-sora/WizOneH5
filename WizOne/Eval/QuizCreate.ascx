@@ -847,8 +847,7 @@
                                                                             </td>
                                                                             <td>
                                                                                 <dx:ASPxComboBox ID="cmbTemplateCompetente" runat="server" DropDownStyle="DropDown" ValueField="TemplateId" ValueType="System.Int32" TextField="TemplateName" AutoPostBack="false">
-                                                                                    <ClientSideEvents SelectedIndexChanged="function(s, e){ 
-                                                                                                                    OnCMBTipChanged(s); }" />
+                                                                                    <ClientSideEvents SelectedIndexChanged="function(s, e){ OnCMBTipChanged(s); }" />
                                                                                 </dx:ASPxComboBox>
                                                                             </td>
                                                                         </tr>
@@ -864,8 +863,8 @@
                                                                                     OnCustomErrorText="grDateCompetente_CustomErrorText">
                                                                                     <SettingsBehavior AllowFocusedRow="true" EnableCustomizationWindow="true"
                                                                                         AllowSelectByRowClick="true" ColumnResizeMode="NextColumn" />
-                                                                                    <Settings ShowFilterRow="true" ShowGroupPanel="true" HorizontalScrollBarMode="Auto" />
-                                                                                    <SettingsSearchPanel Visible="true" />
+                                                                                    <Settings ShowFilterRow="false" ShowGroupPanel="false" HorizontalScrollBarMode="Auto" />
+                                                                                    <SettingsSearchPanel Visible="false" />
                                                                                     <ClientSideEvents ContextMenu="ctx" BatchEditStartEditing="OnBatchEditStartEditingCompetente" FocusedRowChanged="FocusedRowChangedCompetente" />
                                                                                     <SettingsEditing Mode="Inline" />
                                                                                     <Columns>

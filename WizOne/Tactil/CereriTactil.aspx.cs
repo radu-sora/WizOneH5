@@ -1265,7 +1265,7 @@ namespace WizOne.Tactil
 
                 string sqlIst;
                 int trimiteLaInlocuitor;
-                General.SelectCereriIstoric(Convert.ToInt32(General.VarSession("User_Marca")), -1, Convert.ToInt32(drAbs["IdCircuit"]), Convert.ToInt32(General.Nz(drAbs["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor);
+                General.SelectCereriIstoric(Convert.ToInt32(General.VarSession("User_Marca")), -1, Convert.ToInt32(drAbs["IdCircuit"]), Convert.ToInt32(General.Nz(drAbs["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor, -99, txtDataInc.Date);
 
 
                 #endregion

@@ -402,7 +402,7 @@ namespace WizOne.Absente
                 }
 
 
-                General.SelectCereriIstoric(marca, -1, Convert.ToInt32(drAbs["IdCircuit"]), 0, out sqlIst, out trimiteLaInlocuitor);
+                General.SelectCereriIstoric(marca, -1, Convert.ToInt32(drAbs["IdCircuit"]), 0, out sqlIst, out trimiteLaInlocuitor, -99, dtDataInc.Date);
 
                 #endregion
 

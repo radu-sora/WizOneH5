@@ -140,6 +140,7 @@ namespace WizOne
 
                     DataTable dtPro = new DataTable();
                     if (General.Nz(Session["PaginaWeb"],"").ToString() != "") dtPro = General.IncarcaDT(sqlPro, new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", "."), Session["UserId"].ToString() });
+                    Session["ListaProfile"] = dtPro;
                     if (dtPro.Rows.Count == 0)
                         divCmbProfile.Visible = false;
                     else
@@ -181,6 +182,7 @@ namespace WizOne
                             {
                                 for (int i = 0; i < dtPro.Rows.Count; i++)
                                 {
+                                    gasit = false;
                                     if (dtPro.Rows[i]["Grid"] != null)
                                     {
                                         foreach (ASPxPageControl pagCtrl in ContentPlaceHolder1.Controls.OfType<ASPxPageControl>())
@@ -212,14 +214,15 @@ namespace WizOne
 
                                                         //adugam profilul original al gridului
 
-                                                        DataRow dr = dtPro.NewRow();
-                                                        dr["Id"] = -1;
-                                                        dr["Denumire"] = "Original";
-                                                        dr["Continut"] = "";
-                                                        dr["Implicit"] = 0;
-                                                        dr["Activ"] = 1;
-                                                        dr["Grid"] = dtPro.Rows[i]["Grid"].ToString();
-                                                        dtPro.Rows.Add(dr);
+                                                        //DataRow dr = dtPro.NewRow();
+                                                        //dr["Id"] = -1;
+                                                        //dr["Denumire"] = "Original";
+                                                        //dr["Continut"] = "";
+                                                        //dr["Implicit"] = 0;
+                                                        //dr["Activ"] = 1;
+                                                        //dr["Grid"] = dtPro.Rows[i]["Grid"].ToString();
+                                                        //if (dtPro.Select("Id = -1").Count() == 0)
+                                                        //    dtPro.Rows.Add(dr);
 
                                                         //incarcam profilul implicit
                                                         ctl.LoadClientLayout(prof);
@@ -527,6 +530,37 @@ namespace WizOne
                         grDate.LoadClientLayout(Dami.Profil((int)cmbProfile.SelectedItem.Value));
 
                     if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(this.ContentPlaceHolder1);
+                }
+                else
+                {//Radu 02.11.2020
+                    if (General.Nz(Session["PaginaWeb"], "").ToString() == "Personal.DateAngajat")
+                    {
+                        bool gasit = false;
+                        foreach (ASPxPageControl pagCtrl in ContentPlaceHolder1.Controls.OfType<ASPxPageControl>())
+                        {
+                            foreach (TabPage tab in pagCtrl.TabPages)
+                            {
+                                foreach (dynamic pnlCtl in tab.Controls)
+                                {
+                                    DataTable dtPro =  Session["ListaProfile"] as DataTable;
+                                    ASPxGridView ctl = pnlCtl.Controls[0].FindControl(dtPro.Select("Id = " + (int)cmbProfile.SelectedItem.Value)[0]["Grid"].ToString()) as ASPxGridView;
+                                    if (ctl != null)
+                                    {
+                                        ctl.LoadClientLayout(Dami.Profil((int)cmbProfile.SelectedItem.Value));
+                                        gasit = true;
+                                        break;
+                                    }
+                                    if (gasit)
+                                        break;
+                                }
+                                if (gasit)
+                                    break;
+                            }
+                            if (gasit)
+                                break;
+                        }                           
+                        
+                    }
                 }
             }
             catch (Exception ex)

@@ -16,6 +16,51 @@
             }
         } 
 
+        var textSeparator = ",";
+        function OnListBoxSelectionChanged(listBox, args) {
+            if (args.index == 0)
+                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
+            UpdateSelectAllItemState();
+            UpdateText();
+        }
+        function UpdateSelectAllItemState() {
+            IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
+        }
+        function IsAllSelected() {
+            var selectedDataItemCount = checkListBox.GetItemCount() - (checkListBox.GetItem(0).selected ? 0 : 1);
+            return checkListBox.GetSelectedItems().length == selectedDataItemCount;
+        }
+        function UpdateText() {
+            var selectedItems = checkListBox.GetSelectedItems();
+            checkComboBoxGrup.SetText(GetSelectedItemsText(selectedItems));
+        }
+        function SynchronizeListBoxValues(dropDown, args) {
+            checkListBox.UnselectAll();
+            var texts = dropDown.GetText().split(textSeparator);
+            var values = GetValuesByTexts(texts);
+            checkListBox.SelectValues(values);
+            UpdateSelectAllItemState();
+            UpdateText();
+        }
+        function GetSelectedItemsText(items) {
+            var texts = [];
+            for (var i = 0; i < items.length; i++)
+                if (items[i].index != 0)
+                    texts.push(items[i].text);
+            return texts.join(textSeparator);
+        }
+        function GetValuesByTexts(texts) {
+            var actualValues = [];
+            var item;
+            for (var i = 0; i < texts.length; i++) {
+                item = checkListBox.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+            return actualValues;
+        }
+
+
     </script>
 
 </asp:Content>
@@ -46,7 +91,7 @@
         <PanelCollection>
             <dx:PanelContent>
 
-            <table width="20%">
+            <table width="45%">
                 <tr>
 
                     <td>
@@ -55,7 +100,36 @@
                                     CallbackPageSize="15" EnableCallbackMode="true"  >    
                         </dx:ASPxComboBox>
                     </td>
-                   								
+                     <td>
+                        <label id="lblRap" runat="server" style="display:inline-block;">Raport</label>
+                        <dx:ASPxComboBox ID="cmbRaport" ClientInstanceName="cmbRaport" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false"
+                                    CallbackPageSize="15" EnableCallbackMode="true"  >    
+                        </dx:ASPxComboBox>
+                    </td>     
+			        <td >		
+                        <label id="lblGrup" runat="server" style="display:inline-block;">Grupuri utilizatori</label>	
+                        <dx:ASPxDropDownEdit ClientInstanceName="checkComboBoxGrup" ID="checkComboBoxGrup" Width="210px" runat="server" AnimationType="None">
+                            <DropDownWindowStyle BackColor="#EDEDED" />
+                            <DropDownWindowTemplate>
+                                <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
+                                    <Border BorderStyle="None" />
+                                    <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />             
+                                    <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged" />
+                                </dx:ASPxListBox>
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td style="padding: 4px">
+                                            <dx:ASPxButton ID="ASPxButton1" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
+                                                <ClientSideEvents Click="function(s, e){ checkComboBoxGrup.HideDropDown(); }" />
+                                            </dx:ASPxButton>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </DropDownWindowTemplate>
+                            <ClientSideEvents TextChanged="SynchronizeListBoxValues"  />
+                        </dx:ASPxDropDownEdit>
+
+                    </td>                    
 
                     <td>
                         <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
@@ -69,8 +143,8 @@
                 </tr>
             </table>
           
-             <table width="65%"> 
-			        <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="65%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting"  >
+             <table width="90%"> 
+			        <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting"  >
                         <SettingsBehavior AllowFocusedRow="true" />
                         <Settings  ShowFilterRow="False" ShowColumnHeaders="true" />
                         <ClientSideEvents ContextMenu="ctx" />
@@ -91,6 +165,8 @@
                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.String" DropDownStyle="DropDown" />
                             </dx:GridViewDataComboBoxColumn>
                             <dx:GridViewDataTextColumn FieldName="Latime" Name="Latime" Caption="Latime"  Width="100px" />	
+                            <dx:GridViewDataTextColumn FieldName="PozitiiBlocate" Name="PozitiiBlocate" Caption="Pozitii blocate"  Width="100px" />	
+
                             <dx:GridViewDataTextColumn FieldName="IdFormular" Name="IdFormular" Caption="IdFormular"  Width="50px" Visible="false" ShowInCustomizationForm="false"/>
                             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="50px" Visible="false" ShowInCustomizationForm="false"/>
                             <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO"  Width="50px" Visible="false" ShowInCustomizationForm="false"/>

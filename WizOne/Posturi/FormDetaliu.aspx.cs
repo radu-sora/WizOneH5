@@ -74,6 +74,9 @@ namespace WizOne.Posturi
                             case "numeric":
                             case "number":
                             case "decimal":
+                                if (((object)ctl).GetType() == typeof(ASPxCheckBox) || ((object)ctl).GetType() == typeof(ASPxRadioButton))
+                                    val = (ctl.Value == null ? "NULL" : (ctl.Value ? "1" : "0"));
+                                else
                                     val = (ctl.Value ?? "NULL");
                                 break;
                             case "nvarchar":
@@ -119,7 +122,8 @@ namespace WizOne.Posturi
 
         protected void btnPrint_Click(object sender, EventArgs e)
         {
-            int idRap = Convert.ToInt32(Dami.ValoareParam("IdRaportFormular" + Session["FormDetaliu_IdFormular"].ToString(), "-99"));
+            DataTable dt = General.IncarcaDT("SELECT \"IdRaport\" FROM \"Org_tblFormulare\" WHERE \"Id\" = " + Session["FormDetaliu_IdFormular"].ToString(), null);
+            int idRap = Convert.ToInt32(General.Nz(dt.Rows[0][0] , "-99"));
             int id = Convert.ToInt32(Session["FormDetaliu_Id"].ToString());     
 
             var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(idRap);
@@ -136,7 +140,7 @@ namespace WizOne.Posturi
                 div.Controls.Clear();        
 
                 Dictionary<string, string> lstCtrl = new Dictionary<string, string>();
-                bool modif = true;
+                bool modifGen = true;
 
                 bool poateModifica = false;
                 if (Session["FormDetaliu_PoateModifica"] != null)
@@ -152,9 +156,12 @@ namespace WizOne.Posturi
 
                 if (!esteNou && (!poateModifica || (idStare != 1 && idStare != 2)))          //are doar drepturi de vizualizare
                 {
-                    modif = false;
+                    modifGen = false;
                 }
 
+                int pozitie = 0;
+                if (Session["FormDetaliu_Pozitie"] != null)
+                    pozitie = Convert.ToInt32(Session["FormDetaliu_Pozitie"].ToString());
 
                 HtmlTable table = new HtmlTable();
                 table.CellPadding = 3;
@@ -175,7 +182,7 @@ namespace WizOne.Posturi
                 txt1.ClientIDMode = ClientIDMode.Static;
                 txt1.ClientInstanceName = "txtForm";
                 txt1.Width = Unit.Pixel(250);
-                txt1.ReadOnly = modif ? false : true;
+                txt1.ReadOnly = modifGen ? false : true;
                 txt1.Style.Add("margin", "15px 15px !important");
                 txt1.Text = (Session["FormDetaliu_NumeFormular"] ?? "").ToString();
                 txt1.ReadOnly = true;
@@ -199,7 +206,7 @@ namespace WizOne.Posturi
                     dte1.DisplayFormatString = "dd/MM/yyyy";
                     dte1.EditFormat = EditFormat.Custom;
                     dte1.EditFormatString = "dd/MM/yyyy";
-                    dte1.ReadOnly = modif ? false : true;
+                    dte1.ReadOnly = modifGen ? false : true;
                     dte1.Style.Add("margin", "15px 15px !important");
                     dte1.Value = Session["FormDetaliu_DataVigoare"] ?? DateTime.Now;
                     dte1.ReadOnly = true;
@@ -211,11 +218,22 @@ namespace WizOne.Posturi
 
                 row = new HtmlTableRow();
 
-                int rand = 0, poz = 0;
+                int rand = 0, poz = 0;               
 
                 DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Org_FormCreate"" WHERE ""IdFormular""=@1 ORDER BY ""Rand"", ""Pozitie""", new object[] { General.Nz(Session["FormDetaliu_IdFormular"], "-99") });
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
+                    bool modif = modifGen;
+                    if (dt.Rows[i]["PozitiiBlocate"] != DBNull.Value)
+                    {
+                        string[] sir = dt.Rows[i]["PozitiiBlocate"].ToString().Split(',');
+                        List<int> lstPoz = new List<int>();
+                        for (int k = 0; k < sir.Length; k++)
+                            lstPoz.Add(Convert.ToInt32(sir[k]));
+                        if (lstPoz.Contains(pozitie))
+                            modif = false;
+                    }
+
                     DataRow dr = dt.Rows[i];
 
                     if (rand != Convert.ToInt32(dt.Rows[i]["Rand"].ToString()))

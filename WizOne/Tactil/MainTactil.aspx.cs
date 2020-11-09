@@ -28,7 +28,7 @@ namespace WizOne.Tactil
                 spnAnul.MinValue = 2015;
                 spnAnul.MaxValue = 2025;
 
-
+                lnlPri.Attributes.Add("onClick", "return false;");
 
                 if (!IsPostBack)
                 {
@@ -144,13 +144,14 @@ namespace WizOne.Tactil
         //            }
 
 
-        protected void lnlPri_Click(object sender, EventArgs e)
+        protected void lnlPri_Click()
         {
             try
             {              
                 if (!VerifLuna(Convert.ToInt32(spnLuna.Value), Convert.ToInt32(spnAnul.Value)))
                 {
-                    MessageBox.Show("Luna selectata este ulterioara lunii de lucru!", MessageBox.icoWarning, "");
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Luna selectata este ulterioara lunii de lucru!");
+                    //MessageBox.Show("Luna selectata este ulterioara lunii de lucru!", MessageBox.icoWarning, "");
                     return;
                 }
 
@@ -166,14 +167,15 @@ namespace WizOne.Tactil
                     };
 
                     // New report access interface
-                    MessageBox.Show("Fluturasul se printeaza!", MessageBox.icoSuccess, "");
+                    //MessageBox.Show("Fluturasul se printeaza!", MessageBox.icoSuccess, "");
                     Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
                 }
                 else
                 {
                     if (VerificaFluturasLog() == 0)
                     {
-                        MessageBox.Show("Ati atins numarul maxim de imprimari pentru acest tip de fluturas si pentru luna si anul selectate!", MessageBox.icoWarning, "");
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Ati atins numarul maxim de imprimari pentru acest tip de fluturas si pentru luna si anul selectate!");
+                        //MessageBox.Show("Ati atins numarul maxim de imprimari pentru acest tip de fluturas si pentru luna si anul selectate!", MessageBox.icoWarning, "");
                     }
                     else
                     {
@@ -198,7 +200,7 @@ namespace WizOne.Tactil
 
                         dlreport.CreateDocument();
 
-                        MessageBox.Show("Fluturasul se printeaza!", MessageBox.icoSuccess, "");
+                        //MessageBox.Show("Fluturasul se printeaza!", MessageBox.icoSuccess, "");
 
                         ReportPrintTool pt = new ReportPrintTool(dlreport);
                         pt.Print();
@@ -302,7 +304,10 @@ namespace WizOne.Tactil
                 return true;
         }
 
-
-
+        protected void pnlCtl_Callback(object sender, CallbackEventArgsBase e)
+        {
+            lnlPri_Click();
+            
+        }
     }
 }

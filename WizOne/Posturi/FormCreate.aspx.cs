@@ -40,16 +40,32 @@ namespace WizOne.Posturi
                 grDate.SettingsDataSecurity.AllowInsert = true;
                 grDate.SettingsDataSecurity.AllowDelete = true;                
 
-                DataTable dtform = General.IncarcaDT("SELECT * FROM \"Org_tblFormulare\"", null);
-                cmbForm.DataSource = dtform;
+                DataTable dtForm = General.IncarcaDT("SELECT * FROM \"Org_tblFormulare\"", null);
+                cmbForm.DataSource = dtForm;
                 cmbForm.DataBind();
+                Session["FormCreate_Rap"] = dtForm;
 
-            
+                DataTable dtRap = General.IncarcaDT("SELECT \"DynReportId\" as \"Id\", \"Name\" as \"Denumire\" FROM \"DynReports\"", null);
+                cmbRaport.DataSource = dtRap;
+                cmbRaport.DataBind();
+
+                DataTable dtGrup = General.IncarcaDT("SELECT * FROM \"tblGrupUsers\"", null);
+                if (dtGrup != null && dtGrup.Rows.Count > 0)
+                {
+                    ASPxListBox nestedListBox = checkComboBoxGrup.FindControl("listBox") as ASPxListBox;
+                    nestedListBox.Items.Clear();
+                    nestedListBox.Items.Add("(Selectie toate)", -2);
+                    for (int i = 0; i < dtGrup.Rows.Count; i++)
+                    {
+                        nestedListBox.Items.Add(dtGrup.Rows[i]["Denumire"].ToString(), Convert.ToInt32(dtGrup.Rows[i]["Id"].ToString()));                    
+                    }
+                }
 
                 if (!IsPostBack)
                 {
                     cmbForm.SelectedIndex = -1;
                     Session["FormCreate_Save"] = 1;
+                    cmbRaport.SelectedIndex = -1;
                 }
                 else
                 {
@@ -57,6 +73,36 @@ namespace WizOne.Posturi
                     grDate.KeyFieldName = "IdAuto";
                     grDate.DataSource = dt;
                     grDate.DataBind();
+
+                    dtRap = Session["FormCreate_Rap"] as DataTable;
+
+                    checkComboBoxGrup.Value = null;
+
+                    if (dtRap != null && dtRap.Rows.Count > 0)
+                    {
+                        DataRow[] dr = dtRap.Select("Id = " + cmbForm.Items[cmbForm.SelectedIndex].Value.ToString());
+                        if (dr[0]["IdRaport"] != DBNull.Value)
+                            cmbRaport.Value = Convert.ToInt32(dr[0]["IdRaport"].ToString());
+
+                        if (dr[0]["GrupuriUtilizatori"] != DBNull.Value)
+                        {
+                            string[] sir = dr[0]["GrupuriUtilizatori"].ToString().Split(',');
+                            ASPxListBox nestedListBox = checkComboBoxGrup.FindControl("listBox") as ASPxListBox;
+                            string text = "";
+                            for (int i = 0; i < nestedListBox.Items.Count; i++)
+                            {
+                                for (int j = 0; j < sir.Length; j++)
+                                    if (Convert.ToInt32(nestedListBox.Items[i].Value) == Convert.ToInt32(sir[j]))
+                                    {
+                                        nestedListBox.Items[i].Selected = true;
+                                        text += "," + nestedListBox.Items[i].Text;
+                                        break;
+                                    }
+
+                            }
+                            checkComboBoxGrup.Text = (text.Length > 0 ? text.Substring(1) : text);
+                        }
+                    }
 
                 }
 
@@ -137,6 +183,38 @@ namespace WizOne.Posturi
                 grDate.DataSource = dtForm;
                 grDate.DataBind();
                 Session["FormCreate_Grid"] = dtForm;
+
+                DataTable dtRap = Session["FormCreate_Rap"] as DataTable;
+
+                cmbRaport.Value = null;
+                checkComboBoxGrup.Value = null;
+
+                if (dtRap != null && dtRap.Rows.Count > 0)
+                {
+                    DataRow[] dr = dtRap.Select("Id = " + cmbForm.Items[cmbForm.SelectedIndex].Value.ToString());  
+                    if (dr[0]["IdRaport"] != DBNull.Value)
+                        cmbRaport.Value = Convert.ToInt32(dr[0]["IdRaport"].ToString());
+
+                    if (dr[0]["GrupuriUtilizatori"] != DBNull.Value)
+                    {
+                        string[] sir = dr[0]["GrupuriUtilizatori"].ToString().Split(',');
+                        ASPxListBox nestedListBox = checkComboBoxGrup.FindControl("listBox") as ASPxListBox;
+                        string text = "";
+                        for (int i = 0; i < nestedListBox.Items.Count; i++)
+                        {
+                            for (int j = 0; j < sir.Length; j++)
+                                if (Convert.ToInt32(nestedListBox.Items[i].Value) == Convert.ToInt32(sir[j]))
+                                {
+                                    nestedListBox.Items[i].Selected = true;
+                                    text += "," + nestedListBox.Items[i].Text;
+                                    break;
+                                }
+
+                        }
+                        checkComboBoxGrup.Text = (text.Length > 0 ? text.Substring(1) : text);
+                    }
+                }   
+
             }
             catch(Exception ex)
             {
@@ -300,6 +378,20 @@ namespace WizOne.Posturi
                 DataTable dt = Session["FormCreate_Grid"] as DataTable;
                 General.SalveazaDate(dt, "Org_FormCreate");
                 Session["FormCreate_Save"] = 1;
+
+                if (cmbRaport.SelectedIndex >= 0)
+                {
+                    General.ExecutaNonQuery("UPDATE \"Org_tblFormulare\" SET \"IdRaport\" = " + cmbRaport.Items[cmbRaport.SelectedIndex].Value.ToString() + " WHERE \"Id\" = "  
+                        + cmbForm.Items[cmbForm.SelectedIndex].Value.ToString(), null);
+                }
+
+                if (checkComboBoxGrup.Value != null)
+                {
+                    string sir = GetIdGrup(checkComboBoxGrup.Value.ToString().Replace(";", ",")).Replace(";", ",").Substring(0, GetIdGrup(checkComboBoxGrup.Value.ToString()).Length - 1);
+                    General.ExecutaNonQuery("UPDATE \"Org_tblFormulare\" SET \"GrupuriUtilizatori\" = '" + sir + "' WHERE \"Id\" = "
+                        + cmbForm.Items[cmbForm.SelectedIndex].Value.ToString(), null);
+                }
+
                 MessageBox.Show("Proces terminat cu succes!", MessageBox.icoSuccess);
 
             }
@@ -325,6 +417,7 @@ namespace WizOne.Posturi
                 Session["FormDetaliu_IdStare"] = 0;
                 Session["FormDetaliu_PoateModifica"] = 1;
                 Session["FormDetaliu_EsteNou"] = 1;
+                Session["FormDetaliu_Pozitie"] = 1;
 
                 Session["FormDetaliu_NumeFormular"] = cmbForm.Text;
                 Session["FormDetaliu_DataVigoare"] = DateTime.Now;
@@ -339,6 +432,31 @@ namespace WizOne.Posturi
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+        public static string GetIdGrup(string sir)
+        {
+            string val = "";
+            DataTable dt = General.IncarcaDT("SELECT * FROM \"tblGrupUsers\"", null);
+            try
+            {
+                string[] param = sir.Split(',');
+                foreach (string elem in param)
+                {
+                    if (dt != null && dt.Rows.Count > 0)
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                            if (dt.Rows[i]["Denumire"].ToString().ToLower() == elem.ToLower())
+                            {
+                                val += dt.Rows[i]["Id"].ToString().ToLower() + ";";
+                                break;
+                            }
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return val;
         }
     }
 }

@@ -15052,3 +15052,76 @@ INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana")
 GO
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(122, 'Lista formulare', 'Lista formulare', 'Posturi\FormLista', 1, 'm1.png')
 GO
+
+insert into "Org_tblFormulare"(Id, Denumire) values (21, 'Referat angajare')
+GO
+insert into "Org_tblFormulare"(Id, Denumire) values (22, 'Referat modificare CIM')
+GO
+
+ CREATE TABLE Org_DateGenerale
+   (	"Id" int, 
+	"DataVigoare" DATETIME, 
+	"PostId" int, 
+	"PostDenumire" nVARCHAR(250), 
+	"FunctieId" int, 
+	"FunctieDenumire" nVARCHAR(250), 
+	"FunctieCOR" int, 
+	"ContractDurata" int, 
+	"ContractDurataData" DATETIME, 
+	"TipContract" int, 
+	"NrOre" int, 
+	"Locatie" nVARCHAR(max), 
+	"Salariul" int, 
+	"BugetExistent" int, 
+	"CentruCost" int, 
+	"MotiveId" int, 
+	"MotiveDescriere" nVARCHAR(max), 
+	"DataInceput" DATETIME, 
+	"DataSfarsit" DATETIME, 
+	"F10003" int, 
+	"NumeComplet" nVARCHAR(250), 
+	"Companie" int, 
+	"Subcompanie" int, 
+	"Filiala" int, 
+	"Sectie" int, 
+	"Dept" int, 
+	"TipPozitie" int, 
+	"Rol1Observatii" nVARCHAR(max), 
+	"Rol2Observatii" nVARCHAR(max), 
+	"Rol3Observatii" nVARCHAR(max), 
+	"Rol4Observatii" nVARCHAR(max), 
+	"Rol5Observatii" nVARCHAR(max), 
+	"Telefon" int, 
+	"CertificatVPN" int, 
+	"Calculator" int, 
+	"Masina" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME DEFAULT GETDATE(), 
+	"Rol6Observatii" nVARCHAR(max), 
+	"Rol0Observatii" nVARCHAR(max), 
+	"Rol4DataAngajarii" DATE, 
+	"Rol4Functie" nVARCHAR(250), 
+	"Rol4SalariuActual" int, 
+	"Rol4DataUltModifSal" DATETIME, 
+	"Rol4Suma" int, 
+	"Rol4Info" nVARCHAR(max), 
+	"Subdept" int, 
+	"AgentieId" int, 
+	"LocatieId" int, 
+	"DataSfarsitObs" nVARCHAR(250),
+ CONSTRAINT [PK_Org_DateGenerale] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+ALTER TABLE Org_tblFormulare ADD IdRaport int
+GO
+
+ALTER TABLE Org_tblFormulare ADD GrupuriUtilizatori  nvarchar(20)
+GO
+
+ALTER TABLE Org_FormCreate ADD PozitiiBlocate nvarchar(20)
+GO

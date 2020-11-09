@@ -303,6 +303,7 @@ namespace WizOne.Posturi
                             Session["FormDetaliu_EsteNou"] = null;
                             Session["FormDetaliu_NumeFormular"] = descFormular;
                             Session["FormDetaliu_DataVigoare"] = dtVigoare;
+                            Session["FormDetaliu_Pozitie"] = pozitie;
 
 
                             if (Page.IsCallback)
@@ -1070,7 +1071,7 @@ namespace WizOne.Posturi
                 {
                     if (idFrm == 20 || idFrm == 21) f10003 = Convert.ToInt32(Session["User_Marca"] == DBNull.Value ? "-99" : Session["User_Marca"].ToString());
               
-                    int id = AdaugaFormularGenerali(Convert.ToInt32(Session["UserId"].ToString()), idFrm, idPost, idRec, dtVigoare, f10003, numeAng, Convert.ToInt32(Session["User_Marca"] == DBNull.Value ? "-99" : Session["User_Marca"].ToString()));
+                    int id = AdaugaFormular(Convert.ToInt32(Session["UserId"].ToString()), idFrm, idPost, idRec, dtVigoare, f10003, numeAng, Convert.ToInt32(Session["User_Marca"] == DBNull.Value ? "-99" : Session["User_Marca"].ToString()));
                     
                     if (id == -1 && id == -99)
                     {
@@ -1084,6 +1085,7 @@ namespace WizOne.Posturi
                     Session["FormDetaliu_IdStare"] = 0;
                     Session["FormDetaliu_PoateModifica"] = 1;
                     Session["FormDetaliu_EsteNou"] = 1;
+                    Session["FormDetaliu_Pozitie"] = 1;
 
                     Session["FormDetaliu_NumeFormular"] = cmbFormNou.Text;
                     Session["FormDetaliu_DataVigoare"] = dtVigoare;
@@ -1154,7 +1156,7 @@ namespace WizOne.Posturi
             }
         }
 
-        public int AdaugaFormularGenerali(int idUser, int idFormular, int? idPost, int? idRec, DateTime dtVigoare, int f10003_Ang, string numeAng, int f10003)
+        public int AdaugaFormular(int idUser, int idFormular, int? idPost, int? idRec, DateTime dtVigoare, int f10003_Ang, string numeAng, int f10003)
         {
             int idUrm = 1;        
 
@@ -1455,8 +1457,8 @@ namespace WizOne.Posturi
                         lblDataVig.Visible = false;
                         deDataVig.ClientVisible = false;
                         deDataVig.Value = null;
-                        lblRecrut.Visible = true;
-                        cmbRecrut.ClientVisible = true;
+                        lblRecrut.Visible = false; //true
+                        cmbRecrut.ClientVisible = false; //true
                         cmbRecrut.Value = null;
                         lblAng.Visible = false;
                         cmbAng.ClientVisible = false;

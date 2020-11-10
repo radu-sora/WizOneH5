@@ -574,7 +574,24 @@ namespace WizOne.Module
         public static SqlCommand DamiSqlCommand(string strSql, object[] lstParam, int executa = 0)
         {
             SqlConnection conn = new SqlConnection(Constante.cnnWeb);
-            conn.Open();
+
+            while (true)
+            {
+                try
+                {
+                    conn.Open();
+                }
+                catch (SqlException ex)
+                {
+                    if (ex.Number == 1225)
+                    {
+                        continue;
+                    }
+                }
+
+                break;
+            }
+
 
             SqlTransaction tran = conn.BeginTransaction();
 

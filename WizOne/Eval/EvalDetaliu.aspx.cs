@@ -3660,7 +3660,7 @@ namespace WizOne.Eval
                 grDateCompetente.ID = "grDateCompetente" + "_WXY_" + id.ToString();
 
                 //Florin 2019.06.26
-                grDateCompetente.ClientInstanceName = "grDateObiective" + "_WXY_" + id.ToString();
+                grDateCompetente.ClientInstanceName = "grDateCompetente" + "_WXY_" + id.ToString();
                 grDateCompetente.ClientIDMode = ClientIDMode.Static;
                 grDateCompetente.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
 
@@ -3694,6 +3694,8 @@ namespace WizOne.Eval
                 //Florin 2019.06.26
                 grDateCompetente.BatchUpdate += GrDateCompetente_BatchUpdate;
                 Session["NumeGriduri"] += ";" + grDateCompetente.ID;
+
+                grDateCompetente.EnableRowsCache = false;
 
 
 

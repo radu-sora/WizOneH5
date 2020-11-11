@@ -74,7 +74,7 @@ namespace WizOne.Eval
         string idCateg = "0";
         int idPerioada = 0;
 
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
 
             try
@@ -1076,6 +1076,24 @@ namespace WizOne.Eval
                 divIntrebari.ClientEnabled = blocat == 1 ? false : true;
 
 
+                //Florin 2020.11.11
+                //Work Around - pt cazul cand in gridul de competente se adauga coloana goale dupa callback
+                if (General.Nz(Session["NumeGriduri"], "").ToString() != "")
+                {
+                    string[] arr = Session["NumeGriduri"].ToString().Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        ASPxGridView grDate = grIntrebari.FindControl(arr[i]) as ASPxGridView;
+                        if (grDate != null)
+                        {
+                            foreach (GridViewDataColumn col in grDate.Columns.OfType<GridViewDataColumn>())
+                            {
+                                if (col.FieldName == "" && col.UnboundType == DevExpress.Data.UnboundColumnType.Bound)
+                                    grDate.Columns.Remove(col);
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {

@@ -430,8 +430,12 @@ namespace WizOne.Eval
 
                 if (!IsPostBack)
                 {
-                    Session["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigObTemplate"" "), 0)) + 1;
-                    Session["TemplateIdCompetenta"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigCompTemplate"" "), 0)) + 1;
+                    //Florin 2020.11.12 - am scos + 1
+                    //Session["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigObTemplate"" "), 0)) + 1;
+                    //Session["TemplateIdCompetenta"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigCompTemplate"" "), 0)) + 1;
+                    Session["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigObTemplate"" "), 0));
+                    Session["TemplateIdCompetenta"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigCompTemplate"" "), 0));
+
                     Session["QuizIntrebari_Id"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""Id"",0)) FROM ""Eval_QuizIntrebari"" "), 0)) + 1;
                 }
             }
@@ -699,6 +703,22 @@ namespace WizOne.Eval
                     //rwNewSectiune["DescriereInRatingGlobal"] = txtDexRatGlobal.Text;
                     rwNewSectiune["TemplateIdObiectiv"] = DBNull.Value;
                     rwNewSectiune["TemplateIdCompetenta"] = DBNull.Value;
+
+
+                    //FLorin 2020.11.12 Begin
+                    if (Convert.ToInt32(cmbTipObiect.Value.ToString()) == 23)
+                    {
+                        rwNewSectiune["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(Session["TemplateIdObiectiv"],1)) + 1;
+                        Session["TemplateIdObiectiv"] = rwNewSectiune["TemplateIdObiectiv"];
+                    }
+
+                    if (Convert.ToInt32(cmbTipObiect.Value.ToString()) == 5)
+                    {
+                        rwNewSectiune["TemplateIdCompetenta"] = Convert.ToInt32(General.Nz(Session["TemplateIdCompetenta"], 1)) + 1;
+                        Session["TemplateIdCompetenta"] = rwNewSectiune["TemplateIdCompetenta"];
+                    }
+                    //FLorin 2020.11.12 End
+
 
                     if (Session["isEditingObiectivTemplate"] != null && Session["isEditingObiectivTemplate"].ToString() == "1")
                     {

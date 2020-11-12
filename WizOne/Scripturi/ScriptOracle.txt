@@ -15404,17 +15404,12 @@ COMMIT;
 ALTER TABLE "Eval_Quiz" ADD "Sincronizare" number(10);
 /
 
-CREATE TABLE "Eval_ConfigTipTabela" 
-(	"IdLinie" NUMBER(10,0), 
-"Coloana" NUMBER(10,0), 
-"Lungime" NUMBER(10,0), 
-"Alias" VARCHAR2(500 BYTE), 
-"USER_NO" NUMBER(10,0), 
-"TIME" DATE DEFAULT SYSDATE
-);
 
-CREATE UNIQUE INDEX "Eval_ConfigTipTabela_PK" ON "Eval_ConfigTipTabela" ("IdLinie") ;
+insert into F704 (f70401, f70402, f70403, f70404, f70405, f70406, f70407, f70409)
+select 704, (select f10002 from f100 where f10017 = f09502 and rownum=1), f09503, 25, 'Prelungire CIM', f09505,
+case when f09511 = 'Nedeterminat' then 1 else 2 end,'Modificari in avans'
+from f095 where f09510=1 and trunc(f09505) >= trunc(to_DATE('01/10/2020', 'dd/mm/yyyy'));
 
-ALTER TABLE "Eval_ConfigTipTabela" ADD CONSTRAINT "Eval_ConfigTipTabela_PK" PRIMARY KEY ("IdLinie");
-ALTER TABLE "Eval_ConfigTipTabela" MODIFY ("IdLinie" NOT NULL ENABLE);
-/
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(123, 'Circuit formulare', 'Circuit formulare', 'Pagini\SablonNomen[Org_Circuit]', 1, 'm1.png');
+commit;

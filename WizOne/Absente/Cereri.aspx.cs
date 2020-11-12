@@ -82,9 +82,9 @@ namespace WizOne.Absente
                         txtTitlu.Text = "Prima Pagina - Cereri";
                     else
                         txtTitlu.Text = General.VarSession("Titlu").ToString();
-
-                    txtDataInc.Date = DateTime.Now;
-                    txtDataSf.Date = DateTime.Now;
+                    
+                    txtDataInc.Date = DateTime.ParseExact(Request.QueryString["start"] ?? DateTime.Now.ToString("yyyy-M-d"), "yyyy-M-d", CultureInfo.InvariantCulture);
+                    txtDataSf.Date = DateTime.ParseExact(Request.QueryString["end"] ?? DateTime.Now.ToString("yyyy-M-d"), "yyyy-M-d", CultureInfo.InvariantCulture);
 
                     DataTable dtAng = General.IncarcaDT(SelectAngajati(-44), null, "F10003;Rol");
 

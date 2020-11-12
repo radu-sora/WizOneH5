@@ -215,6 +215,25 @@
             }
         }
 
+        function OnAnulare(s, e) {
+            if (grDate.GetSelectedRowCount() > 0) {
+                swal({
+                    title: trad_string(limba, 'Sunteti sigur/a ?'), text: trad_string(limba, 'Vreti sa continuati procesul de anulare ?'),
+                    type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        grDate.PerformCallback("btnAnulare; ");
+                    }
+                });
+            }
+            else {
+                swal({
+                    title: trad_string(limba, ""), text: trad_string(limba, "Nu exista linii selectate"),
+                    type: "warning"
+                });
+            }
+        }
+
         function OnAproba(s, e) {
             if (grDate.GetSelectedRowCount() > 0) {
                 swal({
@@ -339,6 +358,12 @@
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnIstoricExtins" ClientInstanceName="btnIstoricExtins" ClientIDMode="Static" runat="server" Text="Istoric Extins" AutoPostBack="true" OnClick="btnIstoricExtins_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/istoric.png"></Image>
+                </dx:ASPxButton>
+                <dx:ASPxButton ID="btnAnulare" ClientInstanceName="btnAnulare" ClientIDMode="Static" runat="server" Text="Anulare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) {
+                       OnAnulare(s,e);
+                    }" />
+                    <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnRespinge" ClientInstanceName="btnRespinge" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {

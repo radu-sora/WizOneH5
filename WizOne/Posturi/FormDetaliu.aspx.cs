@@ -230,7 +230,7 @@ namespace WizOne.Posturi
                         List<int> lstPoz = new List<int>();
                         for (int k = 0; k < sir.Length; k++)
                             lstPoz.Add(Convert.ToInt32(sir[k]));
-                        if (lstPoz.Contains(pozitie))
+                        if (lstPoz.Contains(pozitie + 1))
                             modif = false;
                     }
 

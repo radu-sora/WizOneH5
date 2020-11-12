@@ -38,6 +38,14 @@ namespace WizOne.Module
         {
             public int Id { get; set; }
             public int Rol { get; set; }
+            public int IdStare { get; set; }
+            public string Nume { get; set; }
+            public DateTime DataInceput { get; set; }
+            public int F10003 { get; set; }
+            public DateTime DataSfarsit { get; set; }
+            public int NrOre { get; set; }
+            public int NrZile { get; set; }
+            public int IdAbsenta { get; set; }
         }
 
         public class metaPontaj

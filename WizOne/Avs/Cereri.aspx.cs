@@ -4531,7 +4531,15 @@ namespace WizOne.Avs
                                 else
                                     General.CalculCO(dtSf.Year, f10003);
                             }
-                            //}                           
+                            else
+                            {
+                                sql100 = "UPDATE F100 SET  F10023 = " + data10
+                                + ", F100993 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 103)"
+                                : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + "  WHERE F10003 = " + f10003.ToString();
+
+                                sql1001 = "UPDATE F1001 SET F1001138 = " + data + " WHERE F10003 = " + f10003.ToString();
+                            }    
+                            //}   
 
                             //Radu 26.10.2020
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
@@ -4897,11 +4905,11 @@ namespace WizOne.Avs
 
 
                 //Radu 09.09.2020 - actualizare data consemnare
-                if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month)
-                {
+                //if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month)
+                //{
                     DateTime dtConsemn = General.FindDataConsemnare(f10003);
                     General.ExecutaNonQuery("UPDATE F1001 SET F1001109 = " + General.ToDataUniv(dtConsemn) + " WHERE F10003 = " + f10003, null);
-                }
+                //}
 
 
                 //Florin 2019-04-10

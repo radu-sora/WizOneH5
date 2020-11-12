@@ -1085,7 +1085,7 @@ namespace WizOne.Posturi
                     Session["FormDetaliu_IdStare"] = 0;
                     Session["FormDetaliu_PoateModifica"] = 1;
                     Session["FormDetaliu_EsteNou"] = 1;
-                    Session["FormDetaliu_Pozitie"] = 1;
+                    Session["FormDetaliu_Pozitie"] = 0;
 
                     Session["FormDetaliu_NumeFormular"] = cmbFormNou.Text;
                     Session["FormDetaliu_DataVigoare"] = dtVigoare;
@@ -1234,6 +1234,7 @@ namespace WizOne.Posturi
                 {
                     string aprobat = "NULL", dataAprobare = "NULL";
                     int idSuper = -99;
+                    idStare = 2;
                     if (dtCirc.Rows[0]["Super" + i] != DBNull.Value)
                     {
                         idSuper = Convert.ToInt32(dtCirc.Rows[0]["Super" + i].ToString());

@@ -564,6 +564,42 @@ namespace WizOne.Eval
         protected global::DevExpress.Web.ASPxGridView grDateCompetente;
 
         /// <summary>
+        /// pnlConfigTipTabela control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxFormLayout pnlConfigTipTabela;
+
+        /// <summary>
+        /// ASPxHiddenField1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxHiddenField ASPxHiddenField1;
+
+        /// <summary>
+        /// ASPxHiddenField2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxHiddenField ASPxHiddenField2;
+
+        /// <summary>
+        /// grDateTabela control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView grDateTabela;
+
+        /// <summary>
         /// lblEndDelimitator control.
         /// </summary>
         /// <remarks>

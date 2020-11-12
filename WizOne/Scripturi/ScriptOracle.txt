@@ -15403,3 +15403,18 @@ COMMIT;
 
 ALTER TABLE "Eval_Quiz" ADD "Sincronizare" number(10);
 /
+
+CREATE TABLE "Eval_ConfigTipTabela" 
+(	"IdLinie" NUMBER(10,0), 
+"Coloana" NUMBER(10,0), 
+"Lungime" NUMBER(10,0), 
+"Alias" VARCHAR2(500 BYTE), 
+"USER_NO" NUMBER(10,0), 
+"TIME" DATE DEFAULT SYSDATE
+);
+
+CREATE UNIQUE INDEX "Eval_ConfigTipTabela_PK" ON "Eval_ConfigTipTabela" ("IdLinie") ;
+
+ALTER TABLE "Eval_ConfigTipTabela" ADD CONSTRAINT "Eval_ConfigTipTabela_PK" PRIMARY KEY ("IdLinie");
+ALTER TABLE "Eval_ConfigTipTabela" MODIFY ("IdLinie" NOT NULL ENABLE);
+/

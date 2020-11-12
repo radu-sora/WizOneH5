@@ -943,6 +943,73 @@
                                             </Items>
                                         </dx:ASPxFormLayout>
 
+                                        <dx:ASPxFormLayout ID="pnlConfigTipTabela" runat="server">
+                                            <Items>
+                                                <dx:LayoutGroup Caption="Configurare tip control tabela">
+                                                    <Items>
+                                                        <dx:LayoutItem Caption="">
+                                                            <LayoutItemNestedControlCollection>
+                                                                <dx:LayoutItemNestedControlContainer>
+                                                                    <table cellspacing="20">
+                                                                        <tr>
+                                                                            <td colspan="2">
+                                                                                <dx:ASPxHiddenField runat="server" ID="ASPxHiddenField1" ClientInstanceName="hfCompetente" />
+                                                                                <dx:ASPxHiddenField runat="server" ID="ASPxHiddenField2" ClientInstanceName="hfCompetenteColName" />
+                                                                                <dx:ASPxGridView ID="grDateTabela" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateTabela" ClientIDMode="Static" Width="1100px" AutoGenerateColumns="false">
+                                                                                    <SettingsBehavior AllowFocusedRow="true" EnableCustomizationWindow="true" AllowSelectByRowClick="true" ColumnResizeMode="NextColumn" />
+                                                                                    <Settings ShowFilterRow="false" ShowGroupPanel="false" HorizontalScrollBarMode="Auto" />
+                                                                                    <SettingsSearchPanel Visible="false" />
+                                                                                    <ClientSideEvents ContextMenu="ctx" />
+                                                                                    <SettingsEditing Mode="Inline" />
+                                                                                    <Columns>
+                                                                                        <dx:GridViewCommandColumn Width="80px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
+
+                                                                                        <dx:GridViewDataTextColumn FieldName="IdLinie" Name="IdLinie" Caption="IdLinie" Visible="false" ShowInCustomizationForm="false" />
+                                                                                        <dx:GridViewDataComboBoxColumn FieldName="Coloana" Name="Coloana" Caption="Coloana" Width="120">
+                                                                                            <PropertiesComboBox>
+                                                                                                <Items>
+                                                                                                    <dx:ListEditItem Value="1" Text="Coloana 1" />
+                                                                                                    <dx:ListEditItem Value="2" Text="Coloana 2" />
+                                                                                                    <dx:ListEditItem Value="3" Text="Coloana 3" />
+                                                                                                    <dx:ListEditItem Value="4" Text="Coloana 4" />
+                                                                                                    <dx:ListEditItem Value="5" Text="Coloana 5" />
+                                                                                                    <dx:ListEditItem Value="6" Text="Coloana 6" />
+                                                                                                </Items>
+                                                                                            </PropertiesComboBox>
+                                                                                        </dx:GridViewDataComboBoxColumn>
+                                                                                        <dx:GridViewDataTextColumn FieldName="Lungime" Name="Lungime" Caption="Lungime" Width="100" />
+                                                                                        <dx:GridViewDataTextColumn FieldName="Alias" Name="Alias" Caption="Alias" Width="250"/>
+                                                                                        
+                                                                                    </Columns>
+                                                                                    <SettingsCommandButton>
+                                                                                        <EditButton>
+                                                                                            <Image Url="../Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" ToolTip="Edit" />
+                                                                                            <Styles>
+                                                                                                <Style Paddings-PaddingRight="5px" />
+                                                                                            </Styles>
+                                                                                        </EditButton>
+                                                                                        <UpdateButton>
+                                                                                            <Image Url="../Fisiere/Imagini/Icoane/salveaza.png" AlternateText="Save" ToolTip="Actualizeaza" />
+                                                                                            <Styles>
+                                                                                                <Style Paddings-PaddingRight="5px" />
+                                                                                            </Styles>
+                                                                                        </UpdateButton>
+                                                                                        <CancelButton>
+                                                                                            <Image Url="../Fisiere/Imagini/Icoane/renunta.png" AlternateText="Renunta" ToolTip="Renunta" />
+                                                                                        </CancelButton>
+                                                                                    </SettingsCommandButton>
+                                                                                </dx:ASPxGridView>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </dx:LayoutItemNestedControlContainer>
+                                                            </LayoutItemNestedControlCollection>
+                                                        </dx:LayoutItem>
+                                                    </Items>
+                                                </dx:LayoutGroup>
+                                            </Items>
+                                        </dx:ASPxFormLayout>
+
 
                                     </dx:PanelContent>
                                 </PanelCollection>

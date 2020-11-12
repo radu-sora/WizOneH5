@@ -15136,3 +15136,20 @@ GO
 
 ALTER TABLE Org_FormCreate ADD PozitiiBlocate nvarchar(20)
 GO
+
+CREATE TABLE [dbo].[Eval_ConfigTipTabela](
+	[IdLinie] [int] NOT NULL,
+	[Coloana] [int] NOT NULL,
+	[Lungime] [int] NULL,
+	[Alias] [nvarchar](500) NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_Eval_ConfigTipTabela] PRIMARY KEY CLUSTERED 
+(
+	[IdLinie] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Eval_ConfigTipTabela] ADD  CONSTRAINT [DF_Eval_ConfigTipTabela_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO

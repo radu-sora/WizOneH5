@@ -49,7 +49,7 @@ namespace WizOne.Eval
                 #endregion
 
                 if (Request["pp"] != null)
-                    txtTitlu.Text = "Prima Pagina - Evaluare";
+                    txtTitlu.Text = Dami.TraduCuvant("Prima Pagina - Evaluare");
                 else
                     txtTitlu.Text = General.VarSession("Titlu").ToString();
                 grDate.DataBind();
@@ -227,6 +227,7 @@ namespace WizOne.Eval
                                 Session["CompletareChestionar_Nume"] = "";
                                 Session["CompletareChestionar_TrebuieSaIaLaCunostinta"] = "0";
                                 Session["CompletareChestionar_ALuatLaCunostinta"] = "0";
+                                Session["CompletareChestionar_Sincronizare"] = "0";
 
                                 //Florin 2020.08.21
                                 Session["CompletareChestionar_IdRaport"] = -99;
@@ -265,6 +266,7 @@ namespace WizOne.Eval
                                     Session["CompletareChestionar_ALuatLaCunostinta"] = General.Nz(dr["ALuatLaCunostinta"], "0");
                                     Session["CompletareChestionar_Aprobat"] = General.Nz(dr["Aprobat"], "0");
                                     Session["CompletareChestionar_IdRaport"] = Convert.ToInt32(General.Nz(dr["IdRaport"], -99));
+                                    Session["CompletareChestionar_Sincronizare"] = Convert.ToInt32(General.Nz(dr["Sincronizare"], 0));
                                 }
 
                                 Session["lstEval_ObiIndividualeTemp"] = null;
@@ -276,6 +278,14 @@ namespace WizOne.Eval
                                 //Florin 2019.06.27
                                 Session["lstEval_ObiIndividualeTemp_Sterse"] = null;
                                 Session["lstEval_CompetenteAngajatTemp_Sterse"] = null;
+
+                                //Florin 2020.11.12
+                                Session["lstEval_ConfigObiective"] = null;
+                                Session["lstEval_ConfigObTemplate"] = null;
+                                Session["lstEval_ConfigObTemplateDetail"] = null;
+                                Session["lstEval_ConfigCompetente"] = null;
+                                Session["lstEval_ConfigCompTemplate"] = null;
+                                Session["lstEval_ConfigCompTemplateDetail"] = null;
 
                                 //Florin 2019.10.23 - retinem filtrul
                                 #region Salvam Filtrul

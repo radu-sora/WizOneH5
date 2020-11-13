@@ -2114,7 +2114,19 @@ namespace WizOne.Avs
                             {
                                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");                               
                             }
-                        chkGen.Checked = true;
+
+
+                        string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
+                        if (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idAtr + ",") >= 0))
+                        {
+                            chkGen.ClientVisible = false;
+                            chkGen.Checked = false;
+                        }
+                        else
+                        {
+                            chkGen.ClientVisible = true;
+                            chkGen.Checked = true;
+                        }
                         if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR)
                         {
                             DataTable dtCtr = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
@@ -4494,34 +4506,47 @@ namespace WizOne.Avs
                             Personal.Contract ctr = new Personal.Contract();
                             ctr.CalculLuniSiZile(Convert.ToDateTime(dtInc.Date), Convert.ToDateTime(dtSf.Date), out nrLuni, out nrZile);
 
-                            sql100Tmp = "UPDATE F100 SET F100933 = " + data9 + ", F100934 = " + data10 + ", F100936 = " + nrZile.ToString() + ", F100935 = "
+                            if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
+                            {
+                                act = 1;
+                                sql100Tmp = "UPDATE F100 SET F100933 = " + data9 + ", F100934 = " + data10 + ", F100936 = " + nrZile.ToString() + ", F100935 = "
                                 + nrLuni.ToString() + ", F100938 = 1, F10023 = " + data10
                                 + ", F100993 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 103)"
                                 : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + ", F1009741 = " + dtCer.Rows[0]["DurataContract"].ToString() + "  WHERE F10003 = " + f10003.ToString();
-                            General.IncarcaDT(sql100Tmp, null);
+                                General.IncarcaDT(sql100Tmp, null);
 
-                            sql1001 = "UPDATE F1001 SET F1001138 = " + data + " WHERE F10003 = " + f10003.ToString();
+                                sql1001 = "UPDATE F1001 SET F1001138 = " + data + " WHERE F10003 = " + f10003.ToString();
 
-                            string sql095 = "INSERT INTO F095 (F09501, F09502, F09503, F09504, F09505, F09506, F09507, F09508, F09509, F09510, F09511, USER_NO, TIME) "
-                                + " VALUES (95, '" + dtF100.Rows[0]["F10017"].ToString() + "', " + dtF100.Rows[0]["F10003"].ToString() + ", '" + dtF100.Rows[0]["F10011"].ToString() + "', " + data9 + ", " + data10
-                                + ", " + nrLuni.ToString() + ", " + nrZile.ToString() + ", " + dtF100.Rows[0]["F100929"].ToString() + ", 1, " + (Convert.ToInt32(dtCer.Rows[0]["DurataContract"].ToString()) == 1 ? "'Nedeterminat'" : "'Determinat'") + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
-                            General.IncarcaDT(sql095, null);
-                            //}
+                                string sql095 = "INSERT INTO F095 (F09501, F09502, F09503, F09504, F09505, F09506, F09507, F09508, F09509, F09510, F09511, USER_NO, TIME) "
+                                    + " VALUES (95, '" + dtF100.Rows[0]["F10017"].ToString() + "', " + dtF100.Rows[0]["F10003"].ToString() + ", '" + dtF100.Rows[0]["F10011"].ToString() + "', " + data9 + ", " + data10
+                                    + ", " + nrLuni.ToString() + ", " + nrZile.ToString() + ", " + dtF100.Rows[0]["F100929"].ToString() + ", 1, " + (Convert.ToInt32(dtCer.Rows[0]["DurataContract"].ToString()) == 1 ? "'Nedeterminat'" : "'Determinat'") + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                                General.IncarcaDT(sql095, null);
 
-                            //string sqlTmp = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
-                            //    + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", " + Convert.ToInt32(dtCer.Rows[0]["IdAtribut"].ToString()) + ", 'Prelungire CIM', " + data + ", " + dtCer.Rows[0]["MeserieId"].ToString() + ", 'Modificari in avans', '"
-                            //    + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
-                            //General.IncarcaDT(sqlTmp, null);
-
-
-                            //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO   
-                            if (dtSf.Year > DateTime.Now.Year)
-                            {
-                                General.CalculCO(dtSf.Year, f10003);
-                                General.CalculCO(DateTime.Now.Year, f10003);
+                                //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO   
+                                if (dtSf.Year > DateTime.Now.Year)
+                                {
+                                    General.CalculCO(dtSf.Year, f10003);
+                                    General.CalculCO(DateTime.Now.Year, f10003);
+                                }
+                                else
+                                    General.CalculCO(dtSf.Year, f10003);
                             }
                             else
-                                General.CalculCO(dtSf.Year, f10003);
+                            {
+                                sql100 = "UPDATE F100 SET  F10023 = " + data10
+                                + ", F100993 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 103)"
+                                : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + "  WHERE F10003 = " + f10003.ToString();
+
+                                sql1001 = "UPDATE F1001 SET F1001138 = " + data + " WHERE F10003 = " + f10003.ToString();
+                            }    
+                            //}   
+
+                            //Radu 26.10.2020
+                            sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
+                                + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", " + dtCer.Rows[0]["IdAtribut"].ToString() + ", 'Prelungire CIM', " + data + ", " + dtCer.Rows[0]["DurataContract"].ToString() + ", 'Modificari in avans', '"
+                                + dateDoc + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+
+
                         }
                         break;
                     case (int)Constante.Atribute.Organigrama:
@@ -4880,11 +4905,11 @@ namespace WizOne.Avs
 
 
                 //Radu 09.09.2020 - actualizare data consemnare
-                if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month)
-                {
+                //if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month)
+                //{
                     DateTime dtConsemn = General.FindDataConsemnare(f10003);
                     General.ExecutaNonQuery("UPDATE F1001 SET F1001109 = " + General.ToDataUniv(dtConsemn) + " WHERE F10003 = " + f10003, null);
-                }
+                //}
 
 
                 //Florin 2019-04-10

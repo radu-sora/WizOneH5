@@ -51,9 +51,9 @@ namespace WizOne.Personal
         private void IncarcaGrid()
         {
 
-            string sqlFinal = "SELECT * FROM \"Admin_Evolutie\" WHERE \"Marca\" = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT * FROM \"Admin_Evolutie\" WHERE \"Marca\" = " + HttpContext.Current.Session["Marca"].ToString();
             DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("Admin_Evolutie"))
             {
                 dt = ds.Tables["Admin_Evolutie"];
@@ -75,7 +75,7 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colDep = (grDateEvolutie.Columns["IdDepartament"] as GridViewDataComboBoxColumn);
             colDep.PropertiesComboBox.DataSource = dtDep;
 
-
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
 
         }
 

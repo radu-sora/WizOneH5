@@ -480,8 +480,8 @@ namespace WizOne.Pontaj
                 {
                     grDate.DataSource = null;
                     grDate.DataBind();
-                    grDate.JSProperties["cpAlertMessage"] = "Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea";
                     //MessageBox.Show("Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea", MessageBox.icoInfo, "Initializare");
+                    grDate.JSProperties["cpAlertMessage"] = "Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea";
                     return;
                 }
 
@@ -615,7 +615,7 @@ namespace WizOne.Pontaj
                 //Florin 2020.05.25
                 GridViewCommandColumn grCmd = grDate.Columns[0] as GridViewCommandColumn;
                 grCmd.Visible = false;
-                if (dt.Rows.Count == 1)
+                if ((tip == 2 || tip == 20) && dt.Rows.Count == 1)
                 {
                     grCmd.Visible = true;
                     grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.AllDataRows;
@@ -857,7 +857,7 @@ namespace WizOne.Pontaj
                             CASE WHEN (
                             CASE WHEN {idRol} = 3 THEN 1 ELSE 
                             CASE WHEN ({idRol} = 2 AND ((COALESCE(J.""IdStare"",1)=1 OR COALESCE(J.""IdStare"",1) = 2 OR COALESCE(J.""IdStare"",1) = 4 OR COALESCE(J.""IdStare"",1) = 6))) THEN 1 ELSE 
-                            CASE WHEN ({idRol} = 1 AND(COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
+                            CASE WHEN (({idRol} = 1 OR {idRol} = 0) AND (COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
                             END END END)=1 AND
                             (SELECT COUNT(*)
                             FROM ""Ptj_relGrupSuper"" BB
@@ -956,7 +956,7 @@ namespace WizOne.Pontaj
                             CASE WHEN (
                             CASE WHEN {idRol} = 3 THEN 1 ELSE 
                             CASE WHEN ({idRol} = 2 AND ((COALESCE(J.""IdStare"",1)=1 OR COALESCE(J.""IdStare"",1) = 2 OR COALESCE(J.""IdStare"",1) = 4 OR COALESCE(J.""IdStare"",1) = 6))) THEN 1 ELSE 
-                            CASE WHEN ({idRol} = 1 AND(COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
+                            CASE WHEN (({idRol} = 1 OR {idRol} = 0) AND (COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
                             END END END)=1 AND
                             (SELECT COUNT(*)
                             FROM ""Ptj_relGrupSuper"" BB
@@ -1484,6 +1484,11 @@ namespace WizOne.Pontaj
                                     DateTime inOut = Convert.ToDateTime(e.CellValue);
                                     DateTime zi = Convert.ToDateTime(obj);
                                     if (inOut.Date != zi.Date) e.Cell.BackColor = System.Drawing.Color.LightGray;
+
+                                    //setam culoarea de fundal daca a fost modificata
+                                    string modif = Convert.ToString(grDate.GetRowValues(e.VisibleIndex, "ModifInOut"));
+                                    if (modif.Contains(e.DataColumn.FieldName + ";"))
+                                        e.Cell.ForeColor = General.Culoare("#0000c8");
                                 }
                             }
                             break;
@@ -1565,6 +1570,9 @@ namespace WizOne.Pontaj
                 string strSql = "";
                 var dic = upd.NewValues.Cast<DictionaryEntry>().OrderBy(r => r.Key).ToDictionary(c => c.Key, d => d.Value);
 
+                //Florin 2020.09.16
+                string modifInOut = General.Nz(row["ModifInOut"],"").ToString();
+
                 foreach (var l in dic)
                 {
                     string numeCol = l.Key.ToString();
@@ -1614,6 +1622,9 @@ namespace WizOne.Pontaj
 
                                 cmp += $@", ""{numeCol}""=" + General.ToDataUniv(Convert.ToDateTime(row[numeCol]), true);
                                 row[numeCol] = inOut;
+
+                                if (!modifInOut.Contains(numeCol + ";"))
+                                    modifInOut += numeCol + ";";
                             }
                             catch (Exception ex)
                             {
@@ -1639,6 +1650,9 @@ namespace WizOne.Pontaj
                                     row[numeCol] = inOut;
 
                                 cmp += $@", ""{numeCol}""=" + General.ToDataUniv(Convert.ToDateTime(row[numeCol]), true);
+
+                                if (!modifInOut.Contains(numeCol + ";"))
+                                    modifInOut += numeCol + ";";
                             }
                             catch (Exception ex)
                             {
@@ -1702,8 +1716,13 @@ namespace WizOne.Pontaj
                     }
                 }
 
+                //Florin 2020.09.16
+                string cmpInOut = "";
+                if (modifInOut != "")
+                    cmpInOut = $@",""ModifInOut""='{modifInOut}'";
+
                 if (cmp != "")
-                    strSql += $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
+                    strSql += $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} {cmpInOut} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
 
                 //Florin 2020.02.07 - am adaugat validarile
                 string msg = "";
@@ -2205,6 +2224,10 @@ namespace WizOne.Pontaj
                                         colField = "FTmp" + colField.Replace("F", "");
                                     }
                                     if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.DateTime;
+
+                                    //c.BatchEditModifiedCellStyle.ForeColor = System.Drawing.Color.Red;
+                                    //c.BatchEditModifiedCellStyle.ForeColor = General.Culoare("#0096c8");
+                                    c.BatchEditModifiedCellStyle.ForeColor = General.Culoare("#0000c8");
                                 }
                                 break;
                         }
@@ -3211,7 +3234,6 @@ namespace WizOne.Pontaj
                     grDate.ClientInstanceName = "grDateTotaluri";
                     grDate.Width = Unit.Percentage(100);
                     grDate.AutoGenerateColumns = false;
-                    grDate.CustomCallback += grDateTotaluri_CustomCallback;
 
                     for (int i = 0; i < dtCol.Rows.Count; i++)
                     {
@@ -3386,20 +3408,6 @@ namespace WizOne.Pontaj
             grDateIstoric.DataSource = General.IncarcaDT(strSql, null);
             grDateIstoric.DataBind();
 
-        }
-
-        protected void grDateTotaluri_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
-        {
-            try
-            {
-                if (tip == 1 || tip == 10)
-                    CreeazaGridTotaluri();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
         }
 
     }

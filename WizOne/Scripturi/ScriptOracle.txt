@@ -14950,7 +14950,7 @@ where f100.f10003 =altf10003
       WHEN OTHERS THEN RETURN 8;
 
 END;
-
+/
 
 
 create or replace FUNCTION "DamiBirou" (altF10003 IN NUMBER, "dt" IN DATE) RETURN NUMBER
@@ -14989,7 +14989,7 @@ where f100.f10003 =altf10003
       WHEN OTHERS THEN RETURN 8;
 
 END;
-
+/
 
 --https://github.com/wizromRD/WizOne/issues/496
 --Adaugare program de lucru in modificari in avans/Circuit Documente pentru generare AA #496
@@ -15159,7 +15159,6 @@ COMMIT;
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('MP_VerifIntervalCartele' , '0', '1 - se verifica daca, la introducerea unei cartele, intervalul se intersecteaza cu cel al unei alte cartele a aceluiasi angajat; 0 - nu se verifica' , 0);
 COMMIT;
 
-
 ALTER TABLE "Avs_Cereri" ADD "PerProbaZL" number(9);
 ALTER TABLE "Avs_Cereri" ADD "PerProbaZC" number(9);
 ALTER TABLE "Avs_Cereri" ADD "PreavizDemisie" number(9);
@@ -15187,3 +15186,250 @@ INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('Rap_Grupa
 insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (35, 'Tip contract', 1);
 insert into "Avs_tblAtribute" ("Id", "Denumire", "Activ") values (36, 'Durata contract', 1);
 commit;
+
+
+----  2.2.132  ----
+
+
+--https://github.com/wizromRD/WizOne/issues/566
+--In tabela Eval_tblTipValoriLinii nu se salveaza inregistrarile decat pentru primul set de Valori creat in tabela Eval_tblTipValori #566
+ CREATE OR REPLACE TRIGGER "Auto_Eval_tblTipValoriLinii" 
+  BEFORE INSERT ON "Eval_tblTipValoriLinii"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_tblTipValoriLinii_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_tblTipValoriLinii" ENABLE;
+/
+
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "Ordine" number(10);
+/
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "Ordine" number(10);
+/
+
+INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare") VALUES(1, 68, 'Link', 0);
+COMMIT;
+
+--https://github.com/wizromRD/WizOne/issues/563
+--Pe formularele duplicate daca adaug linii noi in chestionar le inverseaza ordinea dupa salvare. De renuntat la tabela TableSYSInfo_NextId si de pus conditie de Max+1 #563
+CREATE SEQUENCE "Eval_SetCalificativDet_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_SetCalificativDet" 
+  BEFORE INSERT ON "Eval_SetCalificativDet"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_SetCalificativDet_SEQ".nextval
+    INTO :new."IdCalificativ"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_SetCalificativDet" ENABLE;
+/
+
+
+CREATE SEQUENCE "Eval_CategCompetenteDet_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_CategCompetenteDet" 
+  BEFORE INSERT ON "Eval_CategCompetenteDet"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_CategCompetenteDet_SEQ".nextval
+    INTO :new."IdCompetenta"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_CategCompetenteDet" ENABLE;
+/
+
+
+CREATE SEQUENCE "Eval_ListaObiectivDet_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_ListaObiectivDet" 
+  BEFORE INSERT ON "Eval_ListaObiectivDet"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_ListaObiectivDet_SEQ".nextval
+    INTO :new."Id"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_ListaObiectivDet" ENABLE;
+/
+
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_relGrupAngajatQuiz" 
+  BEFORE INSERT ON "Eval_relGrupAngajatQuiz"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_relGrupAngajatQuiz_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_relGrupAngajatQuiz" ENABLE;
+/
+
+DROP TABLE "TableSYSInfo_NextId";
+/
+
+ALTER TABLE "Eval_QuizIntrebari" ADD "OrdineAfisare" number(10);
+/
+
+alter table "Eval_ObiIndividuale" add "Total1" CLOB;
+/
+alter table "Eval_ObiIndividuale" add "Total2" CLOB;
+/
+alter table "Eval_ObiIndividualeTemp" add "Total1" CLOB;
+/
+alter table "Eval_ObiIndividualeTemp" add "Total2" CLOB;
+/
+
+alter table "Eval_CompetenteAngajat" add "Total1" CLOB;
+/
+alter table "Eval_CompetenteAngajat" add "Total2" CLOB;
+/
+alter table "Eval_CompetenteAngajatTemp" add "Total1" CLOB;
+/
+alter table "Eval_CompetenteAngajatTemp" add "Total2" CLOB;
+/
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "FormulaSql" CLOB;
+/
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "FormulaSql" CLOB;
+/
+
+INSERT INTO "Eval_ConfigCompetente"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(6, 'Total1', 'System.String', 6, 1);
+COMMIT;
+INSERT INTO "Eval_ConfigCompetente"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(7, 'Total2', 'System.String', 7, 1);
+COMMIT;
+
+
+INSERT INTO "Eval_ConfigObiective"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(14, 'Total1', 'System.String', 14, 1);
+COMMIT;
+INSERT INTO "Eval_ConfigObiective"("Id", "ColumnName", "ColumnType", "Ordine", "Vizibil") VALUES(15, 'Total2', 'System.String', 15, 1);
+COMMIT;
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "Alias" varchar2(250);
+/
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "Alias" varchar2(250);
+/
+
+ALTER TABLE "Ptj_Intrari" ADD "ModifInOut" varchar2(500)
+/
+
+ALTER TABLE "Eval_ConfigCompTemplateDetail" ADD "TotalColoana" number(10);
+/
+ALTER TABLE "Eval_ConfigObTemplateDetail" ADD "TotalColoana" number(10);
+/
+
+
+CREATE TABLE "tblAdevRestrictii"(
+	"IdSuper" NUMBER(9) NOT NULL,
+	"IdAdev" NUMBER(9) NOT NULL,
+	USER_NO NUMBER(9),
+	TIME DATE DEFAULT SYSDATE);
+	
+	 CREATE UNIQUE INDEX "PK_tblAdevRestrictii" ON "tblAdevRestrictii" ("IdSuper", "IdAdev") ;
+
+ALTER TABLE "tblAdevRestrictii" ADD CONSTRAINT "PK_tblAdevRestrictii" PRIMARY KEY ("IdSuper", "IdAdev");
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Adev_Restrictii', '0', '1 - se restrictioneaza adeverintele cf. tblAdevRestrictii; 0 - nu sunt restrictii', 3);
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Adev_IdSuper', '', 'Contine id-urile de IdSuper care sa fie luate in considerare la Adeverinte', 3);
+commit;
+
+
+--Rol vizualizare in Cereri #612
+--https://github.com/wizromRD/WizOne/issues/612
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", "Criptat") VALUES('Cereri_IDuriRoluriVizualizare','1,2,3,4,5,6','se foloseste in modulul de cereri, are aceeasi functionalitate cu parametrul Cereri_IDuriRoluriHR cu diferenta ca nu are drepturi de modificare are doar de vizualizare',1,0);
+COMMIT;
+
+INSERT INTO "Eval_QuizTaburi"("Denumire", "Pagina", "Ordine") VALUES('Ordine afisare','QuizOrdonare',5);
+COMMIT;
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('LimbiTraduse',  'Ro,En,Fr,Bg,Es,De,It,Ru', 'Limbi care sunt traduse; trebuie introduse de forma: Ro,En,Bg,Fr etc.', 0);
+commit;
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('FiltruAngajati_AscunsiAppWS', 'F10025 <> 900', 'Conditie pentru afisarea angajatilor in WizSalary', 3);
+commit;
+
+
+
+CREATE TABLE "Org_FormCreate"(
+	"IdFormular" NUMBER(9) NOT NULL,
+	"Rand" NUMBER(9) NOT NULL,
+	"Pozitie" NUMBER(9) NOT NULL,
+	"TipControl" NUMBER(9) NOT NULL,
+	"NumeEticheta" varchar2(250) NOT NULL,
+	"Sursa" varchar2(4000) NULL,
+	"ColoanaBD" varchar2(250) NOT NULL,
+	"Latime" NUMBER(9) NULL,
+	"IdAuto" NUMBER(9)  NOT NULL,
+    "USER_NO" NUMBER(9), 
+    "TIME" DATE DEFAULT SYSDATE);
+  
+    CREATE UNIQUE INDEX "PK_Org_FormCreate" ON "Org_FormCreate" ("IdAuto") ;
+
+ALTER TABLE "Org_FormCreate" ADD CONSTRAINT "PK_Org_FormCreate" PRIMARY KEY ("IdAuto");
+
+CREATE SEQUENCE "Org_FormCreate_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+  CREATE OR REPLACE TRIGGER "Auto_Org_FormCreate" 
+  BEFORE INSERT ON "Org_FormCreate"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Org_FormCreate_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Org_FormCreate" ENABLE;
+/
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(121, 'Creare formular', 'Creare formular', 'Posturi\FormCreate', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(122, 'Lista formulare', 'Lista formulare', 'Posturi\FormLista', 1, 'm1.png');
+commit;
+
+ALTER TABLE "Eval_tblTipCamp" ADD "Activ" number(10) DEFAULT 1;
+/
+
+UPDATE "Eval_tblTipCamp" SET "Activ"=1;
+COMMIT;
+UPDATE "Eval_tblTipCamp" SET "Activ"=0 WHERE "Id" NOT IN (1,2,3,4,5,8,9,10,11,13,14,15,17,18,19,20,21,23,53,54,55,60,61,62,63,64,65,66,67,68);
+COMMIT;
+
+ALTER TABLE "Eval_Quiz" ADD "Sincronizare" number(10);
+/
+
+
+insert into F704 (f70401, f70402, f70403, f70404, f70405, f70406, f70407, f70409)
+select 704, (select f10002 from f100 where f10017 = f09502 and rownum=1), f09503, 25, 'Prelungire CIM', f09505,
+case when f09511 = 'Nedeterminat' then 1 else 2 end,'Modificari in avans'
+from f095 where f09510=1 and trunc(f09505) >= trunc(to_DATE('01/10/2020', 'dd/mm/yyyy'));
+
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(123, 'Circuit formulare', 'Circuit formulare', 'Pagini\SablonNomen[Org_Circuit]', 1, 'm1.png');
+commit;
+
+CREATE TABLE "Eval_ConfigTipTabela" 
+(	
+"IdQuiz" NUMBER(10,0), 
+"IdLinie" NUMBER(10,0), 
+"Coloana" NUMBER(10,0), 
+"Lungime" NUMBER(10,0), 
+"Alias" VARCHAR2(500 BYTE), 
+"USER_NO" NUMBER(10,0), 
+"TIME" DATE DEFAULT SYSDATE
+);
+
+CREATE UNIQUE INDEX "Eval_ConfigTipTabela_PK" ON "Eval_ConfigTipTabela" ("IdQuiz","IdLinie","Coloana") ;
+
+ALTER TABLE "Eval_ConfigTipTabela" ADD CONSTRAINT "Eval_ConfigTipTabela_PK" PRIMARY KEY ("IdQuiz","IdLinie","Coloana");
+ALTER TABLE "Eval_ConfigTipTabela" MODIFY ("IdLinie" NOT NULL ENABLE);
+/
+
+INSERT INTO "Securitate" ("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu") VALUES('Absente.Lista', 'btnAnulare', '-', 6, 1, 1, 0);
+COMMIT;

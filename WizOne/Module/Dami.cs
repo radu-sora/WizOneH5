@@ -552,8 +552,6 @@ namespace WizOne.Module
                 // 77  -  Drepturi depline
                 // 76  -  Fara supervizor (cazul cand pe circuit, in loc de id supervizor, se pune codul de user (F70102)
 
-
-                string idHR = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
                 string selectInloc = "-99";
                 if (Dami.ValoareParam("InlocuitorulVedeCererile", "0") == "1")
                 {
@@ -613,11 +611,18 @@ namespace WizOne.Module
                                 (SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={HttpContext.Current.Session["UserId"]} AND ""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= ""DataSfarsit"") {condSuplim}";
 
 
+                //Florin 2020.10.12 - am adaugat si conditia pt rolul de vizualizare
                 //Florin 2020.06.23 - am schimbat 77 AS ""Rol"" cu  B."IdSuper" AS ""Rol""
-                if (totiAngajatii == 3)
+                if (totiAngajatii == 3 || totiAngajatii == 4)
+                {
+                    string idRol = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
+                    if (totiAngajatii == 4)
+                        idRol = Dami.ValoareParam("Cereri_IDuriRoluriVizualizare", "-99");
+
                     strSql = $@"SELECT DISTINCT A.*, B.""IdSuper"" AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
                                FROM ""Ptj_Cereri"" A
-                               INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idHR}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}";
+                               INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idRol}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}";
+                }
 
                 //Florin 2019.09.25 - optimizare
                 //Anulare_Valoare, Anulare_NrZile se transforma din subselecturi in LEFT JOIN
@@ -1323,66 +1328,29 @@ namespace WizOne.Module
                         break;
                 }
 
-                ///LeonardM 16.10.2017
-                ///in momentul in care avem de a face cu tabele ce tin de modulul de Evaluare
-                ///atunci intentia e ca pentru coloanele de id sa preluam valoarea cu ajutorul procedurii GetNextId
-                ///
-                if (tabela.Contains("Eval"))
+                if (Constante.tipBD == 1)                   //SQL
                 {
-                    #region varianta prin procedura GetNextId
-                    string sqlQuery = string.Empty;
-                    if (Constante.tipBD == 1)           //SQL
+                    int vers = Convert.ToInt32(ValoareParam("VersiuneSQL", "2008"));
+                    if (vers > 2008)
                     {
-                        sqlQuery = "exec \"GetNextId\" '{0}', {1}";
-                        sqlQuery = string.Format(sqlQuery, tabela, nrInreg);
-                        General.ExecutaNonQuery(sqlQuery, null);
+                        int cnt = Convert.ToInt32(General.ExecutaScalar("SELECT COUNT(*) FROM sys.objects WHERE name = '" + seq + "' AND type = 'SO'", null));
+                        if (cnt == 0)
+                            id = -99;
+                        else
+                            id = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR " + seq, null));
                     }
                     else
                     {
-                        //Oracle
-                        sqlQuery = "exec \"GetNextId\" ('{0}', {1})";
-                        sqlQuery = string.Format(sqlQuery, tabela, nrInreg);
-                        General.ExecutaNonQueryOracle("\"GetNextId\"", new object[] { "tableName=" + tabela, "nrInreg=" + nrInreg });
+                        id = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"
+                            BEGIN
+                                UPDATE ""tblConfig"" SET ""IdAutoCereri"" = COALESCE(""IdAutoCereri"",0)+1 WHERE ""Id"" = 1;
+                                SELECT ""IdAutoCereri"" FROM ""tblConfig"" WHERE ""Id"" = 1;
+                            END; "), 1));
                     }
-
-                    sqlQuery = "select \"NextId\" from \"TableSYSInfo_NextId\" where \"TableName\" ='{0}'";
-                    sqlQuery = string.Format(sqlQuery, tabela);
-                    id = Convert.ToInt32(General.ExecutaScalar(sqlQuery, null));
-                    #endregion
                 }
-                else
+                else                                   //Oracle
                 {
-                    #region varianta standard/ secvente
-                    if (Constante.tipBD == 1)                   //SQL
-                    {
-                        int vers = Convert.ToInt32(ValoareParam("VersiuneSQL", "2008"));
-
-                        if (vers > 2008)
-                        {
-                            //Radu 09.01.2018
-                            //int cnt = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[@1]') AND type = 'SO'", new object[] { seq }));
-                            int cnt = Convert.ToInt32(General.ExecutaScalar("SELECT COUNT(*) FROM sys.objects WHERE name = '" + seq + "' AND type = 'SO'", null));
-                            if (cnt == 0)
-                            {
-                                //id = Convert.ToInt32(General.ExecutaScalar("SELECT MAX(COALESCE(Id,0)) FROM " + tabela, null)) + 1;
-                                id = -99;
-                            }
-                            else
-                                //Radu 16.04.2018
-                                //id = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR @1", new object[] { seq }));
-                                id = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR " + seq, null));
-                        }
-                        else
-                        {
-                            id = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""IdAutoCereri"" FROM ""tblConfig"" WHERE ""Id"" = 1", null)) + 1;
-                            General.ExecutaNonQuery($@"UPDATE ""tblConfig"" SET ""IdAutoCereri"" = {id} WHERE ""Id"" = 1", null);
-                        }
-                    }
-                    else                                   //Oracle
-                    {
-                        id = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""{seq}"".NEXTVAL FROM DUAL", null));
-                    }
-                    #endregion
+                    id = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""{seq}"".NEXTVAL FROM DUAL", null));
                 }
             }
             catch (Exception)
@@ -1392,6 +1360,112 @@ namespace WizOne.Module
 
             return id;
         }
+
+
+        //internal static int NextId(string tabela, int nrInreg = 1)
+        //{
+        //    int id = 1;
+
+        //    try
+        //    {
+        //        string seq = tabela + "_SEQ";
+
+        //        //daca tabela se gaseste in switch-ul de mai jos se ia secventa indicata acolo, daca nu se ia cea implicita de deasupra de forma Tabela + _SEQ
+        //        //exista cazul in care pt aceeasi tabela exista mai multe secvente
+        //        switch (tabela.ToUpper())
+        //        {
+        //            case "PTJ_CERERI":
+        //                seq = "Ptj_Cereri_Id_SEQ";
+        //                break;
+        //            case "ORGANIGRAMA":
+        //                seq = "Organigrama_Id_SEQ";
+        //                break;
+        //            case "F100":
+        //                seq = "F100MARCA";
+        //                break;
+        //            case "MP_CERERI":
+        //                seq = "MP_Cereri_SEQ";
+        //                break;
+        //            case "F300":
+        //                seq = "F300_SEQ";
+        //                break;
+        //            case "BP_PRIME":
+        //                seq = "BP_Prime_SEQ";
+        //                break;
+        //            case "OBIINDIVIDUALE":
+        //                seq = "ObiIndividuale_SEQ";
+        //                break;
+        //        }
+
+        //        ///LeonardM 16.10.2017
+        //        ///in momentul in care avem de a face cu tabele ce tin de modulul de Evaluare
+        //        ///atunci intentia e ca pentru coloanele de id sa preluam valoarea cu ajutorul procedurii GetNextId
+        //        ///
+        //        if (tabela.Contains("Eval"))
+        //        {
+        //            #region varianta prin procedura GetNextId
+        //            string sqlQuery = string.Empty;
+        //            if (Constante.tipBD == 1)           //SQL
+        //            {
+        //                sqlQuery = "exec \"GetNextId\" '{0}', {1}";
+        //                sqlQuery = string.Format(sqlQuery, tabela, nrInreg);
+        //                General.ExecutaNonQuery(sqlQuery, null);
+        //            }
+        //            else
+        //            {
+        //                //Oracle
+        //                sqlQuery = "exec \"GetNextId\" ('{0}', {1})";
+        //                sqlQuery = string.Format(sqlQuery, tabela, nrInreg);
+        //                General.ExecutaNonQueryOracle("\"GetNextId\"", new object[] { "tableName=" + tabela, "nrInreg=" + nrInreg });
+        //            }
+
+        //            sqlQuery = "select \"NextId\" from \"TableSYSInfo_NextId\" where \"TableName\" ='{0}'";
+        //            sqlQuery = string.Format(sqlQuery, tabela);
+        //            id = Convert.ToInt32(General.ExecutaScalar(sqlQuery, null));
+        //            #endregion
+        //        }
+        //        else
+        //        {
+        //            #region varianta standard/ secvente
+        //            if (Constante.tipBD == 1)                   //SQL
+        //            {
+        //                int vers = Convert.ToInt32(ValoareParam("VersiuneSQL", "2008"));
+
+        //                if (vers > 2008)
+        //                {
+        //                    //Radu 09.01.2018
+        //                    //int cnt = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[@1]') AND type = 'SO'", new object[] { seq }));
+        //                    int cnt = Convert.ToInt32(General.ExecutaScalar("SELECT COUNT(*) FROM sys.objects WHERE name = '" + seq + "' AND type = 'SO'", null));
+        //                    if (cnt == 0)
+        //                    {
+        //                        //id = Convert.ToInt32(General.ExecutaScalar("SELECT MAX(COALESCE(Id,0)) FROM " + tabela, null)) + 1;
+        //                        id = -99;
+        //                    }
+        //                    else
+        //                        //Radu 16.04.2018
+        //                        //id = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR @1", new object[] { seq }));
+        //                        id = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR " + seq, null));
+        //                }
+        //                else
+        //                {
+        //                    id = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""IdAutoCereri"" FROM ""tblConfig"" WHERE ""Id"" = 1", null)) + 1;
+        //                    General.ExecutaNonQuery($@"UPDATE ""tblConfig"" SET ""IdAutoCereri"" = {id} WHERE ""Id"" = 1", null);
+        //                }
+        //            }
+        //            else                                   //Oracle
+        //            {
+        //                id = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""{seq}"".NEXTVAL FROM DUAL", null));
+        //            }
+        //            #endregion
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        // srvGeneral.MemoreazaEroarea(ex.ToString(), "srvGeneral", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return id;
+        //}
 
         internal static DateTime DataDrepturi(int tip, int nrZile, DateTime dtInc, int f10003=-99, int idRol = 0)
         {
@@ -1560,15 +1634,27 @@ namespace WizOne.Module
         {
             try
             {
+                //Radu 26.10.2020
+                string limbi = Dami.ValoareParam("LimbiTraduse", "");
+                string[] sirLimbi = limbi.ToUpper().Split(',');
+
                 List<metaGeneral2> list = new List<metaGeneral2>();
-                list.Add(new metaGeneral2() { Id = "RO", Denumire = "Română" });
-                list.Add(new metaGeneral2() { Id = "EN", Denumire = "English" });
-                list.Add(new metaGeneral2() { Id = "FR", Denumire = "Français" });
-                list.Add(new metaGeneral2() { Id = "ES", Denumire = "Español" });
-                list.Add(new metaGeneral2() { Id = "DE", Denumire = "Deutsch" });
-                list.Add(new metaGeneral2() { Id = "IT", Denumire = "Italiano" });
-                list.Add(new metaGeneral2() { Id = "BG", Denumire = "български" });
-                list.Add(new metaGeneral2() { Id = "RU", Denumire = "русский" });
+                if (sirLimbi.Contains("RO"))
+                    list.Add(new metaGeneral2() { Id = "RO", Denumire = "Română" });
+                if (sirLimbi.Contains("EN"))
+                    list.Add(new metaGeneral2() { Id = "EN", Denumire = "English" });
+                if (sirLimbi.Contains("FR"))
+                    list.Add(new metaGeneral2() { Id = "FR", Denumire = "Français" });
+                if (sirLimbi.Contains("ES"))
+                    list.Add(new metaGeneral2() { Id = "ES", Denumire = "Español" });
+                if (sirLimbi.Contains("DE"))
+                    list.Add(new metaGeneral2() { Id = "DE", Denumire = "Deutsch" });
+                if (sirLimbi.Contains("IT"))
+                    list.Add(new metaGeneral2() { Id = "IT", Denumire = "Italiano" });
+                if (sirLimbi.Contains("BG"))
+                    list.Add(new metaGeneral2() { Id = "BG", Denumire = "български" });
+                if (sirLimbi.Contains("RU"))
+                    list.Add(new metaGeneral2() { Id = "RU", Denumire = "русский" });
 
                 return list;
             }

@@ -399,6 +399,7 @@
     <Content Include="Eval\QuizDrepturi.ascx" />
     <Content Include="Eval\QuizInit.aspx" />
     <Content Include="Eval\QuizLista.aspx" />
+    <Content Include="Eval\QuizOrdonare.ascx" />
     <Content Include="Eval\ValoriLinii.aspx" />
     <Content Include="FederationMetadata\2007-06\FederationMetadata.xml" />
     <Content Include="Fisiere\css\login.css" />
@@ -809,6 +810,7 @@
     <Content Include="Generatoare\Reports\Pages\View.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Info.aspx" />
+    <Content Include="LogOut.aspx" />
     <Content Include="Organigrama\Lista.aspx" />
     <Content Include="Organigrama\Posturi.aspx" />
     <Content Include="Organigrama\PosturiValidare.aspx" />
@@ -848,6 +850,9 @@
     <Content Include="Personal\Tarife.ascx" />
     <Content Include="Pontaj\PlanificareSchimburi.aspx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
+    <Content Include="Posturi\FormCreate.aspx" />
+    <Content Include="Posturi\FormDetaliu.aspx" />
+    <Content Include="Posturi\FormLista.aspx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
     <Content Include="Revisal\RapoarteRevisal.aspx" />
     <Content Include="Revisal\Revisal.aspx" />
@@ -866,6 +871,8 @@
     <Content Include="FisiereApp\Medicina\init" />
     <Content Include="FisiereApp\Sanctiuni\init" />
     <Content Include="FisiereApp\Studii\init" />
+    <Content Include="Fisiere\BDReferintaORA.csv" />
+    <Content Include="Fisiere\BDReferintaSQL.csv" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1461,6 +1468,13 @@
     <Compile Include="Eval\QuizLista.aspx.designer.cs">
       <DependentUpon>QuizLista.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Eval\QuizOrdonare.ascx.cs">
+      <DependentUpon>QuizOrdonare.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\QuizOrdonare.ascx.designer.cs">
+      <DependentUpon>QuizOrdonare.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Eval\ValoriLinii.aspx.cs">
       <DependentUpon>ValoriLinii.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1543,6 +1557,13 @@
     </Compile>
     <Compile Include="Info.aspx.designer.cs">
       <DependentUpon>Info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LogOut.aspx.cs">
+      <DependentUpon>LogOut.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LogOut.aspx.designer.cs">
+      <DependentUpon>LogOut.aspx</DependentUpon>
     </Compile>
     <Compile Include="Module\Calcul.cs" />
     <Compile Include="Module\ConcediiMedicale.cs" />
@@ -1824,6 +1845,27 @@
     </Compile>
     <Compile Include="Pontaj\PontajSpecial.aspx.designer.cs">
       <DependentUpon>PontajSpecial.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Posturi\FormCreate.aspx.cs">
+      <DependentUpon>FormCreate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Posturi\FormCreate.aspx.designer.cs">
+      <DependentUpon>FormCreate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Posturi\FormDetaliu.aspx.cs">
+      <DependentUpon>FormDetaliu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Posturi\FormDetaliu.aspx.designer.cs">
+      <DependentUpon>FormDetaliu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Posturi\FormLista.aspx.cs">
+      <DependentUpon>FormLista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Posturi\FormLista.aspx.designer.cs">
+      <DependentUpon>FormLista.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\AdeverintaGenerala.cs">
       <SubType>Component</SubType>

@@ -1,16 +1,11 @@
 ﻿using DevExpress.Web;
-using Oracle.ManagedDataAccess.Client;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Eval
@@ -18,73 +13,37 @@ namespace WizOne.Eval
     public partial class ListaObiective : System.Web.UI.Page
     {
         string cmp = "USER_NO,TIME,IDAUTO,";
-        //int tmpObi = -99;
 
-        public class metaDate
-        {
-            public int Id { get; set; }
-            public string Denumire { get; set; }
-            public int ParentId { get; set; }
-        }
-
-        List<metaDate> lstObiective = new List<metaDate>();
-        List<metaDate> lstActivitati = new List<metaDate>();
-        List<metaDate> lstSetAngajati = new List<metaDate>();
         protected void Page_Init(object sender, EventArgs e)
         {
             try
             {
-                DataTable dtObiective = General.IncarcaDT("select * from \"Eval_Obiectiv\" ", null);
-                DataTable dtActivitati = General.IncarcaDT("select act.* from \"Eval_ObiectivXActivitate\" act join \"Eval_Obiectiv\" ob on act.\"IdObiectiv\" = ob.\"IdObiectiv\" ", null);
-                DataTable dtSetAnagajati = General.IncarcaDT("select * from \"Eval_SetAngajati\" ", null);
-
-
-                lstObiective = new List<metaDate>();
-                lstActivitati = new List<metaDate>();
-                lstSetAngajati = new List<metaDate>();
-
-                foreach(DataRow rwObiectiv in dtObiective.Rows)
+                if (!IsPostBack)
                 {
-                    metaDate clsObiectiv = new metaDate();
-                    clsObiectiv.Id = Convert.ToInt32(rwObiectiv["IdObiectiv"].ToString());
-                    clsObiectiv.Denumire = rwObiectiv["Obiectiv"].ToString();
-                    lstObiective.Add(clsObiectiv);
+                    Session["EvalLista_DSObiective"] = General.IncarcaDT(@"SELECT * FROM ""Eval_Obiectiv"" ");
+                    Session["EvalLista_DSObiectiveXActivitate"] = General.IncarcaDT(@"SELECT * FROM ""Eval_ObiectivXActivitate"" ");
+                    Session["EvalLista_DSSetAngajat"] = General.IncarcaDT(@"SELECT * FROM ""Eval_SetAngajati"" ");
                 }
-                Session["EvalLista_DSObiective"] = lstObiective;
 
-                foreach(DataRow rwActivitate in dtActivitati.Rows)
-                {
-                    metaDate clsActivitate = new metaDate();
-                    clsActivitate.Id = Convert.ToInt32(rwActivitate["IdActivitate"].ToString());
-                    clsActivitate.Denumire = rwActivitate["Activitate"].ToString();
-                    clsActivitate.ParentId = Convert.ToInt32(rwActivitate["IdObiectiv"].ToString());
-                    lstActivitati.Add(clsActivitate);
-                }
-                Session["EvalLista_DSObiectiveXActivitate"] = lstActivitati;
-
-                foreach (DataRow rwSetAngajat in dtSetAnagajati.Rows)
-                {
-                    metaDate clsSetAngajat = new metaDate();
-                    clsSetAngajat.Id = Convert.ToInt32(rwSetAngajat["IdSetAng"].ToString());
-                    clsSetAngajat.Denumire = rwSetAngajat["DenSet"].ToString();
-                    lstSetAngajati.Add(clsSetAngajat);
-                }
-                Session["EvalLista_DSSetAngajat"] = lstSetAngajati;
+                GridViewDataComboBoxColumn colObiective = (grDate.Columns["IdObiectiv"] as GridViewDataComboBoxColumn);
+                GridViewDataComboBoxColumn colActivitati = (grDate.Columns["IdActivitate"] as GridViewDataComboBoxColumn);
+                GridViewDataComboBoxColumn colSetAngajati = (grDate.Columns["IdSetAngajat"] as GridViewDataComboBoxColumn);
+                colObiective.PropertiesComboBox.DataSource = Session["EvalLista_DSObiective"];
+                colActivitati.PropertiesComboBox.DataSource = Session["EvalLista_DSObiectiveXActivitate"];
+                colSetAngajati.PropertiesComboBox.DataSource = Session["EvalLista_DSSetAngajat"];
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie! ");
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
 
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
                 Dami.AccesApp();
-
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 #region Traducere
@@ -99,7 +58,7 @@ namespace WizOne.Eval
                 #endregion
 
                 int IdListaObiective = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
-                if(!IsPostBack)
+                if (!IsPostBack)
                 {
                     switch (Session["Sablon_TipActiune"].ToString())
                     {
@@ -109,7 +68,7 @@ namespace WizOne.Eval
                         case "Clone":
                             {
                                 //incarcam header-ul
-                                DataTable dtHead = General.IncarcaDT(@"SELECT * FROM ""Eval_ListaObiectiv"" WHERE ""IdLista""=@1 ", new string[] { IdListaObiective.ToString() });
+                                DataTable dtHead = General.IncarcaDT(@"SELECT * FROM ""Eval_ListaObiectiv"" WHERE ""IdLista""=@1 ", new object[] { IdListaObiective });
                                 if (dtHead.Rows.Count > 0)
                                 {
                                     txtId.Text = dtHead.Rows[0]["IdLista"].ToString();
@@ -120,48 +79,15 @@ namespace WizOne.Eval
                             break;
                     }
 
-                    DataSet ds = new DataSet();
-                    string gridKey = "";
-                    string sqlQuery = string.Empty;
-                    sqlQuery = "select * from \"Eval_ListaObiectivDet\" where \"IdLista\" ={0}";
-                    sqlQuery = string.Format(sqlQuery, IdListaObiective);
-                    DataTable dt = General.IncarcaDT(sqlQuery, null);
+                    DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Eval_ListaObiectivDet"" WHERE ""IdLista"" = @1", new object[] { IdListaObiective });
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
-
-                    DataColumn[] keys = dt.PrimaryKey;
-                    for (int i = 0; i < keys.Count(); i++)
-                        gridKey += ";" + keys[i].ToString();
-
                     Session["InformatiaCurenta"] = dt;
-
-                    GridViewDataComboBoxColumn colObiective = (grDate.Columns["IdObiectiv"] as GridViewDataComboBoxColumn);
-                    GridViewDataComboBoxColumn colActivitati = (grDate.Columns["IdActivitate"] as GridViewDataComboBoxColumn);
-                    GridViewDataComboBoxColumn colSetAngajati = (grDate.Columns["IdSetAngajat"] as GridViewDataComboBoxColumn);
-                    colObiective.PropertiesComboBox.DataSource = lstObiective;
-                    colActivitati.PropertiesComboBox.DataSource = lstActivitati;
-                    colSetAngajati.PropertiesComboBox.DataSource = lstSetAngajati;
-
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.KeyFieldName = "Id";
-                    if (gridKey != "") grDate.KeyFieldName = gridKey.Substring(1);
                     grDate.DataBind();
                 }
                 else
                 {
-                    lstActivitati = new List<metaDate>();
-                    lstObiective = new List<metaDate>();
-                    lstSetAngajati = new List<metaDate>();
-
-                    lstObiective = Session["EvalLista_DSObiective"] as List<metaDate>;
-                    lstActivitati = Session["EvalLista_DSObiectiveXActivitate"] as List<metaDate>;
-                    lstSetAngajati = Session["EvalLista_DSSetAngajat"] as List<metaDate>;
-                    GridViewDataComboBoxColumn colObiective = (grDate.Columns["IdObiectiv"] as GridViewDataComboBoxColumn);
-                    GridViewDataComboBoxColumn colActivitati = (grDate.Columns["IdActivitate"] as GridViewDataComboBoxColumn);
-                    GridViewDataComboBoxColumn colSetAngajati = (grDate.Columns["IdSetAngajat"] as GridViewDataComboBoxColumn);
-                    colObiective.PropertiesComboBox.DataSource = lstObiective;
-                    colActivitati.PropertiesComboBox.DataSource = lstActivitati;
-                    colSetAngajati.PropertiesComboBox.DataSource = lstSetAngajati;
-
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.DataBind();
                 }
@@ -191,19 +117,16 @@ namespace WizOne.Eval
         {
             try
             {
-                string sqlQuery = string.Empty;
                 int id = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                sqlQuery = "select * from \"Eval_ListaObiectiv\" where \"IdLista\" = {0} ";
-                sqlQuery = string.Format(sqlQuery, id);
-                DataTable dtHead = General.IncarcaDT(sqlQuery, null);
+                DataTable dtHead = General.IncarcaDT(@"SELECT * FROM ""Eval_ListaObiectiv"" WHERE ""IdLista"" = @1", new object[] { id });
 
-                switch(Session["Sablon_TipActiune"].ToString())
+                switch (Session["Sablon_TipActiune"].ToString())
                 {
                     case "New":
                     case "Clone":
                         {
-                            id = Dami.NextId("Eval_ListaObiectiv");
+                            id = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""IdLista"",0)) FROM ""Eval_ListaObiectiv"" "), 0)) + 1;
                             DataRow drHead = dtHead.NewRow();
                             drHead["IdLista"] = id;
                             drHead["CodLista"] = txtCodLista.Text;
@@ -212,8 +135,6 @@ namespace WizOne.Eval
                             drHead["USER_NO"] = Session["UserId"];
                             dtHead.Rows.Add(drHead);
 
-                            int nrInreg = dt.Rows.Count;
-                            int Id = Dami.NextId("Eval_ListaObiectivDet", nrInreg);
                             foreach(DataRow dr in dt.Rows)
                             {
                                 dr["IdLista"] = id;
@@ -231,48 +152,8 @@ namespace WizOne.Eval
                         break;
                 }
 
-                #region salvare Eval_ListaObiectiv
-                if (Constante.tipBD == 1)
-                {
-                    SqlDataAdapter daHead = new SqlDataAdapter();
-                    daHead.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_ListaObiectiv\" ", null);
-                    SqlCommandBuilder cbHead = new SqlCommandBuilder(daHead);
-                    daHead.Update(dtHead);
-                }
-                else
-                {
-                    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_ListaObiectiv\" WHERE ROWNUM = 0", null);
-                    OracleCommandBuilder cbbHead = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(dtHead);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
-
-                }
-                #endregion
-
-                #region salvare Eval_ListaObiectivDet
-                if (Constante.tipBD == 1)
-                {
-                    SqlDataAdapter da = new SqlDataAdapter();
-                    da.SelectCommand = General.DamiSqlCommand("select top 0 * from \"Eval_ListaObiectivDet\" ", null);
-                    SqlCommandBuilder cb = new SqlCommandBuilder(da);
-                    da.Update(dt);
-
-                    da.Dispose();
-                    da = null;
-                }
-                else
-                {
-                    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-                    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Eval_ListaObiectivDet\" WHERE ROWNUM = 0", null);
-                    OracleCommandBuilder cb = new OracleCommandBuilder(oledbAdapter);
-                    oledbAdapter.Update(dt);
-                    oledbAdapter.Dispose();
-                    oledbAdapter = null;
-
-                }
-                #endregion
+                General.SalveazaDate(dtHead, "Eval_ListaObiectiv");
+                General.SalveazaDate(dt, "Eval_ListaObiectivDet");
 
                 HttpContext.Current.Session["Sablon_Tabela"] = "Eval_ListaObiectiv";
                 Response.Redirect("~/Pagini/SablonLista.aspx", false);
@@ -337,8 +218,7 @@ namespace WizOne.Eval
             {
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow row = dt.NewRow();
-                int x = Dami.NextId("Eval_ListaObiectivDet");
-                row["Id"] = x;
+
                 row["IdObiectiv"] = e.NewValues["IdObiectiv"] ?? DBNull.Value;
                 row["IdActivitate"] = e.NewValues["IdActivitate"] ?? DBNull.Value;
                 row["IdSetAngajat"] = e.NewValues["IdSetAngajat"] ?? DBNull.Value;
@@ -371,9 +251,7 @@ namespace WizOne.Eval
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow row = dt.Rows.Find(keys);
-
                 DataColumn[] colPrimaryKey = dt.PrimaryKey;
-
                 foreach (DataColumn col in dt.Columns)
                 {
                     if ((!col.AutoIncrement && (cmp.IndexOf(col.ColumnName.ToUpper() + ",") < 0)) && colPrimaryKey.Where(p => p.ColumnName == col.ColumnName).Count() == 0)
@@ -381,7 +259,6 @@ namespace WizOne.Eval
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                     }
-
                 }
 
                 e.Cancel = true;
@@ -400,65 +277,9 @@ namespace WizOne.Eval
         {
             try
             {
-                DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 e.NewValues["TIME"] = DateTime.Now;
                 e.NewValues["USER_NO"] = Session["UserId"];
-                e.NewValues["Id"] = dt.Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void grDate_CustomErrorText(object sender, DevExpress.Web.ASPxGridViewCustomErrorTextEventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void Unnamed_ItemRequestedByValue(object source, ListEditItemRequestedByValueEventArgs e)
-        {
-            try
-            {
-                //int id;
-                //if (e.Value == null || !int.TryParse(e.Value.ToString(), out id))
-                //    return;
-                //ASPxComboBox editor = source as ASPxComboBox;
-                //var query = lstActivitati.Where(p => p.ParentId == id);
-                //editor.DataSource = query.ToList();
-                //editor.DataBind();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void Unnamed_ItemsRequestedByFilterCondition(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
-        {
-            try
-            {
-                //ASPxComboBox editor = source as ASPxComboBox;
-                //List<metaDate> query;
-                //var take = e.EndIndex - e.BeginIndex + 1;
-                //var skip = e.BeginIndex;
-                //int countryValue = GetCurrentObjective();
-                //if (countryValue > -1)
-                //    query = lstActivitati.Where(p => p.Denumire.Contains(e.Filter) && p.ParentId == countryValue).OrderBy(p => p.Id).ToList<metaDate>();
-                //else
-                //    query = lstActivitati.Where(p => p.Denumire.Contains(e.Filter)).OrderBy(p => p.Id).ToList<metaDate>();
-                //editor.DataSource = query;
-                //editor.DataBind();
+                e.NewValues["Id"] = 1;
             }
             catch (Exception ex)
             {
@@ -479,14 +300,6 @@ namespace WizOne.Eval
         {
             try
             {
-                //if (e.Column.FieldName == "IdObiectiv")
-                //    e.Editor.ClientInstanceName = "ObjectiveEditor";
-                //if (e.Column.FieldName != "IdActivitate")
-                //    return;
-                //var editor = (ASPxComboBox)e.Editor;
-                //editor.ClientInstanceName = "ActivityEditor";
-                //editor.ClientSideEvents.EndCallback = "cmbActivity_EndCallBack";
-
                 if (!grDate.IsEditing || e.Column.FieldName != "IdActivitate") return;
                 object val = -99;
 
@@ -500,8 +313,6 @@ namespace WizOne.Eval
                     val = grDate.GetRowValuesByKeyValue(e.KeyValue, "IdObiectiv");
                     if (val == DBNull.Value) return;
                 }
-
-                //string idObi = (string)val;
 
                 ASPxComboBox combo = e.Editor as ASPxComboBox;
                 IncarcaActivitati(combo, Convert.ToInt32(val));
@@ -517,55 +328,16 @@ namespace WizOne.Eval
 
         protected void IncarcaActivitati(ASPxComboBox cmb, int idObi)
         {
-            //if (string.IsNullOrEmpty(idObi)) return;
-
-            cmb.DataSource = lstActivitati.Where(p => p.ParentId == idObi);
+            DataTable dt = Session["EvalLista_DSObiectiveXActivitate"] as DataTable;
+            DataTable dtFiltru = dt.Select("IdObiectiv = " + idObi).CopyToDataTable();
+            cmb.DataSource = dtFiltru;
             cmb.DataBind();
-
-            //List<string> cities = GetCities(country);
-            //cmb.Items.Clear();
-            //foreach (string city in cities)
-            //    cmb.Items.Add(city);
         }
-
-        //List<string> GetCities(string country)
-        //{
-        //    using (var context = new WorldCitiesContext())
-        //        return context.Cities.Where(c => c.Country.CountryName == country).OrderBy(c => c.CityName).Select(c => c.CityName).ToList();
-        //}
 
         void cmbAct_OnCallback(object source, CallbackEventArgsBase e)
         {
             if (string.IsNullOrEmpty(e.Parameter)) return;
             IncarcaActivitati(source as ASPxComboBox, Convert.ToInt32(e.Parameter));
-        }
-
-
-        protected void grDate_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
-        {
-            try
-            {
-                //GridViewDataComboBoxColumn colAct = (grDate.Columns["IdActivitate"] as GridViewDataComboBoxColumn);
-                //colAct.PropertiesComboBox.DataSource = lstActivitati.Where(p => p.ParentId == 1);
-
-                //ASPxComboBox editor = source as ASPxComboBox;
-                //List<metaDate> query;
-                //var take = e.EndIndex - e.BeginIndex + 1;
-                //var skip = e.BeginIndex;
-                //int countryValue = GetCurrentObjective();
-                //if (countryValue > -1)
-                //    query = lstActivitati.Where(p => p.Denumire.Contains(e.Filter) && p.ParentId == countryValue).OrderBy(p => p.Id).ToList<metaDate>();
-                //else
-                //    query = lstActivitati.Where(p => p.Denumire.Contains(e.Filter)).OrderBy(p => p.Id).ToList<metaDate>();
-                //editor.DataSource = query;
-                //editor.DataBind();
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
     }
 }

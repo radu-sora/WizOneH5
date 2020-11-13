@@ -68,20 +68,20 @@
                             <div style="padding: 4px 3px 4px">
                                 <table>
                                     <tr>
-                                        <td style="padding-left:10px !important;" colspan="2">Nume beneficiu</td>
+                                        <td id="lblNume" runat="server" style="padding-left:10px !important;" colspan="2">Nume beneficiu</td>
                                     </tr>
                                     <tr><td style="padding:10px !important;" colspan="2"><dx:ASPxComboBox ID="cmbNumeBen" runat="server" Width="250px" ValueField="IdObiect" DropDownWidth="200" TextField="NumeCompus" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("IdObiect") %>' />
                                     </tr>
                                     <tr>
-                                        <td style="padding:10px !important;">Data primire</td>
-                                        <td style="padding:10px !important;">Data expirare</td>
+                                        <td id="lblDataPrimire" runat="server" style="padding:10px !important;">Data primire</td>
+                                        <td id="lblDataExp" runat="server" style="padding:10px !important;">Data expirare</td>
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataPrim" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DataPrimire") %>' /></td>
                                         <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataExp" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DataExpirare") %>' /></td>
                                     </tr>
                                     <tr>
-                                        <td style="padding:10px !important;"  colspan="2">Caracteristica echipament</td>                                      
+                                        <td id="lblCaract" runat="server" style="padding:10px !important;"  colspan="2">Caracteristica echipament</td>                                      
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;"  colspan="2"><dx:ASPxTextBox ID="txtCaract" runat="server" Width="250px" Value='<%# Bind("Caracteristica") %>' /></td>
@@ -89,9 +89,9 @@
                                     <tr>
                                         <td style="padding:10px !important;" colspan="2">
                                             <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
-                                            <dx:ASPxUploadControl ID="btnDocUploadAtas" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
+                                            <dx:ASPxUploadControl ID="btnDocUploadBen" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
                                                 BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
-                                                ClientInstanceName="btnDocUploadAtas" OnFileUploadComplete="btnDocUploadAtas_FileUploadComplete" ValidationSettings-ShowErrors="false">
+                                                ClientInstanceName="btnDocUploadBen" OnFileUploadComplete="btnDocUploadBen_FileUploadComplete" ValidationSettings-ShowErrors="false">
                                                 <BrowseButton>
                                                     <Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
                                                 </BrowseButton>

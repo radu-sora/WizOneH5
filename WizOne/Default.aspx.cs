@@ -686,8 +686,16 @@ namespace WizOne
                         }
                         break;
                     case "6":
-                        //intra direct in aplicatie
-                        stare = "3" + idLimba;
+                        {
+                            //intra direct in aplicatie
+                            DataRow dr = General.IncarcaDR("SELECT \"IdLimba\", F10003 FROM USERS WHERE UPPER(F70104)=@1", new string[] { General.Strip(utilizator.ToUpper()) });
+                            if (dr != null && dr["IdLimba"] != null && dr["IdLimba"].ToString() != "")
+                            {
+                                idLimba = dr["IdLimba"].ToString();
+                                marca = (dr["F10003"] as int? ?? -99).ToString();
+                            }
+                            stare = "3" + idLimba;
+                        }
                         break;
                 }
 

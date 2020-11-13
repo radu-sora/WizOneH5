@@ -1,24 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="QuizAngajatGrup.ascx.cs" Inherits="WizOne.Eval.QuizAngajatGrup" %>
 
-
-
-<script language="javascript" type="text/javascript">
-
-    function grDateAdresa_CustomButtonClick(s, e) {
-        switch(e.buttonID)
-        {
-            case "btnCauta":
-                grDateAdresa.PerformCallback("btnCauta");
-                break;                
-        }
-    }
-
-    window.CompleteazaAdresa = function () {
-        grDateAdresa.PerformCallback("btnCauta");
-    }
-
-</script>
-
 <body>
     <table>
         <tr>
@@ -27,7 +8,7 @@
                     OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnInitNewRow="grDate_InitNewRow" AutoGenerateColumns="false" OnDataBinding="grDate_DataBinding">
                      <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="false" ShowColumnHeaders="true" />
-                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateAdresa_CustomButtonClick(s, e); }" ContextMenu="ctx" />    
+                    <ClientSideEvents ContextMenu="ctx" />    
                     <SettingsEditing Mode="Inline" />               
                     <Columns>
                         <dx:GridViewCommandColumn Width="80px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />

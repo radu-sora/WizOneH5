@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Eval {
-    
-    
-    public partial class QuizCreate {
-        
+namespace WizOne.Eval
+{
+
+
+    public partial class QuizCreate
+    {
+
         /// <summary>
         /// lblFirstDelimitator control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblFirstDelimitator;
-        
+
         /// <summary>
         /// partGeneral control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxFormLayout partGeneral;
-        
+
         /// <summary>
         /// dtList1 control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DataList dtList1;
-        
+
         /// <summary>
         /// lblBetweenZones control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblBetweenZones;
-        
+
         /// <summary>
         /// panel2 control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel panel2;
-        
+
         /// <summary>
         /// partGrid control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxFormLayout partGrid;
-        
+
         /// <summary>
         /// btnDeleteSectiune control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnDeleteSectiune;
-        
+
         /// <summary>
         /// grDateIntrebari control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTreeList.ASPxTreeList grDateIntrebari;
-        
+
         /// <summary>
         /// partSectiune control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxFormLayout partSectiune;
-        
+
         /// <summary>
         /// lblDenSectiune control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblDenSectiune;
-        
+
         /// <summary>
         /// txtDenSectiune control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtDenSectiune;
-        
+
         /// <summary>
         /// btnAddSectiune control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnAddSectiune;
-        
+
         /// <summary>
         /// partIntrebari control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxFormLayout partIntrebari;
-        
+
         /// <summary>
         /// lblTipIntrebare control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblTipIntrebare;
-        
+
         /// <summary>
         /// cmbTip control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbTip;
-        
+
         /// <summary>
         /// lblTipIntrebareObiect control.
         /// </summary>
@@ -155,7 +157,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblTipIntrebareObiect;
-        
+
         /// <summary>
         /// cmbTipObiect control.
         /// </summary>
@@ -164,7 +166,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbTipObiect;
-        
+
         /// <summary>
         /// lblPerioadaObi control.
         /// </summary>
@@ -173,7 +175,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblPerioadaObi;
-        
+
         /// <summary>
         /// cmbPerioadaObi control.
         /// </summary>
@@ -182,7 +184,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbPerioadaObi;
-        
+
         /// <summary>
         /// lblPerioadaComp control.
         /// </summary>
@@ -191,7 +193,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblPerioadaComp;
-        
+
         /// <summary>
         /// cmbPerioadaComp control.
         /// </summary>
@@ -200,7 +202,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbPerioadaComp;
-        
+
         /// <summary>
         /// lblOrientare control.
         /// </summary>
@@ -209,7 +211,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblOrientare;
-        
+
         /// <summary>
         /// chkOrizontal control.
         /// </summary>
@@ -218,7 +220,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRadioButton chkOrizontal;
-        
+
         /// <summary>
         /// chkVertical control.
         /// </summary>
@@ -227,7 +229,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRadioButton chkVertical;
-        
+
         /// <summary>
         /// lblSecPart5 control.
         /// </summary>
@@ -236,7 +238,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblSecPart5;
-        
+
         /// <summary>
         /// lblGrup control.
         /// </summary>
@@ -245,7 +247,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblGrup;
-        
+
         /// <summary>
         /// cmbGrup control.
         /// </summary>
@@ -254,7 +256,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbGrup;
-        
+
         /// <summary>
         /// lblSursaDate control.
         /// </summary>
@@ -263,7 +265,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblSursaDate;
-        
+
         /// <summary>
         /// cmbSursaDate control.
         /// </summary>
@@ -272,7 +274,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSursaDate;
-        
+
         /// <summary>
         /// lblCategObi control.
         /// </summary>
@@ -281,7 +283,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblCategObi;
-        
+
         /// <summary>
         /// cmbCategObi control.
         /// </summary>
@@ -290,7 +292,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbCategObi;
-        
+
         /// <summary>
         /// chkObligatoriu control.
         /// </summary>
@@ -299,7 +301,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkObligatoriu;
-        
+
         /// <summary>
         /// lblPrelObi control.
         /// </summary>
@@ -308,7 +310,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblPrelObi;
-        
+
         /// <summary>
         /// chkNomenclator control.
         /// </summary>
@@ -317,7 +319,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRadioButton chkNomenclator;
-        
+
         /// <summary>
         /// chkObiective control.
         /// </summary>
@@ -326,7 +328,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRadioButton chkObiective;
-        
+
         /// <summary>
         /// lblPrelComp control.
         /// </summary>
@@ -335,7 +337,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblPrelComp;
-        
+
         /// <summary>
         /// chkNomenclatorComp control.
         /// </summary>
@@ -344,7 +346,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRadioButton chkNomenclatorComp;
-        
+
         /// <summary>
         /// chkCompetente control.
         /// </summary>
@@ -353,7 +355,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRadioButton chkCompetente;
-        
+
         /// <summary>
         /// lblSecPart8 control.
         /// </summary>
@@ -362,7 +364,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblSecPart8;
-        
+
         /// <summary>
         /// lblDesIntrebare control.
         /// </summary>
@@ -371,7 +373,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblDesIntrebare;
-        
+
         /// <summary>
         /// txtDescIntrebare control.
         /// </summary>
@@ -380,7 +382,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtDescIntrebare;
-        
+
         /// <summary>
         /// btnAddIntrebare control.
         /// </summary>
@@ -389,7 +391,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnAddIntrebare;
-        
+
         /// <summary>
         /// partGridObiective control.
         /// </summary>
@@ -398,7 +400,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxFormLayout partGridObiective;
-        
+
         /// <summary>
         /// lblTemplateObiective control.
         /// </summary>
@@ -407,7 +409,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblTemplateObiective;
-        
+
         /// <summary>
         /// cmbTemplateObiective control.
         /// </summary>
@@ -416,7 +418,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbTemplateObiective;
-        
+
         /// <summary>
         /// lblMinObiective control.
         /// </summary>
@@ -425,7 +427,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblMinObiective;
-        
+
         /// <summary>
         /// txtMinObiective control.
         /// </summary>
@@ -434,7 +436,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtMinObiective;
-        
+
         /// <summary>
         /// lblMaxObiective control.
         /// </summary>
@@ -443,7 +445,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblMaxObiective;
-        
+
         /// <summary>
         /// txtMaxObiective control.
         /// </summary>
@@ -452,7 +454,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtMaxObiective;
-        
+
         /// <summary>
         /// chkCanAddObiective control.
         /// </summary>
@@ -461,7 +463,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkCanAddObiective;
-        
+
         /// <summary>
         /// chkCanDeleteObiective control.
         /// </summary>
@@ -470,7 +472,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkCanDeleteObiective;
-        
+
         /// <summary>
         /// chkCanEditObiective control.
         /// </summary>
@@ -479,7 +481,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkCanEditObiective;
-        
+
         /// <summary>
         /// hfObiectiv control.
         /// </summary>
@@ -488,7 +490,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField hfObiectiv;
-        
+
         /// <summary>
         /// hfObiectivColName control.
         /// </summary>
@@ -497,7 +499,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField hfObiectivColName;
-        
+
         /// <summary>
         /// grDateObiective control.
         /// </summary>
@@ -506,7 +508,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDateObiective;
-        
+
         /// <summary>
         /// partGridCompetente control.
         /// </summary>
@@ -515,7 +517,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxFormLayout partGridCompetente;
-        
+
         /// <summary>
         /// lblTemplateCompetente control.
         /// </summary>
@@ -524,7 +526,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblTemplateCompetente;
-        
+
         /// <summary>
         /// cmbTemplateCompetente control.
         /// </summary>
@@ -533,7 +535,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbTemplateCompetente;
-        
+
         /// <summary>
         /// hfCompetente control.
         /// </summary>
@@ -542,7 +544,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField hfCompetente;
-        
+
         /// <summary>
         /// hfCompetenteColName control.
         /// </summary>
@@ -551,7 +553,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField hfCompetenteColName;
-        
+
         /// <summary>
         /// grDateCompetente control.
         /// </summary>
@@ -560,7 +562,43 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDateCompetente;
-        
+
+        /// <summary>
+        /// pnlConfigTipTabela control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxFormLayout pnlConfigTipTabela;
+
+        /// <summary>
+        /// ASPxHiddenField1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxHiddenField ASPxHiddenField1;
+
+        /// <summary>
+        /// ASPxHiddenField2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxHiddenField ASPxHiddenField2;
+
+        /// <summary>
+        /// grDateTabela control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView grDateTabela;
+
         /// <summary>
         /// lblEndDelimitator control.
         /// </summary>
@@ -569,7 +607,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblEndDelimitator;
-        
+
         /// <summary>
         /// hf control.
         /// </summary>
@@ -578,7 +616,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField hf;
-        
+
         /// <summary>
         /// hf1 control.
         /// </summary>
@@ -587,7 +625,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField hf1;
-        
+
         /// <summary>
         /// lstValori control.
         /// </summary>

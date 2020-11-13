@@ -1,4 +1,5 @@
-﻿using DevExpress.Web;
+﻿using DevExpress.PivotGrid.OLAP.Mdx;
+using DevExpress.Web;
 using DevExpress.Web.ASPxHtmlEditor.Internal;
 using DevExpress.Web.Data;
 using System;
@@ -73,7 +74,7 @@ namespace WizOne.Eval
         string idCateg = "0";
         int idPerioada = 0;
 
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
 
             try
@@ -102,12 +103,15 @@ namespace WizOne.Eval
 
                     DataSet ds = new DataSet();
                     ds.Tables.Add(tableAAA);
-                    tableBBB.PrimaryKey = new DataColumn[] { tableBBB.Columns["Id"] };
+                    tableBBB.PrimaryKey = new DataColumn[] { tableBBB.Columns["IdQuiz"], tableBBB.Columns["F10003"], tableBBB.Columns["Id"], tableBBB.Columns["Linia"] };
                     ds.Tables.Add(tableBBB);
                     tableCCC.PrimaryKey = new DataColumn[] { tableCCC.Columns["Id"] };
                     ds.Tables.Add(tableCCC);
 
                     Session["InformatiaCurentaCompletareChestionar"] = ds;
+
+                    //Florin 2020.11.13
+                    Session["Eval_RaspunsLinii_Tabel"] = tableBBB;
 
                     DataTable table = new DataTable();
                     DataTable tableIntrebari = new DataTable();
@@ -404,13 +408,13 @@ namespace WizOne.Eval
                             ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", ""F10003"", ""Pozitie"",
                             ""Id"", ""IdLinieQuiz"", 
                             ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"", 
-                            USER_NO, TIME, ""IdPeriod"", ""IdCategObiective"")
+                            USER_NO, TIME, ""IdPeriod"", ""IdCategObiective"", ""Total1"", ""Total2"")
                             VALUES(@idUnic,@2,@3,@4,@5,
                             @6,@7,@8,@9,@10,
                             @11,@12,@13,@14,@15,
                             @16,@17,
                             @18,@19,@20,@21,
-                            @22,@23,@24,@25);";
+                            @22,@23,@24,@25,formulaSql1,formulaSql2);";
 
                         string tgv = "";
 
@@ -420,6 +424,15 @@ namespace WizOne.Eval
                             {
                                 string sqlDel = sqlDeleteObiIndividuale;
                                 string sqlIns = sqlInsertObiIndividuale;
+
+                                string formulaSql1 = "@26";
+                                string formulaSql2 = "@27";
+                                if (General.Nz(clsObiIndividuale.FormulaSql1, "").ToString().Trim() != "") formulaSql1 = General.Nz(clsObiIndividuale.FormulaSql1, "").ToString().Trim();
+                                if (General.Nz(clsObiIndividuale.FormulaSql2, "").ToString().Trim() != "") formulaSql2 = General.Nz(clsObiIndividuale.FormulaSql2, "").ToString().Trim();
+                                formulaSql1 = formulaSql1.Replace("Obiectiv", "@3").Replace("Activitate", "@5").Replace("Pondere", "@28").Replace("Calificativ", "@11").Replace("Descriere", "@7").Replace("ExplicatiiCalificativ", "@12").Replace("Target", "@29").Replace("Realizat", "@30").Replace("ColoanaSuplimentara1", "@18").Replace("ColoanaSuplimentara2", "@19").Replace("ColoanaSuplimentara3", "@20").Replace("ColoanaSuplimentara4", "@21");
+                                formulaSql1 = formulaSql1.Replace("Obiectiv", "@3").Replace("Activitate", "@5").Replace("Pondere", "@28").Replace("Calificativ", "@11").Replace("Descriere", "@7").Replace("ExplicatiiCalificativ", "@12").Replace("Target", "@29").Replace("Realizat", "@30").Replace("ColoanaSuplimentara1", "@18").Replace("ColoanaSuplimentara2", "@19").Replace("ColoanaSuplimentara3", "@20").Replace("ColoanaSuplimentara4", "@21");
+                                sqlIns = sqlIns.Replace("formulaSql1", formulaSql1).Replace("formulaSql2", formulaSql2);
+
                                 string sqlObi =
                                     "BEGIN " + Environment.NewLine +
                                         sqlDel + Environment.NewLine +
@@ -437,7 +450,8 @@ namespace WizOne.Eval
                                     clsObiIndividuale.Calificativ, clsObiIndividuale.ExplicatiiCalificativ, clsObiIndividuale.IdQuiz, clsObiIndividuale.F10003, clsObiIndividuale.Pozitie,
                                     clsObiIndividuale.Id, clsObiIndividuale.IdLinieQuiz,
                                     clsObiIndividuale.ColoanaSuplimentara1, clsObiIndividuale.ColoanaSuplimentara2, clsObiIndividuale.ColoanaSuplimentara3, clsObiIndividuale.ColoanaSuplimentara4,
-                                    General.Nz(clsObiIndividuale.USER_NO, Session["UserId"]), General.Nz(clsObiIndividuale.TIME, DateTime.Now), clsObiIndividuale.IdPeriod, clsObiIndividuale.IdCategObiective });
+                                    General.Nz(clsObiIndividuale.USER_NO, Session["UserId"]), General.Nz(clsObiIndividuale.TIME, DateTime.Now), clsObiIndividuale.IdPeriod, clsObiIndividuale.IdCategObiective,
+                                    General.Nz(clsObiIndividuale.Total1, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.Total2, "0").ToString().Replace(",", "."), clsObiIndividuale.Pondere, clsObiIndividuale.Target, clsObiIndividuale.Realizat });
                             }
                             catch (Exception ex)
                             {
@@ -494,8 +508,8 @@ namespace WizOne.Eval
                         string sqlDeleteCompAngajat = @"DELETE FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdAuto""=@15;";
                         string sqlInsertCompAngajat = @"insert into ""Eval_CompetenteAngajatTemp""(""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"",
                                                                                       ""Pondere"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", 
-                                                                                      ""Explicatii"", ""IdQuiz"", ""F10003"", ""Pozitie"", ""Id"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdPeriod"")
-                                                                                        values(@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@idUnic,@16,@17,@18)";
+                                                                                      ""Explicatii"", ""IdQuiz"", ""F10003"", ""Pozitie"", ""Id"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdPeriod"", ""Total1"", ""Total2"")
+                                                                                        values(@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@idUnic,@16,@17,@18,formulaSql1,formulaSql2)";
 
                         string tgv = "";
 
@@ -505,6 +519,15 @@ namespace WizOne.Eval
                             {
                                 string sqlDel = sqlDeleteCompAngajat;
                                 string sqlIns = sqlInsertCompAngajat;
+
+                                string formulaSql1 = "@20";
+                                string formulaSql2 = "@21";
+                                if (General.Nz(clsCompetenta.FormulaSql1, "").ToString().Trim() != "") formulaSql1 = General.Nz(clsCompetenta.FormulaSql1, "").ToString().Trim();
+                                if (General.Nz(clsCompetenta.FormulaSql2, "").ToString().Trim() != "") formulaSql2 = General.Nz(clsCompetenta.FormulaSql2, "").ToString().Trim();
+                                formulaSql1 = formulaSql1.Replace("Competenta", "@3").Replace("Pondere", "@19").Replace("Calificativ", "@7").Replace("Explicatii", "@9").Replace("ExplicatiiCalificativ", "@8");
+                                formulaSql1 = formulaSql1.Replace("Competenta", "@3").Replace("Pondere", "@19").Replace("Calificativ", "@7").Replace("Explicatii", "@9").Replace("ExplicatiiCalificativ", "@8");
+                                sqlIns = sqlIns.Replace("formulaSql1", formulaSql1).Replace("formulaSql2", formulaSql2);
+
                                 string sqlCmp =
                                     "BEGIN " + Environment.NewLine +
                                         sqlDel + Environment.NewLine +
@@ -515,7 +538,8 @@ namespace WizOne.Eval
                                 tgv += sqlCmp + Environment.NewLine;
                                 General.ExecutaNonQuery(sqlCmp, new object[] { clsCompetenta.IdCategCompetenta, clsCompetenta.CategCompetenta, clsCompetenta.IdCompetenta, clsCompetenta.Competenta,
                                                                         General.Nz(clsCompetenta.Pondere, "0").ToString().Replace(",", "."), clsCompetenta.IdCalificativ, clsCompetenta.Calificativ, clsCompetenta.ExplicatiiCalificativ,
-                                                                        clsCompetenta.Explicatii, clsCompetenta.IdQuiz, clsCompetenta.F10003, clsCompetenta.Pozitie, clsCompetenta.Id, clsCompetenta.IdLinieQuiz, clsCompetenta.IdAuto, General.Nz(clsCompetenta.USER_NO, Session["UserId"]), General.Nz(clsCompetenta.TIME, DateTime.Now), clsCompetenta.IdPeriod });
+                                                                        clsCompetenta.Explicatii, clsCompetenta.IdQuiz, clsCompetenta.F10003, clsCompetenta.Pozitie, clsCompetenta.Id, clsCompetenta.IdLinieQuiz, clsCompetenta.IdAuto, General.Nz(clsCompetenta.USER_NO, Session["UserId"]), General.Nz(clsCompetenta.TIME, DateTime.Now), 
+                                                                        clsCompetenta.IdPeriod, clsCompetenta.Pondere, General.Nz(clsCompetenta.Total1, "0").ToString().Replace(",", "."), General.Nz(clsCompetenta.Total2, "0").ToString().Replace(",", ".")});
                             }
                             catch (Exception ex)
                             {
@@ -559,10 +583,9 @@ namespace WizOne.Eval
 
                 #endregion
 
-                if (Dami.ValoareParam("PreluareDateAutomat", "0") == "1" && idCateg == "0")
+                //Florin 2020.11.06
+                if (General.Nz(Session["CompletareChestionar_Sincronizare"],0).ToString() == "1" && idCateg == "0")
                     PreluareDateAutomat(pozitie);
-
-
 
                 //Florin 2019.10.16
                 if (General.Nz(Session["NumeGriduri"], "").ToString() != "")
@@ -593,6 +616,10 @@ namespace WizOne.Eval
                     }
                 }
 
+                //Florin 2020.11.13
+                DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                General.SalveazaDate(dtTbl, "Eval_RaspunsLinii");
+
                 //MessageBox.Show("Proces realizat cu succes!", MessageBox.icoSuccess);
                 pnlSectiune.JSProperties["cpAlertMessage"] = "Proces realizat cu succes!";
 
@@ -614,7 +641,7 @@ namespace WizOne.Eval
                 var entRoot = lstEval_QuizIntrebari.Where(p => p.Parinte == 0 && p.Descriere == "Root").FirstOrDefault();
                 if (entRoot != null) idRoot = entRoot.Id;
 
-                var entSec = lstEval_QuizIntrebari.Where(p => p.Parinte == idRoot && p.EsteSectiune == 1).OrderBy(p => p.Id);
+                var entSec = lstEval_QuizIntrebari.Where(p => p.Parinte == idRoot && p.EsteSectiune == 1).OrderBy(p => p.OrdineAfisare);
 
                 foreach (var ent in entSec)
                 {
@@ -1034,7 +1061,7 @@ namespace WizOne.Eval
                 grIntrebari.Width = "100%";
                 int idParinte = lstSec.ElementAt(indexSec);
 
-                var arrIntre = lstEval_QuizIntrebari.Where(p => p.Ordine != null && p.Ordine.Contains("-" + idParinte + "-")).OrderBy(p => p.Id);
+                var arrIntre = lstEval_QuizIntrebari.Where(p => p.Ordine != null && p.Ordine.Contains("-" + idParinte + "-")).OrderBy(p => p.OrdineAfisare);
                 if (arrIntre.Any())
                 {
                     foreach (var ent in arrIntre)
@@ -1056,6 +1083,30 @@ namespace WizOne.Eval
                 divIntrebari.ClientEnabled = blocat == 1 ? false : true;
 
 
+                //Florin 2020.11.11
+                //Work Around - pt cazul cand in gridul de competente se adauga coloana goale dupa callback
+                if (General.Nz(Session["NumeGriduri"], "").ToString() != "")
+                {
+                    string[] arr = Session["NumeGriduri"].ToString().Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        ASPxGridView grDate = grIntrebari.FindControl(arr[i]) as ASPxGridView;
+                        if (grDate != null)
+                        {
+                            List<GridViewDataColumn> lst = new List<GridViewDataColumn>();
+                            foreach (GridViewDataColumn col in grDate.Columns.OfType<GridViewDataColumn>())
+                            {
+                                if (col.FieldName == "" && col.UnboundType == DevExpress.Data.UnboundColumnType.Bound)
+                                    lst.Add(col);
+                            }
+
+                            foreach (GridViewDataColumn col in lst)
+                            {
+                                grDate.Columns.Remove(col);
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1125,16 +1176,19 @@ namespace WizOne.Eval
                         case 17: //Tabel
                             ctl = CreeazaTabel(ent.Id, super);
                             break;
-                        case 18: //Nume Manager
-                            ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));
-                            break;
+                        case 18: //Nume Manager  
                         case 19: //Post Manager
-                            ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));
-                            break;
-                        case 20: //Nume Manager N + 2
-                            ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));
-                            break;
+                        case 20: //Nume Manager N + 2  
                         case 21: // Post Manager N + 2
+                        case 60: //Supervizor3 Nume
+                        case 61: //Supervizor3 Post
+                        case 62: //Supervizor4 Nume
+                        case 63: //Supervizor4 Post
+                        case 64: //Supervizor5 Nume
+                        case 65: //Supervizor5 Post
+                        case 66: //Supervizor6 Nume
+                        case 67: //Supervizor6 Post
+                            //Radu 30.10.2020 - am grupat toate optiunile de mai sus
                             ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));
                             break;
                         case 23: //Obiective individuale
@@ -1155,6 +1209,9 @@ namespace WizOne.Eval
                             break;
                         case 55: //tabel din view Others
                             ctl = CreazaTabelOthers();
+                            break;
+                        case 68: //tabel din view Others
+                            ctl = CreeazaLink(ent.Descriere, ent.Id);
                             break;
                     }
 
@@ -1200,7 +1257,7 @@ namespace WizOne.Eval
                         //Florin 2019.10.23  END
 
 
-                        if (ent.TipData == 9 || ent.TipData == 16 || ent.TipData == 24) //este eticheta sau rating global
+                        if (ent.TipData == 9 || ent.TipData == 16 || ent.TipData == 24 || ent.TipData == 68) //este eticheta sau rating global
                         {
                             HtmlTableRow row = new HtmlTableRow();
                             HtmlTableCell cell = new HtmlTableCell();
@@ -1283,34 +1340,58 @@ namespace WizOne.Eval
             try
             {
                 #region GridProperties
-                gr.Width = 1500;
-                gr.ID = "gr" + "_WXY_" + id.ToString();
+                gr.Width = new Unit(100, UnitType.Percentage);
+                gr.ID = "grTabela" + "_WXY_" + id.ToString();
+                gr.ClientInstanceName = "grDateObiective" + "_WXY_" + id.ToString();
+                gr.ClientIDMode = ClientIDMode.Static;
+                gr.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
                 gr.SettingsBehavior.AllowFocusedRow = true;
                 gr.SettingsBehavior.EnableCustomizationWindow = true;
                 gr.SettingsBehavior.AllowSelectByRowClick = true;
                 gr.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
-                gr.Settings.ShowFilterRow = true;
-                gr.Settings.ShowGroupPanel = true;
+                gr.Settings.ShowFilterRow = false;
+                gr.Settings.ShowGroupPanel = false;
                 gr.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
-                gr.SettingsSearchPanel.Visible = true;
+                gr.SettingsSearchPanel.Visible = false;
                 gr.AutoGenerateColumns = false;
-
                 gr.ClientSideEvents.ContextMenu = "ctx";
-                gr.SettingsEditing.Mode = GridViewEditingMode.Inline;
+               
+                gr.SettingsBehavior.ConfirmDelete = true;
+                gr.SettingsText.ConfirmDelete = "Confirmati operatia de stergere?";
 
-                gr.RowUpdating += Gr_RowUpdating; 
+                gr.SettingsEditing.Mode = GridViewEditingMode.Batch;
+                gr.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+                gr.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+                gr.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
+
+                gr.BatchUpdate += gr_BatchUpdate;
+                //gr.InitNewRow += gr_InitNewRow;
+                Session["NumeGriduri"] += ";" + gr.ID;
+
+                #endregion
+
+
+                #region Grid Command Buttons
+                gr.SettingsCommandButton.NewButton.Image.ToolTip = "Rand nou";
+                gr.SettingsCommandButton.NewButton.Image.Url = "~/Fisiere/Imagini/Icoane/New.png";
+
+                gr.SettingsCommandButton.DeleteButton.Image.ToolTip = "Sterge";
+                gr.SettingsCommandButton.DeleteButton.Image.Url = "~/Fisiere/Imagini/Icoane/sterge.png";
                 #endregion
 
 
                 GridViewCommandColumn colCommand = new GridViewCommandColumn();
                 colCommand.Width = 80;
-                colCommand.ShowEditButton = true;
+                colCommand.ShowDeleteButton = true;
+                colCommand.ShowNewButtonInHeader = true;
                 colCommand.VisibleIndex = 0;
                 colCommand.Caption = " ";
                 colCommand.ButtonRenderMode = GridCommandButtonRenderMode.Image;
                 gr.Columns.Add(colCommand);
 
-                 string[] arr = { "IdQuiz", "F10003", "Id", "Linia", "TipData", "Descriere", super, "USER_NO", "TIME" };
+                //string[] arr = { "IdQuiz", "F10003", "Id", "Linia", "TipData", "Descriere", super, "USER_NO", "TIME" };
+                string[] arr = { "IdQuiz", "F10003", "Id", "Linia", "TipData", "USER_NO", "TIME" };
 
                 for (int i = 0; i <= arr.Length - 1; i++)
                 {
@@ -1318,42 +1399,30 @@ namespace WizOne.Eval
                     col.FieldName = arr[i];
                     col.Name = Dami.TraduCuvant(arr[i]);
                     col.Caption = Dami.TraduCuvant(arr[i]);
+                    col.Visible = true;
+                    col.ShowInCustomizationForm = false;
+                }
 
-                    if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 7 || i == 8)
-                    {
-                        col.Visible = false;
-                    }
+                DataTable dtConfig = General.IncarcaDT(@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdQuiz""=@1 AND ""IdLinie""=@2", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), id });
+                for (int i = 0; i < dtConfig.Rows.Count; i++)
+                {
+                    DataRow dr = dtConfig.Rows[i];
+                    string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + dr["Coloana"];
 
-                    if (i == 5) col.ReadOnly = true;
-                    if (i == 6)
-                    {
-                        col.Name = Dami.TraduCuvant("Raspuns");
-                        col.Caption = Dami.TraduCuvant("Raspuns");
-                    }
-                    if (i == 6)                    
-                        col.CellStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
-
-                
+                    GridViewDataTextColumn col = new GridViewDataTextColumn();
+                    col.FieldName = camp;
+                    col.Name = camp;
+                    col.Caption = Dami.TraduCuvant(General.Nz(dr["Alias"], "Coloana " + dr["Coloana"]).ToString());
+                    col.Width = Convert.ToInt32(General.Nz(dr["Lungime"],250));
+                    col.CellStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
                     gr.Columns.Add(col);
-                }                
-              
+                }
 
-                #region Grid Command Buttons
-                gr.SettingsCommandButton.EditButton.Image.Url = "../Fisiere/Imagini/Icoane/edit.png";
-                gr.SettingsCommandButton.EditButton.Image.AlternateText = "Edit";
-                gr.SettingsCommandButton.EditButton.Image.ToolTip = "Edit";
-
-                gr.SettingsCommandButton.UpdateButton.Image.Url = "../Fisiere/Imagini/Icoane/salveaza.png";
-                gr.SettingsCommandButton.UpdateButton.Image.AlternateText = "Save";
-                gr.SettingsCommandButton.UpdateButton.Image.ToolTip = "Actualizeaza";
-
-                gr.SettingsCommandButton.CancelButton.Image.Url = "../Fisiere/Imagini/Icoane/renunta.png";
-                gr.SettingsCommandButton.CancelButton.Image.AlternateText = "Renunta";
-                gr.SettingsCommandButton.CancelButton.Image.ToolTip = "Renunta";
-                #endregion
-                
-                gr.DataSource = lstEval_RaspunsLinii.Where(p => p.Id == id);
+                //gr.DataSource = lstEval_RaspunsLinii.Where(p => p.Id == id);
+                DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                gr.DataSource = dtTbl.Select("Id=" + id).CopyToDataTable();
                 gr.KeyFieldName = "IdQuiz; F10003; Id; Linia";
+                //gr.KeyFieldName = "Id; Linia";
                 gr.DataBind();
             }
             catch (Exception ex)
@@ -1363,6 +1432,202 @@ namespace WizOne.Eval
 
             return gr;
         }
+
+        //private void gr_InitNewRow(object sender, ASPxDataInitNewRowEventArgs e)
+        //{
+        //    try
+        //    {
+        //        ASPxGridView grid = sender as ASPxGridView;
+        //        e.NewValues["IdQuiz"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+        //        e.NewValues["F10003"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+        //        e.NewValues["Id"] = Convert.ToInt32(grid.ID.Split('_')[grid.ID.Split('_').Count() - 1]);
+
+        //        DataTable dt = grid.DataSource as DataTable;
+        //        int cnt = 0;
+        //        if (dt != null)
+        //            cnt = dt.Rows.Count;
+        //        e.NewValues["Linia"] = cnt + 1;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+        //private void gr_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
+        //{
+        //    try
+        //    {
+        //        ASPxGridView grid = sender as ASPxGridView;
+        //        grid.CancelEdit();
+
+        //        List<Eval_RaspunsLinii> lst = Session["lstEval_RaspunsLinii"] as List<Eval_RaspunsLinii>;
+
+        //        for (int x = 0; x < e.InsertValues.Count; x++)
+        //        {
+        //            ASPxDataInsertValues vals = e.InsertValues[x] as ASPxDataInsertValues;
+        //            Eval_RaspunsLinii cls = new Eval_RaspunsLinii();
+        //            cls.F10003 = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+        //            cls.IdQuiz = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+        //            cls.Id = Convert.ToInt32(grid.ID.Split('_')[grid.ID.Split('_').Count() - 1]);
+        //            cls.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+        //            cls.TIME = DateTime.Now;
+
+        //            int max = lst.Where(p => p.IdQuiz == cls.IdQuiz && p.F10003 == cls.F10003 && p.Id == cls.Id).Max(p => p.Linia);
+        //            cls.Linia = max + 1;
+
+        //            for (int i = 1; i <= 6; i++)
+        //            {
+        //                string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+        //                PropertyInfo val = cls.GetType().GetProperty(camp);
+        //                if (val != null)
+        //                {
+        //                    val.SetValue(cls, vals.NewValues[camp], null);
+        //                }
+        //            }
+
+        //            lst.Add(cls);
+        //        }
+
+        //        for (int x = 0; x < e.UpdateValues.Count; x++)
+        //        {
+        //            ASPxDataUpdateValues vals = e.UpdateValues[x] as ASPxDataUpdateValues;
+        //            object[] keys = new object[] { vals.Keys[0] };
+
+        //            Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(vals.Keys[0]) && p.F10003 == Convert.ToInt32(vals.Keys[1]) && p.Id == Convert.ToInt32(vals.Keys[2]) && p.Linia == Convert.ToInt32(vals.Keys[3])).FirstOrDefault();
+        //            if (cls == null) return;
+
+        //            cls.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+        //            cls.TIME = DateTime.Now;
+
+        //            for (int i = 1; i <= 6; i++)
+        //            {
+        //                string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+        //                PropertyInfo val = cls.GetType().GetProperty(camp);
+        //                if (val != null)
+        //                {
+        //                    val.SetValue(cls, vals.NewValues[camp], null);
+        //                }
+        //            }
+        //        }
+
+        //        for (int x = 0; x < e.DeleteValues.Count; x++)
+        //        {
+        //            ASPxDataDeleteValues vals = e.DeleteValues[x] as ASPxDataDeleteValues;
+        //            object[] keys = new object[] { vals.Keys[0] };
+
+        //            Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
+        //            if (cls == null) return;
+        //            lst.Remove(cls);
+
+        //            //List<Eval_CompetenteAngajatTemp> lstSterse = Session["lstEval_CompetenteAngajatTemp_Sterse"] as List<Eval_CompetenteAngajatTemp>;
+        //            //if (lstSterse == null) lstSterse = new List<Eval_CompetenteAngajatTemp>();
+        //            //lstSterse.Add(cls);
+        //            //Session["lstEval_CompetenteAngajatTemp_Sterse"] = lstSterse;
+        //        }
+
+        //        Session["lstEval_RaspunsLinii"] = lst;
+
+        //        e.Handled = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+
+        //}
+
+        private void gr_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
+        {
+            try
+            {
+                ASPxGridView grid = sender as ASPxGridView;
+                grid.CancelEdit();
+
+                DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+
+                for (int x = 0; x < e.InsertValues.Count; x++)
+                {
+                    ASPxDataInsertValues vals = e.InsertValues[x] as ASPxDataInsertValues;
+                    DataRow dr = dtTbl.NewRow();
+                    dr["F10003"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+                    dr["IdQuiz"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+                    dr["Id"] = Convert.ToInt32(grid.ID.Split('_')[grid.ID.Split('_').Count() - 1]);
+                    dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                    dr["TIME"] = DateTime.Now;
+
+                    //int max = lst.Where(p => p.IdQuiz == cls.IdQuiz && p.F10003 == cls.F10003 && p.Id == cls.Id).Max(p => p.Linia);
+                    //cls.Linia = max + 1;
+                    //DataTable dtFiltru = dtTbl.Select("Id=" + dr["Id"]).CopyToDataTable();
+                    int max = Convert.ToInt32(dtTbl.Compute("MAX(Linia)", "Id=" + dr["Id"]));
+                    dr["Linia"] = max + 1;
+
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                        dr[camp] = vals.NewValues[camp];
+                        //PropertyInfo val = cls.GetType().GetProperty(camp);
+                        //if (val != null)
+                        //{
+                        //    val.SetValue(cls, vals.NewValues[camp], null);
+                        //}
+                    }
+
+                    dtTbl.Rows.Add(dr);
+                }
+
+                for (int x = 0; x < e.UpdateValues.Count; x++)
+                {
+                    //ASPxDataUpdateValues vals = e.UpdateValues[x] as ASPxDataUpdateValues;
+                    //object[] keys = new object[] { vals.Keys[0] };
+
+                    //Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(vals.Keys[0]) && p.F10003 == Convert.ToInt32(vals.Keys[1]) && p.Id == Convert.ToInt32(vals.Keys[2]) && p.Linia == Convert.ToInt32(vals.Keys[3])).FirstOrDefault();
+                    //if (cls == null) return;
+
+                    //cls.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                    //cls.TIME = DateTime.Now;
+
+                    //for (int i = 1; i <= 6; i++)
+                    //{
+                    //    string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                    //    PropertyInfo val = cls.GetType().GetProperty(camp);
+                    //    if (val != null)
+                    //    {
+                    //        val.SetValue(cls, vals.NewValues[camp], null);
+                    //    }
+                    //}
+                }
+
+                for (int x = 0; x < e.DeleteValues.Count; x++)
+                {
+                    ASPxDataDeleteValues vals = e.DeleteValues[x] as ASPxDataDeleteValues;
+                    object[] keys = new object[] { vals.Keys[0] };
+
+                    //Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
+                    //if (cls == null) return;
+                    //lst.Remove(cls);
+
+                    //List<Eval_CompetenteAngajatTemp> lstSterse = Session["lstEval_CompetenteAngajatTemp_Sterse"] as List<Eval_CompetenteAngajatTemp>;
+                    //if (lstSterse == null) lstSterse = new List<Eval_CompetenteAngajatTemp>();
+                    //lstSterse.Add(cls);
+                    //Session["lstEval_CompetenteAngajatTemp_Sterse"] = lstSterse;
+                }
+
+                Session["Eval_RaspunsLinii_Tabel"] = dtTbl;
+
+                e.Handled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+
+        }
+
 
         private void Gr_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
@@ -1409,7 +1674,7 @@ namespace WizOne.Eval
             //13 - NumeComplet
             //14 - Structura org.
             //15 - Post
-
+            
             ASPxTextBox txt = new ASPxTextBox();            
             try
             {
@@ -1447,6 +1712,8 @@ namespace WizOne.Eval
                         txt.DisplayFormatString = "N0";
                         break;
                 }
+
+                
             }
             catch (Exception ex)
             {
@@ -1782,7 +2049,7 @@ namespace WizOne.Eval
                 grDateObiective.BatchUpdate += GrDateObiective_BatchUpdate;
                 Session["NumeGriduri"] += ";" + grDateObiective.ID;
 
-
+                grDateObiective.CustomSummaryCalculate += GrDateObiective_CustomSummaryCalculate;
 
                 //Radu 19.04.2019
                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24 || Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 25)
@@ -1850,9 +2117,71 @@ namespace WizOne.Eval
 
                 #region AddColumns
 
+                string formulaSql1 = "";
+                string formulaSql2 = "";
                 int y = 34;
-                foreach (Eval_ConfigObTemplateDetail clsConfigDetail in lstEval_ConfigObTemplateDetail.Where(p=>p.TemplateId==TemplateIdObiectiv))
+                foreach (Eval_ConfigObTemplateDetail clsConfigDetail in lstEval_ConfigObTemplateDetail.Where(p=>p.TemplateId==TemplateIdObiectiv).OrderBy(p => p.Ordine ?? 99))
                 {
+                    //Florin 2020.09.14 Begin
+                    if (clsConfigDetail.ColumnName == "Total1" || clsConfigDetail.ColumnName == "Total2")
+                    {
+                        GridViewDataTextColumn colFormula = new GridViewDataTextColumn();
+                        string colName = clsConfigDetail.ColumnName.Replace("Total", "FormulaSql");
+                        colFormula.FieldName = colName;
+                        colFormula.Name = colName;
+                        colFormula.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+                        colFormula.UnboundExpression = clsConfigDetail.FormulaSql;
+                        colFormula.Visible = false;
+
+                        grDateObiective.Columns.Add(colFormula);
+
+                        if (clsConfigDetail.ColumnName == "Total1") formulaSql1 = clsConfigDetail.FormulaSql;
+                        if (clsConfigDetail.ColumnName == "Total2") formulaSql2 = clsConfigDetail.FormulaSql;
+
+                        if (Convert.ToString(clsConfigDetail.TotalColoana) != "")
+                        {
+                            grDateObiective.Settings.ShowFooter = true;
+                            grDateObiective.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                            ASPxSummaryItem s = new ASPxSummaryItem();
+                            s.FieldName = clsConfigDetail.ColumnName;
+                            switch (clsConfigDetail.TotalColoana)
+                            {
+                                case 1:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N0}";
+                                    break;
+                                case 2:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N2}";
+                                    break;
+                                case 3:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N0}";
+                                    break;
+                                case 4:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N2}";
+                                    break;
+                                case 5:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
+                                    s.DisplayFormat = "Val. min. {0}";
+                                    break;
+                                case 6:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
+                                    s.DisplayFormat = "Val. max. {0}";
+                                    break;
+                            }
+                            //if (clsConfigDetail.TotalColoana == 0)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                            //if (clsConfigDetail.TotalColoana == 4)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                            //s.DisplayFormat = "{0}";
+
+                            grDateObiective.TotalSummary.Add(s);
+                        }
+                    }
+                    //Florin 2020.09.14 End
+
                     y++;
                     if (clsConfigDetail.Vizibil == true)
                     {
@@ -1923,7 +2252,7 @@ namespace WizOne.Eval
                                 GridViewDataComboBoxColumn colObiectiv = new GridViewDataComboBoxColumn();
                                 colObiectiv.FieldName = "IdObiectiv";
                                 colObiectiv.Name = "IdObiectiv";
-                                colObiectiv.Caption = Dami.TraduCuvant("Obiectiv");
+                                colObiectiv.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Obiectiv");
                                 colObiectiv.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colObiectiv.ReadOnly = !clsConfigDetail.Editare;
@@ -1951,7 +2280,7 @@ namespace WizOne.Eval
                                 colObiectiv.PropertiesMemoEdit.Rows = 5;
                                 colObiectiv.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                 colObiectiv.Name = "Obiectiv";
-                                colObiectiv.Caption = Dami.TraduCuvant("Obiectiv");
+                                colObiectiv.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Obiectiv");
                                 colObiectiv.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colObiectiv.ReadOnly = !clsConfigDetail.Editare;
@@ -2022,7 +2351,7 @@ namespace WizOne.Eval
                                 GridViewDataComboBoxColumn colActivitate = new GridViewDataComboBoxColumn();
                                 colActivitate.FieldName = "IdActivitate";
                                 colActivitate.Name = "IdActivitate";
-                                colActivitate.Caption = Dami.TraduCuvant("Activitate") + " - " + y;
+                                colActivitate.Caption = (clsConfigDetail.Alias ?? Dami.TraduCuvant("Activitate")) + " - " + y;
                                 colActivitate.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colActivitate.ReadOnly = !clsConfigDetail.Editare;
@@ -2059,7 +2388,7 @@ namespace WizOne.Eval
                                 colActivitate.PropertiesMemoEdit.Rows = 5;
                                 colActivitate.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                 colActivitate.Name = "Activitate";
-                                colActivitate.Caption = Dami.TraduCuvant("Activitate");
+                                colActivitate.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Activitate");
                                 colActivitate.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colActivitate.ReadOnly = !clsConfigDetail.Editare;
@@ -2102,7 +2431,7 @@ namespace WizOne.Eval
                                 GridViewDataComboBoxColumn colCalificativ = new GridViewDataComboBoxColumn();
                                 colCalificativ.FieldName = "IdCalificativ";
                                 colCalificativ.Name = "IdCalificativ";
-                                colCalificativ.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colCalificativ.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colCalificativ.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colCalificativ.ReadOnly = !clsConfigDetail.Editare;
@@ -2123,7 +2452,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colCalificativ = new GridViewDataTextColumn();
                                 colCalificativ.FieldName = "Calificativ";
                                 colCalificativ.Name = "Calificativ";
-                                colCalificativ.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colCalificativ.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colCalificativ.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colCalificativ.ReadOnly = !clsConfigDetail.Editare;
@@ -2147,7 +2476,7 @@ namespace WizOne.Eval
                                 GridViewDataMemoColumn colString = new GridViewDataMemoColumn();
                                 colString.FieldName = clsConfigDetail.ColumnName;
                                 colString.Name = clsConfigDetail.ColumnName;
-                                colString.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colString.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colString.PropertiesMemoEdit.Rows = 5;
                                 colString.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                 colString.Width = clsConfigDetail.Width;
@@ -2161,7 +2490,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colDecimal = new GridViewDataTextColumn();
                                 colDecimal.FieldName = clsConfigDetail.ColumnName;
                                 colDecimal.Name = clsConfigDetail.ColumnName;
-                                colDecimal.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colDecimal.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colDecimal.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colDecimal.ReadOnly = !clsConfigDetail.Editare;
@@ -2176,7 +2505,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colInt = new GridViewDataTextColumn();
                                 colInt.FieldName = clsConfigDetail.ColumnName;
                                 colInt.Name = clsConfigDetail.ColumnName;
-                                colInt.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colInt.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colInt.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colInt.ReadOnly = !clsConfigDetail.Editare;
@@ -2228,7 +2557,18 @@ namespace WizOne.Eval
 
                 #endregion
 
-                grDateObiective.DataSource = lstEval_ObiIndividualeTemp.Where(p => p.IdLinieQuiz == id && p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"]) && p.IdQuiz == Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1))).ToList();
+                List<Eval_ObiIndividualeTemp> lst = lstEval_ObiIndividualeTemp.Where(p => p.IdLinieQuiz == id && p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"]) && p.IdQuiz == Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1))).ToList();
+                if (formulaSql1 != "" || formulaSql2 != "")
+                {
+                    foreach (Eval_ObiIndividualeTemp l in lst)
+                    {
+                        if (formulaSql1 != "")
+                            l.FormulaSql1 = formulaSql1;
+                        if (formulaSql2 != "")
+                            l.FormulaSql2 = formulaSql2;
+                    }
+                }
+                grDateObiective.DataSource = lst;
                 grDateObiective.KeyFieldName = "IdAuto";
                 grDateObiective.DataBind();
 
@@ -2273,6 +2613,44 @@ namespace WizOne.Eval
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
             return grDateObiective;
+        }
+
+        private void GrDateObiective_CustomSummaryCalculate(object sender, DevExpress.Data.CustomSummaryEventArgs e)
+        {
+            try
+            {
+                ASPxSummaryItem itm = e.Item as ASPxSummaryItem;
+                if (itm.DisplayFormat.ToLower().IndexOf("max") >= 0)
+                {
+                    // Initialization. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                        e.TotalValue = 0;
+                    else
+                    // Calculation. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                    {
+                        if (Convert.ToDecimal(e.FieldValue) > Convert.ToDecimal(e.TotalValue))
+                            e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                    }
+                }
+                else
+                {
+                    // Initialization. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                        e.TotalValue = 9999;
+                    else
+                    // Calculation. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                    {
+                        if (Convert.ToDecimal(e.FieldValue) < Convert.ToDecimal(e.TotalValue))
+                            e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
 
@@ -2398,6 +2776,11 @@ namespace WizOne.Eval
                                 break;
                         }
 
+                        if (grid.Columns["FormulaSql1"] != null)
+                            clsNew.FormulaSql1 = ((GridViewDataTextColumn)grid.Columns["FormulaSql1"]).UnboundExpression;
+                        if (grid.Columns["FormulaSql2"] != null)
+                            clsNew.FormulaSql2 = ((GridViewDataTextColumn)grid.Columns["FormulaSql2"]).UnboundExpression;
+
                     }
 
                     //Florin 2020.01.17 
@@ -2500,6 +2883,11 @@ namespace WizOne.Eval
                                 clsUpd.ColoanaSuplimentara4 = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
                                 break;
                         }
+
+                        if (grid.Columns["FormulaSql1"] != null)
+                            clsUpd.FormulaSql1 = ((GridViewDataTextColumn)grid.Columns["FormulaSql1"]).UnboundExpression;
+                        if (grid.Columns["FormulaSql2"] != null)
+                            clsUpd.FormulaSql2 = ((GridViewDataTextColumn)grid.Columns["FormulaSql2"]).UnboundExpression;
                     }
 
                     switch(General.Nz(Session["IdClient"], 1).ToString())
@@ -2758,7 +3146,7 @@ namespace WizOne.Eval
                                 break;
                             case "IdCalificativ":
                                 clsNew.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ) != null)
                                     clsNew.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ).Text;
                                 break;
                             case "Calificativ":
@@ -2771,11 +3159,16 @@ namespace WizOne.Eval
                                 clsNew.Explicatii = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
                                 break;
                         }
-
                     }
+
+                    if (grid.Columns["FormulaSql1"] != null)
+                        clsNew.FormulaSql1 = ((GridViewDataTextColumn)grid.Columns["FormulaSql1"]).UnboundExpression;
+                    if (grid.Columns["FormulaSql2"] != null)
+                        clsNew.FormulaSql2 = ((GridViewDataTextColumn)grid.Columns["FormulaSql2"]).UnboundExpression;
 
                     lst.Add(clsNew);
                 }
+
                 decimal sumaClaim = 0;
                 int marca = -99;
                 int idQuiz = -99;
@@ -2814,7 +3207,7 @@ namespace WizOne.Eval
                                 break;
                             case "IdCalificativ":
                                 clsUpd.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ) != null)
                                     clsUpd.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ).Text;
                                 break;
                             case "Calificativ":
@@ -2828,6 +3221,11 @@ namespace WizOne.Eval
                                 break;
                         }
                     }
+
+                    if (grid.Columns["FormulaSql1"] != null)
+                        clsUpd.FormulaSql1 = ((GridViewDataTextColumn)grid.Columns["FormulaSql1"]).UnboundExpression;
+                    if (grid.Columns["FormulaSql2"] != null)
+                        clsUpd.FormulaSql2 = ((GridViewDataTextColumn)grid.Columns["FormulaSql2"]).UnboundExpression;
 
                     switch (General.Nz(Session["IdClient"], 1).ToString())
                     {
@@ -3501,7 +3899,7 @@ namespace WizOne.Eval
                 grDateCompetente.ID = "grDateCompetente" + "_WXY_" + id.ToString();
 
                 //Florin 2019.06.26
-                grDateCompetente.ClientInstanceName = "grDateObiective" + "_WXY_" + id.ToString();
+                grDateCompetente.ClientInstanceName = "grDateCompetente" + "_WXY_" + id.ToString();
                 grDateCompetente.ClientIDMode = ClientIDMode.Static;
                 grDateCompetente.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
 
@@ -3535,6 +3933,8 @@ namespace WizOne.Eval
                 //Florin 2019.06.26
                 grDateCompetente.BatchUpdate += GrDateCompetente_BatchUpdate;
                 Session["NumeGriduri"] += ";" + grDateCompetente.ID;
+
+                grDateCompetente.EnableRowsCache = false;
 
 
 
@@ -3596,8 +3996,70 @@ namespace WizOne.Eval
 
                 #region AddColumns
 
-                foreach (Eval_ConfigCompTemplateDetail clsConfigDetail in lstEval_ConfigCompTemplateDetail.Where(p=>p.TemplateId==TemplateIdCompetenta))
+                string formulaSql1 = "";
+                string formulaSql2 = "";
+                foreach (Eval_ConfigCompTemplateDetail clsConfigDetail in lstEval_ConfigCompTemplateDetail.Where(p=>p.TemplateId==TemplateIdCompetenta).OrderBy(p => p.Ordine ?? 99))
                 {
+                    //Florin 2020.09.14 Begin
+                    if ((clsConfigDetail.ColumnName == "Total1" || clsConfigDetail.ColumnName == "Total2") && clsConfigDetail.FormulaSql != "")
+                    {
+                        GridViewDataTextColumn colFormula = new GridViewDataTextColumn();
+                        string colName = clsConfigDetail.ColumnName.Replace("Total", "FormulaSql");
+                        colFormula.FieldName = colName;
+                        colFormula.Name = colName;
+                        colFormula.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+                        colFormula.UnboundExpression = clsConfigDetail.FormulaSql;
+                        colFormula.Visible = false;
+
+                        grDateCompetente.Columns.Add(colFormula);
+
+                        if (clsConfigDetail.ColumnName == "Total1") formulaSql1 = clsConfigDetail.FormulaSql;
+                        if (clsConfigDetail.ColumnName == "Total2") formulaSql2 = clsConfigDetail.FormulaSql;
+
+                        if (Convert.ToString(clsConfigDetail.TotalColoana) != "")
+                        {
+                            grDateCompetente.Settings.ShowFooter = true;
+                            grDateCompetente.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                            ASPxSummaryItem s = new ASPxSummaryItem();
+                            s.FieldName = clsConfigDetail.ColumnName;
+                            switch (clsConfigDetail.TotalColoana)
+                            {
+                                case 1:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N0}";
+                                    break;
+                                case 2:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N2}";
+                                    break;
+                                case 3:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N0}";
+                                    break;
+                                case 4:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N2}";
+                                    break;
+                                case 5:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Min;
+                                    s.DisplayFormat = "Valoarea minima {0}";
+                                    break;
+                                case 6:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Max;
+                                    s.DisplayFormat = "Valoarea maxima {0}";
+                                    break;
+                            }
+                            //if (clsConfigDetail.TotalColoana == 0)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                            //if (clsConfigDetail.TotalColoana == 4)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                            //s.DisplayFormat = "{0}";
+
+                            grDateCompetente.TotalSummary.Add(s);
+                        }
+                    }
+                    //Florin 2020.09.14 End
+
                     if (clsConfigDetail.Vizibil == true)
                     {
                         #region colCompetenta
@@ -3636,7 +4098,7 @@ namespace WizOne.Eval
                             GridViewDataComboBoxColumn colCompetenta = new GridViewDataComboBoxColumn();
                             colCompetenta.FieldName = "IdCompetenta";
                             colCompetenta.Name = "IdCompetenta";
-                            colCompetenta.Caption = Dami.TraduCuvant("Competenta");
+                            colCompetenta.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                             colCompetenta.Width = clsConfigDetail.Width;
                             colCompetenta.PropertiesComboBox.TextField = "Denumire";
                             colCompetenta.PropertiesComboBox.ValueField = "Id";
@@ -3679,7 +4141,7 @@ namespace WizOne.Eval
                             GridViewDataComboBoxColumn colCalificativ = new GridViewDataComboBoxColumn();
                             colCalificativ.FieldName = "IdCalificativ";
                             colCalificativ.Name = "IdCalificativ";
-                            colCalificativ.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                            colCalificativ.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                             colCalificativ.Width = clsConfigDetail.Width;
 
                             colCalificativ.PropertiesComboBox.TextField = "Denumire";
@@ -3703,7 +4165,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colString = new GridViewDataTextColumn();
                                 colString.FieldName = clsConfigDetail.ColumnName;
                                 colString.Name = clsConfigDetail.ColumnName;
-                                colString.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colString.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colString.Width = clsConfigDetail.Width;
 
                                 grDateCompetente.Columns.Add(colString);
@@ -3712,7 +4174,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colDecimal = new GridViewDataTextColumn();
                                 colDecimal.FieldName = clsConfigDetail.ColumnName;
                                 colDecimal.Name = clsConfigDetail.ColumnName;
-                                colDecimal.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colDecimal.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colDecimal.Width = clsConfigDetail.Width;
 
                                 colDecimal.PropertiesTextEdit.DisplayFormatString = "n3";
@@ -3724,7 +4186,7 @@ namespace WizOne.Eval
                                 GridViewDataTextColumn colInt = new GridViewDataTextColumn();
                                 colInt.FieldName = clsConfigDetail.ColumnName;
                                 colInt.Name = clsConfigDetail.ColumnName;
-                                colInt.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                colInt.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colInt.Width = clsConfigDetail.Width;
 
                                 colInt.PropertiesTextEdit.DisplayFormatString = "n0";
@@ -3784,7 +4246,18 @@ namespace WizOne.Eval
 
                 #endregion
 
-                grDateCompetente.DataSource = lstEval_CompetenteAngajatTemp.Where(p => p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.IdLinieQuiz == id && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"])).ToList();
+                List<Eval_CompetenteAngajatTemp> lst = lstEval_CompetenteAngajatTemp.Where(p => p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.IdLinieQuiz == id && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"])).ToList();
+                if (formulaSql1 != "" || formulaSql2 != "")
+                {
+                    foreach (Eval_CompetenteAngajatTemp l in lst)
+                    {
+                        if (formulaSql1 != "")
+                            l.FormulaSql1 = formulaSql1;
+                        if (formulaSql2 != "")
+                            l.FormulaSql2 = formulaSql2;
+                    }
+                }
+                grDateCompetente.DataSource = lst;
                 grDateCompetente.KeyFieldName = "IdAuto";
                 grDateCompetente.DataBind();
             }
@@ -4611,7 +5084,30 @@ namespace WizOne.Eval
             }
         }
 
+        private ASPxHyperLink CreeazaLink(string valoare, int idCtl)
+        {
+            ASPxHyperLink lnk = new ASPxHyperLink();
 
+            try
+            {
+                lnk.Text = valoare;
+                lnk.Font.Underline = true;
+                lnk.NavigateUrl = valoare;
+                lnk.Target = "_blank";
+                lnk.ID = "lnk_" + idCtl;
+                lnk.Wrap = DevExpress.Utils.DefaultBoolean.True;
+                lnk.ForeColor = Evaluare.CuloareBrush("#FF000099");
+                lnk.Font.Size = 12;
+                lnk.Style.Add("margin-bottom", "10px");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return lnk;
+        }
 
     }
 }

@@ -870,7 +870,7 @@ namespace WizOne.Absente
 
                 string sqlIst;
                 int trimiteLaInlocuitor;
-                General.SelectCereriIstoric(Convert.ToInt32(cmbAng.Value), Convert.ToInt32(General.Nz(cmbInloc.Value, -1)), Convert.ToInt32(drAbs["IdCircuit"]), Convert.ToInt32(General.Nz(drAbs["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor);
+                General.SelectCereriIstoric(Convert.ToInt32(cmbAng.Value), Convert.ToInt32(General.Nz(cmbInloc.Value, -1)), Convert.ToInt32(drAbs["IdCircuit"]), Convert.ToInt32(General.Nz(drAbs["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor, -99, txtDataInc.Date);
 
                 #endregion
 

@@ -38,6 +38,14 @@ namespace WizOne.Module
         {
             public int Id { get; set; }
             public int Rol { get; set; }
+            public int IdStare { get; set; }
+            public string Nume { get; set; }
+            public DateTime DataInceput { get; set; }
+            public int F10003 { get; set; }
+            public DateTime DataSfarsit { get; set; }
+            public int NrOre { get; set; }
+            public int NrZile { get; set; }
+            public int IdAbsenta { get; set; }
         }
 
         public class metaPontaj
@@ -574,7 +582,24 @@ namespace WizOne.Module
         public static SqlCommand DamiSqlCommand(string strSql, object[] lstParam, int executa = 0)
         {
             SqlConnection conn = new SqlConnection(Constante.cnnWeb);
-            conn.Open();
+
+            while (true)
+            {
+                try
+                {
+                    conn.Open();
+                }
+                catch (SqlException ex)
+                {
+                    if (ex.Number == 1225)
+                    {
+                        continue;
+                    }
+                }
+
+                break;
+            }
+
 
             SqlTransaction tran = conn.BeginTransaction();
 
@@ -1927,7 +1952,7 @@ namespace WizOne.Module
         }
 
 
-        public static void SelectCereriIstoric(int f10003, int idInloc, int idCircuit, int estePlanificare, out string sqlSelect, out int trimiteLaInlocuitor, int idCerere = -99)
+        public static void SelectCereriIstoric(int f10003, int idInloc, int idCircuit, int estePlanificare, out string sqlSelect, out int trimiteLaInlocuitor, int idCerere = -99, DateTime? dtInc = null)
         {
             string sqlIst = "";
             int trimite = 0;
@@ -1942,6 +1967,10 @@ namespace WizOne.Module
                     op = "||";
                     tipData = "varchar2";
                 }
+
+                string filtru = "";
+                if (dtInc != null)
+                    filtru = $@" AND ""DataInceput"" <= {General.ToDataUniv(dtInc)} AND {General.ToDataUniv(dtInc)} <= ""DataSfarsit"" ";
 
                 //exceptand primul element, selectul de mai jos intoarce un string cu toti actorii de pe circuit
                 string sqlCir = $@"SELECT CAST(COALESCE(""TrimiteLaInlocuitor"",0) AS {tipData}(10)) {op} ';' {op} COALESCE(CAST(""UserIntrod"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super1"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super2"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super3"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super4"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super5"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super6"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super7"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super8"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super9"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super10"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super11"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super12"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super13"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super14"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super15"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super16"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super17"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super18"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super19"" AS {tipData}(10)) {op} ';','') {op} COALESCE(CAST(""Super20"" AS {tipData}(10)) {op} ';','') FROM ""Ptj_Circuit"" WHERE ""IdAuto""=" + idCircuit;
@@ -1978,20 +2007,20 @@ namespace WizOne.Module
                         if (Convert.ToInt32(lstId[i].ToString()) < 0)
                         {
                             strTmp = @" UNION {4} SELECT TOP 1 {3} AS ""Index"", IdUser, {1} AS IdSuper, 0 AS ""Inlocuitor"" FROM (
-                                        SELECT TOP 1 IdUser FROM F100Supervizori WHERE F10003 = {0} AND IdSuper = (-1 * {1}) AND IdUser = {2}
+                                        SELECT TOP 1 IdUser FROM F100Supervizori WHERE F10003 = {0} AND IdSuper = (-1 * {1}) AND IdUser = {2} {5} 
                                         UNION ALL
-                                        SELECT TOP 1 IdUser FROM F100Supervizori WHERE F10003 = {0} AND IdSuper = (-1 * {1})
+                                        SELECT TOP 1 IdUser FROM F100Supervizori WHERE F10003 = {0} AND IdSuper = (-1 * {1}) {5} 
                                         ) x ";
                             if (Constante.tipBD == 2)
                             {
                                 strTmp = @" UNION {4} SELECT {3} AS ""Index"", ""IdUser"", {1} AS ""IdSuper"", 0 AS ""Inlocuitor"" FROM (
-                                    SELECT ""IdUser"" FROM ""F100Supervizori"" WHERE F10003 = {0} AND ""IdSuper"" = (-1 * {1}) AND ""IdUser"" = {2} AND ROWNUM<=1
+                                    SELECT ""IdUser"" FROM ""F100Supervizori"" WHERE F10003 = {0} AND ""IdSuper"" = (-1 * {1}) AND ""IdUser"" = {2} AND ROWNUM<=1 {5} 
                                     UNION ALL
-                                    SELECT ""IdUser"" FROM ""F100Supervizori"" WHERE F10003 = {0} AND ""IdSuper"" = (-1 * {1}) AND ROWNUM<=1
+                                    SELECT ""IdUser"" FROM ""F100Supervizori"" WHERE F10003 = {0} AND ""IdSuper"" = (-1 * {1}) AND ROWNUM<=1 {5} 
                                     ) x  WHERE ROWNUM<=1";
                             }
 
-                            strTmp = string.Format(strTmp, f10003, Convert.ToInt32(lstId[i]), HttpContext.Current.Session["UserId"], idx, strUnion);
+                            strTmp = string.Format(strTmp, f10003, Convert.ToInt32(lstId[i]), HttpContext.Current.Session["UserId"], idx, strUnion, filtru);
                         }
 
                         idx++;
@@ -2147,7 +2176,7 @@ namespace WizOne.Module
                 //#311 si #344
                 strSql = $@"SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                     CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
-                    CASE WHEN COALESCE(b.SL,0) = 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 0 ELSE 
+                    CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE 
                     CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 THEN 1 ELSE 
                     CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
                     CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 
@@ -2299,7 +2328,7 @@ namespace WizOne.Module
 
         }
 
-        public static string MetodeCereri(int tipActiune, List<metaCereriRol> arr, int idUser, int userMarca, string motiv = "", int idRol = 0)
+        public static string MetodeCereri(int tipActiune, List<metaCereriRol> arr, int idUser, int userMarca, string motiv = "", bool esteHR = false)
         {
             string log = "";
             //string tmpLog = "A intrat in metoda - tipActiune: " + tipActiune;
@@ -2317,69 +2346,6 @@ namespace WizOne.Module
                 {
                     strSelect += " UNION SELECT " + arr[i].Id + " AS \"Id\", " + arr[i].Rol + " AS \"Rol\" " + (Constante.tipBD == 2 ? " FROM DUAL " : "");
                 }
-
-                #region Old
-
-                ////Florin 2019.09.25
-                //////am modificat subselecturile Dretprui_Valoare si Drepturi_NrZile in LEFT JOIN
-
-                ////left join D este pt a aduce cererile in cazul in care este inlocuitor
-                ////
-                ////string strSql = $@"SELECT A.*, G.F10008 {Dami.Operator()} ' ' {Dami.Operator()} G.F10009 AS ""NumeComplet"",
-                ////                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""IdCerere"" ELSE B.""IdCerere"" END AS ""IdCerere"",
-                ////                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""Pozitie"" ELSE B.""Pozitie"" END AS ""PozitieIstoric"",
-                ////                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""Aprobat"" ELSE B.""Aprobat"" END AS ""Aprobat"",
-                ////                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""IdUser"" ELSE B.""IdUser"" END AS ""IdUser"",
-                ////                CASE WHEN D.""IdAuto"" IS NOT NULL THEN D.""IdAuto"" ELSE B.""IdAuto"" END AS ""IdIst"",
-                ////                COALESCE(F.""IdStare"",1) AS ""IdStareCumulat"", COALESCE(C.""IdTipOre"",0) AS ""IdTipOre"",
-                ////                COALESCE(C.""Compensare"",0) AS ""Compensare"", 
-                ////                COALESCE(C.""OreInVal"",'') AS ""OreInVal"", COALESCE(""NuTrimiteInPontaj"",0) AS ""NuTrimiteInPontaj"", E.""RespectaOrdinea"", RL.""Rol"",
-                ////                (SELECT {strTOP} ""Valoare"" FROM ""Ptj_CereriDrepturi"" DR WHERE (DR.""IdAbs""=A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare""=A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol""=RL.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune""={tipActiune} OR DR.""IdActiune"" = -13) {strROW} ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC) AS ""Drepturi_Valoare"",
-                ////                (SELECT {strTOP} ""NrZile"" FROM ""Ptj_CereriDrepturi"" DR WHERE (DR.""IdAbs""=A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare""=A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol""=RL.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune""={tipActiune} OR DR.""IdActiune"" = -13) {strROW} ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC) AS ""Drepturi_NrZile""
-                ////                FROM({strSelect.Substring(6)}) RL
-                ////                INNER JOIN ""Ptj_Cereri"" A ON RL.""Id"" = A.""Id""
-                ////                LEFT JOIN ""Ptj_CereriIstoric"" B ON A.""Id""=B.""IdCerere"" AND B.""IdSuper"" = -1 * RL.""Rol"" AND B.""IdUser""={idUser}
-                ////                LEFT JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta""=C.""Id""
-                ////                LEFT JOIN ""Ptj_Circuit"" E ON A.""IdCircuit""=E.""IdAuto""
-                ////                LEFT JOIN ""Ptj_CereriIstoric"" D ON 
-                ////                (D.""Pozitie"" = (A.""Pozitie"" + 1) OR (COALESCE(E.""RespectaOrdinea"",0)=0 AND D.""Pozitie"" > (A.""Pozitie"" + 1))) AND
-                ////                A.""Id""=D.""IdCerere"" AND (D.""IdSuper"" = -1 * RL.""Rol""  OR RL.""Rol"" = 78) AND D.""IdUser"" IN (SELECT Y.F70102 FROM ""Ptj_Cereri"" X
-                ////                                                                                                    INNER JOIN USERS Y ON X.F10003=Y.F10003
-                ////                                                                                                    WHERE X.""Inlocuitor""=(SELECT G.F10003 FROM USERS G WHERE G.F70102={idUser}) AND {TruncateDate("X.\"DataInceput\"")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("X.\"DataSfarsit\"")}
-                ////                                                                                                    UNION
-                ////                                                                                                    SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDate("\"DataInceput\"")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("\"DataSfarsit\"")})
-                ////                LEFT JOIN ""Ptj_Cumulat"" F ON A.F10003=F.F10003 AND F.""An""={General.FunctiiData("A.\"DataInceput\"", "A")} AND F.""Luna""={General.FunctiiData("A.\"DataInceput\"", "L")}
-                ////                LEFT JOIN F100 G ON A.F10003=G.F10003
-                ////                WHERE 1=1 ";
-
-                //string strSql = $@"SELECT A.*, G.F10008 {Dami.Operator()} ' ' {Dami.Operator()} G.F10009 AS ""NumeComplet"",
-                //                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""IdCerere"" ELSE B.""IdCerere"" END AS ""IdCerere"",
-                //                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""Pozitie"" ELSE B.""Pozitie"" END AS ""PozitieIstoric"",
-                //                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""Aprobat"" ELSE B.""Aprobat"" END AS ""Aprobat"",
-                //                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""IdUser"" ELSE B.""IdUser"" END AS ""IdUser"",
-                //                CASE WHEN D.""IdAuto"" IS NOT NULL THEN D.""IdAuto"" ELSE B.""IdAuto"" END AS ""IdIst"",
-                //                COALESCE(F.""IdStare"",1) AS ""IdStareCumulat"", COALESCE(C.""IdTipOre"",0) AS ""IdTipOre"",
-                //                COALESCE(C.""Compensare"",0) AS ""Compensare"", 
-                //                COALESCE(C.""OreInVal"",'') AS ""OreInVal"", COALESCE(""NuTrimiteInPontaj"",0) AS ""NuTrimiteInPontaj"", E.""RespectaOrdinea"", RL.""Rol"",
-                //                DR.""Valoare"" AS ""Drepturi_Valoare"",
-                //                DR.""NrZile"" AS ""Drepturi_NrZile""
-                //                FROM ({strSelect.Substring(6)}) RL
-                //                INNER JOIN ""Ptj_Cereri"" A ON RL.""Id"" = A.""Id""
-                //                LEFT JOIN ""Ptj_CereriIstoric"" B ON A.""Id""=B.""IdCerere"" AND B.""IdSuper"" = -1 * RL.""Rol"" AND B.""IdUser""={idUser}
-                //                LEFT JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta""=C.""Id""
-                //                LEFT JOIN ""Ptj_Circuit"" E ON A.""IdCircuit""=E.""IdAuto""
-                //                LEFT JOIN ""Ptj_CereriIstoric"" D ON 
-                //                (D.""Pozitie"" = (A.""Pozitie"" + 1) OR (COALESCE(E.""RespectaOrdinea"",0)=0 AND D.""Pozitie"" > (A.""Pozitie"" + 1))) AND
-                //                A.""Id""=D.""IdCerere"" AND (D.""IdSuper"" = -1 * RL.""Rol""  OR RL.""Rol"" = 78) AND D.""IdUser"" IN (SELECT Y.F70102 FROM ""Ptj_Cereri"" X
-                //                                                                                                    INNER JOIN USERS Y ON X.F10003=Y.F10003
-                //                                                                                                    WHERE X.""Inlocuitor""=(SELECT G.F10003 FROM USERS G WHERE G.F70102={idUser}) AND {TruncateDate("X.DataInceput")} <= {CurrentDate(true)} AND {CurrentDate(true)} <= {TruncateDate("X.DataSfarsit")}
-                //                                                                                                    UNION
-                //                                                                                                    SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDate("DataInceput")} <= {CurrentDate(true)} AND {CurrentDate(true)} <= {TruncateDate("DataSfarsit")})
-                //                LEFT JOIN ""Ptj_Cumulat"" F ON A.F10003=F.F10003 AND F.""An""={General.FunctiiData("A.\"DataInceput\"", "A")} AND F.""Luna""={General.FunctiiData("A.\"DataInceput\"", "L")}
-                //                LEFT JOIN F100 G ON A.F10003=G.F10003
-                //                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"", W.""IdActiune"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC, W.""IdActiune"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = RL.""Rol"" OR DR.""IdRol"" = -13 OR (RL.""Rol""=78 AND DR.""IdRol""=(D.""IdSuper"" * -1)) OR (RL.""Rol""=78 AND DR.""IdRol"" IN (76, -13) AND D.""IdSuper"" > 0)) AND (DR.""IdActiune"" = 1 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
-                //                WHERE 1=1 ";
-                #endregion
 
                 string strDrepturi = $@"
                     (SELECT TOP 1 Valoare FROM Ptj_CereriDrepturi DR WHERE DR.IdAbs IN (A.IdAbsenta,-13) AND DR.IdStare IN (A.IdStare, -13) AND DR.IdRol IN (RL.Rol, -13) AND DR.IdActiune IN ({tipActiune}, -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Drepturi_Valoare,
@@ -2422,13 +2388,7 @@ namespace WizOne.Module
                 for (int j = 0; j < dt.Rows.Count; j++)
                 {
                     DataRow dr = dt.Rows[j];
-
-                    //Radu 29.07.2020                    
-                    string idHR = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
-                    string sqlHr = $@"SELECT ""IdUser"" FROM ""F100Supervizori"" WHERE ""IdUser""={idUser} AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"" ";
-                    DataTable dtHr = General.IncarcaDT(sqlHr, null);
-                    if (dtHr != null && dtHr.Rows.Count > 0) HR = true;
-                    //if (Convert.ToInt32(General.Nz(dr["Rol"], -99)) == 77) HR = true;
+                    if (Convert.ToInt32(General.Nz(dr["Rol"], -99)) == 77 || esteHR) HR = true;
 
                     #region Validare stare cerere
                     //Buacata de cod identica cu cea din Cereri -> btnAprobare si btnRespinge
@@ -2610,7 +2570,14 @@ namespace WizOne.Module
                         //completeaza soldul de ZL; Este numai pt clientul Groupama
                         if (tipActiune == 2) General.SituatieZLOperatii(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]), 2, Convert.ToInt32(General.Nz(dr["NrZile"], 1)));
 
-                        Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + dr["Id"], "Ptj_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca);
+                        //Florin 2020.09.16
+                        string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(HttpContext.Current.Session["IdClient"], "1").ToString(), General.Nz(HttpContext.Current.Session["IdLimba"], "RO").ToString() };
+
+                        HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                        {
+                            NotifAsync.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + dr["Id"], "Ptj_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca, arrParam);
+                        });
+
 
                         if (tipActiune == 1)
                             log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("a fost aprobata") + System.Environment.NewLine;
@@ -5349,11 +5316,13 @@ namespace WizOne.Module
 
             try
             {
-
-                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ + cmpData + " ORDER BY F01107";
-                if (Constante.tipBD == 2)
-                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ + cmpData + " ORDER BY F01107";
-                table = IncarcaDT(sql, null);
+                if (categ != null && categ.Length > 0)
+                {
+                    string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ + cmpData + " ORDER BY F01107";
+                    if (Constante.tipBD == 2)
+                        sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ + cmpData + " ORDER BY F01107";
+                    table = IncarcaDT(sql, null);
+                }
 
             }
             catch (Exception ex)
@@ -5623,6 +5592,12 @@ namespace WizOne.Module
 
                 //Florin 2020.08.18
                 HttpContext.Current.Session["FisiereDeSters"] = "";
+
+                //Florin 2020.09.08
+                HttpContext.Current.Session["TemplateIdObiectiv"] = 1;
+                HttpContext.Current.Session["TemplateIdCompetenta"] = 1;
+                HttpContext.Current.Session["QuizIntrebari_Id"] = 1;
+
 
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
@@ -6550,8 +6525,8 @@ namespace WizOne.Module
                         string strUp = @"UPDATE A SET 
                                         A.""ValStr"" = dn.Norma , 
                                         A.""Val0""   = dn.Norma * 60,
-                                        In1  = (SELECT DATETIMEFROMPARTS(YEAR(A.Ziua), MONTH(A.Ziua), DAY(A.Ziua), DATEPART(HOUR, OraInInitializare), DATEPART(MINUTE, OraInInitializare), 0, 0) FROM Ptj_Contracte WHERE Id = A.IdContract),
-                                        Out1 = (SELECT DATETIMEFROMPARTS(YEAR(A.Ziua), MONTH(A.Ziua), DAY(A.Ziua), DATEPART(HOUR, OraOutInitializare), DATEPART(MINUTE, OraOutInitializare), 0, 0) FROM Ptj_Contracte WHERE Id = A.IdContract)
+                                        In1  = ISNULL(In1,(SELECT DATETIMEFROMPARTS(YEAR(A.Ziua), MONTH(A.Ziua), DAY(A.Ziua), DATEPART(HOUR, OraInInitializare), DATEPART(MINUTE, OraInInitializare), 0, 0) FROM Ptj_Contracte WHERE Id = A.IdContract)),
+                                        Out1 = ISNULL(Out1,(SELECT DATETIMEFROMPARTS(YEAR(A.Ziua), MONTH(A.Ziua), DAY(A.Ziua), DATEPART(HOUR, OraOutInitializare), DATEPART(MINUTE, OraOutInitializare), 0, 0) FROM Ptj_Contracte WHERE Id = A.IdContract))
                                         FROM ""Ptj_Intrari"" A
                                         INNER JOIN F100 C ON A.F10003=C.F10003 AND CONVERT(date, C.F10022) <= CONVERT(date, A.Ziua) AND CONVERT(date, A.Ziua) <= CONVERT(date, C.F10023)
                                         LEFT JOIN HOLIDAYS B ON A.Ziua=B.DAY
@@ -6666,7 +6641,7 @@ namespace WizOne.Module
                     //if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
                     if (denDept != "") strFiltru += @" AND A.""Dept"" IN ('" + denDept.Replace(",", "','") + "')";
 
-                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
+                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, F100958, F100959, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
 
                     //Florin 2020.06.30 am modificat 1 cu cuNormaZL
@@ -8352,7 +8327,7 @@ namespace WizOne.Module
                                     b.* from  ""tblZile"" a
                                     left join 
                                     (SELECT P.""Zi"",
-                                    CASE WHEN COALESCE(b.SL,0) = 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 0 ELSE
+                                    CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE
                                     CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 THEN 1 ELSE 
                                     CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
                                     CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 
@@ -8393,7 +8368,7 @@ namespace WizOne.Module
 
                             (SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                             CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
-                            CASE WHEN COALESCE(b.SL,0) = 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 0 ELSE
+                            CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE
                             CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 THEN 1 ELSE 
                             CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
                             CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 

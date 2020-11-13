@@ -93,7 +93,7 @@ namespace WizOne.CereriDiverse
                 #endregion
 
                 if (Request["pp"] != null)
-                    txtTitlu.Text = "Prima Pagina - Cereri";
+                    txtTitlu.Text = Dami.TraduCuvant("Prima Pagina - Cereri"); 
                 else
                     txtTitlu.Text = General.VarSession("Titlu").ToString();
 

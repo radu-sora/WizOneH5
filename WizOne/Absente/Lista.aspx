@@ -3,32 +3,39 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
 
     
-    <script language="javascript" type="text/javascript">
+    <script>
 
         var limba = "<%= Session["IdLimba"] %>";
 
         function grDate_CustomButtonClick(s, e) {
-            switch(e.buttonID)
-            {
-                case "btnDelete":
-                    grDate.GetRowValues(e.visibleIndex, 'IdStare', GoToDeleteMode);
-                    break;
-                case "btnPlanif":
-                    grDate.PerformCallback("btnPlanif;0");
-                    break;
-                case "btnIstoric":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToIstoric);
-                    break;
-                case "btnDivide":
-                    grDate.GetRowValues(e.visibleIndex, 'Id;IdStare;DataInceput;DataSfarsit', GoToDivide);
-                    //popUpDivide.Show();
-                    break;
-                case "btnCerere":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToCerereMode);
-                    break;
-                case "btnAtasament":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToAtasMode);
-                    break;
+            if (cmbViz.GetValue() == 4) {
+                //NOP
+            }
+            else {
+                switch (e.buttonID) {
+                    case "btnEdit":
+                        grDate.StartEditRow(e.visibleIndex);
+                        break;
+                    case "btnDelete":
+                        grDate.GetRowValues(e.visibleIndex, 'IdStare', GoToDeleteMode);
+                        break;
+                    case "btnPlanif":
+                        grDate.PerformCallback("btnPlanif;0");
+                        break;
+                    case "btnIstoric":
+                        grDate.GetRowValues(e.visibleIndex, 'Id', GoToIstoric);
+                        break;
+                    case "btnDivide":
+                        grDate.GetRowValues(e.visibleIndex, 'Id;IdStare;DataInceput;DataSfarsit', GoToDivide);
+                        //popUpDivide.Show();
+                        break;
+                    case "btnCerere":
+                        grDate.GetRowValues(e.visibleIndex, 'Id', GoToCerereMode);
+                        break;
+                    case "btnAtasament":
+                        grDate.GetRowValues(e.visibleIndex, 'Id', GoToAtasMode);
+                        break;
+                }
             }
         }
 
@@ -169,6 +176,21 @@
             }
         }
 
+        function SetEnabled() {
+            if (typeof cmbViz !== 'undefined') {
+                var esteActiv = true;
+                if (cmbViz.GetValue() == 4)
+                    esteActiv = false;
+
+                if (typeof btnRespinge !== 'undefined')
+                    btnRespinge.SetEnabled(esteActiv);
+                if (typeof btnRespinge !== 'undefined')
+                    btnAproba.SetEnabled(esteActiv);
+                if (typeof btnRespinge !== 'undefined')
+                    btnSolNoua.SetEnabled(esteActiv);
+            }
+        }
+
         function OnRespinge(s, e)
         {
             if (grDate.GetSelectedRowCount() > 0) {
@@ -186,6 +208,25 @@
             }
             else
             {
+                swal({
+                    title: trad_string(limba, ""), text: trad_string(limba, "Nu exista linii selectate"),
+                    type: "warning"
+                });
+            }
+        }
+
+        function OnAnulare(s, e) {
+            if (grDate.GetSelectedRowCount() > 0) {
+                swal({
+                    title: trad_string(limba, 'Sunteti sigur/a ?'), text: trad_string(limba, 'Vreti sa continuati procesul de anulare ?'),
+                    type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        grDate.PerformCallback("btnAnulare; ");
+                    }
+                });
+            }
+            else {
                 swal({
                     title: trad_string(limba, ""), text: trad_string(limba, "Nu exista linii selectate"),
                     type: "warning"
@@ -282,6 +323,7 @@
 
         function OnInitGrid(s, e) {
             AdjustSize();
+            SetEnabled();
         }
 
         function OnControlsInitialized(s, e) {
@@ -317,6 +359,12 @@
                 <dx:ASPxButton ID="btnIstoricExtins" ClientInstanceName="btnIstoricExtins" ClientIDMode="Static" runat="server" Text="Istoric Extins" AutoPostBack="true" OnClick="btnIstoricExtins_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/istoric.png"></Image>
                 </dx:ASPxButton>
+                <dx:ASPxButton ID="btnAnulare" ClientInstanceName="btnAnulare" ClientIDMode="Static" runat="server" Text="Anulare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) {
+                       OnAnulare(s,e);
+                    }" />
+                    <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
+                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnRespinge" ClientInstanceName="btnRespinge" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                        OnRespinge(s,e);
@@ -344,7 +392,7 @@
                                 <label id="lblViz" runat="server" style="display:inline-block; float:left; padding:0px 15px;"></label>
                                 <div style="float:left; padding-right:15px;">
                                     <dx:ASPxComboBox ID="cmbViz" ClientInstanceName="cmbViz" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="false" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s,e) { SetComboViz();pnlCtl.PerformCallback('cmbViz'); }" Init="function(s,e) { SetComboViz(); }" />
+                                        <ClientSideEvents SelectedIndexChanged="function(s,e) { SetComboViz(); pnlCtl.PerformCallback('cmbViz'); SetEnabled(); }" Init="function(s,e) { SetComboViz(); }" />
                                     </dx:ASPxComboBox>
                                 </div>
                                 <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px;">Roluri</label>
@@ -406,7 +454,8 @@
                                     </dx:ASPxComboBox>
                                 </div>
                                 <div style="float:left;">
-                                    <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
+                                    <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                                        <ClientSideEvents Click="function(s,e) { grDate.PerformCallback('btnFiltru;-99'); }" />
                                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                                     </dx:ASPxButton>
                                 </div>
@@ -420,22 +469,25 @@
         <tr>
             <td colspan="2">
 
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCustomUnboundColumnData="grDate_CustomUnboundColumnData">
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCustomUnboundColumnData="grDate_CustomUnboundColumnData">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowFilterRow="True" ShowGroupPanel="True" HorizontalScrollBarMode="Auto" ShowFilterRowMenu="true" VerticalScrollBarMode="Visible" />
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsSearchPanel Visible="true" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
-                    <ClientSideEvents 
-                        CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" 
-                        EndCallback="function(s,e) { OnEndCallback(s,e); }"
+                    <ClientSideEvents ContextMenu="ctx" 
+                        CustomButtonClick="grDate_CustomButtonClick" 
+                        EndCallback="function(s,e) { OnEndCallback(s,e); SetEnabled(); }"
                         Init="OnInitGrid"  />
                     <Columns>
 
                         <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" />
 
-                        <dx:GridViewCommandColumn Width="160px" VisibleIndex="1" ButtonType="Image" ShowEditButton="true" Caption=" " Name="butoaneGrid" >
+                        <dx:GridViewCommandColumn Width="160px" VisibleIndex="1" ButtonType="Image" Caption=" " Name="butoaneGrid" >
                             <CustomButtons>
+                                <dx:GridViewCommandColumnCustomButton ID="btnEdit">
+                                    <Image ToolTip="Anulare" Url="~/Fisiere/Imagini/Icoane/edit.png" />
+                                </dx:GridViewCommandColumnCustomButton>
                                 <dx:GridViewCommandColumnCustomButton ID="btnDelete">
                                     <Image ToolTip="Anulare" Url="~/Fisiere/Imagini/Icoane/sterge.png" />
                                 </dx:GridViewCommandColumnCustomButton>

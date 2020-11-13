@@ -51,9 +51,9 @@ namespace WizOne.Personal
         private void IncarcaGrid()
         {
 
-            string sqlFinal = "SELECT * FROM \"Admin_Limbi\" WHERE \"Marca\" = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT * FROM \"Admin_Limbi\" WHERE \"Marca\" = " + HttpContext.Current.Session["Marca"].ToString();
             DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("Admin_Limbi"))
             {
                 dt = ds.Tables["Admin_Limbi"];
@@ -74,7 +74,7 @@ namespace WizOne.Personal
             DataTable dtLimba = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colLimba = (grDateLimbi.Columns["IdLimba"] as GridViewDataComboBoxColumn);
             colLimba.PropertiesComboBox.DataSource = dtLimba;
-
+            HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
         }
 
         protected void grDateLimbi_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)

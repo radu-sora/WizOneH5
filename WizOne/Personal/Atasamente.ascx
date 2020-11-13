@@ -68,8 +68,8 @@
                             <div style="padding: 4px 3px 4px">
                                 <table>
                                     <tr>
-                                        <td style="padding-left:10px !important;">Descriere</td>
-                                        <td style="padding-left:10px !important;">Categorie</td>
+                                        <td id="lblDesc" runat="server" style="padding-left:10px !important;">Descriere</td>
+                                        <td id="lblCateg" runat="server" style="padding-left:10px !important;">Categorie</td>
                                     </tr>
                                     <tr>
                                         <td rowspan="5" style="vertical-align:top;padding:10px !important;"><dx:ASPxMemo ID="txtDesc" runat="server" Width="500px" Height="150" Text='<%# Bind("DescrAttach") %>' /></td>
@@ -78,7 +78,7 @@
                                            
                                     </tr>
                                     <tr>
-                                        <td style="padding:10px !important;">Data</td>
+                                        <td id="lblData" runat="server" style="padding:10px !important;">Data</td>
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataDoc" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DateAttach") %>' /></td>

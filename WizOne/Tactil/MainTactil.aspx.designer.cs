@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Tactil {
-    
-    
-    public partial class MainTactil {
-        
+namespace WizOne.Tactil
+{
+
+
+    public partial class MainTactil
+    {
+
         /// <summary>
         /// btnBack control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnBack;
-        
+
         /// <summary>
         /// lblMarca control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblMarca;
-        
+
         /// <summary>
         /// lblNume control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblNume;
-        
+
         /// <summary>
         /// btnLogOut control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnLogOut;
-        
+
         /// <summary>
         /// spnLuna control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxSpinEdit spnLuna;
-        
+
         /// <summary>
         /// tdDataSf control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlTableCell tdDataSf;
-        
+
         /// <summary>
         /// spnAnul control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxSpinEdit spnAnul;
-        
+
         /// <summary>
         /// lnkPre control.
         /// </summary>
@@ -83,7 +85,16 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lnkPre;
-        
+
+        /// <summary>
+        /// pnlCtl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
+
         /// <summary>
         /// lblPrint control.
         /// </summary>
@@ -92,7 +103,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPrint;
-        
+
         /// <summary>
         /// lnlPri control.
         /// </summary>

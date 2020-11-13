@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Absente
@@ -17,12 +16,6 @@ namespace WizOne.Absente
     {
 
         bool esteHr = false;
-
-        internal class metaDate
-        {
-            public int Id { get; set; }
-            public string Denumire { get; set; }
-        }
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -68,6 +61,7 @@ namespace WizOne.Absente
                 btnSolNoua.Text = Dami.TraduCuvant("btnSolNoua", "Solicitare noua");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnRespinge.Text = Dami.TraduCuvant("btnRespinge", "Respinge");
+                btnAnulare.Text = Dami.TraduCuvant("btnAnulare", "Anulare");
                 btnAproba.Text = Dami.TraduCuvant("btnAproba", "Aproba");
                 btnIstoricExtins.Text = Dami.TraduCuvant("btnIstoricExtins", "Istoric Extins");
 
@@ -118,7 +112,7 @@ namespace WizOne.Absente
                 #endregion
 
                 if (Request["pp"] != null)
-                    txtTitlu.Text = "Prima Pagina - Cereri";
+                    txtTitlu.Text = Dami.TraduCuvant("Prima Pagina - Cereri");
                 else
                     txtTitlu.Text = General.VarSession("Titlu").ToString();
 				
@@ -143,7 +137,7 @@ namespace WizOne.Absente
                     chkAnulare.Checked = true;
 
                     //Florin 2018.10.15
-                    switch(dt.Rows.Count)
+                    switch (dt.Rows.Count)
                     {
                         case 0:
                             lblRol.Visible = false;
@@ -155,9 +149,9 @@ namespace WizOne.Absente
                             cmbRol.SelectedIndex = 0;
                             break;
                         case 2:
-                            //lblRol.Visible = false;
-                            //cmbRol.Visible = false;
-                            //break;
+                        //lblRol.Visible = false;
+                        //cmbRol.Visible = false;
+                        //break;
                         default:
                             cmbRol.DataSource = dt;
                             cmbRol.DataBind();
@@ -180,18 +174,25 @@ namespace WizOne.Absente
                     cmbViz.SelectedIndex = 0;
 
                     if (esteHr)
-                    {
-                        ListEditItem itm = new ListEditItem();
-                        itm.Text = Dami.TraduCuvant("Toti angajatii", "Toti angajatii");
-                        itm.Value = 3;
-                        cmbViz.Items.Add(itm);
-                    }
+                        cmbViz.Items.Add(Dami.TraduCuvant("Toti angajatii - Rol HR", "Toti angajatii - Rol HR"), 3);
+
+                    //if (esteHr)
+                    //{
+                    //    ListEditItem itm = new ListEditItem();
+                    //    itm.Text = Dami.TraduCuvant("Toti angajatii - Rol HR", "Toti angajatii - Rol HR");
+                    //    itm.Value = 3;
+                    //    cmbViz.Items.Add(itm);
+                    //}
+
+                    string idViz = Dami.ValoareParam("Cereri_IDuriRoluriVizualizare", "-99");
+                    if (idViz != "" && Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE ""IdUser""={Session["UserId"]} AND ""IdSuper"" IN ({idViz}) GROUP BY ""IdUser"" "), 0)) > 0)
+                        cmbViz.Items.Add(Dami.TraduCuvant("Toti angajatii - Rol Vizualizare", "Toti angajatii - Rol Vizualizare"), 4);
 
                     //Florin2019.07.17
                     NameValueCollection lst = HttpUtility.ParseQueryString((Session["Filtru_CereriAbs"] ?? "").ToString());
                     if (lst.Count > 0)
                     {
-                        if (General.Nz(lst["Viz"], "").ToString() != "") cmbViz.SelectedIndex = Convert.ToInt32(lst["Viz"])-1;
+                        if (General.Nz(lst["Viz"], "").ToString() != "") cmbViz.SelectedIndex = Convert.ToInt32(lst["Viz"]) - 1;
                         if (General.Nz(lst["Rol"], "").ToString() != "") cmbRol.Value = Convert.ToInt32(lst["Rol"]);
                         if (General.Nz(lst["Stare"], "").ToString() != "") cmbStare.Text = lst["Stare"].ToString();
                         if (General.Nz(lst["DtInc"], "").ToString() != "") txtDtInc.Value = Convert.ToDateTime(lst["DtInc"]);
@@ -201,6 +202,9 @@ namespace WizOne.Absente
                     }
 
                     grDate.DataBind();
+                }
+                else if (grDate.IsCallback) {
+                    IncarcaGrid();
                 }
 
                 if (General.Nz(cmbViz.Value,"").ToString() == "3")
@@ -223,8 +227,7 @@ namespace WizOne.Absente
             try
             {
                 IncarcaGrid();
-                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);
-                
+                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate); 
             }
             catch (Exception ex)
             {
@@ -255,19 +258,6 @@ namespace WizOne.Absente
                 Session["Sablon_CheiePrimara"] = -99;
                 Session["Sablon_TipActiune"] = "New";
                 Response.Redirect("~/Absente/Cereri.aspx", false);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void btnFiltru_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                grDate.DataBind();
             }
             catch (Exception ex)
             {
@@ -307,7 +297,9 @@ namespace WizOne.Absente
                     ids.Add(new Module.General.metaCereriRol { Id = Convert.ToInt32(General.Nz(arr[0], 0)), Rol = Convert.ToInt32(General.Nz(arr[5], 0)) });
                 }
 
-                if (ids.Count != 0) msg += General.MetodeCereri(1, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), "",  Convert.ToInt32(General.Nz(cmbRol.Value,0)));
+                bool esteHR = false;
+                if (Convert.ToInt32(General.Nz(cmbViz.Value, 1)) == 3) esteHR = true;
+                if (ids.Count != 0) msg += General.MetodeCereri(1, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), "",  esteHR);
                 grDate.JSProperties["cpAlertMessage"] = msg;
                 grDate.DataBind();
                 grDate.Selection.UnselectAll();
@@ -342,6 +334,7 @@ namespace WizOne.Absente
                 dt = General.IncarcaDT(strSql, null);
                 grDate.KeyFieldName = "Id; Rol";
                 grDate.DataSource = dt;
+                grDate.DataBind();
             }
             catch (Exception ex)
             {
@@ -562,7 +555,7 @@ namespace WizOne.Absente
                                     //insetul pt introducerea istoricului
                                     string sqlIst;
                                     int trimiteLaInlocuitor;
-                                    General.SelectCereriIstoric(Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[3], -1)), Convert.ToInt32(drAbs["IdCircuit"]), 0, out sqlIst, out trimiteLaInlocuitor, (int)obj[0]);
+                                    General.SelectCereriIstoric(Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[3], -1)), Convert.ToInt32(drAbs["IdCircuit"]), 0, out sqlIst, out trimiteLaInlocuitor, (int)obj[0], Convert.ToDateTime(obj[6]));
 
 
                                     //update-ul pt actualizarea datelor cererii
@@ -622,11 +615,18 @@ namespace WizOne.Absente
                         case "btnRespinge":
                             RespingeCerere(arr[1].Trim());
                             break;
+                        case "btnAnulare":
+                            AnulareCereri();
+                            break;
                         case "btnAproba":
                             btnAproba_Click(null, null);
                             break;
                         case "colHide":
                             grDate.Columns[arr[1]].Visible = false;
+                            break;
+                        case "btnFiltru":
+                            IncarcaGrid();
+                            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);
                             break;
                     }
                 }
@@ -637,6 +637,158 @@ namespace WizOne.Absente
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+        protected void AnulareCereri()
+        {
+            List<Module.General.metaCereriRol> ids = new List<Module.General.metaCereriRol>();
+            string msg = "";
+            List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "Actiune", "NumeAngajat", "DataInceput", "Rol", "IdAbsenta", "F10003", "Anulare_Valoare", "Anulare_NrZile", "DataSfarsit", "NrOre", "NrZile" });
+            if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+
+            for (int i = 0; i < lst.Count(); i++)
+            {
+                object[] arr = lst[i] as object[];
+                switch (Convert.ToInt32(General.Nz(arr[1], 0)))
+                {
+                    case -1:
+                        msg += Dami.TraduCuvant("Cererea pt") + " " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("este anulata") + System.Environment.NewLine;
+                        continue;
+                    case 0:
+                        msg += Dami.TraduCuvant("Cererea pt") + " " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("este respinsa") + System.Environment.NewLine;
+                        continue;
+                }
+
+                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(arr[7].ToString(), Convert.ToDateTime(arr[4]).Date, Convert.ToInt32(arr[6])), null);
+                if (drAbs != null)
+                {
+                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 34)
+                    {
+                        if (General.Nz(drAbs["DenumireScurta"], "").ToString().ToUpper() != "D1" && General.Nz(drAbs["DenumireScurta"], "").ToString().ToUpper() != "D2")
+                        {
+                            msg += Dami.TraduCuvant("Cererea pt") + " " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("Puteti anula numai cerereile cu tip de absenta Delegatie") + System.Environment.NewLine;
+                            continue;
+                        }
+
+                        if (General.Nz(drAbs["DenumireScurta"], "").ToString().ToUpper() == "CO" && Convert.ToInt32(drAbs["CampBifa1"]) == 1)
+                        {
+                            msg += Dami.TraduCuvant("Cererea pt") + " " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("Nu puteti anula o cerere pentru care s-a cerut prima") + System.Environment.NewLine;
+                            continue;
+                        }
+                    }
+
+                    if ((arr[7] ?? -99).ToString() == General.VarSession("User_Marca").ToString() && Convert.ToInt32(General.Nz(drAbs["Anulare"], 0)) == 0 && Convert.ToInt32(General.Nz(arr[1], 0)) != 4)
+                    {
+                        msg += Dami.TraduCuvant("Cererea pt") + " " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("Angajatul nu are drepturi pentru a anula acest tip de absenta") + System.Environment.NewLine;
+                        continue;
+                    }
+
+                    if ((arr[7] ?? -99).ToString() == General.VarSession("User_Marca").ToString() && Convert.ToInt32(General.Nz(drAbs["AnulareAltii"], 0)) == 0)
+                    {
+                        msg += Dami.TraduCuvant("Cererea pt") + " " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("Persoanele din circuit nu au dreptul de a anula acest tip de absenta") + System.Environment.NewLine;
+                        continue;
+                    }
+                }
+
+                int selRol = 0;
+                if (cmbRol.SelectedItem != null) selRol = Convert.ToInt32(General.Nz(cmbRol.SelectedItem.Value, 0));
+                DateTime ziDrp = Dami.DataDrepturi(Convert.ToInt32(General.Nz(arr[8], -99)), Convert.ToInt32(General.Nz(arr[9], 0)), Convert.ToDateTime(arr[4]), Convert.ToInt32(arr[7]), selRol);
+                if (Convert.ToDateTime(arr[4]).Date < ziDrp)
+                {
+                    if (ziDrp.Year == 2111 && ziDrp.Month == 11 && ziDrp.Day == 11)
+                    {
+                        msg += Dami.TraduCuvant("Cererea pt") + " " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("Nu aveti stabilite drepturi pentru a realiza aceasta operatie") + System.Environment.NewLine;
+                        continue;
+                    }
+                    else
+                    {
+                        if (ziDrp.Year == 2222 && ziDrp.Month == 12 && ziDrp.Day == 13)
+                        {
+                            msg += Dami.TraduCuvant("Cererea pt") + " " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("Pontajul a fost aprobat") + System.Environment.NewLine;
+                            continue;
+                        }
+                        else
+                        {
+                            msg += Dami.TraduCuvant("Cererea pt") + " " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("Data inceput trebuie sa fie mai mare sau egala decat") + " " + ziDrp.Date.ToShortDateString() + System.Environment.NewLine;
+                            continue;
+                        }
+                    }                 
+                }
+
+
+                ids.Add(new Module.General.metaCereriRol { Id = Convert.ToInt32(General.Nz(arr[0], 0)), Rol = Convert.ToInt32(General.Nz(arr[5], 0)), IdStare = Convert.ToInt32(General.Nz(arr[1], 0)),
+                Nume = General.Nz(arr[3], "").ToString(), DataInceput = Convert.ToDateTime(General.Nz(arr[4], new DateTime(2100, 1, 1))), F10003 = Convert.ToInt32(General.Nz(arr[7], 0)),
+                DataSfarsit = Convert.ToDateTime(General.Nz(arr[10], new DateTime(2100, 1, 1))) ,  NrOre = Convert.ToInt32(General.Nz(arr[11], 0)),  NrZile = Convert.ToInt32(General.Nz(arr[12], 0)), IdAbsenta = Convert.ToInt32(General.Nz(arr[6], 0))
+                });
+            }
+
+
+            for (int i = 0; i < ids.Count; i++)
+            {
+                string msgNtf = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT Z.*, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + ids[i].Id, "", Convert.ToInt32(ids[i].Id), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                if (msgNtf != "" && msgNtf.Substring(0, 1) == "2")
+                {
+                    msg += Dami.TraduCuvant("Cererea pt") + " " + ids[i].Nume + "-" + Convert.ToDateTime(ids[i].DataInceput).ToShortDateString() + " - " + "-" + Dami.TraduCuvant(msgNtf.Substring(2)) + System.Environment.NewLine;
+                    continue;
+                }
+                else
+                {
+                    try
+                    {
+                        string sqlIst = $@"INSERT INTO ""Ptj_CereriIstoric""
+                                                    (""IdCerere"", ""IdCircuit"", ""IdSuper"", ""IdStare"", ""IdUser"", ""Pozitie"", ""Aprobat"", ""DataAprobare"", USER_NO, TIME, ""Inlocuitor"", ""IdUserInlocuitor"", ""Culoare"")
+                                                    SELECT ""Id"", ""IdCircuit"", {-1 * Convert.ToInt32(General.Nz(ids[i].Rol, 0))}, -1, {Session["UserId"]}, 22, 1, {General.CurrentDate()}, {Session["UserId"]}, {General.CurrentDate()}, 0, null, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = -1) FROM ""Ptj_Cereri"" WHERE ""Id""={ids[i].Id};";
+                        string sqlCer = $@"UPDATE ""Ptj_Cereri"" SET ""IdStare"" =-1, ""Culoare"" =(SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" =-1) WHERE ""Id"" ={ids[i].Id};";
+                        string sqlDel = $@"DELETE FROM ""tblFisiere"" WHERE ""Id""={ids[i].Id} AND ""Tabela""='Ptj_Cereri' AND ""EsteCerere"" = 1; ";
+
+                        string sqlGen = "BEGIN " + "\n\r" +
+                                                sqlIst + "\n\r" +
+                                                sqlCer + "\n\r" +
+                                                sqlDel + "\n\r" +
+                                                "END;";
+                        General.ExecutaNonQuery(sqlGen, null);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
+                //stergem din pontaj
+                int idTipOre = 0;
+                string oreInVal = "";
+                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(ids[i].F10003.ToString(), ids[i].DataInceput.Date, ids[i].IdAbsenta), null);
+                if (drAbs != null)
+                {
+                    idTipOre = Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0));
+                    oreInVal = General.Nz(drAbs["OreInVal"], "").ToString();
+                }
+
+                if (ids[i].IdStare == 3)
+                    General.StergeInPontaj(Convert.ToInt32(ids[i].Id), idTipOre, oreInVal, ids[i].DataInceput, ids[i].DataSfarsit, ids[i].F10003, ids[i].NrOre, Convert.ToInt32(General.Nz(Session["UserId"], -99)));
+
+                DataTable dtPtj = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= ""Ziua"" AND ""Ziua"" <= @3", new object[] { ids[i].F10003, ids[i].DataInceput, ids[i].DataSfarsit });
+                if (dtPtj != null && dtPtj.Rows.Count > 0)
+                {
+                    for (int k = 0; k < dtPtj.Rows.Count; k++)
+                    {
+                        Calcul.AlocaContract(Convert.ToInt32(dtPtj.Rows[k]["F10003"].ToString()), Convert.ToDateTime(dtPtj.Rows[k]["Ziua"]));
+                        Calcul.CalculInOut(dtPtj.Rows[k], true, true);
+                    }
+                }
+
+                General.CalculFormule(ids[i].F10003, null, ids[i].DataInceput, ids[i].DataSfarsit);
+                General.SituatieZLOperatii(Convert.ToInt32(General.Nz(ids[i].F10003, -99)), ids[i].DataInceput, 3,ids[i].NrZile);
+                Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + ids[i].Id, "Ptj_Cereri", Convert.ToInt32(ids[i].Id), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+
+
+            }
+
+            grDate.JSProperties["cpAlertMessage"] = msg;
+            grDate.DataBind();
+            grDate.Selection.UnselectAll();
+        }
+
+
+
 
         protected void grDate_HtmlDataCellPrepared(object sender, ASPxGridViewTableDataCellEventArgs e)
         {
@@ -973,18 +1125,9 @@ namespace WizOne.Absente
 
                     // id = -13 este banca
                     // id = -14 este plata
-                    List<metaDate> lst = new List<metaDate>();
-                    metaDate ent = new metaDate();
-                    ent.Id = Convert.ToInt32(General.Nz(obj[1],(int)Constante.IdCompensareDefault.LaBanca));
-                    ent.Denumire = General.Nz(obj[3], Dami.TraduCuvant("Banca")).ToString();
-                    lst.Add(ent);
-
-                    metaDate ent2 = new metaDate();
-                    ent2.Id = Convert.ToInt32(General.Nz(obj[2], (int)Constante.IdCompensareDefault.LaPlata));
-                    ent2.Denumire = General.Nz(obj[4], Dami.TraduCuvant("Plata")).ToString();
-                    lst.Add(ent2);
-
-                    cmbCps.DataSource = lst;
+                    cmbCps.Items.Add(new ListEditItem { Value = Convert.ToInt32(General.Nz(obj[1], (int)Constante.IdCompensareDefault.LaBanca)), Text = General.Nz(obj[3], Dami.TraduCuvant("Banca")).ToString() });
+                    cmbCps.Items.Add(new ListEditItem { Value = Convert.ToInt32(General.Nz(obj[2], (int)Constante.IdCompensareDefault.LaPlata)), Text = General.Nz(obj[4], Dami.TraduCuvant("Plata")).ToString() });
+                    cmbCps.DataBindItems();
                     cmbCps.Value = obj[6];
                 }
                 else
@@ -1059,8 +1202,11 @@ namespace WizOne.Absente
 
                     ids.Add(new Module.General.metaCereriRol { Id = Convert.ToInt32(General.Nz(arr[0], 0)), Rol = Convert.ToInt32(General.Nz(arr[5], 0)) });
                 }
-                General.MemoreazaEroarea("Vine din Absente Lista");
-                if (ids.Count != 0) msg += General.MetodeCereri(2, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), motiv, Convert.ToInt32(General.Nz(cmbRol.Value, 0)));
+
+                bool esteHR = false;
+                if (Convert.ToInt32(General.Nz(cmbViz.Value, 1)) == 3) esteHR = true;
+
+                if (ids.Count != 0) msg += General.MetodeCereri(2, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), motiv, esteHR);
                 grDate.JSProperties["cpAlertMessage"] = msg;
                 grDate.DataBind();
                 grDate.Selection.UnselectAll();
@@ -1135,8 +1281,6 @@ namespace WizOne.Absente
 
                     e.Value = ore;
                 }           
-
-                
             }
         }
 
@@ -1162,6 +1306,25 @@ namespace WizOne.Absente
                         if (dt.Select("F10003=" + General.Nz(cmbAng.Value, -99)).Count() == 0)
                             cmbAng.Value = null;
                         break;
+                }
+
+                if (tip == "cmbViz")
+                {
+                    //bool stare = true;
+                    //if (Convert.ToInt32(cmbViz.Value ?? 1)== 4)
+                    //    stare = false;
+
+                    //btnAproba.Enabled = stare;
+                    //btnRespinge.Enabled = stare;
+                    //GridViewCommandColumn cmbCol = grDate.Columns[1] as GridViewCommandColumn;
+                    //cmbAng.Enabled = stare;
+                    if (Convert.ToInt32(cmbViz.Value ?? 1) == 4)
+                    {
+                        btnAproba.Enabled = false;
+                        btnRespinge.Enabled = false;
+                        GridViewCommandColumn cmbCol = grDate.Columns[1] as GridViewCommandColumn;
+                        cmbAng.Enabled = false;
+                    }
                 }
             }
             catch (Exception ex)

@@ -1,24 +1,16 @@
 ﻿using DevExpress.Web;
-using Org.BouncyCastle.Asn1.Cmp;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Eval
 {
     public partial class QuizLista : System.Web.UI.Page
     {
-        //string cmp = "USER_NO,TIME,IDAUTO,";
-
-        #region Events
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -28,30 +20,15 @@ namespace WizOne.Eval
                 btnNew.Text = Dami.TraduCuvant("btnNew", "Nou");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnEdit.Image.ToolTip = Dami.TraduCuvant("btnEdit", "Modifica");
-                foreach(GridViewColumn c in grDate.Columns)
-                {
-                    try
-                    {
-                        if (c.GetType() == typeof(GridViewDataColumn))
-                        {
-                            GridViewDataColumn col = c as GridViewDataColumn;
-                            col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
-                        }
-                    }
-                    catch (Exception) { }
-                }
+                foreach (var col in grDate.Columns.OfType<GridViewDataColumn>())
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
                 #endregion
 
                 txtTitlu.Text = (Session["Titlu"] ?? "").ToString();
                 if(!IsPostBack)
                 {
-
-                    Session["Eval_QuizListaPerioada"] = General.IncarcaDT(@"select ""IdPerioada"" as ""Id"", ""DenPerioada"" as ""Denumire"" from ""Eval_Perioada"" ", null);
-                    cmbPerioada.DataSource = Session["Eval_QuizListaPerioada"];
+                    cmbPerioada.DataSource = General.IncarcaDT(@"SELECT ""IdPerioada"" AS ""Id"", ""DenPerioada"" AS ""Denumire"" FROM ""Eval_Perioada"" ", null);
                     cmbPerioada.DataBind();
-
-                    IncarcaGrid();
-                    btnNew.Attributes.Add("onclik", "window.open('QuizDetaliu.aspx', null, '', null);");
 
                     #region Reset DataSet
                     Session["createEval_ConfigObTemplate"] = null;
@@ -71,28 +48,10 @@ namespace WizOne.Eval
                     Session["nomenVwEval_ConfigCompetenteCol"] = null;
                     #endregion
                 }
-                else
-                {
-                    cmbPerioada.DataSource = Session["Eval_QuizListaPerioada"];
-                    cmbPerioada.DataBind();
-                    grDate.DataSource = Session["InformatiaCurentaQuiz"];
-                    grDate.KeyFieldName = "Id";
-                    grDate.DataBind();
-                }
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
-            }
-        }
 
-        protected void btnFiltru_Click(object sender, EventArgs e)
-        {
-            try
-            {
                 IncarcaGrid();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
             }
@@ -102,57 +61,66 @@ namespace WizOne.Eval
         {
             try
             {
-                string str = e.Parameters;
-                if(str!="")
+                int id = Convert.ToInt32(grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id" }) ?? -99);
+
+                if (e.Parameters != "btnFiltru" && id == -99)
+                    return;
+
+                switch (e.Parameters)
                 {
-                    string[] arr = e.Parameters.Split(';');
-                    if (arr.Length != 2 || arr[0] == "" || arr[1] == "")
-                        return;
+                    case "btnEdit":
+                        {
+                            //Florin 2020.01.30
+                            Session["Eval_QuizSetAngajati"] = null;
+                            Session["Eval_ConfigTipTabela"] = null;
 
-                    switch(arr[0])
-                    {
-                        case "btnEdit":
+                            string url = "~/Eval/QuizDetaliu.aspx";
+                            if(url!="")
                             {
-                                //Florin 2020.01.30
-                                Session["Eval_QuizSetAngajati"] = null;
+                                Session["IdEvalQuiz"] = id;
+                                DataTable table = General.IncarcaDT(@"SELECT * FROM ""Eval_Quiz"" WHERE ""Id"" = " + id, null);
+                                DataTable table0 = General.IncarcaDT(@"SELECT * FROM ""Eval_QuizIntrebari"" WHERE ""IdQuiz"" = " + id, null);
+                                DataTable table1 = General.IncarcaDT(@"SELECT * FROM ""Eval_Circuit"" WHERE ""IdQuiz"" = " + id, null);
+                                DataTable table2 = General.IncarcaDT(@"SELECT * FROM ""Eval_Drepturi"" WHERE ""IdQuiz"" = " + id, null);
 
-                                string url = "~/Eval/QuizDetaliu.aspx";
-                                if(url!="")
-                                {
-                                    Session["IdEvalQuiz"] = arr[1];
-                                    DataTable table = General.IncarcaDT(@"select * from ""Eval_Quiz"" where ""Id"" = " + arr[1], null);
-                                    DataTable table0 = General.IncarcaDT(@"select * from ""Eval_QuizIntrebari"" where ""IdQuiz"" = " + arr[1], null);
-                                    DataTable table1 = General.IncarcaDT(@"select * from ""Eval_Circuit"" where ""IdQuiz"" = " + arr[1], null);
-                                    DataTable table2 = General.IncarcaDT(@"select * from ""Eval_Drepturi"" where ""IdQuiz"" = " + arr[1], null);
+                                DataSet ds = new DataSet();
+                                table.TableName = "Eval_Quiz";
+                                table.PrimaryKey = new DataColumn[] { table.Columns["Id"] };
+                                ds.Tables.Add(table);
+                                table0.TableName = "Eval_QuizIntrebari";
+                                table0.PrimaryKey = new DataColumn[] { table0.Columns["Id"] };
+                                ds.Tables.Add(table0);
+                                table1.TableName = "Eval_Circuit";
+                                ds.Tables.Add(table1);
+                                table1.PrimaryKey = new DataColumn[] { table1.Columns["IdAuto"] };
+                                table2.TableName = "Eval_Drepturi";
+                                table2.PrimaryKey = new DataColumn[] { table2.Columns["IdAuto"] };
+                                ds.Tables.Add(table2);
 
-                                    DataSet ds = new DataSet();
-                                    table.TableName = "Eval_Quiz";
-                                    table.PrimaryKey = new DataColumn[] { table.Columns["Id"] };
-                                    ds.Tables.Add(table);
-                                    table0.TableName = "Eval_QuizIntrebari";
-                                    table0.PrimaryKey = new DataColumn[] { table0.Columns["Id"] };
-                                    ds.Tables.Add(table0);
-                                    table1.TableName = "Eval_Circuit";
-                                    ds.Tables.Add(table1);
-                                    table1.PrimaryKey = new DataColumn[] { table1.Columns["IdAuto"] };
-                                    table2.TableName = "Eval_Drepturi";
-                                    table2.PrimaryKey = new DataColumn[] { table2.Columns["IdAuto"] };
-                                    ds.Tables.Add(table2);
-
-                                    Session["InformatiaCurentaEvalQuiz"] = ds;
-                                    if (Page.IsCallback)
-                                        ASPxWebControl.RedirectOnCallback(url);
-                                    else
-                                        Response.Redirect(url, false);
-
-                                }
+                                Session["InformatiaCurentaEvalQuiz"] = ds;
+                                if (Page.IsCallback)
+                                    ASPxWebControl.RedirectOnCallback(url);
+                                else
+                                    Response.Redirect(url, false);
                             }
-                            break;
-                        case "btnSterge":
-                            StergeChestionar(arr[1]);
-                            btnFiltru_Click(sender, e);
-                            break;
-                    }
+                        }
+                        break;
+                    case "btnSterge":
+                        General.ExecutaNonQuery($@"DELETE FROM ""Eval_relGrupAngajatQuiz"" WHERE ""IdQuiz"" = " + id, null);
+                        General.ExecutaNonQuery($@"DELETE FROM ""Eval_Circuit"" WHERE ""IdQuiz"" = " + id, null);
+                        General.ExecutaNonQuery($@"DELETE FROM ""Eval_Drepturi"" WHERE ""IdQuiz"" = " + id, null);
+                        General.ExecutaNonQuery($@"DELETE FROM ""Eval_QuizIntrebari"" WHERE ""IdQuiz"" = " + id, null);
+                        General.ExecutaNonQuery($@"DELETE FROM ""Eval_Quiz"" WHERE ""Id"" = " + id, null);
+
+                        IncarcaGrid();
+                        break;
+                    case "btnDuplicare":
+                        QuizDuplica(id, Convert.ToInt32(Session["UserId"].ToString()));
+                        IncarcaGrid();
+                        break;
+                    case "btnFiltru":
+                        IncarcaGrid();
+                        break;
                 }
             }
             catch(Exception ex)
@@ -161,37 +129,22 @@ namespace WizOne.Eval
             }
         }
 
-        protected void grDate_HtmlDataCellPrepared(object sender, DevExpress.Web.ASPxGridViewTableDataCellEventArgs e)
-        {
-            try
-            {
-                if(e.DataColumn.FieldName=="Stare")
-                {
-                    object row = grDate.GetRowValues(e.VisibleIndex, "Culoare");
-                    string culoare = row.ToString();
-
-                    e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(culoare);
-                }
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie!");
-            }
-        }
-        #endregion
-
-        #region Methods 
         private void IncarcaGrid()
         {
             try
             {
-                DateTime dtStart = dtInceput.Value == null ? new DateTime(1900, 1, 1) : Convert.ToDateTime(dtInceput.Value);
-                DateTime dtEnd = dtSfarsit.Value == null ? new DateTime(1900, 1, 1) : Convert.ToDateTime(dtSfarsit.Value);
-                DataTable dt = Evaluare.GetEval_Quiz(Convert.ToInt32(cmbPerioada.Value ?? -99), dtStart, dtEnd);
+                string filtru = "";
+                if (txtDtSf.Value != null) filtru += @" AND A.""DataInceput"" <= " + General.ToDataUniv(txtDtSf.Date);
+                if (txtDtInc.Value != null) filtru += " AND " + General.ToDataUniv(txtDtInc.Date) + @" <= A.""DataSfarsit"" ";
+                if (cmbPerioada.Value != null) filtru += @" AND A.""Anul""= " + General.Nz(cmbPerioada.Value, -99);
+
+                string strSql = $@"SELECT A.""Id"", A.""Denumire"", A.""Titlu"", A.""DataInceput"", A.""DataSfarsit"", B.""DenPerioada"" AS ""Perioada""
+                    FROM ""Eval_Quiz"" A
+                    LEFT JOIN ""Eval_Perioada"" B ON A.""Anul"" = B.""IdPerioada""
+                    WHERE 1 = 1 {filtru}";
                 
-                grDate.DataSource = dt;
+                grDate.DataSource = General.IncarcaDT(strSql);
                 grDate.KeyFieldName = "Id";
-                Session["InformatiaCurentaQuiz"] = dt;
                 grDate.DataBind();
             }
             catch(Exception ex)
@@ -200,57 +153,16 @@ namespace WizOne.Eval
             }
         }
 
-        private void StergeChestionar(string id)
-        {
-            try
-            {
-                General.ExecutaNonQuery("DELETE FROM \"Eval_Circuit\" where \"IdQuiz\" = " + id, null);
-                General.ExecutaNonQuery("DELETE FROM \"Eval_Drepturi\" where \"IdQuiz\" = " + id, null);
-                General.ExecutaNonQuery("DELETE FROM \"Eval_QuizIntrebari\" where \"IdQuiz\" = " + id, null);
-                General.ExecutaNonQuery("DELETE FROM \"Eval_Quiz\" where \"Id\" = " + id, null);
-
-                DateTime dtStart = dtInceput.Value == null ? new DateTime(1900, 1, 1) : Convert.ToDateTime(dtInceput.Value);
-                DateTime dtEnd = dtSfarsit.Value == null ? new DateTime(1900, 1, 1) : Convert.ToDateTime(dtSfarsit.Value);
-                
-                Session["InformatiaCurentaQuiz"] = Evaluare.GetEval_Quiz(Convert.ToInt32(cmbPerioada.Value ?? -99), dtStart, dtEnd);
-            }
-            catch(Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-        #endregion
-
         protected void btnNew_Click(object sender, EventArgs e)
         {
             try
             {
-                //int IdQuiz = Dami.NextId("Eval_Quiz");
                 Session["IdEvalQuiz"] = null;
                 Session["InformatiaCurentaEvalQuiz"] = null;
                 Session["Quiz360"] = 0;
-
-                //Florin 2020.01.30
                 Session["Eval_QuizSetAngajati"] = null;
+                Session["Eval_ConfigTipTabela"] = null;
 
-                /*
-                DataTable table = General.IncarcaDT(@"select * from ""Eval_Quiz"" where ""Id"" = " + IdQuiz, null);
-                DataTable table0 = General.IncarcaDT(@"select * from ""Eval_QuizIntrebari"" where ""Id"" = " + IdQuiz, null);
-                DataTable table1 = General.IncarcaDT(@"select * from ""Eval_Circuit"" where ""IdQuiz"" = " + IdQuiz, null);
-                DataTable table2 = General.IncarcaDT(@"select * from ""Eval_Drepturi"" where ""IdQuiz"" = " + IdQuiz, null);
-
-                DataSet ds = new DataSet();
-                table.TableName = "Eval_Quiz";
-                ds.Tables.Add(table);
-                table0.TableName = "Eval_QuizIntrebari";
-                ds.Tables.Add(table0);
-                table1.TableName = "Eval_Circuit";
-                ds.Tables.Add(table1);
-                table2.TableName = "Eval_Drepturi";
-                ds.Tables.Add(table2);
-
-                Session["InformatiaCurentaEvalQuiz"] = ds;
-                */
                 string url = "";
                 url = "~/Eval/QuizDetaliu.aspx";
                 Response.Redirect(url, false);
@@ -283,29 +195,6 @@ namespace WizOne.Eval
             }
         }
 
-
-
-
-        protected void btnDuplicare_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                int id = Convert.ToInt32(grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id" }) ?? -99);
-                if (id != -99)
-                {
-                    QuizDuplica(id, Convert.ToInt32(Session["UserId"].ToString()));
-                    IncarcaGrid();
-
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-
         public void QuizDuplica(int id, int idUser)
         {
             try
@@ -317,7 +206,7 @@ namespace WizOne.Eval
                 DataTable dtOriGrup = General.IncarcaDT("SELECT * FROM \"Eval_relGrupAngajatQuiz\" WHERE \"IdQuiz\" = " + id, null);
 
                 int idUrm = 2;
-                idUrm = Dami.NextId("Eval_Quiz");
+                idUrm = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""Id"",0)) FROM ""Eval_Quiz"" "), 0)) + 1;
 
                 string sqlQuiz = "";
                 if (dtOri != null && dtOri.Rows.Count > 0)
@@ -376,143 +265,10 @@ namespace WizOne.Eval
 
                 General.IncarcaDT(sqlQuiz, null);
 
-
-
-                //Florin 2019.10.02
-                #region OLD QuizIntrebari
-
-                //int idRoot = 0, idSec = 0, idParinte = 0;
-                //Hashtable rel = new Hashtable();
-
-                ////Florin 2019.01.07
-                //int idUrmLinii = 10000;
-                ////idUrmLinii = Dami.NextId("Eval_QuizIntrebari", dtOriLinii.Columns.Count);
-                ////idUrmLinii = idUrmLinii - dtOriLinii.Columns.Count + 1;
-                //idUrmLinii = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(""Id"") FROM ""Eval_QuizIntrebari"" ", null), 0)) + 1;
-
-
-
-                //string sqlQuizLinii = "";
-                //if (dtOriLinii != null && dtOriLinii.Rows.Count > 0)
-                //{
-                //    for (int j = 0; j < dtOriLinii.Rows.Count; j++)
-                //    {
-                //        sqlQuizLinii = "INSERT INTO \"Eval_QuizIntrebari\" (";
-                //        for (int i = 0; i < dtOriLinii.Columns.Count; i++)
-                //        {
-                //            sqlQuizLinii += "\"" + dtOriLinii.Columns[i].ColumnName + "\"";
-                //            if (i < dtOriLinii.Columns.Count - 1)
-                //                sqlQuizLinii += ", ";
-                //        }
-                //        sqlQuizLinii += ") VALUES (";
-                //        for (int i = 0; i < dtOriLinii.Columns.Count; i++)
-                //        {
-                //            switch (dtOriLinii.Columns[i].ColumnName)
-                //            {
-                //                case "Ordine":
-                //                    string[] param = dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString().Split('-');
-                //                    if (param.Length == 3)
-                //                    {
-                //                        if (rel[param[1]] != null)
-                //                            idRoot = Convert.ToInt32(rel[param[1]]);
-                //                        else
-                //                        {
-                //                            idRoot = idUrmLinii;
-                //                            rel[param[1]] = idRoot;
-                //                        }
-                //                    }
-                //                    if (param.Length == 4)
-                //                    {
-                //                        if (rel[param[2]] != null)
-                //                            idSec = Convert.ToInt32(rel[param[2]]);
-                //                        else
-                //                        {
-                //                            idSec = idUrmLinii;
-                //                            rel[param[2]] = idSec;
-                //                        }
-                //                        idParinte = idRoot;
-                //                    }
-                //                    if (param.Length == 5)
-                //                    {
-                //                        if (rel[param[2]] != null)
-                //                            idSec = Convert.ToInt32(rel[param[2]]);
-                //                        else
-                //                        {
-                //                            idSec = idUrmLinii;
-                //                            rel[param[2]] = idSec;
-                //                        }
-                //                        idParinte = idSec;
-                //                    }
-                //                    sqlQuizLinii += "'";
-                //                    for (int k = 1; k < param.Length - 1; k++)
-                //                    {
-                //                        if (k == 1)
-                //                            sqlQuizLinii += "-" + idRoot;
-                //                        if (k == 2)
-                //                            sqlQuizLinii += "-" + idSec;
-                //                        if (k == 3)
-                //                            sqlQuizLinii += "-" + idUrmLinii;
-                //                        if (k == param.Length - 2)
-                //                            sqlQuizLinii += "-";
-                //                    }
-                //                    sqlQuizLinii += "'";
-                //                    break;
-                //                case "Parinte":
-                //                    sqlQuizLinii += idParinte;
-                //                    break;
-                //                case "Id":
-                //                    sqlQuizLinii += idUrmLinii;
-                //                    break;
-                //                case "IdQuiz":
-                //                    sqlQuizLinii += idUrm;
-                //                    break;
-                //                case "TemplateIdObiectiv":
-                //                case "TemplateIdCompetenta":
-                //                    sqlQuizLinii += "NULL";
-                //                    break;
-                //                case "USER_NO":
-                //                    sqlQuizLinii += idUser;
-                //                    break;
-                //                case "TIME":
-                //                    sqlQuizLinii += (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
-                //                    break;
-                //                default:
-                //                    if (dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName] == null || dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString().Length <= 0)
-                //                        sqlQuizLinii += "NULL";
-                //                    else
-                //                    {
-                //                        switch (dtOriLinii.Columns[i].DataType.ToString())
-                //                        {
-                //                            case "System.String":
-                //                                sqlQuizLinii += "'" + dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString() + "'";
-                //                                break;
-                //                            case "System.DateTime":
-                //                                DateTime dt = Convert.ToDateTime(General.Nz(dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName], new DateTime(2100, 1, 1)));
-                //                                sqlQuizLinii += General.ToDataUniv(dt);
-                //                                break;
-                //                            default:
-                //                                sqlQuizLinii += dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString();
-                //                                break;
-                //                        }
-                //                    }
-                //                    break;
-                //            }
-                //            if (i < dtOriLinii.Columns.Count - 1)
-                //                sqlQuizLinii += ", ";
-                //        }
-                //        sqlQuizLinii += ")";
-                //        General.IncarcaDT(sqlQuizLinii, null);
-                //        idUrmLinii++;
-
-                //    }
-                //}
-
-                #endregion
-
                 int idUrmLinii = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(""Id"") FROM ""Eval_QuizIntrebari"" ", null), 0)) + 1;
                 General.ExecutaNonQuery($@"
-                INSERT INTO ""Eval_QuizIntrebari""(""Id"",                ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", ""IdQuiz"", ""Orientare"", ""Obligatoriu"", ""Parinte"",                ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", ""TIME"", ""USER_NO"")
-                                            SELECT ""Id"" + {idUrmLinii}, ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", {idUrm},    ""Orientare"", ""Obligatoriu"", CASE WHEN ""Descriere"" ='Root' THEN 0 ELSE ""Parinte"" + {idUrmLinii} END AS ""Parinte"", ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", {General.CurrentDate()}, {Session["UserId"]} FROM ""Eval_QuizIntrebari"" WHERE ""IdQuiz"" = {id}", null);
+                INSERT INTO ""Eval_QuizIntrebari""(""Id"",                ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", ""IdQuiz"", ""Orientare"", ""Obligatoriu"", ""Parinte"",                ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", ""TIME"", ""USER_NO"", ""OrdineAfisare"")
+                                            SELECT ""Id"" + {idUrmLinii}, ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", {idUrm},    ""Orientare"", ""Obligatoriu"", CASE WHEN ""Descriere"" ='Root' THEN 0 ELSE ""Parinte"" + {idUrmLinii} END AS ""Parinte"", ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", {General.CurrentDate()}, {Session["UserId"]}, ""OrdineAfisare"" FROM ""Eval_QuizIntrebari"" WHERE ""IdQuiz"" = {id}", null);
 
                 //End Florin 2019.10.02
 
@@ -559,10 +315,6 @@ namespace WizOne.Eval
                     General.ExecutaNonQuery("BEGIN" + Environment.NewLine +
                         sqlTemp + Environment.NewLine +
                         "END;");
-
-
-                int idUrmCirc = 2;
-                idUrmCirc = Dami.NextId("Eval_Circuit");
 
                 string sqlCircuit = "";
                 if (dtOriCircuit != null && dtOriCircuit.Rows.Count > 0)
@@ -629,9 +381,6 @@ namespace WizOne.Eval
                 }
                 General.IncarcaDT(sqlCircuit, null);
 
-                int idUrmDrepturi = 10000;
-                idUrmDrepturi = Dami.NextId("Eval_Drepturi", dtOriDrepturi.Columns.Count);
-                idUrmDrepturi = idUrmDrepturi - dtOriDrepturi.Columns.Count + 1;
 
                 string sqlDrepturi = "";
                 if (dtOriDrepturi != null && dtOriDrepturi.Rows.Count > 0)
@@ -697,16 +446,9 @@ namespace WizOne.Eval
                         }
                         sqlDrepturi += ")";
                         General.IncarcaDT(sqlDrepturi, null);
-                        idUrmDrepturi++;
-
                     }
                 }
 
-
-                //int idAuto = 10000000;
-                int idUrmGrup = 10000;
-                idUrmGrup = Dami.NextId("Eval_relGrupAngajatQuiz", dtOriGrup.Columns.Count);
-                idUrmGrup = idUrmGrup - dtOriGrup.Columns.Count + 1;
 
                 string sqlGrup = "";
                 if (dtOriGrup != null && dtOriGrup.Rows.Count > 0)
@@ -772,8 +514,6 @@ namespace WizOne.Eval
                         }
                         sqlGrup += ")";
                         General.IncarcaDT(sqlGrup, null);
-                        idUrmGrup++;
-
                     }
                 }
 

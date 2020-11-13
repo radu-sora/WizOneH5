@@ -18,7 +18,7 @@ namespace WizOne.Pagini
         {
             try
             {
-                grDate.DataBind();
+              
             }
             catch (Exception)
             {
@@ -58,6 +58,8 @@ namespace WizOne.Pagini
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
+
+                grDate.DataBind();  //Radu 24.09.2020 - am mutat aici (din Page_Init), deoarece nu se actualizau ToolTip-urile
             }
             catch (Exception ex)
             {

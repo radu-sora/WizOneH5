@@ -100,12 +100,12 @@
                             <div style="padding: 4px 3px 4px">
                                 <table>
                                     <tr>
-                                        <td style="padding-left:10px !important;">Observatii</td>
-                                        <td style="padding-left:10px !important;">Medicina muncii/PSI</td>
-                                        <td style="padding:10px !important;">Data eliberarii</td>
-                                        <td style="padding:10px !important;">Data expirarii</td>
-                                        <td style="padding:10px !important;">Serie si nr. doc.</td>
-                                        <td style="padding:10px !important;">Emitent</td>
+                                        <td id="lblObs" runat="server" style="padding-left:10px !important;">Observatii</td>
+                                        <td id="lblMedMunc" runat="server" style="padding-left:10px !important;">Medicina muncii/PSI</td>
+                                        <td id="lblDataElib" runat="server" style="padding:10px !important;">Data eliberarii</td>
+                                        <td id="lblDataExp" runat="server" style="padding:10px !important;">Data expirarii</td>
+                                        <td id="lblSerieNr" runat="server" style="padding:10px !important;">Serie si nr. doc.</td>
+                                        <td id="lblEmitent" runat="server" style="padding:10px !important;">Emitent</td>
                                     </tr>
                                     <tr>
                                         <td rowspan="5" style="vertical-align:top;padding:10px !important;"><dx:ASPxMemo ID="txtObs" runat="server" Width="500px" Height="150" Text='<%# Bind("Observatii") %>' /></td>
@@ -116,9 +116,9 @@
                                         <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtEmi" runat="server" Width="200" Value='<%# Bind("Emitent") %>' /></td>
                                     </tr>
                                     <tr>
-                                        <td style="padding:10px !important;">Data eliberare control medical</td>
-                                        <td style="padding:10px !important;">Perioada valabilitate</td>
-                                        <td style="padding:10px !important;">Data urmatorului control</td>
+                                        <td id="lblDataElibCtrlMed" runat="server" style="padding:10px !important;">Data eliberare control medical</td>
+                                        <td id="lblPerValab" runat="server" style="padding:10px !important;">Perioada valabilitate</td>
+                                        <td id="lblDataUrmCtrl" runat="server" style="padding:10px !important;">Data urmatorului control</td>
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataElibCtrlMed" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DataElibControlMed") %>' >
@@ -130,10 +130,10 @@
                                         <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataUrmCtrl" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DataUrmControl") %>' ReadOnly="true" /></td>
                                     </tr>
                                     <tr>
-                                        <td style="padding:10px !important;">Locatie</td>
-                                        <td style="padding:10px !important;">Manager direct</td>
-                                        <td style="padding:10px !important;">Sector alimentar</td>
-                                        <td style="padding:10px !important;">Rezultat examen</td>
+                                        <td id="lblLocatie" runat="server" style="padding:10px !important;">Locatie</td>
+                                        <td id="lblManagerDir" runat="server" style="padding:10px !important;">Manager direct</td>
+                                        <td id="lblSectAlim" runat="server" style="padding:10px !important;">Sector alimentar</td>
+                                        <td id="lblRezExamen" runat="server" style="padding:10px !important;">Rezultat examen</td>
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbLocatie" runat="server" Width="215px" ValueField="Id" DropDownWidth="200" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("IdLocatie") %>' />
@@ -142,8 +142,8 @@
                                         <td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbRez" runat="server" Width="215px" ValueField="Id" DropDownWidth="200" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("RezultatExamen") %>' />
                                     </tr>
                                     <tr>
-                                        <td style="padding:10px !important;">Alte riscuri</td>
-                                        <td style="padding:10px !important;">Riscuri</td>                                   
+                                        <td id="lblAlteRisc" runat="server" style="padding:10px !important;">Alte riscuri</td>
+                                        <td id="lblRiscuri" runat="server" style="padding:10px !important;">Riscuri</td>                                   
                                     </tr>    
                                     <tr>
                                         <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtAlteRiscuri" runat="server" Width="500" Value='<%# Bind("AlteRiscuri") %>' /></td>

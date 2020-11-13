@@ -2,13 +2,46 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
-    <link rel="stylesheet" type="text/css" href="../Fisiere/css/tactil.css" />
+    <link rel="stylesheet" type="text/css" href="../Fisiere/css/tactil.css" />     
+             
     
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <script>
-        
+        function Printare() {
+            pnlCtl.PerformCallback();
+        }
+
+        function OnEndCallback(s, e) {
+            pnlLoading.Hide();
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+            else {
+                swal({
+                    title: "Info", text: "Documentul a fost trimis spre printare. Va rugam verificati!",
+                    type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Continuare", cancelButtonText: "Iesire", closeOnConfirm: true
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        window.location = '<%: ResolveClientUrl("~/Tactil/Main.aspx") %>';
+                    }
+                    else {
+                        var tipInfoChiosc = <%= Session["TipInfoChiosc"] %>;
+                        var pagina = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
+                        if (tipInfoChiosc == 1 || tipInfoChiosc == 2)
+                            pagina = '<%: ResolveClientUrl("~/DefaultTactilFaraCard.aspx") %>';
+                        if (tipInfoChiosc == 3)
+                        pagina = '<%: ResolveClientUrl("~/DefaultTactilExtra.aspx") %>';
+                    window.location = pagina;
+                }
+            });
+            }
+        }
     </script>
     
     <table style="width:100%;">
@@ -49,6 +82,8 @@
             <td width="350"></td>
         </tr>
     </table>
+
+
     <div class="row text-center align-center">
 
         <div class="col-sm-4">
@@ -62,17 +97,28 @@
             </div>
         </div>
 
-        <div class="col-sm-4">
-            <div class="badgeTactil" id="lblPrint" runat="server">
-                <asp:LinkButton runat="server" ID="lnlPri" OnClick="lnlPri_Click">
-                    <div>
-                        <img src ="../Fisiere/Imagini/bdgCer.jpg" alt = "Fluturas Printare" />
+
+        <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" meta:resourcekey="pnlCtlResource1" >
+            <SettingsLoadingPanel Enabled="False"></SettingsLoadingPanel>
+            <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
+            <PanelCollection>
+         <dx:PanelContent meta:resourcekey="PanelContentResource1">
+
+                <div class="col-sm-4">
+                    <div class="badgeTactil" id="lblPrint" runat="server">
+                        <asp:LinkButton runat="server" ID="lnlPri" OnClientClick="Printare()">
+                            <div>
+                                <img src ="../Fisiere/Imagini/bdgCer.jpg" alt = "Fluturas Printare" />
+                            </div>
+                        </asp:LinkButton>
+                        <h3>Fluturas Printare</h3>
                     </div>
-                </asp:LinkButton>
-                <h3>Fluturas Printare</h3>
-            </div>
-        </div>   
+                </div>   
+
+                    </dx:PanelContent>
+        </PanelCollection>
+    </dx:ASPxCallbackPanel>
 
     </div>
-       
+          
 </asp:Content>

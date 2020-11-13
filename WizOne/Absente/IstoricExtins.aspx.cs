@@ -798,7 +798,7 @@ namespace WizOne.Absente
             try
             {
                 
-                DataTable dt = GetIstoricExtinsLunar(userId, angId, an, luna, structura, f10003, false);
+                DataTable dt = GetIstoricExtinsLunar(userId, angId, an, luna, structura, f10003, true);     //Radu 30.10.2020 - am schimbat in true pentru a sti ce culori trebuie hasurate
 
                 DevExpress.Spreadsheet.Workbook book = new DevExpress.Spreadsheet.Workbook();
                 DevExpress.Spreadsheet.Worksheet ws2 = book.Worksheets["Sheet1"];
@@ -814,10 +814,20 @@ namespace WizOne.Absente
                     for (int j = 0; j < dt.Columns.Count; j++)
                     {
                         string val = General.Nz(dt.Rows[i][j], "").ToString();
-                        if (val != "" && val.Substring(0, 1) == "#")
-                            ws2.Cells[row, j].FillColor = General.Culoare(dt.Rows[i][j].ToString());
+                        if (val != "" && val.Substring(0, 1) == "#")                        
+                            ws2.Cells[row, j].FillColor = General.Culoare(dt.Rows[i][j].ToString()); 
                         else
-                            ws2.Cells[row, j].Value = dt.Rows[i][j].ToString();
+                        {
+                            if (val.Contains("repeating-linear-gradient"))
+                            {//Radu 30.10.2020
+                                string[] elemente = dt.Rows[i][j].ToString().Split(',');
+                                string culoare = elemente[elemente.Length - 1].Trim().Split(' ')[0].Trim();
+                                ws2.Cells[row, j].FillColor = General.Culoare(culoare);
+                                ws2.Cells[row, j].Fill.PatternType = DevExpress.Spreadsheet.PatternType.LightDown;
+                            }
+                            else    
+                                ws2.Cells[row, j].Value = dt.Rows[i][j].ToString();
+                        }
                     }
                     row++;
                 }
@@ -841,7 +851,15 @@ namespace WizOne.Absente
                 {
                     DataRowView obj = grLeg.GetRow(i) as DataRowView;
                     ws2.Cells[row, col].Value = obj["Denumire"].ToString();
-                    ws2.Cells[row, col + 1].FillColor = General.Culoare(obj["Culoare"].ToString());
+                    if (obj["Culoare"].ToString().Contains("repeating-linear-gradient"))
+                    {//Radu 30.10.2020
+                        string[] elemente = obj["Culoare"].ToString().Split(',');
+                        string culoare = elemente[elemente.Length - 1].Trim().Split(' ')[0].Trim();
+                        ws2.Cells[row, col + 1].FillColor = General.Culoare(culoare);
+                        ws2.Cells[row, col + 1].Fill.PatternType = DevExpress.Spreadsheet.PatternType.LightDown;
+                    }
+                    else
+                        ws2.Cells[row, col + 1].FillColor = General.Culoare(obj["Culoare"].ToString());
                     row++;
                 }
 

@@ -54,6 +54,16 @@ namespace WizOne
                     Response.Redirect("../Default.aspx", false);
                 }
 
+                //Radu 26.10.2020
+                string limbi = Dami.ValoareParam("LimbiTraduse", "");
+                string[] sirLimbi = limbi.Split(',');
+                for (int i = 0; i < sirLimbi.Length; i++)
+                {
+                    LinkButton lnk = (LinkButton)pnlHeader.FindControl("a" + sirLimbi[i]);
+                    if (lnk != null)
+                        lnk.Visible = true;
+                }
+
 
                 if (!IsPostBack)
                 {
@@ -88,7 +98,6 @@ namespace WizOne
                 lblConfirmaRap.Text = Dami.TraduCuvant("ConfirmaParolaRapoarte");
 
                 popGen.HeaderText = Dami.TraduCuvant("Istoric");
-
                 #endregion
 
                 if (General.VarSession("EsteAdmin").ToString() != "1")
@@ -115,22 +124,23 @@ namespace WizOne
                     }
                         
                     //incarcam lista de profile disponibile
-                    string sqlPro = $@"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" 
+                    string sqlPro = $@"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"", A.""Grid"" 
                                 FROM ""tblProfile"" A
                                 INNER JOIN ""tblProfileLinii"" B ON  A.""Id"" = B.""Id""
                                 INNER JOIN ""relGrupUser"" C ON B.""IdGrup"" = C.""IdGrup""
                                 WHERE A.""Pagina"" = @1 AND C.""IdUser"" = @2 AND COALESCE(A.""Activ"" ,0) = 1 {filtruSup}
-                                GROUP BY A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)), A.""Implicit"", A.""Activ"" ";
+                                GROUP BY A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)), A.""Implicit"", A.""Activ"", A.""Grid"" ";
 
                     if (General.VarSession("EsteAdmin").ToString() == "1")
-                        sqlPro = $@"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" 
+                        sqlPro = $@"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" , A.""Grid""
                                 FROM ""tblProfile"" A
                                 INNER JOIN ""tblProfileLinii"" B ON  A.""Id"" = B.""Id""
                                 WHERE A.""Pagina"" = @1 AND COALESCE(A.""Activ"" ,0) = 1 {filtruSup}
-                                GROUP BY A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)), A.""Implicit"", A.""Activ"" ";
+                                GROUP BY A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)), A.""Implicit"", A.""Activ"", A.""Grid"" ";
 
                     DataTable dtPro = new DataTable();
                     if (General.Nz(Session["PaginaWeb"],"").ToString() != "") dtPro = General.IncarcaDT(sqlPro, new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", "."), Session["UserId"].ToString() });
+                    Session["ListaProfile"] = dtPro;
                     if (dtPro.Rows.Count == 0)
                         divCmbProfile.Visible = false;
                     else
@@ -163,6 +173,80 @@ namespace WizOne
 
                             //incarcam profilul implicit
                             grDate.LoadClientLayout(prof);
+                        }
+                        else
+                        {   
+                            //Radu 23.09.2020
+                            bool gasit = false;
+                            if (General.Nz(Session["PaginaWeb"], "").ToString() == "Personal.DateAngajat")
+                            {
+                                for (int i = 0; i < dtPro.Rows.Count; i++)
+                                {
+                                    gasit = false;
+                                    if (dtPro.Rows[i]["Grid"] != null)
+                                    {
+                                        foreach (ASPxPageControl pagCtrl in ContentPlaceHolder1.Controls.OfType<ASPxPageControl>())
+                                        {
+                                            foreach (TabPage tab in pagCtrl.TabPages)
+                                            {
+                                                foreach (dynamic pnlCtl in tab.Controls)
+                                                {
+                                                    ASPxGridView ctl = pnlCtl.Controls[0].FindControl(dtPro.Rows[i]["Grid"].ToString()) as ASPxGridView;
+                                                    if (ctl != null)
+                                                    {
+                                                        Session["Profil_DataGrid"] = ctl.SaveClientLayout();
+                                                        var ert = Session["Profil_DataGrid"];
+
+                                                        string prof = "";
+                                                      
+                                                        DataRow[] lst = dtPro.Select("Implicit=1 AND Grid = '" + dtPro.Rows[i]["Grid"].ToString() + "'");
+                                                        if (lst.Count() > 0)
+                                                        {
+                                                            prof = (lst[0]["Continut"] ?? "").ToString();
+                                                            cmbProfile.Value = lst[0]["Id"];
+                                                        }
+                                                        else
+                                                        {
+                                                            prof = (dtPro.Rows[i]["Continut"] ?? "").ToString();
+                                                            cmbProfile.Value = dtPro.Rows[i]["Id"];
+                                                        }
+
+
+                                                        //adugam profilul original al gridului
+
+                                                        //DataRow dr = dtPro.NewRow();
+                                                        //dr["Id"] = -1;
+                                                        //dr["Denumire"] = "Original";
+                                                        //dr["Continut"] = "";
+                                                        //dr["Implicit"] = 0;
+                                                        //dr["Activ"] = 1;
+                                                        //dr["Grid"] = dtPro.Rows[i]["Grid"].ToString();
+                                                        //if (dtPro.Select("Id = -1").Count() == 0)
+                                                        //    dtPro.Rows.Add(dr);
+
+                                                        //incarcam profilul implicit
+                                                        ctl.LoadClientLayout(prof);
+                                                        
+
+                                                        
+                                                        gasit = true;
+                                                        break;
+                                                    }
+                                                    if (gasit)
+                                                        break;
+                                                }
+                                                if (gasit)
+                                                    break;
+                                            }
+                                            if (gasit)
+                                                break;
+                                        }
+
+
+                                    }
+                                }
+                            }
+                            
                         }
 
                         cmbProfile.DataSource = dtPro;
@@ -447,6 +531,37 @@ namespace WizOne
 
                     if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(this.ContentPlaceHolder1);
                 }
+                else
+                {//Radu 02.11.2020
+                    if (General.Nz(Session["PaginaWeb"], "").ToString() == "Personal.DateAngajat")
+                    {
+                        bool gasit = false;
+                        foreach (ASPxPageControl pagCtrl in ContentPlaceHolder1.Controls.OfType<ASPxPageControl>())
+                        {
+                            foreach (TabPage tab in pagCtrl.TabPages)
+                            {
+                                foreach (dynamic pnlCtl in tab.Controls)
+                                {
+                                    DataTable dtPro =  Session["ListaProfile"] as DataTable;
+                                    ASPxGridView ctl = pnlCtl.Controls[0].FindControl(dtPro.Select("Id = " + (int)cmbProfile.SelectedItem.Value)[0]["Grid"].ToString()) as ASPxGridView;
+                                    if (ctl != null)
+                                    {
+                                        ctl.LoadClientLayout(Dami.Profil((int)cmbProfile.SelectedItem.Value));
+                                        gasit = true;
+                                        break;
+                                    }
+                                    if (gasit)
+                                        break;
+                                }
+                                if (gasit)
+                                    break;
+                            }
+                            if (gasit)
+                                break;
+                        }                           
+                        
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -458,12 +573,43 @@ namespace WizOne
         protected void callBackProfile_Callback(object sender, CallbackEventArgs e)
         {
             try
-            {
-                ASPxGridView grDate = (ASPxGridView)ContentPlaceHolder1.FindControl("grDate");
-                if (grDate != null)
+            {//Radu 22.09.2020 - modificare pentru a putea seta profile pe grid-urile din Personal
+                bool gasit = false;
+                if (e.Parameter != null && e.Parameter.Length > 0)
                 {
-                    Session["Profil_DataGrid"] = grDate.SaveClientLayout();
-                    var ert = Session["Profil_DataGrid"];
+                    ASPxGridView grDate = (ASPxGridView)ContentPlaceHolder1.FindControl(e.Parameter);
+                    if (grDate != null)
+                    {
+                        Session["Profil_DataGrid"] = grDate.SaveClientLayout();
+                        var ert = Session["Profil_DataGrid"];
+                    }
+                    else
+                    {
+                        foreach (ASPxPageControl pagCtrl in ContentPlaceHolder1.Controls.OfType<ASPxPageControl>())
+                        {
+                            foreach (TabPage tab in pagCtrl.TabPages)
+                            {
+                                foreach (dynamic pnlCtl in tab.Controls)
+                                {
+                                    ASPxGridView ctl = pnlCtl.Controls[0].FindControl(e.Parameter) as ASPxGridView;
+                                    if (ctl != null)
+                                    {
+                                        Session["Profil_DataGrid"] = ctl.SaveClientLayout();
+                                        var ert = Session["Profil_DataGrid"];
+                                        Session["Profil_GridPersonal"] = e.Parameter;
+                                        gasit = true;
+                                        break;
+                                    }
+                                    if (gasit)
+                                        break;
+                                }
+                                if (gasit)
+                                    break;
+                            }
+                            if (gasit)
+                                break;
+                        }
+                    }    
                 }
             }
             catch (Exception ex)
@@ -478,27 +624,33 @@ namespace WizOne
             try
             {
                 string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
-                if (tipVerif == "5")
-                    General.SignOut();
-                else
+
+                switch (tipVerif)
                 {
-                    //Florin 2020.01.27
+                    case "5":
+                        General.SignOut();
+                        break;
+                    case "6":
+                        if (Page.IsCallback)
+                            ASPxWebControl.RedirectOnCallback("~/LogOut.aspx");
+                        else
+                            Response.Redirect("~/LogOut.aspx", false);
 
-                    string url = "~/Default.aspx";
-                    if (Constante.esteTactil)
-                        url = "~/Tactil/MainTactil.aspx";
+                        //Pastram limba setata pt a putea traduce fraza din pagina de log out
+                        string idLimba = General.Nz(Session["IdLimba"],"RO").ToString();
+                        General.InitSessionVariables();
+                        Session["IdLimba"] = idLimba;
+                        break;
+                    default:
+                        string url = "~/Default.aspx";
+                        if (Constante.esteTactil)
+                            url = "~/Tactil/MainTactil.aspx";
 
-                    if (Page.IsCallback)
-                        ASPxWebControl.RedirectOnCallback(url);
-                    else
-                        Response.Redirect(url, false);
-
-                    ////Radu 20.07.2018 - am inlocuit ../ cu ~/
-                    //if (Constante.esteTactil)
-                    //    //Response.Redirect("~/DefaultTactil.aspx", false);
-                    //    Response.Redirect("~/Tactil/MainTactil.aspx", false);
-                    //else
-                    //    Response.Redirect("~/Default.aspx", false);
+                        if (Page.IsCallback)
+                            ASPxWebControl.RedirectOnCallback(url);
+                        else
+                            Response.Redirect(url, false);
+                        break;
                 }
             }
             catch (Exception ex)

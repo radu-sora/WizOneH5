@@ -60,6 +60,24 @@ namespace WizOne.Adev
         protected global::System.Web.UI.HtmlControls.HtmlTableRow bulk1;
 
         /// <summary>
+        /// lblRol control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRol;
+
+        /// <summary>
+        /// cmbRol control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbRol;
+
+        /// <summary>
         /// lblAngBulk control.
         /// </summary>
         /// <remarks>

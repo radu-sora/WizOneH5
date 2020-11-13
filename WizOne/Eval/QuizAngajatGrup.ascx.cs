@@ -34,7 +34,6 @@ namespace WizOne.Eval
                 { keys[i] = e.Keys[i]; }
 
                 DataSet ds = Session["InformatiaCurentaEvalQuiz"] as DataSet;
-
                 DataRow row = ds.Tables["Eval_relGrupAngajatQuiz"].Rows.Find(keys);
 
                 row.Delete();
@@ -67,9 +66,6 @@ namespace WizOne.Eval
                         {
                             case "IDQUIZ":
                                 row[x] = Session["IdEvalQuiz"];
-                                break;
-                            case "IDAUTO":
-                                row[x] = Dami.NextId("Eval_relGrupAngajatQuiz");
                                 break;
                             case "USER_NO":
                                 row[x] = Session["UserId"];
@@ -109,7 +105,6 @@ namespace WizOne.Eval
                 { keys[i] = e.Keys[i]; }
 
                 DataSet ds = Session["InformatiaCurentaEvalQuiz"] as DataSet;
-
                 DataRow row = ds.Tables["Eval_relGrupAngajatQuiz"].Rows.Find(keys);
 
                 foreach (DataColumn col in ds.Tables["Eval_relGrupAngajatQuiz"].Columns)
@@ -138,17 +133,7 @@ namespace WizOne.Eval
         {
             try
             {
-                DataSet ds = Session["InformatiaCurentaEvalQuiz"] as DataSet;
-                DataTable dt = ds.Tables["Eval_relGrupAngajatQuiz"];
-                if (dt.Columns["IdAuto"] != null)
-                {
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        e.NewValues["IdAuto"] = Dami.NextId("Eval_relGrupAngajatQuiz");
-                    }
-                    else
-                        e.NewValues["IdAuto"] = 1;
-                }
+                e.NewValues["IdAuto"] = 1;
             }
             catch (Exception ex)
             {
@@ -194,37 +179,6 @@ namespace WizOne.Eval
 
                 grDate.KeyFieldName = "IdAuto";
                 grDate.DataSource = dt;
-
-
-                //Florin 2020.01.30
-
-                //List<metaDate> dtSetAngajati = Session["Eval_QuizSetAngajati"] as List<metaDate>;
-                //if (dtSetAngajati != null)
-                //{
-                //    GridViewDataComboBoxColumn colSetAngajati = (grDate.Columns["IdGrup"] as GridViewDataComboBoxColumn);
-                //    colSetAngajati.PropertiesComboBox.DataSource = dtSetAngajati;
-                //}
-                //else
-                //{
-                //    //Florin
-                //    strSQL = "select \"IdSetAng\" as \"Id\", \"DenSet\" as \"Denumire\" from \"Eval_SetAngajati\"";
-                //    DataTable dtSetAngajat = new DataTable();
-                //    dtSetAngajat = General.IncarcaDT(strSQL, null);
-                //    lstGrupuriAngajati = new List<metaDate>();
-                //    if (dtSetAngajat != null && dtSetAngajat.Rows.Count != 0)
-                //    {
-                //        foreach (DataRow rwSetAngajat in dtSetAngajat.Rows)
-                //        {
-                //            metaDate clsSetAng = new metaDate();
-                //            clsSetAng.Id = Convert.ToInt32(rwSetAngajat["Id"].ToString());
-                //            clsSetAng.Denumire = rwSetAngajat["Denumire"].ToString();
-                //            lstGrupuriAngajati.Add(clsSetAng);
-                //        }
-                //    }
-                //    Session["Eval_QuizSetAngajati"] = lstGrupuriAngajati;
-                //    GridViewDataComboBoxColumn colSetAngajati = (grDate.Columns["IdGrup"] as GridViewDataComboBoxColumn);
-                //    colSetAngajati.PropertiesComboBox.DataSource = lstGrupuriAngajati;
-                //}
 
                 DataTable dtSet = Session["Eval_QuizSetAngajati"] as DataTable;
                 if (dtSet == null || dtSet.Rows.Count == 0)

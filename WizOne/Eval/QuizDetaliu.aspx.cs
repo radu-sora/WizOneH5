@@ -231,6 +231,13 @@ namespace WizOne.Eval
 
                 #endregion
 
+                #region salvare Eval_ConfigTipTabela
+
+                DataTable dtTbl = Session["Eval_ConfigTipTabela"] as DataTable;
+                General.SalveazaDate(dtTbl, "Eval_ConfigTipTabela");
+
+                #endregion
+
                 //MessageBox.Show("Proces realizat cu succes!", MessageBox.icoSuccess);
                 ASPxPageControl2.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces finalizat cu succes");
             }

@@ -15148,6 +15148,7 @@ INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(123, '
 GO 
 
 CREATE TABLE [dbo].[Eval_ConfigTipTabela](
+	[IdQuiz] [int] NOT NULL,
 	[IdLinie] [int] NOT NULL,
 	[Coloana] [int] NOT NULL,
 	[Lungime] [int] NULL,
@@ -15156,7 +15157,7 @@ CREATE TABLE [dbo].[Eval_ConfigTipTabela](
 	[TIME] [datetime] NULL,
  CONSTRAINT [PK_Eval_ConfigTipTabela] PRIMARY KEY CLUSTERED 
 (
-	[IdLinie] ASC, [Coloana] ASC
+	[IdQuiz] ASC,[IdLinie] ASC, [Coloana] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO

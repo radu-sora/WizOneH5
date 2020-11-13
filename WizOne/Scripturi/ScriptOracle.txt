@@ -15415,7 +15415,9 @@ INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana")
 commit;
 
 CREATE TABLE "Eval_ConfigTipTabela" 
-(	"IdLinie" NUMBER(10,0), 
+(	
+"IdQuiz" NUMBER(10,0), 
+"IdLinie" NUMBER(10,0), 
 "Coloana" NUMBER(10,0), 
 "Lungime" NUMBER(10,0), 
 "Alias" VARCHAR2(500 BYTE), 
@@ -15423,8 +15425,8 @@ CREATE TABLE "Eval_ConfigTipTabela"
 "TIME" DATE DEFAULT SYSDATE
 );
 
-CREATE UNIQUE INDEX "Eval_ConfigTipTabela_PK" ON "Eval_ConfigTipTabela" ("IdLinie","Coloana") ;
+CREATE UNIQUE INDEX "Eval_ConfigTipTabela_PK" ON "Eval_ConfigTipTabela" ("IdQuiz","IdLinie","Coloana") ;
 
-ALTER TABLE "Eval_ConfigTipTabela" ADD CONSTRAINT "Eval_ConfigTipTabela_PK" PRIMARY KEY ("IdLinie","Coloana");
+ALTER TABLE "Eval_ConfigTipTabela" ADD CONSTRAINT "Eval_ConfigTipTabela_PK" PRIMARY KEY ("IdQuiz","IdLinie","Coloana");
 ALTER TABLE "Eval_ConfigTipTabela" MODIFY ("IdLinie" NOT NULL ENABLE);
 /

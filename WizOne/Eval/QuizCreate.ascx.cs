@@ -460,6 +460,10 @@ namespace WizOne.Eval
                     cmbCategObi.DataSource = dt;
                     cmbCategObi.DataBind();
                     Session["Eval_tblCategorieObiective"] = dt;
+
+                    //Florin 2020.11.13
+                    DataTable dtTbl = General.IncarcaDT(@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdQuiz""=@1 ", new object[] { Session["IdEvalQuiz"] });
+                    Session["Eval_ConfigTipTabela"] = dtTbl;
                 }
                 else
                 {
@@ -930,7 +934,10 @@ namespace WizOne.Eval
                             if (cmbTipObiect.Value != null && Convert.ToInt32(cmbTipObiect.Value.ToString()) == 17)
                             {
                                 pnlConfigTipTabela.Visible = true;
-                                grDateTabela.DataSource = General.IncarcaDT($@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdLinie""=@1", new object[] { IdQuizIntrebare });
+                                DataTable dtTbl = Session["Eval_ConfigTipTabela"] as DataTable;
+                                DataTable dtFiltru = dtTbl.Select("IdQuiz = " + Convert.ToInt32(General.Nz(Session["IdEvalQuiz"], -99)) + " AND IdLInie = " + IdQuizIntrebare).CopyToDataTable();
+                                grDateTabela.DataSource = dtFiltru;
+                                //General.IncarcaDT($@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdLinie""=@1", new object[] { IdQuizIntrebare });
                                 grDateTabela.DataBind();
                             }
 
@@ -2069,10 +2076,10 @@ namespace WizOne.Eval
         {
             try
             {
-                //DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                DataTable dt = grDateTabela.DataSource as DataTable;
+                DataTable dt = Session["Eval_ConfigTipTabela"] as DataTable;
                 DataRow dr = dt.NewRow();
 
+                dr["IdQuiz"] = Convert.ToInt32(General.Nz(Session["IdEvalQuiz"], -99));
                 dr["IdLinie"] = Convert.ToInt32(hf["Id"]);
                 dr["Coloana"] = e.NewValues["Coloana"];
                 dr["Lungime"] = e.NewValues["Lungime"];
@@ -2100,8 +2107,7 @@ namespace WizOne.Eval
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
 
-                //DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                DataTable dt = grDateTabela.DataSource as DataTable;
+                DataTable dt = Session["Eval_ConfigTipTabela"] as DataTable;
                 DataRow dr = dt.Rows.Find(keys);
 
                 dr["Coloana"] = e.NewValues["Coloana"];
@@ -2129,8 +2135,7 @@ namespace WizOne.Eval
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
 
-                //DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                DataTable dt = grDateTabela.DataSource as DataTable;
+                DataTable dt = Session["Eval_ConfigTipTabela"] as DataTable;
                 DataRow found = dt.Rows.Find(keys);
                 found.Delete();
 
@@ -2148,7 +2153,8 @@ namespace WizOne.Eval
         {
             try
             {
-                e.NewValues["IdLinie"] = Convert.ToInt32(hf["Id"]);
+                e.NewValues["IdLinie"] = Convert.ToInt32(General.Nz(hf["Id"],1));
+                e.NewValues["IdQuiz"] = Convert.ToInt32(General.Nz(Session["IdEvalQuiz"],-99));
             }
             catch (Exception ex)
             {

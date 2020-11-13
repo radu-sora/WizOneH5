@@ -959,7 +959,7 @@
                                                                             <td colspan="2">
                                                                                 <dx:ASPxHiddenField runat="server" ID="ASPxHiddenField1" ClientInstanceName="hfCompetente" />
                                                                                 <dx:ASPxHiddenField runat="server" ID="ASPxHiddenField2" ClientInstanceName="hfCompetenteColName" />
-                                                                                <dx:ASPxGridView ID="grDateTabela" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateTabela" ClientIDMode="Static" Width="1100px" AutoGenerateColumns="false" KeyFieldName="IdLinie;Coloana"
+                                                                                <dx:ASPxGridView ID="grDateTabela" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateTabela" ClientIDMode="Static" Width="1100px" AutoGenerateColumns="false" KeyFieldName="IdQuiz;IdLinie;Coloana"
                                                                                      OnRowInserting="grDateTabela_RowInserting" OnRowUpdating="grDateTabela_RowUpdating" OnRowDeleting="grDateTabela_RowDeleting" OnInitNewRow="grDateTabela_InitNewRow">
                                                                                     <SettingsBehavior AllowFocusedRow="true" EnableCustomizationWindow="true" AllowSelectByRowClick="true" ColumnResizeMode="NextColumn" />
                                                                                     <Settings ShowFilterRow="false" ShowGroupPanel="false" HorizontalScrollBarMode="Auto" />
@@ -969,6 +969,7 @@
                                                                                     <Columns>
                                                                                         <dx:GridViewCommandColumn Width="80px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
 
+                                                                                        <dx:GridViewDataTextColumn FieldName="IdQuiz" Name="IdQuiz" Caption="IdQuiz" Visible="false" ShowInCustomizationForm="false" />
                                                                                         <dx:GridViewDataTextColumn FieldName="IdLinie" Name="IdLinie" Caption="IdLinie" Visible="false" ShowInCustomizationForm="false" />
                                                                                         <dx:GridViewDataComboBoxColumn FieldName="Coloana" Name="Coloana" Caption="Coloana" Width="120">
                                                                                             <PropertiesComboBox>

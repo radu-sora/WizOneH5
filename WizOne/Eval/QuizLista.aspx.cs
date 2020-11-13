@@ -72,6 +72,7 @@ namespace WizOne.Eval
                         {
                             //Florin 2020.01.30
                             Session["Eval_QuizSetAngajati"] = null;
+                            Session["Eval_ConfigTipTabela"] = null;
 
                             string url = "~/Eval/QuizDetaliu.aspx";
                             if(url!="")
@@ -160,6 +161,7 @@ namespace WizOne.Eval
                 Session["InformatiaCurentaEvalQuiz"] = null;
                 Session["Quiz360"] = 0;
                 Session["Eval_QuizSetAngajati"] = null;
+                Session["Eval_ConfigTipTabela"] = null;
 
                 string url = "";
                 url = "~/Eval/QuizDetaliu.aspx";

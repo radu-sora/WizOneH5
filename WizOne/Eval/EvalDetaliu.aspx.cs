@@ -1086,10 +1086,16 @@ namespace WizOne.Eval
                         ASPxGridView grDate = grIntrebari.FindControl(arr[i]) as ASPxGridView;
                         if (grDate != null)
                         {
+                            List<GridViewDataColumn> lst = new List<GridViewDataColumn>();
                             foreach (GridViewDataColumn col in grDate.Columns.OfType<GridViewDataColumn>())
                             {
                                 if (col.FieldName == "" && col.UnboundType == DevExpress.Data.UnboundColumnType.Bound)
-                                    grDate.Columns.Remove(col);
+                                    lst.Add(col);
+                            }
+
+                            foreach (GridViewDataColumn col in lst)
+                            {
+                                grDate.Columns.Remove(col);
                             }
                         }
                     }

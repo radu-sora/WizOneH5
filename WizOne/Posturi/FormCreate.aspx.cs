@@ -74,36 +74,6 @@ namespace WizOne.Posturi
                     grDate.DataSource = dt;
                     grDate.DataBind();
 
-                    dtRap = Session["FormCreate_Rap"] as DataTable;
-
-                    checkComboBoxGrup.Value = null;
-
-                    if (dtRap != null && dtRap.Rows.Count > 0)
-                    {
-                        DataRow[] dr = dtRap.Select("Id = " + cmbForm.Items[cmbForm.SelectedIndex].Value.ToString());
-                        if (dr[0]["IdRaport"] != DBNull.Value)
-                            cmbRaport.Value = Convert.ToInt32(dr[0]["IdRaport"].ToString());
-
-                        if (dr[0]["GrupuriUtilizatori"] != DBNull.Value)
-                        {
-                            string[] sir = dr[0]["GrupuriUtilizatori"].ToString().Split(',');
-                            ASPxListBox nestedListBox = checkComboBoxGrup.FindControl("listBox") as ASPxListBox;
-                            string text = "";
-                            for (int i = 0; i < nestedListBox.Items.Count; i++)
-                            {
-                                for (int j = 0; j < sir.Length; j++)
-                                    if (Convert.ToInt32(nestedListBox.Items[i].Value) == Convert.ToInt32(sir[j]))
-                                    {
-                                        nestedListBox.Items[i].Selected = true;
-                                        text += "," + nestedListBox.Items[i].Text;
-                                        break;
-                                    }
-
-                            }
-                            checkComboBoxGrup.Text = (text.Length > 0 ? text.Substring(1) : text);
-                        }
-                    }
-
                 }
 
 
@@ -146,6 +116,9 @@ namespace WizOne.Posturi
                 string tip = e.Parameter.Split(';')[0];
                 switch(tip)
                 {
+                    case "1":
+                        btnSave_Click();
+                        break;
                     case "5":
                         IncarcaGrid();
                         break;    
@@ -371,7 +344,7 @@ namespace WizOne.Posturi
             }
         }
 
-        protected void btnSave_Click(object sender, EventArgs e)
+        protected void btnSave_Click()
         {
             try
             {
@@ -392,7 +365,7 @@ namespace WizOne.Posturi
                         + cmbForm.Items[cmbForm.SelectedIndex].Value.ToString(), null);
                 }
 
-                MessageBox.Show("Proces terminat cu succes!", MessageBox.icoSuccess);
+                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces terminat cu succes!");
 
             }
             catch (Exception ex)

@@ -15164,3 +15164,6 @@ GO
 
 ALTER TABLE [dbo].[Eval_ConfigTipTabela] ADD  CONSTRAINT [DF_Eval_ConfigTipTabela_TIME]  DEFAULT (getdate()) FOR [TIME]
 GO
+
+INSERT INTO "Securitate" ("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu") VALUES('Absente.Lista', 'btnAnulare', '-', 6, 1, 1, 0)
+GO

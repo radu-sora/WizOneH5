@@ -15430,3 +15430,6 @@ CREATE UNIQUE INDEX "Eval_ConfigTipTabela_PK" ON "Eval_ConfigTipTabela" ("IdQuiz
 ALTER TABLE "Eval_ConfigTipTabela" ADD CONSTRAINT "Eval_ConfigTipTabela_PK" PRIMARY KEY ("IdQuiz","IdLinie","Coloana");
 ALTER TABLE "Eval_ConfigTipTabela" MODIFY ("IdLinie" NOT NULL ENABLE);
 /
+
+INSERT INTO "Securitate" ("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu") VALUES('Absente.Lista', 'btnAnulare', '-', 6, 1, 1, 0);
+COMMIT;

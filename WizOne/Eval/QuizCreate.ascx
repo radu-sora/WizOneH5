@@ -955,7 +955,8 @@
                                                                             <td colspan="2">
                                                                                 <dx:ASPxHiddenField runat="server" ID="ASPxHiddenField1" ClientInstanceName="hfCompetente" />
                                                                                 <dx:ASPxHiddenField runat="server" ID="ASPxHiddenField2" ClientInstanceName="hfCompetenteColName" />
-                                                                                <dx:ASPxGridView ID="grDateTabela" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateTabela" ClientIDMode="Static" Width="1100px" AutoGenerateColumns="false">
+                                                                                <dx:ASPxGridView ID="grDateTabela" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateTabela" ClientIDMode="Static" Width="1100px" AutoGenerateColumns="false" KeyFieldName="IdLinie;Coloana"
+                                                                                     OnRowInserting="grDateTabela_RowInserting" OnRowUpdating="grDateTabela_RowUpdating" OnRowDeleting="grDateTabela_RowDeleting" OnInitNewRow="grDateTabela_InitNewRow">
                                                                                     <SettingsBehavior AllowFocusedRow="true" EnableCustomizationWindow="true" AllowSelectByRowClick="true" ColumnResizeMode="NextColumn" />
                                                                                     <Settings ShowFilterRow="false" ShowGroupPanel="false" HorizontalScrollBarMode="Auto" />
                                                                                     <SettingsSearchPanel Visible="false" />
@@ -977,7 +978,7 @@
                                                                                                 </Items>
                                                                                             </PropertiesComboBox>
                                                                                         </dx:GridViewDataComboBoxColumn>
-                                                                                        <dx:GridViewDataTextColumn FieldName="Lungime" Name="Lungime" Caption="Lungime" Width="100" />
+                                                                                        <dx:GridViewDataSpinEditColumn FieldName="Lungime" Name="Lungime" Caption="Lungime" Width="100" PropertiesSpinEdit-MinValue="10" PropertiesSpinEdit-MaxValue="1000" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false"/>
                                                                                         <dx:GridViewDataTextColumn FieldName="Alias" Name="Alias" Caption="Alias" Width="250"/>
                                                                                         
                                                                                     </Columns>
@@ -988,6 +989,10 @@
                                                                                                 <Style Paddings-PaddingRight="5px" />
                                                                                             </Styles>
                                                                                         </EditButton>
+						                                                                <DeleteButton>
+							                                                                <Image Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" ToolTip="Sterge" />
+						                                                                </DeleteButton>
+                                                                                        
                                                                                         <UpdateButton>
                                                                                             <Image Url="../Fisiere/Imagini/Icoane/salveaza.png" AlternateText="Save" ToolTip="Actualizeaza" />
                                                                                             <Styles>
@@ -997,6 +1002,10 @@
                                                                                         <CancelButton>
                                                                                             <Image Url="../Fisiere/Imagini/Icoane/renunta.png" AlternateText="Renunta" ToolTip="Renunta" />
                                                                                         </CancelButton>
+
+                                                                                        <NewButton>
+                                                                                            <Image Url="~/Fisiere/Imagini/Icoane/new.png" AlternateText="Adauga" ToolTip="Adauga" />
+                                                                                        </NewButton>
                                                                                     </SettingsCommandButton>
                                                                                 </dx:ASPxGridView>
                                                                             </td>

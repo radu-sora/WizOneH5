@@ -595,6 +595,7 @@ namespace WizOne.Eval
                     //cmbDinNomenclator.Value = null;
                     partGridObiective.Visible = false;
                     partGridCompetente.Visible = false;
+                    pnlConfigTipTabela.Visible = false;
 
                     lblPrelObi.Visible = false;
                     chkNomenclator.Visible = false;
@@ -924,6 +925,14 @@ namespace WizOne.Eval
                                 cmbTemplateCompetente.Value = TemplateIdCompetente;
                             }
                             #endregion
+
+                            //FLorin 2020.11.12
+                            if (cmbTipObiect.Value != null && Convert.ToInt32(cmbTipObiect.Value.ToString()) == 17)
+                            {
+                                pnlConfigTipTabela.Visible = true;
+                                grDateTabela.DataSource = General.IncarcaDT($@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdLinie""=@1", new object[] { IdQuizIntrebare });
+                                grDateTabela.DataBind();
+                            }
 
                             Session["Eval_QuizIntrebari_IdCategorieData"] = IdCategorieTipCamp;
 
@@ -1569,6 +1578,7 @@ namespace WizOne.Eval
                 //cmbDinNomenclator.Value = null;
                 partGridObiective.Visible = false;
                 partGridCompetente.Visible = false;
+                pnlConfigTipTabela.Visible = false;
 
                 lblPrelObi.Visible = false;
                 chkNomenclator.Visible = false;
@@ -2055,5 +2065,95 @@ namespace WizOne.Eval
 
         #endregion
 
+        protected void grDateTabela_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            try
+            {
+                //DataTable dt = Session["InformatiaCurenta"] as DataTable;
+                DataTable dt = grDateTabela.DataSource as DataTable;
+                DataRow dr = dt.NewRow();
+
+                dr["IdLinie"] = Convert.ToInt32(hf["Id"]);
+                dr["Coloana"] = e.NewValues["Coloana"];
+                dr["Lungime"] = e.NewValues["Lungime"];
+                dr["Alias"] = e.NewValues["Alias"];
+                dr["USER_NO"] = Session["UserId"];
+                dr["TIME"] = DateTime.Now;
+
+                dt.Rows.Add(dr);
+                e.Cancel = true;
+                grDateTabela.CancelEdit();
+                Session["InformatiaCurenta"] = dt;
+                grDateTabela.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateTabela_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                //DataTable dt = Session["InformatiaCurenta"] as DataTable;
+                DataTable dt = grDateTabela.DataSource as DataTable;
+                DataRow dr = dt.Rows.Find(keys);
+
+                dr["Coloana"] = e.NewValues["Coloana"];
+                dr["Lungime"] = e.NewValues["Lungime"];
+                dr["Alias"] = e.NewValues["Alias"];
+                dr["USER_NO"] = Session["UserId"];
+                dr["TIME"] = DateTime.Now;
+
+                e.Cancel = true;
+                grDateTabela.CancelEdit();
+                Session["InformatiaCurenta"] = dt;
+                grDateTabela.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateTabela_RowDeleting(object sender, DevExpress.Web.Data.ASPxDataDeletingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                //DataTable dt = Session["InformatiaCurenta"] as DataTable;
+                DataTable dt = grDateTabela.DataSource as DataTable;
+                DataRow found = dt.Rows.Find(keys);
+                found.Delete();
+
+                e.Cancel = true;
+                grDateTabela.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateTabela_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
+        {
+            try
+            {
+                e.NewValues["IdLinie"] = Convert.ToInt32(hf["Id"]);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

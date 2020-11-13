@@ -15433,3 +15433,6 @@ ALTER TABLE "Eval_ConfigTipTabela" MODIFY ("IdLinie" NOT NULL ENABLE);
 
 INSERT INTO "Securitate" ("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu") VALUES('Absente.Lista', 'btnAnulare', '-', 6, 1, 1, 0);
 COMMIT;
+
+insert into "Securitate" ("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu") values ('Absente.Lista',	'btnAnulare',	'-',	6,	1,	1,	0);
+commit;

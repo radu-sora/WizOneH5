@@ -15,6 +15,7 @@
                 s.cpAlertMessage = null;
             }
         } 
+ 
 
         var textSeparator = ",";
         function OnListBoxSelectionChanged(listBox, args) {
@@ -75,7 +76,11 @@
                 <dx:ASPxButton ID="btnPreviz" ClientInstanceName="btnPreviz" ClientIDMode="Static" runat="server" Text="Previzualizare" AutoPostBack="true" OnClick="btnPreviz_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/new.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salvare" AutoPostBack="true" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salvare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) {
+                                pnlLoading.Show();
+                                pnlCtl.PerformCallback(1);
+                            }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="../Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >

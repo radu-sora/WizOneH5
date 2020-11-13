@@ -279,6 +279,14 @@ namespace WizOne.Eval
                                 Session["lstEval_ObiIndividualeTemp_Sterse"] = null;
                                 Session["lstEval_CompetenteAngajatTemp_Sterse"] = null;
 
+                                //Florin 2020.11.12
+                                Session["lstEval_ConfigObiective"] = null;
+                                Session["lstEval_ConfigObTemplate"] = null;
+                                Session["lstEval_ConfigObTemplateDetail"] = null;
+                                Session["lstEval_ConfigCompetente"] = null;
+                                Session["lstEval_ConfigCompTemplate"] = null;
+                                Session["lstEval_ConfigCompTemplateDetail"] = null;
+
                                 //Florin 2019.10.23 - retinem filtrul
                                 #region Salvam Filtrul
 

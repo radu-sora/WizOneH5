@@ -67,6 +67,8 @@ namespace WizOne.Posturi
                 dt.Rows.Add(1, "Nivelul meu");
                 dt.Rows.Add(2, "Toate");
 
+                if (!IsPostBack)
+                    cmbNivel.Value = 1;
                 cmbNivel.DataSource = dt;
                 cmbNivel.DataBind();
 
@@ -1196,7 +1198,7 @@ namespace WizOne.Posturi
                 DataTable dtCirc = General.IncarcaDT(sql, null);
 
                 int total = 0;
-                int idStare = 2;
+                int idStare = -99;
                 int pozUser = 1;
 
                 //aflam totalul de users din circuit
@@ -1234,7 +1236,7 @@ namespace WizOne.Posturi
                 {
                     string aprobat = "NULL", dataAprobare = "NULL";
                     int idSuper = -99;
-                    idStare = 2;
+                    idStare = -99;
                     if (dtCirc.Rows[0]["Super" + i] != DBNull.Value)
                     {
                         idSuper = Convert.ToInt32(dtCirc.Rows[0]["Super" + i].ToString());
@@ -1360,7 +1362,7 @@ namespace WizOne.Posturi
                         }
                         string strSqlIst = "INSERT INTO \"Org_DateIstoric\"(\"Id\", \"IdCircuit\", \"IdPost\", \"IdUser\", \"IdStare\",  \"Pozitie\", \"Culoare\", \"Aprobat\", \"DataAprobare\", \"Inlocuitor\", \"IdUserInlocuitor\", \"IdRol\",  USER_NO, TIME) "
                                 + " VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13})";
-                        strSqlIst = string.Format(strSqlIst, idUrm, idCircuit, idPost == null ? "NULL" : idPost.ToString(), idUserCalc, idStare, poz, ("(SELECT CASE WHEN \"Culoare\" IS NULL THEN '#FFFFFFFF' ELSE \"Culoare\" END FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idStare + ")"),
+                        strSqlIst = string.Format(strSqlIst, idUrm, idCircuit, idPost == null ? "NULL" : idPost.ToString(), idUserCalc, (idStare == -99 ? "NULL" : idStare.ToString()), poz, ("(SELECT CASE WHEN \"Culoare\" IS NULL THEN '#FFFFFFFF' ELSE \"Culoare\" END FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idStare + ")"),
                             aprobat, dataAprobare, "0", "NULL", idSuper, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
                         General.ExecutaNonQuery(strSqlIst, null);
                     } 
@@ -1371,7 +1373,7 @@ namespace WizOne.Posturi
                     "TO_DATE('" + dtVigoare.Day.ToString().PadLeft(2, '0') + "/" + dtVigoare.Month.ToString().PadLeft(2, '0') + "/" + dtVigoare.Year.ToString() + "', 'dd/mm/yyyy')");
                 string strSql = "INSERT INTO \"Org_Date\"(\"Id\", \"IdFormular\", \"IdStare\", \"IdPost\", \"UserIntrod\", \"Inlocuitor\", \"IdCerereRecrutare\", \"IdCircuit\", \"TotalCircuit\", \"Culoare\", \"Pozitie\", \"DataInceput\", F10003, \"Observatii\", \"F10003Candidat\", USER_NO, TIME) "
                         + " VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, '{9}', {10}, {11}, {12}, '{13}', {14}, {15}, {16})";
-                strSql = string.Format(strSql, idUrm, idFormular, idStare, idPost == null ? "NULL" : idPost.ToString(), idUser, "NULL",
+                strSql = string.Format(strSql, idUrm, idFormular, "1", idPost == null ? "NULL" : idPost.ToString(), idUser, "NULL",
                     idRec == null ? "NULL" : idRec.ToString(), idCircuit, total, culoare, pozUser, dataInceput, f10003, "NULL", "NULL", Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
 
                 General.ExecutaNonQuery(strSql, null);

@@ -5295,11 +5295,13 @@ namespace WizOne.Module
 
             try
             {
-
-                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ + cmpData + " ORDER BY F01107";
-                if (Constante.tipBD == 2)
-                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ + cmpData + " ORDER BY F01107";
-                table = IncarcaDT(sql, null);
+                if (categ != null && categ.Length > 0)
+                {
+                    string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ + cmpData + " ORDER BY F01107";
+                    if (Constante.tipBD == 2)
+                        sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ + cmpData + " ORDER BY F01107";
+                    table = IncarcaDT(sql, null);
+                }
 
             }
             catch (Exception ex)

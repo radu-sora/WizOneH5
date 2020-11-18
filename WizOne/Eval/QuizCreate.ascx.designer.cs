@@ -84,7 +84,7 @@ namespace WizOne.Eval
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTreeList.ASPxTreeList grDateIntrebari;
+        protected global::DevExpress.XtraReports.Web.ASPxTreeList grDateIntrebari;
 
         /// <summary>
         /// partSectiune control.
@@ -571,24 +571,6 @@ namespace WizOne.Eval
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxFormLayout pnlConfigTipTabela;
-
-        /// <summary>
-        /// ASPxHiddenField1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxHiddenField ASPxHiddenField1;
-
-        /// <summary>
-        /// ASPxHiddenField2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxHiddenField ASPxHiddenField2;
 
         /// <summary>
         /// grDateTabela control.

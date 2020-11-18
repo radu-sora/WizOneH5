@@ -936,8 +936,8 @@ namespace WizOne.Eval
                                 pnlConfigTipTabela.Visible = true;
                                 DataTable dtTbl = Session["Eval_ConfigTipTabela"] as DataTable;
                                 DataTable dtFiltru = dtTbl.Select("IdQuiz = " + Convert.ToInt32(General.Nz(Session["IdEvalQuiz"], -99)) + " AND IdLInie = " + IdQuizIntrebare).CopyToDataTable();
-                                //grDateTabela.DataSource = dtFiltru;
-                                grDateTabela.DataSource = General.IncarcaDT($@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdQuiz"" = @1 AND ""IdLinie""=@2", new object[] { Session["IdEvalQuiz"], IdQuizIntrebare });
+                                grDateTabela.DataSource = dtFiltru;
+                                //grDateTabela.DataSource = General.IncarcaDT($@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdQuiz"" = @1 AND ""IdLinie""=@2", new object[] { Session["IdEvalQuiz"], IdQuizIntrebare });
                                 grDateTabela.DataBind();
                             }
 

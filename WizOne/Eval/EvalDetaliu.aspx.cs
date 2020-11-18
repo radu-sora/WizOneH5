@@ -1401,6 +1401,7 @@ namespace WizOne.Eval
                     col.Caption = Dami.TraduCuvant(arr[i]);
                     col.Visible = true;
                     col.ShowInCustomizationForm = false;
+                    gr.Columns.Add(col);
                 }
 
                 DataTable dtConfig = General.IncarcaDT(@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdQuiz""=@1 AND ""IdLinie""=@2", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), id });
@@ -1420,9 +1421,11 @@ namespace WizOne.Eval
 
                 //gr.DataSource = lstEval_RaspunsLinii.Where(p => p.Id == id);
                 DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                //dtTbl.PrimaryKey = new DataColumn[] { dtTbl.Columns["IdQuiz"], dtTbl.Columns["F10003"], dtTbl.Columns["Id"], dtTbl.Columns["Linia"] };
                 gr.DataSource = dtTbl.Select("Id=" + id).CopyToDataTable();
-                gr.KeyFieldName = "IdQuiz; F10003; Id; Linia";
-                //gr.KeyFieldName = "Id; Linia";
+                //gr.DataSource = dtTbl;
+                //gr.KeyFieldName = "IdQuiz; F10003; Id; Linia";
+                gr.KeyFieldName = "Id; Linia";
                 gr.DataBind();
             }
             catch (Exception ex)

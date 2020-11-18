@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using DevExpress.Web;
+using System;
+using System.Data;
+using System.IO;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using DevExpress.Web;
 using WizOne.Module;
-using System.Data.SqlClient;
-using System.Reflection;
-using System.IO;
-using System.Globalization;
-using System.Web.UI.HtmlControls;
-using Oracle.ManagedDataAccess.Client;
 
 namespace WizOne.Personal
 {
     public partial class Lista : System.Web.UI.Page
     {
-        //string cmp = "USER_NO,TIME,IDAUTO,";
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -116,8 +107,16 @@ namespace WizOne.Personal
                     lblText.Text = "Campurile insemnate cu gri sunt obligatoriu de completat";                    
                 }
 
-
+                if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
+                {
+                    cmbPost.Visible = true;
+                    DataTable dtPost = General.IncarcaDT($@"SELECT ""Id"", ""Denumire"" FROM ""Org_Posturi"" WHERE {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}", null);
+                    cmbPost.DataSource = dtPost;
+                    cmbPost.DataBind();
+                    //if (!IsPostBack && dtPost.Rows.Count > 0)
+                    //    cmbPost.Value = Convert.ToInt32(General.Nz(dtPost.Rows[0]["Id"], -99));
                 }
+            }
             catch (Exception ex)
             {
                 //MessageBox.Show(this, ex, MessageBox.icoError, "");
@@ -711,6 +710,9 @@ namespace WizOne.Personal
                         Session["MP_Candidat"] = chkCandidat.Checked ? 1 : 0;
                         Session["MP_CreareUtilizator"] = chkUser.Checked ? 1 : 0;
                         ASPxWebControl.RedirectOnCallback("~/Personal/DateAngajat.aspx");
+                        break;
+                    case "Post":
+                        Session["MP_IdPost"] = cmbPost.Value;
                         break;
                 }
 

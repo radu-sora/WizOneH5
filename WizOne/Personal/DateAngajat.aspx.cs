@@ -1,21 +1,17 @@
-﻿using System;
+﻿using DevExpress.Web;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using DevExpress.Web;
 using WizOne.Module;
-using System.Data.SqlClient;
-using System.Reflection;
-using System.IO;
-using System.Globalization;
-using System.Web.UI.HtmlControls;
-using DevExpress.Data;
-using System.Web.Hosting;
-using System.Drawing;
-using System.Diagnostics;
 
 namespace WizOne.Personal
 {
@@ -49,6 +45,11 @@ namespace WizOne.Personal
                     Session["esteNou"] = "true";
 
                     Initializare(ref ds);
+                }
+                else              //Florin 2020.10.28
+                {
+                    General.AflaIdPost();
+                    General.AdaugaDosar(ref ds, Session["Marca"]);
                 }
 
                 if (!IsPostBack)
@@ -509,7 +510,6 @@ namespace WizOne.Personal
                     {
                         try
                         {
-                            var ert = Convert.ToInt32(General.Nz(ds.Tables[1].Rows[0]["F10025"], 0));
                             if (Convert.ToInt32(General.Nz(ds.Tables[1].Rows[0]["F10025"],0)) == 999  && Convert.ToDateTime(ds.Tables[1].Rows[0]["F10022"]) < General.DamiDataLucru().AddMonths(1))
                             {
                                 MessageBox.Show("Data angajarii este mai mica decat luna de salarizare", MessageBox.icoError, "");
@@ -687,8 +687,6 @@ namespace WizOne.Personal
                     
                 for (int i = 1; i < ds.Tables.Count; i++)
                 {//Radu 10.06.2019
-                    var ert = ds.Tables[i].TableName;
-
                     if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni" || ds.Tables[i].TableName == "Admin_Cursuri" || ds.Tables[i].TableName == "F100Studii")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
@@ -755,6 +753,10 @@ namespace WizOne.Personal
                 }
 
 
+                //Florin 2020.10.02
+                //salvam postul
+                General.SalveazaPost(Session["Marca"], Session["MP_IdPost"], DateTime.Now);
+
                 //Florin 2019.09.23
                 GolireVariabile();
 
@@ -772,7 +774,6 @@ namespace WizOne.Personal
                 //Florin 2018.11.22
                 //trimitem la lista de angajati        
                 Response.Redirect("~/Personal/Lista.aspx", false);
-
             }
             catch (Exception ex)
             {
@@ -787,11 +788,6 @@ namespace WizOne.Personal
             try
             {
                 string sql = "SELECT * FROM \"" + tabela + "\"";
-                //DataTable dtGen = new DataTable();
-                //dtGen = General.IncarcaDT(sql, null);
-                //dtGen.TableName = tabela;
-                //dtGen.PrimaryKey = new DataColumn[] { dtGen.Columns["IdAuto"] };
-
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataTable dt = ds.Tables[tabela] as DataTable;
 
@@ -881,7 +877,6 @@ namespace WizOne.Personal
                                 General.LoadFile(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
                             }
                         }
-    ;
                     }
                     else
                     {//INSERT
@@ -917,7 +912,6 @@ namespace WizOne.Personal
                                 //    val = "''";
                                 if (val.Length <= 0)
                                     val = "null";
-
 
                                 sir += "," + val;
                             }
@@ -1013,7 +1007,6 @@ namespace WizOne.Personal
             try
             {
                 ds = new DataSet();
-
 
                 string idSablon = Session["IdSablon"].ToString();
                 string sql = "SELECT * FROM F099 WHERE F09903 = " + idSablon;
@@ -1114,6 +1107,63 @@ namespace WizOne.Personal
                 ds.Tables.Add(dt100);
                 dt1001.TableName = "F1001";
                 ds.Tables.Add(dt1001);
+
+                
+
+                if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1" && Convert.ToString(Session["MP_IdPost"]) != "")
+                {
+                    DataRow dr = General.IncarcaDR($@"SELECT * FROM ""Org_Posturi"" WHERE Id=@1 AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}", new object[] { Session["MP_IdPost"] });
+                    if (dr != null)
+                    {
+                        //Functia
+                        if (dr["IdFunctie"] != DBNull.Value)
+                        {
+                            ds.Tables[0].Rows[0]["F10071"] = dr["IdFunctie"];
+                            ds.Tables["F100"].Rows[0]["F10071"] = dr["IdFunctie"];
+                        }
+                            
+                        //cor
+                        if (dr["CodCOR"] != DBNull.Value)
+                        {
+                            ds.Tables[0].Rows[0]["F10098"] = dr["CodCOR"];
+                            ds.Tables["F100"].Rows[0]["F10098"] = dr["CodCOR"];
+                        }
+                        
+                        //Nivel functie - se face automat in Page_init din Personal/Contract
+
+                        //structura organizatorica
+                        if (dr["F10002"] != DBNull.Value)
+                        {
+                            ds.Tables[0].Rows[0]["F10002"] = dr["F10002"];
+                            ds.Tables["F100"].Rows[0]["F10002"] = dr["F10002"];
+                        }
+                        if (dr["F10004"] != DBNull.Value)
+                        {
+                            ds.Tables[0].Rows[0]["F10004"] = dr["F10004"];
+                            ds.Tables["F100"].Rows[0]["F10004"] = dr["F10004"];
+                        }
+                        if (dr["F10005"] != DBNull.Value)
+                        {
+                            ds.Tables[0].Rows[0]["F10005"] = dr["F10005"];
+                            ds.Tables["F100"].Rows[0]["F10005"] = dr["F10005"];
+                        }
+                        if (dr["F10006"] != DBNull.Value)
+                        {
+                            ds.Tables[0].Rows[0]["F10006"] = dr["F10006"];
+                            ds.Tables["F100"].Rows[0]["F10006"] = dr["F10006"];
+                        }
+                        if (dr["F10007"] != DBNull.Value)
+                        {
+                            ds.Tables[0].Rows[0]["F10007"] = dr["F10007"];
+                            ds.Tables["F100"].Rows[0]["F10007"] = dr["F10007"];
+                        }
+
+                        Session["MP_SalariulMinPost"] = Convert.ToInt32(General.Nz(dr["SalariuMin"],0));
+                        General.AdaugaBeneficiile(ref ds, Session["Marca"], dr);
+                    }
+
+                    General.AdaugaDosar(ref ds, Session["Marca"]);
+                }
 
                 Session["InformatiaCurentaPersonal"] = ds;
             }
@@ -1245,20 +1295,6 @@ namespace WizOne.Personal
             blocat = false;
             try
             {
-
-                //string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
-                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                //                FROM ""Securitate"" A
-                //                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                //                WHERE B.""IdUser"" = {1} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" = '{0}'
-                //                UNION
-                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                //                FROM ""Securitate"" A
-                //                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" = '{0}') X
-                //                GROUP BY X.""IdControl"", X.""IdColoana""";
-                //strSql = string.Format(strSql, numeTab, Session["UserId"].ToString());
-                //DataTable dt = General.IncarcaDT(strSql, null);
-
                 DataTable dtSec = HttpContext.Current.Session["SecuritatePersonal"] as DataTable;
                 DataTable dt = new DataTable();
                 if (dtSec != null && dtSec.Rows.Count > 0)
@@ -1287,20 +1323,6 @@ namespace WizOne.Personal
             List<string> lista = new List<string>();
             try
             {
-
-                //string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
-                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                //                FROM ""Securitate"" A
-                //                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                //                WHERE B.""IdUser"" = {0} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" like '%_I%'
-                //                UNION
-                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                //                FROM ""Securitate"" A
-                //                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl""  like '%_I%') X
-                //                GROUP BY X.""IdControl"", X.""IdColoana""";
-                //strSql = string.Format(strSql, Session["UserId"].ToString());
-                //DataTable dt = General.IncarcaDT(strSql, null);
-
                 DataTable dtSec = HttpContext.Current.Session["SecuritatePersonal"] as DataTable;
                 DataTable dt = new DataTable();
                 if (dtSec != null && dtSec.Rows.Count > 0)
@@ -1323,49 +1345,6 @@ namespace WizOne.Personal
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
             return lista;
-        }
-
-        protected void ASPxPageControl2_Callback(object sender, CallbackEventArgsBase e)
-        {
-            try
-            {
-                ASPxPageControl ctl = sender as ASPxPageControl;
-                if (ctl == null) return;
-                //TabPage tab = ctl.ActiveTabPage;
-                
-                //if (Session["PreluareDate"] != null && Session["PreluareDate"].ToString() == "1")
-                //{
-                //    Session["PreluareDate"] = 0;
-                //    foreach (TabPage tab in ctl.TabPages)
-                //    {
-                //        for (int j = 0; j < tab.Controls[0].Controls.Count; j++)
-                //        {
-                //            if (tab.Controls[0].Controls[j].GetType() == typeof(DevExpress.Web.ASPxCallbackPanel))
-                //            {
-                //                ASPxCallbackPanel cb = tab.Controls[0].Controls[j] as ASPxCallbackPanel;
-                //                for (int k = 0; k < cb.Controls.Count; k++)
-                //                {
-                //                    if (cb.Controls[k].GetType() == typeof(DataList))
-                //                    {
-                //                        DataList dl = cb.Controls[k] as DataList;
-                //                        DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                //                        DataTable table = ds.Tables[0];
-                //                        dl.DataSource = table;
-                //                        dl.DataBind();
-                //                        break;
-                //                    }
-                //                }
-                //                break;
-                //            }
-                //        }
-                //    }
-                //}
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
         }
 
         private void AdaugaValorile()
@@ -1777,6 +1756,12 @@ namespace WizOne.Personal
 
                 //Florin 2020.08.20
                 Session["List_DocUpload_MP_Atasamente"] = null;
+
+                //Florin 2020.10.02
+                Session["MP_IdPost"] = null;
+                Session["MP_SalariulMinPost"] = 0;
+
+                Session["DocUpload_MP_Dosar"] = null;
             }
             catch (Exception ex)
             {

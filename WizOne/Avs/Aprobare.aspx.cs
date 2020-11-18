@@ -931,8 +931,10 @@ namespace WizOne.Avs
                             {
                                 Cereri pag = new Cereri();
                                 pag.TrimiteInF704(id);
-                                if (Convert.ToInt32(General.Nz(dtCer.Rows[0]["IdAtribut"],-99)) == 2)
-                                    General.ModificaFunctieAngajat(Convert.ToInt32(dtCer.Rows[0]["F10003"]), Convert.ToInt32(General.Nz(dtCer.Rows[0]["FunctieId"], -99)), Convert.ToDateTime(dtCer.Rows[0]["DataModif"]), new DateTime(2100, 1, 1));
+
+                                //Florin 2020.10.07 - se trateaza cazul in functia TrimiteInF704
+                                //if (Convert.ToInt32(General.Nz(dtCer.Rows[0]["IdAtribut"],-99)) == 2)
+                                //    General.ModificaFunctieAngajat(Convert.ToInt32(dtCer.Rows[0]["F10003"]), Convert.ToInt32(General.Nz(dtCer.Rows[0]["FunctieId"], -99)), Convert.ToDateTime(dtCer.Rows[0]["DataModif"]), new DateTime(2100, 1, 1));
                             }
 
                             if (actiune == 3)

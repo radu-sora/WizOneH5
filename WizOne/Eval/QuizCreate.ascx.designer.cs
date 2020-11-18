@@ -84,7 +84,7 @@ namespace WizOne.Eval
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.XtraReports.Web.ASPxTreeList grDateIntrebari;
+        protected global::DevExpress.Web.ASPxTreeList.ASPxTreeList grDateIntrebari;
 
         /// <summary>
         /// partSectiune control.

@@ -3,6 +3,7 @@ using DevExpress.Web.ASPxTreeList;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -437,7 +438,11 @@ namespace WizOne.Eval
                     Session["TemplateIdCompetenta"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigCompTemplate"" "), 0));
 
                     Session["QuizIntrebari_Id"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""Id"",0)) FROM ""Eval_QuizIntrebari"" "), 0)) + 1;
+                    Session["isEditingConfigTipTabela"] = null;
                 }
+
+                if (Session["isEditingConfigTipTabela"] == null || Session["isEditingConfigTipTabela"].ToString() == "0")
+                    pnlConfigTipTabela.Visible = false;
             }
             catch (Exception ex)
             {
@@ -933,12 +938,28 @@ namespace WizOne.Eval
                             //FLorin 2020.11.12
                             if (cmbTipObiect.Value != null && Convert.ToInt32(cmbTipObiect.Value.ToString()) == 17)
                             {
+                                Session["isEditingConfigTipTabela"] = "1";
                                 pnlConfigTipTabela.Visible = true;
-                                DataTable dtTbl = Session["Eval_ConfigTipTabela"] as DataTable;
-                                DataTable dtFiltru = dtTbl.Select("IdQuiz = " + Convert.ToInt32(General.Nz(Session["IdEvalQuiz"], -99)) + " AND IdLInie = " + IdQuizIntrebare).CopyToDataTable();
+
+                                DataTable dtFiltru = Session["Eval_ConfigTipTabela"] as DataTable;
+                                DataRow[] arrTbl = dtFiltru.Select("IdQuiz = " + Convert.ToInt32(General.Nz(Session["IdEvalQuiz"], -99)) + " AND IdLInie = " + IdQuizIntrebare);
+                                if (arrTbl.Count() > 0)
+                                    dtFiltru = arrTbl.CopyToDataTable();
+                                else
+                                    dtFiltru = General.IncarcaDT(@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE 1=2");
+
                                 grDateTabela.DataSource = dtFiltru;
-                                //grDateTabela.DataSource = General.IncarcaDT($@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdQuiz"" = @1 AND ""IdLinie""=@2", new object[] { Session["IdEvalQuiz"], IdQuizIntrebare });
                                 grDateTabela.DataBind();
+
+                                //DataTable dtTbl = Session["Eval_ConfigTipTabela"] as DataTable;
+                                //DataTable dtFiltru = dtTbl.Select("IdQuiz = " + Convert.ToInt32(General.Nz(Session["IdEvalQuiz"], -99)) + " AND IdLInie = " + IdQuizIntrebare).CopyToDataTable();
+                                //grDateTabela.DataSource = dtFiltru;
+                                ////grDateTabela.DataSource = General.IncarcaDT($@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdQuiz"" = @1 AND ""IdLinie""=@2", new object[] { Session["IdEvalQuiz"], IdQuizIntrebare });
+                                //grDateTabela.DataBind();
+                            }
+                            else
+                            {
+                                Session["isEditingConfigTipTabela"] = null;
                             }
 
                             Session["Eval_QuizIntrebari_IdCategorieData"] = IdCategorieTipCamp;
@@ -2161,5 +2182,6 @@ namespace WizOne.Eval
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+    
     }
 }

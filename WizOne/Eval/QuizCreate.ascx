@@ -947,7 +947,7 @@
                                             </Items>
                                         </dx:ASPxFormLayout>
 
-                                        <dx:ASPxFormLayout ID="pnlConfigTipTabela" runat="server" Visible="false">
+                                        <dx:ASPxFormLayout ID="pnlConfigTipTabela" runat="server">
                                             <Items>
                                                 <dx:LayoutGroup Caption="Configurare tip control tabela">
                                                     <Items>

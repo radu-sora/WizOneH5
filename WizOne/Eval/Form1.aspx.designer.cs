@@ -15,12 +15,30 @@ namespace WizOne.Eval
     {
 
         /// <summary>
-        /// grDateTabela control.
+        /// pnlSectiune control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDateTabela;
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlSectiune;
+
+        /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnSave;
+
+        /// <summary>
+        /// divIntrebari control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxPanel divIntrebari;
     }
 }

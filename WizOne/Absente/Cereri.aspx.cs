@@ -782,7 +782,7 @@ namespace WizOne.Absente
                         int esteD = 0;
                         int esteZL = 1;
 
-                        esteSL = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM HOLIDAYS WHERE DAY =@1", new object[] { txtDataInc.Date }) ?? 0);
+                        esteSL = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = " + General.ToDataUniv(txtDataInc.Date)) ?? 0);
                         if (txtDataInc.Date.DayOfWeek == DayOfWeek.Saturday) esteS = 1;
                         if (txtDataInc.Date.DayOfWeek == DayOfWeek.Sunday) esteD = 1;
                         if (esteSL == 1 || esteS == 1 || esteD == 1) esteZL = 0;

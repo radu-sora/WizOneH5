@@ -1918,13 +1918,17 @@ namespace WizOne.Module
                 if (Constante.tipBD == 2)
                     idAuto = "ROWNUM";
 
+                string filtruSuper = "";
+                if (idRol != -99)
+                    filtruSuper = $@" AND B.""IdSuper""={idRol}";
+
                 strSql = $@"SELECT {idAuto} AS ""IdAuto"", Y.* FROM (
                         SELECT MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
                         FROM (
                         SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
                         FROM ""Ptj_tblAbsente"" A
                         INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                        INNER JOIN ""F100Supervizori"" B ON b.""IdSuper"" = -1 * c.""UserIntrod"" AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit""
+                        INNER JOIN ""F100Supervizori"" B ON b.""IdSuper"" = -1 * c.""UserIntrod"" AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit"" {filtruSuper}
                         INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup"" AND b.F10003=d.F10003
                         INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
                         INNER JOIN ""F100Contracte"" H ON H.F10003={f10003} AND CAST(H.""DataInceput"" as date) <= {General.ToDataUniv(data)} AND {General.ToDataUniv(data)} <= CAST(H.""DataSfarsit"" as date)

@@ -1,23 +1,19 @@
-﻿using DevExpress.Web;
+﻿using DevExpress.DataProcessing;
+using DevExpress.Web;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Globalization;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using WizOne.Module;
-using System.Drawing;
-using System.Data.SqlClient;
-using System.Data.SqlTypes;
-using DevExpress.DataProcessing;
-using DevExpress.XtraSpreadsheet.Import.OpenXml;
 
 namespace WizOne.Pontaj
 {
@@ -142,11 +138,6 @@ namespace WizOne.Pontaj
             try
             {
                 Session["PaginaWeb"] = "Pontaj.PontajEchipa";
-
-                //CultureInfo newCulture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
-                //newCulture.NumberFormat.NumberDecimalSeparator = ".";
-                //System.Threading.Thread.CurrentThread.CurrentCulture = newCulture;
-                //System.Threading.Thread.CurrentThread.CurrentUICulture = newCulture;
 
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.Chimpex))
                     divHovercard.Visible = false;
@@ -311,13 +302,6 @@ namespace WizOne.Pontaj
 
                     #endregion
 
-                    //DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
-                    //cmbStare.DataSource = dtStari;
-                    //cmbStare.DataBind();
-
-                    //GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                    //colStari.PropertiesComboBox.DataSource = dtStari;
-
                     cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
                     cmbCateg.DataBind();
 
@@ -347,7 +331,6 @@ namespace WizOne.Pontaj
                 }
                 else if (grDate.IsCallback)
                 {
-                    SetColoane();
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.DataBind();
                 }
@@ -426,8 +409,6 @@ namespace WizOne.Pontaj
             try
             {
                 General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, cmbCtr.Value == null ? "" : cmbCtr.Value.ToString().Replace(",", "', '"));
-
-                //grDate.KeyFieldName = "F10003";
 
                 string strSql = DamiSelect();
 
@@ -2408,14 +2389,7 @@ namespace WizOne.Pontaj
             string op = "+";
             if (Constante.tipBD == 2) op = "||";
 
-            //List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "AngajatNume" });
-            //if (lst == null || lst.Count() == 0 || lst[0] == null) return;
-            //object[] arr = lst[0] as object[];
-
             DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
-
-            //strSql = string.Format(strSql, arr[0].ToString(), ziua.Year, ziua.Month, op);
-
             strSql = string.Format(strSql, General.Nz(f10003,-99), ziua.Year, ziua.Month, op);
 
             grDateIstoric.DataSource = General.IncarcaDT(strSql, null);

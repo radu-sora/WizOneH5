@@ -947,7 +947,7 @@
                                             </Items>
                                         </dx:ASPxFormLayout>
 
-                                        <dx:ASPxFormLayout ID="pnlConfigTipTabela" runat="server" Visible="false">
+                                        <dx:ASPxFormLayout ID="pnlConfigTipTabela" runat="server">
                                             <Items>
                                                 <dx:LayoutGroup Caption="Configurare tip control tabela">
                                                     <Items>
@@ -957,9 +957,7 @@
                                                                     <table cellspacing="20">
                                                                         <tr>
                                                                             <td colspan="2">
-                                                                                <dx:ASPxHiddenField runat="server" ID="ASPxHiddenField1" ClientInstanceName="hfCompetente" />
-                                                                                <dx:ASPxHiddenField runat="server" ID="ASPxHiddenField2" ClientInstanceName="hfCompetenteColName" />
-                                                                                <dx:ASPxGridView ID="grDateTabela" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateTabela" ClientIDMode="Static" Width="1100px" AutoGenerateColumns="false" KeyFieldName="IdQuiz;IdLinie;Coloana"
+                                                                                <dx:ASPxGridView ID="grDateTabela" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateTabela" ClientIDMode="Static" AutoGenerateColumns="false" KeyFieldName="IdQuiz;IdLinie;Coloana"
                                                                                      OnRowInserting="grDateTabela_RowInserting" OnRowUpdating="grDateTabela_RowUpdating" OnRowDeleting="grDateTabela_RowDeleting" OnInitNewRow="grDateTabela_InitNewRow">
                                                                                     <SettingsBehavior AllowFocusedRow="true" EnableCustomizationWindow="true" AllowSelectByRowClick="true" ColumnResizeMode="NextColumn" />
                                                                                     <Settings ShowFilterRow="false" ShowGroupPanel="false" HorizontalScrollBarMode="Auto" />

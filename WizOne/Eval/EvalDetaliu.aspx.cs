@@ -111,7 +111,7 @@ namespace WizOne.Eval
                     Session["InformatiaCurentaCompletareChestionar"] = ds;
 
                     //Florin 2020.11.13
-                    Session["Eval_RaspunsLinii_Tabel"] = tableBBB;
+                    //Session["Eval_RaspunsLinii_Tabel"] = tableBBB;
 
                     DataTable table = new DataTable();
                     DataTable tableIntrebari = new DataTable();
@@ -583,6 +583,12 @@ namespace WizOne.Eval
 
                 #endregion
 
+
+                //Florin 2020.11.13
+                DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                General.SalveazaDate(dtTbl, "Eval_RaspunsLinii");
+
+
                 //Florin 2020.11.06
                 if (General.Nz(Session["CompletareChestionar_Sincronizare"],0).ToString() == "1" && idCateg == "0")
                     PreluareDateAutomat(pozitie);
@@ -610,19 +616,28 @@ namespace WizOne.Eval
                                 grDate.DataSource = lst.Where(p => p.IdLinieQuiz == idLinieQuiz && p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"])).ToList();
                             }
 
+                            //Florin 2020.11.19
+                            if (grDate.ID.IndexOf("grTabela") >= 0)
+                            {
+                                //DataTable dt = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                                //DataRow[] arrDr = dtTbl.Select("Id=" + idLinieQuiz);
+                                //if (arrDr.Count() > 0)
+                                //    grDate.DataSource = arrDr.CopyToDataTable();
+                                //else
+                                //    grDate.DataSource = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsLinii"" WHERE 1=2");
+
+                                //grDate.DataSource = Session["Eval_RaspunsLinii_Tabel"];
+                                grDate.DataSource = dtTbl;
+                            }
+
                             grDate.KeyFieldName = "IdAuto";
                             grDate.DataBind();
                         }
                     }
                 }
 
-                //Florin 2020.11.13
-                DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
-                General.SalveazaDate(dtTbl, "Eval_RaspunsLinii");
-
                 //MessageBox.Show("Proces realizat cu succes!", MessageBox.icoSuccess);
                 pnlSectiune.JSProperties["cpAlertMessage"] = "Proces realizat cu succes!";
-
             }
             catch (Exception ex)
             {
@@ -1342,9 +1357,10 @@ namespace WizOne.Eval
                 #region GridProperties
                 gr.Width = new Unit(100, UnitType.Percentage);
                 gr.ID = "grTabela" + "_WXY_" + id.ToString();
-                gr.ClientInstanceName = "grDateObiective" + "_WXY_" + id.ToString();
+                gr.ClientInstanceName = "grTabela" + "_WXY_" + id.ToString();
                 gr.ClientIDMode = ClientIDMode.Static;
                 gr.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                gr.SettingsText.ConfirmDelete = "";    
 
                 gr.SettingsBehavior.AllowFocusedRow = true;
                 gr.SettingsBehavior.EnableCustomizationWindow = true;
@@ -1360,14 +1376,19 @@ namespace WizOne.Eval
                 gr.SettingsBehavior.ConfirmDelete = true;
                 gr.SettingsText.ConfirmDelete = "Confirmati operatia de stergere?";
 
-                gr.SettingsEditing.Mode = GridViewEditingMode.Batch;
-                gr.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
-                gr.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
-                gr.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
+                gr.SettingsEditing.Mode = GridViewEditingMode.Inline;
+                //gr.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+                //gr.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+                //gr.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
 
-                gr.BatchUpdate += gr_BatchUpdate;
+                //gr.BatchUpdate += gr_BatchUpdate;
                 //gr.InitNewRow += gr_InitNewRow;
+                gr.RowInserting += gr_RowInserting;
+                gr.RowUpdating += gr_RowUpdating;
+                gr.RowDeleting += gr_RowDeleting;
                 Session["NumeGriduri"] += ";" + gr.ID;
+
+                gr.KeyFieldName = "IdQuiz;F10003;Id;Linia";
 
                 #endregion
 
@@ -1378,12 +1399,25 @@ namespace WizOne.Eval
 
                 gr.SettingsCommandButton.DeleteButton.Image.ToolTip = "Sterge";
                 gr.SettingsCommandButton.DeleteButton.Image.Url = "~/Fisiere/Imagini/Icoane/sterge.png";
+
+                gr.SettingsCommandButton.UpdateButton.Image.Url = "../Fisiere/Imagini/Icoane/salveaza.png";
+                gr.SettingsCommandButton.UpdateButton.Image.AlternateText = "Save";
+                gr.SettingsCommandButton.UpdateButton.Image.ToolTip = "Actualizeaza";
+
+                gr.SettingsCommandButton.CancelButton.Image.Url = "../Fisiere/Imagini/Icoane/renunta.png";
+                gr.SettingsCommandButton.CancelButton.Image.AlternateText = "Renunta";
+                gr.SettingsCommandButton.CancelButton.Image.ToolTip = "Renunta";
+
+                gr.SettingsCommandButton.EditButton.Image.ToolTip = "Modifica";
+                gr.SettingsCommandButton.EditButton.Image.Url = "~/Fisiere/Imagini/Icoane/edit.png";
+
                 #endregion
 
 
                 GridViewCommandColumn colCommand = new GridViewCommandColumn();
                 colCommand.Width = 80;
                 colCommand.ShowDeleteButton = true;
+                colCommand.ShowEditButton = true;
                 colCommand.ShowNewButtonInHeader = true;
                 colCommand.VisibleIndex = 0;
                 colCommand.Caption = " ";
@@ -1399,8 +1433,9 @@ namespace WizOne.Eval
                     col.FieldName = arr[i];
                     col.Name = Dami.TraduCuvant(arr[i]);
                     col.Caption = Dami.TraduCuvant(arr[i]);
-                    col.Visible = true;
+                    col.Visible = false;
                     col.ShowInCustomizationForm = false;
+                    gr.Columns.Add(col);
                 }
 
                 DataTable dtConfig = General.IncarcaDT(@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdQuiz""=@1 AND ""IdLinie""=@2", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), id });
@@ -1418,11 +1453,37 @@ namespace WizOne.Eval
                     gr.Columns.Add(col);
                 }
 
-                //gr.DataSource = lstEval_RaspunsLinii.Where(p => p.Id == id);
-                DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
-                gr.DataSource = dtTbl.Select("Id=" + id).CopyToDataTable();
-                gr.KeyFieldName = "IdQuiz; F10003; Id; Linia";
-                //gr.KeyFieldName = "Id; Linia";
+                ////gr.DataSource = lstEval_RaspunsLinii.Where(p => p.Id == id);
+                //DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                //DataRow[] arrDr = dtTbl.Select("Id=" + id);
+
+                //if (arrDr.Count() > 0)
+                //{
+                //    DataTable dtTmp = arrDr.CopyToDataTable();
+                //    dtTmp.PrimaryKey = new DataColumn[] { dtTmp.Columns["IdQuiz"], dtTmp.Columns["F10003"], dtTmp.Columns["Id"], dtTmp.Columns["Linia"] };
+                //    gr.DataSource = dtTmp;
+                //} 
+                //else
+                //    gr.DataSource = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsLinii"" WHERE 1=2");
+                ////gr.DataSource = dtTbl;
+                ////gr.KeyFieldName = "IdQuiz; F10003; Id; Linia";
+                //gr.KeyFieldName = "IdQuiz;F10003;Id;Linia";
+                //gr.DataBind();
+                ////tableBBB.Columns["IdQuiz"], tableBBB.Columns["F10003"], tableBBB.Columns["Id"], tableBBB.Columns["Linia"]
+                ///
+
+                DataTable dt = new DataTable();
+                if (Session["Eval_RaspunsLinii_Tabel"] == null)
+                {
+                    dt = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsLinii"" WHERE ""IdQuiz"" = @1 AND ""F10003"" = @2 AND ""Id""=@3", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), id });
+                    Session["Eval_RaspunsLinii_Tabel"] = dt;
+                }
+                else
+                    dt = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["IdQuiz"], dt.Columns["F10003"], dt.Columns["Id"], dt.Columns["Linia"] };
+
+                gr.DataSource = dt;
                 gr.DataBind();
             }
             catch (Exception ex)
@@ -1431,6 +1492,113 @@ namespace WizOne.Eval
             }
 
             return gr;
+        }
+
+        private void gr_RowDeleting(object sender, ASPxDataDeletingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                ASPxGridView grDate = sender as ASPxGridView;
+                DataTable dt = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                DataRow found = dt.Rows.Find(keys);
+                if (dt.Rows.Count == 1)
+                {
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                        found[camp] = DBNull.Value;
+                    }
+                }
+                else
+                    found.Delete();
+
+                e.Cancel = true;
+                grDate.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void gr_RowUpdating(object sender, ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                ASPxGridView grDate = sender as ASPxGridView;
+                DataTable dt = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                DataRow dr = dt.Rows.Find(keys);
+
+                dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                dr["TIME"] = DateTime.Now;
+
+                for (int i = 1; i <= 6; i++)
+                {
+                    string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                    dr[camp] = e.NewValues[camp];
+                }
+
+                e.Cancel = true;
+                grDate.CancelEdit();
+                Session["Eval_RaspunsLinii_Tabel"] = dt;
+                grDate.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void gr_RowInserting(object sender, ASPxDataInsertingEventArgs e)
+        {
+            try
+            {
+                ASPxGridView grDate = sender as ASPxGridView;
+                DataTable dt = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                DataRow dr = dt.NewRow();
+
+                dr["F10003"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+                dr["IdQuiz"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+                dr["Id"] = Convert.ToInt32(grDate.ID.Split('_')[grDate.ID.Split('_').Count() - 1]);
+                dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                dr["TIME"] = DateTime.Now;
+
+                int max = Convert.ToInt32(dt.Compute("MAX(Linia)", "Id=" + dr["Id"]));
+                dr["Linia"] = max + 1;
+
+                //foreach (KeyValuePair<string, object> item in e.NewValues)
+                //{
+                //    dr[item.Key] = item.Value ?? DBNull.Value;
+                //}
+
+                for (int i = 1; i <= 6; i++)
+                {
+                    string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                    dr[camp] = e.NewValues[camp];
+                }
+
+                dt.Rows.Add(dr);
+                e.Cancel = true;
+                grDate.CancelEdit();
+                Session["Eval_RaspunsLinii_Tabel"] = dt;
+                grDate.DataSource = dt;
+                //DataRow[] arrDr = dt.Select("Id=" + dr["Id"]);
+                //grDate.DataSource = arrDr.CopyToDataTable();
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
         //private void gr_InitNewRow(object sender, ASPxDataInitNewRowEventArgs e)
@@ -1539,6 +1707,96 @@ namespace WizOne.Eval
 
         //}
 
+        //private void gr_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
+        //{
+        //    try
+        //    {
+        //        ASPxGridView grid = sender as ASPxGridView;
+        //        grid.CancelEdit();
+
+        //        DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+
+        //        for (int x = 0; x < e.InsertValues.Count; x++)
+        //        {
+        //            ASPxDataInsertValues vals = e.InsertValues[x] as ASPxDataInsertValues;
+        //            DataRow dr = dtTbl.NewRow();
+        //            dr["F10003"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+        //            dr["IdQuiz"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+        //            dr["Id"] = Convert.ToInt32(grid.ID.Split('_')[grid.ID.Split('_').Count() - 1]);
+        //            dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+        //            dr["TIME"] = DateTime.Now;
+
+        //            //int max = lst.Where(p => p.IdQuiz == cls.IdQuiz && p.F10003 == cls.F10003 && p.Id == cls.Id).Max(p => p.Linia);
+        //            //cls.Linia = max + 1;
+        //            //DataTable dtFiltru = dtTbl.Select("Id=" + dr["Id"]).CopyToDataTable();
+        //            int max = Convert.ToInt32(dtTbl.Compute("MAX(Linia)", "Id=" + dr["Id"]));
+        //            dr["Linia"] = max + 1;
+
+        //            for (int i = 1; i <= 6; i++)
+        //            {
+        //                string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+        //                dr[camp] = vals.NewValues[camp];
+        //                //PropertyInfo val = cls.GetType().GetProperty(camp);
+        //                //if (val != null)
+        //                //{
+        //                //    val.SetValue(cls, vals.NewValues[camp], null);
+        //                //}
+        //            }
+
+        //            dtTbl.Rows.Add(dr);
+        //        }
+
+        //        for (int x = 0; x < e.UpdateValues.Count; x++)
+        //        {
+        //            //ASPxDataUpdateValues vals = e.UpdateValues[x] as ASPxDataUpdateValues;
+        //            //object[] keys = new object[] { vals.Keys[0] };
+
+        //            //Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(vals.Keys[0]) && p.F10003 == Convert.ToInt32(vals.Keys[1]) && p.Id == Convert.ToInt32(vals.Keys[2]) && p.Linia == Convert.ToInt32(vals.Keys[3])).FirstOrDefault();
+        //            //if (cls == null) return;
+
+        //            //cls.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+        //            //cls.TIME = DateTime.Now;
+
+        //            //for (int i = 1; i <= 6; i++)
+        //            //{
+        //            //    string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+        //            //    PropertyInfo val = cls.GetType().GetProperty(camp);
+        //            //    if (val != null)
+        //            //    {
+        //            //        val.SetValue(cls, vals.NewValues[camp], null);
+        //            //    }
+        //            //}
+        //        }
+
+        //        for (int x = 0; x < e.DeleteValues.Count; x++)
+        //        {
+        //            ASPxDataDeleteValues vals = e.DeleteValues[x] as ASPxDataDeleteValues;
+        //            object[] keys = new object[] { vals.Keys[0] };
+
+        //            //Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
+        //            //if (cls == null) return;
+        //            //lst.Remove(cls);
+
+        //            //List<Eval_CompetenteAngajatTemp> lstSterse = Session["lstEval_CompetenteAngajatTemp_Sterse"] as List<Eval_CompetenteAngajatTemp>;
+        //            //if (lstSterse == null) lstSterse = new List<Eval_CompetenteAngajatTemp>();
+        //            //lstSterse.Add(cls);
+        //            //Session["lstEval_CompetenteAngajatTemp_Sterse"] = lstSterse;
+        //        }
+
+        //        Session["Eval_RaspunsLinii_Tabel"] = dtTbl;
+
+        //        e.Handled = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+
+        //}
+
+
         private void gr_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
         {
             try
@@ -1558,9 +1816,6 @@ namespace WizOne.Eval
                     dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
                     dr["TIME"] = DateTime.Now;
 
-                    //int max = lst.Where(p => p.IdQuiz == cls.IdQuiz && p.F10003 == cls.F10003 && p.Id == cls.Id).Max(p => p.Linia);
-                    //cls.Linia = max + 1;
-                    //DataTable dtFiltru = dtTbl.Select("Id=" + dr["Id"]).CopyToDataTable();
                     int max = Convert.ToInt32(dtTbl.Compute("MAX(Linia)", "Id=" + dr["Id"]));
                     dr["Linia"] = max + 1;
 
@@ -1568,11 +1823,6 @@ namespace WizOne.Eval
                     {
                         string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
                         dr[camp] = vals.NewValues[camp];
-                        //PropertyInfo val = cls.GetType().GetProperty(camp);
-                        //if (val != null)
-                        //{
-                        //    val.SetValue(cls, vals.NewValues[camp], null);
-                        //}
                     }
 
                     dtTbl.Rows.Add(dr);
@@ -1580,39 +1830,41 @@ namespace WizOne.Eval
 
                 for (int x = 0; x < e.UpdateValues.Count; x++)
                 {
-                    //ASPxDataUpdateValues vals = e.UpdateValues[x] as ASPxDataUpdateValues;
-                    //object[] keys = new object[] { vals.Keys[0] };
+                    ASPxDataUpdateValues vals = e.UpdateValues[x] as ASPxDataUpdateValues;
 
-                    //Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(vals.Keys[0]) && p.F10003 == Convert.ToInt32(vals.Keys[1]) && p.Id == Convert.ToInt32(vals.Keys[2]) && p.Linia == Convert.ToInt32(vals.Keys[3])).FirstOrDefault();
-                    //if (cls == null) return;
+                    object[] keys = new object[vals.Keys.Count];
+                    for (int y = 0; y < vals.Keys.Count; y++)
+                    { keys[y] = vals.Keys[y]; }
 
-                    //cls.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
-                    //cls.TIME = DateTime.Now;
+                    DataRow dr = dtTbl.Rows.Find(keys);
 
-                    //for (int i = 1; i <= 6; i++)
-                    //{
-                    //    string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
-                    //    PropertyInfo val = cls.GetType().GetProperty(camp);
-                    //    if (val != null)
-                    //    {
-                    //        val.SetValue(cls, vals.NewValues[camp], null);
-                    //    }
-                    //}
+                    dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                    dr["TIME"] = DateTime.Now;
+
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                        dr[camp] = vals.NewValues[camp];
+                    }
                 }
 
                 for (int x = 0; x < e.DeleteValues.Count; x++)
                 {
                     ASPxDataDeleteValues vals = e.DeleteValues[x] as ASPxDataDeleteValues;
-                    object[] keys = new object[] { vals.Keys[0] };
 
-                    //Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
-                    //if (cls == null) return;
-                    //lst.Remove(cls);
+                    object[] keys = new object[vals.Keys.Count];
+                    for (int y = 0; y < vals.Keys.Count; y++)
+                    { keys[y] = vals.Keys[y]; }
 
-                    //List<Eval_CompetenteAngajatTemp> lstSterse = Session["lstEval_CompetenteAngajatTemp_Sterse"] as List<Eval_CompetenteAngajatTemp>;
-                    //if (lstSterse == null) lstSterse = new List<Eval_CompetenteAngajatTemp>();
-                    //lstSterse.Add(cls);
-                    //Session["lstEval_CompetenteAngajatTemp_Sterse"] = lstSterse;
+                    DataRow dr = dtTbl.Rows.Find(keys);
+                    dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                    dr["TIME"] = DateTime.Now;
+
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                        dr[camp] = DBNull.Value;
+                    }
                 }
 
                 Session["Eval_RaspunsLinii_Tabel"] = dtTbl;
@@ -1629,38 +1881,38 @@ namespace WizOne.Eval
         }
 
 
-        private void Gr_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
-        {
-            try
-            {
-                object[] keys = new object[e.Keys.Count];
-                for (int i = 0; i < e.Keys.Count; i++)
-                { keys[i] = e.Keys[i]; }
-                ASPxGridView grid = sender as ASPxGridView;                
-                GridViewDataTextColumn col = grid.Columns[7] as GridViewDataTextColumn;
+        //private void Gr_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        //{
+        //    try
+        //    {
+        //        object[] keys = new object[e.Keys.Count];
+        //        for (int i = 0; i < e.Keys.Count; i++)
+        //        { keys[i] = e.Keys[i]; }
+        //        ASPxGridView grid = sender as ASPxGridView;                
+        //        GridViewDataTextColumn col = grid.Columns[7] as GridViewDataTextColumn;
 
-                Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
+        //        Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
                 
-                if (raspLinie != null)
-                {
-                    PropertyInfo piValue = raspLinie.GetType().GetProperty(col.FieldName);
-                    if (piValue != null)
-                    {
-                        piValue.SetValue(raspLinie, Convert.ChangeType(e.NewValues[col.FieldName] ?? DBNull.Value, piValue.PropertyType), null);
-                    }
-                }
+        //        if (raspLinie != null)
+        //        {
+        //            PropertyInfo piValue = raspLinie.GetType().GetProperty(col.FieldName);
+        //            if (piValue != null)
+        //            {
+        //                piValue.SetValue(raspLinie, Convert.ChangeType(e.NewValues[col.FieldName] ?? DBNull.Value, piValue.PropertyType), null);
+        //            }
+        //        }
 
-                e.Cancel = true;
+        //        e.Cancel = true;
 
-                grid.CancelEdit();
-                grid.DataSource = lstEval_RaspunsLinii.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        grid.CancelEdit();
+        //        grid.DataSource = lstEval_RaspunsLinii.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         private ASPxTextBox CreeazaTextEdit(int id, int tip, string super, int tipData = 0)
         {

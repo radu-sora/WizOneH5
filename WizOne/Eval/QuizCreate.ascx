@@ -38,6 +38,9 @@
             case "cmbIdRaport":
                 lstValori.Set('IdRaport', s.GetValue());
                 break;
+            case "chkSinc":
+                lstValori.Set('Sincronizare', s.GetValue());
+                break;
         }
     }
 
@@ -373,11 +376,14 @@
                                                                                     </td>
                                                                                 </tr>
                                                                             </table>
-
+                                                                            <br />
                                                                             <table width="30">
                                                                                 <tr>
+                                                                                    <td>
+                                                                                        <dx:ASPxLabel ID="lblLuatLaCunostinta" Width="100" runat="server" Text="Luat la cunostinta" />
+                                                                                    </td>
                                                                                    <td>
-                                                                                        <dx:ASPxCheckBox ID="chkLuatLaCunostinta" Width="120" runat="server" Text="Luat la cunostinta"
+                                                                                        <dx:ASPxCheckBox ID="chkLuatLaCunostinta" Width="20" runat="server"
                                                                                             TextAlign="Left" Checked='<%#  Eval("LuatLaCunostinta") == DBNull.Value ? false : Convert.ToBoolean(Eval("LuatLaCunostinta"))%>'
                                                                                             ClientInstanceName="chkLuatLaCunostinta" ClientIDMode="Static">
                                                                                             <ClientSideEvents ValueChanged="function(s, e){ OnValueChanged(s); }" />
@@ -385,7 +391,7 @@
                                                                                     </td>
                                                                                     <td>&nbsp;&nbsp;&nbsp;</td>
                                                                                     <td>
-                                                                                        <dx:ASPxLabel ID="lblNrZile" Width="180" runat="server" Text="Numar zile luat la cunostinta" />
+                                                                                        <dx:ASPxLabel ID="lblNrZile" Width="160" runat="server" Text="Numar zile luat la cunostinta" />
                                                                                     </td>
                                                                                     <td>
                                                                                         <dx:ASPxTextBox ID="txtNrZileLuatLaCunostinta" Width="30" ClientInstanceName="txtNrZileLuatLaCunostinta" ClientIDMode="Static" runat="server" Text='<%# Eval("NrZileLuatLaCunostinta") %>' AutoPostBack="false">
@@ -394,13 +400,22 @@
                                                                                     </td>
                                                                                     <td>&nbsp;&nbsp;&nbsp;</td>
                                                                                     <td>
-                                                                                        <dx:ASPxLabel ID="lblIdRaport" Width="70" runat="server" Text="Raport" />
+                                                                                        <dx:ASPxLabel ID="lblIdRaport" Width="50" runat="server" Text="Raport" />
                                                                                     </td>
                                                                                     <td>
                                                                                         <dx:ASPxComboBox ID="cmbIdRaport" ClientInstanceName="cmbIdRaport" ClientIDMode="Static" runat="server" DropDownStyle="DropDown" Value='<%# Eval("IdRaport") %>' TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" DataSourceID="dsRaps" >
                                                                                             <ClientSideEvents SelectedIndexChanged="function(s, e){ OnValueChanged(s); }" />
                                                                                         </dx:ASPxComboBox>
                                                                                         <asp:ObjectDataSource runat="server" ID="dsRaps" TypeName="WizOne.Module.Evaluare" SelectMethod="GetRapoarte" />
+                                                                                    </td>
+                                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                                    <td>
+                                                                                        <dx:ASPxLabel ID="lblSinc" Width="144" runat="server" Text="Sincronizare raspunsuri" />
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <dx:ASPxCheckBox ID="chkSinc" Width="20" runat="server" ClientInstanceName="chkSinc" ClientIDMode="Static" Checked='<%#  Eval("Sincronizare") == DBNull.Value ? false : Convert.ToBoolean(Eval("Sincronizare"))%>' >
+                                                                                            <ClientSideEvents ValueChanged="function(s, e){ OnValueChanged(s); }" />
+                                                                                        </dx:ASPxCheckBox>
                                                                                     </td>
                                                                                  </tr>
                                                                             </table>
@@ -591,32 +606,32 @@
                                                                         <dx:ASPxLabel ID="lblGrup" runat="server" Width="40" Text="Grup" />
                                                                     </td>
                                                                     <td>
-                                                                        <dx:ASPxComboBox ID="cmbGrup" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" 
+                                                                        <dx:ASPxComboBox ID="cmbGrup" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" CssClass="margin_rightt15"
                                                                             AutoPostBack="false" ValueType="System.Int32" />
                                                                     </td>
                                                                     <td>
-                                                                        <dx:ASPxLabel ID="lblSursaDate" runat="server" Width="100" Text="Sursa date" />
+                                                                        <dx:ASPxLabel ID="lblSursaDate" runat="server" Width="100" Text="Sursa date" ClientVisible="false" />
                                                                     </td>
                                                                     <td>
-                                                                        <dx:ASPxComboBox ID="cmbSursaDate" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id"
-                                                                            AutoPostBack="false" ValueType="System.Int32" ClientInstanceName="cmbSursaDate" >
+                                                                        <dx:ASPxComboBox ID="cmbSursaDate" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" CssClass="margin_rightt15"
+                                                                            AutoPostBack="false" ValueType="System.Int32" ClientInstanceName="cmbSursaDate" ClientVisible="false">
                                                                             <ClientSideEvents SelectedIndexChanged="function(s, e){ OnCMBTipChanged(s); }" />
                                                                         </dx:ASPxComboBox>
                                                                     </td>
-                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                    <td></td>
                                                                     <td>
-                                                                        <dx:ASPxLabel ID="lblCategObi" runat="server" Width="90" Text="Categ. obiectiv" ClientVisible="false" />
+                                                                        <dx:ASPxLabel ID="lblCategObi" runat="server" Width="100" Text="Categ. obiectiv" ClientVisible="false" />
                                                                     </td>
                                                                     <td>
-                                                                        <dx:ASPxComboBox ID="cmbCategObi" ClientInstanceName="cmbCategObi" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" ClientVisible="true"/>
+                                                                        <dx:ASPxComboBox ID="cmbCategObi" ClientInstanceName="cmbCategObi" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" ClientVisible="false" CssClass="margin_rightt15"/>
                                                                     </td>                                                                    
-                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                    <td></td>
                                                                     <td>
-                                                                        <dx:ASPxCheckBox ID="chkObligatoriu" runat="server" Text="Obligatoriu" TextAlign="Left" ClientInstanceName="chkObligatoriu" AutoPostBack="false">
+                                                                        <dx:ASPxCheckBox ID="chkObligatoriu" runat="server" Text="Obligatoriu" TextAlign="Left" ClientInstanceName="chkObligatoriu" AutoPostBack="false" Width="100px" CssClass="margin_rightt15">
                                                                             <ClientSideEvents ValueChanged="function(s, e){ OnCHKChanged(s); }" />
                                                                         </dx:ASPxCheckBox>
                                                                     </td>
-                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                    <td></td>
                                                                      <td>
                                                                         <dx:ASPxLabel ID="lblPrelObi" runat="server" Text="Preluare obiective:" Width="100" />
                                                                     </td>
@@ -793,8 +808,12 @@
                                                                                         <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14">
                                                                                             <PropertiesComboBox>
                                                                                                 <Items>
-                                                                                                    <dx:ListEditItem Value="0" Text="Suma" />
-                                                                                                    <dx:ListEditItem Value="4" Text="Medie" />
+                                                                                                    <dx:ListEditItem Value="1" Text="Suma fara zecimale" />
+                                                                                                    <dx:ListEditItem Value="2" Text="Suma cu 2 zecimale" />
+                                                                                                    <dx:ListEditItem Value="3" Text="Medie fara zecimale" />
+                                                                                                    <dx:ListEditItem Value="4" Text="Medie cu 2 zecimale" />
+                                                                                                    <dx:ListEditItem Value="5" Text="Valoare minima" />
+                                                                                                    <dx:ListEditItem Value="6" Text="Valoare maxima" />
                                                                                                 </Items>
                                                                                             </PropertiesComboBox>
                                                                                         </dx:GridViewDataComboBoxColumn>
@@ -843,8 +862,7 @@
                                                                             </td>
                                                                             <td>
                                                                                 <dx:ASPxComboBox ID="cmbTemplateCompetente" runat="server" DropDownStyle="DropDown" ValueField="TemplateId" ValueType="System.Int32" TextField="TemplateName" AutoPostBack="false">
-                                                                                    <ClientSideEvents SelectedIndexChanged="function(s, e){ 
-                                                                                                                    OnCMBTipChanged(s); }" />
+                                                                                    <ClientSideEvents SelectedIndexChanged="function(s, e){ OnCMBTipChanged(s); }" />
                                                                                 </dx:ASPxComboBox>
                                                                             </td>
                                                                         </tr>
@@ -860,8 +878,8 @@
                                                                                     OnCustomErrorText="grDateCompetente_CustomErrorText">
                                                                                     <SettingsBehavior AllowFocusedRow="true" EnableCustomizationWindow="true"
                                                                                         AllowSelectByRowClick="true" ColumnResizeMode="NextColumn" />
-                                                                                    <Settings ShowFilterRow="true" ShowGroupPanel="true" HorizontalScrollBarMode="Auto" />
-                                                                                    <SettingsSearchPanel Visible="true" />
+                                                                                    <Settings ShowFilterRow="false" ShowGroupPanel="false" HorizontalScrollBarMode="Auto" />
+                                                                                    <SettingsSearchPanel Visible="false" />
                                                                                     <ClientSideEvents ContextMenu="ctx" BatchEditStartEditing="OnBatchEditStartEditingCompetente" FocusedRowChanged="FocusedRowChangedCompetente" />
                                                                                     <SettingsEditing Mode="Inline" />
                                                                                     <Columns>
@@ -890,8 +908,12 @@
                                                                                         <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14">
                                                                                             <PropertiesComboBox>
                                                                                                 <Items>
-                                                                                                    <dx:ListEditItem Value="0" Text="Suma" />
-                                                                                                    <dx:ListEditItem Value="4" Text="Medie" />
+                                                                                                    <dx:ListEditItem Value="1" Text="Suma fara zecimale" />
+                                                                                                    <dx:ListEditItem Value="2" Text="Suma cu 2 zecimale" />
+                                                                                                    <dx:ListEditItem Value="3" Text="Medie fara zecimale" />
+                                                                                                    <dx:ListEditItem Value="4" Text="Medie cu 2 zecimale" />
+                                                                                                    <dx:ListEditItem Value="5" Text="Valoare minima" />
+                                                                                                    <dx:ListEditItem Value="6" Text="Valoare maxima" />
                                                                                                 </Items>
                                                                                             </PropertiesComboBox>
                                                                                         </dx:GridViewDataComboBoxColumn>
@@ -912,6 +934,81 @@
                                                                                         <CancelButton>
                                                                                             <Image Url="../Fisiere/Imagini/Icoane/renunta.png" AlternateText="Renunta" ToolTip="Renunta" />
                                                                                         </CancelButton>
+                                                                                    </SettingsCommandButton>
+                                                                                </dx:ASPxGridView>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </dx:LayoutItemNestedControlContainer>
+                                                            </LayoutItemNestedControlCollection>
+                                                        </dx:LayoutItem>
+                                                    </Items>
+                                                </dx:LayoutGroup>
+                                            </Items>
+                                        </dx:ASPxFormLayout>
+
+                                        <dx:ASPxFormLayout ID="pnlConfigTipTabela" runat="server">
+                                            <Items>
+                                                <dx:LayoutGroup Caption="Configurare tip control tabela">
+                                                    <Items>
+                                                        <dx:LayoutItem Caption="">
+                                                            <LayoutItemNestedControlCollection>
+                                                                <dx:LayoutItemNestedControlContainer>
+                                                                    <table cellspacing="20">
+                                                                        <tr>
+                                                                            <td colspan="2">
+                                                                                <dx:ASPxGridView ID="grDateTabela" runat="server" SettingsPager-PageSize="50" ClientInstanceName="grDateTabela" ClientIDMode="Static" AutoGenerateColumns="false" KeyFieldName="IdQuiz;IdLinie;Coloana"
+                                                                                     OnRowInserting="grDateTabela_RowInserting" OnRowUpdating="grDateTabela_RowUpdating" OnRowDeleting="grDateTabela_RowDeleting" OnInitNewRow="grDateTabela_InitNewRow">
+                                                                                    <SettingsBehavior AllowFocusedRow="true" EnableCustomizationWindow="true" AllowSelectByRowClick="true" ColumnResizeMode="NextColumn" />
+                                                                                    <Settings ShowFilterRow="false" ShowGroupPanel="false" HorizontalScrollBarMode="Auto" />
+                                                                                    <SettingsSearchPanel Visible="false" />
+                                                                                    <ClientSideEvents ContextMenu="ctx" />
+                                                                                    <SettingsEditing Mode="Inline" />
+                                                                                    <Columns>
+                                                                                        <dx:GridViewCommandColumn Width="80px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
+
+                                                                                        <dx:GridViewDataTextColumn FieldName="IdQuiz" Name="IdQuiz" Caption="IdQuiz" Visible="false" ShowInCustomizationForm="false" />
+                                                                                        <dx:GridViewDataTextColumn FieldName="IdLinie" Name="IdLinie" Caption="IdLinie" Visible="false" ShowInCustomizationForm="false" />
+                                                                                        <dx:GridViewDataComboBoxColumn FieldName="Coloana" Name="Coloana" Caption="Coloana" Width="120">
+                                                                                            <PropertiesComboBox>
+                                                                                                <Items>
+                                                                                                    <dx:ListEditItem Value="1" Text="Coloana 1" />
+                                                                                                    <dx:ListEditItem Value="2" Text="Coloana 2" />
+                                                                                                    <dx:ListEditItem Value="3" Text="Coloana 3" />
+                                                                                                    <dx:ListEditItem Value="4" Text="Coloana 4" />
+                                                                                                    <dx:ListEditItem Value="5" Text="Coloana 5" />
+                                                                                                    <dx:ListEditItem Value="6" Text="Coloana 6" />
+                                                                                                </Items>
+                                                                                            </PropertiesComboBox>
+                                                                                        </dx:GridViewDataComboBoxColumn>
+                                                                                        <dx:GridViewDataSpinEditColumn FieldName="Lungime" Name="Lungime" Caption="Lungime" Width="100" PropertiesSpinEdit-MinValue="10" PropertiesSpinEdit-MaxValue="1000" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false"/>
+                                                                                        <dx:GridViewDataTextColumn FieldName="Alias" Name="Alias" Caption="Alias" Width="250"/>
+                                                                                        
+                                                                                    </Columns>
+                                                                                    <SettingsCommandButton>
+                                                                                        <EditButton>
+                                                                                            <Image Url="../Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" ToolTip="Edit" />
+                                                                                            <Styles>
+                                                                                                <Style Paddings-PaddingRight="5px" />
+                                                                                            </Styles>
+                                                                                        </EditButton>
+						                                                                <DeleteButton>
+							                                                                <Image Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" ToolTip="Sterge" />
+						                                                                </DeleteButton>
+                                                                                        
+                                                                                        <UpdateButton>
+                                                                                            <Image Url="../Fisiere/Imagini/Icoane/salveaza.png" AlternateText="Save" ToolTip="Actualizeaza" />
+                                                                                            <Styles>
+                                                                                                <Style Paddings-PaddingRight="5px" />
+                                                                                            </Styles>
+                                                                                        </UpdateButton>
+                                                                                        <CancelButton>
+                                                                                            <Image Url="../Fisiere/Imagini/Icoane/renunta.png" AlternateText="Renunta" ToolTip="Renunta" />
+                                                                                        </CancelButton>
+
+                                                                                        <NewButton>
+                                                                                            <Image Url="~/Fisiere/Imagini/Icoane/new.png" AlternateText="Adauga" ToolTip="Adauga" />
+                                                                                        </NewButton>
                                                                                     </SettingsCommandButton>
                                                                                 </dx:ASPxGridView>
                                                                             </td>

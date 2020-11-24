@@ -336,7 +336,7 @@ namespace WizOne.Pontaj
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"", Y.F00709 AS ""Subdept"", Z.F00810 AS ""Birou"",
                             L.""Denumire"" AS ""DescContract"", M.""Denumire"" AS DescProgram, COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
                             CASE WHEN A.F10022 <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= A.F10023 THEN 1 ELSE 0 END AS ""Activ"",  
-                            COALESCE(J.""IdStare"",1) AS ""IdStare"", K.""Culoare"" AS ""CuloareStare"", K.""Denumire"" AS ""NumeStare"", 
+                            COALESCE(J.""IdStare"",1) AS ""IdStare"", K.""Culoare"" AS ""CuloareStare"", K.""Denumire"" AS ""NumeStare"", K.""Denumire"" AS ""Stare"", 
                             CASE WHEN (SELECT COUNT(*) FROM ""Ptj_Cereri"" Z 
                             INNER JOIN ""Ptj_tblAbsente"" Y ON Z.""IdAbsenta"" = Y.""Id""
                             WHERE Z.F10003 = P.F10003 AND Z.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= Z.""DataSfarsit"" AND Z.""IdStare"" = 3
@@ -400,7 +400,7 @@ namespace WizOne.Pontaj
                             CASE WHEN {idRol} = 3 THEN 1 ELSE 
                             CASE WHEN ({idRol} = 2 AND ((COALESCE(J.""IdStare"",1)=1 OR COALESCE(J.""IdStare"",1) = 2 OR COALESCE(J.""IdStare"",1) = 4 OR COALESCE(J.""IdStare"",1) = 6))) THEN 1 ELSE 
                             CASE WHEN (({idRol} = 1 OR {idRol} = 0) AND (COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
-                            END END END AS ""DrepturiModif""
+                            END END END AS ""DrepturiModif"", Fct.F71804 AS ""Functie""
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
                             LEFT JOIN F002 E ON P.F10002 = E.F00202
@@ -414,6 +414,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN ""Ptj_tblStariPontaj"" K ON COALESCE(J.""IdStare"",1) = K.""Id""
                             LEFT JOIN ""Ptj_Contracte"" L ON P.""IdContract""=L.""Id""
                             LEFT JOIN ""Ptj_Programe"" M ON P.""IdProgram""=M.""Id""
+                            LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             WHERE CONVERT(date,P.""Ziua"") <= A.F10023
                             {filtru}
                             ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";

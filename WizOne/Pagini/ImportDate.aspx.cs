@@ -1454,7 +1454,7 @@ namespace WizOne.Pagini
                                 int idUrm = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
                                 General.ExecutaNonQuery("DELETE FROM \"Ptj_CereriIstoric\" WHERE \"IdCerere\" = " + idUrm, null);
 
-                                General.SelectCereriIstoric(Convert.ToInt32(marcaInit), inloc, idCir < 0 ? idCircuitAbs : idCir, estePlanif, out sqlIst, out trimiteLaInlocuitor, Convert.ToInt32(idCerere));
+                                General.SelectCereriIstoric(Convert.ToInt32(marcaInit), inloc, idCir < 0 ? idCircuitAbs : idCir, estePlanif, out sqlIst, out trimiteLaInlocuitor, Convert.ToInt32(idCerere), dataInc);
                                 General.ExecutaNonQuery(sqlIst, null);
 
                                 string strTop = "";

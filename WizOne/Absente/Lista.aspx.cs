@@ -555,7 +555,7 @@ namespace WizOne.Absente
                                     //insetul pt introducerea istoricului
                                     string sqlIst;
                                     int trimiteLaInlocuitor;
-                                    General.SelectCereriIstoric(Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[3], -1)), Convert.ToInt32(drAbs["IdCircuit"]), 0, out sqlIst, out trimiteLaInlocuitor, (int)obj[0]);
+                                    General.SelectCereriIstoric(Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[3], -1)), Convert.ToInt32(drAbs["IdCircuit"]), 0, out sqlIst, out trimiteLaInlocuitor, (int)obj[0], Convert.ToDateTime(obj[6]));
 
 
                                     //update-ul pt actualizarea datelor cererii

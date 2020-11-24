@@ -72,6 +72,7 @@ namespace WizOne.Eval
                         {
                             //Florin 2020.01.30
                             Session["Eval_QuizSetAngajati"] = null;
+                            Session["Eval_ConfigTipTabela"] = null;
 
                             string url = "~/Eval/QuizDetaliu.aspx";
                             if(url!="")
@@ -160,6 +161,7 @@ namespace WizOne.Eval
                 Session["InformatiaCurentaEvalQuiz"] = null;
                 Session["Quiz360"] = 0;
                 Session["Eval_QuizSetAngajati"] = null;
+                Session["Eval_ConfigTipTabela"] = null;
 
                 string url = "";
                 url = "~/Eval/QuizDetaliu.aspx";
@@ -265,8 +267,8 @@ namespace WizOne.Eval
 
                 int idUrmLinii = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(""Id"") FROM ""Eval_QuizIntrebari"" ", null), 0)) + 1;
                 General.ExecutaNonQuery($@"
-                INSERT INTO ""Eval_QuizIntrebari""(""Id"",                ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", ""IdQuiz"", ""Orientare"", ""Obligatoriu"", ""Parinte"",                ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", ""TIME"", ""USER_NO"")
-                                            SELECT ""Id"" + {idUrmLinii}, ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", {idUrm},    ""Orientare"", ""Obligatoriu"", CASE WHEN ""Descriere"" ='Root' THEN 0 ELSE ""Parinte"" + {idUrmLinii} END AS ""Parinte"", ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", {General.CurrentDate()}, {Session["UserId"]} FROM ""Eval_QuizIntrebari"" WHERE ""IdQuiz"" = {id}", null);
+                INSERT INTO ""Eval_QuizIntrebari""(""Id"",                ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", ""IdQuiz"", ""Orientare"", ""Obligatoriu"", ""Parinte"",                ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", ""TIME"", ""USER_NO"", ""OrdineAfisare"")
+                                            SELECT ""Id"" + {idUrmLinii}, ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", {idUrm},    ""Orientare"", ""Obligatoriu"", CASE WHEN ""Descriere"" ='Root' THEN 0 ELSE ""Parinte"" + {idUrmLinii} END AS ""Parinte"", ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", {General.CurrentDate()}, {Session["UserId"]}, ""OrdineAfisare"" FROM ""Eval_QuizIntrebari"" WHERE ""IdQuiz"" = {id}", null);
 
                 //End Florin 2019.10.02
 

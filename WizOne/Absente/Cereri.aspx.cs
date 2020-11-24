@@ -782,7 +782,7 @@ namespace WizOne.Absente
                         int esteD = 0;
                         int esteZL = 1;
 
-                        esteSL = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM HOLIDAYS WHERE DAY =@1", new object[] { txtDataInc.Date }) ?? 0);
+                        esteSL = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = " + General.ToDataUniv(txtDataInc.Date)) ?? 0);
                         if (txtDataInc.Date.DayOfWeek == DayOfWeek.Saturday) esteS = 1;
                         if (txtDataInc.Date.DayOfWeek == DayOfWeek.Sunday) esteD = 1;
                         if (esteSL == 1 || esteS == 1 || esteD == 1) esteZL = 0;
@@ -870,7 +870,7 @@ namespace WizOne.Absente
 
                 string sqlIst;
                 int trimiteLaInlocuitor;
-                General.SelectCereriIstoric(Convert.ToInt32(cmbAng.Value), Convert.ToInt32(General.Nz(cmbInloc.Value, -1)), Convert.ToInt32(drAbs["IdCircuit"]), Convert.ToInt32(General.Nz(drAbs["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor);
+                General.SelectCereriIstoric(Convert.ToInt32(cmbAng.Value), Convert.ToInt32(General.Nz(cmbInloc.Value, -1)), Convert.ToInt32(drAbs["IdCircuit"]), Convert.ToInt32(General.Nz(drAbs["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor, -99, txtDataInc.Date);
 
                 #endregion
 

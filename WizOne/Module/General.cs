@@ -593,8 +593,19 @@ namespace WizOne.Module
                 {
                     if (ex.Number == 1225)
                     {
+                        MemoreazaEroarea(
+                            "Number - " + ex.Number + Environment.NewLine +
+                            "Message - " + ex.Message + Environment.NewLine +
+                            "Errors - " + ex.Errors + Environment.NewLine +
+                            "ErrorCode - " + ex.ErrorCode, "Rollback", new StackTrace().GetFrame(0).GetMethod().Name);
                         continue;
                     }
+
+                    MemoreazaEroarea(
+                        "Number - " + ex.Number + Environment.NewLine + 
+                        "Message - " + ex.Message + Environment.NewLine + 
+                        "Errors - " + ex.Errors + Environment.NewLine + 
+                        "ErrorCode - " + ex.ErrorCode, "Rollback", new StackTrace().GetFrame(0).GetMethod().Name);
                 }
 
                 break;

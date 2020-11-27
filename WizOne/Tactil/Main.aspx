@@ -8,9 +8,11 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
     <script>        
-        function AspLoading()
+        function AspLoading(txt)
         {
             pnlLoading.Show();
+            if (txt != "")
+                pnlLoading.SetText(txt);
         }
     </script>
 

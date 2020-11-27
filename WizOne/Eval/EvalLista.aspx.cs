@@ -286,6 +286,7 @@ namespace WizOne.Eval
                                 Session["lstEval_ConfigCompetente"] = null;
                                 Session["lstEval_ConfigCompTemplate"] = null;
                                 Session["lstEval_ConfigCompTemplateDetail"] = null;
+                                Session["Eval_RaspunsLinii_Tabel"] = null;
 
                                 //Florin 2019.10.23 - retinem filtrul
                                 #region Salvam Filtrul

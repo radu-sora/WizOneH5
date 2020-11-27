@@ -15434,5 +15434,17 @@ ALTER TABLE "Eval_ConfigTipTabela" MODIFY ("IdLinie" NOT NULL ENABLE);
 INSERT INTO "Securitate" ("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu") VALUES('Absente.Lista', 'btnAnulare', '-', 6, 1, 1, 0);
 COMMIT;
 
-insert into "Securitate" ("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu") values ('Absente.Lista',	'btnAnulare',	'-',	6,	1,	1,	0);
-commit;
+
+----  2.2.132.01  ----
+
+
+ALTER TABLE F1001 ADD  F1001109 DATE; 
+UPDATE F1001 SET F1001109 = (select f10022 from f100 where f1001.F10003 = f100.f10003 );
+ALTER TABLE F9101 ADD  F9101109 DATE;                                                  
+ALTER TABLE F0991 ADD  F0991109 DATE;  
+
+----  2.2.132.02  ----
+
+
+ALTER TABLE F100 MODIFY F10081 VARCHAR2(50);
+

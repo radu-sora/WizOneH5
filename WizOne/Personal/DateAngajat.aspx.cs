@@ -461,7 +461,7 @@ namespace WizOne.Personal
 
                 //Radu 15.01.2020
                 string sqlAng = "SELECT " + ds.Tables[1].Rows[0]["F10003"] + " AS F10003, '" + ds.Tables[1].Rows[0]["F100901"] + "' AS F100901, " 
-                        + ds.Tables[1].Rows[0]["F10071"] + " AS F10071, " + ds.Tables[1].Rows[0]["F10050"] + " AS F10050, " + ds.Tables[1].Rows[0]["F10051"] + " AS F10051 ";     //se pot completa in viitor si alte campuri de interes
+                        + ds.Tables[1].Rows[0]["F10071"] + " AS F10071, " + ds.Tables[1].Rows[0]["F10050"] + " AS F10050, " + ds.Tables[1].Rows[0]["F10051"] + " AS F10051, " + ds.Tables[1].Rows[0]["F10061"] + " AS F10061 ";     //se pot completa in viitor si alte campuri de interes
                 string msg = Notif.TrimiteNotificare("Personal.Lista", (int)Constante.TipNotificare.Validare, sqlAng + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                 if (msg != "" && msg.Substring(0, 1) == "2")
                 {

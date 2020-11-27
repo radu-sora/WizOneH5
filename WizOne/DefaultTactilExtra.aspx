@@ -39,8 +39,8 @@
         <div id="panouExt" runat="server"  class="outer">
             <div  class="inner">
                 Pentru accesarea aplicatiei va rugam apropiati cardul de cititor
-                <input type = "text" id="txtPan1" name="txtPan1" runat="server"  autocomplete="off" class="hide" maxlength="15" onserverchange="txtPan1_TextChanged" onblur="this.focus()"/>
             </div>
+            <input type = "text" id="txtPan1" name="txtPan1" runat="server"  autocomplete="off" class="hide" maxlength="15" onserverchange="txtPan1_TextChanged" onblur="this.focus()"/>
 		</div>
         <div id="butoane" runat="server" class="innerbuttonscard">
             <table>

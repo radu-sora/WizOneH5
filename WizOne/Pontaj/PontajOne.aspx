@@ -229,6 +229,21 @@
             e.processOnServer = true;
         }
 
+        function OnGridInit() {
+            window.addEventListener('resize', function () {
+                AdjustSize();
+            })
+
+            AdjustSize();
+        }
+
+        function AdjustSize() {
+            var dif = 220 + pnlFiltrare.GetHeight();
+
+            var height = Math.max(0, document.documentElement.clientHeight) - dif;
+            grDate.SetHeight(height);
+        }
+
     </script>
 
 
@@ -270,67 +285,77 @@
             <td colspan="2">
                 <br /><br />
 
-                <div style="float:left; line-height:22px; vertical-align:middle;">
+                <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Setare filtru de selectie" Width="100%">
+                    <HeaderStyle Font-Bold="true" />
+                    <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
+                    <PanelCollection>
+                        <dx:PanelContent>
+
+                            <div style="float:left; line-height:22px; vertical-align:middle;">
                     
-                    <div style="float:left; padding-right:15px;">
-                        <label id="lblAnLuna" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Luna/An</label>
-                            <dx:ASPxDateEdit ID="txtAnLuna" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" >
-                                <CalendarProperties FirstDayOfWeek="Monday" />
-                        </dx:ASPxDateEdit>
-                    </div>
+                                <div style="float:left; padding-right:15px;">
+                                    <label id="lblAnLuna" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Luna/An</label>
+                                        <dx:ASPxDateEdit ID="txtAnLuna" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" >
+                                            <CalendarProperties FirstDayOfWeek="Monday" />
+                                    </dx:ASPxDateEdit>
+                                </div>
                     
-                    <div style="float:left; padding-right:15px; vertical-align:middle; display:none;">
-                        <label id="lblRolAng" runat="server" style="float:left; padding-right:15px;">Roluri</label>
-                        <dx:ASPxComboBox ID="cmbRolAng" ClientInstanceName="cmbRolAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
-                        </dx:ASPxComboBox>
-                    </div>
+                                <div style="float:left; padding-right:15px; vertical-align:middle; display:none;">
+                                    <label id="lblRolAng" runat="server" style="float:left; padding-right:15px;">Roluri</label>
+                                    <dx:ASPxComboBox ID="cmbRolAng" ClientInstanceName="cmbRolAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
+                                    </dx:ASPxComboBox>
+                                </div>
                     
-                    <div style="float:left; padding-right:15px; display:none;">
-                        <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px;">Angajat</label>
-                        <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true"
-                                    CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" OnButtonClick="cmbAng_ButtonClick" >
-                            <Columns>
-                                <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
-                                <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />
-                            </Columns>
-                            <Buttons>
-                                <dx:EditButton Position="Left">
-                                    <Image Url="~/Fisiere/Imagini/Icoane/sgSt.png" Height="20px" Width="12px"></Image>
-                                </dx:EditButton>
-                                <dx:EditButton Position="Right">
-                                    <Image Url="~/Fisiere/Imagini/Icoane/sgDr.png" Height="20px" Width="12px"></Image>
-                                </dx:EditButton>
-                            </Buttons>
-                            <ClientSideEvents ButtonClick="function(s, e) {
-                                                        pnlLoading.Show();
-                                                        e.processOnServer = true;
-                                                    }" />
-                        </dx:ASPxComboBox>
-                    </div>
+                                <div style="float:left; padding-right:15px; display:none;">
+                                    <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px;">Angajat</label>
+                                    <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true"
+                                                CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" OnButtonClick="cmbAng_ButtonClick" >
+                                        <Columns>
+                                            <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
+                                            <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
+                                            <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
+                                            <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
+                                            <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />
+                                        </Columns>
+                                        <Buttons>
+                                            <dx:EditButton Position="Left">
+                                                <Image Url="~/Fisiere/Imagini/Icoane/sgSt.png" Height="20px" Width="12px"></Image>
+                                            </dx:EditButton>
+                                            <dx:EditButton Position="Right">
+                                                <Image Url="~/Fisiere/Imagini/Icoane/sgDr.png" Height="20px" Width="12px"></Image>
+                                            </dx:EditButton>
+                                        </Buttons>
+                                        <ClientSideEvents ButtonClick="function(s, e) {
+                                                                    pnlLoading.Show();
+                                                                    e.processOnServer = true;
+                                                                }" />
+                                    </dx:ASPxComboBox>
+                                </div>
 
-                    <label ID="txtStare" runat="server" Width="110" style="float:left; margin-right:15px; width:110px; height:26px; text-align:center; border:solid 1px gray; color:#000000;"></label>
-                </div>
+                                <label ID="txtStare" runat="server" Width="110" style="float:left; margin-right:15px; width:110px; height:26px; text-align:center; border:solid 1px gray; color:#000000;"></label>
+                            </div>
 
 
-                <div style="float:left; padding:0px 15px;">
-                    <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
-                        <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
-                        <ClientSideEvents Click="function(s, e) {
-                                        pnlLoading.Show();
-                                        e.processOnServer = true;
-                                    }" />
-                    </dx:ASPxButton>
-                </div>
+                            <div style="float:left; padding:0px 15px;">
+                                <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
+                                    <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
+                                    <ClientSideEvents Click="function(s, e) {
+                                                    pnlLoading.Show();
+                                                    e.processOnServer = true;
+                                                }" />
+                                </dx:ASPxButton>
+                            </div>
 
-                <div style="float:left; display:none;">
-                    <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                        <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
-                        <ClientSideEvents Click="EmptyFields" />
-                    </dx:ASPxButton>
-                </div>
+                            <div style="float:left; display:none;">
+                                <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                                    <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
+                                    <ClientSideEvents Click="EmptyFields" />
+                                </dx:ASPxButton>
+                            </div>
+
+                        </dx:PanelContent>
+                    </PanelCollection>
+                </dx:ASPxRoundPanel>
             </td>
         </tr>
         <tr>
@@ -346,6 +371,7 @@
                     <ClientSideEvents ContextMenu="ctx" 
                         BatchEditEndEditing="OnBatchEditEndEditing" 
                         BatchEditStartEditing="OnBatchEditStartEditing"
+                        Init="function(s,e) { OnGridInit(); }"
                         FocusedRowChanged="grid_FocusedRowChanged"
                         RowDblClick="function(s, e) {
                         ccValori.Set('cheia',s.GetRowKey(s.GetFocusedRowIndex()));

@@ -3,6 +3,7 @@ using DevExpress.Web.ASPxTreeList;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -22,13 +23,21 @@ namespace WizOne.Eval
             public int Parinte { get;set;}
         }
 
+        public class metaEval_tblTipCamp
+        {
+            public int Id { get; set; }
+            public string Denumire { get; set; }
+            public int Parinte { get; set; }
+            public int Activ { get; set; }
+        }
+
         public class metaCmb
         {
             public int Id { get; set; }
             public string Denumire { get; set; }
         }
         List<metaDate> lstEval_tblCategTipCamp = new List<metaDate>();
-        List<metaDate> lstEval_tblTipCamp = new List<metaDate>();
+        List<metaEval_tblTipCamp> lstEval_tblTipCamp = new List<metaEval_tblTipCamp>();
         List<metaDate> lstEval_tblTipValori = new List<metaDate>();
         List<metaDate> lstEval_tblIntrebari = new List<metaDate>();
         List<metaDate> lstEval_Perioada = new List<metaDate>();
@@ -100,13 +109,14 @@ namespace WizOne.Eval
                 {
                     string strSQL = "select * from \"Eval_tblTipCamp\" ";
                     DataTable dtEval_tblTipCamp = General.IncarcaDT(strSQL, null);
-                    lstEval_tblTipCamp = new List<metaDate>();
+                    lstEval_tblTipCamp = new List<metaEval_tblTipCamp>();
                     foreach (DataRow rwEval_tblTipCamp in dtEval_tblTipCamp.Rows)
                     {
-                        metaDate clsMeta = new metaDate();
+                        metaEval_tblTipCamp clsMeta = new metaEval_tblTipCamp();
                         clsMeta.Id = Convert.ToInt32(rwEval_tblTipCamp["Id"].ToString());
                         clsMeta.Denumire = rwEval_tblTipCamp["Denumire"].ToString();
                         clsMeta.Parinte = Convert.ToInt32(rwEval_tblTipCamp["IdCategorie"].ToString());
+                        clsMeta.Activ = Convert.ToInt32(General.Nz(rwEval_tblTipCamp["Activ"],0));
                         lstEval_tblTipCamp.Add(clsMeta);
                     }
 
@@ -114,8 +124,8 @@ namespace WizOne.Eval
                 }
                 else
                 {
-                    lstEval_tblTipCamp = new List<metaDate>();
-                    lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaDate>;
+                    lstEval_tblTipCamp = new List<metaEval_tblTipCamp>();
+                    lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaEval_tblTipCamp>;
                 }
 
                 if (Session["nomenEval_tblTipValori"] == null)
@@ -384,11 +394,12 @@ namespace WizOne.Eval
                 }
                 else
                 {
-                    cmbTemplateObiective.DataSource = lstEval_ConfigObTemplate;
-                    cmbTemplateObiective.DataBind();
+                    //Florin 2020.11.06 - s-a mutat in panel2_callback
+                    //cmbTemplateObiective.DataSource = lstEval_ConfigObTemplate;
+                    //cmbTemplateObiective.DataBind();
 
-                    int TemplateIdObiectiv = Convert.ToInt32(Session["editingObiectivTemplate"].ToString());
-                    cmbTemplateObiective.Value = TemplateIdObiectiv;
+                    //int TemplateIdObiectiv = Convert.ToInt32(Session["editingObiectivTemplate"].ToString());
+                    //cmbTemplateObiective.Value = TemplateIdObiectiv;
                 }
 
                 if (Session["isEditingCompetenteTemplate"] == null || Session["isEditingCompetenteTemplate"].ToString() == "0")
@@ -402,27 +413,36 @@ namespace WizOne.Eval
                 }
                 else
                 {
-                    cmbTemplateCompetente.DataSource = lstEval_ConfigCompTemplate;
-                    cmbTemplateCompetente.DataBind();
+                    //Florin 2020.11.06 - s-a mutat in panel2_callback
+                    //cmbTemplateCompetente.DataSource = lstEval_ConfigCompTemplate;
+                    //cmbTemplateCompetente.DataBind();
 
-                    int TemplateIdCompetente = Convert.ToInt32(Session["editingCompetenteTemplate"].ToString());
-                    cmbTemplateCompetente.Value = TemplateIdCompetente;
+                    //int TemplateIdCompetente = Convert.ToInt32(Session["editingCompetenteTemplate"].ToString());
+                    //cmbTemplateCompetente.Value = TemplateIdCompetente;
                 }
 
 
                 if (Session["Eval_QuizIntrebari_IdCategorieData"] != null)
                 {
                     int idCategorieTipCamp = Convert.ToInt32(Session["Eval_QuizIntrebari_IdCategorieData"].ToString());
-                    cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == idCategorieTipCamp);
+                    cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == idCategorieTipCamp && p.Activ == 1);
                     cmbTipObiect.DataBind();
                 }
 
                 if (!IsPostBack)
                 {
-                    Session["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigObTemplate"" "), 0)) + 1;
-                    Session["TemplateIdCompetenta"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigCompTemplate"" "), 0)) + 1;
+                    //Florin 2020.11.12 - am scos + 1
+                    //Session["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigObTemplate"" "), 0)) + 1;
+                    //Session["TemplateIdCompetenta"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigCompTemplate"" "), 0)) + 1;
+                    Session["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigObTemplate"" "), 0));
+                    Session["TemplateIdCompetenta"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""TemplateId"",0)) FROM ""Eval_ConfigCompTemplate"" "), 0));
+
                     Session["QuizIntrebari_Id"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""Id"",0)) FROM ""Eval_QuizIntrebari"" "), 0)) + 1;
+                    Session["isEditingConfigTipTabela"] = null;
                 }
+
+                if (Session["isEditingConfigTipTabela"] == null || Session["isEditingConfigTipTabela"].ToString() == "0")
+                    pnlConfigTipTabela.Visible = false;
             }
             catch (Exception ex)
             {
@@ -445,6 +465,10 @@ namespace WizOne.Eval
                     cmbCategObi.DataSource = dt;
                     cmbCategObi.DataBind();
                     Session["Eval_tblCategorieObiective"] = dt;
+
+                    //Florin 2020.11.13
+                    DataTable dtTbl = General.IncarcaDT(@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdQuiz""=@1 ", new object[] { Session["IdEvalQuiz"] });
+                    Session["Eval_ConfigTipTabela"] = dtTbl;
                 }
                 else
                 {
@@ -527,6 +551,10 @@ namespace WizOne.Eval
                         ds.Tables[0].Rows[0]["IdRaport"] = param[1];
                         Session["InformatiaCurentaEvalQuiz"] = ds;
                         break;
+                    case "chkSinc":
+                        ds.Tables[0].Rows[0]["Sincronizare"] = (param[1] == "true" ? 1 : 0);
+                        Session["InformatiaCurentaEvalQuiz"] = ds;
+                        break;
                 }
             }
             catch(Exception ex)
@@ -576,6 +604,7 @@ namespace WizOne.Eval
                     //cmbDinNomenclator.Value = null;
                     partGridObiective.Visible = false;
                     partGridCompetente.Visible = false;
+                    pnlConfigTipTabela.Visible = false;
 
                     lblPrelObi.Visible = false;
                     chkNomenclator.Visible = false;
@@ -685,6 +714,22 @@ namespace WizOne.Eval
                     rwNewSectiune["TemplateIdObiectiv"] = DBNull.Value;
                     rwNewSectiune["TemplateIdCompetenta"] = DBNull.Value;
 
+
+                    //FLorin 2020.11.12 Begin
+                    if (Convert.ToInt32(cmbTipObiect.Value.ToString()) == 23)
+                    {
+                        rwNewSectiune["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(Session["TemplateIdObiectiv"],1)) + 1;
+                        Session["TemplateIdObiectiv"] = rwNewSectiune["TemplateIdObiectiv"];
+                    }
+
+                    if (Convert.ToInt32(cmbTipObiect.Value.ToString()) == 5)
+                    {
+                        rwNewSectiune["TemplateIdCompetenta"] = Convert.ToInt32(General.Nz(Session["TemplateIdCompetenta"], 1)) + 1;
+                        Session["TemplateIdCompetenta"] = rwNewSectiune["TemplateIdCompetenta"];
+                    }
+                    //FLorin 2020.11.12 End
+
+
                     if (Session["isEditingObiectivTemplate"] != null && Session["isEditingObiectivTemplate"].ToString() == "1")
                     {
                         rwNewSectiune["IdPeriod"] = cmbPerioadaObi.Value ?? DBNull.Value;
@@ -789,6 +834,7 @@ namespace WizOne.Eval
                 #endregion
 
                 #region Asignare Date
+
                 if (General.Nz(hf["Id"], "").ToString() != "" && String.IsNullOrEmpty(e.Parameter))
                 {
                     int IdQuizIntrebare = Convert.ToInt32(hf["Id"]);
@@ -828,12 +874,12 @@ namespace WizOne.Eval
                     //Categorie Tip Camp & Tip Camp
                     if (!string.IsNullOrEmpty(rwDataCurrent["TipData"].ToString()))
                     {
-                        lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaDate>;
+                        lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaEval_tblTipCamp>;
                         if (lstEval_tblTipCamp.Where(p => p.Id == Convert.ToInt32(rwDataCurrent["TipData"].ToString())).Count() != 0)
                         {
                             int IdCategorieTipCamp = lstEval_tblTipCamp.Where(p => p.Id == Convert.ToInt32(rwDataCurrent["TipData"].ToString())).FirstOrDefault().Parinte;
                             cmbTip.Value = IdCategorieTipCamp;
-                            cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == IdCategorieTipCamp);
+                            cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == IdCategorieTipCamp && p.Activ == 1);
                             cmbTipObiect.DataBind();
                             cmbTipObiect.Value = rwDataCurrent["TipData"];
 
@@ -854,6 +900,12 @@ namespace WizOne.Eval
                                 chkObiective.Visible = true;
                                 lblPerioadaObi.Visible = true; // chkObiective.Checked == true ? true : false;
                                 cmbPerioadaObi.Visible = true; // chkObiective.Checked == true ? true : false;
+
+                                //Florin 2020.11.06
+                                cmbTemplateObiective.DataSource = lstEval_ConfigObTemplate;
+                                cmbTemplateObiective.DataBind();
+                                int TemplateIdObiectiv = Convert.ToInt32(Session["editingObiectivTemplate"].ToString());
+                                cmbTemplateObiective.Value = TemplateIdObiectiv;
                             }
                             #endregion
 
@@ -873,19 +925,53 @@ namespace WizOne.Eval
                                 chkCompetente.Visible = true;
                                 lblPerioadaComp.Visible = true; //chkCompetente.Checked == true ? true : false;
                                 cmbPerioadaComp.Visible = true; //chkCompetente.Checked == true ? true : false;
+
+                                //Florin 2020.11.06
+                                cmbTemplateCompetente.DataSource = lstEval_ConfigCompTemplate;
+                                cmbTemplateCompetente.DataBind();
+
+                                int TemplateIdCompetente = Convert.ToInt32(Session["editingCompetenteTemplate"].ToString());
+                                cmbTemplateCompetente.Value = TemplateIdCompetente;
                             }
                             #endregion
+
+                            //FLorin 2020.11.12
+                            if (cmbTipObiect.Value != null && Convert.ToInt32(cmbTipObiect.Value.ToString()) == 17)
+                            {
+                                Session["isEditingConfigTipTabela"] = "1";
+                                pnlConfigTipTabela.Visible = true;
+
+                                DataTable dtFiltru = Session["Eval_ConfigTipTabela"] as DataTable;
+                                DataRow[] arrTbl = dtFiltru.Select("IdQuiz = " + Convert.ToInt32(General.Nz(Session["IdEvalQuiz"], -99)) + " AND IdLInie = " + IdQuizIntrebare);
+                                if (arrTbl.Count() > 0)
+                                    dtFiltru = arrTbl.CopyToDataTable();
+                                else
+                                    dtFiltru = General.IncarcaDT(@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE 1=2");
+
+                                grDateTabela.DataSource = dtFiltru;
+                                grDateTabela.DataBind();
+
+                                //DataTable dtTbl = Session["Eval_ConfigTipTabela"] as DataTable;
+                                //DataTable dtFiltru = dtTbl.Select("IdQuiz = " + Convert.ToInt32(General.Nz(Session["IdEvalQuiz"], -99)) + " AND IdLInie = " + IdQuizIntrebare).CopyToDataTable();
+                                //grDateTabela.DataSource = dtFiltru;
+                                ////grDateTabela.DataSource = General.IncarcaDT($@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdQuiz"" = @1 AND ""IdLinie""=@2", new object[] { Session["IdEvalQuiz"], IdQuizIntrebare });
+                                //grDateTabela.DataBind();
+                            }
+                            else
+                            {
+                                Session["isEditingConfigTipTabela"] = null;
+                            }
 
                             Session["Eval_QuizIntrebari_IdCategorieData"] = IdCategorieTipCamp;
 
                             //Florin 2020.01.03 - daca tipul de control ales este obiectiv si exista inregistrari in tabela de categori de obiective, atunci afisam combobox-ul de categ obi
                             DataTable dtCtgObi = Session["Eval_tblCategorieObiective"] as DataTable;
-                            if (dtCtgObi != null && dtCtgObi.Rows.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value,-1)) == 4)
+                            if (dtCtgObi != null && dtCtgObi.Rows.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 4)
                             {
                                 lblCategObi.ClientVisible = true;
                                 cmbCategObi.ClientVisible = true;
                                 if (Convert.ToInt32(General.Nz(rwDataCurrent["IdCategObiective"], -99)) != -99)
-                                    cmbCategObi.Value = Convert.ToInt32(General.Nz(rwDataCurrent["IdCategObiective"],-1));
+                                    cmbCategObi.Value = Convert.ToInt32(General.Nz(rwDataCurrent["IdCategObiective"], -1));
                             }
                             else
                             {
@@ -920,6 +1006,19 @@ namespace WizOne.Eval
                     {
                         chkOrizontal.Checked = false;
                         chkVertical.Checked = false;
+                    }
+
+                    //Florin 2020.11.06
+                    List<metaDate> tmpListaTblTipValori = Session["nomenEval_tblTipValori"] as List<metaDate>;
+                    if (tmpListaTblTipValori.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 1 && Convert.ToInt32(General.Nz(cmbTipObiect.Value, -1)) == 2)
+                    {
+                        lblSursaDate.ClientVisible = true;
+                        cmbSursaDate.ClientVisible = true;
+                    }
+                    else
+                    {
+                        lblSursaDate.ClientVisible = false;
+                        cmbSursaDate.ClientVisible = false;
                     }
 
                     //Sursa date
@@ -1014,12 +1113,39 @@ namespace WizOne.Eval
 
                     txtDenSectiune.Text = rwDataSectiune["Descriere"].ToString();
                     int TipValoare = Convert.ToInt32((rwDataCurrent["TipData"].ToString() == string.Empty ? "-99" : rwDataCurrent["TipData"]) ?? -99);
-                    metaDate cls = lstEval_tblTipCamp.Where(p => p.Id == TipValoare).FirstOrDefault();
+                    metaEval_tblTipCamp cls = lstEval_tblTipCamp.Where(p => p.Id == TipValoare).FirstOrDefault();
                     if (cls != null)
                     {
                         cmbTip.Value = cls.Parinte;
                     }
                     return;
+                }
+
+                //Florin 2020.11.06 - este pusa de 2 ori (este si mai sus din cauza return-ului de deasupra)
+                //Florin 2020.11.06- daca tipul de control ales este obiectiv si exista inregistrari in tabela de categori de obiective, atunci afisam combobox-ul de categ obi
+                DataTable dtCtgObi2 = Session["Eval_tblCategorieObiective"] as DataTable;
+                if (dtCtgObi2 != null && dtCtgObi2.Rows.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 4)
+                {
+                    lblCategObi.ClientVisible = true;
+                    cmbCategObi.ClientVisible = true;
+                }
+                else
+                {
+                    lblCategObi.ClientVisible = false;
+                    cmbCategObi.ClientVisible = false;
+                }
+
+                //Florin 2020.11.06 - este pusa de 2 ori (este si mai sus din cauza return-ului de deasupra)
+                List<metaDate> tmpListaTblTipValori2 = Session["nomenEval_tblTipValori"] as List<metaDate>;
+                if (tmpListaTblTipValori2.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 1 && Convert.ToInt32(General.Nz(cmbTipObiect.Value, -1)) == 2)
+                {
+                    lblSursaDate.ClientVisible = true;
+                    cmbSursaDate.ClientVisible = true;
+                }
+                else
+                {
+                    lblSursaDate.ClientVisible = false;
+                    cmbSursaDate.ClientVisible = false;
                 }
 
                 #endregion
@@ -1163,8 +1289,8 @@ namespace WizOne.Eval
                     {
                         case "cmbTip":
                             int idCategorieTipCamp = Convert.ToInt32(arr[1]);
-                            lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaDate>;
-                            cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == idCategorieTipCamp);
+                            lstEval_tblTipCamp = Session["nomenEval_tblTipCamp"] as List<metaEval_tblTipCamp>;
+                            cmbTipObiect.DataSource = lstEval_tblTipCamp.Where(p => p.Parinte == idCategorieTipCamp && p.Activ == 1);
                             cmbTipObiect.DataBind();
 
                             Session["Eval_QuizIntrebari_IdCategorieData"] = idCategorieTipCamp;
@@ -1480,6 +1606,7 @@ namespace WizOne.Eval
                 //cmbDinNomenclator.Value = null;
                 partGridObiective.Visible = false;
                 partGridCompetente.Visible = false;
+                pnlConfigTipTabela.Visible = false;
 
                 lblPrelObi.Visible = false;
                 chkNomenclator.Visible = false;
@@ -1966,5 +2093,95 @@ namespace WizOne.Eval
 
         #endregion
 
+        protected void grDateTabela_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            try
+            {
+                DataTable dt = Session["Eval_ConfigTipTabela"] as DataTable;
+                DataRow dr = dt.NewRow();
+
+                dr["IdQuiz"] = Convert.ToInt32(General.Nz(Session["IdEvalQuiz"], -99));
+                dr["IdLinie"] = Convert.ToInt32(hf["Id"]);
+                dr["Coloana"] = e.NewValues["Coloana"];
+                dr["Lungime"] = e.NewValues["Lungime"];
+                dr["Alias"] = e.NewValues["Alias"];
+                dr["USER_NO"] = Session["UserId"];
+                dr["TIME"] = DateTime.Now;
+
+                dt.Rows.Add(dr);
+                e.Cancel = true;
+                grDateTabela.CancelEdit();
+                Session["InformatiaCurenta"] = dt;
+                grDateTabela.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateTabela_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                DataTable dt = Session["Eval_ConfigTipTabela"] as DataTable;
+                DataRow dr = dt.Rows.Find(keys);
+
+                dr["Coloana"] = e.NewValues["Coloana"];
+                dr["Lungime"] = e.NewValues["Lungime"];
+                dr["Alias"] = e.NewValues["Alias"];
+                dr["USER_NO"] = Session["UserId"];
+                dr["TIME"] = DateTime.Now;
+
+                e.Cancel = true;
+                grDateTabela.CancelEdit();
+                Session["InformatiaCurenta"] = dt;
+                grDateTabela.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateTabela_RowDeleting(object sender, DevExpress.Web.Data.ASPxDataDeletingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                DataTable dt = Session["Eval_ConfigTipTabela"] as DataTable;
+                DataRow found = dt.Rows.Find(keys);
+                found.Delete();
+
+                e.Cancel = true;
+                grDateTabela.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateTabela_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
+        {
+            try
+            {
+                e.NewValues["IdLinie"] = Convert.ToInt32(General.Nz(hf["Id"], 1));
+                e.NewValues["IdQuiz"] = Convert.ToInt32(General.Nz(Session["IdEvalQuiz"], -99));
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+    
     }
 }

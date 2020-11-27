@@ -114,6 +114,7 @@ namespace WizOne.Eval
                                 if (lst.Contains("LuatLaCunostinta")) ds.Tables[0].Rows[0]["LuatLaCunostinta"] = lst["LuatLaCunostinta"];
                                 if (lst.Contains("NrZileLuatLaCunostinta")) ds.Tables[0].Rows[0]["NrZileLuatLaCunostinta"] = lst["NrZileLuatLaCunostinta"];
                                 if (lst.Contains("IdRaport")) ds.Tables[0].Rows[0]["IdRaport"] = lst["IdRaport"];
+                                if (lst.Contains("Sincronizare")) ds.Tables[0].Rows[0]["Sincronizare"] = lst["Sincronizare"];
                             }
                         }
                     }
@@ -227,6 +228,13 @@ namespace WizOne.Eval
                         General.ExecutaNonQuery(@"UPDATE ""Eval_QuizIntrebari"" SET ""Ordine"" = @1 WHERE ""Id"" = @2", new object[] { clsOrdine.Ordine, clsOrdine.Id });
                     }
                 }
+
+                #endregion
+
+                #region salvare Eval_ConfigTipTabela
+
+                DataTable dtTbl = Session["Eval_ConfigTipTabela"] as DataTable;
+                General.SalveazaDate(dtTbl, "Eval_ConfigTipTabela");
 
                 #endregion
 

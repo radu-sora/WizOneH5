@@ -74,7 +74,7 @@ namespace WizOne.Eval
         string idCateg = "0";
         int idPerioada = 0;
 
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
 
             try
@@ -103,12 +103,15 @@ namespace WizOne.Eval
 
                     DataSet ds = new DataSet();
                     ds.Tables.Add(tableAAA);
-                    tableBBB.PrimaryKey = new DataColumn[] { tableBBB.Columns["Id"] };
+                    tableBBB.PrimaryKey = new DataColumn[] { tableBBB.Columns["IdQuiz"], tableBBB.Columns["F10003"], tableBBB.Columns["Id"], tableBBB.Columns["Linia"] };
                     ds.Tables.Add(tableBBB);
                     tableCCC.PrimaryKey = new DataColumn[] { tableCCC.Columns["Id"] };
                     ds.Tables.Add(tableCCC);
 
                     Session["InformatiaCurentaCompletareChestionar"] = ds;
+
+                    //Florin 2020.11.13
+                    //Session["Eval_RaspunsLinii_Tabel"] = tableBBB;
 
                     DataTable table = new DataTable();
                     DataTable tableIntrebari = new DataTable();
@@ -580,10 +583,15 @@ namespace WizOne.Eval
 
                 #endregion
 
-                if (Dami.ValoareParam("PreluareDateAutomat", "0") == "1" && idCateg == "0")
+
+                //Florin 2020.11.13
+                DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                General.SalveazaDate(dtTbl, "Eval_RaspunsLinii");
+
+
+                //Florin 2020.11.06
+                if (General.Nz(Session["CompletareChestionar_Sincronizare"],0).ToString() == "1" && idCateg == "0")
                     PreluareDateAutomat(pozitie);
-
-
 
                 //Florin 2019.10.16
                 if (General.Nz(Session["NumeGriduri"], "").ToString() != "")
@@ -608,6 +616,20 @@ namespace WizOne.Eval
                                 grDate.DataSource = lst.Where(p => p.IdLinieQuiz == idLinieQuiz && p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"])).ToList();
                             }
 
+                            //Florin 2020.11.19
+                            if (grDate.ID.IndexOf("grTabela") >= 0)
+                            {
+                                //DataTable dt = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                                //DataRow[] arrDr = dtTbl.Select("Id=" + idLinieQuiz);
+                                //if (arrDr.Count() > 0)
+                                //    grDate.DataSource = arrDr.CopyToDataTable();
+                                //else
+                                //    grDate.DataSource = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsLinii"" WHERE 1=2");
+
+                                //grDate.DataSource = Session["Eval_RaspunsLinii_Tabel"];
+                                grDate.DataSource = dtTbl;
+                            }
+
                             grDate.KeyFieldName = "IdAuto";
                             grDate.DataBind();
                         }
@@ -616,7 +638,6 @@ namespace WizOne.Eval
 
                 //MessageBox.Show("Proces realizat cu succes!", MessageBox.icoSuccess);
                 pnlSectiune.JSProperties["cpAlertMessage"] = "Proces realizat cu succes!";
-
             }
             catch (Exception ex)
             {
@@ -1077,6 +1098,30 @@ namespace WizOne.Eval
                 divIntrebari.ClientEnabled = blocat == 1 ? false : true;
 
 
+                //Florin 2020.11.11
+                //Work Around - pt cazul cand in gridul de competente se adauga coloana goale dupa callback
+                if (General.Nz(Session["NumeGriduri"], "").ToString() != "")
+                {
+                    string[] arr = Session["NumeGriduri"].ToString().Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        ASPxGridView grDate = grIntrebari.FindControl(arr[i]) as ASPxGridView;
+                        if (grDate != null)
+                        {
+                            List<GridViewDataColumn> lst = new List<GridViewDataColumn>();
+                            foreach (GridViewDataColumn col in grDate.Columns.OfType<GridViewDataColumn>())
+                            {
+                                if (col.FieldName == "" && col.UnboundType == DevExpress.Data.UnboundColumnType.Bound)
+                                    lst.Add(col);
+                            }
+
+                            foreach (GridViewDataColumn col in lst)
+                            {
+                                grDate.Columns.Remove(col);
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1310,65 +1355,50 @@ namespace WizOne.Eval
             try
             {
                 #region GridProperties
-                gr.Width = 1500;
-                gr.ID = "gr" + "_WXY_" + id.ToString();
+                gr.Width = new Unit(100, UnitType.Percentage);
+                gr.ID = "grTabela" + "_WXY_" + id.ToString();
+                gr.ClientInstanceName = "grTabela" + "_WXY_" + id.ToString();
+                gr.ClientIDMode = ClientIDMode.Static;
+                gr.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                gr.SettingsText.ConfirmDelete = "";    
+
                 gr.SettingsBehavior.AllowFocusedRow = true;
                 gr.SettingsBehavior.EnableCustomizationWindow = true;
                 gr.SettingsBehavior.AllowSelectByRowClick = true;
                 gr.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
-                gr.Settings.ShowFilterRow = true;
-                gr.Settings.ShowGroupPanel = true;
+                gr.Settings.ShowFilterRow = false;
+                gr.Settings.ShowGroupPanel = false;
                 gr.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
-                gr.SettingsSearchPanel.Visible = true;
+                gr.SettingsSearchPanel.Visible = false;
                 gr.AutoGenerateColumns = false;
-
                 gr.ClientSideEvents.ContextMenu = "ctx";
-                gr.SettingsEditing.Mode = GridViewEditingMode.Inline;
+               
+                gr.SettingsBehavior.ConfirmDelete = true;
+                gr.SettingsText.ConfirmDelete = "Confirmati operatia de stergere?";
 
-                gr.RowUpdating += Gr_RowUpdating; 
+                gr.SettingsEditing.Mode = GridViewEditingMode.Inline;
+                //gr.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+                //gr.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+                //gr.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
+
+                //gr.BatchUpdate += gr_BatchUpdate;
+                //gr.InitNewRow += gr_InitNewRow;
+                gr.RowInserting += gr_RowInserting;
+                gr.RowUpdating += gr_RowUpdating;
+                gr.RowDeleting += gr_RowDeleting;
+                Session["NumeGriduri"] += ";" + gr.ID;
+
+                gr.KeyFieldName = "IdQuiz;F10003;Id;Linia";
+
                 #endregion
 
 
-                GridViewCommandColumn colCommand = new GridViewCommandColumn();
-                colCommand.Width = 80;
-                colCommand.ShowEditButton = true;
-                colCommand.VisibleIndex = 0;
-                colCommand.Caption = " ";
-                colCommand.ButtonRenderMode = GridCommandButtonRenderMode.Image;
-                gr.Columns.Add(colCommand);
-
-                 string[] arr = { "IdQuiz", "F10003", "Id", "Linia", "TipData", "Descriere", super, "USER_NO", "TIME" };
-
-                for (int i = 0; i <= arr.Length - 1; i++)
-                {
-                    GridViewDataTextColumn col = new GridViewDataTextColumn();
-                    col.FieldName = arr[i];
-                    col.Name = Dami.TraduCuvant(arr[i]);
-                    col.Caption = Dami.TraduCuvant(arr[i]);
-
-                    if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 7 || i == 8)
-                    {
-                        col.Visible = false;
-                    }
-
-                    if (i == 5) col.ReadOnly = true;
-                    if (i == 6)
-                    {
-                        col.Name = Dami.TraduCuvant("Raspuns");
-                        col.Caption = Dami.TraduCuvant("Raspuns");
-                    }
-                    if (i == 6)                    
-                        col.CellStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
-
-                
-                    gr.Columns.Add(col);
-                }                
-              
-
                 #region Grid Command Buttons
-                gr.SettingsCommandButton.EditButton.Image.Url = "../Fisiere/Imagini/Icoane/edit.png";
-                gr.SettingsCommandButton.EditButton.Image.AlternateText = "Edit";
-                gr.SettingsCommandButton.EditButton.Image.ToolTip = "Edit";
+                gr.SettingsCommandButton.NewButton.Image.ToolTip = "Rand nou";
+                gr.SettingsCommandButton.NewButton.Image.Url = "~/Fisiere/Imagini/Icoane/New.png";
+
+                gr.SettingsCommandButton.DeleteButton.Image.ToolTip = "Sterge";
+                gr.SettingsCommandButton.DeleteButton.Image.Url = "~/Fisiere/Imagini/Icoane/sterge.png";
 
                 gr.SettingsCommandButton.UpdateButton.Image.Url = "../Fisiere/Imagini/Icoane/salveaza.png";
                 gr.SettingsCommandButton.UpdateButton.Image.AlternateText = "Save";
@@ -1377,10 +1407,83 @@ namespace WizOne.Eval
                 gr.SettingsCommandButton.CancelButton.Image.Url = "../Fisiere/Imagini/Icoane/renunta.png";
                 gr.SettingsCommandButton.CancelButton.Image.AlternateText = "Renunta";
                 gr.SettingsCommandButton.CancelButton.Image.ToolTip = "Renunta";
+
+                gr.SettingsCommandButton.EditButton.Image.ToolTip = "Modifica";
+                gr.SettingsCommandButton.EditButton.Image.Url = "~/Fisiere/Imagini/Icoane/edit.png";
+
                 #endregion
-                
-                gr.DataSource = lstEval_RaspunsLinii.Where(p => p.Id == id);
-                gr.KeyFieldName = "IdQuiz; F10003; Id; Linia";
+
+
+                GridViewCommandColumn colCommand = new GridViewCommandColumn();
+                colCommand.Width = 80;
+                colCommand.ShowDeleteButton = true;
+                colCommand.ShowEditButton = true;
+                colCommand.ShowNewButtonInHeader = true;
+                colCommand.VisibleIndex = 0;
+                colCommand.Caption = " ";
+                colCommand.ButtonRenderMode = GridCommandButtonRenderMode.Image;
+                gr.Columns.Add(colCommand);
+
+                //string[] arr = { "IdQuiz", "F10003", "Id", "Linia", "TipData", "Descriere", super, "USER_NO", "TIME" };
+                string[] arr = { "IdQuiz", "F10003", "Id", "Linia", "TipData", "USER_NO", "TIME" };
+
+                for (int i = 0; i <= arr.Length - 1; i++)
+                {
+                    GridViewDataTextColumn col = new GridViewDataTextColumn();
+                    col.FieldName = arr[i];
+                    col.Name = Dami.TraduCuvant(arr[i]);
+                    col.Caption = Dami.TraduCuvant(arr[i]);
+                    col.Visible = false;
+                    col.ShowInCustomizationForm = false;
+                    gr.Columns.Add(col);
+                }
+
+                DataTable dtConfig = General.IncarcaDT(@"SELECT * FROM ""Eval_ConfigTipTabela"" WHERE ""IdQuiz""=@1 AND ""IdLinie""=@2", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), id });
+                for (int i = 0; i < dtConfig.Rows.Count; i++)
+                {
+                    DataRow dr = dtConfig.Rows[i];
+                    string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + dr["Coloana"];
+
+                    GridViewDataTextColumn col = new GridViewDataTextColumn();
+                    col.FieldName = camp;
+                    col.Name = camp;
+                    col.Caption = Dami.TraduCuvant(General.Nz(dr["Alias"], "Coloana " + dr["Coloana"]).ToString());
+                    col.Width = Convert.ToInt32(General.Nz(dr["Lungime"],250));
+                    col.CellStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
+                    gr.Columns.Add(col);
+                }
+
+                ////gr.DataSource = lstEval_RaspunsLinii.Where(p => p.Id == id);
+                //DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                //DataRow[] arrDr = dtTbl.Select("Id=" + id);
+
+                //if (arrDr.Count() > 0)
+                //{
+                //    DataTable dtTmp = arrDr.CopyToDataTable();
+                //    dtTmp.PrimaryKey = new DataColumn[] { dtTmp.Columns["IdQuiz"], dtTmp.Columns["F10003"], dtTmp.Columns["Id"], dtTmp.Columns["Linia"] };
+                //    gr.DataSource = dtTmp;
+                //} 
+                //else
+                //    gr.DataSource = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsLinii"" WHERE 1=2");
+                ////gr.DataSource = dtTbl;
+                ////gr.KeyFieldName = "IdQuiz; F10003; Id; Linia";
+                //gr.KeyFieldName = "IdQuiz;F10003;Id;Linia";
+                //gr.DataBind();
+                ////tableBBB.Columns["IdQuiz"], tableBBB.Columns["F10003"], tableBBB.Columns["Id"], tableBBB.Columns["Linia"]
+                ///
+
+                DataTable dt = new DataTable();
+                if (Session["Eval_RaspunsLinii_Tabel"] == null)
+                {
+                    dt = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsLinii"" WHERE ""IdQuiz"" = @1 AND ""F10003"" = @2 AND ""Id""=@3", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), id });
+                    Session["Eval_RaspunsLinii_Tabel"] = dt;
+                }
+                else
+                    dt = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["IdQuiz"], dt.Columns["F10003"], dt.Columns["Id"], dt.Columns["Linia"] };
+
+                gr.DataSource = dt;
                 gr.DataBind();
             }
             catch (Exception ex)
@@ -1391,31 +1494,30 @@ namespace WizOne.Eval
             return gr;
         }
 
-        private void Gr_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        private void gr_RowDeleting(object sender, ASPxDataDeletingEventArgs e)
         {
             try
             {
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
-                ASPxGridView grid = sender as ASPxGridView;                
-                GridViewDataTextColumn col = grid.Columns[7] as GridViewDataTextColumn;
 
-                Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
-                
-                if (raspLinie != null)
+                ASPxGridView grDate = sender as ASPxGridView;
+                DataTable dt = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                DataRow found = dt.Rows.Find(keys);
+                if (dt.Rows.Count == 1)
                 {
-                    PropertyInfo piValue = raspLinie.GetType().GetProperty(col.FieldName);
-                    if (piValue != null)
+                    for (int i = 1; i <= 6; i++)
                     {
-                        piValue.SetValue(raspLinie, Convert.ChangeType(e.NewValues[col.FieldName] ?? DBNull.Value, piValue.PropertyType), null);
+                        string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                        found[camp] = DBNull.Value;
                     }
                 }
+                else
+                    found.Delete();
 
                 e.Cancel = true;
-
-                grid.CancelEdit();
-                grid.DataSource = lstEval_RaspunsLinii.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
+                grDate.DataSource = dt;
             }
             catch (Exception ex)
             {
@@ -1423,6 +1525,394 @@ namespace WizOne.Eval
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+        private void gr_RowUpdating(object sender, ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                ASPxGridView grDate = sender as ASPxGridView;
+                DataTable dt = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                DataRow dr = dt.Rows.Find(keys);
+
+                dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                dr["TIME"] = DateTime.Now;
+
+                for (int i = 1; i <= 6; i++)
+                {
+                    string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                    dr[camp] = e.NewValues[camp];
+                }
+
+                e.Cancel = true;
+                grDate.CancelEdit();
+                Session["Eval_RaspunsLinii_Tabel"] = dt;
+                grDate.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void gr_RowInserting(object sender, ASPxDataInsertingEventArgs e)
+        {
+            try
+            {
+                ASPxGridView grDate = sender as ASPxGridView;
+                DataTable dt = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+                DataRow dr = dt.NewRow();
+
+                dr["F10003"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+                dr["IdQuiz"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+                dr["Id"] = Convert.ToInt32(grDate.ID.Split('_')[grDate.ID.Split('_').Count() - 1]);
+                dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                dr["TIME"] = DateTime.Now;
+
+                int max = Convert.ToInt32(dt.Compute("MAX(Linia)", "Id=" + dr["Id"]));
+                dr["Linia"] = max + 1;
+
+                //foreach (KeyValuePair<string, object> item in e.NewValues)
+                //{
+                //    dr[item.Key] = item.Value ?? DBNull.Value;
+                //}
+
+                for (int i = 1; i <= 6; i++)
+                {
+                    string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                    dr[camp] = e.NewValues[camp];
+                }
+
+                dt.Rows.Add(dr);
+                e.Cancel = true;
+                grDate.CancelEdit();
+                Session["Eval_RaspunsLinii_Tabel"] = dt;
+                grDate.DataSource = dt;
+                //DataRow[] arrDr = dt.Select("Id=" + dr["Id"]);
+                //grDate.DataSource = arrDr.CopyToDataTable();
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        //private void gr_InitNewRow(object sender, ASPxDataInitNewRowEventArgs e)
+        //{
+        //    try
+        //    {
+        //        ASPxGridView grid = sender as ASPxGridView;
+        //        e.NewValues["IdQuiz"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+        //        e.NewValues["F10003"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+        //        e.NewValues["Id"] = Convert.ToInt32(grid.ID.Split('_')[grid.ID.Split('_').Count() - 1]);
+
+        //        DataTable dt = grid.DataSource as DataTable;
+        //        int cnt = 0;
+        //        if (dt != null)
+        //            cnt = dt.Rows.Count;
+        //        e.NewValues["Linia"] = cnt + 1;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+        //private void gr_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
+        //{
+        //    try
+        //    {
+        //        ASPxGridView grid = sender as ASPxGridView;
+        //        grid.CancelEdit();
+
+        //        List<Eval_RaspunsLinii> lst = Session["lstEval_RaspunsLinii"] as List<Eval_RaspunsLinii>;
+
+        //        for (int x = 0; x < e.InsertValues.Count; x++)
+        //        {
+        //            ASPxDataInsertValues vals = e.InsertValues[x] as ASPxDataInsertValues;
+        //            Eval_RaspunsLinii cls = new Eval_RaspunsLinii();
+        //            cls.F10003 = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+        //            cls.IdQuiz = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+        //            cls.Id = Convert.ToInt32(grid.ID.Split('_')[grid.ID.Split('_').Count() - 1]);
+        //            cls.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+        //            cls.TIME = DateTime.Now;
+
+        //            int max = lst.Where(p => p.IdQuiz == cls.IdQuiz && p.F10003 == cls.F10003 && p.Id == cls.Id).Max(p => p.Linia);
+        //            cls.Linia = max + 1;
+
+        //            for (int i = 1; i <= 6; i++)
+        //            {
+        //                string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+        //                PropertyInfo val = cls.GetType().GetProperty(camp);
+        //                if (val != null)
+        //                {
+        //                    val.SetValue(cls, vals.NewValues[camp], null);
+        //                }
+        //            }
+
+        //            lst.Add(cls);
+        //        }
+
+        //        for (int x = 0; x < e.UpdateValues.Count; x++)
+        //        {
+        //            ASPxDataUpdateValues vals = e.UpdateValues[x] as ASPxDataUpdateValues;
+        //            object[] keys = new object[] { vals.Keys[0] };
+
+        //            Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(vals.Keys[0]) && p.F10003 == Convert.ToInt32(vals.Keys[1]) && p.Id == Convert.ToInt32(vals.Keys[2]) && p.Linia == Convert.ToInt32(vals.Keys[3])).FirstOrDefault();
+        //            if (cls == null) return;
+
+        //            cls.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+        //            cls.TIME = DateTime.Now;
+
+        //            for (int i = 1; i <= 6; i++)
+        //            {
+        //                string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+        //                PropertyInfo val = cls.GetType().GetProperty(camp);
+        //                if (val != null)
+        //                {
+        //                    val.SetValue(cls, vals.NewValues[camp], null);
+        //                }
+        //            }
+        //        }
+
+        //        for (int x = 0; x < e.DeleteValues.Count; x++)
+        //        {
+        //            ASPxDataDeleteValues vals = e.DeleteValues[x] as ASPxDataDeleteValues;
+        //            object[] keys = new object[] { vals.Keys[0] };
+
+        //            Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
+        //            if (cls == null) return;
+        //            lst.Remove(cls);
+
+        //            //List<Eval_CompetenteAngajatTemp> lstSterse = Session["lstEval_CompetenteAngajatTemp_Sterse"] as List<Eval_CompetenteAngajatTemp>;
+        //            //if (lstSterse == null) lstSterse = new List<Eval_CompetenteAngajatTemp>();
+        //            //lstSterse.Add(cls);
+        //            //Session["lstEval_CompetenteAngajatTemp_Sterse"] = lstSterse;
+        //        }
+
+        //        Session["lstEval_RaspunsLinii"] = lst;
+
+        //        e.Handled = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+
+        //}
+
+        //private void gr_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
+        //{
+        //    try
+        //    {
+        //        ASPxGridView grid = sender as ASPxGridView;
+        //        grid.CancelEdit();
+
+        //        DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+
+        //        for (int x = 0; x < e.InsertValues.Count; x++)
+        //        {
+        //            ASPxDataInsertValues vals = e.InsertValues[x] as ASPxDataInsertValues;
+        //            DataRow dr = dtTbl.NewRow();
+        //            dr["F10003"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+        //            dr["IdQuiz"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+        //            dr["Id"] = Convert.ToInt32(grid.ID.Split('_')[grid.ID.Split('_').Count() - 1]);
+        //            dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+        //            dr["TIME"] = DateTime.Now;
+
+        //            //int max = lst.Where(p => p.IdQuiz == cls.IdQuiz && p.F10003 == cls.F10003 && p.Id == cls.Id).Max(p => p.Linia);
+        //            //cls.Linia = max + 1;
+        //            //DataTable dtFiltru = dtTbl.Select("Id=" + dr["Id"]).CopyToDataTable();
+        //            int max = Convert.ToInt32(dtTbl.Compute("MAX(Linia)", "Id=" + dr["Id"]));
+        //            dr["Linia"] = max + 1;
+
+        //            for (int i = 1; i <= 6; i++)
+        //            {
+        //                string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+        //                dr[camp] = vals.NewValues[camp];
+        //                //PropertyInfo val = cls.GetType().GetProperty(camp);
+        //                //if (val != null)
+        //                //{
+        //                //    val.SetValue(cls, vals.NewValues[camp], null);
+        //                //}
+        //            }
+
+        //            dtTbl.Rows.Add(dr);
+        //        }
+
+        //        for (int x = 0; x < e.UpdateValues.Count; x++)
+        //        {
+        //            //ASPxDataUpdateValues vals = e.UpdateValues[x] as ASPxDataUpdateValues;
+        //            //object[] keys = new object[] { vals.Keys[0] };
+
+        //            //Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(vals.Keys[0]) && p.F10003 == Convert.ToInt32(vals.Keys[1]) && p.Id == Convert.ToInt32(vals.Keys[2]) && p.Linia == Convert.ToInt32(vals.Keys[3])).FirstOrDefault();
+        //            //if (cls == null) return;
+
+        //            //cls.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+        //            //cls.TIME = DateTime.Now;
+
+        //            //for (int i = 1; i <= 6; i++)
+        //            //{
+        //            //    string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+        //            //    PropertyInfo val = cls.GetType().GetProperty(camp);
+        //            //    if (val != null)
+        //            //    {
+        //            //        val.SetValue(cls, vals.NewValues[camp], null);
+        //            //    }
+        //            //}
+        //        }
+
+        //        for (int x = 0; x < e.DeleteValues.Count; x++)
+        //        {
+        //            ASPxDataDeleteValues vals = e.DeleteValues[x] as ASPxDataDeleteValues;
+        //            object[] keys = new object[] { vals.Keys[0] };
+
+        //            //Eval_RaspunsLinii cls = lst.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
+        //            //if (cls == null) return;
+        //            //lst.Remove(cls);
+
+        //            //List<Eval_CompetenteAngajatTemp> lstSterse = Session["lstEval_CompetenteAngajatTemp_Sterse"] as List<Eval_CompetenteAngajatTemp>;
+        //            //if (lstSterse == null) lstSterse = new List<Eval_CompetenteAngajatTemp>();
+        //            //lstSterse.Add(cls);
+        //            //Session["lstEval_CompetenteAngajatTemp_Sterse"] = lstSterse;
+        //        }
+
+        //        Session["Eval_RaspunsLinii_Tabel"] = dtTbl;
+
+        //        e.Handled = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+
+        //}
+
+
+        private void gr_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
+        {
+            try
+            {
+                ASPxGridView grid = sender as ASPxGridView;
+                grid.CancelEdit();
+
+                DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
+
+                for (int x = 0; x < e.InsertValues.Count; x++)
+                {
+                    ASPxDataInsertValues vals = e.InsertValues[x] as ASPxDataInsertValues;
+                    DataRow dr = dtTbl.NewRow();
+                    dr["F10003"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+                    dr["IdQuiz"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+                    dr["Id"] = Convert.ToInt32(grid.ID.Split('_')[grid.ID.Split('_').Count() - 1]);
+                    dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                    dr["TIME"] = DateTime.Now;
+
+                    int max = Convert.ToInt32(dtTbl.Compute("MAX(Linia)", "Id=" + dr["Id"]));
+                    dr["Linia"] = max + 1;
+
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                        dr[camp] = vals.NewValues[camp];
+                    }
+
+                    dtTbl.Rows.Add(dr);
+                }
+
+                for (int x = 0; x < e.UpdateValues.Count; x++)
+                {
+                    ASPxDataUpdateValues vals = e.UpdateValues[x] as ASPxDataUpdateValues;
+
+                    object[] keys = new object[vals.Keys.Count];
+                    for (int y = 0; y < vals.Keys.Count; y++)
+                    { keys[y] = vals.Keys[y]; }
+
+                    DataRow dr = dtTbl.Rows.Find(keys);
+
+                    dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                    dr["TIME"] = DateTime.Now;
+
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                        dr[camp] = vals.NewValues[camp];
+                    }
+                }
+
+                for (int x = 0; x < e.DeleteValues.Count; x++)
+                {
+                    ASPxDataDeleteValues vals = e.DeleteValues[x] as ASPxDataDeleteValues;
+
+                    object[] keys = new object[vals.Keys.Count];
+                    for (int y = 0; y < vals.Keys.Count; y++)
+                    { keys[y] = vals.Keys[y]; }
+
+                    DataRow dr = dtTbl.Rows.Find(keys);
+                    dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                    dr["TIME"] = DateTime.Now;
+
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        string camp = "Super" + Session["Eval_ActiveTab"].ToString() + "_" + i;
+                        dr[camp] = DBNull.Value;
+                    }
+                }
+
+                Session["Eval_RaspunsLinii_Tabel"] = dtTbl;
+
+                e.Handled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+
+        }
+
+
+        //private void Gr_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        //{
+        //    try
+        //    {
+        //        object[] keys = new object[e.Keys.Count];
+        //        for (int i = 0; i < e.Keys.Count; i++)
+        //        { keys[i] = e.Keys[i]; }
+        //        ASPxGridView grid = sender as ASPxGridView;                
+        //        GridViewDataTextColumn col = grid.Columns[7] as GridViewDataTextColumn;
+
+        //        Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
+                
+        //        if (raspLinie != null)
+        //        {
+        //            PropertyInfo piValue = raspLinie.GetType().GetProperty(col.FieldName);
+        //            if (piValue != null)
+        //            {
+        //                piValue.SetValue(raspLinie, Convert.ChangeType(e.NewValues[col.FieldName] ?? DBNull.Value, piValue.PropertyType), null);
+        //            }
+        //        }
+
+        //        e.Cancel = true;
+
+        //        grid.CancelEdit();
+        //        grid.DataSource = lstEval_RaspunsLinii.Where(p => p.IdQuiz == Convert.ToInt32(keys[0]) && p.F10003 == Convert.ToInt32(keys[1]) && p.Id == Convert.ToInt32(keys[2]) && p.Linia == Convert.ToInt32(keys[3])).FirstOrDefault();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         private ASPxTextBox CreeazaTextEdit(int id, int tip, string super, int tipData = 0)
         {
@@ -1811,7 +2301,7 @@ namespace WizOne.Eval
                 grDateObiective.BatchUpdate += GrDateObiective_BatchUpdate;
                 Session["NumeGriduri"] += ";" + grDateObiective.ID;
 
-
+                grDateObiective.CustomSummaryCalculate += GrDateObiective_CustomSummaryCalculate;
 
                 //Radu 19.04.2019
                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24 || Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 25)
@@ -1891,7 +2381,7 @@ namespace WizOne.Eval
                         string colName = clsConfigDetail.ColumnName.Replace("Total", "FormulaSql");
                         colFormula.FieldName = colName;
                         colFormula.Name = colName;
-                        colFormula.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        colFormula.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
                         colFormula.UnboundExpression = clsConfigDetail.FormulaSql;
                         colFormula.Visible = false;
 
@@ -1906,11 +2396,38 @@ namespace WizOne.Eval
                             grDateObiective.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
                             ASPxSummaryItem s = new ASPxSummaryItem();
                             s.FieldName = clsConfigDetail.ColumnName;
-                            if (clsConfigDetail.TotalColoana == 0)
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-                            if (clsConfigDetail.TotalColoana == 4)
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
-                            s.DisplayFormat = "{0}";
+                            switch (clsConfigDetail.TotalColoana)
+                            {
+                                case 1:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N0}";
+                                    break;
+                                case 2:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N2}";
+                                    break;
+                                case 3:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N0}";
+                                    break;
+                                case 4:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N2}";
+                                    break;
+                                case 5:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
+                                    s.DisplayFormat = "Val. min. {0}";
+                                    break;
+                                case 6:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
+                                    s.DisplayFormat = "Val. max. {0}";
+                                    break;
+                            }
+                            //if (clsConfigDetail.TotalColoana == 0)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                            //if (clsConfigDetail.TotalColoana == 4)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                            //s.DisplayFormat = "{0}";
 
                             grDateObiective.TotalSummary.Add(s);
                         }
@@ -2348,6 +2865,44 @@ namespace WizOne.Eval
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
             return grDateObiective;
+        }
+
+        private void GrDateObiective_CustomSummaryCalculate(object sender, DevExpress.Data.CustomSummaryEventArgs e)
+        {
+            try
+            {
+                ASPxSummaryItem itm = e.Item as ASPxSummaryItem;
+                if (itm.DisplayFormat.ToLower().IndexOf("max") >= 0)
+                {
+                    // Initialization. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                        e.TotalValue = 0;
+                    else
+                    // Calculation. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                    {
+                        if (Convert.ToDecimal(e.FieldValue) > Convert.ToDecimal(e.TotalValue))
+                            e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                    }
+                }
+                else
+                {
+                    // Initialization. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                        e.TotalValue = 9999;
+                    else
+                    // Calculation. 
+                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                    {
+                        if (Convert.ToDecimal(e.FieldValue) < Convert.ToDecimal(e.TotalValue))
+                            e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
 
@@ -2843,7 +3398,7 @@ namespace WizOne.Eval
                                 break;
                             case "IdCalificativ":
                                 clsNew.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ) != null)
                                     clsNew.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ).Text;
                                 break;
                             case "Calificativ":
@@ -2904,7 +3459,7 @@ namespace WizOne.Eval
                                 break;
                             case "IdCalificativ":
                                 clsUpd.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ) != null)
                                     clsUpd.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ).Text;
                                 break;
                             case "Calificativ":
@@ -3596,7 +4151,7 @@ namespace WizOne.Eval
                 grDateCompetente.ID = "grDateCompetente" + "_WXY_" + id.ToString();
 
                 //Florin 2019.06.26
-                grDateCompetente.ClientInstanceName = "grDateObiective" + "_WXY_" + id.ToString();
+                grDateCompetente.ClientInstanceName = "grDateCompetente" + "_WXY_" + id.ToString();
                 grDateCompetente.ClientIDMode = ClientIDMode.Static;
                 grDateCompetente.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
 
@@ -3630,6 +4185,8 @@ namespace WizOne.Eval
                 //Florin 2019.06.26
                 grDateCompetente.BatchUpdate += GrDateCompetente_BatchUpdate;
                 Session["NumeGriduri"] += ";" + grDateCompetente.ID;
+
+                grDateCompetente.EnableRowsCache = false;
 
 
 
@@ -3702,7 +4259,7 @@ namespace WizOne.Eval
                         string colName = clsConfigDetail.ColumnName.Replace("Total", "FormulaSql");
                         colFormula.FieldName = colName;
                         colFormula.Name = colName;
-                        colFormula.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        colFormula.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
                         colFormula.UnboundExpression = clsConfigDetail.FormulaSql;
                         colFormula.Visible = false;
 
@@ -3717,11 +4274,38 @@ namespace WizOne.Eval
                             grDateCompetente.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
                             ASPxSummaryItem s = new ASPxSummaryItem();
                             s.FieldName = clsConfigDetail.ColumnName;
-                            if (clsConfigDetail.TotalColoana == 0)
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-                            if (clsConfigDetail.TotalColoana == 4)
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
-                            s.DisplayFormat = "{0}";
+                            switch (clsConfigDetail.TotalColoana)
+                            {
+                                case 1:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N0}";
+                                    break;
+                                case 2:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                    s.DisplayFormat = "Suma {0:N2}";
+                                    break;
+                                case 3:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N0}";
+                                    break;
+                                case 4:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                    s.DisplayFormat = "Media {0:N2}";
+                                    break;
+                                case 5:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Min;
+                                    s.DisplayFormat = "Valoarea minima {0}";
+                                    break;
+                                case 6:
+                                    s.SummaryType = DevExpress.Data.SummaryItemType.Max;
+                                    s.DisplayFormat = "Valoarea maxima {0}";
+                                    break;
+                            }
+                            //if (clsConfigDetail.TotalColoana == 0)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                            //if (clsConfigDetail.TotalColoana == 4)
+                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                            //s.DisplayFormat = "{0}";
 
                             grDateCompetente.TotalSummary.Add(s);
                         }

@@ -179,6 +179,13 @@ namespace WizOne.Pontaj
 
                 Dami.AccesApp();
 
+                DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
+                cmbStare.DataSource = dtStari;
+                cmbStare.DataBind();
+
+                GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
+                colStari.PropertiesComboBox.DataSource = dtStari;
+
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
@@ -304,9 +311,12 @@ namespace WizOne.Pontaj
 
                     #endregion
 
-                    DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
-                    cmbStare.DataSource = dtStari;
-                    cmbStare.DataBind();
+                    //DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
+                    //cmbStare.DataSource = dtStari;
+                    //cmbStare.DataBind();
+
+                    //GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
+                    //colStari.PropertiesComboBox.DataSource = dtStari;
 
                     cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
                     cmbCateg.DataBind();
@@ -602,7 +612,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                if (e.DataColumn.FieldName == "Stare")
+                if (e.DataColumn.FieldName == "IdStare")
                 {
                     object col = grDate.GetRowValues(e.VisibleIndex, "Culoare");
                     if (col != null) e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(col.ToString());

@@ -130,6 +130,9 @@ namespace WizOne.Pagini
                                     }
                                 }
                                 break;
+                            case "13":
+                                tbl = "Curs_Inregistrare";
+                                break;
                         }
 
                         if (tbl.Length > 0)

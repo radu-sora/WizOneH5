@@ -392,6 +392,7 @@
     <Content Include="Eval\EvalDetaliu.aspx" />
     <Content Include="Eval\EvalLista.aspx" />
     <Content Include="Eval\EvalTemp.aspx" />
+    <Content Include="Eval\Form1.aspx" />
     <Content Include="Eval\Invitatie.aspx" />
     <Content Include="Eval\ListaObiective.aspx" />
     <Content Include="Eval\QuizAngajatGrup.ascx" />
@@ -1421,6 +1422,13 @@
     </Compile>
     <Compile Include="Eval\EvalTemp.aspx.designer.cs">
       <DependentUpon>EvalTemp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\Form1.aspx.cs">
+      <DependentUpon>Form1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\Form1.aspx.designer.cs">
+      <DependentUpon>Form1.aspx</DependentUpon>
     </Compile>
     <Compile Include="Eval\Invitatie.aspx.cs">
       <DependentUpon>Invitatie.aspx</DependentUpon>

@@ -1226,6 +1226,9 @@ namespace WizOne.Eval
                         case 68: //tabel din view Others
                             ctl = CreeazaLink(ent.Descriere, ent.Id);
                             break;
+                        case 69: //raport evaluare multipla
+                            ctl = CreazaTabelSimplu(ent.Id, "viewEvaluareMultipla");
+                            break;
                     }
 
                     if (ctl != null)
@@ -5225,6 +5228,41 @@ namespace WizOne.Eval
                 grDate.Width = Unit.Percentage(100);
                 grDate.ID = "grDate_DinView_Others";
                 grDate.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return grDate;
+        }
+
+        private ASPxGridView CreazaTabelSimplu(int id, string numeView)
+        {
+            ASPxGridView grDate = new ASPxGridView();
+
+            try
+            {
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""{numeView}"" WHERE F10003 = @1 AND ""IdQuiz"" = @2", new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"] });
+
+                grDate.AutoGenerateColumns = true;
+                grDate.DataSource = dt;
+                grDate.Width = Unit.Percentage(100);
+                grDate.ID = "grDate_DinView_" + id;
+                grDate.DataBind();
+
+                if (grDate.Columns["IdQuiz"] != null)
+                {
+                    grDate.Columns["IdQuiz"].Visible = false;
+                    grDate.Columns["IdQuiz"].ShowInCustomizationForm = false;
+
+                }
+                if (grDate.Columns["F10003"] != null)
+                {
+                    grDate.Columns["F10003"].Visible = false;
+                    grDate.Columns["F10003"].ShowInCustomizationForm = false;
+                }
             }
             catch (Exception ex)
             {

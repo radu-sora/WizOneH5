@@ -15168,6 +15168,7 @@ GO
 INSERT INTO "Securitate" ("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu") VALUES('Absente.Lista', 'btnAnulare', '-', 6, 1, 1, 0)
 GO
 
+
 ----  2.2.132.01  ----
 
 
@@ -15176,8 +15177,87 @@ UPDATE F1001 SET F1001109 = (select f10022 from f100 where f1001.F10003 = f100.f
 ALTER TABLE F9101 ADD  F9101109 DATETIME;                                                  
 ALTER TABLE F0991 ADD  F0991109 DATETIME;  
 
+
 ----  2.2.132.02  ----
 
 
 ALTER TABLE F100 ALTER COLUMN F10081 NVARCHAR(50)
+GO
+
+
+----  2.2.133  ----
+
+
+CREATE TABLE [dbo].[Eval_relGrupSetAngajati](
+	[IdGrup] [int] NOT NULL,
+	[IdSetAngajati] [int] NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_Eval_relGrupSetAngajati] PRIMARY KEY CLUSTERED 
+(
+	[IdGrup] ASC,
+	[IdSetAngajati] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Eval_relGrupSetAngajati] ADD  CONSTRAINT [DF_Eval_relGrupSetAngajati_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+
+ALTER TABLE Eval_CategCompetente ADD Sectiune nvarchar(250)
+GO
+ALTER TABLE Eval_CategCompetente ADD Subsectiune nvarchar(250)
+GO
+ALTER TABLE Eval_CategCompetente ADD IdCalificativ int
+GO
+
+CREATE TABLE [dbo].[Eval_RaspunsMultiplu](
+	[F10003] [int] NULL,
+	[Data] [datetime] NULL,
+	[Sectiune] [nvarchar](250) NULL,
+	[Subsectiune] [nvarchar](250) NULL,
+	[CategorieCompetentaId] [int] NULL,
+	[CategorieCompetentaDenumire] [nvarchar](250) NULL,
+	[CompetentaId] [int] NULL,
+	[CompetentaDenumire] [nvarchar](250) NULL,
+	[CalificativId] [int] NULL,
+	[CalificativDenumire] [nvarchar](50) NULL,
+	[FunctiaId] [int] NULL,
+	[FunctiaDenumire] [nvarchar](250) NULL,
+	[Observatii] [nvarchar](max) NULL,
+	[IdUser] [int] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [PK_Eval_RaspunsMultiplu] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Eval_RaspunsMultiplu] ADD  CONSTRAINT [DF_Eval_RaspunsMultiplu_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(124, 'Evaluare multipla', 'Evaluare multipla', 'Eval\EvalMultiplu', 1, 'm1.png')
+GO 
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(125, 'Grupuri per eval. multipla', 'Grupuri per eval. multipla', 'Pagini\SablonNomen[Eval_relGrupSetAngajati]', 1, 'm1.png')
+GO
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(126, 'Categorii competente', 'Categorii competente', 'Pagini\SablonNomen[Eval_CategCompetente]', 1, 'm1.png')
+GO
+
+INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo, IdAutomat) VALUES('Eval_CategCompetente','IdCalificativ',2,1,'SELECT Id, Denumire FROM Eval_tblTipValori', 0)
+GO
+INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo, IdAutomat) VALUES('Eval_relGrupSetAngajati','IdGrup',2,1,'SELECT Id, Denumire FROM tblGrupUsers', 0)
+GO
+INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo, IdAutomat) VALUES('Eval_relGrupSetAngajati','IdSetAngajati',2,1,'SELECT IdSetAng, DenSet FROM Eval_SetAngajati', 0)
+GO
+
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 69, 'Evaluare Multipla Raport', 0)
+GO
+
+CREATE VIEW [dbo].[viewEvaluareMultipla]
+AS
+SELECT 1 AS IdQuiz, F10003, Sectiune, Subsectiune, CategorieCompetentaDenumire, CompetentaDenumire, CalificativDenumire FROM Eval_RaspunsMultiplu
 GO

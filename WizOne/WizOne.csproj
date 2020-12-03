@@ -389,6 +389,7 @@
     <Content Include="Eval\EvalBulk.aspx" />
     <Content Include="Eval\EvalDetaliu.aspx" />
     <Content Include="Eval\EvalLista.aspx" />
+    <Content Include="Eval\EvalMultiplu.aspx" />
     <Content Include="Eval\EvalTemp.aspx" />
     <Content Include="Eval\Form1.aspx" />
     <Content Include="Eval\Invitatie.aspx" />
@@ -1399,6 +1400,12 @@
     </Compile>
     <Compile Include="Eval\EvalLista.aspx.designer.cs">
       <DependentUpon>EvalLista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\EvalMultiplu.aspx.cs">
+      <DependentUpon>EvalMultiplu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\EvalMultiplu.aspx.designer.cs">
+      <DependentUpon>EvalMultiplu.aspx</DependentUpon>
     </Compile>
     <Compile Include="Eval\EvalTemp.aspx.cs">
       <DependentUpon>EvalTemp.aspx</DependentUpon>

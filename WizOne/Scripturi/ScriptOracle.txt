@@ -15443,8 +15443,97 @@ UPDATE F1001 SET F1001109 = (select f10022 from f100 where f1001.F10003 = f100.f
 ALTER TABLE F9101 ADD  F9101109 DATE;                                                  
 ALTER TABLE F0991 ADD  F0991109 DATE;  
 
+
 ----  2.2.132.02  ----
 
 
 ALTER TABLE F100 MODIFY F10081 VARCHAR2(50);
 
+
+----  2.2.133  ----
+
+
+CREATE TABLE "Eval_relGrupSetAngajati" 
+(	"IdGrup" NUMBER(10,0), 
+    "IdSetAngajati" NUMBER(10,0),  
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE
+);
+
+CREATE UNIQUE INDEX "Eval_relGrupSetAngajati_PK" ON "Eval_relGrupSetAngajati" ("IdGrup", "IdSetAngajati");
+
+ALTER TABLE "Eval_relGrupSetAngajati" ADD CONSTRAINT "Eval_relGrupSetAngajati_PK" PRIMARY KEY ("IdGrup", "IdSetAngajati");
+ALTER TABLE "Eval_relGrupSetAngajati" MODIFY ("IdSetAngajati" NOT NULL ENABLE);
+ALTER TABLE "Eval_relGrupSetAngajati" MODIFY ("IdGrup" NOT NULL ENABLE);
+/
+
+
+ALTER TABLE "Eval_CategCompetente" ADD "Sectiune" varchar2(250);
+/
+ALTER TABLE "Eval_CategCompetente" ADD "Subsectiune" varchar2(250);
+/
+ALTER TABLE "Eval_CategCompetente" ADD "IdCalificativ" number(10);
+/
+
+
+CREATE TABLE "Eval_RaspunsMultiplu" 
+(	"F10003" NUMBER(10,0), 
+    "Data" DATE, 
+    "Sectiune" VARCHAR2(250 BYTE), 
+    "Subsectiune" VARCHAR2(250 BYTE), 
+    "CategorieCompetentaId" NUMBER(10,0), 
+    "CategorieCompetentaDenumire" VARCHAR2(250 BYTE), 
+    "CompetentaId" NUMBER(10,0), 
+    "CompetentaDenumire" VARCHAR2(250 BYTE), 
+	"CalificativId" NUMBER(10,0), 
+    "CalificativDenumire" VARCHAR2(50 BYTE), 
+    "FunctiaId" NUMBER(10,0), 
+    "FunctiaDenumire" VARCHAR2(250 BYTE), 
+    "Observatii" CLOB, 
+    "IdUser" NUMBER(10,0), 
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE, 
+    "IdAuto" NUMBER(10,0)
+);
+
+CREATE UNIQUE INDEX "Eval_RaspunsMultiplu_PK" ON "Eval_RaspunsMultiplu" ("IdAuto");
+
+CREATE SEQUENCE "Eval_RaspunsMultiplu_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+CREATE OR REPLACE TRIGGER "Auto_Eval_RaspunsMultiplu" 
+  BEFORE INSERT ON "Eval_RaspunsMultiplu"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "Eval_RaspunsMultiplu_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Eval_RaspunsMultiplu" ENABLE;
+/
+
+ALTER TABLE "Eval_RaspunsMultiplu" ADD CONSTRAINT "Eval_RaspunsMultiplu_PK" PRIMARY KEY ("IdAuto");
+ALTER TABLE "Eval_RaspunsMultiplu" MODIFY ("IdAuto" NOT NULL ENABLE);
+/
+
+INSERT INTO tblMeniuri("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(124, 'Evaluare multipla', 'Evaluare multipla', 'Eval\EvalMultiplu', 1, 'm1.png');
+COMMIT;
+INSERT INTO tblMeniuri("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(125, 'Grupuri per eval. multipla', 'Grupuri per eval. multipla', 'Pagini\SablonNomen[Eval_relGrupSetAngajati]', 1, 'm1.png');
+COMMIT;
+INSERT INTO tblMeniuri("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(126, 'Categorii competente', 'Categorii competente', 'Pagini\SablonNomen[Eval_CategCompetente]', 1, 'm1.png');
+COMMIT;
+
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat") VALUES('Eval_CategCompetente','IdCalificativ',2,1,'SELECT Id, Denumire FROM Eval_tblTipValori', 0);
+COMMIT;
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat")VALUES('Eval_relGrupSetAngajati','IdGrup',2,1,'SELECT Id, Denumire FROM tblGrupUsers', 0);
+COMMIT;
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat") VALUES('Eval_relGrupSetAngajati','IdSetAngajati',2,1,'SELECT IdSetAng, DenSet FROM Eval_SetAngajati', 0);
+COMMIT;
+
+INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare") VALUES(1, 69, 'Evaluare Multipla Raport', 0);
+COMMIT;
+
+CREATE VIEW "viewEvaluareMultipla"
+AS
+SELECT 1 AS "IdQuiz", F10003, "Sectiune", "Subsectiune", "CategorieCompetentaDenumire", "CompetentaDenumire", "CalificativDenumire" FROM "Eval_RaspunsMultiplu";
+/

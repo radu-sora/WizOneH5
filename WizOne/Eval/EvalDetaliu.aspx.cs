@@ -254,7 +254,8 @@ namespace WizOne.Eval
                 string sqlCommandInsertTemp = string.Empty;
 
                 #region Set Scripts Upload DB
-                sqlCommandDelete = @"delete from ""Eval_RaspunsLinii"" where ""IdQuiz"" = @1 and ""F10003"" = @2 and ""Id"" = @3";
+                //Florin 2020.12.04 - am adaugat filtrul cu linia
+                sqlCommandDelete = @"delete from ""Eval_RaspunsLinii"" where ""IdQuiz"" = @1 and ""F10003"" = @2 and ""Id"" = @3 AND ""Linia"" = @4";
                 //sqlCommandInsert = $@"insert into ""Eval_RaspunsLinii""(""IdQuiz"", ""F10003"", ""Id"", ""Linia"", 
                 //                                ""Super1"",""Super2"",""Super3"",""Super4"",""Super5"",
                 //                                ""Super6"",""Super7"",""Super8"",""Super9"",""Super10"",
@@ -344,7 +345,8 @@ namespace WizOne.Eval
                     try
                     {
                         sqlCommandDeleteTemp = sqlCommandDelete;
-                        General.ExecutaNonQuery(sqlCommandDeleteTemp, new object[] { entRaspLinie.IdQuiz, entRaspLinie.F10003, entRaspLinie.Id });
+                        //Florin 2020.12.04 - am adaugat filtrul cu linia
+                        General.ExecutaNonQuery(sqlCommandDeleteTemp, new object[] { entRaspLinie.IdQuiz, entRaspLinie.F10003, entRaspLinie.Id, entRaspLinie.Linia });
 
                         sqlCommandInsertTemp = sqlCommandInsert;
                         General.ExecutaNonQuery(sqlCommandInsertTemp, new object[] {  entRaspLinie.IdQuiz, entRaspLinie.F10003, entRaspLinie.Id,
@@ -1575,7 +1577,7 @@ namespace WizOne.Eval
                 dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
                 dr["TIME"] = DateTime.Now;
 
-                int max = Convert.ToInt32(dt.Compute("MAX(Linia)", "Id=" + dr["Id"]));
+                int max = Convert.ToInt32(General.Nz(dt.Compute("MAX(Linia)", "Id=" + dr["Id"]),0));
                 dr["Linia"] = max + 1;
 
                 //foreach (KeyValuePair<string, object> item in e.NewValues)

@@ -783,4 +783,12 @@ table label {
     flex-wrap: wrap;
 }
 
+.tblCompetente {
+    margin:10px;
+}
+
+.tblCompetente tr td {
+    padding:5px;
+}
+
     

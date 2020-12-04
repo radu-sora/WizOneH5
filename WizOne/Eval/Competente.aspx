@@ -29,10 +29,10 @@
         </tr>
     </table>
 
-    <table>
+    <table class="tblCompetente">
         <tr>
             <td>
-                <dx:ASPxLabel ID="lblId" runat="server" Text="Id" Width="30px" />
+                <dx:ASPxLabel ID="lblId" runat="server" Text="Id" Width="100px" />
             </td>
             <td>
                 <dx:ASPxTextBox ID="txtId" runat="server" Width="50px" Enabled="false" />
@@ -41,13 +41,33 @@
                 <dx:ASPxLabel ID="lblCodCategorie" runat="server" Text ="Cod categorie:" Width ="100px" />
             </td>
             <td>
-                <dx:ASPxTextBox ID="txtCodCategorie" runat="server" Width="150px" />
+                <dx:ASPxTextBox ID="txtCodCategorie" runat="server" Width="250px" />
             </td>
             <td>
                 <dx:ASPxLabel ID="lblDenCategorie" runat="server" Text="Categorie:" Width="100px" />
             </td>
             <td>
-                <dx:ASPxTextBox ID="txtDenCategorie" runat="server" Width ="350px" />
+                <dx:ASPxTextBox ID="txtDenCategorie" runat="server" Width ="250px" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <dx:ASPxLabel ID="lblSec" runat="server" Text="Sectiune:" Width="100px" />
+            </td>
+            <td>
+                <dx:ASPxTextBox ID="txtSec" runat="server" Width ="250px" />
+            </td>
+            <td>
+                <dx:ASPxLabel ID="lblSub" runat="server" Text="Subsectiune" Width="100px" />
+            </td>
+            <td>
+                <dx:ASPxTextBox ID="txtSub" runat="server" Width ="250px" />
+            </td>
+            <td>
+                <dx:ASPxLabel ID="lblCal" runat="server" Text="Calificativ" Width="100px" />
+            </td>
+            <td>
+                <dx:ASPxComboBox ID="cmbCal" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
             </td>
         </tr>
     </table>

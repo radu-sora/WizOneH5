@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Eval {
-    
-    
-    public partial class Competente {
-        
+namespace WizOne.Eval
+{
+
+
+    public partial class Competente
+    {
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
+
         /// <summary>
         /// btnBack control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnBack;
-        
+
         /// <summary>
         /// btnNew control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnNew;
-        
+
         /// <summary>
         /// btnSave control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnSave;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// lblId control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblId;
-        
+
         /// <summary>
         /// txtId control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtId;
-        
+
         /// <summary>
         /// lblCodCategorie control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblCodCategorie;
-        
+
         /// <summary>
         /// txtCodCategorie control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtCodCategorie;
-        
+
         /// <summary>
         /// lblDenCategorie control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblDenCategorie;
-        
+
         /// <summary>
         /// txtDenCategorie control.
         /// </summary>
@@ -110,7 +112,61 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtDenCategorie;
-        
+
+        /// <summary>
+        /// lblSec control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblSec;
+
+        /// <summary>
+        /// txtSec control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtSec;
+
+        /// <summary>
+        /// lblSub control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblSub;
+
+        /// <summary>
+        /// txtSub control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtSub;
+
+        /// <summary>
+        /// lblCal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblCal;
+
+        /// <summary>
+        /// cmbCal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCal;
+
         /// <summary>
         /// grDate control.
         /// </summary>
@@ -119,7 +175,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate;
-        
+
         /// <summary>
         /// gridExport control.
         /// </summary>

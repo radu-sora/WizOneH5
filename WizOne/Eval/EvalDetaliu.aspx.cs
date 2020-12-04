@@ -199,7 +199,8 @@ namespace WizOne.Eval
                     if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) == Convert.ToInt32(General.Nz(Session["User_Marca"], -98)) && Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 && Convert.ToInt32(General.Nz(Session["CompletareChestionar_TrebuieSaIaLaCunostinta"], 1)) == 1 && Convert.ToInt32(General.Nz(Session["CompletareChestionar_ALuatLaCunostinta"], 1)) == 0) btnLuatCunostinta.Visible = true;
 
                     CreazaMeniu();
-                    CreazaTab(lstEvalDenumireSuper);
+                    //Florin 2020.12.04 - tichet #692
+                    //CreazaTab(lstEvalDenumireSuper);
                     CreeazaSectiune("Super" + Session["Eval_ActiveTab"].ToString());
                 }
 

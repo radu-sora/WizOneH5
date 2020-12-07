@@ -40,7 +40,7 @@
             <dx:ListBoxColumn FieldName="Id" Caption="Marca" Width="80px"/>
             <dx:ListBoxColumn FieldName="Denumire" Caption="Angajat" Width="170px"/>
         </Columns>
-        <ClientSideEvents SelectedIndexChanged="function(s, e) { OnSelectedIndexChanged(s,e); }" GotFocus="function(s, e){ s.ShowDropDown(); }"/>
+        <ClientSideEvents SelectedIndexChanged="function(s, e) { OnSelectedIndexChanged(s,e); }"/>
     </dx:ASPxComboBox>
 
     <br />

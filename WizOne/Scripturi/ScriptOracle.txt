@@ -15537,3 +15537,6 @@ CREATE VIEW "viewEvaluareMultipla"
 AS
 SELECT 1 AS "IdQuiz", F10003, "Sectiune", "Subsectiune", "CategorieCompetentaDenumire", "CompetentaDenumire", "CalificativDenumire" FROM "Eval_RaspunsMultiplu";
 /
+
+ALTER TABLE "Eval_DrepturiTab" ADD "Vizibil" NUMBER(10,0);
+/

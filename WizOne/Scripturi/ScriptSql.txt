@@ -15261,3 +15261,6 @@ CREATE VIEW [dbo].[viewEvaluareMultipla]
 AS
 SELECT 1 AS IdQuiz, F10003, Sectiune, Subsectiune, CategorieCompetentaDenumire, CompetentaDenumire, CalificativDenumire FROM Eval_RaspunsMultiplu
 GO
+
+ALTER TABLE Eval_DrepturiTab ADD Vizibil int
+GO

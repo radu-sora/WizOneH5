@@ -761,6 +761,7 @@
     <Content Include="Fisiere\Imagini\Icoane\view.png" />
     <Content Include="Fisiere\Imagini\Icoane\word.png" />
     <Content Include="Fisiere\Imagini\loading.gif" />
+    <Content Include="Fisiere\Imagini\radioButton.png" />
     <Content Include="Fisiere\Imagini\Teme\ThemeAqua.png" />
     <Content Include="Fisiere\Imagini\Teme\ThemeBlackGlass.png" />
     <Content Include="Fisiere\Imagini\Teme\ThemeDefault.png" />

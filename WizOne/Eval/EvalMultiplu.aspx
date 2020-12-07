@@ -2,6 +2,25 @@
 
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <style>
+        .dxbButton_MaterialCompact
+        {
+            background-color:#F78119;
+        }
+        .dxeFocused_MaterialCompact{
+            border:1px solid #F78119;
+        }
+        .dxeButtonEditButtonHover_MaterialCompact, 
+        .dxeButtonEditButtonPressed_MaterialCompact{
+            background-color:#F78119;
+        }
+        .dxeListBoxItemPressed_MaterialCompact,
+        .dxeListBoxItemSelected_MaterialCompact,
+        .dxeListBoxItemHover_MaterialCompact.dxeListBoxItemSelected_MaterialCompact
+        {
+            background-color:#F78119;
+        }
+    </style>
 
     <table style="width:100%">
         <tr>
@@ -9,7 +28,7 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td class="pull-right">    
-                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this, event)" >
+                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this, event)" Theme="MaterialCompact" >
                 </dx:ASPxButton>
             </td>
         </tr>
@@ -21,7 +40,7 @@
             <dx:ListBoxColumn FieldName="Id" Caption="Marca" Width="80px"/>
             <dx:ListBoxColumn FieldName="Denumire" Caption="Angajat" Width="170px"/>
         </Columns>
-        <ClientSideEvents SelectedIndexChanged="function(s, e) { OnSelectedIndexChanged(s,e); }" />
+        <ClientSideEvents SelectedIndexChanged="function(s, e) { OnSelectedIndexChanged(s,e); }" GotFocus="function(s, e){ s.ShowDropDown(); }"/>
     </dx:ASPxComboBox>
 
     <br />
@@ -35,8 +54,9 @@
                     <div class="panel panel-default ascuns pnlUmbra margin_right50" id="divSec">
                         <div class="panel-heading">Sectiune</div>
                         <div class="panel-body">
-                            <dx:ASPxRadioButtonList ID="ctlSec" ClientInstanceName="ctlSec" ClientIDMode="Static" runat="server" ValueField="Sectiune" TextField="Sectiune" RepeatColumns="1" RepeatLayout="Table" Border-BorderWidth="0" AutoPostBack="false">
+                            <dx:ASPxRadioButtonList ID="ctlSec" ClientInstanceName="ctlSec" ClientIDMode="Static" runat="server" ValueField="Sectiune" TextField="Sectiune" RepeatColumns="1" RepeatLayout="Table" Border-BorderWidth="0" AutoPostBack="false" Theme="MaterialCompact">
                                 <ClientSideEvents ValueChanged="function(s,e) { OnSelectedIndexChanged(s,e); }" />
+                                <CheckedImage Url="../Fisiere/Imagini/radioButton.png" Width="20" Height="20px"></CheckedImage>
                             </dx:ASPxRadioButtonList>
                         </div>
                     </div>
@@ -51,8 +71,9 @@
                     <div class="panel panel-default ascuns pnlUmbra margin_right50" id="divSub">
                         <div class="panel-heading">Subsectiune</div>
                         <div class="panel-body">
-                            <dx:ASPxRadioButtonList ID="ctlSub" ClientInstanceName="ctlSub" ClientIDMode="Static" runat="server" ValueField="Subsectiune" TextField="Subsectiune" RepeatColumns="1" RepeatLayout="Table" Border-BorderWidth="0" AutoPostBack="false">
+                            <dx:ASPxRadioButtonList ID="ctlSub" ClientInstanceName="ctlSub" ClientIDMode="Static" runat="server" ValueField="Subsectiune" TextField="Subsectiune" RepeatColumns="1" RepeatLayout="Table" Border-BorderWidth="0" AutoPostBack="false" Theme="MaterialCompact">
                                 <ClientSideEvents ValueChanged="function(s,e) { OnSelectedIndexChanged(s,e); }" />
+                                <CheckedImage Url="../Fisiere/Imagini/radioButton.png" Width="20" Height="20px"></CheckedImage>
                             </dx:ASPxRadioButtonList>
                         </div>
                     </div>
@@ -67,8 +88,9 @@
                     <div class="panel panel-default ascuns pnlUmbra margin_right50" id="divCtg">
                         <div class="panel-heading">Categorie Competente</div>
                         <div class="panel-body">
-                            <dx:ASPxRadioButtonList ID="ctlCtg" ClientInstanceName="ctlCtg" ClientIDMode="Static" runat="server" ValueField="IdCategorie" TextField="DenCategorie" RepeatColumns="1" RepeatLayout="Table" Border-BorderWidth="0" AutoPostBack="false">
+                            <dx:ASPxRadioButtonList ID="ctlCtg" ClientInstanceName="ctlCtg" ClientIDMode="Static" runat="server" ValueField="IdCategorie" TextField="DenCategorie" RepeatColumns="1" RepeatLayout="Table" Border-BorderWidth="0" AutoPostBack="false" Theme="MaterialCompact">
                                 <ClientSideEvents ValueChanged="function(s,e) { OnSelectedIndexChanged(s,e); }" />
+                                <CheckedImage Url="../Fisiere/Imagini/radioButton.png" Width="20" Height="20px"></CheckedImage>
                             </dx:ASPxRadioButtonList>
                         </div>
                     </div>
@@ -83,8 +105,9 @@
                     <div class="panel panel-default ascuns pnlUmbra margin_right50" id="divCom">
                         <div class="panel-heading">Competente</div>
                         <div class="panel-body">
-                            <dx:ASPxRadioButtonList ID="ctlCom" ClientInstanceName="ctlCom" ClientIDMode="Static" runat="server" ValueField="IdCompetenta" TextField="DenCompetenta" RepeatColumns="1" RepeatLayout="Table" Border-BorderWidth="0" AutoPostBack="false">
+                            <dx:ASPxRadioButtonList ID="ctlCom" ClientInstanceName="ctlCom" ClientIDMode="Static" runat="server" ValueField="IdCompetenta" TextField="DenCompetenta" RepeatColumns="1" RepeatLayout="Table" Border-BorderWidth="0" AutoPostBack="false" Theme="MaterialCompact">
                                 <ClientSideEvents ValueChanged="function(s,e) { SetCtl(ctlCal); }" />
+                                <CheckedImage Url="../Fisiere/Imagini/radioButton.png" Width="20" Height="20px"></CheckedImage>
                             </dx:ASPxRadioButtonList>
                         </div>
                     </div>
@@ -92,8 +115,9 @@
                     <div class="panel panel-default ascuns pnlUmbra margin_right50" id="divCal">
                         <div class="panel-heading">Calificativ</div>
                         <div class="panel-body">
-                            <dx:ASPxRadioButtonList ID="ctlCal" ClientInstanceName="ctlCal" ClientIDMode="Static" runat="server" ValueField="Nota" TextField="Valoare" RepeatColumns="1" RepeatLayout="Table" Border-BorderWidth="0" AutoPostBack="false">
+                            <dx:ASPxRadioButtonList ID="ctlCal" ClientInstanceName="ctlCal" ClientIDMode="Static" runat="server" ValueField="Nota" TextField="Valoare" RepeatColumns="1" RepeatLayout="Table" Border-BorderWidth="0" AutoPostBack="false" Theme="MaterialCompact">
                                 <ClientSideEvents ValueChanged="function(s,e) {  SetCtl(ctlObs); }" />
+                                <CheckedImage Url="../Fisiere/Imagini/radioButton.png" Width="20" Height="20px"></CheckedImage>
                             </dx:ASPxRadioButtonList>
                         </div>
                     </div>
@@ -104,7 +128,7 @@
         <div class="panel panel-default ascuns pnlUmbra margin_right50" id="divObs">
             <div class="panel-heading">Observatii</div>
             <div class="panel-body">
-                <dx:ASPxMemo ID="ctlObs" ClientInstanceName="ctlObs" ClientIDMode="Static" runat="server" Width="500px" Height="100px"></dx:ASPxMemo>
+                <dx:ASPxMemo ID="ctlObs" ClientInstanceName="ctlObs" ClientIDMode="Static" runat="server" Width="500px" Height="100px" Theme="MaterialCompact"/>
             </div>
         </div>
 

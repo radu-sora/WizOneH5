@@ -13,8 +13,8 @@ namespace WizOne.Eval
     {
         protected void Page_PreInit(object sender, EventArgs e)
         {
-            DevExpress.Web.ASPxWebControl.GlobalThemeBaseColor = "#F78119";
-            DevExpress.Web.ASPxWebControl.GlobalTheme = "MaterialCompact";
+            //DevExpress.Web.ASPxWebControl.GlobalThemeBaseColor = "#F78119";
+            //DevExpress.Web.ASPxWebControl.GlobalTheme = "MaterialCompact";
         }
 
         protected void Page_Load(object sender, EventArgs e)

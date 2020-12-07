@@ -522,7 +522,7 @@ namespace WizOne.Module
 
                             if (Convert.ToDateTime(entPrg["OraIntrare"]) > Convert.ToDateTime(entPrg["OraIesire"])) oraSf = new DateTime(zi.Value.AddDays(1).Year, zi.Value.AddDays(1).Month, zi.Value.AddDays(1).Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
 
-                            if (Convert.ToDateTime(firstIn) < oraInc) startTime = oraInc;
+                            if (Convert.ToDateTime(firstIn) <= oraInc) startTime = oraInc;
                             if (oraInc < Convert.ToDateTime(firstIn) && Convert.ToDateTime(firstIn) < oraSf) startTime = firstIn;
                             if (oraSf < Convert.ToDateTime(firstIn)) startTime = oraSf;
                         }
@@ -707,7 +707,7 @@ namespace WizOne.Module
 
                             if (Convert.ToDateTime(entPrg["OraIntrare"]) > Convert.ToDateTime(entPrg["OraIesire"])) oraSf = new DateTime(zi.Value.AddDays(1).Year, zi.Value.AddDays(1).Month, zi.Value.AddDays(1).Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
 
-                            if (Convert.ToDateTime(firstIn) < oraInc) startTime = oraInc;
+                            if (Convert.ToDateTime(firstIn) <= oraInc) startTime = oraInc;
                             if (oraInc < Convert.ToDateTime(firstIn) && Convert.ToDateTime(firstIn) < oraSf) startTime = firstIn;
                             if (oraSf < Convert.ToDateTime(firstIn)) startTime = oraSf;
                         }

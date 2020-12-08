@@ -168,17 +168,17 @@
                 <div class="Absente_divOuter margin_top15">
                     <label id="lblSup" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Superior administrativ</label>
                     <div style="float:left; padding-right:15px;">    
-                        <dx:ASPxComboBox ID="cmbSup" runat="server" Width="300px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" 
+                        <dx:ASPxComboBox ID="cmbSup" runat="server" Width="300px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true"
                                     IncrementalFilteringMode="Contains" CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
                             <ClientSideEvents SelectedIndexChanged="function(s, e) { NivelIerarhic(s); }" />
+                            <ItemStyle Wrap="True" />
                             <Columns>
-                                <dx:ListBoxColumn FieldName="Id" Caption="Id" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Denumire" Caption="Post" Width="130px" />
+                                <dx:ListBoxColumn FieldName="Id" Caption="Id" Width="80px" />
+                                <dx:ListBoxColumn FieldName="Denumire" Caption="Post" Width="250px" />
                                 <dx:ListBoxColumn FieldName="NivelIerarhic" Caption="Nivel" Width="50px" />
-                                <dx:ListBoxColumn FieldName="Subcompanie" Caption="Subcompanie" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />
+                                <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="180px" />
+                                <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="180px" />
+                                <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="180px" />
                             </Columns>
                         </dx:ASPxComboBox>
                     </div>
@@ -187,14 +187,14 @@
                     <div style="float:left; padding-right:15px;">    
                         <dx:ASPxComboBox ID="cmbSupFunc" ClientInstanceName="cmbSupFunc" ClientIDMode="Static" runat="server" Width="300px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" 
                                     IncrementalFilteringMode="Contains" CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
+                            <ItemStyle Wrap="True" />
                             <Columns>
-                                <dx:ListBoxColumn FieldName="Id" Caption="Id" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Denumire" Caption="Post" Width="130px" />
+                                <dx:ListBoxColumn FieldName="Id" Caption="Id" Width="80px" />
+                                <dx:ListBoxColumn FieldName="Denumire" Caption="Post" Width="250px" />
                                 <dx:ListBoxColumn FieldName="NivelIerarhic" Caption="Nivel" Width="50px" />
-                                <dx:ListBoxColumn FieldName="Subcompanie" Caption="Subcompanie" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />
+                                <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="180px" />
+                                <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="180px" />
+                                <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="180px" />
                             </Columns>
                         </dx:ASPxComboBox>
                     </div>

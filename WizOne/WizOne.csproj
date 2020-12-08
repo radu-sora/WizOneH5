@@ -1359,6 +1359,7 @@
     </Compile>
     <Compile Include="Curs\Cursuri.aspx.cs">
       <DependentUpon>Cursuri.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\Cursuri.aspx.designer.cs">
       <DependentUpon>Cursuri.aspx</DependentUpon>
@@ -1435,6 +1436,7 @@
     </Compile>
     <Compile Include="Eval\EvalMultiplu.aspx.cs">
       <DependentUpon>EvalMultiplu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Eval\EvalMultiplu.aspx.designer.cs">
       <DependentUpon>EvalMultiplu.aspx</DependentUpon>

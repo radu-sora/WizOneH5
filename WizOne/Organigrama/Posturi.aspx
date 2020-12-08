@@ -101,12 +101,12 @@
                 </div>
 
                 <div class="Absente_divOuter margin_top15">
-		            <label id="lblDenRO" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire raport romana</label>
+		            <label id="lblDenRO" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire post romana</label>
                     <div style="float:left; padding-right:15px;">
                         <dx:ASPxTextBox ID="txtDenRO" runat="server" Width="300px" MaxLength="300" />
                     </div>        
 
-		            <label id="lblDenEN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire raport engleza</label>
+		            <label id="lblDenEN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire post engleza</label>
                     <div style="float:left; padding-right:15px;">
                         <dx:ASPxTextBox ID="txtDenEN" runat="server" Width="300px" MaxLength="300" />
                     </div>        

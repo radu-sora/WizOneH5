@@ -382,6 +382,8 @@
     <Content Include="Contracte\Detalii.aspx" />
     <Content Include="Curs\Aprobare.aspx" />
     <Content Include="Curs\AprobareTrainer.aspx" />
+    <Content Include="Curs\Cursuri.aspx" />
+    <Content Include="Curs\relCurs.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="DefaultTactilExtra.aspx" />
     <Content Include="DefaultTactilFaraCard.aspx" />
@@ -1352,6 +1354,19 @@
     </Compile>
     <Compile Include="Curs\AprobareTrainer.aspx.designer.cs">
       <DependentUpon>AprobareTrainer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Curs\Cursuri.aspx.cs">
+      <DependentUpon>Cursuri.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Curs\Cursuri.aspx.designer.cs">
+      <DependentUpon>Cursuri.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Curs\relCurs.aspx.cs">
+      <DependentUpon>relCurs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Curs\relCurs.aspx.designer.cs">
+      <DependentUpon>relCurs.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

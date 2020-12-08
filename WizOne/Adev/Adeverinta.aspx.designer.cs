@@ -231,6 +231,24 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxComboBox cmbBirou;
 
         /// <summary>
+        /// lblPL control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPL;
+
+        /// <summary>
+        /// cmbPctLucru control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbPctLucru;
+
+        /// <summary>
         /// lblCtr control.
         /// </summary>
         /// <remarks>

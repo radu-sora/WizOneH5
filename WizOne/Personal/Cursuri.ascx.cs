@@ -389,6 +389,8 @@ namespace WizOne.Personal
         {
             try
             {
+                General.SecuritatePersonal(grDateCursuri, "Cursuri", Convert.ToInt32(Session["UserId"].ToString()), true);
+
                 ASPxComboBox cmbTipCurs = grDateCursuri.FindEditFormTemplateControl("cmbTipCurs") as ASPxComboBox;
                 if (cmbTipCurs != null)
                 {

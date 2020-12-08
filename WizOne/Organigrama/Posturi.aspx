@@ -12,7 +12,7 @@
                     <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnSterge" ClientInstanceName="btnSterge" ClientIDMode="Static" runat="server" Text="Sterge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s,e) { OnStergeClick(s,e); }" />
+                    <ClientSideEvents Click="function(s,e) { OnStergeClick(); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" >
@@ -89,7 +89,9 @@
         
 		            <label id="lblDen" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtDen" runat="server" Width="300px" />
+                        <dx:ASPxTextBox ID="txtDen" ClientInstanceName="txtDen" runat="server" Width="300px">
+                            <ClientSideEvents TextChanged="function(s,e) { OnDenumireChanged(s,e); }" />
+                        </dx:ASPxTextBox>
                     </div>        
 		            <label id="lblDtInc" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data Inceput</label>
                     <div style="float:left; padding-right:10px;">
@@ -104,24 +106,24 @@
                 <div class="Absente_divOuter margin_top15">
 		            <label id="lblDenRO" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire post romana</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtDenRO" runat="server" Width="300px" MaxLength="300" />
+                        <dx:ASPxTextBox ID="txtDenRO" ClientInstanceName="txtDenRO" runat="server" Width="300px" MaxLength="300" />
                     </div>        
 
 		            <label id="lblDenEN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire post engleza</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtDenEN" runat="server" Width="300px" MaxLength="300" />
+                        <dx:ASPxTextBox ID="txtDenEN" ClientInstanceName="txtDenEN" runat="server" Width="300px" MaxLength="300" />
                     </div>        
                 </div>
 
                 <div class="Absente_divOuter margin_top15">
 		            <label id="lblGrupRO" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Nume grup romana</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtGrupRO" runat="server" Width="300px" MaxLength="300" />
+                        <dx:ASPxTextBox ID="txtGrupRO" ClientInstanceName="txtGrupRO" runat="server" Width="300px" MaxLength="300" />
                     </div>        
 
 		            <label id="lblGrupEN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Nume grup engleza</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtGrupEN" runat="server" Width="300px" MaxLength="300" />
+                        <dx:ASPxTextBox ID="txtGrupEN" ClientInstanceName="txtGrupEN" runat="server" Width="300px" MaxLength="300" />
                     </div>        
                 </div>
 
@@ -437,7 +439,7 @@
             }
         }
 
-        function OnStergeClick(s, e) {
+        function OnStergeClick() {
             swal({
                 title: trad_string(limba, 'Sunteti sigur/a ?'), text: trad_string(limba, 'Sigur doriti continuarea procesului de stergere ?'),
                 type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
@@ -445,6 +447,16 @@
                 if (isConfirm)
                     pnlCtl.PerformCallback('btnSterge');
             });
+        }
+
+        var valDen = "";
+        function OnDenumireChanged(s, e) {
+            if (txtDenRO.GetValue() == null || txtDenRO.GetValue() == valDen)
+                txtDenRO.SetValue(txtDen.GetValue());
+            txtDenEN.SetValue(txtDen.GetValue());
+            txtGrupRO.SetValue(txtDen.GetValue());
+            txtGrupEN.SetValue(txtDen.GetValue());
+            valDen = txtDen.GetValue();
         }
 
     </script>

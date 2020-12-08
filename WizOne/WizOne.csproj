@@ -228,6 +228,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Artifacts\itextsharp.dll</HintPath>
     </Reference>
+    <Reference Include="MaterialCompactOrangeBase">
+      <HintPath>..\..\..\DLL\MaterialCompactOrangeBase.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.EntityDataSource, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.EntityDataSource.6.0.0\lib\net40\Microsoft.AspNet.EntityDataSource.dll</HintPath>
     </Reference>
@@ -398,6 +401,7 @@
     <Content Include="Eval\EvalBulk.aspx" />
     <Content Include="Eval\EvalDetaliu.aspx" />
     <Content Include="Eval\EvalLista.aspx" />
+    <Content Include="Eval\EvalMultiplu.aspx" />
     <Content Include="Eval\EvalTemp.aspx" />
     <Content Include="Eval\Invitatie.aspx" />
     <Content Include="Eval\ListaObiective.aspx" />
@@ -1400,6 +1404,12 @@
     </Compile>
     <Compile Include="Eval\EvalLista.aspx.designer.cs">
       <DependentUpon>EvalLista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\EvalMultiplu.aspx.cs">
+      <DependentUpon>EvalMultiplu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\EvalMultiplu.aspx.designer.cs">
+      <DependentUpon>EvalMultiplu.aspx</DependentUpon>
     </Compile>
     <Compile Include="Eval\EvalTemp.aspx.cs">
       <DependentUpon>EvalTemp.aspx</DependentUpon>

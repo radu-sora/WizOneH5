@@ -199,20 +199,10 @@ namespace WizOne.Organigrama
         {
             try
             {
-                Iesire();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        public void Iesire()
-        {
-            try
-            {
-                Response.Redirect("~/Organigrama/Lista.aspx", false);
+                if (Page.IsCallback)
+                    ASPxWebControl.RedirectOnCallback("~/Organigrama/Lista.aspx");
+                else
+                    Response.Redirect("~/Organigrama/Lista.aspx", false);
             }
             catch (Exception ex)
             {
@@ -414,28 +404,7 @@ namespace WizOne.Organigrama
                     Session["Org_PosturiPozitii"] = null;
                 }
 
-                Iesire();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void btnSterge_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                General.ExecutaNonQuery(
-                    @"BEGIN
-                        DELETE FROM ""Org_relPostAngajat"" WHERE ""IdPost""=@1;
-                        DELETE FROM ""Org_relPostBeneficiu"" WHERE ""IdPost""=@1;
-                        DELETE FROM ""Org_relPostRol"" WHERE ""IdPost""=@1;
-                        DELETE FROM ""Org_PosturiPozitii"" WHERE ""IdPost""=@1;
-                        DELETE FROM ""Org_PosturiDosar"" WHERE ""IdPost""=@1;
-                        DELETE FROM ""Org_Posturi"" WHERE ""Id""=@1;
-                    END;", new object[] { txtId.Value });
+                btnBack_Click(sender, e);
             }
             catch (Exception ex)
             {
@@ -515,6 +484,20 @@ namespace WizOne.Organigrama
 
                         Session["Posturi_Upload"] = itm;
                         lblDoc.InnerHtml = "&nbsp;";
+                        break;
+                    case "btnSterge":
+                        {
+                            General.ExecutaNonQuery(
+                                @"BEGIN
+                                DELETE FROM ""Org_relPostAngajat"" WHERE ""IdPost""=@1;
+                                DELETE FROM ""Org_relPostBeneficiu"" WHERE ""IdPost""=@1;
+                                DELETE FROM ""Org_relPostRol"" WHERE ""IdPost""=@1;
+                                DELETE FROM ""Org_PosturiPozitii"" WHERE ""IdPost""=@1;
+                                DELETE FROM ""Org_PosturiDosar"" WHERE ""IdPost""=@1;
+                                DELETE FROM ""Org_Posturi"" WHERE ""Id""=@1;
+                                END;", new object[] { txtId.Value });
+                            btnBack_Click(null, null);
+                        }
                         break;
                 }
 

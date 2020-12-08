@@ -11,7 +11,8 @@
                 <dx:ASPxButton ID="btnPrint" ClientInstanceName="btnPrint" ClientIDMode="Static" runat="server" Text="Imprima" AutoPostBack="true" OnClick="btnPrint_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnSterge" ClientInstanceName="btnSterge" ClientIDMode="Static" runat="server" Text="Sterge" OnClick="btnSterge_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnSterge" ClientInstanceName="btnSterge" ClientIDMode="Static" runat="server" Text="Sterge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s,e) { OnStergeClick(s,e); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" >
@@ -389,7 +390,7 @@
     </dx:ASPxPopupControl>
 
     <script>
-
+        var limba = "<%= Session["IdLimba"] %>";
         function EndUpload(s) {
             lblDoc.innerText = s.cpDocUploadName;
             s.cpDocUploadName = null;
@@ -434,6 +435,16 @@
                 });
                 s.cpAlertMessage = null;
             }
+        }
+
+        function OnStergeClick(s, e) {
+            swal({
+                title: trad_string(limba, 'Sunteti sigur/a ?'), text: trad_string(limba, 'Sigur doriti continuarea procesului de stergere ?'),
+                type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
+            }, function (isConfirm) {
+                if (isConfirm)
+                    pnlCtl.PerformCallback('btnSterge');
+            });
         }
 
     </script>

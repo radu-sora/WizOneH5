@@ -58,6 +58,7 @@ namespace WizOne.Adev
                 lblDept.InnerText = Dami.TraduCuvant("Dept");
                 lblSubDept.InnerText = Dami.TraduCuvant("SubDept");
                 lblBirou.InnerText = Dami.TraduCuvant("Birou");
+                lblPL.InnerText = Dami.TraduCuvant("Punct de lucru");
                 lblDataPlec.InnerText = Dami.TraduCuvant("Data plecarii");
 
                 foreach (dynamic c in grDate.Columns)
@@ -180,6 +181,13 @@ namespace WizOne.Adev
                 cmbSubDept.DataBind();
                 cmbBirou.DataSource = General.IncarcaDT("SELECT F00809, F00810 FROM F008", null);
                 cmbBirou.DataBind();
+
+                string sql = @"SELECT * FROM F080 ORDER BY F08003";
+                if (Constante.tipBD == 2)
+                    sql = General.SelectOracle("F080", "F08002") + " ORDER BY F08003";
+                DataTable dtPL = General.IncarcaDT(sql, null);
+                cmbPctLucru.DataSource = dtPL;
+                cmbPctLucru.DataBind();
 
                 cmbCateg.DataSource = General.IncarcaDT("SELECT F72402, F72404 FROM F724", null);
                 cmbCateg.DataBind();
@@ -620,7 +628,7 @@ namespace WizOne.Adev
                 grDate.KeyFieldName = "F10003";
 
                 DataTable dt = GetF100NumeComplet(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToDateTime(deDataPlec.Value ?? new DateTime(2100, 1, 1)), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99),
-                    Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbSubDept.Value ?? -99), Convert.ToInt32(cmbBirou.Value ?? -99), Convert.ToInt32(cmbAngBulk.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), Convert.ToInt32(cmbCateg.Value ?? -99));
+                    Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbSubDept.Value ?? -99), Convert.ToInt32(cmbBirou.Value ?? -99), Convert.ToInt32(cmbAngBulk.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), Convert.ToInt32(cmbCateg.Value ?? -99), Convert.ToInt32(cmbPctLucru.Value ?? -99));
 
                 grDate.DataSource = dt;
                 Session["InformatiaCurenta_Adev"] = dt;
@@ -636,7 +644,7 @@ namespace WizOne.Adev
             }
         }
 
-        public DataTable GetF100NumeComplet(int idUser, DateTime dataPlec, int idSubcomp = -99, int idFiliala = -99, int idSectie = -99, int idDept = -99, int idSubdept = -99, int idBirou = -99, int idAngajat = -9, int idCtr = -99, int idCateg = -99)
+        public DataTable GetF100NumeComplet(int idUser, DateTime dataPlec, int idSubcomp = -99, int idFiliala = -99, int idSectie = -99, int idDept = -99, int idSubdept = -99, int idBirou = -99, int idAngajat = -9, int idCtr = -99, int idCateg = -99, int idPctLucru = -99)
         {
             DataTable dt = new DataTable();
 
@@ -654,8 +662,8 @@ namespace WizOne.Adev
 
                 string strSql = @"SELECT Y.* FROM(
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
-                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025, A.F100993,
-                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025, A.F100993, A.F10079, 
+                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"", F08003 AS ""PunctLucru"",
                                 A.F10061, A.F10062
 
                                 FROM ""relGrupAngajat"" B                                
@@ -669,14 +677,15 @@ namespace WizOne.Adev
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506                                
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607                                
                                 LEFT JOIN F007 K ON X.F100958 = K.F00708  
-                                LEFT JOIN F008 L ON X.F100959 = L.F00809                                 
+                                LEFT JOIN F008 L ON X.F100959 = L.F00809    
+                                LEFT JOIN F080 M ON A.F10079 = M.F08002
                                 WHERE C.""IdSuper"" = {1}
 
                                 UNION
 
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
-                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  , A.F100993,
-                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  , A.F100993, A.F10079, 
+                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",  F08003 AS ""PunctLucru"",
                                 A.F10061, A.F10062
 
                                 FROM ""relGrupAngajat"" B                                
@@ -691,7 +700,8 @@ namespace WizOne.Adev
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506                                
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
                                 LEFT JOIN F007 K ON X.F100958 = K.F00708  
-                                LEFT JOIN F008 L ON X.F100959 = L.F00809                                  
+                                LEFT JOIN F008 L ON X.F100959 = L.F00809  
+                                LEFT JOIN F080 M ON A.F10079 = M.F08002
                                 WHERE J.""IdUser"" = {1} {3}
   
                                                            
@@ -749,6 +759,15 @@ namespace WizOne.Adev
                 if (idBirou != -99)
                 {
                     tmp = string.Format("  Y.F100959 = {0} ", idBirou);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idPctLucru != -99)
+                {
+                    tmp = string.Format("  Y.F10079 = {0} ", idPctLucru);
                     if (cond.Length <= 0)
                         cond = " WHERE " + tmp;
                     else

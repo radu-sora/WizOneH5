@@ -162,6 +162,16 @@ namespace WizOne.Pagini
                             + " WHERE a.\"Id\" = " + id + " order by a.\"Pozitie\" ";                        
                         dt = General.IncarcaDT(strSql, null);
                         break;
+                    case 8:     //Curs_CereriIstoric
+                        op = "+";
+                        if (Constante.tipBD == 2) op = "||";
+                        strSql = "SELECT a.\"IdAuto\", a.\"IdCerere\", a.\"IdCircuit\", a.\"IdSuper\", a.\"IdStare\", '' as \"Stare\", a.\"Aprobat\", a.\"Culoare\", CASE WHEN a.\"Pozitie\" is null THEN 0 ELSE a.\"Pozitie\" END AS \"Pozitie\", "
+                             + " a.\"DataAprobare\", CASE WHEN c.F10003 IS NULL THEN b.F70104 ELSE  c.F10008 " + op + " ' ' " + op + " c.F10009 END AS \"Nume\" "
+                             + " FROM \"Curs_CereriIstoric\" a "
+                             + " LEFT JOIN USERS b on a.\"IdUSer\" = b.F70102 "
+                             + " LEFT JOIN F100 c on a.F10003 = c.F10003 " 
+                             + " WHERE a.\"IdCerere\" = " + id + " order by a.\"Pozitie\" ";
+                        break;
                     default:
                         //tabela = "Ptj_CereriIstoric";
                         break;

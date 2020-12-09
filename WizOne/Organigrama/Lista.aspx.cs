@@ -372,9 +372,9 @@ namespace WizOne.Organigrama
 	                    BEGIN
 		                    INSERT INTO Org_Posturi(Id, Denumire, DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN, DataInceput, DataSfarsit, Stare, F10002, F10004, F10005, F10006, F10007, IdSuperior, NivelIerarhic, PlanHC, IdResponsabilitate, IdTipPost, CodBuget, IdLocatie, IdMotivModif, IdFamFR, CodCOR, FunctieCOR, IdSchema, IdFamGAM, Atribute, Criterii, ObservatiiModif, NivelHay, SalariuMin,  SalariuMed,  SalariuMax,  IdSuperiorFunctional, IdBeneficiu1, IdBeneficiu2, IdBeneficiu3, IdBeneficiu4, IdBeneficiu5, IdBeneficiu6, IdBeneficiu7, IdBeneficiu8, IdBeneficiu9, IdBeneficiu10, TIME, USER_NO) 
 		                    SELECT Id, Denumire, DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN, CONVERT(date,{ General.ToDataUniv(Convert.ToDateTime(txtDtVig.Value)) }) AS DataInceput, DataSfarsit, 1 AS Stare, F10002, F10004, F10005, F10006, F10007, (SELECT Id FROM Org_Posturi WHERE IdAuto={ target_idAuto }) AS IdSuperior, NivelIerarhic, PlanHC, IdResponsabilitate, IdTipPost, CodBuget, IdLocatie, IdMotivModif, IdFamFR, CodCOR, FunctieCOR, IdSchema, IdFamGAM, Atribute, Criterii, ObservatiiModif, NivelHay, SalariuMin,  SalariuMed,  SalariuMax,  IdSuperiorFunctional, IdBeneficiu1, IdBeneficiu2, IdBeneficiu3, IdBeneficiu4, IdBeneficiu5, IdBeneficiu6, IdBeneficiu7, IdBeneficiu8, IdBeneficiu9, IdBeneficiu10, GETDATE(), { Session["UserId"] } AS USER_NO 
-		                    FROM Org_Posturi WHERE IdAuto={ nod_idAuto }
+		                    FROM Org_Posturi WHERE IdAuto={ nod_idAuto };
 
-		                    UPDATE Org_Posturi SET DataSfarsit= DATEADD(d, -1, CONVERT(date,{ General.ToDataUniv(Convert.ToDateTime(txtDtVig.Value)) })) WHERE IdAuto={ nod_idAuto }
+		                    UPDATE Org_Posturi SET DataSfarsit= DATEADD(d, -1, CONVERT(date,{ General.ToDataUniv(Convert.ToDateTime(txtDtVig.Value)) })) WHERE IdAuto={ nod_idAuto };
 	                    END", null);
                 }
                 else
@@ -428,7 +428,7 @@ namespace WizOne.Organigrama
                 if (!adaugaSuperior) sqlSup = "";
                 if (Convert.ToDateTime(dtInc).Date == Convert.ToDateTime(txtDtVig.Date).Date)
                 {
-                    strSql += $@"UPDATE ""Org_Posturi"" SET 
+                    strSql = $@"UPDATE ""Org_Posturi"" SET 
                                     ""IdMotivModif""={cmbMotiv.Value},
                                     {(adaugaSuperior ? @" ""IdSuperior""=" + sqlSup + "," : "")}
                                     F10002 = (SELECT F10002 FROM ""Org_Posturi"" WHERE ""IdAuto""={target_idAuto}), 
@@ -440,25 +440,26 @@ namespace WizOne.Organigrama
                 }
                 else
                 {
-                    strSql += $@"INSERT INTO ""Org_Posturi""(
-                                    ""Id"", ""Denumire"", DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN, ""DataInceput"", ""DataSfarsit"", F10002, F10004, F10005, F10006, F10007, 
-                                    ""Stare"", ""IdSuperior"", ""IdSuperiorFunctional"", 
-                                    ""NivelIerarhic"", ""PlanHC"", ""NivelHay"", ""SalariuMin"", ""SalariuMed"", ""SalariuMax"", 
-                                    ""CodBuget"", ""CodCOR"", ""Atribute"", ""Criterii"", ""ObservatiiModif"", ""IdMotivModif"",
-                                    ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"", USER_NO, TIME)
-                                    SELECT ""Id"", ""Denumire"", DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN,{General.ToDataUniv(txtDtVig.Date)}, ""DataSfarsit"", 
-                                    (SELECT F10002 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10002, 
-                                    (SELECT F10004 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10004,
-                                    (SELECT F10005 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10005,
-                                    (SELECT F10006 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10006,
-                                    (SELECT F10007 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10007,
-                                    ""Stare"", {(adaugaSuperior ? sqlSup : @" ""IdSuperior"" ")}, ""IdSuperiorFunctional"", 
-                                    ""NivelIerarhic"", ""PlanHC"", ""NivelHay"", ""SalariuMin"", ""SalariuMed"", ""SalariuMax"", 
-                                    ""CodBuget"", ""CodCOR"", ""Atribute"", ""Criterii"", ""ObservatiiModif"", {cmbMotiv.Value},
-                                    ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"", {Session["UserId"]}, GetDate()
-                                    FROM ""Org_Posturi"" WHERE ""IdAuto""={idAuto}";
-
-                    strSql += $@"UPDATE ""Org_Posturi"" SET"" DataSfarsit""={General.ToDataUniv(txtDtVig.Date.AddDays(-1))} WHERE ""IdAuto""={idAuto}";
+                    strSql = $@"BEGIN
+                                INSERT INTO ""Org_Posturi""(
+                                ""Id"", ""Denumire"", DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN, ""DataInceput"", ""DataSfarsit"", F10002, F10004, F10005, F10006, F10007, 
+                                ""Stare"", ""IdSuperior"", ""IdSuperiorFunctional"", 
+                                ""NivelIerarhic"", ""PlanHC"", ""NivelHay"", ""SalariuMin"", ""SalariuMed"", ""SalariuMax"", 
+                                ""CodBuget"", ""CodCOR"", ""Atribute"", ""Criterii"", ""ObservatiiModif"", ""IdMotivModif"",
+                                ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"", USER_NO, TIME)
+                                SELECT ""Id"", ""Denumire"", DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN,{General.ToDataUniv(txtDtVig.Date)}, ""DataSfarsit"", 
+                                (SELECT F10002 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10002, 
+                                (SELECT F10004 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10004,
+                                (SELECT F10005 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10005,
+                                (SELECT F10006 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10006,
+                                (SELECT F10007 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10007,
+                                ""Stare"", {(adaugaSuperior ? sqlSup : @" ""IdSuperior"" ")}, ""IdSuperiorFunctional"", 
+                                ""NivelIerarhic"", ""PlanHC"", ""NivelHay"", ""SalariuMin"", ""SalariuMed"", ""SalariuMax"", 
+                                ""CodBuget"", ""CodCOR"", ""Atribute"", ""Criterii"", ""ObservatiiModif"", {cmbMotiv.Value},
+                                ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"", {Session["UserId"]}, GetDate()
+                                FROM ""Org_Posturi"" WHERE ""IdAuto""={idAuto};
+                                UPDATE ""Org_Posturi"" SET ""DataSfarsit""={General.ToDataUniv(txtDtVig.Date.AddDays(-1))} WHERE ""IdAuto""={idAuto};
+                            END;";
                 }
 
                 General.ExecutaNonQuery(strSql, null);

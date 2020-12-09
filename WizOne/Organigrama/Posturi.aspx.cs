@@ -195,10 +195,16 @@ namespace WizOne.Organigrama
             }
         }
 
+        protected void Page_Unload(object sender, EventArgs e)
+        {
+            string ert = "";
+        }
+
         protected void btnBack_Click(object sender, EventArgs e)
         {
             try
             {
+                GolireVariabile();
                 if (Page.IsCallback)
                     ASPxWebControl.RedirectOnCallback("~/Organigrama/Lista.aspx");
                 else
@@ -712,6 +718,8 @@ namespace WizOne.Organigrama
                 DataRow found = dt.Rows.Find(e.Keys["IdAuto"]);
                 found.Delete();
 
+                PopuleazaPozitii(dt);
+
                 e.Cancel = true;
                 grDateIstoric.CancelEdit();
                 Session["Org_PosturiPozitii"] = dt;
@@ -742,6 +750,8 @@ namespace WizOne.Organigrama
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;
                     dt.Rows.Add(dr);
+
+                    PopuleazaPozitii(dt);
                 }
                 else
                     grDateIstoric.JSProperties["cpAlertMessage"] = "Acest interval se intersecteaza cu unul deja existent";
@@ -774,6 +784,8 @@ namespace WizOne.Organigrama
                     dr["DataSfarsit"] = e.NewValues["DataSfarsit"];
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;
+
+                    PopuleazaPozitii(dt);
                 }
                 else
                     grDateIstoric.JSProperties["cpAlertMessage"] = "Acest interval se intersecteaza cu unul deja existent";
@@ -795,6 +807,11 @@ namespace WizOne.Organigrama
             try
             {
                 e.NewValues["IdPost"] = txtId.Value;
+                if (General.Nz(Session["IdAuto"], "-99").ToString() == "-97")
+                {
+                    e.NewValues["DataInceput"] = DateTime.Now.Date;
+                    e.NewValues["DataSfarsit"] = txtDtSf.Value;
+                }
             }
             catch (Exception ex)
             {
@@ -803,7 +820,45 @@ namespace WizOne.Organigrama
             }
         }
 
+        private void GolireVariabile()
+        {
+            try
+            {
+                Session["DataVigoare"] = null;
+                Session["IdAuto"] = -97;
+                Session["Org_Duplicare"] = "0";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
+        private void PopuleazaPozitii(DataTable dt)
+        {
+            try
+            {
+                DataRow[] arrNew = dt.Select("DataInceput <= #" + Convert.ToDateTime(Session["DataVigoare"]).ToString("yyyy-MM-dd") + "# AND #" + Convert.ToDateTime(Session["DataVigoare"]).ToString("yyyy-MM-dd") + "# <= DataSfarsit");
+                if (arrNew.Length > 0)
+                {
+                    //txtPozitii.Text = General.Nz(arrNew[0]["Pozitii"], "").ToString();
+                    //txtPozitiiAprobate.Text = General.Nz(arrNew[0]["PozitiiAprobate"], "").ToString();
+                    grDateIstoric.JSProperties["cpPozitii"] = General.Nz(arrNew[0]["Pozitii"], "").ToString();
+                    grDateIstoric.JSProperties["cpPozitiiAprobate"] = General.Nz(arrNew[0]["PozitiiAprobate"], "").ToString();
+                }
+                else
+                {
+                    grDateIstoric.JSProperties["cpPozitii"] = "";
+                    grDateIstoric.JSProperties["cpPozitiiAprobate"] = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
     }
 }

@@ -266,11 +266,11 @@
                 <div class="Absente_divOuter margin_top15">
 		            <label id="lblPozitii" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Nr pozitii</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtPozitii" runat="server" Width="60px" Enabled="false" ReadOnly="true"/>
+                        <dx:ASPxTextBox ID="txtPozitii" ClientInstanceName="txtPozitii" runat="server" Width="60px" ClientEnabled="false" ReadOnly="true"/>
                     </div>
                 	<label id="lblPozitiiAprobate" runat="server" style="display:inline-block; float:left; padding-right:15px;">Nr pozitii aprobate</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtPozitiiAprobate" runat="server" Width="60px" Enabled="false" ReadOnly="true"/>
+                        <dx:ASPxTextBox ID="txtPozitiiAprobate" ClientInstanceName="txtPozitiiAprobate" runat="server" Width="60px" ClientEnabled="false" ReadOnly="true"/>
                     </div>
                     <dx:ASPxButton ID="btnPozitii" runat="server" ToolTip="istoric numar pozitii" AutoPostBack="false" Height="28px" Text="...">
                         <Paddings PaddingLeft="0px" PaddingRight="0px" />
@@ -436,6 +436,13 @@
                     type: "warning"
                 });
                 s.cpAlertMessage = null;
+            }
+
+            if (s.cpPozitii != null) {
+                txtPozitii.SetValue(s.cpPozitii);
+            }
+            if (s.cpPozitiiAprobate != null) {
+                txtPozitiiAprobate.SetValue(s.cpPozitiiAprobate);
             }
         }
 

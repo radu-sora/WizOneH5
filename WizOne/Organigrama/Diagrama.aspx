@@ -18,6 +18,8 @@
                 </dx:ASPxButton>
             </td>
         </tr>
+    </table>
+    <table style="width:100%;">
         <tr>
             <td colspan="2">
                 <div class="Absente_divOuter" style="display:flex; align-items:flex-end; margin:15px 0px;">
@@ -63,9 +65,9 @@
                     </div>
 
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxCheckBox ID="chkPlan" Text="Plan HC" runat="server" Checked="true" />
-                        <dx:ASPxCheckBox ID="chkAprobat" Text="HC Aprobat" runat="server" Checked="true" />
-                        <dx:ASPxCheckBox ID="chkEfectiv" Text="HC Efectiv" runat="server" Checked="true" />
+                        <dx:ASPxCheckBox ID="chkPlan" Text="Pozitii" runat="server" Checked="true" />
+                        <dx:ASPxCheckBox ID="chkAprobat" Text="Pozitii Aprobate" runat="server" Checked="true" />
+                        <dx:ASPxCheckBox ID="chkEfectiv" Text="Pozitii Efective" runat="server" Checked="true" />
                     </div>
 
                     <div style="float:left;">

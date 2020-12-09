@@ -35,9 +35,9 @@ namespace WizOne.Organigrama
                     lblAfis.InnerText = Dami.TraduCuvant("Afisare ultimul nivel");
                     lblParinte.InnerText = Dami.TraduCuvant("Superior");
 
-                    chkPlan.Text = Dami.TraduCuvant("Plan HC");
-                    chkAprobat.Text = Dami.TraduCuvant("HC Aprobat");
-                    chkEfectiv.Text = Dami.TraduCuvant("HC Efectiv");
+                    chkPlan.Text = Dami.TraduCuvant("Pozitii");
+                    chkAprobat.Text = Dami.TraduCuvant("Pozitii Aprobate");
+                    chkEfectiv.Text = Dami.TraduCuvant("Pozitii Efective");
 
                     btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                     #endregion

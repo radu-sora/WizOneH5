@@ -378,6 +378,8 @@ namespace WizOne.Personal
         {
             try
             {
+                General.SecuritatePersonal(grDateSanctiuni, "Sanctiuni", Convert.ToInt32(Session["UserId"].ToString()), true);
+
                 ASPxComboBox cmbCateg = grDateSanctiuni.FindEditFormTemplateControl("cmbObi") as ASPxComboBox;
                 if (cmbCateg != null)
                 {

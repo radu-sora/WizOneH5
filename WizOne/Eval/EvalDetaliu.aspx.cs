@@ -2303,7 +2303,7 @@ namespace WizOne.Eval
                 grDateObiective.BatchUpdate += GrDateObiective_BatchUpdate;
                 Session["NumeGriduri"] += ";" + grDateObiective.ID;
 
-                grDateObiective.CustomSummaryCalculate += GrDateObiective_CustomSummaryCalculate;
+                grDateObiective.CustomSummaryCalculate += grDateObiective_CustomSummaryCalculate;
 
                 //Radu 19.04.2019
                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24 || Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 25)
@@ -2401,22 +2401,23 @@ namespace WizOne.Eval
                         grDateObiective.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
                         ASPxSummaryItem s = new ASPxSummaryItem();
                         s.FieldName = clsConfigDetail.ColumnName;
+                        s.ShowInColumn = clsConfigDetail.ColumnName;
                         switch (clsConfigDetail.TotalColoana)
                         {
                             case 1:
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
                                 s.DisplayFormat = "Suma {0:N0}";
                                 break;
                             case 2:
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
                                 s.DisplayFormat = "Suma {0:N2}";
                                 break;
                             case 3:
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
                                 s.DisplayFormat = "Media {0:N0}";
                                 break;
                             case 4:
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
                                 s.DisplayFormat = "Media {0:N2}";
                                 break;
                             case 5:
@@ -2865,37 +2866,82 @@ namespace WizOne.Eval
             return grDateObiective;
         }
 
-        private void GrDateObiective_CustomSummaryCalculate(object sender, DevExpress.Data.CustomSummaryEventArgs e)
+        private void grDateObiective_CustomSummaryCalculate(object sender, DevExpress.Data.CustomSummaryEventArgs e)
         {
             try
             {
                 ASPxSummaryItem itm = e.Item as ASPxSummaryItem;
-                if (itm.DisplayFormat.ToLower().IndexOf("max") >= 0)
+                switch(itm.DisplayFormat)
                 {
-                    // Initialization. 
-                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
-                        e.TotalValue = 0;
-                    else
-                    // Calculation. 
-                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
-                    {
-                        if (Convert.ToDecimal(e.FieldValue) > Convert.ToDecimal(e.TotalValue))
-                            e.TotalValue = Convert.ToDecimal(e.FieldValue);
-                    }
+                    case "Suma {0:N0}":
+                    case "Suma {0:N2}":
+                        {
+                            if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                                e.TotalValue = 0;
+                            else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                                e.TotalValue = Convert.ToDecimal(e.TotalValue) + Convert.ToDecimal(e.FieldValue);
+                        }
+                        break;
+                    case "Media {0:N0}":
+                    case "Media {0:N2}":
+                        {
+                            if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                                e.TotalValue = 0;
+                            else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                                e.TotalValue = Convert.ToDecimal(e.TotalValue) + Convert.ToDecimal(e.FieldValue);
+                            else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Finalize)
+                                e.TotalValue = Convert.ToDecimal(e.TotalValue) / (e.RowHandle + 1);
+                        }
+                        break;
+                    case "Val. min. {0}":
+                        {
+                            if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                                e.TotalValue = 999999;
+                            else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                            {
+                                if (Convert.ToDecimal(e.FieldValue) < Convert.ToDecimal(e.TotalValue))
+                                    e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                            }
+                        }
+                        break;
+                    case "Val. max. {0}":
+                        {
+                            if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                                e.TotalValue = 0;
+                            else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                            {
+                                if (Convert.ToDecimal(e.FieldValue) > Convert.ToDecimal(e.TotalValue))
+                                    e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                            }
+                        }
+                        break;
                 }
-                else
-                {
-                    // Initialization. 
-                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
-                        e.TotalValue = 9999;
-                    else
-                    // Calculation. 
-                    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
-                    {
-                        if (Convert.ToDecimal(e.FieldValue) < Convert.ToDecimal(e.TotalValue))
-                            e.TotalValue = Convert.ToDecimal(e.FieldValue);
-                    }
-                }
+                //if (itm.DisplayFormat.ToLower().IndexOf("max") >= 0)
+                //{
+                //    // Initialization. 
+                //    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                //        e.TotalValue = 0;
+                //    else
+                //    // Calculation. 
+                //    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                //    {
+                //        if (Convert.ToDecimal(e.FieldValue) > Convert.ToDecimal(e.TotalValue))
+                //            e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                //    }
+                //}
+                //else
+                //{
+                //    // Initialization. 
+                //    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                //        e.TotalValue = 9999;
+                //    else
+                //    // Calculation. 
+                //    if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                //    {
+                //        if (Convert.ToDecimal(e.FieldValue) < Convert.ToDecimal(e.TotalValue))
+                //            e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                //    }
+                //}
             }
             catch (Exception ex)
             {
@@ -4184,6 +4230,8 @@ namespace WizOne.Eval
                 grDateCompetente.BatchUpdate += GrDateCompetente_BatchUpdate;
                 Session["NumeGriduri"] += ";" + grDateCompetente.ID;
 
+                grDateCompetente.CustomSummaryCalculate += grDateCompetente_CustomSummaryCalculate;
+
                 grDateCompetente.EnableRowsCache = false;
 
 
@@ -4275,31 +4323,32 @@ namespace WizOne.Eval
                         grDateCompetente.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
                         ASPxSummaryItem s = new ASPxSummaryItem();
                         s.FieldName = clsConfigDetail.ColumnName;
+                        s.ShowInColumn = clsConfigDetail.ColumnName;
                         switch (clsConfigDetail.TotalColoana)
                         {
                             case 1:
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
                                 s.DisplayFormat = "Suma {0:N0}";
                                 break;
                             case 2:
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
                                 s.DisplayFormat = "Suma {0:N2}";
                                 break;
                             case 3:
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
                                 s.DisplayFormat = "Media {0:N0}";
                                 break;
                             case 4:
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
                                 s.DisplayFormat = "Media {0:N2}";
                                 break;
                             case 5:
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Min;
-                                s.DisplayFormat = "Valoarea minima {0}";
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
+                                s.DisplayFormat = "Val. min. {0}";
                                 break;
                             case 6:
-                                s.SummaryType = DevExpress.Data.SummaryItemType.Max;
-                                s.DisplayFormat = "Valoarea maxima {0}";
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
+                                s.DisplayFormat = "Val. max. {0}";
                                 break;
                         }
                         grDateCompetente.TotalSummary.Add(s);
@@ -4514,6 +4563,64 @@ namespace WizOne.Eval
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
             return grDateCompetente;
+        }
+
+        private void grDateCompetente_CustomSummaryCalculate(object sender, DevExpress.Data.CustomSummaryEventArgs e)
+        {
+            try
+            {
+                ASPxSummaryItem itm = e.Item as ASPxSummaryItem;
+                switch (itm.DisplayFormat)
+                {
+                    case "Suma {0:N0}":
+                    case "Suma {0:N2}":
+                        {
+                            if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                                e.TotalValue = 0;
+                            else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                                e.TotalValue = Convert.ToDecimal(e.TotalValue) + Convert.ToDecimal(e.FieldValue);
+                        }
+                        break;
+                    case "Media {0:N0}":
+                    case "Media {0:N2}":
+                        {
+                            if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                                e.TotalValue = 0;
+                            else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                                e.TotalValue = Convert.ToDecimal(e.TotalValue) + Convert.ToDecimal(e.FieldValue);
+                            else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Finalize)
+                                e.TotalValue = Convert.ToDecimal(e.TotalValue) / (e.RowHandle + 1);
+                        }
+                        break;
+                    case "Val. min. {0}":
+                        {
+                            if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                                e.TotalValue = 999999;
+                            else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                            {
+                                if (Convert.ToDecimal(e.FieldValue) < Convert.ToDecimal(e.TotalValue))
+                                    e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                            }
+                        }
+                        break;
+                    case "Val. max. {0}":
+                        {
+                            if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
+                                e.TotalValue = 0;
+                            else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
+                            {
+                                if (Convert.ToDecimal(e.FieldValue) > Convert.ToDecimal(e.TotalValue))
+                                    e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                            }
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
         }
 
         private void GrDateCompetente_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)

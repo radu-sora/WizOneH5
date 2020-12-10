@@ -15168,6 +15168,7 @@ GO
 INSERT INTO "Securitate" ("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu") VALUES('Absente.Lista', 'btnAnulare', '-', 6, 1, 1, 0)
 GO
 
+
 ----  2.2.132.01  ----
 
 
@@ -15176,8 +15177,16 @@ UPDATE F1001 SET F1001109 = (select f10022 from f100 where f1001.F10003 = f100.f
 ALTER TABLE F9101 ADD  F9101109 DATETIME;                                                  
 ALTER TABLE F0991 ADD  F0991109 DATETIME;  
 
+
 ----  2.2.132.02  ----
 
 
 ALTER TABLE F100 ALTER COLUMN F10081 NVARCHAR(50)
+GO
+
+
+----  2.2.132.04  ----
+
+
+UPDATE Eval_ConfigObiective SET ColumnType='System.DateTime' WHERE Id=6
 GO

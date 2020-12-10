@@ -410,13 +410,13 @@ namespace WizOne.Eval
                             ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", ""F10003"", ""Pozitie"",
                             ""Id"", ""IdLinieQuiz"", 
                             ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"", 
-                            USER_NO, TIME, ""IdPeriod"", ""IdCategObiective"", ""Total1"", ""Total2"")
+                            USER_NO, TIME, ""IdPeriod"", ""IdCategObiective"", ""Total1"", ""Total2"", ""Termen"")
                             VALUES(@idUnic,@2,@3,@4,@5,
                             @6,@7,@8,@9,@10,
                             @11,@12,@13,@14,@15,
                             @16,@17,
                             @18,@19,@20,@21,
-                            @22,@23,@24,@25,formulaSql1,formulaSql2);";
+                            @22,@23,@24,@25,formulaSql1,formulaSql2,@31);";
 
                         string tgv = "";
 
@@ -453,7 +453,7 @@ namespace WizOne.Eval
                                     clsObiIndividuale.Id, clsObiIndividuale.IdLinieQuiz,
                                     clsObiIndividuale.ColoanaSuplimentara1, clsObiIndividuale.ColoanaSuplimentara2, clsObiIndividuale.ColoanaSuplimentara3, clsObiIndividuale.ColoanaSuplimentara4,
                                     General.Nz(clsObiIndividuale.USER_NO, Session["UserId"]), General.Nz(clsObiIndividuale.TIME, DateTime.Now), clsObiIndividuale.IdPeriod, clsObiIndividuale.IdCategObiective,
-                                    General.Nz(clsObiIndividuale.Total1, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.Total2, "0").ToString().Replace(",", "."), clsObiIndividuale.Pondere, clsObiIndividuale.Target, clsObiIndividuale.Realizat });
+                                    General.Nz(clsObiIndividuale.Total1, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.Total2, "0").ToString().Replace(",", "."), clsObiIndividuale.Pondere, clsObiIndividuale.Target, clsObiIndividuale.Realizat, clsObiIndividuale.Termen });
                             }
                             catch (Exception ex)
                             {
@@ -588,7 +588,8 @@ namespace WizOne.Eval
 
                 //Florin 2020.11.13
                 DataTable dtTbl = Session["Eval_RaspunsLinii_Tabel"] as DataTable;
-                General.SalveazaDate(dtTbl, "Eval_RaspunsLinii");
+                if (dtTbl != null)
+                    General.SalveazaDate(dtTbl, "Eval_RaspunsLinii");
 
 
                 //Florin 2020.11.06
@@ -2724,18 +2725,20 @@ namespace WizOne.Eval
                         switch (clsConfigObiective.ColumnType)
                         {
                             case "System.String":
-                                GridViewDataMemoColumn colString = new GridViewDataMemoColumn();
-                                colString.FieldName = clsConfigDetail.ColumnName;
-                                colString.Name = clsConfigDetail.ColumnName;
-                                colString.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
-                                colString.PropertiesMemoEdit.Rows = 5;
-                                colString.PropertiesMemoEdit.Height = Unit.Percentage(100);
-                                colString.Width = clsConfigDetail.Width;
-                                if (idCateg == "0")
-                                    colString.ReadOnly = !clsConfigDetail.Editare;
-                                colString.Visible = clsConfigDetail.Vizibil;
+                                {
+                                    GridViewDataMemoColumn col = new GridViewDataMemoColumn();
+                                    col.FieldName = clsConfigDetail.ColumnName;
+                                    col.Name = clsConfigDetail.ColumnName;
+                                    col.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                    col.PropertiesMemoEdit.Rows = 5;
+                                    col.PropertiesMemoEdit.Height = Unit.Percentage(100);
+                                    col.Width = clsConfigDetail.Width;
+                                    if (idCateg == "0")
+                                        col.ReadOnly = !clsConfigDetail.Editare;
+                                    col.Visible = clsConfigDetail.Vizibil;
 
-                                grDateObiective.Columns.Add(colString);
+                                    grDateObiective.Columns.Add(col);
+                                }
                                 break;
                             case "System.Decimal":
                                 GridViewDataTextColumn colDecimal = new GridViewDataTextColumn();
@@ -2753,19 +2756,38 @@ namespace WizOne.Eval
                                 grDateObiective.Columns.Add(colDecimal);
                                 break;
                             case "System.Int32":
-                                GridViewDataTextColumn colInt = new GridViewDataTextColumn();
-                                colInt.FieldName = clsConfigDetail.ColumnName;
-                                colInt.Name = clsConfigDetail.ColumnName;
-                                colInt.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
-                                colInt.Width = clsConfigDetail.Width;
-                                if (idCateg == "0")
-                                    colInt.ReadOnly = !clsConfigDetail.Editare;
-                                colInt.Visible = clsConfigDetail.Vizibil;
+                                {
+                                    GridViewDataTextColumn col = new GridViewDataTextColumn();
+                                    col.FieldName = clsConfigDetail.ColumnName;
+                                    col.Name = clsConfigDetail.ColumnName;
+                                    col.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                    col.Width = clsConfigDetail.Width;
+                                    if (idCateg == "0")
+                                        col.ReadOnly = !clsConfigDetail.Editare;
+                                    col.Visible = clsConfigDetail.Vizibil;
 
-                                colInt.PropertiesTextEdit.DisplayFormatString = "n0";
-                                colInt.PropertiesTextEdit.MaskSettings.Mask = "<0..99999>";
+                                    col.PropertiesTextEdit.DisplayFormatString = "n0";
+                                    col.PropertiesTextEdit.MaskSettings.Mask = "<0..99999>";
 
-                                grDateObiective.Columns.Add(colInt);
+                                    grDateObiective.Columns.Add(col);
+                                }
+                                break;
+                            case "System.DateTime":
+                                {
+                                    GridViewDataDateColumn col = new GridViewDataDateColumn();
+                                    col.FieldName = clsConfigDetail.ColumnName;
+                                    col.Name = clsConfigDetail.ColumnName;
+                                    col.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                    col.PropertiesDateEdit.DisplayFormatString = "dd/MM/yyyy";
+                                    col.PropertiesDateEdit.EditFormatString = "dd/MM/yyyy";
+                                    col.PropertiesDateEdit.EditFormat = EditFormat.Custom;
+                                    col.Width = clsConfigDetail.Width;
+                                    if (idCateg == "0")
+                                        col.ReadOnly = !clsConfigDetail.Editare;
+                                    col.Visible = clsConfigDetail.Vizibil;
+
+                                    grDateObiective.Columns.Add(col);
+                                }
                                 break;
                         }
 
@@ -3070,6 +3092,9 @@ namespace WizOne.Eval
                             case "ColoanaSuplimentara4":
                                 clsNew.ColoanaSuplimentara4 = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
                                 break;
+                            case "Termen":
+                                clsNew.Termen = (DateTime?)(ins.NewValues[de.Key.ToString()]);
+                                break;
                         }
 
                         if (grid.Columns["FormulaSql1"] != null)
@@ -3177,6 +3202,9 @@ namespace WizOne.Eval
                                 break;
                             case "ColoanaSuplimentara4":
                                 clsUpd.ColoanaSuplimentara4 = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "Termen":
+                                clsUpd.Termen = (DateTime?)(ins.NewValues[de.Key.ToString()]);
                                 break;
                         }
 

@@ -1049,7 +1049,7 @@ namespace WizOne.Eval
                                     }
 
                                     notaF /= 5;
-                                    int califF = (int)Math.Ceiling(notaF);
+                                    double califF = Math.Ceiling(notaF);
 
                                     Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
                                     if (notaFinalaEvaluare != null)
@@ -1058,7 +1058,7 @@ namespace WizOne.Eval
                                         PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
 
                                         if (val != null)
-                                            val.SetValue(linieNotaFinala, califF.ToString(), null);
+                                            val.SetValue(linieNotaFinala, califF.ToString("0.##"), null);
                                     }
 
                                     Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
@@ -3476,7 +3476,7 @@ namespace WizOne.Eval
 
                                 notaF /= 5;
 
-                                int califF = (int)Math.Ceiling(notaF);
+                                double califF = Math.Ceiling(notaF);
 
                                 Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
                                 if (notaFinalaEvaluare != null)
@@ -3485,7 +3485,7 @@ namespace WizOne.Eval
                                     PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
 
                                     if (val != null)
-                                        val.SetValue(linieNotaFinala, califF.ToString(), null);
+                                        val.SetValue(linieNotaFinala, califF.ToString("0.##"), null);
                                 }
 
                                 Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
@@ -3804,7 +3804,7 @@ namespace WizOne.Eval
 
                                 notaF /= 5;
 
-                                int califF = (int)Math.Ceiling(notaF);
+                                double califF = Math.Ceiling(notaF);
 
                                 Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
                                 if (notaFinalaEvaluare != null)
@@ -3813,7 +3813,7 @@ namespace WizOne.Eval
                                     PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
 
                                     if (val != null)
-                                        val.SetValue(linieNotaFinala, califF.ToString(), null);
+                                        val.SetValue(linieNotaFinala, califF.ToString("0.##"), null);
                                 }
 
                                 Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;

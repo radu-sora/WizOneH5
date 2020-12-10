@@ -799,13 +799,12 @@
                                                                                             </PropertiesComboBox>
                                                                                         </dx:GridViewDataComboBoxColumn>
                                                                                         <dx:GridViewDataComboBoxColumn FieldName="IdNomenclator" Name="IdNomenclator" Caption="Nomenclator" Width="150" VisibleIndex="7">
-                                                                                            <PropertiesComboBox TextField="DenNomenclator" ValueField="IdNomenclator" ValueType="System.Int32" DropDownStyle="DropDown" EnableCallbackMode="true" 
-                                                                                                OnItemRequestedByValue="Unnamed_ItemRequestedByValue" OnItemsRequestedByFilterCondition="Unnamed_ItemsRequestedByFilterCondition" />
+                                                                                            <PropertiesComboBox TextField="DenNomenclator" ValueField="IdNomenclator" ValueType="System.Int32" DropDownStyle="DropDown" EnableCallbackMode="true" OnItemRequestedByValue="Unnamed_ItemRequestedByValue" OnItemsRequestedByFilterCondition="Unnamed_ItemsRequestedByFilterCondition" />
                                                                                         </dx:GridViewDataComboBoxColumn>
                                                                                         <dx:GridViewDataSpinEditColumn FieldName="Ordine" Name ="Ordine" Caption="Ordine" VisibleIndex="9" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false" PropertiesSpinEdit-MinValue="1" PropertiesSpinEdit-MaxValue="99"/>
                                                                                         <dx:GridViewDataTextColumn FieldName="FormulaSql" Name="FormulaSql" Caption="FormulaSql" VisibleIndex="10" />
                                                                                         <dx:GridViewDataTextColumn FieldName="Alias" Name="Alias" Caption="Alias" VisibleIndex="12" />
-                                                                                        <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14">
+                                                                                        <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14" PropertiesComboBox-AllowNull="true">
                                                                                             <PropertiesComboBox>
                                                                                                 <Items>
                                                                                                     <dx:ListEditItem Value="1" Text="Suma fara zecimale" />
@@ -898,14 +897,12 @@
                                                                                         <dx:GridViewDataCheckColumn FieldName="Editare" Name="Editare" Caption="Editare"  Width="70px" VisibleIndex="4" />
                                                                                         <dx:GridViewDataCheckColumn FieldName="Vizibil" Name="Vizibil" Caption="Vizibil"  Width="70px" VisibleIndex="5" />
                                                                                         <dx:GridViewDataComboBoxColumn FieldName="IdNomenclator" Name="IdNomenclator" Caption="Nomenclator" Width="150" VisibleIndex="7">
-                                                                                            <PropertiesComboBox TextField="DenNomenclator" ValueField="IdNomenclator" ValueType="System.Int32" DropDownStyle="DropDown" EnableCallbackMode="true"
-                                                                                                OnItemRequestedByValue="Unnamed_ItemRequestedByValue1" OnItemsRequestedByFilterCondition="Unnamed_ItemsRequestedByFilterCondition1"
-                                                                                                  />
+                                                                                            <PropertiesComboBox TextField="DenNomenclator" ValueField="IdNomenclator" ValueType="System.Int32" DropDownStyle="DropDown" EnableCallbackMode="true" OnItemRequestedByValue="Unnamed_ItemRequestedByValue1" OnItemsRequestedByFilterCondition="Unnamed_ItemsRequestedByFilterCondition1"/>
                                                                                         </dx:GridViewDataComboBoxColumn>
                                                                                         <dx:GridViewDataSpinEditColumn FieldName="Ordine" Name ="Ordine" Caption="Ordine" VisibleIndex="9" PropertiesSpinEdit-SpinButtons-ShowIncrementButtons="false" PropertiesSpinEdit-MinValue="1" PropertiesSpinEdit-MaxValue="99"/>
                                                                                         <dx:GridViewDataTextColumn FieldName="FormulaSql" Name="FormulaSql" Caption="FormulaSql" VisibleIndex="10" />
                                                                                         <dx:GridViewDataTextColumn FieldName="Alias" Name="Alias" Caption="Alias" VisibleIndex="12" />
-                                                                                        <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14">
+                                                                                        <dx:GridViewDataComboBoxColumn FieldName="TotalColoana" Name="TotalColoana" Caption="Total Coloana" Width="150" VisibleIndex="14" PropertiesComboBox-AllowNull="true">
                                                                                             <PropertiesComboBox>
                                                                                                 <Items>
                                                                                                     <dx:ListEditItem Value="1" Text="Suma fara zecimale" />

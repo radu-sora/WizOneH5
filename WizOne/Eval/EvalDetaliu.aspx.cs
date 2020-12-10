@@ -201,7 +201,7 @@ namespace WizOne.Eval
                     if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) == Convert.ToInt32(General.Nz(Session["User_Marca"], -98)) && Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 && Convert.ToInt32(General.Nz(Session["CompletareChestionar_TrebuieSaIaLaCunostinta"], 1)) == 1 && Convert.ToInt32(General.Nz(Session["CompletareChestionar_ALuatLaCunostinta"], 1)) == 0) btnLuatCunostinta.Visible = true;
 
                     CreazaMeniu();
-                    CreazaTab(lstEvalDenumireSuper);
+                    //CreazaTab(lstEvalDenumireSuper);
                     CreeazaSectiune("Super" + Session["Eval_ActiveTab"].ToString());
                 }
 
@@ -255,7 +255,8 @@ namespace WizOne.Eval
                 string sqlCommandInsertTemp = string.Empty;
 
                 #region Set Scripts Upload DB
-                sqlCommandDelete = @"delete from ""Eval_RaspunsLinii"" where ""IdQuiz"" = @1 and ""F10003"" = @2 and ""Id"" = @3";
+                //Florin 2020.12.04 - am adaugat filtrul cu linia
+                sqlCommandDelete = @"delete from ""Eval_RaspunsLinii"" where ""IdQuiz"" = @1 and ""F10003"" = @2 and ""Id"" = @3 AND ""Linia"" = @4";
                 //sqlCommandInsert = $@"insert into ""Eval_RaspunsLinii""(""IdQuiz"", ""F10003"", ""Id"", ""Linia"", 
                 //                                ""Super1"",""Super2"",""Super3"",""Super4"",""Super5"",
                 //                                ""Super6"",""Super7"",""Super8"",""Super9"",""Super10"",
@@ -345,7 +346,8 @@ namespace WizOne.Eval
                     try
                     {
                         sqlCommandDeleteTemp = sqlCommandDelete;
-                        General.ExecutaNonQuery(sqlCommandDeleteTemp, new object[] { entRaspLinie.IdQuiz, entRaspLinie.F10003, entRaspLinie.Id });
+                        //Florin 2020.12.04 - am adaugat filtrul cu linia
+                        General.ExecutaNonQuery(sqlCommandDeleteTemp, new object[] { entRaspLinie.IdQuiz, entRaspLinie.F10003, entRaspLinie.Id, entRaspLinie.Linia });
 
                         sqlCommandInsertTemp = sqlCommandInsert;
                         General.ExecutaNonQuery(sqlCommandInsertTemp, new object[] {  entRaspLinie.IdQuiz, entRaspLinie.F10003, entRaspLinie.Id,
@@ -1573,7 +1575,7 @@ namespace WizOne.Eval
                 dr["USER_NO"] = Convert.ToInt32(General.Nz(Session["UserId"], -99));
                 dr["TIME"] = DateTime.Now;
 
-                int max = Convert.ToInt32(dt.Compute("MAX(Linia)", "Id=" + dr["Id"]));
+                int max = Convert.ToInt32(General.Nz(dt.Compute("MAX(Linia)", "Id=" + dr["Id"]), 0));
                 dr["Linia"] = max + 1;
 
                 //foreach (KeyValuePair<string, object> item in e.NewValues)
@@ -2389,50 +2391,46 @@ namespace WizOne.Eval
 
                         if (clsConfigDetail.ColumnName == "Total1") formulaSql1 = clsConfigDetail.FormulaSql;
                         if (clsConfigDetail.ColumnName == "Total2") formulaSql2 = clsConfigDetail.FormulaSql;
-
-                        if (Convert.ToString(clsConfigDetail.TotalColoana) != "")
-                        {
-                            grDateObiective.Settings.ShowFooter = true;
-                            grDateObiective.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
-                            ASPxSummaryItem s = new ASPxSummaryItem();
-                            s.FieldName = clsConfigDetail.ColumnName;
-                            switch (clsConfigDetail.TotalColoana)
-                            {
-                                case 1:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-                                    s.DisplayFormat = "Suma {0:N0}";
-                                    break;
-                                case 2:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-                                    s.DisplayFormat = "Suma {0:N2}";
-                                    break;
-                                case 3:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
-                                    s.DisplayFormat = "Media {0:N0}";
-                                    break;
-                                case 4:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
-                                    s.DisplayFormat = "Media {0:N2}";
-                                    break;
-                                case 5:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
-                                    s.DisplayFormat = "Val. min. {0}";
-                                    break;
-                                case 6:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
-                                    s.DisplayFormat = "Val. max. {0}";
-                                    break;
-                            }
-                            //if (clsConfigDetail.TotalColoana == 0)
-                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-                            //if (clsConfigDetail.TotalColoana == 4)
-                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
-                            //s.DisplayFormat = "{0}";
-
-                            grDateObiective.TotalSummary.Add(s);
-                        }
                     }
                     //Florin 2020.09.14 End
+
+                    //Florin 2020.12.09 Begin
+                    if (Convert.ToString(clsConfigDetail.TotalColoana) != "")
+                    {
+                        grDateObiective.Settings.ShowFooter = true;
+                        grDateObiective.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                        ASPxSummaryItem s = new ASPxSummaryItem();
+                        s.FieldName = clsConfigDetail.ColumnName;
+                        switch (clsConfigDetail.TotalColoana)
+                        {
+                            case 1:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                s.DisplayFormat = "Suma {0:N0}";
+                                break;
+                            case 2:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                s.DisplayFormat = "Suma {0:N2}";
+                                break;
+                            case 3:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                s.DisplayFormat = "Media {0:N0}";
+                                break;
+                            case 4:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                s.DisplayFormat = "Media {0:N2}";
+                                break;
+                            case 5:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
+                                s.DisplayFormat = "Val. min. {0}";
+                                break;
+                            case 6:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Custom;
+                                s.DisplayFormat = "Val. max. {0}";
+                                break;
+                        }
+                        grDateObiective.TotalSummary.Add(s);
+                    }
+                    //Florin 2020.12.09 End
 
                     y++;
                     if (clsConfigDetail.Vizibil == true)
@@ -4267,50 +4265,48 @@ namespace WizOne.Eval
 
                         if (clsConfigDetail.ColumnName == "Total1") formulaSql1 = clsConfigDetail.FormulaSql;
                         if (clsConfigDetail.ColumnName == "Total2") formulaSql2 = clsConfigDetail.FormulaSql;
-
-                        if (Convert.ToString(clsConfigDetail.TotalColoana) != "")
-                        {
-                            grDateCompetente.Settings.ShowFooter = true;
-                            grDateCompetente.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
-                            ASPxSummaryItem s = new ASPxSummaryItem();
-                            s.FieldName = clsConfigDetail.ColumnName;
-                            switch (clsConfigDetail.TotalColoana)
-                            {
-                                case 1:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-                                    s.DisplayFormat = "Suma {0:N0}";
-                                    break;
-                                case 2:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-                                    s.DisplayFormat = "Suma {0:N2}";
-                                    break;
-                                case 3:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
-                                    s.DisplayFormat = "Media {0:N0}";
-                                    break;
-                                case 4:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
-                                    s.DisplayFormat = "Media {0:N2}";
-                                    break;
-                                case 5:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Min;
-                                    s.DisplayFormat = "Valoarea minima {0}";
-                                    break;
-                                case 6:
-                                    s.SummaryType = DevExpress.Data.SummaryItemType.Max;
-                                    s.DisplayFormat = "Valoarea maxima {0}";
-                                    break;
-                            }
-                            //if (clsConfigDetail.TotalColoana == 0)
-                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-                            //if (clsConfigDetail.TotalColoana == 4)
-                            //    s.SummaryType = DevExpress.Data.SummaryItemType.Average;
-                            //s.DisplayFormat = "{0}";
-
-                            grDateCompetente.TotalSummary.Add(s);
-                        }
                     }
                     //Florin 2020.09.14 End
+
+                    //Florin 2020.12.09 Begin
+                    if (Convert.ToString(clsConfigDetail.TotalColoana) != "")
+                    {
+                        grDateCompetente.Settings.ShowFooter = true;
+                        grDateCompetente.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                        ASPxSummaryItem s = new ASPxSummaryItem();
+                        s.FieldName = clsConfigDetail.ColumnName;
+                        switch (clsConfigDetail.TotalColoana)
+                        {
+                            case 1:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                s.DisplayFormat = "Suma {0:N0}";
+                                break;
+                            case 2:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                                s.DisplayFormat = "Suma {0:N2}";
+                                break;
+                            case 3:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                s.DisplayFormat = "Media {0:N0}";
+                                break;
+                            case 4:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Average;
+                                s.DisplayFormat = "Media {0:N2}";
+                                break;
+                            case 5:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Min;
+                                s.DisplayFormat = "Valoarea minima {0}";
+                                break;
+                            case 6:
+                                s.SummaryType = DevExpress.Data.SummaryItemType.Max;
+                                s.DisplayFormat = "Valoarea maxima {0}";
+                                break;
+                        }
+                        grDateCompetente.TotalSummary.Add(s);
+                    }
+                    //Florin 2020.12.09 End
+
+
 
                     if (clsConfigDetail.Vizibil == true)
                     {

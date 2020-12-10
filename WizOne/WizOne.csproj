@@ -383,6 +383,10 @@
     <Content Include="Curs\Aprobare.aspx" />
     <Content Include="Curs\AprobareTrainer.aspx" />
     <Content Include="Curs\Cursuri.aspx" />
+    <Content Include="Curs\CursuriAnterioare.aspx" />
+    <Content Include="Curs\CursuriInregistrare.aspx" />
+    <Content Include="Curs\CursuriIstoric.aspx" />
+    <Content Include="Curs\CursuriView.aspx" />
     <Content Include="Curs\relCurs.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="DefaultTactilExtra.aspx" />
@@ -1360,6 +1364,34 @@
     </Compile>
     <Compile Include="Curs\Cursuri.aspx.designer.cs">
       <DependentUpon>Cursuri.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Curs\CursuriAnterioare.aspx.cs">
+      <DependentUpon>CursuriAnterioare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Curs\CursuriAnterioare.aspx.designer.cs">
+      <DependentUpon>CursuriAnterioare.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Curs\CursuriInregistrare.aspx.cs">
+      <DependentUpon>CursuriInregistrare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Curs\CursuriInregistrare.aspx.designer.cs">
+      <DependentUpon>CursuriInregistrare.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Curs\CursuriIstoric.aspx.cs">
+      <DependentUpon>CursuriIstoric.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Curs\CursuriIstoric.aspx.designer.cs">
+      <DependentUpon>CursuriIstoric.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Curs\CursuriView.aspx.cs">
+      <DependentUpon>CursuriView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Curs\CursuriView.aspx.designer.cs">
+      <DependentUpon>CursuriView.aspx</DependentUpon>
     </Compile>
     <Compile Include="Curs\relCurs.aspx.cs">
       <DependentUpon>relCurs.aspx</DependentUpon>

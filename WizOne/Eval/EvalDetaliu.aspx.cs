@@ -1016,7 +1016,7 @@ namespace WizOne.Eval
                                     }
 
                                     nota = nota / cnt;
-                                    int calif = (int)Math.Ceiling(nota);
+                                    double calif = Math.Ceiling(nota);
 
                                     Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR 3A") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
                                     if (notaFinala != null)
@@ -1025,7 +1025,7 @@ namespace WizOne.Eval
                                         PropertyInfo val = linieNota.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
 
                                         if (val != null)
-                                            val.SetValue(linieNota, calif.ToString(), null);
+                                            val.SetValue(linieNota, calif.ToString("0.##"), null);
                                     }
 
                                     double notaF = 0;
@@ -3453,7 +3453,7 @@ namespace WizOne.Eval
                                     cnt++;
                                 }
                                 double nota = total / cnt;
-                                int calif = (int)Math.Ceiling(nota);
+                                double calif = Math.Ceiling(nota);
 
                                 int nrSec = Convert.ToInt32(Session["indexSec"].ToString());
 
@@ -3478,7 +3478,7 @@ namespace WizOne.Eval
                                     PropertyInfo val = linieNota.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
 
                                     if (val != null)
-                                        val.SetValue(linieNota, calif.ToString(), null);
+                                        val.SetValue(linieNota, calif.ToString("0.##"), null);
                                 }
 
                                 double notaF = 0;
@@ -3796,7 +3796,7 @@ namespace WizOne.Eval
                                     cnt++;
                                 }
                                 double nota = total / cnt;
-                                int calif = (int)Math.Ceiling(nota);
+                                double calif = Math.Ceiling(nota);
 
 
                                 Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR 3B") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
@@ -3806,7 +3806,7 @@ namespace WizOne.Eval
                                     PropertyInfo val = linieNota.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
 
                                     if (val != null)
-                                        val.SetValue(linieNota, calif.ToString(), null);
+                                        val.SetValue(linieNota, calif.ToString("0.##"), null);
                                 }
 
                                 double notaF = 0;

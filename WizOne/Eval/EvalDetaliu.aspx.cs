@@ -1045,9 +1045,9 @@ namespace WizOne.Eval
                                                     double rez = 0;
                                                     double.TryParse(s, out rez);
                                                     notaF += rez;
-                                                    if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && rez == 0)
-                                                        nr = 4;
                                                 }
+                                                if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && s.Length <= 0)
+                                                    nr = 4;
                                             }
                                         }
                                     }
@@ -3501,9 +3501,9 @@ namespace WizOne.Eval
                                                 double rez = 0;
                                                 double.TryParse(s, out rez);
                                                 notaF += rez;
-                                                if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && rez == 0)
-                                                    nr = 4;
                                             }
+                                            if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && s.Length <= 0)
+                                                nr = 4;
                                         }
                                     }
                                 }
@@ -3832,9 +3832,9 @@ namespace WizOne.Eval
                                                 double rez = 0;
                                                 double.TryParse(s, out rez);
                                                 notaF += rez;
-                                                if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && rez == 0)
-                                                    nr = 4;
                                             }
+                                            if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && s.Length <= 0)
+                                                nr = 4;
                                         }
                                     }
                                 }

@@ -1006,8 +1006,8 @@ namespace WizOne.Eval
                                                 string s = val.GetValue(linieCalif, null).ToString();
                                                 if (s.Length > 0)
                                                 {
-                                                    int rez = 0;
-                                                    int.TryParse(s, out rez);
+                                                    double rez = 0;
+                                                    double.TryParse(s, out rez);
                                                     nota += rez;
                                                     cnt++;
                                                 }
@@ -1029,6 +1029,7 @@ namespace WizOne.Eval
                                     }
 
                                     double notaF = 0;
+                                    int nr = 5;
                                     lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR") && p.IdQuiz == raspLinie.IdQuiz).ToList();
                                     if (lstNoteFinale != null && lstNoteFinale.Count > 0)
                                     {
@@ -1041,15 +1042,17 @@ namespace WizOne.Eval
                                                 string s = val.GetValue(linieCalif, null).ToString();
                                                 if (s.Length > 0)
                                                 {
-                                                    int rez = 0;
-                                                    int.TryParse(s, out rez);
+                                                    double rez = 0;
+                                                    double.TryParse(s, out rez);
                                                     notaF += rez;
+                                                    if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && rez == 0)
+                                                        nr = 4;
                                                 }
                                             }
                                         }
                                     }
 
-                                    notaF /= 5;
+                                    notaF /= nr;
                                     double califF = notaF;
 
                                     Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
@@ -3482,6 +3485,7 @@ namespace WizOne.Eval
                                 }
 
                                 double notaF = 0;
+                                int nr = 5;
                                 List<Eval_QuizIntrebari> lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR") && p.IdQuiz == clsUpd.IdQuiz).ToList();
                                 if (lstNoteFinale != null && lstNoteFinale.Count > 0)
                                 {
@@ -3494,15 +3498,17 @@ namespace WizOne.Eval
                                             string s = val.GetValue(linieCalif, null).ToString();
                                             if (s.Length > 0)
                                             {
-                                                int rez = 0;
-                                                int.TryParse(s, out rez);
+                                                double rez = 0;
+                                                double.TryParse(s, out rez);
                                                 notaF += rez;
+                                                if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && rez == 0)
+                                                    nr = 4;
                                             }
                                         }
                                     }
                                 }
 
-                                notaF /= 5;
+                                notaF /= nr;
 
                                 double califF = notaF;
 
@@ -3810,6 +3816,7 @@ namespace WizOne.Eval
                                 }
 
                                 double notaF = 0;
+                                int nr = 5;
                                 List<Eval_QuizIntrebari> lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR") && p.IdQuiz == clsUpd.IdQuiz).ToList();
                                 if (lstNoteFinale != null && lstNoteFinale.Count > 0)
                                 {
@@ -3822,15 +3829,17 @@ namespace WizOne.Eval
                                             string s = val.GetValue(linieCalif, null).ToString();
                                             if (s.Length > 0)
                                             {
-                                                int rez = 0;
-                                                int.TryParse(s, out rez);
+                                                double rez = 0;
+                                                double.TryParse(s, out rez);
                                                 notaF += rez;
+                                                if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && rez == 0)
+                                                    nr = 4;
                                             }
                                         }
                                     }
                                 }
 
-                                notaF /= 5;
+                                notaF /= nr;
 
                                 double califF = notaF;
 

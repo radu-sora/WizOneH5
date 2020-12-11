@@ -827,6 +827,13 @@ namespace WizOne.Organigrama
                 Session["DataVigoare"] = null;
                 Session["IdAuto"] = -97;
                 Session["Org_Duplicare"] = "0";
+                Session["Posturi_Upload"] = null;
+                Session["Org_PosturiPozitii"] = null;
+                Session.Remove("DataVigoare");
+                Session.Remove("IdAuto");
+                Session.Remove("Org_Duplicare");
+                Session.Remove("Posturi_Upload");
+                Session.Remove("Org_PosturiPozitii");
             }
             catch (Exception ex)
             {

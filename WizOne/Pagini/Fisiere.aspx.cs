@@ -150,6 +150,9 @@ namespace WizOne.Pagini
                                     }
                                 }
                                 break;
+                            case "17":
+                                tbl = "Curs_relSesiuneDocumente";
+                                break;
                         }
 
                         if (tbl.Length > 0)

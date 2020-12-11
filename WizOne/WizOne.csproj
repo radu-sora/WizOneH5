@@ -386,8 +386,11 @@
     <Content Include="Curs\CursuriAnterioare.aspx" />
     <Content Include="Curs\CursuriInregistrare.aspx" />
     <Content Include="Curs\CursuriIstoric.aspx" />
+    <Content Include="Curs\CursuriSesiuni.aspx" />
     <Content Include="Curs\CursuriView.aspx" />
     <Content Include="Curs\relCurs.aspx" />
+    <Content Include="Curs\relSesiuneCosturi.aspx" />
+    <Content Include="Curs\relSesiuneDocumente.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="DefaultTactilExtra.aspx" />
     <Content Include="DefaultTactilFaraCard.aspx" />
@@ -1361,6 +1364,7 @@
     </Compile>
     <Compile Include="Curs\Cursuri.aspx.cs">
       <DependentUpon>Cursuri.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\Cursuri.aspx.designer.cs">
       <DependentUpon>Cursuri.aspx</DependentUpon>
@@ -1386,6 +1390,13 @@
     <Compile Include="Curs\CursuriIstoric.aspx.designer.cs">
       <DependentUpon>CursuriIstoric.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Curs\CursuriSesiuni.aspx.cs">
+      <DependentUpon>CursuriSesiuni.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Curs\CursuriSesiuni.aspx.designer.cs">
+      <DependentUpon>CursuriSesiuni.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Curs\CursuriView.aspx.cs">
       <DependentUpon>CursuriView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1399,6 +1410,20 @@
     </Compile>
     <Compile Include="Curs\relCurs.aspx.designer.cs">
       <DependentUpon>relCurs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Curs\relSesiuneCosturi.aspx.cs">
+      <DependentUpon>relSesiuneCosturi.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Curs\relSesiuneCosturi.aspx.designer.cs">
+      <DependentUpon>relSesiuneCosturi.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Curs\relSesiuneDocumente.aspx.cs">
+      <DependentUpon>relSesiuneDocumente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Curs\relSesiuneDocumente.aspx.designer.cs">
+      <DependentUpon>relSesiuneDocumente.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

@@ -1013,7 +1013,7 @@ namespace WizOne.Eval
                                     }
 
                                     nota = nota / cnt;
-                                    double calif = Math.Ceiling(nota);
+                                    double calif = nota;
 
                                     Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR 3A") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
                                     if (notaFinala != null)
@@ -1047,7 +1047,7 @@ namespace WizOne.Eval
                                     }
 
                                     notaF /= 5;
-                                    double califF = Math.Ceiling(notaF);
+                                    double califF = notaF;
 
                                     Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
                                     if (notaFinalaEvaluare != null)
@@ -3381,7 +3381,7 @@ namespace WizOne.Eval
                                     cnt++;
                                 }
                                 double nota = total / cnt;
-                                double calif = Math.Ceiling(nota);
+                                double calif = nota;
 
                                 int nrSec = Convert.ToInt32(Session["indexSec"].ToString());
 
@@ -3432,7 +3432,7 @@ namespace WizOne.Eval
 
                                 notaF /= 5;
 
-                                double califF = Math.Ceiling(notaF);
+                                double califF = notaF;
 
                                 Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
                                 if (notaFinalaEvaluare != null)
@@ -3724,7 +3724,7 @@ namespace WizOne.Eval
                                     cnt++;
                                 }
                                 double nota = total / cnt;
-                                double calif = Math.Ceiling(nota);
+                                double calif = nota;
 
 
                                 Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR 3B") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
@@ -3760,7 +3760,7 @@ namespace WizOne.Eval
 
                                 notaF /= 5;
 
-                                double califF = Math.Ceiling(notaF);
+                                double califF = notaF;
 
                                 Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
                                 if (notaFinalaEvaluare != null)

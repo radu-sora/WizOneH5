@@ -15448,3 +15448,34 @@ ALTER TABLE F0991 ADD  F0991109 DATE;
 
 ALTER TABLE F100 MODIFY F10081 VARCHAR2(50);
 
+
+----  2.2.133  ----
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(125, 'Cursuri', 'Cursuri', 'Curs\Cursuri', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(126, 'Sesiuni de cursuri', 'Sesiuni de cursuri', 'Curs\CursuriSesiuni', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(127, 'Aprobare training', 'Aprobare training', 'Curs\Aprobare', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(128, 'Circuit', 'Circuit', 'Pagini\SablonNomen[Curs_Circuit]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(129, 'Cursuri anterioare', 'Cursuri anterioare', 'Curs\CursuriAnterioare', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(130, 'Feedback trainer', 'Feedback trainer', 'Curs\AprobareTrainer', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(131, 'Planificare', 'Planificarea oamenilor pe cursuri', 'Curs\CursuriInregistrare', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(132, 'Vizualizare cursuri disponibile', 'Vizualizare cursuri', 'Curs\CursuriView', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(133, 'Vizualizare istoric', 'Vizualizare istoric', 'Curs\CursuriIstoric', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(134, 'Categorii costuri curs', 'Categorii costuri', 'Pagini\SablonNomen[Curs_tblCosturi]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(135, 'Categorii nivel1', 'Categorii nivel1', 'Pagini\SablonNomen[Curs_tblCateg_Niv1]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(136, 'Categorii nivel2', 'Categorii nivel2', 'Pagini\SablonNomen[Curs_tblCateg_Niv2]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(137, 'Categorii nivel3', 'Categorii nivel3', 'Pagini\SablonNomen[Curs_tblCateg_Niv3]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(138, 'Categorii note', 'Nomenclator categorii note', 'Pagini\SablonNomen[Curs_tblCategoriiNote]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(139, 'Categorii valori note', 'Nomenclator categorii valori note', 'Pagini\SablonNomen[Curs_tblCategNoteValori]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(140, 'Certificari', 'Certificari', 'Pagini\SablonNomen[Curs_tblCertificari]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(141, 'Competente', 'Competente', 'Pagini\SablonNomen[tblCompetente]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(142, 'Competente si Cursuri', 'Competente si Cursuri', 'Pagini\SablonNomen[Curs_relCursCompetente]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(143, 'Competente si Functii', 'Competente si Functii', 'Pagini\SablonNomen[Curs_relCompetenteFunctii]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(144, 'Furnizori', 'Furnizori', 'Pagini\SablonNomen[Curs_tblFurnizori]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(145, 'Locatii', 'Locatii', 'Pagini\SablonNomen[Curs_tblLocatii]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(146, 'Organizatori', 'Organizatori', 'Pagini\SablonNomen[Curs_tblOrganizatori]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(147, 'Stari anterioare', 'Stari anterioare', 'Pagini\SablonNomen[Curs_tblStariAnterior]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(148, 'Stari circuit', 'Stari circuit', 'Pagini\SablonNomen[Curs_tblStari]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(149, 'Tematici', 'Tematici', 'Pagini\SablonNomen[Curs_tblTematici]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(150, 'Tipuri competente', 'Tipuri competente', 'Pagini\SablonNomen[tblGrupCompetente]', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(151, 'Traineri', 'Traineri', 'Pagini\SablonNomen[Curs_tblTraineri]', 1, 'm1.png');
+commit;

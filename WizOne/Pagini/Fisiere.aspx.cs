@@ -37,7 +37,21 @@ namespace WizOne.Pagini
                                 tbl = "MP_Cereri";
                                 break;
                             case "3":
-                                tbl = "Org_Posturi";
+                                //Florin 2020.12.11
+                                {
+                                    //metaCereriDate itm = new metaCereriDate();
+
+                                    //itm.UploadedFile = dtDoc.Rows[0]["Fisier"];
+                                    //itm.UploadedFileName = dtDoc.Rows[0]["FisierNume"];
+                                    //itm.UploadedFileExtension = dtDoc.Rows[0]["FisierExtensie"];
+                                    tbl = "";
+                                    Organigrama.Posturi.metaCereriDate itm = Session["Posturi_Upload"] as Organigrama.Posturi.metaCereriDate;
+                                    if (itm != null && itm.UploadedFile != null)
+                                        scrieDoc((itm.UploadedFileExtension ?? ".txt").ToString(), (byte[])itm.UploadedFile, (itm.UploadedFileName ?? "Fisier").ToString());
+                                    else
+                                        Response.Write("Nu exista date de afisat !");
+                                }
+                                //tbl = "Org_Posturi";
                                 break;
                             case "4":
                                 {

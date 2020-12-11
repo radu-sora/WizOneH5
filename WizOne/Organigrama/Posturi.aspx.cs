@@ -369,16 +369,23 @@ namespace WizOne.Organigrama
                 }
 
                 //salvam documentul
-                if (Session["Posturi_Upload"] != null)
+                string sqlFis = "";
+                metaCereriDate itm = Session["Posturi_Upload"] as metaCereriDate;
+                if (itm != null && itm.UploadedFile != null)
                 {
-                    metaCereriDate itm = Session["Posturi_Upload"] as metaCereriDate;
-                    if (itm.UploadedFile != null)
-                    {
-                        string sqlFis = $@"INSERT INTO ""tblFisiere""(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
-                            SELECT @1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()} " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
-
-                        General.ExecutaNonQuery(sqlFis, new object[] { "Org_Posturi", idAuto, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
-                    }
+                    sqlFis = $@"
+                        BEGIN
+                            IF((SELECT COUNT(*) FROM ""tblFisiere"" WHERE ""Tabela""=@1 AND ""Id""=@2) = 0)
+                            INSERT INTO ""tblFisiere""(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) SELECT @1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()} {General.FromDual()}
+                            ELSE
+                            UPDATE ""tblFisiere"" SET ""Fisier""=@3, ""FisierNUme""=@4, ""FisierExtensie""=@5 WHERE ""Tabela""=@1 AND ""Id""=@2
+                        END";
+                    General.ExecutaNonQuery(sqlFis, new object[] { "Org_Posturi", idAuto, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
+                }
+                else
+                {
+                    sqlFis = $@"DELETE FROM ""tblFisiere"" WHERE ""Tabela""=@1 AND ""Id""=@2";
+                    General.ExecutaNonQuery(sqlFis, new object[] { "Org_Posturi", idAuto });
                 }
 
                 //salvam Dosarul Personal

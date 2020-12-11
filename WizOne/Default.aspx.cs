@@ -119,7 +119,7 @@ namespace WizOne
                                     string usrTMP = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Upn).Select(c => c.Value).SingleOrDefault();
                                     int poz = usrTMP.IndexOf("@");
                                     if (poz > 0) usrTMP = usrTMP.Remove(poz);
-                                    General.MemoreazaEroarea(usrTMP);
+                                    //General.MemoreazaEroarea(usrTMP);
                                     string txtRas = Verifica(usrTMP, "", false, false);
 
                                     if (General.Nz(Session["SecApp"], "").ToString() != "OK")

@@ -2982,7 +2982,12 @@ namespace WizOne.Eval
                             if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
                                 e.TotalValue = 0;
                             else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
-                                e.TotalValue = Convert.ToDecimal(e.TotalValue) + Convert.ToDecimal(e.FieldValue);
+                            {
+                                decimal val = 0;
+                                if (General.Nz(e.FieldValue, "").ToString() != "" && General.IsNumeric(e.FieldValue))
+                                    val = Convert.ToDecimal(e.FieldValue);
+                                e.TotalValue = Convert.ToDecimal(e.TotalValue) + val;
+                            }
                         }
                         break;
                     case "Media {0:N0}":
@@ -2991,7 +2996,12 @@ namespace WizOne.Eval
                             if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Start)
                                 e.TotalValue = 0;
                             else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
-                                e.TotalValue = Convert.ToDecimal(e.TotalValue) + Convert.ToDecimal(e.FieldValue);
+                            {
+                                decimal val = 0;
+                                if (General.Nz(e.FieldValue, "").ToString() != "" && General.IsNumeric(e.FieldValue))
+                                    val = Convert.ToDecimal(e.FieldValue);
+                                e.TotalValue = Convert.ToDecimal(e.TotalValue) + val;
+                            }
                             else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Finalize)
                                 e.TotalValue = Convert.ToDecimal(e.TotalValue) / (e.RowHandle + 1);
                         }
@@ -3002,8 +3012,11 @@ namespace WizOne.Eval
                                 e.TotalValue = 999999;
                             else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
                             {
-                                if (Convert.ToDecimal(e.FieldValue) < Convert.ToDecimal(e.TotalValue))
-                                    e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                                if (General.Nz(e.FieldValue, "").ToString() != "" && General.IsNumeric(e.FieldValue))
+                                {
+                                    if (Convert.ToDecimal(e.FieldValue) < Convert.ToDecimal(e.TotalValue))
+                                        e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                                }
                             }
                         }
                         break;
@@ -3013,8 +3026,11 @@ namespace WizOne.Eval
                                 e.TotalValue = 0;
                             else if (e.SummaryProcess == DevExpress.Data.CustomSummaryProcess.Calculate)
                             {
-                                if (Convert.ToDecimal(e.FieldValue) > Convert.ToDecimal(e.TotalValue))
-                                    e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                                if (General.Nz(e.FieldValue, "").ToString() != "" && General.IsNumeric(e.FieldValue))
+                                {
+                                    if (Convert.ToDecimal(e.FieldValue) > Convert.ToDecimal(e.TotalValue))
+                                        e.TotalValue = Convert.ToDecimal(e.FieldValue);
+                                }
                             }
                         }
                         break;

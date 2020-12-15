@@ -2248,7 +2248,8 @@ namespace WizOne.Eval
                                 INNER JOIN Eval_QuizIntrebari B ON A.IdQuiz=B.IdQuiz AND A.Id=B.id AND B.TipData=3
                                 WHERE A.F10003=@1 AND A.IdQuiz=@2) X WHERE COALESCE(Total,0) <> 0", 
                                 new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
-                            lbl.Text = val.ToString();
+                            lbl.Text = val.ToString("0.##");
+                            //lbl.Text = val.ToString();
 
                             Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.Id == id).FirstOrDefault();
                             if (raspLinie != null)

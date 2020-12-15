@@ -987,8 +987,8 @@ namespace WizOne.Eval
                             piValue.SetValue(raspLinie, valueControl, null);
                             Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
 
-                            if (General.Nz(Session["IdClient"], 1).ToString() == "27")
-                            {//Euroins
+                            if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == Convert.ToInt32(Module.IdClienti.Clienti.Euroins))                  
+                            {
                                 int nrSec = Convert.ToInt32(Session["indexSec"].ToString());
                                 if (nrSec == 3 && raspLinie.TipData == 3)
                                 {
@@ -1028,47 +1028,13 @@ namespace WizOne.Eval
                                             val.SetValue(linieNota, calif.ToString("0.##"), null);
                                     }
 
-                                    double notaF = 0;
-                                    int nr = 5;
-                                    lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR") && p.IdQuiz == raspLinie.IdQuiz).ToList();
-                                    if (lstNoteFinale != null && lstNoteFinale.Count > 0)
-                                    {
-                                        foreach (Eval_QuizIntrebari linie in lstNoteFinale)
-                                        {
-                                            Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == linie.Id && p.F10003 == raspLinie.F10003 && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
-                                            PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-                                            if (val != null)
-                                            {
-                                                string s = val.GetValue(linieCalif, null).ToString();
-                                                if (s.Length > 0)
-                                                {
-                                                    double rez = 0;
-                                                    double.TryParse(s, out rez);
-                                                    notaF += rez;
-                                                }
-                                                if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && s.Length <= 0)
-                                                    nr = 4;
-                                            }
-                                        }
-                                    }
-
-                                    notaF /= nr;
-                                    double califF = notaF;
-
-                                    Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
-                                    if (notaFinalaEvaluare != null)
-                                    {
-                                        Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == notaFinalaEvaluare.Id && p.F10003 == raspLinie.F10003 && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
-                                        PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-
-                                        if (val != null)
-                                            val.SetValue(linieNotaFinala, califF.ToString("0.##"), null);
-                                    }
+                                    ASPxTextEdit txtNota3A = grIntrebari.FindControl("txt_WXY_" + notaFinala.Id) as ASPxTextEdit;
+                                    //ASPxLabel txtNota3A = grIntrebari.FindControl("lblTOTALINTERMEDIAR3A_" + notaFinala.Id) as ASPxLabel;
+                                    if (txtNota3A != null)
+                                        txtNota3A.Value = calif.ToString("0.##");
 
                                     Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
-
                                 }
-
                             }
                         }
                     }
@@ -1080,7 +1046,6 @@ namespace WizOne.Eval
                     }
 
                     return;
-                    
                 }
 
                 if (e.Parameter == "tabSuper")
@@ -1315,6 +1280,9 @@ namespace WizOne.Eval
                         case 68: //tabel din view Others
                             ctl = CreeazaLink(ent.Descriere, ent.Id);
                             break;
+                        case 69: //Nota Finala
+                            ctl = CreeazaNotaFinala(ent.Id);
+                            break;
                     }
 
                     if (ctl != null)
@@ -1372,6 +1340,14 @@ namespace WizOne.Eval
                         {
                             //Florin 2020.01.05 - am adaugat si categorie obiectiv
                             ASPxLabel lbl = CreeazaEticheta(ent.Descriere + "  " + denCateg, ent.Id);
+
+                            //Florin 2020.12.15 - pt Euroins
+                            if (lbl.Text.IndexOf("TOTAL INTERMEDIAR 3A") >=0)
+                            {
+                                ctl.ClientEnabled = false;
+                                ctl.ClientReadOnly = true;
+                            }
+
                             if (ent.Orientare == 1 && ent.TipData != 3) //orientare orizontala      Radu 19.04.2019 - pentru butoane radio s-a facut o exceptie
                             {
                                 HtmlTableRow row = new HtmlTableRow();
@@ -2230,6 +2206,66 @@ namespace WizOne.Eval
             return lbl;
         }
 
+        private ASPxLabel CreeazaNotaFinala(int id)
+        {
+            ASPxLabel lbl = new ASPxLabel();
+            //ASPxTextBox txt = new ASPxTextBox();
+            try
+            {
+                lbl.Wrap = DevExpress.Utils.DefaultBoolean.True;
+                lbl.ForeColor = Evaluare.CuloareBrush("#FF000099");
+                //Florin 2018.06.25  cerere de la Pelifilip
+                lbl.Font.Size = 12;
+                lbl.ID = "txt" + id;
+                lbl.CssClass = "lbl_eval_desc";
+
+
+                //txt.Height = 21;
+                //txt.Width = 400;
+                //txt.HorizontalAlign = HorizontalAlign.Left;
+                //txt.ID = "txt" + "_WXY_" + id.ToString();
+                //txt.ClientSideEvents.TextChanged = "function(s, e){ OnTextChangedHandlerCtr(s); }";
+                //txt.ReadOnly = true;
+                //txt.Enabled = false;
+
+                switch (Convert.ToInt32(General.Nz(Session["IdClient"], 1)))
+                {
+                    case (int)Module.IdClienti.Clienti.Euroins:
+                        {
+                            decimal val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                $@"SELECT ROUND(SUM(Total)/COUNT(*),2) FROM (
+                                SELECT IdLinieQuiz, SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 GROUP BY IdLinieQuiz
+                                UNION
+                                SELECT IdLinieQuiz, SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 GROUP BY IdLinieQuiz
+                                UNION
+                                SELECT 1, SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Super{General.Nz(Session["Eval_ActiveTab"],1)},'') = '' THEN 0 ELSE Super{General.Nz(Session["Eval_ActiveTab"], 1)} END))/COUNT(*) AS Total FROM Eval_RaspunsLinii A
+                                INNER JOIN Eval_QuizIntrebari B ON A.IdQuiz=B.IdQuiz AND A.Id=B.id AND B.TipData=3
+                                WHERE A.F10003=@1 AND A.IdQuiz=@2) X WHERE COALESCE(Total,0) <> 0", 
+                                new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                            lbl.Text = val.ToString();
+
+                            Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.Id == id).FirstOrDefault();
+                            if (raspLinie != null)
+                            {
+                                PropertyInfo piValue = raspLinie.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                if (piValue != null)
+                                {
+                                    //txt.Text = piValue.GetValue(raspLinie, null).ToString();
+                                    piValue.SetValue(raspLinie, lbl.Text, null);
+                                    Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            return lbl;
+        }
+
         private ASPxDateEdit CreeazaDateEdit(int id, string super)
         {
             ASPxDateEdit dt = new ASPxDateEdit();
@@ -2396,6 +2432,14 @@ namespace WizOne.Eval
                     string endCallBackFunctionGrDate = @"function " + grDateObiective.ID + @"_EndCallBack(s, e) { pnlSectiune.PerformCallback('CreeazaSectiune');  }";
                     grDateObiective.ClientSideEvents.EndCallback = endCallBackFunctionGrDate;
                 }
+
+
+                //Florin 2020.12.15 
+                grDateObiective.ClientSideEvents.BatchEditStartEditing = "function(s,e) { OnGridBatchEditStartEditing(s,e); }";
+                string cp_ColoaneRO = "";
+                grDateObiective.Styles.BatchEditModifiedCell.ForeColor = System.Drawing.Color.Black;
+
+
                 #endregion
 
                 #region Grid Default Columns
@@ -2607,7 +2651,11 @@ namespace WizOne.Eval
                                 colObiectiv.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Obiectiv");
                                 colObiectiv.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
+                                {
                                     colObiectiv.ReadOnly = !clsConfigDetail.Editare;
+                                    if (colObiectiv.ReadOnly)
+                                        cp_ColoaneRO += "IdObiectiv;";
+                                }
                                 colObiectiv.Visible = clsConfigDetail.Vizibil;
 
                                 colObiectiv.PropertiesComboBox.TextField = "Denumire";
@@ -2635,7 +2683,11 @@ namespace WizOne.Eval
                                 colObiectiv.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Obiectiv");
                                 colObiectiv.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
+                                {
                                     colObiectiv.ReadOnly = !clsConfigDetail.Editare;
+                                    if (colObiectiv.ReadOnly)
+                                        cp_ColoaneRO += "Obiectiv;";
+                                }
                                 colObiectiv.Visible = clsConfigDetail.Vizibil;
 
                                 grDateObiective.Columns.Add(colObiectiv);
@@ -2706,7 +2758,11 @@ namespace WizOne.Eval
                                 colActivitate.Caption = (clsConfigDetail.Alias ?? Dami.TraduCuvant("Activitate")) + " - " + y;
                                 colActivitate.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
+                                {
                                     colActivitate.ReadOnly = !clsConfigDetail.Editare;
+                                    if (colActivitate.ReadOnly)
+                                        cp_ColoaneRO += "IdActivitate;";
+                                }
                                 colActivitate.Visible = clsConfigDetail.Vizibil;
 
                                 colActivitate.PropertiesComboBox.TextField = "Denumire";
@@ -2743,7 +2799,11 @@ namespace WizOne.Eval
                                 colActivitate.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Activitate");
                                 colActivitate.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
+                                {
                                     colActivitate.ReadOnly = !clsConfigDetail.Editare;
+                                    if (colActivitate.ReadOnly)
+                                        cp_ColoaneRO += "Activitate;";
+                                }
                                 colActivitate.Visible = clsConfigDetail.Vizibil;
 
                                 grDateObiective.Columns.Add(colActivitate);
@@ -2786,7 +2846,11 @@ namespace WizOne.Eval
                                 colCalificativ.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colCalificativ.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
+                                {
                                     colCalificativ.ReadOnly = !clsConfigDetail.Editare;
+                                    if (colCalificativ.ReadOnly)
+                                        cp_ColoaneRO += "IdCalificativ;";
+                                }
                                 colCalificativ.Visible = clsConfigDetail.Vizibil;
 
                                 colCalificativ.PropertiesComboBox.TextField = "Denumire";
@@ -2807,7 +2871,11 @@ namespace WizOne.Eval
                                 colCalificativ.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colCalificativ.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
+                                {
                                     colCalificativ.ReadOnly = !clsConfigDetail.Editare;
+                                    if (colCalificativ.ReadOnly)
+                                        cp_ColoaneRO += "Calificativ;";
+                                }
                                 colCalificativ.Visible = clsConfigDetail.Vizibil;
                                 colCalificativ.Visible = false;
                                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) != 20 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)) >= 2 || tab >= 2)   //Radu 03.07.2018 - calificativul nu trebuie sa fie afisat pe tab-ul angajatului decat dupa ce acesta finalizeaza
@@ -2834,26 +2902,36 @@ namespace WizOne.Eval
                                     col.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                     col.Width = clsConfigDetail.Width;
                                     if (idCateg == "0")
+                                    {
                                         col.ReadOnly = !clsConfigDetail.Editare;
+                                        if (col.ReadOnly)
+                                            cp_ColoaneRO += clsConfigDetail.ColumnName + ";";
+                                    }
                                     col.Visible = clsConfigDetail.Vizibil;
 
                                     grDateObiective.Columns.Add(col);
                                 }
                                 break;
                             case "System.Decimal":
-                                GridViewDataTextColumn colDecimal = new GridViewDataTextColumn();
-                                colDecimal.FieldName = clsConfigDetail.ColumnName;
-                                colDecimal.Name = clsConfigDetail.ColumnName;
-                                colDecimal.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
-                                colDecimal.Width = clsConfigDetail.Width;
-                                if (idCateg == "0")
-                                    colDecimal.ReadOnly = !clsConfigDetail.Editare;
-                                colDecimal.Visible = clsConfigDetail.Vizibil;
+                                {
+                                    GridViewDataTextColumn col = new GridViewDataTextColumn();
+                                    col.FieldName = clsConfigDetail.ColumnName;
+                                    col.Name = clsConfigDetail.ColumnName;
+                                    col.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
+                                    col.Width = clsConfigDetail.Width;
+                                    if (idCateg == "0")
+                                    {
+                                        col.ReadOnly = !clsConfigDetail.Editare;
+                                        if (col.ReadOnly)
+                                            cp_ColoaneRO += clsConfigDetail.ColumnName + ";";
+                                    }
+                                    col.Visible = clsConfigDetail.Vizibil;
 
-                                colDecimal.PropertiesTextEdit.DisplayFormatString = "n2";
-                                colDecimal.PropertiesTextEdit.MaskSettings.Mask = "<0..99999>.<00..99g>";
+                                    col.PropertiesTextEdit.DisplayFormatString = "n2";
+                                    col.PropertiesTextEdit.MaskSettings.Mask = "<0..99999>.<00..99g>";
 
-                                grDateObiective.Columns.Add(colDecimal);
+                                    grDateObiective.Columns.Add(col);
+                                }
                                 break;
                             case "System.Int32":
                                 {
@@ -2863,7 +2941,11 @@ namespace WizOne.Eval
                                     col.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                     col.Width = clsConfigDetail.Width;
                                     if (idCateg == "0")
+                                    {
                                         col.ReadOnly = !clsConfigDetail.Editare;
+                                        if (col.ReadOnly)
+                                            cp_ColoaneRO += clsConfigDetail.ColumnName + ";";
+                                    }
                                     col.Visible = clsConfigDetail.Vizibil;
 
                                     col.PropertiesTextEdit.DisplayFormatString = "n0";
@@ -2883,7 +2965,11 @@ namespace WizOne.Eval
                                     col.PropertiesDateEdit.EditFormat = EditFormat.Custom;
                                     col.Width = clsConfigDetail.Width;
                                     if (idCateg == "0")
+                                    {
                                         col.ReadOnly = !clsConfigDetail.Editare;
+                                        if (col.ReadOnly)
+                                            cp_ColoaneRO += clsConfigDetail.ColumnName + ";";
+                                    }
                                     col.Visible = clsConfigDetail.Vizibil;
 
                                     grDateObiective.Columns.Add(col);
@@ -2964,6 +3050,10 @@ namespace WizOne.Eval
                     }                    
                 }
 
+                //Florin 2020.12.15
+                if (cp_ColoaneRO != "")
+                    grDateObiective.JSProperties["cp_ColoaneRO"] = cp_ColoaneRO;
+
                 //if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 20)
                 //{//daca formularul este pe pozitia 1, evaluatorul sa poata completa comentariile pe tab-ul sau
                 //    if (idCateg == "0")
@@ -2976,10 +3066,10 @@ namespace WizOne.Eval
                 //                if (dt.Rows[0][0].ToString() == Session["UserId"].ToString())
                 //                    grDateObiective.Enabled = true;
 
-                //            }
-                //        }
-                //    }
-                //}
+                    //            }
+                    //        }
+                    //    }
+                    //}
             }
             catch (Exception ex)
             {
@@ -3451,87 +3541,6 @@ namespace WizOne.Eval
                                 sumaClaim += val * (decimal)clsUpd.Pondere;
                             }                            
                             break;
-                        case "27":                          //Euroins
-                            {
-                                double total = 0;
-                                int cnt = 0;
-                                foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
-                                                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
-                                {
-                                    total += Convert.ToDouble(General.Nz(linie.IdCalificativ, 0));
-                                    cnt++;
-                                }
-                                double nota = total / cnt;
-                                double calif = nota;
-
-                                int nrSec = Convert.ToInt32(Session["indexSec"].ToString());
-
-                                string numeTxt = "";
-                                switch (nrSec)
-                                {
-                                    case 1:
-                                        numeTxt = "TOTAL INTERMEDIAR 1";
-                                        break;
-                                    case 2:
-                                        numeTxt = "TOTAL INTERMEDIAR 2";
-                                        break;
-                                    case 3:
-                                        numeTxt = "TOTAL INTERMEDIAR 3C";
-                                        break;
-                                }
-
-                                Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains(numeTxt) && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
-                                if (notaFinala != null)
-                                {
-                                    Eval_RaspunsLinii linieNota = lstEval_RaspunsLinii.Where(p => p.Id == notaFinala.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
-                                    PropertyInfo val = linieNota.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-
-                                    if (val != null)
-                                        val.SetValue(linieNota, calif.ToString("0.##"), null);
-                                }
-
-                                double notaF = 0;
-                                int nr = 5;
-                                List<Eval_QuizIntrebari> lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR") && p.IdQuiz == clsUpd.IdQuiz).ToList();
-                                if (lstNoteFinale != null && lstNoteFinale.Count > 0)
-                                {
-                                    foreach (Eval_QuizIntrebari linie in lstNoteFinale)
-                                    {
-                                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == linie.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
-                                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-                                        if (val != null)
-                                        {
-                                            string s = val.GetValue(linieCalif, null).ToString();
-                                            if (s.Length > 0)
-                                            {
-                                                double rez = 0;
-                                                double.TryParse(s, out rez);
-                                                notaF += rez;
-                                            }
-                                            if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && s.Length <= 0)
-                                                nr = 4;
-                                        }
-                                    }
-                                }
-
-                                notaF /= nr;
-
-                                double califF = notaF;
-
-                                Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
-                                if (notaFinalaEvaluare != null)
-                                {
-                                    Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == notaFinalaEvaluare.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
-                                    PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-
-                                    if (val != null)
-                                        val.SetValue(linieNotaFinala, califF.ToString("0.##"), null);
-                                }
-
-                                Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
-
-                            }
-                            break;
                     }
                 }
 
@@ -3794,72 +3803,6 @@ namespace WizOne.Eval
                                 //Florin 2020.05.06
                                 decimal val = decimal.Parse(General.Nz(clsUpd.Calificativ, 0).ToString(), CultureInfo.InvariantCulture);
                                 sumaClaim += val * clsUpd.Pondere;
-
-                            }
-                            break;
-                        case "27":                          //Euroins
-                            {
-                                double total = 0;
-                                int cnt = 0;
-                                foreach (Eval_CompetenteAngajatTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
-                                                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
-                                {
-                                    total += Convert.ToDouble(General.Nz(linie.IdCalificativ, 0));
-                                    cnt++;
-                                }
-                                double nota = total / cnt;
-                                double calif = nota;
-
-
-                                Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR 3B") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
-                                if (notaFinala != null)
-                                {
-                                    Eval_RaspunsLinii linieNota = lstEval_RaspunsLinii.Where(p => p.Id == notaFinala.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
-                                    PropertyInfo val = linieNota.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-
-                                    if (val != null)
-                                        val.SetValue(linieNota, calif.ToString("0.##"), null);
-                                }
-
-                                double notaF = 0;
-                                int nr = 5;
-                                List<Eval_QuizIntrebari> lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR") && p.IdQuiz == clsUpd.IdQuiz).ToList();
-                                if (lstNoteFinale != null && lstNoteFinale.Count > 0)
-                                {
-                                    foreach (Eval_QuizIntrebari linie in lstNoteFinale)
-                                    {
-                                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == linie.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
-                                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-                                        if (val != null)
-                                        {
-                                            string s = val.GetValue(linieCalif, null).ToString();
-                                            if (s.Length > 0)
-                                            {
-                                                double rez = 0;
-                                                double.TryParse(s, out rez);
-                                                notaF += rez;
-                                            }
-                                            if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && s.Length <= 0)
-                                                nr = 4;
-                                        }
-                                    }
-                                }
-
-                                notaF /= nr;
-
-                                double califF = notaF;
-
-                                Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
-                                if (notaFinalaEvaluare != null)
-                                {
-                                    Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == notaFinalaEvaluare.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
-                                    PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-
-                                    if (val != null)
-                                        val.SetValue(linieNotaFinala, califF.ToString("0.##"), null);
-                                }
-
-                                Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
 
                             }
                             break;
@@ -4508,6 +4451,11 @@ namespace WizOne.Eval
                     string endCallBackFunctionGrDate = @"function " + grDateCompetente.ID + @"_EndCallBack(s, e) { pnlSectiune.PerformCallback('CreeazaSectiune');  }";
                     grDateCompetente.ClientSideEvents.EndCallback = endCallBackFunctionGrDate;
                 }
+
+                //Florin 2020.12.15 
+                grDateCompetente.ClientSideEvents.BatchEditStartEditing = "function(s,e) { OnGridBatchEditStartEditing(s,e); }";
+                string cp_ColoaneRO = "";
+                grDateCompetente.Styles.BatchEditModifiedCell.ForeColor = System.Drawing.Color.Black;
                 #endregion
 
 
@@ -4667,12 +4615,20 @@ namespace WizOne.Eval
                             }
                             else
                                 lstCompetente = Session["feedEval_Competenta"] as List<metaDate>;
+                            #endregion
 
                             GridViewDataComboBoxColumn colCompetenta = new GridViewDataComboBoxColumn();
                             colCompetenta.FieldName = "IdCompetenta";
                             colCompetenta.Name = "IdCompetenta";
                             colCompetenta.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                             colCompetenta.Width = clsConfigDetail.Width;
+                            if (idCateg == "0")
+                            {
+                                colCompetenta.ReadOnly = !clsConfigDetail.Editare;
+                                if (colCompetenta.ReadOnly)
+                                    cp_ColoaneRO += "IdCompetenta;";
+                            }
+
                             colCompetenta.PropertiesComboBox.TextField = "Denumire";
                             colCompetenta.PropertiesComboBox.ValueField = "Id";
                             colCompetenta.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDownList;
@@ -4683,7 +4639,7 @@ namespace WizOne.Eval
                             grDateCompetente.Columns.Add(colCompetenta);
                             continue;
 
-                            #endregion
+                           
                         }
                         #endregion
 
@@ -4716,6 +4672,12 @@ namespace WizOne.Eval
                             colCalificativ.Name = "IdCalificativ";
                             colCalificativ.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                             colCalificativ.Width = clsConfigDetail.Width;
+                            if (idCateg == "0")
+                            {
+                                colCalificativ.ReadOnly = !clsConfigDetail.Editare;
+                                if (colCalificativ.ReadOnly)
+                                    cp_ColoaneRO += "IdCalificativ;";
+                            }
 
                             colCalificativ.PropertiesComboBox.TextField = "Denumire";
                             colCalificativ.PropertiesComboBox.ValueField = "IdCalificativ";
@@ -4740,6 +4702,12 @@ namespace WizOne.Eval
                                 colString.Name = clsConfigDetail.ColumnName;
                                 colString.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colString.Width = clsConfigDetail.Width;
+                                if (idCateg == "0")
+                                {
+                                    colString.ReadOnly = !clsConfigDetail.Editare;
+                                    if (colString.ReadOnly)
+                                        cp_ColoaneRO += clsConfigDetail.ColumnName + ";";
+                                }
 
                                 grDateCompetente.Columns.Add(colString);
                                 break;
@@ -4749,6 +4717,12 @@ namespace WizOne.Eval
                                 colDecimal.Name = clsConfigDetail.ColumnName;
                                 colDecimal.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colDecimal.Width = clsConfigDetail.Width;
+                                if (idCateg == "0")
+                                {
+                                    colDecimal.ReadOnly = !clsConfigDetail.Editare;
+                                    if (colDecimal.ReadOnly)
+                                        cp_ColoaneRO += clsConfigDetail.ColumnName + ";";
+                                }
 
                                 colDecimal.PropertiesTextEdit.DisplayFormatString = "n3";
                                 colDecimal.PropertiesTextEdit.MaskSettings.Mask = "<0..99999>.<0..999g>";
@@ -4761,6 +4735,12 @@ namespace WizOne.Eval
                                 colInt.Name = clsConfigDetail.ColumnName;
                                 colInt.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colInt.Width = clsConfigDetail.Width;
+                                if (idCateg == "0")
+                                {
+                                    colInt.ReadOnly = !clsConfigDetail.Editare;
+                                    if (colInt.ReadOnly)
+                                        cp_ColoaneRO += clsConfigDetail.ColumnName + ";";
+                                }
 
                                 colInt.PropertiesTextEdit.DisplayFormatString = "n0";
                                 colInt.PropertiesTextEdit.MaskSettings.Mask = "<0..99999>";
@@ -4833,6 +4813,10 @@ namespace WizOne.Eval
                 grDateCompetente.DataSource = lst;
                 grDateCompetente.KeyFieldName = "IdAuto";
                 grDateCompetente.DataBind();
+
+                //Florin 2020.12.15
+                if (cp_ColoaneRO != "")
+                    grDateCompetente.JSProperties["cp_ColoaneRO"] = cp_ColoaneRO;
             }
             catch (Exception ex)
             {

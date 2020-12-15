@@ -15456,3 +15456,6 @@ ALTER TABLE F100 MODIFY F10081 VARCHAR2(50);
 
 UPDATE "Eval_ConfigObiective" SET "ColumnType"='System.DateTime' WHERE "Id"=6;
 COMMIT;
+
+INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare") VALUES(1, 69, 'Nota Finala', 0);
+COMMIT;

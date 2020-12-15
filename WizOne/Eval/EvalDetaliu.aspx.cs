@@ -803,7 +803,7 @@ namespace WizOne.Eval
                         pnlSectiune.JSProperties["cpAlertMessage"] = "Proces realizat cu succes!";
 
                         //Radu 15.12.2020
-                        string msg = Notif.TrimiteNotificare("Eval.EvalLista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 2 AS ""Actiune"" FROM ""Eval_Raspuns"" Z WHERE ""IdQuiz""=" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) + @"AND F10003 = " + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                        string msg = Notif.TrimiteNotificare("Eval.EvalLista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 2 AS ""Actiune"" FROM ""Eval_Raspuns"" Z WHERE ""IdQuiz""=" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) + @" AND F10003 = " + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                         if (msg.Length > 0)
                             General.CreazaLog(msg);
 
@@ -5186,7 +5186,7 @@ namespace WizOne.Eval
                     return;                                    
                 }
 				
-				msg = Notif.TrimiteNotificare("Eval.EvalLista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"" FROM ""Eval_Raspuns"" Z WHERE ""IdQuiz""=" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) + @"AND F10003 = " + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+				msg = Notif.TrimiteNotificare("Eval.EvalLista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"" FROM ""Eval_Raspuns"" Z WHERE ""IdQuiz""=" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) + @" AND F10003 = " + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
 				if (msg.Length > 0)                    
 					General.CreazaLog(msg);   
 				

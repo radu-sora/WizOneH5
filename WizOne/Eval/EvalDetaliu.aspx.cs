@@ -2215,24 +2215,14 @@ namespace WizOne.Eval
         private ASPxLabel CreeazaNotaFinala(int id)
         {
             ASPxLabel lbl = new ASPxLabel();
-            //ASPxTextBox txt = new ASPxTextBox();
+
             try
             {
                 lbl.Wrap = DevExpress.Utils.DefaultBoolean.True;
                 lbl.ForeColor = Evaluare.CuloareBrush("#FF000099");
-                //Florin 2018.06.25  cerere de la Pelifilip
                 lbl.Font.Size = 12;
                 lbl.ID = "txt" + id;
                 lbl.CssClass = "lbl_eval_desc";
-
-
-                //txt.Height = 21;
-                //txt.Width = 400;
-                //txt.HorizontalAlign = HorizontalAlign.Left;
-                //txt.ID = "txt" + "_WXY_" + id.ToString();
-                //txt.ClientSideEvents.TextChanged = "function(s, e){ OnTextChangedHandlerCtr(s); }";
-                //txt.ReadOnly = true;
-                //txt.Enabled = false;
 
                 switch (Convert.ToInt32(General.Nz(Session["IdClient"], 1)))
                 {
@@ -2249,7 +2239,6 @@ namespace WizOne.Eval
                                 WHERE A.F10003=@1 AND A.IdQuiz=@2) X WHERE COALESCE(Total,0) <> 0", 
                                 new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
                             lbl.Text = val.ToString("0.##");
-                            //lbl.Text = val.ToString();
 
                             Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.Id == id).FirstOrDefault();
                             if (raspLinie != null)
@@ -2257,7 +2246,6 @@ namespace WizOne.Eval
                                 PropertyInfo piValue = raspLinie.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
                                 if (piValue != null)
                                 {
-                                    //txt.Text = piValue.GetValue(raspLinie, null).ToString();
                                     piValue.SetValue(raspLinie, lbl.Text, null);
                                     Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
                                 }

@@ -71,9 +71,10 @@ namespace WizOne.Personal
 
         protected void grDateDosar_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
         {
+            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+
             try
             {
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataTable dt = ds.Tables["Admin_Dosar"];
                 DataRow dr = dt.NewRow();
 
@@ -112,7 +113,17 @@ namespace WizOne.Personal
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                if (ex.Message.IndexOf("is constrained to be unique") >= 0)
+                    grDateDosar.JSProperties["cpAlertMessage"] = "Date duplicate";
+                else
+                    MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+            finally
+            {
+                e.Cancel = true;
+                grDateDosar.CancelEdit();
+                grDateDosar.DataSource = ds.Tables["Admin_Dosar"];
+                Session["InformatiaCurentaPersonal"] = ds;
             }
         }
 

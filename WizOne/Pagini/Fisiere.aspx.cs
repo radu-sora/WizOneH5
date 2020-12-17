@@ -133,6 +133,27 @@ namespace WizOne.Pagini
                             case "13":
                                 tbl = "Curs_Inregistrare";
                                 break;
+                            case "14":
+                                tbl = "Curs_Anterior";
+                                break;
+                            case "15":
+                                tbl = "Curs_Inregistrare";
+                                break;
+                            case "16":
+                                {
+                                    tbl = "Curs_Inregistrare";
+                                    Curs.CursuriInregistrare.metaUploadFile fisier = Session["DocUpload_CursInreg"] as Curs.CursuriInregistrare.metaUploadFile;
+                                    if (fisier != null)
+                                    {
+                                        scrieDoc(fisier.UploadedFileExtension.ToString(), (byte[])fisier.UploadedFile, fisier.UploadedFileName.ToString());
+                                        tbl = "";
+                                    }
+                                }
+                                break;
+                            case "17":
+                                tbl = "Curs_relSesiuneDocumente";
+                                id = "(SELECT \"IdDocument\" FROM \"Curs_relSesiuneDocumente\" WHERE \"IdCurs\" = " + id + " AND \"IdSesiune\" = -99)";
+                                break;
                         }
 
                         if (tbl.Length > 0)

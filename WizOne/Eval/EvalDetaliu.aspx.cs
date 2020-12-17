@@ -820,6 +820,12 @@ namespace WizOne.Eval
 
                         General.ExecutaNonQuery($@"UPDATE ""Eval_Raspuns"" SET ""LuatLaCunostinta"" = @1, ""LuatData""={General.CurrentDate()}, ""LuatUser""={Session["UserId"]}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE ""IdQuiz""=@2 AND F10003 = @3", new object[] { valueControl, Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"],1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                         pnlSectiune.JSProperties["cpAlertMessage"] = "Proces realizat cu succes!";
+
+                        //Radu 15.12.2020
+                        string msg = Notif.TrimiteNotificare("Eval.EvalLista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"" FROM ""Eval_Raspuns"" Z WHERE ""IdQuiz""=" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) + @"AND F10003 = " + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                        if (msg.Length > 0)
+                            General.CreazaLog(msg);
+
                         return;
                     }
 
@@ -999,12 +1005,96 @@ namespace WizOne.Eval
                             }
                         }
 
-
+                        
                         PropertyInfo piValue = raspLinie.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
                         if (piValue != null)
                         {
                             piValue.SetValue(raspLinie, valueControl, null);
                             Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
+
+                            if (General.Nz(Session["IdClient"], 1).ToString() == "27")
+                            {//Euroins
+                                int nrSec = Convert.ToInt32(Session["indexSec"].ToString());
+                                if (nrSec == 3 && raspLinie.TipData == 3)
+                                {
+                                    double nota = 0;
+                                    int cnt = 0;
+                                    List<Eval_QuizIntrebari> lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.TipData == 3 && p.IdQuiz == raspLinie.IdQuiz).ToList();
+                                    if (lstNoteFinale != null && lstNoteFinale.Count > 0)
+                                    {
+                                        foreach (Eval_QuizIntrebari linie in lstNoteFinale)
+                                        {
+                                            Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == linie.Id && p.F10003 == raspLinie.F10003 && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                            PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                            if (val != null)
+                                            {
+                                                string s = val.GetValue(linieCalif, null).ToString();
+                                                if (s.Length > 0)
+                                                {
+                                                    double rez = 0;
+                                                    double.TryParse(s, out rez);
+                                                    nota += rez;
+                                                    cnt++;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    nota = nota / cnt;
+                                    double calif = nota;
+
+                                    Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR 3A") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                    if (notaFinala != null)
+                                    {
+                                        Eval_RaspunsLinii linieNota = lstEval_RaspunsLinii.Where(p => p.Id == notaFinala.Id && p.F10003 == raspLinie.F10003 && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                        PropertyInfo val = linieNota.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                        if (val != null)
+                                            val.SetValue(linieNota, calif.ToString("0.##"), null);
+                                    }
+
+                                    double notaF = 0;
+                                    int nr = 5;
+                                    lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR") && p.IdQuiz == raspLinie.IdQuiz).ToList();
+                                    if (lstNoteFinale != null && lstNoteFinale.Count > 0)
+                                    {
+                                        foreach (Eval_QuizIntrebari linie in lstNoteFinale)
+                                        {
+                                            Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == linie.Id && p.F10003 == raspLinie.F10003 && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                            PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                            if (val != null)
+                                            {
+                                                string s = val.GetValue(linieCalif, null).ToString();
+                                                if (s.Length > 0)
+                                                {
+                                                    double rez = 0;
+                                                    double.TryParse(s, out rez);
+                                                    notaF += rez;                                              
+                                                }
+                                                if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && s.Length <= 0)
+                                                    nr = 4;
+                                            }
+                                        }
+                                    }
+
+                                    notaF /= nr;
+                                    double califF = notaF;
+
+                                    Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                    if (notaFinalaEvaluare != null)
+                                    {
+                                        Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == notaFinalaEvaluare.Id && p.F10003 == raspLinie.F10003 && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                        PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                        if (val != null)
+                                            val.SetValue(linieNotaFinala, califF.ToString("0.##"), null);
+                                    }
+
+                                    Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
+
+                                }
+
+                            }
                         }
                     }
 
@@ -3314,6 +3404,87 @@ namespace WizOne.Eval
                                 sumaClaim += val * (decimal)clsUpd.Pondere;
                             }                            
                             break;
+                        case "27":                          //Euroins
+                            {
+                                double total = 0;
+                                int cnt = 0;
+                                foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
+                                                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
+                                {
+                                    total += Convert.ToDouble(General.Nz(linie.IdCalificativ, 0));
+                                    cnt++;
+                                }
+                                double nota = total / cnt;
+                                double calif = nota;
+
+                                int nrSec = Convert.ToInt32(Session["indexSec"].ToString());
+
+                                string numeTxt = "";
+                                switch (nrSec)
+                                {
+                                    case 1:
+                                        numeTxt = "TOTAL INTERMEDIAR 1";
+                                        break;
+                                    case 2:
+                                        numeTxt = "TOTAL INTERMEDIAR 2";
+                                        break;
+                                    case 3:
+                                        numeTxt = "TOTAL INTERMEDIAR 3C";
+                                        break;
+                                }
+
+                                Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains(numeTxt) && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                if (notaFinala != null)
+                                {
+                                    Eval_RaspunsLinii linieNota = lstEval_RaspunsLinii.Where(p => p.Id == notaFinala.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                    PropertyInfo val = linieNota.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                    if (val != null)
+                                        val.SetValue(linieNota, calif.ToString("0.##"), null);
+                                }
+
+                                double notaF = 0;
+                                int nr = 5;
+                                List<Eval_QuizIntrebari> lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR") && p.IdQuiz == clsUpd.IdQuiz).ToList();
+                                if (lstNoteFinale != null && lstNoteFinale.Count > 0)
+                                {
+                                    foreach (Eval_QuizIntrebari linie in lstNoteFinale)
+                                    {
+                                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == linie.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                        if (val != null)
+                                        {
+                                            string s = val.GetValue(linieCalif, null).ToString();
+                                            if (s.Length > 0)
+                                            {
+                                                double rez = 0;
+                                                double.TryParse(s, out rez);
+                                                notaF += rez;
+                                            }
+                                            if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && s.Length <= 0)
+                                                nr = 4;
+                                        }
+                                    }
+                                }
+
+                                notaF /= nr;
+
+                                double califF = notaF;
+
+                                Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                if (notaFinalaEvaluare != null)
+                                {
+                                    Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == notaFinalaEvaluare.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                    PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                    if (val != null)
+                                        val.SetValue(linieNotaFinala, califF.ToString("0.##"), null);
+                                }
+
+                                Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
+
+                            }
+                            break;
                     }
                 }
 
@@ -3576,6 +3747,72 @@ namespace WizOne.Eval
                                 //Florin 2020.05.06
                                 decimal val = decimal.Parse(General.Nz(clsUpd.Calificativ, 0).ToString(), CultureInfo.InvariantCulture);
                                 sumaClaim += val * clsUpd.Pondere;
+
+                            }
+                            break;
+                        case "27":                          //Euroins
+                            {
+                                double total = 0;
+                                int cnt = 0;
+                                foreach (Eval_CompetenteAngajatTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
+                                                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
+                                {
+                                    total += Convert.ToDouble(General.Nz(linie.IdCalificativ, 0));
+                                    cnt++;
+                                }
+                                double nota = total / cnt;
+                                double calif = nota;
+
+
+                                Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR 3B") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                if (notaFinala != null)
+                                {
+                                    Eval_RaspunsLinii linieNota = lstEval_RaspunsLinii.Where(p => p.Id == notaFinala.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                    PropertyInfo val = linieNota.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                    if (val != null)
+                                        val.SetValue(linieNota, calif.ToString("0.##"), null);
+                                }
+
+                                double notaF = 0;
+                                int nr = 5;
+                                List<Eval_QuizIntrebari> lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("TOTAL INTERMEDIAR") && p.IdQuiz == clsUpd.IdQuiz).ToList();
+                                if (lstNoteFinale != null && lstNoteFinale.Count > 0)
+                                {
+                                    foreach (Eval_QuizIntrebari linie in lstNoteFinale)
+                                    {
+                                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == linie.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                        if (val != null)
+                                        {
+                                            string s = val.GetValue(linieCalif, null).ToString();
+                                            if (s.Length > 0)
+                                            {
+                                                double rez = 0;
+                                                double.TryParse(s, out rez);
+                                                notaF += rez;
+                                            }
+                                            if (linie.Descriere.ToUpper() == "TOTAL INTERMEDIAR 3B" && s.Length <= 0)
+                                                nr = 4;
+                                        }
+                                    }
+                                }
+
+                                notaF /= nr;
+                                
+                                double califF = notaF;
+
+                                Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                if (notaFinalaEvaluare != null)
+                                {
+                                    Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == notaFinalaEvaluare.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                    PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                    if (val != null)
+                                        val.SetValue(linieNotaFinala, califF.ToString("0.##"), null);
+                                }
+
+                                Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
 
                             }
                             break;
@@ -3894,7 +4131,8 @@ namespace WizOne.Eval
                     }
 
                     Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
-                }
+                }                
+
 
                 e.Cancel = true;
 

@@ -592,6 +592,11 @@ namespace WizOne.Eval
                     General.SalveazaDate(dtTbl, "Eval_RaspunsLinii");
 
 
+                //Florin 2020.12.17
+                string nota = CalculNotaFinala().ToString("0.##");
+                SalveazaNotaFinala(nota);
+
+
                 //Florin 2020.11.06
                 if (General.Nz(Session["CompletareChestionar_Sincronizare"],0).ToString() == "1" && idCateg == "0")
                     PreluareDateAutomat(pozitie);
@@ -2223,36 +2228,7 @@ namespace WizOne.Eval
                 lbl.Font.Size = 12;
                 lbl.ID = "txt" + id;
                 lbl.CssClass = "lbl_eval_desc";
-
-                switch (Convert.ToInt32(General.Nz(Session["IdClient"], 1)))
-                {
-                    case (int)Module.IdClienti.Clienti.Euroins:
-                        {
-                            decimal val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
-                                $@"SELECT ROUND(SUM(Total)/COUNT(*),2) FROM (
-                                SELECT IdLinieQuiz, SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 GROUP BY IdLinieQuiz
-                                UNION
-                                SELECT IdLinieQuiz, SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 GROUP BY IdLinieQuiz
-                                UNION
-                                SELECT 1, SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Super{General.Nz(Session["Eval_ActiveTab"],1)},'') = '' THEN 0 ELSE Super{General.Nz(Session["Eval_ActiveTab"], 1)} END))/COUNT(*) AS Total FROM Eval_RaspunsLinii A
-                                INNER JOIN Eval_QuizIntrebari B ON A.IdQuiz=B.IdQuiz AND A.Id=B.id AND B.TipData=3
-                                WHERE A.F10003=@1 AND A.IdQuiz=@2) X WHERE COALESCE(Total,0) <> 0", 
-                                new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
-                            lbl.Text = val.ToString("0.##");
-
-                            Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.Id == id).FirstOrDefault();
-                            if (raspLinie != null)
-                            {
-                                PropertyInfo piValue = raspLinie.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-                                if (piValue != null)
-                                {
-                                    piValue.SetValue(raspLinie, lbl.Text, null);
-                                    Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
-                                }
-                            }
-                        }
-                        break;
-                }
+                lbl.Text = CalculNotaFinala().ToString("0.##");
             }
             catch (Exception ex)
             {
@@ -5717,6 +5693,73 @@ namespace WizOne.Eval
             }
 
             return lnk;
+        }
+
+        private decimal CalculNotaFinala()
+        {
+            decimal val = 0;
+
+            try
+            {
+                switch (Convert.ToInt32(General.Nz(Session["IdClient"], 1)))
+                {
+                    case (int)Module.IdClienti.Clienti.Euroins:
+                        {
+                            val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                $@"SELECT ROUND(SUM(Total)/COUNT(*),2) FROM (
+                                SELECT IdLinieQuiz, SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 GROUP BY IdLinieQuiz
+                                UNION
+                                SELECT IdLinieQuiz, SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 GROUP BY IdLinieQuiz
+                                UNION
+                                SELECT 1, SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Super{General.Nz(Session["Eval_ActiveTab"], 1)},'') = '' THEN 0 ELSE Super{General.Nz(Session["Eval_ActiveTab"], 1)} END))/COUNT(*) AS Total FROM Eval_RaspunsLinii A
+                                INNER JOIN Eval_QuizIntrebari B ON A.IdQuiz=B.IdQuiz AND A.Id=B.id AND B.TipData=3
+                                WHERE A.F10003=@1 AND A.IdQuiz=@2) X WHERE COALESCE(Total,0) <> 0",
+                                new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+
+                            //Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.Id == id).FirstOrDefault();
+                            //if (id == -99)
+                            //    raspLinie = lstEval_RaspunsLinii.Where(p => p.TipData == 69).FirstOrDefault();
+
+                            //if (raspLinie != null)
+                            //{
+                            //    PropertyInfo piValue = raspLinie.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                            //    if (piValue != null)
+                            //    {
+                            //        piValue.SetValue(raspLinie, val.ToString("0.##"), null);
+                            //        Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
+                            //    }
+                            //}
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return val;
+        }
+
+        private void SalveazaNotaFinala(string nota)
+        {
+            try
+            {
+                General.ExecutaNonQuery($@"UPDATE ""Eval_RaspunsLinii"" SET ""Super{Session["Eval_ActiveTab"]}""='{nota}' WHERE F10003=@1 AND ""IdQuiz""=@2 AND ""TipData""=69", new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"] });
+                Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.TipData == 69).FirstOrDefault();
+                if (raspLinie != null)
+                {
+                    ASPxLabel txtNota = grIntrebari.FindControl("txt" + raspLinie.Id) as ASPxLabel;
+                    if (txtNota != null)
+                        txtNota.Text = nota;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
     }

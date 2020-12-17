@@ -15479,3 +15479,91 @@ INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana")
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(150, 'Tipuri competente', 'Tipuri competente', 'Pagini\SablonNomen[tblGrupCompetente]', 1, 'm1.png');
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(151, 'Traineri', 'Traineri', 'Pagini\SablonNomen[Curs_tblTraineri]', 1, 'm1.png');
 commit;
+
+
+DELETE F069 WHERE F06904 =2021;
+DELETE F069 WHERE F06904 =2022;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 1, 'Ianuarie', 20, 160, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 2, 'Februarie', 20, 160, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 3, 'Martie', 23, 184, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 4, 'Aprilie', 21, 168, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 5, 'Mai', 20, 160, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 6, 'Iunie', 20, 160, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 7, 'Iulie', 22, 176, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 8, 'August', 22, 176, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 9, 'Septembrie', 22, 176, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 10, 'Octombrie', 21, 168, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 11, 'Noiembrie', 21, 168, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2021, 12, 'Decembrie', 22, 176, 2230, 5429, 1, SYSDATE from F002;
+Insert into F069
+   (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select
+   69, F00202, 2022, 1, 'Ianuarie', 20, 160, 2230, 5429, 1, SYSDATE from F002;
+Commit;
+
+
+
+DELETE HOLIDAYS WHERE TO_CHAR(DAY, 'YYYY')='2021';
+DELETE HOLIDAYS WHERE TO_CHAR(DAY, 'YYYY')='2022';
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('01/01/2021', 'DD/MM/YYYY'), 'Anul Nou (Ziua 1)', 700);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('02/01/2021', 'DD/MM/YYYY'), 'Anul Nou (Ziua 2)', 701);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('24/01/2021', 'DD/MM/YYYY'), 'Ziua Unirii', 702);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('30/04/2021', 'DD/MM/YYYY'), 'Vinerea Mare', 703);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('02/05/2021', 'DD/MM/YYYY'), 'Paste (Ziua 1)', 704);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('03/05/2021', 'DD/MM/YYYY'), 'Paste (Ziua 2)', 705);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('01/05/2021', 'DD/MM/YYYY'), 'Ziua Muncii - 1 Mai', 706);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('01/06/2021', 'DD/MM/YYYY'), 'Ziua Copilului - 1 Iunie', 707);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('20/06/2021', 'DD/MM/YYYY'), 'Rusalii (Ziua 1)', 708);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('21/06/2021', 'DD/MM/YYYY'), 'Rusalii (Ziua 2)', 709);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('15/08/2021', 'DD/MM/YYYY'), 'Adormirea Maicii Domnului', 710);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('30/11/2021', 'DD/MM/YYYY'), 'Sfantul Andrei', 711);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('01/12/2021', 'DD/MM/YYYY'), 'Ziua nationala a Romaniei', 712);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('25/12/2021', 'DD/MM/YYYY'), 'Craciun (Ziua 1)', 713);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('26/12/2021', 'DD/MM/YYYY'), 'Craciun (Ziua 2)', 714);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('01/01/2022', 'DD/MM/YYYY'), 'Anul Nou (Ziua 1)', 715);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('02/01/2022', 'DD/MM/YYYY'), 'Anul Nou (Ziua 2)', 716);
+Insert into HOLIDAYS (DAY, NAME, NO) Values (TO_DATE('24/01/2022', 'DD/MM/YYYY'), 'Ziua Unirii', 717);
+commit;
+
+ALTER TABLE F100 MODIFY F10081 varchar2(50);
+ALTER TABLE F910 MODIFY F91081 varchar2(50);
+ALTER TABLE F099 MODIFY F09981 varchar2(50);
+ALTER TABLE F002 MODIFY F00231 varchar2(50);
+ALTER TABLE F075 MODIFY F07506 varchar2(50);
+ALTER TABLE F077 MODIFY F07704 varchar2(50);

@@ -850,7 +850,7 @@ namespace WizOne.Module
         public int IdActivitate { get; set; }
         public string Activitate { get; set; }
         public string Descriere { get; set; }
-        public DateTime Termen { get; set; }
+        public DateTime? Termen { get; set; }
         public string Calificativ { get; set; }
         public string ExplicatiiCalificativ { get; set; }
         public int IdQuiz { get; set; }
@@ -921,6 +921,9 @@ namespace WizOne.Module
 
             Total1 = columns.Contains("Total1") == true ? (dr["Total1"] != DBNull.Value ? dr["Total1"].ToString() : null) : null;
             Total2 = columns.Contains("Total2") == true ? (dr["Total2"] != DBNull.Value ? dr["Total2"].ToString() : null) : null;
+
+            //Florin 2020.12.10
+            Termen = columns.Contains("Termen") == true ? (dr["Termen"] != DBNull.Value ? (DateTime?)dr["Termen"] : null) : null;
         }
     }
 

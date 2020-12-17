@@ -193,6 +193,11 @@
                                     </dx:ASPxComboBox>
                             </div>   
                             <div style="float:left; padding-right:15px;">
+                                <label id="lblPL" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Punct de lucru</label>
+                                <dx:ASPxComboBox ID="cmbPctLucru" ClientInstanceName="cmbPctLucru" ClientIDMode="Static" runat="server" Width="150px" TextField="F08003" ValueField="F08002" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                                    </dx:ASPxComboBox>
+                            </div> 
+                            <div style="float:left; padding-right:15px;">
                                 <label id="lblCtr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Contract</label>
                                 <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" />
                             </div>   
@@ -244,6 +249,7 @@
                                         <dx:GridViewDataTextColumn FieldName="Dept" Caption="Dept" ReadOnly="true" Width="100"/>
                                         <dx:GridViewDataTextColumn FieldName="Subdept" Caption="Subdept" ReadOnly="true" Width="100" />
                                         <dx:GridViewDataTextColumn FieldName="Birou" Caption="Birou" ReadOnly="true" Width="100" />
+                                        <dx:GridViewDataTextColumn FieldName="PunctLucru" Caption="Punct de lucru" ReadOnly="true" Width="100" />
 
                                     </Columns>
                     

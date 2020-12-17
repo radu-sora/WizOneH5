@@ -4433,6 +4433,7 @@ namespace WizOne.Module
             return settings.GetType().GetProperty(name) != null;
         }
 
+
         public static void SecuritatePersonal(DataList dtList, int idUser)
         {
             List<string> lista = new List<string>();
@@ -4652,7 +4653,7 @@ namespace WizOne.Module
         }
 
         //Radu 25.02.2020
-        public static void SecuritatePersonal(ASPxGridView grDate)
+        public static void SecuritatePersonal(ASPxGridView grDate, string numeTab = "", int idUser = -99, bool editForm = false)
         {
             try
             {
@@ -4663,7 +4664,10 @@ namespace WizOne.Module
                 DataTable dt = new DataTable();
                 if (dtSec != null && dtSec.Rows.Count > 0)
                 {
-                    dt = dtSec.Select("IdForm = '" + nume + "'") != null && dtSec.Select("IdForm = '" + nume + "'").Count() > 0 ? dtSec.Select("IdForm = '" + nume + "'").CopyToDataTable() : null;
+                    if (editForm)
+                        dt = dtSec.Select("IdForm = 'Personal.DateAngajat'") != null && dtSec.Select("IdForm = 'Personal.DateAngajat'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.DateAngajat'").CopyToDataTable() : null;
+                    else
+                        dt = dtSec.Select("IdForm = '" + nume + "'") != null && dtSec.Select("IdForm = '" + nume + "'").Count() > 0 ? dtSec.Select("IdForm = '" + nume + "'").CopyToDataTable() : null;
                 }
                 else
                     return;
@@ -4674,54 +4678,81 @@ namespace WizOne.Module
                     {
                         try
                         {
-                            if (dr["IdColoana"].ToString() != "-")
+                            if (editForm)
                             {
-                                //ASPxGridView ctl = pag.FindControl(dr["IdControl"].ToString()) as ASPxGridView;
-                                ASPxGridView ctl = grDate;
+                                string id = "";
+                                if (dr["IdControl"].ToString().Split('_').Length >= 2)
+                                    id = dr["IdControl"].ToString().Split('_')[2];
+                                dynamic ctl = grDate.FindEditFormTemplateControl(id);
                                 if (ctl != null)
                                 {
-                                    GridViewDataColumn col = ctl.Columns[dr["IdColoana"].ToString()] as GridViewDataColumn;
-                                    if (col != null)
+                                    bool vizibil = true, blocat = false;
+                                    SecuritateCtrl(numeTab, idUser, out vizibil, out blocat, true);
+                                    if (!IsPropertyExist(ctl, "ClientVisible"))
                                     {
-                                        col.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                        col.ReadOnly = (Convert.ToInt32(dr["Blocat"]) == 1 ? true : false);
+                                        ctl.Visible = vizibil;
                                     }
                                     else
                                     {
-                                        //verificam daca sunt butoane in interiorul gridului
-                                        GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
-                                        GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
-                                        if (button != null)
+                                        ctl.ClientVisible = vizibil;
+                                        if (IsPropertyExist(ctl, "ReadOnly"))
+                                            ctl.ReadOnly = blocat;
+                                        else
+                                            ctl.ClientEnabled = !blocat;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (dr["IdColoana"].ToString() != "-")
+                                {
+                                    //ASPxGridView ctl = pag.FindControl(dr["IdControl"].ToString()) as ASPxGridView;
+                                    ASPxGridView ctl = grDate;
+                                    if (ctl != null)
+                                    {
+                                        GridViewDataColumn col = ctl.Columns[dr["IdColoana"].ToString()] as GridViewDataColumn;
+                                        if (col != null)
                                         {
-                                            if (Convert.ToInt32(dr["Vizibil"]) == 1)
-                                                button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
-                                            else
-                                                button.Visibility = GridViewCustomButtonVisibility.Invisible;
+                                            col.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            col.ReadOnly = (Convert.ToInt32(dr["Blocat"]) == 1 ? true : false);
                                         }
                                         else
                                         {
-                                            //Florin 2018.08.16
-                                            //atunci este buton BuiltIn al Devexpress-ului
-                                            if (dr["IdColoana"].ToString().ToLower() == "btnedit")
+                                            //verificam daca sunt butoane in interiorul gridului
+                                            GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
+                                            GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
+                                            if (button != null)
                                             {
-                                                column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                                if (Convert.ToInt32(dr["Vizibil"]) == 1)
+                                                    button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                                                else
+                                                    button.Visibility = GridViewCustomButtonVisibility.Invisible;
                                             }
-                                            if (dr["IdColoana"].ToString().ToLower() == "btnsterge")
+                                            else
                                             {
-                                                column.ShowDeleteButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                                //Florin 2018.08.16
+                                                //atunci este buton BuiltIn al Devexpress-ului
+                                                if (dr["IdColoana"].ToString().ToLower() == "btnedit")
+                                                {
+                                                    column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                                }
+                                                if (dr["IdColoana"].ToString().ToLower() == "btnsterge")
+                                                {
+                                                    column.ShowDeleteButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                                }
+                                                if (dr["IdColoana"].ToString().ToLower() == "btnnew")
+                                                {
+                                                    column.ShowNewButtonInHeader = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                                }
                                             }
-                                            if (dr["IdColoana"].ToString().ToLower() == "btnnew")
-                                            {
-                                                column.ShowNewButtonInHeader = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                            }
+
+
                                         }
-
-
                                     }
                                 }
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             continue;
                         }
@@ -4734,7 +4765,7 @@ namespace WizOne.Module
             }
         }
 
-        public static void SecuritateCtrl(string numeTab, int idUser, out bool vizibil, out bool blocat)
+        public static void SecuritateCtrl(string numeTab, int idUser, out bool vizibil, out bool blocat, bool editForm = false)
         {
             vizibil = true;
             blocat = false;
@@ -4758,7 +4789,10 @@ namespace WizOne.Module
                 DataTable dt = new DataTable();
                 if (dtSec != null && dtSec.Rows.Count > 0)
                 {
-                    dt = dtSec.Select("IdForm = 'Personal.Lista' AND IdControl='" + numeTab + "'") != null && dtSec.Select("IdForm = 'Personal.Lista' AND IdControl='" + numeTab + "'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista' AND IdControl='" + numeTab + "'").CopyToDataTable() : null;
+                    if (editForm)
+                        dt = dtSec.Select("IdForm = 'Personal.DateAngajat' AND IdControl like 'grDate" + numeTab + "%'") != null && dtSec.Select("IdForm = 'Personal.DateAngajat' AND  IdControl like 'grDate" + numeTab + "%'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.DateAngajat' AND  IdControl like 'grDate" + numeTab + "%'").CopyToDataTable() : null;
+                    else
+                        dt = dtSec.Select("IdForm = 'Personal.Lista' AND IdControl='" + numeTab + "'") != null && dtSec.Select("IdForm = 'Personal.Lista' AND IdControl='" + numeTab + "'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista' AND IdControl='" + numeTab + "'").CopyToDataTable() : null;
                 }
                 else
                     return;

@@ -282,13 +282,16 @@ namespace Wizrom.Reports.Code
                 }
 
                 xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for Print here
-
-                //Florin 2020.06.10
                 xtraReport.PaperKind = System.Drawing.Printing.PaperKind.A4;
-                xtraReport.Margins.Top = 10;
-                xtraReport.Margins.Bottom = 10;
-                xtraReport.Margins.Left = 50;
-                xtraReport.Margins.Right = 50;
+                //Florin 2020.12.11
+                if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) != Convert.ToInt32(IdClienti.Clienti.TMK))
+                {
+                    //Florin 2020.06.10
+                    xtraReport.Margins.Top = 10;
+                    xtraReport.Margins.Bottom = 10;
+                    xtraReport.Margins.Left = 50;
+                    xtraReport.Margins.Right = 50;
+                }
                 xtraReport.PrintingSystem.ShowMarginsWarning = false;
                 xtraReport.ShowPrintMarginsWarning = false;
 

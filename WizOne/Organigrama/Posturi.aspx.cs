@@ -584,14 +584,30 @@ namespace WizOne.Organigrama
         {
             try
             {
+                DataTable dt = Session["Org_CampuriExtra"] as DataTable;
+                if (Session["Org_CampuriExtra"] == null)
+                    dt = General.IncarcaDT($@"SELECT * FROM ""Org_tblConfig"" WHERE COALESCE(""Vizibil"",0)=1 ORDER BY COALESCE(""Ordine"",9999)", null);
+
+                chkExtra.DataSource = dt;
+                chkExtra.DataBind();
+
+                string cmps = "1,4,6,7";
+                foreach(ListEditItem item in chkExtra.Items)
+                {
+                    if (cmps.IndexOf(item.Value.ToString()) >= 0)
+                        item.Selected = true;
+                }
+
                 HtmlGenericControl divRow = new HtmlGenericControl("div");
                 divRow.Attributes["class"] = "row";
-                HtmlGenericControl divCol = new HtmlGenericControl("div");
-                divCol.Attributes["class"] = "col-md-12";
 
-                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Org_tblConfig"" WHERE COALESCE(""Vizibil"",0)=1", null);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
+                    HtmlGenericControl divCol = new HtmlGenericControl("div");
+                    divCol.Attributes["class"] = "col-md-12 ascuns";
+                    divCol.ID = "divCampExtra" + General.Nz(dt.Rows[i]["Id"], 1).ToString();
+                    divCol.ClientIDMode = ClientIDMode.Static;
+
                     HtmlGenericControl lbl = new HtmlGenericControl("label");
                     lbl.Style["width"] = "100%";
                     lbl.Style["margin-top"] = "20px";
@@ -606,9 +622,11 @@ namespace WizOne.Organigrama
 
                     divCol.Controls.Add(lbl);
                     divCol.Controls.Add(txt);
+
+                    divRow.Controls.Add(divCol);
                 }
 
-                divRow.Controls.Add(divCol);
+                
                 divExtra.Controls.Add(divRow);
             }
             catch (Exception ex)
@@ -836,11 +854,13 @@ namespace WizOne.Organigrama
                 Session["Org_Duplicare"] = "0";
                 Session["Posturi_Upload"] = null;
                 Session["Org_PosturiPozitii"] = null;
+                Session["Org_CampuriExtra"] = null;
                 Session.Remove("DataVigoare");
                 Session.Remove("IdAuto");
                 Session.Remove("Org_Duplicare");
                 Session.Remove("Posturi_Upload");
                 Session.Remove("Org_PosturiPozitii");
+                Session.Remove("Org_CampuriExtra");
             }
             catch (Exception ex)
             {

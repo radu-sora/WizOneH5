@@ -285,6 +285,17 @@
                     </dx:ASPxCheckBoxList>
                 </div>
 
+                <div class="Absente_divOuter margin_top15">
+                    <label id="Label2" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Alege campuri aditionale</label>
+                    <div style="float:left; padding-right:15px;">  
+                        <dx:ASPxCheckBoxList ID="chkExtra" runat="server" ValueField="Id" TextField="Eticheta" RepeatColumns="4" RepeatLayout="Table" >
+                            <CaptionSettings Position="Top" />
+                            <ClientSideEvents SelectedIndexChanged="function(s,e) { OnChckSelectedIndexChanged(s,e); }" />
+                        </dx:ASPxCheckBoxList>
+                    </div>
+                </div>
+
+
                 <div id="divExtra" runat="server" style="width:815px;">
                 </div>
 
@@ -464,6 +475,41 @@
             txtGrupRO.SetValue(txtDen.GetValue());
             txtGrupEN.SetValue(txtDen.GetValue());
             valDen = txtDen.GetValue();
+        }
+
+        function CloseGridLookup() {
+            cmbCampExtra.ConfirmCurrentSelection();
+            cmbCampExtra.HideDropDown();
+            cmbCampExtra.Focus();
+
+            var val = cmbCampExtra.GetValue();
+            if (val != null) {
+                for (var i = 1; i <= 20; i++)
+                {
+                    var div = document.getElementById("divCampExtra" + val[i]);
+                    if (div != null) {
+                        if (val.indexOf(val[i]) > 0)
+                            div.classList.remove("ascuns");
+                        else
+                            div.classList.add("ascuns");
+                    }
+                }
+            }
+        }
+
+        function OnChckSelectedIndexChanged(s, e) {
+            var val = s.GetSelectedValues();
+            if (val != null) {
+                for (var i = 1; i <= 20; i++) {
+                    var div = document.getElementById("divCampExtra" + i);
+                    if (div != null) {
+                        if (val.indexOf(i.toString()) >= 0)
+                            div.classList.remove("ascuns");
+                        else
+                            div.classList.add("ascuns");
+                    }
+                }
+            }
         }
 
     </script>

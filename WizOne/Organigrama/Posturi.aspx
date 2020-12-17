@@ -288,7 +288,7 @@
                 <div class="Absente_divOuter margin_top15">
                     <label id="Label2" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Alege campuri aditionale</label>
                     <div style="float:left; padding-right:15px;">  
-                        <dx:ASPxCheckBoxList ID="chkExtra" runat="server" ValueField="Id" TextField="Eticheta" RepeatColumns="4" RepeatLayout="Table" >
+                        <dx:ASPxCheckBoxList ID="chkExtra" ClientInstanceName="chkExtra" runat="server" ValueField="Id" TextField="Eticheta" RepeatColumns="4" RepeatLayout="Table" >
                             <CaptionSettings Position="Top" />
                             <ClientSideEvents SelectedIndexChanged="function(s,e) { OnChckSelectedIndexChanged(s,e); }" />
                         </dx:ASPxCheckBoxList>
@@ -434,6 +434,7 @@
                 s.cpAlertMessage = null;
             }
             pnlLoading.Hide();
+            OnChckSelectedIndexChanged();
         }
 
         function ShowDoc() {
@@ -497,8 +498,8 @@
             }
         }
 
-        function OnChckSelectedIndexChanged(s, e) {
-            var val = s.GetSelectedValues();
+        function OnChckSelectedIndexChanged() {
+            var val = chkExtra.GetSelectedValues();
             if (val != null) {
                 for (var i = 1; i <= 20; i++) {
                     var div = document.getElementById("divCampExtra" + i);

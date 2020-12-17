@@ -70,6 +70,7 @@ namespace WizOne.Organigrama
                 cmbFunc.DataBind();
 
                 DataRow dr = null;
+                string campuriExtra = "";
 
                 //daca este modificare incarcam valorile din baza de date
                 if (!IsPostBack)
@@ -133,6 +134,8 @@ namespace WizOne.Organigrama
                             Session["Org_Duplicare"] = "0";
                             Session["IdAuto"] = -97;
                         }
+
+                        campuriExtra = General.Nz(dr["CampuriExtra"],"").ToString();
                     }
                     else
                     {
@@ -187,6 +190,28 @@ namespace WizOne.Organigrama
 
                 AdaugaCampuriExtra(dr);
                 AdaugaBeneficiile(dr);
+
+                if (!IsPostBack)
+                {
+                    foreach (ListEditItem item in chkExtra.Items)
+                    {
+                        if (campuriExtra.IndexOf(item.Value.ToString()) >= 0)
+                            item.Selected = true;
+                    }
+
+                    for (int i = 1; i <= 20; i++)
+                    {
+                        HtmlGenericControl div = divExtra.FindControl("divCampExtra" + i) as HtmlGenericControl;
+                        if (div != null)
+                        {
+                            if (campuriExtra.IndexOf(i.ToString()) >= 0)
+                                div.Attributes["class"] = "col-md-12";
+                            else
+                                div.Attributes["class"] = "col-md-12 ascuns";
+
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -316,6 +341,7 @@ namespace WizOne.Organigrama
                 dic.Add("NumeGrupEN", txtGrupEN.Text);
                 dic.Add("IdFunctie", cmbFunc.Value);
                 dic.Add("StudiiSuperioare", chkStudii.Value);
+                dic.Add("CampuriExtra", String.Join(",", chkExtra.SelectedValues.Cast<string>().Select(p => p.ToString()).ToArray()));
                 dic.Add("USER_NO", Session["UserId"]);
                 dic.Add("TIME", DateTime.Now);
 
@@ -591,20 +617,13 @@ namespace WizOne.Organigrama
                 chkExtra.DataSource = dt;
                 chkExtra.DataBind();
 
-                string cmps = "1,4,6,7";
-                foreach(ListEditItem item in chkExtra.Items)
-                {
-                    if (cmps.IndexOf(item.Value.ToString()) >= 0)
-                        item.Selected = true;
-                }
-
                 HtmlGenericControl divRow = new HtmlGenericControl("div");
                 divRow.Attributes["class"] = "row";
 
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     HtmlGenericControl divCol = new HtmlGenericControl("div");
-                    divCol.Attributes["class"] = "col-md-12 ascuns";
+                    divCol.Attributes["class"] = "col-md-12";
                     divCol.ID = "divCampExtra" + General.Nz(dt.Rows[i]["Id"], 1).ToString();
                     divCol.ClientIDMode = ClientIDMode.Static;
 

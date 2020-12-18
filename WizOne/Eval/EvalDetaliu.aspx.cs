@@ -659,6 +659,7 @@ namespace WizOne.Eval
         {
             try
             {
+                int x = 0;
                 int i = 0;
                 int idRoot = -99;
                 var entRoot = lstEval_QuizIntrebari.Where(p => p.Parinte == 0 && p.Descriere == "Root").FirstOrDefault();
@@ -666,11 +667,30 @@ namespace WizOne.Eval
 
                 var entSec = lstEval_QuizIntrebari.Where(p => p.Parinte == idRoot && p.EsteSectiune == 1).OrderBy(p => p.OrdineAfisare);
 
+                //Florin 2020.12.04
+                string strSql = @"SELECT CONVERT(varchar(20),TabIndex) + ',' 
+                                FROM Eval_DrepturiTab A
+                                INNER JOIN Eval_RaspunsIstoric B ON A.IdQuiz=B.IdQuiz AND B.F10003=@1 AND A.Pozitie = B.Pozitie
+                                WHERE A.IdQuiz=@2 AND COALESCE(A.Vizibil,1)=0 AND B.IdUser=@3
+                                FOR XML PATH('')";
+                if (Constante.tipBD == 2)
+                    strSql = @"SELECT LISTAGG(""TabIndex"",',') WITHIN GROUP (ORDER BY ""TabIndex"") 
+                                FROM ""Eval_DrepturiTab"" A
+                                INNER JOIN ""Eval_RaspunsIstoric"" B ON A.""IdQuiz""=B.""IdQuiz"" AND B.F10003=@1 AND A.""Pozitie"" = B.""Pozitie""
+                                WHERE A.""IdQuiz""=@2 AND COALESCE(A.""Vizibil"",1)=0 AND B.""IdUser""=@3";
+                string sir = General.Nz(General.ExecutaScalar(strSql, new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["UserId"] }), "").ToString();
+
                 foreach (var ent in entSec)
                 {
 
                     try
                     {
+                        //Florin 2020.12.04
+                        x++;
+                        string idx = "," + sir + ",";
+                        if (idx.IndexOf("," + x + ",") >= 0)
+                            continue;
+
                         i += 1;
                         if (!IsPostBack)
                             totalSec += 1;
@@ -1293,6 +1313,9 @@ namespace WizOne.Eval
                             break;
                         case 69: //Nota Finala
                             ctl = CreeazaNotaFinala(ent.Id);
+                            break;
+                        case 70: //raport evaluare multipla
+                            ctl = CreazaTabelSimplu(ent.Id, "viewEvaluareMultipla");
                             break;
                     }
 
@@ -5760,6 +5783,41 @@ namespace WizOne.Eval
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+        private ASPxGridView CreazaTabelSimplu(int id, string numeView)
+        {
+            ASPxGridView grDate = new ASPxGridView();
+
+            try
+            {
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""{numeView}"" WHERE F10003 = @1 AND ""IdQuiz"" = @2", new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"] });
+
+                grDate.AutoGenerateColumns = true;
+                grDate.DataSource = dt;
+                grDate.Width = Unit.Percentage(100);
+                grDate.ID = "grDate_DinView_" + id;
+                grDate.DataBind();
+
+                if (grDate.Columns["IdQuiz"] != null)
+                {
+                    grDate.Columns["IdQuiz"].Visible = false;
+                    grDate.Columns["IdQuiz"].ShowInCustomizationForm = false;
+
+                }
+                if (grDate.Columns["F10003"] != null)
+                {
+                    grDate.Columns["F10003"].Visible = false;
+                    grDate.Columns["F10003"].ShowInCustomizationForm = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return grDate;
         }
 
     }

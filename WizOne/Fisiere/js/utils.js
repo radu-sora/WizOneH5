@@ -26,14 +26,14 @@ function ctx(s, e)
         if (__reqSec.length > 0)
             sir = __reqSec.split("=");       
 
-        
         if (targ.id == "pnlContent1_ContentPlaceHolder1_ASPxPageControl2") {
             if (sir[1].length <= 0 || e.srcElement.id.length <= 0 || (e.srcElement.id.length > 0 && e.srcElement.id.indexOf(sir[1]) == -1)) {
                 if (e.srcElement.innerText != "") {
                     if ((e.srcElement.id.length >= 3 && e.srcElement.id.substring(0, 3) == "lbl")
                         || (e.srcElement.id.length >= 2 && e.srcElement.id.substring(0, 2) == "lg")
                         || (e.srcElement.id.length >= 3 && e.srcElement.id.substring(0, 3) == "chk")
-                        || (e.srcElement.id.length >= 3 && e.srcElement.id.substring(0, 3) == "btn"))
+                        || (e.srcElement.id.length >= 3 && e.srcElement.id.substring(0, 3) == "btn")
+                        || (e.srcElement.id.length >= 6 && e.srcElement.id.substring(0, 6) == "grDate") && e.srcElement.id.indexOf('lbl') != -1 )
                         __reqSec = "IdControl=" + e.srcElement.id;
                     else
                         __reqSec = "IdControl=" + e.srcElement.innerText;

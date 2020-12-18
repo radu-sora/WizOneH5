@@ -6237,7 +6237,7 @@ namespace WizOne.Module
                 }
 
                 //initializam Ptj_Intrari
-                string strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"")
+                string strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"", F100958, F100959)
                                 SELECT B.F10003, A.""Zi"", -1 AS F06204, A.""ZiSapt"", 
                                 CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
                                 CASE WHEN C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
@@ -6258,7 +6258,9 @@ namespace WizOne.Module
                                 WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
                                 WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
                                 WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
-                                END END AS ""IdProgram""
+                                END END AS ""IdProgram"",
+                                COALESCE(sd.Subdept, (SELECT C.F100958 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100958, 
+                                COALESCE(br.Birou, (SELECT C.F100959 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100959
 
                                 FROM ""tblZile"" A
                                 INNER JOIN F100 B ON 1=1 AND B.F10022 <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= B.F10023
@@ -6267,9 +6269,11 @@ namespace WizOne.Module
                                 {strInner}                                
                                 LEFT JOIN F006 G ON G.F00607 = dd.Dept
                                 INNER JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" BB WHERE BB.F10003 = B.F10003 AND BB.""DataInceput"" <= A.Zi AND A.Zi <= BB.""DataSfarsit"")
+                                OUTER APPLY dbo.DamiSubdept(B.F10003, A.Zi) sd
+                                OUTER APPLY dbo.DamiBirou(B.F10003, A.Zi) br                                 
                                 WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {General.FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0 {filtru};";
                 if (Constante.tipBD == 2)
-                    strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"")
+                    strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"", F100958, F100959)
                                 SELECT B.F10003, A.""Zi"", -1 AS F06204, A.""ZiSapt"", 
                                 CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
                                 CASE WHEN C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
@@ -6290,7 +6294,9 @@ namespace WizOne.Module
                                 WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
                                 WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
                                 WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
-                                END END AS ""IdProgram""
+                                END END AS ""IdProgram"",
+								COALESCE(""DamiSubdept""(B.F10003, A.""Ziua""), (SELECT C.F100958 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100958,
+                                COALESCE(""DamiBirou""(B.F10003, A.""Ziua""), (SELECT C.F100959 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100958
 
                                 FROM ""tblZile"" A
                                 INNER JOIN F100 B ON 1=1 AND B.F10022  <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= B.F10023

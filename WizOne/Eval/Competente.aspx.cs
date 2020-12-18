@@ -47,8 +47,11 @@ namespace WizOne.Eval
                                 if (dtHead.Rows.Count != 0)
                                 {
                                     txtId.Text = dtHead.Rows[0]["IdCategorie"].ToString();
-                                    txtCodCategorie.Text = dtHead.Rows[0]["CodCategorie"].ToString();
-                                    txtDenCategorie.Text = dtHead.Rows[0]["DenCategorie"].ToString();
+                                    txtCodCategorie.Text = Convert.ToString(General.Nz(dtHead.Rows[0]["CodCategorie"], ""));
+                                    txtDenCategorie.Text = Convert.ToString(General.Nz(dtHead.Rows[0]["DenCategorie"], ""));
+                                    txtSec.Text = Convert.ToString(General.Nz(dtHead.Rows[0]["Sectiune"],""));
+                                    txtSub.Text = Convert.ToString(General.Nz(dtHead.Rows[0]["Subsectiune"], ""));
+                                    cmbCal.Value = Convert.ToInt32(General.Nz(dtHead.Rows[0]["IdCalificativ"],-1));
                                 }
                             }
                             break;
@@ -59,6 +62,10 @@ namespace WizOne.Eval
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.KeyFieldName = "IdCompetenta";
                     grDate.DataBind();
+
+                    DataTable dtCal = General.IncarcaDT(@"SELECT * FROM ""Eval_tblTipValori"" ");
+                    cmbCal.DataSource = dtCal;
+                    cmbCal.DataBind();
                 }
                 else
                 {
@@ -105,6 +112,9 @@ namespace WizOne.Eval
                             drHead["IdCategorie"] = id;
                             drHead["CodCategorie"] = txtCodCategorie.Text;
                             drHead["DenCategorie"] = txtDenCategorie.Text;
+                            drHead["Sectiune"] = txtSec.Text;
+                            drHead["Subsectiune"] = txtSub.Text;
+                            drHead["IdCalificativ"] = cmbCal.Value ?? DBNull.Value;
                             drHead["TIME"] = DateTime.Now;
                             drHead["USER_NO"] = Session["UserId"];
                             dtHead.Rows.Add(drHead);
@@ -118,6 +128,9 @@ namespace WizOne.Eval
                     case "Edit":
                         dtHead.Rows[0]["CodCategorie"] = txtCodCategorie.Text;
                         dtHead.Rows[0]["DenCategorie"] = txtDenCategorie.Text;
+                        dtHead.Rows[0]["Sectiune"] = txtSec.Text;
+                        dtHead.Rows[0]["Subsectiune"] = txtSub.Text;
+                        dtHead.Rows[0]["IdCalificativ"] = cmbCal.Value ?? DBNull.Value;
                         foreach (DataRow dr in dt.Rows)
                         {
                             if (dr.RowState != DataRowState.Deleted)

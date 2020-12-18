@@ -766,4 +766,29 @@ table label {
     margin:auto;
 }
 
+.pnlUmbra {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /*width: 400px;*/
+    float: left;
+    /*display:inline-block;*/
+}
+
+.margin_right50 {
+    margin-right: 50px;
+}
+
+.flex-container {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.tblCompetente {
+    margin:10px;
+}
+
+.tblCompetente tr td {
+    padding:5px;
+}
+
     

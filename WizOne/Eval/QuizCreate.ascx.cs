@@ -1312,7 +1312,7 @@ namespace WizOne.Eval
                                 rwIntrebare["TemplateIdObiectiv"] = DBNull.Value;
                             }
                             int IdTipObiect = -99;
-                            if (Int32.TryParse(cmbTipObiect.Value.ToString(), out IdTipObiect))
+                            if (Int32.TryParse(General.Nz(cmbTipObiect.Value,-99).ToString(), out IdTipObiect))
                             {
                                 partGridObiective.Visible = IdTipObiect == 23 ? true : false;
                                 Session["isEditingObiectivTemplate"] = IdTipObiect == 23 ? 1 : 0;

@@ -389,6 +389,7 @@
     <Content Include="Eval\EvalBulk.aspx" />
     <Content Include="Eval\EvalDetaliu.aspx" />
     <Content Include="Eval\EvalLista.aspx" />
+    <Content Include="Eval\EvalMultiplu.aspx" />
     <Content Include="Eval\EvalTemp.aspx" />
     <Content Include="Eval\Form1.aspx" />
     <Content Include="Eval\Invitatie.aspx" />
@@ -760,6 +761,7 @@
     <Content Include="Fisiere\Imagini\Icoane\view.png" />
     <Content Include="Fisiere\Imagini\Icoane\word.png" />
     <Content Include="Fisiere\Imagini\loading.gif" />
+    <Content Include="Fisiere\Imagini\radioButton.png" />
     <Content Include="Fisiere\Imagini\Teme\ThemeAqua.png" />
     <Content Include="Fisiere\Imagini\Teme\ThemeBlackGlass.png" />
     <Content Include="Fisiere\Imagini\Teme\ThemeDefault.png" />
@@ -1399,6 +1401,13 @@
     </Compile>
     <Compile Include="Eval\EvalLista.aspx.designer.cs">
       <DependentUpon>EvalLista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\EvalMultiplu.aspx.cs">
+      <DependentUpon>EvalMultiplu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\EvalMultiplu.aspx.designer.cs">
+      <DependentUpon>EvalMultiplu.aspx</DependentUpon>
     </Compile>
     <Compile Include="Eval\EvalTemp.aspx.cs">
       <DependentUpon>EvalTemp.aspx</DependentUpon>

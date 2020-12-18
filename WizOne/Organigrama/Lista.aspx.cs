@@ -110,7 +110,12 @@ namespace WizOne.Organigrama
                     {
                         strSql = @"select * from ( 
                             select a.""IdAuto"", a.""Id"", COALESCE(a.""IdSuperior"",0) AS ""IdSuperior"", COALESCE(a.""IdSuperiorFunctional"",0) AS ""IdSuperiorFunctional"", a.""Denumire"", '' as ""Nume"", '' as ""Prenume"", b.F00204 as ""Companie"", c.F00305 as ""Subcompanie"", d.F00406 as ""Filiala"", e.F00507 as ""Sectie"", f.F00608 as ""Dept"", 
-                             '#FFFFFFFF' as ""Culoare"", 1 as ""EstePost"", case when a.""Stare"" is null then 0 else a.""Stare"" end as ""Activ"", null as F10003, 0 as ""StareAngajat"" 
+                             '#FFFFFFFF' as ""Culoare"", 1 as ""EstePost"", case when a.""Stare"" is null then 0 else a.""Stare"" end as ""Activ"", null as F10003, 0 as ""StareAngajat"",
+                            dbo.[DamiHC2](1, A.Id, {0}) AS PosturiPlanificate, 
+                            dbo.[DamiHC2](2, A.Id, {0}) AS PosturiAprobate, 
+                            dbo.[DamiHC2](3, A.Id, {0}) AS AngajatiActivi, 
+                            dbo.[DamiHC2](4, A.Id, {0}) AS AngajatiInactivi, 
+                            dbo.[DamiHC2](5, A.Id, {0}) AS Candidati
                              from ""Org_Posturi"" a  
                              LEFT JOIN F002 b on a.""F10002""=b.F00202  
                              LEFT JOIN F003 c on a.""F10004""=c.F00304  
@@ -123,7 +128,7 @@ namespace WizOne.Organigrama
                              a.F10008 as ""Nume"", a.F10009 as ""Prenume"", b.F00204 as ""Companie"", c.F00305 as ""Subcompanie"", d.F00406 as ""Filiala"", e.F00507 as ""Sectie"", f.F00608 as ""Dept"",  
                              case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then '#ffc8ffc8' else '#ffffffc8' end else '#ffffc8c8' end as ""Culoare"", 
                              0 as ""EstePost"",  case when r.""Stare"" is null then 0 else r.""Stare"" end as ""Activ"", a.F10003 as F10003,  
-                             case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then 1 else 2 end else 3 end as ""StareAngajat"" 
+                             case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then 1 else 2 end else 3 end as ""StareAngajat"", 0, 0, 0, 0, 0  
                              from ""Org_relPostAngajat"" r 
                              inner join F100 a on r.F10003 = a.F10003 
                              inner join ""Org_Posturi"" x on r.""IdPost"" = x.""Id"" 
@@ -158,7 +163,12 @@ namespace WizOne.Organigrama
                                     )
                                     select * from (
                                     SELECT a.IdAuto, a.Id, COALESCE(a.IdSuperior,0) AS IdSuperior, COALESCE(a.""IdSuperiorFunctional"",0) AS ""IdSuperiorFunctional"", a.Denumire, '' as Nume, '' as Prenume, b.F00204 as Companie, c.F00305 as Subcompanie, d.F00406 as Filiala, e.F00507 as Sectie, f.F00608 as Dept,  
-                                    '#FFFFFFFF' as Culoare, 1 as EstePost, case when a.Stare is null then 0 else a.Stare end as Activ, null as F10003, 0 as StareAngajat 
+                                    '#FFFFFFFF' as Culoare, 1 as EstePost, case when a.Stare is null then 0 else a.Stare end as Activ, null as F10003, 0 as StareAngajat,
+                                    dbo.[DamiHC2](1, A.Id, {0}) AS PosturiPlanificate, 
+                                    dbo.[DamiHC2](2, A.Id, {0}) AS PosturiAprobate, 
+                                    dbo.[DamiHC2](3, A.Id, {0}) AS AngajatiActivi, 
+                                    dbo.[DamiHC2](4, A.Id, {0}) AS AngajatiInactivi, 
+                                    dbo.[DamiHC2](5, A.Id, {0}) AS Candidati
                                     FROM Posturi
                                     INNER JOIN Org_Posturi A ON Posturi.Id = A.Id
                                     LEFT JOIN F002 b on a.F10002=b.F00202  
@@ -174,7 +184,7 @@ namespace WizOne.Organigrama
                                     a.F10008 as Nume, a.F10009 as Prenume, b.F00204 as Companie, c.F00305 as Subcompanie, d.F00406 as Filiala, e.F00507 as Sectie, f.F00608 as Dept,  
                                     case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then '#ffc8ffc8' else '#ffffffc8' end else '#ffffc8c8' end as Culoare, 
                                     0 as EstePost,  case when r.Stare is null then 0 else r.Stare end as Activ, a.F10003 as F10003,  
-                                    case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then 1 else 2 end else 3 end as StareAngajat 
+                                    case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then 1 else 2 end else 3 end as StareAngajat, 0, 0, 0, 0, 0 
                                     FROM Posturi
                                     INNER JOIN Org_relPostAngajat R ON R.IdPost=Posturi.Id
                                     inner join F100 a on R.F10003 = a.F10003 

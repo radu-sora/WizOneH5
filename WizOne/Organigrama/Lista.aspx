@@ -91,6 +91,12 @@
                         <dx:TreeListDataColumn FieldName="Id" Name="Cod" Caption="Cod" ReadOnly="true" Width="150px" VisibleIndex="2" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
                         <dx:TreeListCheckColumn FieldName="Activ" Caption="Activ" Width="50px" VisibleIndex="3" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
 
+                        <dx:TreeListDataColumn FieldName="PosturiPlanificate" Name="PosturiPlanificate" Caption="Planificate" ReadOnly="true" Width="70px" VisibleIndex="15" />
+                        <dx:TreeListDataColumn FieldName="PosturiAprobate" Name="PosturiAprobate" Caption="Aprobate" ReadOnly="true" Width="70px" VisibleIndex="16" />
+                        <dx:TreeListDataColumn FieldName="AngajatiActivi" Name="AngajatiActivi" Caption="Activi" ReadOnly="true" Width="70px" VisibleIndex="17" />
+                        <dx:TreeListDataColumn FieldName="AngajatiInactivi" Name="AngajatiInactivi" Caption="Inactivi" ReadOnly="true" Width="70px" VisibleIndex="18" />
+                        <dx:TreeListDataColumn FieldName="Candidati" Name="Candidati" Caption="Candidati" ReadOnly="true" Width="70px" VisibleIndex="19" />
+
                         <dx:TreeListDataColumn FieldName="Companie" Name="Companie" Caption="Companie" ReadOnly="true" Width="250px" VisibleIndex="5" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList"/>
                         <dx:TreeListDataColumn FieldName="Subcompanie" Name="Subcompanie" Caption="Subcompanie" ReadOnly="true" Width="250px" VisibleIndex="6" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
                         <dx:TreeListDataColumn FieldName="Filiala" Name="Filiala" Caption="Filiala" ReadOnly="true" Width="250px" VisibleIndex="7" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />

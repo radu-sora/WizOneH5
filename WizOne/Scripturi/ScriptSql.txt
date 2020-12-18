@@ -15193,3 +15193,144 @@ GO
 
 INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 69, 'Nota Finala', 0)
 GO
+
+
+----  2.2.133  ----
+
+
+CREATE TABLE [dbo].[Eval_relGrupSetAngajati](
+	[IdGrup] [int] NOT NULL,
+	[IdSetAngajati] [int] NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_Eval_relGrupSetAngajati] PRIMARY KEY CLUSTERED 
+(
+	[IdGrup] ASC,
+	[IdSetAngajati] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Eval_relGrupSetAngajati] ADD  CONSTRAINT [DF_Eval_relGrupSetAngajati_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+
+ALTER TABLE Eval_CategCompetente ADD Sectiune nvarchar(250)
+GO
+ALTER TABLE Eval_CategCompetente ADD Subsectiune nvarchar(250)
+GO
+ALTER TABLE Eval_CategCompetente ADD IdCalificativ int
+GO
+
+CREATE TABLE [dbo].[Eval_RaspunsMultiplu](
+	[F10003] [int] NULL,
+	[Data] [datetime] NULL,
+	[Sectiune] [nvarchar](250) NULL,
+	[Subsectiune] [nvarchar](250) NULL,
+	[CategorieCompetentaId] [int] NULL,
+	[CategorieCompetentaDenumire] [nvarchar](250) NULL,
+	[CompetentaId] [int] NULL,
+	[CompetentaDenumire] [nvarchar](250) NULL,
+	[CalificativId] [int] NULL,
+	[CalificativDenumire] [nvarchar](50) NULL,
+	[FunctiaId] [int] NULL,
+	[FunctiaDenumire] [nvarchar](250) NULL,
+	[Observatii] [nvarchar](max) NULL,
+	[IdUser] [int] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [PK_Eval_RaspunsMultiplu] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Eval_RaspunsMultiplu] ADD  CONSTRAINT [DF_Eval_RaspunsMultiplu_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(124, 'Evaluare multipla', 'Evaluare multipla', 'Eval\EvalMultiplu', 1, 'm1.png')
+GO 
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(125, 'Grupuri per eval. multipla', 'Grupuri per eval. multipla', 'Pagini\SablonNomen[Eval_relGrupSetAngajati]', 1, 'm1.png')
+GO
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(126, 'Categorii competente', 'Categorii competente', 'Pagini\SablonNomen[Eval_CategCompetente]', 1, 'm1.png')
+GO
+
+INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo, IdAutomat) VALUES('Eval_CategCompetente','IdCalificativ',2,1,'SELECT Id, Denumire FROM Eval_tblTipValori', 0)
+GO
+INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo, IdAutomat) VALUES('Eval_relGrupSetAngajati','IdGrup',2,1,'SELECT Id, Denumire FROM tblGrupUsers', 0)
+GO
+INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo, IdAutomat) VALUES('Eval_relGrupSetAngajati','IdSetAngajati',2,1,'SELECT IdSetAng, DenSet FROM Eval_SetAngajati', 0)
+GO
+
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 69, 'Evaluare Multipla Raport', 0)
+GO
+
+CREATE VIEW [dbo].[viewEvaluareMultipla]
+AS
+SELECT 1 AS IdQuiz, F10003, Sectiune, Subsectiune, CategorieCompetentaDenumire, CompetentaDenumire, CalificativDenumire FROM Eval_RaspunsMultiplu
+GO
+
+ALTER TABLE Eval_DrepturiTab ADD Vizibil int
+GO
+
+
+DELETE F069 WHERE F06904 =2021;
+DELETE F069 WHERE F06904 =2022;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 1, 'Ianuarie', 20, 160, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 2, 'Februarie', 20, 160, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 3, 'Martie', 23, 184, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 4, 'Aprilie', 21, 168, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 5, 'Mai', 20, 160, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 6, 'Iunie',  20, 160, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 7, 'Iulie',  22, 176, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 8, 'August',  22, 176, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 9, 'Septembrie', 22, 176, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 10, 'Octombrie', 21, 168, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 11, 'Noiembrie',  21, 168, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2021, 12, 'Decembrie',  22, 176, 2230, 5429, 1, getdate() from F002;
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 1, 'Ianuarie', 20, 160, 2230, 5429, 1, getdate() from F002;
+
+
+DELETE HOLIDAYS WHERE YEAR(DAY)=2021;
+DELETE HOLIDAYS WHERE YEAR(DAY)=2022;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '01/01/2021', 103), 'Anul Nou (Ziua 1)', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '02/01/2021', 103), 'Anul Nou (Ziua 2)', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '24/01/2021', 103), 'Ziua Unirii', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '30/04/2021', 103), 'Vinerea Mare', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '02/05/2021', 103), 'Paste (Ziua 1)', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '03/05/2021', 103), 'Paste (Ziua 2)', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '01/05/2021', 103), 'Ziua Muncii - 1 Mai', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '01/06/2021', 103), 'Ziua Copilului - 1 Iunie', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '20/06/2021', 103), 'Rusalii (Ziua 1)', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '21/06/2021', 103), 'Rusalii (Ziua 2)', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '15/08/2021', 103), 'Adormirea Maicii Domnului', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '30/11/2021', 103), 'Sfantul Andrei', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '01/12/2021', 103), 'Ziua nationala a Romaniei', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '25/12/2021', 103), 'Craciun (Ziua 1)', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '26/12/2021', 103), 'Craciun (Ziua 2)', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '01/01/2022', 103), 'Anul Nou (Ziua 1)', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '02/01/2022', 103), 'Anul Nou (Ziua 2)', max(no)+1 from holidays;
+Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '24/01/2022', 103), 'Ziua Unirii', max(no)+1 from holidays;
+
+
+ALTER TABLE F100 ALTER COLUMN F10081 VARCHAR(50);
+ALTER TABLE F910 ALTER COLUMN F91081 VARCHAR(50);
+ALTER TABLE F099 ALTER COLUMN F09981 VARCHAR(50);
+ALTER TABLE F002 ALTER COLUMN F00231 VARCHAR(50);
+ALTER TABLE F075 ALTER COLUMN F07506 VARCHAR(50);
+ALTER TABLE F077 ALTER COLUMN F07704 VARCHAR(50);

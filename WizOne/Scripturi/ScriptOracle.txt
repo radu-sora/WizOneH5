@@ -15541,7 +15541,7 @@ COMMIT;
 INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat") VALUES('Eval_relGrupSetAngajati','IdSetAngajati',2,1,'SELECT IdSetAng, DenSet FROM Eval_SetAngajati', 0);
 COMMIT;
 
-INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare") VALUES(1, 69, 'Evaluare Multipla Raport', 0);
+INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare") VALUES(1, 70, 'Evaluare Multipla Raport', 0);
 COMMIT;
 
 CREATE VIEW "viewEvaluareMultipla"

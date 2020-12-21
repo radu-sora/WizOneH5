@@ -369,6 +369,41 @@ namespace WizOne.Personal
                 cmbPost.DataBind();
             }
 
+            if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
+            {
+                //Functie
+                ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
+                if (cmbFunctie != null)
+                    cmbFunctie.ClientEnabled = false;
+                ASPxButton btnFunc = Contract_DataList.Items[0].FindControl("btnFunc") as ASPxButton;
+                if (btnFunc != null)
+                    btnFunc.ClientEnabled = false;
+                ASPxButton btnFuncIst = Contract_DataList.Items[0].FindControl("btnFuncIst") as ASPxButton;
+                if (btnFuncIst != null)
+                    btnFuncIst.ClientEnabled = false;
+                if (cmbNivelFunctie != null)
+                    cmbNivelFunctie.ClientEnabled = false;
+                ASPxDateEdit deDataModifFunctie = Contract_DataList.Items[0].FindControl("deDataModifFunctie") as ASPxDateEdit;
+                if (deDataModifFunctie != null)
+                    deDataModifFunctie.ClientEnabled = false;
+
+                //COR
+                if (cmbCOR != null)
+                    cmbCOR.ClientEnabled = false;
+                ASPxButton btnCautaCOR = Contract_DataList.Items[0].FindControl("btnCautaCOR") as ASPxButton;
+                if (btnCautaCOR != null)
+                    btnCautaCOR.ClientEnabled = false;
+                ASPxButton btnCOR = Contract_DataList.Items[0].FindControl("btnCOR") as ASPxButton;
+                if (btnCOR != null)
+                    btnCOR.ClientEnabled = false;
+                ASPxButton btnCORIst = Contract_DataList.Items[0].FindControl("btnCORIst") as ASPxButton;
+                if (btnCORIst != null)
+                    btnCORIst.ClientEnabled = false;
+                ASPxDateEdit deDataModifCOR = Contract_DataList.Items[0].FindControl("deDataModifCOR") as ASPxDateEdit;
+                if (deDataModifCOR != null)
+                    deDataModifCOR.ClientEnabled = false;
+            }
+
             General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));
         }
 

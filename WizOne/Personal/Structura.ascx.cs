@@ -178,7 +178,11 @@ namespace WizOne.Personal
                         lst = Session["MP_CuloareCampOblig"] as List<int>;
                     cmbStru.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                     //cmbPL.BackColor = Color.LightGray;
-                }           
+                }
+
+                if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
+                    pnlCtlStruct.ClientEnabled = false;
+
                 General.SecuritatePersonal(pnlCtlStruct, Convert.ToInt32(Session["UserId"].ToString()));
             }
             catch (Exception ex)

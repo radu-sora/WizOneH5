@@ -5203,6 +5203,8 @@ namespace WizOne.Avs
 
             try
             {
+                string filtru = CreeazaFiltruPost();
+
                 //strSql = $@"SELECT A.Id, A.Denumire 
                 //        FROM Avs_tblAtribute A
                 //        INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
@@ -5213,18 +5215,19 @@ namespace WizOne.Avs
 
                 strSql = $@"SELECT A.""Id"", A.""Denumire"" FROM ""Avs_tblAtribute"" A
                         INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut"" AND B.""Super1""=0
-                        WHERE {Session["User_Marca"]} = @3 AND {cmbRol.Value} = 0
+                        WHERE {Session["User_Marca"]} = @3 AND {cmbRol.Value} = 0 {filtru}
                         UNION
                         SELECT A.""Id"", A.""Denumire"" 
                         FROM ""Avs_tblAtribute"" A
                         INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut""
                         INNER JOIN ""F100Supervizori"" C ON (-1 * B.""Super1"") = C.""IdSuper""
-                        WHERE C.""IdUser""=@1 AND C.""IdSuper""=@2 AND C.F10003=@3
+                        WHERE C.""IdUser""=@1 AND C.""IdSuper""=@2 AND C.F10003=@3 {filtru}
                         GROUP BY A.""Id"", A.""Denumire""
                         UNION
                         SELECT A.""Id"", A.""Denumire"" 
                         FROM ""Avs_tblAtribute"" A
                         INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut"" AND B.""Super1""=@1
+                        WHERE 1=1 {filtru}
                         ORDER BY ""Denumire"" ";
             }
             catch (Exception ex)
@@ -5280,6 +5283,8 @@ namespace WizOne.Avs
 
             try
             {
+                string filtru = CreeazaFiltruPost();
+
                 string strSql = $@"SELECT B.Super1 AS Id, COALESCE(S.Alias,S.Denumire) AS Denumire 
                     FROM Avs_tblAtribute A
                     INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut AND B.Super1=0
@@ -6997,6 +7002,26 @@ namespace WizOne.Avs
                 return false;
             else
                 return true;
+        }
+
+        private static string CreeazaFiltruPost()
+        {
+            //daca se foloseste organigrama aratam postul si ascundem COR, functie si structura, iar daca nu se foloseste invers
+            string filtru = "";
+
+            try
+            {
+                if (General.Nz(Dami.ValoareParam("MP_FolosesteOrganigrama"),"0").ToString() == "1")
+                    filtru = " AND A.Id NOT IN (2,3,5)";
+                else
+                    filtru = " AND A.Id <> 37";
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Avs.Cereri", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return filtru;
         }
 
     }

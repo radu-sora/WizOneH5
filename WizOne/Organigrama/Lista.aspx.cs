@@ -111,24 +111,26 @@ namespace WizOne.Organigrama
                         strSql = @"select * from ( 
                             select a.""IdAuto"", a.""Id"", COALESCE(a.""IdSuperior"",0) AS ""IdSuperior"", COALESCE(a.""IdSuperiorFunctional"",0) AS ""IdSuperiorFunctional"", a.""Denumire"", '' as ""Nume"", '' as ""Prenume"", b.F00204 as ""Companie"", c.F00305 as ""Subcompanie"", d.F00406 as ""Filiala"", e.F00507 as ""Sectie"", f.F00608 as ""Dept"", 
                              '#FFFFFFFF' as ""Culoare"", 1 as ""EstePost"", case when a.""Stare"" is null then 0 else a.""Stare"" end as ""Activ"", null as F10003, 0 as ""StareAngajat"",
-                            dbo.[DamiHC2](1, A.Id, {0}) AS PosturiPlanificate, 
-                            dbo.[DamiHC2](2, A.Id, {0}) AS PosturiAprobate, 
-                            dbo.[DamiHC2](3, A.Id, {0}) AS AngajatiActivi, 
-                            dbo.[DamiHC2](4, A.Id, {0}) AS AngajatiInactivi, 
-                            dbo.[DamiHC2](5, A.Id, {0}) AS Candidati
+                            W.Pozitii AS PosturiPlanificate,W.PozitiiAprobate,W.Activi AS AngajatiActivi,W.Suspendati AS AngajatiSuspendati,W.Candidati
                              from ""Org_Posturi"" a  
                              LEFT JOIN F002 b on a.""F10002""=b.F00202  
                              LEFT JOIN F003 c on a.""F10004""=c.F00304  
                              LEFT JOIN F004 d on a.""F10005""=d.F00405  
                              LEFT JOIN F005 e on a.""F10006""=e.F00506  
-                             LEFT JOIN F006 f on a.""F10007""=f.F00607  
+                             LEFT JOIN F006 f on a.""F10007""=f.F00607
+                            OUTER APPLY dbo.DamiPozitii(A.Id, '2020-12-21') W
                              where CONVERT(date,a.""DataInceput"") <= {0} and {0} <= CONVERT(date,a.""DataSfarsit"") 
                              union 
                              select -1 * r.""IdAuto"" as ""IdAuto"", -1 * a.F10003 as ""Id"", r.""IdPost"" as ""IdSuperior"", r.""IdPost"" as ""IdSuperiorFunctional"", ' ' + a.F10008 + ' ' + a.F10009 as ""Denumire"",  
                              a.F10008 as ""Nume"", a.F10009 as ""Prenume"", b.F00204 as ""Companie"", c.F00305 as ""Subcompanie"", d.F00406 as ""Filiala"", e.F00507 as ""Sectie"", f.F00608 as ""Dept"",  
                              case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then '#ffc8ffc8' else '#ffffffc8' end else '#ffffc8c8' end as ""Culoare"", 
                              0 as ""EstePost"",  case when r.""Stare"" is null then 0 else r.""Stare"" end as ""Activ"", a.F10003 as F10003,  
-                             case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then 1 else 2 end else 3 end as ""StareAngajat"", 0, 0, 0, 0, 0  
+                            CASE WHEN 
+			                (A.F100922 <= {0} AND {0} <= (CASE WHEN COALESCE(A.F100924, '2100-01-01') = '2100-01-01' THEN A.F100923 ELSE A.F100924 END)) 
+			                AND 
+			                (A.F10022 <= {0} AND {0} <= Z.DataPlecare) 
+		                    THEN 2 ELSE
+                            CASE WHEN A.F10022 <= {0} AND {0} <= Z.DataPlecare THEN 1 ELSE 3 END END AS ""StareAngajat"", 0, 0, 0, 0, 0  
                              from ""Org_relPostAngajat"" r 
                              inner join F100 a on r.F10003 = a.F10003 
                              inner join ""Org_Posturi"" x on r.""IdPost"" = x.""Id"" 
@@ -137,6 +139,7 @@ namespace WizOne.Organigrama
                              LEFT JOIN F004 d on a.""F10005""=d.F00405  
                              LEFT JOIN F005 e on a.""F10006""=e.F00506  
                              LEFT JOIN F006 f on a.""F10007""=f.F00607  
+                            OUTER APPLY DamiDataPlecare(a.F10003, {0}) Z
                              where CONVERT(date,r.""DataInceput"") <= {0} and {0} <= CONVERT(date,r.""DataSfarsit"") 
                              and CONVERT(date,x.""DataInceput"") <= {0} and {0} <= CONVERT(date,x.""DataSfarsit"") ) x 
                              where {1} (x.""StareAngajat""=0 {2}) 
@@ -164,11 +167,7 @@ namespace WizOne.Organigrama
                                     select * from (
                                     SELECT a.IdAuto, a.Id, COALESCE(a.IdSuperior,0) AS IdSuperior, COALESCE(a.""IdSuperiorFunctional"",0) AS ""IdSuperiorFunctional"", a.Denumire, '' as Nume, '' as Prenume, b.F00204 as Companie, c.F00305 as Subcompanie, d.F00406 as Filiala, e.F00507 as Sectie, f.F00608 as Dept,  
                                     '#FFFFFFFF' as Culoare, 1 as EstePost, case when a.Stare is null then 0 else a.Stare end as Activ, null as F10003, 0 as StareAngajat,
-                                    dbo.[DamiHC2](1, A.Id, {0}) AS PosturiPlanificate, 
-                                    dbo.[DamiHC2](2, A.Id, {0}) AS PosturiAprobate, 
-                                    dbo.[DamiHC2](3, A.Id, {0}) AS AngajatiActivi, 
-                                    dbo.[DamiHC2](4, A.Id, {0}) AS AngajatiInactivi, 
-                                    dbo.[DamiHC2](5, A.Id, {0}) AS Candidati
+                                    W.Pozitii AS PosturiPlanificate,W.PozitiiAprobate,W.Activi AS AngajatiActivi,W.Suspendati AS AngajatiSuspendati,W.Candidati
                                     FROM Posturi
                                     INNER JOIN Org_Posturi A ON Posturi.Id = A.Id
                                     LEFT JOIN F002 b on a.F10002=b.F00202  
@@ -176,6 +175,7 @@ namespace WizOne.Organigrama
                                     LEFT JOIN F004 d on a.F10005=d.F00405  
                                     LEFT JOIN F005 e on a.F10006=e.F00506  
                                     LEFT JOIN F006 f on a.F10007=f.F00607  
+                                    OUTER APPLY dbo.DamiPozitii(A.Id, '2020-12-21') W
                                     WHERE CONVERT(date,A.DataInceput) <= {0} and {0} <= CONVERT(date,A.DataSfarsit)   
                          
                                     UNION
@@ -184,7 +184,12 @@ namespace WizOne.Organigrama
                                     a.F10008 as Nume, a.F10009 as Prenume, b.F00204 as Companie, c.F00305 as Subcompanie, d.F00406 as Filiala, e.F00507 as Sectie, f.F00608 as Dept,  
                                     case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then '#ffc8ffc8' else '#ffffffc8' end else '#ffffc8c8' end as Culoare, 
                                     0 as EstePost,  case when r.Stare is null then 0 else r.Stare end as Activ, a.F10003 as F10003,  
-                                    case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then 1 else 2 end else 3 end as StareAngajat, 0, 0, 0, 0, 0 
+                                    CASE WHEN 
+			                        (A.F100922 <= {0} AND {0} <= (CASE WHEN COALESCE(A.F100924, '2100-01-01') = '2100-01-01' THEN A.F100923 ELSE A.F100924 END)) 
+			                        AND 
+			                        (A.F10022 <= {0} AND {0} <= Z.DataPlecare) 
+		                            THEN 2 ELSE
+                                    CASE WHEN A.F10022 <= {0} AND {0} <= Z.DataPlecare THEN 1 ELSE 3 END END AS ""StareAngajat"", 0, 0, 0, 0, 0  
                                     FROM Posturi
                                     INNER JOIN Org_relPostAngajat R ON R.IdPost=Posturi.Id
                                     inner join F100 a on R.F10003 = a.F10003 
@@ -193,6 +198,7 @@ namespace WizOne.Organigrama
                                     LEFT JOIN F004 d on a.F10005=d.F00405  
                                     LEFT JOIN F005 e on a.F10006=e.F00506  
                                     LEFT JOIN F006 f on a.F10007=f.F00607  
+                                    OUTER APPLY DamiDataPlecare(a.F10003, {0}) Z
                                     WHERE CONVERT(date,R.DataInceput) <= {0} and {0} <= CONVERT(date,R.DataSfarsit) 
                                     ) x 
                                     WHERE {1} (x.StareAngajat=0 {2}) 

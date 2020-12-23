@@ -181,7 +181,7 @@ namespace WizOne.Personal
                 }
 
                 if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
-                    pnlCtlStruct.ClientEnabled = false;
+                    cmbStru.ClientEnabled = false;
 
                 General.SecuritatePersonal(pnlCtlStruct, Convert.ToInt32(Session["UserId"].ToString()));
             }

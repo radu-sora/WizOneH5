@@ -369,6 +369,7 @@ namespace WizOne.Personal
                 cmbPost.DataBind();
             }
 
+            //2020.12.21
             if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
             {
                 //Functie
@@ -402,6 +403,10 @@ namespace WizOne.Personal
                 ASPxDateEdit deDataModifCOR = Contract_DataList.Items[0].FindControl("deDataModifCOR") as ASPxDateEdit;
                 if (deDataModifCOR != null)
                     deDataModifCOR.ClientEnabled = false;
+
+                //Post
+                if (cmbPost != null)
+                    cmbPost.ClientEnabled = false;
             }
 
             General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));

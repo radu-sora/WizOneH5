@@ -922,6 +922,12 @@ namespace WizOne.Avs
                             //ctx.SaveChanges();
 
 
+                            //Florin #710
+                            //daca este post, creeam automat linii si pentru celelalte 3 atribute: Functie, COR, Structura
+                            if (idStare == 3 && Convert.ToInt32(dtCer.Rows[0]["IdAtribut"]) == (int)Constante.Atribute.Post)
+                                General.CreeazaAtributePost(id, dtCer.Rows[0]["F10003"], General.Nz(dtCer.Rows[0]["PostId"], -99), Convert.ToDateTime(dtCer.Rows[0]["DataModif"]));
+
+
                             //Florin 2019.03.01
                             //s-a adaugat conditia cu parametrul
                             //Florin 2019.07.29
@@ -941,10 +947,13 @@ namespace WizOne.Avs
                             {
                                 try
                                 {
+                                    //Florin #710 - am adaugat insertul
                                     General.ExecutaNonQuery(
                                         $@"BEGIN
-                                        DELETE FROM ""Admin_NrActAd"" WHERE ""IdAuto""=(SELECT ""IdActAd"" FROM ""Avs_Cereri"" WHERE ""ID""=@1);
-                                        UPDATE ""Avs_Cereri"" SET ""IdActAd"" = null WHERE ""Id""=@1;
+                                            DELETE FROM ""Admin_NrActAd"" WHERE ""IdAuto""=(SELECT ""IdActAd"" FROM ""Avs_Cereri"" WHERE ""ID""=@1);
+                                            UPDATE ""Avs_Cereri"" SET ""IdActAd"" = null WHERE ""Id""=@1;
+                                            INSERT INTO ""Avs_CereriIstoric"" (""Id"", ""IdCircuit"", ""IdUser"", ""IdStare"", ""Pozitie"", ""Culoare"", ""Aprobat"", ""DataAprobare"", ""Inlocuitor"", ""IdSuper"")
+                                            SELECT ""Id"", ""IdCircuit"", {Session["UserId"]}, -1, 22, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = -1), 1, {General.CurrentDate()}, null, {-1 * Convert.ToInt32(General.Nz(cmbRol.Value, 0))} FROM ""Avs_Cereri"" WHERE ""IdParinte""=@1
                                         END", new object[] { id });
 
 

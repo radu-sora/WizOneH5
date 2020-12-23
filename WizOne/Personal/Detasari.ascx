@@ -10,7 +10,28 @@
             if (s.GetValue() == 1)
                 chk2.SetValue(0);
         }
+	}
+
+	function SchimbareTara(s) {
+		if (s.GetValue() == 1) {
+            chk2.SetEnabled(false);
+            chk3.SetEnabled(false);
+            chk4.SetEnabled(false);
+            chk5.SetEnabled(false);
+		}
+		else {
+            chk2.SetEnabled(true);
+            chk3.SetEnabled(true);
+            chk4.SetEnabled(true);
+            chk5.SetEnabled(true);
+        }
+	}
+
+    function OnEndCallbackGridDet(s, e) {
+        pnlCtlSusp.PerformCallback("ActDet");
+        pnlLoading.Hide();
     }
+
 </script>
 
 <body>
@@ -45,10 +66,11 @@
 						        </td> 
                                 <td><label style="display:inline-block;">&nbsp; </label></td>                                                                			
 						        <td>
-							        <dx:ASPxLabel  ID="lblNationalitate" Width="100" runat="server"  Text="Nationalitate" ></dx:ASPxLabel >	
+							        <dx:ASPxLabel  ID="lblNationalitate" Width="100" runat="server"  Text="Tara detasare" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
 							        <dx:ASPxComboBox DataSourceID="dsNationalitate" Width="120"  Value='<%#Eval("F100920") %>' ID="cmbNationalitate"   runat="server" DropDownStyle="DropDown"  TextField="F73304" ValueField="F73302" AutoPostBack="false"  ValueType="System.Int32" >
+										<ClientSideEvents SelectedIndexChanged="function(s,e){ SchimbareTara(s); }" />
 							        </dx:ASPxComboBox>
 						        </td>                
 					        </tr>
@@ -63,7 +85,7 @@
 						        </td>
 					            <td><label style="display:inline-block;">&nbsp; </label></td>
 						        <td>		
-							        <dx:ASPxLabel  ID="lblDataSfarsitDet" runat="server"  Text="Data sfarsit" Width="80"></dx:ASPxLabel >	
+							        <dx:ASPxLabel  ID="lblDataSfarsitDet" runat="server"  Text="Data sfarsit estimata" Width="80"></dx:ASPxLabel >	
 						        </td>
 						        <td>			
 							        <dx:ASPxDateEdit  ID="deDataSfarsitDet" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100916") %>'  AutoPostBack="false"  >
@@ -75,14 +97,14 @@
 							        <dx:ASPxLabel  ID="lblDataIncetareDet" runat="server"  Text="Data incetare" Width="100"></dx:ASPxLabel >	
 						        </td>
 						        <td>			
-							        <dx:ASPxDateEdit  ID="deDataIncetareDet" Width="120" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100917") %>'  AutoPostBack="false"  >
+							        <dx:ASPxDateEdit  ID="deDataIncetareDet" Width="120" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100917") %>'  AutoPostBack="false"  >										
                                         <CalendarProperties FirstDayOfWeek="Monday" />
 							        </dx:ASPxDateEdit>					
 						        </td>
 					        </tr>
                             <tr>
                                 <td colspan="2">
-                                    <dx:ASPxCheckBox ID="chk1"  runat="server" Width="200" Text="Platit de angajatorul la care e detasat (DA/NU)" TextAlign="Left" Checked='<%#  Eval("F1001125") == DBNull.Value ? false : Convert.ToBoolean(Eval("F1001125"))%>'   ClientInstanceName="chk1" >                                     
+                                    <dx:ASPxCheckBox ID="chk1"  runat="server" Width="200" Text="Platit de angajator actual" TextAlign="Left" Checked='<%#  Eval("F1001125") == DBNull.Value ? false : Convert.ToBoolean(Eval("F1001125"))%>'   ClientInstanceName="chk1" >                                     
                                     </dx:ASPxCheckBox>
                                 </td>
                                 <td colspan="3">
@@ -120,15 +142,18 @@
           </PanelCollection>
         </dx:ASPxCallbackPanel>
 
-    <dx:ASPxGridView ID="grDateDetasari" runat="server" ClientInstanceName="grDateDetasari" ClientIDMode="Static" Width="50%" AutoGenerateColumns="false"  OnDataBinding="grDateDetasari_DataBinding" >
+    <dx:ASPxGridView ID="grDateDetasari" runat="server" ClientInstanceName="grDateDetasari" ClientIDMode="Static" Width="50%" AutoGenerateColumns="false"  OnDataBinding="grDateDetasari_DataBinding" 
+		 OnRowInserting="grDateDetasari_RowInserting" OnRowUpdating="grDateDetasari_RowUpdating" >
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
         <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
+		<ClientSideEvents EndCallback="function (s,e) { OnEndCallbackGridDet(s,e); }" />
         <Columns>
+			<dx:GridViewCommandColumn Width="150px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>
             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
             <dx:GridViewDataTextColumn FieldName="F11204" Name="F11204" Caption="Nume angajator"  Width="150px"/>
             <dx:GridViewDataTextColumn FieldName="F11205" Name="F11205" Caption="CUI"  Width="100px"/>
-            <dx:GridViewDataComboBoxColumn FieldName="F11206" Name="F11206" Caption="Nationalitate" ReadOnly="true" Width="250px" >
+            <dx:GridViewDataComboBoxColumn FieldName="F11206" Name="F11206" Caption="Tara detasare" ReadOnly="true" Width="250px" >
 				<Settings SortMode="DisplayText" />
                 <PropertiesComboBox TextField="F73304" ValueField="F73302" ValueType="System.Int32" DropDownStyle="DropDown" />
             </dx:GridViewDataComboBoxColumn>
@@ -136,7 +161,7 @@
             <dx:GridViewDataDateColumn FieldName="F11207" Name="F11207" Caption="Data inceput"  Width="100px" >
                     <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
             </dx:GridViewDataDateColumn>
-            <dx:GridViewDataDateColumn FieldName="F11208" Name="F11208" Caption="Data sfarsit"  Width="100px" >
+            <dx:GridViewDataDateColumn FieldName="F11208" Name="F11208" Caption="Data sfarsit estimata"  Width="100px" >
                     <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
             </dx:GridViewDataDateColumn>
             <dx:GridViewDataDateColumn FieldName="F11209" Name="F11209" Caption="Data incetare"  Width="100px" >                      
@@ -144,6 +169,29 @@
             </dx:GridViewDataDateColumn>
               
         </Columns>
+        <SettingsCommandButton>
+            <UpdateButton ButtonType="Link" Text="Actualizeaza">
+                <Styles>
+                    <Style Paddings-PaddingRight="10" Paddings-PaddingTop="20">
+                    </Style>
+                </Styles>
+            </UpdateButton>
+            <CancelButton ButtonType="Link" Text="Renunta">
+            </CancelButton>
+
+            <EditButton Image-ToolTip="Edit">
+                <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+                <Styles>
+                    <Style Paddings-PaddingRight="5px" />
+                </Styles>
+            </EditButton> 
+            <NewButton Image-ToolTip="Rand nou">
+                <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+                <Styles>
+                    <Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
+                </Styles>
+            </NewButton>
+        </SettingsCommandButton>
     </dx:ASPxGridView>
 
        <dx:ASPxCallbackPanel ID = "pnlCtlMutare" ClientIDMode="Static" ClientInstanceName="pnlCtlMutare" runat="server" SettingsLoadingPanel-Enabled="false">

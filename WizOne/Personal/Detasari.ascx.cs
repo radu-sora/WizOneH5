@@ -41,6 +41,17 @@ namespace WizOne.Personal
             grDateDetasari.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
             grDateDetasari.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
 
+            if (!IsPostBack)
+            {//Radu 17.12.2020
+                if (table.Rows[0]["F100920"] != DBNull.Value && Convert.ToInt32(table.Rows[0]["F100920"].ToString()) == 1)
+                {
+                    for (int i= 2; i <= 5; i++)
+                    {
+                        ASPxCheckBox chk = Detasari_DataList.Items[0].FindControl("chk" + i) as ASPxCheckBox;
+                        chk.ClientEnabled = false;
+                    }
+                }
+            }
 
             string[] etichete = new string[6] { "lblNumeAngajator", "lblCUI", "lblNationalitate", "lblDataInceputDet", "lblDataSfarsitDet", "lblDataIncetareDet"};
             for (int i = 0; i < etichete.Count(); i++)
@@ -91,7 +102,15 @@ namespace WizOne.Personal
 
         }
 
-    
+        protected void grDateDetasari_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+
+        }
+
+        protected void grDateDetasari_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+
+        }
     }
 
     //Checked='<%#Convert.ToInt32(DataBinder.GetPropertyValue(Container.DataItem,"F1001125"))==1%>'

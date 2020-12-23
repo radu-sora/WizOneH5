@@ -503,6 +503,23 @@ namespace WizOne.Pagini
             //}
         }
 
+   
+
+        protected void grDate_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {//Radu 17.12.2020
+            if (e.Column.FieldName == "NumeComplet")
+            {
+                object val = -99;
+                if (e.KeyValue == DBNull.Value || e.KeyValue == null) return;
+                val = grDate.GetRowValuesByKeyValue(e.KeyValue, "F10003");
+                if (val != DBNull.Value)
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+
+        }
+
         //protected void UpdatePasswordField(string newPassword)
         //{
         //    try

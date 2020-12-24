@@ -2544,6 +2544,14 @@ namespace WizOne.Avs
                         Session["Valoare4Noua"] = "cmb4Nou;2";
                         IncarcaDate();
                     }
+
+                    //Florin #715
+                    if (Convert.ToInt32(cmb4Nou.Value) == 3)
+                    {
+                        cmb5Nou.Value = 6;
+                        Session["Valoare5Noua"] = "cmb5Nou;6";
+                        IncarcaDate();
+                    }
                     break;
                 case "cmb5Nou":
                     if (Convert.ToInt32(cmb5Nou.Value ?? -1) == 2 && txt1Nou.Text.Length > 0 && Convert.ToInt32(txt1Nou.Text) > 30)
@@ -2581,11 +2589,19 @@ namespace WizOne.Avs
                     }
                     else
                     {
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati introdus intervalul corect!");
-                        txt1Nou.Text = "";
+                        //Florin #715
+                        if (Convert.ToInt32(General.Nz(cmb4Nou.Value,-99)) != 3)
+                        {
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati introdus intervalul corect!");
+                            txt1Nou.Text = "";
+                        }
                     }
                     break;
             }
+
+            //Florin #715
+            if (Convert.ToInt32(cmb4Nou.Value) == 3)
+                cmb5Nou.ClientEnabled = false;
         }
 
         private void SetDataRevisal(int param, DateTime dataMod, int atribut, out string data)

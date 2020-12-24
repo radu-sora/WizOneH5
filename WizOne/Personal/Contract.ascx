@@ -152,6 +152,7 @@
             s.cpAlertMessage = null;
         }
         pnlLoading.Hide();
+        OUG132(); 
     }
 
     function CalcVechimeComp(s) {
@@ -357,9 +358,10 @@
                     var resN = tipN.split(";");
                     for (var i = 0; i < resN.length; i++) {
                         var linieN = resN[i].split(",");
-                        if (linieN[0] == 1) {                           
+                        //Florin - #715 - comentat de moment
+                        //if (linieN[0] == 1) {                           
                             cmbTipNorma.AddItem(linieN[1], Number(linieN[0]));
-                        }
+                        //}
                     }
 
                     cmbTipNorma.SetSelectedIndex(0);
@@ -388,7 +390,7 @@
 
                     cmbIntRepTimpMunca.SetSelectedIndex(0);
                     cmbIntRepTimpMunca.SetEnabled(false);
-                    txtNrOre.SetValue(0);
+                    //txtNrOre.SetValue(0);
                     txtNrOre.SetEnabled(false);
                     
                 }
@@ -420,9 +422,10 @@
                     var resN = tipN.split(";");
                     for (var i = 0; i < resN.length; i++) {
                         var linieN = resN[i].split(",");
-                        if (linieN[0] == 2) {
+                        //Florin - #715 - comentat de moment
+                        //if (linieN[0] == 2) {
                             cmbTipNorma.AddItem(linieN[1], Number(linieN[0]));
-                        }
+                        //}
                     }
                     cmbTipNorma.SetSelectedIndex(0);
 
@@ -727,6 +730,35 @@
         
         if (mesaj.length > 0)
             swal({ title: "", text: mesaj, type: "warning" });
+    }
+
+    function OUG132() {
+<%--        if (cmbTipNorma.GetValue() == 3) {
+            cmbDurTimpMunca.ClearItems();
+            var dtm = "<%=Session["MP_ComboDTM"] %>";
+            var res = dtm.split(";");
+            for (var i = 0; i < res.length; i++) {
+                var linie = res[i].split(",");
+                if (linie[2] == 3) {
+                    cmbDurTimpMunca.AddItem(linie[1], Number(linie[0]));
+                }
+            }
+            cmbDurTimpMunca.SetValue(6);
+            cmbDurTimpMunca.SetEnabled(false);
+            cmbIntRepTimpMunca.SetEnabled(true);
+        }
+        else {
+            cmbDurTimpMunca.ClearItems();
+            var dtm = "<%=Session["MP_ComboDTM"] %>";
+            var res = dtm.split(";");
+            for (var i = 0; i < res.length; i++) {
+                var linie = res[i].split(",");
+                if (linie[2] == 1) {
+                    cmbDurTimpMunca.AddItem(linie[1], Number(linie[0]));
+                }
+            }
+            cmbDurTimpMunca.SetEnabled(true);
+        }--%>
     }
 
 </script>
@@ -1150,7 +1182,7 @@
 							<dx:ASPxLabel  ID="lblDurTimpMunca" runat="server"  Text="Durata timp munca" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox    ID="cmbDurTimpMunca" Width="130" TabIndex="28" ClientInstanceName="cmbDurTimpMunca" runat="server" DropDownStyle="DropDown"  TextField="F09103" ValueField="F09102" ValueType="System.Int32">
+							<dx:ASPxComboBox ID="cmbDurTimpMunca" Width="130" TabIndex="28" ClientInstanceName="cmbDurTimpMunca" runat="server" DropDownStyle="DropDown"  TextField="F09103" ValueField="F09102" ValueType="System.Int32">
                                 <ClientSideEvents SelectedIndexChanged="function(s,e){ ValidareNrOre(s); }" />
 							</dx:ASPxComboBox >
 						</td>
@@ -1180,7 +1212,7 @@
 							<dx:ASPxLabel  ID="lblNrOre" Width="100" runat="server"  Text="Nr ore pe luna/saptamana" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxTextBox  ID="txtNrOre"  Width="75" runat="server" ClientInstanceName="txtNrOre" Text='<%# Bind("F100964") %>' TabIndex="31" AutoPostBack="false" >
+							<dx:ASPxTextBox  ID="txtNrOre"  Width="75" runat="server" ClientInstanceName="txtNrOre" Text='<%# Eval("F100964") %>' TabIndex="31" AutoPostBack="false" >
                                 <ClientSideEvents TextChanged="function(s,e){ ValidareNrOre(s); }" />
 							</dx:ASPxTextBox >
 						</td>

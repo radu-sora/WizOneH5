@@ -3042,6 +3042,9 @@ namespace WizOne.Module
                 cond = " WHERE F09105 = 1";
             if (param == "2")
                 cond = " WHERE F09105 = 2";
+            //Florin #715
+            if (param == "3")
+                cond = " WHERE F09105 = 3";
             string sql = @"SELECT * FROM F091 " + cond + " ORDER BY F09103";
             if (Constante.tipBD == 2)
                 sql = General.SelectOracle("F091", "F09102") + cond + " ORDER BY F09103";

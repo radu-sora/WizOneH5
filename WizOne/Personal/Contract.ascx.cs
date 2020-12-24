@@ -134,13 +134,18 @@ namespace WizOne.Personal
                 if (General.Nz(ds.Tables[0].Rows[0]["F100927"], "").ToString() != "")
                     cmbDurTimpMunca.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100927"]);
 
-                cmbTipNorma.DataSource = General.GetTipNorma(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0 ? "1" : "2");
+
+                //Florin #715
+                //cmbTipNorma.DataSource = General.GetTipNorma(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0 ? "1" : "2");
+                cmbTipNorma.DataSource = General.GetTipNorma("1 OR 1=1");
                 cmbTipNorma.DataBind();
                 //Florin 2019.09.05
                 if (General.Nz(ds.Tables[0].Rows[0]["F100926"], "").ToString() != "")
                     cmbTipNorma.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100926"]);
 
-                if (ds.Tables[0].Rows[0]["F10010"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
+                //Florin #715
+                //if (ds.Tables[0].Rows[0]["F10010"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
+                if (Convert.ToInt32(cmbTipNorma.Value) != 3 && (ds.Tables[0].Rows[0]["F10010"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0))
                 {
                     cmbIntRepTimpMunca.ClientEnabled = false;
                     txtNrOre.ClientEnabled = false;
@@ -182,10 +187,14 @@ namespace WizOne.Personal
                 cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca(tipAng == 0 ? "1" : "2");
                 cmbDurTimpMunca.DataBind();
 
-                cmbTipNorma.DataSource = General.GetTipNorma(tipAng == 0 ? "1" : "2");
+                //Florin #715
+                //cmbTipNorma.DataSource = General.GetTipNorma(tipAng == 0 ? "1" : "2");
+                cmbTipNorma.DataSource = General.GetTipNorma("1 OR 1=1");
                 cmbTipNorma.DataBind();
 
-                if (tipAng == 0)
+                //Florin #715
+                //if (tipAng == 0)
+                if (Convert.ToInt32(cmbTipNorma.Value) != 3 && tipAng == 0)
                 {
                     cmbIntRepTimpMunca.ClientEnabled = false;
                     txtNrOre.ClientEnabled = false;
@@ -279,7 +288,7 @@ namespace WizOne.Personal
 
             }
             
-            //SetDurataTimpMunca();
+            SetDurataTimpMunca();
 
             ASPxRadioButtonList rbCtrRadiat = Contract_DataList.Items[0].FindControl("rbCtrRadiat") as ASPxRadioButtonList;
             rbCtrRadiat.Value = General.Nz(table.Rows[0]["F1001077"], 0).ToString();
@@ -902,20 +911,41 @@ namespace WizOne.Personal
             //else
             //    txtZileCOCuvAnCrt.Text = "";
         }
-        
 
 
+        //Florin #715
         protected void SetDurataTimpMunca()
         {
             ASPxComboBox cmbDurTimpMunca = Contract_DataList.Items[0].FindControl("cmbDurTimpMunca") as ASPxComboBox;
-            ASPxComboBox cmbTipNorma = Contract_DataList.Items[0].FindControl("cmbTipNorma") as ASPxComboBox;
+            if (cmbDurTimpMunca != null)
+            {
+                ASPxComboBox cmbTipNorma = Contract_DataList.Items[0].FindControl("cmbTipNorma") as ASPxComboBox;
+                //ObjectDataSource cmbDTMDataSource = cmbDurTimpMunca.NamingContainer.FindControl("dsDTM") as ObjectDataSource;
+                //if (cmbDTMDataSource != null && cmbTipNorma != null)
+                //{
+                //    cmbDTMDataSource.SelectParameters.Clear();
+                //    cmbDTMDataSource.SelectParameters.Add("param", cmbTipNorma.SelectedIndex.ToString());
+                //    cmbDurTimpMunca.DataBindItems();
+                //}
 
-            ObjectDataSource cmbDTMDataSource = cmbDurTimpMunca.NamingContainer.FindControl("dsDTM") as ObjectDataSource;
+                if (cmbTipNorma != null && cmbDurTimpMunca != null)
+                {
+                    if (Convert.ToInt32(General.Nz(cmbTipNorma.Value, -99)) == 3)
+                    {
+                        cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca("3");
+                        cmbDurTimpMunca.DataBind();
+                        cmbDurTimpMunca.Value = 6;
+                        //cmbDurTimpMunca.ClientEnabled = false;
+                    }
 
-            cmbDTMDataSource.SelectParameters.Clear();
-            cmbDTMDataSource.SelectParameters.Add("param", cmbTipNorma.SelectedIndex.ToString()); 
-            cmbDurTimpMunca.DataBindItems();
+                    ASPxComboBox cmbIntRepTimpMunca = Contract_DataList.Items[0].FindControl("cmbIntRepTimpMunca") as ASPxComboBox;
+                    if (cmbIntRepTimpMunca != null)
+                        cmbIntRepTimpMunca.ClientEnabled = true;
 
+                    ASPxTextBox txtNrOre = Contract_DataList.Items[0].FindControl("txtNrOre") as ASPxTextBox;
+                    txtNrOre.ClientEnabled = true;
+                }
+            }
         }
 
         public DateTime SetDataRevisal(DateTime data)

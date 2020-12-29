@@ -1019,7 +1019,7 @@ namespace WizOne.Pagini
 
                                         if (Dami.ValoareParam("FinalizareCuActeAditionale") == "1")
                                         {
-                                            DataTable dtAvs = General.IncarcaDT($@"SELECT * FROM ""Avs_Cereri"" WHERE ""IdActAd""=@1", new object[] { obj[3] });
+                                            DataTable dtAvs = General.IncarcaDT($@"SELECT * FROM ""Avs_Cereri"" WHERE ""IdActAd""=@1 AND ""IdParinte"" IS NULL", new object[] { obj[3] });
                                             for (int x = 0; x < dtAvs.Rows.Count; x++)
                                             {
                                                 //cazul cand este angajat

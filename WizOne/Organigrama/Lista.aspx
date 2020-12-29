@@ -76,6 +76,8 @@
                 </div>
             </td>
         </tr>
+    </table>
+    <table style="width:100%">
         <tr>
             <td colspan="2">
                 <dx:ASPxTreeList ID="grDate" runat="server" ClientInstanceName="grDate" SettingsEditing-AllowNodeDragDrop="true" Height="100%" KeyFieldName="Id" AutoGenerateColumns="true" OnHtmlRowPrepared="grDate_HtmlRowPrepared" OnCustomCallback="grDate_CustomCallback" >

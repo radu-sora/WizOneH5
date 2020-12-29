@@ -166,6 +166,22 @@
                             <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbDept'); }" />
                         </dx:ASPxComboBox>
                     </div>
+
+                    <label id="lblSubdept" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Subdept.</label>
+                    <div style="float:left; padding-right:15px;">    
+                        <dx:ASPxComboBox ID="cmbSubDept" ClientInstanceName="cmbSubDept" ClientIDMode="Static" runat="server" Width="300px" ValueField="IdSubDept" TextField="SubDept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSubdept'); }" />
+                        </dx:ASPxComboBox>
+                    </div>
+                </div>
+
+                <div class="Absente_divOuter margin_top15">
+                    <label id="lblBirou" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Birou</label>
+                    <div style="float:left; padding-right:15px;">    
+                        <dx:ASPxComboBox ID="cmbBirou" ClientInstanceName="cmbBirou" ClientIDMode="Static" runat="server" Width="300px" ValueField="IdBirou" TextField="Birou" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbBirou'); }" />
+                        </dx:ASPxComboBox>
+                    </div>
                 </div>
 
                 <div class="Absente_divOuter margin_top15">

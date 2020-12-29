@@ -93,6 +93,8 @@ namespace WizOne.Organigrama
                         cmbFil.Value = dr["F10005"];
                         cmbSec.Value = dr["F10006"];
                         cmbDept.Value = dr["F10007"];
+                        cmbSubDept.Value = dr["IdSubdept"];
+                        cmbBirou.Value = dr["IdBirou"];
                         cmbSup.Value = dr["IdSuperior"];
                         cmbSupFunc.Value = dr["IdSuperiorFunctional"];
                         txtNivelIer.Value = dr["NivelIerarhic"];
@@ -187,6 +189,12 @@ namespace WizOne.Organigrama
                     cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99), null);
                     cmbDept.DataBind();
                 }
+
+                //Florin #710
+                cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 WHERE F00707=" + General.Nz(cmbDept.Value, -99), null);
+                cmbSubDept.DataBind();
+                cmbBirou.DataSource = General.IncarcaDT(@"SELECT F00809 AS ""IdBirou"", F00810 AS ""Birou"" FROM F008", null);
+                cmbBirou.DataBind();
 
                 AdaugaCampuriExtra(dr);
                 AdaugaBeneficiile(dr);
@@ -325,6 +333,8 @@ namespace WizOne.Organigrama
                 dic.Add("F10005", cmbFil.Value);
                 dic.Add("F10006", cmbSec.Value);
                 dic.Add("F10007", cmbDept.Value);
+                dic.Add("IdSubdept", cmbSubDept.Value);
+                dic.Add("IdBirou", cmbBirou.Value);
                 dic.Add("Stare", 1);
                 dic.Add("IdSuperior", cmbSup.Value);
                 dic.Add("IdSuperiorFunctional", cmbSupFunc.Value);
@@ -512,6 +522,9 @@ namespace WizOne.Organigrama
                         cmbDept.Value = null;
                         break;
                     case "cmbDept":
+                        //Florin #710
+                        cmbSubDept.Value = null;
+                        cmbBirou.Value = null;
                         break;
                     case "5":
                         metaCereriDate itm = new metaCereriDate();
@@ -556,6 +569,12 @@ namespace WizOne.Organigrama
                     cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99), null);
                     cmbDept.DataBind();
                 }
+
+                //Florin #710
+                cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 WHERE F00707=" + General.Nz(cmbDept.Value, -99), null);
+                cmbSubDept.DataBind();
+                cmbBirou.DataSource = General.IncarcaDT(@"SELECT F00809 AS ""IdBirou"", F00810 AS ""Birou"" FROM F008", null);
+                cmbBirou.DataBind();
             }
             catch (Exception ex)
             {

@@ -393,6 +393,42 @@ namespace WizOne.Organigrama
         protected global::DevExpress.Web.ASPxComboBox cmbDept;
 
         /// <summary>
+        /// lblSubdept control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSubdept;
+
+        /// <summary>
+        /// cmbSubDept control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbSubDept;
+
+        /// <summary>
+        /// lblBirou control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblBirou;
+
+        /// <summary>
+        /// cmbBirou control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbBirou;
+
+        /// <summary>
         /// lblSup control.
         /// </summary>
         /// <remarks>

@@ -7,29 +7,193 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Personal {
-    
-    
-    public partial class Detasari {
-        
+namespace WizOne.Personal
+{
+
+
+    public partial class Detasari
+    {
+
         /// <summary>
-        /// Detasari_pnlCtl control.
+        /// pnlCtlDet control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel Detasari_pnlCtl;
-        
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtlDet;
+
         /// <summary>
-        /// Detasari_DataList control.
+        /// lgDet control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList Detasari_DataList;
-        
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgDet;
+
+        /// <summary>
+        /// lgDetTable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable lgDetTable;
+
+        /// <summary>
+        /// lblNumeAngajator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblNumeAngajator;
+
+        /// <summary>
+        /// txtNumeAngajator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtNumeAngajator;
+
+        /// <summary>
+        /// lblCUI control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblCUI;
+
+        /// <summary>
+        /// txtCUI control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtCUI;
+
+        /// <summary>
+        /// lblNationalitate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblNationalitate;
+
+        /// <summary>
+        /// cmbNationalitate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbNationalitate;
+
+        /// <summary>
+        /// lblDataInceputDet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblDataInceputDet;
+
+        /// <summary>
+        /// deDataInceputDet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxDateEdit deDataInceputDet;
+
+        /// <summary>
+        /// lblDataSfarsitDet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblDataSfarsitDet;
+
+        /// <summary>
+        /// deDataSfarsitDet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxDateEdit deDataSfarsitDet;
+
+        /// <summary>
+        /// lblDataIncetareDet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblDataIncetareDet;
+
+        /// <summary>
+        /// deDataIncetareDet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxDateEdit deDataIncetareDet;
+
+        /// <summary>
+        /// chk1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chk1;
+
+        /// <summary>
+        /// chk2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chk2;
+
+        /// <summary>
+        /// chk4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chk4;
+
+        /// <summary>
+        /// chk3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chk3;
+
+        /// <summary>
+        /// chk5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chk5;
+
         /// <summary>
         /// grDateDetasari control.
         /// </summary>
@@ -38,7 +202,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDateDetasari;
-        
+
         /// <summary>
         /// pnlCtlMutare control.
         /// </summary>
@@ -47,7 +211,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtlMutare;
-        
+
         /// <summary>
         /// Mutare_DataList control.
         /// </summary>

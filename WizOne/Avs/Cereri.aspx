@@ -527,7 +527,7 @@
                   </tr>
                     <tr>
                         <td colspan="2">
-                            <dx:ASPxCheckBox ID="chk1"  runat="server" Width="200" Text="Platit de angajatorul la care e detasat (DA/NU)" TextAlign="Left"   ClientInstanceName="chk1" >                                     
+                            <dx:ASPxCheckBox ID="chk1"  runat="server" Width="200" Text="Platit de angajator actual" TextAlign="Left"   ClientInstanceName="chk1" >                                     
                             </dx:ASPxCheckBox>
                         </td>
                         <td colspan="3">

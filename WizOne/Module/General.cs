@@ -7019,14 +7019,15 @@ namespace WizOne.Module
                     try
                     {
                         string[] computer_name = System.Net.Dns.GetHostEntry(HttpContext.Current.Request.ServerVariables["remote_addr"]).HostName.Split(new Char[] { '.' });
-                        String ecn = System.Environment.MachineName;
+                        //String ecn = System.Environment.MachineName;
                         computerName = computer_name[0].ToString();
+                        //computerName = ecn;
                     }
                     catch (Exception) { }
 
                     DataTable dt = General.IncarcaDT(@"SELECT TOP 0 * FROM ""WT_USERS"" ", null);
                     DataRow dr = dt.NewRow();
-                    dr["USER_WIN"] = "";
+                    dr["USER_WIN"] = System.Web.HttpContext.Current.User.Identity.Name.ToString(); 
                     dr["COMPUTER_NAME"] = computerName;
                     dr["USER_WS"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
                     dr["DATA"] = DateTime.Now;

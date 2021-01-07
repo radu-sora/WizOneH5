@@ -98,9 +98,9 @@ namespace WizOne.Organigrama
                     else
                         camp += "NumeGrup" + General.Nz(cmbLimbi.Value, "RO").ToString();
 
-                    if (chkPlan.Checked) camp += $" + ', Plan: ' + CONVERT(nvarchar(10),dbo.[DamiHC](1, Id, {General.ToDataUniv(dtRef.Date)}))";
-                    if (chkAprobat.Checked) camp += $" + ', Aprobat: ' + CONVERT(nvarchar(10),dbo.[DamiHC](2, Id, {General.ToDataUniv(dtRef.Date)}))";
-                    if (chkEfectiv.Checked) camp += $" + ', Efectiv: ' + CONVERT(nvarchar(10),dbo.[DamiHC](3, Id, {General.ToDataUniv(dtRef.Date)}))";
+                    if (chkPlan.Checked) camp += $" + ', Plan: ' + CONVERT(nvarchar(10),COALESCE(W.Pozitii,0))";
+                    if (chkAprobat.Checked) camp += $" + ', Aprobat: ' + CONVERT(nvarchar(10),COALESCE(W.PozitiiAprobate,0))";
+                    if (chkEfectiv.Checked) camp += $" + ', Efectiv: ' + CONVERT(nvarchar(10),COALESCE(W.Activi,0))";
 
                     strSql = $@"WITH tree AS  
                             (
@@ -118,7 +118,8 @@ namespace WizOne.Organigrama
                             WHERE CONVERT(DATE, child.DataInceput, 103)<=CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) AND CONVERT(DATE, {General.ToDataUniv(dtRef.Date)},103) <= CONVERT(DATE, child.DataSfarsit, 103) AND child.Stare = 1
                             )
                             SELECT Id, IdSuperior, NivelIerarhic, Level, {camp} AS Denumire
-                            FROM tree
+                            FROM tree A
+                            OUTER APPLY dbo.DamiPozitii(A.Id, {General.ToDataUniv(dtRef.Date)}) W
                             where Level <= {nivel}
                             ORDER BY Level, IdSuperior";
                 }

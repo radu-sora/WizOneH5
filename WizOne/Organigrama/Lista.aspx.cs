@@ -111,7 +111,7 @@ namespace WizOne.Organigrama
                         strSql = @"select * from ( 
                             select a.""IdAuto"", a.""Id"", COALESCE(a.""IdSuperior"",0) AS ""IdSuperior"", COALESCE(a.""IdSuperiorFunctional"",0) AS ""IdSuperiorFunctional"", a.""Denumire"", '' as ""Nume"", '' as ""Prenume"", b.F00204 as ""Companie"", c.F00305 as ""Subcompanie"", d.F00406 as ""Filiala"", e.F00507 as ""Sectie"", f.F00608 as ""Dept"", 
                              '#FFFFFFFF' as ""Culoare"", 1 as ""EstePost"", case when a.""Stare"" is null then 0 else a.""Stare"" end as ""Activ"", null as F10003, 0 as ""StareAngajat"",
-                            W.Pozitii AS PosturiPlanificate,W.PozitiiAprobate,W.Activi AS AngajatiActivi,W.Suspendati AS AngajatiSuspendati,W.Candidati
+                            W.Pozitii AS PozitiiPlanificate,W.PozitiiAprobate,W.Activi AS AngajatiActivi,W.Suspendati AS AngajatiSuspendati,W.Candidati
                              from ""Org_Posturi"" a  
                              LEFT JOIN F002 b on a.""F10002""=b.F00202  
                              LEFT JOIN F003 c on a.""F10004""=c.F00304  

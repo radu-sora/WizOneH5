@@ -277,7 +277,7 @@ namespace WizOne.Organigrama
                 }
 
                 int id = 1;
-                DateTime dtInc = Convert.ToDateTime(Session["DataVigoare"]);
+                DateTime dtInc = Convert.ToDateTime(Session["DataVigoare"]).Date;
                 DateTime dtSf = new DateTime(2100, 1, 1);
                 string sqlIns = "";
                 string sqlUpd = "";
@@ -288,8 +288,8 @@ namespace WizOne.Organigrama
                 {
                     //daca este post nou
                     id = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(Id),0) FROM ""Org_Posturi"" ", null), 0)) + 1;
-                    dtInc = Convert.ToDateTime(txtDtInc.Value);
-                    dtSf = Convert.ToDateTime(txtDtSf.Value);
+                    dtInc = Convert.ToDateTime(txtDtInc.Value).Date;
+                    dtSf = Convert.ToDateTime(txtDtSf.Value).Date;
                 }
                 else
                 {
@@ -313,7 +313,7 @@ namespace WizOne.Organigrama
                     else
                     {
                         //daca intra in vigoare cu o alta data decat data inceput
-                        dtInc = Convert.ToDateTime(Session["DataVigoare"]);
+                        dtInc = Convert.ToDateTime(Session["DataVigoare"]).Date;
                         sqlUpd = $@"UPDATE ""Org_Posturi"" SET ""DataSfarsit""={General.ToDataUniv(Convert.ToDateTime(Session["DataVigoare"]).AddDays(-1))} WHERE ""IdAuto"" = @1";
                     }
 

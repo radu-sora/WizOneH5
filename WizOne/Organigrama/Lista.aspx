@@ -93,8 +93,8 @@
                         <dx:TreeListDataColumn FieldName="Id" Name="Cod" Caption="Cod" ReadOnly="true" Width="150px" VisibleIndex="2" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
                         <dx:TreeListCheckColumn FieldName="Activ" Caption="Activ" Width="50px" VisibleIndex="3" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
 
-                        <dx:TreeListDataColumn FieldName="PosturiPlanificate" Name="PosturiPlanificate" Caption="Planificate" ReadOnly="true" Width="70px" VisibleIndex="15" />
-                        <dx:TreeListDataColumn FieldName="PosturiAprobate" Name="PosturiAprobate" Caption="Aprobate" ReadOnly="true" Width="70px" VisibleIndex="16" />
+                        <dx:TreeListDataColumn FieldName="PozitiiPlanificate" Name="PozitiiPlanificate" Caption="Planificate" ReadOnly="true" Width="70px" VisibleIndex="15" />
+                        <dx:TreeListDataColumn FieldName="PozitiiAprobate" Name="PozitiiAprobate" Caption="Aprobate" ReadOnly="true" Width="70px" VisibleIndex="16" />
                         <dx:TreeListDataColumn FieldName="AngajatiActivi" Name="AngajatiActivi" Caption="Activi" ReadOnly="true" Width="70px" VisibleIndex="17" />
                         <dx:TreeListDataColumn FieldName="AngajatiInactivi" Name="AngajatiInactivi" Caption="Inactivi" ReadOnly="true" Width="70px" VisibleIndex="18" />
                         <dx:TreeListDataColumn FieldName="Candidati" Name="Candidati" Caption="Candidati" ReadOnly="true" Width="70px" VisibleIndex="19" />

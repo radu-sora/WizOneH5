@@ -97,18 +97,18 @@ namespace WizOne.Personal
 
             if (IsPostBack)
             {
-                txtNumeAngajator.Text = Session["MP_DetNumeAng"] == DBNull.Value  ? "" : Session["MP_DetNumeAng"].ToString();
-                txtCUI.Text = Session["MP_DetCUI"] == DBNull.Value ? "" : Session["MP_DetCUI"].ToString();
-                cmbNationalitate.Value = Convert.ToInt32((Session["MP_DetNation"] == DBNull.Value ? "0" : Session["MP_DetNation"].ToString()).ToString());
-                deDataInceputDet.Value = Convert.ToDateTime((Session["MP_DetDataIncp"] == DBNull.Value ? "01/01/2100" : Session["MP_DetDataIncp"].ToString()).ToString());
-                deDataSfarsitDet.Value = Convert.ToDateTime((Session["MP_DetDataSf"]  == DBNull.Value ? "01/01/2100" : Session["MP_DetDataSf"].ToString()).ToString());
-                deDataIncetareDet.Value = Convert.ToDateTime((Session["MP_DetDataInct"] == DBNull.Value ? "01/01/2100" : Session["MP_DetDataInct"].ToString()).ToString());
+                txtNumeAngajator.Text = Session["MP_DetNumeAng"] == DBNull.Value  ? "" : (Session["MP_DetNumeAng"] ?? "").ToString();
+                txtCUI.Text = Session["MP_DetCUI"] == DBNull.Value ? "" : (Session["MP_DetCUI"] ?? "").ToString();
+                cmbNationalitate.Value = Convert.ToInt32((Session["MP_DetNation"] == DBNull.Value ? "0" : (Session["MP_DetNation"] ?? "0").ToString()).ToString());
+                deDataInceputDet.Value = Convert.ToDateTime((Session["MP_DetDataIncp"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataIncp"] ?? "01/01/2100").ToString()).ToString());
+                deDataSfarsitDet.Value = Convert.ToDateTime((Session["MP_DetDataSf"]  == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataSf"] ?? "01/01/2100").ToString()).ToString());
+                deDataIncetareDet.Value = Convert.ToDateTime((Session["MP_DetDataInct"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataInct"] ?? "01/01/2100").ToString()).ToString());
 
-                chk1.Checked = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : Session["MP_Det1"].ToString()).ToString()) == 1 ? true : false;
-                chk2.Checked = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : Session["MP_Det2"].ToString()).ToString()) == 1 ? true : false;
-                chk3.Checked = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : Session["MP_Det3"].ToString()).ToString()) == 1 ? true : false;
-                chk4.Checked = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : Session["MP_Det4"].ToString()).ToString()) == 1 ? true : false;
-                chk5.Checked = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : Session["MP_Det5"].ToString()).ToString()) == 1 ? true : false;
+                chk1.Checked = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : (Session["MP_Det1"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                chk2.Checked = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : (Session["MP_Det2"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                chk3.Checked = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                chk4.Checked = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                chk5.Checked = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : (Session["MP_Det5"] ?? "0").ToString()).ToString()) == 1 ? true : false;
 
             }
         }
@@ -467,44 +467,44 @@ namespace WizOne.Personal
                 switch (param[0])
                 {
                     case "ActDet":
-                        txtNumeAngajator.Text = Session["MP_DetNumeAng"] == DBNull.Value ? "" : Session["MP_DetNumeAng"].ToString();
-                        txtCUI.Text = Session["MP_DetCUI"] == DBNull.Value ? "" : Session["MP_DetCUI"].ToString();
-                        cmbNationalitate.Value = Convert.ToInt32(Session["MP_DetNation"] == DBNull.Value ? "" : Session["MP_DetNation"].ToString());
-                        deDataInceputDet.Value = Convert.ToDateTime(Session["MP_DetDataIncp"] == DBNull.Value ? "01/01/2100" : Session["MP_DetDataIncp"].ToString());
-                        deDataSfarsitDet.Value = Convert.ToDateTime(Session["MP_DetDataSf"] == DBNull.Value ? "01/01/2100" : Session["MP_DetDataSf"].ToString());
-                        deDataIncetareDet.Value = Convert.ToDateTime(Session["MP_DetDataInct"] == DBNull.Value ? "01/01/2100" : Session["MP_DetDataInct"].ToString());
+                        txtNumeAngajator.Text = Session["MP_DetNumeAng"] == DBNull.Value ? "" : (Session["MP_DetNumeAng"] ?? "").ToString();
+                        txtCUI.Text = Session["MP_DetCUI"] == DBNull.Value ? "" : (Session["MP_DetCUI"] ?? "").ToString();
+                        cmbNationalitate.Value = Convert.ToInt32(Session["MP_DetNation"] == DBNull.Value ? "0" : (Session["MP_DetNation"] ?? "0").ToString());
+                        deDataInceputDet.Value = Convert.ToDateTime(Session["MP_DetDataIncp"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataIncp"] ?? "01/01/2100").ToString());
+                        deDataSfarsitDet.Value = Convert.ToDateTime(Session["MP_DetDataSf"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataSf"] ?? "01/01/2100").ToString());
+                        deDataIncetareDet.Value = Convert.ToDateTime(Session["MP_DetDataInct"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataInct"] ?? "01/01/2100").ToString());
 
-                        chk1.Checked = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : Session["MP_Det1"].ToString()).ToString()) == 1 ? true : false;
-                        chk2.Checked = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : Session["MP_Det2"].ToString()).ToString()) == 1 ? true : false;
-                        chk3.Checked = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : Session["MP_Det3"].ToString()).ToString()) == 1 ? true : false;
-                        chk4.Checked = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : Session["MP_Det4"].ToString()).ToString()) == 1 ? true : false;
-                        chk5.Checked = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : Session["MP_Det5"].ToString()).ToString()) == 1 ? true : false;
+                        chk1.Checked = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : (Session["MP_Det1"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                        chk2.Checked = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : (Session["MP_Det2"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                        chk3.Checked = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                        chk4.Checked = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                        chk5.Checked = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : (Session["MP_Det5"] ?? "0").ToString()).ToString()) == 1 ? true : false;
 
-                        ds.Tables[0].Rows[0]["F100915"] = Convert.ToDateTime(Session["MP_DetDataIncp"] == DBNull.Value ? "01/01/2100" : Session["MP_DetDataIncp"].ToString());
-                        ds.Tables[0].Rows[0]["F100916"] = Convert.ToDateTime(Session["MP_DetDataSf"] == DBNull.Value ? "01/01/2100" : Session["MP_DetDataSf"].ToString());
-                        ds.Tables[0].Rows[0]["F100917"] = Convert.ToDateTime(Session["MP_DetDataInct"] == DBNull.Value ? "01/01/2100" : Session["MP_DetDataInct"].ToString());
-                        ds.Tables[0].Rows[0]["F100918"] = Session["MP_DetNumeAng"] == DBNull.Value ? "" : Session["MP_DetNumeAng"].ToString();
-                        ds.Tables[0].Rows[0]["F100919"] = Session["MP_DetCUI"] == DBNull.Value ? "" : Session["MP_DetCUI"].ToString();
-                        ds.Tables[0].Rows[0]["F100920"] = Convert.ToInt32(Session["MP_DetNation"] == DBNull.Value ? "" : Session["MP_DetNation"].ToString());
-                        ds.Tables[0].Rows[0]["F1001125"] = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : Session["MP_Det1"].ToString()).ToString());
-                        ds.Tables[0].Rows[0]["F1001126"] = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : Session["MP_Det2"].ToString()).ToString());
-                        ds.Tables[0].Rows[0]["F1001127"] = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : Session["MP_Det3"].ToString()).ToString());
-                        ds.Tables[0].Rows[0]["F1001128"] = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : Session["MP_Det4"].ToString()).ToString());
-                        ds.Tables[0].Rows[0]["F1001129"] = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : Session["MP_Det5"].ToString()).ToString());
+                        ds.Tables[0].Rows[0]["F100915"] = Convert.ToDateTime(Session["MP_DetDataIncp"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataIncp"] ?? "01/01/2100").ToString());
+                        ds.Tables[0].Rows[0]["F100916"] = Convert.ToDateTime(Session["MP_DetDataSf"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataSf"] ?? "01/01/2100").ToString());
+                        ds.Tables[0].Rows[0]["F100917"] = Convert.ToDateTime(Session["MP_DetDataInct"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataInct"] ?? "01/01/2100").ToString());
+                        ds.Tables[0].Rows[0]["F100918"] = Session["MP_DetNumeAng"] == DBNull.Value ? "" : (Session["MP_DetNumeAng"] ?? "").ToString();
+                        ds.Tables[0].Rows[0]["F100919"] = Session["MP_DetCUI"] == DBNull.Value ? "" : (Session["MP_DetCUI"] ?? "").ToString();
+                        ds.Tables[0].Rows[0]["F100920"] = Convert.ToInt32(Session["MP_DetNation"] == DBNull.Value ? "0" : (Session["MP_DetNation"] ?? "").ToString());
+                        ds.Tables[0].Rows[0]["F1001125"] = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : (Session["MP_Det1"] ?? "0").ToString()).ToString());
+                        ds.Tables[0].Rows[0]["F1001126"] = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : (Session["MP_Det2"] ?? "0").ToString()).ToString());
+                        ds.Tables[0].Rows[0]["F1001127"] = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString());
+                        ds.Tables[0].Rows[0]["F1001128"] = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString());
+                        ds.Tables[0].Rows[0]["F1001129"] = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : (Session["MP_Det5"] ?? "0").ToString()).ToString());
 
 
-                        ds.Tables[1].Rows[0]["F100915"] = Convert.ToDateTime(Session["MP_DetDataIncp"] == DBNull.Value ? "01/01/2100" : Session["MP_DetDataIncp"].ToString());
-                        ds.Tables[1].Rows[0]["F100916"] = Convert.ToDateTime(Session["MP_DetDataSf"] == DBNull.Value ? "01/01/2100" : Session["MP_DetDataSf"].ToString());
-                        ds.Tables[1].Rows[0]["F100917"] = Convert.ToDateTime(Session["MP_DetDataInct"] == DBNull.Value ? "01/01/2100" : Session["MP_DetDataInct"].ToString());
-                        ds.Tables[1].Rows[0]["F100918"] = Session["MP_DetNumeAng"] == DBNull.Value ? "" : Session["MP_DetNumeAng"].ToString();
-                        ds.Tables[1].Rows[0]["F100919"] = Session["MP_DetCUI"] == DBNull.Value ? "" : Session["MP_DetCUI"].ToString();
-                        ds.Tables[1].Rows[0]["F100920"] = Convert.ToInt32(Session["MP_DetNation"] == DBNull.Value ? "" : Session["MP_DetNation"].ToString());
+                        ds.Tables[1].Rows[0]["F100915"] = Convert.ToDateTime(Session["MP_DetDataIncp"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataIncp"] ?? "01/01/2100").ToString());
+                        ds.Tables[1].Rows[0]["F100916"] = Convert.ToDateTime(Session["MP_DetDataSf"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataSf"] ?? "01/01/2100").ToString());
+                        ds.Tables[1].Rows[0]["F100917"] = Convert.ToDateTime(Session["MP_DetDataInct"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataInct"] ?? "01/01/2100").ToString());
+                        ds.Tables[1].Rows[0]["F100918"] = Session["MP_DetNumeAng"] == DBNull.Value ? "" : (Session["MP_DetNumeAng"] ?? "").ToString();
+                        ds.Tables[1].Rows[0]["F100919"] = Session["MP_DetCUI"] == DBNull.Value ? "" : (Session["MP_DetCUI"] ?? "").ToString();
+                        ds.Tables[1].Rows[0]["F100920"] = Convert.ToInt32(Session["MP_DetNation"] == DBNull.Value ? "0" : (Session["MP_DetNation"] ?? "0").ToString());
 
-                        ds.Tables[2].Rows[0]["F1001125"] = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : Session["MP_Det1"].ToString()).ToString());
-                        ds.Tables[2].Rows[0]["F1001126"] = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : Session["MP_Det2"].ToString()).ToString());
-                        ds.Tables[2].Rows[0]["F1001127"] = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : Session["MP_Det3"].ToString()).ToString());
-                        ds.Tables[2].Rows[0]["F1001128"] = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : Session["MP_Det4"].ToString()).ToString());
-                        ds.Tables[2].Rows[0]["F1001129"] = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : Session["MP_Det5"].ToString()).ToString());               
+                        ds.Tables[2].Rows[0]["F1001125"] = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : (Session["MP_Det1"] ?? "0").ToString()).ToString());
+                        ds.Tables[2].Rows[0]["F1001126"] = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : (Session["MP_Det2"] ?? "0").ToString()).ToString());
+                        ds.Tables[2].Rows[0]["F1001127"] = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString());
+                        ds.Tables[2].Rows[0]["F1001128"] = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString());
+                        ds.Tables[2].Rows[0]["F1001129"] = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : (Session["MP_Det5"] ?? "0").ToString()).ToString());               
                         break;
                 }
                 Session["InformatiaCurentaPersonal"] = ds;

@@ -118,7 +118,7 @@ namespace WizOne.Organigrama
                              LEFT JOIN F004 d on a.""F10005""=d.F00405  
                              LEFT JOIN F005 e on a.""F10006""=e.F00506  
                              LEFT JOIN F006 f on a.""F10007""=f.F00607
-                            OUTER APPLY dbo.DamiPozitii(A.Id, '2020-12-21') W
+                            OUTER APPLY dbo.DamiPozitii(A.Id, {0}) W
                              where CONVERT(date,a.""DataInceput"") <= {0} and {0} <= CONVERT(date,a.""DataSfarsit"") 
                              union 
                              select -1 * r.""IdAuto"" as ""IdAuto"", -1 * a.F10003 as ""Id"", r.""IdPost"" as ""IdSuperior"", r.""IdPost"" as ""IdSuperiorFunctional"", ' ' + a.F10008 + ' ' + a.F10009 as ""Denumire"",  
@@ -175,7 +175,7 @@ namespace WizOne.Organigrama
                                     LEFT JOIN F004 d on a.F10005=d.F00405  
                                     LEFT JOIN F005 e on a.F10006=e.F00506  
                                     LEFT JOIN F006 f on a.F10007=f.F00607  
-                                    OUTER APPLY dbo.DamiPozitii(A.Id, '2020-12-21') W
+                                    OUTER APPLY dbo.DamiPozitii(A.Id, {0}) W
                                     WHERE CONVERT(date,A.DataInceput) <= {0} and {0} <= CONVERT(date,A.DataSfarsit)   
                          
                                     UNION

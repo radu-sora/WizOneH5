@@ -141,7 +141,7 @@ namespace WizOne.Organigrama
                     }
                     else
                     {
-                        txtDtInc.Value = Convert.ToDateTime(Session["DataVigoare"]);
+                        txtDtInc.Value = Convert.ToDateTime(Session["DataVigoare"]).Date;
                         txtDtSf.Value = new DateTime(2100, 1, 1);
                     }
 

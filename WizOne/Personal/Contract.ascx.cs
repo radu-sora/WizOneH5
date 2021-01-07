@@ -242,6 +242,7 @@ namespace WizOne.Personal
                     if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != null && drFunc[0]["F71813"].ToString().Length > 0)
                     {
                         cmbNivelFunctie.Value = Convert.ToInt32(drFunc[0]["F71813"].ToString());
+                        cmbNivelFunctie.ClientEnabled = false;
                         if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                             CompletareZile(Convert.ToInt32(drFunc[0]["F71813"].ToString()));
                     }
@@ -382,8 +383,6 @@ namespace WizOne.Personal
                 ASPxButton btnFuncIst = Contract_DataList.Items[0].FindControl("btnFuncIst") as ASPxButton;
                 if (btnFuncIst != null)
                     btnFuncIst.ClientEnabled = false;
-                if (cmbNivelFunctie != null)
-                    cmbNivelFunctie.ClientEnabled = false;
                 ASPxDateEdit deDataModifFunctie = Contract_DataList.Items[0].FindControl("deDataModifFunctie") as ASPxDateEdit;
                 if (deDataModifFunctie != null)
                     deDataModifFunctie.ClientEnabled = false;
@@ -579,6 +578,22 @@ namespace WizOne.Personal
                         cmbPost.DataSource = Session["MP_cmbPost"];
                         cmbPost.DataBind();
                         cmbPost.Value = null;
+
+                        //Florin #720
+                        DataTable dtFunc = General.GetFunctie();
+                        if (dtFunc != null && dtFunc.Rows.Count > 0)
+                        {
+                            DataRow[] drFunc = dtFunc.Select("F71802 = " + (ds.Tables[0].Rows[0]["F10071"] as int? ?? 0).ToString());
+                            if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != null && drFunc[0]["F71813"].ToString().Length > 0)
+                            {
+                                ASPxComboBox cmbNivelFunctie = Contract_DataList.Items[0].FindControl("cmbNivelFunctie") as ASPxComboBox;
+                                if (cmbNivelFunctie != null)
+                                {
+                                    cmbNivelFunctie.Value = Convert.ToInt32(drFunc[0]["F71813"].ToString());
+                                    cmbNivelFunctie.ClientEnabled = false;
+                                }
+                            }
+                        }
                     }
                     break;
             }

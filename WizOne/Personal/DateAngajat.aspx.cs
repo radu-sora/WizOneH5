@@ -1652,7 +1652,7 @@ namespace WizOne.Personal
                                 if (colName == "F71813")
                                 {
                                     //Radu 12.09.2019 - salvare nivel functie in F718
-                                    if (ds.Tables[1].Rows[0]["F10071"] != null && ds.Tables[1].Rows[0]["F10071"].ToString().Length > 0)
+                                    if (ds.Tables[1].Rows[0]["F10071"] != null && ds.Tables[1].Rows[0]["F10071"].ToString().Length > 0 && ctl.Value != null)
                                         General.ExecutaNonQuery("UPDATE F718 SET F71813 = " + (ctl.Value ?? "NULL") + " WHERE F71802 = " + ds.Tables[1].Rows[0]["F10071"].ToString(), null);
                                     continue;
                                 }

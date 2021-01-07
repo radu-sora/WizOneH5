@@ -109,6 +109,7 @@ namespace WizOne.Personal
 
                 if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
                 {
+                    lblPost.Visible = true;
                     cmbPost.Visible = true;
                     DataTable dtPost = General.IncarcaDT($@"SELECT ""Id"", ""Denumire"" FROM ""Org_Posturi"" WHERE {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}", null);
                     cmbPost.DataSource = dtPost;

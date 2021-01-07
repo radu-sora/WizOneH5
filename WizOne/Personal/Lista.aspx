@@ -252,6 +252,7 @@
 
             <div class="row">
                 <div class="col-md-12">
+                    <label id="lblPost" runat="server" visible="false" style="width:100%; text-align:left;">Selectie post</label>
 				    <dx:ASPxComboBox ID="cmbPost" ClientInstanceName="cmbPost" runat="server" DropDownStyle="DropDownList" Width="200" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Visible="false" >
                         <ClientSideEvents SelectedIndexChanged="function(s, e){ popUpSablon.PerformWindowCallback(popUpSablon.GetWindow(0), 'Post') }"  />
                     </dx:ASPxComboBox>
@@ -260,6 +261,7 @@
             <br />
             <div class="row">
                 <div class="col-md-12">
+                    <label style="width:100%; text-align:left;">Selectie tip angajat</label>
 				    <dx:ASPxComboBox  DataSourceID="dsSablon"   ID="cmbSablon"  runat="server" DropDownStyle="DropDown" Width="200" DropDownHeight="150"  DropDownWidth="200"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false"  >
                             <ClientSideEvents SelectedIndexChanged="function(s, e){ popUpSablon.PerformWindowCallback(popUpSablon.GetWindow(0), 'Sablon') }" />
 				    </dx:ASPxComboBox>

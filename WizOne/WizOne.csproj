@@ -2486,6 +2486,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Curs\" />
     <Folder Include="Temp\" />
   </ItemGroup>
   <ItemGroup>

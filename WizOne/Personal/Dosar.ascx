@@ -114,7 +114,7 @@
     <script>
 
         function OnCustomButtonClickDosar(s, e) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=13&id=' + s.GetRowKey(s.GetFocusedRowIndex()), '_blank ')
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=17&id=' + s.GetRowKey(s.GetFocusedRowIndex()), '_blank ')
         }
 
         function OnEndUploadDosar(s) {

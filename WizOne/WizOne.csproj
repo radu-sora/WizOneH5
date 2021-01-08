@@ -869,6 +869,7 @@
     <Content Include="Pagini\VerificareBD.aspx" />
     <Content Include="Personal\Activitati.ascx" />
     <Content Include="Personal\Cursuri.ascx" />
+    <Content Include="Personal\Dosar.ascx" />
     <Content Include="Personal\Evaluare.ascx" />
     <Content Include="Personal\Calcul.ascx" />
     <Content Include="Personal\CentreCost.ascx" />
@@ -1871,6 +1872,13 @@
     </Compile>
     <Compile Include="Personal\Cursuri.ascx.designer.cs">
       <DependentUpon>Cursuri.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Dosar.ascx.cs">
+      <DependentUpon>Dosar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Dosar.ascx.designer.cs">
+      <DependentUpon>Dosar.ascx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Evaluare.ascx.cs">
       <DependentUpon>Evaluare.ascx</DependentUpon>

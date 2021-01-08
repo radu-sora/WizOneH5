@@ -844,6 +844,7 @@
     <Content Include="Global.asax" />
     <Content Include="Info.aspx" />
     <Content Include="LogOut.aspx" />
+    <Content Include="Organigrama\Diagrama.aspx" />
     <Content Include="Organigrama\Lista.aspx" />
     <Content Include="Organigrama\Posturi.aspx" />
     <Content Include="Organigrama\PosturiValidare.aspx" />
@@ -869,7 +870,6 @@
     <Content Include="Pagini\VerificareBD.aspx" />
     <Content Include="Personal\Activitati.ascx" />
     <Content Include="Personal\Cursuri.ascx" />
-    <Content Include="Personal\Dosar.ascx" />
     <Content Include="Personal\Evaluare.ascx" />
     <Content Include="Personal\Calcul.ascx" />
     <Content Include="Personal\CentreCost.ascx" />
@@ -1008,7 +1008,6 @@
       <DependentUpon>ReportsModel.edmx</DependentUpon>
     </None>
     <Content Include="Generatoare\Reports\Pages\Download.ashx" />
-    <Content Include="Organigrama\Diagrama.xlsm" />
     <Content Include="Organigrama\Temp\Diagrama1078.xlsm" />
     <Content Include="LocalSTS.exe.config" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsOraModel.edmx">
@@ -1698,6 +1697,12 @@
     <Compile Include="Module\Notif.cs" />
     <Compile Include="Module\NotifAsync.cs" />
     <Compile Include="Module\Saml.cs" />
+    <Compile Include="Organigrama\Diagrama.aspx.cs">
+      <DependentUpon>Diagrama.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Organigrama\Diagrama.aspx.designer.cs">
+      <DependentUpon>Diagrama.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Organigrama\Lista.aspx.cs">
       <DependentUpon>Lista.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1872,13 +1877,6 @@
     </Compile>
     <Compile Include="Personal\Cursuri.ascx.designer.cs">
       <DependentUpon>Cursuri.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Personal\Dosar.ascx.cs">
-      <DependentUpon>Dosar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Personal\Dosar.ascx.designer.cs">
-      <DependentUpon>Dosar.ascx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Evaluare.ascx.cs">
       <DependentUpon>Evaluare.ascx</DependentUpon>
@@ -2708,6 +2706,7 @@
       <LastGenOutput>General.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\AdeverintaGenerala.resx">
       <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
     </EmbeddedResource>

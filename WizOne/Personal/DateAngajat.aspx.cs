@@ -49,7 +49,6 @@ namespace WizOne.Personal
                 else              //Florin 2020.10.28
                 {
                     General.AflaIdPost();
-                    General.AdaugaDosar(ref ds, Session["Marca"]);
                 }
 
                 if (!IsPostBack)
@@ -1161,8 +1160,6 @@ namespace WizOne.Personal
                         Session["MP_SalariulMinPost"] = Convert.ToInt32(General.Nz(dr["SalariuMin"],0));
                         General.AdaugaBeneficiile(ref ds, Session["Marca"], dr);
                     }
-
-                    General.AdaugaDosar(ref ds, Session["Marca"]);
                 }
 
                 Session["InformatiaCurentaPersonal"] = ds;

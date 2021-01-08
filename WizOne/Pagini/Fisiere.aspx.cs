@@ -167,41 +167,6 @@ namespace WizOne.Pagini
                                     }
                                 }
                                 break;
-                            case "17":
-                                {
-                                    string[] arr = id.Split('|');
-                                    if (arr.Length != 2) return;
-                                    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                                    if (ds != null)
-                                    {
-                                        DataRow dr = ds.Tables["Admin_Dosar"].Rows.Find(new object[] { arr[0], arr[1] });
-                                        if (dr != null && dr["Fisier"] != DBNull.Value)
-                                            scrieDoc(General.Nz(dr["FisierExtensie"], ".txt").ToString(), (byte[])dr["Fisier"], General.Nz(dr["FisierNume"], "Fisier").ToString());
-                                        else
-                                            Response.Write("Nu exista date de afisat !");
-                                    }
-                                    else
-                                    {
-                                        DataRow drAt = General.IncarcaDR(@"SELECT * FROM ""Admin_Dosar"" WHERE F10003=@1 AND ""IdObiect""=@2", new object[] { arr[0], arr[1] });   // dtAt.Select("IdAuto = " + id).FirstOrDefault();
-                                        if (drAt != null)
-                                        {
-                                            string numeFiser = General.Nz(drAt["FisierNume"], "").ToString();
-                                            object fisier = General.Nz(drAt["Fisier"], null);
-
-                                            string cale = HostingEnvironment.MapPath("~/FisiereApp/Atasamente/") + numeFiser;
-                                            if (fisier == null && File.Exists(cale))
-                                                fisier = File.ReadAllBytes(cale);
-
-                                            if (fisier != null)
-                                                scrieDoc(General.Nz(drAt["FisierExtensie"], ".txt").ToString(), (byte[])fisier, numeFiser);
-                                            else
-                                                Response.Write("Nu exista date de afisat !");
-                                        }
-                                        else
-                                            Response.Write("Nu exista date de afisat !");
-                                    }
-                                }
-                                break;
                         }
 
                         if (tbl.Length > 0)

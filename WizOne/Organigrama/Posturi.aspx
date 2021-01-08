@@ -84,7 +84,6 @@
                     </div>
                 </div>
 
-
                 <div class="Absente_divOuter margin_top15">
         
 		            <label id="lblDen" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire</label>
@@ -295,25 +294,28 @@
                 </div>
                 <br /><br />
 
-                <div id="divDosar" runat="server" style="width:815px;">
-                    <dx:ASPxCheckBoxList ID="lstDosar" runat="server" ValueField="Id" TextField="Denumire" RepeatColumns="1" RepeatLayout="Table" OnDataBound="lstDosar_DataBound" >
-                        <CaptionSettings Position="Top" />
-                    </dx:ASPxCheckBoxList>
+                <div class="Absente_divOuter margin_top15">
+                    <label id="Label1" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100%;">Alege documentele pentru dosarul personal</label>
+                    <div style="float:left; padding-right:15px;">  
+                        <dx:ASPxCheckBoxList ID="chkDosar" ClientInstanceName="chkDosar" runat="server" ValueField="Id" TextField="Denumire" RepeatColumns="6" RepeatLayout="Table" >
+                            <CaptionSettings Position="Top" />
+                        </dx:ASPxCheckBoxList>
+                    </div>
                 </div>
 
+                <div id="divDosar" runat="server" style="width:815px;"></div>
+
                 <div class="Absente_divOuter margin_top15">
-                    <label id="Label2" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Alege campuri aditionale</label>
+                    <label id="Label2" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100%;">Alege campurile aditionale</label>
                     <div style="float:left; padding-right:15px;">  
-                        <dx:ASPxCheckBoxList ID="chkExtra" ClientInstanceName="chkExtra" runat="server" ValueField="Id" TextField="Eticheta" RepeatColumns="4" RepeatLayout="Table" >
+                        <dx:ASPxCheckBoxList ID="chkExtra" ClientInstanceName="chkExtra" runat="server" ValueField="Id" TextField="Eticheta" RepeatColumns="6" RepeatLayout="Table" >
                             <CaptionSettings Position="Top" />
                             <ClientSideEvents SelectedIndexChanged="function(s,e) { OnChckSelectedIndexChanged(s,e); }" />
                         </dx:ASPxCheckBoxList>
                     </div>
                 </div>
 
-
-                <div id="divExtra" runat="server" style="width:815px;">
-                </div>
+                <div id="divExtra" runat="server" style="width:815px;"></div>
 
                 <div class="Absente_divOuter margin_top15" style="display:none;">
 		            <label id="lblCom" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Competente</label>

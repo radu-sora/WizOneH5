@@ -145,8 +145,6 @@ namespace WizOne.Organigrama
                         txtDtSf.Value = new DateTime(2100, 1, 1);
                     }
 
-                    AdaugaDosar();
-
                     //incarcam pozitii
                     DataTable dtPoz = General.IncarcaDT(@"SELECT * FROM ""Org_PosturiPozitii"" WHERE ""IdPost""=@1 ORDER BY ""DataInceput""", new object[] { txtId.Value });
                     Session["Org_PosturiPozitii"] = dtPoz;
@@ -196,6 +194,7 @@ namespace WizOne.Organigrama
                 cmbBirou.DataSource = General.IncarcaDT(@"SELECT F00809 AS ""IdBirou"", F00810 AS ""Birou"" FROM F008", null);
                 cmbBirou.DataBind();
 
+                AdaugaDosar();
                 AdaugaCampuriExtra(dr);
                 AdaugaBeneficiile(dr);
 
@@ -216,8 +215,16 @@ namespace WizOne.Organigrama
                                 div.Attributes["class"] = "col-md-12";
                             else
                                 div.Attributes["class"] = "col-md-12 ascuns";
-
                         }
+                    }
+
+
+                    string idsDosar = General.Nz(General.ExecutaScalar(@"SELECT ',' + CONVERT(nvarchar(10),""IdObiect"") FROM ""Org_PosturiDosar"" WHERE ""IdPost""=(SELECT ""Id"" FROM ""Org_Posturi"" WHERE ""IdAuto""=@1) FOR XML PATH ('')", new object[] { General.Nz(Session["IdAuto"], "-97") }), "").ToString();
+
+                    foreach (ListEditItem item in chkDosar.Items)
+                    {
+                        if ((idsDosar + ",").IndexOf("," + item.Value.ToString() + ",") >= 0)
+                            item.Selected = true;
                     }
                 }
             }
@@ -426,9 +433,9 @@ namespace WizOne.Organigrama
 
                 //salvam Dosarul Personal
                 string sqlDosar = "";
-                foreach (var item in lstDosar.SelectedValues)
+                foreach (var item in chkDosar.SelectedValues)
                 {
-                    
+
                     sqlDosar += $@"INSERT INTO ""Org_PosturiDosar""(""IdPost"", ""IdObiect"") VALUES({id},{item});" + Environment.NewLine;
                 }
 
@@ -440,6 +447,18 @@ namespace WizOne.Organigrama
                         {sqlDosar}
                         END;", null);
                 }
+
+                //actualizam doarul personal al tuturor angajatilor care sunt pe acest post
+                General.ExecutaNonQuery($@"
+                    BEGIN
+                        DELETE FROM Atasamente WHERE IdEmpl IN (SELECT F10003 FROM Org_relPostAngajat WHERE IdPost=@1) AND Attach IS NULL;
+                        INSERT INTO Atasamente(IdEmpl, IdCategory, VineDinPosturi, DateAttach, USER_NO, TIME)
+                        SELECT A.F10003, C.IdObiect, 1, GetDate(), {Session["UserId"]}, GetDate() FROM Org_relPostAngajat A
+                        INNER JOIN Org_PosturiDosar C ON A.IdPost=C.IdPost
+                        LEFT JOIN Atasamente B ON A.F10003 = B.IdEmpl AND B.IdCategory=C.IdObiect
+                        WHERE A.IdPost=@1 AND B.IdCategory IS NULL
+                        GROUP BY A.F10003, C.IdObiect;
+                    END;", new object[] { id });
 
                 DataTable dtPoz = Session["Org_PosturiPozitii"] as DataTable;
                 if (dtPoz != null)
@@ -735,17 +754,21 @@ namespace WizOne.Organigrama
         {
             try
             {
-                DataTable dtTab = General.IncarcaDT($@"
-                    SELECT C.""Id"", C.""Denumire"", CASE WHEN D.""IdObiect"" IS NULL THEN 0 ELSE 1 END AS ""Bifat""
-                    FROM ""Admin_Arii"" A
-                    INNER JOIN ""Admin_Categorii"" B ON A.""Id""=B.""IdArie""
-                    INNER JOIN ""Admin_Obiecte"" C ON B.""Id""=C.""IdCategorie""
-                    LEFT JOIN ""Org_PosturiDosar"" D ON C.""Id"" = D.""IdObiect"" AND ""IdPost""={General.Nz(txtId.Value,-99)}
-                    WHERE A.""Id"" = (SELECT COALESCE(""Valoare"",'') FROM ""tblParametrii"" WHERE ""Nume""='ArieTabDosarPersonalDinPersonal')
-                    AND B.""Denumire""='Documente Post'", null);
+                DataTable dtDosar = General.IncarcaDT(@"SELECT ""IdCategory"" AS ""Id"", ""NameCategory"" AS ""Denumire"" FROM ""CategoriiAtasamente"" ORDER BY ""NameCategory"" ");
+                chkDosar.DataSource = dtDosar;
+                chkDosar.DataBind();
 
-                lstDosar.DataSource = dtTab;
-                lstDosar.DataBind();
+                //DataTable dtTab = General.IncarcaDT($@"
+                //    SELECT C.""Id"", C.""Denumire"", CASE WHEN D.""IdObiect"" IS NULL THEN 0 ELSE 1 END AS ""Bifat""
+                //    FROM ""Admin_Arii"" A
+                //    INNER JOIN ""Admin_Categorii"" B ON A.""Id""=B.""IdArie""
+                //    INNER JOIN ""Admin_Obiecte"" C ON B.""Id""=C.""IdCategorie""
+                //    LEFT JOIN ""Org_PosturiDosar"" D ON C.""Id"" = D.""IdObiect"" AND ""IdPost""={General.Nz(txtId.Value, -99)}
+                //    WHERE A.""Id"" = (SELECT COALESCE(""Valoare"",'') FROM ""tblParametrii"" WHERE ""Nume""='ArieTabDosarPersonalDinPersonal')
+                //    AND B.""Denumire""='Documente Post'", null);
+
+                //lstDosar.DataSource = dtTab;
+                //lstDosar.DataBind();
             }
             catch (Exception ex)
             {

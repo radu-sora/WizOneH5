@@ -663,6 +663,24 @@ namespace WizOne.Organigrama
         protected global::DevExpress.Web.ASPxButton btnPozitii;
 
         /// <summary>
+        /// Label1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label1;
+
+        /// <summary>
+        /// chkDosar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBoxList chkDosar;
+
+        /// <summary>
         /// divDosar control.
         /// </summary>
         /// <remarks>
@@ -670,15 +688,6 @@ namespace WizOne.Organigrama
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDosar;
-
-        /// <summary>
-        /// lstDosar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBoxList lstDosar;
 
         /// <summary>
         /// Label2 control.

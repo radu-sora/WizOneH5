@@ -15647,3 +15647,178 @@ ALTER TABLE F077 MODIFY F07704 varchar2(50);
 INSERT INTO F091 (F09101, F09102, F09103, F09104, F09105) SELECT 91, 6, 'Timp munca conform OUG 132/2020', 'TimpOUG132', 3 FROM F010 WHERE NOT EXISTS (SELECT * FROM F091 WHERE F09102 = 6);
 INSERT INTO F092 (F09201, F09202, F09203, F09204) SELECT 92, 3, 'Intreaga OUG132', 'NormaOUG132' FROM F010 WHERE NOT EXISTS (SELECT * FROM F092 WHERE F09202 = 3);
 COMMIT;
+
+
+----  2.2.134  ----
+
+
+-- https://github.com/wizromRD/WizOne/issues/8
+-- Organigrama
+
+BEGIN
+    DECLARE cnt number;
+    BEGIN
+        SELECT COUNT(*) INTO cnt FROM "Org_Posturi";
+        IF (cnt = 0) THEN
+            INSERT INTO "Org_Posturi"("Id", "Denumire", "Stare", "IdSuperior", "NivelIerarhic", "DataInceput", "DataSfarsit", "DenumireRO", "DenumireEN", "NumeGrupRO", "NumeGrupEN")
+            VALUES(1, 'CONSILIU DE ADMINISTRATIE', 1, 0, 'N', TO_DATE('01-01-2000','DD-MM-YYYY'), TO_DATE('01-01-2200','DD-MM-YYYY'), 'CONSILIU DE ADMINISTRATIE', 'BOARD OF DIRECTORS', 'CONSILIU DE ADMINISTRATIE', 'BOARD OF DIRECTORS');
+            COMMIT;
+        END IF;
+    END;
+END;
+
+ALTER TABLE "Org_Posturi" ADD "CampExtra1" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra2" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra3" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra4" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra5" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra6" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra7" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra8" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra9" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra10" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra11" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra12" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra13" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra14" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra15" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra16" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra17" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra18" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra19" CLOB;
+ALTER TABLE "Org_Posturi" ADD "CampExtra20" CLOB;
+
+  CREATE TABLE "Org_tblConfig" 
+   (	"Id" NUMBER(10,0), 
+	"Eticheta" VARCHAR2(500 BYTE), 
+	"Vizibil" NUMBER(10,0), 
+	"Ordine" NUMBER(10,0), 
+	"USER_NO" NUMBER(10,0), 
+	"TIME" DATE DEFAULT SYSDATE
+   );
+
+  CREATE UNIQUE INDEX "Org_tblConfig_PK" ON "Org_tblConfig" ("Id");
+  ALTER TABLE "Org_tblConfig" ADD CONSTRAINT "Org_tblConfig_PK" PRIMARY KEY ("Id");
+  ALTER TABLE "Org_tblConfig" MODIFY ("Id" NOT NULL ENABLE);
+/
+
+
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Atributii speciale', 1, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Criterii de evaluare', 2, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Observatii', 3, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Conditii de lucru', 4, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Scopul postului', 5, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Profilul postului', 6, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Responsabilitati', 7, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Sarcini secundare', 8, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Responsabilitati de supraveghere', 9, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Autoritatea de a lua decizii', 10, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 11', 11, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 12', 12, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 13', 13, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 14', 14, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 15', 15, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 16', 16, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 17', 17, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 18', 18, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 19', 19, 1);
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 20', 20, 1);
+COMMIT;
+
+INSERT INTO "tblModule"("Id", "Denumire") VALUES(12, 'Organigrama');
+COMMIT;
+
+CREATE TABLE "Org_PosturiDosar" 
+(	"IdPost" NUMBER(10,0), 
+"IdObiect" NUMBER(10,0), 
+"USER_NO" NUMBER(10,0), 
+"TIME" DATE DEFAULT SYSDATE
+);
+
+CREATE UNIQUE INDEX "Org_PosturiDosar_PK" ON "Org_PosturiDosar" ("IdPost", "IdObiect");
+
+ALTER TABLE "Org_PosturiDosar" ADD CONSTRAINT "Org_PosturiDosar_PK" PRIMARY KEY ("IdPost", "IdObiect");
+ALTER TABLE "Org_PosturiDosar" MODIFY ("IdObiect" NOT NULL ENABLE);
+ALTER TABLE "Org_PosturiDosar" MODIFY ("IdPost" NOT NULL ENABLE);
+/
+
+
+CREATE TABLE "Org_PosturiPozitii" 
+(
+	"IdPost" NUMBER(10,0), 	
+	"Pozitii" NUMBER(10,0), 
+    "PozitiiAprobate" NUMBER(10,0), 
+    "DataInceput" DATE, 
+    "DataSfarsit" DATE, 
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE, 
+    "IdAuto" NUMBER(10,0)
+);
+
+CREATE UNIQUE INDEX "Org_PosturiPozitii_PK" ON "Org_PosturiPozitii" ("IdAuto");
+
+
+CREATE SEQUENCE "Org_PosturiPozitii_SEQ" MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER NOCYCLE ;
+
+CREATE OR REPLACE TRIGGER "Auto_Org_PosturiPozitii" 
+BEFORE INSERT ON "Org_PosturiPozitii"
+REFERENCING FOR EACH ROW
+BEGIN
+    SELECT "Org_PosturiPozitii_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+/
+ALTER TRIGGER "Auto_Org_PosturiPozitii" ENABLE;
+/
+
+ALTER TABLE "Org_PosturiPozitii" ADD CONSTRAINT "Org_PosturiPozitii_PK" PRIMARY KEY ("IdAuto");
+ALTER TABLE "Org_PosturiPozitii" MODIFY ("IdAuto" NOT NULL ENABLE);
+/
+
+
+
+ALTER TABLE "Avs_Cereri" ADD "PostId" number(10);
+/
+ALTER TABLE "Avs_Cereri" ADD "PostNume" varchar2(500)
+/
+
+ALTER TABLE "Org_Posturi" ADD "StudiiSuperioare" number(10);
+/
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('MP_FolosesteOrganigrama', '0', '1 - in fereastra de selectie sablon se adauga un combobox cu posturile');
+COMMIT;
+
+DECLARE cnt number;
+BEGIN
+SELECT COUNT(*) INTO cnt FROM "Org_Posturi";
+IF cnt = 0 THEN
+    INSERT INTO "Org_Posturi"("Id", "Denumire", "Stare", "IdSuperior", "NivelIerarhic", "DataInceput", "DataSfarsit", "DenumireRO", "DenumireEN", "NumeGrupRO", "NumeGrupEN")
+    VALUES(1, 'CONSILIU DE ADMINISTRATIE', 1, 0, 'N', TO_DATE('01-01-2000','DD-MM-YYYY'), TO_DATE('01-01-2200','DD-MM-YYYY'), 'CONSILIU DE ADMINISTRATIE', 
+    'BOARD OF DIRECTORS', 'CONSILIU DE ADMINISTRATIE', 'BOARD OF DIRECTORS');
+    COMMIT;
+END IF;
+END;
+/
+
+ALTER TABLE "Org_Posturi" ADD "CampuriExtra" varchar2(100);
+/
+
+INSERT INTO "Avs_tblAtribute" ("Id", "Denumire", "Activ") VALUES(37, 'Post', 1);
+COMMIT;
+
+ALTER TABLE "Avs_Cereri" ADD "IdParinte" number(10);
+/
+
+ALTER TABLE "Org_Posturi" ADD "IdSubdept" number(10);
+/
+ALTER TABLE "Org_Posturi" ADD "IdBirou" number(10);
+/
+
+ALTER TABLE "Org_Posturi" ADD "Ordine" number(10);
+/
+
+ALTER TABLE "Atasamente" ADD "VineDinPosturi" number(10);
+/
+ALTER TABLE "Atasamente" ADD "EsteLaDosar" number(10);
+/

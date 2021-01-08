@@ -140,15 +140,15 @@ namespace WizOne.Pagini
                                 tbl = "Curs_Inregistrare";
                                 break;
                             case "16":
-                                //{
-                                //    tbl = "Curs_Inregistrare";
-                                //    Curs.CursuriInregistrare.metaUploadFile fisier = Session["DocUpload_CursInreg"] as Curs.CursuriInregistrare.metaUploadFile;
-                                //    if (fisier != null)
-                                //    {
-                                //        scrieDoc(fisier.UploadedFileExtension.ToString(), (byte[])fisier.UploadedFile, fisier.UploadedFileName.ToString());
-                                //        tbl = "";
-                                //    }
-                                //}
+                                {
+                                    tbl = "Curs_Inregistrare";
+                                    Curs.CursuriInregistrare.metaUploadFile fisier = Session["DocUpload_CursInreg"] as Curs.CursuriInregistrare.metaUploadFile;
+                                    if (fisier != null)
+                                    {
+                                        scrieDoc(fisier.UploadedFileExtension.ToString(), (byte[])fisier.UploadedFile, fisier.UploadedFileName.ToString());
+                                        tbl = "";
+                                    }
+                                }
                                 break;
                         }
 

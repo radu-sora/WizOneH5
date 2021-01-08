@@ -15343,3 +15343,826 @@ INSERT INTO F091 (F09101, F09102, F09103, F09104, F09105) SELECT 91, 6, 'Timp mu
 GO
 INSERT INTO F092 (F09201, F09202, F09203, F09204) SELECT 92, 3, 'Intreaga OUG132', 'NormaOUG132' FROM F010 WHERE NOT EXISTS (SELECT * FROM F092 WHERE F09202 = 3)
 GO
+
+
+----  2.2.134  ----
+
+---- Cursuri START
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(125, 'Cursuri', 'Cursuri', 'Curs\Cursuri', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(126, 'Sesiuni de cursuri', 'Sesiuni de cursuri', 'Curs\CursuriSesiuni', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(127, 'Aprobare training', 'Aprobare training', 'Curs\Aprobare', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(128, 'Circuit', 'Circuit', 'Pagini\SablonNomen[Curs_Circuit]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(129, 'Cursuri anterioare', 'Cursuri anterioare', 'Curs\CursuriAnterioare', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(130, 'Feedback trainer', 'Feedback trainer', 'Curs\AprobareTrainer', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(131, 'Planificare', 'Planificarea oamenilor pe cursuri', 'Curs\CursuriInregistrare', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(132, 'Vizualizare cursuri disponibile', 'Vizualizare cursuri', 'Curs\CursuriView', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(133, 'Vizualizare istoric', 'Vizualizare istoric', 'Curs\CursuriIstoric', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(134, 'Categorii costuri curs', 'Categorii costuri', 'Pagini\SablonNomen[Curs_tblCosturi]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(135, 'Categorii nivel1', 'Categorii nivel1', 'Pagini\SablonNomen[Curs_tblCateg_Niv1]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(136, 'Categorii nivel2', 'Categorii nivel2', 'Pagini\SablonNomen[Curs_tblCateg_Niv2]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(137, 'Categorii nivel3', 'Categorii nivel3', 'Pagini\SablonNomen[Curs_tblCateg_Niv3]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(138, 'Categorii note', 'Nomenclator categorii note', 'Pagini\SablonNomen[Curs_tblCategoriiNote]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(139, 'Categorii valori note', 'Nomenclator categorii valori note', 'Pagini\SablonNomen[Curs_tblCategNoteValori]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(140, 'Certificari', 'Certificari', 'Pagini\SablonNomen[Curs_tblCertificari]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(141, 'Competente', 'Competente', 'Pagini\SablonNomen[tblCompetente]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(142, 'Competente si Cursuri', 'Competente si Cursuri', 'Pagini\SablonNomen[Curs_relCursCompetente]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(143, 'Competente si Functii', 'Competente si Functii', 'Pagini\SablonNomen[Curs_relCompetenteFunctii]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(144, 'Furnizori', 'Furnizori', 'Pagini\SablonNomen[Curs_tblFurnizori]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(145, 'Locatii', 'Locatii', 'Pagini\SablonNomen[Curs_tblLocatii]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(146, 'Organizatori', 'Organizatori', 'Pagini\SablonNomen[Curs_tblOrganizatori]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(147, 'Stari anterioare', 'Stari anterioare', 'Pagini\SablonNomen[Curs_tblStariAnterior]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(148, 'Stari circuit', 'Stari circuit', 'Pagini\SablonNomen[Curs_tblStari]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(149, 'Tematici', 'Tematici', 'Pagini\SablonNomen[Curs_tblTematici]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(150, 'Tipuri competente', 'Tipuri competente', 'Pagini\SablonNomen[tblGrupCompetente]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(151, 'Traineri', 'Traineri', 'Pagini\SablonNomen[Curs_tblTraineri]', 1, 'm1.png')
+GO
+
+
+
+CREATE TABLE [dbo].[Curs_Anterior](
+	[F10003] [int] NULL,
+	[CursId] [int] NULL,
+	[CursNume] [nvarchar](4000) NULL,
+	[SesiuneId] [int] NULL,
+	[SesiuneNume] [nvarchar](4000) NULL,
+	[DataDobandire] [datetime] NULL,
+	[Organizator] [nvarchar](4000) NULL,
+	[Trainer] [nvarchar](4000) NULL,
+	[Certificat] [nvarchar](4000) NULL,
+	[Observatii] [nvarchar](4000) NULL,
+	[IdStare] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[DenCurs] [nvarchar](500) NULL,
+	[CuloareStare] [nvarchar](50) NULL,
+	[areFisier] [int] NULL,
+	[DataInceput] [datetime] NULL,
+	[DataSfarsit] [datetime] NULL,
+ CONSTRAINT [Curs_Anterior_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_CereriIstoric](
+	[IdCerere] [int] NULL,
+	[IdCircuit] [int] NULL,
+	[IdSuper] [int] NULL,
+	[IdStare] [int] NULL,
+	[IdUser] [int] NULL,
+	[Pozitie] [int] NULL,
+	[Culoare] [nvarchar](50) NULL,
+	[Aprobat] [int] NULL,
+	[DataAprobare] [datetime] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[eListaAsteptare] [int] NULL,
+ CONSTRAINT [Curs_CereriIstoric_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_Circuit](
+	[IdGrupAngajat] [int] NULL,
+	[IdInternExtern] [int] NULL,
+	[Super1] [int] NULL,
+	[Super2] [int] NULL,
+	[Super3] [int] NULL,
+	[Super4] [int] NULL,
+	[Super5] [int] NULL,
+	[Super6] [int] NULL,
+	[Super7] [int] NULL,
+	[Super8] [int] NULL,
+	[Super9] [int] NULL,
+	[Super10] [int] NULL,
+	[Super11] [int] NULL,
+	[Super12] [int] NULL,
+	[Super13] [int] NULL,
+	[Super14] [int] NULL,
+	[Super15] [int] NULL,
+	[Super16] [int] NULL,
+	[Super17] [int] NULL,
+	[Super18] [int] NULL,
+	[Super19] [int] NULL,
+	[Super20] [int] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [Curs_Circuit_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_Inregistrare](
+	[F10003] [int] NULL,
+	[IdCurs] [int] NULL,
+	[IdSesiune] [int] NULL,
+	[IdStare] [int] NULL,
+	[Observatii] [nvarchar](4000) NULL,
+	[Certificat] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[UserIntrod] [int] NULL,
+	[IdCircuit] [int] NULL,
+	[TotalSuperCircuit] [int] NULL,
+	[Culoare] [nvarchar](50) NULL,
+	[Pozitie] [int] NULL,
+	[Id] [int] NULL,
+	[CostRONcuTVA] [int] NULL,
+	[Denumire] [nvarchar](100) NULL,
+	[Organizator] [nvarchar](100) NULL,
+	[PrezentCurs] [int] NULL,
+	[IdCategValoareNota] [int] NULL,
+	[eListaAsteptare] [int] NULL,
+ CONSTRAINT [Curs_Inregistrare_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+CREATE TABLE [dbo].[Curs_relCompetenteFunctii](
+	[Id_Competenta] [int] NULL,
+	[Id_Functie] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_relCompetenteFunctii_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_relCompetenteFunctiiAcad](
+	[Id_Competenta] [int] NULL,
+	[Id_Functie] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_relCompFunctiiAcad_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_relCursAngajati](
+	[Id_Curs] [int] NULL,
+	[Id_Angajat] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_relCursAngajati_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_relCursAnterior](
+	[IdCursAnterior] [int] NULL,
+	[IdCurs] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_relCursAnterior_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_relCursCompetente](
+	[Id_Competenta] [int] NULL,
+	[Id_Curs] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_relCursCompetente_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_relCursCompetenteAcad](
+	[Id_Competenta] [int] NULL,
+	[Id_Curs] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_relCursCompetenteAcad_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_relCursDepart](
+	[Id_Curs] [int] NULL,
+	[Id_Depart] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_relCursDepart_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_relCursFunctii](
+	[Id_Curs] [int] NULL,
+	[Id_Functie] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_relCursFunctii_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_relCursFunctiiAcad](
+	[Id_Curs] [int] NULL,
+	[Id_FunctieAcad] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_relCursFunctiiAcad_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_relSesiuneCosturi](
+	[IdCurs] [int] NULL,
+	[IdSesiune] [int] NULL,
+	[IdCost] [int] NULL,
+	[Valoare] [numeric](10, 5) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdTipCost] [int] NULL,
+	[NumeTipCost] [nvarchar](400) NULL,
+	[IdFurnizor] [int] NULL,
+	[IdCentruCost] [int] NULL,
+ CONSTRAINT [Curs_relSesiuneCosturi_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_relSesiuneDocumente](
+	[IdCurs] [int] NULL,
+	[IdSesiune] [int] NULL,
+	[IdDocument] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK__Curs_rel__2C8AA82CD8612807] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_relSesiuneTrainer](
+	[IdCurs] [int] NULL,
+	[IdSesiune] [int] NULL,
+	[IdTrainer] [int] NULL,
+	[DenumireTrainer] [nvarchar](200) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_relSesiuneTrainer_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblCateg_Niv1](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](150) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblCateg_Niv1_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblCateg_Niv2](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](150) NULL,
+	[Id_Niv1] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblCateg_Niv2_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblCateg_Niv3](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](150) NULL,
+	[Id_Niv2] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblCateg_Niv3_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblCategNoteValori](
+	[IdCategorie] [int] NULL,
+	[IdCategValoare] [int] NULL,
+	[DenumireValoare] [nvarchar](200) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [decimal](10, 0) NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblCategNoteValori_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblCategoriiNote](
+	[IdCategorie] [int] NULL,
+	[DenumireCategorie] [nvarchar](200) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [decimal](10, 0) NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblCategoriiNote_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblCategSesiuni](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](500) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblCategSesiuni_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblCentreCost](
+	[IdCentruCost] [int] NULL,
+	[CentruCost] [varchar](200) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblCentreCost_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblCertificari](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](500) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblCertificari_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+CREATE TABLE [dbo].[Curs_tblCosturi](
+	[IdCost] [int] NULL,
+	[DenumireCost] [nvarchar](200) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdCentruCost] [int] NULL,
+ CONSTRAINT [Curs_tblCosturi_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblCurs](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](500) NULL,
+	[Observatii] [nvarchar](4000) NULL,
+	[Gradul] [nvarchar](150) NULL,
+	[CertificariId] [int] NULL,
+	[CertificariNume] [nvarchar](4000) NULL,
+	[TemplateCertificare] [int] NULL,
+	[TemplateDiploma] [int] NULL,
+	[Activ] [int] NULL,
+	[Importat] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[Categ_Niv1Nume] [nvarchar](150) NULL,
+	[Categ_Niv3Nume] [nvarchar](150) NULL,
+	[MetodaLivrare] [nvarchar](100) NULL,
+	[Skill] [int] NULL,
+	[Categ_Niv1Id] [int] NULL,
+	[Buget] [numeric](18, 0) NULL,
+	[Categ_Niv3Id] [int] NULL,
+	[Categ_Niv2Nume] [nvarchar](150) NULL,
+	[Categ_Niv2Id] [int] NULL,
+	[Recurenta] [int] NULL,
+	[User_TrainerId] [int] NULL,
+	[DateAditLaPlanificare] [int] NULL,
+	[FinalizareCurs] [nvarchar](400) NULL,
+	[OrganizatorId] [int] NULL,
+	[OrganizatorNume] [nvarchar](4000) NULL,
+	[IdCategorieNota] [int] NULL,
+ CONSTRAINT [Curs_tblCurs_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Curs_tblCursSesiune](
+	[Id] [int] NULL,
+	[IdCurs] [int] NULL,
+	[Denumire] [nvarchar](500) NULL,
+	[DataInceput] [datetime] NULL,
+	[DataSfarsit] [datetime] NULL,
+	[OraInceput] [datetime] NULL,
+	[OraSfarsit] [datetime] NULL,
+	[TotalOre] [numeric](22, 2) NULL,
+	[TematicaId] [int] NULL,
+	[TematicaNume] [nvarchar](4000) NULL,
+	[OrganizatorId] [int] NULL,
+	[OrganizatorNume] [nvarchar](4000) NULL,
+	[TrainerId] [int] NULL,
+	[TrainerNume] [nvarchar](4000) NULL,
+	[Locatie] [nvarchar](4000) NULL,
+	[Buget] [numeric](22, 2) NULL,
+	[IdMoneda] [int] NULL,
+	[CostEfectiv] [numeric](22, 2) NULL,
+	[Observatii] [nvarchar](4000) NULL,
+	[IdStare] [int] NULL,
+	[NrMin] [int] NULL,
+	[NrMax] [int] NULL,
+	[IdQuiz] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[DataExpirare] [datetime] NULL,
+	[CategSesiune] [int] NULL,
+	[Bugetat] [int] NULL,
+	[InternExtern] [int] NULL,
+	[CostEstimat] [int] NULL,
+	[CodBuget] [nvarchar](20) NULL,
+	[TipSesiune] [int] NULL,
+	[Materiale] [nvarchar](200) NULL,
+	[OrePauzaMasa] [decimal](18, 2) NULL,
+	[DataInceputAprobare] [datetime] NULL,
+	[DataSfarsitAprobare] [datetime] NULL,
+ CONSTRAINT [Curs_tblCursSesiune_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+CREATE TABLE [dbo].[Curs_tblFurnizori](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](500) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblFurnizori_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblLocatii](
+	[Denumire] [nvarchar](500) NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[Id] [int] NOT NULL,
+ CONSTRAINT [Curs_tblLocatii_PK] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblOrganizatori](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](500) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblOrganizatori_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblStari](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](50) NULL,
+	[Culoare] [nvarchar](50) NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[esteAnterior] [int] NULL,
+ CONSTRAINT [Curs_tblStari_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblStariAnterior](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](150) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblStariAnterior_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblStariSesiune](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](150) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblStariSesiune_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblTematici](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](500) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblTematici_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Curs_tblTipSesiuni](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](500) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblTipSesiuni_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+CREATE TABLE [dbo].[Curs_tblTraineri](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](500) NULL,
+	[IdUser] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Curs_tblTraineri_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+ALTER TABLE [dbo].[Curs_Anterior] ADD  CONSTRAINT [DF__tmp_ms_xx___TIME__7B5C1DA2]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_Anterior] ADD  CONSTRAINT [DF__Curs_Ante__areFi__5A6F5FCC]  DEFAULT ((0)) FOR [areFisier]
+GO
+ALTER TABLE [dbo].[Curs_CereriIstoric] ADD  CONSTRAINT [DF__Curs_Cerer__TIME__54B751CD]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_CereriIstoric] ADD  CONSTRAINT [DF__Curs_Cere__eList__49CFAF06]  DEFAULT ((0)) FOR [eListaAsteptare]
+GO
+ALTER TABLE [dbo].[Curs_Circuit] ADD  CONSTRAINT [DF__Curs_Circu__TIME__55AB7606]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_Inregistrare] ADD  CONSTRAINT [DF__tmp_ms_xx___TIME__7F2CAE86]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_Inregistrare] ADD  CONSTRAINT [DF__Curs_Inre__Preze__5B638405]  DEFAULT ((0)) FOR [PrezentCurs]
+GO
+ALTER TABLE [dbo].[Curs_Inregistrare] ADD  CONSTRAINT [DF__Curs_Inre__eList__48DB8ACD]  DEFAULT ((0)) FOR [eListaAsteptare]
+GO
+
+ALTER TABLE [dbo].[Curs_relCompetenteFunctii] ADD  CONSTRAINT [DF__Curs_relCo__TIME__597C06EA]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_relCompetenteFunctiiAcad] ADD  CONSTRAINT [DF__Curs_relCo__TIME__5A702B23]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_relCursAngajati] ADD  CONSTRAINT [DF__Curs_relCu__TIME__5B644F5C]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_relCursCompetente] ADD  CONSTRAINT [DF__Curs_relCu__TIME__5C587395]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_relCursCompetenteAcad] ADD  CONSTRAINT [DF__Curs_relCu__TIME__5D4C97CE]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_relCursDepart] ADD  CONSTRAINT [DF__Curs_relCu__TIME__5E40BC07]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_relCursFunctii] ADD  CONSTRAINT [DF__Curs_relCu__TIME__5F34E040]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_relCursFunctiiAcad] ADD  CONSTRAINT [DF__Curs_relCu__TIME__60290479]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_relSesiuneCosturi] ADD  CONSTRAINT [DF__Curs_relSe__TIME__611D28B2]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_relSesiuneDocumente] ADD  CONSTRAINT [DF__Curs_relSe__TIME__62114CEB]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_relSesiuneTrainer] ADD  CONSTRAINT [DF__Curs_relSe__TIME__63057124]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblCateg_Niv1] ADD  CONSTRAINT [DF__Curs_tblCa__TIME__63F9955D]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblCateg_Niv2] ADD  CONSTRAINT [DF__Curs_tblCa__TIME__64EDB996]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblCateg_Niv3] ADD  CONSTRAINT [DF__Curs_tblCa__TIME__65E1DDCF]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblCategSesiuni] ADD  CONSTRAINT [DF__Curs_tblCa__TIME__66D60208]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblCertificari] ADD  CONSTRAINT [DF__tmp_ms_xx___TIME__02FD3F6A]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+ALTER TABLE [dbo].[Curs_tblCosturi] ADD  CONSTRAINT [DF__Curs_tblCo__TIME__68BE4A7A]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblCurs] ADD  CONSTRAINT [DF__tmp_ms_xx___TIME__05D9AC15]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblCursSesiune] ADD  CONSTRAINT [DF__tmp_ms_xx___TIME__08B618C0]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+
+ALTER TABLE [dbo].[Curs_tblLocatii] ADD  CONSTRAINT [DF__Curs_tblLo__TIME__6AA692EC]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblOrganizatori] ADD  CONSTRAINT [DF__tmp_ms_xx___TIME__1427CB6C]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblStari] ADD  CONSTRAINT [DF__Curs_tblSt__TIME__6B9AB725]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblStari] ADD  CONSTRAINT [DF__Curs_tblS__esteA__5C57A83E]  DEFAULT ((0)) FOR [esteAnterior]
+GO
+ALTER TABLE [dbo].[Curs_tblStariAnterior] ADD  CONSTRAINT [DF__tmp_ms_xx___TIME__17043817]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+ALTER TABLE [dbo].[Curs_tblStariSesiune] ADD  CONSTRAINT [DF__tmp_ms_xx___TIME__1CBD116D]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblTematici] ADD  CONSTRAINT [DF__tmp_ms_xx___TIME__1F997E18]  DEFAULT (getdate()) FOR [TIME]
+GO
+ALTER TABLE [dbo].[Curs_tblTipSesiuni] ADD  CONSTRAINT [DF__Curs_tblTi__TIME__6D82FF97]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+ALTER TABLE [dbo].[Curs_tblTraineri] ADD  CONSTRAINT [DF__tmp_ms_xx___TIME__2275EAC3]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+
+
+CREATE SEQUENCE [dbo].[Curs_tblCurs_SEQ] 
+ AS [bigint]
+ START WITH 1
+ INCREMENT BY 1
+ MINVALUE 1
+ MAXVALUE 9999999999999
+ CACHE 
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('hasNomenclatorTraineri', '1', '', 6)
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('TipFunctiiCurs', '1', '0 - tabela F718 (functii), 1- Tabela F713 (titluri academice), 2 - tabela Org_Posturi (posturi)', 6)
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('afisareOrganizatorCursuri', '0', '0 - organizatorul se alege din meniul de Cursuri; 1 - organizatorul de curs se alege din meniul sesiuni', 6)
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Curs_CompletareAngajati', '3', '0 -> nu trebuie completata dimensiunea; 1 -> trebuie completata dimensiunea; 2 -> poate fi completata/nu dimensiunea; 3-> cel putin o dimensiune trebuie completata', 6)
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Curs_CompletareDepartament', '3', '0 -> nu trebuie completata dimensiunea; 1 -> trebuie completata dimensiunea; 2 -> poate fi completata/nu dimensiunea; 3-> cel putin o dimensiune trebuie completata', 6)
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Curs_CompletareCompetente', '3', '0 -> nu trebuie completata dimensiunea; 1 -> trebuie completata dimensiunea; 2 -> poate fi completata/nu dimensiunea; 3-> cel putin o dimensiune trebuie completata', 6)
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Curs_CompletareFunctii', '3', '0 -> nu trebuie completata dimensiunea; 1 -> trebuie completata dimensiunea; 2 -> poate fi completata/nu dimensiunea; 3-> cel putin o dimensiune trebuie completata', 6)
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('verifCursAnterior', '0', '0 - nu se verifica daca s-au absolvit cursurile anterioare; 1 - se verifica daca s-au absolvit cursurile anterioare', 6)
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('verifNumarParticipantiSesiune', '0', '0 - nu se verifica numarul de participanti maxim la sesiune; 1 - se verifica numarul maxim de participanti la sesiune', 6)
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('hasNomenclatorCosturi', '0', '', 6)
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('alocareCursCosturiXCentruCost', '1', '0 - costurile aferente cursurilor nu se aloca pe vreun centru de cost din tabela Curs_tblCentreCost; 1 - costurile se aolca pe centrele de cost definite in Curs_tblCentreCost', 6)
+GO
+
+
+---- Cursuri END

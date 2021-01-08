@@ -87,6 +87,7 @@
             ProgramLucru = 34,
             TipContract = 35,
             DurataContract = 36,
+            Post = 37,
             NumePrenume = 101,
             CASS = 102,
             Studii = 103,

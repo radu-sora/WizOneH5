@@ -192,7 +192,20 @@ namespace WizOne.Pagini
                             {dr["F704660"] ?? null},{dr["F704661"] ?? null},{dr["F704662"] ?? null},{dr["F704663"] ?? null},{dr["F704664"] ?? null},{dr["F704665"] ?? null},{dr["F704666"] ?? null},{dr["F704667"] ?? null},{dr["F704668"]},{dr["F704669"] ?? null});
                             END;";
                         General.ExecutaNonQuery(strSql, null);
-                    }                  
+                    }
+                }
+
+                //Florin 2020.10.06
+                if (rez)
+                {
+                    string strSql = $@"SELECT * FROM Avs_Cereri A WHERE PostId IS NOT NULL AND YEAR(A.DataModif)=(SELECT F01011 FROM F010) AND MONTH(A.DataModif)=(SELECT F01012 FROM F010)";
+                    if (Constante.tipBD == 2)
+                        strSql = @"SELECT * FROM ""Avs_Cereri"" A WHERE ""PostId"" IS NOT NULL AND TO_NUMBER(TO_CHAR(A.""DataModif"", 'YYYY'))=(SELECT F01011 FROM F010) AND TO_NUMBER(TO_CHAR(A.""DataModif"", 'MM'))=(SELECT F01012 FROM F010)";
+                    DataTable dt = General.IncarcaDT(strSql);
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        General.SalveazaPost(dt.Rows[i]["F10003"], dt.Rows[i]["PostId"], Convert.ToDateTime(dt.Rows[i]["DataModif"]));
+                    }
                 }
             }
             catch (Exception ex)

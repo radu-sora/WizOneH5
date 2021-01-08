@@ -1,15 +1,17 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Beneficii.ascx.cs" Inherits="WizOne.Personal.Beneficii" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Dosar.ascx.cs" Inherits="WizOne.Personal.Dosar" %>
+
+
 
 <body>
 
-    <table width="100%">
+    <table style="width:100%">
         <tr>
             <td>
-                <dx:ASPxGridView ID="grDateBeneficii" runat="server" ClientInstanceName="grDateBeneficii" ClientIDMode="Static" Width="65%" AutoGenerateColumns="false"  OnDataBinding="grDateBeneficii_DataBinding"  OnInitNewRow="grDateBeneficii_InitNewRow"
-                    OnRowInserting="grDateBeneficii_RowInserting" OnRowUpdating="grDateBeneficii_RowUpdating" OnRowDeleting="grDateBeneficii_RowDeleting" OnHtmlEditFormCreated="grDateBeneficii_HtmlEditFormCreated">
+                <dx:ASPxGridView ID="grDateDosar" runat="server" ClientInstanceName="grDateDosar" ClientIDMode="Static" Width="60%" AutoGenerateColumns="false" KeyFieldName="F10003;IdObiect" OnDataBinding="grDateDosar_DataBinding"  OnInitNewRow="grDateDosar_InitNewRow"
+                    OnRowInserting="grDateDosar_RowInserting" OnRowUpdating="grDateDosar_RowUpdating" OnRowDeleting="grDateDosar_RowDeleting" OnHtmlEditFormCreated="grDateDosar_HtmlEditFormCreated">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
-                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateBeneficii_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnEndCallbackBeneficii(s,e); }" ContextMenu="ctx" />                                      
+                    <ClientSideEvents CustomButtonClick="function(s, e) { OnCustomButtonClickDosar(s, e); }" EndCallback="function(s,e) { OnEndCallbackDosar(s,e); }" ContextMenu="ctx" />                                      
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
@@ -20,21 +22,19 @@
                                 </dx:GridViewCommandColumnCustomButton>
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
-                        <dx:GridViewDataTextColumn FieldName="Marca" Name="Marca" Caption="Angajat"  Width="75px" Visible="false"/>
-                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
-                        <dx:GridViewDataComboBoxColumn FieldName="IdObiect" Name="IdObiect" Caption="Nume beneficiu"  Width="250px" >
-                            <Settings SortMode="DisplayText" />
+                        
+                        <dx:GridViewDataComboBoxColumn FieldName="IdObiect" Name="IdObiect" Caption="Denumire document" Width="450px" >
                             <PropertiesComboBox TextField="NumeCompus" ValueField="IdObiect" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="Caracteristica" Name="Caracteristica" Caption="Caracteristica echipament"  Width="250px" />
-                        <dx:GridViewDataDateColumn FieldName="DataPrimire" Name="DataPrimire" Caption="Data primire"  Width="100px" >
-                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                        </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataDateColumn FieldName="DataExpirare" Name="DataExpirare" Caption="Data expirare"  Width="100px" >
-                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                        </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" />						
-                        <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" />
+                        <dx:GridViewDataTextColumn FieldName="FisierNume" Name="FisierNume" Caption="Nume fisier"  Width="350px" Settings-ShowEditorInBatchEditMode="false" />
+                        <dx:GridViewDataTextColumn FieldName="FisierExtensie" Name="FisierExtensie" Caption="Extensie fisier"  Width="150px" Settings-ShowEditorInBatchEditMode="false" />
+
+                        <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" Width="150px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Angajat"  Width="75px" Visible="false" ShowInCustomizationForm="false"/>
+                        <dx:GridViewDataDateColumn FieldName="Obligatoriu" Name="Obligatoriu" Caption="Obligatoriu" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataDateColumn FieldName="AreFisier" Name="AreFisier" Caption="AreFisier" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />
                     </Columns>
                     <SettingsCommandButton>
                         <UpdateButton ButtonType="Link" Text="Actualizeaza">
@@ -68,36 +68,27 @@
                             <div style="padding: 4px 3px 4px">
                                 <table>
                                     <tr>
-                                        <td id="lblNume" runat="server" style="padding-left:10px !important;" colspan="2">Nume beneficiu</td>
+                                        <td style="padding-left:10px !important;" colspan="2">Nume beneficiu</td>
                                     </tr>
                                     <tr><td style="padding:10px !important;" colspan="2"><dx:ASPxComboBox ID="cmbNumeBen" runat="server" Width="250px" ValueField="IdObiect" DropDownWidth="200" TextField="NumeCompus" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("IdObiect") %>' />
                                     </tr>
                                     <tr>
-                                        <td id="lblDataPrimire" runat="server" style="padding:10px !important;">Data primire</td>
-                                        <td id="lblDataExp" runat="server" style="padding:10px !important;">Data expirare</td>
+                                        <td style="padding:10px !important;"  colspan="2">Descriere</td>                                      
                                     </tr>
                                     <tr>
-                                        <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataPrim" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DataPrimire") %>' /></td>
-                                        <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataExp" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DataExpirare") %>' /></td>
-                                    </tr>
-                                    <tr>
-                                        <td id="lblCaract" runat="server" style="padding:10px !important;"  colspan="2">Caracteristica echipament</td>                                      
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:10px !important;"  colspan="2"><dx:ASPxTextBox ID="txtCaract" runat="server" Width="250px" Value='<%# Bind("Caracteristica") %>' /></td>
+                                        <td style="padding:10px !important;"  colspan="2"><dx:ASPxTextBox ID="txtDesc" runat="server" Width="250px" Value='<%# Bind("Descriere") %>' /></td>
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;" colspan="2">
-                                            <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
-                                            <dx:ASPxUploadControl ID="btnDocUploadBen" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
+                                            <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp;</label>
+                                            <dx:ASPxUploadControl ID="btnDocUploadDosar" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
                                                 BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
-                                                ClientInstanceName="btnDocUploadBen" OnFileUploadComplete="btnDocUploadBen_FileUploadComplete" ValidationSettings-ShowErrors="false">
+                                                ClientInstanceName="btnDocUploadDosar" OnFileUploadComplete="btnDocUploadDosar_FileUploadComplete" ValidationSettings-ShowErrors="true">
                                                 <BrowseButton>
                                                     <Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
                                                 </BrowseButton>
                                                 <ValidationSettings ShowErrors="False"></ValidationSettings>
-
-                                                <ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                                                <ClientSideEvents FileUploadComplete="function(s,e) { OnEndUploadDosar(s); }" />
                                             </dx:ASPxUploadControl>
                                         </td>
                                     </tr>
@@ -122,16 +113,16 @@
 
     <script>
 
-        function grDateBeneficii_CustomButtonClick(s, e) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=10&id=' + s.GetRowKey(s.GetFocusedRowIndex()), '_blank ')
+        function OnCustomButtonClickDosar(s, e) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=13&id=' + s.GetRowKey(s.GetFocusedRowIndex()), '_blank ')
         }
 
-        function EndUpload(s) {
+        function OnEndUploadDosar(s) {
             lblDoc.innerText = s.cpDocUploadName;
             s.cpDocUploadName = null;
         }
 
-        function OnEndCallbackBeneficii(s, e) {
+        function OnEndCallbackDosar(s, e) {
             if (s.cpAlertMessage != null) {
                 swal({
                     title: "", text: s.cpAlertMessage,

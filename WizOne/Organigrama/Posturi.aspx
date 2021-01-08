@@ -1,68 +1,18 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Posturi.aspx.cs" Inherits="WizOne.Organigrama.Posturi" %>
 
-
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-
-    <script language="javascript" type="text/javascript">
-        function StartUpload() {
-            //pnlLoading.Show();
-        }
-
-        function EndUpload(s) {
-            //pnlLoading.Hide();
-            lblDoc.innerText = s.cpDocUploadName;
-            s.cpDocUploadName = null;
-        }
-
-        function NivelHay(s)
-        {
-            txtSalMin.SetValue(s.GetSelectedItem().texts[1]);
-            txtSalMed.SetValue(s.GetSelectedItem().texts[2]);
-            txtSalMax.SetValue(s.GetSelectedItem().texts[3]);
-        }
-
-        function NivelIerarhic(s)
-        {
-            var nvl = s.GetSelectedItem().texts[2].replace('N-', '');
-            if (nvl == 'N') nvl=0;
-            txtNivelIer.SetValue('N-' + (Number(nvl) + 1));
-            hfNivelIer.Set('val','N-' + (Number(nvl) + 1));
-
-            cmbSupFunc.SetValue(s.GetValue());
-            cmbSupFunc.SetText(s.GetText());
-        }
-
-        function OnEndCallback(s, e) {
-            if (s.cpAlertMessage != null) {
-                swal({
-                    title: trad_string(limba, ""), text: s.cpAlertMessage,
-                    type: "warning"
-                });
-                s.cpAlertMessage = null;
-            }
-            pnlLoading.Hide();
-        }
-
-        function ShowDoc()
-        {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tbl=3&id=' + <%=Session["IdAuto"] %>, '_blank ')
-        }
-
-    </script>
-
-</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <table width="100%">
+    <table style="width:100%">
         <tr>
-            <td align="left">
+            <td class="pull-left">
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Font-Size="14px" Font-Bold="True" ForeColor="#00578A" Font-Underline="True" />
             </td>
-            <td align="right">
+            <td class="pull-right">
                 <dx:ASPxButton ID="btnPrint" ClientInstanceName="btnPrint" ClientIDMode="Static" runat="server" Text="Imprima" AutoPostBack="true" OnClick="btnPrint_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnSterge" ClientInstanceName="btnSterge" ClientIDMode="Static" runat="server" Text="Sterge" OnClick="btnSterge_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnSterge" ClientInstanceName="btnSterge" ClientIDMode="Static" runat="server" Text="Sterge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s,e) { OnStergeClick(); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" >
@@ -78,9 +28,6 @@
         </tr>
     </table>
     
-
-
-
     <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
         <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
         <PanelCollection>
@@ -112,7 +59,7 @@
                                         </BrowseButton>
                                         <ValidationSettings ShowErrors="False"></ValidationSettings>
 
-                                        <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                                        <ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
                                     </dx:ASPxUploadControl>
                                 </td>
                                 <td style="padding-right:10px;">
@@ -142,7 +89,9 @@
         
 		            <label id="lblDen" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtDen" runat="server" Width="300px" />
+                        <dx:ASPxTextBox ID="txtDen" ClientInstanceName="txtDen" runat="server" Width="300px">
+                            <ClientSideEvents TextChanged="function(s,e) { OnDenumireChanged(s,e); }" />
+                        </dx:ASPxTextBox>
                     </div>        
 		            <label id="lblDtInc" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data Inceput</label>
                     <div style="float:left; padding-right:10px;">
@@ -155,26 +104,26 @@
                 </div>
 
                 <div class="Absente_divOuter margin_top15">
-		            <label id="lblDenRO" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire raport romana</label>
+		            <label id="lblDenRO" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire post romana</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtDenRO" runat="server" Width="300px" MaxLength="300" />
+                        <dx:ASPxTextBox ID="txtDenRO" ClientInstanceName="txtDenRO" runat="server" Width="300px" MaxLength="300" />
                     </div>        
 
-		            <label id="lblDenEN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire raport engleza</label>
+		            <label id="lblDenEN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Denumire post engleza</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtDenEN" runat="server" Width="300px" MaxLength="300" />
+                        <dx:ASPxTextBox ID="txtDenEN" ClientInstanceName="txtDenEN" runat="server" Width="300px" MaxLength="300" />
                     </div>        
                 </div>
 
                 <div class="Absente_divOuter margin_top15">
 		            <label id="lblGrupRO" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Nume grup romana</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtGrupRO" runat="server" Width="300px" MaxLength="300" />
+                        <dx:ASPxTextBox ID="txtGrupRO" ClientInstanceName="txtGrupRO" runat="server" Width="300px" MaxLength="300" />
                     </div>        
 
 		            <label id="lblGrupEN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Nume grup engleza</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtGrupEN" runat="server" Width="300px" MaxLength="300" />
+                        <dx:ASPxTextBox ID="txtGrupEN" ClientInstanceName="txtGrupEN" runat="server" Width="300px" MaxLength="300" />
                     </div>        
                 </div>
 
@@ -217,38 +166,54 @@
                             <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbDept'); }" />
                         </dx:ASPxComboBox>
                     </div>
+
+                    <label id="lblSubdept" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Subdept.</label>
+                    <div style="float:left; padding-right:15px;">    
+                        <dx:ASPxComboBox ID="cmbSubDept" ClientInstanceName="cmbSubDept" ClientIDMode="Static" runat="server" Width="300px" ValueField="IdSubDept" TextField="SubDept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSubdept'); }" />
+                        </dx:ASPxComboBox>
+                    </div>
+                </div>
+
+                <div class="Absente_divOuter margin_top15">
+                    <label id="lblBirou" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Birou</label>
+                    <div style="float:left; padding-right:15px;">    
+                        <dx:ASPxComboBox ID="cmbBirou" ClientInstanceName="cmbBirou" ClientIDMode="Static" runat="server" Width="300px" ValueField="IdBirou" TextField="Birou" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbBirou'); }" />
+                        </dx:ASPxComboBox>
+                    </div>
                 </div>
 
                 <div class="Absente_divOuter margin_top15">
                     <label id="lblSup" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Superior administrativ</label>
                     <div style="float:left; padding-right:15px;">    
-                        <dx:ASPxComboBox ID="cmbSup" runat="server" Width="300px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" 
+                        <dx:ASPxComboBox ID="cmbSup" runat="server" Width="300px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true"
                                     IncrementalFilteringMode="Contains" CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
                             <ClientSideEvents SelectedIndexChanged="function(s, e) { NivelIerarhic(s); }" />
+                            <ItemStyle Wrap="True" />
                             <Columns>
-                                <dx:ListBoxColumn FieldName="Id" Caption="Id" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Denumire" Caption="Post" Width="130px" />
+                                <dx:ListBoxColumn FieldName="Id" Caption="Id" Width="80px" />
+                                <dx:ListBoxColumn FieldName="Denumire" Caption="Post" Width="250px" />
                                 <dx:ListBoxColumn FieldName="NivelIerarhic" Caption="Nivel" Width="50px" />
-                                <dx:ListBoxColumn FieldName="Subcompanie" Caption="Subcompanie" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />
+                                <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="180px" />
+                                <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="180px" />
+                                <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="180px" />
                             </Columns>
                         </dx:ASPxComboBox>
                     </div>
         
-                    <label id="lblSupFunc" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:85px;">Superior functional</label>
+                    <label id="lblSupFunc" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Superior functional</label>
                     <div style="float:left; padding-right:15px;">    
                         <dx:ASPxComboBox ID="cmbSupFunc" ClientInstanceName="cmbSupFunc" ClientIDMode="Static" runat="server" Width="300px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" 
                                     IncrementalFilteringMode="Contains" CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
+                            <ItemStyle Wrap="True" />
                             <Columns>
-                                <dx:ListBoxColumn FieldName="Id" Caption="Id" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Denumire" Caption="Post" Width="130px" />
+                                <dx:ListBoxColumn FieldName="Id" Caption="Id" Width="80px" />
+                                <dx:ListBoxColumn FieldName="Denumire" Caption="Post" Width="250px" />
                                 <dx:ListBoxColumn FieldName="NivelIerarhic" Caption="Nivel" Width="50px" />
-                                <dx:ListBoxColumn FieldName="Subcompanie" Caption="Subcompanie" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
-                                <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />
+                                <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="180px" />
+                                <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="180px" />
+                                <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="180px" />
                             </Columns>
                         </dx:ASPxComboBox>
                     </div>
@@ -256,8 +221,16 @@
 
                 <div class="Absente_divOuter margin_top15">
                     <label id="lblFunc" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Functie</label>
-                    <dx:ASPxComboBox ID="cmbFunc" runat="server" Width="300px" ValueField="F71802" TextField="F71804" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)"
+                    <div style="float:left; padding-right:15px;"> 
+                        <dx:ASPxComboBox ID="cmbFunc" runat="server" Width="300px" ValueField="F71802" TextField="F71804" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)"
                         IncrementalFilteringMode="Contains" CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0}" />
+                    </div>
+                        
+                    <label id="lblStudiiSup" runat="server" style="display:inline-block; float:left; padding-right:15px; width:120px;">Studii Superioare</label>
+                    <div style="float:left; padding-right:15px;"> 
+                        <dx:ASPxCheckBox ID="chkStudii" runat="server" />
+                    </div>
+
                 </div>
 
                 <div class="Absente_divOuter margin_top15">
@@ -304,53 +277,44 @@
                             </Columns>
                         </dx:ASPxComboBox>
                     </div>
-
-		            <label id="lblPLan" runat="server" style="display:inline-block; float:left; padding-right:15px;">Plan HC</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtPlan" runat="server" Width="60px"/>
-                    </div>
-                	<label id="lblHCAprobat" runat="server" style="display:inline-block; float:left; padding-right:15px;">HC Aprobat</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxTextBox ID="txtHCAProbat" runat="server" Width="60px"/>
-                    </div>
-                </div>
-
-                <div id="divExtra" runat="server">
-                    <div class="row">
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;">
-                            <label id="lblAnLuna" runat="server">Luna/An</label><br />
-                            <dx:ASPxDateEdit ID="txtAnLuna" ClientInstanceName="txtAnLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
-                                <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtAnLuna'); }" />
-                                <CalendarProperties FirstDayOfWeek="Monday" />
-                            </dx:ASPxDateEdit>
-                        </div>
-                    </div>
-
-
                 </div>
 
                 <div class="Absente_divOuter margin_top15">
-		            <label id="lblAtr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Atribute speciale</label>
+		            <label id="lblPozitii" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Nr pozitii</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxMemo ID="txtAtr" runat="server" Width="700px" Height="100px" />
-                    </div>   
+                        <dx:ASPxTextBox ID="txtPozitii" ClientInstanceName="txtPozitii" runat="server" Width="60px" ClientEnabled="false" ReadOnly="true"/>
+                    </div>
+                	<label id="lblPozitiiAprobate" runat="server" style="display:inline-block; float:left; padding-right:15px;">Nr pozitii aprobate</label>
+                    <div style="float:left; padding-right:15px;">
+                        <dx:ASPxTextBox ID="txtPozitiiAprobate" ClientInstanceName="txtPozitiiAprobate" runat="server" Width="60px" ClientEnabled="false" ReadOnly="true"/>
+                    </div>
+                    <dx:ASPxButton ID="btnPozitii" runat="server" ToolTip="istoric numar pozitii" AutoPostBack="false" Height="28px" Text="...">
+                        <Paddings PaddingLeft="0px" PaddingRight="0px" />
+                        <ClientSideEvents Click="function(s,e) { popUpIstoric.Show(); }" />
+                    </dx:ASPxButton>
                 </div>
-    
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblCrt" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Criterii evaluare</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxMemo ID="txtCrt" runat="server" Width="700px" Height="100px" />
-                    </div>   
+                <br /><br />
+
+                <div id="divDosar" runat="server" style="width:815px;">
+                    <dx:ASPxCheckBoxList ID="lstDosar" runat="server" ValueField="Id" TextField="Denumire" RepeatColumns="1" RepeatLayout="Table" OnDataBound="lstDosar_DataBound" >
+                        <CaptionSettings Position="Top" />
+                    </dx:ASPxCheckBoxList>
                 </div>
 
                 <div class="Absente_divOuter margin_top15">
-		            <label id="lblObs" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Observatii</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxMemo ID="txtObs" runat="server" Width="700px" Height="100px" />
-                    </div>   
+                    <label id="Label2" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Alege campuri aditionale</label>
+                    <div style="float:left; padding-right:15px;">  
+                        <dx:ASPxCheckBoxList ID="chkExtra" ClientInstanceName="chkExtra" runat="server" ValueField="Id" TextField="Eticheta" RepeatColumns="4" RepeatLayout="Table" >
+                            <CaptionSettings Position="Top" />
+                            <ClientSideEvents SelectedIndexChanged="function(s,e) { OnChckSelectedIndexChanged(s,e); }" />
+                        </dx:ASPxCheckBoxList>
+                    </div>
                 </div>
 
-                
+
+                <div id="divExtra" runat="server" style="width:815px;">
+                </div>
+
                 <div class="Absente_divOuter margin_top15" style="display:none;">
 		            <label id="lblCom" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Competente</label>
                     <dx:ASPxGridView ID="grDate" runat="server" Width="700px">
@@ -361,79 +325,210 @@
                     </dx:ASPxGridView>
                 </div>
 
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf1" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns" >Beneficiul 1</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf1" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
+                <div id="divBenef" runat="server" style="width:815px;">
                 </div>
 
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf2" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 2</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf2" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf3" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 3</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf3" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf4" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 4</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf4" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf5" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 5</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf5" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf6" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 6</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf6" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf7" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 7</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf7" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf8" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 8</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf8" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf9" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 9</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf9" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
-
-                <div class="Absente_divOuter margin_top15">
-		            <label id="lblBenf10" runat="server" style="float:left; padding-right:15px; width:100px;" class="ascuns">Beneficiul 10</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbBenf10" runat="server" Width="300px" ValueField="ObiectId" TextField="ObiectDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" CssClass="ascuns" />
-                    </div>   
-                </div>
+                <br /><br /><br /><br />
 
             </dx:PanelContent>
         </PanelCollection>
     </dx:ASPxCallbackPanel>
 
+
+    <dx:ASPxPopupControl ID="popUpIstoric" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Right" ContentStyle-VerticalAlign="Top"
+        EnableViewState="False" PopupElementID="popUpInitArea" PopupHorizontalAlign="WindowCenter"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="800px" Height="500px" HeaderText="Istoric numar pozitii aprobate"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpIstoric" EnableHierarchyRecreation="false">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel6" runat="server">
+
+                    <dx:ASPxGridView ID="grDateIstoric" runat="server" ClientInstanceName="grDateIstoric" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" KeyFieldName="IdAuto" 
+                         OnInitNewRow="grDateIstoric_InitNewRow" OnRowUpdating="grDateIstoric_RowUpdating" OnRowDeleting="grDateIstoric_RowDeleting" OnRowInserting="grDateIstoric_RowInserting" >
+                        <SettingsBehavior AllowFocusedRow="true" />
+                        <Settings ShowFilterRow="False" ShowColumnHeaders="true" ShowStatusBar="Hidden" />
+                        <SettingsEditing Mode="Inline" />
+                        <ClientSideEvents EndCallback="function(s,e) { OnEndCallbackGridIstoric(s,e); }" ContextMenu="ctx" />
+                        <Columns>
+                            <dx:GridViewCommandColumn Width="25px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
+                                                           
+                            <dx:GridViewDataSpinEditColumn FieldName="Pozitii" Name="Pozitii" Caption="Pozitii">
+                                <PropertiesSpinEdit MaxValue="99" MinValue="1" MaxLength="2">
+                                    <ValidationSettings>
+                                        <RequiredField IsRequired="true" ErrorText="Acest camp este obligatoriu" />
+                                    </ValidationSettings>
+                                </PropertiesSpinEdit>
+                            </dx:GridViewDataSpinEditColumn>
+                            <dx:GridViewDataSpinEditColumn FieldName="PozitiiAprobate" Name="PozitiiAprobate" Caption="Pozitii Aprobate">
+                                <PropertiesSpinEdit MaxValue="99" MinValue="1" MaxLength="2">
+                                    <ValidationSettings>
+                                        <RequiredField IsRequired="true" ErrorText="Acest camp este obligatoriu" />
+                                    </ValidationSettings>
+                                </PropertiesSpinEdit>
+                            </dx:GridViewDataSpinEditColumn>
+                            <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data Inceput">
+                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
+                                    <ValidationSettings>
+                                        <RequiredField IsRequired="true" ErrorText="Acest camp este obligatoriu" />
+                                    </ValidationSettings>
+                                </PropertiesDateEdit>
+                            </dx:GridViewDataDateColumn>
+                            <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data Sfarsit">
+                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
+                                    <ValidationSettings>
+                                        <RequiredField IsRequired="true" ErrorText="Acest camp este obligatoriu" />
+                                    </ValidationSettings>
+                                </PropertiesDateEdit>
+                            </dx:GridViewDataDateColumn>
+                            
+                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" ShowInCustomizationForm="false" /> 
+                            <dx:GridViewDataTextColumn FieldName="IdPost" Name="IdPost" Caption="IdPost"  Width="75px" Visible="false" ShowInCustomizationForm="false" /> 
+                        </Columns>
+
+                        <SettingsCommandButton>
+                            <UpdateButton>
+                                <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png" AlternateText="Save" ToolTip="Actualizeaza" />
+                                <Styles>
+                                    <Style Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </UpdateButton>
+                            <CancelButton>
+                                <Image Url="~/Fisiere/Imagini/Icoane/renunta.png" AlternateText="Renunta" ToolTip="Renunta" />
+                            </CancelButton>
+
+                            <EditButton>
+                                <Image Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" ToolTip="Edit" />
+                                <Styles>
+                                    <Style Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </EditButton>
+                            <DeleteButton>
+                                <Image Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" ToolTip="Sterge" />
+                            </DeleteButton>
+                            <NewButton>
+                                <Image Url="~/Fisiere/Imagini/Icoane/new.png" AlternateText="Adauga" ToolTip="Adauga" />
+                            </NewButton>
+                        </SettingsCommandButton>
+
+                    </dx:ASPxGridView>
+
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
+
+    <script>
+        var limba = "<%= Session["IdLimba"] %>";
+        function EndUpload(s) {
+            lblDoc.innerText = s.cpDocUploadName;
+            s.cpDocUploadName = null;
+        }
+
+        function NivelHay(s) {
+            txtSalMin.SetValue(s.GetSelectedItem().texts[1]);
+            txtSalMed.SetValue(s.GetSelectedItem().texts[2]);
+            txtSalMax.SetValue(s.GetSelectedItem().texts[3]);
+        }
+
+        function NivelIerarhic(s) {
+            var nvl = s.GetSelectedItem().texts[2].replace('N-', '');
+            if (nvl == 'N') nvl = 0;
+            txtNivelIer.SetValue('N-' + (Number(nvl) + 1));
+            hfNivelIer.Set('val', 'N-' + (Number(nvl) + 1));
+
+            cmbSupFunc.SetValue(s.GetValue());
+            cmbSupFunc.SetText(s.GetText());
+        }
+
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+            pnlLoading.Hide();
+            OnChckSelectedIndexChanged();
+        }
+
+        function ShowDoc() {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tbl=3&id=' + <%=Session["IdAuto"] %>, '_blank ')
+        }
+
+        function OnEndCallbackGridIstoric(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+
+            if (s.cpPozitii != null) {
+                txtPozitii.SetValue(s.cpPozitii);
+            }
+            if (s.cpPozitiiAprobate != null) {
+                txtPozitiiAprobate.SetValue(s.cpPozitiiAprobate);
+            }
+        }
+
+        function OnStergeClick() {
+            swal({
+                title: trad_string(limba, 'Sunteti sigur/a ?'), text: trad_string(limba, 'Sigur doriti continuarea procesului de stergere ?'),
+                type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
+            }, function (isConfirm) {
+                if (isConfirm)
+                    pnlCtl.PerformCallback('btnSterge');
+            });
+        }
+
+        var valDen = "";
+        function OnDenumireChanged(s, e) {
+            if (txtDenRO.GetValue() == null || txtDenRO.GetValue() == valDen)
+                txtDenRO.SetValue(txtDen.GetValue());
+            txtDenEN.SetValue(txtDen.GetValue());
+            txtGrupRO.SetValue(txtDen.GetValue());
+            txtGrupEN.SetValue(txtDen.GetValue());
+            valDen = txtDen.GetValue();
+        }
+
+        function CloseGridLookup() {
+            cmbCampExtra.ConfirmCurrentSelection();
+            cmbCampExtra.HideDropDown();
+            cmbCampExtra.Focus();
+
+            var val = cmbCampExtra.GetValue();
+            if (val != null) {
+                for (var i = 1; i <= 20; i++)
+                {
+                    var div = document.getElementById("divCampExtra" + val[i]);
+                    if (div != null) {
+                        if (val.indexOf(val[i]) > 0)
+                            div.classList.remove("ascuns");
+                        else
+                            div.classList.add("ascuns");
+                    }
+                }
+            }
+        }
+
+        function OnChckSelectedIndexChanged() {
+            var val = chkExtra.GetSelectedValues();
+            if (val != null) {
+                for (var i = 1; i <= 20; i++) {
+                    var div = document.getElementById("divCampExtra" + i);
+                    if (div != null) {
+                        if (val.indexOf(i.toString()) >= 0)
+                            div.classList.remove("ascuns");
+                        else
+                            div.classList.add("ascuns");
+                    }
+                }
+            }
+        }
+
+    </script>
 
 </asp:Content>

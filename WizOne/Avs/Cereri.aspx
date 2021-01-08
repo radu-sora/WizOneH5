@@ -295,7 +295,7 @@
             </table>
 
             <table width="40%">
-                            <tr>
+                <tr>
                     <td id="lbl1Act" runat="server"  >
                         <dx:ASPxLabel  ID="lblTxt3Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmb1Act" runat="server" ClientInstanceName="cmb1Act" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 

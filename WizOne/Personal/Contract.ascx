@@ -151,6 +151,11 @@
             });
             s.cpAlertMessage = null;
         }
+
+        if (s.cpControl == "cmbPost") {
+            VerifSalariu(txtSalariu.GetValue(), cmbTimpPartial.GetValue());
+        }
+
         pnlLoading.Hide();
         OUG132(); 
     }
@@ -617,11 +622,22 @@
  
     function VerifSalariu(sal, timp) {
         if (sal == null || sal.length <= 0)      
-            return;        
+            return;
+
+        var txt = "";
         var salMin = parseInt("<%=Session["MP_SalMin"] %>");
         if (parseInt(salMin) * parseInt(timp) / 8 > parseInt(sal) && cmbIntRepTimpMunca.GetValue() <= 1 && (cmbTipCtrMunca.GetValue() == 1 || cmbTipCtrMunca.GetValue() == 2
             || cmbTipCtrMunca.GetValue() == 3 || cmbTipCtrMunca.GetValue() == 4 || cmbTipCtrMunca.GetValue() == 33 || cmbTipCtrMunca.GetValue() == 34))
-            swal({ title: "", text: "Salariul introdus este mai mic decat cel minim raportat la norma si conditiile salariale ale angajatului!", type: "warning" });
+            txt = "Salariul introdus este mai mic decat cel minim raportat la norma si conditiile salariale ale angajatului!";
+
+        var salMinPost = parseInt("<%=Session["MP_SalariulMinPost"] %>");
+        if (salMinPost > sal) {
+            if (txt != "") txt += "\n"
+            txt += "Salariul introdus este mai mic decat salariul minim al postului selectat";
+        }
+
+        if (txt != "")
+            swal({ title: "", text: txt, type: "warning" });
     }
 
     function CompletareZile(s) { 
@@ -767,11 +783,11 @@
 
     <table width="100%">
 		<tr>
-			<td align="left">					
+			<td align="left">
 			</td>
-		</tr>			
+		</tr>
 	</table>
-				
+
 
 
    <dx:ASPxCallbackPanel ID = "Contract_pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtlContract" runat="server" OnCallback="pnlCtlContract_Callback" SettingsLoadingPanel-Enabled="false">
@@ -1268,7 +1284,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsFunctie"  Value='<%#Eval("F10071") %>' ID="cmbFunctie" Width="130" TabIndex="34" runat="server" DropDownStyle="DropDown"  TextField="F71804" ValueField="F71802" ValueType="System.Int32">
-                                
+                                <ClientSideEvents SelectedIndexChanged="function(s,e) { pnlLoading.Show(); pnlCtlContract.PerformCallback('cmbFunctie'); }" />
 							</dx:ASPxComboBox >
 						</td>
                         <td>
@@ -1330,7 +1346,17 @@
                                 <Paddings PaddingLeft="10px"/>
                             </dx:ASPxButton>
                         </td>
-					</tr>  
+					</tr>
+                    <tr>
+                        <td>
+                            <dx:ASPxLabel ID="lblPost" runat="server" Text="Post" />
+                        </td>
+                        <td>
+                            <dx:ASPxComboBox ID="cmbPost" ClientInstanceName="cmbPost" runat="server" TextField="Denumire" ValueField="Id" DropDownStyle="DropDownList" ValueType="System.Int32" Width="130" TabIndex="37" AllowNull="true">
+                                <ClientSideEvents SelectedIndexChanged="function(s,e) { pnlLoading.Show(); pnlCtlContract.PerformCallback('cmbPost'); }" />
+                            </dx:ASPxComboBox>
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <dx:ASPxCheckBox ID="chkFunctieBaza"  runat="server" Width="150" Text="Functie de baza" TextAlign="Left" TabIndex="38"  Checked='<%#  Eval("F10032") == DBNull.Value ? false : Convert.ToBoolean(Eval("F10032"))%>' ClientInstanceName="chkbx4" >
@@ -1735,4 +1761,5 @@
         </dx:ASPxCallbackPanel>    
   <dx:ASPxHiddenField runat="server" ID="hfTipAngajat" ClientInstanceName="hfTipAngajat" />
   <dx:ASPxHiddenField runat="server" ID="hfIntRepTM" ClientInstanceName="hfIntRepTM" />
+    <dx:ASPxHiddenField runat="server" ID="hfSalMin" ClientInstanceName="hfSalMin" />
 </body>

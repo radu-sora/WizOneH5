@@ -894,8 +894,8 @@ namespace WizOne.Avs
                             {
                                 //Florin 2019.06.03
                                 //daca anuleaza, introducem o linie noua cu anulat
-                                sql = $@"INSERT INTO ""Avs_CereriIstoric"" (""Id"", ""IdCircuit"", ""IdUser"", ""IdStare"", ""Pozitie"", ""Culoare"", ""Aprobat"", ""DataAprobare"", ""Inlocuitor"", ""IdSuper"")
-                                        VALUES ({id}, {dtCerIst.Rows[0]["IdCircuit"]}, {Session["UserId"]}, -1, 22, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = -1), 1, {General.CurrentDate()}, null, {-1 * Convert.ToInt32(General.Nz(cmbRol.Value,0))})";
+                                sql = $@"INSERT INTO ""Avs_CereriIstoric"" (""Id"", ""IdCircuit"", ""IdUser"", ""IdStare"", ""Pozitie"", ""Culoare"", ""Aprobat"", ""DataAprobare"", ""Inlocuitor"", ""IdSuper"", USER_NO, TIME)
+                                        VALUES ({id}, {dtCerIst.Rows[0]["IdCircuit"]}, {Session["UserId"]}, -1, 22, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = -1), 1, {General.CurrentDate()}, null, {-1 * Convert.ToInt32(General.Nz(cmbRol.Value,0))}, {Session["UserId"]}, GetDate())";
                             }
                             General.IncarcaDT(sql, null);
 
@@ -922,6 +922,12 @@ namespace WizOne.Avs
                             //ctx.SaveChanges();
 
 
+                            //Florin #710
+                            //daca este post, creeam automat linii si pentru celelalte 3 atribute: Functie, COR, Structura
+                            if (idStare == 3 && Convert.ToInt32(dtCer.Rows[0]["IdAtribut"]) == (int)Constante.Atribute.Post)
+                                General.CreeazaAtributePost(id, dtCer.Rows[0]["F10003"], General.Nz(dtCer.Rows[0]["PostId"], -99), Convert.ToDateTime(dtCer.Rows[0]["DataModif"]));
+
+
                             //Florin 2019.03.01
                             //s-a adaugat conditia cu parametrul
                             //Florin 2019.07.29
@@ -931,20 +937,25 @@ namespace WizOne.Avs
                             {
                                 Cereri pag = new Cereri();
                                 pag.TrimiteInF704(id);
-                                if (Convert.ToInt32(General.Nz(dtCer.Rows[0]["IdAtribut"],-99)) == 2)
-                                    General.ModificaFunctieAngajat(Convert.ToInt32(dtCer.Rows[0]["F10003"]), Convert.ToInt32(General.Nz(dtCer.Rows[0]["FunctieId"], -99)), Convert.ToDateTime(dtCer.Rows[0]["DataModif"]), new DateTime(2100, 1, 1));
+
+                                //Florin 2020.10.07 - se trateaza cazul in functia TrimiteInF704
+                                //if (Convert.ToInt32(General.Nz(dtCer.Rows[0]["IdAtribut"],-99)) == 2)
+                                //    General.ModificaFunctieAngajat(Convert.ToInt32(dtCer.Rows[0]["F10003"]), Convert.ToInt32(General.Nz(dtCer.Rows[0]["FunctieId"], -99)), Convert.ToDateTime(dtCer.Rows[0]["DataModif"]), new DateTime(2100, 1, 1));
                             }
 
                             if (actiune == 3)
                             {
                                 try
                                 {
+                                    //Florin #710 - am adaugat insertul
                                     General.ExecutaNonQuery(
                                         $@"BEGIN
-                                        DELETE FROM ""Admin_NrActAd"" WHERE ""IdAuto""=(SELECT ""IdActAd"" FROM ""Avs_Cereri"" WHERE ""ID""=@1);
-                                        UPDATE ""Avs_Cereri"" SET ""IdActAd"" = null WHERE ""Id""=@1;
-                                        END", new object[] { id });
-
+                                            DELETE FROM ""Admin_NrActAd"" WHERE ""IdAuto""=(SELECT ""IdActAd"" FROM ""Avs_Cereri"" WHERE ""ID""=@1);
+                                            UPDATE ""Avs_Cereri"" SET ""IdActAd"" = null WHERE ""Id""=@1;
+                                            INSERT INTO ""Avs_CereriIstoric"" (""Id"", ""IdCircuit"", ""IdUser"", ""IdStare"", ""Pozitie"", ""Culoare"", ""Aprobat"", ""DataAprobare"", ""Inlocuitor"", ""IdSuper"", USER_NO, TIME)
+                                            SELECT ""Id"", ""IdCircuit"", {Session["UserId"]}, -1, 22, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = -1), 1, {General.CurrentDate()}, null, {-1 * Convert.ToInt32(General.Nz(cmbRol.Value, 0))}, {Session["UserId"]}, GetDate() FROM ""Avs_Cereri"" WHERE ""IdParinte""=@1;
+                                            UPDATE Org_relPostAngajat SET IdPost=IdPostVechi WHERE F10003=@2 AND IdPost=@3 AND DataInceput=@4;
+                                        END;", new object[] { id, dtCer.Rows[0]["F10003"], General.Nz(dtCer.Rows[0]["PostId"], -99), Convert.ToDateTime(dtCer.Rows[0]["DataModif"]) });
 
                                     //UPDATE ""Admin_NrActAd"" SET ""DocNr""=null, ""DocData""=null, ""Tiparit""=0, ""Semnat""=0, ""Revisal""=0 WHERE ""IdAuto""=(SELECT ""IdActAd"" FROM ""Avs_Cereri"" WHERE ""ID""=@1);
                                 }
@@ -1360,6 +1371,8 @@ namespace WizOne.Avs
                     //aratam toate cererile
                 }
 
+                if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
+                    filtru += @" AND A.""IdParinte"" IS NULL";
 
                 if (Constante.tipBD == 1)
                 {

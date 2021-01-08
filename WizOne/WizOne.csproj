@@ -234,6 +234,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Artifacts\itextsharp.dll</HintPath>
     </Reference>
+    <Reference Include="MaterialCompactOrangeBase, Version=20.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\DLL\MaterialCompactOrangeBase.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.EntityDataSource, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.EntityDataSource.6.0.0\lib\net40\Microsoft.AspNet.EntityDataSource.dll</HintPath>
     </Reference>
@@ -1367,66 +1371,77 @@
     </Compile>
     <Compile Include="Curs\Aprobare.aspx.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\Aprobare.aspx.designer.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>
     </Compile>
     <Compile Include="Curs\AprobareTrainer.aspx.cs">
       <DependentUpon>AprobareTrainer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\AprobareTrainer.aspx.designer.cs">
       <DependentUpon>AprobareTrainer.aspx</DependentUpon>
     </Compile>
     <Compile Include="Curs\Cursuri.aspx.cs">
       <DependentUpon>Cursuri.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\Cursuri.aspx.designer.cs">
       <DependentUpon>Cursuri.aspx</DependentUpon>
     </Compile>
     <Compile Include="Curs\CursuriAnterioare.aspx.cs">
       <DependentUpon>CursuriAnterioare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\CursuriAnterioare.aspx.designer.cs">
       <DependentUpon>CursuriAnterioare.aspx</DependentUpon>
     </Compile>
     <Compile Include="Curs\CursuriInregistrare.aspx.cs">
       <DependentUpon>CursuriInregistrare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\CursuriInregistrare.aspx.designer.cs">
       <DependentUpon>CursuriInregistrare.aspx</DependentUpon>
     </Compile>
     <Compile Include="Curs\CursuriIstoric.aspx.cs">
       <DependentUpon>CursuriIstoric.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\CursuriIstoric.aspx.designer.cs">
       <DependentUpon>CursuriIstoric.aspx</DependentUpon>
     </Compile>
     <Compile Include="Curs\CursuriSesiuni.aspx.cs">
       <DependentUpon>CursuriSesiuni.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\CursuriSesiuni.aspx.designer.cs">
       <DependentUpon>CursuriSesiuni.aspx</DependentUpon>
     </Compile>
     <Compile Include="Curs\CursuriView.aspx.cs">
       <DependentUpon>CursuriView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\CursuriView.aspx.designer.cs">
       <DependentUpon>CursuriView.aspx</DependentUpon>
     </Compile>
     <Compile Include="Curs\relCurs.aspx.cs">
       <DependentUpon>relCurs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\relCurs.aspx.designer.cs">
       <DependentUpon>relCurs.aspx</DependentUpon>
     </Compile>
     <Compile Include="Curs\relSesiuneCosturi.aspx.cs">
       <DependentUpon>relSesiuneCosturi.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\relSesiuneCosturi.aspx.designer.cs">
       <DependentUpon>relSesiuneCosturi.aspx</DependentUpon>
     </Compile>
     <Compile Include="Curs\relSesiuneDocumente.aspx.cs">
       <DependentUpon>relSesiuneDocumente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Curs\relSesiuneDocumente.aspx.designer.cs">
       <DependentUpon>relSesiuneDocumente.aspx</DependentUpon>

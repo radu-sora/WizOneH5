@@ -37,7 +37,21 @@ namespace WizOne.Pagini
                                 tbl = "MP_Cereri";
                                 break;
                             case "3":
-                                tbl = "Org_Posturi";
+                                //Florin 2020.12.11
+                                {
+                                    //metaCereriDate itm = new metaCereriDate();
+
+                                    //itm.UploadedFile = dtDoc.Rows[0]["Fisier"];
+                                    //itm.UploadedFileName = dtDoc.Rows[0]["FisierNume"];
+                                    //itm.UploadedFileExtension = dtDoc.Rows[0]["FisierExtensie"];
+                                    tbl = "";
+                                    Organigrama.Posturi.metaCereriDate itm = Session["Posturi_Upload"] as Organigrama.Posturi.metaCereriDate;
+                                    if (itm != null && itm.UploadedFile != null)
+                                        scrieDoc(General.Nz(itm.UploadedFileExtension, ".txt").ToString(), (byte[])itm.UploadedFile, General.Nz(itm.UploadedFileName, "Fisier").ToString());
+                                    else
+                                        Response.Write("Nu exista date de afisat !");
+                                }
+                                //tbl = "Org_Posturi";
                                 break;
                             case "4":
                                 {
@@ -54,14 +68,17 @@ namespace WizOne.Pagini
                                         DataRow drAt = General.IncarcaDR(@"SELECT * FROM ""Atasamente"" WHERE ""IdAuto""=@1", new object[] { id });
                                         if (drAt != null)
                                         {
-                                            string numeFiser = (drAt["FisierNume"] ?? "").ToString();
+                                            string numeFiser = General.Nz(drAt["FisierNume"], "").ToString();
                                             object fisier = General.Nz(drAt["Attach"], null);
 
                                             string cale = HostingEnvironment.MapPath("~/FisiereApp/Atasamente/") + numeFiser;
                                             if (fisier == null && File.Exists(cale))
                                                 fisier = File.ReadAllBytes(cale);
 
-                                            scrieDoc((drAt["FisierExtensie"] ?? ".txt").ToString(), (byte[])fisier, numeFiser);
+                                            if (fisier != null)
+                                                scrieDoc(General.Nz(drAt["FisierExtensie"], ".txt").ToString(), (byte[])fisier, numeFiser);
+                                            else
+                                                Response.Write("Nu exista date de afisat !");
                                         }
                                         else
                                             Response.Write("Nu exista date de afisat !");
@@ -150,6 +167,41 @@ namespace WizOne.Pagini
                                     }
                                 }
                                 break;
+                            case "17":
+                                {
+                                    string[] arr = id.Split('|');
+                                    if (arr.Length != 2) return;
+                                    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                                    if (ds != null)
+                                    {
+                                        DataRow dr = ds.Tables["Admin_Dosar"].Rows.Find(new object[] { arr[0], arr[1] });
+                                        if (dr != null && dr["Fisier"] != DBNull.Value)
+                                            scrieDoc(General.Nz(dr["FisierExtensie"], ".txt").ToString(), (byte[])dr["Fisier"], General.Nz(dr["FisierNume"], "Fisier").ToString());
+                                        else
+                                            Response.Write("Nu exista date de afisat !");
+                                    }
+                                    else
+                                    {
+                                        DataRow drAt = General.IncarcaDR(@"SELECT * FROM ""Admin_Dosar"" WHERE F10003=@1 AND ""IdObiect""=@2", new object[] { arr[0], arr[1] });   // dtAt.Select("IdAuto = " + id).FirstOrDefault();
+                                        if (drAt != null)
+                                        {
+                                            string numeFiser = General.Nz(drAt["FisierNume"], "").ToString();
+                                            object fisier = General.Nz(drAt["Fisier"], null);
+
+                                            string cale = HostingEnvironment.MapPath("~/FisiereApp/Atasamente/") + numeFiser;
+                                            if (fisier == null && File.Exists(cale))
+                                                fisier = File.ReadAllBytes(cale);
+
+                                            if (fisier != null)
+                                                scrieDoc(General.Nz(drAt["FisierExtensie"], ".txt").ToString(), (byte[])fisier, numeFiser);
+                                            else
+                                                Response.Write("Nu exista date de afisat !");
+                                        }
+                                        else
+                                            Response.Write("Nu exista date de afisat !");
+                                    }
+                                }
+                                break;
                         }
 
                         if (tbl.Length > 0)
@@ -161,12 +213,12 @@ namespace WizOne.Pagini
                                 //Florin 2020.08.18
                                 byte[] fis = (byte[])General.Nz(dt.Rows[0]["Fisier"], null);
                                 string director = tbl.Replace("Admin_", "").Replace("F100", "");
-                                string cale = HostingEnvironment.MapPath("~/FisiereApp/" + director + "/") + (dt.Rows[0]["FisierNume"] as string ?? "").ToString();
+                                string cale = HostingEnvironment.MapPath("~/FisiereApp/" + director + "/") + General.Nz(dt.Rows[0]["FisierNume"], "").ToString();
                                 if (fis == null && File.Exists(cale))
                                         fis = File.ReadAllBytes(cale);
 
                                 if (fis != null)
-                                    scrieDoc((dt.Rows[0]["FisierExtensie"] ?? "").ToString(), fis, (dt.Rows[0]["FisierNume"] as string ?? "").ToString());
+                                    scrieDoc(General.Nz(dt.Rows[0]["FisierExtensie"], "").ToString(), fis, General.Nz(dt.Rows[0]["FisierNume"], "").ToString());
                                 else
                                     Response.Write("Nu exista date de afisat !");
                             }

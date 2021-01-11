@@ -16404,3 +16404,15 @@ ALTER TABLE Atasamente ADD VineDinPosturi int
 GO
 ALTER TABLE Atasamente ADD EsteLaDosar int
 GO
+
+
+ALTER TABLE Avs_Cereri ADD DetBifa1 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa2 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa3 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa4 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa5 int 
+GO

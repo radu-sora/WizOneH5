@@ -9519,8 +9519,7 @@ GO
 alter table f100 alter column f10032 int
 GO
 
-alter table Avs_Cereri add Document nvarchar(50)
-GO
+
 alter table PtjSpecial_Sabloane add Decalare int
 GO
 
@@ -16068,3 +16067,16 @@ GO
 
 ---- Cursuri END
 
+
+
+
+ALTER TABLE Avs_Cereri ADD DetBifa1 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa2 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa3 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa4 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa5 int 
+GO

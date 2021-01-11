@@ -87,6 +87,8 @@ namespace WizOne.Posturi
                 dtTipCtrl.Rows.Add(3, "ComboBox");
                 dtTipCtrl.Rows.Add(4, "RadioButton");
                 dtTipCtrl.Rows.Add(5, "CheckBox");
+                dtTipCtrl.Rows.Add(6, "Label");
+                dtTipCtrl.Rows.Add(7, "StructOrg");
 
                 GridViewDataComboBoxColumn colTipCtrl = (grDate.Columns["TipControl"] as GridViewDataComboBoxColumn);
                 colTipCtrl.PropertiesComboBox.DataSource = dtTipCtrl;
@@ -212,7 +214,7 @@ namespace WizOne.Posturi
                 object[] row = new object[dt.Columns.Count];
                 int x = 0;
 
-                if (e.NewValues["Rand"] == null || e.NewValues["Pozitie"] == null || e.NewValues["TipControl"] == null || e.NewValues["NumeEticheta"] == null || e.NewValues["ColoanaBD"] == null)                
+                if (e.NewValues["Rand"] == null || e.NewValues["Pozitie"] == null || e.NewValues["TipControl"] == null || e.NewValues["NumeEticheta"] == null || (Convert.ToInt32(e.NewValues["TipControl"].ToString()) < 6 && e.NewValues["ColoanaBD"] == null))                
                 {
                     MessageBox.Show("Lipsesc date!", MessageBox.icoError);
                     e.Cancel = true;
@@ -246,6 +248,14 @@ namespace WizOne.Posturi
                                 break;
                             case "TIME":
                                 row[x] = DateTime.Now;
+                                break;
+                            case "COLOANABD":
+                                if (Convert.ToInt32(e.NewValues["TipControl"].ToString()) == 6)
+                                    row[x] = "Label_" + e.NewValues["Rand"].ToString() + "_" + e.NewValues["Pozitie"].ToString();
+                                else if (Convert.ToInt32(e.NewValues["TipControl"].ToString()) == 7)
+                                    row[x] = "StructOrg";
+                                else
+                                    row[x] = e.NewValues[col.ColumnName];
                                 break;
                             default:
                                 row[x] = e.NewValues[col.ColumnName];
@@ -282,7 +292,7 @@ namespace WizOne.Posturi
 
                 DataRow row = dt.Rows.Find(keys);
 
-                if (e.NewValues["Rand"] == null || e.NewValues["Pozitie"] == null || e.NewValues["TipControl"] == null || e.NewValues["NumeEticheta"] == null || e.NewValues["ColoanaBD"] == null)
+                if (e.NewValues["Rand"] == null || e.NewValues["Pozitie"] == null || e.NewValues["TipControl"] == null || e.NewValues["NumeEticheta"] == null || (Convert.ToInt32(e.NewValues["TipControl"].ToString()) < 6 && e.NewValues["ColoanaBD"] == null))
                 {
                     MessageBox.Show("Lipsesc date!", MessageBox.icoError);
                     e.Cancel = true;
@@ -303,6 +313,10 @@ namespace WizOne.Posturi
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                        if (Convert.ToInt32(e.NewValues["TipControl"].ToString()) == 6 && col.ColumnName == "ColoanaBD")
+                            row[col.ColumnName] = "Label_" + e.NewValues["Rand"].ToString() + "_" + e.NewValues["Pozitie"].ToString();
+                        else if (Convert.ToInt32(e.NewValues["TipControl"].ToString()) == 7 && col.ColumnName == "ColoanaBD")
+                            row[col.ColumnName] = "StructOrg";
                     }
                 }
 

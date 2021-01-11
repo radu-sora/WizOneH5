@@ -748,7 +748,9 @@
     <Content Include="Fisiere\Imagini\Icoane\sgSus.png" />
     <Content Include="Fisiere\Imagini\Icoane\sgSusOver.png" />
     <Content Include="Fisiere\Imagini\Icoane\stare.png" />
+    <Content Include="Fisiere\Imagini\Icoane\start.svg" />
     <Content Include="Fisiere\Imagini\Icoane\sterge.png" />
+    <Content Include="Fisiere\Imagini\Icoane\stop.svg" />
     <Content Include="Fisiere\Imagini\Icoane\update.png" />
     <Content Include="Fisiere\Imagini\Icoane\user.png" />
     <Content Include="Fisiere\Imagini\Icoane\validare.png" />
@@ -844,6 +846,7 @@
     <Content Include="Personal\StudiiNou.ascx" />
     <Content Include="Personal\Tarife.ascx" />
     <Content Include="Pontaj\PlanificareSchimburi.aspx" />
+    <Content Include="Pontaj\PontajAngajat.aspx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
     <Content Include="Revisal\RapoarteRevisal.aspx" />
@@ -1807,6 +1810,13 @@
     </Compile>
     <Compile Include="Pontaj\PlanificareSchimburi.aspx.designer.cs">
       <DependentUpon>PlanificareSchimburi.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PontajAngajat.aspx.cs">
+      <DependentUpon>PontajAngajat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PontajAngajat.aspx.designer.cs">
+      <DependentUpon>PontajAngajat.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pontaj\PontajSpecial.aspx.cs">
       <DependentUpon>PontajSpecial.aspx</DependentUpon>

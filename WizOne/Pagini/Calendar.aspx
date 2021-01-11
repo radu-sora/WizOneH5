@@ -1,6 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Calendar.aspx.cs" Inherits="WizOne.Pagini.Calendar" %>
 
-<asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">    
+<asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <!-- Modal dialogs -->    
+
+    <!-- Page content -->
     <div class="page-content">        
         <div class="page-content-data invisible">
             <dx:ASPxScheduler ID="Scheduler" ClientInstanceName="scheduler" runat="server" Width="100%" CssClass="dx-scheduler-adaptive"
@@ -58,13 +61,15 @@
                 var self = this;
 
                 self.pageContent = $('.page-content');
-                ASPxClientControl.GetControlCollection().ControlsInitialized.AddHandler(function () {
-                    self.onControlsInitialized(self);
+                ASPxClientControl.GetControlCollection().ControlsInitialized.AddHandler(function (s, e) {
+                    self.onControlsInitialized(e);
                 });
             },
             /* Events */
-            onControlsInitialized: function (pageControl) {
-                pageControl.pageContent.find('> div[class*="invisible"]').removeClass('invisible'); // To hide DX controls UI init issues.                
+            onControlsInitialized: function (e) {
+                if (!e.isCallback) { // Validate document ready
+                    this.pageContent.find('> div[class*="invisible"]').removeClass('invisible'); // To hide DX controls UI init issues.                
+                }
             },
             onSchedulerMenuItemClicked: function(e) {
                 e.handled = true;

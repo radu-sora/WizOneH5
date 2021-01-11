@@ -276,7 +276,7 @@
             EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
             PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="900px" MinHeight="600px"
             Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGen" EnableHierarchyRecreation="True">
-            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchAtWindowInnerWidth="768" FixedHeader="true" MinWidth="100%" MinHeight="100%" />
+            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchAtWindowInnerWidth="768" MinWidth="100%" MinHeight="100%" />
             <ClientSideEvents CloseUp="function(s, e) { s.PerformCallback(); }" />
             <ContentCollection>
                 <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">

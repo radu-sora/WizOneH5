@@ -54,6 +54,8 @@ namespace WizOne.Avs
                     Session["AvsCereri"] = null;
                     Session["AvsCereriCalcul"] = null;
                     Session["Avs_Cereri_Date"] = null;
+                    Session["Avs_ChkEnabled"] = null;
+                    Session["Avs_ChkGen"] = null;
 
                     Session["Avs_NrLuni"] = "";
                     Session["Avs_NrZile"] = "";
@@ -288,7 +290,35 @@ namespace WizOne.Avs
                             lblDoc.InnerText = General.Nz(itm.UploadedFileName, "").ToString();
                         }
                     }
+                    if (Session["Avs_ChkGen"] != null )
+                    {
+                        if (Session["Avs_ChkGen"].ToString() == "false")
+                        {
+                            chkGen.ClientVisible = false;
+                        }
+                        else
+                        {
+                            chkGen.ClientVisible = false;
+                        }
+                    }
 
+                    if (Session["Avs_ChkEnabled"] != null)
+                    {
+                        if (Session["Avs_ChkEnabled"].ToString() == "false")
+                        {                     
+                            chk2.ClientEnabled = false;
+                            chk3.ClientEnabled = false;
+                            chk4.ClientEnabled = false;
+                            chk5.ClientEnabled = false;
+                        }
+                        else
+                        {
+                            chk2.ClientEnabled = true;
+                            chk3.ClientEnabled = true;
+                            chk4.ClientEnabled = true;
+                            chk5.ClientEnabled = true;
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -2097,25 +2127,34 @@ namespace WizOne.Avs
                 else
                     cmb1Nou.Value = 0;
 
-                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11204"] != null && dtTempRev.Rows[0]["F11204"].ToString().Length > 0)
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11204"] != DBNull.Value && dtTempRev.Rows[0]["F11204"].ToString().Length > 0)
                     txt1Nou.Text = dtTempRev.Rows[0]["F11204"].ToString();
                 else
                     txt1Nou.Text = "";
 
-                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11205"] != null && dtTempRev.Rows[0]["F11205"].ToString().Length > 0)
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11205"] != DBNull.Value && dtTempRev.Rows[0]["F11205"].ToString().Length > 0)
                     txt2Nou.Text = dtTempRev.Rows[0]["F11205"].ToString();
                 else
                     txt2Nou.Text = "";
 
-                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11207"] != null && dtTempRev.Rows[0]["F11207"].ToString().Length > 0)
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11207"] != DBNull.Value && dtTempRev.Rows[0]["F11207"].ToString().Length > 0)
                     de1Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11207"].ToString());
                 else
                     de1Nou.Value = new DateTime(2100, 1, 1);
 
-                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11208"] != null && dtTempRev.Rows[0]["F11208"].ToString().Length > 0)
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11208"] != DBNull.Value && dtTempRev.Rows[0]["F11208"].ToString().Length > 0)
                     de2Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11208"].ToString());
                 else
                     de2Nou.Value = new DateTime(2100, 1, 1);
+
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0)
+                {
+                    chk1.Checked = dtTempRev.Rows[0]["F11210"] == DBNull.Value ? false : (Convert.ToInt32(dtTempRev.Rows[0]["F11210"].ToString()) == 1 ? true : false);
+                    chk2.Checked = dtTempRev.Rows[0]["F11211"] == DBNull.Value ? false : (Convert.ToInt32(dtTempRev.Rows[0]["F11211"].ToString()) == 1 ? true : false);
+                    chk3.Checked = dtTempRev.Rows[0]["F11212"] == DBNull.Value ? false : (Convert.ToInt32(dtTempRev.Rows[0]["F11212"].ToString()) == 1 ? true : false);
+                    chk4.Checked = dtTempRev.Rows[0]["F11213"] == DBNull.Value ? false : (Convert.ToInt32(dtTempRev.Rows[0]["F11213"].ToString()) == 1 ? true : false);
+                    chk5.Checked = dtTempRev.Rows[0]["F11214"] == DBNull.Value ? false : (Convert.ToInt32(dtTempRev.Rows[0]["F11214"].ToString()) == 1 ? true : false);
+                }
             }
 
             //Radu 14.07.2020
@@ -2286,10 +2325,12 @@ namespace WizOne.Avs
         {
             try
             {
+
                 string tip = e.Parameter.Split(';')[0];
                 switch (tip)
                 {
                     case "1":
+                        Session["Avs_ChkGen"] = null;
                         txtDataMod.Date = DateTime.Now;
                         AscundeCtl();
                         IncarcaDate();
@@ -2312,11 +2353,13 @@ namespace WizOne.Avs
                         {
                             chkGen.ClientVisible = false;
                             chkGen.Checked = false;
+                            Session["Avs_ChkGen"] = "false";
                         }
                         else
                         {
                             chkGen.ClientVisible = true;
                             chkGen.Checked = true;
+                            Session["Avs_ChkGen"] = "true";
                         }
                         if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR)
                         {
@@ -2458,6 +2501,7 @@ namespace WizOne.Avs
                                 chk3.ClientEnabled = false;
                                 chk4.ClientEnabled = false;
                                 chk5.ClientEnabled = false;
+                                Session["Avs_ChkEnabled"] = "false";
                             }
                             else
                             {
@@ -2465,6 +2509,7 @@ namespace WizOne.Avs
                                 chk3.ClientEnabled = true;
                                 chk4.ClientEnabled = true;
                                 chk5.ClientEnabled = true;
+                                Session["Avs_ChkEnabled"] = "true"; 
                             }
                         }    
 
@@ -2619,6 +2664,7 @@ namespace WizOne.Avs
                             //cmbAtributeFiltru.DataBind();
                             Session["AvsCereri"] = null;
                             Session["AvsCereriCalcul"] = null;
+                            Session["Avs_ChkEnabled"] = null;
                             AscundeCtl();
                             cmbAtribute.Value = null;
                         }
@@ -2835,8 +2881,10 @@ namespace WizOne.Avs
             lblDataRevisal.Visible = false;
             deDataRevisal.Visible = false;
             if (atribut == (int)Constante.Atribute.Functie || atribut == (int)Constante.Atribute.CodCOR || atribut == (int)Constante.Atribute.Norma || atribut == (int)Constante.Atribute.ProgramLucru || atribut == (int)Constante.Atribute.PrelungireCIM
-                || atribut == (int)Constante.Atribute.PrelungireCIM_Vanz || atribut == (int)Constante.Atribute.ContrITM || atribut == (int)Constante.Atribute.ContrIn
-                || atribut == (int)Constante.Atribute.Suspendare || atribut == (int)Constante.Atribute.RevenireSuspendare || atribut == (int)Constante.Atribute.TipContract || atribut == (int)Constante.Atribute.DurataContract)
+                || atribut == (int)Constante.Atribute.PrelungireCIM_Vanz || atribut == (int)Constante.Atribute.ContrITM || atribut == (int)Constante.Atribute.ContrIn ||
+                 atribut == (int)Constante.Atribute.Salariul || atribut == (int)Constante.Atribute.Sporuri || atribut == (int)Constante.Atribute.MotivPlecare
+                || atribut == (int)Constante.Atribute.Suspendare || atribut == (int)Constante.Atribute.Detasare || atribut == (int)Constante.Atribute.RevenireSuspendare || atribut == (int)Constante.Atribute.RevenireDetasare 
+                || atribut == (int)Constante.Atribute.TipContract || atribut == (int)Constante.Atribute.DurataContract)
             {
                 string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataMod.Year + " UNION SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + (dataMod.Year - 1).ToString();
                 if (Constante.tipBD == 2)
@@ -3876,10 +3924,11 @@ namespace WizOne.Avs
                         ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + de3Nou.Text + "', 103)" : "TO_DATE('" + de3Nou.Text + "', 'dd/mm/yyyy')");
                     break;
                 case (int)Constante.Atribute.Detasare:
-                    camp1 = "\"IdNationalitAng\", \"NumeAngajator\", \"CUIAngajator\", \"DataInceputDet\", \"DataSfEstimDet\", \"DataIncetareDet\"";
+                    camp1 = "\"IdNationalitAng\", \"NumeAngajator\", \"CUIAngajator\", \"DataInceputDet\", \"DataSfEstimDet\", \"DataIncetareDet\", \"DetBifa1\", \"DetBifa2\", \"DetBifa3\", \"DetBifa4\", \"DetBifa5\"";
                     camp2 = cmb1Nou.Value.ToString() + ", '" + txt1Nou.Text + "', '" + txt2Nou.Text + "', " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + de1Nou.Text + "', 103)" : "TO_DATE('" + de1Nou.Text + "', 'dd/mm/yyyy')") +
                         ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 103)" : "TO_DATE('" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 'dd/mm/yyyy')") +
-                        ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + (de3Nou.Text.Length <= 0 ? "01/01/2100" : de3Nou.Text) + "', 103)" : "TO_DATE('" + (de3Nou.Text.Length <= 0 ? "01/01/2100" : de3Nou.Text) + "', 'dd/mm/yyyy')");
+                        ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + (de3Nou.Text.Length <= 0 ? "01/01/2100" : de3Nou.Text) + "', 103)" : "TO_DATE('" + (de3Nou.Text.Length <= 0 ? "01/01/2100" : de3Nou.Text) + "', 'dd/mm/yyyy')") +
+                        ", " + (chk1.Checked ? "1" : "0") + ", " + (chk2.Checked ? "1" : "0") + ", " + (chk4.Checked ? "1" : "0") + ", " + (chk3.Checked ? "1" : "0") + ", " + (chk5.Checked ? "1" : "0");
                     break;
                 case (int)Constante.Atribute.RevenireDetasare:
                     camp1 = "\"IdNationalitAng\", \"NumeAngajator\", \"CUIAngajator\", \"DataInceputDet\", \"DataSfEstimDet\", \"DataIncetareDet\"";
@@ -5128,16 +5177,20 @@ namespace WizOne.Avs
                         dtLuc = General.DamiDataLucru();
                         if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                         {
-                            sql100 = "UPDATE F100 SET F100915 = " + data14 + ", F100916 = " + data15 + ", F100917 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();
+                            sql100 = "UPDATE F100 SET F100915 = " + data14 + ", F100916 = " + data15 + ", F100917 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") 
+                                + ", F100920 = " + dtCer.Rows[0]["IdNationalitAng"].ToString() + ", F100918 = '" + dtCer.Rows[0]["NumeAngajator"].ToString() + "', " 
+                                + " F100919 = '" + dtCer.Rows[0]["CUIAngajator"].ToString() + "' WHERE F10003 = " + f10003.ToString();
                             if (chk1 != null)
                             {
-                                sql1001 = "UPDATE F1001 SET F1001125 = " + (chk1.Checked ? "1" : "0") + ", F1001126 = " + (chk2.Checked ? "1" : "0") + ", F1001127 = " + (chk3.Checked ? "1" : "0")
-                                    + ", F1001128 = " + (chk4.Checked ? "1" : "0") + ", F1001129 = " + (chk5.Checked ? "1" : "0") + " WHERE F10003 = " + f10003.ToString();
+                                sql1001 = "UPDATE F1001 SET F1001125 = " + (chk1.Checked ? "1" : "0") + ", F1001126 = " + (chk2.Checked ? "1" : "0") + ", F1001127 = " + (chk4.Checked ? "1" : "0")
+                                    + ", F1001128 = " + (chk3.Checked ? "1" : "0") + ", F1001129 = " + (chk5.Checked ? "1" : "0") + " WHERE F10003 = " + f10003.ToString();
                             }
                         }
-                        string sql112 = $@"INSERT INTO F112 (F11201, F11202, F11203, F11204, F11205, F11206, F11207, F11208, F11209, YEAR, MONTH, USER_NO, TIME)
+                        string sql112 = $@"INSERT INTO F112 (F11201, F11202, F11203, F11204, F11205, F11206, F11207, F11208, F11209, F11210, F11211, F11212, F11213, F11214, YEAR, MONTH, USER_NO, TIME)
                                VALUES (112, '{General.Nz(dtF100.Rows[0]["F10017"], "")}', {f10003}, '{dtCer.Rows[0]["NumeAngajator"].ToString()}','{dtCer.Rows[0]["CUIAngajator"].ToString()}',{dtCer.Rows[0]["IdNationalitAng"].ToString()},
-                                {data14}, {data15}, {data16}, {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";
+                                {data14}, {data15}, {data16}, {(dtCer.Rows[0]["DetBifa1"] == DBNull.Value? "0" : dtCer.Rows[0]["DetBifa1"].ToString())}, {(dtCer.Rows[0]["DetBifa2"] == DBNull.Value ? "0" : dtCer.Rows[0]["DetBifa2"].ToString())}, 
+                                {(dtCer.Rows[0]["DetBifa4"] == DBNull.Value ? "0" : dtCer.Rows[0]["DetBifa4"].ToString())}, {(dtCer.Rows[0]["DetBifa3"] == DBNull.Value ? "0" : dtCer.Rows[0]["DetBifa3"].ToString())},
+                                {(dtCer.Rows[0]["DetBifa5"] == DBNull.Value ? "0" : dtCer.Rows[0]["DetBifa5"].ToString())}, {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";
                         General.IncarcaDT(sql112, null);
 
                         ActualizareDet(f10003, ref sql100, ref sql1001);

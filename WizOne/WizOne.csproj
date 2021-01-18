@@ -1698,6 +1698,7 @@
     <Compile Include="Module\Saml.cs" />
     <Compile Include="Organigrama\Diagrama.aspx.cs">
       <DependentUpon>Diagrama.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Organigrama\Diagrama.aspx.designer.cs">
       <DependentUpon>Diagrama.aspx</DependentUpon>

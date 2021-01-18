@@ -5706,23 +5706,12 @@ namespace WizOne.Eval
                                 INNER JOIN Eval_QuizIntrebari B ON A.IdQuiz=B.IdQuiz AND A.Id=B.id AND B.TipData=3
                                 WHERE A.F10003=@1 AND A.IdQuiz=@2) X WHERE COALESCE(Total,0) <> 0",
                                 new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
-
-                            //Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.Id == id).FirstOrDefault();
-                            //if (id == -99)
-                            //    raspLinie = lstEval_RaspunsLinii.Where(p => p.TipData == 69).FirstOrDefault();
-
-                            //if (raspLinie != null)
-                            //{
-                            //    PropertyInfo piValue = raspLinie.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-                            //    if (piValue != null)
-                            //    {
-                            //        piValue.SetValue(raspLinie, val.ToString("0.##"), null);
-                            //        Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
-                            //    }
-                            //}
                         }
                         break;
                     case (int)Module.IdClienti.Clienti.Alka:
+                        val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                $@"SELECT SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
                         break;
                 }
             }
@@ -5753,41 +5742,6 @@ namespace WizOne.Eval
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }
-
-        private ASPxGridView CreazaTabelSimplu(int id, string numeView)
-        {
-            ASPxGridView grDate = new ASPxGridView();
-
-            try
-            {
-                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""{numeView}"" WHERE F10003 = @1 AND ""IdQuiz"" = @2", new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"] });
-
-                grDate.AutoGenerateColumns = true;
-                grDate.DataSource = dt;
-                grDate.Width = Unit.Percentage(100);
-                grDate.ID = "grDate_DinView_" + id;
-                grDate.DataBind();
-
-                if (grDate.Columns["IdQuiz"] != null)
-                {
-                    grDate.Columns["IdQuiz"].Visible = false;
-                    grDate.Columns["IdQuiz"].ShowInCustomizationForm = false;
-
-                }
-                if (grDate.Columns["F10003"] != null)
-                {
-                    grDate.Columns["F10003"].Visible = false;
-                    grDate.Columns["F10003"].ShowInCustomizationForm = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return grDate;
         }
 
 

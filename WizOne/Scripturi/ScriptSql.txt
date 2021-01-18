@@ -16416,3 +16416,19 @@ ALTER TABLE Avs_Cereri ADD DetBifa4 int
 GO
 ALTER TABLE Avs_Cereri ADD DetBifa5 int 
 GO
+
+CREATE TABLE [dbo].[Org_PosturiEchipamente](
+	[IdPost] [int] NOT NULL,
+	[IdObiect] [int] NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_Org_PosturiEchipamente] PRIMARY KEY CLUSTERED 
+(
+	[IdPost] ASC,
+	[IdObiect] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Org_PosturiEchipamente] ADD  CONSTRAINT [DF_Org_PosturiEchipamente_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO

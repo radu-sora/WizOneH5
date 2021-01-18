@@ -15185,6 +15185,16 @@ ALTER TABLE F100 ALTER COLUMN F10081 NVARCHAR(50)
 GO
 
 
+----  2.2.132.04  ----
+
+
+UPDATE Eval_ConfigObiective SET ColumnType='System.DateTime' WHERE Id=6
+GO
+
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 69, 'Nota Finala', 0)
+GO
+
+
 ----  2.2.133  ----
 
 
@@ -15254,7 +15264,7 @@ GO
 INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo, IdAutomat) VALUES('Eval_relGrupSetAngajati','IdSetAngajati',2,1,'SELECT IdSetAng, DenSet FROM Eval_SetAngajati', 0)
 GO
 
-INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 69, 'Evaluare Multipla Raport', 0)
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 70, 'Evaluare Multipla Raport', 0)
 GO
 
 CREATE VIEW [dbo].[viewEvaluareMultipla]

@@ -20,6 +20,23 @@ namespace WizOne.Personal
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
             table = ds.Tables[0];
 
+            if (!IsPostBack)
+            {
+                Session["MP_DetNumeAng"] = null;
+                Session["MP_DetCUI"] = null;
+                Session["MP_DetNation"] = null;
+                Session["MP_DetDataIncp"] = null;
+                Session["MP_DetDataSf"] = null;
+                Session["MP_DetDataInct"] = null;
+                Session["MP_Det1"] = null;
+                Session["MP_Det2"] = null;
+                Session["MP_Det3"] = null;
+                Session["MP_Det4"] = null;
+                Session["MP_Det5"] = null;
+                Session["MP_Detasari"] = null;
+            }
+
+
             DataTable dt = ds.Tables[0];
             if (!IsPostBack)
                 ActualizareDet(1);            
@@ -106,11 +123,11 @@ namespace WizOne.Personal
 
                 chk1.Checked = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : (Session["MP_Det1"] ?? "0").ToString()).ToString()) == 1 ? true : false;
                 chk2.Checked = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : (Session["MP_Det2"] ?? "0").ToString()).ToString()) == 1 ? true : false;
-                chk3.Checked = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString()) == 1 ? true : false;
-                chk4.Checked = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                chk3.Checked = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                chk4.Checked = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString()) == 1 ? true : false;
                 chk5.Checked = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : (Session["MP_Det5"] ?? "0").ToString()).ToString()) == 1 ? true : false;
 
-            }
+            }           
         }
 
         protected void grDateDetasari_DataBinding(object sender, EventArgs e)
@@ -357,8 +374,8 @@ namespace WizOne.Personal
 
                     Session["MP_Det1"] = dtDetAng.Rows[0]["F11210"];
                     Session["MP_Det2"] = dtDetAng.Rows[0]["F11211"];
-                    Session["MP_Det3"] = dtDetAng.Rows[0]["F11212"];
-                    Session["MP_Det4"] = dtDetAng.Rows[0]["F11213"];
+                    Session["MP_Det4"] = dtDetAng.Rows[0]["F11212"];
+                    Session["MP_Det3"] = dtDetAng.Rows[0]["F11213"];
                     Session["MP_Det5"] = dtDetAng.Rows[0]["F11214"];
                 }
                 ds.Tables[0].Rows[0]["F100915"] = dtDetAng.Rows[0]["F11207"];
@@ -369,8 +386,8 @@ namespace WizOne.Personal
                 ds.Tables[0].Rows[0]["F100920"] = dtDetAng.Rows[0]["F11206"];
                 ds.Tables[0].Rows[0]["F1001125"] = dtDetAng.Rows[0]["F11210"];
                 ds.Tables[0].Rows[0]["F1001126"] = dtDetAng.Rows[0]["F11211"];
-                ds.Tables[0].Rows[0]["F1001127"] = dtDetAng.Rows[0]["F11212"];
-                ds.Tables[0].Rows[0]["F1001128"] = dtDetAng.Rows[0]["F11213"];
+                ds.Tables[0].Rows[0]["F1001127"] = dtDetAng.Rows[0]["F11213"];
+                ds.Tables[0].Rows[0]["F1001128"] = dtDetAng.Rows[0]["F11212"];
                 ds.Tables[0].Rows[0]["F1001129"] = dtDetAng.Rows[0]["F11214"];
 
 
@@ -383,8 +400,8 @@ namespace WizOne.Personal
 
                 ds.Tables[2].Rows[0]["F1001125"] = dtDetAng.Rows[0]["F11210"];
                 ds.Tables[2].Rows[0]["F1001126"] = dtDetAng.Rows[0]["F11211"];
-                ds.Tables[2].Rows[0]["F1001127"] = dtDetAng.Rows[0]["F11212"];
-                ds.Tables[2].Rows[0]["F1001128"] = dtDetAng.Rows[0]["F11213"];
+                ds.Tables[2].Rows[0]["F1001127"] = dtDetAng.Rows[0]["F11213"];
+                ds.Tables[2].Rows[0]["F1001128"] = dtDetAng.Rows[0]["F11212"];
                 ds.Tables[2].Rows[0]["F1001129"] = dtDetAng.Rows[0]["F11214"];
 
             }
@@ -420,8 +437,8 @@ namespace WizOne.Personal
 
                         Session["MP_Det1"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11210"];
                         Session["MP_Det2"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11211"];
-                        Session["MP_Det3"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11212"];
-                        Session["MP_Det4"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11213"];
+                        Session["MP_Det4"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11212"];
+                        Session["MP_Det3"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11213"];
                         Session["MP_Det5"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11214"];
 
                         ds.Tables[0].Rows[0]["F100915"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11207"];
@@ -432,8 +449,8 @@ namespace WizOne.Personal
                         ds.Tables[0].Rows[0]["F100920"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11206"];
                         ds.Tables[0].Rows[0]["F1001125"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11210"];
                         ds.Tables[0].Rows[0]["F1001126"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11211"];
-                        ds.Tables[0].Rows[0]["F1001127"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11212"];
-                        ds.Tables[0].Rows[0]["F1001128"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11213"];
+                        ds.Tables[0].Rows[0]["F1001127"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11213"];
+                        ds.Tables[0].Rows[0]["F1001128"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11212"];
                         ds.Tables[0].Rows[0]["F1001129"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11214"];
 
 
@@ -446,8 +463,8 @@ namespace WizOne.Personal
 
                         ds.Tables[2].Rows[0]["F1001125"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11210"];
                         ds.Tables[2].Rows[0]["F1001126"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11211"];
-                        ds.Tables[2].Rows[0]["F1001127"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11212"];
-                        ds.Tables[2].Rows[0]["F1001128"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11213"];
+                        ds.Tables[2].Rows[0]["F1001127"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11213"];
+                        ds.Tables[2].Rows[0]["F1001128"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11212"];
                         ds.Tables[2].Rows[0]["F1001129"] = dt.Select("1 = 1", "F11207 DESC").CopyToDataTable().Rows[0]["F11214"];
 
 
@@ -476,8 +493,8 @@ namespace WizOne.Personal
 
                         chk1.Checked = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : (Session["MP_Det1"] ?? "0").ToString()).ToString()) == 1 ? true : false;
                         chk2.Checked = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : (Session["MP_Det2"] ?? "0").ToString()).ToString()) == 1 ? true : false;
-                        chk3.Checked = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString()) == 1 ? true : false;
-                        chk4.Checked = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                        chk3.Checked = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString()) == 1 ? true : false;
+                        chk4.Checked = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString()) == 1 ? true : false;
                         chk5.Checked = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : (Session["MP_Det5"] ?? "0").ToString()).ToString()) == 1 ? true : false;
 
                         ds.Tables[0].Rows[0]["F100915"] = Convert.ToDateTime(Session["MP_DetDataIncp"] == DBNull.Value ? "01/01/2100" : (Session["MP_DetDataIncp"] ?? "01/01/2100").ToString());
@@ -488,8 +505,8 @@ namespace WizOne.Personal
                         ds.Tables[0].Rows[0]["F100920"] = Convert.ToInt32(Session["MP_DetNation"] == DBNull.Value ? "0" : (Session["MP_DetNation"] ?? "").ToString());
                         ds.Tables[0].Rows[0]["F1001125"] = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : (Session["MP_Det1"] ?? "0").ToString()).ToString());
                         ds.Tables[0].Rows[0]["F1001126"] = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : (Session["MP_Det2"] ?? "0").ToString()).ToString());
-                        ds.Tables[0].Rows[0]["F1001127"] = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString());
-                        ds.Tables[0].Rows[0]["F1001128"] = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString());
+                        ds.Tables[0].Rows[0]["F1001127"] = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString());
+                        ds.Tables[0].Rows[0]["F1001128"] = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString());
                         ds.Tables[0].Rows[0]["F1001129"] = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : (Session["MP_Det5"] ?? "0").ToString()).ToString());
 
 
@@ -502,8 +519,8 @@ namespace WizOne.Personal
 
                         ds.Tables[2].Rows[0]["F1001125"] = Convert.ToInt32((Session["MP_Det1"] == DBNull.Value ? "0" : (Session["MP_Det1"] ?? "0").ToString()).ToString());
                         ds.Tables[2].Rows[0]["F1001126"] = Convert.ToInt32((Session["MP_Det2"] == DBNull.Value ? "0" : (Session["MP_Det2"] ?? "0").ToString()).ToString());
-                        ds.Tables[2].Rows[0]["F1001127"] = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString());
-                        ds.Tables[2].Rows[0]["F1001128"] = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString());
+                        ds.Tables[2].Rows[0]["F1001127"] = Convert.ToInt32((Session["MP_Det4"] == DBNull.Value ? "0" : (Session["MP_Det4"] ?? "0").ToString()).ToString());
+                        ds.Tables[2].Rows[0]["F1001128"] = Convert.ToInt32((Session["MP_Det3"] == DBNull.Value ? "0" : (Session["MP_Det3"] ?? "0").ToString()).ToString());
                         ds.Tables[2].Rows[0]["F1001129"] = Convert.ToInt32((Session["MP_Det5"] == DBNull.Value ? "0" : (Session["MP_Det5"] ?? "0").ToString()).ToString());               
                         break;
                 }

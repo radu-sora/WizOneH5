@@ -207,16 +207,15 @@
         <Columns>
 			<dx:GridViewCommandColumn Width="150px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>
             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
-            <dx:GridViewDataTextColumn FieldName="F11204" Name="F11204" Caption="Nume angajator"  Width="150px"/>
-            <dx:GridViewDataTextColumn FieldName="F11205" Name="F11205" Caption="CUI"  Width="100px"/>
+            <dx:GridViewDataTextColumn FieldName="F11204" Name="F11204" Caption="Nume angajator"  Width="150px"/>           
             <dx:GridViewDataComboBoxColumn FieldName="F11206" Name="F11206" Caption="Tara detasare" Width="250px" >
 				<Settings SortMode="DisplayText" />
                 <PropertiesComboBox TextField="F73304" ValueField="F73302" ValueType="System.Int32" DropDownStyle="DropDown" />
-            </dx:GridViewDataComboBoxColumn>
-                                                                                        
+            </dx:GridViewDataComboBoxColumn>                                                                                        
             <dx:GridViewDataDateColumn FieldName="F11207" Name="F11207" Caption="Data inceput"  Width="100px" >
                     <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
             </dx:GridViewDataDateColumn>
+             <dx:GridViewDataTextColumn FieldName="F11205" Name="F11205" Caption="CUI"  Width="100px"/>
             <dx:GridViewDataDateColumn FieldName="F11208" Name="F11208" Caption="Data sfarsit estimata"  Width="100px" >
                     <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
             </dx:GridViewDataDateColumn>

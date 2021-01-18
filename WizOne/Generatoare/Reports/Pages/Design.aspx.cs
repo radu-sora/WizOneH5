@@ -23,6 +23,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using Wizrom.Reports.Code;
 using Wizrom.Reports.Models;
 
@@ -343,239 +344,278 @@ namespace Wizrom.Reports.Pages
                     if (report == null)
                         throw new Exception($"No report found for id {_reportId}");
 
-                    var xtraReport = new XtraReport();                    
-
-                    // Update or create default layout by report type
-                    if (report.LayoutData != null)
+                    if (report.ReportTypeId != 5) // Report based template
                     {
-                        using (var memStream = new MemoryStream(report.LayoutData))
-                            xtraReport.LoadLayoutFromXml(memStream);
+                        var xtraReport = new XtraReport();
 
-                        if (report.ReportTypeId == 2) // Document
+                        // Update or create default layout by report type
+                        if (report.LayoutData != null)
                         {
-                            var detailBand = xtraReport.Bands.OfType<DetailBand>().FirstOrDefault();
+                            using (var memStream = new MemoryStream(report.LayoutData))
+                                xtraReport.LoadLayoutFromXml(memStream);
 
-                            if (detailBand != null)
+                            if (report.ReportTypeId == 2) // Document
                             {
-                                var richTexts = detailBand.Controls.OfType<XRRichText>();
+                                var detailBand = xtraReport.Bands.OfType<DetailBand>().FirstOrDefault();
 
-                                if (richTexts.Count() == 0)
+                                if (detailBand != null)
                                 {
-                                    var defaultXRRichTextHeight = 100;
+                                    var richTexts = detailBand.Controls.OfType<XRRichText>();
 
-                                    if (detailBand.HeightF < defaultXRRichTextHeight)
-                                        detailBand.HeightF += defaultXRRichTextHeight - detailBand.HeightF;
-
-                                    detailBand.Controls.Add(new XRRichText()
+                                    if (richTexts.Count() == 0)
                                     {
-                                        Size = new Size(detailBand.Right, defaultXRRichTextHeight)
-                                    });
+                                        var defaultXRRichTextHeight = 100;
+
+                                        if (detailBand.HeightF < defaultXRRichTextHeight)
+                                            detailBand.HeightF += defaultXRRichTextHeight - detailBand.HeightF;
+
+                                        detailBand.Controls.Add(new XRRichText()
+                                        {
+                                            Size = new Size(detailBand.Right, defaultXRRichTextHeight)
+                                        });
+                                    }
+                                }
+                            }
+                            else if (report.ReportTypeId == 3) // Cube
+                            {
+                                var detailBand = xtraReport.Bands.OfType<DetailBand>().FirstOrDefault();
+
+                                if (detailBand != null)
+                                {
+                                    var pivotGrids = detailBand.Controls.OfType<XRPivotGrid>();
+
+                                    if (pivotGrids.Count() == 0)
+                                    {
+                                        var defaultXRPivotGridHeight = 100;
+
+                                        if (detailBand.HeightF < defaultXRPivotGridHeight)
+                                            detailBand.HeightF += defaultXRPivotGridHeight - detailBand.HeightF;
+
+                                        detailBand.Controls.Add(new XRPivotGrid()
+                                        {
+                                            Size = new Size(detailBand.Right, defaultXRPivotGridHeight)
+                                        });
+                                    }
+                                }
+                            }
+                            else if (report.ReportTypeId == 4) // Table
+                            {
+                                var detailBand = xtraReport.Bands.OfType<DetailBand>().FirstOrDefault();
+
+                                if (detailBand != null)
+                                {
+                                    var richTexts = detailBand.Controls.OfType<XRRichText>();
+
+                                    if (richTexts.Count() == 0)
+                                    {
+                                        var defaultXRRichTextHeight = 100;
+
+                                        if (detailBand.HeightF < defaultXRRichTextHeight)
+                                            detailBand.HeightF += defaultXRRichTextHeight - detailBand.HeightF;
+
+                                        detailBand.Controls.Add(new XRRichText()
+                                        {
+                                            Size = new Size(detailBand.Right, defaultXRRichTextHeight)
+                                        });
+                                    }
                                 }
                             }
                         }
-                        else if (report.ReportTypeId == 3) // Cube
+                        else
                         {
-                            var detailBand = xtraReport.Bands.OfType<DetailBand>().FirstOrDefault();
-
-                            if (detailBand != null)
+                            if (report.ReportTypeId == 2) // Document
                             {
-                                var pivotGrids = detailBand.Controls.OfType<XRPivotGrid>();
+                                var detailBand = new DetailBand();
 
-                                if (pivotGrids.Count() == 0)
+                                xtraReport.Bands.Add(detailBand);
+
+                                detailBand.Controls.Add(new XRRichText()
                                 {
-                                    var defaultXRPivotGridHeight = 100;
-
-                                    if (detailBand.HeightF < defaultXRPivotGridHeight)
-                                        detailBand.HeightF += defaultXRPivotGridHeight - detailBand.HeightF;
-
-                                    detailBand.Controls.Add(new XRPivotGrid()
-                                    {
-                                        Size = new Size(detailBand.Right, defaultXRPivotGridHeight)
-                                    });
-                                }
+                                    Size = new Size(detailBand.Right, detailBand.Bottom)
+                                });
                             }
+                            else if (report.ReportTypeId == 3) // Cube
+                            {
+                                var defaultXRPivotGridHeight = 100;
+                                var defaultXRChartHeight = 150;
+                                var detailBand = new DetailBand()
+                                {
+                                    HeightF = defaultXRPivotGridHeight + defaultXRChartHeight
+                                };
+
+                                xtraReport.Bands.Add(detailBand);
+
+                                detailBand.Controls.Add(new XRPivotGrid()
+                                {
+                                    Size = new Size(detailBand.Right, defaultXRPivotGridHeight)
+                                });
+
+                                var xrChart = new XRChart()
+                                {
+                                    TopF = defaultXRPivotGridHeight,
+                                    Size = new Size(detailBand.Right, defaultXRChartHeight),
+                                    DataSource = detailBand.Controls.OfType<XRPivotGrid>().First(),
+                                    SeriesDataMember = "Series"
+                                };
+
+                                xrChart.Series.Add(new Series()
+                                {
+                                    ArgumentDataMember = "Arguments"
+                                });
+
+                                detailBand.Controls.Add(xrChart);
+                            }
+                            else if (report.ReportTypeId == 4) // Table
+                            {
+                                var defaultXRRichTextHeight = 100;
+                                var detailBand = new DetailBand()
+                                {
+                                    HeightF = defaultXRRichTextHeight
+                                };
+
+                                xtraReport.Bands.Add(detailBand);
+
+                                detailBand.Controls.Add(new XRRichText()
+                                {
+                                    Size = new Size(detailBand.Right, defaultXRRichTextHeight)
+                                });
+                            }
+
+                            // Set general defaults
+                            xtraReport.ExportOptions.Docx.ExportMode = DevExpress.XtraPrinting.DocxExportMode.SingleFile;
+                            xtraReport.ExportOptions.Docx.KeepRowHeight = true;
+                            // Set internal report id
+                            xtraReport.Tag = _reportId;
+                        }
+
+                        // Update internal name of the report
+                        xtraReport.Name = GetReportName(report.Name);
+                        xtraReport.DisplayName = report.Name;
+
+                        // Update internal name of the subreports available in this report
+                        foreach (var subreport in ReportDesigner.Subreports)
+                        {
+                            //var subReportId = Convert.ToInt32(subreport.Key);
+                            //var subReportName = mainContext.Reports.Find(subReportId)?.Name;
+                            // ...                        
+                        }
+
+                        // Save layout changes
+                        using (var memStream = new MemoryStream())
+                        {
+                            xtraReport.SaveLayoutToXml(memStream);
+                            report.LayoutData = memStream.GetBuffer();
+                        }
+
+                        entities.SaveChanges();
+
+                        // For client side customization
+                        ReportType = report.ReportTypeId;
+
+                        // Init controls
+                        DashboardTemplate.Visible = false;
+
+                        if (report.ReportTypeId == 3) // Cube
+                        {
+                            var pivotGrid = xtraReport.Bands.OfType<DetailBand>().FirstOrDefault()?.Controls.OfType<XRPivotGrid>().FirstOrDefault();
+
+                            // Init chart options           
+                            ChartTypeComboBox.Items.AddRange(Enum.GetValues(typeof(ViewType)).OfType<ViewType>().
+                                Select(vt => new ListEditItem() { Value = (int)vt, Text = vt.ToString() }).ToList());
+
+                            ChartOptionsCheckBoxList.Items.Add("Show Point Labels", "O1");
+                            ChartOptionsCheckBoxList.Items.Add("Generate Series from Columns", "O2");
+                            ChartOptionsCheckBoxList.Items.Add("Show Column Grand Totals", "O3");
+                            ChartOptionsCheckBoxList.Items.Add("Show Row Grand Totals", "O4");
+                            ChartOptionsCheckBoxList.Items.Add("Show Chart", "O5");
+
+                            // Bind to empty datasource to load columns definition.
+                            if (pivotGrid.Fields.Count == 0)
+                                pivotGrid.RetrieveFields(); // Retrieve all data source fields into filter area by default. Can be customized later.
+
+                            LoadASPxPivotGridLayoutFromXRPivotGrid(CustomCubePivotGrid, pivotGrid); // Load layout if exists.
                         }
                         else if (report.ReportTypeId == 4) // Table
                         {
-                            var detailBand = xtraReport.Bands.OfType<DetailBand>().FirstOrDefault();
+                            // Bind to empty datasource to load columns definition into viewstate. This is for grouping feature.
+                            var richText = xtraReport.Bands.OfType<DetailBand>().FirstOrDefault()?.Controls.OfType<XRRichText>().FirstOrDefault();
 
-                            if (detailBand != null)
-                            {
-                                var richTexts = detailBand.Controls.OfType<XRRichText>();
+                            CustomTableGridView.DataSource = xtraReport.DataSource;
+                            CustomTableGridView.DataMember = xtraReport.DataMember;
+                            CustomTableGridView.DataBind();
 
-                                if (richTexts.Count() == 0)
-                                {
-                                    var defaultXRRichTextHeight = 100;
-
-                                    if (detailBand.HeightF < defaultXRRichTextHeight)
-                                        detailBand.HeightF += defaultXRRichTextHeight - detailBand.HeightF;
-
-                                    detailBand.Controls.Add(new XRRichText()
-                                    {
-                                        Size = new Size(detailBand.Right, defaultXRRichTextHeight)
-                                    });
-                                }
-                            }
+                            LoadASPxGridViewLayout(CustomTableGridView, richText?.Tag); // Load layout if exists.
                         }
-                    }
-                    else
-                    {
+
+                        // Customize report designer UI
                         if (report.ReportTypeId == 2) // Document
                         {
-                            var detailBand = new DetailBand();
-
-                            xtraReport.Bands.Add(detailBand);
-
-                            detailBand.Controls.Add(new XRRichText()
+                            ReportDesigner.MenuItems.Add(new ClientControlsMenuItem()
                             {
-                                Size = new Size(detailBand.Right, detailBand.Bottom)
+                                Text = "Compose document text",
+                                ImageClassName = "dxrd-image-run-wizard",
+                                JSClickAction = "function() { showCustomLayoutSection(true); }",
+                                Container = MenuItemContainer.Toolbar
                             });
                         }
                         else if (report.ReportTypeId == 3) // Cube
                         {
-                            var defaultXRPivotGridHeight = 100;
-                            var defaultXRChartHeight = 150;
-                            var detailBand = new DetailBand()
+                            ReportDesigner.MenuItems.Add(new ClientControlsMenuItem()
                             {
-                                HeightF = defaultXRPivotGridHeight + defaultXRChartHeight
-                            };
-
-                            xtraReport.Bands.Add(detailBand);
-
-                            detailBand.Controls.Add(new XRPivotGrid()
-                            {
-                                Size = new Size(detailBand.Right, defaultXRPivotGridHeight)
+                                Text = "Customize cube layout",
+                                ImageClassName = "dxrd-image-run-wizard",
+                                JSClickAction = "function() { showCustomLayoutSection(true); }",
+                                Container = MenuItemContainer.Toolbar
                             });
-
-                            var xrChart = new XRChart()
-                            {
-                                TopF = defaultXRPivotGridHeight,
-                                Size = new Size(detailBand.Right, defaultXRChartHeight),
-                                DataSource = detailBand.Controls.OfType<XRPivotGrid>().First(),
-                                SeriesDataMember = "Series"
-                            };
-
-                            xrChart.Series.Add(new Series()
-                            {
-                                ArgumentDataMember = "Arguments"
-                            });
-
-                            detailBand.Controls.Add(xrChart);
                         }
                         else if (report.ReportTypeId == 4) // Table
                         {
-                            var defaultXRRichTextHeight = 100;
-                            var detailBand = new DetailBand()
+                            ReportDesigner.MenuItems.Add(new ClientControlsMenuItem()
                             {
-                                HeightF = defaultXRRichTextHeight
-                            };
-
-                            xtraReport.Bands.Add(detailBand);
-
-                            detailBand.Controls.Add(new XRRichText()
-                            {
-                                Size = new Size(detailBand.Right, defaultXRRichTextHeight)
+                                Text = "Customize table layout",
+                                ImageClassName = "dxrd-image-run-wizard",
+                                JSClickAction = "function() { showCustomLayoutSection(true); }",
+                                Container = MenuItemContainer.Toolbar
                             });
                         }
 
-                        // Set general defaults
-                        xtraReport.ExportOptions.Docx.ExportMode = DevExpress.XtraPrinting.DocxExportMode.SingleFile;
-                        xtraReport.ExportOptions.Docx.KeepRowHeight = true;
-                        // Set internal report id
-                        xtraReport.Tag = _reportId;
+                        // Open the report
+                        ReportDesigner.OpenReport(_reportId.ToString());
                     }
-
-                    // Update internal name of the report
-                    xtraReport.Name = GetReportName(report.Name);
-                    xtraReport.DisplayName = report.Name;
-
-                    // Update internal name of the subreports available in this report
-                    foreach (var subreport in ReportDesigner.Subreports)
+                    else // Dashboard template
                     {
-                        //var subReportId = Convert.ToInt32(subreport.Key);
-                        //var subReportName = mainContext.Reports.Find(subReportId)?.Name;
-                        // ...                        
-                    }
+                        var dashboardXDoc = null as XDocument;
 
-                    // Save layout changes
-                    using (var memStream = new MemoryStream())
-                    {
-                        xtraReport.SaveLayoutToXml(memStream);
-                        report.LayoutData = memStream.GetBuffer();
-                    }
-
-                    entities.SaveChanges();
-
-                    // For client side customization
-                    ReportType = report.ReportTypeId;
-
-                    // Init controls
-                    if (report.ReportTypeId == 3) // Cube
-                    {
-                        var pivotGrid = xtraReport.Bands.OfType<DetailBand>().FirstOrDefault()?.Controls.OfType<XRPivotGrid>().FirstOrDefault();
-
-                        // Init chart options           
-                        ChartTypeComboBox.Items.AddRange(Enum.GetValues(typeof(ViewType)).OfType<ViewType>().
-                            Select(vt => new ListEditItem() { Value = (int)vt, Text = vt.ToString() }).ToList());
-
-                        ChartOptionsCheckBoxList.Items.Add("Show Point Labels", "O1");
-                        ChartOptionsCheckBoxList.Items.Add("Generate Series from Columns", "O2");
-                        ChartOptionsCheckBoxList.Items.Add("Show Column Grand Totals", "O3");
-                        ChartOptionsCheckBoxList.Items.Add("Show Row Grand Totals", "O4");
-                        ChartOptionsCheckBoxList.Items.Add("Show Chart", "O5");
-
-                        // Bind to empty datasource to load columns definition.
-                        if (pivotGrid.Fields.Count == 0)
-                            pivotGrid.RetrieveFields(); // Retrieve all data source fields into filter area by default. Can be customized later.
-
-                        LoadASPxPivotGridLayoutFromXRPivotGrid(CustomCubePivotGrid, pivotGrid); // Load layout if exists.
-                    }
-                    else if (report.ReportTypeId == 4) // Table
-                    {
-                        // Bind to empty datasource to load columns definition into viewstate. This is for grouping feature.
-                        var richText = xtraReport.Bands.OfType<DetailBand>().FirstOrDefault()?.Controls.OfType<XRRichText>().FirstOrDefault();
-
-                        CustomTableGridView.DataSource = xtraReport.DataSource;
-                        CustomTableGridView.DataMember = xtraReport.DataMember;
-                        CustomTableGridView.DataBind();
-
-                        LoadASPxGridViewLayout(CustomTableGridView, richText?.Tag); // Load layout if exists.
-                    }
-
-                    // Customize report designer UI
-                    if (report.ReportTypeId == 2) // Document
-                    {
-                        ReportDesigner.MenuItems.Add(new ClientControlsMenuItem()
+                        // Update or create default dashboard layout                        
+                        if (report.LayoutData != null)
                         {
-                            Text = "Compose document text",
-                            ImageClassName = "dxrd-image-run-wizard",
-                            JSClickAction = "function() { showCustomLayoutSection(true); }",
-                            Container = MenuItemContainer.Toolbar
-                        });
-                    }
-                    else if (report.ReportTypeId == 3) // Cube
-                    {
-                        ReportDesigner.MenuItems.Add(new ClientControlsMenuItem()
+                            dashboardXDoc = XDocument.Parse(Encoding.UTF8.GetString(report.LayoutData));
+                            dashboardXDoc.Descendants("Title").Attributes("Text").First().Value = report.Name;
+                        }
+                        else
                         {
-                            Text = "Customize cube layout",
-                            ImageClassName = "dxrd-image-run-wizard",
-                            JSClickAction = "function() { showCustomLayoutSection(true); }",
-                            Container = MenuItemContainer.Toolbar
-                        });
-                    }
-                    else if (report.ReportTypeId == 4) // Table
-                    {
-                        ReportDesigner.MenuItems.Add(new ClientControlsMenuItem()
-                        {
-                            Text = "Customize table layout",
-                            ImageClassName = "dxrd-image-run-wizard",
-                            JSClickAction = "function() { showCustomLayoutSection(true); }",
-                            Container = MenuItemContainer.Toolbar
-                        });
-                    }
+                            dashboardXDoc = new XDocument();
+                            dashboardXDoc.Add(new XElement("Dashboard", new object[]
+                            {
+                                new XElement("Title", new XAttribute("Text", report.Name)),
+                                new XElement("UserData", new XElement("Storage", new XAttribute("Id", _reportId)))
+                            }));
+                        }
 
-                    // Open the report
-                    ReportDesigner.OpenReport(_reportId.ToString());
+                        // Save layout changes
+                        report.LayoutData = Encoding.UTF8.GetBytes(dashboardXDoc.ToString());
+                        entities.SaveChanges();
+
+                        // Init controls
+                        ReportTemplate.Visible = false;
+
+                        // Customize dashboard designer UI
+                        // ...
+                        // TODO: Add exit option to dashboard designer
+
+                        // Open the dashboard
+                        DashboardDesigner.InitialDashboardId = _reportId.ToString();
+                    }
                 }
                 else if (CustomDocumentCallbackPanel.IsCallback || CustomDocumentRichEdit.IsCallback)
                 {

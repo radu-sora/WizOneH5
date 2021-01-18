@@ -462,106 +462,126 @@ namespace Wizrom.Reports.Pages
                     if (report.LayoutData == null)
                         throw new Exception($"No layout found for report id {_reportId}");
 
-                    using (var memStream = new MemoryStream(report.LayoutData))
-                        _report.LoadLayoutFromXml(memStream);
-
-                    // Set internal params            
-                    var values = ReportSession.ParamList;
-                    var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
-                    var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
-                    var parameters = _report.ObjectStorage.OfType<SqlDataSource>().
-                        SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                        Where(p => p.Type != typeof(Expression));
-
-                    foreach (var param in parameters)
+                    if (report.ReportTypeId != 5) // Report based template
                     {
-                        var name = param.Name.TrimStart('@');
-                        var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
-                            implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
+                        using (var memStream = new MemoryStream(report.LayoutData))
+                            _report.LoadLayoutFromXml(memStream);
 
-                        if (value != null)
-                            param.Value = Convert.ChangeType(value, param.Type);
-                    }
+                        // Set internal params            
+                        var values = ReportSession.ParamList;
+                        var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
+                        var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
+                        var parameters = _report.ObjectStorage.OfType<SqlDataSource>().
+                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                            Where(p => p.Type != typeof(Expression));
 
-                    // For client side customization
-                    ReportName = report.Name;
-                    ReportType = report.ReportTypeId;
-
-                    // Init controls
-                    if (report.ReportTypeId == 3) // Cube
-                    {
-                        if (_pivotGrid != null)
+                        foreach (var param in parameters)
                         {
-                            ReportsUsersDataSource.WhereParameters["ReportId"].DefaultValue = _reportId.ToString();
-                            ReportsUsersDataSource.WhereParameters["RegUserId"].DefaultValue = _userId;
+                            var name = param.Name.TrimStart('@');
+                            var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
+                                implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
 
-                            if (_chart != null)
-                            {
-                                // Init chart options
-                                _chartOptions = JObject.Parse(SaveXRChartOptions(_chart, _pivotGrid));
-
-                                ChartTypeComboBox.Items.AddRange(Enum.GetValues(typeof(ViewType)).OfType<ViewType>().
-                                    Select(vt => new ListEditItem() { Value = (int)vt, Text = vt.ToString() }).ToList());
-                                ChartTypeComboBox.Value = (int)_chartOptions.Type;
-
-                                ChartOptionsCheckBoxList.Items.Add("Show Point Labels", "O1").Selected = _chartOptions.Options.O1;
-                                ChartOptionsCheckBoxList.Items.Add("Generate Series from Columns", "O2").Selected = _chartOptions.Options.O2;
-                                ChartOptionsCheckBoxList.Items.Add("Show Column Grand Totals", "O3").Selected = _chartOptions.Options.O3;
-                                ChartOptionsCheckBoxList.Items.Add("Show Row Grand Totals", "O4").Selected = _chartOptions.Options.O4;
-                                ChartOptionsCheckBoxList.Items.Add("Show Chart", "O5").Selected = _chartOptions.Options.O5;
-
-                                // Init chart control
-                                LoadWebChartOptions(CustomCubeWebChartControl, CustomCubePivotGrid, _chartOptions);
-                            }
-
-                            if (_report.Parameters.Count == 0)
-                            {
-                                _report.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for FillDataSource here
-                                _report.FillDataSource();
-                            }
-
-                            if (_pivotGrid.Fields.Count == 0)
-                                _pivotGrid.RetrieveFields(); // Retrieve all data source fields into filter area by default. Can be customized later.
-
-                            LoadASPxPivotGridLayoutFromXRPivotGrid(CustomCubePivotGrid, _pivotGrid);
-
-                            CustomCubePivotGrid.DataSource = _pivotGrid.DataSource;
-                            CustomCubePivotGrid.DataMember = _pivotGrid.DataMember;
+                            if (value != null)
+                                param.Value = Convert.ChangeType(value, param.Type);
                         }
-                    }
-                    else if (report.ReportTypeId == 4) // Table
-                    {
-                        if (_richText != null)
+
+                        // For client side customization
+                        ReportName = report.Name;
+                        ReportType = report.ReportTypeId;
+
+                        // Init controls
+                        DashboardTemplate.Visible = false;
+
+                        if (report.ReportTypeId == 3) // Cube
                         {
-                            ReportsUsersDataSource.WhereParameters["ReportId"].DefaultValue = _reportId.ToString();
-                            ReportsUsersDataSource.WhereParameters["RegUserId"].DefaultValue = _userId;
-
-                            if (_report.Parameters.Count == 0)
+                            if (_pivotGrid != null)
                             {
-                                _report.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for FillDataSource here
-                                _report.FillDataSource();
+                                ReportsUsersDataSource.WhereParameters["ReportId"].DefaultValue = _reportId.ToString();
+                                ReportsUsersDataSource.WhereParameters["RegUserId"].DefaultValue = _userId;
+
+                                if (_chart != null)
+                                {
+                                    // Init chart options
+                                    _chartOptions = JObject.Parse(SaveXRChartOptions(_chart, _pivotGrid));
+
+                                    ChartTypeComboBox.Items.AddRange(Enum.GetValues(typeof(ViewType)).OfType<ViewType>().
+                                        Select(vt => new ListEditItem() { Value = (int)vt, Text = vt.ToString() }).ToList());
+                                    ChartTypeComboBox.Value = (int)_chartOptions.Type;
+
+                                    ChartOptionsCheckBoxList.Items.Add("Show Point Labels", "O1").Selected = _chartOptions.Options.O1;
+                                    ChartOptionsCheckBoxList.Items.Add("Generate Series from Columns", "O2").Selected = _chartOptions.Options.O2;
+                                    ChartOptionsCheckBoxList.Items.Add("Show Column Grand Totals", "O3").Selected = _chartOptions.Options.O3;
+                                    ChartOptionsCheckBoxList.Items.Add("Show Row Grand Totals", "O4").Selected = _chartOptions.Options.O4;
+                                    ChartOptionsCheckBoxList.Items.Add("Show Chart", "O5").Selected = _chartOptions.Options.O5;
+
+                                    // Init chart control
+                                    LoadWebChartOptions(CustomCubeWebChartControl, CustomCubePivotGrid, _chartOptions);
+                                }
+
+                                if (_report.Parameters.Count == 0)
+                                {
+                                    _report.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for FillDataSource here
+                                    _report.FillDataSource();
+                                }
+
+                                if (_pivotGrid.Fields.Count == 0)
+                                    _pivotGrid.RetrieveFields(); // Retrieve all data source fields into filter area by default. Can be customized later.
+
+                                LoadASPxPivotGridLayoutFromXRPivotGrid(CustomCubePivotGrid, _pivotGrid);
+
+                                CustomCubePivotGrid.DataSource = _pivotGrid.DataSource;
+                                CustomCubePivotGrid.DataMember = _pivotGrid.DataMember;
                             }
-
-                            CustomTableGridView.DataSource = _report.DataSource;
-                            CustomTableGridView.DataMember = _report.DataMember;
-                            CustomTableGridView.DataBind();
-
-                            LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag, false);
                         }
+                        else if (report.ReportTypeId == 4) // Table
+                        {
+                            if (_richText != null)
+                            {
+                                ReportsUsersDataSource.WhereParameters["ReportId"].DefaultValue = _reportId.ToString();
+                                ReportsUsersDataSource.WhereParameters["RegUserId"].DefaultValue = _userId;
+
+                                if (_report.Parameters.Count == 0)
+                                {
+                                    _report.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for FillDataSource here
+                                    _report.FillDataSource();
+                                }
+
+                                CustomTableGridView.DataSource = _report.DataSource;
+                                CustomTableGridView.DataMember = _report.DataMember;
+                                CustomTableGridView.DataBind();
+
+                                LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag, false);
+                            }
+                        }
+
+                        // Customize report viewer UI
+                        WebDocumentViewer.MobileMode = report.ReportTypeId <= 2 ? IsMobileDevice : false; // Mobile mode only for Report & Document type
+                        WebDocumentViewer.MenuItems.Add(new WebDocumentViewerMenuItem()
+                        {
+                            Text = "Exit",
+                            ImageClassName = WebDocumentViewer.MobileMode ? "dxrd-image-exit mobile" : "dxrd-image-exit",
+                            JSClickAction = "function() { onExitButtonClick(); }",
+                            Container = MenuItemContainer.Toolbar
+                        });
+
+                        // Open the report
+                        WebDocumentViewer.OpenReport(_report);
                     }
-
-                    // Customize report viewer UI
-                    WebDocumentViewer.MobileMode = report.ReportTypeId <= 2 ? IsMobileDevice : false; // Mobile mode only for Report & Document type
-                    WebDocumentViewer.MenuItems.Add(new WebDocumentViewerMenuItem()
+                    else // Dashboard template
                     {
-                        Text = "Exit",
-                        ImageClassName = WebDocumentViewer.MobileMode ? "dxrd-image-exit mobile" : "dxrd-image-exit",
-                        JSClickAction = "function() { onExitButtonClick(); }",
-                        Container = MenuItemContainer.Toolbar
-                    });
+                        // Set internal params
+                        // ...
 
-                    // Open the report
-                    WebDocumentViewer.OpenReport(_report);
+                        // Init controls
+                        ReportTemplate.Visible = false;
+
+                        // Customize dashboard viewer UI
+                        // ...
+                        // TODO: Add exit option to dashboard viewer
+
+                        // Open the dashboard
+                        DashboardViewer.InitialDashboardId = _reportId.ToString();
+                    }
                 }
                 else if (WebDocumentViewerCallbackPanel.IsCallback)
                 {
@@ -779,7 +799,7 @@ namespace Wizrom.Reports.Pages
                                 {
                                     if (_reportParams != null)
                                     {
-                                        var oldParams = _report.Parameters.OfType<Parameter>().ToDictionary(p => p.Name, p => p.Value);
+                                        var oldParams = _report.Parameters.OfType<DevExpress.XtraReports.Parameters.Parameter>().ToDictionary(p => p.Name, p => p.Value);
 
                                         foreach (var param in _report.Parameters)
                                             param.Value = _reportParams[param.Name].Value;
@@ -1075,7 +1095,7 @@ namespace Wizrom.Reports.Pages
                             {
                                 if (_reportParams != null)
                                 {
-                                    var oldParams = _report.Parameters.OfType<Parameter>().ToDictionary(p => p.Name, p => p.Value);
+                                    var oldParams = _report.Parameters.OfType<DevExpress.XtraReports.Parameters.Parameter>().ToDictionary(p => p.Name, p => p.Value);
 
                                     foreach (var param in _report.Parameters)
                                         param.Value = _reportParams[param.Name].Value;

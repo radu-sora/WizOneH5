@@ -59,6 +59,15 @@
     <Reference Include="DevExpress.CodeParser.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.CodeParser.19.1.4\lib\net452\DevExpress.CodeParser.v19.1.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Dashboard.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Dashboard.Core.19.1.4\lib\net452\DevExpress.Dashboard.v19.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v19.1.Web, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Dashboard.Common.19.1.4\lib\net452\DevExpress.Dashboard.v19.1.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v19.1.Web.WebForms, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Dashboard.19.1.4\lib\net452\DevExpress.Dashboard.v19.1.Web.WebForms.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Data.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Data.19.1.4\lib\net452\DevExpress.Data.v19.1.dll</HintPath>
     </Reference>
@@ -70,6 +79,9 @@
     </Reference>
     <Reference Include="DevExpress.Images.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Images.19.1.4\lib\net452\DevExpress.Images.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Map.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Map.Core.19.1.4\lib\net452\DevExpress.Map.v19.1.Core.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Office.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Office.Core.19.1.4\lib\net452\DevExpress.Office.v19.1.Core.dll</HintPath>
@@ -103,6 +115,9 @@
     </Reference>
     <Reference Include="DevExpress.Spreadsheet.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Spreadsheet.Core.19.1.4\lib\net452\DevExpress.Spreadsheet.v19.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.TreeMap.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.TreeMap.Core.19.1.4\lib\net452\DevExpress.TreeMap.v19.1.Core.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Utils.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Utils.19.1.4\lib\net452\DevExpress.Utils.v19.1.dll</HintPath>
@@ -158,11 +173,20 @@
     <Reference Include="DevExpress.XtraGauges.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Gauges.Core.19.1.4\lib\net452\DevExpress.XtraGauges.v19.1.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraGauges.v19.1.Presets, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Gauges.19.1.4\lib\net452\DevExpress.XtraGauges.v19.1.Presets.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v19.1.Win, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Gauges.19.1.4\lib\net452\DevExpress.XtraGauges.v19.1.Win.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.XtraGrid.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.Grid.19.1.4\lib\net452\DevExpress.XtraGrid.v19.1.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.XtraLayout.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.Navigation.19.1.4\lib\net452\DevExpress.XtraLayout.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraMap.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Map.19.1.4\lib\net452\DevExpress.XtraMap.v19.1.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.XtraNavBar.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.19.1.4\lib\net452\DevExpress.XtraNavBar.v19.1.dll</HintPath>
@@ -187,6 +211,9 @@
     </Reference>
     <Reference Include="DevExpress.XtraTreeList.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.TreeList.19.1.4\lib\net452\DevExpress.XtraTreeList.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeMap.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.TreeMap.19.1.4\lib\net452\DevExpress.XtraTreeMap.v19.1.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.XtraVerticalGrid.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.VerticalGrid.19.1.4\lib\net452\DevExpress.XtraVerticalGrid.v19.1.dll</HintPath>
@@ -355,7 +382,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\reports.css" />
+    <Content Include="Generatoare\Reports\Styles\reports.css" />
     <Content Include="ContracteLucru\Contract.aspx" />
     <Content Include="ContracteLucru\ContractAbsente.ascx" />
     <Content Include="ContracteLucru\ContractCiclic.ascx" />
@@ -787,6 +814,8 @@
     <Content Include="Generatoare\Reports\Pages\Design.aspx" />
     <Content Include="Generatoare\Reports\Pages\Manage.aspx" />
     <Content Include="Generatoare\Reports\Pages\View.aspx" />
+    <Content Include="Generatoare\Reports\Scripts\dashboard-exit-extension.js" />
+    <Content Include="Generatoare\Reports\Scripts\dashboard-save-as-extension.js" />
     <Content Include="Global.asax" />
     <Content Include="Info.aspx" />
     <Content Include="Organigrama\Lista.aspx" />
@@ -1453,6 +1482,7 @@
       <DependentUpon>ValoriLinii.aspx</DependentUpon>
     </Compile>
     <Compile Include="Generatoare\Reports\Code\DictionaryExtensions.cs" />
+    <Compile Include="Generatoare\Reports\Code\EntityDashboardStorage.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportsDbContext.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportSessionModule.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportConnectionProviderService.cs" />

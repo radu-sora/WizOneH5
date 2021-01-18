@@ -1,4 +1,5 @@
-﻿using DevExpress.DataAccess;
+﻿using DevExpress.DashboardWeb;
+using DevExpress.DataAccess;
 using DevExpress.DataAccess.Sql;
 using DevExpress.DataAccess.Wizard.Services;
 using DevExpress.XtraReports.UI;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web;
+using System.Web.SessionState;
 using Wizrom.Reports.Models;
 
 namespace Wizrom.Reports.Code
@@ -89,6 +91,11 @@ namespace Wizrom.Reports.Code
             DefaultReportDesignerContainer.EnableCustomSql();
             DefaultWebDocumentViewerContainer.DisableCachedDocumentSource();
             ReportStorageWebExtension.RegisterExtensionGlobal(new EntityReportStorageWebExtension());
+
+            DashboardBootstrapper.SessionState = SessionStateBehavior.Required;
+            ASPxDashboard.StaticInitialize();
+            DashboardConfigurator.Default.SetConnectionStringsProvider(new ReportDataSourceWizardConnectionStringsProvider());
+            DashboardConfigurator.Default.SetDashboardStorage(new EntityDashboardStorage());
             // Reports
             DynamicModuleUtility.RegisterModule(typeof(ReportSessionModule));
             ReportsDbContext.RegisterGlobalConnectionString(reportsPath, appConnectionString);

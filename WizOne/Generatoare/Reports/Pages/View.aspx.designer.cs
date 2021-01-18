@@ -7,11 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Wizrom.Reports.Pages {
-    
-    
-    public partial class View {
-        
+namespace Wizrom.Reports.Pages
+{
+
+
+    public partial class View
+    {
+
+        /// <summary>
+        /// ReportTemplate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder ReportTemplate;
+
         /// <summary>
         /// WebDocumentViewerCallbackPanel control.
         /// </summary>
@@ -20,7 +31,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel WebDocumentViewerCallbackPanel;
-        
+
         /// <summary>
         /// WebDocumentViewer control.
         /// </summary>
@@ -29,7 +40,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.XtraReports.Web.ASPxWebDocumentViewer WebDocumentViewer;
-        
+
         /// <summary>
         /// LayoutComboBox control.
         /// </summary>
@@ -38,7 +49,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox LayoutComboBox;
-        
+
         /// <summary>
         /// ReportsUsersDataSource control.
         /// </summary>
@@ -47,7 +58,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource ReportsUsersDataSource;
-        
+
         /// <summary>
         /// ChartTypeComboBox control.
         /// </summary>
@@ -56,7 +67,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox ChartTypeComboBox;
-        
+
         /// <summary>
         /// ChartOptionsCheckBoxList control.
         /// </summary>
@@ -65,7 +76,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBoxList ChartOptionsCheckBoxList;
-        
+
         /// <summary>
         /// CustomCubePivotGrid control.
         /// </summary>
@@ -74,7 +85,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPivotGrid.ASPxPivotGrid CustomCubePivotGrid;
-        
+
         /// <summary>
         /// CustomCubePivotGridExporter control.
         /// </summary>
@@ -83,7 +94,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPivotGrid.ASPxPivotGridExporter CustomCubePivotGridExporter;
-        
+
         /// <summary>
         /// CustomCubeWebChartControl control.
         /// </summary>
@@ -92,7 +103,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.XtraCharts.Web.WebChartControl CustomCubeWebChartControl;
-        
+
         /// <summary>
         /// CustomTableGridView control.
         /// </summary>
@@ -101,7 +112,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView CustomTableGridView;
-        
+
         /// <summary>
         /// CustomTableGridViewExporter control.
         /// </summary>
@@ -110,7 +121,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridViewExporter CustomTableGridViewExporter;
-        
+
         /// <summary>
         /// globalEvents control.
         /// </summary>
@@ -119,5 +130,23 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGlobalEvents globalEvents;
+
+        /// <summary>
+        /// DashboardTemplate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder DashboardTemplate;
+
+        /// <summary>
+        /// DashboardViewer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.DashboardWeb.ASPxDashboard DashboardViewer;
     }
 }

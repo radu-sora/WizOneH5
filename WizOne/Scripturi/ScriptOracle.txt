@@ -15822,3 +15822,18 @@ ALTER TABLE "Atasamente" ADD "VineDinPosturi" number(10);
 /
 ALTER TABLE "Atasamente" ADD "EsteLaDosar" number(10);
 /
+
+
+CREATE TABLE "Org_PosturiEchipamente" 
+(	"IdPost" NUMBER(10,0), 
+"IdObiect" NUMBER(10,0), 
+"USER_NO" NUMBER(10,0), 
+"TIME" DATE DEFAULT SYSDATE
+);
+
+CREATE UNIQUE INDEX "Org_PosturiEchipamente_PK" ON "Org_PosturiEchipamente" ("IdPost", "IdObiect");
+
+ALTER TABLE "Org_PosturiEchipamente" ADD CONSTRAINT "Org_PosturiEchipamente_PK" PRIMARY KEY ("IdPost", "IdObiect");
+ALTER TABLE "Org_PosturiEchipamente" MODIFY ("IdObiect" NOT NULL ENABLE);
+ALTER TABLE "Org_PosturiEchipamente" MODIFY ("IdPost" NOT NULL ENABLE);
+/

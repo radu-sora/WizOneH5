@@ -197,9 +197,11 @@ namespace WizOne.Organigrama
                 AdaugaDosar();
                 AdaugaCampuriExtra(dr);
                 AdaugaBeneficiile(dr);
+                AdaugaEchipamente();
 
                 if (!IsPostBack)
                 {
+                    //campuri extra
                     foreach (ListEditItem item in chkExtra.Items)
                     {
                         if (campuriExtra.IndexOf(item.Value.ToString()) >= 0)
@@ -218,12 +220,19 @@ namespace WizOne.Organigrama
                         }
                     }
 
-
+                    //dosar personal
                     string idsDosar = General.Nz(General.ExecutaScalar(@"SELECT ',' + CONVERT(nvarchar(10),""IdObiect"") FROM ""Org_PosturiDosar"" WHERE ""IdPost""=(SELECT ""Id"" FROM ""Org_Posturi"" WHERE ""IdAuto""=@1) FOR XML PATH ('')", new object[] { General.Nz(Session["IdAuto"], "-97") }), "").ToString();
-
                     foreach (ListEditItem item in chkDosar.Items)
                     {
                         if ((idsDosar + ",").IndexOf("," + item.Value.ToString() + ",") >= 0)
+                            item.Selected = true;
+                    }
+
+                    //echipamente
+                    string idsEchip = General.Nz(General.ExecutaScalar(@"SELECT ',' + CONVERT(nvarchar(10),""IdObiect"") FROM ""Org_PosturiEchipamente"" WHERE ""IdPost""=(SELECT ""Id"" FROM ""Org_Posturi"" WHERE ""IdAuto""=@1) FOR XML PATH ('')", new object[] { General.Nz(Session["IdAuto"], "-97") }), "").ToString();
+                    foreach (ListEditItem item in chkEchip.Items)
+                    {
+                        if ((idsEchip + ",").IndexOf("," + item.Value.ToString() + ",") >= 0)
                             item.Selected = true;
                     }
                 }
@@ -457,6 +466,18 @@ namespace WizOne.Organigrama
                         INNER JOIN Org_PosturiDosar C ON A.IdPost=C.IdPost
                         LEFT JOIN Atasamente B ON A.F10003 = B.IdEmpl AND B.IdCategory=C.IdObiect
                         WHERE A.IdPost=@1 AND B.IdCategory IS NULL
+                        GROUP BY A.F10003, C.IdObiect;
+                    END;", new object[] { id });
+
+                //actualizam echipamentele tuturor angajatilor care sunt pe acest post
+                General.ExecutaNonQuery($@"
+                    BEGIN
+                        DELETE FROM Admin_Echipamente WHERE Marca IN (SELECT F10003 FROM Org_relPostAngajat WHERE IdPost=@1) AND DataPrimire IS NULL AND Caracteristica IS NULL;
+                        INSERT INTO Admin_Echipamente(Marca, IdObiect, USER_NO, TIME)
+                        SELECT A.F10003, C.IdObiect, 1, GetDate(), {Session["UserId"]}, GetDate() FROM Org_relPostAngajat A
+                        INNER JOIN Org_PosturiEchipamente C ON A.IdPost=C.IdPost
+                        LEFT JOIN Admin_Echipamente B ON A.F10003 = B.Marca AND B.IdObiect=C.IdObiect
+                        WHERE A.IdPost=@1 AND B.IdObiect IS NULL
                         GROUP BY A.F10003, C.IdObiect;
                     END;", new object[] { id });
 
@@ -754,8 +775,8 @@ namespace WizOne.Organigrama
         {
             try
             {
-                DataTable dtDosar = General.IncarcaDT(@"SELECT ""IdCategory"" AS ""Id"", ""NameCategory"" AS ""Denumire"" FROM ""CategoriiAtasamente"" ORDER BY ""NameCategory"" ");
-                chkDosar.DataSource = dtDosar;
+                DataTable dt = General.IncarcaDT(@"SELECT ""IdCategory"" AS ""Id"", ""NameCategory"" AS ""Denumire"" FROM ""CategoriiAtasamente"" ORDER BY ""NameCategory"" ");
+                chkDosar.DataSource = dt;
                 chkDosar.DataBind();
 
                 //DataTable dtTab = General.IncarcaDT($@"
@@ -769,6 +790,21 @@ namespace WizOne.Organigrama
 
                 //lstDosar.DataSource = dtTab;
                 //lstDosar.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void AdaugaEchipamente()
+        {
+            try
+            {
+                DataTable dt = General.GetObiecteDinArie("ArieTabEchipamenteDinPersonal");
+                chkEchip.DataSource = dt;
+                chkEchip.DataBind();
             }
             catch (Exception ex)
             {

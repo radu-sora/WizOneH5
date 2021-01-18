@@ -317,6 +317,16 @@
 
                 <div id="divExtra" runat="server" style="width:815px;"></div>
 
+                <div class="Absente_divOuter margin_top15">
+                    <label id="Label3" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100%;">Alege echipamentele</label>
+                    <div style="float:left; padding-right:15px;">  
+                        <dx:ASPxCheckBoxList ID="chkEchip" ClientInstanceName="chkEchip" runat="server" ValueField="IdObiect" TextField="NumeCompus" RepeatColumns="6" RepeatLayout="Table" >
+                        </dx:ASPxCheckBoxList>
+                    </div>
+                </div>
+
+                <div id="divEchip" runat="server" style="width:815px;"></div>
+
                 <div class="Absente_divOuter margin_top15" style="display:none;">
 		            <label id="lblCom" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Competente</label>
                     <dx:ASPxGridView ID="grDate" runat="server" Width="700px">

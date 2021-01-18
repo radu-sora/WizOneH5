@@ -717,6 +717,33 @@ namespace WizOne.Organigrama
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divExtra;
 
         /// <summary>
+        /// Label3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label3;
+
+        /// <summary>
+        /// chkEchip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBoxList chkEchip;
+
+        /// <summary>
+        /// divEchip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divEchip;
+
+        /// <summary>
         /// lblCom control.
         /// </summary>
         /// <remarks>

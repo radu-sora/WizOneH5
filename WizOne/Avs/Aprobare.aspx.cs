@@ -131,7 +131,6 @@ namespace WizOne.Avs
             try
             {
                 IncarcaGrid();
-                chkGen.Checked = true;
             }
             catch (Exception ex)
             {
@@ -927,7 +926,7 @@ namespace WizOne.Avs
                             //Florin 2019.07.29
                             //s-a adaugat si parametrul cu id-uri excluse
                             string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
-                            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + id + ",") >= 0) || !chkGen.Checked))
+                            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + id + ",") >= 0) ))
                             {
                                 Cereri pag = new Cereri();
                                 pag.TrimiteInF704(id);
@@ -1369,7 +1368,7 @@ namespace WizOne.Avs
                             " when 2 then a.FunctieNume  " +
                             " when 3 then a.CORNume  " +
                             " when 4 then a.MotivNume  " +
-                            " when 5 then ''  " +
+                            " when 5 then a.SubcompanieNume + ' / ' + a.FilialaNume + ' / ' + a.SectieNume + ' / ' +  a.DeptNume " +
                             " when 6 then convert(nvarchar(20),a.TimpPartial)  " +
                             " when 8 then convert(nvarchar(20),a.NrIntern) + ' / ' + convert(nvarchar(20),a.DataIntern,103)  " +
                             " when 9 then convert(nvarchar(20),a.NrITM) + ' / ' + convert(nvarchar(20),a.DataITM,103)  " +

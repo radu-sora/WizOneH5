@@ -2881,8 +2881,9 @@ namespace WizOne.Module
                 table.Rows.Add(2, "Ctr. de munca temporar");
                 table.Rows.Add(4, "Ctr. de ucenicie la locul de munca");
                 table.Rows.Add(1, "Ctr. individual de munca");
-                table.Rows.Add(32, "Ctr. internship");
+                table.Rows.Add(32, "Ctr. internship");     
                 table.Rows.Add(8, "Ctr. mandat");
+                table.Rows.Add(35, "Ctr.temporar cu clauza de telemunca");
                 table.Rows.Add(98, "Drepturi de autor si drepturi conexe");
 
             }

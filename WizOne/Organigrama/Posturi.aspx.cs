@@ -469,12 +469,30 @@ namespace WizOne.Organigrama
                         GROUP BY A.F10003, C.IdObiect;
                     END;", new object[] { id });
 
+
+                //salvam echipamentele
+                string sqlEchip = "";
+                foreach (var item in chkEchip.SelectedValues)
+                {
+
+                    sqlEchip += $@"INSERT INTO ""Org_PosturiEchipamente""(""IdPost"", ""IdObiect"") VALUES({id},{item});" + Environment.NewLine;
+                }
+
+                if (sqlDosar != "")
+                {
+                    General.ExecutaNonQuery(
+                        $@"BEGIN
+                        DELETE FROM ""Org_PosturiEchipamente"" WHERE ""IdPost""={id};
+                        {sqlEchip}
+                        END;", null);
+                }
+
                 //actualizam echipamentele tuturor angajatilor care sunt pe acest post
                 General.ExecutaNonQuery($@"
                     BEGIN
                         DELETE FROM Admin_Echipamente WHERE Marca IN (SELECT F10003 FROM Org_relPostAngajat WHERE IdPost=@1) AND DataPrimire IS NULL AND Caracteristica IS NULL;
                         INSERT INTO Admin_Echipamente(Marca, IdObiect, USER_NO, TIME)
-                        SELECT A.F10003, C.IdObiect, 1, GetDate(), {Session["UserId"]}, GetDate() FROM Org_relPostAngajat A
+                        SELECT A.F10003, C.IdObiect, {Session["UserId"]}, GetDate() FROM Org_relPostAngajat A
                         INNER JOIN Org_PosturiEchipamente C ON A.IdPost=C.IdPost
                         LEFT JOIN Admin_Echipamente B ON A.F10003 = B.Marca AND B.IdObiect=C.IdObiect
                         WHERE A.IdPost=@1 AND B.IdObiect IS NULL

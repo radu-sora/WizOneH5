@@ -476,7 +476,8 @@ namespace WizOne.Pontaj
                 if (tip == 2 || tip == 20)
                     dataSelectie = txtZiua.Date;
 
-                if (!General.EstePontajulInitializat(dataSelectie, General.Nz(cmbCtr.Value, "").ToString()))
+                //Florin #740
+                if (!General.EstePontajulInitializat(dataSelectie, General.Nz(cmbCtr.Text, "").ToString()))
                 {
                     grDate.DataSource = null;
                     grDate.DataBind();

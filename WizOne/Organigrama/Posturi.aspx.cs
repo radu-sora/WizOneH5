@@ -196,8 +196,8 @@ namespace WizOne.Organigrama
 
                 AdaugaDosar();
                 AdaugaCampuriExtra(dr);
-                AdaugaBeneficiile(dr);
                 AdaugaEchipamente();
+                AdaugaBeneficiile();
 
                 if (!IsPostBack)
                 {
@@ -233,6 +233,14 @@ namespace WizOne.Organigrama
                     foreach (ListEditItem item in chkEchip.Items)
                     {
                         if ((idsEchip + ",").IndexOf("," + item.Value.ToString() + ",") >= 0)
+                            item.Selected = true;
+                    }
+
+                    //beneficii
+                    string idsBenef = General.Nz(General.ExecutaScalar(@"SELECT ',' + CONVERT(nvarchar(10),""IdObiect"") FROM ""Org_PosturiBeneficii"" WHERE ""IdPost""=(SELECT ""Id"" FROM ""Org_Posturi"" WHERE ""IdAuto""=@1) FOR XML PATH ('')", new object[] { General.Nz(Session["IdAuto"], "-97") }), "").ToString();
+                    foreach (ListEditItem item in chkBenef.Items)
+                    {
+                        if ((idsBenef + ",").IndexOf("," + item.Value.ToString() + ",") >= 0)
                             item.Selected = true;
                     }
                 }
@@ -469,17 +477,66 @@ namespace WizOne.Organigrama
                         GROUP BY A.F10003, C.IdObiect;
                     END;", new object[] { id });
 
+
+                //salvam echipamentele
+                string sqlEchip = "";
+                foreach (var item in chkEchip.SelectedValues)
+                {
+
+                    sqlEchip += $@"INSERT INTO ""Org_PosturiEchipamente""(""IdPost"", ""IdObiect"") VALUES({id},{item});" + Environment.NewLine;
+                }
+
+                if (sqlEchip != "")
+                {
+                    General.ExecutaNonQuery(
+                        $@"BEGIN
+                        DELETE FROM ""Org_PosturiEchipamente"" WHERE ""IdPost""={id};
+                        {sqlEchip}
+                        END;", null);
+                }
+
                 //actualizam echipamentele tuturor angajatilor care sunt pe acest post
                 General.ExecutaNonQuery($@"
                     BEGIN
                         DELETE FROM Admin_Echipamente WHERE Marca IN (SELECT F10003 FROM Org_relPostAngajat WHERE IdPost=@1) AND DataPrimire IS NULL AND Caracteristica IS NULL;
                         INSERT INTO Admin_Echipamente(Marca, IdObiect, USER_NO, TIME)
-                        SELECT A.F10003, C.IdObiect, 1, GetDate(), {Session["UserId"]}, GetDate() FROM Org_relPostAngajat A
+                        SELECT A.F10003, C.IdObiect, {Session["UserId"]}, GetDate() FROM Org_relPostAngajat A
                         INNER JOIN Org_PosturiEchipamente C ON A.IdPost=C.IdPost
                         LEFT JOIN Admin_Echipamente B ON A.F10003 = B.Marca AND B.IdObiect=C.IdObiect
                         WHERE A.IdPost=@1 AND B.IdObiect IS NULL
                         GROUP BY A.F10003, C.IdObiect;
                     END;", new object[] { id });
+
+
+                //salvam beneficiile
+                string sqlBenef = "";
+                foreach (var item in chkBenef.SelectedValues)
+                {
+
+                    sqlBenef += $@"INSERT INTO ""Org_PosturiBeneficii""(""IdPost"", ""IdObiect"") VALUES({id},{item});" + Environment.NewLine;
+                }
+
+                if (sqlBenef != "")
+                {
+                    General.ExecutaNonQuery(
+                        $@"BEGIN
+                        DELETE FROM ""Org_PosturiBeneficii"" WHERE ""IdPost""={id};
+                        {sqlBenef}
+                        END;", null);
+                }
+
+                //actualizam beneficiile tuturor angajatilor care sunt pe acest post
+                General.ExecutaNonQuery($@"
+                    BEGIN
+                        DELETE FROM Admin_Beneficii WHERE Marca IN (SELECT F10003 FROM Org_relPostAngajat WHERE IdPost=@1) AND DataPrimire IS NULL AND Caracteristica IS NULL;
+                        INSERT INTO Admin_Beneficii(Marca, IdObiect, USER_NO, TIME)
+                        SELECT A.F10003, C.IdObiect, {Session["UserId"]}, GetDate() FROM Org_relPostAngajat A
+                        INNER JOIN Org_PosturiBeneficii C ON A.IdPost=C.IdPost
+                        LEFT JOIN Admin_Beneficii B ON A.F10003 = B.Marca AND B.IdObiect=C.IdObiect
+                        WHERE A.IdPost=@1 AND B.IdObiect IS NULL
+                        GROUP BY A.F10003, C.IdObiect;
+                    END;", new object[] { id });
+
 
                 DataTable dtPoz = Session["Org_PosturiPozitii"] as DataTable;
                 if (dtPoz != null)
@@ -714,62 +771,62 @@ namespace WizOne.Organigrama
             }
         }
 
-        private void AdaugaBeneficiile(DataRow dr)
-        {
-            try
-            {
-                string strSql = $@"SELECT B.""Id"" AS ""IdCateg"", B.""Denumire"" AS ""Eticheta"", C.""Id"", C.""Denumire"", B.""OrdineInPosturi""
-                    FROM ""Admin_Arii"" A
-                    INNER JOIN ""Admin_Categorii"" B ON A.""Id"" = B.""IdArie""
-                    INNER JOIN ""Admin_Obiecte"" C ON B.""Id"" = C.""IdCategorie""
-                    WHERE (A.""Denumire"" = 'Beneficii' OR A.""Denumire"" = 'atribute posturi') AND B.""OrdineInPosturi"" IS NOT NULL AND ""OrdineInPosturi"" <> 0
-                    ORDER BY B.""OrdineInPosturi"", B.""Id"", B.""Denumire"" ";
-                DataTable dtBen = General.IncarcaDT(strSql, null);
+        //private void AdaugaBeneficiile(DataRow dr)
+        //{
+        //    try
+        //    {
+        //        string strSql = $@"SELECT B.""Id"" AS ""IdCateg"", B.""Denumire"" AS ""Eticheta"", C.""Id"", C.""Denumire"", B.""OrdineInPosturi""
+        //            FROM ""Admin_Arii"" A
+        //            INNER JOIN ""Admin_Categorii"" B ON A.""Id"" = B.""IdArie""
+        //            INNER JOIN ""Admin_Obiecte"" C ON B.""Id"" = C.""IdCategorie""
+        //            WHERE (A.""Denumire"" = 'Beneficii' OR A.""Denumire"" = 'atribute posturi') AND B.""OrdineInPosturi"" IS NOT NULL AND ""OrdineInPosturi"" <> 0
+        //            ORDER BY B.""OrdineInPosturi"", B.""Id"", B.""Denumire"" ";
+        //        DataTable dtBen = General.IncarcaDT(strSql, null);
 
-                HtmlGenericControl divRow = new HtmlGenericControl("div");
-                divRow.Attributes["class"] = "row";
+        //        HtmlGenericControl divRow = new HtmlGenericControl("div");
+        //        divRow.Attributes["class"] = "row";
 
-                DataTable dt = dtBen.DefaultView.ToTable(true, new string[] { "IdCateg", "Eticheta" });
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    HtmlGenericControl divCol = new HtmlGenericControl("div");
-                    divCol.Attributes["class"] = "col-md-6";
+        //        DataTable dt = dtBen.DefaultView.ToTable(true, new string[] { "IdCateg", "Eticheta" });
+        //        for (int i = 0; i < dt.Rows.Count; i++)
+        //        {
+        //            HtmlGenericControl divCol = new HtmlGenericControl("div");
+        //            divCol.Attributes["class"] = "col-md-6";
 
-                    HtmlGenericControl lbl = new HtmlGenericControl("label");
-                    lbl.Style["width"] = "100%";
-                    lbl.Style["margin-top"] = "20px";
-                    lbl.InnerText = Dami.TraduCuvant(General.Nz(dt.Rows[i]["Eticheta"], "").ToString());
+        //            HtmlGenericControl lbl = new HtmlGenericControl("label");
+        //            lbl.Style["width"] = "100%";
+        //            lbl.Style["margin-top"] = "20px";
+        //            lbl.InnerText = Dami.TraduCuvant(General.Nz(dt.Rows[i]["Eticheta"], "").ToString());
 
-                    ASPxComboBox cmb = new ASPxComboBox();
-                    cmb.ID = "cmbBenef" + (i + 1).ToString();
-                    cmb.Width = Unit.Pixel(300);
-                    cmb.AutoPostBack = false;
-                    cmb.AllowNull = true;
-                    cmb.ValueField = "Id";
-                    cmb.ValueType = typeof(System.Int32);
-                    cmb.TextField = "Denumire";
-                    DataView view = dtBen.DefaultView;
-                    view.RowFilter = "IdCateg=" + Convert.ToInt32(General.Nz(dt.Rows[i]["IdCateg"], -99));
-                    cmb.DataSource = view;
-                    cmb.DataBind();
+        //            ASPxComboBox cmb = new ASPxComboBox();
+        //            cmb.ID = "cmbBenef" + (i + 1).ToString();
+        //            cmb.Width = Unit.Pixel(300);
+        //            cmb.AutoPostBack = false;
+        //            cmb.AllowNull = true;
+        //            cmb.ValueField = "Id";
+        //            cmb.ValueType = typeof(System.Int32);
+        //            cmb.TextField = "Denumire";
+        //            DataView view = dtBen.DefaultView;
+        //            view.RowFilter = "IdCateg=" + Convert.ToInt32(General.Nz(dt.Rows[i]["IdCateg"], -99));
+        //            cmb.DataSource = view;
+        //            cmb.DataBind();
 
-                    if (dr != null)
-                        cmb.Value = dr["IdBeneficiu" + (i + 1).ToString()];
+        //            if (dr != null)
+        //                cmb.Value = dr["IdBeneficiu" + (i + 1).ToString()];
 
-                    divCol.Controls.Add(lbl);
-                    divCol.Controls.Add(cmb);
+        //            divCol.Controls.Add(lbl);
+        //            divCol.Controls.Add(cmb);
 
-                    divRow.Controls.Add(divCol);
-                }
+        //            divRow.Controls.Add(divCol);
+        //        }
 
-                divBenef.Controls.Add(divRow);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        divBenef.Controls.Add(divRow);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         private void AdaugaDosar()
         {
@@ -805,6 +862,21 @@ namespace WizOne.Organigrama
                 DataTable dt = General.GetObiecteDinArie("ArieTabEchipamenteDinPersonal");
                 chkEchip.DataSource = dt;
                 chkEchip.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void AdaugaBeneficiile()
+        {
+            try
+            {
+                DataTable dt = General.GetObiecteDinArie("ArieTabBeneficiiDinPersonal");
+                chkBenef.DataSource = dt;
+                chkBenef.DataBind();
             }
             catch (Exception ex)
             {

@@ -55,6 +55,8 @@ namespace WizOne.Avs
                     Session["AvsCereriCalcul"] = null;
                     Session["Avs_Cereri_Date"] = null;
 
+                    Session["Avs_ChkGen"] = null;
+
                     Session["Avs_NrLuni"] = "";
                     Session["Avs_NrZile"] = "";
 
@@ -288,7 +290,17 @@ namespace WizOne.Avs
                             lblDoc.InnerText = General.Nz(itm.UploadedFileName, "").ToString();
                         }
                     }
-
+                    if (Session["Avs_ChkGen"] != null)
+                    {
+                        if (Session["Avs_ChkGen"].ToString() == "false")
+                        {
+                            chkGen.ClientVisible = false;
+                        }
+                        else
+                        {
+                            chkGen.ClientVisible = true;
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -1610,8 +1622,8 @@ namespace WizOne.Avs
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.MesajPersonal)
             {
                 ArataCtl(3, "Mesaj actual", "Mesaj nou", "", "", "", "", "", "", "", "");
-                DataTable dtTemp1 = General.IncarcaDT("select F72402 AS \"Id\", F72404 AS \"Denumire\" from F100, f724 WHERE F10061 = F72402 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
-                DataTable dtTemp2 = General.IncarcaDT("select F72402 AS \"Id\", F72404 AS \"Denumire\" from f724", null);
+                DataTable dtTemp1 = General.IncarcaDT("select F72402 AS \"Id\", F72404 AS \"Denumire\" from F100, f724 WHERE F72411 IN (0,1) AND  F10061 = F72402 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                DataTable dtTemp2 = General.IncarcaDT("select F72402 AS \"Id\", F72404 AS \"Denumire\" from f724 WHERE F72411 IN (0,1) ", null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
             }
 
@@ -2099,6 +2111,7 @@ namespace WizOne.Avs
                 switch (tip)
                 {
                     case "1":
+                        Session["Avs_ChkGen"] = null;
                         txtDataMod.Date = DateTime.Now;
                         AscundeCtl();
                         IncarcaDate();
@@ -2121,11 +2134,13 @@ namespace WizOne.Avs
                         {
                             chkGen.ClientVisible = false;
                             chkGen.Checked = false;
+                            Session["Avs_ChkGen"] = "false";
                         }
                         else
                         {
                             chkGen.ClientVisible = true;
                             chkGen.Checked = true;
+                            Session["Avs_ChkGen"] = "true";
                         }
                         if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR)
                         {
@@ -3894,7 +3909,7 @@ namespace WizOne.Avs
                             " when 2 then a.\"FunctieNume\"  " +
                             " when 3 then a.\"CORNume\"  " +
                             " when 4 then a.\"MotivNume\"  " +
-                            " when 5 then a.\"DeptNume\"  " +
+                            " when 5 then a.\"SubcompanieNume\" + ' / ' + a.\"FilialaNume\" + ' / ' + a.\"SectieNume\" + ' / ' +  a.\"DeptNume\"  " +
                             " when 6 then convert(nvarchar(20),a.\"TimpPartial\")  " +
                             " when 8 then convert(nvarchar(20),a.\"NrIntern\") + ' / ' + convert(nvarchar(20),a.\"DataIntern\",103)  " +
                             " when 9 then convert(nvarchar(20),a.\"NrITM\") + ' / ' + convert(nvarchar(20),a.\"DataITM\",103)  " +
@@ -5098,10 +5113,12 @@ namespace WizOne.Avs
             if (dt1 != null && dt1.Columns.Count > 2)
             {
                 cmbAct.Columns.Clear();
-                for (int i = 0; i < dt2.Columns.Count; i++)
+                for (int i = 0; i < dt1.Columns.Count; i++)
                 {
                     ListBoxColumn col = new ListBoxColumn();
                     col.FieldName = dt1.Columns[i].ColumnName;
+                    if (i > 7)
+                        col.Visible = false;
                     cmbAct.Columns.Add(col);
                 }
             }
@@ -5113,6 +5130,8 @@ namespace WizOne.Avs
                 {
                     ListBoxColumn col = new ListBoxColumn();
                     col.FieldName = dt2.Columns[i].ColumnName;
+                    if (i > 7)
+                        col.Visible = false;
                     cmbNou.Columns.Add(col);
                 }
             }

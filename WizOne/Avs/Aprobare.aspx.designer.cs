@@ -141,24 +141,6 @@ namespace WizOne.Avs
         protected global::DevExpress.Web.ASPxDropDownEdit checkComboBoxStare;
 
         /// <summary>
-        /// lblGen control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblGen;
-
-        /// <summary>
-        /// chkGen control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBox chkGen;
-
-        /// <summary>
         /// btnFiltru control.
         /// </summary>
         /// <remarks>

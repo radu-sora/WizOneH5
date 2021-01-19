@@ -15837,3 +15837,29 @@ ALTER TABLE "Org_PosturiEchipamente" ADD CONSTRAINT "Org_PosturiEchipamente_PK" 
 ALTER TABLE "Org_PosturiEchipamente" MODIFY ("IdObiect" NOT NULL ENABLE);
 ALTER TABLE "Org_PosturiEchipamente" MODIFY ("IdPost" NOT NULL ENABLE);
 /
+
+CREATE TABLE "Org_PosturiBeneficii" 
+(	"IdPost" NUMBER(10,0), 
+"IdObiect" NUMBER(10,0), 
+"USER_NO" NUMBER(10,0), 
+"TIME" DATE DEFAULT SYSDATE
+);
+
+CREATE UNIQUE INDEX "Org_PosturiBeneficii_PK" ON "Org_PosturiBeneficii" ("IdPost", "IdObiect");
+
+ALTER TABLE "Org_PosturiBeneficii" ADD CONSTRAINT "Org_PosturiBeneficii_PK" PRIMARY KEY ("IdPost", "IdObiect");
+ALTER TABLE "Org_PosturiBeneficii" MODIFY ("IdObiect" NOT NULL ENABLE);
+ALTER TABLE "Org_PosturiBeneficii" MODIFY ("IdPost" NOT NULL ENABLE);
+/
+
+ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu1";
+ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu2";
+ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu3";
+ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu4";
+ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu5";
+ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu6";
+ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu7";
+ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu8";
+ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu9";
+ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu10";
+/

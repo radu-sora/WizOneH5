@@ -16449,3 +16449,24 @@ GO
 
 ALTER TABLE [dbo].[Org_PosturiBeneficii] ADD  CONSTRAINT [DF_Org_PosturiBeneficii_TIME]  DEFAULT (getdate()) FOR [TIME]
 GO
+
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu1
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu2
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu3
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu4
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu5
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu6
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu7
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu8
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu9
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu10
+GO

@@ -1,9 +1,12 @@
 ﻿<%@ Page Title="View Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="View.aspx.cs" Inherits="Wizrom.Reports.Pages.View" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <link rel="stylesheet" type="text/css" href="../Styles/reports.css" />
+
     <!-- Modal dialogs -->
 
-    <!-- Page content -->                  
+    <!-- Page content -->       
+<asp:PlaceHolder ID="ReportTemplate" runat="server">
     <table class="report-view-template">
         <tr>
             <td>
@@ -799,5 +802,9 @@
     <dx:ASPxGlobalEvents ID="globalEvents" runat="server">
         <ClientSideEvents ControlsInitialized="onControlsInitialized" />
     </dx:ASPxGlobalEvents>
-
+</asp:PlaceHolder>
+<asp:PlaceHolder ID="DashboardTemplate" runat="server">
+    <dx:ASPxDashboard ID="DashboardViewer" ClientInstanceName="dashboardViewer" runat="server" WorkingMode="ViewerOnly" UseDashboardConfigurator="true">
+    </dx:ASPxDashboard>
+</asp:PlaceHolder>
 </asp:Content>

@@ -55,18 +55,28 @@
   <ItemGroup>
     <Reference Include="Adeverinte_Word">
       <HintPath>..\Artifacts\Adeverinte_Word.dll</HintPath>
-    </Reference>
-    <Reference Include="BouncyCastle.Crypto">
-      <HintPath>..\Artifacts\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="CryptoXMLHONEYWELL">
-      <HintPath>..\Artifacts\CryptoXMLHONEYWELL.dll</HintPath>
-    </Reference>
     <Reference Include="DevExpress.Charts.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Charts.Core.20.2.4\lib\net452\DevExpress.Charts.v20.2.Core.dll</HintPath>
     </Reference>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\Artifacts\BouncyCastle.Crypto.dll</HintPath>
     <Reference Include="DevExpress.CodeParser.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.CodeParser.20.2.4\lib\net452\DevExpress.CodeParser.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="CryptoXMLHONEYWELL">
+      <HintPath>..\Artifacts\CryptoXMLHONEYWELL.dll</HintPath>
+    <Reference Include="DevExpress.Dashboard.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Dashboard.Core.20.2.4\lib\net452\DevExpress.Dashboard.v20.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Charts.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Charts.Core.20.2.4\lib\net452\DevExpress.Charts.v20.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Dashboard.v20.2.Web, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Dashboard.Common.20.2.4\lib\net452\DevExpress.Dashboard.v20.2.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.CodeParser.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.CodeParser.20.2.4\lib\net452\DevExpress.CodeParser.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.Dashboard.v20.2.Web.WebForms, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Dashboard.20.2.4\lib\net452\DevExpress.Dashboard.v20.2.Web.WebForms.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Data.Desktop.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Data.Desktop.20.2.4\lib\net452\DevExpress.Data.Desktop.v20.2.dll</HintPath>
@@ -88,22 +98,41 @@
     </Reference>
     <Reference Include="DevExpress.Office.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Office.Core.20.2.4\lib\net452\DevExpress.Office.v20.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Map.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Map.Core.20.2.4\lib\net452\DevExpress.Map.v20.2.Core.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Pdf.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Pdf.Core.20.2.4\lib\net452\DevExpress.Pdf.v20.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Office.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Office.Core.20.2.4\lib\net452\DevExpress.Office.v20.2.Core.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Pdf.v20.2.Drawing, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Pdf.Drawing.20.2.4\lib\net452\DevExpress.Pdf.v20.2.Drawing.dll</HintPath>
+    <Reference Include="DevExpress.Pdf.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Pdf.Core.20.2.4\lib\net452\DevExpress.Pdf.v20.2.Core.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.PivotGrid.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.PivotGrid.Core.20.2.4\lib\net452\DevExpress.PivotGrid.v20.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Pdf.v20.2.Drawing, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Pdf.Drawing.20.2.4\lib\net452\DevExpress.Pdf.v20.2.Drawing.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Printing.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Printing.Core.20.2.4\lib\net452\DevExpress.Printing.v20.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.PivotGrid.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.PivotGrid.Core.20.2.4\lib\net452\DevExpress.PivotGrid.v20.2.Core.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.RichEdit.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.RichEdit.Core.20.2.4\lib\net452\DevExpress.RichEdit.v20.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Printing.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Printing.Core.20.2.4\lib\net452\DevExpress.Printing.v20.2.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.RichEdit.v20.2.Export, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.RichEdit.Export.20.2.4\lib\net452\DevExpress.RichEdit.v20.2.Export.dll</HintPath>
+    <Reference Include="DevExpress.RichEdit.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.RichEdit.Core.20.2.4\lib\net452\DevExpress.RichEdit.v20.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Snap.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Snap.Core.20.2.4\lib\net452\DevExpress.Snap.v20.2.Core.dll</HintPath>
     <Reference Include="DevExpress.RichEdit.v20.2.Export, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.RichEdit.Export.20.2.4\lib\net452\DevExpress.RichEdit.v20.2.Export.dll</HintPath>
     </Reference>
@@ -118,6 +147,9 @@
     </Reference>
     <Reference Include="DevExpress.Spreadsheet.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Spreadsheet.Core.20.2.4\lib\net452\DevExpress.Spreadsheet.v20.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.TreeMap.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.TreeMap.Core.20.2.4\lib\net452\DevExpress.TreeMap.v20.2.Core.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Utils.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Utils.20.2.4\lib\net452\DevExpress.Utils.v20.2.dll</HintPath>
@@ -149,6 +181,71 @@
     <Reference Include="DevExpress.Web.ASPxSpreadsheet.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Web.Office.20.2.4\lib\net452\DevExpress.Web.ASPxSpreadsheet.v20.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Sparkline.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Sparkline.Core.20.2.4\lib\net452\DevExpress.Sparkline.v20.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Web.ASPxThemes.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Themes.20.2.4\lib\net452\DevExpress.Web.ASPxThemes.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.SpellChecker.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.SpellChecker.Core.20.2.4\lib\net452\DevExpress.SpellChecker.v20.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Web.ASPxTreeList.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.20.2.4\lib\net452\DevExpress.Web.ASPxTreeList.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Spreadsheet.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Spreadsheet.Core.20.2.4\lib\net452\DevExpress.Spreadsheet.v20.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Web.Resources.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.20.2.4\lib\net452\DevExpress.Web.Resources.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Utils.20.2.4\lib\net452\DevExpress.Utils.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.Web.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.20.2.4\lib\net452\DevExpress.Web.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxDiagram.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.20.2.4\lib\net452\DevExpress.Web.ASPxDiagram.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpo.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Xpo.20.2.4\lib\net452\DevExpress.Xpo.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxGantt.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.20.2.4\lib\net452\DevExpress.Web.ASPxGantt.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraBars.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Navigation.20.2.4\lib\net452\DevExpress.XtraBars.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxGauges.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Visualization.20.2.4\lib\net452\DevExpress.Web.ASPxGauges.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraCharts.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Charts.20.2.4\lib\net452\DevExpress.XtraCharts.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxHtmlEditor.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.20.2.4\lib\net452\DevExpress.Web.ASPxHtmlEditor.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraCharts.v20.2.Web, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Visualization.20.2.4\lib\net452\DevExpress.XtraCharts.v20.2.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxPivotGrid.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.20.2.4\lib\net452\DevExpress.Web.ASPxPivotGrid.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraEditors.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Navigation.20.2.4\lib\net452\DevExpress.XtraEditors.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxRichEdit.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Office.20.2.4\lib\net452\DevExpress.Web.ASPxRichEdit.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraGauges.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Gauges.Core.20.2.4\lib\net452\DevExpress.XtraGauges.v20.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxScheduler.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Scheduler.20.2.4\lib\net452\DevExpress.Web.ASPxScheduler.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraGauges.v20.2.Presets, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Gauges.20.2.4\lib\net452\DevExpress.XtraGauges.v20.2.Presets.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxSpellChecker.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.20.2.4\lib\net452\DevExpress.Web.ASPxSpellChecker.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraGauges.v20.2.Win, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Gauges.20.2.4\lib\net452\DevExpress.XtraGauges.v20.2.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxSpreadsheet.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Office.20.2.4\lib\net452\DevExpress.Web.ASPxSpreadsheet.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraGrid.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Grid.20.2.4\lib\net452\DevExpress.XtraGrid.v20.2.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Web.ASPxThemes.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Web.Themes.20.2.4\lib\net452\DevExpress.Web.ASPxThemes.v20.2.dll</HintPath>
     </Reference>
@@ -175,42 +272,68 @@
     </Reference>
     <Reference Include="DevExpress.XtraEditors.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.Navigation.20.2.4\lib\net452\DevExpress.XtraEditors.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraLayout.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Navigation.20.2.4\lib\net452\DevExpress.XtraLayout.v20.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraMap.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Map.20.2.4\lib\net452\DevExpress.XtraMap.v20.2.dll</HintPath>
     <Reference Include="DevExpress.XtraGauges.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Gauges.Core.20.2.4\lib\net452\DevExpress.XtraGauges.v20.2.Core.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.XtraGrid.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.Grid.20.2.4\lib\net452\DevExpress.XtraGrid.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.XtraLayout.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Win.Navigation.20.2.4\lib\net452\DevExpress.XtraLayout.v20.2.dll</HintPath>
-    </Reference>
     <Reference Include="DevExpress.XtraNavBar.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.20.2.4\lib\net452\DevExpress.XtraNavBar.v20.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraLayout.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Navigation.20.2.4\lib\net452\DevExpress.XtraLayout.v20.2.dll</HintPath>
     <Reference Include="DevExpress.XtraPivotGrid.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.PivotGrid.20.2.4\lib\net452\DevExpress.XtraPivotGrid.v20.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraNavBar.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.20.2.4\lib\net452\DevExpress.XtraNavBar.v20.2.dll</HintPath>
     <Reference Include="DevExpress.XtraPrinting.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.Printing.20.2.4\lib\net452\DevExpress.XtraPrinting.v20.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraPivotGrid.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.PivotGrid.20.2.4\lib\net452\DevExpress.XtraPivotGrid.v20.2.dll</HintPath>
     <Reference Include="DevExpress.XtraReports.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Reporting.Core.20.2.4\lib\net452\DevExpress.XtraReports.v20.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Printing.20.2.4\lib\net452\DevExpress.XtraPrinting.v20.2.dll</HintPath>
     <Reference Include="DevExpress.XtraReports.v20.2.Web, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Web.Reporting.Common.20.2.4\lib\net452\DevExpress.XtraReports.v20.2.Web.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraReports.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Reporting.Core.20.2.4\lib\net452\DevExpress.XtraReports.v20.2.dll</HintPath>
     <Reference Include="DevExpress.XtraReports.v20.2.Web.WebForms, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Web.Reporting.20.2.4\lib\net452\DevExpress.XtraReports.v20.2.Web.WebForms.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraReports.v20.2.Web, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Reporting.Common.20.2.4\lib\net452\DevExpress.XtraReports.v20.2.Web.dll</HintPath>
     <Reference Include="DevExpress.XtraScheduler.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Scheduler.Core.20.2.4\lib\net452\DevExpress.XtraScheduler.v20.2.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraReports.v20.2.Web.WebForms, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Reporting.20.2.4\lib\net452\DevExpress.XtraReports.v20.2.Web.WebForms.dll</HintPath>
     <Reference Include="DevExpress.XtraScheduler.v20.2.Core.Desktop, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Scheduler.CoreDesktop.20.2.4\lib\net452\DevExpress.XtraScheduler.v20.2.Core.Desktop.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v20.2.Core, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Scheduler.Core.20.2.4\lib\net452\DevExpress.XtraScheduler.v20.2.Core.dll</HintPath>
     <Reference Include="DevExpress.XtraTreeList.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.TreeList.20.2.4\lib\net452\DevExpress.XtraTreeList.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v20.2.Core.Desktop, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Scheduler.CoreDesktop.20.2.4\lib\net452\DevExpress.XtraScheduler.v20.2.Core.Desktop.dll</HintPath>
+    <Reference Include="DevExpress.XtraTreeMap.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.TreeMap.20.2.4\lib\net452\DevExpress.XtraTreeMap.v20.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.TreeList.20.2.4\lib\net452\DevExpress.XtraTreeList.v20.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraTreeMap.v20.2.UI, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.TreeMap.20.2.4\lib\net452\DevExpress.XtraTreeMap.v20.2.UI.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.XtraVerticalGrid.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.VerticalGrid.20.2.4\lib\net452\DevExpress.XtraVerticalGrid.v20.2.dll</HintPath>
@@ -396,6 +519,13 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Generatoare\Reports\Styles\reports.css" />
+    <Content Include="ContracteLucru\Contract.aspx" />
+    <Content Include="ContracteLucru\ContractAbsente.ascx" />
+    <Content Include="ContracteLucru\ContractCiclic.ascx" />
+    <Content Include="ContracteLucru\ContractDetaliu.aspx" />
+    <Content Include="ContracteLucru\ContractVal.ascx" />
+    <Content Include="ContracteLucru\ContractZilnic.ascx" />
     <Content Include="Content\reports.css" />
     <Content Include="Contracte\Lista.aspx" />
     <Content Include="Contracte\Detalii.aspx" />
@@ -841,6 +971,8 @@
     <Content Include="Generatoare\Reports\Pages\Design.aspx" />
     <Content Include="Generatoare\Reports\Pages\Manage.aspx" />
     <Content Include="Generatoare\Reports\Pages\View.aspx" />
+    <Content Include="Generatoare\Reports\Scripts\dashboard-exit-extension.js" />
+    <Content Include="Generatoare\Reports\Scripts\dashboard-save-as-extension.js" />
     <Content Include="Global.asax" />
     <Content Include="Info.aspx" />
     <Content Include="LogOut.aspx" />
@@ -1606,6 +1738,7 @@
       <DependentUpon>ValoriLinii.aspx</DependentUpon>
     </Compile>
     <Compile Include="Generatoare\Reports\Code\DictionaryExtensions.cs" />
+    <Compile Include="Generatoare\Reports\Code\EntityDashboardStorage.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportsDbContext.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportSessionModule.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportConnectionProviderService.cs" />
@@ -2706,7 +2839,6 @@
       <LastGenOutput>General.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\AdeverintaGenerala.resx">
       <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
     </EmbeddedResource>

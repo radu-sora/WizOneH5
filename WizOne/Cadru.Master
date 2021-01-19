@@ -12,7 +12,6 @@
     <title id="txtVers1" runat="server">WizOne versiunea 1.1.001</title>
 
     <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" runat="server" />        
-    <link rel="stylesheet" type="text/css" href="Content/reports.css" runat="server" />
     <link rel="stylesheet" type="text/css" href="Fisiere/css/style.css" runat="server" />    
     <link rel="stylesheet" type="text/css" href="Fisiere/css/widgets.css" runat="server" />
     <link rel="stylesheet" type="text/css" href="Fisiere/MsgBox/sweetalert.css" runat="server" />

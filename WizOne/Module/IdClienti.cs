@@ -27,7 +27,8 @@
             Zitec = 45,
             BancaCarpatica = 65,
             Trico = 66,
-            TMK = 67
+            TMK = 67,
+            Alka = 68
         }
 
 

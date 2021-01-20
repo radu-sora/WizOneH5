@@ -15647,3 +15647,11 @@ ALTER TABLE F077 MODIFY F07704 varchar2(50);
 INSERT INTO F091 (F09101, F09102, F09103, F09104, F09105) SELECT 91, 6, 'Timp munca conform OUG 132/2020', 'TimpOUG132', 3 FROM F010 WHERE NOT EXISTS (SELECT * FROM F091 WHERE F09102 = 6);
 INSERT INTO F092 (F09201, F09202, F09203, F09204) SELECT 92, 3, 'Intreaga OUG132', 'NormaOUG132' FROM F010 WHERE NOT EXISTS (SELECT * FROM F092 WHERE F09202 = 3);
 COMMIT;
+
+
+----  2.2.133.02  ----
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", "Criptat") VALUES('CuloareRaportTitlu','','',0, 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", "Criptat") VALUES('CuloareRaportHeaderTabel','','',0, 0);
+COMMIT;

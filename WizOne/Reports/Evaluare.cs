@@ -1,17 +1,11 @@
-﻿using System;
-using System.Drawing;
-using System.Collections;
-using DevExpress.XtraReports.UI;
-using System.Reflection;
+﻿using DevExpress.XtraReports.UI;
+using System;
 using System.Collections.Generic;
-using WizOne.Module;
 using System.Data;
-using System.Web;
 using System.Diagnostics;
-using System.Linq;
-
-
-
+using System.Drawing;
+using System.Web;
+using WizOne.Module;
 
 namespace WizOne.Reports
 {
@@ -74,8 +68,11 @@ namespace WizOne.Reports
                 DataTable dtTit = General.IncarcaDT(sql, null);
                 if (dtTit != null && dtTit.Rows.Count > 0 && dtTit.Rows[0]["Titlu"] != null && dtTit.Rows[0]["Titlu"].ToString().Length > 0) titlu = dtTit.Rows[0]["Titlu"].ToString();
                 lblTitlu.Text = titlu;
+                string culoareTitlu = Dami.ValoareParam("CuloareRaportTitlu");
+                if (culoareTitlu != "")
+                    lblTitlu.BackColor = General.Culoare(culoareTitlu);
 
-                sql = "SELECT * FROM \"Eval_QuizIntrebari\" WHERE \"IdQuiz\" = " + idQuiz + " ORDER BY \"Id\" ";
+                sql = "SELECT * FROM \"Eval_QuizIntrebari\" WHERE \"IdQuiz\" = " + idQuiz + " ORDER BY \"OrdineAfisare\" ";
                 DataTable dtIntr = General.IncarcaDT(sql, null);
                 sql = "SELECT * FROM \"Eval_RaspunsLinii\" WHERE \"IdQuiz\" = " + idQuiz + " AND F10003 = " + f10003;
                 DataTable dtRasp = General.IncarcaDT(sql, null);
@@ -100,7 +97,7 @@ namespace WizOne.Reports
                 if (drIntr != null && drIntr[0]["Id"] != null && drIntr[0]["Id"].ToString().Length > 0)
                     idRoot = Convert.ToInt32(drIntr[0]["Id"].ToString());
 
-                DataRow[] drSec = dtIntr.Select("Parinte = " + idRoot + " AND EsteSectiune = 1");
+                DataRow[] drSec = dtIntr.Select("Parinte = " + idRoot + " AND EsteSectiune = 1", "OrdineAfisare");
                 if (drSec != null && drSec.Length > 0)
                     for (int i = 0; i < drSec.Length; i++)
                     {
@@ -112,7 +109,7 @@ namespace WizOne.Reports
                         pozY += (int)lblSec.HeightF + spatiuVert;
 
                         string idParinte = "-" + (drSec[i]["Id"] != DBNull.Value ? drSec[i]["Id"].ToString() : "") + "-";
-                        DataRow[] arrIntre = dtIntr.Select("Ordine IS NOT NULL AND Id <> " + (drSec[i]["Id"] != DBNull.Value ? drSec[i]["Id"].ToString() : "") + " AND Ordine LIKE '%" + idParinte + "%'");
+                        DataRow[] arrIntre = dtIntr.Select("Ordine IS NOT NULL AND Id <> " + (drSec[i]["Id"] != DBNull.Value ? drSec[i]["Id"].ToString() : "") + " AND Ordine LIKE '%" + idParinte + "%'", "OrdineAfisare");
                         if (arrIntre != null && arrIntre.Length > 0)
                             for (int j = 0; j < arrIntre.Length; j++)
                             {
@@ -379,6 +376,23 @@ namespace WizOne.Reports
                                             ctl = null;
                                         }
                                         break;
+                                    case 69:                     //Nota finala
+                                        {
+                                            decimal nota = Convert.ToDecimal(DaMiRaspuns(dtRasp.Select("Id = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0"))[0], super));
+                                            string desc = "";
+                                            if (Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) == (int)IdClienti.Clienti.Alka)
+                                            {
+                                                if (1 <= nota && nota <= 1.99m) desc = "Necesita imbunatatire rapida";
+                                                if (2 <= nota && nota <= 2.99m) desc = "Nesatisfacator/Sub asteptari";
+                                                if (3 <= nota && nota <= 3.99m) desc = "Bun/Conform asteptarilor";
+                                                if (4 <= nota && nota <= 4.50m) desc = "Foarte bine/ Peste asteptari";
+                                                if (4.51m <= nota && nota <= 5) desc = "Excelent";
+                                            }
+
+                                            int tipData = Convert.ToInt32((arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0"));
+                                            ctl = CreeazaEticheta(nota + " " + desc, (tipData == 8 ? 0 : 1), (tipData == 8 ? true : false));
+                                        }
+                                        break;
                                 }
 
                                 if (ctl != null) AdaugaControl(ctl, Convert.ToInt32(arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0"), (arrIntre[j]["Descriere"] != DBNull.Value ? arrIntre[j]["Descriere"].ToString() : ""), Convert.ToInt32(arrIntre[j]["Orientare"] != DBNull.Value ? arrIntre[j]["Orientare"].ToString() : "0"));
@@ -398,14 +412,17 @@ namespace WizOne.Reports
 
                                 if (Convert.ToInt32(arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0") == 5 || Convert.ToInt32(arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0") == 6)
                                 {
-                                    //adaugam total rating la fiecare grup
-                                    int tipCalcul = 1;
-                                    if (Convert.ToInt32((arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0")) == 5) tipCalcul = 2;
-                                    int valRat = CalculRating(dtRasp.Select("Id = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0")), -99, super, tipCalcul);
-                                    string descRat = DaMiRating(valRat.ToString());
-                                    XRControl ctlRat = CreeazaEticheta(descRat);
+                                    if (Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) != (int)IdClienti.Clienti.Alka)
+                                    {
+                                        //adaugam total rating la fiecare grup
+                                        int tipCalcul = 1;
+                                        if (Convert.ToInt32((arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0")) == 5) tipCalcul = 2;
+                                        int valRat = CalculRating(dtRasp.Select("Id = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0")), -99, super, tipCalcul);
+                                        string descRat = DaMiRating(valRat.ToString());
+                                        XRControl ctlRat = CreeazaEticheta(descRat);
 
-                                    if (ctlRat != null) AdaugaControl(ctlRat, Convert.ToInt32((arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0")), "Rating total: ", 1);
+                                        if (ctlRat != null) AdaugaControl(ctlRat, Convert.ToInt32((arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0")), "Rating total: ", 1);
+                                    }
                                 }
                             }
                     }
@@ -533,6 +550,9 @@ namespace WizOne.Reports
                     cell.Text = cols[j];
                     cell.WidthF = latime[j];
                     cell.BackColor = Color.FromArgb(206, 255, 206);
+                    string culoareTabel = Dami.ValoareParam("CuloareRaportHeaderTabel");
+                    if (culoareTabel != "")
+                        cell.BackColor = General.Culoare(culoareTabel);
                     rowH.Cells.Add(cell);
                 }
                 tbl.Rows.Add(rowH);

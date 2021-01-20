@@ -1948,12 +1948,12 @@ namespace WizOne.Avs
                 {
                     DataTable dtTempRev = General.IncarcaDT("select * from f111 Where F11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11107 IS NULL OR F11107 = "
                                 + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ") AND F11104 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString() + " ORDER BY F11105", null);
-                    if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11105"] != null && dtTempRev.Rows[0]["F11105"].ToString().Length > 0)
+                    if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11105"] != DBNull.Value && dtTempRev.Rows[0]["F11105"].ToString().Length > 0)
                         de1Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11105"].ToString());
                     else
                         de1Nou.Value = new DateTime(2100, 1, 1);
 
-                    if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11106"] != null && dtTempRev.Rows[0]["F11106"].ToString().Length > 0)
+                    if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11106"] != DBNull.Value && dtTempRev.Rows[0]["F11106"].ToString().Length > 0)
                         de2Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11106"].ToString());
                     else
                         de2Nou.Value = new DateTime(2100, 1, 1);
@@ -1982,22 +1982,22 @@ namespace WizOne.Avs
                 else
                     cmb1Nou.Value = 0;
 
-                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11204"] != null && dtTempRev.Rows[0]["F11204"].ToString().Length > 0)
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11204"] != DBNull.Value && dtTempRev.Rows[0]["F11204"].ToString().Length > 0)
                     txt1Nou.Text = dtTempRev.Rows[0]["F11204"].ToString();
                 else
                     txt1Nou.Text = "";
 
-                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11205"] != null && dtTempRev.Rows[0]["F11205"].ToString().Length > 0)
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11205"] != DBNull.Value && dtTempRev.Rows[0]["F11205"].ToString().Length > 0)
                     txt2Nou.Text = dtTempRev.Rows[0]["F11205"].ToString();
                 else
                     txt2Nou.Text = "";
 
-                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11207"] != null && dtTempRev.Rows[0]["F11207"].ToString().Length > 0)
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11207"] != DBNull.Value && dtTempRev.Rows[0]["F11207"].ToString().Length > 0)
                     de1Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11207"].ToString());
                 else
                     de1Nou.Value = new DateTime(2100, 1, 1);
 
-                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11208"] != null && dtTempRev.Rows[0]["F11208"].ToString().Length > 0)
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11208"] != DBNull.Value && dtTempRev.Rows[0]["F11208"].ToString().Length > 0)
                     de2Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11208"].ToString());
                 else
                     de2Nou.Value = new DateTime(2100, 1, 1);
@@ -2625,8 +2625,10 @@ namespace WizOne.Avs
             lblDataRevisal.Visible = false;
             deDataRevisal.Visible = false;
             if (atribut == (int)Constante.Atribute.Functie || atribut == (int)Constante.Atribute.CodCOR || atribut == (int)Constante.Atribute.Norma || atribut == (int)Constante.Atribute.ProgramLucru || atribut == (int)Constante.Atribute.PrelungireCIM
-                || atribut == (int)Constante.Atribute.PrelungireCIM_Vanz || atribut == (int)Constante.Atribute.ContrITM || atribut == (int)Constante.Atribute.ContrIn
-                || atribut == (int)Constante.Atribute.Suspendare || atribut == (int)Constante.Atribute.RevenireSuspendare || atribut == (int)Constante.Atribute.TipContract || atribut == (int)Constante.Atribute.DurataContract)
+                || atribut == (int)Constante.Atribute.PrelungireCIM_Vanz || atribut == (int)Constante.Atribute.ContrITM || atribut == (int)Constante.Atribute.ContrIn ||
+                 atribut == (int)Constante.Atribute.Salariul || atribut == (int)Constante.Atribute.Sporuri || atribut == (int)Constante.Atribute.MotivPlecare
+                || atribut == (int)Constante.Atribute.Suspendare || atribut == (int)Constante.Atribute.Detasare || atribut == (int)Constante.Atribute.RevenireSuspendare || atribut == (int)Constante.Atribute.RevenireDetasare
+                || atribut == (int)Constante.Atribute.TipContract || atribut == (int)Constante.Atribute.DurataContract)
             {
                 string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataMod.Year + " UNION SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + (dataMod.Year - 1).ToString();
                 if (Constante.tipBD == 2)
@@ -3909,7 +3911,7 @@ namespace WizOne.Avs
                             " when 2 then a.\"FunctieNume\"  " +
                             " when 3 then a.\"CORNume\"  " +
                             " when 4 then a.\"MotivNume\"  " +
-                            " when 5 then a.\"SubcompanieNume\" + ' / ' + a.\"FilialaNume\" + ' / ' + a.\"SectieNume\" + ' / ' +  a.\"DeptNume\"  " +
+                            " when 5 then a.\"SubcompanieNume\" + ' / ' + a.\"FilialaNume\" + ' / ' + a.\"SectieNume\" + ' / ' +  a.\"DeptNume\" + ' / ' + a.SubdeptNume + ' / ' + a.BirouNume " +
                             " when 6 then convert(nvarchar(20),a.\"TimpPartial\")  " +
                             " when 8 then convert(nvarchar(20),a.\"NrIntern\") + ' / ' + convert(nvarchar(20),a.\"DataIntern\",103)  " +
                             " when 9 then convert(nvarchar(20),a.\"NrITM\") + ' / ' + convert(nvarchar(20),a.\"DataITM\",103)  " +
@@ -4896,7 +4898,8 @@ namespace WizOne.Avs
                                     + ", F100993 = " + General.ToDataUniv(new DateTime(2100, 1, 1)) + ", F1009741 = 1, F100935 = 0, F100936 = 0 "
                                     : "F100933 = " + data9 + ", F100934 = " + data10 + ", F100936 = " + nrZile.ToString() + ", F100935 = " + nrLuni.ToString() + ", F100938 = 1, F10023 = " + data10
                                     + ", F100993 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 103)"
-                                    : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + ", F1009741 = " + dtCer.Rows[0]["DurataContract"].ToString() )
+                                    : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + ", F1009741 = " 
+                                    + (dtCer.Rows[0]["DurataContract"] == DBNull.Value || dtCer.Rows[0]["DurataContract"].ToString().Length <= 0 ? "NULL" : dtCer.Rows[0]["DurataContract"].ToString()))
                                     : "") +  " WHERE F10003 = " + f10003.ToString();
                                 sql1001 = "UPDATE F1001 SET " + (modifTip ? "F1001137 = " + data : "") + (modifDur ? (modifTip ? "," : "") + "F1001138 = " + data : "") + " WHERE F10003 = " + f10003.ToString();
 

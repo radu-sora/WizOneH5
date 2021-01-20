@@ -1368,7 +1368,7 @@ namespace WizOne.Avs
                             " when 2 then a.FunctieNume  " +
                             " when 3 then a.CORNume  " +
                             " when 4 then a.MotivNume  " +
-                            " when 5 then a.SubcompanieNume + ' / ' + a.FilialaNume + ' / ' + a.SectieNume + ' / ' +  a.DeptNume " +
+                            " when 5 then a.SubcompanieNume + ' / ' + a.FilialaNume + ' / ' + a.SectieNume + ' / ' +  a.DeptNume + ' / ' + a.SubdeptNume + ' / ' + a.BirouNume " +
                             " when 6 then convert(nvarchar(20),a.TimpPartial)  " +
                             " when 8 then convert(nvarchar(20),a.NrIntern) + ' / ' + convert(nvarchar(20),a.DataIntern,103)  " +
                             " when 9 then convert(nvarchar(20),a.NrITM) + ' / ' + convert(nvarchar(20),a.DataITM,103)  " +

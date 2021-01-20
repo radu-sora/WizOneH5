@@ -327,8 +327,7 @@ namespace WizOne.Personal
 
             if (Dami.ValoareParam("ValidariPersonal") == "1")
             {
-                string[] lstTextBox = new string[8] { "txtNrCtrInt", "txtSalariu", "txtPerProbaZL", "txtPerProbaZC", "txtNrZilePreavizDemisie", "txtNrZilePreavizConc",
-                                                    "txtZileCOCuvAnCrt", "txtNrOre"};
+                string[] lstTextBox = new string[7] { "txtNrCtrInt", "txtSalariu", "txtPerProbaZL", "txtPerProbaZC", "txtNrZilePreavizDemisie", "txtNrZilePreavizConc", "txtNrOre"};   //"txtZileCOCuvAnCrt",
                 for (int i = 0; i < lstTextBox.Count(); i++)
                 {
                     ASPxTextBox txt = Contract_DataList.Items[0].FindControl(lstTextBox[i]) as ASPxTextBox;

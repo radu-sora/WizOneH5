@@ -3980,7 +3980,7 @@ namespace WizOne.Avs
                             " when 2 then a.\"FunctieNume\"  " +
                             " when 3 then a.\"CORNume\"  " +
                             " when 4 then a.\"MotivNume\"  " +
-                            " when 5 then a.\"SubcompanieNume\" + ' / ' + a.\"FilialaNume\" + ' / ' + a.\"SectieNume\" + ' / ' +  a.\"DeptNume\"  " +
+                            " when 5 then a.\"SubcompanieNume\" + ' / ' + a.\"FilialaNume\" + ' / ' + a.\"SectieNume\" + ' / ' +  a.\"DeptNume\" + ' / ' + a.SubdeptNume + ' / ' + a.BirouNume " +
                             " when 6 then convert(nvarchar(20),a.\"TimpPartial\")  " +
                             " when 8 then convert(nvarchar(20),a.\"NrIntern\") + ' / ' + convert(nvarchar(20),a.\"DataIntern\",103)  " +
                             " when 9 then convert(nvarchar(20),a.\"NrITM\") + ' / ' + convert(nvarchar(20),a.\"DataITM\",103)  " +
@@ -4978,7 +4978,8 @@ namespace WizOne.Avs
                                     + ", F100993 = " + General.ToDataUniv(new DateTime(2100, 1, 1)) + ", F1009741 = 1, F100935 = 0, F100936 = 0 "
                                     : "F100933 = " + data9 + ", F100934 = " + data10 + ", F100936 = " + nrZile.ToString() + ", F100935 = " + nrLuni.ToString() + ", F100938 = 1, F10023 = " + data10
                                     + ", F100993 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 103)"
-                                    : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + ", F1009741 = " + dtCer.Rows[0]["DurataContract"].ToString() )
+                                    : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + ", F1009741 = " 
+                                    + (dtCer.Rows[0]["DurataContract"] == DBNull.Value || dtCer.Rows[0]["DurataContract"].ToString().Length <= 0 ? "NULL" : dtCer.Rows[0]["DurataContract"].ToString()) )
                                     : "") +  " WHERE F10003 = " + f10003.ToString();
                                 sql1001 = "UPDATE F1001 SET " + (modifTip ? "F1001137 = " + data : "") + (modifDur ? (modifTip ? "," : "") + "F1001138 = " + data : "") + " WHERE F10003 = " + f10003.ToString();
 

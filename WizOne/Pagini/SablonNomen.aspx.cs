@@ -394,6 +394,7 @@ namespace WizOne.Pagini
                 }
                 else
                 {
+                    DataTable dtCfg = General.IncarcaDT("SELECT * FROM \"tblNomenConfig\" WHERE \"Tabela\"= '" + Session["Sablon_Tabela"] + "'", null);
                     DataSet ds = Session["SurseCombo"] as DataSet;
                     List<metaTblNomenConfig_SelectStr> lst = Session["SurseCombo_BIS"] as List<metaTblNomenConfig_SelectStr>;
                     foreach (var c in grDate.Columns)
@@ -403,7 +404,15 @@ namespace WizOne.Pagini
                             GridViewDataColumn col = (GridViewDataColumn)c;
                             if (col.Visible == false) continue;
 
-                            col.Caption = Dami.TraduCuvant(col.FieldName);
+                            //Florin #750
+                            //col.Caption = Dami.TraduCuvant(col.FieldName);
+                            string alias = col.FieldName;
+                            if (dtCfg.Rows.Count > 0 && dtCfg.Select("Camp='" + col.FieldName + "'").Count() > 0)
+                            {
+                                DataRow dr = dtCfg.Select("Camp='" + col.FieldName + "'")[0];
+                                if (dr.Table.Columns["Alias"] != null && General.Nz(dr["Alias"], "").ToString() != "") alias = dr["Alias"].ToString();
+                            }
+                            col.Caption = Dami.TraduCuvant(alias);
 
                             //in cazul in care este Combobox, adaugam sursele de date retinute in variabila de sesiune
                             var ent = lst.Where(p => p.NumeCamp == col.FieldName).FirstOrDefault();

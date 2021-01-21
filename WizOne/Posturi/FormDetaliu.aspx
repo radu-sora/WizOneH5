@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="FormDetaliu.aspx.cs" Inherits="WizOne.Posturi.FormDetaliu" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" Async="true" CodeBehind="FormDetaliu.aspx.cs" Inherits="WizOne.Posturi.FormDetaliu" %>
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">

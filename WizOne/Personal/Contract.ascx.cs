@@ -63,7 +63,7 @@ namespace WizOne.Personal
 
             ASPxComboBox cmbTipAngajat = Contract_DataList.Items[0].FindControl("cmbTipAng") as ASPxComboBox;
 
-            if (ds.Tables[1].Rows[0]["F100643"] != null && ds.Tables[1].Rows[0]["F100643"].ToString().Length >= 4)
+            if (ds.Tables[1].Rows[0]["F100643"] != DBNull.Value && ds.Tables[1].Rows[0]["F100643"].ToString().Length >= 4)
             {
                 txtVechCompAni.Text = ds.Tables[1].Rows[0]["F100643"].ToString().Substring(0, 2);
                 txtVechCompLuni.Text = ds.Tables[1].Rows[0]["F100643"].ToString().Substring(2, 2);
@@ -74,7 +74,7 @@ namespace WizOne.Personal
                 txtVechCompLuni.Text = "00";
             }
 
-            if (ds.Tables[1].Rows[0]["F100644"] != null && ds.Tables[1].Rows[0]["F100644"].ToString().Length >= 4)
+            if (ds.Tables[1].Rows[0]["F100644"] != DBNull.Value && ds.Tables[1].Rows[0]["F100644"].ToString().Length >= 4)
             {
                 txtVechCarteMuncaAni.Text = ds.Tables[1].Rows[0]["F100644"].ToString().Substring(0, 2);
                 txtVechCarteMuncaLuni.Text = ds.Tables[1].Rows[0]["F100644"].ToString().Substring(2, 2);
@@ -140,20 +140,20 @@ namespace WizOne.Personal
                 if (General.Nz(ds.Tables[0].Rows[0]["F100926"], "").ToString() != "")
                     cmbTipNorma.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100926"]);
 
-                if (ds.Tables[0].Rows[0]["F10010"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
+                if (ds.Tables[0].Rows[0]["F10010"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
                 {
                     cmbIntRepTimpMunca.ClientEnabled = false;
                     txtNrOre.ClientEnabled = false;
                     txtNrOre.Text = "0";
                 }
 
-                if (ds.Tables[0].Rows[0]["F100939"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 0 || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 1)
+                if (ds.Tables[0].Rows[0]["F100939"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 0 || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 1)
                 {
                     txtNrOre.ClientEnabled = false;
                     txtNrOre.Text = "0";
                 }
               
-                if (ds.Tables[0].Rows[0]["F1009741"] != null && Convert.ToInt32(ds.Tables[0].Rows[0]["F1009741"].ToString()) == 1)
+                if (ds.Tables[0].Rows[0]["F1009741"] != DBNull.Value && Convert.ToInt32(ds.Tables[0].Rows[0]["F1009741"].ToString()) == 1)
                 {
                     deDeLaData.ClientEnabled = false;
                     deLaData.ClientEnabled = false;

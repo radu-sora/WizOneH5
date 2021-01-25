@@ -147,6 +147,6 @@ namespace WizOne.Pagini
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.XtraReports.Web.ASPxTreeList grDate;
+        protected global::DevExpress.Web.ASPxTreeList.ASPxTreeList grDate;
     }
 }

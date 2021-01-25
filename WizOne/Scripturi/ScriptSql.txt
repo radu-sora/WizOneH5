@@ -15183,6 +15183,9 @@ GO
 
 ----  2.2.133  ----
 
+INSERT [dbo].[MeniuLista] ([Id], [Denumire], [Descriere], [Activ], [USER_NO], [TIME]) VALUES (15, N'Cursuri', N'', 1, NULL, NULL)
+GO
+
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(125, 'Cursuri', 'Cursuri', 'Curs\Cursuri', 1, 'm1.png')
 GO
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(126, 'Sesiuni de cursuri', 'Sesiuni de cursuri', 'Curs\CursuriSesiuni', 1, 'm1.png')
@@ -15236,6 +15239,8 @@ GO
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(150, 'Tipuri competente', 'Tipuri competente', 'Pagini\SablonNomen[tblGrupCompetente]', 1, 'm1.png')
 GO
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(151, 'Traineri', 'Traineri', 'Pagini\SablonNomen[Curs_tblTraineri]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(152, 'Definire elemente de cost', 'Definire elemente de cost', 'Pagini\SablonNomen[Curs_tblCentreCost]', 1, 'm1.png')
 GO
 
 
@@ -16063,6 +16068,8 @@ GO
 
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('alocareCursCosturiXCentruCost', '1', '0 - costurile aferente cursurilor nu se aloca pe vreun centru de cost din tabela Curs_tblCentreCost; 1 - costurile se aolca pe centrele de cost definite in Curs_tblCentreCost', 6)
 GO
+
+
 
 
 ---- Cursuri END

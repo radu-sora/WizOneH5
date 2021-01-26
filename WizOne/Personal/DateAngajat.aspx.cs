@@ -1153,6 +1153,9 @@ namespace WizOne.Personal
                         {
                             dt100.Rows[0]["F10003"] = marcaFin;
                             dt1001.Rows[0]["F10003"] = marcaFin;
+
+                            dt100.Rows[0]["F100985"] = marcaFin;
+
                             Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;
                         }
                     }
@@ -1589,6 +1592,9 @@ namespace WizOne.Personal
                 lstDO.Add("deLaDataLivMil", "F100574");
                 lstDO.Add("txtGrad", "F100575");
                 lstDO.Add("txtOrdin", "F100576");
+                lstDO.Add("txtCamp1", "F100902");
+                lstDO.Add("txtCamp2", "F100903");
+                lstDO.Add("txtCamp3", "F100904");
                 #endregion
 
                 //Studii

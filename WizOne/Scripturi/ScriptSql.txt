@@ -16036,6 +16036,15 @@ CREATE SEQUENCE [dbo].[Curs_tblCurs_SEQ]
  CACHE 
 GO
 
+CREATE SEQUENCE [dbo].[Curs_relSesiuneDocumente_SEQ] 
+ AS [bigint]
+ START WITH 1
+ INCREMENT BY 1
+ MINVALUE 1
+ MAXVALUE 9999999999999
+ CACHE 
+GO
+
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('hasNomenclatorTraineri', '1', '', 6)
 GO
 

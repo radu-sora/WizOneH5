@@ -30,7 +30,7 @@ namespace WizOne.BP
                 Session["PaginaWeb"] = "BP.Aprobare";
                 //Session["Absente_Cereri_Date"] = null;
 
-                cmbAnul.DataSource = General.ListaNumere(2010, 2020);
+                cmbAnul.DataSource = General.ListaNumere(2010, DateTime.Now.Year + 5);
                 cmbAnul.DataBind();
 
                 DataTable dt = new DataTable();

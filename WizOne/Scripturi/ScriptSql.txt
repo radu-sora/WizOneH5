@@ -16470,3 +16470,36 @@ ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu9
 GO
 ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu10
 GO
+
+
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (1, 1, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (2, 2, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (3, 3, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (4, 3, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (5, 3, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (6, 3, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (7, 3, 1, 0, 2, NULL)
+GO
+
+ALTER FUNCTION [dbo].[DamiDataPlecare] (@f10003 int, @dt DATE) 
+RETURNs table AS 
+return 
+
+	 
+       SELECT top 1 DataPlecare =   DataPlecare from
+(
+SELECT top 1 1 as rank, F70403 marca,  F70406 - 1 dataplecare,  F70406 Data from f704 join f100 on f70403 = f10003 WHERE F70404=4 AND F70406 <= @dt and F70406 - 1 >= f10022 and F70403 = @f10003 ORDER BY F70406 DESC
+union
+select 2 as rank, f10003 marca, f10023 Dataplecare,   DATEFROMPARTS(f01011, f01012, 1) data from f100 join f010 on 1=1 where f10003 =@f10003 and DATEFROMPARTS(f01011, f01012, 1)<=@dt
+union
+select top 1 3 as rank, f91003 marca, f91023 dataplecare,  DATEFROMPARTS(year, MONTH, 1) data from f910 where DATEFROMPARTS(year, MONTH, 1)<= @dt and f91003 = @f10003 order by year desc, month desc
+union
+select 4 as rank, f10003 marca, F10023 dataplecare, DATEFROMPARTS(1900,1,1) data from f100 where f10003 =@f10003
+) x
+order by data desc, rank

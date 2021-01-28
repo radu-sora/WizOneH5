@@ -108,6 +108,7 @@
                         <dx:TreeListDataColumn FieldName="IdSuperior" Visible="false" ShowInCustomizationForm="false" VisibleIndex="10" />
                         <dx:TreeListDataColumn FieldName="IdAuto" Visible="false" ShowInCustomizationForm="false" VisibleIndex="19" />
                         <dx:TreeListDataColumn FieldName="StareAngajat" Visible="false" ShowInCustomizationForm="false" VisibleIndex="20" />
+                        <dx:TreeListDataColumn FieldName="AngPost" Visible="true" ShowInCustomizationForm="false" VisibleIndex="20" />
 
                     </Columns>
                 </dx:ASPxTreeList>
@@ -120,7 +121,7 @@
     <dx:ASPxPopupControl ID="popUpMotiv" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
         CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
         EnableViewState="False" PopupElementID="popUpMotivArea" PopupHorizontalAlign="WindowCenter"
-        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="450px" Height="150px" HeaderText="Motivul modificarii"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="450px" Height="170px" HeaderText="Motivul modificarii"
         FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpMotiv" EnableHierarchyRecreation="false">
         <ContentCollection>
             <dx:PopupControlContentControl runat="server">
@@ -147,7 +148,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2"><br /><dx:ASPxCheckBox ID="chkStruc" runat="server" Text="Doriti modificarea structurii organizatorice cu cea a noului post superior" /></td>
+                            <td colspan="2"><br /><dx:ASPxCheckBox ID="chkStruc" ClientInstanceName="chkStruc" ClientIDMode="Static" runat="server" Text="Doriti modificarea structurii organizatorice cu cea a noului post superior" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><br /><dx:ASPxLabel ID="lblText" ClientInstanceName="lblText" runat="server" ForeColor="Red" Text="Postul are angajat alocat si din acest motiv nu se poate actualiza structura." /></td>
                         </tr>
                     </table>
                 </asp:Panel>
@@ -161,7 +165,7 @@
             var jsDate = txtDtVig.GetDate();
 
             if (jsDate.getDate() == 1) {
-                grDate.GetNodeValues(e.nodeKey, "IdAuto", GetNodeValueOri);
+                grDate.GetNodeValues(e.nodeKey, "IdAuto;AngPost", GetNodeValueOri);
 
                 var nodeKeys = s.GetVisibleNodeKeys();
                 for (var i = 0; i < nodeKeys.length; i++) {
@@ -184,6 +188,15 @@
 
         function GetNodeValueOri(selectedValues) {
             hf.Set("Nod", selectedValues);
+            if (selectedValues.length > 1 && selectedValues[1] > 0) {
+                chkStruc.SetEnabled(false);
+                chkStruc.SetValue(false);
+                lblText.SetVisible(true);
+            }
+            else {
+                chkStruc.SetEnabled(true);
+                lblText.SetVisible(false);
+            }
         }
         function GetNodeValueDes(selectedValues) {
             hf.Set("Target", selectedValues);

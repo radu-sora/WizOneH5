@@ -101,6 +101,15 @@ namespace WizOne.Organigrama
                     if (chkPlan.Checked) camp += $" + ', Plan: ' + CONVERT(nvarchar(10),COALESCE(W.Pozitii,0))";
                     if (chkAprobat.Checked) camp += $" + ', Aprobat: ' + CONVERT(nvarchar(10),COALESCE(W.PozitiiAprobate,0))";
                     if (chkEfectiv.Checked) camp += $" + ', Efectiv: ' + CONVERT(nvarchar(10),COALESCE(W.Activi,0))";
+                    if (chkAngajati.Checked) camp += $@" + ', ' + COALESCE(CASE WHEN H.Nr > 1 THEN CONVERT(nvarchar(500),H.Nr) + ' pers' ELSE CASE WHEN H.Nr = 1 THEN
+                            (SELECT Y.F10008 + ' ' + Y.F10009
+                            FROM Org_relPostAngajat X 
+                            INNER JOIN F100 Y ON X.F10003=Y.F10003
+                            OUTER APPLY DamiDataPlecare(X.F10003, {General.ToDataUniv(dtRef.Date)}) Z
+                            WHERE X.DataInceput <= {General.ToDataUniv(dtRef.Date)} AND {General.ToDataUniv(dtRef.Date)} <= X.DataSfarsit
+                            AND (Y.F10022 <= {General.ToDataUniv(dtRef.Date)} AND {General.ToDataUniv(dtRef.Date)} <= Z.DataPlecare) AND 
+                            NOT (Y.F100922 <= {General.ToDataUniv(dtRef.Date)} AND {General.ToDataUniv(dtRef.Date)} <= (CASE WHEN COALESCE(Y.F100924, '2100-01-01') = '2100-01-01' THEN Y.F100923 ELSE Y.F100924 END))
+                            AND X.IdPost=A.Id) END END,'')";
 
                     strSql = $@"WITH tree AS  
                             (
@@ -120,6 +129,15 @@ namespace WizOne.Organigrama
                             SELECT Id, IdSuperior, NivelIerarhic, Level, {camp} AS Denumire
                             FROM tree A
                             OUTER APPLY dbo.DamiPozitii(A.Id, {General.ToDataUniv(dtRef.Date)}) W
+                            LEFT JOIN 
+                            (SELECT X.IdPost, COUNT(*) AS Nr
+                            FROM Org_relPostAngajat X 
+                            INNER JOIN F100 Y ON X.F10003=Y.F10003
+                            OUTER APPLY DamiDataPlecare(X.F10003, {General.ToDataUniv(dtRef.Date)}) Z
+                            WHERE X.DataInceput <= {General.ToDataUniv(dtRef.Date)} AND {General.ToDataUniv(dtRef.Date)} <= X.DataSfarsit
+                            AND (Y.F10022 <= {General.ToDataUniv(dtRef.Date)} AND {General.ToDataUniv(dtRef.Date)} <= Z.DataPlecare) AND 
+                            NOT (Y.F100922 <= {General.ToDataUniv(dtRef.Date)} AND {General.ToDataUniv(dtRef.Date)} <= (CASE WHEN COALESCE(Y.F100924, '2100-01-01') = '2100-01-01' THEN Y.F100923 ELSE Y.F100924 END)) 
+                            GROUP BY X.IdPost) H ON A.Id = H.IdPost
                             where Level <= {nivel}
                             ORDER BY Level, IdSuperior";
                 }

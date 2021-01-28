@@ -111,7 +111,7 @@ namespace WizOne.Organigrama
                         strSql = @"select * from ( 
                             select a.""IdAuto"", a.""Id"", COALESCE(a.""IdSuperior"",0) AS ""IdSuperior"", COALESCE(a.""IdSuperiorFunctional"",0) AS ""IdSuperiorFunctional"", a.""Denumire"", '' as ""Nume"", '' as ""Prenume"", b.F00204 as ""Companie"", c.F00305 as ""Subcompanie"", d.F00406 as ""Filiala"", e.F00507 as ""Sectie"", f.F00608 as ""Dept"", 
                              '#FFFFFFFF' as ""Culoare"", 1 as ""EstePost"", case when a.""Stare"" is null then 0 else a.""Stare"" end as ""Activ"", null as F10003, 0 as ""StareAngajat"",
-                            W.Pozitii AS PozitiiPlanificate,W.PozitiiAprobate,W.Activi AS AngajatiActivi,W.Suspendati AS AngajatiSuspendati,W.Candidati
+                            W.Pozitii AS PozitiiPlanificate,W.PozitiiAprobate,W.Activi AS AngajatiActivi,W.Suspendati AS AngajatiSuspendati,W.Candidati, H.Nr AS AngPost
                              from ""Org_Posturi"" a  
                              LEFT JOIN F002 b on a.""F10002""=b.F00202  
                              LEFT JOIN F003 c on a.""F10004""=c.F00304  
@@ -119,6 +119,15 @@ namespace WizOne.Organigrama
                              LEFT JOIN F005 e on a.""F10006""=e.F00506  
                              LEFT JOIN F006 f on a.""F10007""=f.F00607
                             OUTER APPLY dbo.DamiPozitii(A.Id, {0}) W
+                            LEFT JOIN 
+                            (SELECT X.IdPost, COUNT(*) AS Nr
+                            FROM Org_relPostAngajat X 
+                            INNER JOIN F100 Y ON X.F10003=Y.F10003
+                            OUTER APPLY DamiDataPlecare(X.F10003, {0}) Z
+                            WHERE X.DataInceput <= {0} AND {0} <= X.DataSfarsit
+                            AND (Y.F10022 <= {0} AND {0} <= Z.DataPlecare) AND 
+                            NOT (Y.F100922 <= {0} AND {0} <= (CASE WHEN COALESCE(Y.F100924, '2100-01-01') = '2100-01-01' THEN Y.F100923 ELSE Y.F100924 END)) 
+                            GROUP BY X.IdPost) H ON A.Id = H.IdPost
                              where CONVERT(date,a.""DataInceput"") <= {0} and {0} <= CONVERT(date,a.""DataSfarsit"") 
                              union 
                              select -1 * r.""IdAuto"" as ""IdAuto"", -1 * a.F10003 as ""Id"", r.""IdPost"" as ""IdSuperior"", r.""IdPost"" as ""IdSuperiorFunctional"", ' ' + a.F10008 + ' ' + a.F10009 as ""Denumire"",  
@@ -130,7 +139,7 @@ namespace WizOne.Organigrama
 			                AND 
 			                (A.F10022 <= {0} AND {0} <= Z.DataPlecare) 
 		                    THEN 2 ELSE
-                            CASE WHEN A.F10022 <= {0} AND {0} <= Z.DataPlecare THEN 1 ELSE 3 END END AS ""StareAngajat"", 0, 0, 0, 0, 0  
+                            CASE WHEN A.F10022 <= {0} AND {0} <= Z.DataPlecare THEN 1 ELSE 3 END END AS ""StareAngajat"", 0, 0, 0, 0, 0, 0  
                              from ""Org_relPostAngajat"" r 
                              inner join F100 a on r.F10003 = a.F10003 
                              inner join ""Org_Posturi"" x on r.""IdPost"" = x.""Id"" 
@@ -386,8 +395,8 @@ namespace WizOne.Organigrama
 	                    END
                     ELSE
 	                    BEGIN
-		                    INSERT INTO Org_Posturi(Id, Denumire, DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN, DataInceput, DataSfarsit, Stare, F10002, F10004, F10005, F10006, F10007, IdSuperior, NivelIerarhic, PlanHC, IdResponsabilitate, IdTipPost, CodBuget, IdLocatie, IdMotivModif, IdFamFR, CodCOR, FunctieCOR, IdSchema, IdFamGAM, Atribute, Criterii, ObservatiiModif, NivelHay, SalariuMin,  SalariuMed,  SalariuMax,  IdSuperiorFunctional, IdBeneficiu1, IdBeneficiu2, IdBeneficiu3, IdBeneficiu4, IdBeneficiu5, IdBeneficiu6, IdBeneficiu7, IdBeneficiu8, IdBeneficiu9, IdBeneficiu10, TIME, USER_NO) 
-		                    SELECT Id, Denumire, DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN, CONVERT(date,{ General.ToDataUniv(Convert.ToDateTime(txtDtVig.Value)) }) AS DataInceput, DataSfarsit, 1 AS Stare, F10002, F10004, F10005, F10006, F10007, (SELECT Id FROM Org_Posturi WHERE IdAuto={ target_idAuto }) AS IdSuperior, NivelIerarhic, PlanHC, IdResponsabilitate, IdTipPost, CodBuget, IdLocatie, IdMotivModif, IdFamFR, CodCOR, FunctieCOR, IdSchema, IdFamGAM, Atribute, Criterii, ObservatiiModif, NivelHay, SalariuMin,  SalariuMed,  SalariuMax,  IdSuperiorFunctional, IdBeneficiu1, IdBeneficiu2, IdBeneficiu3, IdBeneficiu4, IdBeneficiu5, IdBeneficiu6, IdBeneficiu7, IdBeneficiu8, IdBeneficiu9, IdBeneficiu10, GETDATE(), { Session["UserId"] } AS USER_NO 
+		                    INSERT INTO Org_Posturi(Id, Denumire, DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN, DataInceput, DataSfarsit, Stare, F10002, F10004, F10005, F10006, F10007, IdSuperior, NivelIerarhic, PlanHC, IdResponsabilitate, IdTipPost, CodBuget, IdLocatie, IdMotivModif, IdFamFR, CodCOR, FunctieCOR, IdSchema, IdFamGAM, Atribute, Criterii, ObservatiiModif, NivelHay, SalariuMin,  SalariuMed,  SalariuMax,  IdSuperiorFunctional, TIME, USER_NO) 
+		                    SELECT Id, Denumire, DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN, CONVERT(date,{ General.ToDataUniv(Convert.ToDateTime(txtDtVig.Value)) }) AS DataInceput, DataSfarsit, 1 AS Stare, F10002, F10004, F10005, F10006, F10007, (SELECT Id FROM Org_Posturi WHERE IdAuto={ target_idAuto }) AS IdSuperior, NivelIerarhic, PlanHC, IdResponsabilitate, IdTipPost, CodBuget, IdLocatie, IdMotivModif, IdFamFR, CodCOR, FunctieCOR, IdSchema, IdFamGAM, Atribute, Criterii, ObservatiiModif, NivelHay, SalariuMin,  SalariuMed,  SalariuMax,  IdSuperiorFunctional, GETDATE(), { Session["UserId"] } AS USER_NO 
 		                    FROM Org_Posturi WHERE IdAuto={ nod_idAuto };
 
 		                    UPDATE Org_Posturi SET DataSfarsit= DATEADD(d, -1, CONVERT(date,{ General.ToDataUniv(Convert.ToDateTime(txtDtVig.Value)) })) WHERE IdAuto={ nod_idAuto };
@@ -461,8 +470,7 @@ namespace WizOne.Organigrama
                                 ""Id"", ""Denumire"", DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN, ""DataInceput"", ""DataSfarsit"", F10002, F10004, F10005, F10006, F10007, 
                                 ""Stare"", ""IdSuperior"", ""IdSuperiorFunctional"", 
                                 ""NivelIerarhic"", ""PlanHC"", ""NivelHay"", ""SalariuMin"", ""SalariuMed"", ""SalariuMax"", 
-                                ""CodBuget"", ""CodCOR"", ""Atribute"", ""Criterii"", ""ObservatiiModif"", ""IdMotivModif"",
-                                ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"", USER_NO, TIME)
+                                ""CodBuget"", ""CodCOR"", ""Atribute"", ""Criterii"", ""ObservatiiModif"", ""IdMotivModif"", USER_NO, TIME)
                                 SELECT ""Id"", ""Denumire"", DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN,{General.ToDataUniv(txtDtVig.Date)}, ""DataSfarsit"", 
                                 (SELECT F10002 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10002, 
                                 (SELECT F10004 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10004,
@@ -471,8 +479,7 @@ namespace WizOne.Organigrama
                                 (SELECT F10007 FROM Org_Posturi WHERE IdAuto={target_idAuto}) AS F10007,
                                 ""Stare"", {(adaugaSuperior ? sqlSup : @" ""IdSuperior"" ")}, ""IdSuperiorFunctional"", 
                                 ""NivelIerarhic"", ""PlanHC"", ""NivelHay"", ""SalariuMin"", ""SalariuMed"", ""SalariuMax"", 
-                                ""CodBuget"", ""CodCOR"", ""Atribute"", ""Criterii"", ""ObservatiiModif"", {cmbMotiv.Value},
-                                ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"", {Session["UserId"]}, GetDate()
+                                ""CodBuget"", ""CodCOR"", ""Atribute"", ""Criterii"", ""ObservatiiModif"", {cmbMotiv.Value}, {Session["UserId"]}, GetDate()
                                 FROM ""Org_Posturi"" WHERE ""IdAuto""={idAuto};
                                 UPDATE ""Org_Posturi"" SET ""DataSfarsit""={General.ToDataUniv(txtDtVig.Date.AddDays(-1))} WHERE ""IdAuto""={idAuto};
                             END;";

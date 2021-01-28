@@ -344,6 +344,34 @@ namespace WizOne.Organigrama
                     General.SchimbaInPlanificat(Convert.ToDateTime(Session["DataVigoare"]), id, Convert.ToInt32(drModif["modifStruc"]), Convert.ToInt32(drModif["modifCor"]), Convert.ToInt32(drModif["modifFunctia"]), 0);
                 }
 
+
+                //Florin #725 - verificam daca sunt angajati asignati pe acest post
+                int nrAng = Convert.ToInt32(General.Nz(General.ExecutaScalar(
+                    $@"SELECT COUNT(*) AS Nr
+                    FROM Org_relPostAngajat X 
+                    INNER JOIN F100 Y ON X.F10003=Y.F10003
+                    OUTER APPLY DamiDataPlecare(X.F10003, {General.ToDataUniv(dtInc)}) Z
+                    WHERE X.DataInceput <= {General.ToDataUniv(dtInc)} AND {General.ToDataUniv(dtInc)} <= X.DataSfarsit
+                    AND (Y.F10022 <= {General.ToDataUniv(dtInc)} AND {General.ToDataUniv(dtInc)} <= Z.DataPlecare) AND 
+                    NOT (Y.F100922 <= {General.ToDataUniv(dtInc)} AND {General.ToDataUniv(dtInc)} <= (CASE WHEN COALESCE(Y.F100924, '2100-01-01') = '2100-01-01' THEN Y.F100923 ELSE Y.F100924 END)) 
+                    AND X.IdPost={id}"), 0));
+
+                if (nrAng > 0)
+                {
+                    DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Org_Posturi"" WHERE ""IdAuto""=@1", new object[] { General.Nz(Session["IdAuto"], "-97") });
+                    if (dt.Rows.Count > 0)
+                    {
+                        if (Convert.ToInt32(General.Nz(dt.Rows[0]["IdFunctie"],-99)) != Convert.ToInt32(General.Nz(cmbFunc.Value, -99)) || 
+                            Convert.ToInt32(General.Nz(dt.Rows[0]["CodCOR"], -99)) != Convert.ToInt32(General.Nz(cmbCor.Value, -99)) || 
+                            Convert.ToInt32(General.Nz(dt.Rows[0]["F10007"], -99)) != Convert.ToInt32(General.Nz(cmbDept.Value, -99)))
+                        {
+                            MessageBox.Show("Nu se pot salva modificarile deoarece exista angajati asignati pe acest post");
+                            return;
+                        }
+                    }
+                }
+
+
                 int idAuto = Convert.ToInt32(General.Nz(Session["IdAuto"], -97));
 
                 Dictionary<string, object> dic = new Dictionary<string, object>();
@@ -397,14 +425,15 @@ namespace WizOne.Organigrama
                     x++;
                 }
 
-                for (int i = 1; i <= 10; i++)
-                {
-                    objs[x] = divBenef.FindControl("cmbBenef" + i) != null ? ((ASPxComboBox)divBenef.FindControl("cmbBenef" + i)).Value : null;
-                    campuriInsert += $@",""IdBeneficiu{i}""";
-                    campuriUpdate += $@",""IdBeneficiu{i}""=@{x + 1}";
-                    valoriInsert += $",@{x + 1}";
-                    x++;
-                }
+                //Florin 2020.01.21 - nu mai exista beneficiile, s-au mutat in tabela separatat conform tichet #8
+                //for (int i = 1; i <= 10; i++)
+                //{
+                //    objs[x] = divBenef.FindControl("cmbBenef" + i) != null ? ((ASPxComboBox)divBenef.FindControl("cmbBenef" + i)).Value : null;
+                //    campuriInsert += $@",""IdBeneficiu{i}""";
+                //    campuriUpdate += $@",""IdBeneficiu{i}""=@{x + 1}";
+                //    valoriInsert += $",@{x + 1}";
+                //    x++;
+                //}
 
                 for (int i = 1; i <= 20; i++)
                 {

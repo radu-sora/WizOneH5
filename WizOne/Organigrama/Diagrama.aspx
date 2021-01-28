@@ -66,6 +66,7 @@
                         <dx:ASPxCheckBox ID="chkPlan" Text="Pozitii" runat="server" Checked="true" />
                         <dx:ASPxCheckBox ID="chkAprobat" Text="Pozitii Aprobate" runat="server" Checked="true" />
                         <dx:ASPxCheckBox ID="chkEfectiv" Text="Pozitii Efective" runat="server" Checked="true" />
+                        <dx:ASPxCheckBox ID="chkAngajati" Text="Angajati" runat="server" Checked="false" />
                     </div>
 
                     <div style="float:left;">

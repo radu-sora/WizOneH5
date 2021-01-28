@@ -95,6 +95,7 @@ namespace Wizrom.Reports.Code
             DashboardBootstrapper.SessionState = SessionStateBehavior.Required;
             ASPxDashboard.StaticInitialize();
             DashboardConfigurator.Default.SetConnectionStringsProvider(new ReportDataSourceWizardConnectionStringsProvider());
+            DashboardConfigurator.Default.AllowExecutingCustomSql = true;
             DashboardConfigurator.Default.SetDashboardStorage(new EntityDashboardStorage());
             // Reports
             DynamicModuleUtility.RegisterModule(typeof(ReportSessionModule));

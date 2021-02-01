@@ -1416,7 +1416,7 @@ namespace WizOne.Pontaj
                                         for (int z = 1; z <= nrZec; z++)
                                             format += "#";
 
-                                    if (idZile > 0 && colZile > 0 && lista.ContainsKey(dt.Columns[i].ColumnName))
+                                    if (idZile > 0 && colZile > 0 && listaId.ContainsKey(dt.Columns[i].ColumnName))
                                     {
                                         if (nrZec > 0)
                                             ws2.Cells[4 * row + 3 + rand - 1, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].NumberFormat = format;

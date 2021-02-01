@@ -3866,20 +3866,23 @@ namespace WizOne.Module
             switch (cnp[0])
             {
                 case '1':
-                case '2':
-                case '7':
-                case '8':
+                case '2':  
                     an = 1900 + tempAn;
                     break;
-
                 case '3':
                 case '4':
                     an = 1800 + tempAn;
                     break;
-
                 case '5':
                 case '6':
                     an = 2000 + tempAn;
+                    break;
+                case '7':
+                case '8':
+                    if (Convert.ToInt16(cnp.Substring(1, 2)) >= 30)
+                        an = 1900 + tempAn; 
+                    else
+                        an = 2000 + tempAn;
                     break;
             }
             return new DateTime(Convert.ToInt16(an), Convert.ToInt16(luna), Convert.ToInt16(ziua));

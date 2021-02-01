@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Pagini {
-    
-    
-    public partial class MeniuDetaliu {
-        
+namespace WizOne.Pagini
+{
+
+
+    public partial class MeniuDetaliu
+    {
+
         /// <summary>
         /// txtMax control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField txtMax;
-        
+
         /// <summary>
         /// txtMax2 control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField txtMax2;
-        
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
+
         /// <summary>
         /// btnBack control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnBack;
-        
+
         /// <summary>
         /// btnSave control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnSave;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// lblId control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblId;
-        
+
         /// <summary>
         /// txtId control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtId;
-        
+
         /// <summary>
         /// lblDenumire control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblDenumire;
-        
+
         /// <summary>
         /// txtDenumire control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtDenumire;
-        
+
         /// <summary>
         /// lblActiv control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblActiv;
-        
+
         /// <summary>
         /// chkActiv control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkActiv;
-        
+
         /// <summary>
         /// lblDesc control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblDesc;
-        
+
         /// <summary>
         /// txtDesc control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxMemo txtDesc;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>

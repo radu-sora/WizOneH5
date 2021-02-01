@@ -127,7 +127,7 @@ namespace WizOne.Curs
                 btnIncarca.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
 
                 int id = 0;
-                string strSql = "select \"Curs_relSesiuneDocumente_SEQ\".nextval from dual";
+                string strSql = "select next value for \"Curs_relSesiuneDocumente_SEQ\"";
                 DataTable q = General.IncarcaDT(strSql, null);
 
                 if (q != null && q.Rows.Count > 0)

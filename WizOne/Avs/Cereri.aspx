@@ -252,11 +252,12 @@
                     <td>
                         <label id="lblAng" runat="server" style="display:inline-block;">Angajat</label>
                         <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
-                                CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >
+                                CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" DropDownWidth="1100px" >
                             <Columns>
                                 <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
                                 <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
                                 <dx:ListBoxColumn FieldName="Companie" Caption="Compania" Width="130px" />
+                                <dx:ListBoxColumn FieldName="Subcompanie" Caption="Subcompania" Width="130px" />
                                 <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
                                 <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
                                 <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />

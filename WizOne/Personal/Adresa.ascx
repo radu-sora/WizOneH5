@@ -16,10 +16,20 @@
 
     function OnClickGasit(values)
     {
-        grDateAdresa.SetEditValue("Strada", values[0]);
-        grDateAdresa.SetEditValue("NumeNivel1", values[2]);
-        grDateAdresa.SetEditValue("NumeNivel2", values[4]);
-        grDateAdresa.SetEditValue("NumeNivel3", values[6]);
+        var strada = grDateAdresa.GetEditor("Strada");
+        var niv1 = grDateAdresa.GetEditor("NumeNivel1");
+        var niv2 = grDateAdresa.GetEditor("NumeNivel2");
+        var niv3 = grDateAdresa.GetEditor("NumeNivel3");
+
+        strada.SetValue(values[0]);
+        niv1.SetValue(values[2]);
+        niv2.SetValue(values[4]);
+        niv3.SetValue(values[6]);
+
+        //grDateAdresa.SetEditValue("Strada", values[0]);
+        //grDateAdresa.SetEditValue("NumeNivel1", values[2]);
+        //grDateAdresa.SetEditValue("NumeNivel2", values[4]);
+        //grDateAdresa.SetEditValue("NumeNivel3", values[6]);
 
         hfSiruta.Set("SirutaNivel1", values[1]);
         hfSiruta.Set("SirutaNivel2", values[3]);

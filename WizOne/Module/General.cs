@@ -2881,8 +2881,9 @@ namespace WizOne.Module
                 table.Rows.Add(2, "Ctr. de munca temporar");
                 table.Rows.Add(4, "Ctr. de ucenicie la locul de munca");
                 table.Rows.Add(1, "Ctr. individual de munca");
-                table.Rows.Add(32, "Ctr. internship");
+                table.Rows.Add(32, "Ctr. internship");     
                 table.Rows.Add(8, "Ctr. mandat");
+                table.Rows.Add(35, "Ctr.temporar cu clauza de telemunca");
                 table.Rows.Add(98, "Drepturi de autor si drepturi conexe");
 
             }
@@ -3868,20 +3869,23 @@ namespace WizOne.Module
             switch (cnp[0])
             {
                 case '1':
-                case '2':
-                case '7':
-                case '8':
+                case '2':  
                     an = 1900 + tempAn;
                     break;
-
                 case '3':
                 case '4':
                     an = 1800 + tempAn;
                     break;
-
                 case '5':
                 case '6':
                     an = 2000 + tempAn;
+                    break;
+                case '7':
+                case '8':
+                    if (Convert.ToInt16(cnp.Substring(1, 2)) >= 30)
+                        an = 1900 + tempAn; 
+                    else
+                        an = 2000 + tempAn;
                     break;
             }
             return new DateTime(Convert.ToInt16(an), Convert.ToInt16(luna), Convert.ToInt16(ziua));

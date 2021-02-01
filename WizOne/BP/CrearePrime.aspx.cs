@@ -93,11 +93,11 @@ namespace WizOne.BP
 
             try
             {
-                cmbAn.DataSource = General.ListaNumere(2010, 2020);
+                cmbAn.DataSource = General.ListaNumere(2010, DateTime.Now.Year + 5);
                 cmbAn.DataBind();
                 cmbLuna.DataSource = General.ListaLuniDesc();
                 cmbLuna.DataBind();
-                cmbAnFil.DataSource = General.ListaNumere(2010, 2020);
+                cmbAnFil.DataSource = General.ListaNumere(2010, DateTime.Now.Year + 5);
                 cmbAnFil.DataBind();
                 cmbLunaFil.DataSource = General.ListaLuniDesc();
                 cmbLunaFil.DataBind();

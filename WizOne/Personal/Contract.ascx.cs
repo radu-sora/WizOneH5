@@ -63,7 +63,7 @@ namespace WizOne.Personal
 
             ASPxComboBox cmbTipAngajat = Contract_DataList.Items[0].FindControl("cmbTipAng") as ASPxComboBox;
 
-            if (ds.Tables[1].Rows[0]["F100643"] != null && ds.Tables[1].Rows[0]["F100643"].ToString().Length >= 4)
+            if (ds.Tables[1].Rows[0]["F100643"] != DBNull.Value && ds.Tables[1].Rows[0]["F100643"].ToString().Length >= 4)
             {
                 txtVechCompAni.Text = ds.Tables[1].Rows[0]["F100643"].ToString().Substring(0, 2);
                 txtVechCompLuni.Text = ds.Tables[1].Rows[0]["F100643"].ToString().Substring(2, 2);
@@ -74,7 +74,7 @@ namespace WizOne.Personal
                 txtVechCompLuni.Text = "00";
             }
 
-            if (ds.Tables[1].Rows[0]["F100644"] != null && ds.Tables[1].Rows[0]["F100644"].ToString().Length >= 4)
+            if (ds.Tables[1].Rows[0]["F100644"] != DBNull.Value && ds.Tables[1].Rows[0]["F100644"].ToString().Length >= 4)
             {
                 txtVechCarteMuncaAni.Text = ds.Tables[1].Rows[0]["F100644"].ToString().Substring(0, 2);
                 txtVechCarteMuncaLuni.Text = ds.Tables[1].Rows[0]["F100644"].ToString().Substring(2, 2);
@@ -145,20 +145,20 @@ namespace WizOne.Personal
 
                 //Florin #715
                 //if (ds.Tables[0].Rows[0]["F10010"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
-                if (Convert.ToInt32(cmbTipNorma.Value) != 3 && (ds.Tables[0].Rows[0]["F10010"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0))
+                if (Convert.ToInt32(cmbTipNorma.Value) != 3 && (ds.Tables[0].Rows[0]["F10010"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0))
                 {
                     cmbIntRepTimpMunca.ClientEnabled = false;
                     txtNrOre.ClientEnabled = false;
                     txtNrOre.Text = "0";
                 }
 
-                if (ds.Tables[0].Rows[0]["F100939"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 0 || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 1)
+                if (ds.Tables[0].Rows[0]["F100939"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 0 || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 1)
                 {
                     txtNrOre.ClientEnabled = false;
                     txtNrOre.Text = "0";
                 }
               
-                if (ds.Tables[0].Rows[0]["F1009741"] != null && Convert.ToInt32(ds.Tables[0].Rows[0]["F1009741"].ToString()) == 1)
+                if (ds.Tables[0].Rows[0]["F1009741"] != nDBNull.Valueull && Convert.ToInt32(ds.Tables[0].Rows[0]["F1009741"].ToString()) == 1)
                 {
                     deDeLaData.ClientEnabled = false;
                     deLaData.ClientEnabled = false;
@@ -267,7 +267,7 @@ namespace WizOne.Personal
                 if (dtFunc != null && dtFunc.Rows.Count > 0)
                 {
                     DataRow[] drFunc = dtFunc.Select("F71802 = " + (ds.Tables[0].Rows[0]["F10071"] as int? ?? 0).ToString());
-                    if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != null && drFunc[0]["F71813"].ToString().Length > 0)
+                    if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != DBNull.Value && drFunc[0]["F71813"].ToString().Length > 0)
                     {
                         cmbNivelFunctie.Value = Convert.ToInt32(drFunc[0]["F71813"].ToString());
                         if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
@@ -296,11 +296,11 @@ namespace WizOne.Personal
             rbCtrRadiat.Items[1].Text = Dami.TraduCuvant(rbCtrRadiat.Items[1].Text);
 
             DataTable dtComp = General.IncarcaDT("SELECT * FROM F002 WHERE F00202 = " + ds.Tables[0].Rows[0]["F10002"].ToString(), null);
-            if ((dtComp.Rows[0]["F00287"] != null && dtComp.Rows[0]["F00287"].ToString() == "1") || (dtComp.Rows[0]["F00288"] != null && dtComp.Rows[0]["F00288"].ToString() == "1"))
+            if ((dtComp.Rows[0]["F00287"] != DBNull.Value && dtComp.Rows[0]["F00287"].ToString() == "1") || (dtComp.Rows[0]["F00288"] != DBNull.Value && dtComp.Rows[0]["F00288"].ToString() == "1"))
                 chkConstr.ClientEnabled = true;
 
             ASPxComboBox cmbCOR = Contract_DataList.Items[0].FindControl("cmbCOR") as ASPxComboBox;
-            cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == null || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
+            cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == DBNull.Value || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
                         
             ds.Tables[1].Rows[0]["F100935"] = nrLuni;
             ds.Tables[1].Rows[0]["F100936"] = nrZile;
@@ -336,8 +336,7 @@ namespace WizOne.Personal
 
             if (Dami.ValoareParam("ValidariPersonal") == "1")
             {
-                string[] lstTextBox = new string[8] { "txtNrCtrInt", "txtSalariu", "txtPerProbaZL", "txtPerProbaZC", "txtNrZilePreavizDemisie", "txtNrZilePreavizConc",
-                                                    "txtZileCOCuvAnCrt", "txtNrOre"};
+                string[] lstTextBox = new string[7] { "txtNrCtrInt", "txtSalariu", "txtPerProbaZL", "txtPerProbaZC", "txtNrZilePreavizDemisie", "txtNrZilePreavizConc", "txtNrOre"};    //"txtZileCOCuvAnCrt"
                 for (int i = 0; i < lstTextBox.Count(); i++)
                 {
                     ASPxTextBox txt = Contract_DataList.Items[0].FindControl(lstTextBox[i]) as ASPxTextBox;

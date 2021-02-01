@@ -158,7 +158,7 @@ namespace WizOne.Personal
                     txtNrOre.Text = "0";
                 }
               
-                if (ds.Tables[0].Rows[0]["F1009741"] != nDBNull.Valueull && Convert.ToInt32(ds.Tables[0].Rows[0]["F1009741"].ToString()) == 1)
+                if (ds.Tables[0].Rows[0]["F1009741"] != DBNull.Value && Convert.ToInt32(ds.Tables[0].Rows[0]["F1009741"].ToString()) == 1)
                 {
                     deDeLaData.ClientEnabled = false;
                     deLaData.ClientEnabled = false;

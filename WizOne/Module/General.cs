@@ -6558,11 +6558,14 @@ namespace WizOne.Module
 
 
                     //Florin 2019.05.14
-                    string strInner = @"LEFT JOIN (SELECT F70403, MAX(DATEADD(d,-1,F70406)) DataPlecare FROM f704 WHERE F70404=4 GROUP BY F70403) ddp ON c.F10003 = ddp.F70403 
-                                        OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn";
+                    //string strInner = @"LEFT JOIN (SELECT F70403, MAX(DATEADD(d,-1,F70406)) DataPlecare FROM f704 WHERE F70404=4 GROUP BY F70403) ddp ON c.F10003 = ddp.F70403 
+                    //                    OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn";
                     ////Florin 2018.10.23
-                    //string strInner = @"OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn
-                    //                    OUTER APPLY dbo.DamiDataPlecare(A.F10003, A.Ziua) ddp";
+                    //Radu 02.02.2021 - s-a revenit la functia DamiDataPlecare
+                    string strInner = @"OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn
+                                        OUTER APPLY dbo.DamiDataPlecare(A.F10003, A.Ziua) ddp";
+
+
                     if (Dami.ValoareParam("TipCalculDate") == "2")
                     {
                         strInner =

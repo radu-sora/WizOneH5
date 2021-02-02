@@ -16225,3 +16225,22 @@ ALTER TABLE Ptj_Cumulat ALTER COLUMN F99 numeric(22,2)
 GO
 ALTER TABLE Ptj_Cumulat ALTER COLUMN F100 numeric(22,2)
 GO
+
+
+drop SEQUENCE Ptj_Cereri_Id_SEQ
+GO
+
+declare @maxId as int 
+select @maxId = max(Id) + 1 from Ptj_Cereri
+declare @s nvarchar(4000);
+set @s = N'
+CREATE SEQUENCE Ptj_Cereri_Id_SEQ  AS INTEGER  
+START WITH ' + cast(@maxId as nvarchar) + '
+INCREMENT BY 1  
+NO CYCLE;'
+
+EXEC (@s);
+
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('TextLogare', '', 'Text ce se va afisa in fereastra de logare', 0)
+GO

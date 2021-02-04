@@ -169,7 +169,7 @@ namespace WizOne.Pagini
                              + " a.\"DataAprobare\", CASE WHEN c.F10003 IS NULL THEN b.F70104 ELSE  c.F10008 " + op + " ' ' " + op + " c.F10009 END AS \"Nume\" "
                              + " FROM \"Curs_CereriIstoric\" a "
                              + " LEFT JOIN USERS b on a.\"IdUSer\" = b.F70102 "
-                             + " LEFT JOIN F100 c on a.F10003 = c.F10003 " 
+                             + " LEFT JOIN F100 c on b.F10003 = c.F10003 " 
                              + " WHERE a.\"IdCerere\" = " + id + " order by a.\"Pozitie\" ";
                         break;
                     default:

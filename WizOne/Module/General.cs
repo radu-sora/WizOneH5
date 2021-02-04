@@ -6828,12 +6828,16 @@ namespace WizOne.Module
 
                     //Florin 201.12.02 - am adaugat IdProgram
                     //Radu 04.04.2017 - am modificat F06204Default
+                    //Radu 03.02.2021 - am inlocuit DamiSubdept si DamiBirou
+                    //OUTER APPLY dbo.DamiSubdept(A.F10003, X.Ziua) sd
+                    //OUTER APPLY dbo.DamiBirou(A.F10003, X.Ziua) br
+
                     strSql = @" SELECT A.F10003, X.Ziua, CASE WHEN datepart(dw,X.Ziua) - 1 = 0 THEN 7 ELSE datepart(dw,X.Ziua) - 1 END AS ZiSapt,
                                 CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 THEN 1 ELSE 0 END AS ZiLibera, 
                                 0 as Parinte, 0 as Linia, -1 as F06204, 
                                 G.F00603 AS F10002, G.F00604 AS F10004, G.F00605 AS F10005, G.F00606 AS F10006, G.F00607 as F10007, 
-                                COALESCE(sd.Subdept, (SELECT C.F100958 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100958, 
-                                COALESCE(br.Birou, (SELECT C.F100959 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100959,
+                                COALESCE(dd.Subdept, (SELECT C.F100958 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100958, 
+                                COALESCE(dd.Birou, (SELECT C.F100959 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100959,
                                 '#00FFFFFF' as CuloareValoare, 
                                 dn.Norma AS Norma, 
                                 (SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"") AS IdContract, 
@@ -6861,8 +6865,8 @@ namespace WizOne.Module
                                 left join (select F10003, ""Ziua"", count(*) as CNT from ""Ptj_Intrari"" where YEAR(Ziua)={3} AND MONTH(Ziua)={4} AND F06204=-1 GROUP BY F10003, ""Ziua"") D on D.F10003=A.F10003 AND D.""Ziua"" = x.ZIUA
                                 {5}
                                 LEFT JOIN F006 G ON G.F00607 = dd.Dept
-                                OUTER APPLY dbo.DamiSubdept(A.F10003, X.Ziua) sd
-                                OUTER APPLY dbo.DamiBirou(A.F10003, X.Ziua) br
+                                LEFT JOIN F007 H ON H.F00708 = dd.Subdept
+                                LEFT JOIN F008 I ON I.F00809 = dd.Birou
                                 LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")
                                 where isnull(D.CNT,0) = 0";
 
@@ -8487,7 +8491,11 @@ namespace WizOne.Module
 
                 ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE F10003 = " + marca + " AND \"IdAbsenta\" = " + idAbs + " AND \"DataInceput\" = " + General.ToDataUniv(dataInceput.Date), null);
 
-                string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
+                //Radu 01.02.2021 - citire idCerere din secventa
+                int idCerere = Dami.NextId("Ptj_Cereri");
+                string sqlIdCerere = idCerere.ToString();
+                if (idCerere == -99)
+                    sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
                 string sqlInsert = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""Observatii"", ""IdStare"", USER_NO, TIME) "
                                 + @"VALUES (" +
                                 sqlIdCerere + ", " +

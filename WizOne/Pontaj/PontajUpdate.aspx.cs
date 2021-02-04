@@ -255,11 +255,18 @@ namespace WizOne.Pontaj
                         if (chkStr == true)
                         {
                             //Florin 2020.07.02 - am adaugat subdept si birou
-                            act += ",A.F10002=G.F00603, A.F10004=G.F00604, A.F10005=G.F00605, A.F10006=G.F00606, A.F10007=G.F00607, A.F100958=sd.Subdept, A.F100959=br.Birou";
+                            //Radu 03.02.2021 - am inlocuit DamiSubdept si DamiBirou
+                            //OUTER APPLY dbo.DamiSubdept(A.F10003, A.Ziua) sd 
+                            //OUTER APPLY dbo.DamiBirou(A.F10003, A.Ziua) br
+
+
+                            act += ",A.F10002=G.F00603, A.F10004=G.F00604, A.F10005=G.F00605, A.F10006=G.F00606, A.F10007=G.F00607, A.F100958=dd.Subdept, A.F100959=dd.Birou";
                             inn += " OUTER APPLY dbo.DamiDept(A.F10003, A.Ziua) dd " +
                                    " LEFT JOIN F006 G ON G.F00607 = dd.Dept " +
-                                   " OUTER APPLY dbo.DamiSubdept(A.F10003, A.Ziua) sd " +
-                                   " OUTER APPLY dbo.DamiBirou(A.F10003, A.Ziua) br ";
+                                   " LEFT JOIN F007 H ON H.F00708 = dd.Subdept " +
+                                   " LEFT JOIN F008 I ON I.F00809 = dd.Birou ";
+                            
+                                
                             //Florin 2018.10.23
                             if (Dami.ValoareParam("TipCalculDate") == "2")
                                 inn += " LEFT JOIN DamiDept_Table ddt ON ddt.F10003=A.F10003 AND ddt.dt=A.Ziua";

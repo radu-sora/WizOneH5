@@ -255,6 +255,8 @@ namespace WizOne.Pontaj
                 }
                 #endregion
 
+                SetColoane();   //Radu 04.02.2021
+
                 if (!IsPostBack)
                 {
                     Session["InformatiaCurenta"] = null;
@@ -264,8 +266,8 @@ namespace WizOne.Pontaj
                     IncarcaRoluri();
                     IncarcaAngajati();
 
-                    SetColoane();
-                    SetColoaneCuloare();
+                    
+                    
 
                     #region Filtru Retinut
 
@@ -285,6 +287,8 @@ namespace WizOne.Pontaj
                                 {
                                 }
                             }
+
+                            SetColoaneCuloare();
 
                             if (General.Nz(lst["Rol"], "").ToString() != "") cmbRol.Value = Convert.ToInt32(lst["Rol"]);
                             if (General.Nz(lst["IdAng"], "").ToString() != "") cmbAng.Value = Convert.ToInt32(lst["IdAng"]);
@@ -307,7 +311,11 @@ namespace WizOne.Pontaj
                                 grDate.FocusedRowIndex = Convert.ToInt32(General.Nz(lst["IndexRow"], "1"));
                             }
                         }
+                        else
+                            SetColoaneCuloare();
                     }
+                    else
+                        SetColoaneCuloare();
 
                     #endregion
 
@@ -317,6 +325,8 @@ namespace WizOne.Pontaj
 
                     //GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                     //colStari.PropertiesComboBox.DataSource = dtStari;
+
+
 
                     cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
                     cmbCateg.DataBind();
@@ -1424,7 +1434,7 @@ namespace WizOne.Pontaj
                                     }
                                     else
                                     {
-                                        if (listaId[dt.Columns[i].ColumnName] > listaId["Zilele 1-31"])
+                                        if (listaId.ContainsKey(dt.Columns[i].ColumnName) && listaId[dt.Columns[i].ColumnName] > listaId["Zilele 1-31"])
                                         {
                                             colZile = 30 + listaId["Zilele 1-31"];
                                             ignorare = true;
@@ -2009,6 +2019,12 @@ namespace WizOne.Pontaj
 
                 foreach (var col in grDate.Columns.OfType<GridViewDataSpinEditColumn>())
                     f_uri += $",COALESCE(X.{col.FieldName},0) AS {col.FieldName}";
+
+
+                if (Dami.ValoareParam("TipCalculDate") == "2")
+                    strInner += $@"LEFT JOIN DamiDataPlecare_Table ddp ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
+                else
+                    strInner += $@"OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
 
 
                 //Radu 02.02.2021 -  am adaugat DataInceput, DataSfarsit, ZileCONeefectuate si ZLPNeefectuate

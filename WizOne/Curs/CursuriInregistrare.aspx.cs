@@ -663,7 +663,7 @@ namespace WizOne.Curs
 
                 #region dimensiuneFunctii
                 string strFct = string.Empty;
-                switch (Curs_CompletareCompetente)
+                switch (Curs_CompletareFunctii)
                 {
                     case 0:/* nu trebuie completata dimensiunea*/
                         #region nu trebuie completata dimensiunea
@@ -1345,7 +1345,7 @@ namespace WizOne.Curs
                 {
                     string aprobat = "NULL", dataAprobare = "NULL";
                     int idSuper = -99;
-                    idStare = -99;
+                    //idStare = -99;
                     int lstAstept = 0;
                     if (dtCirc.Rows[0]["Super" + i] != DBNull.Value)
                     {

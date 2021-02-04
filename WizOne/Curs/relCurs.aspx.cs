@@ -271,7 +271,7 @@ namespace WizOne.Curs
                 {
                     sql = "SELECT b.\"Activ\", b.\"Denumire\", a.\"Id_Competenta\" AS \"Id\", b.\"IdGrup\", a.USER_NO, b.TIME FROM "
                     + " \"Curs_relCompetenteFunctii\" a "
-                    + " JOIN \"tblCompetente\" b on a.\"IdCompetenta\" = b.\"Id\" ORDER BY b.\"Denumire\", b.\"Id\" ";
+                    + " JOIN \"tblCompetente\" b on a.\"Id_Competenta\" = b.\"Id\" ORDER BY b.\"Denumire\", b.\"Id\" ";
                 }
                 return General.IncarcaDT(sql, null);
             }

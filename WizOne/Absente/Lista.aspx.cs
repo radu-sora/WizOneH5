@@ -827,7 +827,12 @@ namespace WizOne.Absente
 
                 DateTime dtSplit = Convert.ToDateTime(txtDataDivide.Value);
 
-                string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
+
+                //Radu 01.02.2021 - citire idCerere din secventa
+                int idCerere = Dami.NextId("Ptj_Cereri");
+                string sqlIdCerere = idCerere.ToString();
+                if (idCerere == -99)
+                    sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
                 DateTime dtIncOri = Convert.ToDateTime(obj[4]);
                 DateTime dtSfOri = Convert.ToDateTime(obj[5]);
 

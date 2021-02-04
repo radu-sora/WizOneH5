@@ -615,7 +615,11 @@ namespace WizOne.Tactil
                 DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToDateTime(obj[4]).Date, Convert.ToInt32(obj[2])), null);
                 if (drAbs != null) adunaZL = Convert.ToInt32(General.Nz(drAbs["AdunaZileLibere"], 0));
 
-                string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
+                //Radu 01.02.2021 - citire idCerere din secventa
+                int idCerere = Dami.NextId("Ptj_Cereri");
+                string sqlIdCerere = idCerere.ToString();
+                if (idCerere == -99)
+                    sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
                 DateTime dtIncOri = Convert.ToDateTime(obj[4]);
                 DateTime dtSfOri = Convert.ToDateTime(obj[5]);
 

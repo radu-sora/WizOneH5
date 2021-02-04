@@ -460,13 +460,61 @@ namespace WizOne.Personal
                 }
 
                 //Radu 15.01.2020
-                string sqlAng = "SELECT " + ds.Tables[1].Rows[0]["F10003"] + " AS F10003, " 
-                        + (ds.Tables[1].Rows[0]["F100901"] == DBNull.Value ? "NULL" :  "'" + ds.Tables[1].Rows[0]["F100901"].ToString() + "'") + " AS F100901, " 
-                        + (ds.Tables[1].Rows[0]["F10071"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10071"].ToString()) + " AS F10071, " 
-                        + (ds.Tables[1].Rows[0]["F10050"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10050"].ToString()) + " AS F10050, " 
-                        + (ds.Tables[1].Rows[0]["F10051"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10051"].ToString()) + " AS F10051, " 
+
+                string valMin = "100000";
+                int idCtr = -99;
+                DataTable dtParam = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" ='ValMinView'", null);
+                if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null)
+                    valMin = dtParam.Rows[0][0].ToString();
+                string sqlCtr = "SELECT IdContract, DataSfarsit FROM F100Contracte WHERE F10003 = " + ds.Tables[1].Rows[0]["F10003"].ToString() + " AND IdAuto >= " + valMin + " ORDER BY DataSfarsit DESC";
+                DataTable dtCtr = General.IncarcaDT(sqlCtr, null);
+                DateTime dtSf1 = new DateTime(1900, 1, 1);
+                if (dtCtr != null && dtCtr.Rows.Count > 0 && dtCtr.Rows[0]["DataSfarsit"] != DBNull.Value && dtCtr.Rows[0]["DataSfarsit"].ToString() != null)
+                    dtSf1 = Convert.ToDateTime(dtCtr.Rows[0]["DataSfarsit"].ToString());
+                DateTime dtSf2 = new DateTime(1900, 1, 1);
+                DataTable dtCtr2 = null;
+                if (ds.Tables.Contains("F100Contracte2"))
+                {
+                    dtCtr2 = ds.Tables["F100Contracte2"].Select("F10003 = " + ds.Tables[1].Rows[0]["F10003"].ToString()) != null ?
+                        ds.Tables["F100Contracte2"].Select("F10003 = " + ds.Tables[1].Rows[0]["F10003"].ToString()).OrderByDescending(x => x["DataSfarsit"]).CopyToDataTable() : null;
+                    if (dtCtr2 != null)
+                        dtSf2 = Convert.ToDateTime(dtCtr2.Rows[0]["DataSfarsit"].ToString());
+                }
+                if (dtSf1 > dtSf2)
+                {
+                    idCtr = Convert.ToInt32(dtCtr.Rows[0]["IdContract"].ToString());
+                }
+                else if (dtCtr2 != null && dtCtr2.Rows.Count > 0)
+                {
+                    idCtr = Convert.ToInt32(dtCtr2.Rows[0]["IdContract"].ToString());
+                }
+
+
+                string sqlAng = "SELECT " + ds.Tables[1].Rows[0]["F10003"] + " AS F10003, "
+                        + (ds.Tables[1].Rows[0]["F100901"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100901"].ToString() + "'") + " AS F100901, "
+                        + (ds.Tables[1].Rows[0]["F10071"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10071"].ToString()) + " AS F10071, "
+                        + (ds.Tables[1].Rows[0]["F10050"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10050"].ToString()) + " AS F10050, "
+                        + (ds.Tables[1].Rows[0]["F10051"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10051"].ToString()) + " AS F10051, "
                         + (ds.Tables[1].Rows[0]["F10061"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10061"].ToString()) + " AS F10061, "
-                        + (ds.Tables[1].Rows[0]["F10062"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10062"].ToString()) + " AS F10062 ";     //se pot completa in viitor si alte campuri de interes
+                        + (ds.Tables[1].Rows[0]["F10062"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10062"].ToString()) + " AS F10062, "
+                        + (ds.Tables[1].Rows[0]["F10004"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10004"].ToString()) + " AS F10004, "
+                        + (ds.Tables[1].Rows[0]["F1009741"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F1009741"].ToString()) + " AS F1009741, "
+                        + (ds.Tables[1].Rows[0]["F100984"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100984"].ToString()) + " AS F100984, "
+                        + (ds.Tables[1].Rows[0]["F100935"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100935"].ToString()) + " AS F100935, "
+                        + (ds.Tables[1].Rows[0]["F100936"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100936"].ToString()) + " AS F100936, "
+                        + (ds.Tables[1].Rows[0]["F100975"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100975"].ToString()) + " AS F100975, "
+                        + (ds.Tables[2].Rows[0]["F1001063"] == DBNull.Value ? "NULL" : ds.Tables[2].Rows[0]["F1001063"].ToString()) + " AS F1001063, "
+                        + (ds.Tables[1].Rows[0]["F1009742"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F1009742"].ToString()) + " AS F1009742, "
+                        + (ds.Tables[1].Rows[0]["F100931"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100931"].ToString()) + " AS F100931, "
+                        + (ds.Tables[2].Rows[0]["F1001046"] == DBNull.Value ? "NULL" : ds.Tables[2].Rows[0]["F1001046"].ToString()) + " AS F1001046, "
+                        + (ds.Tables[1].Rows[0]["F10071"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10071"].ToString()) + " AS F10071, "
+                        + (ds.Tables[1].Rows[0]["F10072"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10072"].ToString()) + " AS F10072, "
+                        + (ds.Tables[1].Rows[0]["F100902"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100902"].ToString() + "'") + " AS F100902, "
+                        + (ds.Tables[1].Rows[0]["F100904"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100904"].ToString() + "'") + " AS F100904, "
+                        + (ds.Tables[2].Rows[0]["F100943"] == DBNull.Value ? "NULL" : ds.Tables[2].Rows[0]["F100943"].ToString()) + " AS F100943, "
+                        + idCtr + " AS IdContract ";
+
+                //se pot completa in viitor si alte campuri de interes
                 string msg = Notif.TrimiteNotificare("Personal.Lista", (int)Constante.TipNotificare.Validare, sqlAng + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                 if (msg != "" && msg.Substring(0, 1) == "2")
                 {

@@ -106,6 +106,12 @@ namespace WizOne
                     }
                     else
                     {//Radu 18.05.2020
+                        if (Session["TipInfoChiosc"] == null)
+                        {
+                            MessageBox.Show("Nu s-a putut realiza conexiunea cu baza de date!", MessageBox.icoError, "");
+                            return;
+                        }
+
                         string tip = Session["TipInfoChiosc"].ToString();
                         if (tip == "3")
                         {

@@ -56,18 +56,6 @@ color:#00588a;
     color:#00588a;
 }
 
-.innerlogare {
-    position: absolute;
-    top: 650px;
-    left: 55px;
-    height: 550px;
-    width: 290px;
-    display: inline-block;
-    text-align: center;
-    font-size: 24px;
-    color: #00588a;
-}
-
 .innerbuttons {
     position: absolute;
     top: 80px;
@@ -89,6 +77,18 @@ color:#00588a;
     display: inline-block;
     text-align: center;
     font-size: 21px;
+    color: #00588a;
+}
+
+.innerlogare {
+    position: absolute;
+    top: 360px;
+    left: 55px;
+    height: 550px;
+    width: 290px;
+    display: inline-block;
+    text-align: center;
+    font-size: 25px;
     color: #00588a;
 }
 

@@ -147,8 +147,8 @@
                         <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajatul" ReadOnly="true" Width="180px" >
                             <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
-					    <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii" ReadOnly="true"  Width="350px" />
-                        <dx:GridViewDataComboBoxColumn FieldName="IdCategValoareNota" Name="IdCategValoareNota" Caption="Nota" ReadOnly="true" Width="150px"  >
+					    <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"  Width="350px" />
+                        <dx:GridViewDataComboBoxColumn FieldName="IdCategValoareNota" Name="IdCategValoareNota" Caption="Nota" Width="150px"  >
                             <PropertiesComboBox TextField="DenumireValoare" ValueField="IdCategValoare" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataCheckColumn FieldName="PrezentCurs" Name="PrezentCurs" Caption="Prezent"  Width="100px"  />

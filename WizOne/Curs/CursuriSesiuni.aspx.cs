@@ -466,13 +466,20 @@ namespace WizOne.Curs
                                 recurenta = Convert.ToInt32(Session["CursuriSesiuni_Recurenta"].ToString());
                             DateTime dataExpirare = dataInceput.AddMonths(recurenta);
                             e.NewValues["DataExpirare"] = dataExpirare;
+                            row["DataExpirare"] = dataExpirare;
                         }
                         if (col.ColumnName.ToUpper() == "TOTALORE")
                         {
                             double TotalOre;
                             GetTotalHoursSession(e, out TotalOre);
                             e.NewValues["TotalOre"] = TotalOre;
+                            row["TotalOre"] = TotalOre;
                         }
+                        if (col.ColumnName.ToUpper() == "ORAINCEPUT" && e.NewValues["OraInceput"] != null)
+                            row[col.ColumnName] = new DateTime(2100, 1, 1, Convert.ToDateTime(e.NewValues["OraInceput"]).Hour, Convert.ToDateTime(e.NewValues["OraInceput"]).Minute, 0);
+                        if (col.ColumnName.ToUpper() == "ORASFARSIT" && e.NewValues["OraSfarsit"] != null)                    
+                            row[col.ColumnName] = new DateTime(2100, 1, 1, Convert.ToDateTime(e.NewValues["OraSfarsit"]).Hour, Convert.ToDateTime(e.NewValues["OraSfarsit"]).Minute, 0);
+                        break;
                     }
 
                 }
@@ -530,6 +537,7 @@ namespace WizOne.Curs
                 e.NewValues["Id"] = idSesMax;
                 e.NewValues["IdCurs"] = (int)cmbCurs.Value;
                 e.NewValues["IdStare"] = 1;
+
  
 
                 e.NewValues["InternExtern"] = categ1;
@@ -578,12 +586,21 @@ namespace WizOne.Curs
                                     recurenta = Convert.ToInt32(Session["CursuriSesiuni_Recurenta"].ToString());
                                 DateTime dataExpirare = dataInceput.AddMonths(recurenta);
                                 e.NewValues["DataExpirare"] = dataExpirare;
+                                row[x] = e.NewValues[col.ColumnName];
                                 break;
                             case "TOTALORE":                             
                                 double TotalOre;
                                 GetTotalHoursSession(e, out TotalOre);
                                 e.NewValues["TotalOre"] = TotalOre;
-                                
+                                row[x] = e.NewValues[col.ColumnName];
+                                break;
+                            case "ORAINCEPUT":
+                                if (e.NewValues["OraInceput"] != null)
+                                    row[x] = new DateTime(2100, 1, 1, Convert.ToDateTime(e.NewValues["OraInceput"]).Hour, Convert.ToDateTime(e.NewValues["OraInceput"]).Minute, 0);
+                                break;
+                            case "ORASFARSIT":
+                                if (e.NewValues["OraSfarsit"] != null)
+                                    row[x] = new DateTime(2100, 1, 1, Convert.ToDateTime(e.NewValues["OraSfarsit"]).Hour, Convert.ToDateTime(e.NewValues["OraSfarsit"]).Minute, 0);
                                 break;
                             default:
                                 row[x] = e.NewValues[col.ColumnName];
@@ -657,7 +674,7 @@ namespace WizOne.Curs
             try
             {
                 string sql = "SELECT a.\"IdAuto\", a.\"Id\", a.\"Denumire\", a.\"Categ_Niv1Id\",  b.\"Denumire\" as \"Categ_Niv1Nume\", a.\"Categ_Niv2Id\", c.\"Denumire\" as \"Categ_Niv2Nume\", "
-                    + " a.\"Categ_Niv3Id,  d.\"Denumire\" as \"Categ_Niv3Nume\" , a.\"Recurenta\" FROM "
+                    + " a.\"Categ_Niv3Id\",  d.\"Denumire\" as \"Categ_Niv3Nume\" , a.\"Recurenta\" FROM "
                     + " \"Curs_tblCurs\" a "
                     + " LEFT JOIN \"Curs_tblCateg_Niv1\" b on a.\"Categ_Niv1Id\" = b.\"Id\" "
                     + " LEFT JOIN \"Curs_tblCateg_Niv2\" c on a.\"Categ_Niv2Id\" = c.\"Id\" "

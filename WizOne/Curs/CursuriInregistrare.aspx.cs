@@ -246,6 +246,7 @@ namespace WizOne.Curs
                                 object[] lst = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "IdStare", "IdCurs", "F10003", "IdSesiune" }) as object[];
                                 Aprobare pagApr = new Aprobare();
                                 pagApr.AnuleazaCerereCurs(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(lst[0] ?? "-99"), 1);
+                                Session["CursuriInreg_Grid"] = null;
                                 IncarcaGrid();
                             }
                             break;
@@ -1489,7 +1490,7 @@ namespace WizOne.Curs
                 {
                     sql = "INSERT INTO \"tblFisiere\" (\"Tabela\", \"Id\", \"Fisier\", \"FisierNume\", \"FisierExtensie\", USER_NO, TIME)  VALUES ('{0}', {1}, '{2}', '{3}', '{4}', {5}, {6})";
                     sql = string.Format(sql, "Curs_Inregistrare", idUrmat, fis, fisNume, fisExt, idUser, (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
-                    General.ExecutaNonQuery(strSql, null); 
+                    General.ExecutaNonQuery(sql, null); 
                 }
 
                 #endregion

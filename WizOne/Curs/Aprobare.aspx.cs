@@ -650,7 +650,7 @@ namespace WizOne.Curs
                 string filtru = "";
 
                 if (f10003 != -99) filtru += " AND a.F10003 = " + f10003;
-                if (filtruStari != "") filtru += " AND a.\"IdStare\" IN (" + filtruStari.Replace(";", ",").Substring(0, filtruStari.Length - 1) + ")";
+                if (filtruStari != "") filtru += " AND a.\"IdStare\" IN (" + filtruStari.Replace(";", ",").Substring(0, filtruStari.Length) + ")";
 
                 if (tip == 1 || tip == 2)
                 {

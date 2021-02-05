@@ -88,7 +88,7 @@ namespace WizOne.Curs
                 if (Session["relSesiuneDocumente_Grid"] == null)
                 {
                     dt = General.IncarcaDT(strSql, null);
-                    grDate.KeyFieldName = "IdAuto";
+                    grDate.KeyFieldName = "Tabela;Id;EsteCerere";
                     grDate.DataSource = dt;
                     grDate.DataBind();
                     Session["relSesiuneDocumente_Grid"] = dt;
@@ -96,7 +96,7 @@ namespace WizOne.Curs
                 else
                 {
                     dt = Session["relSesiuneDocumente_Grid"] as DataTable;
-                    grDate.KeyFieldName = "IdAuto";
+                    grDate.KeyFieldName = "Tabela;Id;EsteCerere";
                     grDate.DataSource = dt;
                     grDate.DataBind();
                 }
@@ -189,10 +189,12 @@ namespace WizOne.Curs
                 strSql += @"DELETE FROM ""Curs_relSesiuneDocumente"" WHERE ""IdCurs"" = {0} AND {3} ""IdSesiune"", -99) = {1} AND ""IdDocument""={2};";
                 strSql += @"END; ";
 
+                string qwe = General.Nz(Request["qwe"], "-99").ToString();
+
                 if (Constante.tipBD == 1)
-                    strSql = string.Format(strSql, row["IdCurs"].ToString(), row["IdSesiune"].ToString(), row["Id"].ToString(), "isnull( ");
+                    strSql = string.Format(strSql, qwe.Split(',')[0], qwe.Split(',')[1], row["Id"].ToString(), "isnull( ");
                 else
-                    strSql = string.Format(strSql, row["IdCurs"].ToString(), row["IdSesiune"].ToString(), row["Id"].ToString(), "nvl( ");
+                    strSql = string.Format(strSql, qwe.Split(',')[0], qwe.Split(',')[1], row["Id"].ToString(), "nvl( ");
 
                 General.ExecutaNonQuery(strSql, null);
 

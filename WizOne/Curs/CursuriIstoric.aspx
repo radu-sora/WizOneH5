@@ -151,7 +151,7 @@
 
                         <dx:GridViewDataTextColumn FieldName="Certificat" Name="Certificat" Caption="Certificat" ReadOnly="true" Width="100px"  />
                         <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" ReadOnly="true" Width="100px"/>
-                        <dx:GridViewDataCheckColumn FieldName="Nota" Name="Nota" Caption="Nota"  Width="100px"  />                       
+                        <dx:GridViewDataTextColumn FieldName="Nota" Name="Nota" Caption="Nota"  Width="100px"  />                       
 
                         <dx:GridViewDataTextColumn FieldName="Planificare_CostRONcuTVA" Name="Planificare_CostRONcuTVA" Caption="CostRONcuTVA"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="Planificare_Denumire" Name="Planificare_Denumire" Caption="Denumire"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />

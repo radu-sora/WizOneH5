@@ -71,7 +71,7 @@
                         <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" meta:resourcekey="ListBoxColumnResource5" />
                         <dx:ListBoxColumn FieldName="Functia" Caption="Functia" Width="130px" meta:resourcekey="ListBoxColumnResource6" />
                     </Columns>
-                    <ClientSideEvents SelectedIndexChanged="function(s, e) { window.setTimeout(DelayedCallback('COUNTRY'), 1000); }" ButtonClick="OnCustomButtonClick" />
+                    <ClientSideEvents />
                 </dx:ASPxComboBox>
             </td>
             <td>

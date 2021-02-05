@@ -1198,7 +1198,11 @@ namespace WizOne.Absente
                         nrOre = Convert.ToDecimal(txtNrOre.Text);
                 }
 
-                string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
+                //Radu 01.02.2021 - citire idCerere din secventa
+                int idCerere = Dami.NextId("Ptj_Cereri");
+                string sqlIdCerere = idCerere.ToString();
+                if (idCerere == -99)
+                    sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
                 string sqlInloc =  "NULL" ;
                 string sqlTotal = @"(SELECT COUNT(*) FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere""=" + sqlIdCerere + ")";
                 string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";

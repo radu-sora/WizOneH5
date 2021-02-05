@@ -172,10 +172,18 @@
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora inceput"   Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="HH:mm"></PropertiesDateEdit>
+                            <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm">  
+                                <TimeSectionProperties Visible="true" >  
+                                    <TimeEditProperties EditFormatString="HH:mm" DisplayFormatString="HH:mm"></TimeEditProperties>  
+                                </TimeSectionProperties>  
+                            </PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora sfarsit"   Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="HH:mm"></PropertiesDateEdit>
+                            <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm">  
+                                <TimeSectionProperties Visible="true" >  
+                                    <TimeEditProperties EditFormatString="HH:mm" DisplayFormatString="HH:mm"></TimeEditProperties>  
+                                </TimeSectionProperties>  
+                            </PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataTextColumn FieldName="OrePauzaMasa" Name="OrePauzaMasa" Caption="Ore pauza masa"   Width="50px"  />
                         <dx:GridViewDataTextColumn FieldName="TotalOre" Name="TotalOre" Caption="Total ore"   Width="50px"  />

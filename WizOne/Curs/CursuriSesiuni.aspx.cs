@@ -304,10 +304,10 @@ namespace WizOne.Curs
 
                     string idStare = e.GetValue("IdStare").ToString();
                     DataRow[] lst = dt.Select("Id=" + idStare);
-                    if (lst.Count() > 0 && lst[0]["Culoare"] != null)
-                    {
-                        e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(lst[0]["Culoare"].ToString());
-                    }
+                    //if (lst.Count() > 0 && lst[0]["Culoare"] != null)
+                    //{
+                    //    e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(lst[0]["Culoare"].ToString());
+                    //}
                 }
             }
             catch (Exception ex)

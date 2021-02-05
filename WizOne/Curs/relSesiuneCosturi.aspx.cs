@@ -97,7 +97,7 @@ namespace WizOne.Curs
             {
                 DataTable dt = new DataTable();
 
-                string strSql = " SELECT * FROM \"Curs_relSesiuneCosturi\" WHERE \"Id_Curs\" = " + id.Split(',')[0] + " AND \"IdSesiune\" = " + id.Split(',')[1] + " AND \"IdTipCost\" = " + tip;
+                string strSql = " SELECT * FROM \"Curs_relSesiuneCosturi\" WHERE \"IdCurs\" = " + id.Split(',')[0] + " AND \"IdSesiune\" = " + id.Split(',')[1] + " AND \"IdTipCost\" = " + tip;
 
                 if (Session["relSesiuneCosturi_Grid"] == null)
                 {
@@ -202,8 +202,8 @@ namespace WizOne.Curs
 
                 string iduri = General.Nz(Request["qwe"], -99).ToString();
                 int tip = Convert.ToInt32(General.Nz(Request["tip"], -99));
-                e.NewValues["IdCurs"] = Convert.ToInt32(iduri.Split(';')[0]);
-                e.NewValues["IdSesiune"] = Convert.ToInt32(iduri.Split(';')[1]);
+                e.NewValues["IdCurs"] = Convert.ToInt32(iduri.Split(',')[0]);
+                e.NewValues["IdSesiune"] = Convert.ToInt32(iduri.Split(',')[1]);
                 e.NewValues["IdTipCost"] = tip;
                 e.NewValues["NumeTipCost"] = tip == 0 ? "Cost Estimat" : "Cost Efectiv";
 

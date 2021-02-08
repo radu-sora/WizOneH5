@@ -167,6 +167,10 @@ namespace WizOne.Pagini
                                     }
                                 }
                                 break;
+                            case "17":
+                                tbl = "Curs_relSesiuneDocumente";
+                                id = "(SELECT \"IdDocument\" FROM \"Curs_relSesiuneDocumente\" WHERE \"IdCurs\" = " + id + " AND \"IdSesiune\" = -99)";
+                                break;
                         }
 
                         if (tbl.Length > 0)

@@ -65,6 +65,23 @@ namespace WizOne.Curs
                 cmbAng.DataSource = dtAng;
                 cmbAng.DataBind();
 
+                DataTable dtCurs = General.IncarcaDT("SELECT * FROM \"Curs_tblCurs\"", null);
+                cmbCurs.DataSource = dtCurs;
+                cmbCurs.DataBind();
+
+                DataTable dtDep = General.IncarcaDT("SELECT * FROM F006", null);
+                cmbDepartament.DataSource = dtDep;
+                cmbDepartament.DataBind();
+
+                DataTable dtNiv1 = General.IncarcaDT("SELECT * FROM Curs_tblCateg_Niv1", null);
+                cmbCateg_Niv1.DataSource = dtNiv1;
+                cmbCateg_Niv1.DataBind();
+
+
+                DataTable dtNiv2 = General.IncarcaDT("SELECT * FROM Curs_tblCateg_Niv2", null);
+                cmbCateg_Niv2.DataSource = dtNiv2;
+                cmbCateg_Niv2.DataBind();
+
                 grDate.KeyFieldName = "IdAuto";
                 DataTable dt = Session["CursuriIstoric_Grid"] as DataTable;
                 grDate.DataSource = dt;

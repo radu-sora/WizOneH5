@@ -421,7 +421,7 @@
                                     <dx:ASPxButton ID="btnStudiiIst" ClientInstanceName="btnStudiiIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
                                          <ClientSideEvents Click="function(s,e){ GoToIstoricDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
-                                        <Paddings PaddingLeft="10px"/>
+                                        <Paddings PaddingLeft="10px" PaddingRight="10px"/>
                                     </dx:ASPxButton>
                                 </td>
 					        </tr>
@@ -462,7 +462,7 @@
                                     <dx:ASPxButton ID="btnTitluAcadIst" ClientInstanceName="btnTitluAcadIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
                                          <ClientSideEvents Click="function(s,e){ GoToIstoricDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
-                                        <Paddings PaddingLeft="10px"/>
+                                        <Paddings PaddingLeft="10px" PaddingRight="10px"/>
                                     </dx:ASPxButton>
                                 </td>
 					        </tr>
@@ -571,7 +571,41 @@
 					        </tr>                                                                                    					                                                                                                                                     					       
 				        </table>
 			        </fieldset>
-                 </td> 
+                 </td>
+				 <td  valign="top">
+					  <fieldset >
+						  <legend id="lgCampExtra" runat="server" class="legend-font-size"></legend>
+						  <table id="lgCampExtraTable" runat="server" width="60%">
+                            <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblCamp1" runat="server" Width="100"  Text="Camp 1"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtCamp1" Width="150"  runat="server" Text='<%# Eval("F100902") %>' TabIndex="37" AutoPostBack="false" >
+							        </dx:ASPxTextBox>
+						        </td>
+					        </tr>
+                            <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblCamp2" runat="server"  Width="100" Text="Camp 2"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtCamp2" Width="150"  runat="server" Text='<%# Eval("F100903") %>' TabIndex="38" AutoPostBack="false" >
+							        </dx:ASPxTextBox>
+						        </td>
+					        </tr>
+                            <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblCamp3" runat="server" Width="100"  Text="Camp 3"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtCamp3" Width="150"  runat="server" Text='<%# Eval("F100904") %>' TabIndex="39" AutoPostBack="false" >
+							        </dx:ASPxTextBox>
+						        </td>
+					        </tr>
+						  </table>
+					  </fieldset>
+				</td>
                 </tr>      
 			</div>
         </ItemTemplate>

@@ -65,13 +65,12 @@
                             <dx:GridViewCommandColumn Width="90px" VisibleIndex="1" ButtonType="Image" Caption=" " ShowDeleteButton="true" ShowNewButtonInHeader="true" Name="butoaneGrid" >
  
                             </dx:GridViewCommandColumn>
-
-                            <dx:GridViewDataTextColumn FieldName="IdCurs" Name="IdCurs" Caption="IdCurs" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false"/>
-                            <dx:GridViewDataTextColumn FieldName="IdSesiune" Name="IdSesiune" Caption="IdSesiune" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false"/>
                                           
                             <dx:GridViewDataTextColumn FieldName="FisierNume" Name="FisierNume" Caption="Document"  Width="300px"/>                           
 
+                            <dx:GridViewDataTextColumn FieldName="Tabela" Name="Tabela" Caption="Tabela" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                             <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                            <dx:GridViewDataTextColumn FieldName="EsteCerere" Name="EsteCerere" Caption="EsteCerere" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                             <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false"/>
                             <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false"/>

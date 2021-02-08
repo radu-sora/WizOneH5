@@ -398,7 +398,8 @@
                                 <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px;">Roluri</label>
                                 <div style="float:left; padding-right:15px;">
                                     <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
-                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRol'); }"/>
+                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRol'); 
+                                             grDate.PerformCallback('btnFiltru;-99'); }"/>
                                     </dx:ASPxComboBox>
                                 </div>
                                 <label id="lblStare" runat="server" style="display:inline-block; float:left; padding-right:15px;">Stare</label>

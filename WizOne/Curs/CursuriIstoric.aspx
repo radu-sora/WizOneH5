@@ -71,7 +71,7 @@
                         <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" meta:resourcekey="ListBoxColumnResource5" />
                         <dx:ListBoxColumn FieldName="Functia" Caption="Functia" Width="130px" meta:resourcekey="ListBoxColumnResource6" />
                     </Columns>
-                    <ClientSideEvents SelectedIndexChanged="function(s, e) { window.setTimeout(DelayedCallback('COUNTRY'), 1000); }" ButtonClick="OnCustomButtonClick" />
+                    <ClientSideEvents />
                 </dx:ASPxComboBox>
             </td>
             <td>
@@ -151,7 +151,7 @@
 
                         <dx:GridViewDataTextColumn FieldName="Certificat" Name="Certificat" Caption="Certificat" ReadOnly="true" Width="100px"  />
                         <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" ReadOnly="true" Width="100px"/>
-                        <dx:GridViewDataCheckColumn FieldName="Nota" Name="Nota" Caption="Nota"  Width="100px"  />                       
+                        <dx:GridViewDataTextColumn FieldName="Nota" Name="Nota" Caption="Nota"  Width="100px"  />                       
 
                         <dx:GridViewDataTextColumn FieldName="Planificare_CostRONcuTVA" Name="Planificare_CostRONcuTVA" Caption="CostRONcuTVA"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="Planificare_Denumire" Name="Planificare_Denumire" Caption="Denumire"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />

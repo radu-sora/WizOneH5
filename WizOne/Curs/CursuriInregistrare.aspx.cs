@@ -246,6 +246,7 @@ namespace WizOne.Curs
                                 object[] lst = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "IdStare", "IdCurs", "F10003", "IdSesiune" }) as object[];
                                 Aprobare pagApr = new Aprobare();
                                 pagApr.AnuleazaCerereCurs(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(lst[0] ?? "-99"), 1);
+                                Session["CursuriInreg_Grid"] = null;
                                 IncarcaGrid();
                             }
                             break;
@@ -663,7 +664,7 @@ namespace WizOne.Curs
 
                 #region dimensiuneFunctii
                 string strFct = string.Empty;
-                switch (Curs_CompletareCompetente)
+                switch (Curs_CompletareFunctii)
                 {
                     case 0:/* nu trebuie completata dimensiunea*/
                         #region nu trebuie completata dimensiunea
@@ -1024,7 +1025,7 @@ namespace WizOne.Curs
                     metaUploadFile doc = Session["DocUpload_CursuriInreg_Grid"] as metaUploadFile;
                     if (doc != null)
                     {
-                        General.LoadFile(doc.UploadedFileName.ToString(), doc.UploadedFile, "Curs_Inregistrare", Convert.ToInt32(e.NewValues["Id"].ToString()));
+                        General.LoadFile(doc.UploadedFileName.ToString(), doc.UploadedFile, "Curs_Inregistrare", Convert.ToInt32(row["Id"].ToString()));
                         Session["DocUpload_CursuriInreg_Grid"] = null;
                     }
                 }
@@ -1058,7 +1059,7 @@ namespace WizOne.Curs
                 itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
                 itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
 
-                Session["DocUpload_CursInreg_Grid"] = itm;
+                Session["DocUpload_CursuriInreg_Grid"] = itm;
 
                 btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
             }
@@ -1073,7 +1074,7 @@ namespace WizOne.Curs
             try
             {
                 object[] lst = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "IdStare", "IdCurs", "F10003", "IdSesiune" }) as object[];
-                DataTable dtCurs = General.IncarcaDT("SELECT * FROM \"Curs_tblCurs\" WHERE\"Id\" = " + Convert.ToInt32(lst[0] ?? "-99"), null);
+                DataTable dtCurs = General.IncarcaDT("SELECT * FROM \"Curs_tblCurs\" WHERE\"Id\" = " + Convert.ToInt32(lst[2] ?? "-99"), null);
                 if (dtCurs != null && dtCurs.Rows.Count > 0)
                 {
                     txtDenumire.Text = dtCurs.Rows[0]["Denumire"] == DBNull.Value ? "" : dtCurs.Rows[0]["Denumire"].ToString();
@@ -1095,7 +1096,7 @@ namespace WizOne.Curs
             try
             {
                 object[] lst = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "IdStare", "IdCurs", "F10003", "IdSesiune" }) as object[];
-                DataTable dtSes = General.IncarcaDT("SELECT * FROM \"Curs_tblCursSesiune\" WHERE\"IdCurs\" = " + Convert.ToInt32(lst[0] ?? "-99") + " AND \"Id\" = " + Convert.ToInt32(lst[4] ?? "-99"), null);
+                DataTable dtSes = General.IncarcaDT("SELECT * FROM \"Curs_tblCursSesiune\" WHERE\"IdCurs\" = " + Convert.ToInt32(lst[2] ?? "-99") + " AND \"Id\" = " + Convert.ToInt32(lst[4] ?? "-99"), null);
                 if (dtSes != null && dtSes.Rows.Count > 0)
                 {
                     txtDenumireS.Text = dtSes.Rows[0]["Denumire"] == DBNull.Value ? "" : dtSes.Rows[0]["Denumire"].ToString();
@@ -1273,7 +1274,7 @@ namespace WizOne.Curs
                 /*end Leonardm 01.09.2015*/
 
                 //Radu 18.10.2016
-                DataTable dtSuperv = General.IncarcaDT("SELECT \"IdSuper\" FROM \"F100Supervizori\" WHERE \"IdUser\" = " + idUser + " GROUP BY \"IdSuper\" ", null);
+                DataTable dtSuperv = General.IncarcaDT("SELECT \"IdSuper\" FROM \"F100Supervizori\" WHERE \"IdUser\" = " + idUser + " AND F10003 = " + f10003 + " GROUP BY \"IdSuper\" ", null);
                 int idSuperv = 0;
                 if (dtSuperv != null && dtSuperv.Rows.Count > 0)
                     idSuperv = Convert.ToInt32(dtSuperv.Rows[0][0].ToString());
@@ -1345,7 +1346,7 @@ namespace WizOne.Curs
                 {
                     string aprobat = "NULL", dataAprobare = "NULL";
                     int idSuper = -99;
-                    idStare = -99;
+                    //idStare = -99;
                     int lstAstept = 0;
                     if (dtCirc.Rows[0]["Super" + i] != DBNull.Value)
                     {
@@ -1489,7 +1490,7 @@ namespace WizOne.Curs
                 {
                     sql = "INSERT INTO \"tblFisiere\" (\"Tabela\", \"Id\", \"Fisier\", \"FisierNume\", \"FisierExtensie\", USER_NO, TIME)  VALUES ('{0}', {1}, '{2}', '{3}', '{4}', {5}, {6})";
                     sql = string.Format(sql, "Curs_Inregistrare", idUrmat, fis, fisNume, fisExt, idUser, (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
-                    General.ExecutaNonQuery(strSql, null); 
+                    General.ExecutaNonQuery(sql, null); 
                 }
 
                 #endregion

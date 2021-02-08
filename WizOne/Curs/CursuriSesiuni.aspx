@@ -171,12 +171,10 @@
                         <dx:GridViewDataDateColumn FieldName="DataExpirare" Name="DataExpirare" Caption="Data expirare"   Width="100px" >         
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora inceput"   Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="HH:mm"></PropertiesDateEdit>
-                        </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora sfarsit"   Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="HH:mm"></PropertiesDateEdit>
-                        </dx:GridViewDataDateColumn>
+                        <dx:GridViewDataTimeEditColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora inceput"   Width="100px" >  
+                        </dx:GridViewDataTimeEditColumn>
+                        <dx:GridViewDataTimeEditColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora sfarsit"   Width="100px" >   
+                        </dx:GridViewDataTimeEditColumn>
                         <dx:GridViewDataTextColumn FieldName="OrePauzaMasa" Name="OrePauzaMasa" Caption="Ore pauza masa"   Width="50px"  />
                         <dx:GridViewDataTextColumn FieldName="TotalOre" Name="TotalOre" Caption="Total ore"   Width="50px"  />
                         <dx:GridViewDataTextColumn FieldName="NrMin" Name="NrMin" Caption="Nr min"   Width="50px"  />
@@ -245,10 +243,8 @@
                             <Settings FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
 
-                        <dx:GridViewDataTextColumn FieldName="User_TrainerId" Name="User_TrainerId" Caption="User_TrainerId"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="IdCurs" Name="IdCurs" Caption="IdCurs"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="IdSesiune" Name="IdSesiune" Caption="IdSesiune"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME" ReadOnly="true" Width="50px" Visible="false"  ShowInCustomizationForm="false"/>

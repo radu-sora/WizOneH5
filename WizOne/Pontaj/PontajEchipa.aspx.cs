@@ -246,6 +246,8 @@ namespace WizOne.Pontaj
                 }
                 #endregion
 
+                SetColoane();   //Radu 04.02.2021
+
                 if (!IsPostBack)
                 {
                     Session["InformatiaCurenta"] = null;
@@ -254,9 +256,6 @@ namespace WizOne.Pontaj
 
                     IncarcaRoluri();
                     IncarcaAngajati();
-
-                    SetColoane();
-                    SetColoaneCuloare();
 
                     #region Filtru Retinut
 
@@ -276,6 +275,8 @@ namespace WizOne.Pontaj
                                 {
                                 }
                             }
+
+                            SetColoaneCuloare();
 
                             if (General.Nz(lst["Rol"], "").ToString() != "") cmbRol.Value = Convert.ToInt32(lst["Rol"]);
                             if (General.Nz(lst["IdAng"], "").ToString() != "") cmbAng.Value = Convert.ToInt32(lst["IdAng"]);
@@ -298,7 +299,11 @@ namespace WizOne.Pontaj
                                 grDate.FocusedRowIndex = Convert.ToInt32(General.Nz(lst["IndexRow"], "1"));
                             }
                         }
+                        else
+                            SetColoaneCuloare();
                     }
+                    else
+                        SetColoaneCuloare();
 
                     #endregion
 
@@ -1398,7 +1403,7 @@ namespace WizOne.Pontaj
                                         for (int z = 1; z <= nrZec; z++)
                                             format += "#";
 
-                                    if (idZile > 0 && colZile > 0 && lista.ContainsKey(dt.Columns[i].ColumnName))
+                                    if (idZile > 0 && colZile > 0 && listaId.ContainsKey(dt.Columns[i].ColumnName))
                                     {
                                         if (nrZec > 0)
                                             ws2.Cells[4 * row + 3 + rand - 1, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].NumberFormat = format;
@@ -1406,7 +1411,7 @@ namespace WizOne.Pontaj
                                     }
                                     else
                                     {
-                                        if (listaId[dt.Columns[i].ColumnName] > listaId["Zilele 1-31"])
+                                        if (listaId.ContainsKey(dt.Columns[i].ColumnName) && listaId[dt.Columns[i].ColumnName] > listaId["Zilele 1-31"])
                                         {
                                             colZile = 30 + listaId["Zilele 1-31"];
                                             ignorare = true;
@@ -1996,15 +2001,25 @@ namespace WizOne.Pontaj
                     else
                         f_uri += $",COALESCE(X.{col.FieldName},0) AS {col.FieldName}";
                 }
-                   
 
-                strSql = "SELECT X.F10003, A.F10008  " + Dami.Operator() + "  ' '  " + Dami.Operator() + "  A.F10009 AS \"AngajatNume\", Y.\"Norma\", C.\"Denumire\" AS \"DescContract\", L.F06205, FCT.F71804 AS \"Functie\", A.F100901 AS EID, COALESCE(K.\"Culoare\", '#FFFFFFFF') AS \"Culoare\", X.\"IdStare\", K.\"Denumire\" AS \"Stare\", " +
+                if (Dami.ValoareParam("TipCalculDate") == "2")
+                    strInner += $@"LEFT JOIN DamiDataPlecare_Table ddp ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
+                else
+                    strInner += $@"OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
+
+                //Radu 02.02.2021 -  am adaugat DataInceput, DataSfarsit, ZileCONeefectuate si ZLPNeefectuate
+                strSql = "SELECT X.F10003, CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, convert(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate, " + 
+                        " A.F10008  " + Dami.Operator() + "  ' '  " + Dami.Operator() + "  A.F10009 AS \"AngajatNume\", Y.\"Norma\", C.\"Denumire\" AS \"DescContract\", L.F06205, FCT.F71804 AS \"Functie\", A.F100901 AS EID, COALESCE(K.\"Culoare\", '#FFFFFFFF') AS \"Culoare\", X.\"IdStare\", K.\"Denumire\" AS \"Stare\", " +
                         "S2.F00204 AS \"Companie\", S3.F00305 AS \"Subcompanie\", S4.F00406 AS \"Filiala\", H.F00507 AS \"Sectie\",I.F00608 AS \"Dept\", S7.F00709 AS \"Subdept\", S8.F00810 AS \"Birou\", " + campCategorie + " " +
                         "{0} " +
                         f_uri + 
                         " FROM \"Ptj_Cumulat\" X  " +
                         strInner +
                         "{1}" +
+
+                        " left join SituatieZileAbsente zabs on zabs.F10003 = x.F10003 and zabs.An = x.An and zabs.IdAbsenta = (select Id from Ptj_tblAbsente where DenumireScurta = 'CO') " +
+                        " left join SituatieZLP zlp on zlp.F10003 = x.F10003 and zlp.An = x.An " +
+
                         "LEFT JOIN F100 A ON A.F10003=X.F10003  " +
                         "LEFT JOIN (SELECT R.F10003, MIN(R.\"Ziua\") AS \"ZiuaMin\" FROM \"Ptj_Intrari\" R WHERE  " + dtInc + "  <= CAST(\"Ziua\" AS date) AND CAST(\"Ziua\" AS date) <=  " + dtSf + "  GROUP BY R.F10003) Q ON Q.F10003=A.F10003 " +
                         "LEFT JOIN \"Ptj_Intrari\" Y ON A.F10003=Y.F10003 AND Y.\"Ziua\"=Q.\"ZiuaMin\" " +

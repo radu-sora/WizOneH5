@@ -197,6 +197,10 @@ namespace WizOne.Personal
                             if (row[x] != null && row[x].ToString().Length > 0)
                                 ds.Tables[1].Rows[0]["F10016"] = row[x].ToString();
                             break;
+                        case "BIFATRIMITEREEMAIL":
+                            if (row[x] != null && row[x].ToString().Length > 0)
+                                ds.Tables[1].Rows[0]["F10014"] = Convert.ToInt32(row[x].ToString());
+                            break;
                     }
                     x++;
                 }
@@ -318,6 +322,10 @@ namespace WizOne.Personal
                         case "PAROLAPDF":
                             if (row[x] != null && row[x].ToString().Length > 0)
                                 ds.Tables[1].Rows[0]["F10016"] = row[x].ToString();
+                            break;
+                        case "BIFATRIMITEREEMAIL":
+                            if (row[x] != null && row[x].ToString().Length > 0)
+                                ds.Tables[1].Rows[0]["F10014"] = Convert.ToInt32(row[x].ToString());
                             break;
                     }
                     x++;

@@ -271,7 +271,7 @@ namespace WizOne.Curs
                 {
                     sql = "SELECT b.\"Activ\", b.\"Denumire\", a.\"Id_Competenta\" AS \"Id\", b.\"IdGrup\", a.USER_NO, b.TIME FROM "
                     + " \"Curs_relCompetenteFunctii\" a "
-                    + " JOIN \"tblCompetente\" b on a.\"IdCompetenta\" = b.\"Id\" ORDER BY b.\"Denumire\", b.\"Id\" ";
+                    + " JOIN \"tblCompetente\" b on a.\"Id_Competenta\" = b.\"Id\" ORDER BY b.\"Denumire\", b.\"Id\" ";
                 }
                 return General.IncarcaDT(sql, null);
             }
@@ -371,7 +371,7 @@ namespace WizOne.Curs
                         strSql = " SELECT * FROM \"Curs_relCursAnterior\" WHERE \"Id_Curs\" = " + id;
                         break;
                     case 9:
-                        strSql = " SELECT * FROM \"Curs_relSesiuneTrainer\" WHERE \"Id_Curs\" = " + id.Split(',')[0] + " AND \"IdSesiune\" = " + id.Split(',')[1];
+                        strSql = " SELECT * FROM \"Curs_relSesiuneTrainer\" WHERE \"IdCurs\" = " + id.Split(',')[0] + " AND \"IdSesiune\" = " + id.Split(',')[1];
                         break;
                 }
 
@@ -570,8 +570,8 @@ namespace WizOne.Curs
                 if (Convert.ToInt32(Session["relCurs_Tip"].ToString()) == 9)
                 {
                     string iduri = General.Nz(Request["qwe"], -99).ToString();
-                    e.NewValues["IdCurs"] = Convert.ToInt32(iduri.Split(';')[0]);
-                    e.NewValues["IdSesiune"] = Convert.ToInt32(iduri.Split(';')[1]);
+                    e.NewValues["IdCurs"] = Convert.ToInt32(iduri.Split(',')[0]);
+                    e.NewValues["IdSesiune"] = Convert.ToInt32(iduri.Split(',')[1]);
                 }
                 else if (Convert.ToInt32(Session["relCurs_Tip"].ToString()) == 8)
                     e.NewValues["IdCurs"] = Convert.ToInt32(General.Nz(Request["qwe"], -99));

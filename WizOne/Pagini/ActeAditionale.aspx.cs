@@ -827,14 +827,16 @@ namespace WizOne.Pagini
 
 
                                                 int idRegistru = -99;
-                                                int nrStart = 0;
+                                                int nrStart = 1;
                                                 string docNr = "";
                                                 DataTable dtSet = General.IncarcaDT(@"SELECT * FROM ""MP_ActAdSetari""");
                                                 DataRow[] arr = dtSet.Select("IdTip=" + idTipDoc);
                                                 if (arr.Count() > 0)
                                                 {
                                                     idRegistru = Convert.ToInt32(General.Nz(arr[0]["IdRegistru"], -99));
-                                                    nrStart = Convert.ToInt32(General.Nz(arr[0]["NrStart"], 0));
+                                                    nrStart = Convert.ToInt32(General.Nz(arr[0]["NrStart"], 1));
+                                                    //Florin #765
+                                                    nrStart -= 1;
                                                 }
 
                                                 string filtruSup = "";

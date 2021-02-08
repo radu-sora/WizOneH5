@@ -592,7 +592,19 @@ namespace WizOne.Organigrama
         {
             try
             {
+                int idRap = Convert.ToInt32(Dami.ValoareParam("IdRaportFisaPost", "-99"));
+                if (idRap != -99 && Convert.ToInt32(General.Nz(Session["IdAuto"], "-99")) != -99)
+                {
+                    var reportParams = new
+                    {
+                        IdAutoPost = Convert.ToInt32(General.Nz(Session["IdAuto"], "-99"))
+                    };
 
+                    var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(idRap);
+                    var reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(idRap, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
+
+                    this.ClientScript.RegisterClientScriptBlock(this.GetType(), "Org_FisaPost", "window.location.href = \"" + ResolveClientUrl(reportUrl) + "\"", true);
+                }
             }
             catch (Exception ex)
             {

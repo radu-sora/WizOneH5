@@ -16492,7 +16492,7 @@ RETURNs table AS
 return 
 
 	 
-       SELECT top 1 DataPlecare =   DataPlecare from
+SELECT top 1 DataPlecare =   DataPlecare from
 (
 SELECT top 1 1 as rank, F70403 marca,  F70406 - 1 dataplecare,  F70406 Data from f704 join f100 on f70403 = f10003 WHERE F70404=4 AND F70406 <= @dt and F70406 - 1 >= f10022 and F70403 = @f10003 ORDER BY F70406 DESC
 union
@@ -16503,3 +16503,9 @@ union
 select 4 as rank, f10003 marca, F10023 dataplecare, DATEFROMPARTS(1900,1,1) data from f100 where f10003 =@f10003
 ) x
 order by data desc, rank
+
+
+--https://github.com/wizromRD/WizOne/issues/718
+--De discutat functionalitatea butonului Imprima de pe Post #718
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('IdRaportFisaPost', '-99', 'Id Raport pentru fisa post din modulul de Organigrama')
+GO

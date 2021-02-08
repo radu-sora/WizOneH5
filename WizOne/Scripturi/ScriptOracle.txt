@@ -15863,3 +15863,8 @@ ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu8";
 ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu9";
 ALTER TABLE "Org_Posturi" DROP COLUMN "IdBeneficiu10";
 /
+
+--https://github.com/wizromRD/WizOne/issues/718
+--De discutat functionalitatea butonului Imprima de pe Post #718
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('IdRaportFisaPost', '-99', 'Id Raport pentru fisa post din modulul de Organigrama');
+COMMIT;

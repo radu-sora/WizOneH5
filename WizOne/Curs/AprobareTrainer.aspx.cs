@@ -229,7 +229,7 @@ namespace WizOne.Curs
                 }
 
                 string strSql = @"UPDATE ""Curs_tblCursSesiune"" SET ""IdStare""=4 WHERE ""IdCurs""={0} AND ""Id""={1};";
-                strSql += @"UPDATE ""Curs_tblCurs"" SET ""Activ""=0 WHERE (SELECT Count(*) FROM ""Curs_tblCursSesiune"" WHERE ""IdCurs""={0} AND ""IdStare"" NOT IN (4,5)) = 0;";
+                strSql += @"UPDATE ""Curs_tblCurs"" SET ""Activ""=0 WHERE (SELECT Count(*) FROM ""Curs_tblCursSesiune"" WHERE ""IdCurs""={0} AND ""IdStare"" NOT IN (4,5)) = 0 AND Id = {0};";
                 strSql = "BEGIN " + strSql + " END;";
 
                 strSql = string.Format(strSql, Convert.ToInt32(cmbCurs.Value ?? -99), Convert.ToInt32(cmbSesiune.Value ?? -99));

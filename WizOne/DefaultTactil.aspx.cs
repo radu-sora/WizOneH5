@@ -80,7 +80,10 @@ namespace WizOne
                 }
                 else
                 {
-                    string msg = PermisiuneConectare();
+                    //Radu 09.02.2021
+                    string msg = "";
+                    if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) != (int)IdClienti.Clienti.Harting)
+                        msg = PermisiuneConectare();
                     if (msg != "")
                     {
                         MessageBox.Show(msg, MessageBox.icoWarning, "");

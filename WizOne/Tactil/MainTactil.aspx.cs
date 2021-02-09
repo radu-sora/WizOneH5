@@ -26,7 +26,7 @@ namespace WizOne.Tactil
                 spnLuna.MaxValue = 12;
 
                 spnAnul.MinValue = 2015;
-                spnAnul.MaxValue = 2025;
+                spnAnul.MaxValue = DateTime.Now.Year + 5;
 
                 lnlPri.Attributes.Add("onClick", "return false;");
 

@@ -1280,6 +1280,8 @@
   <data name="xrTableCell33.Text" xml:space="preserve">
     <value>Realizat:
 Ore suplimentare:
+Zile supraveghere copil:
+Zile motivate neplatite:
 Ore noapte:
 Concediu odihna:
 Compensare CO:
@@ -1291,6 +1293,7 @@ Prima calitate:
 Prima diferenta:
 Prima merit:
 Val. Salar. compens.:
-Prima bruta:</value>
+Prima bruta:
+Supraveghere copil:</value>
   </data>
 </root>

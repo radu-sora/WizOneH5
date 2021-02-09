@@ -914,7 +914,7 @@ namespace WizOne.Absente
                 if (dtCer.Rows.Count > 0)
                 {
                     string sqlIst = $@"INSERT INTO ""Ptj_CereriIstoric""(IdCerere, IdCircuit, IdSuper, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, USER_NO, TIME, Inlocuitor, IdUserInlocuitor)
-                                SELECT {Convert.ToInt32(dtCer.Rows[0]["Id"])} AS IdCerere, IdCircuit, IdSuper, {idStare}, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, {Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME, Inlocuitor, IdUserInlocuitor FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere"" = {obj[0]}";
+                                SELECT {Convert.ToInt32(dtCer.Rows[0]["Id"])} AS IdCerere, IdCircuit, IdSuper,IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, {Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME, Inlocuitor, IdUserInlocuitor FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere"" = {obj[0]}";
 
                     General.ExecutaNonQuery(sqlIst, null);
 

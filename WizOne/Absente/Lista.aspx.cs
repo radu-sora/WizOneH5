@@ -825,8 +825,12 @@ namespace WizOne.Absente
                     return;
                 }
 
+
                 DateTime dtSplit = Convert.ToDateTime(txtDataDivide.Value);
 
+                //Radu 08.02.2021
+                if (dtSplit == null || dtSplit.Date < new DateTime(1900, 1, 1))
+                    return;
 
                 //Radu 01.02.2021 - citire idCerere din secventa
                 int idCerere = Dami.NextId("Ptj_Cereri");
@@ -910,11 +914,22 @@ namespace WizOne.Absente
                 DataTable dtCer = General.IncarcaDT(sqlGen, null);
 
                 if (dtCer.Rows.Count > 0)
-                {
+                {  
                     string sqlIst = $@"INSERT INTO ""Ptj_CereriIstoric""(IdCerere, IdCircuit, IdSuper, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, USER_NO, TIME, Inlocuitor, IdUserInlocuitor)
-                                SELECT {Convert.ToInt32(dtCer.Rows[0]["Id"])} AS IdCerere, IdCircuit, IdSuper, {idStare}, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, {Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME, Inlocuitor, IdUserInlocuitor FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere"" = {obj[0]}";
-
+                                SELECT {Convert.ToInt32(dtCer.Rows[0]["Id"])} AS IdCerere, IdCircuit, IdSuper, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, {Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME, Inlocuitor, IdUserInlocuitor FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere"" = {obj[0]}";
                     General.ExecutaNonQuery(sqlIst, null);
+
+                    //Radu 08.02.2021
+                    if (chkAnulare.Checked)
+                    {
+                        string sqlIstAnulare = $@"INSERT INTO ""Ptj_CereriIstoric""
+                                                    (""IdCerere"", ""IdCircuit"", ""IdSuper"", ""IdStare"", ""IdUser"", ""Pozitie"", ""Aprobat"", ""DataAprobare"", USER_NO, TIME, ""Inlocuitor"", ""IdUserInlocuitor"", ""Culoare"")
+                                                    SELECT TOP 1 {Convert.ToInt32(dtCer.Rows[0]["Id"])}, ""IdCircuit"", ""IdSuper"", -1, ""IdUser"", 22, 1, {General.CurrentDate()}, {Session["UserId"]}, 
+                                                    {General.CurrentDate()}, 0, null, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = -1) FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere""={obj[0]};";
+                        General.ExecutaNonQuery(sqlIstAnulare, null);
+                    }
+
+                 
                 }
 
                 //Radu 13.02.2020 - daca chkAnulare este bifata, trebuie sterse valorile din Pontaj

@@ -473,7 +473,7 @@ namespace WizOne.Personal
                     dtSf1 = Convert.ToDateTime(dtCtr.Rows[0]["DataSfarsit"].ToString());
                 DateTime dtSf2 = new DateTime(1900, 1, 1);
                 DataTable dtCtr2 = null;
-                if (ds.Tables.Contains("F100Contracte2"))
+                if (ds.Tables.Contains("F100Contracte2") && ds.Tables["F100Contracte2"].Rows.Count > 0)
                 {
                     dtCtr2 = ds.Tables["F100Contracte2"].Select("F10003 = " + ds.Tables[1].Rows[0]["F10003"].ToString()) != null ?
                         ds.Tables["F100Contracte2"].Select("F10003 = " + ds.Tables[1].Rows[0]["F10003"].ToString()).OrderByDescending(x => x["DataSfarsit"]).CopyToDataTable() : null;

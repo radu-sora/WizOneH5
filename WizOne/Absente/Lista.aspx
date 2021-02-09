@@ -140,6 +140,7 @@
                     title: trad_string(limba, ""), text: trad_string(limba, "Lipseste data cu care se divide cererea"),
                     type: "warning"
                 });
+                e.processOnServer = false;
             }
             else {
                 var txtDiv = txtDataDivide.GetDate().getTime();

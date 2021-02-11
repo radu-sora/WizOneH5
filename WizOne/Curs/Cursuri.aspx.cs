@@ -78,6 +78,7 @@ namespace WizOne.Curs
                 dt = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Curs_tblOrganizatori"" ", null);
                 col = (grDate.Columns["OrganizatorId"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = dt;
+                Session["Curs_Organizatori"] = dt;
 
                 dt = General.IncarcaDT(@"SELECT ""IdCategorie"", ""DenumireCategorie"" FROM ""Curs_tblCategoriiNote"" ", null);
                 col = (grDate.Columns["IdCategorieNota"] as GridViewDataComboBoxColumn);
@@ -280,6 +281,13 @@ namespace WizOne.Curs
                     return;
                 }
 
+                if (e.NewValues["OrganizatorId"] != null)
+                {
+                    DataTable dt1 = Session["Curs_Organizatori"] as DataTable;
+                    if (dt1 != null && dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()) != null && dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()).Length > 0)
+                       row["OrganizatorNume"] = dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()).FirstOrDefault()["Denumire"].ToString();
+                }
+
                 foreach (DataColumn col in dt.Columns)
                 {
                     if (!col.AutoIncrement && !col.ReadOnly && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
@@ -318,8 +326,17 @@ namespace WizOne.Curs
                 int x = 0;
 
                 e.NewValues["Id"] = Dami.NextId("Curs_tblCurs");
-                e.NewValues["Activ"] = 1;
-                e.NewValues["Importat"] = 0;
+                if (e.NewValues["Activ"] == null)
+                    e.NewValues["Activ"] = 1;
+                if (e.NewValues["Importat"] == null)
+                    e.NewValues["Importat"] = 0;
+
+                if (e.NewValues["OrganizatorId"] != null)
+                {
+                    DataTable dt1 = Session["Curs_Organizatori"] as DataTable;
+                    if (dt1 != null && dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()) != null && dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()).Length > 0)
+                        e.NewValues["OrganizatorNume"] = dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()).FirstOrDefault()["Denumire"].ToString();
+                }
 
                 if (Constante.tipBD == 1)
                 {
@@ -350,7 +367,13 @@ namespace WizOne.Curs
                     if (!col.AutoIncrement)
                     {
                         switch (col.ColumnName.ToUpper())
-                        {  
+                        {
+                            case "USER_NO":
+                                row[x] = Session["UserId"];
+                                break;
+                            case "TIME":
+                                row[x] = DateTime.Now;
+                                break;
                             default:
                                 row[x] = e.NewValues[col.ColumnName];
                                 break;

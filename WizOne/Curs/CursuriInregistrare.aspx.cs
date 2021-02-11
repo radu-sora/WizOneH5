@@ -1339,14 +1339,14 @@ namespace WizOne.Curs
                 int poz = 0;
                 int idUserPrece = -99;
                 int idUserCalc = -99;
-
+                int idStareGen = -99;
                 List<int> lst = new List<int>();
 
                 for (int i = 1; i <= 20; i++)
                 {
                     string aprobat = "NULL", dataAprobare = "NULL";
                     int idSuper = -99;
-                    //idStare = -99;
+                    idStare = -99;
                     int lstAstept = 0;
                     if (dtCirc.Rows[0]["Super" + i] != DBNull.Value)
                     {
@@ -1413,8 +1413,8 @@ namespace WizOne.Curs
                                 if (idUserCalc == idUser)
                                 {
                                     pozUser = poz;
-                                    if (poz == 1) idStare = 1;
-                                    if (poz == total && total == 1) idStare = 3;    //Radu 18.10.2016
+                                    if (poz == 1) { idStare = 1; idStareGen = 1; }
+                                    if (poz == total && total == 1) { idStare = 3; idStareGen = 3; }   //Radu 18.10.2016
 
                                     dataAprobare = (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
                                     aprobat = "1";
@@ -1429,8 +1429,8 @@ namespace WizOne.Curs
                                 else if (poz == total)
                                 {
                                     //idStare = 3;
-                                    if (poz == 1) idStare = 1;                      //Radu 18.10.2016
-                                    if (poz == total && total == 1) idStare = 3;    //Radu 18.10.2016
+                                    if (poz == 1) { idStare = 1; idStareGen = 1; }                    //Radu 18.10.2016
+                                    if (poz == total && total == 1) { idStare = 3; idStareGen = 3; }   //Radu 18.10.2016
 
                                     if (idStare == 3)
                                     {
@@ -1474,8 +1474,8 @@ namespace WizOne.Curs
 
                string strSql = "INSERT INTO \"Curs_Inregistrare\"(\"Id\", F10003, \"IdCurs\", \"IdSesiune\", \"IdCircuit\", \"Observatii\", \"UserIntrod\", \"TotalSuperCircuit\", \"Pozitie\", \"IdStare\", \"Culoare\", \"CostRONcuTVA\", \"Denumire\", \"Organizator\", \"eListaAsteptare\", USER_NO, TIME) "
                         + " VALUES ({0}, {1}, {2}, {3}, {4}, '{5}', {6}, {7}, {8}, {9}, {10}, {11}, '{12}', '{13}', {14}, {15}, {16})";
-                strSql = string.Format(strSql, idUrmat, f10003, idCurs, idSesiune, idCircuit, strObs, idUser, total, pozUser, idStare,
-                    ("(SELECT CASE WHEN \"Culoare\" IS NULL THEN '#FFFFFFFF' ELSE \"Culoare\" END FROM \"Curs_tblStari\" WHERE \"Id\" = " + idStare + ")"),
+                strSql = string.Format(strSql, idUrmat, f10003, idCurs, idSesiune, idCircuit, strObs, idUser, total, pozUser, idStareGen,
+                    ("(SELECT CASE WHEN \"Culoare\" IS NULL THEN '#FFFFFFFF' ELSE \"Culoare\" END FROM \"Curs_tblStari\" WHERE \"Id\" = " + idStareGen + ")"),
                     CostRON == null ? "NULL" : CostRON.ToString(), Den, Org, chkListaAsteptare, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
 
                 General.ExecutaNonQuery(strSql, null);

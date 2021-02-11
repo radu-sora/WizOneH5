@@ -52,7 +52,7 @@
                         <SettingsSearchPanel Visible="False" />
                          <ClientSideEvents  ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                         <Columns>
-                            <dx:GridViewCommandColumn Width="90px" VisibleIndex="1" ButtonType="Image" ShowEditButton="true" ShowDeleteButton="true" ShowNewButtonInHeader="true" Caption=" " Name="butoaneGrid" /> 
+                            <dx:GridViewCommandColumn Width="90px" VisibleIndex="0" ButtonType="Image" ShowEditButton="true" ShowDeleteButton="true" ShowNewButtonInHeader="true" Caption=" " Name="butoaneGrid" /> 
                             <dx:GridViewDataTextColumn FieldName="Id_Curs" Name="Id_Curs" Caption="IdCurs" ReadOnly="true" Width="50px" Visible="false"/>
                                
                             

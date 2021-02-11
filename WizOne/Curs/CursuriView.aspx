@@ -13,6 +13,9 @@
                 case "btnDoc":
                     grDate.GetRowValues(e.visibleIndex, 'IdCurs;IdSesiune', GoToDoc);
                     break;
+                case "btnArata":
+                    grDate.GetRowValues(e.visibleIndex, 'IdCurs', GoToArataMode);
+                    break;
             }
         } 
 
@@ -32,6 +35,10 @@
                 });
                 s.cpAlertMessage = null;
             }
+        }
+
+        function GoToArataMode(Value) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=17&id=' + Value, '_blank ');
         }
 
 
@@ -96,6 +103,13 @@
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                     <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                     <Columns>      
+                        <dx:GridViewCommandColumn Width="125px" VisibleIndex="0" ButtonType="Image"  Caption=" " Name="butoaneGrid" >  
+                            <CustomButtons>                     
+                                <dx:GridViewCommandColumnCustomButton ID="btnArata">
+                                    <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/arata.png" />
+                                </dx:GridViewCommandColumnCustomButton>                                
+                            </CustomButtons>                                               
+                        </dx:GridViewCommandColumn>
                         <dx:GridViewCommandColumn Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Documente">
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnDoc" Visibility="AllDataRows">

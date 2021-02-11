@@ -356,7 +356,7 @@ namespace WizOne.Curs
                 else
                 {
                     //daca nu selectez nici un angajat, atunci arat toate cursurile angajatilor la care eu sunt manager + cursurile mele + toate cursurile daca eu sunt trainer
-                    strFiltru += "AND (X.F10003 = " + marcaMea + " OR X.F10003 IN (SELECT F10003 FROM \"F100Supervizori\" WHERE \"IdUser\"=" + idUser + " AND \"IdSuper\"=1) OR (SELECT COUNT(*) FROM \"Curs_tblCursSesiune\" WHERE \"TrainerId\"=" + idUser + ")>0)";
+                    strFiltru += "AND (X.F10003 = " + marcaMea + " OR X.F10003 IN (SELECT F10003 FROM \"F100Supervizori\" WHERE \"IdUser\"=" + idUser + " AND \"IdSuper\"=1) OR (SELECT COUNT(*) FROM Curs_tblCursSesiune a LEFT JOIN Curs_tblTraineri b on  a.TrainerId=b.id where b.iduser =" + idUser + ")>0)";
                 }
                 if (idCurs != -99) strFiltru += " AND X.\"IdCurs\" = " + idCurs;
                 if (idSesiune != -99) strFiltru += " AND X.\"IdSesiune\" = " + idSesiune;

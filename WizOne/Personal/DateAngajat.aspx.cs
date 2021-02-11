@@ -473,7 +473,7 @@ namespace WizOne.Personal
                     dtSf1 = Convert.ToDateTime(dtCtr.Rows[0]["DataSfarsit"].ToString());
                 DateTime dtSf2 = new DateTime(1900, 1, 1);
                 DataTable dtCtr2 = null;
-                if (ds.Tables.Contains("F100Contracte2"))
+                if (ds.Tables.Contains("F100Contracte2") && ds.Tables["F100Contracte2"].Rows.Count > 0)
                 {
                     dtCtr2 = ds.Tables["F100Contracte2"].Select("F10003 = " + ds.Tables[1].Rows[0]["F10003"].ToString()) != null ?
                         ds.Tables["F100Contracte2"].Select("F10003 = " + ds.Tables[1].Rows[0]["F10003"].ToString()).OrderByDescending(x => x["DataSfarsit"]).CopyToDataTable() : null;
@@ -506,7 +506,6 @@ namespace WizOne.Personal
                         + (ds.Tables[1].Rows[0]["F1009742"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F1009742"].ToString()) + " AS F1009742, "
                         + (ds.Tables[1].Rows[0]["F100931"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100931"].ToString()) + " AS F100931, "
                         + (ds.Tables[2].Rows[0]["F1001046"] == DBNull.Value ? "NULL" : ds.Tables[2].Rows[0]["F1001046"].ToString()) + " AS F1001046, "
-                        + (ds.Tables[1].Rows[0]["F10071"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10071"].ToString()) + " AS F10071, "
                         + (ds.Tables[1].Rows[0]["F10072"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10072"].ToString()) + " AS F10072, "
                         + (ds.Tables[1].Rows[0]["F100902"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100902"].ToString() + "'") + " AS F100902, "
                         + (ds.Tables[1].Rows[0]["F100904"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100904"].ToString() + "'") + " AS F100904, "

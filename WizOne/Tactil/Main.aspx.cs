@@ -120,7 +120,16 @@ namespace WizOne.Tactil
                 switch (nume.Split('_')[0])     //Radu 08.03.2019
                 {
                     case "fluturas":
-                        Response.Redirect("~/Tactil/MainTactil.aspx", false);
+                        string msg = "";
+                        if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == (int)IdClienti.Clienti.Harting)
+                        {
+                            DefaultTactil pag = new DefaultTactil();
+                            msg = pag.PermisiuneConectare();
+                        }
+                        if (msg != "")                        
+                            MessageBox.Show(msg, MessageBox.icoWarning, "");
+                        else
+                            Response.Redirect("~/Tactil/MainTactil.aspx", false);
                         break;
                     case "adeverinte":
                         Response.Redirect("~/Tactil/Adeverinte.aspx", false);

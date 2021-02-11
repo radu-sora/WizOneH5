@@ -168,12 +168,12 @@ namespace WizOne.Curs
                         if (!IsPostBack)
                             grDate.Columns.Add(c);
 
-                        c = new GridViewDataComboBoxColumn();
+                        c = new GridViewDataTextColumn(); 
                         c.Name = "IdCurs";
                         c.FieldName = "IdCurs";
                         c.Caption = Dami.TraduCuvant("Curs");
-                        c.PropertiesComboBox.TextField = "Denumire";
-                        c.PropertiesComboBox.ValueField = "Id";
+                        c.Visible = false;
+                        c.ShowInCustomizationForm = false;
                         if (!IsPostBack)
                             grDate.Columns.Add(c);
 
@@ -181,9 +181,13 @@ namespace WizOne.Curs
                         GridViewDataComboBoxColumn colCurs = (grDate.Columns["IdCursAnterior"] as GridViewDataComboBoxColumn);
                         colCurs.PropertiesComboBox.DataSource = dtCurs;
 
-                        dtCurs = General.IncarcaDT("SELECT  * FROM \"Curs_tblCurs\" ");
-                        colCurs = (grDate.Columns["IdCurs"] as GridViewDataComboBoxColumn);
-                        colCurs.PropertiesComboBox.DataSource = dtCurs;
+                        //dtCurs = General.IncarcaDT("SELECT  * FROM \"Curs_tblCurs\" ");
+                        //colCurs = (grDate.Columns["IdCurs"] as GridViewDataComboBoxColumn);
+                        //colCurs.PropertiesComboBox.DataSource = dtCurs;
+
+                        GridViewDataTextColumn colCursV = (grDate.Columns["Id_Curs"] as GridViewDataTextColumn);
+                        if (!IsPostBack)
+                            grDate.Columns.Remove(colCursV);
                         break;
                     case 9:
                         lblTitlu.Text = Dami.TraduCuvant("Traineri");
@@ -217,6 +221,10 @@ namespace WizOne.Curs
                         DataTable dtTrainer = General.IncarcaDT("SELECT  * FROM \"Curs_tblTraineri\" ");
                         GridViewDataComboBoxColumn colTrainer = (grDate.Columns["IdTrainer"] as GridViewDataComboBoxColumn);
                         colTrainer.PropertiesComboBox.DataSource = dtTrainer;
+
+                        colCursV = (grDate.Columns["Id_Curs"] as GridViewDataTextColumn);
+                        if (!IsPostBack)
+                            grDate.Columns.Remove(colCursV);
                         break;
                 }
                 
@@ -368,7 +376,7 @@ namespace WizOne.Curs
                         strSql = " SELECT * FROM \"Curs_relCursDepart\" WHERE \"Id_Curs\" = " + id;
                         break;
                     case 8:
-                        strSql = " SELECT * FROM \"Curs_relCursAnterior\" WHERE \"Id_Curs\" = " + id;
+                        strSql = " SELECT * FROM \"Curs_relCursAnterior\" WHERE \"IdCurs\" = " + id;
                         break;
                     case 9:
                         strSql = " SELECT * FROM \"Curs_relSesiuneTrainer\" WHERE \"IdCurs\" = " + id.Split(',')[0] + " AND \"IdSesiune\" = " + id.Split(',')[1];

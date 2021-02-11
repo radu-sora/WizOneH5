@@ -53,8 +53,7 @@
                         <SettingsSearchPanel Visible="False" />
                          <ClientSideEvents  ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                         <Columns>
-                            <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" />
-                            <dx:GridViewCommandColumn Width="90px" VisibleIndex="1" ButtonType="Image" ShowEditButton="true" ShowDeleteButton="true" ShowNewButtonInHeader="true" Caption=" " Name="butoaneGrid" /> 
+                            <dx:GridViewCommandColumn Width="90px" VisibleIndex="0" ButtonType="Image" ShowEditButton="true" ShowDeleteButton="true" ShowNewButtonInHeader="true" Caption=" " Name="butoaneGrid" /> 
                             <dx:GridViewDataTextColumn FieldName="IdCurs" Name="IdCurs" Caption="IdCurs" ReadOnly="true" Width="50px" Visible="false"/>
                             <dx:GridViewDataTextColumn FieldName="IdSesiune" Name="IdSesiune" Caption="IdSesiune" ReadOnly="true" Width="50px" Visible="false"/>
                             <dx:GridViewDataComboBoxColumn FieldName="IdCost" Name="IdCost" Caption="Cost"  Width="150px">

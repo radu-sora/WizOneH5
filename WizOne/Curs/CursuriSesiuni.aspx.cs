@@ -118,6 +118,7 @@ namespace WizOne.Curs
                 dt = General.IncarcaDT(@"SELECT * FROM ""Curs_tblTematici"" ", null);
                 col = (grDate.Columns["TematicaId"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = dt;
+                Session["CursSes_Tematici"] = dt;
 
                 dt = General.IncarcaDT(@"SELECT * FROM ""Curs_tblCateg_Niv1"" ", null);
                 col = (grDate.Columns["InternExtern"] as GridViewDataComboBoxColumn);
@@ -126,10 +127,12 @@ namespace WizOne.Curs
                 dt = General.IncarcaDT(@"SELECT * FROM ""Curs_tblOrganizatori"" ", null);
                 col = (grDate.Columns["OrganizatorId"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = dt;
+                Session["CursSes_Organizatori"] = dt;
 
                 dt = General.IncarcaDT(@"SELECT * FROM ""Curs_tblTraineri"" ", null);
                 col = (grDate.Columns["TrainerId"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = dt;
+                Session["CursSes_Traineri"] = dt;
 
                 dt = General.IncarcaDT(@"SELECT * FROM ""Curs_tblLocatii"" ", null);
                 col = (grDate.Columns["Locatie"] as GridViewDataComboBoxColumn);
@@ -143,7 +146,8 @@ namespace WizOne.Curs
                 col = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = dt;
 
-                dt = General.IncarcaDT(@"SELECT * FROM ""Eval_Quiz"" WHERE ""TipQuiz"" = 4 ", null);
+                //dt = General.IncarcaDT(@"SELECT * FROM ""Eval_Quiz"" WHERE ""TipQuiz"" = 4 ", null);
+                dt = General.IncarcaDT(@"SELECT * FROM ""Eval_Quiz"" WHERE ""CategorieQuiz"" = 1 ", null);
                 col = (grDate.Columns["IdQuiz"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = dt;
 
@@ -156,7 +160,7 @@ namespace WizOne.Curs
                 grDate.Columns["colNomenclatorTrainer"].Visible = (hasNomenclatorTraineri == 1) ? true : false;
                 grDate.Columns["TrainerId"].Visible = (hasNomenclatorTraineri == 0) ? true : false;
                 grDate.Columns["OrganizatorId"].Visible = (afisareOrganizatorCursuri == 1) ? true : false;
-                grDate.Columns["OrganizatorNume"].Visible = (afisareOrganizatorCursuri == 1) ? true : false;
+                //grDate.Columns["OrganizatorNume"].Visible = (afisareOrganizatorCursuri == 1) ? true : false;
 
                 if (!IsPostBack)
                     Session["CursuriSesiuni_Grid"] = null;
@@ -451,6 +455,25 @@ namespace WizOne.Curs
                     return;
                 }
 
+                if (e.NewValues["TematicaId"] != null)
+                {
+                    DataTable dt1 = Session["CursSes_Tematici"] as DataTable;
+                    if (dt1 != null && dt1.Select("Id = " + e.NewValues["TematicaId"].ToString()) != null && dt1.Select("Id = " + e.NewValues["TematicaId"].ToString()).Length > 0)
+                        row["TematicaNume"] = dt1.Select("Id = " + e.NewValues["TematicaId"].ToString()).FirstOrDefault()["Denumire"].ToString();
+                }
+                if (e.NewValues["OrganizatorId"] != null)
+                {
+                    DataTable dt1 = Session["CursSes_Organizatori"] as DataTable;
+                    if (dt1 != null && dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()) != null && dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()).Length > 0)
+                        row["OrganizatorNume"] = dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()).FirstOrDefault()["Denumire"].ToString();
+                }
+                if (e.NewValues["TrainerId"] != null)
+                {
+                    DataTable dt1 = Session["CursSes_Traineri"] as DataTable;
+                    if (dt1 != null && dt1.Select("IdUser = " + e.NewValues["TrainerId"].ToString()) != null && dt1.Select("IdUser = " + e.NewValues["TrainerId"].ToString()).Length > 0)
+                        row["TrainerNume"] = dt1.Select("IdUser = " + e.NewValues["TrainerId"].ToString()).FirstOrDefault()["Denumire"].ToString();
+                }
+
                 foreach (DataColumn col in dt.Columns)
                 {
                     if (!col.AutoIncrement && !col.ReadOnly && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
@@ -478,8 +501,7 @@ namespace WizOne.Curs
                         if (col.ColumnName.ToUpper() == "ORAINCEPUT" && e.NewValues["OraInceput"] != null)
                             row[col.ColumnName] = new DateTime(2100, 1, 1, Convert.ToDateTime(e.NewValues["OraInceput"]).Hour, Convert.ToDateTime(e.NewValues["OraInceput"]).Minute, 0);
                         if (col.ColumnName.ToUpper() == "ORASFARSIT" && e.NewValues["OraSfarsit"] != null)                    
-                            row[col.ColumnName] = new DateTime(2100, 1, 1, Convert.ToDateTime(e.NewValues["OraSfarsit"]).Hour, Convert.ToDateTime(e.NewValues["OraSfarsit"]).Minute, 0);
-                        break;
+                            row[col.ColumnName] = new DateTime(2100, 1, 1, Convert.ToDateTime(e.NewValues["OraSfarsit"]).Hour, Convert.ToDateTime(e.NewValues["OraSfarsit"]).Minute, 0);                  
                     }
 
                 }
@@ -491,6 +513,7 @@ namespace WizOne.Curs
                 grDate.CancelEdit();
                 Session["CursuriSesiuni_Grid"] = dt;
                 grDate.DataSource = dt;
+                grDate.DataBind();
             }
             catch (Exception ex)
             {
@@ -536,18 +559,40 @@ namespace WizOne.Curs
 
                 e.NewValues["Id"] = idSesMax;
                 e.NewValues["IdCurs"] = (int)cmbCurs.Value;
-                e.NewValues["IdStare"] = 1;
+                if (e.NewValues["IdStare"] == null)
+                    e.NewValues["IdStare"] = 1;
 
- 
 
-                e.NewValues["InternExtern"] = categ1;
-                e.NewValues["CodBuget"] = categ3 == null ? null : categ3.ToString();
+                if (e.NewValues["InternExtern"] == null)
+                    e.NewValues["InternExtern"] = categ1;
+                if (e.NewValues["CodBuget"] == null)
+                    e.NewValues["CodBuget"] = categ3 == null ? null : categ3.ToString();
                 //e.NewValues["Categ_Niv1Id] = categ1;
                 //e.NewValues["Categ_Niv2Id"] = categ2_id;
 
-                e.NewValues["DataInceputAprobare"] = new DateTime(1900, 1, 1);
-                e.NewValues["DataSfarsitAprobare"] = new DateTime(2100, 1, 1);
-
+                if (e.NewValues["DataInceputAprobare"] == null)
+                    e.NewValues["DataInceputAprobare"] = new DateTime(1900, 1, 1);
+                if (e.NewValues["DataSfarsitAprobare"] == null)
+                    e.NewValues["DataSfarsitAprobare"] = new DateTime(2100, 1, 1);
+                
+                if (e.NewValues["TematicaId"] != null)
+                {
+                    DataTable dt1 = Session["CursSes_Tematici"] as DataTable;
+                    if (dt1 != null && dt1.Select("Id = " + e.NewValues["TematicaId"].ToString()) != null && dt1.Select("Id = " + e.NewValues["TematicaId"].ToString()).Length > 0)
+                        e.NewValues["TematicaNume"] = dt1.Select("Id = " + e.NewValues["TematicaId"].ToString()).FirstOrDefault()["Denumire"].ToString();
+                }
+                if (e.NewValues["OrganizatorId"] != null)
+                {
+                    DataTable dt1 = Session["CursSes_Organizatori"] as DataTable;
+                    if (dt1 != null && dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()) != null && dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()).Length > 0)
+                        e.NewValues["OrganizatorNume"] = dt1.Select("Id = " + e.NewValues["OrganizatorId"].ToString()).FirstOrDefault()["Denumire"].ToString();
+                }
+                if (e.NewValues["TrainerId"] != null)
+                {
+                    DataTable dt1 = Session["CursSes_Traineri"] as DataTable;
+                    if (dt1 != null && dt1.Select("IdUser = " + e.NewValues["TrainerId"].ToString()) != null && dt1.Select("IdUser = " + e.NewValues["TrainerId"].ToString()).Length > 0)
+                        e.NewValues["TrainerNume"] = dt1.Select("IdUser = " + e.NewValues["TrainerId"].ToString()).FirstOrDefault()["Denumire"].ToString();
+                }
 
                 if (Constante.tipBD == 1)
                 {
@@ -602,6 +647,12 @@ namespace WizOne.Curs
                                 if (e.NewValues["OraSfarsit"] != null)
                                     row[x] = new DateTime(2100, 1, 1, Convert.ToDateTime(e.NewValues["OraSfarsit"]).Hour, Convert.ToDateTime(e.NewValues["OraSfarsit"]).Minute, 0);
                                 break;
+                            case "USER_NO":
+                                row[x] = Session["UserId"];
+                                break;
+                            case "TIME":
+                                row[x] = DateTime.Now;
+                                break;
                             default:
                                 row[x] = e.NewValues[col.ColumnName];
                                 break;
@@ -617,6 +668,7 @@ namespace WizOne.Curs
                 grDate.DataSource = dt;
                 grDate.KeyFieldName = "IdAuto";
                 Session["CursuriSesiuni_Grid"] = dt;
+                grDate.DataBind();
             }
             catch (Exception ex)
             {

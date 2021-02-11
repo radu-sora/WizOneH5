@@ -61,8 +61,7 @@
                         <SettingsSearchPanel Visible="False" />
                          <ClientSideEvents  ContextMenu="ctx"  EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                         <Columns>
-                            <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" />
-                            <dx:GridViewCommandColumn Width="90px" VisibleIndex="1" ButtonType="Image" Caption=" " ShowDeleteButton="true" ShowNewButtonInHeader="true" Name="butoaneGrid" >
+                            <dx:GridViewCommandColumn Width="90px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowDeleteButton="true" ShowNewButtonInHeader="true" Name="butoaneGrid" >
  
                             </dx:GridViewCommandColumn>
                                           

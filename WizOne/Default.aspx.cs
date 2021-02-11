@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 using WizOne.Module;
 using WizOne.Module.Saml;
 
@@ -168,7 +169,13 @@ namespace WizOne
                 //Radu 02.02.2021
                 string txtLogare = Dami.ValoareParam("TextLogare", "");
                 if (txtLogare.Length > 0)
+                {
                     lblTxt.Text = txtLogare;
+                    //lblTxt.Border.BorderStyle = System.Web.UI.WebControls.BorderStyle.Solid;
+                    //lblTxt.Border.BorderWidth = Unit.Pixel(1); 
+                    if (Dami.ValoareParam("Captcha") == "1")
+                        divText.Attributes["class"] = "innerlogarecaptcha";
+                }
             }
             catch (Exception ex)
             {

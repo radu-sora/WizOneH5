@@ -430,7 +430,7 @@ namespace WizOne.Curs
                 }
 
 
-                if (tipActiune == 1 || tipActiune == 2)
+                //if (tipActiune == 1 || tipActiune == 2)
                     msg = msg + AprobaCurs(Convert.ToInt32(Session["UserId"].ToString()), ids, nrSel, tipActiune, General.ListaCuloareValoare()[5], false);
 
                 if (tipMsg == 0)
@@ -529,12 +529,12 @@ namespace WizOne.Curs
 
 
                             sql = "UPDATE \"Curs_Inregistrare\" SET \"Pozitie\" = " + dtIst.Rows[0]["Pozitie"].ToString() + ", \"IdStare\" = " + idStare.ToString() + ", \"Culoare\" = '" + culoare 
-                                + "' WHERE \"Id\" = " + id.ToString();
+                                + "', eListaAsteptare = " + eListaAsteptare_Curs + " WHERE \"Id\" = " + id.ToString();
                             General.IncarcaDT(sql, null);
      
                             sql = "UPDATE \"Curs_CereriIstoric\" SET \"DataAprobare\" = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", \"Aprobat\" = 1, \"IdStare\" = " + idStare.ToString() + ", \"Culoare\" = '" + culoare
-                            + "', USER_NO = " + idUser.ToString() + ", TIME = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate")                           
-                            + "WHERE \"IdCerere\" = " + id.ToString()
+                            + "', USER_NO = " + idUser.ToString() + ", TIME = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", eListaAsteptare =  " + eListaAsteptare_Ist
+                            + " WHERE \"IdCerere\" = " + id.ToString()
                             + " AND \"IdUser\" = " + idUser.ToString()
                              + " AND \"Pozitie\"=" + dtIst.Rows[0]["Pozitie"].ToString();                            
 

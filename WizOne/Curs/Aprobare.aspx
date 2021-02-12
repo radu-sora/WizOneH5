@@ -270,9 +270,10 @@
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                             <Settings FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
+                        <dx:GridViewDataTextColumn FieldName="eListaAsteptare" Name="eListaAsteptare" Caption="eListaAsteptare" ReadOnly="true" Width="110px"  />
+
                         <dx:GridViewDataTextColumn FieldName="IdCircuit" Name="IdCircuit" Caption="IdCircuit" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="IdSesiune" Name="IdSesiune" Caption="IdSesiune" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="eListaAsteptare" Name="eListaAsteptare" Caption="eListaAsteptare" ReadOnly="true" Width="50px" Visible="false"  ShowInCustomizationForm="false"/>
+                        <dx:GridViewDataTextColumn FieldName="IdSesiune" Name="IdSesiune" Caption="IdSesiune" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />                        
                         <dx:GridViewDataTextColumn FieldName="UserIntrod" Name="UserIntrod" Caption="UserIntrod" ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false"/>
                         <dx:GridViewDataTextColumn FieldName="Culoare" Name="Culoare" Caption="Culoare" ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false"/>
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />

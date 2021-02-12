@@ -177,25 +177,28 @@ namespace WizOne.Pontaj
                 string sqlPrg = "";
                 string sqlCalc = "";
 
+
+                //Radu 12.02.2021 - s-a revenit la functia DamiDataPlecare  
+                //INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403 ) B ON A.F10003=B.F10003 AND
+
                 if (Constante.tipBD == 1)
                 {
                     //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
                     if (chkPerAng == true)
-                    {
+                    { 
                         string strDel = $@"
                             BEGIN
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
                                 SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare date pontaj', {Session["UserId"]}, {General.CurrentDate()}
                                 FROM Ptj_Intrari A
-                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                ) B 
-                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01';
+                                OUTER APPLY dbo.DamiDataPlecare(A.F10003, A.Ziua) ddp
+                                
+                                WHERE A.Ziua> ddp.DataPlecare AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,ddp.DataPlecare) <> '2100-01-01';
 
                                 DELETE A
                                 FROM Ptj_Intrari A
-                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                ) B 
-                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01';
+                                OUTER APPLY dbo.DamiDataPlecare(A.F10003, A.Ziua) ddp
+                                WHERE A.Ziua> ddp.DataPlecare AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,ddp.DataPlecare) <> '2100-01-01';
                             END;";
 
                         ras = General.ExecutaNonQuery(strDel, null);

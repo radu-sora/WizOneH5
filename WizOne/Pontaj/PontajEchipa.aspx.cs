@@ -360,6 +360,7 @@ namespace WizOne.Pontaj
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.DataBind();
                 }
+               
             }
             catch (Exception ex)
             {
@@ -2453,7 +2454,11 @@ namespace WizOne.Pontaj
             {
                 IncarcaAngajati();
                 if (e.Parameter == "txtAnLuna")
+                {
                     SetColoaneCuloare();
+                    //Radu 12.02.2021 - daca se schimba luna, trebuie resetata sursa de date a grid-ului, deoarece noua luna poate avea zile in plus
+                    Session["InformatiaCurenta"] = null;
+                }
             }
             catch (Exception ex)
             {

@@ -820,7 +820,6 @@
 
         // Main functions
         function onDashboardViewerTitleToolbarUpdated(e) {
-            //debugger;
             e.Options.actionItems.push({
                 type: 'button',
                 icon: 'exitIcon',

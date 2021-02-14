@@ -70,7 +70,7 @@ namespace Wizrom.Reports.Pages
         private XRRichText _richText
         {
             get { return _report.Bands.OfType<DetailBand>().FirstOrDefault()?.Controls.OfType<XRRichText>().FirstOrDefault(); }
-        }
+        }        
 
         // For client side customization
         protected string ReportName
@@ -446,7 +446,7 @@ namespace Wizrom.Reports.Pages
         protected void Page_Load(object sender, EventArgs e)
         {
             try
-            {                               
+            {
                 if (!IsPostBack)
                 {
                     // Load data
@@ -570,19 +570,21 @@ namespace Wizrom.Reports.Pages
                     else // Dashboard template
                     {
                         // Set internal params
+                        // They are set into EntityDashboardStorage.
+
+                        // For client side customization
                         // ...
 
                         // Init controls
                         ReportTemplate.Visible = false;
 
                         // Customize dashboard viewer UI
-                        // ...
-                        // TODO: Add exit option to dashboard viewer
+                        // ...                        
 
-                        // Open the dashboard
-                        DashboardViewer.InitialDashboardId = _reportId.ToString();
+                        // Open the dashboard                        
+                        DashboardViewer.InitialDashboardId = Request.QueryString["id"];
                     }
-                }
+                }                
                 else if (WebDocumentViewerCallbackPanel.IsCallback)
                 {
                     if (_report.Name == string.Empty)
@@ -760,7 +762,7 @@ namespace Wizrom.Reports.Pages
                                 // Log error
                                 // For now, mark as unprinted only                            
                             }
-                        }                        
+                        }
 
                         if (commandName != "delete")
                         {

@@ -586,7 +586,8 @@ namespace Wizrom.Reports.Pages
                     {
                         var dashboardXDoc = null as XDocument;
 
-                        // Update or create default dashboard layout                        
+                        // Update or create default dashboard layout
+                        // TODO: Use DevExpress.DashboardCommon.Dashboard object for layout configuration.
                         if (report.LayoutData != null)
                         {
                             dashboardXDoc = XDocument.Parse(Encoding.UTF8.GetString(report.LayoutData));
@@ -606,12 +607,14 @@ namespace Wizrom.Reports.Pages
                         report.LayoutData = Encoding.UTF8.GetBytes(dashboardXDoc.ToString());
                         entities.SaveChanges();
 
+                        // For client side customization
+                        // ...
+
                         // Init controls
                         ReportTemplate.Visible = false;
 
                         // Customize dashboard designer UI
                         // ...
-                        // TODO: Add exit option to dashboard designer
 
                         // Open the dashboard
                         DashboardDesigner.InitialDashboardId = _reportId.ToString();

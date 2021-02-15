@@ -10,7 +10,7 @@ var CustomExtensions;
         this.template = 'dashboard-exit-extension';
 
         this._exitMenuItem = new DevExpress.Dashboard.DashboardMenuItem('exit', 'Exit', 120, 0, function () {            
-            if (_this.saveDashboardExtension.isDashboardDirty()) {
+            if (_this.saveDashboardExtension._isDashboardDirty()) {
                 _this.savePopupMessage('"' + _this.dashboardControl.dashboard().title.text() + '" has been changed. Do you want to save changes ?');
                 _this.savePopupVisible(true);
             } else {

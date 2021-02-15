@@ -1,7 +1,11 @@
-﻿using DevExpress.DashboardWeb;
+﻿using DevExpress.DashboardCommon;
+using DevExpress.DashboardWeb;
+using DevExpress.DataAccess;
+using DevExpress.DataAccess.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using Wizrom.Reports.Models;
@@ -21,12 +25,48 @@ namespace Wizrom.Reports.Code
 
             try
             {
+                var reportSession = null as dynamic;
+
+                if (id.Length == 32)
+                {
+                    reportSession = ReportProxy.GetSession(id);
+                    id = reportSession.ReportId.ToString();
+                }                
+
                 using (var entities = new ReportsEntities())
                 {
                     var report = entities.Reports.Find(int.Parse(id));
 
                     if (report != null && report.LayoutData != null)
                         dashboardXDoc = XDocument.Parse(Encoding.UTF8.GetString(report.LayoutData));
+                }
+
+                if (reportSession != null)
+                {
+                    using (var dashboard = new Dashboard())
+                    {
+                        dashboard.LoadFromXDocument(dashboardXDoc);
+
+                        // Set internal params            
+                        var values = reportSession.ParamList;
+                        var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
+                        var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
+                        var parameters = dashboard.DataSources.OfType<SqlDataSource>().
+                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                            Where(p => p.Type != typeof(Expression));
+
+                        foreach (var param in parameters)
+                        {
+                            var name = param.Name.TrimStart('@');
+                            var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
+                                implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
+
+                            if (value != null)
+                                param.Value = Convert.ChangeType(value, param.Type);
+                        }
+
+                        dashboardXDoc = dashboard.SaveToXDocument();
+                    }
                 }
             }
             catch (Exception)
@@ -66,6 +106,7 @@ namespace Wizrom.Reports.Code
             {
                 using (var entities = new ReportsEntities())
                 {
+                    // TODO: Use DevExpress.DashboardCommon.Dashboard object for layout configuration.
                     var sourceReport = entities.Reports.Find(int.Parse(dashboardXDoc.Descendants("Storage").Attributes("Id").First().Value));
 
                     if (sourceReport != null)

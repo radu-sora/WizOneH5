@@ -25,7 +25,7 @@ namespace Wizrom.Reports.Code
     {
         public class ViewDataCache : IDisposable
         {
-            private XtraReport _report;            
+            private XtraReport _report;
 
             public int ReportUserId { get; set; }
             public object ReportParams { get; set; }
@@ -33,7 +33,7 @@ namespace Wizrom.Reports.Code
             public XtraReport Report
             {
                 get { return _report ?? (_report = new XtraReport()); }
-            }
+            }            
 
             public void Dispose()
             {
@@ -41,7 +41,7 @@ namespace Wizrom.Reports.Code
                 ReportParams = null;
                 ChartOptions = null;
                 _report?.Dispose();
-                _report = null;
+                _report = null;                
             }
         }
 
@@ -72,7 +72,7 @@ namespace Wizrom.Reports.Code
             }
         }
 
-        private static readonly string[] SESSION_PAGE_NAMES = new string[] { "Reports/Pages/View", "Reports/Pages/Design", "Reports/Pages/Print.ashx" };
+        private static readonly string[] SESSION_PAGE_NAMES = new string[] { "Reports/Pages/View", "Reports/Pages/Design", "Reports/Pages/Print.ashx", "DXDD.axd" };
 
         private static string _pagesPath;
         
@@ -87,24 +87,26 @@ namespace Wizrom.Reports.Code
             if (string.IsNullOrEmpty(srcConnectionString))
                 throw new ArgumentException("Invalid src connection string value");
 
-            // DX
+            // DX            
+            //DevExpress.XtraReports.Web.ReportDesigner.Native.ReportDesignerBootstrapper.SessionState = SessionStateBehavior.Required;
+            //DevExpress.XtraReports.Web.QueryBuilder.Native.QueryBuilderBootstrapper.SessionState = SessionStateBehavior.Required;
             DefaultReportDesignerContainer.RegisterDataSourceWizardConnectionStringsProvider<ReportDataSourceWizardConnectionStringsProvider>(true);
             DefaultReportDesignerContainer.EnableCustomSql();
             DefaultWebDocumentViewerContainer.DisableCachedDocumentSource();
             ReportStorageWebExtension.RegisterExtensionGlobal(new EntityReportStorageWebExtension());
 
-            DashboardBootstrapper.SessionState = SessionStateBehavior.Required;
+            DashboardBootstrapper.SessionState = SessionStateBehavior.ReadOnly;
             ASPxDashboard.StaticInitialize();
             DashboardConfigurator.Default.SetConnectionStringsProvider(new ReportDataSourceWizardConnectionStringsProvider());
             DashboardConfigurator.Default.AllowExecutingCustomSql = true;
-            DashboardConfigurator.Default.SetDashboardStorage(new EntityDashboardStorage());
+            DashboardConfigurator.Default.SetDashboardStorage(new EntityDashboardStorage());            
             // Reports
             DynamicModuleUtility.RegisterModule(typeof(ReportSessionModule));
             ReportsDbContext.RegisterGlobalConnectionString(reportsPath, appConnectionString);
             ReportDataSourceWizardConnectionStringsProvider.RegisterGlobalConnectionString(srcConnectionString);
             // If none throws an exception then ...
             _pagesPath = $"~/{reportsPath.Trim(new char[] { ' ', '/', '\\' })}/Reports/Pages/";
-        }
+        }        
 
         private static string GetUrl(int reportId, string userId, short toolbarType, string exportOptions, object paramList, bool oncePerGroup)
         {
@@ -227,7 +229,7 @@ namespace Wizrom.Reports.Code
                 Explicit = paramList
             };
 
-            HttpContext.Current.Response.Redirect(GetUrl(reportId, userId, toolbarType, exportOptions, paramList, oncePerGroup: false));
+            HttpContext.Current.Response.Redirect(GetUrl(reportId, userId, toolbarType, exportOptions, paramList, oncePerGroup: false), false);
         }
         public static void View(int reportId, short toolbarType = 0, string exportOptions = "*", object paramList = null)
         {
@@ -321,16 +323,23 @@ namespace Wizrom.Reports.Code
 
         public static void Design(int reportId)
         {
-            HttpContext.Current.Response.Redirect(GetUrl(reportId, oncePerGroup: false));
+            HttpContext.Current.Response.Redirect(GetUrl(reportId, oncePerGroup: false), false);
         }
 
         public static object GetSession()
+        {
+            return GetSession(null);
+        }
+
+        public static object GetSession(string id)
         {
             if (HttpContext.Current?.Session == null)
                 throw new Exception("Invalid HTTP context");
 
             var reportsSessionsGroups = HttpContext.Current.Session["ReportsSessionsGroups"] as Dictionary<string, Dictionary<string, object>>;
-            var id = HttpContext.Current.Request.QueryString["id"];
+
+            if (string.IsNullOrEmpty(id))
+                id = HttpContext.Current.Request.QueryString["id"];
 
             if (reportsSessionsGroups == null)
                 throw new Exception("No reports sessions found");
@@ -436,7 +445,7 @@ namespace Wizrom.Reports.Code
             if (HttpContext.Current.Request.RequestType == WebRequestMethods.Http.Get)
             {                
                 var urlSegments = HttpContext.Current.Request.Url.Segments;
-                var pageName = string.Concat(urlSegments.Skip(Math.Max(0, urlSegments.Count() - 3)));
+                var pageName = string.Concat(urlSegments.Skip(Math.Max(1, urlSegments.Count() - 3)));
 
                 if (!SESSION_PAGE_NAMES.Contains(pageName))
                 {

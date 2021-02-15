@@ -805,6 +805,30 @@
 </asp:PlaceHolder>
 <asp:PlaceHolder ID="DashboardTemplate" runat="server">
     <dx:ASPxDashboard ID="DashboardViewer" ClientInstanceName="dashboardViewer" runat="server" WorkingMode="ViewerOnly" UseDashboardConfigurator="true">
+        <ClientSideEvents
+            DashboardTitleToolbarUpdated="function(s, e) {                
+                onDashboardViewerTitleToolbarUpdated(e);
+            }" />
     </dx:ASPxDashboard>
+    
+    <div class="d-none">
+        <svg id="exitIcon" viewBox="0 0 24 24"><path class="dx-dashboard-icon" d="m22.089 12-6-6v4h-8v4h8v4z"/><path class="dx-dashboard-icon" d="m12 18.981h-10v-13.953h10v3.4883h2v-5.2325h-14v17.442h14v-5.2325h-2z"/></svg>
+    </div>
+
+    <script>
+        // Globals        
+
+        // Main functions
+        function onDashboardViewerTitleToolbarUpdated(e) {
+            e.Options.actionItems.push({
+                type: 'button',
+                icon: 'exitIcon',
+                hint: 'Exit',
+                click: function () {
+                    window.history.back();
+                }
+            });
+        }
+    </script>
 </asp:PlaceHolder>
 </asp:Content>

@@ -7,6 +7,9 @@
 }
 
 /* Page elements */
+.d-none {
+    display: none;
+}
 
 /* Dynamic report view & design layout */
 .report-view-template {

@@ -73,7 +73,7 @@ namespace WizOne.BP
                     DataTable dtAng = General.IncarcaDT("SELECT * FROM F100", null);
                     Session["ImportPrime_Ang"] = dtAng;
 
-                    cmbAn.DataSource = General.ListaNumere(2015, 2020);
+                    cmbAn.DataSource = General.ListaNumere(2015, DateTime.Now.Year + 5);
                     cmbAn.DataBind();
                     cmbLuna.DataSource = General.ListaLuniDesc();
                     cmbLuna.DataBind();

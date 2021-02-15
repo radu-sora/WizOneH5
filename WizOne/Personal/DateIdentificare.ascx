@@ -76,6 +76,13 @@
                         case '6':
                             an = "20";
                             break;
+                        case '7':
+                        case '8':
+                            if (parseInt(cnp.substr(1, 2)) >= 30)
+                                an = "19";
+                            else
+                                an = "20";
+                            break
                     }
                     strZiua = an + cnp.substr(1, 2) + "-" + cnp.substr(3, 2) + "-" + cnp.substr(5, 2);
                    

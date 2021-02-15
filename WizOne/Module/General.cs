@@ -3870,8 +3870,6 @@ namespace WizOne.Module
             {
                 case '1':
                 case '2':
-                case '7':
-                case '8':
                     an = 1900 + tempAn;
                     break;
 
@@ -3883,6 +3881,13 @@ namespace WizOne.Module
                 case '5':
                 case '6':
                     an = 2000 + tempAn;
+                    break;
+                case '7':
+                case '8':
+                    if (Convert.ToInt16(cnp.Substring(1, 2)) >= 30)
+                        an = 1900 + tempAn;
+                    else
+                        an = 2000 + tempAn;
                     break;
             }
             return new DateTime(Convert.ToInt16(an), Convert.ToInt16(luna), Convert.ToInt16(ziua));
@@ -6263,8 +6268,8 @@ namespace WizOne.Module
                                 WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
                                 WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
                                 END END AS ""IdProgram"",
-                                COALESCE(sd.Subdept, (SELECT C.F100958 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100958, 
-                                COALESCE(br.Birou, (SELECT C.F100959 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100959
+                                COALESCE(dd.Subdept, (SELECT C.F100958 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100958, 
+                                COALESCE(dd.Birou, (SELECT C.F100959 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100959
 
                                 FROM ""tblZile"" A
                                 INNER JOIN F100 B ON 1=1 AND B.F10022 <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= B.F10023
@@ -6273,8 +6278,7 @@ namespace WizOne.Module
                                 {strInner}                                
                                 LEFT JOIN F006 G ON G.F00607 = dd.Dept
                                 INNER JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" BB WHERE BB.F10003 = B.F10003 AND BB.""DataInceput"" <= A.Zi AND A.Zi <= BB.""DataSfarsit"")
-                                OUTER APPLY dbo.DamiSubdept(B.F10003, A.Zi) sd
-                                OUTER APPLY dbo.DamiBirou(B.F10003, A.Zi) br                                 
+                                
                                 WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {General.FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0 {filtru};";
                 if (Constante.tipBD == 2)
                     strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"", F100958, F100959)
@@ -6513,8 +6517,12 @@ namespace WizOne.Module
                     //if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
                     if (denDept != "") strFiltru += @" AND A.F10007 IN (SELECT F00607 FROM F006 WHERE F00608 IN ('" + denDept.Replace(",", "','") + "'))";
 
-                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, F100958, F100959, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
-                                 {0} {1} {2} {3} ";
+
+                    //Florin #773
+                    string strLast = "";
+                    if (cuInOut == 1)
+                        strLast = @", ""FirstIn"", ""LastOut""";
+                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, F100958, F100959, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"" " + strLast + ") {0} {1} {2} {3} ";
 
                     //Florin 2020.06.30 am modificat 1 cu cuNormaZL
                     strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, cuNormaZL, cuInOut), strFiltru, strFiltruZile, usr);
@@ -6564,11 +6572,14 @@ namespace WizOne.Module
 
 
                     //Florin 2019.05.14
-                    string strInner = @"LEFT JOIN (SELECT F70403, MAX(DATEADD(d,-1,F70406)) DataPlecare FROM f704 WHERE F70404=4 GROUP BY F70403) ddp ON c.F10003 = ddp.F70403 
-                                        OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn";
+                    //string strInner = @"LEFT JOIN (SELECT F70403, MAX(DATEADD(d,-1,F70406)) DataPlecare FROM f704 WHERE F70404=4 GROUP BY F70403) ddp ON c.F10003 = ddp.F70403 
+                    //                    OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn";
                     ////Florin 2018.10.23
-                    //string strInner = @"OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn
-                    //                    OUTER APPLY dbo.DamiDataPlecare(A.F10003, A.Ziua) ddp";
+                    //Radu 02.02.2021 - s-a revenit la functia DamiDataPlecare
+                    string strInner = @"OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn
+                                        OUTER APPLY dbo.DamiDataPlecare(A.F10003, A.Ziua) ddp";
+
+
                     if (Dami.ValoareParam("TipCalculDate") == "2")
                     {
                         strInner =
@@ -6819,8 +6830,11 @@ namespace WizOne.Module
                                  ,CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR CONVERT(date, X.Ziua) > CONVERT(date, ddp.DataPlecare) THEN CONVERT(int,NULL) ELSE dn.Norma * 60 END AS Val0";
                     if (cuInOut == 1)
                     {
+                        //Florin #773 - am adaugat FirstIn si LastOut
                         inOut = @",(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraInInitializare), DATEPART(MINUTE,OraInInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS In1
-                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraOutInitializare), DATEPART(MINUTE,OraOutInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS Out1";
+                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraOutInitializare), DATEPART(MINUTE,OraOutInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS Out1
+                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraInInitializare), DATEPART(MINUTE,OraInInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS FirstIn
+                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraOutInitializare), DATEPART(MINUTE,OraOutInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS LastOut";
                     }
 
                     for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)               //pt fiecare zi din luna
@@ -6831,12 +6845,16 @@ namespace WizOne.Module
 
                     //Florin 201.12.02 - am adaugat IdProgram
                     //Radu 04.04.2017 - am modificat F06204Default
+                    //Radu 03.02.2021 - am inlocuit DamiSubdept si DamiBirou
+                    //OUTER APPLY dbo.DamiSubdept(A.F10003, X.Ziua) sd
+                    //OUTER APPLY dbo.DamiBirou(A.F10003, X.Ziua) br
+
                     strSql = @" SELECT A.F10003, X.Ziua, CASE WHEN datepart(dw,X.Ziua) - 1 = 0 THEN 7 ELSE datepart(dw,X.Ziua) - 1 END AS ZiSapt,
                                 CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 THEN 1 ELSE 0 END AS ZiLibera, 
                                 0 as Parinte, 0 as Linia, -1 as F06204, 
                                 G.F00603 AS F10002, G.F00604 AS F10004, G.F00605 AS F10005, G.F00606 AS F10006, G.F00607 as F10007, 
-                                COALESCE(sd.Subdept, (SELECT C.F100958 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100958, 
-                                COALESCE(br.Birou, (SELECT C.F100959 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100959,
+                                COALESCE(dd.Subdept, (SELECT C.F100958 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100958, 
+                                COALESCE(dd.Birou, (SELECT C.F100959 FROM F1001 C WHERE C.F10003=A.F10003)) AS F100959,
                                 '#00FFFFFF' as CuloareValoare, 
                                 dn.Norma AS Norma, 
                                 (SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"") AS IdContract, 
@@ -6864,8 +6882,8 @@ namespace WizOne.Module
                                 left join (select F10003, ""Ziua"", count(*) as CNT from ""Ptj_Intrari"" where YEAR(Ziua)={3} AND MONTH(Ziua)={4} AND F06204=-1 GROUP BY F10003, ""Ziua"") D on D.F10003=A.F10003 AND D.""Ziua"" = x.ZIUA
                                 {5}
                                 LEFT JOIN F006 G ON G.F00607 = dd.Dept
-                                OUTER APPLY dbo.DamiSubdept(A.F10003, X.Ziua) sd
-                                OUTER APPLY dbo.DamiBirou(A.F10003, X.Ziua) br
+                                LEFT JOIN F007 H ON H.F00708 = dd.Subdept
+                                LEFT JOIN F008 I ON I.F00809 = dd.Birou
                                 LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")
                                 where isnull(D.CNT,0) = 0";
 
@@ -6878,8 +6896,11 @@ namespace WizOne.Module
 
                     if (cuInOut == 1)
                     {
+                        //Florin #773 - am adaugat FirstIn si LastOut
                         inOut = @",(SELECT TO_DATE(TO_CHAR(X.""Ziua"", 'DD-MM-YYYY') || ' ' || TO_CHAR(""OraInInitializare"", 'HH24:MI:SS'), 'DD-MM-YYYY HH24:MI:SS') FROM ""Ptj_Contracte"" WHERE ""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"")) AS ""In1""
-                                  ,(SELECT TO_DATE(TO_CHAR(X.""Ziua"", 'DD-MM-YYYY') || ' ' || TO_CHAR(""OraOutInitializare"", 'HH24:MI:SS'), 'DD-MM-YYYY HH24:MI:SS') FROM ""Ptj_Contracte"" WHERE ""Id"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"")) AS ""Out1"" ";
+                                  ,(SELECT TO_DATE(TO_CHAR(X.""Ziua"", 'DD-MM-YYYY') || ' ' || TO_CHAR(""OraOutInitializare"", 'HH24:MI:SS'), 'DD-MM-YYYY HH24:MI:SS') FROM ""Ptj_Contracte"" WHERE ""Id"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"")) AS ""Out1"" 
+                                  ,(SELECT TO_DATE(TO_CHAR(X.""Ziua"", 'DD-MM-YYYY') || ' ' || TO_CHAR(""OraInInitializare"", 'HH24:MI:SS'), 'DD-MM-YYYY HH24:MI:SS') FROM ""Ptj_Contracte"" WHERE ""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"")) AS ""FirstIn""
+                                  ,(SELECT TO_DATE(TO_CHAR(X.""Ziua"", 'DD-MM-YYYY') || ' ' || TO_CHAR(""OraOutInitializare"", 'HH24:MI:SS'), 'DD-MM-YYYY HH24:MI:SS') FROM ""Ptj_Contracte"" WHERE ""Id"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"")) AS ""LastOut"" ";
                     }
                     for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)               //pt fiecare zi din luna
                     {
@@ -8489,7 +8510,10 @@ namespace WizOne.Module
 
                 ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE F10003 = " + marca + " AND \"IdAbsenta\" = " + idAbs + " AND \"DataInceput\" = " + General.ToDataUniv(dataInceput.Date), null);
 
-                string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
+                //Radu 01.02.2021 - citire idCerere din secventa
+                int idCerere = Dami.NextId("Ptj_Cereri");
+                string sqlIdCerere = idCerere.ToString();
+                if (idCerere == -99) sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"")";
                 string sqlInsert = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""Observatii"", ""IdStare"", USER_NO, TIME) "
                                 + @"VALUES (" +
                                 sqlIdCerere + ", " +

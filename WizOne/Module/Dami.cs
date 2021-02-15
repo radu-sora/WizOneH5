@@ -581,6 +581,10 @@ namespace WizOne.Module
                     idStare = "(1, 2, 3)";
                     condSuplim = $@" AND A.""IdStare"" IN (1, 2, 3) ";
                 }
+
+                //Radu 09.02.2021 - conditie pentru eliminarea dublurilor
+                string condElimDubluri = " and abs(b.IdSuper) = (select max(abs(IdSuper)) from Ptj_CereriIstoric where idUser=" + HttpContext.Current.Session["UserId"] + " and idcerere=a.id and Pozitie <> 0 AND IdStare <> -1) ";
+
                 //Radu 10.10.2019 - am scos conditia {General.TruncateDate("A.DataInceput")} <= {General.CurrentDate()} AND {General.CurrentDate()} <= {General.TruncateDate("A.DataSfarsit")} si am inlocuit cu 1 = 1
                 string strSql = $@"SELECT A.*, 0 AS ""Rol"",
                                 CASE WHEN (A.""IdStare"" IN (-1, 0, 3) OR B.""IdCerere"" IS NULL) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
@@ -593,7 +597,7 @@ namespace WizOne.Module
                                 FROM ""Ptj_Cereri"" A
                                 INNER JOIN ""Ptj_CereriIstoric"" B ON A.""Id"" = B.""IdCerere"" AND B.""Pozitie"" <> 0 AND B.""IdStare"" <> -1 AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}
                                 LEFT JOIN ""tblSupervizori"" C ON (-1 * B.""IdSuper"")= C.""Id""     --AND COALESCE(C.""ModululCereriAbsente"", 0) = 1
-                                WHERE A.F10003 <> {HttpContext.Current.Session["User_Marca"]} {condSuplim}
+                                WHERE A.F10003 <> {HttpContext.Current.Session["User_Marca"]} {condSuplim} {condElimDubluri}
                                 UNION
                                 SELECT A.*, 78 AS ""Rol"",
                                 CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
@@ -619,9 +623,12 @@ namespace WizOne.Module
                     if (totiAngajatii == 4)
                         idRol = Dami.ValoareParam("Cereri_IDuriRoluriVizualizare", "-99");
 
+                    //Radu 09.02.2021 - conditie pentru eliminarea dublurilor
+                    string sqlElimDubluri = " and b.idsuper = (select max(idsuper) from F100Supervizori where iduser = " + HttpContext.Current.Session["UserId"] + " and f10003 = a.f10003) ";
+
                     strSql = $@"SELECT DISTINCT A.*, B.""IdSuper"" AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
                                FROM ""Ptj_Cereri"" A
-                               INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idRol}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}";
+                               INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idRol}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]} {sqlElimDubluri}";
                 }
 
                 //Florin 2019.09.25 - optimizare

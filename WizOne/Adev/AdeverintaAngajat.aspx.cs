@@ -55,7 +55,7 @@ namespace WizOne.Adev
                 cmbAng.DataBind();
 
                
-                cmbAnul.DataSource = General.ListaNumere(2015, 2020);
+                cmbAnul.DataSource = General.ListaNumere(2015, DateTime.Now.Year + 5);
                 cmbAnul.DataBind();
                 cmbLuna.DataSource = General.ListaLuniDesc();
                 cmbLuna.DataBind();

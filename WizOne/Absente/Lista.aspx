@@ -140,6 +140,7 @@
                     title: trad_string(limba, ""), text: trad_string(limba, "Lipseste data cu care se divide cererea"),
                     type: "warning"
                 });
+                 e.processOnServer = false;
             }
             else {
                 var txtDiv = txtDataDivide.GetDate().getTime();
@@ -392,13 +393,14 @@
                                 <label id="lblViz" runat="server" style="display:inline-block; float:left; padding:0px 15px;"></label>
                                 <div style="float:left; padding-right:15px;">
                                     <dx:ASPxComboBox ID="cmbViz" ClientInstanceName="cmbViz" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="false" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s,e) { SetComboViz(); pnlCtl.PerformCallback('cmbViz'); SetEnabled(); }" Init="function(s,e) { SetComboViz(); }" />
+                                        <ClientSideEvents SelectedIndexChanged="function(s,e) { SetComboViz(); pnlCtl.PerformCallback('cmbViz'); SetEnabled(); grDate.PerformCallback('btnFiltru;-99'); }" Init="function(s,e) { SetComboViz(); }" />
                                     </dx:ASPxComboBox>
                                 </div>
                                 <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px;">Roluri</label>
                                 <div style="float:left; padding-right:15px;">
                                     <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
-                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRol'); }"/>
+                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRol'); 
+                                            grDate.PerformCallback('btnFiltru;-99');}"/>
                                     </dx:ASPxComboBox>
                                 </div>
                                 <label id="lblStare" runat="server" style="display:inline-block; float:left; padding-right:15px;">Stare</label>

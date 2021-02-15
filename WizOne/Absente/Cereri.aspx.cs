@@ -868,14 +868,17 @@ namespace WizOne.Absente
 
                 #region Construim istoricul
 
+                //Radu 01.02.2021 - citire idCerere din secventa
+                int idCerere = Dami.NextId("Ptj_Cereri");
+
                 string sqlIst;
                 int trimiteLaInlocuitor;
-                General.SelectCereriIstoric(Convert.ToInt32(cmbAng.Value), Convert.ToInt32(General.Nz(cmbInloc.Value, -1)), Convert.ToInt32(drAbs["IdCircuit"]), Convert.ToInt32(General.Nz(drAbs["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor, -99, txtDataInc.Date);
+                General.SelectCereriIstoric(Convert.ToInt32(cmbAng.Value), Convert.ToInt32(General.Nz(cmbInloc.Value, -1)), Convert.ToInt32(drAbs["IdCircuit"]), Convert.ToInt32(General.Nz(drAbs["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor, idCerere, txtDataInc.Date);
 
                 #endregion
 
                 //Florin 2019.10.17 - am mutat sqlCer in afara if-ului pt ca trebuie in modulul de notificari indiferent daca este sql sau oracle
-                string sqlCer = CreazaSelectCuValori();
+                string sqlCer = CreazaSelectCuValori(1, idCerere);
                 string sqlPre = "";
                 string strGen = "";
 
@@ -1291,7 +1294,7 @@ namespace WizOne.Absente
             return str;
         }
 
-        public string CreazaSelectCuValori(int tip = 1)
+        public string CreazaSelectCuValori(int tip = 1, int idCerere = -99)
         {
             //tip = 1 intoarce un select
             //tip = 2 intoarce ca values; necesar pt Oracle
@@ -1365,7 +1368,11 @@ namespace WizOne.Absente
                 string strTop = "";
                 if (Constante.tipBD == 1) strTop = "TOP 1";
 
-                string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
+                //string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
+                //Radu 01.02.2021
+                string sqlIdCerere = idCerere.ToString();
+                if (idCerere == -99) sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"")";
+
                 string sqlInloc = cmbInloc.Value == null ? "NULL" : cmbInloc.Value.ToString();
                 string sqlTotal = @"(SELECT COUNT(*) FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere""=" + sqlIdCerere + ")";
                 string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";

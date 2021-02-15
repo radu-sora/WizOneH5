@@ -55,6 +55,10 @@
            
                 <div id="divOuter" runat="server" class="captcha">
 		        </div>
+
+                <div id ="divText" runat="server" class="innerlogare">
+                    <dx:ASPxLabel ID="lblTxt" runat="server" />
+                </div>
             </div>
 		</div>
 

@@ -5589,7 +5589,8 @@ namespace WizOne.Eval
 
             try
             {
-                DataTable dt = General.IncarcaDT($@"SELECT ""PuncteForte"" FROM ""viewEvaluare360"" WHERE F10003 = @1 AND ""Descriere"" LIKE '%Others%' ", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)).ToString() });
+                //Florin #781 - am adugat si filtrul dupa perioada
+                DataTable dt = General.IncarcaDT($@"SELECT ""PuncteForte"" FROM ""viewEvaluare360"" WHERE F10003 = @1 AND ""Perioada""=(SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id""=@2) AND ""Descriere"" LIKE '%Others%' ", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)).ToString(), Session["CompletareChestionar_IdQuiz"] });
 
                 grDate.AutoGenerateColumns = true;
                 grDate.DataSource = dt;

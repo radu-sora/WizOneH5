@@ -97,7 +97,7 @@
             this.Detail.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
             this.xrTable1});
             this.Detail.Dpi = 254F;
-            this.Detail.HeightF = 1418.828F;
+            this.Detail.HeightF = 1706.66F;
             this.Detail.KeepTogether = true;
             this.Detail.KeepTogetherWithDetailReports = true;
             this.Detail.Name = "Detail";
@@ -107,7 +107,7 @@
             // xrTable1
             // 
             this.xrTable1.Dpi = 254F;
-            this.xrTable1.LocationFloat = new DevExpress.Utils.PointFloat(60F, 0F);
+            this.xrTable1.LocationFloat = new DevExpress.Utils.PointFloat(60.00001F, 0F);
             this.xrTable1.Name = "xrTable1";
             this.xrTable1.Rows.AddRange(new DevExpress.XtraReports.UI.XRTableRow[] {
             this.xrTableRow1,
@@ -122,7 +122,7 @@
             this.xrTableRow10,
             this.xrTableRow11,
             this.xrTableRow12});
-            this.xrTable1.SizeF = new System.Drawing.SizeF(967.1971F, 1404.118F);
+            this.xrTable1.SizeF = new System.Drawing.SizeF(967.197F, 1706.66F);
             // 
             // xrTableRow1
             // 
@@ -656,7 +656,7 @@
             this.xrTableCell26});
             this.xrTableRow10.Dpi = 254F;
             this.xrTableRow10.Name = "xrTableRow10";
-            this.xrTableRow10.Weight = 4.4787910790485626D;
+            this.xrTableRow10.Weight = 4.4787552092737259D;
             // 
             // xrTableCell33
             // 
@@ -688,8 +688,9 @@
             this.xrTableCell25.StylePriority.UseFont = false;
             this.xrTableCell25.StylePriority.UsePadding = false;
             this.xrTableCell25.StylePriority.UseTextAlignment = false;
-            this.xrTableCell25.Text = "[Camp16]\r\n[Camp17]\r\n[Camp18]\r\n[Camp19]\r\n[Camp20]\r\n[Camp21]\r\n[Camp75]\r\n[Camp22]\r\n[" +
-    "Camp23]\r\n[Camp24]\r\n[Camp25]\r\n[Camp26]\r\n[Camp27]\r\n[Camp28]";
+            this.xrTableCell25.Text = "[Camp16]\r\n[Camp17]\r\n[Camp53]\r\n[Camp54]\r\n[Camp18]\r\n[Camp19]\r\n[Camp20]\r\n[Camp21]\r\n[" +
+    "Camp75]\r\n[Camp22]\r\n[Camp23]\r\n[Camp24]\r\n[Camp25]\r\n[Camp26]\r\n[Camp27]\r\n[Camp28]\r\n[" +
+    "Camp52]";
             this.xrTableCell25.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
             this.xrTableCell25.Weight = 0.15074897805573462D;
             // 
@@ -736,7 +737,7 @@
             this.xrTableCell28});
             this.xrTableRow11.Dpi = 254F;
             this.xrTableRow11.Name = "xrTableRow11";
-            this.xrTableRow11.Weight = 0.598647682183812D;
+            this.xrTableRow11.Weight = 0.598683551958649D;
             // 
             // xrTableCell34
             // 
@@ -884,7 +885,7 @@
             // BottomMargin
             // 
             this.BottomMargin.Dpi = 254F;
-            this.BottomMargin.HeightF = 0F;
+            this.BottomMargin.HeightF = 4.533154F;
             this.BottomMargin.Name = "BottomMargin";
             this.BottomMargin.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 254F);
             this.BottomMargin.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
@@ -902,7 +903,7 @@
             this.Dpi = 254F;
             this.FormattingRuleSheet.AddRange(new DevExpress.XtraReports.UI.FormattingRule[] {
             this.formattingRule1});
-            this.Margins = new System.Drawing.Printing.Margins(0, 15, 0, 0);
+            this.Margins = new System.Drawing.Printing.Margins(0, 15, 0, 5);
             this.PageHeight = 2101;
             this.PageWidth = 1103;
             this.PaperKind = System.Drawing.Printing.PaperKind.Custom;

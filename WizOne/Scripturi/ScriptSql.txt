@@ -15450,3 +15450,100 @@ ALTER TABLE Ptj_Cumulat ALTER COLUMN F99 numeric(22,2)
 GO
 ALTER TABLE Ptj_Cumulat ALTER COLUMN F100 numeric(22,2)
 GO
+
+
+
+drop SEQUENCE Ptj_Cereri_Id_SEQ
+GO
+
+declare @maxId as int 
+select @maxId = max(Id) + 1 from Ptj_Cereri
+declare @s nvarchar(4000);
+set @s = N'
+CREATE SEQUENCE Ptj_Cereri_Id_SEQ  AS INTEGER  
+START WITH ' + cast(@maxId as nvarchar) + '
+INCREMENT BY 1  
+NO CYCLE;'
+
+EXEC (@s);
+
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('TextLogare', '', 'Text ce se va afisa in fereastra de logare', 0)
+GO
+
+
+
+alter FUNCTION [dbo].[DamiDept] (@f10003 int, @dt DATE)
+RETURNs table AS
+return
+ 
+       SELECT top 1 Dept =   Dept, Subdept =   Subdept,  Birou =   Birou, Data_dept = data_dept  from
+(
+SELECT top 1 1 as rank, F70403 marca,  F70417 dept,  F70418 Subdept, F704180 Birou, f70406 data_dept,  F70406 Data from f704   WHERE F70404=5 AND F70406 <= @dt and F70403 = @f10003 ORDER BY F70406 DESC
+union
+select 2 as rank, f100.f10003 marca, f10007 dept,  F100958 Subdept,  F100959 Birou, case when coalesce(year(F100910),2100) in (1900,2100) then F10022 else f100910 end data_dept, case when coalesce(100*year(F100910)+month(F100910), 100*2100+1) = 100 * f01011 + f01012 then F100910 else  DATEFROMPARTS(f01011, f01012, 1) end data from f100 join f1001 on f100.F10003=f1001.F10003  join f010 on 1=1 where f100.f10003 =@f10003 and case when coalesce(100*year(F100910)+month(F100910), 100*2100+1) = 100 * f01011 + f01012 then F100910 else  DATEFROMPARTS(f01011, f01012, 1) end<=@dt
+union
+select top 1 3 as rank, f910.f91003 marca, F91007 dept, F910958 subdept, F910959 Birou, case when coalesce(year(F910910),2100) in (1900,2100) then F91022 else f910910 end data_dept, case when coalesce(100*year(F910910)+month(F910910), 100*2100+1) = 100 * f910.YEAR + f910.month then F910910 else  DATEFROMPARTS(f910.year, f910.MONTH, 1) end data from f910 join f9101 on f910.F91003=f9101.F91003 and f910.year = f9101.year and f910.month = f9101.MONTH where case when coalesce(100*year(F910910)+month(F910910), 100*2100+1) = 100 * f910.YEAR + f910.month then F910910 else  DATEFROMPARTS(f910.year, f910.MONTH, 1) end <= @dt and f910.f91003 = @f10003 order by f910.year desc, f910.month desc
+union
+select 4 as rank, f100.f10003 marca, F10007 dept,  F100958 Subdept, F100959 Birou, case when coalesce(year(F100910),2100) in (1900,2100) then F10022 else f100910 end data_dept, DATEFROMPARTS(1900,1,1) data from f100 join f1001 on f100.F10003=f1001.F10003 where f100.f10003 =@f10003
+) x
+order by data desc, rank
+GO
+
+
+
+alter FUNCTION [dbo].[DamiSubdept] (@f10003 int, @dt DATE)
+RETURNs table AS
+return
+ 
+SELECT top 1 Subdept =   Subdept, Data_Subdept = data_Subdept  from
+(
+SELECT top 1 1 as rank, F70403 marca,  F70418 Subdept,  f70406 data_Subdept,  F70406 Data from f704   WHERE F70404=5 AND F70406 <= @dt and F70403 = @f10003 ORDER BY F70406 DESC
+union
+select 2 as rank, f100.f10003 marca, F100958 Subdept, case when coalesce(year(F100910),2100) in (1900,2100) then F10022 else f100910 end data_Subdept,
+case when coalesce(100*year(F100910)+month(F100910), 100*2100+1) = 100 * f01011 + f01012 then F100910 else  DATEFROMPARTS(f01011, f01012, 1) end data
+from f100
+inner join f1001 on f100.F10003=f1001.F10003
+join f010 on 1=1 where f100.f10003 =@f10003 and case when coalesce(100*year(F100910)+month(F100910), 100*2100+1) = 100 * f01011 + f01012 then F100910 else 
+DATEFROMPARTS(f01011, f01012, 1) end<=@dt
+union
+select top 1 3 as rank, f910.f91003 marca, F910958 subdept, case when coalesce(year(F910910),2100) in (1900,2100) then F91022 else f910910 end data_subdept,
+case when coalesce(100*year(F910910)+month(F910910), 100*2100+1) = 100 * f910.YEAR + f910.month then F910910 else  DATEFROMPARTS(f910.year, f910.MONTH, 1) end data
+from f910 join F9101 on f910.f91003 = f9101.f91003 and f910.YEAR = f9101.year and f910.MONTH = f9101.MONTH
+where  case when coalesce(100*year(F910910)+month(F910910), 100*2100+1) = 100 * f910.YEAR + f910.month then F910910 else  DATEFROMPARTS(f910.year, f910.MONTH, 1) end <= @dt
+and f910.f91003 = @f10003 order by f910.year desc, f910.month desc
+union
+select 4 as rank, f100.f10003 marca, F100958 Subdept, case when coalesce(year(F100910),2100) in (1900,2100) then F10022 else f100910 end data_Subdept, DATEFROMPARTS(1900,1,1) data from f100
+join f1001 on f100.F10003=f1001.F10003
+where f100.f10003 =@f10003
+) x
+order by data desc, rank
+GO
+
+alter FUNCTION [dbo].[DamiBirou] (@f10003 int, @dt DATE)
+RETURNs table AS
+return
+ 
+SELECT top 1 Birou =   Birou, Data_Birou = data_Birou  from
+(
+SELECT top 1 1 as rank, F70403 marca,  F704180 Birou,  f70406 data_Birou,  F70406 Data from f704   WHERE F70404=5 AND F70406 <= @dt and F70403 = @f10003 ORDER BY F70406 DESC
+union
+select 2 as rank, f100.f10003 marca, F100959 Birou, case when coalesce(year(F100910),2100) in (1900,2100) then F10022 else f100910 end data_Birou,
+case when coalesce(100*year(F100910)+month(F100910), 100*2100+1) = 100 * f01011 + f01012 then F100910 else  DATEFROMPARTS(f01011, f01012, 1) end data
+from f100
+inner join f1001 on f100.F10003=f1001.F10003
+join f010 on 1=1 where f100.f10003 =@f10003 and case when coalesce(100*year(F100910)+month(F100910), 100*2100+1) = 100 * f01011 + f01012 then F100910 else 
+DATEFROMPARTS(f01011, f01012, 1) end<=@dt
+union
+select top 1 3 as rank, f910.f91003 marca, F910959 Birou, case when coalesce(year(F910910),2100) in (1900,2100) then F91022 else f910910 end data_birou,
+case when coalesce(100*year(F910910)+month(F910910), 100*2100+1) = 100 * f910.YEAR + f910.month then F910910 else  DATEFROMPARTS(f910.year, f910.MONTH, 1) end data
+from f910 join F9101 on f910.f91003 = f9101.f91003 and f910.YEAR = f9101.year and f910.MONTH = f9101.MONTH
+where case when coalesce(100*year(F910910)+month(F910910), 100*2100+1) = 100 * f910.YEAR + f910.month then F910910 else  DATEFROMPARTS(f910.year, f910.MONTH, 1) end <= @dt
+and f910.f91003 = @f10003 order by f910.year desc, f910.month desc
+union
+select 4 as rank, f100.f10003 marca, F100959 Birou, case when coalesce(year(F100910),2100) in (1900,2100) then F10022 else f100910 end data_Birou, DATEFROMPARTS(1900,1,1) data from f100
+join f1001 on f100.F10003=f1001.F10003
+where f100.f10003 =@f10003
+) x
+order by data desc, rank
+GO

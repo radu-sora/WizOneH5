@@ -177,6 +177,9 @@ namespace WizOne.Pontaj
                 string sqlPrg = "";
                 string sqlCalc = "";
 
+                //Radu 12.02.2021 - s-a revenit la functia DamiDataPlecare  
+                //INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403 ) B ON A.F10003=B.F10003 AND
+
                 if (Constante.tipBD == 1)
                 {
                     //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
@@ -187,15 +190,14 @@ namespace WizOne.Pontaj
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
                                 SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare date pontaj', {Session["UserId"]}, {General.CurrentDate()}
                                 FROM Ptj_Intrari A
-                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                ) B 
-                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01';
+                                OUTER APPLY dbo.DamiDataPlecare(A.F10003, A.Ziua) ddp
+                                
+                                WHERE A.Ziua> ddp.DataPlecare AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,ddp.DataPlecare) <> '2100-01-01';
 
                                 DELETE A
                                 FROM Ptj_Intrari A
-                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                ) B 
-                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01';
+                                OUTER APPLY dbo.DamiDataPlecare(A.F10003, A.Ziua) ddp
+                                WHERE A.Ziua> ddp.DataPlecare AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,ddp.DataPlecare) <> '2100-01-01';
                             END;";
 
                         ras = General.ExecutaNonQuery(strDel, null);
@@ -255,11 +257,14 @@ namespace WizOne.Pontaj
                         if (chkStr == true)
                         {
                             //Florin 2020.07.02 - am adaugat subdept si birou
-                            act += ",A.F10002=G.F00603, A.F10004=G.F00604, A.F10005=G.F00605, A.F10006=G.F00606, A.F10007=G.F00607, A.F100958=sd.Subdept, A.F100959=br.Birou";
+                            //Radu 02.02.2021
+                            //" OUTER APPLY dbo.DamiSubdept(A.F10003, A.Ziua) sd " +
+                            //" OUTER APPLY dbo.DamiBirou(A.F10003, A.Ziua) br ";
+                            act += ",A.F10002=G.F00603, A.F10004=G.F00604, A.F10005=G.F00605, A.F10006=G.F00606, A.F10007=G.F00607, A.F100958=dd.Subdept, A.F100959=dd.Birou";
                             inn += " OUTER APPLY dbo.DamiDept(A.F10003, A.Ziua) dd " +
                                    " LEFT JOIN F006 G ON G.F00607 = dd.Dept " +
-                                   " OUTER APPLY dbo.DamiSubdept(A.F10003, A.Ziua) sd " +
-                                   " OUTER APPLY dbo.DamiBirou(A.F10003, A.Ziua) br ";
+                                   " LEFT JOIN F007 H ON H.F00708 = dd.Subdept " +
+                                   " LEFT JOIN F008 I ON I.F00809 = dd.Birou ";
                             //Florin 2018.10.23
                             if (Dami.ValoareParam("TipCalculDate") == "2")
                                 inn += " LEFT JOIN DamiDept_Table ddt ON ddt.F10003=A.F10003 AND ddt.dt=A.Ziua";

@@ -70,13 +70,6 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
-                <dx:ASPxButton ID="btnPrint" runat="server" Text="Imprima" OnClick="btnPrint_Click" oncontextMenu="ctx(this,event)" > 
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
-                    }" />                      
-                    <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
-                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnFinalizare" runat="server" Text="Finalizare sesiune" OnClick="btnFinalizare_Click" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
@@ -144,14 +137,20 @@
                     <ClientSideEvents ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                     <Columns>     
                         <dx:GridViewCommandColumn Width="125px" ButtonType="Image" ShowEditButton="true" Caption=" " Name="butoaneGrid" />                                            
-                        <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajatul" ReadOnly="true" Width="180px" >
+                        <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajatul" ReadOnly="true" Width="180px">
                             <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-					    <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"  Width="350px" />
+					    <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"  Width="350px" >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdCategValoareNota" Name="IdCategValoareNota" Caption="Nota" Width="150px"  >
                             <PropertiesComboBox TextField="DenumireValoare" ValueField="IdCategValoare" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataCheckColumn FieldName="PrezentCurs" Name="PrezentCurs" Caption="Prezent"  Width="100px"  />
+                        <dx:GridViewDataCheckColumn FieldName="PrezentCurs" Name="PrezentCurs" Caption="Prezent"  Width="100px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataCheckColumn>
 
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="75px" Visible="false" />
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" ReadOnly="true" Width="75px" Visible="false" />

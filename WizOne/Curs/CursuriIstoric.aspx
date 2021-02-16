@@ -133,14 +133,30 @@
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                     <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                     <Columns>                  
-                        <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="200px"  />
-                        <dx:GridViewDataTextColumn FieldName="Categ_Niv1" Name="Categ_Niv1" Caption="Categ nivel1" ReadOnly="true" Width="150px"  />
-                        <dx:GridViewDataTextColumn FieldName="Categ_Niv2" Name="Categ_Niv2" Caption="Categ nivel2" ReadOnly="true" Width="150px"  />
-                        <dx:GridViewDataTextColumn FieldName="Departament" Name="Departament" Caption="Departament" ReadOnly="true" Width="150px"  />
-                        <dx:GridViewDataTextColumn FieldName="Curs" Name="Curs" Caption="Curs" ReadOnly="true" Width="150px"  />
-                        <dx:GridViewDataTextColumn FieldName="Sesiune" Name="Sesiune" Caption="Sesiune" ReadOnly="true" Width="150px"  />
-                        <dx:GridViewDataTextColumn FieldName="Organizator" Name="Organizator" Caption="Organizator" ReadOnly="true" Width="100px"  />
-                        <dx:GridViewDataTextColumn FieldName="Trainer" Name="Trainer" Caption="Trainer" ReadOnly="true" Width="100px"  />
+                        <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="200px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Categ_Niv1" Name="Categ_Niv1" Caption="Categ nivel1" ReadOnly="true" Width="150px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Categ_Niv2" Name="Categ_Niv2" Caption="Categ nivel2" ReadOnly="true" Width="150px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Departament" Name="Departament" Caption="Departament" ReadOnly="true" Width="150px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Curs" Name="Curs" Caption="Curs" ReadOnly="true" Width="150px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Sesiune" Name="Sesiune" Caption="Sesiune" ReadOnly="true" Width="150px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Organizator" Name="Organizator" Caption="Organizator" ReadOnly="true" Width="100px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Trainer" Name="Trainer" Caption="Trainer" ReadOnly="true" Width="100px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewCommandColumn Name="colNomenclatorTrainer" Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Trainer">
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnNomenclatorTraineri" Visibility="AllDataRows">
@@ -149,9 +165,15 @@
                             </CustomButtons>                        
                         </dx:GridViewCommandColumn>
 
-                        <dx:GridViewDataTextColumn FieldName="Certificat" Name="Certificat" Caption="Certificat" ReadOnly="true" Width="100px"  />
-                        <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" ReadOnly="true" Width="100px"/>
-                        <dx:GridViewDataTextColumn FieldName="Nota" Name="Nota" Caption="Nota"  Width="100px"  />                       
+                        <dx:GridViewDataTextColumn FieldName="Certificat" Name="Certificat" Caption="Certificat" ReadOnly="true" Width="100px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" ReadOnly="true" Width="100px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Nota" Name="Nota" Caption="Nota"  Width="100px"  >                       
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
 
                         <dx:GridViewDataTextColumn FieldName="Planificare_CostRONcuTVA" Name="Planificare_CostRONcuTVA" Caption="CostRONcuTVA"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="Planificare_Denumire" Name="Planificare_Denumire" Caption="Denumire"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />

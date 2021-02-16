@@ -36,9 +36,8 @@ namespace WizOne.Curs
                 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnRespinge.Text = Dami.TraduCuvant("btnRespinge", "Respinge");
-                btnAproba.Text = Dami.TraduCuvant("btnAproba", "Aproba");
-                btnPrint.Text = Dami.TraduCuvant("btnPrint", "Imprima");
-                btnSendWaitingList.Text = Dami.TraduCuvant("btnSendWaitingList", "Trimite Asteptare");
+                btnAproba.Text = Dami.TraduCuvant("btnAproba", "Aproba");               
+                //btnSendWaitingList.Text = Dami.TraduCuvant("btnSendWaitingList", "Trimite Asteptare");
                 btnIncludeParticipantsList.Text = Dami.TraduCuvant("btnIncludeParticipantsList", "Include Participanti");
 
                 btnDelete.Image.ToolTip = Dami.TraduCuvant("btnDelete", "Sterge");
@@ -101,7 +100,7 @@ namespace WizOne.Curs
                 if (Convert.ToInt32(verifNumarParticipantiSesiune) == 0)
                 {
                     btnIncludeParticipantsList.ClientEnabled = false;
-                    btnSendWaitingList.ClientEnabled = false;
+                    //btnSendWaitingList.ClientEnabled = false;
                 }
 
             }
@@ -387,7 +386,7 @@ namespace WizOne.Curs
                 //Angajatul nu poate aproba proria cerere
                 if (Convert.ToInt32(Session["User_Marca"].ToString()) != Convert.ToInt32(lst[3].ToString()))
                 {
-                    if ((lst[1] ?? "0").ToString() == "1" || (lst[1] ?? "0").ToString() == "2") ids += lst[0].ToString() + ";";
+                    if ((lst[1] ?? "0").ToString() == "1" || (lst[1] ?? "0").ToString() == "2" || (lst[1] ?? "0").ToString() == "3") ids += lst[0].ToString() + ";";
                     nrSel += 1;
                 }
 
@@ -652,21 +651,25 @@ namespace WizOne.Curs
                 if (f10003 != -99) filtru += " AND a.F10003 = " + f10003;
                 if (filtruStari != "") filtru += " AND a.\"IdStare\" IN (" + filtruStari.Replace(";", ",").Substring(0, filtruStari.Length) + ")";
 
+                string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
                 if (tip == 1 || tip == 2)
                 {
-                    filtru += " AND F.\"IdUser\" = " + idUser + " AND (A.\"Pozitie\" + 1) = F.\"Pozitie\" ";
+                    filtru += " AND ((F.\"IdUser\" = " + idUser + " AND (A.\"Pozitie\" + 1) = F.\"Pozitie\") OR  " + idUser + " IN (select sup.\"IdUser\" FROM \"F100Supervizori\" sup where sup.\"IdSuper\" in (" + idHR + ")) )";
                     filtru += " AND A.\"eListaAsteptare\" = " + (tip == 2 ? 1 : 0);
                 }
                 else
-                    filtru += " AND F.\"IdUser\" = " + idUser + " AND (A.\"Pozitie\" <= F.\"Pozitie\" or A.\"IdStare\" = 3 or A.\"IdStare\" = 0) ";
+                    filtru += " AND ((F.\"IdUser\" = " + idUser + " AND (A.\"Pozitie\" <= F.\"Pozitie\" or A.\"IdStare\" = 3 or A.\"IdStare\" = 0)) OR " + idUser + " IN (select sup.\"IdUser\" FROM \"F100Supervizori\" sup where sup.\"IdSuper\" in (" + idHR + ")) ) ";
 
+                string lstCampuri = " a.\"Culoare\", a.F10003, a.\"Id\", a.\"IdAuto\", a.\"IdCircuit\", a.\"IdCurs\", a.\"IdSesiune\" , a.\"IdStare\", "
+                    + "   a.TIME, a.USER_NO, a.\"UserIntrod\",  "
+                    + " case when a.\"eListaAsteptare\" = 1 then 'Lista Asteptare' else '---' end as \"eListaAsteptare\" ";
 
-                strSql = @"SELECT distinct A.* FROM ""Curs_Inregistrare"" A
+                strSql = @"SELECT distinct {1} FROM ""Curs_Inregistrare"" A
                         INNER JOIN ""Curs_CereriIstoric"" F ON A.""Id""=F.""IdCerere""
                         WHERE 1=1 {0}
                         ORDER BY A.TIME";
 
-                strSql = string.Format(strSql, filtru);
+                strSql = string.Format(strSql, filtru, lstCampuri);
                 q = General.IncarcaDT(strSql, null);
             }
             catch (Exception ex)
@@ -988,6 +991,15 @@ namespace WizOne.Curs
 
             return msg;
         }
+
+
+                //<dx:ASPxButton ID = "btnSendWaitingList"  runat="server" Text="Trimite Asteptare" OnClick="btnSendWaitingList_Click" oncontextMenu="ctx(this,event)" >
+                //    <ClientSideEvents Click = "function(s, e) {
+                //        pnlLoading.Show();
+                //        e.processOnServer = true;
+                //    }" />
+                //    <Image Url = "~/Fisiere/Imagini/Icoane/adauga.png" ></ Image >
+                //</ dx:ASPxButton>
 
 
     }

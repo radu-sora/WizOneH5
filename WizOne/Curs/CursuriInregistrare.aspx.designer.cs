@@ -348,42 +348,6 @@ namespace WizOne.Curs
         protected global::DevExpress.Web.ASPxTextBox txtDenumire;
 
         /// <summary>
-        /// lblGrad control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblGrad;
-
-        /// <summary>
-        /// txtGrad control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtGrad;
-
-        /// <summary>
-        /// lblCertif control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblCertif;
-
-        /// <summary>
-        /// txtCertif control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtCertif;
-
-        /// <summary>
         /// lblComen control.
         /// </summary>
         /// <remarks>

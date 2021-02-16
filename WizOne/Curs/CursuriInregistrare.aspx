@@ -333,11 +333,11 @@
 
                         <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajatul" ReadOnly="true" Width="200px">
                             <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdCurs" Name="IdCurs" Caption="Curs" ReadOnly="true" Width="200px">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewCommandColumn Width="75px" ButtonType="Image" ShowEditButton="false"  Caption="Detalii curs">
                             <CustomButtons>
@@ -348,7 +348,7 @@
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdSesiune" Name="IdSesiune" Caption="Sesiune" ReadOnly="true" Width="200px">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewCommandColumn Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Detalii sesiune">
                             <CustomButtons>
@@ -359,12 +359,16 @@
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="150px" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii" ReadOnly="true" Width="200px"  />
-                        <dx:GridViewDataTextColumn FieldName="eListaAsteptare" Name="eListaAsteptare" Caption="Lista Asteptare" ReadOnly="true" Width="110px"/>
-                        <dx:GridViewDataCheckColumn FieldName="Certificat" Name="Certificat" Caption="Certificat"  Width="80px"  />                       
+                        <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii" ReadOnly="true" Width="200px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="eListaAsteptare" Name="eListaAsteptare" Caption="Lista Asteptare" ReadOnly="true" Width="110px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
 
+                        <dx:GridViewDataCheckColumn FieldName="Certificat" Name="Certificat" Caption="Certificat"  Width="80px" Visible="false"  ShowInCustomizationForm="false"  />   
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
@@ -454,22 +458,6 @@
                             </td>
                             <td>
                                 <dx:ASPxTextBox ID="txtDenumire" runat="server" ClientIDMode="Static" ClientInstanceName="txtDenumire" Width="200px" Enabled="false"></dx:ASPxTextBox>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="color: #666666;font-family: Tahoma; font-size: 10px;">
-                                <dx:ASPxLabel ID="lblGrad" runat="server" ClientIDMode="Static" ClientInstanceName="lblGrad" Width="100px" Text="Gradul" ></dx:ASPxLabel>
-                            </td>
-                            <td>
-                                <dx:ASPxTextBox ID="txtGrad" runat="server" ClientIDMode="Static" ClientInstanceName="txtGrad" Width="200px" Enabled="false"></dx:ASPxTextBox>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="color: #666666;font-family: Tahoma; font-size: 10px;">
-                                <dx:ASPxLabel ID="lblCertif" runat="server" ClientIDMode="Static" ClientInstanceName="lblCertif" Width="100px" Text="Certificare" ></dx:ASPxLabel>
-                            </td>
-                            <td>
-                                <dx:ASPxTextBox ID="txtCertif" runat="server" ClientIDMode="Static" ClientInstanceName="txtCertif" Width="200px" Enabled="false" ></dx:ASPxTextBox>
                             </td>
                         </tr>
                         <tr>

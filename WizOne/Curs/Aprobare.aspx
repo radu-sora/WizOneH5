@@ -131,13 +131,6 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnSendWaitingList"  runat="server" Text="Trimite Asteptare" OnClick="btnSendWaitingList_Click" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
-                    }" />
-                    <Image Url="~/Fisiere/Imagini/Icoane/adauga.png"></Image>
-                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnIncludeParticipantsList"  runat="server" Text="Include Participanti" OnClick="btnIncludeParticipantsList_Click" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
@@ -151,10 +144,6 @@
                         e.processOnServer = true;
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
-                </dx:ASPxButton>
-                <dx:ASPxButton ID="btnPrint"  runat="server" Text="Imprima" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function (s,e) {  }" />
-                    <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
@@ -260,17 +249,19 @@
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajatul" ReadOnly="true" Width="300px">
                             <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdCurs" Name="IdCurs" Caption="Curs" ReadOnly="true" Width="250px">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="200px" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="eListaAsteptare" Name="eListaAsteptare" Caption="eListaAsteptare" ReadOnly="true" Width="110px"  />
+                        <dx:GridViewDataTextColumn FieldName="eListaAsteptare" Name="eListaAsteptare" Caption="eListaAsteptare" ReadOnly="true" Width="110px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
 
                         <dx:GridViewDataTextColumn FieldName="IdCircuit" Name="IdCircuit" Caption="IdCircuit" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="IdSesiune" Name="IdSesiune" Caption="IdSesiune" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />                        

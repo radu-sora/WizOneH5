@@ -64,10 +64,28 @@
             }
         }
 
-     
+        function TotalHours(s, e) {
+            var tb = grDate.GetEditor("TotalOre");           
+            var oraInc = grDate.GetEditor("OraInceput").GetValue();
+            var oraSf = grDate.GetEditor("OraSfarsit").GetValue();
+            var oreP = grDate.GetEditor("OrePauzaMasa").GetValue();
+            var dataInc = grDate.GetEditor("DataInceput").GetValue();       
+            var dataSf = grDate.GetEditor("DataSfarsit").GetValue();
 
-
-
+            if (dataInc != null && dataSf != null && oraInc != null && oraSf != null) {
+                var one_day = 1000 * 60 * 60 * 24;
+                dataInc.setHours(0, 0, 0, 0);
+                dataSf.setHours(0, 0, 0, 0);
+                var days = parseInt(dataSf.getTime() - dataInc.getTime()) / (one_day) + 1;
+                var one_min = 1000 * 60;
+                var ts = parseInt(oraSf.getTime() - oraInc.getTime()) / (one_min);
+                if (oreP == null)
+                    oreP = 0;
+                var total = (ts / 60 - parseInt(oreP)) * days;
+                tb.SetValue(total);
+            }      
+           
+        }  
 
     </script>
 
@@ -141,61 +159,74 @@
                                 </dx:GridViewCommandColumnCustomButton>
                             </CustomButtons> 
                         </dx:GridViewCommandColumn>
-
-
-
-
-
                        
                         <dx:GridViewDataComboBoxColumn FieldName="TipSesiune" Name="TipSesiune" Caption="Tip sesiune"  Width="150px">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Denumire"   Width="200px"  />
+                        <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Denumire"   Width="200px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput"  Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit"  Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataDateColumn FieldName="DataInceputAprobare" Name="DataInceputAprobare" Caption="Data inc. aprobare"  Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataDateColumn FieldName="DataSfarsitAprobare" Name="DataSfarsitAprobare" Caption="Data sf. aprobare"  Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="CategSesiune" Name="CategSesiune" Caption="Categorie sesiune"  Width="150px">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataDateColumn FieldName="DataExpirare" Name="DataExpirare" Caption="Data expirare"   Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTimeEditColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora inceput"   Width="100px" >  
+                        <dx:GridViewDataTimeEditColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora inceput"   Width="100px" >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataTimeEditColumn>
-                        <dx:GridViewDataTimeEditColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora sfarsit"   Width="100px" >   
+                        <dx:GridViewDataTimeEditColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora sfarsit"   Width="100px" >  
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataTimeEditColumn>
-                        <dx:GridViewDataTextColumn FieldName="OrePauzaMasa" Name="OrePauzaMasa" Caption="Ore pauza masa"   Width="50px"  />
-                        <dx:GridViewDataTextColumn FieldName="TotalOre" Name="TotalOre" Caption="Total ore"   Width="50px"  />
-                        <dx:GridViewDataTextColumn FieldName="NrMin" Name="NrMin" Caption="Nr min"   Width="50px"  />
-                        <dx:GridViewDataTextColumn FieldName="NrMax" Name="NrMax" Caption="Nr max"   Width="50px"  />
+                        <dx:GridViewDataTextColumn FieldName="OrePauzaMasa" Name="OrePauzaMasa" Caption="Ore pauza masa"   Width="50px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="TotalOre" Name="TotalOre" Caption="Total ore"   Width="50px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="NrMin" Name="NrMin" Caption="Nr min"   Width="50px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="NrMax" Name="NrMax" Caption="Nr max"   Width="50px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="TematicaId" Name="TematicaId" Caption="Tematica"  Width="150px">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="TematicaNume" Name="TematicaNume" Caption="Tematica nume"   Width="75px" Visible="false"  ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="TematicaNume" Name="TematicaNume" Caption="Tematica nume"   Width="75px" Visible="false"  ShowInCustomizationForm="false" >                          
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="InternExtern" Name="InternExtern" Caption="Intern/Extern"  Width="150px">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="OrganizatorId" Name="OrganizatorId" Caption="Organizator"  Width="150px">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="OrganizatorNume" Name="OrganizatorNume" Caption="Organizator nume"   Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataComboBoxColumn FieldName="TrainerId" Name="TrainerId" Caption="Trainer"  Width="150px">
                             <PropertiesComboBox TextField="Denumire" ValueField="IdUser" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="TrainerNume" Name="TrainerNume" Caption="Trainer nume"   Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewCommandColumn Name="colNomenclatorTrainer" Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Trainer">
@@ -207,12 +238,20 @@
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="Locatie" Name="Locatie" Caption="Locatie"  Width="150px">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataCheckColumn FieldName="Bugetat" Name="Bugetat" Caption="Bugetat"  Width="50px"  />   
-                        <dx:GridViewDataTextColumn FieldName="Buget" Name="Buget" Caption="Buget"   Width="50px"  />
-                        <dx:GridViewDataTextColumn FieldName="CodBuget" Name="CodBuget" Caption="Cod buget"   Width="100px"  />                        
-                        <dx:GridViewDataTextColumn FieldName="CostEstimat" Name="CostEstimat" Caption="Cost estimat"   Width="100px"  /> 
+                        <dx:GridViewDataCheckColumn FieldName="Bugetat" Name="Bugetat" Caption="Bugetat"  Width="50px"  >   
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />   
+                        </dx:GridViewDataCheckColumn>    
+                        <dx:GridViewDataTextColumn FieldName="Buget" Name="Buget" Caption="Buget"   Width="50px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="CodBuget" Name="CodBuget" Caption="Cod buget"   Width="100px"  >                        
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="CostEstimat" Name="CostEstimat" Caption="Cost estimat"   Width="100px"  > 
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>    
                         <dx:GridViewCommandColumn Name="colNomenclatorCosturi" Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Cost estimat">
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnNomenclatorCosturiEstimat" Visibility="BrowsableRow">
@@ -222,9 +261,11 @@
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdMoneda" Name="IdMoneda" Caption="Moneda"  Width="150px">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="CostEfectiv" Name="CostEfectiv" Caption="Cost efectiv"   Width="100px"  />  
+                        <dx:GridViewDataTextColumn FieldName="CostEfectiv" Name="CostEfectiv" Caption="Cost efectiv"   Width="100px"  >  
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewCommandColumn Name="colNomenclatorCosturiEfectiv" Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Cost efectiv">
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnNomenclatorCosturiEfectiv" Visibility="BrowsableRow">
@@ -232,15 +273,19 @@
                                 </dx:GridViewCommandColumnCustomButton>
                             </CustomButtons>                        
                         </dx:GridViewCommandColumn>
-                        <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"   Width="200px"  />   
+                        <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"   Width="200px"  >   
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
                        <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare"  Width="100px">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="Materiale" Name="Materiale" Caption="Materiale training"   Width="200px"  />   
+                        <dx:GridViewDataTextColumn FieldName="Materiale" Name="Materiale" Caption="Materiale training"   Width="200px"  >   
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
                        <dx:GridViewDataComboBoxColumn FieldName="IdQuiz" Name="IdQuiz" Caption="Chestionar feedback"  Width="100px">
                             <PropertiesComboBox TextField="Titlu" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
 
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />

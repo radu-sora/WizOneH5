@@ -35,8 +35,7 @@ namespace WizOne.Curs
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
                 
-                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                btnPrint.Text = Dami.TraduCuvant("btnPrint", "Imprima");
+                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");                
                 btnFinalizare.Text = Dami.TraduCuvant("btnFinalizare", "Finalizare sesiune");
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
              
@@ -237,6 +236,8 @@ namespace WizOne.Curs
 
                 MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoInfo);
                 lblStare.InnerText = "Sesiune finalizata";
+
+                IncarcaGrid();
 
             }
             catch (Exception ex)

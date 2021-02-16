@@ -252,9 +252,9 @@ namespace WizOne.Curs
         {
             try
             {
-                string sql = "SELECT b.\"Activ\", b.\"Denumire\", a.\"Id_Competenta\" AS \"Id\", b.\"IdGrup\", a.USER_NO, b.TIME FROM "
+                string sql = "SELECT  b.\"Denumire\", a.\"Id_Competenta\" AS \"Id\" FROM "
                     + " \"Curs_relCompetenteFunctiiAcad\" a "
-                    + " JOIN \"tblCompetente\" b on a.\"Id_Competenta\" = b.\"Id\" ORDER BY b.\"Denumire\", b.\"Id\" ";      
+                    + " JOIN \"tblCompetente\" b on a.\"Id_Competenta\" = b.\"Id\" GROUP BY  b.\"Denumire\", a.\"Id_Competenta\" ORDER BY b.\"Denumire\", a.\"Id_Competenta\" ";      
 
                 return General.IncarcaDT(sql, null);
             }
@@ -277,9 +277,9 @@ namespace WizOne.Curs
                 }
                 else
                 {
-                    sql = "SELECT b.\"Activ\", b.\"Denumire\", a.\"Id_Competenta\" AS \"Id\", b.\"IdGrup\", a.USER_NO, b.TIME FROM "
+                    sql = "SELECT b.\"Denumire\", a.\"Id_Competenta\" AS \"Id\" FROM "
                     + " \"Curs_relCompetenteFunctii\" a "
-                    + " JOIN \"tblCompetente\" b on a.\"Id_Competenta\" = b.\"Id\" ORDER BY b.\"Denumire\", b.\"Id\" ";
+                    + " JOIN \"tblCompetente\" b on a.\"Id_Competenta\" = b.\"Id\" GROUP BY b.\"Denumire\", a.\"Id_Competenta\" ORDER BY b.\"Denumire\", a.\"Id_Competenta\" ";
                 }
                 return General.IncarcaDT(sql, null);
             }

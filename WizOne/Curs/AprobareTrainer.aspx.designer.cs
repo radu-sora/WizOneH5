@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Curs {
-    
-    
-    public partial class AprobareTrainer {
-        
+namespace WizOne.Curs
+{
+
+
+    public partial class AprobareTrainer
+    {
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -20,16 +22,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
-        /// <summary>
-        /// btnPrint control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnPrint;
-        
+
         /// <summary>
         /// btnFinalizare control.
         /// </summary>
@@ -38,7 +31,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFinalizare;
-        
+
         /// <summary>
         /// btnSave control.
         /// </summary>
@@ -47,7 +40,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnSave;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -56,7 +49,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// divRol control.
         /// </summary>
@@ -65,7 +58,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlTableCell divRol;
-        
+
         /// <summary>
         /// lblCurs control.
         /// </summary>
@@ -74,7 +67,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCurs;
-        
+
         /// <summary>
         /// cmbCurs control.
         /// </summary>
@@ -83,7 +76,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbCurs;
-        
+
         /// <summary>
         /// lblSesiune control.
         /// </summary>
@@ -92,7 +85,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSesiune;
-        
+
         /// <summary>
         /// cmbSesiune control.
         /// </summary>
@@ -101,7 +94,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSesiune;
-        
+
         /// <summary>
         /// btnFiltru control.
         /// </summary>
@@ -110,7 +103,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltru;
-        
+
         /// <summary>
         /// btnFiltruSterge control.
         /// </summary>
@@ -119,7 +112,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltruSterge;
-        
+
         /// <summary>
         /// lblStare control.
         /// </summary>
@@ -128,7 +121,7 @@ namespace WizOne.Curs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblStare;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>

@@ -330,7 +330,23 @@ namespace WizOne.Curs
         {
             try
             {
-
+                var grid = sender as ASPxGridView;
+                e.Editor.ReadOnly = false;
+                if (e.Column.FieldName == "OrePauzaMasa")
+                {
+                    var tb = e.Editor as ASPxTextBox;
+                    tb.ClientSideEvents.TextChanged = "TotalHours";
+                }
+                if (e.Column.FieldName == "DataSfarsit")
+                {
+                    var de = e.Editor as ASPxDateEdit;
+                    de.ClientSideEvents.DateChanged = "TotalHours";
+                }
+                if (e.Column.FieldName == "OraInceput" || e.Column.FieldName == "OraSfarsit")
+                {
+                    var te = e.Editor as ASPxTimeEdit;
+                    te.ClientSideEvents.DateChanged = "TotalHours";
+                }
             }
             catch (Exception ex)
             {
@@ -491,13 +507,13 @@ namespace WizOne.Curs
                             e.NewValues["DataExpirare"] = dataExpirare;
                             row["DataExpirare"] = dataExpirare;
                         }
-                        if (col.ColumnName.ToUpper() == "TOTALORE")
-                        {
-                            double TotalOre;
-                            GetTotalHoursSession(e, out TotalOre);
-                            e.NewValues["TotalOre"] = TotalOre;
-                            row["TotalOre"] = TotalOre;
-                        }
+                        //if (col.ColumnName.ToUpper() == "TOTALORE")
+                        //{
+                        //    double TotalOre;
+                        //    GetTotalHoursSession(e, out TotalOre);
+                        //    e.NewValues["TotalOre"] = TotalOre;
+                        //    row["TotalOre"] = TotalOre;
+                        //}
                         if (col.ColumnName.ToUpper() == "ORAINCEPUT" && e.NewValues["OraInceput"] != null)
                             row[col.ColumnName] = new DateTime(2100, 1, 1, Convert.ToDateTime(e.NewValues["OraInceput"]).Hour, Convert.ToDateTime(e.NewValues["OraInceput"]).Minute, 0);
                         if (col.ColumnName.ToUpper() == "ORASFARSIT" && e.NewValues["OraSfarsit"] != null)                    
@@ -533,47 +549,6 @@ namespace WizOne.Curs
                 object[] row = new object[dt.Columns.Count];
                 int x = 0;
 
-                int idSesMax = 1;
-                string sql = "SELECT MAX(a.\"Id\") + 1 FROM \"Curs_tblCursSesiune\" a LEFT JOIN \"Curs_tblCurs\" b on a.\"IdCurs\" = b.\"Id\" ";
-                DataTable dtTmp = General.IncarcaDT(sql, null);
-                if (dtTmp != null & dtTmp.Rows.Count > 0 && dtTmp.Rows[0][0] != null)
-                    idSesMax = Convert.ToInt32(dtTmp.Rows[0][0].ToString()) + 1;
-
-                int? categ1 = null;
-                string categ3 = null;
-                int? categ2_id = null;
-
-                DataTable dtCurs = GetCursRestransFiltru((int)cmbCurs.Value);
-
-                if (dtCurs != null && dtCurs.Rows.Count > 0)
-                {
-                    categ1 = dtCurs.Rows[0]["Categ_Niv1Id"] == DBNull.Value ? 0 : Convert.ToInt32(dtCurs.Rows[0]["Categ_Niv1Id"].ToString());
-                    categ3 = dtCurs.Rows[0]["Categ_Niv3Nume"] == DBNull.Value ? "" : dtCurs.Rows[0]["Categ_Niv3Nume"].ToString();
-                    if (categ3 != null && categ3.Length > 20)
-                    {
-                        categ3 = categ3.Substring(0, 20);
-                    }
-                    categ2_id = dtCurs.Rows[0]["Categ_Niv2Id"] == DBNull.Value ? 0 : Convert.ToInt32(dtCurs.Rows[0]["Categ_Niv2Id"].ToString());
-                    Session["CursuriSesiuni_Recurenta"] = dtCurs.Rows[0]["Recurenta"] == DBNull.Value ? 0 : Convert.ToInt32(dtCurs.Rows[0]["Recurenta"].ToString());
-                }
-
-                e.NewValues["Id"] = idSesMax;
-                e.NewValues["IdCurs"] = (int)cmbCurs.Value;
-                if (e.NewValues["IdStare"] == null)
-                    e.NewValues["IdStare"] = 1;
-
-
-                if (e.NewValues["InternExtern"] == null)
-                    e.NewValues["InternExtern"] = categ1;
-                if (e.NewValues["CodBuget"] == null)
-                    e.NewValues["CodBuget"] = categ3 == null ? null : categ3.ToString();
-                //e.NewValues["Categ_Niv1Id] = categ1;
-                //e.NewValues["Categ_Niv2Id"] = categ2_id;
-
-                if (e.NewValues["DataInceputAprobare"] == null)
-                    e.NewValues["DataInceputAprobare"] = new DateTime(1900, 1, 1);
-                if (e.NewValues["DataSfarsitAprobare"] == null)
-                    e.NewValues["DataSfarsitAprobare"] = new DateTime(2100, 1, 1);
                 
                 if (e.NewValues["TematicaId"] != null)
                 {
@@ -633,12 +608,12 @@ namespace WizOne.Curs
                                 e.NewValues["DataExpirare"] = dataExpirare;
                                 row[x] = e.NewValues[col.ColumnName];
                                 break;
-                            case "TOTALORE":                             
-                                double TotalOre;
-                                GetTotalHoursSession(e, out TotalOre);
-                                e.NewValues["TotalOre"] = TotalOre;
-                                row[x] = e.NewValues[col.ColumnName];
-                                break;
+                            //case "TOTALORE":                             
+                            //    double TotalOre;
+                            //    GetTotalHoursSession(e, out TotalOre);
+                            //    e.NewValues["TotalOre"] = TotalOre;
+                            //    row[x] = e.NewValues[col.ColumnName];
+                            //    break;
                             case "ORAINCEPUT":
                                 if (e.NewValues["OraInceput"] != null)
                                     row[x] = new DateTime(2100, 1, 1, Convert.ToDateTime(e.NewValues["OraInceput"]).Hour, Convert.ToDateTime(e.NewValues["OraInceput"]).Minute, 0);
@@ -707,8 +682,49 @@ namespace WizOne.Curs
         {
             try
             {
+                e.NewValues["IdStare"] = 1;
+                int? categ1 = null;
+                string categ3 = null;
+                int? categ2_id = null;
 
-            
+                DataTable dtCurs = GetCursRestransFiltru((int)cmbCurs.Value);
+
+                if (dtCurs != null && dtCurs.Rows.Count > 0)
+                {
+                    categ1 = dtCurs.Rows[0]["Categ_Niv1Id"] == DBNull.Value ? 0 : Convert.ToInt32(dtCurs.Rows[0]["Categ_Niv1Id"].ToString());
+                    categ3 = dtCurs.Rows[0]["Categ_Niv3Nume"] == DBNull.Value ? "" : dtCurs.Rows[0]["Categ_Niv3Nume"].ToString();
+                    if (categ3 != null && categ3.Length > 20)
+                    {
+                        categ3 = categ3.Substring(0, 20);
+                    }
+                    categ2_id = dtCurs.Rows[0]["Categ_Niv2Id"] == DBNull.Value ? 0 : Convert.ToInt32(dtCurs.Rows[0]["Categ_Niv2Id"].ToString());
+                    Session["CursuriSesiuni_Recurenta"] = dtCurs.Rows[0]["Recurenta"] == DBNull.Value ? 0 : Convert.ToInt32(dtCurs.Rows[0]["Recurenta"].ToString());
+                }
+
+                int idSesMax = 1;
+                string sql = "SELECT MAX(a.\"Id\") + 1 FROM \"Curs_tblCursSesiune\" a LEFT JOIN \"Curs_tblCurs\" b on a.\"IdCurs\" = b.\"Id\" ";
+                DataTable dtTmp = General.IncarcaDT(sql, null);
+                if (dtTmp != null & dtTmp.Rows.Count > 0 && dtTmp.Rows[0][0] != null)
+                    idSesMax = Convert.ToInt32(dtTmp.Rows[0][0].ToString()) + 1;
+
+                e.NewValues["Id"] = idSesMax;
+                e.NewValues["IdCurs"] = (int)cmbCurs.Value;
+                if (e.NewValues["IdStare"] == null)
+                    e.NewValues["IdStare"] = 1;
+
+
+                if (e.NewValues["InternExtern"] == null)
+                    e.NewValues["InternExtern"] = categ1;
+                if (e.NewValues["CodBuget"] == null)
+                    e.NewValues["CodBuget"] = categ3 == null ? null : categ3.ToString();
+                //e.NewValues["Categ_Niv1Id] = categ1;
+                //e.NewValues["Categ_Niv2Id"] = categ2_id;
+
+                if (e.NewValues["DataInceputAprobare"] == null)
+                    e.NewValues["DataInceputAprobare"] = new DateTime(1900, 1, 1);
+                if (e.NewValues["DataSfarsitAprobare"] == null)
+                    e.NewValues["DataSfarsitAprobare"] = new DateTime(2100, 1, 1);
+
             }
             catch (Exception ex)
             {

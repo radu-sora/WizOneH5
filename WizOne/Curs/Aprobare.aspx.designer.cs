@@ -33,15 +33,6 @@ namespace WizOne.Curs
         protected global::DevExpress.Web.ASPxButton btnAproba;
 
         /// <summary>
-        /// btnSendWaitingList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSendWaitingList;
-
-        /// <summary>
         /// btnIncludeParticipantsList control.
         /// </summary>
         /// <remarks>
@@ -58,15 +49,6 @@ namespace WizOne.Curs
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnRespinge;
-
-        /// <summary>
-        /// btnPrint control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnPrint;
 
         /// <summary>
         /// btnExit control.

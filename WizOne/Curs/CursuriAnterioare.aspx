@@ -72,15 +72,27 @@
                         </dx:GridViewCommandColumn>                          
                         <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput"  Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit"  Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="CursNume" Name="CursNume" Caption="Denumire curs"  Width="200px" />                         
-					    <dx:GridViewDataTextColumn FieldName="SesiuneNume" Name="SesiuneNume" Caption="Tip curs"   Width="200px" />	
-                        <dx:GridViewDataTextColumn FieldName="Organizator" Name="Organizator" Caption="Organizator"  Width="200px" />                         
-					    <dx:GridViewDataTextColumn FieldName="Certificat" Name="Certificat" Caption="Specializare"   Width="200px" />	
-					    <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"   Width="200px" />
+                        <dx:GridViewDataTextColumn FieldName="CursNume" Name="CursNume" Caption="Denumire curs"  Width="200px" >                         
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+					    <dx:GridViewDataTextColumn FieldName="SesiuneNume" Name="SesiuneNume" Caption="Tip curs"   Width="200px" >	
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Organizator" Name="Organizator" Caption="Organizator"  Width="200px" >                         
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+					    <dx:GridViewDataTextColumn FieldName="Certificat" Name="Certificat" Caption="Specializare"   Width="200px" >	
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+					    <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"   Width="200px" >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
 
                         <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca" Width="50px" Visible="false" ShowInCustomizationForm="false"/>
                         <dx:GridViewDataTextColumn FieldName="IdStare" Name="IdStare" Caption="Stare" Width="75px" Visible="false" ShowInCustomizationForm="false" />

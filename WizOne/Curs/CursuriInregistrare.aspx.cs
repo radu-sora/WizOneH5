@@ -1078,8 +1078,8 @@ namespace WizOne.Curs
                 if (dtCurs != null && dtCurs.Rows.Count > 0)
                 {
                     txtDenumire.Text = dtCurs.Rows[0]["Denumire"] == DBNull.Value ? "" : dtCurs.Rows[0]["Denumire"].ToString();
-                    txtGrad.Text = dtCurs.Rows[0]["Gradul"] == DBNull.Value ? "" : dtCurs.Rows[0]["Gradul"].ToString();
-                    txtCertif.Text = dtCurs.Rows[0]["CertificariNume"] == DBNull.Value ? "" : dtCurs.Rows[0]["CertificariNume"].ToString();
+                    //txtGrad.Text = dtCurs.Rows[0]["Gradul"] == DBNull.Value ? "" : dtCurs.Rows[0]["Gradul"].ToString();
+                    //txtCertif.Text = dtCurs.Rows[0]["CertificariNume"] == DBNull.Value ? "" : dtCurs.Rows[0]["CertificariNume"].ToString();
                     txtComen.Text = dtCurs.Rows[0]["Observatii"] == DBNull.Value ? "" : dtCurs.Rows[0]["Observatii"].ToString();
                 }
 

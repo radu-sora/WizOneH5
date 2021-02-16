@@ -180,18 +180,29 @@
                                 </dx:GridViewCommandColumnCustomButton>
                             </CustomButtons>                        
                         </dx:GridViewCommandColumn>                       
-                        <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" Width="50px" />
-                        <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Denumire"  Width="150px" />       
-					    <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"   Width="200px" />	
-                        <dx:GridViewDataTextColumn FieldName="Gradul" Name="Gradul" Caption="Gradul" Visible="false" Width="100px" />
+                        <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" Width="50px" >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Denumire"  Width="150px" >       
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+					    <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"   Width="200px" >	
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Gradul" Name="Gradul" Caption="Gradul" Visible="false" Width="100px" >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="Categ_Niv1Id" Name="Categ_Niv1Id" Caption="Categ nivel 1" Width="150px"  >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="Categ_Niv2Id" Name="Categ_Niv2Id" Caption="Categ nivel 2" Width="150px"  >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="Categ_Niv3Id" Name="Categ_Niv3Id" Caption="Categ nivel 3" Width="150px"  >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewCommandColumn Name="colCompetente" Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Competente">
                             <CustomButtons>
@@ -229,24 +240,37 @@
                             </CustomButtons>                        
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataTextColumn FieldName="Buget" Name="Buget" Caption="Buget"  Width="50px" />
-                        <dx:GridViewDataTextColumn FieldName="FinalizareCurs" Name="FinalizareCurs" Caption="Finalizare curs"  Width="200px" />
+                        <dx:GridViewDataTextColumn FieldName="FinalizareCurs" Name="FinalizareCurs" Caption="Finalizare curs"  Width="200px" >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="OrganizatorId" Name="OrganizatorId" Caption="Organizator" Width="150px"  >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataCheckColumn FieldName="OrganizatorNume" Name="OrganizatorNume" Caption="Organizator Nume" Visible="false" ShowInCustomizationForm="false" Width="70px"  />
+                        <dx:GridViewDataCheckColumn FieldName="OrganizatorNume" Name="OrganizatorNume" Caption="Organizator Nume" Visible="false" ShowInCustomizationForm="false" Width="70px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataCheckColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdCategorieNota" Name="IdCategorieNota" Caption="Categorie"  Width="100px" >
                             <PropertiesComboBox TextField="DenumireCategorie" ValueField="IdCategorie" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
                       
                         <dx:GridViewDataComboBoxColumn FieldName="TemplateDiploma" Name="TemplateDiploma" Caption="Diploma participare"  Width="150px" >
                             <PropertiesComboBox TextField="DescrDocument" ValueField="IdDocument" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataCheckColumn FieldName="Activ" Name="Activ" Caption="Activ"  Width="50px"  />
+                        <dx:GridViewDataCheckColumn FieldName="Activ" Name="Activ" Caption="Activ"  Width="50px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataCheckColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="User_TrainerId" Name="User_TrainerId" Caption="Trainer"  Width="150px" >
                             <PropertiesComboBox TextField="Denumire" ValueField="IdUser" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="Recurenta" Name="Recurenta" Caption="Recurenta"  Width="100px"  />
-                        <dx:GridViewDataCheckColumn FieldName="DateAditLaPlanificare" Name="DateAditLaPlanificare" Caption="Date aditionale"  Width="100px"  />
+                        <dx:GridViewDataTextColumn FieldName="Recurenta" Name="Recurenta" Caption="Recurenta"  Width="100px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+
+                        <dx:GridViewDataCheckColumn FieldName="DateAditLaPlanificare" Name="DateAditLaPlanificare" Caption="Date aditionale"  Width="100px" Visible="false" ShowInCustomizationForm="false"  />
                         <dx:GridViewDataCheckColumn FieldName="Importat" Name="Importat" Caption="Anterior"  Width="50px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="MetodaLivrare" Name="MetodaLivrare" Caption="Metoda livrare curs"  Width="75px" Visible="false" ShowInCustomizationForm="false" />
 

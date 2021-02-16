@@ -10,21 +10,11 @@
         function grDate_CustomButtonClick(s, e) {
             switch(e.buttonID)
             {
-                case "btnDoc":
-                    grDate.GetRowValues(e.visibleIndex, 'IdCurs;IdSesiune', GoToDoc);
-                    break;
                 case "btnArata":
                     grDate.GetRowValues(e.visibleIndex, 'IdCurs', GoToArataMode);
                     break;
             }
         } 
-
-        function GoToDoc(Value) {
-            strUrl = getAbsoluteUrl + "Curs/relSesiuneDocumente.aspx?tip=0&qwe=" + Value;
-            popGen.SetHeaderText("Documente");
-            popGen.SetContentUrl(strUrl);
-            popGen.Show();
-        }
 
 
         function OnEndCallback(s, e) {
@@ -109,38 +99,55 @@
                                     <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/arata.png" />
                                 </dx:GridViewCommandColumnCustomButton>                                
                             </CustomButtons>                                               
-                        </dx:GridViewCommandColumn>
-                        <dx:GridViewCommandColumn Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Documente">
-                            <CustomButtons>
-                                <dx:GridViewCommandColumnCustomButton ID="btnDoc" Visibility="AllDataRows">
-                                    <Image ToolTip="Documente" Url="~/Fisiere/Imagini/Icoane/info.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                            </CustomButtons>                        
-                        </dx:GridViewCommandColumn>  
-                        <dx:GridViewDataTextColumn FieldName="Curs" Name="Curs" Caption="Curs" ReadOnly="true" Width="200px"  />
+                        </dx:GridViewCommandColumn> 
+                        <dx:GridViewDataTextColumn FieldName="Curs" Name="Curs" Caption="Curs" ReadOnly="true" Width="200px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewDataTextColumn FieldName="Sesiune" Name="Sesiune" Caption="Sesiune nivel1" ReadOnly="true" Width="150px"  />
-                        <dx:GridViewDataTextColumn FieldName="Categ_Niv1Nume" Name="Categ_Niv1Nume" Caption="Categ_Niv1" ReadOnly="true" Width="150px"  />
-                        <dx:GridViewDataTextColumn FieldName="Categ_Niv2Nume" Name="Categ_Niv2Nume" Caption="Categ_Niv2" ReadOnly="true" Width="150px"  />
-                        <dx:GridViewDataTextColumn FieldName="Categ_Niv3Nume" Name="Categ_Niv3Nume" Caption="Categ_Niv3" ReadOnly="true" Width="150px"  />
+                        <dx:GridViewDataTextColumn FieldName="Categ_Niv1Nume" Name="Categ_Niv1Nume" Caption="Categ_Niv1" ReadOnly="true" Width="150px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Categ_Niv2Nume" Name="Categ_Niv2Nume" Caption="Categ_Niv2" ReadOnly="true" Width="150px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Categ_Niv3Nume" Name="Categ_Niv3Nume" Caption="Categ_Niv3" ReadOnly="true" Width="150px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput"  ReadOnly="true" Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit"  ReadOnly="true" Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora inceput"  ReadOnly="true" Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="HH:mm"></PropertiesDateEdit>
+                            <PropertiesDateEdit DisplayFormatString="HH:mm"></PropertiesDateEdit>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora sfarsit"  ReadOnly="true" Width="100px" >         
-                                <PropertiesDateEdit DisplayFormatString="HH:mm"></PropertiesDateEdit>
+                            <PropertiesDateEdit DisplayFormatString="HH:mm"></PropertiesDateEdit>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="Tematica" Name="Tematica" Caption="Tematica" ReadOnly="true" Width="150px"  />
-                        <dx:GridViewDataTextColumn FieldName="Organizator" Name="Organizator" Caption="Organizator" ReadOnly="true" Width="100px"  />
-                        <dx:GridViewDataTextColumn FieldName="Trainer" Name="Trainer" Caption="Trainer" ReadOnly="true" Width="100px"  />
+                        <dx:GridViewDataTextColumn FieldName="Tematica" Name="Tematica" Caption="Tematica" ReadOnly="true" Width="150px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Organizator" Name="Organizator" Caption="Organizator" ReadOnly="true" Width="100px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Trainer" Name="Trainer" Caption="Trainer" ReadOnly="true" Width="100px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
 
-                        <dx:GridViewDataTextColumn FieldName="Locatie" Name="Locatie" Caption="Locatie" ReadOnly="true" Width="100px"  />
-                        <dx:GridViewDataTextColumn FieldName="FinalizareCurs" Name="FinalizareCurs" Caption="FinalizareCurs" ReadOnly="true" Width="100px"/>
-                        <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"  Width="200px"  />                       
+                        <dx:GridViewDataTextColumn FieldName="Locatie" Name="Locatie" Caption="Locatie" ReadOnly="true" Width="100px"  >
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="FinalizareCurs" Name="FinalizareCurs" Caption="FinalizareCurs" ReadOnly="true" Width="100px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"  Width="200px"  >                       
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataTextColumn>
 
                         <dx:GridViewDataTextColumn FieldName="StareSesiune" Name="StareSesiune" Caption="Stare sesiune"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
 

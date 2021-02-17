@@ -15535,3 +15535,6 @@ where f100.f10003 =@f10003
 ) x
 order by data desc, rank
 GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(152, 'Atribuire document', 'Atribuire document', 'Pagini\RelNomenDoc', 0, 'm1.png')
+GO

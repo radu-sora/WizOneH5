@@ -15536,5 +15536,38 @@ where f100.f10003 =@f10003
 order by data desc, rank
 GO
 
-INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(152, 'Atribuire document', 'Atribuire document', 'Pagini\RelNomenDoc', 0, 'm1.png')
+CREATE TABLE [dbo].[tblRelNomenDoc](
+	[IdNomen1] [int] NULL,
+	[Val1] [nvarchar](100) NULL,
+	[IdNomen2] [int] NULL,
+	[Val2] [nvarchar](100) NULL,
+	[Document] [nvarchar](max) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [tblRelNomenDoc_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+CREATE TABLE [dbo].[tblNomenDoc](
+	[Id] [int] NOT NULL,
+	[Denumire] [nvarchar](100) NULL,
+	[Tip] [int] NOT NULL,		
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [tblNomenDoc_PK] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC,
+	[Tip] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(152, 'Relatie nomenclator document', 'Relatie nomenclator document', 'Pagini\RelNomenDoc', 1, 'm1.png')
 GO

@@ -492,7 +492,18 @@ namespace WizOne.Curs
                              +  " AND \"Aprobat\" IS NULL" ;
                             DataTable dtIst = General.IncarcaDT(sql, null);
 
-                            if (dtIst == null || dtIst.Rows.Count == 0) continue;
+                            if (dtIst == null || dtIst.Rows.Count == 0)
+                            {
+                                if (actiune == 4)
+                                {                            
+                                    sql = "SELECT * FROM \"Curs_CereriIstoric\" WHERE \"IdCerere\" = " + id.ToString()
+                                    + " AND \"IdUser\" = " + idUser.ToString()  + " ORDER BY Pozitie DESC ";
+                                    dtIst = General.IncarcaDT(sql, null);
+                                    if (dtIst == null || dtIst.Rows.Count == 0) continue;
+                                }
+                                else
+                                    continue;
+                            }
 
                             int eListaAsteptare_Curs = Convert.ToInt32(dtCur.Rows[0]["eListaAsteptare"].ToString());
                             int eListaAsteptare_Ist = Convert.ToInt32(dtIst.Rows[0]["eListaAsteptare"].ToString());

@@ -32,7 +32,7 @@ namespace WizOne
                     AscundeButoane();
                 }
 
-                //Florin 2021.02.18
+                //Florin 2021.02.18  #795
                 tipInfoChiosc = Convert.ToInt32(Dami.ValoareParam("TipInfoChiosc", "0"));
                 Session["TipInfoChiosc"] = tipInfoChiosc;
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == Convert.ToInt32(IdClienti.Clienti.TMK))

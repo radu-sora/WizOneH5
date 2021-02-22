@@ -1372,6 +1372,7 @@
     </Compile>
     <Compile Include="ConcediiMedicale\Aprobare.aspx.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ConcediiMedicale\Aprobare.aspx.designer.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>

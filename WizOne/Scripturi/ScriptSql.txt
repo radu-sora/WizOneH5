@@ -15348,63 +15348,6 @@ GO
 
 ---- Cursuri START
 
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(125, 'Cursuri', 'Cursuri', 'Curs\Cursuri', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(126, 'Sesiuni de cursuri', 'Sesiuni de cursuri', 'Curs\CursuriSesiuni', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(127, 'Aprobare training', 'Aprobare training', 'Curs\Aprobare', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(128, 'Circuit', 'Circuit', 'Pagini\SablonNomen[Curs_Circuit]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(129, 'Cursuri anterioare', 'Cursuri anterioare', 'Curs\CursuriAnterioare', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(130, 'Feedback trainer', 'Feedback trainer', 'Curs\AprobareTrainer', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(131, 'Planificare', 'Planificarea oamenilor pe cursuri', 'Curs\CursuriInregistrare', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(132, 'Vizualizare cursuri disponibile', 'Vizualizare cursuri', 'Curs\CursuriView', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(133, 'Vizualizare istoric', 'Vizualizare istoric', 'Curs\CursuriIstoric', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(134, 'Categorii costuri curs', 'Categorii costuri', 'Pagini\SablonNomen[Curs_tblCosturi]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(135, 'Categorii nivel1', 'Categorii nivel1', 'Pagini\SablonNomen[Curs_tblCateg_Niv1]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(136, 'Categorii nivel2', 'Categorii nivel2', 'Pagini\SablonNomen[Curs_tblCateg_Niv2]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(137, 'Categorii nivel3', 'Categorii nivel3', 'Pagini\SablonNomen[Curs_tblCateg_Niv3]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(138, 'Categorii note', 'Nomenclator categorii note', 'Pagini\SablonNomen[Curs_tblCategoriiNote]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(139, 'Categorii valori note', 'Nomenclator categorii valori note', 'Pagini\SablonNomen[Curs_tblCategNoteValori]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(140, 'Certificari', 'Certificari', 'Pagini\SablonNomen[Curs_tblCertificari]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(141, 'Competente', 'Competente', 'Pagini\SablonNomen[tblCompetente]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(142, 'Competente si Cursuri', 'Competente si Cursuri', 'Pagini\SablonNomen[Curs_relCursCompetente]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(143, 'Competente si Functii', 'Competente si Functii', 'Pagini\SablonNomen[Curs_relCompetenteFunctii]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(144, 'Furnizori', 'Furnizori', 'Pagini\SablonNomen[Curs_tblFurnizori]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(145, 'Locatii', 'Locatii', 'Pagini\SablonNomen[Curs_tblLocatii]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(146, 'Organizatori', 'Organizatori', 'Pagini\SablonNomen[Curs_tblOrganizatori]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(147, 'Stari anterioare', 'Stari anterioare', 'Pagini\SablonNomen[Curs_tblStariAnterior]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(148, 'Stari circuit', 'Stari circuit', 'Pagini\SablonNomen[Curs_tblStari]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(149, 'Tematici', 'Tematici', 'Pagini\SablonNomen[Curs_tblTematici]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(150, 'Tipuri competente', 'Tipuri competente', 'Pagini\SablonNomen[tblGrupCompetente]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(151, 'Traineri', 'Traineri', 'Pagini\SablonNomen[Curs_tblTraineri]', 1, 'm1.png')
-GO
-
-
-
 CREATE TABLE [dbo].[Curs_Anterior](
 	[F10003] [int] NULL,
 	[CursId] [int] NULL,
@@ -16260,6 +16203,133 @@ INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES 
 GO
 
 
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Curs_IDuriManager', '1', 'lista Id-uri Manager (cu virgula intre valori)', 6)
+GO
+
+
+
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_Circuit', N'IdGrupAngajat', 2, 1, N'SELECT Id, Denumire FROM tblGrupAngajati', 0, 3, CAST(N'2021-02-02' AS Date), N'Grup Angajati')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_Circuit', N'IdInternExtern', 2, 1, N'select Id, Denumire from Curs_tblCateg_Niv1', 0, 3, CAST(N'2021-02-02' AS Date), N'Grup Curs')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_Circuit', N'Super1', 2, 1, N'SELECT Id, Denumire FROM ( SELECT (-1 * Id) AS Id, CASE WHEN (Alias IS NULL OR LTRIM(RTRIM(Alias)) = '''') THEN Denumire ELSE Alias END AS Denumire, 0 As Ordin FROM tblSupervizori UNION SELECT F10003 AS Id, F10008 + '' '' + F10009 AS Denumire, 1 AS Ordin FROM F100) X ORDER BY Ordin, Denumire', 0, 3, CAST(N'2021-02-02' AS Date), NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_Circuit', N'Super2', 2, 1, N'SELECT Id, Denumire FROM ( SELECT (-1 * Id) AS Id, CASE WHEN (Alias IS NULL OR LTRIM(RTRIM(Alias)) = '''') THEN Denumire ELSE Alias END AS Denumire, 0 As Ordin FROM tblSupervizori UNION SELECT F10003 AS Id, F10008 + '' '' + F10009 AS Denumire, 1 AS Ordin FROM F100) X ORDER BY Ordin, Denumire', 0, 3, CAST(N'2021-02-02' AS Date), NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_Circuit', N'Super3', 2, 1, N'SELECT Id, Denumire FROM ( SELECT (-1 * Id) AS Id, CASE WHEN (Alias IS NULL OR LTRIM(RTRIM(Alias)) = '''') THEN Denumire ELSE Alias END AS Denumire, 0 As Ordin FROM tblSupervizori UNION SELECT F10003 AS Id, F10008 + '' '' + F10009 AS Denumire, 1 AS Ordin FROM F100) X ORDER BY Ordin, Denumire', 0, 3, CAST(N'2021-02-02' AS Date), NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_Circuit', N'Super4', 2, 1, N'SELECT Id, Denumire FROM ( SELECT (-1 * Id) AS Id, CASE WHEN (Alias IS NULL OR LTRIM(RTRIM(Alias)) = '''') THEN Denumire ELSE Alias END AS Denumire, 0 As Ordin FROM tblSupervizori UNION SELECT F10003 AS Id, F10008 + '' '' + F10009 AS Denumire, 1 AS Ordin FROM F100) X ORDER BY Ordin, Denumire', 0, 3, CAST(N'2021-02-02' AS Date), NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_Circuit', N'Super5', 2, 1, N'SELECT Id, Denumire FROM ( SELECT (-1 * Id) AS Id, CASE WHEN (Alias IS NULL OR LTRIM(RTRIM(Alias)) = '''') THEN Denumire ELSE Alias END AS Denumire, 0 As Ordin FROM tblSupervizori UNION SELECT F10003 AS Id, F10008 + '' '' + F10009 AS Denumire, 1 AS Ordin FROM F100) X ORDER BY Ordin, Denumire', 0, 3, CAST(N'2021-02-02' AS Date), NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_Circuit', N'Super6', 2, 1, N'SELECT Id, Denumire FROM ( SELECT (-1 * Id) AS Id, CASE WHEN (Alias IS NULL OR LTRIM(RTRIM(Alias)) = '''') THEN Denumire ELSE Alias END AS Denumire, 0 As Ordin FROM tblSupervizori UNION SELECT F10003 AS Id, F10008 + '' '' + F10009 AS Denumire, 1 AS Ordin FROM F100) X ORDER BY Ordin, Denumire', 0, 3, CAST(N'2021-02-02' AS Date), NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_Circuit', N'Super7', 2, 1, N'SELECT Id, Denumire FROM ( SELECT (-1 * Id) AS Id, CASE WHEN (Alias IS NULL OR LTRIM(RTRIM(Alias)) = '''') THEN Denumire ELSE Alias END AS Denumire, 0 As Ordin FROM tblSupervizori UNION SELECT F10003 AS Id, F10008 + '' '' + F10009 AS Denumire, 1 AS Ordin FROM F100) X ORDER BY Ordin, Denumire', 0, 3, CAST(N'2021-02-02' AS Date), NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_relCompetenteFunctii', N'Id_Competenta', 2, 1, N'select Id, Denumire from tblCompetente', 0, 3, CAST(N'2021-02-02' AS Date), N'Competenta')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_relCompetenteFunctii', N'Id_Functie', 2, 1, N'select F71802, F71804 from F718', 0, 3, CAST(N'2021-02-02' AS Date), N'Functie Interna')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_relCursCompetente', N'Id_Competenta', 2, 1, N'select Id, Denumire from tblCompetente', 0, 3, CAST(N'2021-02-02' AS Date), N'Competenta')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_relCursCompetente', N'Id_Curs', 2, 1, N'select Id, Denumire from Curs_tblCurs', 0, 3, CAST(N'2021-02-02' AS Date), N'Cursuri')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblCateg_Niv2', N'Id_Niv1', 2, 1, N'select Id, Denumire from Curs_tblCateg_Niv1', 0, 3, CAST(N'2021-01-22' AS Date), N'Academia de Training')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblCateg_Niv3', N'Id_Niv2', 2, 1, N'select Id, Denumire from Curs_tblCateg_Niv2', 0, 3, CAST(N'2021-01-22' AS Date), N'Metoda Livrare')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblCategNoteValori', N'DenumireValoare', 6, 1, NULL, 0, 3, CAST(N'2021-01-22' AS Date), N'Denumire Valoare')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblCategNoteValori', N'IdCategorie', 2, 1, N'select IdCategorie, DenumireCategorie from Curs_tblCategoriiNote', 0, 3, CAST(N'2021-01-22' AS Date), N'Categorie Note')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblCategNoteValori', N'IdCategValoare', 7, 1, NULL, 0, 3, CAST(N'2021-01-22' AS Date), N'Valoare Categorie')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblCategoriiNote', N'DenumireCategorie', 6, 1, NULL, 0, 3, CAST(N'2021-01-22' AS Date), N'Denumire Categorie')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblCategoriiNote', N'IdCategorie', 7, 1, NULL, 0, 3, CAST(N'2021-01-22' AS Date), N'Id Categorie')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblCosturi', N'DenumireCost', 6, 1, NULL, 0, 3, CAST(N'2021-01-22' AS Date), N'Denumire Cost')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblCosturi', N'IdCentruCost', 2, 1, N'select IdCentruCost, CentruCost from Curs_tblCentreCost', 0, 3, CAST(N'2021-01-22' AS Date), N'Centru de Cost')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblCosturi', N'IdCost', 7, 1, N'select max(IdCost) + 1 from Curs_tblCosturi', 1, 3, CAST(N'2021-01-22' AS Date), N'Id')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblFurnizori', N'Id', 7, 1, N'select max(Id) + 1 from Curs_tblFurnizori', 1, 3, CAST(N'2021-02-02' AS Date), N'Id')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblLocatii', N'Id', 7, 1, N'select max (Id) + 1 from Curs_tblLocatii', 1, 3, CAST(N'2021-02-02' AS Date), N'Id')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblStari', N'Culoare', 5, 1, NULL, 0, 3, CAST(N'2021-02-02' AS Date), NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES (N'Curs_tblTraineri', N'IdUser', 2, 1, N'select F70102, F70104 from USERS', 0, 3, CAST(N'2021-01-22' AS Date), N'Utilizator')
+GO
+
+
+
+
+
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668082, 0, 1, 1, N'Cursuri', NULL, N'pred.png', NULL, 2, CAST(N'2020-12-11 11:23:09.920' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668083, 668082, 1, 1, N'Cursuri si Sesiuni', NULL, N'grup.png', NULL, 2, CAST(N'2020-12-11 11:24:04.627' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668084, 668083, 1, 1, N'Cursuri', NULL, N'adauga.png', 125, 2, CAST(N'2020-12-11 11:24:43.043' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668085, 668083, 2, 1, N'Sesiuni de cursuri', NULL, N'chooser.png', 126, 2, CAST(N'2020-12-11 11:25:30.243' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668086, 668082, 2, 1, N'Planificare si Urmarire', NULL, N'grup.png', NULL, 2, CAST(N'2020-12-11 11:26:07.457' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668087, 668086, 1, 1, N'Aprobare training', NULL, N'aprobare.png', 127, 2, CAST(N'2020-12-11 11:27:01.107' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668088, 668086, 2, 1, N'Circuit', NULL, N'arata.png', 128, 2, CAST(N'2020-12-11 11:27:28.707' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668089, 668086, 3, 1, N'Cursuri anterioare', NULL, N'istoric.png', 129, 2, CAST(N'2020-12-11 11:28:41.357' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668090, 668086, 4, 1, N'Feedback trainer', NULL, N'arata.png', 130, 2, CAST(N'2020-12-11 11:29:10.103' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668091, 668086, 5, 1, N'Planificare', NULL, N'meniu.png', 131, 2, CAST(N'2020-12-11 11:29:41.110' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668092, 668086, 6, 1, N'Vizualizare cursuri disponibile', NULL, N'intre.png', 132, 2, CAST(N'2020-12-11 11:30:14.557' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668093, 668086, 7, 1, N'Vizualizare istoric', NULL, N'istoric.png', 133, 2, CAST(N'2020-12-11 11:30:43.293' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668094, 668082, 3, 1, N'Nomenclatoare', NULL, N'grup.png', NULL, 2, CAST(N'2020-12-11 11:31:14.650' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668095, 668094, 1, 1, N'Categorii costuri curs', NULL, N'm6.png', 134, 2, CAST(N'2020-12-11 11:31:56.320' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668096, 668094, 2, 1, N'Categorii nivel1', NULL, N'view.png', 135, 2, CAST(N'2020-12-11 11:32:36.450' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668097, 668094, 3, 1, N'Categorii nivel2', NULL, N'view.png', 136, 2, CAST(N'2020-12-11 11:33:00.363' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668098, 668094, 4, 1, N'Categorii nivel3', NULL, N'view.png', 137, 2, CAST(N'2020-12-11 11:33:24.870' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668099, 668094, 5, 1, N'Categorii note', NULL, N'clone.png', 138, 2, CAST(N'2020-12-11 11:33:58.873' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668100, 668094, 6, 1, N'Categorii valori note', NULL, N'clone.png', 139, 2, CAST(N'2020-12-11 11:34:30.413' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668101, 668094, 7, 1, N'Certificari', NULL, N'arata.png', 140, 2, CAST(N'2020-12-11 11:35:08.143' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668102, 668094, 8, 1, N'Competente', NULL, N'chooser.png', 141, 2, CAST(N'2020-12-11 11:35:51.460' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668103, 668094, 9, 1, N'Competente si Cursuri', NULL, N'duplicare.png', 142, 2, CAST(N'2020-12-11 11:36:30.153' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668104, 668094, 10, 1, N'Competente si Functii', NULL, N'intre.png', 143, 2, CAST(N'2020-12-11 11:37:11.923' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668105, 668094, 11, 1, N'Furnizori', NULL, N'initializare.png', 144, 2, CAST(N'2020-12-11 11:37:57.503' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668106, 668094, 12, 1, N'Locatii', NULL, N'info.png', 145, 2, CAST(N'2020-12-11 11:38:26.727' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668107, 668094, 13, 1, N'Organizatori', NULL, N'm1.png', 146, 2, CAST(N'2020-12-11 11:38:46.960' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668108, 668094, 14, 1, N'Stari anterioare', NULL, N'btnInapoi.png', 147, 2, CAST(N'2020-12-11 11:39:18.147' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668109, 668094, 15, 1, N'Stari circuit', NULL, N'view.png', 148, 2, CAST(N'2020-12-11 11:39:58.540' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668110, 668094, 16, 1, N'Tematici', NULL, N'doc2.png', 149, 2, CAST(N'2020-12-11 11:40:21.257' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668111, 668094, 17, 1, N'Tipuri competente', NULL, N'm2.png', 150, 2, CAST(N'2020-12-11 11:40:50.793' AS DateTime))
+GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668112, 668094, 18, 1, N'Trainer', NULL, N'm1.png', 151, 2, CAST(N'2020-12-11 11:41:11.680' AS DateTime))
+GO
+
 ---- Cursuri END
 
 
@@ -16871,3 +16941,143 @@ GO
 --https://github.com/wizromRD/WizOne/issues/718
 --De discutat functionalitatea butonului Imprima de pe Post #718
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('IdRaportFisaPost', '-99', 'Id Raport pentru fisa post din modulul de Organigrama')
+
+
+
+
+
+----  2.2.135  ----
+
+
+CREATE TABLE [dbo].[CM_Cereri](
+	[Id] [int] NOT NULL,
+	[F10003] [int] NOT NULL,
+	[TipProgram] [int] NOT NULL,
+	[TipConcediu] [int] NOT NULL,
+	[CodIndemnizatie] [int] NULL,
+	[SerieCM] [nvarchar](20) NULL,
+	[NumarCM] [nvarchar](20) NULL,
+	[DataCM] DATETIME null,
+	[Prescris] [int] NULL,
+	[DataInceput] DATETIME null,
+	[DataSfarsit] DATETIME null,
+	[NrZile] [int] NULL,
+	[CodDiagnostic] [int] NULL,
+	[CodUrgenta] [int] NULL,
+	[CodInfectoContag] [int] NULL,
+	[Initial] [int] NULL,
+	[ZileCMInitial] [int] NULL,
+	[SerieCMInitial] [nvarchar](20) NULL,
+	[NumarCMInitial] [nvarchar](20) NULL,
+	[DataCMInitial] DATETIME null,
+	[CodTransfer1] [int] NULL,
+	[CodTransfer2] [int] NULL,
+	[CodTransfer3] [int] NULL,
+	[CodTransfer4] [int] NULL,
+	[CodTransfer5] [int] NULL,
+	[NrZileCT1] [int] NULL,
+	[NrZileCT2] [int] NULL,
+	[NrZileCT3] [int] NULL,
+	[NrZileCT4] [int] NULL,
+	[NrZileCT5] [int] NULL,
+	[BazaCalculCM] [int] NULL,
+	[ZileBazaCalculCM] [int] NULL,
+	[MedieZileBazaCalcul] [int] NULL,
+	[MedieZilnicaCM] [int] NULL,
+	[NrAvizMedicExpert] [nvarchar](20) NULL,
+	[DataAvizDSP] DATETIME null,
+	[MedicCurant] [nvarchar](250) NULL,
+	[CNPCopil] [nvarchar](13) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [CM_Cereri_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+CREATE TABLE [dbo].[CM_CereriIstoric](
+	[IdCerere] [int] NULL,
+	[IdCircuit] [int] NULL,
+	[IdSuper] [int] NULL,
+	[IdStare] [int] NULL,
+	[IdUser] [int] NULL,
+	[Pozitie] [int] NULL,
+	[Culoare] [nvarchar](50) NULL,
+	[Aprobat] [int] NULL,
+	[DataAprobare] [datetime] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL
+ CONSTRAINT [CM_CereriIstoric_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+
+CREATE TABLE [dbo].[CM_Circuit](
+	[Super1] [int] NULL,
+	[Super2] [int] NULL,
+	[Super3] [int] NULL,
+	[Super4] [int] NULL,
+	[Super5] [int] NULL,
+	[Super6] [int] NULL,
+	[Super7] [int] NULL,
+	[Super8] [int] NULL,
+	[Super9] [int] NULL,
+	[Super10] [int] NULL,
+	[Super11] [int] NULL,
+	[Super12] [int] NULL,
+	[Super13] [int] NULL,
+	[Super14] [int] NULL,
+	[Super15] [int] NULL,
+	[Super16] [int] NULL,
+	[Super17] [int] NULL,
+	[Super18] [int] NULL,
+	[Super19] [int] NULL,
+	[Super20] [int] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [CM_Circuit_PK] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+CREATE TABLE [dbo].[CM_tblStari](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](50) NULL,
+	[Culoare] [nvarchar](50) NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [CM_tblStari_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME]) VALUES (-1, N'Anulat', N'#FF0000', NULL, NULL)
+GO
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME]) VALUES (1, N'Solicitat', N'#9ACCFF', NULL, NULL)
+GO
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME]) VALUES (2, N'In curs', N'#FFA500', NULL, NULL)
+GO
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME]) VALUES (3, N'Aprobat', N'#9BBB59', NULL, NULL)
+GO
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME]) VALUES (4, N'Transferat', N'#39A1FF', NULL, NULL)
+GO

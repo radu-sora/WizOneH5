@@ -428,7 +428,19 @@ namespace WizOne.Personal
         {
             try
             {
-
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DateTime dtLuc = General.DamiDataLucru();
+                e.NewValues["F11101"] = 111;
+                e.NewValues["F11102"] = ds.Tables[0].Rows[0]["F10017"];
+                e.NewValues["F11103"] = Convert.ToInt32(Session["Marca"].ToString());
+                e.NewValues["F11104"] = 0;
+                e.NewValues["F11105"] = new DateTime(2100, 1, 1);
+                e.NewValues["F11106"] = new DateTime(2100, 1, 1);
+                e.NewValues["F11107"] = new DateTime(2100, 1, 1);
+                e.NewValues["YEAR"] = dtLuc.Year;
+                e.NewValues["MONTH"] = dtLuc.Month;
+                e.NewValues["USER_NO"] = Convert.ToInt32(Session["UserId"].ToString());
+                e.NewValues["TIME"] = DateTime.Now;
 
             }
             catch (Exception ex)
@@ -455,17 +467,6 @@ namespace WizOne.Personal
                 {
                     DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                     DateTime dtLuc = General.DamiDataLucru();
-                    e.NewValues["F11101"] = 111;
-                    e.NewValues["F11102"] = ds.Tables[0].Rows[0]["F10017"];
-                    e.NewValues["F11103"] = Convert.ToInt32(Session["Marca"].ToString());
-                    e.NewValues["F11104"] = 0;
-                    e.NewValues["F11105"] = new DateTime(2100, 1, 1);
-                    e.NewValues["F11106"] = new DateTime(2100, 1, 1);
-                    e.NewValues["F11107"] = new DateTime(2100, 1, 1);
-                    e.NewValues["YEAR"] = dtLuc.Year;
-                    e.NewValues["MONTH"] = dtLuc.Month;
-                    e.NewValues["USER_NO"] = Convert.ToInt32(Session["UserId"].ToString());
-                    e.NewValues["TIME"] = DateTime.Now;
                     DataTable dtSusp = Session["MP_Suspendari"] as DataTable;
                     object[] row = new object[dtSusp.Columns.Count];
                     int x = 0;

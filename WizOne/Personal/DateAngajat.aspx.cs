@@ -1641,6 +1641,7 @@ namespace WizOne.Personal
                 lstDO.Add("txtCamp1", "F100902");
                 lstDO.Add("txtCamp2", "F100903");
                 lstDO.Add("txtCamp3", "F100904");
+                lstDO.Add("txtMarcaVeche", "F100943");
                 #endregion
 
                 //Studii

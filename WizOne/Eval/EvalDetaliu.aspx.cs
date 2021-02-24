@@ -5714,9 +5714,19 @@ namespace WizOne.Eval
                         }
                         break;
                     case (int)Module.IdClienti.Clienti.Alka:
-                        val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
-                                $@"SELECT SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                        {
+                            //#803 Florin
+                            //val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                            //        $@"SELECT SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                            //        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                            val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                $@"SELECT ROUND(SUM(Total)/2,1) FROM (
+                                (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                UNION
+                                (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                ) X",
                                 new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                        }
                         break;
                 }
             }

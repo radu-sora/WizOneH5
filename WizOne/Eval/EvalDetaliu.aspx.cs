@@ -2276,7 +2276,19 @@ namespace WizOne.Eval
                 lbl.Font.Size = 12;
                 lbl.ID = "txt" + id;
                 lbl.CssClass = "lbl_eval_desc";
-                lbl.Text = CalculNotaFinala().ToString("0.##");
+
+                decimal nota = CalculNotaFinala();
+                string desc = "";
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Alka)
+                {
+                    if (1 <= nota && nota <= 1.99m) desc = "Necesita imbunatatire rapida";
+                    if (2 <= nota && nota <= 2.99m) desc = "Nesatisfacator/Sub asteptari";
+                    if (3 <= nota && nota <= 3.99m) desc = "Bun/Conform asteptarilor";
+                    if (4 <= nota && nota <= 4.50m) desc = "Foarte bine/ Peste asteptari";
+                    if (4.51m <= nota && nota <= 5) desc = "Excelent";
+                }
+
+                lbl.Text = CalculNotaFinala().ToString("0.##") + "  " + desc;
             }
             catch (Exception ex)
             {

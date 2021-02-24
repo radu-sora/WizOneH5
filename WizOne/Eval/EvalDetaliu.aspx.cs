@@ -2599,6 +2599,10 @@ namespace WizOne.Eval
                                         strSQLObiectiv = @"SELECT ""IdObiectiv"" AS ""Id"", CAST(""Obiectiv"" AS varchar(4000)) AS ""Denumire"" FROM ""Eval_Obiectiv""  ";
 
                                     DataTable dtObiectiv = General.IncarcaDT(strSQLObiectiv, new object[] { clsConfigDetail.IdNomenclator, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+
+                                    //Florin #801
+                                    lstObiective = new List<metaDate>();
+
                                     foreach (DataRow rwObiectiv in dtObiectiv.Rows)
                                     {
                                         metaDate clsObiectiv = new metaDate();

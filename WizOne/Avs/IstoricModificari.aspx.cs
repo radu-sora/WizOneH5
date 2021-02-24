@@ -94,6 +94,7 @@ namespace WizOne.Avs
                         SELECT A.F10003
                         FROM F100 A
                         INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
+                        INNER JOIN ""Avs_Circuit"" C ON B.""IdSuper"" = -1 * c.""Super1""
                         WHERE B.""IdUser""= {Session["UserId"]}) B
                         INNER JOIN F100 A ON A.F10003=B.F10003
                         LEFT JOIN F718 X ON A.F10071=X.F71802

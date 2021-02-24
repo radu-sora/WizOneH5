@@ -2335,6 +2335,13 @@ namespace WizOne.Module
 
                             }
                         }
+                        else
+                        {
+                            for (int j = 0; j < arr.Count; j++)
+                            {
+                                General.ExecutaNonQuery(@"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString() });
+                            }
+                        }
                     }
                 }
 

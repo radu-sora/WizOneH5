@@ -15571,3 +15571,14 @@ GO
 
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(152, 'Relatie nomenclator document', 'Relatie nomenclator document', 'Pagini\RelNomenDoc', 1, 'm1.png')
 GO
+
+
+ALTER TABLE F099 ADD F099995 int 
+GO
+ALTER TABLE F099 ADD F099996 int 
+GO
+ALTER TABLE F099 ADD F099997 int 
+GO
+
+UPDATE "tblParametrii" SET "Explicatie" = 'Introdusa pentru GDPR, daca este 1 activeaza mecanismul de Two Factor Authentication; 2 - se trimite codul doar celor care au si alte roluri in afara de Angajat' WHERE "Nume" = '2FA'
+GO

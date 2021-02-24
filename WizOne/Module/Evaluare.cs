@@ -2335,7 +2335,7 @@ namespace WizOne.Module
 
                             }
                         }
-                        else
+                        else                //#800 Florin - am adaugat  ramura cu else
                         {
                             for (int j = 0; j < arr.Count; j++)
                             {

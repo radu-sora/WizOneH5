@@ -488,7 +488,7 @@
                         <dx:GridViewCommandColumn Width="160px" VisibleIndex="1" ButtonType="Image" Caption=" " Name="butoaneGrid" >
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnEdit">
-                                    <Image ToolTip="Anulare" Url="~/Fisiere/Imagini/Icoane/edit.png" />
+                                    <Image ToolTip="Modificare" Url="~/Fisiere/Imagini/Icoane/edit.png" />
                                 </dx:GridViewCommandColumnCustomButton>
                                 <dx:GridViewCommandColumnCustomButton ID="btnDelete">
                                     <Image ToolTip="Anulare" Url="~/Fisiere/Imagini/Icoane/sterge.png" />

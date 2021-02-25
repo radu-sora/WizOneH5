@@ -1,9 +1,11 @@
 ﻿using DevExpress.Spreadsheet;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Web;
 using System.Web.Hosting;
 using System.Web.UI;
 using WizOne.Module;
@@ -55,6 +57,18 @@ namespace WizOne.Organigrama
                         grDate.ExpandAll();
                         grDate.FindNodesByFieldValue("Id", idPost)[0].Focus();
                     }
+
+                    ////#805  Florin
+                    //NameValueCollection lst = HttpUtility.ParseQueryString((Session["Filtru_CereriAbs"] ?? "").ToString());
+                    //if (lst.Count > 0)
+                    //{
+                    //    if (General.Nz(lst["DataSelectie"], "").ToString() != "") txtDtVig.Date = Convert.ToDateTime(lst["DataSelectie"]);
+                    //    if (General.Nz(lst["PostActiv"], "").ToString() != "") chkActiv.Value = Convert.ToBoolean(lst["PostActiv"]);
+                    //    if (General.Nz(lst["Angajati"], "").ToString() != "") cmbAng.SelectedIndex = Convert.ToInt32(lst["Angajati"]);
+                    //    if (General.Nz(lst["Superior"], "").ToString() != "") cmbParinte.SelectedIndex = Convert.ToInt32(lst["Superior"]);
+
+                    //    Session["Filtru_Org"] = "";
+                    //}
                 }
                 else
                 {
@@ -324,6 +338,7 @@ namespace WizOne.Organigrama
         {
             try
             {
+                RetineFiltru();
                 Session["DataVigoare"] = txtDtVig.Value;
                 Session["IdAuto"] = -97;
                 Response.Redirect("~/Organigrama/Posturi", false);
@@ -341,6 +356,7 @@ namespace WizOne.Organigrama
             {
                 if (Convert.ToInt32(General.Nz(grDate.FocusedNode.Key, 0)) > 0)
                 {
+                    RetineFiltru();
                     Session["DataVigoare"] = txtDtVig.Value;
                     Session["IdAuto"] = grDate.FocusedNode.GetValue("IdAuto");
                     Response.Redirect("~/Organigrama/Posturi", false);
@@ -361,6 +377,7 @@ namespace WizOne.Organigrama
             {
                 if (Convert.ToInt32(General.Nz(grDate.FocusedNode.Key, 0)) > 0)
                 {
+                    RetineFiltru();
                     Session["DataVigoare"] = txtDtVig.Value;
                     Session["IdAuto"] = grDate.FocusedNode.GetValue("IdAuto");
                     Session["Org_Duplicare"] = "1"; 
@@ -543,20 +560,41 @@ namespace WizOne.Organigrama
         {
             try
             {
+                RetineFiltru();
+                grDate.JSProperties["cpReportUrl"] = ResolveClientUrl("~/Organigrama/Diagrama");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void RetineFiltru()
+        {
+            try
+            {
                 Dictionary<string, object> dic = new Dictionary<string, object>();
 
                 dic.Add("Ziua", Convert.ToDateTime(txtDtVig.Value));
                 dic.Add("Activ", chkActiv.Value);
                 dic.Add("Parinte", cmbParinte.Value);
                 dic.Add("StareAng", cmbAng.Value);
-            
+
                 if (Convert.ToInt32(General.Nz(grDate.FocusedNode.Key, 0)) > 0)
                     dic.Add("IdPost", grDate.FocusedNode.GetValue("Id"));
                 else
                     dic.Add("IdPost", 1);
 
                 Session["Filtru_Posturi"] = dic;
-                grDate.JSProperties["cpReportUrl"] = ResolveClientUrl("~/Organigrama/Diagrama");
+
+                //string req = "";
+                //if (txtDtVig.Date != null) req += "&DataSelectie=" + txtDtVig.Date;
+                //if (chkActiv.Value != null) req += "&PostActiv=" + chkActiv.Value;
+                //req += "&Angajati=" + cmbAng.SelectedIndex;
+                //req += "&Superior=" + cmbParinte.Value;
+
+                //Session["Filtru_Org"] = req;
             }
             catch (Exception ex)
             {

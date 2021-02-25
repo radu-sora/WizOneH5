@@ -1211,6 +1211,15 @@ namespace WizOne.Avs
                 //        WHERE (B.""IdSuper"" >= 0 AND B.""IdUser""={Session["UserId"]}) OR (B.""IdSuper"" < 0 AND FF.""IdUser""={Session["UserId"]})
                 //        OR gg.""IdUser"" = {Session["UserId"]} ";
 
+                string filtru = "";
+                string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
+                if (("," + idHR + ",").IndexOf("," + General.Nz(cmbRol.Value, -99).ToString() + ",") < 0)
+                {
+                    if (Convert.ToInt32(cmbRol.Value ?? -99) != -99)
+                    {
+                        filtru += @" AND  b.idsuper = " + Convert.ToInt32(cmbRol.Value ?? -99);
+                    }
+                }
 
                 strSql = $@"select F10003, ""NumeComplet"", ""Functia"", ""Subcompanie"", ""Filiala"", ""Sectie"", ""Departament""
                         from
@@ -1226,6 +1235,7 @@ namespace WizOne.Avs
                         LEFT JOIN F006 I ON A.F10007 = I.F00607
                         left join ""F100Supervizori"" FF on C.f10003 = FF.f10003 and(-1 * B.""IdSuper"") = FF.IdSuper
                         WHERE case when B.""IdSuper"" >= 0 then  B.""IdUser"" else FF.IdUser end = {Session["UserId"]}
+                        OR c.F10003 in (select b.f10003 from f100supervizori b where b.iduser = {Session["UserId"]} {filtru})
                         union
                         SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"", 
                         X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament""
@@ -1349,10 +1359,17 @@ namespace WizOne.Avs
 
                 //daca este rol de hr aratam toate cererile
                 string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
-                if (("," + idHR + ",").IndexOf("," + General.Nz(cmbRol.Value,-99).ToString() + ",") < 0)
+                if (("," + idHR + ",").IndexOf("," + General.Nz(cmbRol.Value, -99).ToString() + ",") < 0)
                 {
-                    filtru += " AND G.\"IdUser\"=" + Session["UserId"];
-                    if (Convert.ToInt32(cmbRol.Value ?? -99) != -99) filtru += @" AND (CASE WHEN G.""IdSuper"" > 0 THEN 76 ELSE (-1 * G.""IdSuper"") END) = " + Convert.ToInt32(cmbRol.Value ?? -99);
+                    if (Convert.ToInt32(cmbRol.Value ?? -99) != -99)
+                    {
+                        filtru += @" AND ((G.""IdUser"" = " + Session["UserId"] + @" AND (CASE WHEN G.""IdSuper"" > 0 THEN 76 ELSE (-1 * G.""IdSuper"") END) = " + Convert.ToInt32(cmbRol.Value ?? -99)
+                            + @")  OR a.F10003 in (select b.f10003 from F100Supervizori b where b.iduser= " + Session["UserId"] + @" and b.idsuper = " + Convert.ToInt32(cmbRol.Value ?? -99) + @")) ";
+                    }
+                    else
+                    {
+                        filtru += @" AND (G.""IdUser"" = " + Session["UserId"] + @" OR a.F10003 IN (select b.f10003 from F100Supervizori b where b.iduser= " + Session["UserId"] + @"))";
+                    }
                 }
                 else
                 {

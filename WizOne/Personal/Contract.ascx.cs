@@ -391,7 +391,7 @@ namespace WizOne.Personal
             {
                 //Florin 2020.10.02
                 ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
-                string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"", ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
+                string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
                 Session["MP_cmbPost"] = General.IncarcaDT(sqlPost);
                 cmbPost.DataSource = Session["MP_cmbPost"];
                 cmbPost.DataBind();
@@ -959,7 +959,7 @@ namespace WizOne.Personal
                         //Florin 2020.10.02
                         ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
                         ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
-                        string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"", ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
+                        string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
                         Session["MP_cmbPost"] = General.IncarcaDT(sqlPost);
                         cmbPost.DataSource = Session["MP_cmbPost"];
                         cmbPost.DataBind();

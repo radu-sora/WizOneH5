@@ -9129,6 +9129,62 @@ namespace WizOne.Module
             }
         }
 
+        public static void AdaugaDosar(ref DataSet ds, object f10003)
+        {
+            try
+            {
+                DataTable dtDosar = new DataTable();
+                if (ds.Tables.Contains("Admin_Dosar"))
+                {
+                    dtDosar = ds.Tables["Admin_Dosar"];
+                }
+                else
+                {
+                    dtDosar = General.IncarcaDT(@"SELECT * FROM ""Admin_Dosar"" WHERE F10003=@1", new object[] { f10003 });
+                    dtDosar.TableName = "Admin_Dosar";
+                    dtDosar.PrimaryKey = new DataColumn[] { dtDosar.Columns["F10003"], dtDosar.Columns["IdObiect"] };
+                    ds.Tables.Add(dtDosar);
+                }
+
+                //stergem inregistrarile
+                for (int i = 0; i < dtDosar.Rows.Count; i++)
+                {
+                    if (dtDosar.Rows[i].RowState != DataRowState.Deleted && General.Nz(dtDosar.Rows[i]["Obligatoriu"], 0).ToString() == "1" && dtDosar.Rows[i]["Fisier"] == DBNull.Value)
+                        dtDosar.Rows[i].Delete();
+                }
+
+                //DataTable dtOrg = General.IncarcaDT($@"SELECT * FROM ""Org_PosturiDosar"" WHERE ""IdPost""=@1 AND ""IdObiect"" NOT IN (SELECT ""IdObiect"" FROM ""Admin_Dosar"" WHERE F10003=@2)", new object[] { HttpContext.Current.Session["MP_IdPost"], f10003 });
+                DataTable dtOrg = General.IncarcaDT($@"SELECT * FROM ""Org_PosturiDosar"" WHERE ""IdPost""=@1", new object[] { HttpContext.Current.Session["MP_IdPost"] });
+
+                for (int i = 0; i < dtOrg.Rows.Count; i++)
+                {
+                    if (dtDosar.Select("IdObiect=" + dtOrg.Rows[i]["IdObiect"]).Count() == 0)
+                    {
+                        DataRow drDsr = dtDosar.NewRow();
+                        drDsr["F10003"] = f10003;
+                        drDsr["IdObiect"] = dtOrg.Rows[i]["IdObiect"];
+                        drDsr["AreFisier"] = 0;
+                        drDsr["Obligatoriu"] = 1;
+                        drDsr["TIME"] = DateTime.Now;
+                        drDsr["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
+
+                        //if (Constante.tipBD == 1)
+                        //    drDsr["IdAuto"] = Convert.ToInt32(General.Nz(dtDosar.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                        //else
+                        //    drDsr["IdAuto"] = Dami.NextId("Admin_Dosar");
+                        //if (Convert.ToInt32(drDsr["IdAuto"].ToString()) < 1000000)
+                        //    drDsr["IdAuto"] = Convert.ToInt32(drDsr["IdAuto"].ToString()) + 1000000;
+
+                        dtDosar.Rows.Add(drDsr);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "AdaugaDosar", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
         public static void AflaIdPost()
         {
             try

@@ -15645,3 +15645,11 @@ COMMIT;
 --De marit campul DenumireInAdmin din Ptj_contracte la 250 caractere #727
 ALTER TABLE "Ptj_Contracte" MODIFY "DenumireInAdmin" varchar2(1500)
 GO
+
+
+----  2.2.133.05  ----
+
+
+INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare", "Activ") VALUES(1, 71, 'Nota Obiective', 0, 1);
+INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare", "Activ") VALUES(1, 72, 'Nota Competente', 0, 1);
+COMMIT;

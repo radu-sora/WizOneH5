@@ -15582,3 +15582,12 @@ GO
 
 UPDATE "tblParametrii" SET "Explicatie" = 'Introdusa pentru GDPR, daca este 1 activeaza mecanismul de Two Factor Authentication; 2 - se trimite codul doar celor care au si alte roluri in afara de Angajat' WHERE "Nume" = '2FA'
 GO
+
+
+----  2.2.133.05  ----
+
+
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare, Activ) VALUES(1, 71, 'Nota Obiective', 0, 1)
+GO
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare, Activ) VALUES(1, 72, 'Nota Competente', 0, 1)
+GO

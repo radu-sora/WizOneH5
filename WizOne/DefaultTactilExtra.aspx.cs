@@ -13,6 +13,7 @@ namespace WizOne
     public partial class DefaultTactilExtra : System.Web.UI.Page
     {
         //static string arrIncercari = "";
+        int tipInfoChiosc = 0;
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -23,19 +24,23 @@ namespace WizOne
         {
             try
             {             
-
                 if (!IsPostBack)
                 {
                     Session.Clear();
                     General.InitSessionVariables();
 
-                    string tip = Dami.ValoareParam("TipInfoChiosc", "0");
-
-                    Session["TipInfoChiosc"] = tip;
-
                     AscundeButoane();
                 }
 
+                //Florin 2021.02.18  #795
+                tipInfoChiosc = Convert.ToInt32(Dami.ValoareParam("TipInfoChiosc", "0"));
+                Session["TipInfoChiosc"] = tipInfoChiosc;
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == Convert.ToInt32(IdClienti.Clienti.TMK))
+                {
+                    tipInfoChiosc = 3;
+                    Session["TipInfoChiosc"] = tipInfoChiosc;
+                }
+                    
                 Session["IdLimba"] = Dami.ValoareParam("LimbaStart");
                 if (General.VarSession("IdLimba").ToString() == "") Session["IdLimba"] = "RO";
 
@@ -105,15 +110,18 @@ namespace WizOne
                         txtPan1.Focus();
                     }
                     else
-                    {//Radu 18.05.2020
-                        if (Session["TipInfoChiosc"] == null)
-                        {
-                            MessageBox.Show("Nu s-a putut realiza conexiunea cu baza de date!", MessageBox.icoError, "");
-                            return;
-                        }
+                    {
+                        //Florin 2021.02.18
+                        //Radu 18.05.2020
+                        //if (Session["TipInfoChiosc"] == null)
+                        //{
+                        //    MessageBox.Show("Nu s-a putut realiza conexiunea cu baza de date!", MessageBox.icoError, "");
+                        //    return;
+                        //}
 
-                        string tip = Session["TipInfoChiosc"].ToString();
-                        if (tip == "3")
+                        //string tip = Session["TipInfoChiosc"].ToString();
+                        //if (tip == "3")
+                        if (tipInfoChiosc == 3)
                         {
                             btn0.ClientVisible = true;
                             btn1.ClientVisible = true;
@@ -199,8 +207,10 @@ namespace WizOne
                     return;
                 }
 
-                string tip = Session["TipInfoChiosc"].ToString();
-                if (tip == "3")
+                //Florin 2021.02.18
+                //string tip = Session["TipInfoChiosc"].ToString();
+                //if (tip == "3")
+                if (tipInfoChiosc == 3)
                 {//verificare PIN                    
                     if (General.Nz(drUsr["PINInfoChiosc"], "").ToString() != pin)
                     {

@@ -1548,7 +1548,9 @@ namespace WizOne.Module
                     filtruHR = " INNER ";
                 else
                 {
-                    filtruSuper = $@" AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN ({idHR})) ";
+                    //Florin #796
+                    //filtruSuper = $@" AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN ({idHR})) ";
+                    filtruSuper = $@" AND ((ctg.""Id"" != 0  AND ist.""IdUser"" = {HttpContext.Current.Session["UserId"]}) OR (ctg.""Id"" = 0 AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN (0,{idHR})))) ";
                 }
 
                 if (Constante.tipBD == 1) //SQL
@@ -2334,6 +2336,13 @@ namespace WizOne.Module
                                 //    General.ExecutaNonQuery("BEGIN " + Environment.NewLine + sqlInsertObi + Environment.NewLine + " END;", new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["TemplateIdObiectiv"].ToString() });
                                 //}
 
+                            }
+                        }
+                        else                //#800 Florin - am adaugat  ramura cu else
+                        {
+                            for (int j = 0; j < arr.Count; j++)
+                            {
+                                General.ExecutaNonQuery(@"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString() });
                             }
                         }
                     }

@@ -36,6 +36,13 @@ namespace WizOne.Personal
                     }
                     catch (Exception) { }
                 }
+                if (IsPostBack)
+                {
+                    DataTable dtCOR = Session["CautaCOR_Grid"] as DataTable;
+                    grDateCautaCOR.DataSource = dtCOR;
+                    grDateCautaCOR.KeyFieldName = "F72202";
+                    grDateCautaCOR.DataBind();
+                }
             }
             catch (Exception ex)
             {
@@ -66,11 +73,13 @@ namespace WizOne.Personal
                 {
                     ArataMesaj("Introduceti minim 3 caractere la denumire!");
                     return;
-                } 
-                               
-                grDateCautaCOR.DataSource = GetCOR(txtCodCOR.Text, txtDenumire.Text);
+                }
+
+                DataTable dtCOR = GetCOR(txtCodCOR.Text, txtDenumire.Text);
+                grDateCautaCOR.DataSource = dtCOR;
                 grDateCautaCOR.KeyFieldName = "F72202";
                 grDateCautaCOR.DataBind();
+                Session["CautaCOR_Grid"] = dtCOR;
 
             }
             catch (Exception ex)

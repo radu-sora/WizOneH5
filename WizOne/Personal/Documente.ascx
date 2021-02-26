@@ -603,6 +603,15 @@
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
+                            <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblMarcaVeche" runat="server" Width="100"  Text="Marca veche"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtMarcaVeche" Width="150"  runat="server" Text='<%# Eval("F100943") %>' TabIndex="40" AutoPostBack="false" >
+							        </dx:ASPxTextBox>
+						        </td>
+					        </tr>
 						  </table>
 					  </fieldset>
 				</td>

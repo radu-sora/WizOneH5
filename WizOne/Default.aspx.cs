@@ -471,7 +471,13 @@ namespace WizOne
                                 {
                                     General.InregistreazaLogarea(1, txtPan1.Text);
                                     Session["SecApp"] = "OK";
-                                    if (Dami.ValoareParam("2FA", "") == "1")
+
+                                    //Radu 23.02.2021 - se introduce o valoare  suplimentara a parametrului 2FA pentru a se trimite codul doar celor care au si alt rol in afara de angajat                             
+                                    DataTable dtRoluri = General.IncarcaDT("SELECT COUNT(*) FROM F100Supervizori WHERE IdSuper <> 0 AND IdUser = (SELECT F70102 FROM USERS WHERE UPPER(F70104) = '" + utilizator.ToUpper() + "')", null);
+                                    int nrRoluri = 1;
+                                    if (dtRoluri != null && dtRoluri.Rows.Count > 0)
+                                        nrRoluri = Convert.ToInt32(dtRoluri.Rows[0][0].ToString());
+                                    if (Dami.ValoareParam("2FA", "") == "1" || (Dami.ValoareParam("2FA", "") == "2" && nrRoluri > 0))
                                     {
                                         string ras = General.CreazaCod2FA();
                                         if (ras != "")

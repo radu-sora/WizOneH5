@@ -1519,11 +1519,11 @@ namespace WizOne.Pagini
                                         string[] arrIds = ids.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                                         for (int k = 0; k < arrIds.Length; k++)
                                         {
-                                            sqlSes += $"UNION SELECT {IdSesiune}, {arrIds[k]} " + (Constante.tipBD == 2 ? " FROM DUAL" : "");
+                                            sqlSes += $"UNION SELECT {IdSesiune}, {arrIds[k]}, {Session["UserId"]} " + (Constante.tipBD == 2 ? " FROM DUAL" : "");
                                         }
 
                                         if (sqlSes != "")
-                                            General.ExecutaNonQuery(@"INSERT INTO ""tmpIdPrint""(""IdSesiune"", ""Id"") " + sqlSes.Substring(6), null);
+                                            General.ExecutaNonQuery(@"INSERT INTO ""tmpIdPrint""(""IdSesiune"", ""Id"", USER_NO) " + sqlSes.Substring(6), null);
 
                                         reportParams = new
                                         {

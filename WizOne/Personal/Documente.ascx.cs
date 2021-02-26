@@ -105,10 +105,10 @@ namespace WizOne.Personal
                     }
                     Session["MP_ComboTipDoc"] = tipDoc;
                 }
-                string[] etichete = new string[40] { "lblTara", "lblCetatenie", "lblTipAutMunca", "lblDataInc", "lblDataSf", "lblNumeMama", "lblNumeTata", "lblTipDoc", "lblSerieNr", "lblEmisDe", "lblLocNastere", "lblDataELib", "lblDataExp",
+                string[] etichete = new string[41] { "lblTara", "lblCetatenie", "lblTipAutMunca", "lblDataInc", "lblDataSf", "lblNumeMama", "lblNumeTata", "lblTipDoc", "lblSerieNr", "lblEmisDe", "lblLocNastere", "lblDataELib", "lblDataExp",
                                                  "lblNrPermisMunca", "lblDataPermisMunca", "lblNrCtrIntVechi", "lblDataCtrIntVechi", "lblDetaliiCtrAngajat", "lblCateg", "lblDataEmitere", "lblDataExpirare", "lblNr", "lblPermisEmisDe",
                                                  "lblStudii", "lblCalif1", "lblCalif2", "lblTitluAcademic", "lblDedSomaj", "lblNrCarteMunca", "lblSerieCarteMunca", "lblDataCarteMunca", "lblLivret", "lblElibDe", "lblDeLaData", "lblLaData",
-                                                 "lblGrad", "lblOrdin", "lblCamp1", "lblCamp2", "lblCamp3"};
+                                                 "lblGrad", "lblOrdin", "lblCamp1", "lblCamp2", "lblCamp3", "lblMarcaVeche"};
                 for (int i = 0; i < etichete.Count(); i++)
                 {
                     ASPxLabel lbl = Documente_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;

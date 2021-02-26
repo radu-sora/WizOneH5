@@ -834,6 +834,7 @@
     <Content Include="Pagini\Istoric.aspx" />
     <Content Include="Pagini\IstoricModificari.aspx" />
     <Content Include="Pagini\MainPage.aspx" />
+    <Content Include="Pagini\RelNomenDoc.aspx" />
     <Content Include="Pagini\SchimbaParolaCaptcha.aspx" />
     <Content Include="Pagini\TrimitereFluturasi.aspx" />
     <Content Include="Pagini\VerificareBD.aspx" />
@@ -1729,6 +1730,12 @@
     </Compile>
     <Compile Include="Pagini\MainPage.aspx.designer.cs">
       <DependentUpon>MainPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\RelNomenDoc.aspx.cs">
+      <DependentUpon>RelNomenDoc.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\RelNomenDoc.aspx.designer.cs">
+      <DependentUpon>RelNomenDoc.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pagini\SchimbaParolaCaptcha.aspx.cs">
       <DependentUpon>SchimbaParolaCaptcha.aspx</DependentUpon>

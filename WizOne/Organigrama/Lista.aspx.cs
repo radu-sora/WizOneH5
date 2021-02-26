@@ -400,8 +400,16 @@ namespace WizOne.Organigrama
                 if (!hf.Contains("Nod") || !hf.Contains("Target") || cmbMotiv.SelectedIndex == -1) return;
 
                 int target_idAuto = Convert.ToInt32(General.Nz(hf["Target"], -99));
-                int nod_idAuto = Convert.ToInt32(General.Nz(hf["Nod"], -99));
 
+                //Florin #725
+                int nod_idAuto = -99;
+                if (General.Nz(hf["Nod"],"").ToString() != "")
+                {
+                    object[] arr = hf["Nod"] as object[];
+                    if (arr.Length > 0)
+                        nod_idAuto = Convert.ToInt32(General.Nz(arr[0], -99));
+                }
+                
                 if (!chkStruc.Checked)
                 {
                     //modificare de superior

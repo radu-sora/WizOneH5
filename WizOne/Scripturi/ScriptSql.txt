@@ -15591,3 +15591,6 @@ INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare, Activ) VALUES(1
 GO
 INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare, Activ) VALUES(1, 72, 'Nota Competente', 0, 1)
 GO
+
+ALTER TABLE tmpIdPrint ADD USER_NO int
+GO

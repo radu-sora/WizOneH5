@@ -15653,3 +15653,6 @@ GO
 INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare", "Activ") VALUES(1, 71, 'Nota Obiective', 0, 1);
 INSERT INTO "Eval_tblTipCamp"("IdCategorie", "Id", "Denumire", "Preluare", "Activ") VALUES(1, 72, 'Nota Competente', 0, 1);
 COMMIT;
+
+ALTER TABLE tmpIdPrint ADD USER_NO NUMBER(10,0);
+/

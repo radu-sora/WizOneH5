@@ -95,7 +95,7 @@ namespace WizOne.Personal
                     sql = General.SelectOracle("tblTipAdresa", "Id") + " ORDER BY  \"Denumire\"";
                 DataTable dtTipAdr = General.IncarcaDT(sql, null);
                 GridViewDataComboBoxColumn colTipAdr = (grDateAdresa.Columns["IdTipAdresa"] as GridViewDataComboBoxColumn);
-                colTipAdr.PropertiesComboBox.DataSource = dtTipAdr;
+                colTipAdr.PropertiesComboBox.DataSource = dtTipAdr;                
 
                 sql = @"SELECT * FROM ""tblTipStrada""  ORDER BY ""Denumire"" ";
                 if (Constante.tipBD == 2)
@@ -165,6 +165,13 @@ namespace WizOne.Personal
                 object[] row = new object[ds.Tables["F100Adrese"].Columns.Count];
                 int x = 0;
                 int tipArtera = 0;
+
+                if (!e.NewValues.Contains("NumeNivel1"))
+                    e.NewValues.Add("NumeNivel1", General.Nz(hfSiruta["NumeNivel1"], ""));
+                if (!e.NewValues.Contains("NumeNivel2"))
+                    e.NewValues.Add("NumeNivel2", General.Nz(hfSiruta["NumeNivel2"], ""));
+                if (!e.NewValues.Contains("NumeNivel3"))
+                    e.NewValues.Add("NumeNivel3", General.Nz(hfSiruta["NumeNivel3"], ""));
 
                 if (Convert.ToInt32(e.NewValues["IdTipAdresa"].ToString()) == 1)
                     e.NewValues["Principal"] = 1;
@@ -329,10 +336,17 @@ namespace WizOne.Personal
                 DataTable dtLoc = Session["MP_AdresaLocalitati"] as DataTable;
                 int tipArtera = 0;
 
+                if (!e.NewValues.Contains("NumeNivel1"))
+                    e.NewValues.Add("NumeNivel1", General.Nz(hfSiruta["NumeNivel1"], ""));
+                if (!e.NewValues.Contains("NumeNivel2"))
+                    e.NewValues.Add("NumeNivel2", General.Nz(hfSiruta["NumeNivel2"], ""));
+                if (!e.NewValues.Contains("NumeNivel3"))
+                    e.NewValues.Add("NumeNivel3", General.Nz(hfSiruta["NumeNivel3"], ""));
+
                 if (Convert.ToInt32(e.NewValues["IdTipAdresa"].ToString()) == 1)
                     e.NewValues["Principal"] = 1;
                 else
-                    e.NewValues["Principal"] = 0;
+                    e.NewValues["Principal"] = 0;              
 
                 foreach (DataColumn col in ds.Tables["F100Adrese"].Columns)
                 {

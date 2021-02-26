@@ -15276,65 +15276,106 @@ ALTER TABLE Eval_DrepturiTab ADD Vizibil int
 GO
 
 
-DELETE F069 WHERE F06904 =2021;
-DELETE F069 WHERE F06904 =2022;
+
+DELETE F069 WHERE F06904 =2021
+GO
+DELETE F069 WHERE F06904 =2022
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 1, 'Ianuarie', 20, 160, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 1, 'Ianuarie', 20, 160, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 2, 'Februarie', 20, 160, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 2, 'Februarie', 20, 160, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 3, 'Martie', 23, 184, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 3, 'Martie', 23, 184, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 4, 'Aprilie', 21, 168, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 4, 'Aprilie', 21, 168, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 5, 'Mai', 20, 160, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 5, 'Mai', 20, 160, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 6, 'Iunie',  20, 160, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 6, 'Iunie',  20, 160, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 7, 'Iulie',  22, 176, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 7, 'Iulie',  22, 176, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 8, 'August',  22, 176, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 8, 'August',  22, 176, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 9, 'Septembrie', 22, 176, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 9, 'Septembrie', 22, 176, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 10, 'Octombrie', 21, 168, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 10, 'Octombrie', 21, 168, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 11, 'Noiembrie',  21, 168, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 11, 'Noiembrie',  21, 168, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2021, 12, 'Decembrie',  22, 176, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2021, 12, 'Decembrie',  22, 176, 2230, 5429, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 1, 'Ianuarie', 20, 160, 2230, 5429, 1, getdate() from F002;
+select 69, F00202, 2022, 1, 'Ianuarie', 20, 160, 2230, 5429, 1, getdate() from F002
+GO
 
 
-DELETE HOLIDAYS WHERE YEAR(DAY)=2021;
-DELETE HOLIDAYS WHERE YEAR(DAY)=2022;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '01/01/2021', 103), 'Anul Nou (Ziua 1)', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '02/01/2021', 103), 'Anul Nou (Ziua 2)', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '24/01/2021', 103), 'Ziua Unirii', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '30/04/2021', 103), 'Vinerea Mare', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '02/05/2021', 103), 'Paste (Ziua 1)', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '03/05/2021', 103), 'Paste (Ziua 2)', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '01/05/2021', 103), 'Ziua Muncii - 1 Mai', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '01/06/2021', 103), 'Ziua Copilului - 1 Iunie', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '20/06/2021', 103), 'Rusalii (Ziua 1)', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '21/06/2021', 103), 'Rusalii (Ziua 2)', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '15/08/2021', 103), 'Adormirea Maicii Domnului', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '30/11/2021', 103), 'Sfantul Andrei', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '01/12/2021', 103), 'Ziua nationala a Romaniei', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '25/12/2021', 103), 'Craciun (Ziua 1)', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '26/12/2021', 103), 'Craciun (Ziua 2)', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '01/01/2022', 103), 'Anul Nou (Ziua 1)', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '02/01/2022', 103), 'Anul Nou (Ziua 2)', max(no)+1 from holidays;
-Insert into HOLIDAYS (DAY, NAME, NO) select CONVERT(DATETIME, '24/01/2022', 103), 'Ziua Unirii', max(no)+1 from holidays;
+DELETE HOLIDAYS WHERE YEAR(DAY)=2021
+GO
+DELETE HOLIDAYS WHERE YEAR(DAY)=2022
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '01/01/2021', 103), 'Anul Nou (Ziua 1)' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '02/01/2021', 103), 'Anul Nou (Ziua 2)' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '24/01/2021', 103), 'Ziua Unirii' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '30/04/2021', 103), 'Vinerea Mare' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '02/05/2021', 103), 'Paste (Ziua 1)' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '03/05/2021', 103), 'Paste (Ziua 2)' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '01/05/2021', 103), 'Ziua Muncii - 1 Mai' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '01/06/2021', 103), 'Ziua Copilului - 1 Iunie' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '20/06/2021', 103), 'Rusalii (Ziua 1)' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '21/06/2021', 103), 'Rusalii (Ziua 2)' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '15/08/2021', 103), 'Adormirea Maicii Domnului'
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '30/11/2021', 103), 'Sfantul Andrei' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '01/12/2021', 103), 'Ziua nationala a Romaniei' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '25/12/2021', 103), 'Craciun (Ziua 1)' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '26/12/2021', 103), 'Craciun (Ziua 2)' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '01/01/2022', 103), 'Anul Nou (Ziua 1)' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '02/01/2022', 103), 'Anul Nou (Ziua 2)' 
+GO
+Insert into HOLIDAYS (DAY, NAME) select CONVERT(DATETIME, '24/01/2022', 103), 'Ziua Unirii' 
+GO
 
 
-ALTER TABLE F100 ALTER COLUMN F10081 VARCHAR(50);
-ALTER TABLE F910 ALTER COLUMN F91081 VARCHAR(50);
-ALTER TABLE F099 ALTER COLUMN F09981 VARCHAR(50);
-ALTER TABLE F002 ALTER COLUMN F00231 VARCHAR(50);
-ALTER TABLE F075 ALTER COLUMN F07506 VARCHAR(50);
-ALTER TABLE F077 ALTER COLUMN F07704 VARCHAR(50);
-
+ALTER TABLE F100 ALTER COLUMN F10081 VARCHAR(50)
+GO
+ALTER TABLE F910 ALTER COLUMN F91081 VARCHAR(50)
+GO
+ALTER TABLE F099 ALTER COLUMN F09981 VARCHAR(50)
+GO
+ALTER TABLE F002 ALTER COLUMN F00231 VARCHAR(50)
+GO
+ALTER TABLE F075 ALTER COLUMN F07506 VARCHAR(50)
+GO
+ALTER TABLE F077 ALTER COLUMN F07704 VARCHAR(50)
+GO
 
 ----  2.2.133.01  ----
 
@@ -15578,6 +15619,13 @@ GO
 ALTER TABLE F099 ADD F099996 int 
 GO
 ALTER TABLE F099 ADD F099997 int 
+GO
+
+alter table f100 alter column f100891 varchar(50)
+GO
+alter table f910 alter column f910891 varchar(50)
+GO
+alter table f099 alter column f099891 varchar(50)
 GO
 
 UPDATE "tblParametrii" SET "Explicatie" = 'Introdusa pentru GDPR, daca este 1 activeaza mecanismul de Two Factor Authentication; 2 - se trimite codul doar celor care au si alte roluri in afara de Angajat' WHERE "Nume" = '2FA'

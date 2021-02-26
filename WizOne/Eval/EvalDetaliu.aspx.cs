@@ -592,9 +592,14 @@ namespace WizOne.Eval
                     General.SalveazaDate(dtTbl, "Eval_RaspunsLinii");
 
 
+                //Florin 2021.02.25
                 //Florin 2020.12.17
-                string nota = CalculNotaFinala().ToString("0.##");
-                SalveazaNotaFinala(nota);
+                for (int i = 69; i <= 72; i++)
+                {
+                    if (i == 70) continue;
+                    string nota = CalculNota(i).ToString("0.##");
+                    SalveazaNota(nota, i);
+                }
 
 
                 //Florin 2020.11.06
@@ -1312,7 +1317,9 @@ namespace WizOne.Eval
                             ctl = CreeazaLink(ent.Descriere, ent.Id);
                             break;
                         case 69: //Nota Finala
-                            ctl = CreeazaNotaFinala(ent.Id);
+                        case 71: //Nota obiective
+                        case 72: //Nota competente
+                            ctl = CreeazaNota(ent.Id, ent.TipData);
                             break;
                         case 70: //raport evaluare multipla
                             ctl = CreazaTabelSimplu(ent.Id, "viewEvaluareMultipla");
@@ -2240,7 +2247,7 @@ namespace WizOne.Eval
             return lbl;
         }
 
-        private ASPxLabel CreeazaNotaFinala(int id)
+        private ASPxLabel CreeazaNota(int id, int tipData)
         {
             ASPxLabel lbl = new ASPxLabel();
 
@@ -2252,9 +2259,9 @@ namespace WizOne.Eval
                 lbl.ID = "txt" + id;
                 lbl.CssClass = "lbl_eval_desc";
 
-                decimal nota = CalculNotaFinala();
+                decimal nota = CalculNota(tipData);
                 string desc = "";
-                if (Convert.ToInt32(General.Nz(Session["IdClient"],-99)) == (int)IdClienti.Clienti.Alka)
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Alka)
                 {
                     if (1 <= nota && nota <= 1.99m) desc = "Necesita imbunatatire rapida";
                     if (2 <= nota && nota <= 2.99m) desc = "Nesatisfacator/Sub asteptari";
@@ -2263,7 +2270,7 @@ namespace WizOne.Eval
                     if (4.51m <= nota && nota <= 5) desc = "Excelent";
                 }
 
-                lbl.Text = CalculNotaFinala().ToString("0.##") + "  " + desc;
+                lbl.Text = nota.ToString("0.##") + "  " + desc;
             }
             catch (Exception ex)
             {
@@ -5731,8 +5738,13 @@ namespace WizOne.Eval
             return lnk;
         }
 
-        private decimal CalculNotaFinala()
+        private decimal CalculNota(int tipData)
         {
+            //tipdata 
+            //69 - Nota finala
+            //71 - nota obiective
+            //72 - nota competente
+
             decimal val = 0;
 
             try
@@ -5754,9 +5766,35 @@ namespace WizOne.Eval
                         }
                         break;
                     case (int)Module.IdClienti.Clienti.Alka:
-                        val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
-                                $@"SELECT SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
-                                new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                        {
+                            switch (tipData)
+                            {
+                                case 69:
+                                    //#803 Florin
+                                    //val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                    //        $@"SELECT SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                    //        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT ROUND(SUM(Total)/2,1) FROM (
+                                        (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                        UNION
+                                        (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                        ) X",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
+                                case 71:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
+                                case 72:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
+
+                            }
+                        }
                         break;
                 }
             }
@@ -5769,11 +5807,11 @@ namespace WizOne.Eval
             return val;
         }
 
-        private void SalveazaNotaFinala(string nota)
+        private void SalveazaNota(string nota, int tipData)
         {
             try
             {
-                General.ExecutaNonQuery($@"UPDATE ""Eval_RaspunsLinii"" SET ""Super{Session["Eval_ActiveTab"]}""='{nota}' WHERE F10003=@1 AND ""IdQuiz""=@2 AND ""TipData""=69", new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"] });
+                General.ExecutaNonQuery($@"UPDATE ""Eval_RaspunsLinii"" SET ""Super{Session["Eval_ActiveTab"]}""='{nota}' WHERE F10003=@1 AND ""IdQuiz""=@2 AND ""TipData""=@3", new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], tipData });
                 Eval_RaspunsLinii raspLinie = lstEval_RaspunsLinii.Where(p => p.TipData == 69).FirstOrDefault();
                 if (raspLinie != null)
                 {

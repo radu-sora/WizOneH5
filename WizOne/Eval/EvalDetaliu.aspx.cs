@@ -2286,7 +2286,7 @@ namespace WizOne.Eval
 
                 decimal nota = CalculNota(tipData);
                 string desc = "";
-                if (tipData == 69 && Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Alka)
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Alka)
                 {
                     if (1 <= nota && nota <= 1.99m) desc = "Necesita imbunatatire rapida";
                     if (2 <= nota && nota <= 2.99m) desc = "Nesatisfacator/Sub asteptari";

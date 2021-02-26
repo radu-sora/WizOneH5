@@ -134,8 +134,8 @@ namespace WizOne.Personal
                 cmbUnitStat.DataBind();
 
 
-                if (!Page.IsCallback)
-                {
+                //if (!Page.IsCallback)
+                //{
                     //Florin 2020.10.16 - modificata
 
                     int f10003 = -99;
@@ -169,7 +169,7 @@ namespace WizOne.Personal
                     cmbLocatie.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001046"], "0"));
                     cmbCAEN.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001095"], "0"));
                     cmbUnitStat.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001097"], "0"));
-                }
+                //}
 
                 if (Dami.ValoareParam("ValidariPersonal") == "1")
                 {

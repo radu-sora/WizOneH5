@@ -16941,9 +16941,10 @@ GO
 --https://github.com/wizromRD/WizOne/issues/718
 --De discutat functionalitatea butonului Imprima de pe Post #718
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie") VALUES ('IdRaportFisaPost', '-99', 'Id Raport pentru fisa post din modulul de Organigrama')
+GO
 
-
-
+INSERT [dbo].[DynReportTypes] ([DynReportTypeId], [Name]) VALUES (5, N'Dashboard')
+GO
 
 
 ----  2.2.135  ----

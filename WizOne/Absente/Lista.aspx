@@ -18,18 +18,15 @@
                         break;
                     case "btnDelete":
                         grDate.GetRowValues(e.visibleIndex, 'IdStare', GoToDeleteMode);
-                        grDate.PerformCallback('btnFiltru;-99');
                         break;
                     case "btnPlanif":
                         grDate.PerformCallback("btnPlanif;0");
-                        grDate.PerformCallback('btnFiltru;-99');
                         break;
                     case "btnIstoric":
                         grDate.GetRowValues(e.visibleIndex, 'Id', GoToIstoric);
                         break;
                     case "btnDivide":
                         grDate.GetRowValues(e.visibleIndex, 'Id;IdStare;DataInceput;DataSfarsit', GoToDivide);
-                        grDate.PerformCallback('btnFiltru;-99');
                         //popUpDivide.Show();
                         break;
                     case "btnCerere":

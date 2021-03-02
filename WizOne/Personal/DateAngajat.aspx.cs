@@ -1198,6 +1198,7 @@ namespace WizOne.Personal
                         int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar("SELECT COUNT(*) FROM F100 WHERE F10003 =@1", new object[] { marcaInit }), 0));
                         if (cnt != 0)
                         {
+                            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                             dt100.Rows[0]["F10003"] = marcaFin;
                             dt1001.Rows[0]["F10003"] = marcaFin;
 

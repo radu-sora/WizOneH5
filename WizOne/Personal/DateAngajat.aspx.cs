@@ -1203,6 +1203,51 @@ namespace WizOne.Personal
 
                             dt100.Rows[0]["F100985"] = marcaFin;
 
+                            if (ds.Tables.Contains("Admin_Activitati") && ds.Tables["Admin_Activitati"].Rows.Count > 0)
+                                ds.Tables["Admin_Activitati"].Rows[0]["Marca"] = marcaFin;
+                            if (ds.Tables.Contains("F100Adrese") && ds.Tables["F100Adrese"].Rows.Count > 0)
+                                ds.Tables["F100Adrese"].Rows[0]["F10003"] = marcaFin;
+                            if (ds.Tables.Contains("Atasamente") && ds.Tables["Atasamente"].Rows.Count > 0)
+                                ds.Tables["Atasamente"].Rows[0]["IdEmpl"] = marcaFin;
+                            if (ds.Tables.Contains("Admin_Atestate") && ds.Tables["Admin_Atestate"].Rows.Count > 0)
+                                ds.Tables["Admin_Atestate"].Rows[0]["Marca"] = marcaFin;
+                            if (ds.Tables.Contains("Admin_Beneficii") && ds.Tables["Admin_Beneficii"].Rows.Count > 0)
+                                ds.Tables["Admin_Beneficii"].Rows[0]["Marca"] = marcaFin;
+                            if (ds.Tables.Contains("F100Cartele2") && ds.Tables["F100Cartele2"].Rows.Count > 0)
+                                ds.Tables["F100Cartele2"].Rows[0]["F10003"] = marcaFin;
+                            if (ds.Tables.Contains("F100CentreCost2") && ds.Tables["F100CentreCost2"].Rows.Count > 0)
+                                ds.Tables["F100CentreCost2"].Rows[0]["F10003"] = marcaFin;
+                            if (ds.Tables.Contains("F100Contacte") && ds.Tables["F100Contacte"].Rows.Count > 0)
+                                ds.Tables["F100Contacte"].Rows[0]["F10003"] = marcaFin;
+                            if (ds.Tables.Contains("F100Contracte2") && ds.Tables["F100Contracte2"].Rows.Count > 0)
+                                ds.Tables["F100Contracte2"].Rows[0]["F10003"] = marcaFin;
+                            if (ds.Tables.Contains("Admin_Cursuri") && ds.Tables["Admin_Cursuri"].Rows.Count > 0)
+                                ds.Tables["Admin_Cursuri"].Rows[0]["Marca"] = marcaFin;
+                            General.ExecutaNonQuery("UPDATE F112 SET F11203 = " + marcaFin + " WHERE F11203 = " + marcaInit, null);
+                            if (ds.Tables.Contains("Admin_Echipamente") && ds.Tables["Admin_Echipamente"].Rows.Count > 0)
+                                ds.Tables["Admin_Echipamente"].Rows[0]["Marca"] = marcaFin;
+                            if (ds.Tables.Contains("Admin_Evaluare") && ds.Tables["Admin_Evaluare"].Rows.Count > 0)
+                                ds.Tables["Admin_Evaluare"].Rows[0]["Marca"] = marcaFin;
+                            if (ds.Tables.Contains("Admin_Evolutie") && ds.Tables["Admin_Evolutie"].Rows.Count > 0)
+                                ds.Tables["Admin_Evolutie"].Rows[0]["Marca"] = marcaFin;
+                            if (ds.Tables.Contains("Admin_Experienta") && ds.Tables["Admin_Experienta"].Rows.Count > 0)
+                                ds.Tables["Admin_Experienta"].Rows[0]["Marca"] = marcaFin;
+                            if (ds.Tables.Contains("relGrupAngajat2") && ds.Tables["relGrupAngajat2"].Rows.Count > 0)
+                                ds.Tables["relGrupAngajat2"].Rows[0]["F10003"] = marcaFin;
+                            if (ds.Tables.Contains("Admin_Limbi") && ds.Tables["Admin_Limbi"].Rows.Count > 0)
+                                ds.Tables["Admin_Limbi"].Rows[0]["Marca"] = marcaFin;
+                            if (ds.Tables.Contains("Admin_Medicina") && ds.Tables["Admin_Medicina"].Rows.Count > 0)
+                                ds.Tables["Admin_Medicina"].Rows[0]["Marca"] = marcaFin;
+                            if (ds.Tables.Contains("F110") && ds.Tables["F110"].Rows.Count > 0)
+                                ds.Tables["F110"].Rows[0]["F11003"] = marcaFin;
+                            if (ds.Tables.Contains("Admin_Sanctiuni") && ds.Tables["Admin_Sanctiuni"].Rows.Count > 0)
+                                ds.Tables["Admin_Sanctiuni"].Rows[0]["Marca"] = marcaFin;
+                            if (ds.Tables.Contains("F100Studii") && ds.Tables["F100Studii"].Rows.Count > 0)
+                                ds.Tables["F100Studii"].Rows[0]["F10003"] = marcaFin;
+                            if (ds.Tables.Contains("F100Supervizori2") && ds.Tables["F100Supervizori2"].Rows.Count > 0)
+                                ds.Tables["F100Supervizori2"].Rows[0]["F10003"] = marcaFin;
+                            General.ExecutaNonQuery("UPDATE F111 SET F11103 = " + marcaFin + " WHERE F11103 = " + marcaInit, null);
+
                             Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;
                         }
                     }
@@ -1484,7 +1529,7 @@ namespace WizOne.Personal
                 lstCtr.Add("deDataModifFunctie", "F100992");
                 lstCtr.Add("cmbMeserie", "F10029");
                 lstCtr.Add("chkFunctieBaza", "F10032");
-                lstCtr.Add("chkCalcDed", "F10048");
+                lstCtr.Add("chkCalcDed", "F10056");
                 lstCtr.Add("txtPerProbaZL", "F100975");
                 lstCtr.Add("txtPerProbaZC", "F1001063");
                 lstCtr.Add("txtNrZilePreavizDemisie", "F1009742");

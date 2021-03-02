@@ -1341,7 +1341,7 @@
 				    </tr>         
                    <tr>
                         <td>
-                            <dx:ASPxCheckBox ID="chkCalcDed"  runat="server" Width="150" Text="Calcul deduceri FB" TextAlign="Left" TabIndex="39"  Checked='<%#  Eval("F10048") == DBNull.Value ? false : Convert.ToBoolean(Eval("F10048"))%>' ClientInstanceName="chkbx5" >
+                            <dx:ASPxCheckBox ID="chkCalcDed"  runat="server" Width="150" Text="Calcul deduceri FB" TextAlign="Left" TabIndex="39"  Checked='<%#  Eval("F10056") == DBNull.Value ? false : Convert.ToBoolean(Eval("F10048"))%>' ClientInstanceName="chkbx5" >
                                 <ClientSideEvents CheckedChanged="function(s,e){ chkCalcDed_CheckedChanged(s); }" />
                             </dx:ASPxCheckBox>
                         </td>

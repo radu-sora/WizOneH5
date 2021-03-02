@@ -1041,6 +1041,15 @@ namespace WizOne.Pontaj
         protected global::DevExpress.Web.ASPxButton btnModif;
 
         /// <summary>
+        /// modifAbsZi control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl modifAbsZi;
+
+        /// <summary>
         /// cmbTipAbs control.
         /// </summary>
         /// <remarks>
@@ -1050,6 +1059,15 @@ namespace WizOne.Pontaj
         protected global::DevExpress.Web.ASPxComboBox cmbTipAbs;
 
         /// <summary>
+        /// modifAbsOra control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl modifAbsOra;
+
+        /// <summary>
         /// pnlValuri control.
         /// </summary>
         /// <remarks>
@@ -1057,6 +1075,15 @@ namespace WizOne.Pontaj
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlValuri;
+
+        /// <summary>
+        /// modifPrgLucru control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl modifPrgLucru;
 
         /// <summary>
         /// cmbProgr control.

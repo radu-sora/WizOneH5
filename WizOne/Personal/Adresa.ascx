@@ -35,6 +35,10 @@
         hfSiruta.Set("SirutaNivel2", values[3]);
         hfSiruta.Set("SirutaNivel3", values[5]);
 
+        hfSiruta.Set("NumeNivel1", values[2]);
+        hfSiruta.Set("NumeNivel2", values[4]);
+        hfSiruta.Set("NumeNivel3", values[6]);
+
         pnlLoading.Hide();
         popUpCauta.Hide();
     }

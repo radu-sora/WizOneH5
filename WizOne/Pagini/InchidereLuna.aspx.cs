@@ -198,14 +198,32 @@ namespace WizOne.Pagini
                 //Florin 2020.10.06
                 if (rez)
                 {
-                    string strSql = $@"SELECT * FROM Avs_Cereri A WHERE PostId IS NOT NULL AND YEAR(A.DataModif)=(SELECT F01011 FROM F010) AND MONTH(A.DataModif)=(SELECT F01012 FROM F010)";
+                    string strSql = $@"SELECT * FROM Avs_Cereri A WHERE IdAtribut=37 AND PostId IS NOT NULL AND YEAR(A.DataModif)=(SELECT F01011 FROM F010) AND MONTH(A.DataModif)=(SELECT F01012 FROM F010)";
                     if (Constante.tipBD == 2)
-                        strSql = @"SELECT * FROM ""Avs_Cereri"" A WHERE ""PostId"" IS NOT NULL AND TO_NUMBER(TO_CHAR(A.""DataModif"", 'YYYY'))=(SELECT F01011 FROM F010) AND TO_NUMBER(TO_CHAR(A.""DataModif"", 'MM'))=(SELECT F01012 FROM F010)";
+                        strSql = @"SELECT * FROM ""Avs_Cereri"" A WHERE ""IdAtribut""=37 AND ""PostId"" IS NOT NULL AND TO_NUMBER(TO_CHAR(A.""DataModif"", 'YYYY'))=(SELECT F01011 FROM F010) AND TO_NUMBER(TO_CHAR(A.""DataModif"", 'MM'))=(SELECT F01012 FROM F010)";
                     DataTable dt = General.IncarcaDT(strSql);
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         General.SalveazaPost(dt.Rows[i]["F10003"], dt.Rows[i]["PostId"], Convert.ToDateTime(dt.Rows[i]["DataModif"]));
                     }
+
+                    //Florin 2021.03.02 #710
+                    General.ExecutaNonQuery($@"
+                        BEGIN
+                            UPDATE B
+                            SET B.F100975 = (SELECT NrZileLucrProba FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=A.FunctieId)),
+                            B.F1009742 = (SELECT NrZileDemisie FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=A.FunctieId)) , 
+                            B.F100931 = (SELECT NrZileConcediere FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=A.FunctieId)) 
+                            FROM Avs_Cereri A
+                            INNER JOIN F100 B ON A.F10003=B.F10003
+                            WHERE IdAtribut=2 AND PostId IS NOT NULL AND YEAR(A.DataModif)=(SELECT F01011 FROM F010) AND MONTH(A.DataModif)=(SELECT F01012 FROM F010);
+
+                            UPDATE B
+                            SET B.F1001063 = (SELECT NrZileCalProba FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=A.FunctieId))
+                            FROM Avs_Cereri A
+                            INNER JOIN F1001 B ON A.F10003=B.F10003
+                            WHERE IdAtribut=2 AND PostId IS NOT NULL AND YEAR(A.DataModif)=(SELECT F01011 FROM F010) AND MONTH(A.DataModif)=(SELECT F01012 FROM F010);
+                        END;");
                 }
             }
             catch (Exception ex)

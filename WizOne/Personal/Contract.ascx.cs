@@ -966,6 +966,9 @@ namespace WizOne.Personal
                         cmbPost.Value = null;
                     }
                     break;
+                case "btnPost":
+                    ModifAvans((int)Constante.Atribute.Post);
+                    break;
             }
 
         }

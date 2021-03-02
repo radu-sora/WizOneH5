@@ -124,6 +124,9 @@ namespace WizOne.Avs
                     case "btnPermisIst":
                         atribut = (int)Constante.Atribute.PermisAuto;
                         break;
+                    case "btnPostIst":
+                        atribut = (int)Constante.Atribute.Post;
+                        break;
                 }
             }
             catch(Exception ex)
@@ -160,7 +163,12 @@ namespace WizOne.Avs
                 List<int> lst = new List<int>(1);
                 lst.Add(atribut);
 
-                DataTable dtIst = GetIstoricDateContract(marca, lst, luna + 1 > 12 ? 1 : luna, luna + 1 > 12 ? an + 1 : an, numeAng, 0);
+                //Flroin 2021.03.02  #710
+                DataTable dtIst = new DataTable();
+                if (atribut == (int)Constante.Atribute.Post)
+                    dtIst = GetDatePost(marca);
+                else
+                    dtIst = GetIstoricDateContract(marca, lst, luna + 1 > 12 ? 1 : luna, luna + 1 > 12 ? an + 1 : an, numeAng, 0);
 
                 //grDate.DataSource = null;
                 dtIst.PrimaryKey = new DataColumn[] { dtIst.Columns["IdAuto"] };
@@ -1036,7 +1044,45 @@ namespace WizOne.Avs
         //    <PropertiesDateEdit DisplayFormatString = "dd/MM/yyyy" ></ PropertiesDateEdit >
         //</ dx:GridViewDataDateColumn>
 
+        private DataTable GetDatePost(int f10003)
+        {
+            DataTable dt = new DataTable();
 
+            try
+            {
+                dt = General.IncarcaDT(
+                    $@"SELECT X.IdAuto, A.F10008 + ' ' + A.F10009 AS NumeAngajat, B.Denumire AS NumeAtribut, DataModif, ValV, ValN, X.Explicatii, X.USER_NO AS Utilizator, X.TIME AS Data
+                    FROM (
+                    SELECT A.Id AS IdAuto, A.F10003, A.IdAtribut, A.DataModif, NULL AS ValV, 
+                    CASE A.IdAtribut
+                    WHEN 2 THEN A.FunctieNume
+                    WHEN 3 THEN A.CORNume
+                    WHEN 5 THEN A.SubcompanieNume + ' - ' + A.FilialaNume + ' - ' + A.SectieNume + ' - ' + A.DeptNume
+                    WHEN 37 THEN A.PostNume
+                    END AS ValN, A.Explicatii, A.USER_NO, A.TIME 
+                    FROM Avs_Cereri A
+                    WHERE A.F10003={f10003} AND A.IdAtribut = 37 
+                    UNION
+                    SELECT B.Id AS IdAuto, B.F10003, B.IdAtribut, B.DataModif, NULL AS ValV, 
+                    CASE B.IdAtribut
+                    WHEN 2 THEN B.FunctieNume
+                    WHEN 3 THEN B.CORNume
+                    WHEN 5 THEN B.SubcompanieNume + ' - ' + B.FilialaNume + ' - ' + B.SectieNume + ' - ' + B.DeptNume
+                    WHEN 37 THEN B.PostNume
+                    END AS ValN, B.Explicatii, B.USER_NO, B.TIME  
+                    FROM Avs_Cereri A
+                    INNER JOIN Avs_Cereri B ON A.Id = B.IdParinte 
+                    WHERE A.F10003={f10003} AND A.IdAtribut = 37) X
+                    INNER JOIN F100 A ON X.F10003=A.F10003
+                    INNER JOIN Avs_tblAtribute B ON X.IdAtribut = B.Id ");
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return dt;
+        }
 
     }
 }

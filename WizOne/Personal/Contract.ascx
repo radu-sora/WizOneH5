@@ -777,6 +777,18 @@
         }--%>
     }
 
+    function OnClickPst(s) {
+        pnlLoading.Show();
+        pnlCtlContract.PerformCallback(s.name);
+    }
+
+    function GoToIstoricPst(s) {
+        strUrl = getAbsoluteUrl + "Avs/Istoric.aspx?qwe=" + s.name;
+        popGenIst.SetHeaderText("Istoric modificari post");
+        popGenIst.SetContentUrl(strUrl);
+        popGenIst.Show();
+    }
+
 </script>
 
 <body>
@@ -1355,6 +1367,20 @@
                             <dx:ASPxComboBox ID="cmbPost" ClientInstanceName="cmbPost" runat="server" TextField="Denumire" ValueField="Id" DropDownStyle="DropDownList" ValueType="System.Int32" Width="130" TabIndex="37" AllowNull="true">
                                 <ClientSideEvents SelectedIndexChanged="function(s,e) { pnlLoading.Show(); pnlCtlContract.PerformCallback('cmbPost'); }" />
                             </dx:ASPxComboBox>
+                        </td>
+                        <td>
+                            <dx:ASPxButton ID="btnPost" ClientInstanceName="btnPost"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px"  RenderMode="Link" ToolTip="Modificari post" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
+                                <ClientSideEvents Click="function(s,e){ OnClickPst(s); }" />
+                                <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
+                                <Paddings PaddingLeft="10px"/>
+                            </dx:ASPxButton>
+                        </td>
+                        <td>
+                            <dx:ASPxButton ID="btnPostIst" ClientInstanceName="btnPostIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
+                                <ClientSideEvents Click="function(s,e){ GoToIstoricPst(s); }" />
+                                <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
+                                <Paddings PaddingLeft="10px"/>
+                            </dx:ASPxButton>
                         </td>
                     </tr>
                     <tr>

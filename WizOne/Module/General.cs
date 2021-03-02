@@ -9205,13 +9205,14 @@ namespace WizOne.Module
         {
             try
             {
+                //Florin 2021.03.02 #710 - la ramura cu functie am adaugat sa se salveaza si PostId; este necesar pt functia de salvare post din F704
                 General.ExecutaNonQuery(
                     $@"
                     BEGIN
                         IF((SELECT COUNT(*) FROM Avs_Cereri WHERE Id={id} AND FunctieId IS NOT NULL) > 0)
                             BEGIN
-                                INSERT INTO Avs_Cereri(Id, F10003, IdAtribut, IdCircuit, Pozitie, TotalCircuit, Culoare, IdStare, Explicatii, DataModif, USER_NO, TIME, UserIntrod, GenerareDoc, IdParinte, FunctieId, FunctieNume)
-                                SELECT NEXT VALUE FOR Avs_Cereri_SEQ, F10003, 2, IdCircuit, Pozitie, TotalCircuit, Culoare, IdStare, Explicatii, DataModif, USER_NO, GetDate(), UserIntrod, GenerareDoc, {id}, FunctieId, FunctieNume FROM Avs_Cereri WHERE Id={id};
+                                INSERT INTO Avs_Cereri(Id, F10003, IdAtribut, IdCircuit, Pozitie, TotalCircuit, Culoare, IdStare, Explicatii, DataModif, USER_NO, TIME, UserIntrod, GenerareDoc, IdParinte, FunctieId, FunctieNume, PostId)
+                                SELECT NEXT VALUE FOR Avs_Cereri_SEQ, F10003, 2, IdCircuit, Pozitie, TotalCircuit, Culoare, IdStare, Explicatii, DataModif, USER_NO, GetDate(), UserIntrod, GenerareDoc, {id}, FunctieId, FunctieNume, {idPost} FROM Avs_Cereri WHERE Id={id};
                                 
                                 INSERT INTO Avs_CereriIstoric(Id, IdCircuit, IdPost, IdUser, IdStare, Pozitie, CUloare, Aprobat, DataAprobare, Inlocuitor, IdUserInlocuitor, IdRol, IdSuper, USER_NO, TIME)
                                 SELECT CONVERT(int, (SELECT current_value FROM sys.sequences WHERE name = 'Avs_Cereri_SEQ')), IdCircuit, IdPost, IdUser, IdStare, Pozitie, CUloare, Aprobat, DataAprobare, Inlocuitor, IdUserInlocuitor, IdRol, IdSuper, USER_NO, GetDate() FROM Avs_CereriIstoric WHERE Id={id};
@@ -9236,7 +9237,9 @@ namespace WizOne.Module
                             END;                   
                     END;");
 
-                SalveazaPost(f10003, idPost, dtModif);
+
+                //Florin 2021.03.02 #710
+                //SalveazaPost(f10003, idPost, dtModif);
             }
             catch (Exception ex)
             {

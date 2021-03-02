@@ -3956,20 +3956,20 @@ namespace WizOne.Avs
                         camp2 = $@"{General.Nz(cmb1Nou.Value, -99)},'{cmb1Nou.Text}'";
                         ListEditItem leiAct = cmb1Act.SelectedItem;
                         ListEditItem leiNou = cmb1Nou.SelectedItem;
-                        
-                        if (leiAct.GetFieldValue("FunctieId") != leiNou.GetFieldValue("FunctieId"))
+
+                        if (leiAct == null || leiAct.GetFieldValue("FunctieId") != leiNou.GetFieldValue("FunctieId"))
                         {
                             camp1 += @", ""FunctieId"", ""FunctieNume""";
                             camp2 += $@", {General.Nz(leiNou.GetFieldValue("FunctieId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Functie"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Functie") + "'" : "NULL")}";
                             explicatii += ",Functia" + Environment.NewLine;
                         }
-                        if (leiAct.GetFieldValue("CORCod") != leiNou.GetFieldValue("CORCod"))
+                        if (leiAct == null || leiAct.GetFieldValue("CORCod") != leiNou.GetFieldValue("CORCod"))
                         {
                             camp1 += @", ""CORCod"", ""CORNume""";
                             camp2 += $@", {General.Nz(leiNou.GetFieldValue("CORCod"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("COR"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("COR") + "'" : "NULL")}";
                             explicatii += ",COR" + Environment.NewLine;
                         }
-                        if (leiAct.GetFieldValue("DeptId") != leiNou.GetFieldValue("DeptId"))
+                        if (leiAct == null || leiAct.GetFieldValue("DeptId") != leiNou.GetFieldValue("DeptId"))
                         {
                             camp1 += @", ""SubcompanieId"", ""SubcompanieNume"", ""FilialaId"", ""FilialaNume"", ""SectieId"", ""SectieNume"", ""DeptId"", ""DeptNume"", ""SubdeptId"", ""SubdeptNume"", ""BirouId"", ""BirouNume""";
                             camp2 += $@", {General.Nz(leiNou.GetFieldValue("SubcompanieId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Subcompanie"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Subcompanie") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("FilialaId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Filiala"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Filiala") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("SectieId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Sectie"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Sectie") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("DeptId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Dept"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Dept") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("IdSubdept"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Subdept"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Subdept") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("IdBirou"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Birou"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Birou") + "'" : "NULL")}";

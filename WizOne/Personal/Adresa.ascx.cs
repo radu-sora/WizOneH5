@@ -194,7 +194,7 @@ namespace WizOne.Personal
                                     bool gasit = false;
                                     for (int i = 0; i < dtArtera.Rows.Count; i++)
                                     {
-                                        if (dtArtera.Rows[i]["Denumire"].ToString().Length > 0 && e.NewValues["Strada"].ToString().ToUpper().Contains(dtArtera.Rows[i]["Denumire"].ToString().ToUpper()))
+                                        if (e.NewValues["Strada"] != null && dtArtera.Rows[i]["Denumire"].ToString().Length > 0 && e.NewValues["Strada"].ToString().ToUpper().Contains(dtArtera.Rows[i]["Denumire"].ToString().ToUpper()))
                                         {
                                             row[x] = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString());
                                             tipArtera = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString());
@@ -382,7 +382,7 @@ namespace WizOne.Personal
                                     bool gasit = false;
                                     for (int i = 0; i < dtArtera.Rows.Count; i++)
                                     {
-                                        if (dtArtera.Rows[i]["Denumire"].ToString().Length > 0 && e.NewValues["Strada"].ToString().ToUpper().Contains(dtArtera.Rows[i]["Denumire"].ToString().ToUpper()))
+                                        if (e.NewValues["Strada"] != null && dtArtera.Rows[i]["Denumire"].ToString().Length > 0 && e.NewValues["Strada"].ToString().ToUpper().Contains(dtArtera.Rows[i]["Denumire"].ToString().ToUpper()))
                                         {
                                             row[col.ColumnName] = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString());
                                             tipArtera = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString());

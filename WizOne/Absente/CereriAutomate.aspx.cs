@@ -1261,6 +1261,7 @@ namespace WizOne.Absente
                 dic.Add("OraInceput", sqlOraInc);
                 dic.Add("OraSfarsit", sqlOraSf);
                 dic.Add("AreAtas", "0");
+                dic.Add("IdCerereDivizata", "NULL");
                 dic.Add("USER_NO", General.Nz(Session["UserId"], "-99").ToString());
                 dic.Add("TIME", General.CurrentDate());
 

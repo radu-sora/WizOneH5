@@ -113,13 +113,25 @@
                         <Settings SortMode="DisplayText" />
                         <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                     </dx:GridViewDataComboBoxColumn>
-                    <dx:GridViewDataTextColumn FieldName="Strada" Name="Strada" Caption="Artera" Width="150px" />
+                    <dx:GridViewDataTextColumn FieldName="Strada" Name="Strada" Caption="Artera" Width="150px" >
+                        <PropertiesTextEdit MaxLength="50" />
+                    </dx:GridViewDataTextColumn>
                     <dx:GridViewDataTextColumn FieldName="Numar" Name="Numar" Caption="Numar" Width="50px" />
-                    <dx:GridViewDataTextColumn FieldName="Bloc" Name="Bloc" Caption="Bloc" Width="50px" />
-                    <dx:GridViewDataTextColumn FieldName="Scara" Name="Scara" Caption="Scara" Width="50px" />
-                    <dx:GridViewDataTextColumn FieldName="Etaj" Name="Etaj" Caption="Etaj" Width="50px" />
-                    <dx:GridViewDataTextColumn FieldName="Apartament" Name="Apartament" Caption="Apartament" Width="80px" />
-                    <dx:GridViewDataTextColumn FieldName="CodPostal" Name="CodPostal" Caption="Cod postal" Width="80px" />
+                    <dx:GridViewDataTextColumn FieldName="Bloc" Name="Bloc" Caption="Bloc" Width="50px" >
+                       <PropertiesTextEdit MaxLength="20" />
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Scara" Name="Scara" Caption="Scara" Width="50px" >
+                       <PropertiesTextEdit MaxLength="10" />
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Etaj" Name="Etaj" Caption="Etaj" Width="50px" >
+                       <PropertiesTextEdit MaxLength="10" />
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Apartament" Name="Apartament" Caption="Apartament" Width="80px" >
+                       <PropertiesTextEdit MaxLength="30" />
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="CodPostal" Name="CodPostal" Caption="Cod postal" Width="80px" >
+                       <PropertiesTextEdit MaxLength="6" />
+                    </dx:GridViewDataTextColumn>
                     <dx:GridViewDataDateColumn FieldName="DataModif" Name="DataModif" Caption="Data modif." Width="100px" >         
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                     </dx:GridViewDataDateColumn>

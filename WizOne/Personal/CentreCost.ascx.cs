@@ -74,12 +74,13 @@ namespace WizOne.Personal
             grDateCentreCost.KeyFieldName = "IdAuto";
             grDateCentreCost.DataSource = dt;
 
-            string sql = @"SELECT * FROM F062 ORDER BY F06205";
+            string sql = @"SELECT * FROM F062 WHERE COALESCE(Activ, 0) = 1 ORDER BY F06205";
             if (Constante.tipBD == 2)
                 sql = General.SelectOracle("F062", "F06204") + " ORDER BY F06205";
             DataTable dtCC = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colCC = (grDateCentreCost.Columns["IdCentruCost"] as GridViewDataComboBoxColumn);
             colCC.PropertiesComboBox.DataSource = dtCC;
+            Session["MP_F062"] = dtCC;
 
             HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
 
@@ -125,6 +126,13 @@ namespace WizOne.Personal
           
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
+                if (e.NewValues["DataInceput"] == null || e.NewValues["DataSfarsit"] == null)
+                {
+                    grDateCentreCost.JSProperties["cpAlertMessage"] = "Nu ati introdus intervalul!";
+                    e.Cancel = true;
+                    grDateCentreCost.CancelEdit();
+                    return;
+                }
 
                 if (e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
                 {
@@ -167,6 +175,18 @@ namespace WizOne.Personal
 
                         }
                     }
+                }
+
+                DataTable dtCC = Session["MP_F062"] as DataTable;
+                DataRow drCC = dtCC.Select("F06204 = " + e.NewValues["IdCentruCost"]).FirstOrDefault();
+                DateTime dtStartCC = Convert.ToDateTime(drCC["F06208"] == DBNull.Value ? "01/01/1900" : drCC["F06208"].ToString());
+                DateTime dtSfCC = Convert.ToDateTime(drCC["F06209"] == DBNull.Value ? "01/01/2100" : drCC["F06209"].ToString());
+                if (Convert.ToDateTime(e.NewValues["DataInceput"]) < dtStartCC || Convert.ToDateTime(e.NewValues["DataSfarsit"]) > dtSfCC)
+                {
+                    grDateCentreCost.JSProperties["cpAlertMessage"] = "Intervalul ales nu este valid pentru acest centru de cost!";
+                    e.Cancel = true;
+                    grDateCentreCost.CancelEdit();
+                    return;
                 }
 
                 object[] row = new object[ds.Tables["F100CentreCost2"].Columns.Count];
@@ -225,6 +245,14 @@ namespace WizOne.Personal
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
 
+                if (e.NewValues["DataInceput"] == null || e.NewValues["DataSfarsit"] == null)
+                {
+                    grDateCentreCost.JSProperties["cpAlertMessage"] = "Nu ati introdus intervalul!";
+                    e.Cancel = true;
+                    grDateCentreCost.CancelEdit();
+                    return;
+                }
+
                 if (e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
                 {
                     try
@@ -266,6 +294,18 @@ namespace WizOne.Personal
 
                         }
                     }
+                }
+
+                DataTable dtCC = Session["MP_F062"] as DataTable;
+                DataRow drCC = dtCC.Select("F06204 = " + e.NewValues["IdCentruCost"]).FirstOrDefault();
+                DateTime dtStartCC = Convert.ToDateTime(drCC["F06208"] == DBNull.Value ? "01/01/1900" : drCC["F06208"].ToString());
+                DateTime dtSfCC = Convert.ToDateTime(drCC["F06209"] == DBNull.Value ? "01/01/2100" : drCC["F06209"].ToString());
+                if (Convert.ToDateTime(e.NewValues["DataInceput"]) < dtStartCC || Convert.ToDateTime(e.NewValues["DataSfarsit"]) > dtSfCC)
+                {
+                    grDateCentreCost.JSProperties["cpAlertMessage"] = "Intervalul ales nu este valid pentru acest centru de cost!";
+                    e.Cancel = true;
+                    grDateCentreCost.CancelEdit();
+                    return;
                 }
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;

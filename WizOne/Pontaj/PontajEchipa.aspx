@@ -363,7 +363,7 @@
                             </div>
                         </div>
                         <div class="col-md-12 margin_top15">
-                            <h5><b>Absente de tip zi</b></h5>
+                            <h5 id="modifAbsZi" runat="server"><b>Absente de tip zi</b></h5>
                         </div>
                         <div class="col-md-12 margin_top15">
                             <dx:ASPxComboBox ID="cmbTipAbs" runat="server" ClientIDMode="Static" ClientInstanceName="cmbTipAbs" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="DenumireScurta" AutoPostBack="false" TextFormatString="{0}" AllowNull="true" CssClass="aspxComboBox_center">
@@ -375,7 +375,7 @@
                             </dx:ASPxComboBox>
                         </div>
                         <div class="col-md-12 margin_top15">
-                            <h5><b>Absente de tip ora</b></h5>
+                            <h5 id="modifAbsOra" runat="server"><b>Absente de tip ora</b></h5>
                         </div>
                         <div class="col-md-12" id="pnlValuri" runat="server" style="margin:20px 50px 50px 50px;"/>
                     </div>

@@ -56,6 +56,10 @@ namespace WizOne.Pontaj
                 lblCtr.InnerText = Dami.TraduCuvant("Contract");
                 lblCateg.InnerText = Dami.TraduCuvant("Categorie");
 
+                modifAbsZi.InnerText = Dami.TraduCuvant("Absente de tip zi");
+                modifAbsOra.InnerText = Dami.TraduCuvant("Absente de tip ora");
+                modifPrgLucru.InnerText = Dami.TraduCuvant("Program de lucru");
+
                 foreach (dynamic c in grDate.Columns)
                 {
                     try

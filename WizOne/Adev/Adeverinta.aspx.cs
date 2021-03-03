@@ -1316,7 +1316,7 @@ namespace WizOne.Adev
             
         }
 
-        public byte[] GenerareAdeverinta(List<int> lstMarci, int adev, int anul)
+        public byte[] GenerareAdeverinta(List<int> lstMarci, int adev, int anul, bool param = false)
         {
             string msg = "";
             try
@@ -1389,10 +1389,15 @@ namespace WizOne.Adev
                 listaM = listaM.Substring(1);           
 
                 int tipGen = 0;
-                if (rbTipGen1.Checked)
+                if (!param)
+                {
+                    if (rbTipGen1.Checked)
+                        tipGen = 1;
+                    if (rbTipGen2.Checked)
+                        tipGen = 2;
+                }
+                else
                     tipGen = 1;
-                if (rbTipGen2.Checked)
-                    tipGen = 2;
                 string data = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
 
                 String FileName = "";
@@ -1491,6 +1496,16 @@ namespace WizOne.Adev
 
                 //if (msg.Length > 0)
                 //    MessageBox.Show(msg, MessageBox.icoError);
+
+                if (param)
+                {
+                    XDocument doc;
+                    doc = XDocument.Load(FileName);
+                    FlatToOpc(doc, FileName.Split('.')[0] + ".docx");
+                    File.Delete(FileName);
+                    byte[] fisierGen = File.ReadAllBytes(FileName.Split('.')[0] + ".docx");
+                    return fisierGen;
+                }
 
                 if (rbTipGen1.Checked)
                 {

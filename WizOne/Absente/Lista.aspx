@@ -17,7 +17,7 @@
                         grDate.StartEditRow(e.visibleIndex);
                         break;
                     case "btnDelete":
-                        grDate.GetRowValues(e.visibleIndex, 'IdStare', GoToDeleteMode);
+                        grDate.GetRowValues(e.visibleIndex, 'IdStare', GoToDeleteMode);                        
                         break;
                     case "btnPlanif":
                         grDate.PerformCallback("btnPlanif;0");
@@ -362,18 +362,20 @@
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAnulare" ClientInstanceName="btnAnulare" ClientIDMode="Static" runat="server" Text="Anulare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
-                       OnAnulare(s,e);
+                        OnAnulare(s,e);
+                        grDate.PerformCallback('btnFiltru;-99');
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnRespinge" ClientInstanceName="btnRespinge" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
-                       OnRespinge(s,e);
+                        OnRespinge(s,e);
+                        grDate.PerformCallback('btnFiltru;-99');
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) { OnAproba(s,e); }" />
+                    <ClientSideEvents Click="function(s, e) { OnAproba(s,e); grDate.PerformCallback('btnFiltru;-99');}" />
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
@@ -488,7 +490,7 @@
                         <dx:GridViewCommandColumn Width="160px" VisibleIndex="1" ButtonType="Image" Caption=" " Name="butoaneGrid" >
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnEdit">
-                                    <Image ToolTip="Anulare" Url="~/Fisiere/Imagini/Icoane/edit.png" />
+                                    <Image ToolTip="Modificare" Url="~/Fisiere/Imagini/Icoane/edit.png" />
                                 </dx:GridViewCommandColumnCustomButton>
                                 <dx:GridViewCommandColumnCustomButton ID="btnDelete">
                                     <Image ToolTip="Anulare" Url="~/Fisiere/Imagini/Icoane/sterge.png" />

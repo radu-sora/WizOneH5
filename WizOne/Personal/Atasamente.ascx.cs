@@ -84,9 +84,7 @@ namespace WizOne.Personal
                 grDateAtasamente.KeyFieldName = "IdAuto";
                 grDateAtasamente.DataSource = dt;
 
-                string sql = @"SELECT * FROM ""CategoriiAtasamente"" ";
-                if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("CategoriiAtasamente", "IdCategory");
+                string sql = @"SELECT * FROM ""CategoriiAtasamente"" WHERE ""IdCategory"" <= 1000 ORDER BY ""NameCategory""";
                 DataTable dtCategAt = General.IncarcaDT(sql, null);
                 GridViewDataComboBoxColumn colCategAt = (grDateAtasamente.Columns["IdCategory"] as GridViewDataComboBoxColumn);
                 colCategAt.PropertiesComboBox.DataSource = dtCategAt;
@@ -316,9 +314,7 @@ namespace WizOne.Personal
                 ASPxComboBox cmbCateg = grDateAtasamente.FindEditFormTemplateControl("cmbCateg") as ASPxComboBox;
                 if (cmbCateg != null)
                 {
-                    string sql = @"SELECT * FROM ""CategoriiAtasamente"" ORDER BY ""NameCategory""";
-                    if (Constante.tipBD == 2)
-                        sql = General.SelectOracle("CategoriiAtasamente", "IdCategory") + @" ORDER BY ""NameCategory"" ";
+                    string sql = @"SELECT * FROM ""CategoriiAtasamente"" WHERE ""IdCategory"" <= 1000 ORDER BY ""NameCategory""";
                     DataTable dtCateg = General.IncarcaDT(sql, null);
                     cmbCateg.DataSource = dtCateg;
                     cmbCateg.DataBindItems();

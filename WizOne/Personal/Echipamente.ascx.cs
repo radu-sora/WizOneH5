@@ -198,12 +198,22 @@ namespace WizOne.Personal
                             vechime = string.Format(vechime, (nrAni > 0 ? nrAni.ToString() : ""), (nrAni > 0 ? (nrAni == 1 ? "an" : "ani") : ""),
                                                              (nrLuni > 0 ? nrLuni.ToString() : ""), (nrLuni > 0 ? (nrLuni == 1 ? "luna" : "luni") : ""),
                                                              (nrZile > 0 ? nrZile.ToString() : ""), (nrZile > 0 ? (nrZile == 1 ? "zi" : "zile") : ""));
-                            row[col.ColumnName] = vechime;
+                            row[col.ColumnName] = vechime.Trim();
                         }
                         else
                         {
-                            var edc = e.NewValues[col.ColumnName];
-                            row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                            //Florin 2021.03.03
+                            //var edc = e.NewValues[col.ColumnName];
+                            //row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                            dynamic oldValue = e.OldValues[col.ColumnName];
+                            dynamic newValue = e.NewValues[col.ColumnName];
+                            if (oldValue != null && e.OldValues[col.ColumnName].GetType() == typeof(System.DBNull))
+                                oldValue = null;
+                            if (newValue != null && e.NewValues[col.ColumnName].GetType() == typeof(System.DBNull))
+                                newValue = null;
+
+                            if (oldValue != newValue)
+                                row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                         }
                     }
 

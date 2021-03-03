@@ -734,10 +734,11 @@ namespace WizOne.Personal
                     //if (dataModif != Convert.ToDateTime(ds.Tables[1].Rows[0]["F10023"]))
                     //    calcCO = true;
                 }
-                    
+
+                //ds.Tables[i].TableName == "Admin_Beneficii" || 
                 for (int i = 1; i < ds.Tables.Count; i++)
                 {//Radu 10.06.2019
-                    if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni" || ds.Tables[i].TableName == "Admin_Cursuri" || ds.Tables[i].TableName == "F100Studii")
+                    if (ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni" || ds.Tables[i].TableName == "Admin_Cursuri" || ds.Tables[i].TableName == "F100Studii")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
                     {
@@ -1209,7 +1210,10 @@ namespace WizOne.Personal
                         }
 
                         Session["MP_SalariulMinPost"] = Convert.ToInt32(General.Nz(dr["SalariuMin"],0));
-                        General.AdaugaBeneficiile(ref ds, Session["Marca"], dr);
+                        //Florin 2021.03.03 #8
+                        General.AdaugaDosar(ref ds, Session["Marca"]);
+                        General.AdaugaBeneficiile(ref ds, Session["Marca"]);
+                        General.AdaugaEchipamente(ref ds, Session["Marca"]);
                     }
                 }
 

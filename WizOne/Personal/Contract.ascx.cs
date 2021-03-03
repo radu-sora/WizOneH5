@@ -945,13 +945,13 @@ namespace WizOne.Personal
                                 drPost = arr[0];
                         }
 
+                        //Florin 2021.03.03 #8
                         if (drPost != null)
-                        {
                             Session["MP_SalariulMinPost"] = drPost["SalariuMin"];
-                            General.AdaugaBeneficiile(ref ds, Session["Marca"], drPost);
-                        }
 
                         General.AdaugaDosar(ref ds, Session["Marca"]);
+                        General.AdaugaBeneficiile(ref ds, Session["Marca"]);
+                        General.AdaugaEchipamente(ref ds, Session["Marca"]);
                     }
                     break;
                 case "cmbFunctie":

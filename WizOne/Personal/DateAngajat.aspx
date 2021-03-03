@@ -28,23 +28,23 @@
         //}
 
         function OnActiveTabChanged(s, e) {
-            switch (s.GetActiveTab().name) {
-                case "Beneficii":
-                    if (typeof grDateBeneficii !== 'undefined' && ASPxClientUtils.IsExists(grDateBeneficii)) {
-                        grDateBeneficii.Refresh();
-                    }
-                    break;
-                case "Dosar":
-                    if (typeof grDateDosar !== 'undefined' && ASPxClientUtils.IsExists(grDateDosar)) {
-                        grDateDosar.Refresh();
-                    }
-                    break;
-                    //if (modifDosar && typeof grDateDosar !== 'undefined' && ASPxClientUtils.IsExists(grDateDosar)) {
-                    //    grDateDosar.UpdateEdit();
-                    //    modifDosar = false;
-                    //}
-                    //break;
-            }
+            //switch (s.GetActiveTab().name) {
+            //    case "Beneficii":
+            //        if (typeof grDateBeneficii !== 'undefined' && ASPxClientUtils.IsExists(grDateBeneficii)) {
+            //            grDateBeneficii.Refresh();
+            //        }
+            //        break;
+            //    case "Dosar":
+            //        if (typeof grDateDosar !== 'undefined' && ASPxClientUtils.IsExists(grDateDosar)) {
+            //            grDateDosar.Refresh();
+            //        }
+            //        break;
+            //        //if (modifDosar && typeof grDateDosar !== 'undefined' && ASPxClientUtils.IsExists(grDateDosar)) {
+            //        //    grDateDosar.UpdateEdit();
+            //        //    modifDosar = false;
+            //        //}
+            //        //break;
+            //}
         }
     </script>
 

@@ -9075,53 +9075,107 @@ namespace WizOne.Module
             }
         }
 
-        public static void AdaugaBeneficiile(ref DataSet ds, object f10003, DataRow drPost)
+        //public static void AdaugaBeneficiile(ref DataSet ds, object f10003, DataRow drPost)
+        //{
+        //    try
+        //    {
+        //        string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + f10003.ToString();
+        //        DataTable dtBen = new DataTable();
+        //        if (ds.Tables.Contains("Admin_Beneficii"))
+        //        {
+        //            dtBen = ds.Tables["Admin_Beneficii"];
+        //        }
+        //        else
+        //        {
+        //            dtBen = General.IncarcaDT($@"SELECT * FROM ""Admin_Beneficii"" WHERE ""Marca"" = @1", new object[] { f10003 });
+        //            dtBen.TableName = "Admin_Beneficii";
+        //            dtBen.PrimaryKey = new DataColumn[] { dtBen.Columns["IdAuto"] };
+        //            ds.Tables.Add(dtBen);
+        //        }
+
+        //        //stergem toate beneficiile existente
+        //        for (int i = 0; i < dtBen.Rows.Count; i++)
+        //        {
+        //            dtBen.Rows[i].Delete();
+        //        }
+
+        //        for (int i = 1; i <= 10; i++)
+        //        {
+        //            int idBen = Convert.ToInt32(General.Nz(drPost["IdBeneficiu" + i], -99));
+        //            if (idBen != -99 && dtBen.Select("IdObiect=" + idBen).Count() <= 0)
+        //            {
+        //                DataRow drBen = ds.Tables["Admin_Beneficii"].NewRow();
+        //                drBen["Marca"] = f10003;
+        //                drBen["IdObiect"] = idBen;
+        //                drBen["DataPrimire"] = DateTime.Now;
+        //                drBen["DataExpirare"] = new DateTime(2100, 1, 1);
+        //                drBen["TIME"] = DateTime.Now;
+        //                drBen["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
+
+        //                if (Constante.tipBD == 1)
+        //                    drBen["IdAuto"] = Convert.ToInt32(General.Nz(dtBen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+        //                else
+        //                    drBen["IdAuto"] = Dami.NextId("Admin_Beneficii");
+        //                if (Convert.ToInt32(drBen["IdAuto"].ToString()) < 1000000)
+        //                    drBen["IdAuto"] = Convert.ToInt32(drBen["IdAuto"].ToString()) + 1000000;
+
+        //                dtBen.Rows.Add(drBen);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "AdaugaBeneficiile", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+        public static void AdaugaBeneficiile(ref DataSet ds, object f10003)
         {
             try
             {
                 string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + f10003.ToString();
-                DataTable dtBen = new DataTable();
+                DataTable dt = new DataTable();
                 if (ds.Tables.Contains("Admin_Beneficii"))
                 {
-                    dtBen = ds.Tables["Admin_Beneficii"];
+                    dt = ds.Tables["Admin_Beneficii"];
                 }
                 else
                 {
-                    dtBen = General.IncarcaDT($@"SELECT * FROM ""Admin_Beneficii"" WHERE ""Marca"" = @1", new object[] { f10003 });
-                    dtBen.TableName = "Admin_Beneficii";
-                    dtBen.PrimaryKey = new DataColumn[] { dtBen.Columns["IdAuto"] };
-                    ds.Tables.Add(dtBen);
+                    dt = General.IncarcaDT($@"SELECT * FROM ""Admin_Beneficii"" WHERE ""Marca"" = @1", new object[] { f10003 });
+                    dt.TableName = "Admin_Beneficii";
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
+                    ds.Tables.Add(dt);
                 }
 
-                //stergem toate beneficiile existente
-                for (int i = 0; i < dtBen.Rows.Count; i++)
+                //stergem inregistrarile
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    dtBen.Rows[i].Delete();
+                    if (dt.Rows[i].RowState != DataRowState.Deleted && General.Nz(dt.Rows[i]["VineDinPosturi"], 0).ToString() == "1" && dt.Rows[i]["Fisier"] == DBNull.Value)
+                        dt.Rows[i].Delete();
                 }
 
-                for (int i = 1; i <= 10; i++)
+                DataTable dtOrg = General.IncarcaDT(
+                    $@"SELECT A.*, B.""Denumire"" AS ""Caracteristica"" 
+                    FROM ""Org_PosturiBeneficii"" A
+                    LEFT JOIN ""Admin_Obiecte"" B ON A.""IdObiect"" = B.""Id""
+                    WHERE ""IdPost"" = @1", new object[] { HttpContext.Current.Session["MP_IdPost"] });
+
+                for (int i = 0; i < dtOrg.Rows.Count; i++)
                 {
-                    int idBen = Convert.ToInt32(General.Nz(drPost["IdBeneficiu" + i], -99));
-                    if (idBen != -99 && dtBen.Select("IdObiect=" + idBen).Count() <= 0)
+                    if (dt.Select("IdObiect=" + dtOrg.Rows[i]["IdObiect"]).Count() == 0)
                     {
-                        DataRow drBen = ds.Tables["Admin_Beneficii"].NewRow();
-                        drBen["Marca"] = f10003;
-                        drBen["IdObiect"] = idBen;
-                        drBen["DataPrimire"] = DateTime.Now;
-                        drBen["DataExpirare"] = new DateTime(2100, 1, 1);
-                        drBen["TIME"] = DateTime.Now;
-                        drBen["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
+                        DataRow dr = dt.NewRow();
+                        dr["Marca"] = f10003;
+                        dr["IdObiect"] = dtOrg.Rows[i]["IdObiect"];
+                        dr["Caracteristica"] = dtOrg.Rows[i]["Caracteristica"];
+                        dr["VineDinPosturi"] = 1;
+                        dr["TIME"] = DateTime.Now;
+                        dr["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
 
-                        if (Constante.tipBD == 1)
-                            drBen["IdAuto"] = Convert.ToInt32(General.Nz(dtBen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                        else
-                            drBen["IdAuto"] = Dami.NextId("Admin_Beneficii");
-                        if (Convert.ToInt32(drBen["IdAuto"].ToString()) < 1000000)
-                            drBen["IdAuto"] = Convert.ToInt32(drBen["IdAuto"].ToString()) + 1000000;
-
-                        dtBen.Rows.Add(drBen);
+                        dt.Rows.Add(dr);
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -9133,55 +9187,100 @@ namespace WizOne.Module
         {
             try
             {
-                DataTable dtDosar = new DataTable();
-                if (ds.Tables.Contains("Admin_Dosar"))
+                DataTable dt = new DataTable();
+                if (ds.Tables.Contains("Atasamente"))
                 {
-                    dtDosar = ds.Tables["Admin_Dosar"];
+                    dt = ds.Tables["Atasamente"];
                 }
                 else
                 {
-                    dtDosar = General.IncarcaDT(@"SELECT * FROM ""Admin_Dosar"" WHERE F10003=@1", new object[] { f10003 });
-                    dtDosar.TableName = "Admin_Dosar";
-                    dtDosar.PrimaryKey = new DataColumn[] { dtDosar.Columns["F10003"], dtDosar.Columns["IdObiect"] };
-                    ds.Tables.Add(dtDosar);
+                    dt = General.IncarcaDT(@"SELECT * FROM ""Atasamente"" WHERE IdEmpl=@1", new object[] { f10003 });
+                    dt.TableName = "Atasamente";
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
+                    ds.Tables.Add(dt);
                 }
 
                 //stergem inregistrarile
-                for (int i = 0; i < dtDosar.Rows.Count; i++)
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    if (dtDosar.Rows[i].RowState != DataRowState.Deleted && General.Nz(dtDosar.Rows[i]["Obligatoriu"], 0).ToString() == "1" && dtDosar.Rows[i]["Fisier"] == DBNull.Value)
-                        dtDosar.Rows[i].Delete();
+                    if (dt.Rows[i].RowState != DataRowState.Deleted && General.Nz(dt.Rows[i]["VineDinPosturi"], 0).ToString() == "1" && dt.Rows[i]["Attach"] == DBNull.Value)
+                        dt.Rows[i].Delete();
                 }
 
-                //DataTable dtOrg = General.IncarcaDT($@"SELECT * FROM ""Org_PosturiDosar"" WHERE ""IdPost""=@1 AND ""IdObiect"" NOT IN (SELECT ""IdObiect"" FROM ""Admin_Dosar"" WHERE F10003=@2)", new object[] { HttpContext.Current.Session["MP_IdPost"], f10003 });
                 DataTable dtOrg = General.IncarcaDT($@"SELECT * FROM ""Org_PosturiDosar"" WHERE ""IdPost""=@1", new object[] { HttpContext.Current.Session["MP_IdPost"] });
 
                 for (int i = 0; i < dtOrg.Rows.Count; i++)
                 {
-                    if (dtDosar.Select("IdObiect=" + dtOrg.Rows[i]["IdObiect"]).Count() == 0)
+                    if (dt.Select("IdCategory=" + dtOrg.Rows[i]["IdObiect"]).Count() == 0)
                     {
-                        DataRow drDsr = dtDosar.NewRow();
-                        drDsr["F10003"] = f10003;
-                        drDsr["IdObiect"] = dtOrg.Rows[i]["IdObiect"];
-                        drDsr["AreFisier"] = 0;
-                        drDsr["Obligatoriu"] = 1;
-                        drDsr["TIME"] = DateTime.Now;
-                        drDsr["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
+                        DataRow dr = dt.NewRow();
+                        dr["IdEmpl"] = f10003;
+                        dr["IdCategory"] = dtOrg.Rows[i]["IdObiect"];
+                        dr["VineDinPosturi"] = 1;
+                        dr["TIME"] = DateTime.Now;
+                        dr["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
 
-                        //if (Constante.tipBD == 1)
-                        //    drDsr["IdAuto"] = Convert.ToInt32(General.Nz(dtDosar.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                        //else
-                        //    drDsr["IdAuto"] = Dami.NextId("Admin_Dosar");
-                        //if (Convert.ToInt32(drDsr["IdAuto"].ToString()) < 1000000)
-                        //    drDsr["IdAuto"] = Convert.ToInt32(drDsr["IdAuto"].ToString()) + 1000000;
-
-                        dtDosar.Rows.Add(drDsr);
+                        dt.Rows.Add(dr);
                     }
                 }
             }
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, "AdaugaDosar", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        public static void AdaugaEchipamente(ref DataSet ds, object f10003)
+        {
+            try
+            {
+                string sqlFinal = "SELECT * FROM \"Admin_Echipamente\" WHERE \"Marca\" = " + f10003.ToString();
+                DataTable dt = new DataTable();
+                if (ds.Tables.Contains("Admin_Echipamente"))
+                {
+                    dt = ds.Tables["Admin_Echipamente"];
+                }
+                else
+                {
+                    dt = General.IncarcaDT($@"SELECT * FROM ""Admin_Echipamente"" WHERE ""Marca"" = @1", new object[] { f10003 });
+                    dt.TableName = "Admin_Echipamente";
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
+                    ds.Tables.Add(dt);
+                }
+
+                //stergem inregistrarile
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i].RowState != DataRowState.Deleted && General.Nz(dt.Rows[i]["VineDinPosturi"], 0).ToString() == "1" && dt.Rows[i]["Fisier"] == DBNull.Value)
+                        dt.Rows[i].Delete();
+                }
+
+                DataTable dtOrg = General.IncarcaDT(
+                    $@"SELECT A.*, B.""Denumire"" AS ""Caracteristica"" 
+                    FROM ""Org_PosturiEchipamente"" A
+                    LEFT JOIN ""Admin_Obiecte"" B ON A.""IdObiect"" = B.""Id""
+                    WHERE ""IdPost"" = @1", new object[] { HttpContext.Current.Session["MP_IdPost"] });
+
+                for (int i = 0; i < dtOrg.Rows.Count; i++)
+                {
+                    if (dt.Select("IdObiect=" + dtOrg.Rows[i]["IdObiect"]).Count() == 0)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["Marca"] = f10003;
+                        dr["IdObiect"] = dtOrg.Rows[i]["IdObiect"];
+                        dr["Caracteristica"] = dtOrg.Rows[i]["Caracteristica"];
+                        dr["VineDinPosturi"] = 1;
+                        dr["TIME"] = DateTime.Now;
+                        dr["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
+
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "AdaugaEchipamente", new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

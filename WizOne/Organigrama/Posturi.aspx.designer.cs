@@ -663,6 +663,15 @@ namespace WizOne.Organigrama
         protected global::DevExpress.Web.ASPxButton btnPozitii;
 
         /// <summary>
+        /// pnlFiltrare control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxRoundPanel pnlFiltrare;
+
+        /// <summary>
         /// Label1 control.
         /// </summary>
         /// <remarks>

@@ -294,16 +294,24 @@
                 </div>
                 <br /><br />
 
-                <div class="Absente_divOuter margin_top15">
-                    <label id="Label1" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100%;">Alege documentele pentru dosarul personal</label>
-                    <div style="float:left; padding-right:15px;">  
-                        <dx:ASPxCheckBoxList ID="chkDosar" ClientInstanceName="chkDosar" runat="server" ValueField="Id" TextField="Denumire" RepeatColumns="6" RepeatLayout="Table" >
-                            <CaptionSettings Position="Top" />
-                        </dx:ASPxCheckBoxList>
-                    </div>
-                </div>
+                <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20" Width="100%">
+                    <HeaderStyle Font-Bold="true" />
+                    <PanelCollection>
+                        <dx:PanelContent>
 
-                <div id="divDosar" runat="server" style="width:815px;"></div>
+                            <div class="Absente_divOuter margin_top15">
+                                <label id="Label1" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100%;">Alege documentele pentru dosarul personal</label>
+                                <div style="float:left; padding-right:15px;">  
+                                    <dx:ASPxCheckBoxList ID="chkDosar" ClientInstanceName="chkDosar" runat="server" ValueField="Id" TextField="Denumire" RepeatColumns="6" RepeatLayout="Table" >
+                                        <CaptionSettings Position="Top" />
+                                    </dx:ASPxCheckBoxList>
+                                </div>
+                            </div>
+                            <div id="divDosar" runat="server" style="width:815px;"></div>
+
+                        </dx:PanelContent>
+                    </PanelCollection>
+                </dx:ASPxRoundPanel>
 
                 <div class="Absente_divOuter margin_top15">
                     <label id="Label2" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100%;">Alege campurile aditionale</label>

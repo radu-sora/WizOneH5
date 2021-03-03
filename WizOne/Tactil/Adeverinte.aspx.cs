@@ -8,11 +8,19 @@ using System.Data;
 using System.Web;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
+using System.Web.Hosting;
+using System.Collections.Generic;
+using System.Drawing.Printing;
+using System.Drawing;
 
 namespace WizOne.Tactil
 {
     public partial class Adeverinte : System.Web.UI.Page
     {
+        private Font printFont;
+        private StreamReader streamToPrint;
+        static string filePath;
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -41,7 +49,9 @@ namespace WizOne.Tactil
                     {
                         dt.Rows.Add("AdeverintaPractica", "Adeverinta de practica", null, null);
                         dt.Rows.Add("AdeverintaCresa", "Adeverinta cresa/gradinita", null, null);
-                    }                    
+                    }
+                    if (HttpContext.Current.Session["IdClient"] == null || Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 66)                    
+                        dt.Rows.Add("AdeverintaSanatate", "Adeverinta de sanatate", null, null);                    
                 }
                 dt.Rows.Add("Inapoi", "Inapoi", null, null);
                 for (int i = 0; i < dt.Rows.Count; i++)
@@ -176,7 +186,11 @@ namespace WizOne.Tactil
                         case "adeverintacresa":
                         case "adeverintacresaprint":
                             lnkAdevGrad_Click(); ;
-                            break;                  
+                            break;
+                        case "adeverintasanatate":
+                        case "adeverintasanatateprint":
+                            lnkAdevSanatate_Click(); ;
+                            break;
                             //case "inapoi":
                             //    lnkOut_Click();
                             //    break;
@@ -376,5 +390,69 @@ namespace WizOne.Tactil
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+        protected void lnkAdevSanatate_Click()
+        {
+            try
+            {
+                Session["TactilAdeverinte"] = "Sanatate";
+                Session["NrInregAdev"] = General.GetnrInreg();
+                //if (Session["TactilPrintareAdeverinte"].ToString() == "0")
+                //{
+                //    Session["PrintDocument"] = "AdeverintaMedic";
+                //    Session["PaginaWeb"] = "Tactil/Adeverinte.aspx";
+                //    Response.Redirect("~/Reports/ImprimaTactil.aspx", false);
+                //}
+                //else
+                {
+                    Adev.Adeverinta pagAdev = new Adev.Adeverinta();
+                    List<int> lstMarci = new List<int>();
+                    lstMarci.Add(Convert.ToInt32(Session["User_Marca"].ToString()));
+                    string sql = "SELECT * FROM F100 WHERE F10003 = " + lstMarci[0];
+                    DataTable dtAng = General.IncarcaDT(sql, null);  
+                    byte[] fisier = pagAdev.GenerareAdeverinta(lstMarci, 12, DateTime.Now.Year, true);
+                    filePath = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + "Adev_sanatate_2020_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + Session["User_Marca"].ToString() + ".docx";
+                    using (Stream file = File.OpenWrite(filePath))
+                    {
+                        file.Write(fisier, 0, fisier.Length);
+                    }
+
+                    ProcessStartInfo info = new ProcessStartInfo();
+                    info.Verb = "print";
+                    info.FileName = filePath;
+                    info.CreateNoWindow = true;
+                    info.WindowStyle = ProcessWindowStyle.Hidden;
+
+                    Process p = new Process();
+                    p.StartInfo = info;
+                    p.Start();
+
+                    p.WaitForInputIdle();
+                    System.Threading.Thread.Sleep(3000);
+
+                    try
+                    {
+                        if (false == p.CloseMainWindow())
+                            p.Kill();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        
+                    }
+                    System.Threading.Thread.Sleep(3000);
+                    File.Delete(filePath);
+                    MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess, "");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }  
+
+
+
     }
 }

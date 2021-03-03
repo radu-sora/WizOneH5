@@ -9028,7 +9028,7 @@ namespace WizOne.Module
             }
             return dataConsemnare;
 
-        }
+        } 
 
         public static void SalveazaPost(object f10003, object idPost, DateTime dtModif)
         {

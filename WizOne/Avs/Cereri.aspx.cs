@@ -4640,13 +4640,13 @@ namespace WizOne.Avs
                                 : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + "  WHERE F10003 = " + f10003.ToString();
 
                                 sql1001 = "UPDATE F1001 SET F1001138 = " + data + " WHERE F10003 = " + f10003.ToString();
-                            }    
+                            }
                             //}   
 
                             //Radu 26.10.2020
-                            sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
+                            sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70468, F70469, USER_NO, TIME) "
                                 + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", " + dtCer.Rows[0]["IdAtribut"].ToString() + ", 'Prelungire CIM', " + data + ", " + dtCer.Rows[0]["DurataContract"].ToString() + ", 'Modificari in avans', '"
-                                + dateDoc + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                                + dateDoc + "', " + act.ToString() + ", " + data9 + ", " + data10 + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
 
 
                         }

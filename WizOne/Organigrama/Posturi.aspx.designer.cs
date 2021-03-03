@@ -672,15 +672,6 @@ namespace WizOne.Organigrama
         protected global::DevExpress.Web.ASPxRoundPanel pnlFiltrare;
 
         /// <summary>
-        /// Label1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label1;
-
-        /// <summary>
         /// chkDosar control.
         /// </summary>
         /// <remarks>
@@ -699,40 +690,13 @@ namespace WizOne.Organigrama
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDosar;
 
         /// <summary>
-        /// Label2 control.
+        /// ASPxRoundPanel2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label2;
-
-        /// <summary>
-        /// chkExtra control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBoxList chkExtra;
-
-        /// <summary>
-        /// divExtra control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divExtra;
-
-        /// <summary>
-        /// Label3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label3;
+        protected global::DevExpress.Web.ASPxRoundPanel ASPxRoundPanel2;
 
         /// <summary>
         /// chkEchip control.
@@ -753,13 +717,13 @@ namespace WizOne.Organigrama
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divEchip;
 
         /// <summary>
-        /// Label4 control.
+        /// ASPxRoundPanel3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label4;
+        protected global::DevExpress.Web.ASPxRoundPanel ASPxRoundPanel3;
 
         /// <summary>
         /// chkBenef control.
@@ -778,6 +742,33 @@ namespace WizOne.Organigrama
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divBenef;
+
+        /// <summary>
+        /// ASPxRoundPanel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxRoundPanel ASPxRoundPanel1;
+
+        /// <summary>
+        /// chkExtra control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBoxList chkExtra;
+
+        /// <summary>
+        /// divExtra control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divExtra;
 
         /// <summary>
         /// lblCom control.

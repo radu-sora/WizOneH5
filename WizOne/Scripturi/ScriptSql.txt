@@ -16946,6 +16946,57 @@ GO
 INSERT [dbo].[DynReportTypes] ([DynReportTypeId], [Name]) VALUES (5, N'Dashboard')
 GO
 
+ALTER FUNCTION [dbo].[DamiPozitii] (@IdPost int, @dt DATE) 
+RETURNs table AS 
+return 
+
+	WITH 
+
+	HCEfectiv (IdPost, Activi, Suspendati, Candidati)  as
+	(
+		SELECT IdPost, 
+		SUM(CASE WHEN Y.F10025=900 THEN 0 ELSE CASE WHEN Y.F10022 <= @dt AND @dt <= Z.DataPlecare THEN 1 ELSE 0 END END) AS Activi,
+		SUM(CASE WHEN 
+			(Y.F100922 <= @dt AND @dt <= (CASE WHEN COALESCE(Y.F100924, '2100-01-01') = '2100-01-01' THEN Y.F100923 ELSE Y.F100924 END)) 
+			AND 
+			(Y.F10022 <= @dt AND @dt <= Z.DataPlecare) 
+		THEN 1 ELSE 0 END) AS Suspendati,  
+		SUM(CASE WHEN Y.F10025 IN (900) THEN 1 ELSE 0 END) AS Candidati
+		FROM Org_relPostAngajat X 
+		INNER JOIN F100 Y ON X.F10003=Y.F10003
+		OUTER APPLY DamiDataPlecare(X.F10003, @dt) Z
+		WHERE X.DataInceput <= @dt AND @dt <= X.DataSfarsit GROUP BY IdPost
+	),
+
+	tree (Id, IdSuperior, Stare, DataInceput, DataSfarsit, Pozitii, PozitiiAprobate, Activi, Suspendati, Candidati) as 
+	(
+		SELECT A.Id, A.IdSuperior, A.Stare, A.DataInceput, A.DataSfarsit, COALESCE(B.Pozitii,0) AS Pozitii, COALESCE(B.PozitiiAprobate,0) AS PozitiiAprobate,
+		COALESCE(C.Activi,0) AS Activi, COALESCE(C.Suspendati,0) AS Suspendati, COALESCE(C.Candidati,0) AS Candidati
+		FROM Org_Posturi A
+		LEFT JOIN Org_PosturiPozitii B ON A.Id = B.IdPost AND B.DataInceput <= @dt AND @dt <= B.DataSfarsit 
+		LEFT JOIN HCEfectiv C ON A.Id = C.IdPost
+		WHERE A.Id = @IdPost AND A.DataInceput <= @dt AND @dt <= A.DataSfarsit AND COALESCE(A.Stare,0)=1
+		UNION ALL
+		SELECT A.Id, A.IdSuperior, A.Stare, A.DataInceput, A.DataSfarsit, 
+		(SELECT COALESCE(X.Pozitii,0) AS Pozitii FROM Org_PosturiPozitii X WHERE X.IdPost=A.Id AND X.DataInceput <= @dt AND @dt <= X.DataSfarsit) AS Pozitii,
+		(SELECT COALESCE(X.PozitiiAprobate,0) AS PozitiiAprobate FROM Org_PosturiPozitii X WHERE X.IdPost=A.Id AND X.DataInceput <= @dt AND @dt <= X.DataSfarsit) AS PozitiiAprobate,
+		(SELECT COALESCE(Y.Activi,0) AS Activi FROM HCEfectiv Y WHERE Y.IdPost = A.Id) AS Activi,
+		(SELECT COALESCE(Y.Suspendati,0) AS Suspendati FROM HCEfectiv Y WHERE Y.IdPost = A.Id) AS Suspendati,
+		(SELECT COALESCE(Y.Candidati,0) AS Candidati FROM HCEfectiv Y WHERE Y.IdPost = A.Id) AS Candidati
+		FROM Org_Posturi A 
+		INNER JOIN tree D on A.IdSuperior = D.Id AND D.DataInceput <= @dt AND @dt <= D.DataSfarsit
+		WHERE 
+		A.DataInceput <= @dt AND @dt <= A.DataSfarsit AND COALESCE(A.Stare,0)=1
+	)
+
+	SELECT 
+	SUM(COALESCE(Pozitii,0)) AS Pozitii,  
+	SUM(COALESCE(PozitiiAprobate,0)) AS PozitiiAprobate, 
+	SUM(COALESCE(Activi,0)) AS Activi, 
+	SUM(COALESCE(Suspendati,0)) AS Suspendati, 
+	SUM(COALESCE(Candidati,0)) AS Candidati
+	FROM tree;
+
 
 ----  2.2.135  ----
 

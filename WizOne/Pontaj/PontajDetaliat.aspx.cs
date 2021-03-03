@@ -1580,7 +1580,9 @@ namespace WizOne.Pontaj
                     dynamic newValue = upd.NewValues[numeCol];
                     if (oldValue != null && upd.OldValues[numeCol].GetType() == typeof(System.DBNull))
                         oldValue = null;
-                       
+                    if (newValue != null && upd.NewValues[numeCol].GetType() == typeof(System.DBNull))
+                        newValue = null;
+
                     if (oldValue != newValue)
                     {
                         //daca sunt valorile temporare ValTmp

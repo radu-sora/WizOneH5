@@ -709,7 +709,7 @@ namespace WizOne.Module
 
                             if (Convert.ToDateTime(firstIn) <= oraInc) startTime = oraInc;
                             if (oraInc < Convert.ToDateTime(firstIn) && Convert.ToDateTime(firstIn) < oraSf) startTime = firstIn;
-                            if (oraSf < Convert.ToDateTime(firstIn)) startTime = oraSf;
+                            if (oraSf <= Convert.ToDateTime(firstIn)) startTime = oraSf;
                         }
                         else
                         {
@@ -719,56 +719,27 @@ namespace WizOne.Module
                         if (startTime == null)
                             endTime = null;
                         else
+                        {
                             endTime = startTime.Value.AddMinutes(Convert.ToInt32(General.Nz(entPrg["Norma"], -99)));
+                            dtSch = lastOut;
+                        }
+                    }
+                    else
+                    {
+                        if (lastOut != null)
+                        {
+                            dtSch = lastOut; 
+                            if (new DateTime(2100, 1, 1, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, 0) <= oraOutSchimbare && General.Nz(dtCtr.Rows[0]["TipRaportareOreNoapte"],1).ToString() != "2")
+                                endTime = new DateTime(zi.Value.AddDays(1).Year, zi.Value.AddDays(1).Month, zi.Value.AddDays(1).Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
+                            else
+                                endTime = new DateTime(zi.Value.Year, zi.Value.Month, zi.Value.Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
+                        }
                     }
                 }
 
 
                 if (lastOut != null)
                 {
-                    //Florin 2020.04.21 - Am adaugat conditia flexibil=1
-                    if (entPrg != null && Convert.ToInt32(General.Nz(entPrg["Flexibil"], -99)) == 1)
-                    {
-                        dtSch = lastOut;
-                    }
-                    else
-                    {
-                        if (entPrg != null && entPrg["OraIesire"] != null && entPrg["OraIesire"].ToString() != "")
-                        {
-                            if (new DateTime(2100, 1, 1, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, 0) <= oraOutSchimbare)
-                            {
-                                dtSch = lastOut;                //este schimbul 3
-                            }
-                            else
-                            {
-                                //este schimbul 1,2
-                                //2016.02.22 Florin - la schimbul 2 poate sa iasa si la ora 2 a doua zi
-                                if (firstIn != null && new DateTime(2100, 1, 1, lastOut.Value.Hour, lastOut.Value.Minute, 0) <= oraOutSchimbare
-                                    && new DateTime(2100, 1, 1, firstIn.Value.Hour, firstIn.Value.Minute, 0) > oraInSchimbare)
-                                {
-                                    //dtSch = lastOut;
-                                    //Radu 20.02.2017
-                                    dtSch = new DateTime(zi.Value.AddDays(1).Year, zi.Value.AddDays(1).Month, zi.Value.AddDays(1).Day, lastOut.Value.Hour, lastOut.Value.Minute, lastOut.Value.Second);
-                                }
-                                else
-                                {
-                                    dtSch = new DateTime(zi.Value.Year, zi.Value.Month, zi.Value.Day, lastOut.Value.Hour, lastOut.Value.Minute, lastOut.Value.Second);
-                                }
-                            }
-
-                            if (dtSch != null)
-                            {
-                                //Radu 20.02.2017
-                                if (new DateTime(2100, 1, 1, lastOut.Value.Hour, lastOut.Value.Minute, 0) <= oraOutSchimbare && Convert.ToDateTime(entPrg["OraIesire"]).Hour > Convert.ToDateTime(entPrg["OraIntrare"]).Hour)   //Radu 10.10.2019 - am inlocuit a doua conditie (sa fie schimbul 1 sau 2)
-                                    endTime = new DateTime(dtSch.Value.AddDays(-1).Year, dtSch.Value.AddDays(-1).Month, dtSch.Value.AddDays(-1).Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
-                                else if (firstIn != null && Convert.ToDateTime(entPrg["OraIesire"]).Hour < Convert.ToDateTime(entPrg["OraIntrare"]).Hour && firstIn.Value.Day == lastOut.Value.Day)  //Radu 12.09.2019 - prima conditie = sa fie program de noapte (schimb 3), a doua conditie - nu a lucrat peste miezul noptii
-                                    endTime = new DateTime(dtSch.Value.AddDays(1).Year, dtSch.Value.AddDays(1).Month, dtSch.Value.AddDays(1).Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
-                                else
-                                    endTime = new DateTime(dtSch.Value.Year, dtSch.Value.Month, dtSch.Value.Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
-                            }
-                        }
-                    }
-
                     if (endTime == null) return;
 
                     if (lastOut.Value.Hour == endTime.Value.Hour && lastOut.Value.Minute == endTime.Value.Minute)
@@ -781,13 +752,12 @@ namespace WizOne.Module
                         if (lastOut > endTime)                        //iesire tarzie
                         {
                             varTmp = false;
-                            //int dif = Convert.ToInt32((Convert.ToDateTime(lastOut) - Convert.ToDateTime(endTime)).TotalMinutes);
                             int dif = CalculIntervale(ent, Convert.ToDateTime(endTime), Convert.ToDateTime(lastOut));
 
                             int difRap = 0;
                             if (entPrg["OUTPesteDiferentaRaportare"].ToString() != "") difRap = TransformaInMinute(Convert.ToDateTime(entPrg["OUTPesteDiferentaRaportare"]));
                             if (dif <= difRap)
-                                lastOutRap = TransformaInData(dtSch, endTime.Value.Hour, endTime.Value.Minute);
+                                lastOutRap = endTime;
                             else
                                 lastOutRap = dtSch;
 
@@ -796,20 +766,11 @@ namespace WizOne.Module
                             if (entPrg["OUTPesteMinPlata"].ToString() != "") valMin = TransformaInMinute(Convert.ToDateTime(entPrg["OUTPesteMinPlata"]));
                             if (entPrg["OUTPesteMaxPlata"].ToString() != "") valMax = TransformaInMinute(Convert.ToDateTime(entPrg["OUTPesteMaxPlata"]));
 
-                            //if (dif < valMin) lastOutPaid = TransformaInData(dtSch, endTime.Value.Hour, endTime.Value.Minute);
-                            //if (valMin <= dif && dif <= valMax) lastOutPaid = TransformaInData(dtSch, dtSch.Value.Hour, dtSch.Value.Minute);
-                            //DateTime? dtPen = endTime.Value.AddMinutes(valMax);
-                            //if (dif > valMax) lastOutPaid = TransformaInData(dtSch, dtPen.Value.Hour, dtPen.Value.Minute);
-
-                            //Radu 20.02.2017
-                            //Florin 2018.09.03  Am adaugat conditia  Convert.ToDateTime(entPrg["OraIesire"]).Hour > 23
-                            if (dif < valMin) lastOutPaid = TransformaInData((lastOut.Value.Hour <= 9 && Convert.ToDateTime(entPrg["OraIesire"]).Hour > 9 && Convert.ToDateTime(entPrg["OraIesire"]).Hour > 23 ? dtSch.Value.AddDays(-1) : dtSch), endTime.Value.Hour, endTime.Value.Minute);
-                            if (valMin <= dif && dif <= valMax) lastOutPaid = TransformaInData((lastOut.Value.Hour <= 9 && Convert.ToDateTime(entPrg["OraIesire"]).Hour > 9 && Convert.ToDateTime(entPrg["OraIesire"]).Hour > 23 ? dtSch.Value.AddDays(-1) : dtSch), dtSch.Value.Hour, dtSch.Value.Minute);
+                            if (dif < valMin) lastOutPaid = endTime;
+                            if (valMin <= dif && dif <= valMax) lastOutPaid = dtSch;
                             DateTime? dtPen = endTime.Value.AddMinutes(valMax);
-                            if (dif > valMax) lastOutPaid = TransformaInData((lastOut.Value.Hour <= 9 && Convert.ToDateTime(entPrg["OraIesire"]).Hour > 9 && Convert.ToDateTime(entPrg["OraIesire"]).Hour > 23 ? dtSch.Value.AddDays(-1) : dtSch), dtPen.Value.Hour, dtPen.Value.Minute);
+                            if (dif > valMax) lastOutPaid = dtPen;
 
-                            //dif1 = Convert.ToInt32((Convert.ToDateTime(lastOutPaid) - Convert.ToDateTime(endTime)).TotalMinutes);
-                            //dif2 = Convert.ToInt32((Convert.ToDateTime(lastOut) - Convert.ToDateTime(lastOutPaid)).TotalMinutes);
                             dif1 = CalculIntervale(ent, Convert.ToDateTime(endTime), Convert.ToDateTime(lastOutPaid));
                             dif2 = CalculIntervale(ent, Convert.ToDateTime(lastOutPaid), Convert.ToDateTime(lastOut));
                         }
@@ -821,17 +782,17 @@ namespace WizOne.Module
                             int difRap = 0;
                             if (entPrg["OUTSubDiferentaRaportare"].ToString() != "") difRap = TransformaInMinute(Convert.ToDateTime(entPrg["OUTSubDiferentaRaportare"]));
                             if (dif <= difRap)
-                                lastOutRap = TransformaInData(dtSch, endTime.Value.Hour, endTime.Value.Minute);
+                                lastOutRap = endTime;
                             else
                                 lastOutRap = dtSch;
 
                             int valPlata = 0;
                             if (entPrg["OUTSubDiferentaPlata"].ToString() != "") valPlata = TransformaInMinute(Convert.ToDateTime(entPrg["OUTSubDiferentaPlata"]));
 
-                            if (dif <= valPlata) lastOutPaid = TransformaInData(dtSch, endTime.Value.Hour, endTime.Value.Minute);
+                            if (dif <= valPlata) lastOutPaid = endTime;
                             if (dif > valPlata)
                             {
-                                lastOutPaid = TransformaInData(dtSch, endTime.Value.Hour, endTime.Value.Minute);
+                                lastOutPaid =endTime;
                                 int valCalc = 0;
                                 DataTable dtCalc = null;
 
@@ -844,7 +805,7 @@ namespace WizOne.Module
                                 {
                                     valCalc = TransformaInMinute(Convert.ToDateTime(dtCalc.Rows[0]["Valoare"]));
                                     DateTime? dtPen = endTime.Value.AddMinutes(-1 * valCalc);
-                                    lastOutPaid = TransformaInData(dtSch, dtPen.Value.Hour, dtPen.Value.Minute);
+                                    lastOutPaid = dtPen;
                                 }
                                 else
                                 {

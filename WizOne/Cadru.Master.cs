@@ -642,6 +642,9 @@ namespace WizOne
                         Session["IdLimba"] = idLimba;
                         break;
                     default:
+                        //Florin 2021.03.03 #818
+                        Session["VineDinDelogare"] = 1;
+
                         string url = "~/Default.aspx";
                         if (Constante.esteTactil)
                             url = "~/Tactil/MainTactil.aspx";

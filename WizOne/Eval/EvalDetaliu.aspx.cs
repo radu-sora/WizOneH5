@@ -2629,6 +2629,9 @@ namespace WizOne.Eval
                                         clsObiectiv.Denumire = rwObiectiv["Denumire"].ToString();
                                         lstObiective.Add(clsObiectiv);
                                     }
+
+                                    //Florin 2021.03.04  #826
+                                    Session["feedEval_Obiectiv"] = lstObiective;
                                 }
                                 else
                                     lstObiective = Session["feedEval_Obiectiv"] as List<metaDate>;
@@ -2733,6 +2736,9 @@ namespace WizOne.Eval
                                         clsObiectiv.Denumire = rwObiectiv["Denumire"].ToString();
                                         lstObiective.Add(clsObiectiv);
                                     }
+
+                                    //Florin 2021.03.04  #826
+                                    Session["feedEval_Obiectiv"] = lstObiective;
                                 }
                                 else
                                     lstObiective = Session["feedEval_Obiectiv"] as List<metaDate>;

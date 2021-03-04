@@ -488,7 +488,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <span style="font-weight:bold; font-size:14px;">Absente de tip zi</span>
+                                <span style="font-weight:bold; font-size:14px;" id="modifAbsZi" runat="server">Absente de tip zi</span>
                                 <br />
                                 <br />
                             </div>
@@ -512,14 +512,14 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <br /><br /><br />
-                                <span style="font-weight:bold; font-size:14px;">Absente de tip ora</span>
+                                <span style="font-weight:bold; font-size:14px;" id="modifAbsOra" runat="server">Absente de tip ora</span>
                             </div>
                         </div>
                         <div class="row" id="pnlValuri" runat="server" style="margin:20px 50px 50px 50px;">
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <span style="font-weight:bold; font-size:14px;">Program de lucru</span>
+                                <span style="font-weight:bold; font-size:14px;" id="modifPrgLucru" runat="server">Program de lucru</span>
                                 <br />
                                 <br />
                             </div>

@@ -624,7 +624,7 @@ namespace WizOne.Module
                         idRol = Dami.ValoareParam("Cereri_IDuriRoluriVizualizare", "-99");
 
                     //Radu 09.02.2021 - conditie pentru eliminarea dublurilor
-                    string sqlElimDubluri = " and b.idsuper = (select max(idsuper) from F100Supervizori where iduser = " + HttpContext.Current.Session["UserId"] + " and f10003 = a.f10003) ";
+                    string sqlElimDubluri = " and b.idsuper = (select max(idsuper) from F100Supervizori where iduser = " + HttpContext.Current.Session["UserId"] + " and f10003 = a.f10003 and IdSuper in (" + idRol + ")) ";
 
                     strSql = $@"SELECT DISTINCT A.*, B.""IdSuper"" AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
                                FROM ""Ptj_Cereri"" A

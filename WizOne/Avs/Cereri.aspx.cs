@@ -4906,6 +4906,8 @@ namespace WizOne.Avs
 
                                 General.IncarcaDT(sql100Tmp, null); //pentru ca se modifica F10023, trebuie rulat CalculCO, de aceea se executa aici si nu la sfarsit
                             }
+                            else
+                                sql1001 = "UPDATE F1001 SET F1001137 = " + data + " WHERE F10003 = " + f10003.ToString();
 
                             if (modifTip)
                                 sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "

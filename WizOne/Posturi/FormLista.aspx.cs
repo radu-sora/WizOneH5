@@ -1229,6 +1229,7 @@ namespace WizOne.Posturi
                 int poz = 0;
                 int idUserPrece = -99;
                 int idUserCalc = -99;
+                bool adaugat = false;
 
                 List<int> lst = new List<int>();
 
@@ -1301,7 +1302,7 @@ namespace WizOne.Posturi
                                 case 0:                                     //se pun toti supervizorii chiar daca se repeta; ex: circuit -> 3;  3;  8;   3;   9;  rezulta -> 3;  3;   8;   3;   9;
                                     {
                                         poz += 1;     
-                                        if (idUserCalc == idUser)
+                                        if (idUserCalc == idUser && !adaugat)
                                         {
                                             pozUser = poz;
                                             if (poz == 1) idStare = 1;
@@ -1309,6 +1310,7 @@ namespace WizOne.Posturi
 
                                             aprobat = "1";
                                             dataAprobare = (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
+                                            adaugat = true;
                                         }
                                         idUserPrece = idUserCalc;
                                     }
@@ -1318,7 +1320,7 @@ namespace WizOne.Posturi
                                         if (idUserCalc != idUserPrece)
                                         {
                                             poz += 1;
-                                            if (idUserCalc == idUser)
+                                            if (idUserCalc == idUser && !adaugat)
                                             {
                                                 pozUser = poz;
                                                 if (poz == 1) idStare = 1;
@@ -1326,6 +1328,7 @@ namespace WizOne.Posturi
 
                                                 aprobat = "1";
                                                 dataAprobare = (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
+                                                adaugat = true;
                                             }
                                             idUserPrece = idUserCalc;
                                         }

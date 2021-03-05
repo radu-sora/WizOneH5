@@ -123,13 +123,13 @@ namespace WizOne.Organigrama
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAng;
 
         /// <summary>
-        /// cmbAng control.
+        /// cmbStare control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbAng;
+        protected global::DevExpress.Web.ASPxDropDownEdit cmbStare;
 
         /// <summary>
         /// lblParinte control.

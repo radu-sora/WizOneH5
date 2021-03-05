@@ -43,14 +43,32 @@
 
                     <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px;">Angajati</label>
                     <div style="float:left; padding-right:15px;">
-                        <dx:ASPxComboBox ID="cmbAng" runat="server" Width="130px">
-                            <Items>
-                                <dx:ListEditItem Text="Toti" Value="4" />
-                                <dx:ListEditItem Text="Activi" Value="1" Selected="true" />
-                                <dx:ListEditItem Text="Activi suspendati" Value="2" />
-                                <dx:ListEditItem Text="Inactivi" Value="3" />
-                            </Items>
-                        </dx:ASPxComboBox>
+                        <dx:ASPxDropDownEdit ClientInstanceName="cmbStare" ID="cmbStare" Width="150px" runat="server" AnimationType="None">
+                            <DropDownWindowStyle BackColor="#EDEDED" />
+                            <DropDownWindowTemplate>
+                                <dx:ASPxListBox Width="100%" ID="listBoxStare" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
+                                    <Border BorderStyle="None" />
+                                    <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
+                                    <Items>
+                                        <dx:ListEditItem Text="(Selectie toti)" Value="4" />
+                                        <dx:ListEditItem Text="Activi" Value="1" />
+                                        <dx:ListEditItem Text="Activi suspendati" Value="2" />
+                                        <dx:ListEditItem Text="Candidati" Value="3" />
+                                    </Items>
+                                    <ClientSideEvents SelectedIndexChanged="function(s, e){ OnListBoxSelectionChanged(s,e) }" />
+                                </dx:ASPxListBox>
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td style="padding: 4px">
+                                            <dx:ASPxButton ID="btnInchide" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
+                                                <ClientSideEvents Click="function(s, e){ cmbStare.HideDropDown(); }" />
+                                            </dx:ASPxButton>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </DropDownWindowTemplate>
+                            <ClientSideEvents TextChanged="function(s, e){ SynchronizeListBoxValues(s,e) }" DropDown="function(s, e){ SynchronizeListBoxValues(s,e) }"/>
+                        </dx:ASPxDropDownEdit>
                     </div>
 
                     <label id="lblParinte" runat="server" style="display:inline-block; float:left; padding-right:15px;">Superior</label>
@@ -72,8 +90,8 @@
                         <div style="width:16px; height:16px; background-color:#c8ffc8;float:left; margin-left:0px; border:solid 2px #e6e6e6;"></div>
                         <label style="display:inline-block; float:left; padding:0px 15px;">Activ suspendat</label>
                         <div style="width:16px; height:16px; background-color:#ffffc8;float:left; margin-left:0px; border:solid 2px #e6e6e6;"></div>
-                        <label style="display:inline-block; float:left; padding:0px 15px;">Inactiv</label>
-                        <div style="width:16px; height:16px; background-color:#ffc8c8;float:left; margin-left:0px; border:solid 2px #e6e6e6;"></div>
+                        <label style="display:inline-block; float:left; padding:0px 15px;">Candidat</label>
+                        <div style="width:16px; height:16px; background-color:#96c8fa;float:left; margin-left:0px; border:solid 2px #e6e6e6;"></div>
                     </div>
                 </div>
             </td>
@@ -98,7 +116,7 @@
                         <dx:TreeListDataColumn FieldName="PozitiiPlanificate" Name="PozitiiPlanificate" Caption="Planificate" ReadOnly="true" Width="70px" VisibleIndex="15" />
                         <dx:TreeListDataColumn FieldName="PozitiiAprobate" Name="PozitiiAprobate" Caption="Aprobate" ReadOnly="true" Width="70px" VisibleIndex="16" />
                         <dx:TreeListDataColumn FieldName="AngajatiActivi" Name="AngajatiActivi" Caption="Activi" ReadOnly="true" Width="70px" VisibleIndex="17" />
-                        <dx:TreeListDataColumn FieldName="AngajatiInactivi" Name="AngajatiInactivi" Caption="Inactivi" ReadOnly="true" Width="70px" VisibleIndex="18" />
+                        <dx:TreeListDataColumn FieldName="AngajatiInactivi" Name="AngajatiInactivi" Caption="Activ suspendat" ReadOnly="true" Width="70px" VisibleIndex="18" />
                         <dx:TreeListDataColumn FieldName="Candidati" Name="Candidati" Caption="Candidati" ReadOnly="true" Width="70px" VisibleIndex="19" />
 
                         <dx:TreeListDataColumn FieldName="Companie" Name="Companie" Caption="Companie" ReadOnly="true" Width="250px" VisibleIndex="5" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList"/>
@@ -229,6 +247,53 @@
                 window.location.href = s.cpReportUrl;
                 delete s.cpReportUrl;
             }
+        }
+
+
+
+
+        var textSeparator = ",";
+        function OnListBoxSelectionChanged(listBox, args) {
+            if (args.index == 0)
+                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
+            UpdateSelectAllItemState();
+            UpdateText();
+        }
+        function UpdateSelectAllItemState() {
+            IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
+        }
+        function IsAllSelected() {
+            var selectedDataItemCount = checkListBox.GetItemCount() - (checkListBox.GetItem(0).selected ? 0 : 1);
+            return checkListBox.GetSelectedItems().length == selectedDataItemCount;
+        }
+        function UpdateText() {
+            var selectedItems = checkListBox.GetSelectedItems();
+            cmbStare.SetText(GetSelectedItemsText(selectedItems));
+        }
+        function SynchronizeListBoxValues(dropDown, args) {
+            checkListBox.UnselectAll();
+            var texts = dropDown.GetText().split(textSeparator);
+            var values = GetValuesByTexts(texts);
+            checkListBox.SelectValues(values);
+            UpdateSelectAllItemState();
+            UpdateText();
+        }
+        function GetSelectedItemsText(items) {
+            var texts = [];
+            for (var i = 0; i < items.length; i++)
+                if (items[i].index != 0)
+                    texts.push(items[i].text);
+            return texts.join(textSeparator);
+        }
+        function GetValuesByTexts(texts) {
+            var actualValues = [];
+            var item;
+            for (var i = 0; i < texts.length; i++) {
+                item = checkListBox.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+            return actualValues;
         }
 
     </script>

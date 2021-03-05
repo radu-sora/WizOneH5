@@ -44,7 +44,8 @@ namespace WizOne.Organigrama
                             txtDtVig.Value = (DateTime?)dic["Ziua"];
                             chkActiv.Value = (bool?)dic["Activ"];
                             cmbParinte.Value = dic["Parinte"];
-                            cmbAng.Value = dic["StareAng"];
+                            //cmbAng.Value = dic["StareAng"];
+                            cmbStare.Text = General.Nz(dic["StareAng"],"").ToString();
                             idPost = Convert.ToInt32(dic["IdPost"] ?? 1);
                         }
                         Session["Filtru_Posturi"] = null;
@@ -99,23 +100,26 @@ namespace WizOne.Organigrama
                 DateTime dt = Convert.ToDateTime(txtDtVig.Value);
                 int f10003 = -99;
 
-                switch (General.Nz(cmbAng.Value,"1").ToString())
-                {
-                    case "1":                         //Activi
-                        str = " or x.\"StareAngajat\"=1 ";
-                        break;
-                    case "2":                         //Suspendati
-                        str = " or x.\"StareAngajat\"=2 ";
-                        break;
-                    case "3":                         //Inactivi
-                        str = " or x.\"StareAngajat\"=3 ";
-                        break;
-                    case "4":                         //Toti
-                        str = " or x.\"StareAngajat\" IN (1, 2, 3) ";
-                        break;
-                }
+                //switch (General.Nz(cmbAng.Value,"").ToString())
+                //{
+                //    case "1":                         //Activi
+                //        str = " or x.\"StareAngajat\"=1 ";
+                //        break;
+                //    case "2":                         //Suspendati
+                //        str = " or x.\"StareAngajat\"=2 ";
+                //        break;
+                //    case "3":                         //Inactivi
+                //        str = " or x.\"StareAngajat\"=3 ";
+                //        break;
+                //    case "4":                         //Toti
+                //        str = " or x.\"StareAngajat\" IN (1, 2, 3) ";
+                //        break;
+                //}
 
-                if (Convert.ToInt32(General.Nz(chkActiv.Value,0)) == 1) strFiltru = " COALESCE(x.\"Activ\",0) = " + Convert.ToInt32(General.Nz(chkActiv.Value, 0)) + " AND ";
+                if (cmbStare.Value != null) str += @" AND X.""StareAngajat"" IN (0," + DamiStari() + ")";
+
+                //Florin 2021.03.05
+                //if (Convert.ToInt32(General.Nz(chkActiv.Value,0)) == 1) strFiltru = " AND COALESCE(x.\"Activ\",0) = " + Convert.ToInt32(General.Nz(chkActiv.Value, 0));
 
                 //Radu 13.12.2016 - am inlocuit  case when a.F10025 = 0 then 1 else 0 end as "Activ" cu case when r."Stare" is null then 0 else r."Stare" end as "Activ" in toate select-urile de mai jos, deoarece trebuie luata starea legaturii dintre angajat si post
                 if (Constante.tipBD == 1)
@@ -123,50 +127,50 @@ namespace WizOne.Organigrama
                     if (f10003 == -99)
                     {
                         strSql = @"select * from ( 
-                            select a.""IdAuto"", a.""Id"", COALESCE(a.""IdSuperior"",0) AS ""IdSuperior"", COALESCE(a.""IdSuperiorFunctional"",0) AS ""IdSuperiorFunctional"", a.""Denumire"", '' as ""Nume"", '' as ""Prenume"", b.F00204 as ""Companie"", c.F00305 as ""Subcompanie"", d.F00406 as ""Filiala"", e.F00507 as ""Sectie"", f.F00608 as ""Dept"", 
-                             '#FFFFFFFF' as ""Culoare"", 1 as ""EstePost"", case when a.""Stare"" is null then 0 else a.""Stare"" end as ""Activ"", null as F10003, 0 as ""StareAngajat"",
-                            W.Pozitii AS PozitiiPlanificate,W.PozitiiAprobate,W.Activi AS AngajatiActivi,W.Suspendati AS AngajatiSuspendati,W.Candidati, H.Nr AS AngPost
-                             from ""Org_Posturi"" a  
-                             LEFT JOIN F002 b on a.""F10002""=b.F00202  
-                             LEFT JOIN F003 c on a.""F10004""=c.F00304  
-                             LEFT JOIN F004 d on a.""F10005""=d.F00405  
-                             LEFT JOIN F005 e on a.""F10006""=e.F00506  
-                             LEFT JOIN F006 f on a.""F10007""=f.F00607
-                            OUTER APPLY dbo.DamiPozitii(A.Id, {0}) W
-                            LEFT JOIN 
-                            (SELECT X.IdPost, COUNT(*) AS Nr
-                            FROM Org_relPostAngajat X 
-                            INNER JOIN F100 Y ON X.F10003=Y.F10003
-                            OUTER APPLY DamiDataPlecare(X.F10003, {0}) Z
-                            WHERE X.DataInceput <= {0} AND {0} <= X.DataSfarsit
-                            AND (Y.F10022 <= {0} AND {0} <= Z.DataPlecare) AND 
-                            NOT (Y.F100922 <= {0} AND {0} <= (CASE WHEN COALESCE(Y.F100924, '2100-01-01') = '2100-01-01' THEN Y.F100923 ELSE Y.F100924 END)) 
-                            GROUP BY X.IdPost) H ON A.Id = H.IdPost
-                             where CONVERT(date,a.""DataInceput"") <= {0} and {0} <= CONVERT(date,a.""DataSfarsit"") 
-                             union 
-                             select -1 * r.""IdAuto"" as ""IdAuto"", -1 * a.F10003 as ""Id"", r.""IdPost"" as ""IdSuperior"", r.""IdPost"" as ""IdSuperiorFunctional"", ' ' + a.F10008 + ' ' + a.F10009 as ""Denumire"",  
-                             a.F10008 as ""Nume"", a.F10009 as ""Prenume"", b.F00204 as ""Companie"", c.F00305 as ""Subcompanie"", d.F00406 as ""Filiala"", e.F00507 as ""Sectie"", f.F00608 as ""Dept"",  
-                             case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then '#ffc8ffc8' else '#ffffffc8' end else '#ffffc8c8' end as ""Culoare"", 
-                             0 as ""EstePost"",  case when r.""Stare"" is null then 0 else r.""Stare"" end as ""Activ"", a.F10003 as F10003,  
-                            CASE WHEN 
-			                (A.F100922 <= {0} AND {0} <= (CASE WHEN COALESCE(A.F100924, '2100-01-01') = '2100-01-01' THEN A.F100923 ELSE A.F100924 END)) 
-			                AND 
-			                (A.F10022 <= {0} AND {0} <= Z.DataPlecare) 
-		                    THEN 2 ELSE
-                            CASE WHEN A.F10022 <= {0} AND {0} <= Z.DataPlecare THEN 1 ELSE 3 END END AS ""StareAngajat"", 0, 0, 0, 0, 0, 0  
-                             from ""Org_relPostAngajat"" r 
-                             inner join F100 a on r.F10003 = a.F10003 
-                             inner join ""Org_Posturi"" x on r.""IdPost"" = x.""Id"" 
-                             LEFT JOIN F002 b on a.""F10002""=b.F00202  
-                             LEFT JOIN F003 c on a.""F10004""=c.F00304  
-                             LEFT JOIN F004 d on a.""F10005""=d.F00405  
-                             LEFT JOIN F005 e on a.""F10006""=e.F00506  
-                             LEFT JOIN F006 f on a.""F10007""=f.F00607  
-                            OUTER APPLY DamiDataPlecare(a.F10003, {0}) Z
-                             where CONVERT(date,r.""DataInceput"") <= {0} and {0} <= CONVERT(date,r.""DataSfarsit"") 
-                             and CONVERT(date,x.""DataInceput"") <= {0} and {0} <= CONVERT(date,x.""DataSfarsit"") ) x 
-                             where {1} (x.""StareAngajat""=0 {2}) 
-                             order by x.""IdSuperior"", x.""EstePost"", x.""Denumire""";
+                                select a.""IdAuto"", a.""Id"", COALESCE(a.""IdSuperior"",0) AS ""IdSuperior"", COALESCE(a.""IdSuperiorFunctional"",0) AS ""IdSuperiorFunctional"", a.""Denumire"", '' as ""Nume"", '' as ""Prenume"", b.F00204 as ""Companie"", c.F00305 as ""Subcompanie"", d.F00406 as ""Filiala"", e.F00507 as ""Sectie"", f.F00608 as ""Dept"", 
+                                '#FFFFFFFF' as ""Culoare"", 1 as ""EstePost"", case when a.""Stare"" is null then 0 else a.""Stare"" end as ""Activ"", null as F10003, 0 as ""StareAngajat"",
+                                W.Pozitii AS PozitiiPlanificate,W.PozitiiAprobate,W.Activi AS AngajatiActivi,W.Suspendati AS AngajatiSuspendati,W.Candidati, H.Nr AS AngPost
+                                from ""Org_Posturi"" a  
+                                LEFT JOIN F002 b on a.""F10002""=b.F00202  
+                                LEFT JOIN F003 c on a.""F10004""=c.F00304  
+                                LEFT JOIN F004 d on a.""F10005""=d.F00405  
+                                LEFT JOIN F005 e on a.""F10006""=e.F00506  
+                                LEFT JOIN F006 f on a.""F10007""=f.F00607
+                                OUTER APPLY dbo.DamiPozitii(A.Id, {0}) W
+                                LEFT JOIN 
+                                (SELECT X.IdPost, COUNT(*) AS Nr
+                                FROM Org_relPostAngajat X 
+                                INNER JOIN F100 Y ON X.F10003=Y.F10003
+                                OUTER APPLY DamiDataPlecare(X.F10003, {0}) Z
+                                WHERE X.DataInceput <= {0} AND {0} <= X.DataSfarsit
+                                AND (Y.F10022 <= {0} AND {0} <= Z.DataPlecare) AND 
+                                NOT (Y.F100922 <= {0} AND {0} <= (CASE WHEN COALESCE(Y.F100924, '2100-01-01') = '2100-01-01' THEN Y.F100923 ELSE Y.F100924 END)) 
+                                GROUP BY X.IdPost) H ON A.Id = H.IdPost
+                                where CONVERT(date,a.""DataInceput"") <= {0} and {0} <= CONVERT(date,a.""DataSfarsit"") 
+                                union 
+                                select -1 * r.""IdAuto"" as ""IdAuto"", -1 * a.F10003 as ""Id"", r.""IdPost"" as ""IdSuperior"", r.""IdPost"" as ""IdSuperiorFunctional"", ' ' + a.F10008 + ' ' + a.F10009 as ""Denumire"",  
+                                a.F10008 as ""Nume"", a.F10009 as ""Prenume"", b.F00204 as ""Companie"", c.F00305 as ""Subcompanie"", d.F00406 as ""Filiala"", e.F00507 as ""Sectie"", f.F00608 as ""Dept"",  
+                                case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then '#ffc8ffc8' else '#ffffffc8' end else '#ffffc8c8' end as ""Culoare"", 
+                                0 as ""EstePost"",  case when r.""Stare"" is null then 0 else r.""Stare"" end as ""Activ"", a.F10003 as F10003,  
+                                CASE WHEN A.F10025 = 900 THEN 3 ELSE CASE WHEN 
+                                (A.F100922 <= {0} AND {0} <= (CASE WHEN COALESCE(A.F100924, '2100-01-01') = '2100-01-01' THEN A.F100923 ELSE A.F100924 END)) 
+                                AND 
+                                (A.F10022 <= {0} AND {0} <= Z.DataPlecare) 
+                                THEN 2 ELSE
+                                CASE WHEN A.F10022 <= {0} AND {0} <= Z.DataPlecare THEN 1 END END END AS ""StareAngajat"", 0, 0, 0, 0, 0, 0  
+                                from ""Org_relPostAngajat"" r 
+                                inner join F100 a on r.F10003 = a.F10003 
+                                inner join ""Org_Posturi"" x on r.""IdPost"" = x.""Id"" 
+                                LEFT JOIN F002 b on a.""F10002""=b.F00202  
+                                LEFT JOIN F003 c on a.""F10004""=c.F00304  
+                                LEFT JOIN F004 d on a.""F10005""=d.F00405  
+                                LEFT JOIN F005 e on a.""F10006""=e.F00506  
+                                LEFT JOIN F006 f on a.""F10007""=f.F00607  
+                                OUTER APPLY DamiDataPlecare(a.F10003, {0}) Z
+                                where CONVERT(date,r.""DataInceput"") <= {0} and {0} <= CONVERT(date,r.""DataSfarsit"") 
+                                and CONVERT(date,x.""DataInceput"") <= {0} and {0} <= CONVERT(date,x.""DataSfarsit"") ) x 
+                                where 1=1 {1} {2} 
+                                order by x.""IdSuperior"", x.""EstePost"", x.""Denumire""";
 
                         strSql = string.Format(strSql, General.ToDataUniv(dt), strFiltru, str);
 
@@ -207,12 +211,12 @@ namespace WizOne.Organigrama
                                     a.F10008 as Nume, a.F10009 as Prenume, b.F00204 as Companie, c.F00305 as Subcompanie, d.F00406 as Filiala, e.F00507 as Sectie, f.F00608 as Dept,  
                                     case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then '#ffc8ffc8' else '#ffffffc8' end else '#ffffc8c8' end as Culoare, 
                                     0 as EstePost,  case when r.Stare is null then 0 else r.Stare end as Activ, a.F10003 as F10003,  
-                                    CASE WHEN 
+                                    CASE WHEN A.F10025 = 900 THEN 3 ELSE CASE WHEN 
 			                        (A.F100922 <= {0} AND {0} <= (CASE WHEN COALESCE(A.F100924, '2100-01-01') = '2100-01-01' THEN A.F100923 ELSE A.F100924 END)) 
 			                        AND 
 			                        (A.F10022 <= {0} AND {0} <= Z.DataPlecare) 
 		                            THEN 2 ELSE
-                                    CASE WHEN A.F10022 <= {0} AND {0} <= Z.DataPlecare THEN 1 ELSE 3 END END AS ""StareAngajat"", 0, 0, 0, 0, 0  
+                                    CASE WHEN A.F10022 <= {0} AND {0} <= Z.DataPlecare THEN 1 END END END AS ""StareAngajat"", 0, 0, 0, 0, 0  
                                     FROM Posturi
                                     INNER JOIN Org_relPostAngajat R ON R.IdPost=Posturi.Id
                                     inner join F100 a on R.F10003 = a.F10003 
@@ -224,7 +228,7 @@ namespace WizOne.Organigrama
                                     OUTER APPLY DamiDataPlecare(a.F10003, {0}) Z
                                     WHERE CONVERT(date,R.DataInceput) <= {0} and {0} <= CONVERT(date,R.DataSfarsit) 
                                     ) x 
-                                    WHERE {1} (x.StareAngajat=0 {2}) 
+                                    WHERE 1=1 {1} {2} 
                                     ORDER BY x.IdSuperior, x.EstePost, x.Denumire";
 
 
@@ -261,7 +265,7 @@ namespace WizOne.Organigrama
                              LEFT JOIN F006 f on a.""F10007""=f.F00607  
                              where trunc(r.""DataInceput"") <= {0} and {0} <= trunc(r.""DataSfarsit"") 
                              and trunc(x.""DataInceput"") <= {0} and {0} <= trunc(x.""DataSfarsit"") ) x 
-                             where {1} (x.""StareAngajat""=0 {2}) 
+                             WHERE 1=1 {1} {2} 
                              order by x.""IdSuperior"", x.""EstePost"", x.""Denumire""";
 
                         strSql = string.Format(strSql, General.ToDataUniv(dt), strFiltru, str);
@@ -301,7 +305,7 @@ namespace WizOne.Organigrama
                              and trunc(x.""DataInceput"") <= {0} and {0} <= trunc(x.""DataSfarsit"") 
                              START WITH x.""Id"" = (select ""IdPost"" from ""Org_relPostAngajat"" where F10003={3} and Rownum=1 and trunc(""DataInceput"") <= {0} and {0} <= trunc(""DataSfarsit""))  
                              CONNECT BY PRIOR x.""Id"" = x.""IdSuperior"") x 
-                             where {1} (x.""StareAngajat""=0 {2}) 
+                             WHERE 1=1 {1} {2}  
                              order by x.""IdSuperior"", x.""EstePost"", x.""Denumire"" ";
 
                         strSql = string.Format(strSql, General.ToDataUniv(dt), strFiltru, str, f10003);
@@ -537,7 +541,7 @@ namespace WizOne.Organigrama
                             e.Row.BackColor = System.Drawing.Color.FromArgb(255, 255, 200);
                             break;
                         case 3:
-                            e.Row.BackColor = System.Drawing.Color.FromArgb(255, 200, 200);
+                            e.Row.BackColor = System.Drawing.Color.FromArgb(150, 200, 250);
                             break;
                         default:
                             e.Row.BackColor = System.Drawing.Color.FromArgb(200, 255, 200);
@@ -587,7 +591,7 @@ namespace WizOne.Organigrama
                 dic.Add("Ziua", Convert.ToDateTime(txtDtVig.Value));
                 dic.Add("Activ", chkActiv.Value);
                 dic.Add("Parinte", cmbParinte.Value);
-                dic.Add("StareAng", cmbAng.Value);
+                dic.Add("StareAng", cmbStare.Value);
 
                 if (Convert.ToInt32(General.Nz(grDate.FocusedNode.Key, 0)) > 0)
                     dic.Add("IdPost", grDate.FocusedNode.GetValue("Id"));
@@ -609,6 +613,25 @@ namespace WizOne.Organigrama
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+        private string DamiStari()
+        {
+            string val = "";
+
+            try
+            {
+                if (General.Nz(cmbStare.Value, "").ToString() != "")
+                {
+                    var ert = Dami.TraduCuvant("Activi suspendati");
+                    val = cmbStare.Value.ToString().Replace(Dami.TraduCuvant("Activi suspendati"), "2").Replace(Dami.TraduCuvant("Activi"), "1").Replace(Dami.TraduCuvant("Candidati"), "3");
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return val;
         }
     }
 }

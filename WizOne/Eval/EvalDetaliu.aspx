@@ -38,7 +38,7 @@
         var isCustomCascadingCallback = false;
 
         function RefreshData(objectiveValue) {
-            hfObiectiv.Set("CurrentObjective", objectiveValue);
+            hfObiectiv.Set("CurrentObjective", objectiveValue);  
             ActivityEditor.PerformCallback();
         }
 

@@ -306,6 +306,7 @@ namespace WizOne.Posturi
                             Session["FormDetaliu_NumeFormular"] = descFormular;
                             Session["FormDetaliu_DataVigoare"] = dtVigoare;
                             Session["FormDetaliu_Pozitie"] = pozitie;
+                            Session["FormDetaliu_IdRol"] = idRol;
 
 
                             if (Page.IsCallback)
@@ -1088,6 +1089,7 @@ namespace WizOne.Posturi
                     Session["FormDetaliu_PoateModifica"] = 1;
                     Session["FormDetaliu_EsteNou"] = 1;
                     Session["FormDetaliu_Pozitie"] = 0;
+                    Session["FormDetaliu_IdRol"] = 0;
 
                     Session["FormDetaliu_NumeFormular"] = cmbFormNou.Text;
                     Session["FormDetaliu_DataVigoare"] = dtVigoare;

@@ -208,6 +208,10 @@ namespace WizOne.Posturi
                 if (Session["FormDetaliu_Pozitie"] != null)
                     pozitie = Convert.ToInt32(Session["FormDetaliu_Pozitie"].ToString());
 
+                int idRol = 0;
+                if (Session["FormDetaliu_IdRol"] != null)
+                    idRol = Convert.ToInt32(Session["FormDetaliu_IdRol"].ToString());
+
                 HtmlTable table = new HtmlTable();
                 table.CellPadding = 3;
                 table.CellSpacing = 3;
@@ -269,13 +273,9 @@ namespace WizOne.Posturi
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     bool modif = modifGen;
-                    if (dt.Rows[i]["PozitiiBlocate"] != DBNull.Value)
+                    if (dt.Rows[i]["PozitieCircuit"] != DBNull.Value)
                     {
-                        string[] sir = dt.Rows[i]["PozitiiBlocate"].ToString().Split(',');
-                        List<int> lstPoz = new List<int>();
-                        for (int k = 0; k < sir.Length; k++)
-                            lstPoz.Add(Convert.ToInt32(sir[k]));
-                        if (lstPoz.Contains(pozitie + 1))
+                        if (Convert.ToInt32(dt.Rows[i]["PozitieCircuit"].ToString()) != idRol)
                             modif = false;
                     }
 

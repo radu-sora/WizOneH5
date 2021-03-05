@@ -34,9 +34,11 @@
                         <dx:ASPxDateEdit id="txtDtVig" ClientIDMode="Static" ClientInstanceName="txtDtVig" runat="server" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" Width="100px" />
                     </div>
 
-                    <label id="lblActiv" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Post activ</label>
-                    <div style="float:left; padding-right:15px;">
-                        <dx:ASPxCheckBox id="chkActiv" runat="server" TextAlign="Left" />
+                    <div style="display:none;">
+                        <label id="lblActiv" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Post activ</label>
+                        <div style="float:left; padding-right:15px;">
+                            <dx:ASPxCheckBox id="chkActiv" runat="server" TextAlign="Left" />
+                        </div>
                     </div>
 
                     <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px;">Angajati</label>
@@ -91,7 +93,7 @@
                         
                         <dx:TreeListDataColumn FieldName="Denumire" Name="Denumire" Caption="Denumire" ReadOnly="true" Width="150px" VisibleIndex="1" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
                         <dx:TreeListDataColumn FieldName="Id" Name="Cod" Caption="Cod" ReadOnly="true" Width="150px" VisibleIndex="2" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
-                        <dx:TreeListCheckColumn FieldName="Activ" Caption="Activ" Width="50px" VisibleIndex="3" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" />
+                        <dx:TreeListCheckColumn FieldName="Activ" Caption="Activ" Width="50px" VisibleIndex="3" AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" SettingsHeaderFilter-Mode="CheckedList" Visible="false" ShowInCustomizationForm="false"  />
 
                         <dx:TreeListDataColumn FieldName="PozitiiPlanificate" Name="PozitiiPlanificate" Caption="Planificate" ReadOnly="true" Width="70px" VisibleIndex="15" />
                         <dx:TreeListDataColumn FieldName="PozitiiAprobate" Name="PozitiiAprobate" Caption="Aprobate" ReadOnly="true" Width="70px" VisibleIndex="16" />
@@ -108,7 +110,7 @@
                         <dx:TreeListDataColumn FieldName="IdSuperior" Visible="false" ShowInCustomizationForm="false" VisibleIndex="10" />
                         <dx:TreeListDataColumn FieldName="IdAuto" Visible="false" ShowInCustomizationForm="false" VisibleIndex="19" />
                         <dx:TreeListDataColumn FieldName="StareAngajat" Visible="false" ShowInCustomizationForm="false" VisibleIndex="20" />
-                        <dx:TreeListDataColumn FieldName="AngPost" Visible="true" ShowInCustomizationForm="false" VisibleIndex="20" />
+                        <dx:TreeListDataColumn FieldName="AngPost" Visible="false" ShowInCustomizationForm="false" VisibleIndex="20" />
 
                     </Columns>
                 </dx:ASPxTreeList>

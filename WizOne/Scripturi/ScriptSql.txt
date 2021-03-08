@@ -15132,7 +15132,7 @@ GO
 ALTER TABLE Org_tblFormulare ADD GrupuriUtilizatori  nvarchar(20)
 GO
 
-ALTER TABLE Org_FormCreate ADD PozitiiBlocate nvarchar(20)
+ALTER TABLE Org_FormCreate ADD PozitieCircuit nvarchar(20)
 GO
 
 

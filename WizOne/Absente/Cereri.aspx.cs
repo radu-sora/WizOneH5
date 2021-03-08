@@ -450,9 +450,18 @@ namespace WizOne.Absente
                         break;
                     case "7":                   //cmbRol
                         DataTable dtAng = General.IncarcaDT(SelectAngajati(Convert.ToInt32(cmbRol.Value ?? -99)), null);
-                        cmbAng.DataSource = dtAng;
-                        Session["Cereri_Absente_Angajati"] = dtAng;
-                        Session["Cereri_Absente_AngajatiToti"] = dtAng;
+
+                        DataTable dtAngFiltrati = dtAng;
+                        if (cmbRol.Value != null && Convert.ToInt32(cmbRol.Value) != -44 && dtAng != null && dtAng.Rows.Count > 0) dtAngFiltrati = dtAng.Select("Rol=" + cmbRol.Value).CopyToDataTable();
+
+                        DataTable dtAngActivi = new DataTable();
+                        if (dtAngFiltrati != null && dtAngFiltrati.Rows.Count > 0 && dtAngFiltrati.Select("AngajatActiv=1").Count() > 0) dtAngActivi = dtAngFiltrati.Select("AngajatActiv=1").CopyToDataTable();
+                        cmbAng.DataSource = dtAngActivi;
+                        Session["Cereri_Absente_Angajati"] = dtAngActivi;
+                        Session["Cereri_Absente_AngajatiToti"] = dtAngFiltrati;
+                        //cmbAng.DataSource = dtAng;
+                        //Session["Cereri_Absente_Angajati"] = dtAng;
+                        //Session["Cereri_Absente_AngajatiToti"] = dtAng;
                         cmbAng.DataBind();
                         cmbAng.SelectedIndex = 0;
 

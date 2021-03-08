@@ -2772,6 +2772,7 @@ namespace WizOne.Eval
                                 string endCallBackFunction = @"function cmbActivity_EndCallBack(s, e) {
                                                                                                     if (isCustomCascadingCallback)
                                                                                                     {
+                                                                                                        debugger;
                                                                                                        if (s.GetItemCount() > 0)
                                                                                                                 " + grDateObiective.ID + @".BatchEditApi.SetCellValue(currentEditingIndex, ""IdActivitate"", s.GetItem(0).value); 
                                                                                                         isCustomCascadingCallback = false;

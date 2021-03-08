@@ -121,8 +121,28 @@ namespace WizOne.Pagini
                                     if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
                                     {
                                         scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
-                                        tbl = "";
                                     }
+                                    else
+                                    {
+                                        DataRow drAt = General.IncarcaDR(@"SELECT * FROM ""Admin_Beneficii"" WHERE ""IdAuto""=@1", new object[] { id });
+                                        if (drAt != null)
+                                        {
+                                            string numeFiser = General.Nz(drAt["FisierNume"], "").ToString();
+                                            object fisier = General.Nz(drAt["Fisier"], null);
+
+                                            string cale = HostingEnvironment.MapPath("~/FisiereApp/Beneficii/") + numeFiser;
+                                            if (fisier == null && File.Exists(cale))
+                                                fisier = File.ReadAllBytes(cale);
+
+                                            if (fisier != null)
+                                                scrieDoc(General.Nz(drAt["FisierExtensie"], ".txt").ToString(), (byte[])fisier, numeFiser);
+                                            else
+                                                Response.Write("Nu exista date de afisat !");
+                                        }
+                                        else
+                                            Response.Write("Nu exista date de afisat !");
+                                    }
+                                    tbl = "";
                                 }
                                 break;
                             case "11":
@@ -170,6 +190,37 @@ namespace WizOne.Pagini
                             case "17":
                                 tbl = "Curs_relSesiuneDocumente";
                                 id = "(SELECT \"IdDocument\" FROM \"Curs_relSesiuneDocumente\" WHERE \"IdCurs\" = " + id + " AND \"IdSesiune\" = -99)";
+                                break;
+                            case "18":
+                                {
+                                    tbl = "Admin_Echipamente";
+                                    Dictionary<int, Personal.Echipamente.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Echipamente"] as Dictionary<int, Personal.Echipamente.metaUploadFile>;
+                                    if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
+                                    {
+                                        scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
+                                    }
+                                    else
+                                    {
+                                        DataRow drAt = General.IncarcaDR(@"SELECT * FROM ""Admin_Echipamente"" WHERE ""IdAuto""=@1", new object[] { id });
+                                        if (drAt != null)
+                                        {
+                                            string numeFiser = General.Nz(drAt["FisierNume"], "").ToString();
+                                            object fisier = General.Nz(drAt["Fisier"], null);
+
+                                            string cale = HostingEnvironment.MapPath("~/FisiereApp/Echipamente/") + numeFiser;
+                                            if (fisier == null && File.Exists(cale))
+                                                fisier = File.ReadAllBytes(cale);
+
+                                            if (fisier != null)
+                                                scrieDoc(General.Nz(drAt["FisierExtensie"], ".txt").ToString(), (byte[])fisier, numeFiser);
+                                            else
+                                                Response.Write("Nu exista date de afisat !");
+                                        }
+                                        else
+                                            Response.Write("Nu exista date de afisat !");
+                                    }
+                                    tbl = "";
+                                }
                                 break;
                         }
 

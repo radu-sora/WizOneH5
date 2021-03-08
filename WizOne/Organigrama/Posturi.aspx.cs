@@ -873,7 +873,7 @@ namespace WizOne.Organigrama
         {
             try
             {
-                DataTable dt = General.IncarcaDT(@"SELECT ""IdCategory"" AS ""Id"", ""NameCategory"" AS ""Denumire"" FROM ""CategoriiAtasamente"" ORDER BY ""NameCategory"" ");
+                DataTable dt = General.IncarcaDT(@"SELECT ""IdCategory"" AS ""Id"", ""NameCategory"" AS ""Denumire"" FROM ""CategoriiAtasamente"" WHERE ""IdCategory"" <= 1000 ORDER BY ""NameCategory"" ");
                 chkDosar.DataSource = dt;
                 chkDosar.DataBind();
 

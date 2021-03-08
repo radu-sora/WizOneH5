@@ -141,6 +141,7 @@ namespace WizOne.Personal
                 ASPxMemo txtDesc = grDateAtasamente.FindEditFormTemplateControl("txtDesc") as ASPxMemo;
                 ASPxDateEdit txtDataDoc = grDateAtasamente.FindEditFormTemplateControl("txtDataDoc") as ASPxDateEdit;
                 ASPxComboBox cmbCateg = grDateAtasamente.FindEditFormTemplateControl("cmbCateg") as ASPxComboBox;
+                ASPxCheckBox chkLaDosar = grDateAtasamente.FindEditFormTemplateControl("chkLaDosar") as ASPxCheckBox;
 
                 if (Constante.tipBD == 1)
                     dr["IdAuto"] = Convert.ToInt32(General.Nz(ds.Tables["Atasamente"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
@@ -151,6 +152,7 @@ namespace WizOne.Personal
                 dr["DateAttach"] = txtDataDoc.Value ?? DBNull.Value;
                 dr["DescrAttach"] = txtDesc.Value ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
+                dr["EsteLaDosar"] = chkLaDosar.Value ?? DBNull.Value;
                 dr["TIME"] = DateTime.Now;
 
                 metaUploadFile itm = Session["DocUpload_MP_Atasamente"] as metaUploadFile;
@@ -167,17 +169,8 @@ namespace WizOne.Personal
                     lstFiles.Add(Convert.ToInt32(dr["IdAuto"].ToString()), itm);
                     Session["List_DocUpload_MP_Atasamente"] = lstFiles;
                 }
-                //if (itm != null)
-                //{
-                //    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Atasamente", Convert.ToInt32(dr["IdAuto"].ToString()) + (Constante.tipBD == 1 ? 0 : 1));
-                //    if (Constante.tipBD == 2)
-                //        dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1;
-                //    //dr["FisierNume"] = itm.UploadedFileName;
-                //    //dr["FisierExtensie"] = itm.UploadedFileExtension;
-                //}
 
                 ds.Tables["Atasamente"].Rows.Add(dr);
-
                 Session["DocUpload_MP_Atasamente"] = null;
 
                 e.Cancel = true;
@@ -205,11 +198,13 @@ namespace WizOne.Personal
                 ASPxMemo txtDesc = grDateAtasamente.FindEditFormTemplateControl("txtDesc") as ASPxMemo;
                 ASPxDateEdit txtDataDoc = grDateAtasamente.FindEditFormTemplateControl("txtDataDoc") as ASPxDateEdit;
                 ASPxComboBox cmbCateg = grDateAtasamente.FindEditFormTemplateControl("cmbCateg") as ASPxComboBox;
+                ASPxCheckBox chkLaDosar = grDateAtasamente.FindEditFormTemplateControl("chkLaDosar") as ASPxCheckBox;
 
                 dr["IdCategory"] = cmbCateg.Value ?? DBNull.Value;
                 dr["DateAttach"] = txtDataDoc.Value ?? DBNull.Value;
                 dr["DescrAttach"] = txtDesc.Value ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
+                dr["EsteLaDosar"] = chkLaDosar.Value ?? DBNull.Value;
                 dr["TIME"] = DateTime.Now;
 
                 metaUploadFile itm = Session["DocUpload_MP_Atasamente"] as metaUploadFile;               
@@ -218,9 +213,6 @@ namespace WizOne.Personal
                     dr["Attach"] = itm.UploadedFile;
                     dr["FisierNume"] = itm.UploadedFileName;
                     dr["FisierExtensie"] = itm.UploadedFileExtension;
-                    //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Atasamente", dr["IdAuto"]);
-                    //dr["FisierNume"] = itm.UploadedFileName;
-                    //dr["FisierExtensie"] = itm.UploadedFileExtension;
 
                     //Florin 2020.08.20
                     Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Atasamente"] as Dictionary<int, metaUploadFile>;

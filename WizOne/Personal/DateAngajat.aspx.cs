@@ -735,7 +735,8 @@ namespace WizOne.Personal
                     //    calcCO = true;
                 }
 
-                //ds.Tables[i].TableName == "Admin_Beneficii" || 
+                //Florin 2021.03.08
+                // || ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Echipamente"
                 for (int i = 1; i < ds.Tables.Count; i++)
                 {//Radu 10.06.2019
                     if (ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni" || ds.Tables[i].TableName == "Admin_Cursuri" || ds.Tables[i].TableName == "F100Studii")
@@ -928,6 +929,16 @@ namespace WizOne.Personal
                                 General.LoadFile(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
                             }
                         }
+                        if (tabela == "Admin_Echipamente")
+                        {
+                            Dictionary<int, Personal.Echipamente.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Echipamente"] as Dictionary<int, Personal.Echipamente.metaUploadFile>;
+                            if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                            {
+                                sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
+                                General.ExecutaNonQuery(sql, null);
+                                General.LoadFile(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                            }
+                        }
                     }
                     else
                     {//INSERT
@@ -1034,6 +1045,9 @@ namespace WizOne.Personal
 
                 if (tabela == "F100Studii")
                     Session["List_DocUpload_MP_Studii"] = null;
+
+                if (tabela == "Admin_Echipamente")
+                    Session["List_DocUpload_MP_Echipamente"] = null;
 
                 if (General.Nz(Session["FisiereDeSters"],"").ToString() != "")
                 {
@@ -1826,6 +1840,8 @@ namespace WizOne.Personal
                 Session["MP_Avans_Tab"] = null;
                 Session["DocUpload_MP_Beneficii"] = null;
                 Session["List_DocUpload_MP_Beneficii"] = null;
+                Session["DocUpload_MP_Echipamente"] = null;
+                Session["List_DocUpload_MP_Echipamente"] = null;
                 Session["DocUpload_MP_Medicina"] = null;
                 Session["List_DocUpload_MP_Medicina"] = null;
                 Session["DocUpload_MP_Sanctiuni"] = null;

@@ -28,8 +28,11 @@
 					    <dx:GridViewDataDateColumn FieldName="DateAttach" Name="DateAttach" Caption="Data" Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-					    <dx:GridViewDataTextColumn FieldName="DescrAttach" Name="DescrAttach" Caption="Descriere"/>		
-                        
+                        <dx:GridViewDataTextColumn FieldName="FisierNume" Name="FisierNume" Caption="Nume Fisier"/>
+					    <dx:GridViewDataTextColumn FieldName="DescrAttach" Name="DescrAttach" Caption="Descriere"/>
+                        <dx:GridViewDataCheckColumn FieldName="VineDinPosturi" Name="VineDinPosturi" Caption="Obligatoriu" />
+                        <dx:GridViewDataCheckColumn FieldName="EsteLaDosar" Name="EsteLaDosar" Caption="Indosariat" />
+
                         <dx:GridViewDataTextColumn FieldName="IdEmpl" Name="IdEmpl" Caption="Angajat" Visible="false" ShowInCustomizationForm="false"/>
 					    <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
@@ -74,17 +77,17 @@
                                     <tr>
                                         <td rowspan="5" style="vertical-align:top;padding:10px !important;"><dx:ASPxMemo ID="txtDesc" runat="server" Width="500px" Height="150" Text='<%# Bind("DescrAttach") %>' /></td>
                                         <td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbCateg" runat="server" Width="215px" ValueField="IdCategory" DropDownWidth="200" TextField="NameCategory" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("IdCategory") %>' />
-                                            
-                                           
                                     </tr>
                                     <tr>
                                         <td id="lblData" runat="server" style="padding:10px !important;">Data</td>
+                                        <td id="lblLaDosar" runat="server" style="padding:10px !important;">Indosariat</td>
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataDoc" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DateAttach") %>' /></td>
+                                        <td style="padding:10px !important;"><dx:ASPxCheckBox ID="chkLaDosar" runat="server" Checked='<%#  Eval("EsteLaDosar") == DBNull.Value ? false : Convert.ToBoolean(Eval("EsteLaDosar"))%>' /></td>
                                     </tr>
                                     <tr>
-                                        <td style="padding:10px !important;">
+                                        <td style="padding:10px !important;" colspan="2">
                                             <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
                                             <dx:ASPxUploadControl ID="btnDocUploadAtas" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
                                                 BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"

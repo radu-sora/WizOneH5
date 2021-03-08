@@ -50,7 +50,7 @@
 
                 <div style="width:100%; margin-bottom:10px;">
                     <label id="lblStru" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Structura</label>
-				    <dx:ASPxComboBox ID="cmbStru" runat="server" DropDownStyle="DropDown" ValueField="IdAuto" ValueType="System.Int32" TabIndex="1" AutoPostBack="false" Width="250" >
+				    <dx:ASPxComboBox ID="cmbStru" runat="server" DropDownStyle="DropDown" ValueField="IdAuto" ValueType="System.Int32" TabIndex="1" AutoPostBack="false" Width="250" ItemStyle-Wrap="True" >
                         <Columns>
                             <dx:ListBoxColumn FieldName="F00204" Caption="Companie" Width="130px" />
                             <dx:ListBoxColumn FieldName="F00202" Caption="IdCompanie" Width="130px" Visible="false"/>

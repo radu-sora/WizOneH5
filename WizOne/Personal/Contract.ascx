@@ -1418,17 +1418,17 @@
 					    </tr>
                         <tr>
                             <td colspan="2">
-                                <dx:ASPxCheckBox ID="chkScutitCAS" runat="server" Width="150" Text="Scutit de la pragul minim CASS si CAS asigurat" TextAlign="Left" TabIndex="42" ClientInstanceName="chkbx6">
+                                <dx:ASPxCheckBox ID="chkScutitCAS" runat="server" Width="150" Text="Scutit de la pragul minim CASS si CAS asigurat" TextAlign="Left" ClientVisible="false" TabIndex="42" ClientInstanceName="chkbx6">
                                     <ClientSideEvents CheckedChanged="function(s,e){ chkScutitCAS_CheckedChanged(s); }" />
                                 </dx:ASPxCheckBox>
                             </td>
                         </tr>
 					    <tr>				
 						    <td >
-							    <dx:ASPxLabel  ID="lblMotivScutitCAS" Width="100" runat="server"  Text="Motiv scutire de la pragul minim CASS si CAS asigurat" ></dx:ASPxLabel >	
+							    <dx:ASPxLabel  ID="lblMotivScutitCAS" Width="100" runat="server"  ClientVisible="false" Text="Motiv scutire de la pragul minim CASS si CAS asigurat" ></dx:ASPxLabel >	
 						    </td>	
 						    <td>
-							    <dx:ASPxComboBox DataSourceID="dsMSCAS"  Value='<%#Eval("F1001096") %>' ID="cmbMotivScutitCAS"  ClientInstanceName="cmbMotivScutitCAS" TabIndex="43" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F80204" ValueField="F80203" AutoPostBack="false"  ValueType="System.Int32" >
+							    <dx:ASPxComboBox DataSourceID="dsMSCAS"  Value='<%#Eval("F1001096") %>' ID="cmbMotivScutitCAS" ClientVisible="false"  ClientInstanceName="cmbMotivScutitCAS" TabIndex="43" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F80204" ValueField="F80203" AutoPostBack="false"  ValueType="System.Int32" >
                                         
 							    </dx:ASPxComboBox>
 						    </td>               

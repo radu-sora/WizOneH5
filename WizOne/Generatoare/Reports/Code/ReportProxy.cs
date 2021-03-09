@@ -426,7 +426,7 @@ namespace Wizrom.Reports.Code
             if (HttpContext.Current.Request.RequestType == WebRequestMethods.Http.Get)
             {                
                 var urlSegments = HttpContext.Current.Request.Url.Segments;
-                var pageName = string.Concat(urlSegments.Skip(Math.Max(1, urlSegments.Count() - 3)));
+                var pageName = urlSegments.Length > 3 ? string.Concat(urlSegments.Skip(urlSegments.Length - 3)) : urlSegments.Last();
 
                 if (!SESSION_PAGE_NAMES.Contains(pageName))
                 {

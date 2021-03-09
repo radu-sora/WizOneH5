@@ -265,16 +265,23 @@ namespace WizOne.Personal
 
                 DataRow row = ds.Tables["Admin_Echipamente"].Rows.Find(keys);
 
-                Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Echipamente"] as Dictionary<int, metaUploadFile>;
-                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(keys[0].ToString())))
-                    lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
-                Session["List_DocUpload_MP_Echipamente"] = lstFiles;
+                if (General.Nz(row["VineDinPosturi"], 0).ToString() == "1")
+                {
+                    grDateEchipamente.JSProperties["cpAlertMessage"] = "Aceasta linie nu se poate elimina deoarece vine din posturi";
+                }
+                else
+                {
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Echipamente"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(keys[0].ToString())))
+                        lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
+                    Session["List_DocUpload_MP_Echipamente"] = lstFiles;
 
-                Session["DocUpload_MP_Echipamente"] = null;
+                    Session["DocUpload_MP_Echipamente"] = null;
 
-                row.Delete();
+                    row.Delete();
 
-                Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"], "").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Echipamente/' {Dami.Operator()} ""FisierNume"" FROM ""tblFisiere"" WHERE ""Tabela""='Admin_Medicina' AND ""Id""={keys[0]}"), "").ToString();
+                    Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"], "").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Echipamente/' {Dami.Operator()} ""FisierNume"" FROM ""tblFisiere"" WHERE ""Tabela""='Admin_Medicina' AND ""Id""={keys[0]}"), "").ToString();
+                }
 
                 e.Cancel = true;
                 grDateEchipamente.CancelEdit();

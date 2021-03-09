@@ -76,7 +76,9 @@ namespace WizOne.Personal
                 }
                 else
                 {
-                    dt = General.IncarcaDT(@"SELECT * FROM ""Atasamente"" WHERE ""IdEmpl"" = @1", new object[] { HttpContext.Current.Session["Marca"] });
+                    //dt = General.IncarcaDT(@"SELECT * FROM ""Atasamente"" WHERE ""IdEmpl"" = @1", new object[] { HttpContext.Current.Session["Marca"] });
+                    //
+                    dt = General.IncarcaDT(@"SELECT A.*, (SELECT COUNT(*) FROM ""Admin_NrActAd"" B WHERE B.F10003=@1 AND B.""IdAutoAtasamente""=A.""IdAuto"") AS ""VineDinCircuitDoc"" FROM ""Atasamente"" A WHERE ""IdEmpl""=@1", new object[] { HttpContext.Current.Session["Marca"] });
                     dt.TableName = "Atasamente";
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                     ds.Tables.Add(dt);
@@ -84,7 +86,7 @@ namespace WizOne.Personal
                 grDateAtasamente.KeyFieldName = "IdAuto";
                 grDateAtasamente.DataSource = dt;
 
-                string sql = @"SELECT * FROM ""CategoriiAtasamente"" WHERE ""IdCategory"" <= 1000 ORDER BY ""NameCategory""";
+                string sql = @"SELECT * FROM ""CategoriiAtasamente"" ORDER BY ""NameCategory""";
                 DataTable dtCategAt = General.IncarcaDT(sql, null);
                 GridViewDataComboBoxColumn colCategAt = (grDateAtasamente.Columns["IdCategory"] as GridViewDataComboBoxColumn);
                 colCategAt.PropertiesComboBox.DataSource = dtCategAt;
@@ -251,16 +253,26 @@ namespace WizOne.Personal
 
                 DataRow row = ds.Tables["Atasamente"].Rows.Find(keys);
 
-                row.Delete();
+                if (General.Nz(row["VineDinPosturi"], 0).ToString() == "1" || General.Nz(row["VineDinCircuitDoc"], 0).ToString() == "1")
+                {
+                    if (General.Nz(row["VineDinPosturi"], 0).ToString() == "1")
+                        grDateAtasamente.JSProperties["cpAlertMessage"] = "Aceasta linie nu se poate elimina deoarece vine din posturi";
+                    if (General.Nz(row["VineDinCircuitDoc"], 0).ToString() == "1")
+                        grDateAtasamente.JSProperties["cpAlertMessage"] = "Aceasta linie nu se poate elimina deoarece vine din circuit documente";
+                }
+                else
+                {
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Atasamente"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(keys[0].ToString())))
+                        lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
+                    Session["List_DocUpload_MP_Atasamente"] = lstFiles;
 
-                Session["DocUpload_MP_Atasamente"] = null;
+                    Session["DocUpload_MP_Atasamente"] = null;
 
-                //Florin 2020.08.20
-                Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Atasamente"] as Dictionary<int, metaUploadFile>;
-                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(keys[0].ToString())))
-                    lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
-                Session["List_DocUpload_MP_Atasamente"] = lstFiles;
-                Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"], "").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Atasamente/' {Dami.Operator()} ""FisierNume"" FROM ""Atasamente"" WHERE ""IdAuto""={keys[0]}"), "").ToString();
+                    row.Delete();
+
+                    Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"], "").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Atasamente/' {Dami.Operator()} ""FisierNume"" FROM ""Atasamente"" WHERE ""IdAuto""={keys[0]}"), "").ToString();
+                }
 
                 e.Cancel = true;
                 grDateAtasamente.CancelEdit();

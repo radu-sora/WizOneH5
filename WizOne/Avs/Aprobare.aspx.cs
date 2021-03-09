@@ -607,6 +607,14 @@ namespace WizOne.Avs
                             continue;
                     }
 
+                    //Florin 2021.03.09  #710
+                    //Nu se poate anula o cerere daca este trimisa in semnat
+                    if (tipActiune == 3 && Convert.ToInt32(General.Nz(arr[10], 0)) == 1)
+                    {
+                        msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Cererea este semnata") + System.Environment.NewLine;
+                        continue;
+                    }
+
                     //Florin 2019.03.26
                     //Nu se poate anula o cerere daca este trimisa in revisal
                     if (tipActiune == 3 && Convert.ToInt32(General.Nz(arr[6],0)) == 1)

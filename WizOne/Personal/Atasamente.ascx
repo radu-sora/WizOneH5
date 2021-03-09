@@ -9,7 +9,7 @@
                      OnRowInserting="grDateAtasamente_RowInserting" OnRowUpdating="grDateAtasamente_RowUpdating" OnRowDeleting="grDateAtasamente_RowDeleting" OnHtmlEditFormCreated="grDateAtasamente_HtmlEditFormCreated">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
-                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateAtasamente_CustomButtonClick(s, e); }" ContextMenu="ctx" />    
+                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateAtasamente_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnEndCallbackAtasamente(s,e); }" ContextMenu="ctx" />    
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
@@ -133,6 +133,16 @@
     function EndUpload(s) {
         lblDoc.innerText = s.cpDocUploadName;
         s.cpDocUploadName = null;
+    }
+
+    function OnEndCallbackAtasamente(s, e) {
+        if (s.cpAlertMessage != null) {
+            swal({
+                title: "", text: s.cpAlertMessage,
+                type: "warning"
+            });
+            s.cpAlertMessage = null;
+        }
     }
 
 </script>

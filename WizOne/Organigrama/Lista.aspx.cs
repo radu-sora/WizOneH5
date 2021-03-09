@@ -147,7 +147,8 @@ namespace WizOne.Organigrama
                                 NOT (Y.F100922 <= {0} AND {0} <= (CASE WHEN COALESCE(Y.F100924, '2100-01-01') = '2100-01-01' THEN Y.F100923 ELSE Y.F100924 END)) 
                                 GROUP BY X.IdPost) H ON A.Id = H.IdPost
                                 where CONVERT(date,a.""DataInceput"") <= {0} and {0} <= CONVERT(date,a.""DataSfarsit"") 
-                                union 
+                                UNION 
+                                SELECT * FROM (
                                 select -1 * r.""IdAuto"" as ""IdAuto"", -1 * a.F10003 as ""Id"", r.""IdPost"" as ""IdSuperior"", r.""IdPost"" as ""IdSuperiorFunctional"", ' ' + a.F10008 + ' ' + a.F10009 as ""Denumire"",  
                                 a.F10008 as ""Nume"", a.F10009 as ""Prenume"", b.F00204 as ""Companie"", c.F00305 as ""Subcompanie"", d.F00406 as ""Filiala"", e.F00507 as ""Sectie"", f.F00608 as ""Dept"",  
                                 case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then '#ffc8ffc8' else '#ffffffc8' end else '#ffffc8c8' end as ""Culoare"", 
@@ -157,7 +158,8 @@ namespace WizOne.Organigrama
                                 AND 
                                 (A.F10022 <= {0} AND {0} <= Z.DataPlecare) 
                                 THEN 2 ELSE
-                                CASE WHEN A.F10022 <= {0} AND {0} <= Z.DataPlecare THEN 1 END END END AS ""StareAngajat"", 0, 0, 0, 0, 0, 0  
+                                CASE WHEN A.F10022 <= {0} AND {0} <= Z.DataPlecare THEN 1 END END END AS ""StareAngajat"",
+                                0 AS PozitiiPlanificate, 0 AS PozitiiAprobate, 0 AS AngajatiActivi, 0 AS AngajatiSuspendati, 0 AS Candidati, 0 AS AngPost 
                                 from ""Org_relPostAngajat"" r 
                                 inner join F100 a on r.F10003 = a.F10003 
                                 inner join ""Org_Posturi"" x on r.""IdPost"" = x.""Id"" 
@@ -168,8 +170,10 @@ namespace WizOne.Organigrama
                                 LEFT JOIN F006 f on a.""F10007""=f.F00607  
                                 OUTER APPLY DamiDataPlecare(a.F10003, {0}) Z
                                 where CONVERT(date,r.""DataInceput"") <= {0} and {0} <= CONVERT(date,r.""DataSfarsit"") 
-                                and CONVERT(date,x.""DataInceput"") <= {0} and {0} <= CONVERT(date,x.""DataSfarsit"") ) x 
-                                where 1=1 {1} {2} 
+                                and CONVERT(date,x.""DataInceput"") <= {0} and {0} <= CONVERT(date,x.""DataSfarsit"") ) T
+                                WHERE COALESCE(T.""StareAngajat"",4) <> 4
+                                ) x 
+                                WHERE 1=1 {1} {2} 
                                 order by x.""IdSuperior"", x.""EstePost"", x.""Denumire""";
 
                         strSql = string.Format(strSql, General.ToDataUniv(dt), strFiltru, str);
@@ -206,7 +210,7 @@ namespace WizOne.Organigrama
                                     WHERE CONVERT(date,A.DataInceput) <= {0} and {0} <= CONVERT(date,A.DataSfarsit)   
                          
                                     UNION
-
+                                    SELECT * FROM (
                                     SELECT -1 * r.IdAuto as IdAuto, -1 * a.F10003 as Id, r.IdPost as IdSuperior, r.""IdPost"" as ""IdSuperiorFunctional"", ' ' + a.F10008 + ' ' + a.F10009 as Denumire,  
                                     a.F10008 as Nume, a.F10009 as Prenume, b.F00204 as Companie, c.F00305 as Subcompanie, d.F00406 as Filiala, e.F00507 as Sectie, f.F00608 as Dept,  
                                     case when (a.F10025 = 0 or a.F10025 = 999) then case when a.F100925 = 0 then '#ffc8ffc8' else '#ffffffc8' end else '#ffffc8c8' end as Culoare, 
@@ -226,7 +230,8 @@ namespace WizOne.Organigrama
                                     LEFT JOIN F005 e on a.F10006=e.F00506  
                                     LEFT JOIN F006 f on a.F10007=f.F00607  
                                     OUTER APPLY DamiDataPlecare(a.F10003, {0}) Z
-                                    WHERE CONVERT(date,R.DataInceput) <= {0} and {0} <= CONVERT(date,R.DataSfarsit) 
+                                    WHERE CONVERT(date,R.DataInceput) <= {0} and {0} <= CONVERT(date,R.DataSfarsit) ) T
+                                    WHERE COALESCE(T.""StareAngajat"",4) <> 4
                                     ) x 
                                     WHERE 1=1 {1} {2} 
                                     ORDER BY x.IdSuperior, x.EstePost, x.Denumire";
@@ -572,8 +577,13 @@ namespace WizOne.Organigrama
         {
             try
             {
-                RetineFiltru();
-                grDate.JSProperties["cpReportUrl"] = ResolveClientUrl("~/Organigrama/Diagrama");
+                if (e.Argument == "PopUp")
+                    IncarcaGrid();
+                else
+                {
+                    RetineFiltru();
+                    grDate.JSProperties["cpReportUrl"] = ResolveClientUrl("~/Organigrama/Diagrama");
+                }
             }
             catch (Exception ex)
             {
@@ -632,6 +642,11 @@ namespace WizOne.Organigrama
             }
 
             return val;
+        }
+
+        protected void popUpMotiv_WindowCallback(object source, DevExpress.Web.PopupWindowCallbackArgs e)
+        {
+            btnOkModif_Click(null, null);
         }
     }
 }

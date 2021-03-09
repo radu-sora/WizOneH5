@@ -1482,7 +1482,7 @@ namespace WizOne.Avs
             //}
 
             if (nr == 37)            //Post = 37 este id-ul de post din Org_tblAtribute
-            {// 1 CB + 3 x TB
+            {// 1 CB + 4 x TB
                 lbl1Act.Visible = true;
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
@@ -1530,6 +1530,18 @@ namespace WizOne.Avs
                 lblTxt15Nou.Text = text8;
                 txt3Nou.Visible = true;
                 txt3Nou.ClientEnabled = false;
+
+                lbl15Act.Visible = true;
+                lblTxt15Act.Visible = true;
+                lblTxt15Act.Text = text9;
+                txt4Act.Visible = true;
+                txt4Act.ClientEnabled = false;
+
+                lbl16Nou.Visible = true;
+                lblTxt16Nou.Visible = true;
+                lblTxt16Nou.Text = text10;
+                txt4Nou.Visible = true;
+                txt4Nou.ClientEnabled = false;
             }
 
         }
@@ -2258,11 +2270,12 @@ namespace WizOne.Avs
             //Florin 2020.12.22
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Post)
             {
-                ArataCtl(37, "Post actual", "Post nou", "Functie Actuala", "Functie Noua", "COR Actual", "COR Nou", "Structura Actuala", "Structura Noua", "", "");
+                ArataCtl(37, "Post actual", "Post nou", "Functie Actuala", "Functie Noua", "COR Actual", "COR Nou", "Structura Actuala", "Structura Noua", "Nivel functie Actual", "Nivel functie Nou");
                 string strSql = $@"SELECT A.""Id"", A.""Denumire"", B.F71804 AS ""Functie"", B.F71802 AS ""FunctieId"", C.F72204 AS COR, C.F72202 AS ""CORCod"",
                     F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
                     A.F10002 AS ""CompanieId"", A.F10004 AS ""SubcompanieId"", A.F10005 AS ""FilialaId"", A.F10006 AS ""SectieId"", A.F10007 AS ""DeptId"", A.""IdSubdept"", A.""IdBirou"",
-                    COALESCE(F00204 + ', ', '') + COALESCE(F00305 + ', ', '') + COALESCE(F00406 + ', ', '') + COALESCE(F00507 + ', ', '') + COALESCE(F00608,'') + COALESCE(F00709, '') + COALESCE(F00810, '') AS ""Structura""
+                    COALESCE(F00204 + ', ', '') + COALESCE(F00305 + ', ', '') + COALESCE(F00406 + ', ', '') + COALESCE(F00507 + ', ', '') + COALESCE(F00608,'') + COALESCE(F00709, '') + COALESCE(F00810, '') AS ""Structura"",
+                    N.""Denumire"" AS ""NivelFunctie""
                     FROM ""Org_Posturi"" A
                     LEFT JOIN F718 B ON A.""IdFunctie"" = B.F71802
                     LEFT JOIN F722 C ON A.""CodCOR"" = C.F72202 AND F72206 = (SELECT MAX(F72206) FROM F722)
@@ -2272,7 +2285,8 @@ namespace WizOne.Avs
                     LEFT JOIN F005 H ON A.F10006 = H.F00506
                     LEFT JOIN F006 I ON A.F10007 = I.F00607
                     LEFT JOIN F007 K ON A.""IdSubdept"" = K.F00708  
-                    LEFT JOIN F008 L ON A.""IdBirou"" = L.F00809 
+                    LEFT JOIN F008 L ON A.""IdBirou"" = L.F00809
+                    LEFT JOIN ""tblNivelFunctie"" N ON B.F71813 = N.""Id""
                     WHERE CONVERT(date, A.""DataInceput"") <= {General.ToDataUniv(txtDataMod.Date)} AND {General.ToDataUniv(txtDataMod.Date)} <= CONVERT(date, A.""DataSfarsit"")";
                 DataTable dtNou = General.IncarcaDT(strSql + @" ORDER BY A.""Denumire"" ");
                 DataTable dtAct = General.IncarcaDT(strSql + $@" AND A.""Id""=(SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003={General.Nz(cmbAng.Items[cmbAng.SelectedIndex].Value, -99)} AND CONVERT(date, ""DataInceput"") <= {General.ToDataUniv(txtDataMod.Date)} AND {General.ToDataUniv(txtDataMod.Date)} <= CONVERT(date, ""DataSfarsit"")) ");
@@ -2288,6 +2302,7 @@ namespace WizOne.Avs
                     txt1Act.Text = General.Nz(dtAct.Rows[0]["Functie"], "").ToString();
                     txt2Act.Text = General.Nz(dtAct.Rows[0]["COR"], "").ToString();
                     txt3Act.Text = General.Nz(dtAct.Rows[0]["Structura"], "").ToString();
+                    txt4Act.Text = General.Nz(dtAct.Rows[0]["NivelFunctie"], "").ToString();
                 }
 
                 if (Session["Valoare1Noua"] != null)
@@ -2298,21 +2313,26 @@ namespace WizOne.Avs
                     txt1Nou.Text = General.Nz(item.GetFieldValue("Functie"), "").ToString();
                     txt2Nou.Text = General.Nz(item.GetFieldValue("COR"), "").ToString();
                     txt3Nou.Text = General.Nz(item.GetFieldValue("Structura"), "").ToString();
+                    txt4Nou.Text = General.Nz(item.GetFieldValue("NivelFunctie"), "").ToString();
                 }
 
                 txt1Act.Width = Unit.Pixel(250);
                 txt2Act.Width = Unit.Pixel(250);
                 txt3Act.Width = Unit.Pixel(500);
+                txt4Act.Width = Unit.Pixel(250);
                 txt1Nou.Width = Unit.Pixel(250);
                 txt2Nou.Width = Unit.Pixel(250);
                 txt3Nou.Width = Unit.Pixel(500);
+                txt4Nou.Width = Unit.Pixel(250);
 
                 txt1Act.Style["margin-left"] = "15px";
                 txt1Act.Style["margin-right"] = "15px";
                 txt2Act.Style["margin-right"] = "15px";
+                txt3Act.Style["margin-right"] = "15px";
                 txt1Nou.Style["margin-left"] = "15px";
                 txt1Nou.Style["margin-right"] = "15px";
                 txt2Nou.Style["margin-right"] = "15px";
+                txt3Nou.Style["margin-right"] = "15px";
             }
 
 
@@ -3957,19 +3977,19 @@ namespace WizOne.Avs
                         ListEditItem leiAct = cmb1Act.SelectedItem;
                         ListEditItem leiNou = cmb1Nou.SelectedItem;
 
-                        if (leiAct == null || leiAct.GetFieldValue("FunctieId") != leiNou.GetFieldValue("FunctieId"))
+                        if (leiAct == null || (int?)leiAct.GetFieldValue("FunctieId") != (int?)leiNou.GetFieldValue("FunctieId"))
                         {
                             camp1 += @", ""FunctieId"", ""FunctieNume""";
                             camp2 += $@", {General.Nz(leiNou.GetFieldValue("FunctieId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Functie"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Functie") + "'" : "NULL")}";
                             explicatii += ",Functia" + Environment.NewLine;
                         }
-                        if (leiAct == null || leiAct.GetFieldValue("CORCod") != leiNou.GetFieldValue("CORCod"))
+                        if (leiAct == null || (int?)leiAct.GetFieldValue("CORCod") != (int?)leiNou.GetFieldValue("CORCod"))
                         {
                             camp1 += @", ""CORCod"", ""CORNume""";
                             camp2 += $@", {General.Nz(leiNou.GetFieldValue("CORCod"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("COR"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("COR") + "'" : "NULL")}";
                             explicatii += ",COR" + Environment.NewLine;
                         }
-                        if (leiAct == null || leiAct.GetFieldValue("DeptId") != leiNou.GetFieldValue("DeptId"))
+                        if (leiAct == null || (int?)leiAct.GetFieldValue("DeptId") != (int?)leiNou.GetFieldValue("DeptId"))
                         {
                             camp1 += @", ""SubcompanieId"", ""SubcompanieNume"", ""FilialaId"", ""FilialaNume"", ""SectieId"", ""SectieNume"", ""DeptId"", ""DeptNume"", ""SubdeptId"", ""SubdeptNume"", ""BirouId"", ""BirouNume""";
                             camp2 += $@", {General.Nz(leiNou.GetFieldValue("SubcompanieId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Subcompanie"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Subcompanie") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("FilialaId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Filiala"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Filiala") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("SectieId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Sectie"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Sectie") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("DeptId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Dept"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Dept") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("IdSubdept"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Subdept"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Subdept") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("IdBirou"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Birou"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Birou") + "'" : "NULL")}";
@@ -4267,6 +4287,7 @@ namespace WizOne.Avs
                             " when 34 then (select \"Ptj_Contracte\".\"Denumire\" from \"Ptj_Contracte\" where \"Ptj_Contracte\".\"Id\" = a.\"ProgramLucru\") " +
                             " when 35 then a.\"TipContractNume\"" +
                             " when 36 then a.\"DurataContractNume\"" +
+                            " when 37 then a.\"PostNume\"" +
                             " when 101 then a.Nume + ' ' + a.Prenume " +
                             " when 102 then (select F06303 from F063 where F06302 = a.CASS) " +
                             " when 103 then (select F71204 from F712 where F71202 = a.\"Studii\") " +
@@ -4317,6 +4338,7 @@ namespace WizOne.Avs
                             " when 34 then (select \"Ptj_Contracte\".\"Denumire\" from \"Ptj_Contracte\" where \"Ptj_Contracte\".\"Id\" = a.\"ProgramLucru\") " +
                             " when 35 then a.\"TipContractNume\"" +
                             " when 36 then a.\"DurataContractNume\"" +
+                            " when 37 then a.\"PostNume\"" +
                             " when 101 then a.\"Nume\" || ' ' || a.\"Prenume\" " +
                             " when 102 then (select F06303 from F063 where F06302 = a.CASS) " +
                             " when 103 then (select F71204 from F712 where F71202 = a.\"Studii\") " +

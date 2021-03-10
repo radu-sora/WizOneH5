@@ -73,6 +73,12 @@ namespace WizOne.Eval
                             case "TIME":
                                 row[x] = DateTime.Now;
                                 break;
+                            case "IDAUTO":
+                                if (Constante.tipBD == 1)
+                                    row[x] = Convert.ToInt32(General.Nz(ds.Tables["Eval_relGrupAngajatQuiz"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                else
+                                    row[x] = Dami.NextId("Eval_relGrupAngajatQuiz");
+                                break;
                             default:
                                 row[x] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                                 break;

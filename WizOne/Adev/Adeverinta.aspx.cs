@@ -121,6 +121,8 @@ namespace WizOne.Adev
                     cmbRol.DataSource = dtRol;
                     cmbRol.DataBind();
 
+                    cmbRol.SelectedIndex = 0;
+
                     //dtAng = General.IncarcaDT(SelectAngajati(), null);
                     cmbAng.DataSource = dtAng;
                     cmbAng.DataBind();
@@ -157,6 +159,10 @@ namespace WizOne.Adev
 
                     cmbAngBulk.DataSource = dtAng;
                     cmbAngBulk.DataBind();
+
+                    DataTable dtAdev = Session["Adev_Lista"] as DataTable;
+                    cmbAdev.DataSource = dtAdev;
+                    cmbAdev.DataBind();
 
                 }
 
@@ -206,15 +212,17 @@ namespace WizOne.Adev
 
         private void UpdateControls(Dictionary<string, string> lista)
         {
-            DataTable table = new DataTable();
-            table.Columns.Add("Id", typeof(int));
-            table.Columns.Add("Denumire", typeof(string));
+            DataTable dtAdev = new DataTable();
+            dtAdev.Columns.Add("Id", typeof(int));
+            dtAdev.Columns.Add("Denumire", typeof(string));
 
             //Radu 07.10.2020
-            string lstIdSuper = Dami.ValoareParam("Adev_IdSuper", "");
-            string conditie = "";
-            if (lstIdSuper.Length > 0)
-                conditie = " AND \"IdSuper\" IN (" + lstIdSuper + ")";
+            //string lstIdSuper = Dami.ValoareParam("Adev_IdSuper", "");
+            //string conditie = "";
+            //if (lstIdSuper.Length > 0)
+            //    conditie = " AND \"IdSuper\" IN (" + lstIdSuper + ")";
+
+            string conditie = " AND \"IdSuper\" IN (" + Convert.ToInt32(cmbRol.Value) + ")";
 
             string restrictii = Dami.ValoareParam("Adev_Restrictii", "0");
             List<int> lstIds = new List<int>();
@@ -229,41 +237,42 @@ namespace WizOne.Adev
             if (restrictii == "1")
             {
                 if (lstIds.Contains(0))
-                    table.Rows.Add(0, "Sănătate 2019");
+                    dtAdev.Rows.Add(0, "Sănătate 2019");
                 if (lstIds.Contains(1))
-                    table.Rows.Add(1, "Sănătate");
+                    dtAdev.Rows.Add(1, "Sănătate");
                 if (lstIds.Contains(2))
-                    table.Rows.Add(2, "Venituri anuale");
+                    dtAdev.Rows.Add(2, "Venituri anuale");
                 if (lstIds.Contains(3))
-                    table.Rows.Add(3, "CIC");
+                    dtAdev.Rows.Add(3, "CIC");
                 if (lstIds.Contains(4))
-                    table.Rows.Add(4, "Șomaj");
+                    dtAdev.Rows.Add(4, "Șomaj");
                 if (lstIds.Contains(6))
-                    table.Rows.Add(6, "Stagiu");
+                    dtAdev.Rows.Add(6, "Stagiu");
                 if (lstIds.Contains(7))
-                    table.Rows.Add(7, "Vechime");
+                    dtAdev.Rows.Add(7, "Vechime");
                 if (lstIds.Contains(11))
-                    table.Rows.Add(11, "Deplasare");
+                    dtAdev.Rows.Add(11, "Deplasare");
                 if (lstIds.Contains(12))
-                    table.Rows.Add(12, "Sănătate 2020");
+                    dtAdev.Rows.Add(12, "Sănătate 2020");
                 if (lstIds.Contains(13))
-                    table.Rows.Add(13, "Șomaj tehnic 2020");
+                    dtAdev.Rows.Add(13, "Șomaj tehnic 2020");
             }
             else
             {
-                table.Rows.Add(0, "Sănătate 2019");
-                table.Rows.Add(1, "Sănătate");
-                table.Rows.Add(2, "Venituri anuale");
-                table.Rows.Add(3, "CIC");
-                table.Rows.Add(4, "Șomaj");
-                table.Rows.Add(6, "Stagiu");
-                table.Rows.Add(7, "Vechime");
-                table.Rows.Add(11, "Deplasare");
-                table.Rows.Add(12, "Sănătate 2020");
-                table.Rows.Add(13, "Șomaj tehnic 2020");
+                dtAdev.Rows.Add(0, "Sănătate 2019");
+                dtAdev.Rows.Add(1, "Sănătate");
+                dtAdev.Rows.Add(2, "Venituri anuale");
+                dtAdev.Rows.Add(3, "CIC");
+                dtAdev.Rows.Add(4, "Șomaj");
+                dtAdev.Rows.Add(6, "Stagiu");
+                dtAdev.Rows.Add(7, "Vechime");
+                dtAdev.Rows.Add(11, "Deplasare");
+                dtAdev.Rows.Add(12, "Sănătate 2020");
+                dtAdev.Rows.Add(13, "Șomaj tehnic 2020");
             }
-            cmbAdev.DataSource = table;
+            cmbAdev.DataSource = dtAdev;
             cmbAdev.DataBind();
+            Session["Adev_Lista"] = dtAdev;
             //cmbAdev.SelectedIndex = 0;
 
             //DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
@@ -317,7 +326,9 @@ namespace WizOne.Adev
                         int.TryParse(lista[sufix], out anul);
 
                         List<int> listAn = GetYears();
-                        table.Clear();
+                        DataTable table = new DataTable();
+                        table.Columns.Add("Id", typeof(int));
+                        table.Columns.Add("Denumire", typeof(string));
                         for (int i = 0; i < listAn.Count(); i++)
                             table.Rows.Add(listAn[i], listAn[i].ToString());
                         cmbAnul.DataSource = table;
@@ -1386,7 +1397,7 @@ namespace WizOne.Adev
                 foreach (int elem in lstMarci)
                     listaM += ";" + elem;
 
-                listaM = listaM.Substring(1);
+                listaM = listaM.Substring(1);           
 
                 int tipGen = 0;
                 if (!param)

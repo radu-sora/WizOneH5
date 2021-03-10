@@ -170,7 +170,7 @@
                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.String" DropDownStyle="DropDown" />
                             </dx:GridViewDataComboBoxColumn>
                             <dx:GridViewDataTextColumn FieldName="Latime" Name="Latime" Caption="Latime"  Width="100px" />	
-                            <dx:GridViewDataTextColumn FieldName="PozitiiBlocate" Name="PozitiiBlocate" Caption="Pozitii blocate"  Width="100px" />	
+                            <dx:GridViewDataTextColumn FieldName="PozitieCircuit" Name="PozitieCircuit" Caption="Pozitie circuit"  Width="100px" />	
 
                             <dx:GridViewDataTextColumn FieldName="IdFormular" Name="IdFormular" Caption="IdFormular"  Width="50px" Visible="false" ShowInCustomizationForm="false"/>
                             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="50px" Visible="false" ShowInCustomizationForm="false"/>

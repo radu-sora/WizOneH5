@@ -15642,3 +15642,16 @@ GO
 
 ALTER TABLE tmpIdPrint ADD USER_NO int
 GO
+
+
+----  2.2.133.06  ----
+
+-- inserare numar de inregistrare care se va incrementa automat, acesta apare cu data pe document doar daca exista linia in tabela:
+INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) SELECT MAX(NRCRT)+1,'ADEV_SANATATE_REG', '1' AS NR from F800_ADEVERINTE_CONFIG;
+GO
+-- Daca exista Stampila.jpg se aduce pe document sub semnatura 1. Se pot seta dimensiunile prin urmatorii parametrii:
+INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) SELECT MAX(NRCRT)+1,'AdevSubsolDimX', '5943600' AS NR from F800_ADEVERINTE_CONFIG 
+GO
+INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) SELECT MAX(NRCRT)+1,'AdevSubsolDimY', '900430' AS NR from F800_ADEVERINTE_CONFIG 
+GO
+

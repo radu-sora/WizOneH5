@@ -1239,8 +1239,7 @@ namespace WizOne.Avs
                         union
                         SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"", 
                         X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament""
-                        FROM ""Avs_CereriIstoric"" B
-                        INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id""
+                        FROM  ""Avs_Cereri"" C 
                         INNER JOIN F100 A ON A.F10003 = C.F10003
                         LEFT JOIN F718 X ON A.F10071 = X.F71802
                         LEFT JOIN F003 F ON A.F10004 = F.F00304
@@ -1307,8 +1306,7 @@ namespace WizOne.Avs
                         WHERE case when B.""IdSuper"" >= 0 then B.""IdUser"" else FF.IdUser end = {Session["UserId"]}
                         union
                         SELECT DISTINCT C.""Id"", C.""Denumire""
-                        FROM ""Avs_CereriIstoric"" B
-                        INNER JOIN ""Avs_Cereri"" A ON A.Id = B.Id
+                        FROM ""Avs_Cereri"" A
                         INNER JOIN ""Avs_tblAtribute"" C ON C.""Id"" = A.""IdAtribut""
                         left join ""F100Supervizori"" GG on A.f10003 = GG.f10003 and CHARINDEX(',' + CONVERT(nvarchar(20),GG.""IdSuper"") + ','  ,  ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0                 
                         WHERE gg.iduser = {Session["UserId"]} ) T

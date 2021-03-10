@@ -16568,7 +16568,13 @@ GO
 INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) SELECT MAX(NRCRT)+1,'AdevSubsolDimY', '900430' AS NR from F800_ADEVERINTE_CONFIG 
 GO
 
+
+
+
+
 ALTER TABLE F112 ADD  F11215  nvarchar(50)            
+GO
+UPDATE "tblParametrii" SET "Explicatie" = '0 - Blocat Susp si Detasari - nu poate sa introduca nici suspendari si nici detasari, 1 - Blocat Detasari - nu poate sa introduca detasari, 2 - Blocat Susp - nu poate sa introduca suspendari, 3 - Deblocat - poate sa introduca si suspendari si detasari' WHERE "Nume" = 'BlocheazaSuspendariWS'
 GO
 
 

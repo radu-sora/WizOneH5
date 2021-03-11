@@ -197,7 +197,8 @@ namespace WizOne.Personal
                     e.NewValues["YEAR"] = dtLuc.Year;
                     e.NewValues["MONTH"] = dtLuc.Month;
                     e.NewValues["USER_NO"] = Convert.ToInt32(Session["UserId"].ToString());
-                    e.NewValues["TIME"] = DateTime.Now;                    
+                    e.NewValues["TIME"] = DateTime.Now;
+                    e.NewValues["F11215"] = "DetasariWizoneAvans";
                     object[] row = new object[dtDet.Columns.Count];
                     int x = 0;
                     foreach (DataColumn col in dtDet.Columns)
@@ -296,9 +297,11 @@ namespace WizOne.Personal
 
                 DateTime dtIncetareVeche = new DateTime(2100, 1, 1);
 
+                e.NewValues["F11215"] = "DetasariWizoneAvans";
+
                 foreach (DataColumn col in dtDet.Columns)
                 {
-                    if (!col.AutoIncrement && grDateDetasari.Columns[col.ColumnName] != null && grDateDetasari.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDateDetasari.Columns[col.ColumnName] != null)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         if (col.ColumnName == "F11209" && row[col.ColumnName] != DBNull.Value)

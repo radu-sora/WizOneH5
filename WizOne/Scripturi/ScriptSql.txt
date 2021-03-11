@@ -17083,6 +17083,27 @@ GO
 ----  2.2.135  ----
 
 
+-- inserare numar de inregistrare care se va incrementa automat, acesta apare cu data pe document doar daca exista linia in tabela:
+INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) SELECT MAX(NRCRT)+1,'ADEV_SANATATE_REG', '1' AS NR from F800_ADEVERINTE_CONFIG;
+GO
+-- Daca exista Stampila.jpg se aduce pe document sub semnatura 1. Se pot seta dimensiunile prin urmatorii parametrii:
+INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) SELECT MAX(NRCRT)+1,'AdevSubsolDimX', '5943600' AS NR from F800_ADEVERINTE_CONFIG 
+GO
+INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) SELECT MAX(NRCRT)+1,'AdevSubsolDimY', '900430' AS NR from F800_ADEVERINTE_CONFIG 
+GO
+
+
+
+
+
+ALTER TABLE F112 ADD  F11215  nvarchar(50)            
+GO
+UPDATE "tblParametrii" SET "Explicatie" = '0 - Blocat Susp si Detasari - nu poate sa introduca nici suspendari si nici detasari, 1 - Blocat Detasari - nu poate sa introduca detasari, 2 - Blocat Susp - nu poate sa introduca suspendari, 3 - Deblocat - poate sa introduca si suspendari si detasari' WHERE "Nume" = 'BlocheazaSuspendariWS'
+GO
+
+
+
+
 CREATE TABLE [dbo].[CM_Cereri](
 	[Id] [int] NOT NULL,
 	[F10003] [int] NOT NULL,

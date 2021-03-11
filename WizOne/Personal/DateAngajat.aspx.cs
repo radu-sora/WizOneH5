@@ -1648,6 +1648,7 @@ namespace WizOne.Personal
                 #region Documente
                 Dictionary<String, String> lstDO = new Dictionary<string, string>();
                 lstDO.Add("cmbTara", "F100987");
+                lstDO.Add("cmbResedinta", "F1001071");
                 lstDO.Add("cmbCetatenie", "F100981");
                 lstDO.Add("cmbTipAutMunca", "F100911");
                 lstDO.Add("deDataInc", "F100912");

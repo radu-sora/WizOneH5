@@ -342,6 +342,9 @@ namespace WizOne.Organigrama
                     }
 
                     General.SchimbaInPlanificat(Convert.ToDateTime(Session["DataVigoare"]), id, Convert.ToInt32(drModif["modifStruc"]), Convert.ToInt32(drModif["modifCor"]), Convert.ToInt32(drModif["modifFunctia"]), 0);
+
+                    //Florin 2021.03.11
+                    dtSf = Convert.ToDateTime(txtDtSf.Value).Date;
                 }
 
 

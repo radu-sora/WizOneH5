@@ -4671,8 +4671,9 @@ namespace WizOne.Avs
                                 if (dtF1001 != null && dtF1001.Rows.Count > 0)
                                     sql1001 = "UPDATE F1001 SET F1001063 = (SELECT NrZileCalProba FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + dtCer.Rows[0]["FunctieId"].ToString() + ")) WHERE F10003 = " + f10003.ToString();
 
-                                //Florin 2020.10.06
-                                General.SalveazaPost(f10003, dtCer.Rows[0]["PostId"], Convert.ToDateTime(dtCer.Rows[0]["DataModif"]));
+                                //Florin 2021.03.11 - am mutat functia la Post
+                                ////Florin 2020.10.06
+                                //General.SalveazaPost(f10003, dtCer.Rows[0]["PostId"], Convert.ToDateTime(dtCer.Rows[0]["DataModif"]));
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 2, 'Functie', " + data + ", " + dtCer.Rows[0]["FunctieId"].ToString() + ", 'Modificari in avans', '"
@@ -5327,6 +5328,9 @@ namespace WizOne.Avs
                             {
                                 TrimiteInF704(Convert.ToInt32(dtPst.Rows[i]["Id"]));
                             }
+
+                            //Florin 2021.03.11
+                            General.SalveazaPost(f10003, dtCer.Rows[0]["PostId"], Convert.ToDateTime(dtCer.Rows[0]["DataModif"]));
                         }
                         break;
                     default:

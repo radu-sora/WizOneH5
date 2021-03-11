@@ -527,14 +527,18 @@
             });
         }
 
-        var valDen = "";
+        var valDen = txtDen.GetValue();
         function OnDenumireChanged(s, e) {
+            alert(valDen);
+            alert(txtDenRO.GetValue());
             if (txtDenRO.GetValue() == null || txtDenRO.GetValue() == valDen)
                 txtDenRO.SetValue(txtDen.GetValue());
-            txtDenEN.SetValue(txtDen.GetValue());
-            txtGrupRO.SetValue(txtDen.GetValue());
-            txtGrupEN.SetValue(txtDen.GetValue());
-            valDen = txtDen.GetValue();
+            if (txtDenEN.GetValue() == null || txtDenEN.GetValue() == valDen)
+                txtDenEN.SetValue(txtDen.GetValue());
+            if (txtGrupRO.GetValue() == null || txtGrupRO.GetValue() == valDen)
+                txtGrupRO.SetValue(txtDen.GetValue());
+            if (txtGrupEN.GetValue() == null || txtGrupEN.GetValue() == valDen)
+                txtGrupEN.SetValue(txtDen.GetValue());
         }
 
         function CloseGridLookup() {

@@ -1262,11 +1262,13 @@ namespace WizOne.Pagini
                                     dtTemp = General.IncarcaDT(sql, null);
 
                                     int idUrm = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
-                                    //int idUrm = Convert.ToInt32(idCerere);
+                                    //int idUrm = Convert.ToInt32(idCerere);         
 
                                     //adaugam istoricul
                                     int poz = 0;
                                     int idUserCalc = -99;
+
+                                    General.ExecutaNonQuery("DELETE FROM Avs_CereriIstoric WHERE Id = " + idUrm, null);
 
                                     for (int i = 1; i <= 20; i++)
                                     {

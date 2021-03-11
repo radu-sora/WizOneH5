@@ -1414,7 +1414,7 @@ namespace WizOne.Personal
                 DataTable dt = new DataTable();
                 if (dtSec != null && dtSec.Rows.Count > 0)
                 {
-                    dt = dtSec.Select("IdForm = 'Personal.Lista' AND IdControl = '" + numeTab + "'") != null && dtSec.Select("IdForm = 'Personal.Lista' AND IdControl='" + numeTab + "'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista' AND IdControl = '" + numeTab + "'").CopyToDataTable() : null;
+                    dt = dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl = '" + numeTab + "'") != null && dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl='" + numeTab + "'").Count() > 0 ? dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl = '" + numeTab + "'").CopyToDataTable() : null;
                 }
                 else
                     return;
@@ -1442,7 +1442,7 @@ namespace WizOne.Personal
                 DataTable dt = new DataTable();
                 if (dtSec != null && dtSec.Rows.Count > 0)
                 {
-                    dt = dtSec.Select("IdForm = 'Personal.Lista' AND IdControl like '%_I%'") != null && dtSec.Select("IdForm = 'Personal.Lista' AND IdControl like '%_I%'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista' AND IdControl like '%_I%'").CopyToDataTable() : null;
+                    dt = dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl like '%_I%'") != null && dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl like '%_I%'").Count() > 0 ? dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl like '%_I%'").CopyToDataTable() : null;
                 }
                 else
                     return null;
@@ -1642,6 +1642,7 @@ namespace WizOne.Personal
                 #region Documente
                 Dictionary<String, String> lstDO = new Dictionary<string, string>();
                 lstDO.Add("cmbTara", "F100987");
+                lstDO.Add("cmbResedinta", "F1001071");
                 lstDO.Add("cmbCetatenie", "F100981");
                 lstDO.Add("cmbTipAutMunca", "F100911");
                 lstDO.Add("deDataInc", "F100912");

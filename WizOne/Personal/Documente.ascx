@@ -135,6 +135,15 @@
 					        </tr>
 					        <tr>				
 						        <td >
+							        <dx:ASPxLabel  ID="lblResedinta" Width="100" runat="server"  Text="Tara domiciliu/ Resedinta" ></dx:ASPxLabel >	
+						        </td>	
+						        <td>
+							        <dx:ASPxComboBox DataSourceID="dsTN" Width="150" Value='<%#Eval("F1001071") %>' ID="cmbResedinta" ClientInstanceName="cmbResedinta"  runat="server" DropDownStyle="DropDown"  TextField="F73304" ValueField="F73302" AutoPostBack="false"  ValueType="System.Int32" >
+							        </dx:ASPxComboBox>
+						        </td>
+					        </tr>
+					        <tr>				
+						        <td >
 							        <dx:ASPxLabel  ID="lblCetatenie" Width="100" runat="server"  Text="Cetatenie" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>

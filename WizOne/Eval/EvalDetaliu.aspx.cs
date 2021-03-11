@@ -5748,17 +5748,20 @@ namespace WizOne.Eval
                             switch(tipData)
                             {
                                 case 69:
-                                    //#803 Florin
-                                    //val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
-                                    //        $@"SELECT SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
-                                    //        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
-                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
-                                        $@"SELECT ROUND(SUM(Total)/2,1) FROM (
-                                        (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
-                                        UNION
-                                        (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
-                                        ) X",
-                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    //Florin 2021.03.11 - daca chestionarul este din 2020 se iau in calcul doar competentele, daca este din 2021 se adauga si obiectivele
+                                    if (idPerioada == 1)
+                                        //#803 Florin
+                                        val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                                $@"SELECT SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                                new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    else
+                                        val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                            $@"SELECT ROUND(SUM(Total)/2,1) FROM (
+                                            (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                            UNION
+                                            (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                            ) X",
+                                            new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
                                     break;
                                 case 71:
                                     val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(

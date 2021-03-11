@@ -1733,6 +1733,7 @@
     </Compile>
     <Compile Include="Pagini\RelNomenDoc.aspx.cs">
       <DependentUpon>RelNomenDoc.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pagini\RelNomenDoc.aspx.designer.cs">
       <DependentUpon>RelNomenDoc.aspx</DependentUpon>

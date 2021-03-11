@@ -5399,6 +5399,37 @@ namespace WizOne.Eval
         {
             try
             {
+                //General.IncarcaDT(
+                //    $@"
+                //    BEGIN
+
+                //    UPDATE ""Eval_RaspunsLinii"" 
+                //    SET 
+                //    ""Super{poz + 1}""=""Super{poz}"", 
+                //    ""Super{poz + 1}_1""=""Super{poz}_1"", 
+                //    ""Super{poz + 1}_2""=""Super{poz}_2"", 
+                //    ""Super{poz + 1}_3""=""Super{poz}_3"", 
+                //    ""Super{poz + 1}_4""=""Super{poz}_4""   
+                //    WHERE ""IdQuiz""=@1 AND F10003=@2 AND (""Super{poz + 1}"" is null OR RTRIM(LTRIM(""Super{poz + 1}""))='') AND ""Super{poz}"" is not null;
+
+                //    UPDATE B
+                //    SET  B.""IdPeriod"" = A.""IdPeriod"", B.""Pondere"" = A.""Pondere"", B.""IdCalificativ"" = A.""IdCalificativ"", B.""Calificativ"" = A.""Calificativ"", 
+                //    B.""ExplicatiiCalificativ"" = A.""ExplicatiiCalificativ"", B.""Explicatii"" = A.""Explicatii"", B.""Id"" = A.""Id"", TIME = {General.CurrentDate()}, USER_NO = {Session["UserId"]}
+                //    FROM ""Eval_CompetenteAngajatTemp"" B
+                //    LEFT JOIN ""Eval_CompetenteAngajatTemp"" A ON A.""IdUnic"" = B.""IdUnic"" AND A.""Pozitie"" = {poz}
+                //    WHERE B.""IdQuiz"" = @1 AND B.F10003 = @2 AND B.""Pozitie"" = {poz + 1};
+
+                //    UPDATE B
+                //    SET B.""IdPeriod"" = A.""IdPeriod"", B.""Pondere""=A.""Pondere"", B.""Descriere""=A.""Descriere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"",
+                //    B.""IdCalificativ""=A.""IdCalificativ"", B.""Calificativ""=A.""Calificativ"", B.""ExplicatiiCalificativ""=A.""ExplicatiiCalificativ"", 
+                //    B.""ColoanaSuplimentara1""=A.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2""=A.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3""=A.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4""=A.""ColoanaSuplimentara4"", B.""Id""=A.""Id"", TIME = {General.CurrentDate()}, USER_NO = {Session["UserId"]}
+                //    FROM ""Eval_ObiIndividualeTemp"" B
+                //    LEFT JOIN ""Eval_ObiIndividualeTemp"" A ON A.""IdUnic"" = B.""IdUnic"" AND A.""Pozitie"" = {poz}
+                //    WHERE B.""IdQuiz"" = @1 AND B.F10003 = @2 AND B.""Pozitie"" = {poz + 1};
+
+                //    END;", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+
+                //Radu 10.03.2021 - trebuie sa se preia si obiectivele/competentele introduse manual
                 General.IncarcaDT(
                     $@"
                     BEGIN
@@ -5412,20 +5443,21 @@ namespace WizOne.Eval
                     ""Super{poz + 1}_4""=""Super{poz}_4""   
                     WHERE ""IdQuiz""=@1 AND F10003=@2 AND (""Super{poz + 1}"" is null OR RTRIM(LTRIM(""Super{poz + 1}""))='') AND ""Super{poz}"" is not null;
 
-                    UPDATE B
-                    SET  B.""IdPeriod"" = A.""IdPeriod"", B.""Pondere"" = A.""Pondere"", B.""IdCalificativ"" = A.""IdCalificativ"", B.""Calificativ"" = A.""Calificativ"", 
-                    B.""ExplicatiiCalificativ"" = A.""ExplicatiiCalificativ"", B.""Explicatii"" = A.""Explicatii"", B.""Id"" = A.""Id"", TIME = {General.CurrentDate()}, USER_NO = {Session["UserId"]}
-                    FROM ""Eval_CompetenteAngajatTemp"" B
-                    LEFT JOIN ""Eval_CompetenteAngajatTemp"" A ON A.""IdUnic"" = B.""IdUnic"" AND A.""Pozitie"" = {poz}
-                    WHERE B.""IdQuiz"" = @1 AND B.F10003 = @2 AND B.""Pozitie"" = {poz + 1};
+                    DELETE FROM Eval_CompetenteAngajatTemp WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {poz + 1};
 
-                    UPDATE B
-                    SET B.""IdPeriod"" = A.""IdPeriod"", B.""Pondere""=A.""Pondere"", B.""Descriere""=A.""Descriere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"",
-                    B.""IdCalificativ""=A.""IdCalificativ"", B.""Calificativ""=A.""Calificativ"", B.""ExplicatiiCalificativ""=A.""ExplicatiiCalificativ"", 
-                    B.""ColoanaSuplimentara1""=A.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2""=A.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3""=A.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4""=A.""ColoanaSuplimentara4"", B.""Id""=A.""Id"", TIME = {General.CurrentDate()}, USER_NO = {Session["UserId"]}
-                    FROM ""Eval_ObiIndividualeTemp"" B
-                    LEFT JOIN ""Eval_ObiIndividualeTemp"" A ON A.""IdUnic"" = B.""IdUnic"" AND A.""Pozitie"" = {poz}
-                    WHERE B.""IdQuiz"" = @1 AND B.F10003 = @2 AND B.""Pozitie"" = {poz + 1};
+                    INSERT INTO Eval_CompetenteAngajatTemp (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""Pondere"", ""IdCalificativ"", ""Calificativ"" , 
+                    ""ExplicatiiCalificativ"" , ""Explicatii"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                    SELECT ""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""Pondere"", ""IdCalificativ"", ""Calificativ"" , 
+                    ""ExplicatiiCalificativ"" , ""Explicatii"", ""IdQuiz"", F10003, {poz + 1}, ""IdLinieQuiz"", ""IdUnic"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {poz};
+                
+                    DELETE FROM Eval_ObiIndividualeTemp  WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {poz + 1};   
+
+                    INSERT INTO Eval_ObiIndividualeTemp (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", 
+                    ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"",
+                    ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", ""IdCategObiective"", USER_NO, TIME)
+                    SELECT ""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", 
+                    ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"",
+                    ""IdQuiz"", F10003, {poz + 1}, ""IdLinieQuiz"", ""IdUnic"", ""IdCategObiective"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {poz}; 
 
                     END;", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
             }

@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
@@ -278,7 +279,7 @@ namespace WizOne.Posturi
                             break;
                         case "btnEdit":
                             DataTable dt = Session["FormLista_Grid"] as DataTable;
-                            DataRow[] dr = dt.Select("Id = " + arr[1]);                            
+                            DataRow[] dr = dt.Select("IdAuto = " + arr[1]);                            
 
                             int id = Convert.ToInt32(dr[0]["Id"].ToString());
                             int idFormular = Convert.ToInt32(dr[0]["IdFormular"].ToString());
@@ -686,8 +687,13 @@ namespace WizOne.Posturi
                             }
 
                             #region  Notificare start
+                            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                            int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
 
-                            //ctxNtf.TrimiteNotificare("Avs.Aprobare", "grDate", entCer, idUser, f10003);
+                            HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                            {
+                                NotifAsync.TrimiteNotificare("Posturi.FormLista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Org_Date Z WHERE Id=" + id.ToString(), "Org_Date", id, idUser, marcaUser, arrParam);
+                            });
 
                             #endregion
 
@@ -1516,11 +1522,11 @@ namespace WizOne.Posturi
                     General.ExecutaNonQuery("UPDATE \"Org_Date\" SET \"IdStare\" = -1, \"Culoare\" = '" + culoare + "' WHERE \"Id\" = " + id, null);
 
                     //introducem o linie de anulare in Ptj_CereriIstoric
-                    sql = "INSERT INTO \"Org_DateIstoric\" (\"Id\", \"IdCircuit\", \"IdUser\", \"IdStare\", \"Pozitie\", \"Culoare\", \"Aprobat\", \"DataAprobare\", USER_NO, TIME, \"Inlocuitor\", \"IdRol\") "
+                    sql = "INSERT INTO \"Org_DateIstoric\" (\"Id\", \"IdCircuit\", \"IdUser\", \"IdStare\", \"Pozitie\", \"Culoare\", \"Aprobat\", \"DataAprobare\", USER_NO, TIME, \"Inlocuitor\") "
                         + " VALUES (" + id + ", " + dtCer.Rows[0]["IdCircuit"].ToString() + ", " + idUser + ", -1, 22, '" + culoare + "', 1, "  + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") 
-                        + ", " + idUser + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ", 0, " + (dtCer.Rows[0]["IdRol"] == DBNull.Value ? "NULL" : dtCer.Rows[0]["IdRol"].ToString()) + ") ";
+                        + ", " + idUser + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ", 0) ";
                     General.ExecutaNonQuery(sql, null);
-           
+
 
                     //stergem din relatie Post Angajat, si actualizam data de sfarsit a penultimei linii (procesul in oglinda din functia ActualizeazaInRel
                     //var entRel = ctx.Org_relPostAngajat.Where(p => p.F10003 == ent.F10003 && p.IdPost == ent.IdPost && p.DataReferinta == ent.DataInceput).FirstOrDefault();
@@ -1534,6 +1540,14 @@ namespace WizOne.Posturi
                     //    ctx.Org_relPostAngajat.DeleteObject(entRel);
                     //}  
 
+
+                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                    int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+                    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                    {
+                        NotifAsync.TrimiteNotificare("Posturi.FormLista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM Org_Date Z WHERE Id=" + id.ToString(), "Org_Date", id, idUser, marcaUser, arrParam);
+                    });
 
                     msg = "Proces finalizat cu succes";
 

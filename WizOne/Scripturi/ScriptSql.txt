@@ -13543,13 +13543,13 @@ FROM (
 SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 1 AS "ZiSapt", 
 CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN COALESCE(A."Program1", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
 C."Denumire" AS "ProgramDen", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
 FROM "Ptj_Contracte" A
 LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=1 
 LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
@@ -13558,13 +13558,13 @@ UNION
 SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 2 AS "ZiSapt", 
 CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN COALESCE(A."Program2", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
 C."Denumire" AS "ProgramDen", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
 FROM "Ptj_Contracte" A
 LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=2
 LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
@@ -13573,13 +13573,13 @@ UNION
 SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 3 AS "ZiSapt", 
 CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN COALESCE(A."Program3", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
 C."Denumire" AS "ProgramDen", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
 FROM "Ptj_Contracte" A
 LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=3
 LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
@@ -13588,13 +13588,13 @@ UNION
 SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 4 AS "ZiSapt", 
 CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN COALESCE(A."Program4", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
 C."Denumire" AS "ProgramDen", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
 FROM "Ptj_Contracte" A
 LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=4
 LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
@@ -13603,13 +13603,13 @@ UNION
 SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 5 AS "ZiSapt", 
 CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN COALESCE(A."Program5", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
 C."Denumire" AS "ProgramDen", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
 FROM "Ptj_Contracte" A
 LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=5
 LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
@@ -13618,13 +13618,13 @@ UNION
 SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 6 AS "ZiSapt", 
 CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN COALESCE(A."Program6", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
 C."Denumire" AS "ProgramDen", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
 FROM "Ptj_Contracte" A
 LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=6
 LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
@@ -13648,13 +13648,13 @@ UNION
 SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 8 AS "ZiSapt", 
 CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN COALESCE(A."Program8", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
 C."Denumire" AS "ProgramDen", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
-CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
 FROM "Ptj_Contracte" A
 LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=8
 LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
@@ -13664,7 +13664,6 @@ WHERE X."ProgramId" IS NOT NULL
 AND ("ContractId" * 1000000 + "ProgramId" * 10 + "ZiSapt") NOT IN 
 (SELECT "IdContract" * 1000000 + "IdProgram" * 10 + "TipSchimb" FROM "Ptj_ContracteSchimburi") 
 GO
-
 
 
 
@@ -15655,3 +15654,132 @@ GO
 INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) SELECT MAX(NRCRT)+1,'AdevSubsolDimY', '900430' AS NR from F800_ADEVERINTE_CONFIG 
 GO
 
+
+
+UPDATE A
+SET A."OraInceputDeLa" = Z.OraInceputDeLa, A.OraInceputLa = Z."OraInceputLa", A.OraSfarsitDeLa = Z."OraSfarsitDeLa", A.OraSfarsitLa = Z.OraSfarsitLa
+FROM "Ptj_ContracteSchimburi" A
+INNER JOIN (
+SELECT "ContractId", "ZiSapt", "ProgramDen", "ProgramId", "OraInceput", "OraInceputDeLa", "OraInceputLa", "OraSfarsit", "OraSfarsitDeLa", "OraSfarsitLa", "ModVerificare"
+FROM (
+SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 1 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN COALESCE(A."Program1", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=1 
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN COALESCE(A."Program1", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 2 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN COALESCE(A."Program2", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=2
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN COALESCE(A."Program2", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 3 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN COALESCE(A."Program3", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=3
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN COALESCE(A."Program3", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 4 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN COALESCE(A."Program4", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=4
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN COALESCE(A."Program4", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 5 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN COALESCE(A."Program5", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=5
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN COALESCE(A."Program5", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 6 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN COALESCE(A."Program6", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=6
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN COALESCE(A."Program6", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 7 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN COALESCE(A."Program7", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", 
+CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=7
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN COALESCE(A."Program7", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT DISTINCT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 8 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN COALESCE(A."Program8", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN C."OraIntrare" ELSE COALESCE(B."OraInceput", D."OraInceput") END AS "OraInceput", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputDeLa", D."OraInceputDeLa") END AS "OraInceputDeLa", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraInceputLa", D."OraInceputLa") END AS "OraInceputLa", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN C."OraIesire" ELSE COALESCE(B."OraSfarsit", D."OraSfarsit") END AS "OraSfarsit", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitDeLa", D."OraSfarsitDeLa") END AS "OraSfarsitDeLa", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."OraSfarsitLa", D."OraSfarsitLa") END AS "OraSfarsitLa", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN NULL ELSE COALESCE(B."ModVerificare", D."ModVerificare") END AS "ModVerificare"
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=8
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN COALESCE(A."Program8", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+) X
+) Z ON A.IdContract=Z.ContractId AND A.IdProgram=Z.ProgramId AND A.TipSchimb=Z.ZiSapt

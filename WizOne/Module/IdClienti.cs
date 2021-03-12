@@ -28,7 +28,8 @@
             BancaCarpatica = 65,
             Trico = 66,
             TMK = 67,
-            Alka = 68
+            Alka = 68,
+            Temad = 69
         }
 
 

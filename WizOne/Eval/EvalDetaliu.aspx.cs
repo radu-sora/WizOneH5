@@ -2295,6 +2295,15 @@ namespace WizOne.Eval
                     if (4.51m <= nota && nota <= 5) desc = "Excelent";
                 }
 
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Temad)
+                {
+                    if (1 <= nota && nota <= 1.99m) desc = "NESATISFACATOR";
+                    if (2 <= nota && nota <= 2.50m) desc = "SATISFACATOR";
+                    if (2.51m <= nota && nota <= 3.50m) desc = "BINE";
+                    if (3.51m <= nota && nota <= 4.50m) desc = "FOARTE BINE";
+                    if (4.51m <= nota && nota <= 5) desc = "REMARCABIL";
+                }
+
                 lbl.Text = nota.ToString("0.##") + "  " + desc;
             }
             catch (Exception ex)
@@ -5806,6 +5815,32 @@ namespace WizOne.Eval
                                         new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
                                     break;
 
+                            }
+                        }
+                        break;
+                    case (int)Module.IdClienti.Clienti.Temad:
+                        {
+                            switch (tipData)
+                            {
+                                case 69:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT ROUND(SUM(Total),2) FROM (
+                                        (SELECT 0.7 * (CASE WHEN (select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2), COALESCE(Total1,0)) )/(select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) END) AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                        UNION
+                                        (SELECT 0.3 * (CASE WHEN (select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),COALESCE(IdCalificativ,0) ) )/(select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) END) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                        ) X",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
+                                case 71:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT CASE WHEN (select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2), COALESCE(Total1,0)) )/(select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
+                                case 72:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT CASE WHEN (select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2), COALESCE(IdCalificativ,0) ) )/(select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) END AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
                             }
                         }
                         break;

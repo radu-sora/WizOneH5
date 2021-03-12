@@ -8,6 +8,8 @@ using System.Data;
 using System.Web;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
+using System.Collections.Generic;
+using System.Web.Hosting;
 
 namespace WizOne.Tactil
 {
@@ -157,6 +159,9 @@ namespace WizOne.Tactil
                     case "cereridiverseistoric":
                         Response.Redirect("~/Tactil/ListaDiverseTactil.aspx", false);
                         break;
+                    case "adeverintasanatate":           
+                        lnkAdevSanatate_Click(); ;
+                        break;
                     default:
                         {
                             if (nume.Substring(0, 6) == "raport")
@@ -202,6 +207,67 @@ namespace WizOne.Tactil
                         }
                         break;
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void lnkAdevSanatate_Click()
+        {
+            try
+            {
+                Session["TactilAdeverinte"] = "Sanatate";
+                Session["NrInregAdev"] = General.GetnrInreg();
+                //if (Session["TactilPrintareAdeverinte"].ToString() == "0")
+                //{
+                //    Session["PrintDocument"] = "AdeverintaMedic";
+                //    Session["PaginaWeb"] = "Tactil/Adeverinte.aspx";
+                //    Response.Redirect("~/Reports/ImprimaTactil.aspx", false);
+                //}
+                //else
+                {
+                    Adev.Adeverinta pagAdev = new Adev.Adeverinta();
+                    List<int> lstMarci = new List<int>();
+                    lstMarci.Add(Convert.ToInt32(Session["User_Marca"].ToString()));
+                    string sql = "SELECT * FROM F100 WHERE F10003 = " + lstMarci[0];
+                    DataTable dtAng = General.IncarcaDT(sql, null);
+                    byte[] fisier = pagAdev.GenerareAdeverinta(lstMarci, 12, DateTime.Now.Year, true);
+                    string filePath = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + "Adev_sanatate_2020_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + Session["User_Marca"].ToString() + ".docx";
+                    using (Stream file = File.OpenWrite(filePath))
+                    {
+                        file.Write(fisier, 0, fisier.Length);
+                    }
+
+                    ProcessStartInfo info = new ProcessStartInfo();
+                    info.Verb = "print";
+                    info.FileName = filePath;
+                    info.CreateNoWindow = true;
+                    info.WindowStyle = ProcessWindowStyle.Hidden;
+
+                    Process p = new Process();
+                    p.StartInfo = info;
+                    p.Start();
+
+                    p.WaitForInputIdle();
+                    System.Threading.Thread.Sleep(5000);
+
+                    try
+                    {
+                        if (false == p.CloseMainWindow())
+                            p.Kill();
+                    }
+                    catch (InvalidOperationException)
+                    {
+
+                    }
+                    System.Threading.Thread.Sleep(5000);
+                    File.Delete(filePath);
+                    MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess, "");
+                }
+
             }
             catch (Exception ex)
             {

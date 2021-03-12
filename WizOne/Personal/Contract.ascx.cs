@@ -1596,6 +1596,8 @@ namespace WizOne.Personal
                 if (txtGrila == null) return;
 
                 int an = DateTime.Now.Year;
+                int luna = DateTime.Now.Month;
+                int zi = DateTime.Now.Day;
                 DateTime f10022 = deDataAng.Date;
                 string f10072 = txtGrila.Text;
 
@@ -1622,7 +1624,7 @@ namespace WizOne.Personal
                 //string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, vechime, esteNou);
                 //Radu 21.04.2020
 
-                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date,'" + an + "-12-31'), 1, " + f10072 + ")";
+                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date,'" + an + "-" + luna.ToString().PadLeft(2, '0') + "-" + zi.ToString().PadLeft(2, '0') + "'), 1, " + f10072 + ")";
                 DataTable dtCO = General.IncarcaDT(strSql, null);
 
                 //DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });

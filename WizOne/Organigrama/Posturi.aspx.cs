@@ -341,10 +341,18 @@ namespace WizOne.Organigrama
                         sqlUpd = $@"UPDATE ""Org_Posturi"" SET ""DataSfarsit""={General.ToDataUniv(Convert.ToDateTime(Session["DataVigoare"]).AddDays(-1))} WHERE ""IdAuto"" = @1";
                     }
 
-                    General.SchimbaInPlanificat(Convert.ToDateTime(Session["DataVigoare"]), id, Convert.ToInt32(drModif["modifStruc"]), Convert.ToInt32(drModif["modifCor"]), Convert.ToInt32(drModif["modifFunctia"]), 0);
-
                     //Florin 2021.03.11
                     dtSf = Convert.ToDateTime(txtDtSf.Value).Date;
+
+                    //Florin 2021.03.12
+                    int seInteresecteaza = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM Org_Posturi WHERE Id = @1 AND DataInceput <= @4 AND @3 <= DataSfarsit AND IdAuto <> @2", new object[] { id, Session["IdAuto"], dtInc, dtSf }), 0));
+                    if (seInteresecteaza > 0)
+                    {
+                        MessageBox.Show(Dami.TraduCuvant("Intervalul se intersecteaza cu altul deja existent"), MessageBox.icoError, "");
+                        return;
+                    }
+
+                    General.SchimbaInPlanificat(Convert.ToDateTime(Session["DataVigoare"]), id, Convert.ToInt32(drModif["modifStruc"]), Convert.ToInt32(drModif["modifCor"]), Convert.ToInt32(drModif["modifFunctia"]), 0);
                 }
 
 

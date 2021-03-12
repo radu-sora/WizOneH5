@@ -44,8 +44,6 @@ namespace WizOne.Tactil
                         dt.Rows.Add("AdeverintaPractica", "Adeverinta de practica", null, null);
                         dt.Rows.Add("AdeverintaCresa", "Adeverinta cresa/gradinita", null, null);
                     }
-                    if (HttpContext.Current.Session["IdClient"] == null || Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 66)
-                        dt.Rows.Add("AdeverintaSanatate", "Adeverinta de sanatate", null, null);
                 }
                 dt.Rows.Add("Inapoi", "Inapoi", null, null);
                 for (int i = 0; i < dt.Rows.Count; i++)
@@ -181,13 +179,9 @@ namespace WizOne.Tactil
                         case "adeverintacresaprint":
                             lnkAdevGrad_Click(); ;
                             break;
-                        case "adeverintasanatate":
-                        case "adeverintasanatateprint":
-                            lnkAdevSanatate_Click(); ;
+                        case "inapoi":
+                            btnBack_Click(sender, e);
                             break;
-                            //case "inapoi":
-                            //    lnkOut_Click();
-                            //    break;
 
                     }
                 }             

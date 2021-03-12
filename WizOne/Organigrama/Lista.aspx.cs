@@ -163,11 +163,12 @@ namespace WizOne.Organigrama
                                 from ""Org_relPostAngajat"" r 
                                 inner join F100 a on r.F10003 = a.F10003 
                                 inner join ""Org_Posturi"" x on r.""IdPost"" = x.""Id"" 
-                                LEFT JOIN F002 b on a.""F10002""=b.F00202  
-                                LEFT JOIN F003 c on a.""F10004""=c.F00304  
-                                LEFT JOIN F004 d on a.""F10005""=d.F00405  
-                                LEFT JOIN F005 e on a.""F10006""=e.F00506  
-                                LEFT JOIN F006 f on a.""F10007""=f.F00607  
+								OUTER APPLY DamiDept(A.F10003, {0}) Dept
+								LEFT JOIN F006 f on Dept.Dept=f.F00607
+                                LEFT JOIN F002 b on F.F00603=b.F00202  
+                                LEFT JOIN F003 c on F.F00603=c.F00304  
+                                LEFT JOIN F004 d on F.F00603=d.F00405  
+                                LEFT JOIN F005 e on F.F00603=e.F00506  
                                 OUTER APPLY DamiDataPlecare(a.F10003, {0}) Z
                                 where CONVERT(date,r.""DataInceput"") <= {0} and {0} <= CONVERT(date,r.""DataSfarsit"") 
                                 and CONVERT(date,x.""DataInceput"") <= {0} and {0} <= CONVERT(date,x.""DataSfarsit"") ) T
@@ -221,16 +222,18 @@ namespace WizOne.Organigrama
 			                        (A.F10022 <= {0} AND {0} <= Z.DataPlecare) 
 		                            THEN 2 ELSE
                                     CASE WHEN A.F10022 <= {0} AND {0} <= Z.DataPlecare THEN 1 END END END AS ""StareAngajat"", 0, 0, 0, 0, 0  
-                                    FROM Posturi
-                                    INNER JOIN Org_relPostAngajat R ON R.IdPost=Posturi.Id
-                                    inner join F100 a on R.F10003 = a.F10003 
-                                    LEFT JOIN F002 b on a.F10002=b.F00202  
-                                    LEFT JOIN F003 c on a.F10004=c.F00304  
-                                    LEFT JOIN F004 d on a.F10005=d.F00405  
-                                    LEFT JOIN F005 e on a.F10006=e.F00506  
-                                    LEFT JOIN F006 f on a.F10007=f.F00607  
+                                    from ""Org_relPostAngajat"" r 
+                                    inner join F100 a on r.F10003 = a.F10003 
+                                    inner join ""Org_Posturi"" x on r.""IdPost"" = x.""Id"" 
+								    OUTER APPLY DamiDept(A.F10003, {0}) Dept
+								    LEFT JOIN F006 f on Dept.Dept=f.F00607
+                                    LEFT JOIN F002 b on F.F00603=b.F00202  
+                                    LEFT JOIN F003 c on F.F00603=c.F00304  
+                                    LEFT JOIN F004 d on F.F00603=d.F00405  
+                                    LEFT JOIN F005 e on F.F00603=e.F00506  
                                     OUTER APPLY DamiDataPlecare(a.F10003, {0}) Z
-                                    WHERE CONVERT(date,R.DataInceput) <= {0} and {0} <= CONVERT(date,R.DataSfarsit) ) T
+                                    where CONVERT(date,r.""DataInceput"") <= {0} and {0} <= CONVERT(date,r.""DataSfarsit"") 
+                                    and CONVERT(date,x.""DataInceput"") <= {0} and {0} <= CONVERT(date,x.""DataSfarsit"") ) T
                                     WHERE COALESCE(T.""StareAngajat"",4) <> 4
                                     ) x 
                                     WHERE 1=1 {1} {2} 

@@ -529,8 +529,6 @@
 
         var valDen = txtDen.GetValue();
         function OnDenumireChanged(s, e) {
-            alert(valDen);
-            alert(txtDenRO.GetValue());
             if (txtDenRO.GetValue() == null || txtDenRO.GetValue() == valDen)
                 txtDenRO.SetValue(txtDen.GetValue());
             if (txtDenEN.GetValue() == null || txtDenEN.GetValue() == valDen)

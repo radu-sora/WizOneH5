@@ -16583,6 +16583,7 @@ GO
 CREATE TABLE [dbo].[CM_Cereri](
 	[Id] [int] NOT NULL,
 	[F10003] [int] NOT NULL,
+	[IdStare] [int] NULL,
 	[TipProgram] [int] NOT NULL,
 	[TipConcediu] [int] NOT NULL,
 	[CodIndemnizatie] [int] NULL,
@@ -16619,6 +16620,7 @@ CREATE TABLE [dbo].[CM_Cereri](
 	[DataAvizDSP] DATETIME null,
 	[MedicCurant] [nvarchar](250) NULL,
 	[CNPCopil] [nvarchar](13) NULL,
+	[Document] [int] NULL,
 	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
 	[USER_NO] [int] NULL,
 	[TIME] [datetime] NULL,

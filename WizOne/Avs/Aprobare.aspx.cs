@@ -1423,6 +1423,7 @@ namespace WizOne.Avs
                             " when 34 then (select \"Ptj_Contracte\".\"Denumire\" from \"Ptj_Contracte\" where \"Ptj_Contracte\".\"Id\" = a.\"ProgramLucru\") " +
                             " when 35 then a.\"TipContractNume\"" +
                             " when 36 then a.\"DurataContractNume\"" +
+                            " when 37 then a.\"PostNume\"" +
                             " end AS ValoareNoua,  " +
                             " a.SalariulNet, a.ScutitImpozit,  " +
                             " COALESCE((SELECT COALESCE(NR.Revisal,0) FROM Admin_NrActAd NR WHERE NR.IdAuto=COALESCE(A.IdActAd,-99)),0) AS Revisal, " +
@@ -1466,6 +1467,7 @@ namespace WizOne.Avs
                             " when 34 then (select \"Ptj_Contracte\".\"Denumire\" from \"Ptj_Contracte\" where \"Ptj_Contracte\".\"Id\" = a.\"ProgramLucru\") " +
                             " when 35 then a.\"TipContractNume\"" +
                             " when 36 then a.\"DurataContractNume\"" +
+                            " when 37 then a.\"PostNume\"" +
                             " end AS \"ValoareNoua\", " +
                             " a.\"SalariulNet\", a.\"ScutitImpozit\", " +
                             " COALESCE((SELECT COALESCE(NR.\"Revisal\",0) FROM \"Admin_NrActAd\" NR WHERE NR.\"IdAuto\"=COALESCE(A.\"IdActAd\",-99)),0) AS \"Revisal\", " +

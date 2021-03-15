@@ -17092,6 +17092,31 @@ GO
 INSERT INTO MeniuLista(Id, Denumire, Descriere, Activ) VALUES((SELECT MAX(Id) FROM MeniuLista) + 1, 'Organigrama','Organigrama', 1)
 GO
 
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'DataReferinta', NULL, 0, NULL, 0, 3, NULL, NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'F10003', 2, 1, 'select F10003, F10008+'' ''+ F10009 from f100', 0, 3, NULL, 'Nume Angajat')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'IdPost', 2, 1, 'select Id, Denumire from Org_Posturi', NULL, 3, NULL, 'Denumire Post')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'IdPostVechi', 2, 1, 'select Id, Denumire from Org_Posturi', 0, 3, NULL, 'Post Anterior')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'modifCOR', 1, 1, NULL, 0, 3, NULL, 'COR Modificat')
+GO   
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'modifFunctie', 1, 1, NULL, 0, 3, NULL, 'Functie Modificata')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'modifSalariu', 1, 1, NULL, 0, 3, NULL, 'Salariu Modificat')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'modifStructura', 1, 1, NULL, 0, 3, NULL, 'Structura Modificata')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'SalariuAvizat', 7, 1, NULL, 0, 3, NULL, 'Salariu Post')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'Stare', NULL, 0, NULL, 0, 3, NULL, NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'TIME', NULL, 0, NULL, 0, 3, NULL, NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'USER_NO', NULL, 0, NULL, 0, 3, NULL, NULL)
+GO
+
 ----  2.2.135  ----
 
 

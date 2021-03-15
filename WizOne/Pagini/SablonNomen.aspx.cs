@@ -174,7 +174,7 @@ namespace WizOne.Pagini
                                     else
                                         c.Visible = vizibil;
                                     c.ReadOnly = blocat;
-                                    c.Width = Unit.Pixel(70);
+                                    c.Width = Unit.Pixel(100);
                                     grDate.Columns.Add(c);
                                 }
                                 break;

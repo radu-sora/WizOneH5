@@ -16616,6 +16616,7 @@ CREATE TABLE [dbo].[CM_Cereri](
 	[ZileBazaCalculCM] [int] NULL,
 	[MedieZileBazaCalcul] [int] NULL,
 	[MedieZilnicaCM] [int] NULL,
+	[Stagiu] [int] NULL,
 	[NrAvizMedicExpert] [nvarchar](20) NULL,
 	[DataAvizDSP] DATETIME null,
 	[MedicCurant] [nvarchar](250) NULL,

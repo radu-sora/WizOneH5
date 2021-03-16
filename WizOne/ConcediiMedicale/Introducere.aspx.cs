@@ -134,8 +134,43 @@ namespace WizOne.ConcediiMedicale
                 else
                     rbProgrTure.Checked = true;
                 txtCodIndemn.Text = dtCM.Rows[0]["CodIndemnizatie"] == DBNull.Value ? "" : dtCM.Rows[0]["CodIndemnizatie"].ToString();
-                cmbLocPresc.Value = Convert.ToInt32(dtCM.Rows[0]["Prescris"].ToString());
-
+                cmbLocPresc.Value = Convert.ToInt32(dtCM.Rows[0]["Prescris"] == DBNull.Value ? "0" : dtCM.Rows[0]["Prescris"].ToString());
+                txtSerie.Text = dtCM.Rows[0]["SerieCM"] == DBNull.Value ? "" : dtCM.Rows[0]["SerieCM"].ToString();
+                txtNr.Text = dtCM.Rows[0]["NumarCM"] == DBNull.Value ? "" : dtCM.Rows[0]["NumarCM"].ToString();
+                deData.Value = Convert.ToDateTime(dtCM.Rows[0]["DataCM"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataCM"].ToString());
+                deDeLaData.Value = Convert.ToDateTime(dtCM.Rows[0]["DataInceput"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataInceput"].ToString());
+                deLaData.Value = Convert.ToDateTime(dtCM.Rows[0]["DataSfarsit"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataSfarsit"].ToString());
+                txtNrZile.Text = dtCM.Rows[0]["NrZile"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZile"].ToString();
+                cmbCT1.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer1"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer1"].ToString());
+                cmbCT2.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer2"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer2"].ToString());
+                cmbCT3.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer3"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer3"].ToString());
+                cmbCT4.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer4"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer4"].ToString());
+                cmbCT5.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer5"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer5"].ToString());
+                txtCT1.Text = dtCM.Rows[0]["NrZileCT1"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZileCT1"].ToString();
+                txtCT2.Text = dtCM.Rows[0]["NrZileCT2"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZileCT2"].ToString();
+                txtCT3.Text = dtCM.Rows[0]["NrZileCT3"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZileCT3"].ToString();
+                txtCT4.Text = dtCM.Rows[0]["NrZileCT4"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZileCT4"].ToString();
+                txtCT5.Text = dtCM.Rows[0]["NrZileCT5"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZileCT5"].ToString();
+                txtCodDiag.Text = dtCM.Rows[0]["CodDiagnostic"] == DBNull.Value ? "" : dtCM.Rows[0]["CodDiagnostic"].ToString();
+                txtCodUrgenta.Text = dtCM.Rows[0]["CodUrgenta"] == DBNull.Value ? "" : dtCM.Rows[0]["CodUrgenta"].ToString();
+                txtCodInfCont.Text = dtCM.Rows[0]["CodInfectoContag"] == DBNull.Value ? "" : dtCM.Rows[0]["CodInfectoContag"].ToString();
+                if (Convert.ToInt32(dtCM.Rows[0]["Initial"] == DBNull.Value ? "0" : dtCM.Rows[0]["Initial"].ToString()) == 1)
+                    rbConcInit.Checked = true;
+                else
+                    rbConcCont.Checked = true;
+                txtZCMAnt.Text = dtCM.Rows[0]["ZileCMInitial"] == DBNull.Value ? "" : dtCM.Rows[0]["ZileCMInitial"].ToString();
+                txtSCMInit.Text = dtCM.Rows[0]["SerieCMInitial"] == DBNull.Value ? "" : dtCM.Rows[0]["SerieCMInitial"].ToString();
+                txtNrCMInit.Text = dtCM.Rows[0]["NumarCMInitial"] == DBNull.Value ? "" : dtCM.Rows[0]["NumarCMInitial"].ToString();
+                deDataCMInit.Value = Convert.ToDateTime(dtCM.Rows[0]["DataCMInitial"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataCMInitial"].ToString());
+                txtBCCM.Text = dtCM.Rows[0]["BazaCalculCM"] == DBNull.Value ? "" : dtCM.Rows[0]["BazaCalculCM"].ToString();
+                txtZBC.Text = dtCM.Rows[0]["ZileBazaCalculCM"] == DBNull.Value ? "" : dtCM.Rows[0]["ZileBazaCalculCM"].ToString();
+                txtMZBC.Text = dtCM.Rows[0]["MedieZileBazaCalcul"] == DBNull.Value ? "" : dtCM.Rows[0]["MedieZileBazaCalcul"].ToString();
+                txtMZ.Text = dtCM.Rows[0]["MedieZilnicaCM"] == DBNull.Value ? "" : dtCM.Rows[0]["MedieZilnicaCM"].ToString();
+                chkStagiu.Checked = Convert.ToInt32(dtCM.Rows[0]["Stagiu"] == DBNull.Value ? "0" : dtCM.Rows[0]["Stagiu"].ToString()) == 1 ? true : false;
+                txtNrAviz.Text = dtCM.Rows[0]["NrAvizMedicExpert"] == DBNull.Value ? "" : dtCM.Rows[0]["NrAvizMedicExpert"].ToString();
+                deDataAviz.Value = Convert.ToDateTime(dtCM.Rows[0]["DataAvizDSP"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataAvizDSP"].ToString());
+                txtMedic.Text = dtCM.Rows[0]["MedicCurant"] == DBNull.Value ? "" : dtCM.Rows[0]["MedicCurant"].ToString();
+                cmbCNPCopil.Value = Convert.ToInt32(dtCM.Rows[0]["CNPCopil"] == DBNull.Value ? "0" : dtCM.Rows[0]["CNPCopil"].ToString());
             }
         }
 

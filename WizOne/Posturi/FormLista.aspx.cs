@@ -1010,10 +1010,46 @@ namespace WizOne.Posturi
                 if (dtCons != null && dtCons.Rows.Count > 0 && dtCons.Rows[0][0] != DBNull.Value && Convert.ToInt32(dtCons.Rows[0][0].ToString()) > 0)
                     esteConsRU = true;
 
+                //if (esteConsRU)                      //cand este consultant RU aratam toti angajatii
+                //    sql = "SELECT   a.F10003, a.F10008 " + op + " ' ' " + op + " F10009 AS \"NumeComplet\", a.F10017 AS CNP, b.F00204 AS \"Companie\", c.F00305 AS \"Subcompanie\", d.F00406 AS \" Filiala\", "
+                //        + " e.F00507 AS  \"Sectie\", f.F00608 AS \"Departament\", F10022 as \"DataAngajarii\", F10023 AS \"DataPlecarii\", F10011 AS \"NrContract\", " + condStare + " AS \"Stare\", "
+                //        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  FROM  F100 a "
+                //        + " LEFT JOIN F002 b on a.F10002 = b.F00202 "
+                //        + " LEFT JOIN F003 c on a.F10004 = c.F00304 "
+                //        + " LEFT JOIN F004 d on a.F10005 = d.F00405 "
+                //        + " LEFT JOIN F005 e on a.F10006 = e.F00506 "
+                //        + " LEFT JOIN F006 f on a.F10007 = f.F00607 "
+                //        + " LEFT JOIN USERS g on a.F10003 = g.F10003 "
+                //        + " LEFT JOIN F718 x on a.F10071 = x.F71802 "
+                //        + " LEFT JOIN F704 h on a.F10003 = h.F70403 "
+                //        + " WHERE F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
+                //        + " AND " + condDifLuni 
+                //        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804, h.F70407"
+                //        + " ORDER BY \"NumeComplet\"";
+                //else
+                //    sql = "SELECT   a.F10003, a.F10008 " + op + " ' ' " + op + " F10009 AS \"NumeComplet\", a.F10017 AS CNP, b.F00204 AS \"Companie\", c.F00305 AS \"Subcompanie\", d.F00406 AS \" Filiala\", "
+                //        + " e.F00507 AS  \"Sectie\", f.F00608 AS \"Departament\", F10022 as \"DataAngajarii\", F10023 AS \"DataPlecarii\", F10011 AS \"NrContract\", " + condStare + " AS \"Stare\", "
+                //        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  "
+                //        + " FROM \"F100Supervizori\" z "
+                //        + " JOIN \"Org_Circuit\" y on z.\"IdSuper\" = -1 * y.\"Super2\" "
+                //        + " JOIN  F100 a ON z.F10003 = a.F10003"
+                //        + " LEFT JOIN F002 b on a.F10002 = b.F00202 "
+                //        + " LEFT JOIN F003 c on a.F10004 = c.F00304 "
+                //        + " LEFT JOIN F004 d on a.F10005 = d.F00405 "
+                //        + " LEFT JOIN F005 e on a.F10006 = e.F00506 "
+                //        + " LEFT JOIN F006 f on a.F10007 = f.F00607 "
+                //        + " LEFT JOIN USERS g on a.F10003 = g.F10003 "
+                //        + " LEFT JOIN F718 x on a.F10071 = x.F71802 "
+                //        + " LEFT JOIN F704 h on a.F10003 = h.F70403 "
+                //        + " WHERE y.\"Id\" = (SELECT \"IdCircuit\" FROM \"Org_relFormularCircuit\" WHERE \"IdFormular\" = " + idFormular + ") AND z.\"IdUser\" = " + idUser + " AND F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
+                //        + " AND " + condDifLuni
+                //        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804, h.F70407"
+                //        + " ORDER BY \"NumeComplet\"";
+
                 if (esteConsRU)                      //cand este consultant RU aratam toti angajatii
                     sql = "SELECT   a.F10003, a.F10008 " + op + " ' ' " + op + " F10009 AS \"NumeComplet\", a.F10017 AS CNP, b.F00204 AS \"Companie\", c.F00305 AS \"Subcompanie\", d.F00406 AS \" Filiala\", "
                         + " e.F00507 AS  \"Sectie\", f.F00608 AS \"Departament\", F10022 as \"DataAngajarii\", F10023 AS \"DataPlecarii\", F10011 AS \"NrContract\", " + condStare + " AS \"Stare\", "
-                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  FROM  F100 a "
+                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, null AS \"SalariulModifInAvans\"  FROM  F100 a "
                         + " LEFT JOIN F002 b on a.F10002 = b.F00202 "
                         + " LEFT JOIN F003 c on a.F10004 = c.F00304 "
                         + " LEFT JOIN F004 d on a.F10005 = d.F00405 "
@@ -1021,15 +1057,15 @@ namespace WizOne.Posturi
                         + " LEFT JOIN F006 f on a.F10007 = f.F00607 "
                         + " LEFT JOIN USERS g on a.F10003 = g.F10003 "
                         + " LEFT JOIN F718 x on a.F10071 = x.F71802 "
-                        + " LEFT JOIN F704 h on a.F10003 = h.F70403 "
-                        + " WHERE F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
-                        + " AND " + condDifLuni 
-                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804, h.F70407"
+                        //+ " LEFT JOIN F704 h on a.F10003 = h.F70403 "
+                        //+ " WHERE F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
+                        + " WHERE 1=1 AND " + condDifLuni
+                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804"
                         + " ORDER BY \"NumeComplet\"";
                 else
                     sql = "SELECT   a.F10003, a.F10008 " + op + " ' ' " + op + " F10009 AS \"NumeComplet\", a.F10017 AS CNP, b.F00204 AS \"Companie\", c.F00305 AS \"Subcompanie\", d.F00406 AS \" Filiala\", "
                         + " e.F00507 AS  \"Sectie\", f.F00608 AS \"Departament\", F10022 as \"DataAngajarii\", F10023 AS \"DataPlecarii\", F10011 AS \"NrContract\", " + condStare + " AS \"Stare\", "
-                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  "
+                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, null AS \"SalariulModifInAvans\"  "
                         + " FROM \"F100Supervizori\" z "
                         + " JOIN \"Org_Circuit\" y on z.\"IdSuper\" = -1 * y.\"Super2\" "
                         + " JOIN  F100 a ON z.F10003 = a.F10003"
@@ -1040,10 +1076,11 @@ namespace WizOne.Posturi
                         + " LEFT JOIN F006 f on a.F10007 = f.F00607 "
                         + " LEFT JOIN USERS g on a.F10003 = g.F10003 "
                         + " LEFT JOIN F718 x on a.F10071 = x.F71802 "
-                        + " LEFT JOIN F704 h on a.F10003 = h.F70403 "
-                        + " WHERE y.\"Id\" = (SELECT \"IdCircuit\" FROM \"Org_relFormularCircuit\" WHERE \"IdFormular\" = " + idFormular + ") AND z.\"IdUser\" = " + idUser + " AND F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
+                        //+ " LEFT JOIN F704 h on a.F10003 = h.F70403 "
+                        + " WHERE y.\"Id\" = (SELECT \"IdCircuit\" FROM \"Org_relFormularCircuit\" WHERE \"IdFormular\" = " + idFormular + ") AND z.\"IdUser\" = " + idUser 
+                        //+ " AND F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
                         + " AND " + condDifLuni
-                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804, h.F70407"
+                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804"
                         + " ORDER BY \"NumeComplet\"";
 
                 q = General.IncarcaDT(sql, null);

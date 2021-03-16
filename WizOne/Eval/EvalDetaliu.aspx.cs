@@ -5825,7 +5825,7 @@ namespace WizOne.Eval
                                 case 69:
                                     val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
                                         $@"SELECT ROUND(SUM(Total),2) FROM (
-                                        (SELECT 0.7 * (CASE WHEN (select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2), COALESCE(Total1,0)) )/(select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) END) AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                        (SELECT 0.7 * (CASE WHEN (select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2), COALESCE(Total1,0)) ) END) AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
                                         UNION
                                         (SELECT 0.3 * (CASE WHEN (select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),COALESCE(IdCalificativ,0) ) )/(select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) END) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
                                         ) X",
@@ -5833,7 +5833,7 @@ namespace WizOne.Eval
                                     break;
                                 case 71:
                                     val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
-                                        $@"SELECT CASE WHEN (select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2), COALESCE(Total1,0)) )/(select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                        $@"SELECT CASE WHEN (select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2), COALESCE(Total1,0)) ) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
                                         new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
                                     break;
                                 case 72:

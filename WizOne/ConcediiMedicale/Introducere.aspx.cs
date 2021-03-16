@@ -84,7 +84,7 @@ namespace WizOne.ConcediiMedicale
                     cmbCNPCopil.ClientVisible = false;
                 }
 
-                if (Session["CM_Marca"] == null)
+                if (Session["CM_Id"] == null)
                     AfisareCalculManual(false);
 
             }
@@ -123,11 +123,11 @@ namespace WizOne.ConcediiMedicale
                 InitWorkingDays();
             }
 
-            if (Session["CM_Marca"] != null)
+            if (Session["CM_Id"] != null)
             {
+                DataTable dtCM = General.IncarcaDT("SELECT * FROM CM_Cereri WHERE Id = " + Session["CM_Id"].ToString(), null);
                 cmbAng.ClientEnabled = false;
-                cmbAng.SelectedIndex = Convert.ToInt32(Session["CM_Marca"].ToString());
-                DataTable dtCM = General.IncarcaDT("SELECT * FROM CM_Cereri WHERE F10003 = " + Session["CM_Marca"].ToString(), null);
+                cmbAng.SelectedIndex = Convert.ToInt32(dtCM.Rows[0]["F10003"].ToString());
                 cmbTipConcediu.Value = Convert.ToInt32(dtCM.Rows[0]["TipConcediu"].ToString());
                 if (Convert.ToInt32(dtCM.Rows[0]["TipProgram"] == DBNull.Value? "0" : dtCM.Rows[0]["TipProgram"].ToString()) == 1)
                     rbProgrNorm.Checked = true;
@@ -223,7 +223,7 @@ namespace WizOne.ConcediiMedicale
             if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)            
                 codExcl90 =dtParam.Rows[0][0].ToString().Trim();           
 
-            if (Session["CM_Marca"] == null)
+            if (cmbAng.Value == null)
             {
                 MessageBox.Show(Dami.TraduCuvant("Nu ati ales niciun angajat!"));
                 return;

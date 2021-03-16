@@ -2707,7 +2707,8 @@ namespace WizOne.Eval
                                 GridViewDataMemoColumn colObiectiv = new GridViewDataMemoColumn();
                                 colObiectiv.FieldName = "Obiectiv";
                                 colObiectiv.PropertiesMemoEdit.Rows = 5;
-                                colObiectiv.PropertiesMemoEdit.Height = Unit.Percentage(100);
+                                //Florin #852 2021.03.16 - comentat, nu se afiseaza corect in Chrome (apare o linie ingusta)
+                                //colObiectiv.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                 colObiectiv.Name = "Obiectiv";
                                 colObiectiv.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Obiectiv");
                                 colObiectiv.Width = clsConfigDetail.Width;
@@ -2818,7 +2819,8 @@ namespace WizOne.Eval
                                 GridViewDataMemoColumn colActivitate = new GridViewDataMemoColumn();
                                 colActivitate.FieldName = "Activitate";
                                 colActivitate.PropertiesMemoEdit.Rows = 5;
-                                colActivitate.PropertiesMemoEdit.Height = Unit.Percentage(100);
+                                //Florin #852 2021.03.16 - comentat, nu se afiseaza corect in Chrome (apare o linie ingusta)
+                                //colActivitate.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                 colActivitate.Name = "Activitate";
                                 colActivitate.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Activitate");
                                 colActivitate.Width = clsConfigDetail.Width;
@@ -2910,7 +2912,8 @@ namespace WizOne.Eval
                                 colString.Name = clsConfigDetail.ColumnName;
                                 colString.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colString.PropertiesMemoEdit.Rows = 5;
-                                colString.PropertiesMemoEdit.Height = Unit.Percentage(100);
+                                //Florin #852 2021.03.16 - comentat, nu se afiseaza corect in Chrome (apare o linie ingusta)
+                                //colString.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                 colString.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colString.ReadOnly = !clsConfigDetail.Editare;

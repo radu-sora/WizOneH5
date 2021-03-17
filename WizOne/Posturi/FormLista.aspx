@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="FormLista.aspx.cs" Inherits="WizOne.Posturi.FormLista" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" Async="true" CodeBehind="FormLista.aspx.cs" Inherits="WizOne.Posturi.FormLista" %>
 
 
 
@@ -11,7 +11,7 @@
             switch(e.buttonID)
             {
                 case "btnEdit":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToEditMode);
+                    grDate.GetRowValues(e.visibleIndex, 'IdAuto', GoToEditMode);
                     break;
                 case "btnDelete":
                     grDate.GetRowValues(e.visibleIndex, 'IdStare', GoToDeleteMode);
@@ -277,6 +277,7 @@
                         <dx:GridViewDataTextColumn FieldName="UserIntrod" Name="UserIntrod" Caption="UserIntrod" ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false"/>
                         <dx:GridViewDataTextColumn FieldName="TotalCircuit" Name="TotalCircuit" Caption="TotalCircuit" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="PoateModifica" Name="PoateModifica" Caption="PoateModifica" ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false"/>
+                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME" ReadOnly="true" Width="50px" Visible="false"  ShowInCustomizationForm="false"/>
                     </Columns>

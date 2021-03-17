@@ -884,8 +884,6 @@ namespace WizOne.Absente
 
                 if (Constante.tipBD == 1)
                 {
-                    //sqlCer = CreazaSelectCuValori();
-
                     sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"", USER_NO, TIME, ""IdCerereDivizata"", ""Comentarii"", ""CampBifa"") 
                                 OUTPUT Inserted.Id, Inserted.IdStare ";
 
@@ -911,9 +909,7 @@ namespace WizOne.Absente
                             END;";
                 }
 
-
                 if (Dami.ValoareParam("LogCereri", "0") == "1") General.CreazaLogCereri(strGen, cmbAng.Value.ToString(), txtDataInc.Value.ToString());
-               
 
                 string msg = Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Validare, sqlCer + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                 if (msg != "" && msg.Substring(0, 1) == "2")

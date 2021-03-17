@@ -4463,7 +4463,7 @@ namespace WizOne.Module
             DataTable dt = new DataTable();
             if (dtSec != null && dtSec.Rows.Count > 0)
             {
-                dt = dtSec.Select("IdForm = 'Personal.Lista'") != null && dtSec.Select("IdForm = 'Personal.Lista'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista'").CopyToDataTable() : null;
+                dt = dtSec.Select("IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat'") != null && dtSec.Select("IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat'").CopyToDataTable() : null;
             }
             else
                 return;
@@ -4544,7 +4544,7 @@ namespace WizOne.Module
             DataTable dt = new DataTable();
             if (dtSec != null && dtSec.Rows.Count > 0)
             {
-                dt = dtSec.Select("IdForm = 'Personal.Lista'") != null && dtSec.Select("IdForm = 'Personal.Lista'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista'").CopyToDataTable() : null;
+                dt = dtSec.Select("IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat'") != null && dtSec.Select("IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat'").CopyToDataTable() : null;
             }
             else
                 return;
@@ -4623,7 +4623,7 @@ namespace WizOne.Module
             DataTable dt = new DataTable();
             if (dtSec != null && dtSec.Rows.Count > 0)
             {
-                dt = dtSec.Select("IdForm = 'Personal.Lista' AND IdControl like '%_I%'") != null && dtSec.Select("IdForm = 'Personal.Lista' AND IdControl like '%_I%'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista' AND IdControl like '%_I%'").CopyToDataTable() : null;
+                dt = dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl like '%_I%'") != null && dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl like '%_I%'").Count() > 0 ? dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl like '%_I%'").CopyToDataTable() : null;
             }
             else
                 return;
@@ -4801,7 +4801,7 @@ namespace WizOne.Module
                     if (editForm)
                         dt = dtSec.Select("IdForm = 'Personal.DateAngajat' AND IdControl like 'grDate" + numeTab + "%'") != null && dtSec.Select("IdForm = 'Personal.DateAngajat' AND  IdControl like 'grDate" + numeTab + "%'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.DateAngajat' AND  IdControl like 'grDate" + numeTab + "%'").CopyToDataTable() : null;
                     else
-                        dt = dtSec.Select("IdForm = 'Personal.Lista' AND IdControl='" + numeTab + "'") != null && dtSec.Select("IdForm = 'Personal.Lista' AND IdControl='" + numeTab + "'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista' AND IdControl='" + numeTab + "'").CopyToDataTable() : null;
+                        dt = dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl='" + numeTab + "'") != null && dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl='" + numeTab + "'").Count() > 0 ? dtSec.Select("(IdForm = 'Personal.Lista' OR IdForm = 'Personal.DateAngajat') AND IdControl='" + numeTab + "'").CopyToDataTable() : null;
                 }
                 else
                     return;

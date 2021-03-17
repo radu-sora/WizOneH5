@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
@@ -278,7 +279,7 @@ namespace WizOne.Posturi
                             break;
                         case "btnEdit":
                             DataTable dt = Session["FormLista_Grid"] as DataTable;
-                            DataRow[] dr = dt.Select("Id = " + arr[1]);                            
+                            DataRow[] dr = dt.Select("IdAuto = " + arr[1]);                            
 
                             int id = Convert.ToInt32(dr[0]["Id"].ToString());
                             int idFormular = Convert.ToInt32(dr[0]["IdFormular"].ToString());
@@ -306,6 +307,7 @@ namespace WizOne.Posturi
                             Session["FormDetaliu_NumeFormular"] = descFormular;
                             Session["FormDetaliu_DataVigoare"] = dtVigoare;
                             Session["FormDetaliu_Pozitie"] = pozitie;
+                            Session["FormDetaliu_IdRol"] = idRol;
 
 
                             if (Page.IsCallback)
@@ -685,8 +687,13 @@ namespace WizOne.Posturi
                             }
 
                             #region  Notificare start
+                            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                            int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
 
-                            //ctxNtf.TrimiteNotificare("Avs.Aprobare", "grDate", entCer, idUser, f10003);
+                            HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                            {
+                                NotifAsync.TrimiteNotificare("Posturi.FormLista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Org_Date Z WHERE Id=" + id.ToString(), "Org_Date", id, idUser, marcaUser, arrParam);
+                            });
 
                             #endregion
 
@@ -1003,10 +1010,46 @@ namespace WizOne.Posturi
                 if (dtCons != null && dtCons.Rows.Count > 0 && dtCons.Rows[0][0] != DBNull.Value && Convert.ToInt32(dtCons.Rows[0][0].ToString()) > 0)
                     esteConsRU = true;
 
+                //if (esteConsRU)                      //cand este consultant RU aratam toti angajatii
+                //    sql = "SELECT   a.F10003, a.F10008 " + op + " ' ' " + op + " F10009 AS \"NumeComplet\", a.F10017 AS CNP, b.F00204 AS \"Companie\", c.F00305 AS \"Subcompanie\", d.F00406 AS \" Filiala\", "
+                //        + " e.F00507 AS  \"Sectie\", f.F00608 AS \"Departament\", F10022 as \"DataAngajarii\", F10023 AS \"DataPlecarii\", F10011 AS \"NrContract\", " + condStare + " AS \"Stare\", "
+                //        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  FROM  F100 a "
+                //        + " LEFT JOIN F002 b on a.F10002 = b.F00202 "
+                //        + " LEFT JOIN F003 c on a.F10004 = c.F00304 "
+                //        + " LEFT JOIN F004 d on a.F10005 = d.F00405 "
+                //        + " LEFT JOIN F005 e on a.F10006 = e.F00506 "
+                //        + " LEFT JOIN F006 f on a.F10007 = f.F00607 "
+                //        + " LEFT JOIN USERS g on a.F10003 = g.F10003 "
+                //        + " LEFT JOIN F718 x on a.F10071 = x.F71802 "
+                //        + " LEFT JOIN F704 h on a.F10003 = h.F70403 "
+                //        + " WHERE F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
+                //        + " AND " + condDifLuni 
+                //        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804, h.F70407"
+                //        + " ORDER BY \"NumeComplet\"";
+                //else
+                //    sql = "SELECT   a.F10003, a.F10008 " + op + " ' ' " + op + " F10009 AS \"NumeComplet\", a.F10017 AS CNP, b.F00204 AS \"Companie\", c.F00305 AS \"Subcompanie\", d.F00406 AS \" Filiala\", "
+                //        + " e.F00507 AS  \"Sectie\", f.F00608 AS \"Departament\", F10022 as \"DataAngajarii\", F10023 AS \"DataPlecarii\", F10011 AS \"NrContract\", " + condStare + " AS \"Stare\", "
+                //        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  "
+                //        + " FROM \"F100Supervizori\" z "
+                //        + " JOIN \"Org_Circuit\" y on z.\"IdSuper\" = -1 * y.\"Super2\" "
+                //        + " JOIN  F100 a ON z.F10003 = a.F10003"
+                //        + " LEFT JOIN F002 b on a.F10002 = b.F00202 "
+                //        + " LEFT JOIN F003 c on a.F10004 = c.F00304 "
+                //        + " LEFT JOIN F004 d on a.F10005 = d.F00405 "
+                //        + " LEFT JOIN F005 e on a.F10006 = e.F00506 "
+                //        + " LEFT JOIN F006 f on a.F10007 = f.F00607 "
+                //        + " LEFT JOIN USERS g on a.F10003 = g.F10003 "
+                //        + " LEFT JOIN F718 x on a.F10071 = x.F71802 "
+                //        + " LEFT JOIN F704 h on a.F10003 = h.F70403 "
+                //        + " WHERE y.\"Id\" = (SELECT \"IdCircuit\" FROM \"Org_relFormularCircuit\" WHERE \"IdFormular\" = " + idFormular + ") AND z.\"IdUser\" = " + idUser + " AND F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
+                //        + " AND " + condDifLuni
+                //        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804, h.F70407"
+                //        + " ORDER BY \"NumeComplet\"";
+
                 if (esteConsRU)                      //cand este consultant RU aratam toti angajatii
                     sql = "SELECT   a.F10003, a.F10008 " + op + " ' ' " + op + " F10009 AS \"NumeComplet\", a.F10017 AS CNP, b.F00204 AS \"Companie\", c.F00305 AS \"Subcompanie\", d.F00406 AS \" Filiala\", "
                         + " e.F00507 AS  \"Sectie\", f.F00608 AS \"Departament\", F10022 as \"DataAngajarii\", F10023 AS \"DataPlecarii\", F10011 AS \"NrContract\", " + condStare + " AS \"Stare\", "
-                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  FROM  F100 a "
+                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, null AS \"SalariulModifInAvans\"  FROM  F100 a "
                         + " LEFT JOIN F002 b on a.F10002 = b.F00202 "
                         + " LEFT JOIN F003 c on a.F10004 = c.F00304 "
                         + " LEFT JOIN F004 d on a.F10005 = d.F00405 "
@@ -1014,15 +1057,15 @@ namespace WizOne.Posturi
                         + " LEFT JOIN F006 f on a.F10007 = f.F00607 "
                         + " LEFT JOIN USERS g on a.F10003 = g.F10003 "
                         + " LEFT JOIN F718 x on a.F10071 = x.F71802 "
-                        + " LEFT JOIN F704 h on a.F10003 = h.F70403 "
-                        + " WHERE F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
-                        + " AND " + condDifLuni 
-                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804, h.F70407"
+                        //+ " LEFT JOIN F704 h on a.F10003 = h.F70403 "
+                        //+ " WHERE F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
+                        + " WHERE 1=1 AND " + condDifLuni
+                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804"
                         + " ORDER BY \"NumeComplet\"";
                 else
                     sql = "SELECT   a.F10003, a.F10008 " + op + " ' ' " + op + " F10009 AS \"NumeComplet\", a.F10017 AS CNP, b.F00204 AS \"Companie\", c.F00305 AS \"Subcompanie\", d.F00406 AS \" Filiala\", "
                         + " e.F00507 AS  \"Sectie\", f.F00608 AS \"Departament\", F10022 as \"DataAngajarii\", F10023 AS \"DataPlecarii\", F10011 AS \"NrContract\", " + condStare + " AS \"Stare\", "
-                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, h.F70407 AS \"SalariulModifInAvans\"  "
+                        + " a.F100699 AS \"SalariuBrut\", MIN(F70102) AS \"IdUser\", x.F71804 AS \"Functia\", A.F100992 AS \"DataFunctie\", a.F10025, null AS \"SalariulModifInAvans\"  "
                         + " FROM \"F100Supervizori\" z "
                         + " JOIN \"Org_Circuit\" y on z.\"IdSuper\" = -1 * y.\"Super2\" "
                         + " JOIN  F100 a ON z.F10003 = a.F10003"
@@ -1033,10 +1076,11 @@ namespace WizOne.Posturi
                         + " LEFT JOIN F006 f on a.F10007 = f.F00607 "
                         + " LEFT JOIN USERS g on a.F10003 = g.F10003 "
                         + " LEFT JOIN F718 x on a.F10071 = x.F71802 "
-                        + " LEFT JOIN F704 h on a.F10003 = h.F70403 "
-                        + " WHERE y.\"Id\" = (SELECT \"IdCircuit\" FROM \"Org_relFormularCircuit\" WHERE \"IdFormular\" = " + idFormular + ") AND z.\"IdUser\" = " + idUser + " AND F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
+                        //+ " LEFT JOIN F704 h on a.F10003 = h.F70403 "
+                        + " WHERE y.\"Id\" = (SELECT \"IdCircuit\" FROM \"Org_relFormularCircuit\" WHERE \"IdFormular\" = " + idFormular + ") AND z.\"IdUser\" = " + idUser 
+                        //+ " AND F70404 = 1 and F70420 = 0 AND " + dtVig + " >= F70406 "
                         + " AND " + condDifLuni
-                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804, h.F70407"
+                        + " GROUP BY a.F10003, a.F10008 " + op + " ' ' " + op + " F10009, a.F10017, b.F00204, c.F00305, d.F00406, e.F00507, f.F00608, a.F10022, a.F10023, a.F10011, a.F100699, A.F100992, a.F10025, x.F71804"
                         + " ORDER BY \"NumeComplet\"";
 
                 q = General.IncarcaDT(sql, null);
@@ -1088,6 +1132,7 @@ namespace WizOne.Posturi
                     Session["FormDetaliu_PoateModifica"] = 1;
                     Session["FormDetaliu_EsteNou"] = 1;
                     Session["FormDetaliu_Pozitie"] = 0;
+                    Session["FormDetaliu_IdRol"] = 0;
 
                     Session["FormDetaliu_NumeFormular"] = cmbFormNou.Text;
                     Session["FormDetaliu_DataVigoare"] = dtVigoare;
@@ -1229,6 +1274,7 @@ namespace WizOne.Posturi
                 int poz = 0;
                 int idUserPrece = -99;
                 int idUserCalc = -99;
+                bool adaugat = false;
 
                 List<int> lst = new List<int>();
 
@@ -1301,7 +1347,7 @@ namespace WizOne.Posturi
                                 case 0:                                     //se pun toti supervizorii chiar daca se repeta; ex: circuit -> 3;  3;  8;   3;   9;  rezulta -> 3;  3;   8;   3;   9;
                                     {
                                         poz += 1;     
-                                        if (idUserCalc == idUser)
+                                        if (idUserCalc == idUser && !adaugat)
                                         {
                                             pozUser = poz;
                                             if (poz == 1) idStare = 1;
@@ -1309,6 +1355,7 @@ namespace WizOne.Posturi
 
                                             aprobat = "1";
                                             dataAprobare = (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
+                                            adaugat = true;
                                         }
                                         idUserPrece = idUserCalc;
                                     }
@@ -1318,7 +1365,7 @@ namespace WizOne.Posturi
                                         if (idUserCalc != idUserPrece)
                                         {
                                             poz += 1;
-                                            if (idUserCalc == idUser)
+                                            if (idUserCalc == idUser && !adaugat)
                                             {
                                                 pozUser = poz;
                                                 if (poz == 1) idStare = 1;
@@ -1326,6 +1373,7 @@ namespace WizOne.Posturi
 
                                                 aprobat = "1";
                                                 dataAprobare = (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
+                                                adaugat = true;
                                             }
                                             idUserPrece = idUserCalc;
                                         }
@@ -1511,11 +1559,11 @@ namespace WizOne.Posturi
                     General.ExecutaNonQuery("UPDATE \"Org_Date\" SET \"IdStare\" = -1, \"Culoare\" = '" + culoare + "' WHERE \"Id\" = " + id, null);
 
                     //introducem o linie de anulare in Ptj_CereriIstoric
-                    sql = "INSERT INTO \"Org_DateIstoric\" (\"Id\", \"IdCircuit\", \"IdUser\", \"IdStare\", \"Pozitie\", \"Culoare\", \"Aprobat\", \"DataAprobare\", USER_NO, TIME, \"Inlocuitor\", \"IdRol\") "
+                    sql = "INSERT INTO \"Org_DateIstoric\" (\"Id\", \"IdCircuit\", \"IdUser\", \"IdStare\", \"Pozitie\", \"Culoare\", \"Aprobat\", \"DataAprobare\", USER_NO, TIME, \"Inlocuitor\") "
                         + " VALUES (" + id + ", " + dtCer.Rows[0]["IdCircuit"].ToString() + ", " + idUser + ", -1, 22, '" + culoare + "', 1, "  + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") 
-                        + ", " + idUser + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ", 0, " + (dtCer.Rows[0]["IdRol"] == DBNull.Value ? "NULL" : dtCer.Rows[0]["IdRol"].ToString()) + ") ";
+                        + ", " + idUser + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ", 0) ";
                     General.ExecutaNonQuery(sql, null);
-           
+
 
                     //stergem din relatie Post Angajat, si actualizam data de sfarsit a penultimei linii (procesul in oglinda din functia ActualizeazaInRel
                     //var entRel = ctx.Org_relPostAngajat.Where(p => p.F10003 == ent.F10003 && p.IdPost == ent.IdPost && p.DataReferinta == ent.DataInceput).FirstOrDefault();
@@ -1529,6 +1577,14 @@ namespace WizOne.Posturi
                     //    ctx.Org_relPostAngajat.DeleteObject(entRel);
                     //}  
 
+
+                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                    int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+                    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                    {
+                        NotifAsync.TrimiteNotificare("Posturi.FormLista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM Org_Date Z WHERE Id=" + id.ToString(), "Org_Date", id, idUser, marcaUser, arrParam);
+                    });
 
                     msg = "Proces finalizat cu succes";
 

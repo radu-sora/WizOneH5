@@ -208,6 +208,10 @@ namespace WizOne.Posturi
                 if (Session["FormDetaliu_Pozitie"] != null)
                     pozitie = Convert.ToInt32(Session["FormDetaliu_Pozitie"].ToString());
 
+                int idRol = 0;
+                if (Session["FormDetaliu_IdRol"] != null)
+                    idRol = Convert.ToInt32(Session["FormDetaliu_IdRol"].ToString());
+
                 HtmlTable table = new HtmlTable();
                 table.CellPadding = 3;
                 table.CellSpacing = 3;
@@ -269,13 +273,9 @@ namespace WizOne.Posturi
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     bool modif = modifGen;
-                    if (dt.Rows[i]["PozitiiBlocate"] != DBNull.Value)
+                    if (dt.Rows[i]["PozitieCircuit"] != DBNull.Value)
                     {
-                        string[] sir = dt.Rows[i]["PozitiiBlocate"].ToString().Split(',');
-                        List<int> lstPoz = new List<int>();
-                        for (int k = 0; k < sir.Length; k++)
-                            lstPoz.Add(Convert.ToInt32(sir[k]));
-                        if (lstPoz.Contains(pozitie + 1))
+                        if (Convert.ToInt32(dt.Rows[i]["PozitieCircuit"].ToString()) != idRol)  
                             modif = false;
                     }
 
@@ -310,13 +310,13 @@ namespace WizOne.Posturi
                             txt.ID = ctlId;
                             txt.ClientIDMode = ClientIDMode.Static;
                             txt.ClientInstanceName = ctlId;
-                            txt.Width = Unit.Pixel(Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()));
+                            txt.Width = Unit.Pixel(Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()));
                             txt.ReadOnly = modif ? false : true;
                             txt.Style.Add("margin", "15px 15px !important");
                             cell.ColSpan = 1;
-                            if (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) > 150)
+                            if (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) > 149)
                             {
-                                int nr = (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) / 150) + (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) % 150 > 0 ? 1 : 0);
+                                int nr = (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) / 149);// + (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) % 149 > 0 ? 1 : 0);
                                 cell.ColSpan = nr;
                             }
                             cell.Controls.Add(txt);
@@ -338,9 +338,9 @@ namespace WizOne.Posturi
                             dte.ReadOnly = modif ? false : true;
                             dte.Style.Add("margin", "15px 15px !important");
                             cell.ColSpan = 1;
-                            if (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) > 150)
+                            if (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) > 149)
                             {
-                                int nr = (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) / 150) + (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) % 150 > 0 ? 1 : 0);
+                                int nr = (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) / 149);// + (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) % 149 > 0 ? 1 : 0);
                                 cell.ColSpan = nr;
                             }
                             cell.Controls.Add(dte);
@@ -355,7 +355,7 @@ namespace WizOne.Posturi
                             cmb.ID = ctlId;
                             cmb.ClientIDMode = ClientIDMode.Static;
                             cmb.ClientInstanceName = ctlId;
-                            cmb.Width = Unit.Pixel(Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()));
+                            cmb.Width = Unit.Pixel(Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()));
                             cmb.ReadOnly = modif ? false : true;
                             cmb.Style.Add("margin", "15px 15px !important");
                             try
@@ -376,9 +376,9 @@ namespace WizOne.Posturi
                                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
                             }
                             cell.ColSpan = 1;
-                            if (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) > 150)
+                            if (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) > 149)
                             {
-                                int nr = (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) / 150) + (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) % 150 > 0 ? 1 : 0);
+                                int nr = (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) / 149);// + (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) % 149 > 0 ? 1 : 0);
                                 cell.ColSpan = nr;
                             }
                             cell.Controls.Add(cmb);
@@ -397,7 +397,18 @@ namespace WizOne.Posturi
                             rb.ReadOnly = modif ? false : true;
                             rb.Style.Add("margin", "15px 15px !important");
                             rb.GroupName = numeGrup;
+                            cell.ColSpan = 1;
+                            if (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) > 149)
+                            {
+                                int nr = (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) / 149);// + (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) % 149 > 0 ? 1 : 0);
+                                cell.ColSpan = nr;
+                            }
                             cell.Controls.Add(rb);
+                            if (cell.ColSpan > 1)
+                            {
+                                row.Cells.Add(cell);
+                                cell = new HtmlTableCell();
+                            }                          
                             break;
                         case "5":                   //CheckBox
                             ASPxCheckBox chk = new ASPxCheckBox();
@@ -408,7 +419,18 @@ namespace WizOne.Posturi
                             chk.AllowGrayed = false;
                             chk.ReadOnly = modif ? false : true;
                             chk.Style.Add("margin", "15px 15px !important");
+                            cell.ColSpan = 1;
+                            if (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) > 149)
+                            {
+                                int nr = (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) / 149);// + (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) % 149 > 0 ? 1 : 0);
+                                cell.ColSpan = nr;
+                            }
                             cell.Controls.Add(chk);
+                            if (cell.ColSpan > 1)
+                            {
+                                row.Cells.Add(cell);
+                                cell = new HtmlTableCell();
+                            }                          
                             break;
                         case "7":               //StructOrg
                             ctlId = "StructOrg";
@@ -416,7 +438,7 @@ namespace WizOne.Posturi
                             cmbStruct.ID = ctlId;
                             cmbStruct.ClientIDMode = ClientIDMode.Static;
                             cmbStruct.ClientInstanceName = ctlId;
-                            cmbStruct.Width = Unit.Pixel(Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()));
+                            cmbStruct.Width = Unit.Pixel(Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()));
                             cmbStruct.ReadOnly = modif ? false : true;
                             cmbStruct.Style.Add("margin", "15px 15px !important");
 
@@ -477,9 +499,9 @@ namespace WizOne.Posturi
                             cmbStruct.DataBind();
 
                             cell.ColSpan = 1;
-                            if (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) > 150)
+                            if (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) > 149)
                             {
-                                int nr = (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) / 150) + (Convert.ToInt32(General.Nz(dr["Latime"], "150").ToString()) % 150 > 0 ? 1 : 0);
+                                int nr = (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) / 149);// + (Convert.ToInt32(General.Nz(dr["Latime"], "149").ToString()) % 149 > 0 ? 1 : 0);
                                 cell.ColSpan = nr;
                             }
                             cell.Controls.Add(cmbStruct);

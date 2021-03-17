@@ -2265,11 +2265,11 @@ namespace WizOne.Module
                                             $@"BEGIN
                                                 DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3;
 
-                                                INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"",""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdCategObiective"")
-                                                SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"", CAST(ob.""Obiectiv"" AS varchar(4000)), ob.""IdActivitate"", CAST(ob.""Activitate"" AS varchar(4000)), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, {(dtObiective.Rows[i]["IdCategObiective"] == DBNull.Value ? "null" : dtObiective.Rows[i]["IdCategObiective"].ToString())}
+                                                INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"",""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", Pondere, ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdCategObiective"")
+                                                SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"", CAST(ob.""Obiectiv"" AS varchar(4000)), ob.""IdActivitate"", CAST(ob.""Activitate"" AS varchar(4000)), ob.Pondere, {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, {(dtObiective.Rows[i]["IdCategObiective"] == DBNull.Value ? "null" : dtObiective.Rows[i]["IdCategObiective"].ToString())}
                                                 FROM ""Eval_ObiIndividuale"" ob
                                                 WHERE  ob.F10003 = @1 AND ob.""IdPeriod"" = @4
-                                                group by ob.""IdPeriod"", ob.""IdObiectiv"", CAST(ob.""Obiectiv"" AS varchar(4000)), ob.""IdActivitate"", CAST(ob.""Activitate"" AS varchar(4000));
+                                                group by ob.""IdPeriod"", ob.""IdObiectiv"", CAST(ob.""Obiectiv"" AS varchar(4000)), ob.""IdActivitate"", CAST(ob.""Activitate"" AS varchar(4000)), ob.Pondere;
                                             END;";
 
                                         General.ExecutaNonQuery(sqlTemp, new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString(), dtObiective.Rows[i]["IdPeriod"] });
@@ -2313,8 +2313,8 @@ namespace WizOne.Module
                                             string sqlInsertObi = "";
                                             string sqlSablon =
                                                 @"INSERT INTO ""Eval_ObiIndividualeTemp"" 
-                                                      (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdCategObiective"")
-                                                SELECT ""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, @4,          ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdCategObiective"" FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
+                                                      (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", Pondere, ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdCategObiective"")
+                                                SELECT ""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", Pondere, ""IdQuiz"", F10003, @4,          ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdCategObiective"" FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
                                             DataTable dtIst = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""<>1 ORDER BY ""Pozitie""", new object[] { arr[j].IdQuiz, arr[j].F10003 });
                                             for (int x = 0; x < dtIst.Rows.Count; x++)
                                             {

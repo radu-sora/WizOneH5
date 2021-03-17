@@ -209,6 +209,9 @@ namespace WizOne.Pontaj
                 lblBirou.InnerText = Dami.TraduCuvant("Birou");
                 lblCateg.InnerText = Dami.TraduCuvant("Categorie");
 
+                modifAbsZi.InnerText = Dami.TraduCuvant("Absente de tip zi");
+                modifAbsOra.InnerText = Dami.TraduCuvant("Absente de tip ora");
+
                 //Radu 27.11.2019
                 popUpExport.HeaderText = Dami.TraduCuvant("Export pontaj");
                 ASPxButton btnExp = popUpExport.FindControl("btnExp") as ASPxButton;

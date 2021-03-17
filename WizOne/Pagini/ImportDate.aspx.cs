@@ -1268,6 +1268,8 @@ namespace WizOne.Pagini
                                     int poz = 0;
                                     int idUserCalc = -99;
 
+                                    General.ExecutaNonQuery("DELETE FROM Avs_CereriIstoric WHERE Id = " + idUrm, null);
+
                                     for (int i = 1; i <= 20; i++)
                                     {
                                         if (dtCir != null && dtCir.Rows.Count > 0 && dtCir.Rows[0]["Super" + i] != null && dtCir.Rows[0]["Super" + i].ToString().Length > 0)

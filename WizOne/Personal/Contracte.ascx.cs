@@ -297,12 +297,12 @@ namespace WizOne.Personal
             try
             {
 
-                if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
-                {
-                    e.Cancel = true;
-                    grDateContracte.CancelEdit();
-                    return;
-                }
+                //if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                //{
+                //    e.Cancel = true;
+                //    grDateContracte.CancelEdit();
+                //    return;
+                //}
 
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
@@ -401,12 +401,12 @@ namespace WizOne.Personal
         {
             try
             {
-                if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
-                {
-                    e.Cancel = true;
-                    grDateContracte.CancelEdit();
-                    return;
-                }
+                //if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                //{
+                //    e.Cancel = true;
+                //    grDateContracte.CancelEdit();
+                //    return;
+                //}
 
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)

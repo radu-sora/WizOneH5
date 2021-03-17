@@ -523,6 +523,7 @@ namespace WizOne.Absente
 
                                 grDate.DataBind();
                                 #endregion 
+                                IncarcaGrid();
                             }
                             break;
                         case "btnPlanif":
@@ -610,16 +611,20 @@ namespace WizOne.Absente
                                     }
                                 }
                                 #endregion
+                                IncarcaGrid();
                             }
                             break;
                         case "btnRespinge":
                             RespingeCerere(arr[1].Trim());
+                            IncarcaGrid();
                             break;
                         case "btnAnulare":
                             AnulareCereri();
+                            IncarcaGrid();
                             break;
                         case "btnAproba":
                             btnAproba_Click(null, null);
+                            IncarcaGrid();
                             break;
                         case "colHide":
                             grDate.Columns[arr[1]].Visible = false;

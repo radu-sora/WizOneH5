@@ -440,7 +440,7 @@
             this.xrTableCell16});
             this.xrTableRow6.Dpi = 254F;
             this.xrTableRow6.Name = "xrTableRow6";
-            this.xrTableRow6.Weight = 1.2392512870081585D;
+            this.xrTableRow6.Weight = 1.6978628839241585D;
             // 
             // xrTableCell31
             // 
@@ -455,7 +455,8 @@
             this.xrTableCell31.StylePriority.UseFont = false;
             this.xrTableCell31.StylePriority.UsePadding = false;
             this.xrTableCell31.StylePriority.UseTextAlignment = false;
-            this.xrTableCell31.Text = "Ore lucrate:\r\nZile concediu odihna:\r\nOre suplimentare:";
+            this.xrTableCell31.Text = "Ore lucrate:\r\nZile concediu odihna:\r\nOre suplimentare:\r\nZile supraveghere copil:\r" +
+    "\nZile motivate neplatite:";
             this.xrTableCell31.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             this.xrTableCell31.Weight = 0.31525178726950859D;
             // 
@@ -472,7 +473,7 @@
             this.xrTableCell15.StylePriority.UseFont = false;
             this.xrTableCell15.StylePriority.UsePadding = false;
             this.xrTableCell15.StylePriority.UseTextAlignment = false;
-            this.xrTableCell15.Text = "[Camp5]\r\n[Camp6]\r\n[Camp7]";
+            this.xrTableCell15.Text = "[Camp5]\r\n[Camp6]\r\n[Camp7]\r\n[Camp53]\r\n[Camp54]";
             this.xrTableCell15.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
             this.xrTableCell15.Weight = 0.15074893529374828D;
             // 
@@ -515,7 +516,7 @@
             this.xrTableCell20});
             this.xrTableRow7.Dpi = 254F;
             this.xrTableRow7.Name = "xrTableRow7";
-            this.xrTableRow7.Weight = 0.39430723759085357D;
+            this.xrTableRow7.Weight = 0.39430772480224652D;
             // 
             // xrTableCell19
             // 
@@ -543,7 +544,7 @@
             this.xrTableCell22});
             this.xrTableRow8.Dpi = 254F;
             this.xrTableRow8.Name = "xrTableRow8";
-            this.xrTableRow8.Weight = 1.239251222514298D;
+            this.xrTableRow8.Weight = 1.2392496912784914D;
             // 
             // xrTableCell32
             // 
@@ -618,7 +619,7 @@
             this.xrTableCell24});
             this.xrTableRow9.Dpi = 254F;
             this.xrTableRow9.Name = "xrTableRow9";
-            this.xrTableRow9.Weight = 0.50696642833373073D;
+            this.xrTableRow9.Weight = 0.4345558182931174D;
             // 
             // xrTableCell23
             // 
@@ -656,7 +657,7 @@
             this.xrTableCell26});
             this.xrTableRow10.Dpi = 254F;
             this.xrTableRow10.Name = "xrTableRow10";
-            this.xrTableRow10.Weight = 4.4787552092737259D;
+            this.xrTableRow10.Weight = 4.1891026072736484D;
             // 
             // xrTableCell33
             // 
@@ -688,9 +689,8 @@
             this.xrTableCell25.StylePriority.UseFont = false;
             this.xrTableCell25.StylePriority.UsePadding = false;
             this.xrTableCell25.StylePriority.UseTextAlignment = false;
-            this.xrTableCell25.Text = "[Camp16]\r\n[Camp17]\r\n[Camp53]\r\n[Camp54]\r\n[Camp18]\r\n[Camp19]\r\n[Camp20]\r\n[Camp21]\r\n[" +
-    "Camp75]\r\n[Camp22]\r\n[Camp23]\r\n[Camp24]\r\n[Camp25]\r\n[Camp26]\r\n[Camp27]\r\n[Camp28]\r\n[" +
-    "Camp52]";
+            this.xrTableCell25.Text = "[Camp16]\r\n[Camp17]\r\n[Camp18]\r\n[Camp19]\r\n[Camp20]\r\n[Camp21]\r\n[Camp75]\r\n[Camp22]\r\n[" +
+    "Camp23]\r\n[Camp24]\r\n[Camp25]\r\n[Camp26]\r\n[Camp27]\r\n[Camp28]\r\n[Camp52]";
             this.xrTableCell25.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
             this.xrTableCell25.Weight = 0.15074897805573462D;
             // 
@@ -737,7 +737,7 @@
             this.xrTableCell28});
             this.xrTableRow11.Dpi = 254F;
             this.xrTableRow11.Name = "xrTableRow11";
-            this.xrTableRow11.Weight = 0.598683551958649D;
+            this.xrTableRow11.Weight = 0.50213621110775286D;
             // 
             // xrTableCell34
             // 

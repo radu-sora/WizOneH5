@@ -168,10 +168,16 @@ namespace WizOne.Personal
 
                 if (!e.NewValues.Contains("NumeNivel1"))
                     e.NewValues.Add("NumeNivel1", General.Nz(hfSiruta["NumeNivel1"], ""));
+                else
+                    e.NewValues["NumeNivel1"] = General.Nz(hfSiruta["NumeNivel1"], "");
                 if (!e.NewValues.Contains("NumeNivel2"))
                     e.NewValues.Add("NumeNivel2", General.Nz(hfSiruta["NumeNivel2"], ""));
+                else
+                    e.NewValues["NumeNivel2"] = General.Nz(hfSiruta["NumeNivel2"], "");
                 if (!e.NewValues.Contains("NumeNivel3"))
                     e.NewValues.Add("NumeNivel3", General.Nz(hfSiruta["NumeNivel3"], ""));
+                else
+                    e.NewValues["NumeNivel3"] = General.Nz(hfSiruta["NumeNivel3"], "");
 
                 if (Convert.ToInt32(e.NewValues["IdTipAdresa"].ToString()) == 1)
                     e.NewValues["Principal"] = 1;
@@ -338,10 +344,16 @@ namespace WizOne.Personal
 
                 if (!e.NewValues.Contains("NumeNivel1"))
                     e.NewValues.Add("NumeNivel1", General.Nz(hfSiruta["NumeNivel1"], ""));
+                else
+                    e.NewValues["NumeNivel1"] = General.Nz(hfSiruta["NumeNivel1"], "");
                 if (!e.NewValues.Contains("NumeNivel2"))
                     e.NewValues.Add("NumeNivel2", General.Nz(hfSiruta["NumeNivel2"], ""));
+                else
+                    e.NewValues["NumeNivel2"] = General.Nz(hfSiruta["NumeNivel2"], "");
                 if (!e.NewValues.Contains("NumeNivel3"))
                     e.NewValues.Add("NumeNivel3", General.Nz(hfSiruta["NumeNivel3"], ""));
+                else
+                    e.NewValues["NumeNivel3"] = General.Nz(hfSiruta["NumeNivel3"], "");
 
                 if (Convert.ToInt32(e.NewValues["IdTipAdresa"].ToString()) == 1)
                     e.NewValues["Principal"] = 1;

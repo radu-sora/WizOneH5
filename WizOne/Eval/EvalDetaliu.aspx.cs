@@ -2270,6 +2270,15 @@ namespace WizOne.Eval
                     if (4.51m <= nota && nota <= 5) desc = "Excelent";
                 }
 
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Temad)
+                {
+                    if (1 <= nota && nota <= 1.99m) desc = "NESATISFACATOR";
+                    if (2 <= nota && nota <= 2.50m) desc = "SATISFACATOR";
+                    if (2.51m <= nota && nota <= 3.50m) desc = "BINE";
+                    if (3.51m <= nota && nota <= 4.50m) desc = "FOARTE BINE";
+                    if (4.51m <= nota && nota <= 5) desc = "REMARCABIL";
+                }
+
                 lbl.Text = nota.ToString("0.##") + "  " + desc;
             }
             catch (Exception ex)
@@ -2697,7 +2706,8 @@ namespace WizOne.Eval
                                 GridViewDataMemoColumn colObiectiv = new GridViewDataMemoColumn();
                                 colObiectiv.FieldName = "Obiectiv";
                                 colObiectiv.PropertiesMemoEdit.Rows = 5;
-                                colObiectiv.PropertiesMemoEdit.Height = Unit.Percentage(100);
+                                //Florin #852 2021.03.16 - comentat, nu se afiseaza corect in Chrome (apare o linie ingusta)
+                                //colObiectiv.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                 colObiectiv.Name = "Obiectiv";
                                 colObiectiv.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Obiectiv");
                                 colObiectiv.Width = clsConfigDetail.Width;
@@ -2816,7 +2826,8 @@ namespace WizOne.Eval
                                 GridViewDataMemoColumn colActivitate = new GridViewDataMemoColumn();
                                 colActivitate.FieldName = "Activitate";
                                 colActivitate.PropertiesMemoEdit.Rows = 5;
-                                colActivitate.PropertiesMemoEdit.Height = Unit.Percentage(100);
+                                //Florin #852 2021.03.16 - comentat, nu se afiseaza corect in Chrome (apare o linie ingusta)
+                                //colActivitate.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                 colActivitate.Name = "Activitate";
                                 colActivitate.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Activitate");
                                 colActivitate.Width = clsConfigDetail.Width;
@@ -2921,7 +2932,8 @@ namespace WizOne.Eval
                                     col.Name = clsConfigDetail.ColumnName;
                                     col.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                     col.PropertiesMemoEdit.Rows = 5;
-                                    col.PropertiesMemoEdit.Height = Unit.Percentage(100);
+                                    //Florin #852 2021.03.16 - comentat, nu se afiseaza corect in Chrome (apare o linie ingusta)
+                                    //col.PropertiesMemoEdit.Height = Unit.Percentage(100);
                                     col.Width = clsConfigDetail.Width;
                                     if (idCateg == "0")
                                     {
@@ -5466,6 +5478,37 @@ namespace WizOne.Eval
         {
             try
             {
+                //General.IncarcaDT(
+                //    $@"
+                //    BEGIN
+
+                //    UPDATE ""Eval_RaspunsLinii"" 
+                //    SET 
+                //    ""Super{poz + 1}""=""Super{poz}"", 
+                //    ""Super{poz + 1}_1""=""Super{poz}_1"", 
+                //    ""Super{poz + 1}_2""=""Super{poz}_2"", 
+                //    ""Super{poz + 1}_3""=""Super{poz}_3"", 
+                //    ""Super{poz + 1}_4""=""Super{poz}_4""   
+                //    WHERE ""IdQuiz""=@1 AND F10003=@2 AND (""Super{poz + 1}"" is null OR RTRIM(LTRIM(""Super{poz + 1}""))='') AND ""Super{poz}"" is not null;
+
+                //    UPDATE B
+                //    SET  B.""IdPeriod"" = A.""IdPeriod"", B.""Pondere"" = A.""Pondere"", B.""IdCalificativ"" = A.""IdCalificativ"", B.""Calificativ"" = A.""Calificativ"", 
+                //    B.""ExplicatiiCalificativ"" = A.""ExplicatiiCalificativ"", B.""Explicatii"" = A.""Explicatii"", B.""Id"" = A.""Id"", TIME = {General.CurrentDate()}, USER_NO = {Session["UserId"]}
+                //    FROM ""Eval_CompetenteAngajatTemp"" B
+                //    LEFT JOIN ""Eval_CompetenteAngajatTemp"" A ON A.""IdUnic"" = B.""IdUnic"" AND A.""Pozitie"" = {poz}
+                //    WHERE B.""IdQuiz"" = @1 AND B.F10003 = @2 AND B.""Pozitie"" = {poz + 1};
+
+                //    UPDATE B
+                //    SET B.""IdPeriod"" = A.""IdPeriod"", B.""Pondere""=A.""Pondere"", B.""Descriere""=A.""Descriere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"",
+                //    B.""IdCalificativ""=A.""IdCalificativ"", B.""Calificativ""=A.""Calificativ"", B.""ExplicatiiCalificativ""=A.""ExplicatiiCalificativ"", 
+                //    B.""ColoanaSuplimentara1""=A.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2""=A.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3""=A.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4""=A.""ColoanaSuplimentara4"", B.""Id""=A.""Id"", TIME = {General.CurrentDate()}, USER_NO = {Session["UserId"]}
+                //    FROM ""Eval_ObiIndividualeTemp"" B
+                //    LEFT JOIN ""Eval_ObiIndividualeTemp"" A ON A.""IdUnic"" = B.""IdUnic"" AND A.""Pozitie"" = {poz}
+                //    WHERE B.""IdQuiz"" = @1 AND B.F10003 = @2 AND B.""Pozitie"" = {poz + 1};
+
+                //    END;", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+
+                //Radu 10.03.2021 - trebuie sa se preia si obiectivele/competentele introduse manual
                 General.IncarcaDT(
                     $@"
                     BEGIN
@@ -5479,20 +5522,21 @@ namespace WizOne.Eval
                     ""Super{poz + 1}_4""=""Super{poz}_4""   
                     WHERE ""IdQuiz""=@1 AND F10003=@2 AND (""Super{poz + 1}"" is null OR RTRIM(LTRIM(""Super{poz + 1}""))='') AND ""Super{poz}"" is not null;
 
-                    UPDATE B
-                    SET  B.""IdPeriod"" = A.""IdPeriod"", B.""Pondere"" = A.""Pondere"", B.""IdCalificativ"" = A.""IdCalificativ"", B.""Calificativ"" = A.""Calificativ"", 
-                    B.""ExplicatiiCalificativ"" = A.""ExplicatiiCalificativ"", B.""Explicatii"" = A.""Explicatii"", B.""Id"" = A.""Id"", TIME = {General.CurrentDate()}, USER_NO = {Session["UserId"]}
-                    FROM ""Eval_CompetenteAngajatTemp"" B
-                    LEFT JOIN ""Eval_CompetenteAngajatTemp"" A ON A.""IdUnic"" = B.""IdUnic"" AND A.""Pozitie"" = {poz}
-                    WHERE B.""IdQuiz"" = @1 AND B.F10003 = @2 AND B.""Pozitie"" = {poz + 1};
+                    DELETE FROM Eval_CompetenteAngajatTemp WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {poz + 1};
 
-                    UPDATE B
-                    SET B.""IdPeriod"" = A.""IdPeriod"", B.""Pondere""=A.""Pondere"", B.""Descriere""=A.""Descriere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"",
-                    B.""IdCalificativ""=A.""IdCalificativ"", B.""Calificativ""=A.""Calificativ"", B.""ExplicatiiCalificativ""=A.""ExplicatiiCalificativ"", 
-                    B.""ColoanaSuplimentara1""=A.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2""=A.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3""=A.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4""=A.""ColoanaSuplimentara4"", B.""Id""=A.""Id"", TIME = {General.CurrentDate()}, USER_NO = {Session["UserId"]}
-                    FROM ""Eval_ObiIndividualeTemp"" B
-                    LEFT JOIN ""Eval_ObiIndividualeTemp"" A ON A.""IdUnic"" = B.""IdUnic"" AND A.""Pozitie"" = {poz}
-                    WHERE B.""IdQuiz"" = @1 AND B.F10003 = @2 AND B.""Pozitie"" = {poz + 1};
+                    INSERT INTO Eval_CompetenteAngajatTemp (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""Pondere"", ""IdCalificativ"", ""Calificativ"" , 
+                    ""ExplicatiiCalificativ"" , ""Explicatii"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                    SELECT ""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""Pondere"", ""IdCalificativ"", ""Calificativ"" , 
+                    ""ExplicatiiCalificativ"" , ""Explicatii"", ""IdQuiz"", F10003, {poz + 1}, ""IdLinieQuiz"", ""IdUnic"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {poz};
+                
+                    DELETE FROM Eval_ObiIndividualeTemp  WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {poz + 1};   
+
+                    INSERT INTO Eval_ObiIndividualeTemp (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", 
+                    ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"",
+                    ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", ""IdCategObiective"", USER_NO, TIME)
+                    SELECT ""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", 
+                    ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"",
+                    ""IdQuiz"", F10003, {poz + 1}, ""IdLinieQuiz"", ""IdUnic"", ""IdCategObiective"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {poz}; 
 
                     END;", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
             }
@@ -5614,6 +5658,41 @@ namespace WizOne.Eval
                 grDate.Width = Unit.Percentage(100);
                 grDate.ID = "grDate_DinView_Others";
                 grDate.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return grDate;
+        }
+
+        private ASPxGridView CreazaTabelSimplu(int id, string numeView)
+        {
+            ASPxGridView grDate = new ASPxGridView();
+
+            try
+            {
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""{numeView}"" WHERE F10003 = @1 AND ""IdQuiz"" = @2", new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"] });
+
+                grDate.AutoGenerateColumns = true;
+                grDate.DataSource = dt;
+                grDate.Width = Unit.Percentage(100);
+                grDate.ID = "grDate_DinView_" + id;
+                grDate.DataBind();
+
+                if (grDate.Columns["IdQuiz"] != null)
+                {
+                    grDate.Columns["IdQuiz"].Visible = false;
+                    grDate.Columns["IdQuiz"].ShowInCustomizationForm = false;
+
+                }
+                if (grDate.Columns["F10003"] != null)
+                {
+                    grDate.Columns["F10003"].Visible = false;
+                    grDate.Columns["F10003"].ShowInCustomizationForm = false;
+                }
             }
             catch (Exception ex)
             {
@@ -5780,17 +5859,20 @@ namespace WizOne.Eval
                             switch (tipData)
                             {
                                 case 69:
-                                    //#803 Florin
-                                    //val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
-                                    //        $@"SELECT SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
-                                    //        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
-                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
-                                        $@"SELECT ROUND(SUM(Total)/2,1) FROM (
-                                        (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
-                                        UNION
-                                        (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
-                                        ) X",
-                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    //Florin 2021.03.11 - daca chestionarul este din 2020 se iau in calcul doar competentele, daca este din 2021 se adauga si obiectivele
+                                    if (idPerioada == 1)
+                                        //#803 Florin
+                                        val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                                $@"SELECT SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                                new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    else
+                                        val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                            $@"SELECT ROUND(SUM(Total)/2,1) FROM (
+                                            (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                            UNION
+                                            (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                            ) X",
+                                            new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
                                     break;
                                 case 71:
                                     val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
@@ -5803,6 +5885,32 @@ namespace WizOne.Eval
                                         new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
                                     break;
 
+                            }
+                        }
+                        break;
+                    case (int)Module.IdClienti.Clienti.Temad:
+                        {
+                            switch (tipData)
+                            {
+                                case 69:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT ROUND(SUM(Total),2) FROM (
+                                        (SELECT 0.7 * (CASE WHEN (select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2), COALESCE(Total1,0)) ) END) AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                        UNION
+                                        (SELECT 0.3 * (CASE WHEN (select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),COALESCE(IdCalificativ,0) ) )/(select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) END) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                        ) X",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
+                                case 71:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT CASE WHEN (select COUNT(*) from Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(Total1,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2), COALESCE(Total1,0)) ) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
+                                case 72:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT CASE WHEN (select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2), COALESCE(IdCalificativ,0) ) )/(select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) END AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
                             }
                         }
                         break;
@@ -5837,40 +5945,6 @@ namespace WizOne.Eval
             }
         }
 
-        private ASPxGridView CreazaTabelSimplu(int id, string numeView)
-        {
-            ASPxGridView grDate = new ASPxGridView();
-
-            try
-            {
-                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""{numeView}"" WHERE F10003 = @1 AND ""IdQuiz"" = @2", new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"] });
-
-                grDate.AutoGenerateColumns = true;
-                grDate.DataSource = dt;
-                grDate.Width = Unit.Percentage(100);
-                grDate.ID = "grDate_DinView_" + id;
-                grDate.DataBind();
-
-                if (grDate.Columns["IdQuiz"] != null)
-                {
-                    grDate.Columns["IdQuiz"].Visible = false;
-                    grDate.Columns["IdQuiz"].ShowInCustomizationForm = false;
-
-                }
-                if (grDate.Columns["F10003"] != null)
-                {
-                    grDate.Columns["F10003"].Visible = false;
-                    grDate.Columns["F10003"].ShowInCustomizationForm = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return grDate;
-        }
 
     }
 }

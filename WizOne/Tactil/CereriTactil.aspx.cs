@@ -1263,34 +1263,22 @@ namespace WizOne.Tactil
 
                 #region Construim istoricul
 
+                //Florin 2021.03.17 - citire idCerere din secventa
+                int idCerere = Dami.NextId("Ptj_Cereri");
+
                 string sqlIst;
                 int trimiteLaInlocuitor;
-                General.SelectCereriIstoric(Convert.ToInt32(General.VarSession("User_Marca")), -1, Convert.ToInt32(drAbs["IdCircuit"]), Convert.ToInt32(General.Nz(drAbs["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor, -99, txtDataInc.Date);
-
+                General.SelectCereriIstoric(Convert.ToInt32(General.VarSession("User_Marca")), -1, Convert.ToInt32(drAbs["IdCircuit"]), Convert.ToInt32(General.Nz(drAbs["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor, idCerere, txtDataInc.Date);
 
                 #endregion
 
-
-                //string sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
-                //                OUTPUT Inserted.Id, Inserted.IdStare ";
-
-                //string sqlCer = CreazaSelectCuValori();
-
-                //string strGen = "BEGIN TRAN " +
-                //                sqlIst + "; " +
-                //                sqlPre +
-                //                sqlCer + (Constante.tipBD == 1 ? "" : " FROM DUAL") + "; " +
-                //                "COMMIT TRAN";
-
-
-                string sqlCer = "";
+                //Florin 2019.10.17 - am mutat sqlCer in afara if-ului pt ca trebuie in modulul de notificari indiferent daca este sql sau oracle
+                string sqlCer = CreazaSelectCuValori(1, idCerere);
                 string sqlPre = "";
                 string strGen = "";
 
                 if (Constante.tipBD == 1)
                 {
-                    sqlCer = CreazaSelectCuValori();
-
                     sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"",  ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
                                 OUTPUT Inserted.Id, Inserted.IdStare ";
 
@@ -1302,13 +1290,13 @@ namespace WizOne.Tactil
                 }
                 else
                 {
-                    sqlCer = CreazaSelectCuValori(2);
+                    string sqlCerOrcl = CreazaSelectCuValori(2);
                     sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") ";
 
                     strGen = "BEGIN " +
                                 sqlIst + "; " + Environment.NewLine +
                                 sqlPre +
-                                sqlCer + " RETURNING \"Id\", \"IdStare\" INTO @out_1, @out_2; " +
+                                sqlCerOrcl + " RETURNING \"Id\", \"IdStare\" INTO @out_1, @out_2; " +
                                 @"
                                 EXCEPTION
                                     WHEN DUP_VAL_ON_INDEX THEN
@@ -1798,7 +1786,7 @@ namespace WizOne.Tactil
             return str;
         }
 
-        private string CreazaSelectCuValori(int tip = 1)
+        private string CreazaSelectCuValori(int tip = 1, int idCerere = -99)
         {
             //tip = 1 intoarce un select
             //tip = 2 intoarce ca values; necesar pt Oracle
@@ -1899,7 +1887,7 @@ namespace WizOne.Tactil
                 if (Constante.tipBD == 1) strTop = "TOP 1";
 
                 //Radu 01.02.2021 - citire idCerere din secventa
-                int idCerere = Dami.NextId("Ptj_Cereri");
+                //int idCerere = Dami.NextId("Ptj_Cereri");
                 string sqlIdCerere = idCerere.ToString();
                 if (idCerere == -99) sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"")";
 

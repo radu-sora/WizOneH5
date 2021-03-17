@@ -357,6 +357,8 @@ namespace WizOne.Pontaj
             {
                 RetineFiltru("1");
 
+                grDate.Selection.UnselectAll();
+
                 string struc = "";
 
                 string req = Convert.ToDateTime(txtAnLuna.Value).Month + ";" + Convert.ToDateTime(txtAnLuna.Value).Year + ";";

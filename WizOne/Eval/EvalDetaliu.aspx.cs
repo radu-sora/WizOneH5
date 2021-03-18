@@ -3284,9 +3284,12 @@ namespace WizOne.Eval
                                 clsNew.Realizat = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
                                 break;
                             case "IdCalificativ":
+                                //Florin 2021.03.18
                                 clsNew.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.Count > 0 && colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ) != null)
                                     clsNew.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ).Text;
+                                else
+                                    clsNew.Calificativ = null;
                                 break;
                             case "Calificativ":
                                 clsNew.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
@@ -3395,9 +3398,12 @@ namespace WizOne.Eval
                                 clsUpd.Realizat = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
                                 break;
                             case "IdCalificativ":
+                                //Florin 2021.03.18
                                 clsUpd.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.Count > 0 && colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ) != null)
                                     clsUpd.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ).Text;
+                                else
+                                    clsUpd.Calificativ = null;
                                 break;
                             case "Calificativ":
                                 clsUpd.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
@@ -3683,9 +3689,12 @@ namespace WizOne.Eval
                                 clsNew.Pondere = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToDecimal(ins.NewValues[de.Key.ToString()]);
                                 break;
                             case "IdCalificativ":
+                                //Florin 2021.03.18
                                 clsNew.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ) != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.Count > 0 && colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ) != null)
                                     clsNew.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ).Text;
+                                else
+                                    clsNew.Calificativ = null;
                                 break;
                             case "Calificativ":
                                 clsNew.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
@@ -3744,9 +3753,12 @@ namespace WizOne.Eval
                                 clsUpd.Pondere = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToDecimal(ins.NewValues[de.Key.ToString()]);
                                 break;
                             case "IdCalificativ":
+                                //Florin 2021.03.18
                                 clsUpd.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ) != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.Count > 0 && colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ) != null)
                                     clsUpd.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ).Text;
+                                else
+                                    clsUpd.Calificativ = null;
                                 break;
                             case "Calificativ":
                                 clsUpd.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");

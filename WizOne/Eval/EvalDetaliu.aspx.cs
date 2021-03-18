@@ -2708,7 +2708,7 @@ namespace WizOne.Eval
                                 colObiectiv.FieldName = "Obiectiv";
                                 colObiectiv.PropertiesMemoEdit.Rows = 5;
                                 //Florin #852 2021.03.16 - comentat, nu se afiseaza corect in Chrome (apare o linie ingusta)
-                                //colObiectiv.PropertiesMemoEdit.Height = Unit.Percentage(100);
+                                colObiectiv.PropertiesMemoEdit.Height = Unit.Pixel(80);
                                 colObiectiv.Name = "Obiectiv";
                                 colObiectiv.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Obiectiv");
                                 colObiectiv.Width = clsConfigDetail.Width;
@@ -2820,7 +2820,7 @@ namespace WizOne.Eval
                                 colActivitate.FieldName = "Activitate";
                                 colActivitate.PropertiesMemoEdit.Rows = 5;
                                 //Florin #852 2021.03.16 - comentat, nu se afiseaza corect in Chrome (apare o linie ingusta)
-                                //colActivitate.PropertiesMemoEdit.Height = Unit.Percentage(100);
+                                colActivitate.PropertiesMemoEdit.Height = Unit.Pixel(80);
                                 colActivitate.Name = "Activitate";
                                 colActivitate.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant("Activitate");
                                 colActivitate.Width = clsConfigDetail.Width;
@@ -2913,7 +2913,7 @@ namespace WizOne.Eval
                                 colString.Caption = clsConfigDetail.Alias ?? Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colString.PropertiesMemoEdit.Rows = 5;
                                 //Florin #852 2021.03.16 - comentat, nu se afiseaza corect in Chrome (apare o linie ingusta)
-                                //colString.PropertiesMemoEdit.Height = Unit.Percentage(100);
+                                colString.PropertiesMemoEdit.Height = Unit.Pixel(80);
                                 colString.Width = clsConfigDetail.Width;
                                 if (idCateg == "0")
                                     colString.ReadOnly = !clsConfigDetail.Editare;
@@ -3187,9 +3187,12 @@ namespace WizOne.Eval
                                 clsNew.Realizat = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
                                 break;
                             case "IdCalificativ":
+                                //Florin 2021.03.18
                                 clsNew.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.Count > 0 && colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ) != null)
                                     clsNew.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ).Text;
+                                else
+                                    clsNew.Calificativ = null;
                                 break;
                             case "Calificativ":
                                 clsNew.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
@@ -3295,9 +3298,12 @@ namespace WizOne.Eval
                                 clsUpd.Realizat = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
                                 break;
                             case "IdCalificativ":
+                                //Florin 2021.03.18
                                 clsUpd.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.Count > 0 && colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ) != null)
                                     clsUpd.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ).Text;
+                                else
+                                    clsUpd.Calificativ = null;
                                 break;
                             case "Calificativ":
                                 clsUpd.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
@@ -3661,9 +3667,12 @@ namespace WizOne.Eval
                                 clsNew.Pondere = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToDecimal(ins.NewValues[de.Key.ToString()]);
                                 break;
                             case "IdCalificativ":
+                                //Florin 2021.03.18
                                 clsNew.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ) != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.Count > 0 && colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ) != null)
                                     clsNew.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ).Text;
+                                else
+                                    clsNew.Calificativ = null;
                                 break;
                             case "Calificativ":
                                 clsNew.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
@@ -3722,9 +3731,12 @@ namespace WizOne.Eval
                                 clsUpd.Pondere = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToDecimal(ins.NewValues[de.Key.ToString()]);
                                 break;
                             case "IdCalificativ":
+                                //Florin 2021.03.18
                                 clsUpd.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ) != null)
+                                if (colCalificativ != null && colCalificativ.PropertiesComboBox.Items.Count > 0 && colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ) != null)
                                     clsUpd.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ).Text;
+                                else
+                                    clsUpd.Calificativ = null;
                                 break;
                             case "Calificativ":
                                 clsUpd.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");

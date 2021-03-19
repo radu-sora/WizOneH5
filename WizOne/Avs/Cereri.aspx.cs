@@ -2735,9 +2735,9 @@ namespace WizOne.Avs
                 dt.TableName = "F1001";
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
                 ds.Tables.Add(dt);
-            }
+            }            
 
-            DataTable dtZL = General.IncarcaDT("SELECT * FROM F069 WHERE F06904 = (SELECT F01011 FROM F010) AND F06905 = (SELECT F01012 FROM F010)", null);
+            DataTable dtZL = General.IncarcaDT("SELECT * FROM F069 WHERE F06904 = " + Convert.ToDateTime(txtDataMod.Value).Year + " AND F06905 = " + Convert.ToDateTime(txtDataMod.Value).Month, null);
             DataTable dtTarife = General.IncarcaDT("SELECT * FROM F011", null);
             int poz = 0, valoare = 0;
             int zile_lucratoare_luna = Convert.ToInt32(dtZL.Rows[0]["F06907"].ToString());
@@ -5215,24 +5215,27 @@ namespace WizOne.Avs
                         string sql112 = $@"INSERT INTO F112 (F11201, F11202, F11203, F11204, F11205, F11206, F11207, F11208, F11209, F11210, F11211, F11212, F11213, F11214, YEAR, MONTH, USER_NO, TIME)
                                VALUES (112, '{General.Nz(dtF100.Rows[0]["F10017"], "")}', {f10003}, '{dtCer.Rows[0]["NumeAngajator"].ToString()}','{dtCer.Rows[0]["CUIAngajator"].ToString()}',{dtCer.Rows[0]["IdNationalitAng"].ToString()},
                                 {data14}, {data15}, {data16}, {(dtCer.Rows[0]["DetBifa1"] == DBNull.Value? "0" : dtCer.Rows[0]["DetBifa1"].ToString())}, {(dtCer.Rows[0]["DetBifa2"] == DBNull.Value ? "0" : dtCer.Rows[0]["DetBifa2"].ToString())}, 
-                                {(dtCer.Rows[0]["DetBifa4"] == DBNull.Value ? "0" : dtCer.Rows[0]["DetBifa4"].ToString())}, {(dtCer.Rows[0]["DetBifa3"] == DBNull.Value ? "0" : dtCer.Rows[0]["DetBifa3"].ToString())},
+                                {(dtCer.Rows[0]["DetBifa3"] == DBNull.Value ? "0" : dtCer.Rows[0]["DetBifa3"].ToString())}, {(dtCer.Rows[0]["DetBifa4"] == DBNull.Value ? "0" : dtCer.Rows[0]["DetBifa4"].ToString())},
                                 {(dtCer.Rows[0]["DetBifa5"] == DBNull.Value ? "0" : dtCer.Rows[0]["DetBifa5"].ToString())}, {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";
                         General.IncarcaDT(sql112, null);
                         ActualizareDet(f10003, ref sql100, ref sql1001);
                         if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                         {
                             sql100 = string.Format(sql100, ", F100920 = " + dtCer.Rows[0]["IdNationalitAng"].ToString() + ", F100918 = '" + dtCer.Rows[0]["NumeAngajator"].ToString() + "', "
-                                + " F100919 = '" + dtCer.Rows[0]["CUIAngajator"].ToString() + "'" );
-                          
-                            sql1001 = "UPDATE F1001 SET F1001125 = " + (dtCer.Rows[0]["DetBifa1"] == DBNull.Value ? "NULL" : dtCer.Rows[0]["DetBifa1"].ToString()) 
+                                + " F100919 = '" + dtCer.Rows[0]["CUIAngajator"].ToString() + "'");
+
+                            sql1001 = "UPDATE F1001 SET F1001125 = " + (dtCer.Rows[0]["DetBifa1"] == DBNull.Value ? "NULL" : dtCer.Rows[0]["DetBifa1"].ToString())
                                 + ", F1001126 = " + (dtCer.Rows[0]["DetBifa2"] == DBNull.Value ? "NULL" : dtCer.Rows[0]["DetBifa2"].ToString())
                                 + ", F1001127 = " + (dtCer.Rows[0]["DetBifa3"] == DBNull.Value ? "NULL" : dtCer.Rows[0]["DetBifa3"].ToString())
                                 + ", F1001128 = " + (dtCer.Rows[0]["DetBifa4"] == DBNull.Value ? "NULL" : dtCer.Rows[0]["DetBifa4"].ToString())
                                 + ", F1001129 = " + (dtCer.Rows[0]["DetBifa5"] == DBNull.Value ? "NULL" : dtCer.Rows[0]["DetBifa5"].ToString()) + " WHERE F10003 = " + f10003.ToString();
-                            
+
                         }
                         else
-                            sql100 = string.Format(sql100, "");
+                        {
+                            sql100 = "";
+                            sql1001 = "";
+                        }
 
                         break;
                     case (int)Constante.Atribute.RevenireDetasare:                       
@@ -5246,7 +5249,10 @@ namespace WizOne.Avs
                             sql1001 = "UPDATE F1001 SET F1001125 = 0, F1001126 = 0, F1001127 = 0, F1001128 = 0, F1001129 = 0 WHERE F10003 = " + f10003.ToString();
                         }
                         else
-                            sql100 = string.Format(sql100, "");
+                        {
+                            sql100 = "";
+                            sql1001 = "";
+                        }
                         break;
                     case (int)Constante.Atribute.ProgramLucru:
                         DateTime tmpDtModif2 = Convert.ToDateTime(dtCer.Rows[0]["DataModif"]);

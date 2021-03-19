@@ -3703,7 +3703,7 @@ namespace WizOne.Avs
                     camp2 = cmb1Nou.Value.ToString() + ", '" + txt1Nou.Text + "', '" + txt2Nou.Text + "', " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + de1Nou.Text + "', 103)" : "TO_DATE('" + de1Nou.Text + "', 'dd/mm/yyyy')") +
                         ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 103)" : "TO_DATE('" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 'dd/mm/yyyy')") +
                         ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + (de3Nou.Text.Length <= 0 ? "01/01/2100" : de3Nou.Text) + "', 103)" : "TO_DATE('" + (de3Nou.Text.Length <= 0 ? "01/01/2100" : de3Nou.Text) + "', 'dd/mm/yyyy')") +
-                        ", " + (chk1.Checked ? "1" : "0") + ", " + (chk2.Checked ? "1" : "0") + ", " + (chk4.Checked ? "1" : "0") + ", " + (chk3.Checked ? "1" : "0") + ", " + (chk5.Checked ? "1" : "0");
+                        ", " + (chk1.Checked ? "1" : "0") + ", " + (chk2.Checked ? "1" : "0") + ", " + (chk3.Checked ? "1" : "0") + ", " + (chk4.Checked ? "1" : "0") + ", " + (chk5.Checked ? "1" : "0");
                     break;
                 case (int)Constante.Atribute.RevenireDetasare:
                     camp1 = "\"IdNationalitAng\", \"NumeAngajator\", \"CUIAngajator\", \"DataInceputDet\", \"DataSfEstimDet\", \"DataIncetareDet\"";

@@ -1990,6 +1990,10 @@
     <Compile Include="Reports\AdeverintaMedic.Designer.cs">
       <DependentUpon>AdeverintaMedic.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reports\AdeverintaSanatate.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\AdeverintaSanatate.Designer.cs" />
     <Compile Include="Reports\EvaluareCristim.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2694,6 +2698,7 @@
     <EmbeddedResource Include="Reports\AdeverintaMedic.resx">
       <DependentUpon>AdeverintaMedic.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\AdeverintaSanatate.resx" />
     <EmbeddedResource Include="Reports\Evaluare.resx">
       <DependentUpon>Evaluare.cs</DependentUpon>
     </EmbeddedResource>

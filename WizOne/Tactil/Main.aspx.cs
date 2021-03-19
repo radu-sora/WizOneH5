@@ -220,7 +220,7 @@ namespace WizOne.Tactil
             try
             {
                 Session["TactilAdeverinte"] = "Sanatate";
-                Session["NrInregAdev"] = General.GetnrInreg();
+                //Session["NrInregAdev"] = General.GetnrInreg();
                 //if (Session["TactilPrintareAdeverinte"].ToString() == "0")
                 //{
                 //    Session["PrintDocument"] = "AdeverintaMedic";
@@ -241,29 +241,21 @@ namespace WizOne.Tactil
                         file.Write(fisier, 0, fisier.Length);
                     }
 
-                    ProcessStartInfo info = new ProcessStartInfo();
-                    info.Verb = "print";
-                    info.FileName = filePath;
-                    info.CreateNoWindow = true;
-                    info.WindowStyle = ProcessWindowStyle.Hidden;
+                    HttpContext.Current.Session["AdevSanatate_Cale"] = filePath;  
 
-                    Process p = new Process();
-                    p.StartInfo = info;
-                    p.Start();
+                    Reports.AdeverintaSanatate dlreport = new Reports.AdeverintaSanatate();
+                    dlreport.PaperKind = System.Drawing.Printing.PaperKind.A4;
+                    dlreport.Margins.Top = 10;
+                    dlreport.Margins.Bottom = 10;
+                    dlreport.Margins.Left = 50;
+                    dlreport.Margins.Right = 50;
+                    dlreport.PrintingSystem.ShowMarginsWarning = false;
+                    dlreport.ShowPrintMarginsWarning = false;
+                    dlreport.CreateDocument();
 
-                    p.WaitForInputIdle();
-                    System.Threading.Thread.Sleep(5000);
+                    ReportPrintTool pt = new ReportPrintTool(dlreport);
+                    pt.Print();
 
-                    try
-                    {
-                        if (false == p.CloseMainWindow())
-                            p.Kill();
-                    }
-                    catch (InvalidOperationException)
-                    {
-
-                    }
-                    System.Threading.Thread.Sleep(5000);
                     File.Delete(filePath);
                     MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess, "");
                 }

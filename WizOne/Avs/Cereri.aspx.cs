@@ -2886,6 +2886,15 @@ namespace WizOne.Avs
                     }
                 }
 
+                if (idAtr == (int)Constante.Atribute.Detasare)
+                {
+                    if (Convert.ToDateTime(de1Nou.Value).Date != Convert.ToDateTime(txtDataMod.Value).Date)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data modificarii trebuie sa fie egala cu Data inceput detasare!");
+                        return false;
+                    }
+                }
+
                 if (idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)
                 {
                     if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de3Nou.Value).Date && val == 1)
@@ -2896,11 +2905,11 @@ namespace WizOne.Avs
                     }
                 }
 
-                if (idAtr == (int)Constante.Atribute.RevenireSuspendare)
+                if (idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)
                 {
                     if (Convert.ToDateTime(de3Nou.Value).Date != Convert.ToDateTime(txtDataMod.Value).Date)
                     {
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data modificarii trebuie sa fie egala cu Data incetare suspendare!");
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data modificarii trebuie sa fie egala cu Data incetare " + (idAtr == (int)Constante.Atribute.RevenireSuspendare ? "suspendare" : "detasare") + "!");
                         return false;
                     }
                 }
@@ -4941,7 +4950,7 @@ namespace WizOne.Avs
                         ActualizareDet(f10003, ref sql100, ref sql1001);
                         if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                         {
-                            //sql100 = "UPDATE F100 SET F100915 = " + data14 + ", F100916 = " + data15 + ", F100917 = " + data16 + " WHERE F10003 = " + f10003.ToString();
+                            sql100 = "UPDATE F100 SET F100917 = " + data16 + " WHERE F10003 = " + f10003.ToString();
                             sql1001 = "UPDATE F1001 SET F1001125 = 0, F1001126 = 0, F1001127 = 0, F1001128 = 0, F1001129 = 0 WHERE F10003 = " + f10003.ToString();
                         }
                         else

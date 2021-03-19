@@ -224,8 +224,8 @@
             </dx:GridViewDataDateColumn>
 			<dx:GridViewDataCheckColumn FieldName="F11210" Name="F11210" Caption="Platit de angajator actual"  Width="100px"  HeaderStyle-Wrap="True" />
 			<dx:GridViewDataCheckColumn FieldName="F11211" Name="F11211" Caption="Detasat in Romania din state UE/NON UE"  Width="100px"  HeaderStyle-Wrap="True"  />
-			<dx:GridViewDataCheckColumn FieldName="F11212" Name="F11212" Caption="Formular A1"  Width="100px"   HeaderStyle-Wrap="True" />
-			<dx:GridViewDataCheckColumn FieldName="F11213" Name="F11213" Caption="Detasat din Romania in state UE/NON UE"  Width="100px"  HeaderStyle-Wrap="True" />
+			<dx:GridViewDataCheckColumn FieldName="F11212" Name="F11212" Caption="Detasat din Romania in state UE/NON UE"  Width="100px"   HeaderStyle-Wrap="True" />
+			<dx:GridViewDataCheckColumn FieldName="F11213" Name="F11213" Caption="Formular A1"  Width="100px"  HeaderStyle-Wrap="True" />
 			<dx:GridViewDataCheckColumn FieldName="F11214" Name="F11214" Caption="Acord de securitate sociala"  Width="100px"  HeaderStyle-Wrap="True"  />              
         </Columns>
         <SettingsCommandButton>

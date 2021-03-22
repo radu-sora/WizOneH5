@@ -101,4 +101,5 @@
                     </dx:PopupControlContentControl>
                 </ContentCollection>
         </dx:ASPxPopupControl>
+  <dx:ASPxHiddenField ID="hfDate" runat="server" ClientInstanceName="hfDate" ClientIDMode="Static"/>
 </asp:Content>	

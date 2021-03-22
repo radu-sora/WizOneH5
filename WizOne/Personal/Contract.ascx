@@ -62,10 +62,8 @@
                             title: "", text: "Data contract intern trebuie sa fie anterioara datei angajarii!",
                             type: "warning"
                         });
-                    }
-
-                    pnlLoading.Show();
-                    pnlCtlContract.PerformCallback(s.name + ";" + s.GetDate());
+                    }                   
+                   
                     
                     if (cmbDurCtr.GetValue() == 2) {
                         var dtAng = new Date(deDataAng.GetDate());
@@ -80,6 +78,8 @@
                         deDataModTipCtr.SetValue(DateAng);
                         deDataModDurCtr.SetValue(DateAng);
                     }
+                    pnlLoading.Show();
+                    pnlCtlContract.PerformCallback(s.name + ";" + s.GetDate());
 
                 }
                 break;
@@ -99,8 +99,8 @@
                     }
                     
                     if (s.name == "deLaData"
-                        && (dateDeLa.getFullYear() != 2100 || dateDeLa.getMonth() != 1 || dateDeLa.getDate() != 1)
-                        && (dateLa.getFullYear() != 2100 || dateLa.getMonth() != 1 || dateLa.getDate() != 1)) {
+                        && (dateDeLa.getFullYear() != 2100 || dateDeLa.getMonth() != 0 || dateDeLa.getDate() != 1)
+                        && (dateLa.getFullYear() != 2100 || dateLa.getMonth() != 0 || dateLa.getDate() != 1)) {
 
                         CalculLuniSiZile(dateDeLa, dateLa);
 
@@ -293,7 +293,7 @@
 
         var nrLuni = 0;
         var nrZile = 0;
-        if (dtSf != new Date(2100, 1, 1, 0, 0, 0, 0) && dtInc != new Date(2100, 1, 1, 0, 0, 0, 0))         
+        if (dtSf != new Date(2100, 0, 1, 0, 0, 0, 0) && dtInc != new Date(2100, 0, 1, 0, 0, 0, 0))         
             nrZile = dateDiffInDays(dtInc, dtSf) + 1;
 
         for (var nI = 0; nI < arNrZileInLuna.length && nrZile >= arNrZileInLuna[nI]; nI++)
@@ -505,7 +505,7 @@
             deDataValabInvalid.SetEnabled(true);
         else {
             deDataValabInvalid.SetEnabled(false);
-            var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
+            var dtTmp = new Date(2100, 0, 1, 0, 0, 0, 0)
             deDataValabInvalid.SetValue(dtTmp);
         }
         CompletareZile(cmbNivelFunctie);
@@ -521,7 +521,7 @@
     function Validare36Luni() {
         
         if (cmbDurCtr.GetValue() == 1) {
-            var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
+            var dtTmp = new Date(2100, 0, 1, 0, 0, 0, 0)
 
             deDeLaData.SetEnabled(false);
             deLaData.SetEnabled(false);

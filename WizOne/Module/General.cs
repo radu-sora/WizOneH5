@@ -2903,10 +2903,11 @@ namespace WizOne.Module
 
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("Denumire", typeof(string));
-                            
+
+                table.Rows.Add(1, "Valid");
                 table.Rows.Add(2, "Invalid grad I");
                 table.Rows.Add(3, "Invalid grad II");
-                table.Rows.Add(1, "Valid");
+               
 
                 return table;
             }

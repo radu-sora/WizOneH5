@@ -112,8 +112,10 @@ namespace WizOne.Personal
             ASPxComboBox cmbDurTimpMunca = Contract_DataList.Items[0].FindControl("cmbDurTimpMunca") as ASPxComboBox;
             ASPxComboBox cmbTipNorma = Contract_DataList.Items[0].FindControl("cmbTipNorma") as ASPxComboBox;
             ASPxComboBox cmbIntRepTimpMunca = Contract_DataList.Items[0].FindControl("cmbIntRepTimpMunca") as ASPxComboBox;
+            ASPxComboBox cmbGradInvalid = Contract_DataList.Items[0].FindControl("cmbGradInvalid") as ASPxComboBox;
             ASPxTextBox txtNrOre = Contract_DataList.Items[0].FindControl("txtNrOre") as ASPxTextBox;
             ASPxTextBox txtSalariu = Contract_DataList.Items[0].FindControl("txtSalariu") as ASPxTextBox;
+            ASPxDateEdit deDataValabInvalid = Contract_DataList.Items[0].FindControl("deDataValabInvalid") as ASPxDateEdit;
             if (!IsPostBack)
             {
                 //cmbTimpPartial.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
@@ -164,6 +166,9 @@ namespace WizOne.Personal
                 txtSalariu.Text = ds.Tables[0].Rows[0][salariu].ToString();
 
                 CalculCO();
+
+                if (cmbGradInvalid.Value == null || Convert.ToInt32(cmbGradInvalid.Value) == 1)
+                    deDataValabInvalid.ClientEnabled = false;
 
             }
             else

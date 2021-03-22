@@ -99,8 +99,8 @@
                     }
                     
                     if (s.name == "deLaData"
-                        && (dateDeLa.getFullYear() != 2100 || dateDeLa.getMonth() != 1 || dateDeLa.getDate() != 1)
-                        && (dateLa.getFullYear() != 2100 || dateLa.getMonth() != 1 || dateLa.getDate() != 1)) {
+                        && (dateDeLa.getFullYear() != 2100 || dateDeLa.getMonth() != 0 || dateDeLa.getDate() != 1)
+                        && (dateLa.getFullYear() != 2100 || dateLa.getMonth() != 0 || dateLa.getDate() != 1)) {
 
                         CalculLuniSiZile(dateDeLa, dateLa);
 
@@ -299,7 +299,7 @@
 
         var nrLuni = 0;
         var nrZile = 0;
-        if (dtSf != new Date(2100, 1, 1, 0, 0, 0, 0) && dtInc != new Date(2100, 1, 1, 0, 0, 0, 0))         
+        if (dtSf != new Date(2100, 0, 1, 0, 0, 0, 0) && dtInc != new Date(2100, 0, 1, 0, 0, 0, 0))         
             nrZile = dateDiffInDays(dtInc, dtSf) + 1;
 
         for (var nI = 0; nI < arNrZileInLuna.length && nrZile >= arNrZileInLuna[nI]; nI++)
@@ -509,12 +509,15 @@
     }
 
     function cmbGradInvalid_SelectedIndexChanged(s) {
-        if (cmbGradInvalid.GetSelectedIndex() > 0)
+        if (cmbGradInvalid.GetSelectedIndex() > 0) {
             deDataValabInvalid.SetEnabled(true);
+            hfDate.Remove("DataValabInvalid");
+        }
         else {
             deDataValabInvalid.SetEnabled(false);
-            var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
+            var dtTmp = new Date(2100, 0, 1, 0, 0, 0, 0)
             deDataValabInvalid.SetValue(dtTmp);
+            hfDate.Set("DataValabInvalid", dtTmp);
         }
         CompletareZile(cmbNivelFunctie);
         ValidareZile(1);
@@ -529,7 +532,7 @@
     function Validare36Luni() {
         
         if (cmbDurCtr.GetValue() == 1) {
-            var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
+            var dtTmp = new Date(2100, 0, 1, 0, 0, 0, 0)
 
             deDeLaData.SetEnabled(false);
             deLaData.SetEnabled(false);
@@ -541,6 +544,11 @@
             deUltimaZiLucr.SetValue(dtTmp);
             deDataPlecarii.SetValue(dtTmp);
 
+            hfDate.Set("DeLaData", dtTmp);
+            hfDate.Set("LaData", dtTmp);
+            hfDate.Set("UltimaZiLucr", dtTmp);
+            hfDate.Set("DataPlecarii", dtTmp);
+
             txtNrZile.SetValue("");
             txtNrLuni.SetValue("");
         }
@@ -551,6 +559,12 @@
             deLaData.SetEnabled(true);
             deUltimaZiLucr.SetEnabled(true);
             deDataPlecarii.SetEnabled(true);
+
+            hfDate.Remove("DeLaData");
+            hfDate.Remove("LaData");
+            hfDate.Remove("UltimaZiLucr");
+            hfDate.Remove("DataPlecarii");
+
             if (<%=Session["MP_AreContract"] %> == 0)
                 deDeLaData.SetValue(deDataAng.GetValue());
 

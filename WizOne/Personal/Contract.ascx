@@ -99,8 +99,8 @@
                     }
                     
                     if (s.name == "deLaData"
-                        && (dateDeLa.getFullYear() != 2100 || dateDeLa.getMonth() != 1 || dateDeLa.getDate() != 1)
-                        && (dateLa.getFullYear() != 2100 || dateLa.getMonth() != 1 || dateLa.getDate() != 1)) {
+                        && (dateDeLa.getFullYear() != 2100 || dateDeLa.getMonth() != 0 || dateDeLa.getDate() != 1)
+                        && (dateLa.getFullYear() != 2100 || dateLa.getMonth() != 0 || dateLa.getDate() != 1)) {
 
                         CalculLuniSiZile(dateDeLa, dateLa);
 
@@ -151,6 +151,11 @@
             });
             s.cpAlertMessage = null;
         }
+
+        if (s.cpControl == "cmbPost") {
+            VerifSalariu(txtSalariu.GetValue(), cmbTimpPartial.GetValue());
+        }
+
         pnlLoading.Hide();
         OUG132(); 
     }
@@ -294,7 +299,7 @@
 
         var nrLuni = 0;
         var nrZile = 0;
-        if (dtSf != new Date(2100, 1, 1, 0, 0, 0, 0) && dtInc != new Date(2100, 1, 1, 0, 0, 0, 0))         
+        if (dtSf != new Date(2100, 0, 1, 0, 0, 0, 0) && dtInc != new Date(2100, 0, 1, 0, 0, 0, 0))         
             nrZile = dateDiffInDays(dtInc, dtSf) + 1;
 
         for (var nI = 0; nI < arNrZileInLuna.length && nrZile >= arNrZileInLuna[nI]; nI++)
@@ -504,12 +509,15 @@
     }
 
     function cmbGradInvalid_SelectedIndexChanged(s) {
-        if (cmbGradInvalid.GetSelectedIndex() > 0)
+        if (cmbGradInvalid.GetSelectedIndex() > 0) {
             deDataValabInvalid.SetEnabled(true);
+            hfDate.Remove("DataValabInvalid");
+        }
         else {
             deDataValabInvalid.SetEnabled(false);
-            var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
+            var dtTmp = new Date(2100, 0, 1, 0, 0, 0, 0)
             deDataValabInvalid.SetValue(dtTmp);
+            hfDate.Set("DataValabInvalid", dtTmp);
         }
         CompletareZile(cmbNivelFunctie);
         ValidareZile(1);
@@ -524,7 +532,7 @@
     function Validare36Luni() {
         
         if (cmbDurCtr.GetValue() == 1) {
-            var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
+            var dtTmp = new Date(2100, 0, 1, 0, 0, 0, 0)
 
             deDeLaData.SetEnabled(false);
             deLaData.SetEnabled(false);
@@ -536,6 +544,11 @@
             deUltimaZiLucr.SetValue(dtTmp);
             deDataPlecarii.SetValue(dtTmp);
 
+            hfDate.Set("DeLaData", dtTmp);
+            hfDate.Set("LaData", dtTmp);
+            hfDate.Set("UltimaZiLucr", dtTmp);
+            hfDate.Set("DataPlecarii", dtTmp);
+
             txtNrZile.SetValue("");
             txtNrLuni.SetValue("");
         }
@@ -546,6 +559,12 @@
             deLaData.SetEnabled(true);
             deUltimaZiLucr.SetEnabled(true);
             deDataPlecarii.SetEnabled(true);
+
+            hfDate.Remove("DeLaData");
+            hfDate.Remove("LaData");
+            hfDate.Remove("UltimaZiLucr");
+            hfDate.Remove("DataPlecarii");
+
             if (<%=Session["MP_AreContract"] %> == 0)
                 deDeLaData.SetValue(deDataAng.GetValue());
 
@@ -617,11 +636,22 @@
  
     function VerifSalariu(sal, timp) {
         if (sal == null || sal.length <= 0)      
-            return;        
+            return;
+
+        var txt = "";
         var salMin = parseInt("<%=Session["MP_SalMin"] %>");
         if (parseInt(salMin) * parseInt(timp) / 8 > parseInt(sal) && cmbIntRepTimpMunca.GetValue() <= 1 && (cmbTipCtrMunca.GetValue() == 1 || cmbTipCtrMunca.GetValue() == 2
             || cmbTipCtrMunca.GetValue() == 3 || cmbTipCtrMunca.GetValue() == 4 || cmbTipCtrMunca.GetValue() == 33 || cmbTipCtrMunca.GetValue() == 34))
-            swal({ title: "", text: "Salariul introdus este mai mic decat cel minim raportat la norma si conditiile salariale ale angajatului!", type: "warning" });
+            txt = "Salariul introdus este mai mic decat cel minim raportat la norma si conditiile salariale ale angajatului!";
+
+        var salMinPost = parseInt("<%=Session["MP_SalariulMinPost"] %>");
+        if (salMinPost > sal) {
+            if (txt != "") txt += "\n"
+            txt += "Salariul introdus este mai mic decat salariul minim al postului selectat";
+        }
+
+        if (txt != "")
+            swal({ title: "", text: txt, type: "warning" });
     }
 
     function CompletareZile(s) { 
@@ -761,17 +791,29 @@
         }--%>
     }
 
+    function OnClickPst(s) {
+        pnlLoading.Show();
+        pnlCtlContract.PerformCallback(s.name);
+    }
+
+    function GoToIstoricPst(s) {
+        strUrl = getAbsoluteUrl + "Avs/Istoric.aspx?qwe=" + s.name;
+        popGenIst.SetHeaderText("Istoric modificari post");
+        popGenIst.SetContentUrl(strUrl);
+        popGenIst.Show();
+    }
+
 </script>
 
 <body>
 
     <table width="100%">
 		<tr>
-			<td align="left">					
+			<td align="left">
 			</td>
-		</tr>			
+		</tr>
 	</table>
-				
+
 
 
    <dx:ASPxCallbackPanel ID = "Contract_pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtlContract" runat="server" OnCallback="pnlCtlContract_Callback" SettingsLoadingPanel-Enabled="false">
@@ -1268,7 +1310,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsFunctie"  Value='<%#Eval("F10071") %>' ID="cmbFunctie" Width="130" TabIndex="34" runat="server" DropDownStyle="DropDown"  TextField="F71804" ValueField="F71802" ValueType="System.Int32">
-                                
+                                <ClientSideEvents SelectedIndexChanged="function(s,e) { pnlLoading.Show(); pnlCtlContract.PerformCallback('cmbFunctie'); }" />
 							</dx:ASPxComboBox >
 						</td>
                         <td>
@@ -1330,7 +1372,31 @@
                                 <Paddings PaddingLeft="10px"/>
                             </dx:ASPxButton>
                         </td>
-					</tr>  
+					</tr>
+                    <tr>
+                        <td>
+                            <dx:ASPxLabel ID="lblPost" runat="server" Text="Post" />
+                        </td>
+                        <td>
+                            <dx:ASPxComboBox ID="cmbPost" ClientInstanceName="cmbPost" runat="server" TextField="Denumire" ValueField="Id" DropDownStyle="DropDownList" ValueType="System.Int32" Width="130" TabIndex="37" AllowNull="true">
+                                <ClientSideEvents SelectedIndexChanged="function(s,e) { pnlLoading.Show(); pnlCtlContract.PerformCallback('cmbPost'); }" />
+                            </dx:ASPxComboBox>
+                        </td>
+                        <td>
+                            <dx:ASPxButton ID="btnPost" ClientInstanceName="btnPost"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px"  RenderMode="Link" ToolTip="Modificari post" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
+                                <ClientSideEvents Click="function(s,e){ OnClickPst(s); }" />
+                                <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
+                                <Paddings PaddingLeft="10px"/>
+                            </dx:ASPxButton>
+                        </td>
+                        <td>
+                            <dx:ASPxButton ID="btnPostIst" ClientInstanceName="btnPostIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
+                                <ClientSideEvents Click="function(s,e){ GoToIstoricPst(s); }" />
+                                <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
+                                <Paddings PaddingLeft="10px"/>
+                            </dx:ASPxButton>
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <dx:ASPxCheckBox ID="chkFunctieBaza"  runat="server" Width="150" Text="Functie de baza" TextAlign="Left" TabIndex="38"  Checked='<%#  Eval("F10032") == DBNull.Value ? false : Convert.ToBoolean(Eval("F10032"))%>' ClientInstanceName="chkbx4" >
@@ -1366,17 +1432,17 @@
 					    </tr>
                         <tr>
                             <td colspan="2">
-                                <dx:ASPxCheckBox ID="chkScutitCAS" runat="server" Width="150" Text="Scutit de la pragul minim CASS si CAS asigurat" TextAlign="Left" TabIndex="42" ClientInstanceName="chkbx6">
+                                <dx:ASPxCheckBox ID="chkScutitCAS" runat="server" Width="150" Text="Scutit de la pragul minim CASS si CAS asigurat" TextAlign="Left" ClientVisible="false" TabIndex="42" ClientInstanceName="chkbx6">
                                     <ClientSideEvents CheckedChanged="function(s,e){ chkScutitCAS_CheckedChanged(s); }" />
                                 </dx:ASPxCheckBox>
                             </td>
                         </tr>
 					    <tr>				
 						    <td >
-							    <dx:ASPxLabel  ID="lblMotivScutitCAS" Width="100" runat="server"  Text="Motiv scutire de la pragul minim CASS si CAS asigurat" ></dx:ASPxLabel >	
+							    <dx:ASPxLabel  ID="lblMotivScutitCAS" Width="100" runat="server"  ClientVisible="false" Text="Motiv scutire de la pragul minim CASS si CAS asigurat" ></dx:ASPxLabel >	
 						    </td>	
 						    <td>
-							    <dx:ASPxComboBox DataSourceID="dsMSCAS"  Value='<%#Eval("F1001096") %>' ID="cmbMotivScutitCAS"  ClientInstanceName="cmbMotivScutitCAS" TabIndex="43" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F80204" ValueField="F80203" AutoPostBack="false"  ValueType="System.Int32" >
+							    <dx:ASPxComboBox DataSourceID="dsMSCAS"  Value='<%#Eval("F1001096") %>' ID="cmbMotivScutitCAS" ClientVisible="false"  ClientInstanceName="cmbMotivScutitCAS" TabIndex="43" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F80204" ValueField="F80203" AutoPostBack="false"  ValueType="System.Int32" >
                                         
 							    </dx:ASPxComboBox>
 						    </td>               
@@ -1735,4 +1801,5 @@
         </dx:ASPxCallbackPanel>    
   <dx:ASPxHiddenField runat="server" ID="hfTipAngajat" ClientInstanceName="hfTipAngajat" />
   <dx:ASPxHiddenField runat="server" ID="hfIntRepTM" ClientInstanceName="hfIntRepTM" />
+    <dx:ASPxHiddenField runat="server" ID="hfSalMin" ClientInstanceName="hfSalMin" />
 </body>

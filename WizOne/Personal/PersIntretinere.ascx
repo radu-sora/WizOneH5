@@ -15,25 +15,23 @@
 
             switch (newItem[0]) {
                 case '1':
-                case '2':
+                case '2':       
                     an = 1900 + tempAn;
                     break;
-
                 case '3':
                 case '4':
                     an = 1800 + tempAn;
                     break;
-
                 case '5':
                 case '6':
                     an = 2000 + tempAn;
                     break;
                 case '7':
                 case '8':
-                    if (parseInt(newItem.substr(1, 2)) >= 30)
-                        an = 1900 + tempAn;
+                    if (parseInt(cnp.substr(1, 2)) >= 30)
+                        an = '19';
                     else
-                        an = 2000 + tempAn;
+                        an = '20';
                     break;
             }
             var dataN = new Date(an, luna - 1, ziua);

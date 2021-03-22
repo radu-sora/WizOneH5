@@ -1,9 +1,12 @@
 ﻿<%@ Page Title="View Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="View.aspx.cs" Inherits="Wizrom.Reports.Pages.View" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <link rel="stylesheet" type="text/css" href="../Styles/reports.css" />
+
     <!-- Modal dialogs -->
 
-    <!-- Page content -->                  
+    <!-- Page content -->       
+<asp:PlaceHolder ID="ReportTemplate" runat="server">
     <table class="report-view-template">
         <tr>
             <td>
@@ -799,5 +802,33 @@
     <dx:ASPxGlobalEvents ID="globalEvents" runat="server">
         <ClientSideEvents ControlsInitialized="onControlsInitialized" />
     </dx:ASPxGlobalEvents>
+</asp:PlaceHolder>
+<asp:PlaceHolder ID="DashboardTemplate" runat="server">
+    <dx:ASPxDashboard ID="DashboardViewer" ClientInstanceName="dashboardViewer" runat="server" WorkingMode="ViewerOnly" UseDashboardConfigurator="true">
+        <ClientSideEvents
+            DashboardTitleToolbarUpdated="function(s, e) {                
+                onDashboardViewerTitleToolbarUpdated(e);
+            }" />
+    </dx:ASPxDashboard>
+    
+    <div class="d-none">
+        <svg id="exitIcon" viewBox="0 0 24 24"><path class="dx-dashboard-icon" d="m22.089 12-6-6v4h-8v4h8v4z"/><path class="dx-dashboard-icon" d="m12 18.981h-10v-13.953h10v3.4883h2v-5.2325h-14v17.442h14v-5.2325h-2z"/></svg>
+    </div>
 
+    <script>
+        // Globals        
+
+        // Main functions
+        function onDashboardViewerTitleToolbarUpdated(e) {
+            e.Options.actionItems.push({
+                type: 'button',
+                icon: 'exitIcon',
+                hint: 'Exit',
+                click: function () {
+                    window.history.back();
+                }
+            });
+        }
+    </script>
+</asp:PlaceHolder>
 </asp:Content>

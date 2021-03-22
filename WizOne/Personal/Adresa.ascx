@@ -16,14 +16,28 @@
 
     function OnClickGasit(values)
     {
-        grDateAdresa.SetEditValue("Strada", values[0]);
-        grDateAdresa.SetEditValue("NumeNivel1", values[2]);
-        grDateAdresa.SetEditValue("NumeNivel2", values[4]);
-        grDateAdresa.SetEditValue("NumeNivel3", values[6]);
+        var strada = grDateAdresa.GetEditor("Strada");
+        var niv1 = grDateAdresa.GetEditor("NumeNivel1");
+        var niv2 = grDateAdresa.GetEditor("NumeNivel2");
+        var niv3 = grDateAdresa.GetEditor("NumeNivel3");
+
+        strada.SetValue(values[0]);
+        niv1.SetValue(values[2]);
+        niv2.SetValue(values[4]);
+        niv3.SetValue(values[6]);
+
+        //grDateAdresa.SetEditValue("Strada", values[0]);
+        //grDateAdresa.SetEditValue("NumeNivel1", values[2]);
+        //grDateAdresa.SetEditValue("NumeNivel2", values[4]);
+        //grDateAdresa.SetEditValue("NumeNivel3", values[6]);
 
         hfSiruta.Set("SirutaNivel1", values[1]);
         hfSiruta.Set("SirutaNivel2", values[3]);
         hfSiruta.Set("SirutaNivel3", values[5]);
+
+        hfSiruta.Set("NumeNivel1", values[2]);
+        hfSiruta.Set("NumeNivel2", values[4]);
+        hfSiruta.Set("NumeNivel3", values[6]);
 
         pnlLoading.Hide();
         popUpCauta.Hide();
@@ -89,7 +103,7 @@
                         </CustomButtons>
                         
                     </dx:GridViewCommandColumn>
-                    <dx:GridViewDataTextColumn FieldName="NumeNivel1" Name="NumeNivel1" Caption="Judet"  ReadOnly="true" Width="100px" />
+                    <dx:GridViewDataTextColumn FieldName="NumeNivel1" Name="NumeNivel1" Caption="Judet"   ReadOnly="true" Width="100px" />
                     <dx:GridViewDataTextColumn FieldName="SirutaNivel1" Name="SirutaNivel1" Caption="Judet" Visible="false" Width="200px" />
                     <dx:GridViewDataTextColumn FieldName="NumeNivel2" Name="NumeNivel2" Caption="Mun/Oras/Comuna" ReadOnly="true" Width="150px" />
                     <dx:GridViewDataTextColumn FieldName="SirutaNivel2" Name="SirutaNivel2" Caption="Oras" Visible="false" Width="200px" />

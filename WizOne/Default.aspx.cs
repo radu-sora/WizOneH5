@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 using WizOne.Module;
 using WizOne.Module.Saml;
 
@@ -484,7 +485,7 @@ namespace WizOne
                                     int nrRoluri = 1;
                                     if (dtRoluri != null && dtRoluri.Rows.Count > 0)
                                         nrRoluri = Convert.ToInt32(dtRoluri.Rows[0][0].ToString());
-                                    if (Dami.ValoareParam("2FA", "") == "1" || (Dami.ValoareParam("2FA", "") == "2" && nrRoluri > 0))
+                                    if (Dami.ValoareParam("2FA", "") == "1" || (Dami.ValoareParam("2FA", "") == "2" &&  nrRoluri > 0))
                                     {
                                         string ras = General.CreazaCod2FA();
                                         if (ras != "")

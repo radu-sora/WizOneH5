@@ -466,8 +466,8 @@ namespace WizOne.Personal
                 if (!err)
                 {
                     DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                    DataTable dtSusp = Session["MP_Suspendari"] as DataTable;
                     DateTime dtLuc = General.DamiDataLucru();
+                    DataTable dtSusp = Session["MP_Suspendari"] as DataTable;
                     object[] row = new object[dtSusp.Columns.Count];
                     int x = 0;
                     foreach (DataColumn col in dtSusp.Columns)

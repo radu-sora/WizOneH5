@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Organigrama {
-    
-    
-    public partial class Lista {
-        
+namespace WizOne.Organigrama
+{
+
+
+    public partial class Lista
+    {
+
         /// <summary>
         /// hf control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField hf;
-        
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
+
         /// <summary>
         /// btnExport control.
         /// </summary>
@@ -38,7 +40,16 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExport;
-        
+
+        /// <summary>
+        /// btnDuplicare control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnDuplicare;
+
         /// <summary>
         /// btnModifStruc control.
         /// </summary>
@@ -47,7 +58,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnModifStruc;
-        
+
         /// <summary>
         /// btnNou control.
         /// </summary>
@@ -56,7 +67,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnNou;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -65,7 +76,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// lblDtVig control.
         /// </summary>
@@ -74,7 +85,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDtVig;
-        
+
         /// <summary>
         /// txtDtVig control.
         /// </summary>
@@ -83,7 +94,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit txtDtVig;
-        
+
         /// <summary>
         /// lblActiv control.
         /// </summary>
@@ -92,7 +103,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblActiv;
-        
+
         /// <summary>
         /// chkActiv control.
         /// </summary>
@@ -101,7 +112,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkActiv;
-        
+
         /// <summary>
         /// lblAng control.
         /// </summary>
@@ -110,16 +121,16 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAng;
-        
+
         /// <summary>
-        /// cmbAng control.
+        /// cmbStare control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbAng;
-        
+        protected global::DevExpress.Web.ASPxDropDownEdit cmbStare;
+
         /// <summary>
         /// lblParinte control.
         /// </summary>
@@ -128,7 +139,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblParinte;
-        
+
         /// <summary>
         /// cmbParinte control.
         /// </summary>
@@ -137,7 +148,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbParinte;
-        
+
         /// <summary>
         /// btnFiltru control.
         /// </summary>
@@ -146,7 +157,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltru;
-        
+
         /// <summary>
         /// btnExpand control.
         /// </summary>
@@ -155,7 +166,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExpand;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>
@@ -164,7 +175,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTreeList.ASPxTreeList grDate;
-        
+
         /// <summary>
         /// popUpMotiv control.
         /// </summary>
@@ -173,7 +184,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupControl popUpMotiv;
-        
+
         /// <summary>
         /// Panel1 control.
         /// </summary>
@@ -182,7 +193,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel Panel1;
-        
+
         /// <summary>
         /// btnOkModif control.
         /// </summary>
@@ -191,7 +202,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnOkModif;
-        
+
         /// <summary>
         /// btnInchide control.
         /// </summary>
@@ -200,7 +211,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnInchide;
-        
+
         /// <summary>
         /// cmbMotiv control.
         /// </summary>
@@ -209,7 +220,7 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbMotiv;
-        
+
         /// <summary>
         /// chkStruc control.
         /// </summary>
@@ -218,95 +229,5 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkStruc;
-        
-        /// <summary>
-        /// popUpLevel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPopupControl popUpLevel;
-        
-        /// <summary>
-        /// Panel2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel Panel2;
-        
-        /// <summary>
-        /// btnOkLevel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnOkLevel;
-        
-        /// <summary>
-        /// btnNuLevel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnNuLevel;
-        
-        /// <summary>
-        /// cmbLimbi control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbLimbi;
-        
-        /// <summary>
-        /// txtNivel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxSpinEdit txtNivel;
-        
-        /// <summary>
-        /// cmbAfisare control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbAfisare;
-        
-        /// <summary>
-        /// chkPlan control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBox chkPlan;
-        
-        /// <summary>
-        /// chkAprobat control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBox chkAprobat;
-        
-        /// <summary>
-        /// chkEfectiv control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBox chkEfectiv;
     }
 }

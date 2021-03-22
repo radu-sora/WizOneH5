@@ -1754,5 +1754,11 @@
   </data>
   <data name="PrimaPaginaCereri" xml:space="preserve">
     <value>First Page - Requests</value>
+  </data> 
+  <data name="NrPozitii" xml:space="preserve">
+    <value>No of positions</value>
+  </data>
+  <data name="NrPozitiiAprobate" xml:space="preserve">
+    <value>No of approved positions</value>
   </data>  
 </root>

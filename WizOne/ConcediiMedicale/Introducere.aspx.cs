@@ -61,16 +61,31 @@ namespace WizOne.ConcediiMedicale
                 cmbAng.DataSource = dtAngajati;
                 Session["CM_Angajati"] = dtAngajati;
                 cmbAng.DataBind();
-                cmbAng.SelectedIndex = -1;
+                //if (Session["CM_Marca"] == null)
+                //    cmbAng.SelectedIndex = -1;
+                //else
+                //    cmbAng.SelectedIndex = Convert.ToInt32(Session["CM_Marca"].ToString());
 
                 cmbTipConcediu.SelectedIndex = 0;
                 OnSelChangeTip();
 
                 rbConcInit.Checked = true;
+                rbProgrNorm.Checked = true;
 
                 OnUpdateCcNo();
-               
+                if (cmbTipConcediu.Value != null && Convert.ToInt32(cmbTipConcediu.Value) == 9)
+                {
+                    lblCNP.ClientVisible = true;
+                    cmbCNPCopil.ClientVisible = true;
+                }
+                else
+                {
+                    lblCNP.ClientVisible = false;
+                    cmbCNPCopil.ClientVisible = false;
+                }
 
+                if (Session["CM_Id"] == null)
+                    AfisareCalculManual(false);
 
             }
             else
@@ -78,10 +93,10 @@ namespace WizOne.ConcediiMedicale
                 dtAngajati = Session["CM_Angajati"] as DataTable;
                 cmbAng.DataSource = dtAngajati;
                 cmbAng.DataBind();
-                if (Session["MarcaCM"] != null)
-                    cmbAng.SelectedIndex = Convert.ToInt32(Session["MarcaCM"].ToString());
-                else
-                    cmbAng.SelectedIndex = -1;
+                //if (Session["MarcaCM"] != null)
+                //    cmbAng.SelectedIndex = Convert.ToInt32(Session["MarcaCM"].ToString());
+                //else
+                //    cmbAng.SelectedIndex = -1;
 
                 //if (Session["CM_StartDate"] != null)
                 //    deDeLaData.Value = Session["CM_StartDate"] as DateTime?;
@@ -106,6 +121,56 @@ namespace WizOne.ConcediiMedicale
                     btnMZ.Enabled = true;
                 }
                 InitWorkingDays();
+            }
+
+            if (Session["CM_Id"] != null)
+            {
+                DataTable dtCM = General.IncarcaDT("SELECT * FROM CM_Cereri WHERE Id = " + Session["CM_Id"].ToString(), null);
+                cmbAng.ClientEnabled = false;
+                cmbAng.SelectedIndex = Convert.ToInt32(dtCM.Rows[0]["F10003"].ToString());
+                cmbTipConcediu.Value = Convert.ToInt32(dtCM.Rows[0]["TipConcediu"].ToString());
+                if (Convert.ToInt32(dtCM.Rows[0]["TipProgram"] == DBNull.Value? "0" : dtCM.Rows[0]["TipProgram"].ToString()) == 1)
+                    rbProgrNorm.Checked = true;
+                else
+                    rbProgrTure.Checked = true;
+                txtCodIndemn.Text = dtCM.Rows[0]["CodIndemnizatie"] == DBNull.Value ? "" : dtCM.Rows[0]["CodIndemnizatie"].ToString();
+                cmbLocPresc.Value = Convert.ToInt32(dtCM.Rows[0]["Prescris"] == DBNull.Value ? "0" : dtCM.Rows[0]["Prescris"].ToString());
+                txtSerie.Text = dtCM.Rows[0]["SerieCM"] == DBNull.Value ? "" : dtCM.Rows[0]["SerieCM"].ToString();
+                txtNr.Text = dtCM.Rows[0]["NumarCM"] == DBNull.Value ? "" : dtCM.Rows[0]["NumarCM"].ToString();
+                deData.Value = Convert.ToDateTime(dtCM.Rows[0]["DataCM"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataCM"].ToString());
+                deDeLaData.Value = Convert.ToDateTime(dtCM.Rows[0]["DataInceput"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataInceput"].ToString());
+                deLaData.Value = Convert.ToDateTime(dtCM.Rows[0]["DataSfarsit"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataSfarsit"].ToString());
+                txtNrZile.Text = dtCM.Rows[0]["NrZile"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZile"].ToString();
+                cmbCT1.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer1"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer1"].ToString());
+                cmbCT2.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer2"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer2"].ToString());
+                cmbCT3.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer3"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer3"].ToString());
+                cmbCT4.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer4"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer4"].ToString());
+                cmbCT5.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer5"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer5"].ToString());
+                txtCT1.Text = dtCM.Rows[0]["NrZileCT1"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZileCT1"].ToString();
+                txtCT2.Text = dtCM.Rows[0]["NrZileCT2"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZileCT2"].ToString();
+                txtCT3.Text = dtCM.Rows[0]["NrZileCT3"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZileCT3"].ToString();
+                txtCT4.Text = dtCM.Rows[0]["NrZileCT4"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZileCT4"].ToString();
+                txtCT5.Text = dtCM.Rows[0]["NrZileCT5"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZileCT5"].ToString();
+                txtCodDiag.Text = dtCM.Rows[0]["CodDiagnostic"] == DBNull.Value ? "" : dtCM.Rows[0]["CodDiagnostic"].ToString();
+                txtCodUrgenta.Text = dtCM.Rows[0]["CodUrgenta"] == DBNull.Value ? "" : dtCM.Rows[0]["CodUrgenta"].ToString();
+                txtCodInfCont.Text = dtCM.Rows[0]["CodInfectoContag"] == DBNull.Value ? "" : dtCM.Rows[0]["CodInfectoContag"].ToString();
+                if (Convert.ToInt32(dtCM.Rows[0]["Initial"] == DBNull.Value ? "0" : dtCM.Rows[0]["Initial"].ToString()) == 1)
+                    rbConcInit.Checked = true;
+                else
+                    rbConcCont.Checked = true;
+                txtZCMAnt.Text = dtCM.Rows[0]["ZileCMInitial"] == DBNull.Value ? "" : dtCM.Rows[0]["ZileCMInitial"].ToString();
+                txtSCMInit.Text = dtCM.Rows[0]["SerieCMInitial"] == DBNull.Value ? "" : dtCM.Rows[0]["SerieCMInitial"].ToString();
+                txtNrCMInit.Text = dtCM.Rows[0]["NumarCMInitial"] == DBNull.Value ? "" : dtCM.Rows[0]["NumarCMInitial"].ToString();
+                deDataCMInit.Value = Convert.ToDateTime(dtCM.Rows[0]["DataCMInitial"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataCMInitial"].ToString());
+                txtBCCM.Text = dtCM.Rows[0]["BazaCalculCM"] == DBNull.Value ? "" : dtCM.Rows[0]["BazaCalculCM"].ToString();
+                txtZBC.Text = dtCM.Rows[0]["ZileBazaCalculCM"] == DBNull.Value ? "" : dtCM.Rows[0]["ZileBazaCalculCM"].ToString();
+                txtMZBC.Text = dtCM.Rows[0]["MedieZileBazaCalcul"] == DBNull.Value ? "" : dtCM.Rows[0]["MedieZileBazaCalcul"].ToString();
+                txtMZ.Text = dtCM.Rows[0]["MedieZilnicaCM"] == DBNull.Value ? "" : dtCM.Rows[0]["MedieZilnicaCM"].ToString();
+                chkStagiu.Checked = Convert.ToInt32(dtCM.Rows[0]["Stagiu"] == DBNull.Value ? "0" : dtCM.Rows[0]["Stagiu"].ToString()) == 1 ? true : false;
+                txtNrAviz.Text = dtCM.Rows[0]["NrAvizMedicExpert"] == DBNull.Value ? "" : dtCM.Rows[0]["NrAvizMedicExpert"].ToString();
+                deDataAviz.Value = Convert.ToDateTime(dtCM.Rows[0]["DataAvizDSP"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataAvizDSP"].ToString());
+                txtMedic.Text = dtCM.Rows[0]["MedicCurant"] == DBNull.Value ? "" : dtCM.Rows[0]["MedicCurant"].ToString();
+                cmbCNPCopil.Value = Convert.ToInt32(dtCM.Rows[0]["CNPCopil"] == DBNull.Value ? "0" : dtCM.Rows[0]["CNPCopil"].ToString());
             }
         }
 
@@ -158,7 +223,7 @@ namespace WizOne.ConcediiMedicale
             if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)            
                 codExcl90 =dtParam.Rows[0][0].ToString().Trim();           
 
-            if (Session["MarcaCM"] == null)
+            if (cmbAng.Value == null)
             {
                 MessageBox.Show(Dami.TraduCuvant("Nu ati ales niciun angajat!"));
                 return;
@@ -196,7 +261,7 @@ namespace WizOne.ConcediiMedicale
                 if (dt.Month != Convert.ToInt32(dtLC.Rows[0][0].ToString()))
                 {
 
-                    if (dt.Month > Convert.ToInt32(dtLC.Rows[0][0].ToString()))
+                    if (dt.Year > Convert.ToInt32(dtLC.Rows[0][1].ToString()) || (dt.Year == Convert.ToInt32(dtLC.Rows[0][1].ToString()) && dt.Month > Convert.ToInt32(dtLC.Rows[0][0].ToString())))
                         avans = true;
                     else
                     {
@@ -381,7 +446,7 @@ namespace WizOne.ConcediiMedicale
             
             if (cod == "09")
             {
-                if (txtCNP.Text.Length < 13)
+                if (cmbCNPCopil.Value == null || cmbCNPCopil.Value.ToString().Length < 13)
                 {
                     bErr = true;
                     szErrMsg += "\n- pentru cod indemnizatie 09 nu ati completat CNP copil !";
@@ -617,7 +682,7 @@ namespace WizOne.ConcediiMedicale
                             dtF300.Rows[0]["F300614"] = Convert.ToInt32(txtMZ.Text);
                             dtF300.Rows[0]["F300615"] = txtNrAviz.Text;
                             dtF300.Rows[0]["F300616"] = txtMedic.Text;
-                            dtF300.Rows[0]["F300617"] = txtCNP.Text;
+                            dtF300.Rows[0]["F300617"] = (cmbCNPCopil.Value ?? "").ToString();
                         
                             string sName = dtMARDEF.Rows[0]["NAME"].ToString();
                             if (!(Convert.ToInt32(dtMARDEF.Rows[0]["NO"].ToString()) == 3 || Convert.ToInt32(dtMARDEF.Rows[0]["NO"].ToString()) == 4 || sName.Contains("AMBP")))
@@ -743,32 +808,64 @@ namespace WizOne.ConcediiMedicale
             if (dtAviz.Year <= 1900)
                 dtAviz = new DateTime(2100, 1, 1);
 
-            string sql = "INSERT INTO " + (avans ? "F300_CM_AVANS" : "F300" ) + " (F30001, F30002, F30003, F30004, F30005, F30006, F30007, F30010, F30011, F30012, F30013, F30014, F30015, F30021, F30022, F30023, F30036, F30037, F30038, F30050, " +
-                " F300601, F300602, F300603,  F30053, F300618, F30039, F30040, F30042, F30035, F300606, F300607, F300619, F300608, F300609, F300610, F300611, F300612, F300613, F300614, F300615, F300616, F300617, F300621, " + (avans ? cmpAvans : "") + ") ";
+            //string sql = "INSERT INTO " + (avans ? "F300_CM_AVANS" : "F300" ) + " (F30001, F30002, F30003, F30004, F30005, F30006, F30007, F30010, F30011, F30012, F30013, F30014, F30015, F30021, F30022, F30023, F30036, F30037, F30038, F30050, " +
+            //    " F300601, F300602, F300603,  F30053, F300618, F30039, F30040, F30042, F30035, F300606, F300607, F300619, F300608, F300609, F300610, F300611, F300612, F300613, F300614, F300615, F300616, F300617, F300621, " + (avans ? cmpAvans : "") + ") ";
 
-            sql += "VALUES (300, 1, {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, '{18}', '{19}', {20}, {21}, {22}, {23}, {24}, '{25}', {26}, '{27}', '{28}', '{29}', '{30}', '{31}', " 
-                + " '{32}',  {33}, {34}, {35}, {36}, '{37}', '{38}', '{39}' {40} )";
-
-            sql = string.Format(sql, dtAng.Rows[0]["F10003"].ToString(), dtAng.Rows[0]["F10004"].ToString(), dtAng.Rows[0]["F10005"].ToString(), dtAng.Rows[0]["F10006"].ToString(), dtAng.Rows[0]["F10007"].ToString(), //4
-                cod, 1, tarif.ToString(new CultureInfo("en-US")), zile, proc.ToString(new CultureInfo("en-US")), suma.ToString(new CultureInfo("en-US")), 0, 0, 0, //13
-                (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') +  "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)" 
-                : "TO_DATE('" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 'dd/mm/yyyy')"),  //14
-                (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)"
-                : "TO_DATE('" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 'dd/mm/yyyy')"),  //15
-                (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtEnd.Day.ToString().PadLeft(2, '0') + "/" + dtEnd.Month.ToString().PadLeft(2, '0') + "/" + dtEnd.Year.ToString() + "', 103)"
-                : "TO_DATE('" + dtEnd.Day.ToString().PadLeft(2, '0') + "/" + dtEnd.Month.ToString().PadLeft(2, '0') + "/" + dtEnd.Year.ToString() + "', 'dd/mm/yyyy')"), cc, txtSerie.Text, txtNr.Text, //19
-                (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtData.Day.ToString().PadLeft(2, '0') + "/" + dtData.Month.ToString().PadLeft(2, '0') + "/" + dtData.Year.ToString() + "', 103)"
-                : "TO_DATE('" + dtData.Day.ToString().PadLeft(2, '0') + "/" + dtData.Month.ToString().PadLeft(2, '0') + "/" + dtData.Year.ToString() + "', 'dd/mm/yyyy')"), (txtZCMAnt.Text.Length <= 0 ? "0" : txtZCMAnt.Text), //21
-                (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + dtAviz.Year.ToString() + "', 103)"
-                : "TO_DATE('" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + dtAviz.Year.ToString() + "', 'dd/mm/yyyy')"), 0, 0, detalii, //25
-                (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)"
-                : "TO_DATE('" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 'dd/mm/yyyy')"), txtSCMInit.Text, txtCodIndemn.Text, txtCodDiag.Text,  //29
-                txtNrCMInit.Text, txtCodUrgenta.Text, txtCodInfCont.Text, (cmbLocPresc.SelectedItem == null ? "0" : cmbLocPresc.SelectedItem.Value.ToString()), BCCM, ZileBCCM, MZCM, txtNrAviz.Text, txtMedic.Text, txtCNP.Text,
-                (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Year.ToString() + "', 103)"
-                : "TO_DATE('" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Year.ToString() + "', 'dd/mm/yyyy')"), (avans ? valAvans : "")); //41
+            string sql = "INSERT INTO CM_Cereri (Id, F10003, TipProgram, TipConcediu, CodIndemnizatie, SerieCM, NumarCM, DataCM, Prescris, DataInceput, DataSfarsit, NrZile, CodDiagnostic, CodUrgenta, CodInfectoContag, Initial, ZileCMInitial, SerieCMInitial, NumarCMInitial, DataCMInitial, " +
+                     " CodTransfer1, CodTransfer2, CodTransfer3,  CodTransfer4, CodTransfer5, NrZileCT1, NrZileCT2, NrZileCT3, NrZileCT4, NrZileCT5, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, NrAvizMedicExpert, DataAvizDSP, MedicCurant, CNPCopil, IdStare, Document, USER_NO, TIME) ";
 
 
-	        if(!((chkStagiu.Checked && (cod == 4450 || cod == 4449))))		
+            sql += "VALUES ({0}, {1}, {2}, {3}, {4}, '{5}', '{6}', {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, '{17}', '{18}', {19}, " 
+                + " {20}, {21}, {22}, {23}, {24}, {25}, {26}, {27}, {28}, {29}, {30}, {31}, {32},  {33}, '{34}', {35}, '{36}', {37}, {38}, {39}, {40}, {41} )";
+
+            //sql = string.Format(sql, dtAng.Rows[0]["F10003"].ToString(), dtAng.Rows[0]["F10004"].ToString(), dtAng.Rows[0]["F10005"].ToString(), dtAng.Rows[0]["F10006"].ToString(), dtAng.Rows[0]["F10007"].ToString(), //4
+            //    cod, 1, tarif.ToString(new CultureInfo("en-US")), zile, proc.ToString(new CultureInfo("en-US")), suma.ToString(new CultureInfo("en-US")), 0, 0, 0, //13
+            //    (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') +  "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)" 
+            //    : "TO_DATE('" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 'dd/mm/yyyy')"),  //14
+            //    (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)"
+            //    : "TO_DATE('" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 'dd/mm/yyyy')"),  //15
+            //    (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtEnd.Day.ToString().PadLeft(2, '0') + "/" + dtEnd.Month.ToString().PadLeft(2, '0') + "/" + dtEnd.Year.ToString() + "', 103)"
+            //    : "TO_DATE('" + dtEnd.Day.ToString().PadLeft(2, '0') + "/" + dtEnd.Month.ToString().PadLeft(2, '0') + "/" + dtEnd.Year.ToString() + "', 'dd/mm/yyyy')"), cc, txtSerie.Text, txtNr.Text, //19
+            //    (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtData.Day.ToString().PadLeft(2, '0') + "/" + dtData.Month.ToString().PadLeft(2, '0') + "/" + dtData.Year.ToString() + "', 103)"
+            //    : "TO_DATE('" + dtData.Day.ToString().PadLeft(2, '0') + "/" + dtData.Month.ToString().PadLeft(2, '0') + "/" + dtData.Year.ToString() + "', 'dd/mm/yyyy')"), (txtZCMAnt.Text.Length <= 0 ? "0" : txtZCMAnt.Text), //21
+            //    (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + dtAviz.Year.ToString() + "', 103)"
+            //    : "TO_DATE('" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + dtAviz.Year.ToString() + "', 'dd/mm/yyyy')"), 0, 0, detalii, //25
+            //    (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)"
+            //    : "TO_DATE('" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 'dd/mm/yyyy')"), txtSCMInit.Text, txtCodIndemn.Text, txtCodDiag.Text,  //29
+            //    txtNrCMInit.Text, txtCodUrgenta.Text, txtCodInfCont.Text, (cmbLocPresc.SelectedItem == null ? "0" : cmbLocPresc.SelectedItem.Value.ToString()), BCCM, ZileBCCM, MZCM, txtNrAviz.Text, txtMedic.Text, (cmbCNPCopil.Value ?? "").ToString(),
+            //    (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Year.ToString() + "', 103)"
+            //    : "TO_DATE('" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Year.ToString() + "', 'dd/mm/yyyy')"), (avans ? valAvans : "")); //41
+
+            sql = string.Format(sql, Dami.NextId("CM_Cereri"), dtAng.Rows[0]["F10003"].ToString(), (rbProgrNorm.Checked ? "1" : "0"), Convert.ToInt32(cmbTipConcediu.Value ?? 0), txtCodIndemn.Text, txtSerie.Text, //5
+                txtNr.Text, "CONVERT(DATETIME, '" + dtData.Day.ToString().PadLeft(2, '0') + "/" + dtData.Month.ToString().PadLeft(2, '0') + "/" + dtData.Year.ToString() + "', 103)", Convert.ToInt32(cmbLocPresc.Value ?? 0), //8
+                "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)", "CONVERT(DATETIME, '" + dtEnd.Day.ToString().PadLeft(2, '0') + "/" + dtEnd.Month.ToString().PadLeft(2, '0') + "/" + dtEnd.Year.ToString() + "', 103)", //10
+                zile, txtCodDiag.Text.Length <= 0 ? "0" : txtCodDiag.Text, txtCodUrgenta.Text.Length <= 0 ? "0" : txtCodUrgenta.Text, txtCodInfCont.Text.Length <= 0 ? "0" : txtCodInfCont.Text, (rbConcInit.Checked ? "1" : "0"), txtZCMAnt.Text.Length <= 0 ? "0" : txtZCMAnt.Text, //16
+                txtSCMInit.Text, txtNrCMInit.Text, "CONVERT(DATETIME, '" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + (dtDataCMInit.Year < 1900 ? 2100 : dtDataCMInit.Year).ToString() + "', 103)", //19
+                Convert.ToInt32(cmbCT1.Value ?? 0), Convert.ToInt32(cmbCT2.Value ?? 0), Convert.ToInt32(cmbCT3.Value ?? 0), Convert.ToInt32(cmbCT4.Value ?? 0), Convert.ToInt32(cmbCT5.Value ?? 0), //24
+                txtCT1.Text.Length <= 0 ? "0" : txtCT1.Text, txtCT2.Text.Length <= 0 ? "0" : txtCT2.Text, txtCT3.Text.Length <= 0 ? "0" : txtCT3.Text, txtCT4.Text.Length <= 0 ? "0" : txtCT4.Text, txtCT5.Text.Length <= 0 ? "0" : txtCT5.Text, //29
+                txtBCCM.Text.Length <= 0 ? "0" : txtBCCM.Text, txtZBC.Text.Length <= 0 ? "0" : txtZBC.Text, txtMZBC.Text.Length <= 0 ? "0" : txtMZBC.Text, txtMZ.Text.Length <= 0 ? "0" : txtMZ.Text, //33
+                txtNrAviz.Text, "CONVERT(DATETIME, '" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + (dtAviz.Year < 1900 ? 2100 : dtAviz.Year).ToString() + "', 103)", txtMedic.Text, //36
+                Convert.ToInt32(cmbCNPCopil.Value ?? 0), 1, 0, Convert.ToInt32(Session["UserId"].ToString()), "GETDATE()"); //41
+
+                //cod, 1, tarif.ToString(new CultureInfo("en-US")), zile, proc.ToString(new CultureInfo("en-US")), suma.ToString(new CultureInfo("en-US")), 0, 0, 0, //13
+                //(Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)"
+                //: "TO_DATE('" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 'dd/mm/yyyy')"),  //14
+                //(Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)"
+                //: "TO_DATE('" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 'dd/mm/yyyy')"),  //15
+                //(Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtEnd.Day.ToString().PadLeft(2, '0') + "/" + dtEnd.Month.ToString().PadLeft(2, '0') + "/" + dtEnd.Year.ToString() + "', 103)"
+                //: "TO_DATE('" + dtEnd.Day.ToString().PadLeft(2, '0') + "/" + dtEnd.Month.ToString().PadLeft(2, '0') + "/" + dtEnd.Year.ToString() + "', 'dd/mm/yyyy')"), cc, txtSerie.Text, txtNr.Text, //19
+                //(Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtData.Day.ToString().PadLeft(2, '0') + "/" + dtData.Month.ToString().PadLeft(2, '0') + "/" + dtData.Year.ToString() + "', 103)"
+                //: "TO_DATE('" + dtData.Day.ToString().PadLeft(2, '0') + "/" + dtData.Month.ToString().PadLeft(2, '0') + "/" + dtData.Year.ToString() + "', 'dd/mm/yyyy')"), (txtZCMAnt.Text.Length <= 0 ? "0" : txtZCMAnt.Text), //21
+                //(Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + dtAviz.Year.ToString() + "', 103)"
+                //: "TO_DATE('" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + dtAviz.Year.ToString() + "', 'dd/mm/yyyy')"), 0, 0, detalii, //25
+                //(Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)"
+                //: "TO_DATE('" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 'dd/mm/yyyy')"), txtSCMInit.Text, txtCodIndemn.Text, txtCodDiag.Text,  //29
+                //txtNrCMInit.Text, txtCodUrgenta.Text, txtCodInfCont.Text, (cmbLocPresc.SelectedItem == null ? "0" : cmbLocPresc.SelectedItem.Value.ToString()), BCCM, ZileBCCM, MZCM, txtNrAviz.Text, txtMedic.Text, (cmbCNPCopil.Value ?? "").ToString(),
+                //(Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Year.ToString() + "', 103)"
+                //: "TO_DATE('" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Year.ToString() + "', 'dd/mm/yyyy')"), (avans ? valAvans : "")); //41
+
+
+            if (!((chkStagiu.Checked && (cod == 4450 || cod == 4449))))		
 		        if(General.ExecutaNonQuery(sql, null))
 		        {	
 			        if(chkStagiu.Checked)
@@ -1106,6 +1203,17 @@ namespace WizOne.ConcediiMedicale
             }
             Session["MARDEF"] = dtMARDEF;
             OnZileAng();
+
+            if (no == 9)
+            {
+                lblCNP.ClientVisible = true;
+                cmbCNPCopil.ClientVisible = true;
+            }
+            else
+            {
+                lblCNP.ClientVisible = false;
+                cmbCNPCopil.ClientVisible = false;
+            }
         }
 
         void OnSelStartDate()
@@ -1442,10 +1550,10 @@ namespace WizOne.ConcediiMedicale
         void OnKillfocus93CNPCopil()
         {
             //ASPxTextBox txtCNP = DataList1.Items[0].FindControl("txtCNP") as ASPxTextBox;            
-            if (!General.VerificaCNP(txtCNP.Text))
+            if (!General.VerificaCNP((cmbCNPCopil.Value ?? "").ToString()))
             {               
                 pnlCtl.JSProperties["cpAlertMessage"] = "Atentie! CNP invalid!";
-                txtCNP.Focus();
+                cmbCNPCopil.Focus();
             }
         }
         
@@ -1552,7 +1660,7 @@ namespace WizOne.ConcediiMedicale
                 case "chkCalcul":
                     On93Zilemanual();
                     break;
-                case "txtCNP":
+                case "cmbCNPCopil":
                     OnKillfocus93CNPCopil();
                     break;
                 case "txtCodIndemn":
@@ -1582,11 +1690,43 @@ namespace WizOne.ConcediiMedicale
                 case "btnMZ":
                     OnButtonMedie();
                     break;
+                case "rbProgrNorm":
+                    if (param[1] == "true")
+                        AfisareCalculManual(false);
+                    else
+                        AfisareCalculManual(true);
+                    break;
+                case "rbProgrTure":
+                    if (param[1] == "true")
+                        AfisareCalculManual(true);
+                    else
+                        AfisareCalculManual(false);
+                    break;
+
             }
 
         }
 
  
+        private void AfisareCalculManual(bool afisare)
+        {
+            lblCalcul.ClientVisible = afisare;
+            lblCT1.ClientVisible = afisare;
+            cmbCT1.ClientVisible = afisare;
+            txtCT1.ClientVisible = afisare;
+            lblCT2.ClientVisible = afisare;
+            cmbCT2.ClientVisible = afisare;
+            txtCT2.ClientVisible = afisare;
+            lblCT3.ClientVisible = afisare;
+            cmbCT3.ClientVisible = afisare;
+            txtCT3.ClientVisible = afisare;
+            lblCT4.ClientVisible = afisare;
+            cmbCT4.ClientVisible = afisare;
+            txtCT4.ClientVisible = afisare;
+            lblCT5.ClientVisible = afisare;
+            cmbCT5.ClientVisible = afisare;
+            txtCT5.ClientVisible = afisare;
+        }
 
         double GetMARpercent(int Table_No, double Vechime)
         {
@@ -1829,6 +1969,12 @@ namespace WizOne.ConcediiMedicale
             try
             {
                 OnOK();
+
+                string url = "~/ConcediiMedicale/Aprobare.aspx";
+                if (Page.IsCallback)
+                    ASPxWebControl.RedirectOnCallback(url);
+                else
+                    Response.Redirect(url, false);
             }
             catch (Exception ex)
             {
@@ -1859,7 +2005,7 @@ namespace WizOne.ConcediiMedicale
             txtNrAviz.Text = "";
             deDataAviz.Value = null;
             txtMedic.Text = "";
-            txtCNP.Text = "";
+            cmbCNPCopil.Value = null;
             txtCC.Text = "9999";
             OnUpdateCcNo();
             txtDetalii.Text = "";
@@ -1889,8 +2035,75 @@ namespace WizOne.ConcediiMedicale
             Session["CM_EndDate"] = null;
         }
 
+        protected void btnDocUpload_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        {
+            try
+            {
+
+                string sql = "SELECT * FROM \"tblFisiere\"";
+                DataTable dt = new DataTable();
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                if (ds.Tables.Contains("tblFisiere"))
+                {
+                    dt = ds.Tables["tblFisiere"];
+                }
+                else
+                {
+                    dt = General.IncarcaDT(sql, null);
+                    dt.TableName = "tblFisiere";
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
+                    ds.Tables.Add(dt);
+                }
+
+                DataRow dr = null;
+                if (dt.Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString()).Count() == 0)
+                {
+                    dr = dt.NewRow();
+                    dr["Tabela"] = "F100";
+                    dr["Id"] = Convert.ToInt32(Session["Marca"].ToString());
+                    dr["Fisier"] = btnDocUpload.UploadedFiles[0].FileBytes;
+                    dr["FisierNume"] = btnDocUpload.UploadedFiles[0].FileName;
+                    dr["FisierExtensie"] = btnDocUpload.UploadedFiles[0].ContentType;
+                    dr["USER_NO"] = Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
+                    if (Constante.tipBD == 1)
+                        dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                    else
+                        dr["IdAuto"] = Dami.NextId("tblFisiere");
+                    dr["EsteCerere"] = 0;
+                    dt.Rows.Add(dr);
+                }
+                else
+                {
+                    dr = dt.Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString()).FirstOrDefault();
+                    dr["Fisier"] = btnDocUpload.UploadedFiles[0].FileBytes;
+                    dr["FisierNume"] = btnDocUpload.UploadedFiles[0].FileName;
+                    dr["FisierExtensie"] = btnDocUpload.UploadedFiles[0].ContentType;
+                    dr["USER_NO"] = Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
+                }
+
+                Session["InformatiaCurentaPersonal"] = ds;
+
+                MemoryStream ms = new MemoryStream(btnDocUpload.UploadedFiles[0].FileBytes);
+
+                Session["DateIdentificare_Fisier"] = btnDocUpload.UploadedFiles[0].FileBytes;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+
     }
 
+
+
+
+    //<legend class="legend-font-size">Coduri concediu</legend>
+    // <legend class="legend-font-size">Coduri transfer</legend>
 
 
 

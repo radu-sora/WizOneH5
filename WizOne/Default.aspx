@@ -51,8 +51,9 @@
                     meta:resourcekey="lnkUitatResource1">Am uitat parola</asp:LinkButton>
                 <asp:Button ID="btnOk" runat="server" Text="OK" TabIndex="3" 
                     ValidationGroup="IntroGrup" onclick="btnOk_Click" 
-                    meta:resourcekey="btnOkResource1" />
-           
+                    meta:resourcekey="btnOkResource1" />          
+
+
                 <div id="divOuter" runat="server" class="captcha">
 		        </div>
 

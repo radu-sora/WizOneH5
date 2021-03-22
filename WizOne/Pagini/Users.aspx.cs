@@ -212,7 +212,7 @@ namespace WizOne.Pagini
                     dr["F70114"] = e.NewValues["F70114"] ?? 0;
                     dr["F70121"] = e.NewValues["F70121"] ?? 999;
                     dr["F70122"] = e.NewValues["F70122"] ?? DateTime.Now;
-                    dr["F70123"] = e.NewValues["F70123"] ?? DBNull.Value;
+                    dr["F70123"] = e.NewValues["F70123"] ?? DBNull.Value;                                     
 
                     dr["IdLimba"] = e.NewValues["IdLimba"] ?? "RO";
                     dr["F10003"] = e.NewValues["F10003"] ?? DBNull.Value;
@@ -226,7 +226,11 @@ namespace WizOne.Pagini
                     dr["TIME"] = DateTime.Now;
 
                     //Florin 20149.11.18
-                    dr["NumeComplet"] = numeComplet;
+                    //Radu 16.03.2021
+                    if (numeComplet == null || numeComplet.ToString().Length <= 0)
+                        dr["NumeComplet"] = e.NewValues["NumeComplet"] ?? "";
+                    else
+                        dr["NumeComplet"] = numeComplet;
 
                     dt.Rows.Add(dr);
                 }
@@ -234,6 +238,7 @@ namespace WizOne.Pagini
                 grDate.CancelEdit();
                 Session["InformatiaCurenta"] = dt;
                 grDate.DataSource = dt;
+                grDate.DataBind();
             }
             catch (Exception ex)
             {
@@ -304,12 +309,17 @@ namespace WizOne.Pagini
                     dr["TIME"] = DateTime.Now;
 
                     //Florin 20149.11.18
-                    dr["NumeComplet"] = numeComplet;
+                    //Radu 16.03.2021
+                    if (numeComplet == null || numeComplet.ToString().Length <= 0)
+                        dr["NumeComplet"] = e.NewValues["NumeComplet"] ?? "";
+                    else
+                        dr["NumeComplet"] = numeComplet;
                 }
                 e.Cancel = true;
                 grDate.CancelEdit();
                 Session["InformatiaCurenta"] = dt;
                 grDate.DataSource = dt;
+                grDate.DataBind();
             }
             catch (Exception ex)
             {
@@ -501,6 +511,23 @@ namespace WizOne.Pagini
             //    MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
             //    General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             //}
+        }
+
+   
+
+        protected void grDate_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {//Radu 17.12.2020
+            if (e.Column.FieldName == "NumeComplet")
+            {
+                object val = -99;
+                if (e.KeyValue == DBNull.Value || e.KeyValue == null) return;
+                val = grDate.GetRowValuesByKeyValue(e.KeyValue, "F10003");
+                if (val != DBNull.Value)
+                {
+                    e.Editor.ReadOnly = true;
+                }
+            }
+
         }
 
         //protected void UpdatePasswordField(string newPassword)

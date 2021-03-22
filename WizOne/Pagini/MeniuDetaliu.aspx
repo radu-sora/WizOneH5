@@ -115,8 +115,17 @@
             var arr = cmb.GetSelectedItem();
             if (arr != null)
             {
-                if (grDate.GetEditValue("Nume") == null || grDate.GetEditValue("Nume") == "") grDate.SetEditValue("Nume", arr.texts[0]);
-                if (grDate.GetEditValue("Descriere") == null || grDate.GetEditValue("Descriere") == "") grDate.SetEditValue("Descriere", arr.texts[1]);
+                if (grDate.GetEditValue("Nume") == null || grDate.GetEditValue("Nume") == "") {
+                    //grDate.SetEditValue("Nume", arr.texts[0]);
+                    //Radu 20.01.2021 - din vers 20 DevExpress nu mai merge cum trebuie SetEditValue
+                    var nume = grDate.GetEditor("Nume");
+                    nume.SetValue(arr.texts[0]);
+                }
+                if (grDate.GetEditValue("Descriere") == null || grDate.GetEditValue("Descriere") == "") {
+                    //grDate.SetEditValue("Descriere", arr.texts[1]);
+                    var desc = grDate.GetEditor("Descriere");
+                    desc.SetValue(arr.texts[1]);
+                }
             }
         }
 

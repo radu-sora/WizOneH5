@@ -112,8 +112,10 @@ namespace WizOne.Personal
             ASPxComboBox cmbDurTimpMunca = Contract_DataList.Items[0].FindControl("cmbDurTimpMunca") as ASPxComboBox;
             ASPxComboBox cmbTipNorma = Contract_DataList.Items[0].FindControl("cmbTipNorma") as ASPxComboBox;
             ASPxComboBox cmbIntRepTimpMunca = Contract_DataList.Items[0].FindControl("cmbIntRepTimpMunca") as ASPxComboBox;
+            ASPxComboBox cmbGradInvalid = Contract_DataList.Items[0].FindControl("cmbGradInvalid") as ASPxComboBox;
             ASPxTextBox txtNrOre = Contract_DataList.Items[0].FindControl("txtNrOre") as ASPxTextBox;
             ASPxTextBox txtSalariu = Contract_DataList.Items[0].FindControl("txtSalariu") as ASPxTextBox;
+            ASPxDateEdit deDataValabInvalid = Contract_DataList.Items[0].FindControl("deDataValabInvalid") as ASPxDateEdit;
             if (!IsPostBack)
             {
                 //cmbTimpPartial.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
@@ -169,6 +171,9 @@ namespace WizOne.Personal
                 txtSalariu.Text = ds.Tables[0].Rows[0][salariu].ToString();
 
                 CalculCO();
+
+                if (cmbGradInvalid.Value == null || Convert.ToInt32(cmbGradInvalid.Value) == 1)
+                    deDataValabInvalid.ClientEnabled = false;
 
             }
             else
@@ -267,7 +272,7 @@ namespace WizOne.Personal
                 if (dtFunc != null && dtFunc.Rows.Count > 0)
                 {
                     DataRow[] drFunc = dtFunc.Select("F71802 = " + (ds.Tables[0].Rows[0]["F10071"] as int? ?? 0).ToString());
-                    if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != null && drFunc[0]["F71813"].ToString().Length > 0)
+                    if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != DBNull.Value && drFunc[0]["F71813"].ToString().Length > 0)
                     {
                         cmbNivelFunctie.Value = Convert.ToInt32(drFunc[0]["F71813"].ToString());
                         if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
@@ -296,11 +301,11 @@ namespace WizOne.Personal
             rbCtrRadiat.Items[1].Text = Dami.TraduCuvant(rbCtrRadiat.Items[1].Text);
 
             DataTable dtComp = General.IncarcaDT("SELECT * FROM F002 WHERE F00202 = " + ds.Tables[0].Rows[0]["F10002"].ToString(), null);
-            if ((dtComp.Rows[0]["F00287"] != null && dtComp.Rows[0]["F00287"].ToString() == "1") || (dtComp.Rows[0]["F00288"] != null && dtComp.Rows[0]["F00288"].ToString() == "1"))
+            if ((dtComp.Rows[0]["F00287"] != DBNull.Value && dtComp.Rows[0]["F00287"].ToString() == "1") || (dtComp.Rows[0]["F00288"] != DBNull.Value && dtComp.Rows[0]["F00288"].ToString() == "1"))
                 chkConstr.ClientEnabled = true;
 
             ASPxComboBox cmbCOR = Contract_DataList.Items[0].FindControl("cmbCOR") as ASPxComboBox;
-            cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == null || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
+            cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == DBNull.Value || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
                         
             ds.Tables[1].Rows[0]["F100935"] = nrLuni;
             ds.Tables[1].Rows[0]["F100936"] = nrZile;
@@ -336,7 +341,7 @@ namespace WizOne.Personal
 
             if (Dami.ValoareParam("ValidariPersonal") == "1")
             {
-                string[] lstTextBox = new string[7] { "txtNrCtrInt", "txtSalariu", "txtPerProbaZL", "txtPerProbaZC", "txtNrZilePreavizDemisie", "txtNrZilePreavizConc", "txtNrOre"}; //"txtZileCOCuvAnCrt",
+                string[] lstTextBox = new string[7] { "txtNrCtrInt", "txtSalariu", "txtPerProbaZL", "txtPerProbaZC", "txtNrZilePreavizDemisie", "txtNrZilePreavizConc", "txtNrOre"};    //"txtZileCOCuvAnCrt"
                 for (int i = 0; i < lstTextBox.Count(); i++)
                 {
                     ASPxTextBox txt = Contract_DataList.Items[0].FindControl(lstTextBox[i]) as ASPxTextBox;
@@ -385,6 +390,65 @@ namespace WizOne.Personal
             lgDataInc.InnerText = Dami.TraduCuvant("Data incetare");
             HtmlGenericControl lgSitCOCtr = Contract_DataList.Items[0].FindControl("lgSitCOCtr") as HtmlGenericControl;
             lgSitCOCtr.InnerText = Dami.TraduCuvant("Situatie CO");
+
+            ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
+            if (!IsPostBack)
+            {
+                //Florin 2020.10.02
+                ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
+                string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
+                Session["MP_cmbPost"] = General.IncarcaDT(sqlPost);
+                cmbPost.DataSource = Session["MP_cmbPost"];
+                cmbPost.DataBind();
+
+                General.AflaIdPost();
+                cmbPost.Value = Session["MP_IdPost"];
+            }
+            else if (Contract_pnlCtl.IsCallback)
+            {
+                cmbPost.DataSource = Session["MP_cmbPost"];
+                cmbPost.DataBind();
+            }
+
+            //2020.12.21
+            if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
+            {
+                //Functie
+                ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
+                if (cmbFunctie != null)
+                    cmbFunctie.ClientEnabled = false;
+                ASPxButton btnFunc = Contract_DataList.Items[0].FindControl("btnFunc") as ASPxButton;
+                if (btnFunc != null)
+                    btnFunc.ClientEnabled = false;
+                ASPxButton btnFuncIst = Contract_DataList.Items[0].FindControl("btnFuncIst") as ASPxButton;
+                if (btnFuncIst != null)
+                    btnFuncIst.ClientEnabled = false;
+                if (cmbNivelFunctie != null)
+                    cmbNivelFunctie.ClientEnabled = false;
+                ASPxDateEdit deDataModifFunctie = Contract_DataList.Items[0].FindControl("deDataModifFunctie") as ASPxDateEdit;
+                if (deDataModifFunctie != null)
+                    deDataModifFunctie.ClientEnabled = false;
+
+                //COR
+                if (cmbCOR != null)
+                    cmbCOR.ClientEnabled = false;
+                ASPxButton btnCautaCOR = Contract_DataList.Items[0].FindControl("btnCautaCOR") as ASPxButton;
+                if (btnCautaCOR != null)
+                    btnCautaCOR.ClientEnabled = false;
+                ASPxButton btnCOR = Contract_DataList.Items[0].FindControl("btnCOR") as ASPxButton;
+                if (btnCOR != null)
+                    btnCOR.ClientEnabled = false;
+                ASPxButton btnCORIst = Contract_DataList.Items[0].FindControl("btnCORIst") as ASPxButton;
+                if (btnCORIst != null)
+                    btnCORIst.ClientEnabled = false;
+                ASPxDateEdit deDataModifCOR = Contract_DataList.Items[0].FindControl("deDataModifCOR") as ASPxDateEdit;
+                if (deDataModifCOR != null)
+                    deDataModifCOR.ClientEnabled = false;
+
+                //Post
+                if (cmbPost != null)
+                    cmbPost.ClientEnabled = false;
+            }
 
             General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));
 
@@ -871,6 +935,44 @@ namespace WizOne.Personal
                         ds.Tables[1].Rows[0]["F10098"] = codCOR[0];
                         Session["InformatiaCurentaPersonal"] = ds;
                     }
+                    break;
+                case "cmbPost":
+                    {
+                        ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
+                        Session["MP_IdPost"] = cmbPost.Value;
+                        Contract_pnlCtl.JSProperties["cpControl"] = "cmbPost";
+                        DataTable dtPost = cmbPost.DataSource as DataTable;
+                        DataRow drPost = null;
+                        if (dtPost != null)
+                        {
+                            DataRow[] arr = dtPost.Select("Id=" + cmbPost.Value);
+                            if (arr.Count() > 0)
+                                drPost = arr[0];
+                        }
+
+                        //Florin 2021.03.03 #8
+                        if (drPost != null)
+                            Session["MP_SalariulMinPost"] = drPost["SalariuMin"];
+
+                        General.AdaugaDosar(ref ds, Session["Marca"]);
+                        General.AdaugaBeneficiile(ref ds, Session["Marca"]);
+                        General.AdaugaEchipamente(ref ds, Session["Marca"]);
+                    }
+                    break;
+                case "cmbFunctie":
+                    {
+                        //Florin 2020.10.02
+                        ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
+                        ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
+                        string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
+                        Session["MP_cmbPost"] = General.IncarcaDT(sqlPost);
+                        cmbPost.DataSource = Session["MP_cmbPost"];
+                        cmbPost.DataBind();
+                        cmbPost.Value = null;
+                    }
+                    break;
+                case "btnPost":
+                    ModifAvans((int)Constante.Atribute.Post);
                     break;
             }
 

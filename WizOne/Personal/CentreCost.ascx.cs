@@ -80,6 +80,7 @@ namespace WizOne.Personal
             DataTable dtCC = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colCC = (grDateCentreCost.Columns["IdCentruCost"] as GridViewDataComboBoxColumn);
             colCC.PropertiesComboBox.DataSource = dtCC;
+            Session["MP_F062"] = dtCC;
 
             HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
 
@@ -132,7 +133,6 @@ namespace WizOne.Personal
                     grDateCentreCost.CancelEdit();
                     return;
                 }
-
 
                 if (e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
                 {

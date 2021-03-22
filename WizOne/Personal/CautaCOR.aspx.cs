@@ -41,8 +41,9 @@ namespace WizOne.Personal
                     DataTable dtCOR = Session["CautaCOR_Grid"] as DataTable;
                     grDateCautaCOR.DataSource = dtCOR;
                     grDateCautaCOR.KeyFieldName = "F72202";
-                    grDateCautaCOR.DataBind();
+                    grDateCautaCOR.DataBind();                
                 }
+
             }
             catch (Exception ex)
             {
@@ -73,8 +74,8 @@ namespace WizOne.Personal
                 {
                     ArataMesaj("Introduceti minim 3 caractere la denumire!");
                     return;
-                }
-
+                } 
+                               
                 DataTable dtCOR = GetCOR(txtCodCOR.Text, txtDenumire.Text);
                 grDateCautaCOR.DataSource = dtCOR;
                 grDateCautaCOR.KeyFieldName = "F72202";

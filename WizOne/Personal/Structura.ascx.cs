@@ -134,27 +134,42 @@ namespace WizOne.Personal
                 cmbUnitStat.DataBind();
 
 
-                if (!Page.IsCallback)
-                {
+                //if (!Page.IsCallback)
+                //{
+                    //Florin 2020.10.16 - modificata
+
                     int f10003 = -99;
                     if (table != null && table.Rows.Count > 0) f10003 = Convert.ToInt32(General.Nz(table.Rows[0]["F10003"], -99));
                     DataTable dtF100 = General.GetStructOrgAng(f10003);
+                    DataRow drStruc = null;
                     if (dtF100 != null && dtF100.Rows.Count > 0)
                     {
-                        txtCom.Text = General.Nz(dtF100.Rows[0]["F00204"], "").ToString();
-                        txtSub.Text = General.Nz(dtF100.Rows[0]["F00305"], "").ToString();
-                        txtFil.Text = General.Nz(dtF100.Rows[0]["F00406"], "").ToString();
-                        txtSec.Text = General.Nz(dtF100.Rows[0]["F00507"], "").ToString();
-                        txtDept.Text = General.Nz(dtF100.Rows[0]["F00608"], "").ToString();
-                        txtSubdept.Text = General.Nz(dtF100.Rows[0]["F00709"], "").ToString();
+                        drStruc = dtF100.Rows[0];
                     }
+                    else
+                    {
+                        DataRow[] arr = dtSrc.Select($"F00202={ds.Tables[0].Rows[0]["F10002"]} AND F00304={ds.Tables[0].Rows[0]["F10004"]} AND F00405={ds.Tables[0].Rows[0]["F10005"]} AND F00506={ds.Tables[0].Rows[0]["F10006"]} AND F00607={ds.Tables[0].Rows[0]["F10007"]}");
+                        if (arr.Count() > 0)
+                            drStruc = arr[0];
+                    }
+
+                    if (drStruc != null)
+                    {
+                        txtCom.Text = General.Nz(drStruc["F00204"], "").ToString();
+                        txtSub.Text = General.Nz(drStruc["F00305"], "").ToString();
+                        txtFil.Text = General.Nz(drStruc["F00406"], "").ToString();
+                        txtSec.Text = General.Nz(drStruc["F00507"], "").ToString();
+                        txtDept.Text = General.Nz(drStruc["F00608"], "").ToString();
+                        txtSubdept.Text = General.Nz(drStruc["F00709"], "").ToString();
+                    }
+
                     cmbBir.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F100959"], "0"));
                     cmbCC.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10053"], "0"));
                     cmbPL.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10079"], "0"));
                     cmbLocatie.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001046"], "0"));
                     cmbCAEN.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001095"], "0"));
                     cmbUnitStat.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001097"], "0"));
-                }
+                //}
 
                 if (Dami.ValoareParam("ValidariPersonal") == "1")
                 {
@@ -163,7 +178,11 @@ namespace WizOne.Personal
                         lst = Session["MP_CuloareCampOblig"] as List<int>;
                     cmbStru.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                     //cmbPL.BackColor = Color.LightGray;
-                }           
+                }
+
+                if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
+                    cmbStru.ClientEnabled = false;
+
                 General.SecuritatePersonal(pnlCtlStruct, Convert.ToInt32(Session["UserId"].ToString()));
             }
             catch (Exception ex)

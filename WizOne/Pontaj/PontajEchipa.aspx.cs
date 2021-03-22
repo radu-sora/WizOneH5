@@ -258,8 +258,7 @@ namespace WizOne.Pontaj
                     txtAnLuna.Value = DateTime.Now;
 
                     IncarcaRoluri();
-                    IncarcaAngajati();                   
-                    
+                    IncarcaAngajati();
 
                     #region Filtru Retinut
 
@@ -343,6 +342,7 @@ namespace WizOne.Pontaj
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.DataBind();
                 }
+               
             }
             catch (Exception ex)
             {
@@ -356,6 +356,8 @@ namespace WizOne.Pontaj
             try
             {
                 RetineFiltru("1");
+
+                grDate.Selection.UnselectAll();
 
                 string struc = "";
 
@@ -2005,14 +2007,11 @@ namespace WizOne.Pontaj
                     else
                         f_uri += $",COALESCE(X.{col.FieldName},0) AS {col.FieldName}";
                 }
-                   
-
 
                 if (Dami.ValoareParam("TipCalculDate") == "2")
                     strInner += $@"LEFT JOIN DamiDataPlecare_Table ddp ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
                 else
                     strInner += $@"OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
-
 
                 //Radu 02.02.2021 -  am adaugat DataInceput, DataSfarsit, ZileCONeefectuate si ZLPNeefectuate
                 strSql = "SELECT X.F10003, CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, convert(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate, " + 
@@ -2183,7 +2182,8 @@ namespace WizOne.Pontaj
                 {
                     string roluri = (cmbRol.Value ?? -99).ToString();
                     if (chkRoluri.Checked)
-                        roluri = cmbRol.Items.ToCommaSeparatedString();
+                        roluri = String.Join(",", cmbRol.Items);
+                    //roluri = cmbRol.Items.ToCommaSeparatedString();
 
                     strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, roluri, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
                 }

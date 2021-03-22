@@ -1652,7 +1652,7 @@ namespace WizOne.Adev
                     lstFiles.ForEach(f => System.IO.File.Move(f, Path.Combine(temp, Path.GetFileName(f))));
 
                     // create a new archive
-                    ZipFile.CreateFromDirectory(temp, archive);                    
+                    ZipFile.CreateFromDirectory(temp, archive);      
                     Response.ContentType = "application/zip";
                     Response.AddHeader("Content-Disposition", "attachment; filename=" + numeArhiva + ".zip");
                     Response.TransmitFile(archive);

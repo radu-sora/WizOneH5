@@ -1262,7 +1262,7 @@ namespace WizOne.Pagini
                                     dtTemp = General.IncarcaDT(sql, null);
 
                                     int idUrm = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
-                                    //int idUrm = Convert.ToInt32(idCerere);
+                                    //int idUrm = Convert.ToInt32(idCerere);         
 
                                     //adaugam istoricul
                                     int poz = 0;

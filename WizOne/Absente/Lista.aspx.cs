@@ -830,6 +830,7 @@ namespace WizOne.Absente
                     return;
                 }
 
+
                 DateTime dtSplit = Convert.ToDateTime(txtDataDivide.Value);
 
                 //Radu 08.02.2021
@@ -839,7 +840,8 @@ namespace WizOne.Absente
                 //Radu 01.02.2021 - citire idCerere din secventa
                 int idCerere = Dami.NextId("Ptj_Cereri");
                 string sqlIdCerere = idCerere.ToString();
-                if (idCerere == -99) sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"")";
+                if (idCerere == -99)
+                    sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
                 DateTime dtIncOri = Convert.ToDateTime(obj[4]);
                 DateTime dtSfOri = Convert.ToDateTime(obj[5]);
 
@@ -917,10 +919,9 @@ namespace WizOne.Absente
                 DataTable dtCer = General.IncarcaDT(sqlGen, null);
 
                 if (dtCer.Rows.Count > 0)
-                {
+                {  
                     string sqlIst = $@"INSERT INTO ""Ptj_CereriIstoric""(IdCerere, IdCircuit, IdSuper, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, USER_NO, TIME, Inlocuitor, IdUserInlocuitor)
-                                SELECT {Convert.ToInt32(dtCer.Rows[0]["Id"])} AS IdCerere, IdCircuit, IdSuper,IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, {Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME, Inlocuitor, IdUserInlocuitor FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere"" = {obj[0]}";
-
+                                SELECT {Convert.ToInt32(dtCer.Rows[0]["Id"])} AS IdCerere, IdCircuit, IdSuper, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, {Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME, Inlocuitor, IdUserInlocuitor FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere"" = {obj[0]}";
                     General.ExecutaNonQuery(sqlIst, null);
 
                     //Radu 08.02.2021
@@ -932,6 +933,8 @@ namespace WizOne.Absente
                                                     {General.CurrentDate()}, 0, null, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = -1) FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere""={obj[0]};";
                         General.ExecutaNonQuery(sqlIstAnulare, null);
                     }
+
+                 
                 }
 
                 //Radu 13.02.2020 - daca chkAnulare este bifata, trebuie sterse valorile din Pontaj

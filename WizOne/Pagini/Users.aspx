@@ -67,7 +67,7 @@
                 <tr>
                     <td colspan="5">
                         <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" OnRowDeleting="grDate_RowDeleting" Width="100%"
-                            OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnInitNewRow="grDate_InitNewRow" OnCustomCallback="grDate_CustomCallback" >
+                            OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnInitNewRow="grDate_InitNewRow" OnCustomCallback="grDate_CustomCallback"  OnCellEditorInitialize="grDate_CellEditorInitialize" >
                             <SettingsBehavior AllowFocusedRow="true" EnableCustomizationWindow="true" AllowSelectByRowClick="true" />
                             <Settings ShowFilterRow="True" ShowGroupPanel="True" VerticalScrollBarMode="Visible" />
                             <SettingsSearchPanel Visible="True" />
@@ -99,7 +99,7 @@
                                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnMarcaChanged(); }" />
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>
-                                <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="NumeComplet" Caption="Nume Complet" VisibleIndex="6" ReadOnly="false" Settings-AutoFilterCondition="Contains" Visible="false" ShowInCustomizationForm="false"/>
+                                <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="NumeComplet" Caption="Nume Complet" VisibleIndex="6"  Settings-AutoFilterCondition="Contains"/>
 
                                 <dx:GridViewDataTextColumn FieldName="F70105" Name="F70105" Caption="Id" VisibleIndex="7"/>
                                 <dx:GridViewDataCheckColumn FieldName="F70111" Name="F70111" Caption="Parola Expira" VisibleIndex="8"/>

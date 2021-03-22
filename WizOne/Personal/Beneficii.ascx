@@ -4,12 +4,12 @@
 
     <table width="100%">
         <tr>
-            <td >
+            <td>
                 <dx:ASPxGridView ID="grDateBeneficii" runat="server" ClientInstanceName="grDateBeneficii" ClientIDMode="Static" Width="65%" AutoGenerateColumns="false"  OnDataBinding="grDateBeneficii_DataBinding"  OnInitNewRow="grDateBeneficii_InitNewRow"
                     OnRowInserting="grDateBeneficii_RowInserting" OnRowUpdating="grDateBeneficii_RowUpdating" OnRowDeleting="grDateBeneficii_RowDeleting" OnHtmlEditFormCreated="grDateBeneficii_HtmlEditFormCreated">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
-                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateBeneficii_CustomButtonClick(s, e); }" ContextMenu="ctx" />                                      
+                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateBeneficii_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnEndCallbackBeneficii(s,e); }" ContextMenu="ctx" />                                      
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
@@ -33,6 +33,10 @@
                         <dx:GridViewDataDateColumn FieldName="DataExpirare" Name="DataExpirare" Caption="Data expirare"  Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
+                        <dx:GridViewDataTextColumn FieldName="FisierNume" Name="FisierNume" Caption="Nume Fisier"/>
+                        <dx:GridViewDataCheckColumn FieldName="VineDinPosturi" Name="VineDinPosturi" Caption="Obligatoriu" />
+                        <dx:GridViewDataCheckColumn FieldName="EsteLaDosar" Name="EsteLaDosar" Caption="Indosariat" />
+
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" />						
                         <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" />
                     </Columns>
@@ -68,26 +72,28 @@
                             <div style="padding: 4px 3px 4px">
                                 <table>
                                     <tr>
-                                        <td id="lblNume" runat="server" style="padding-left:10px !important;" colspan="2">Nume beneficiu</td>
+                                        <td id="lblNume" runat="server" style="padding-left:10px !important;" colspan="3">Nume beneficiu</td>
                                     </tr>
-                                    <tr><td style="padding:10px !important;" colspan="2"><dx:ASPxComboBox ID="cmbNumeBen" runat="server" Width="250px" ValueField="IdObiect" DropDownWidth="200" TextField="NumeCompus" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("IdObiect") %>' />
+                                    <tr><td style="padding:10px !important;" colspan="3"><dx:ASPxComboBox ID="cmbNumeBen" runat="server" Width="250px" ValueField="IdObiect" DropDownWidth="200" TextField="NumeCompus" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("IdObiect") %>' />
                                     </tr>
                                     <tr>
                                         <td id="lblDataPrimire" runat="server" style="padding:10px !important;">Data primire</td>
                                         <td id="lblDataExp" runat="server" style="padding:10px !important;">Data expirare</td>
+                                        <td id="lblLaDosar" runat="server" style="padding:10px !important;">Indosariat</td>
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataPrim" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DataPrimire") %>' /></td>
                                         <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataExp" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DataExpirare") %>' /></td>
+                                        <td style="padding:10px !important;"><dx:ASPxCheckBox ID="chkLaDosar" runat="server" Checked='<%#  Eval("EsteLaDosar") == DBNull.Value ? false : Convert.ToBoolean(Eval("EsteLaDosar"))%>' /></td>
                                     </tr>
                                     <tr>
-                                        <td id="lblCaract" runat="server" style="padding:10px !important;"  colspan="2">Caracteristica echipament</td>                                      
+                                        <td id="lblCaract" runat="server" style="padding:10px !important;" colspan="3">Caracteristica echipament</td>                                      
                                     </tr>
                                     <tr>
-                                        <td style="padding:10px !important;"  colspan="2"><dx:ASPxTextBox ID="txtCaract" runat="server" Width="250px" Value='<%# Bind("Caracteristica") %>' /></td>
+                                        <td style="padding:10px !important;" colspan="3"><dx:ASPxTextBox ID="txtCaract" runat="server" Width="250px" Value='<%# Bind("Caracteristica") %>' /></td>
                                     </tr>
                                     <tr>
-                                        <td style="padding:10px !important;" colspan="2">
+                                        <td style="padding:10px !important;" colspan="3">
                                             <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
                                             <dx:ASPxUploadControl ID="btnDocUploadBen" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
                                                 BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
@@ -129,6 +135,16 @@
         function EndUpload(s) {
             lblDoc.innerText = s.cpDocUploadName;
             s.cpDocUploadName = null;
+        }
+
+        function OnEndCallbackBeneficii(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
         }
 
     </script>

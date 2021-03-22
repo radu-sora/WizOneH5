@@ -1781,13 +1781,14 @@ namespace WizOne.Personal
                                     if (ds.Tables[1].Rows[0]["F10071"] != null && ds.Tables[1].Rows[0]["F10071"].ToString().Length > 0)
                                         General.ExecutaNonQuery("UPDATE F718 SET F71813 = " + (ctl.Value ?? "NULL") + " WHERE F71802 = " + ds.Tables[1].Rows[0]["F10071"].ToString(), null);
                                     continue;
-                                }
+                                }                         
 
                                 DataTable dt = new DataTable();
                                 if (cols1.Contains(colName)) dt = ds.Tables[1];
                                 if (cols2.Contains(colName)) dt = ds.Tables[2];
+
                                 if (ctl != null && General.Nz(dt.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString())
-                                {                
+                                {   
                                     dt.Rows[0][colName] = ctl.Value ?? DBNull.Value;
                                 }
 
@@ -1808,6 +1809,32 @@ namespace WizOne.Personal
                                 {
                                     DateTime data = Convert.ToDateTime(ctl.Value ?? new DateTime(2100, 1, 1));
                                     dt2.Rows[0][colName] = new DateTime(data.Year, data.Month, data.Day);
+                                }
+
+                                switch (colName)
+                                {
+                                    case "F100271":
+                                        if (hfDate.Contains("DataValabInvalid"))
+                                            ds.Tables[1].Rows[0]["F100271"] = Convert.ToDateTime(hfDate["DataValabInvalid"]);
+                                        break;
+                                    case "F100933":
+                                        if (hfDate.Contains("DeLaData"))
+                                            ds.Tables[1].Rows[0]["F100933"] = Convert.ToDateTime(hfDate["DeLaData"]);
+                                        break;
+                                    case "F100934":
+                                        if (hfDate.Contains("LaData"))
+                                            ds.Tables[1].Rows[0]["F100934"] = Convert.ToDateTime(hfDate["LaData"]);
+                                        break;
+                                    case "F10023":
+                                        if (hfDate.Contains("UltimaZiLucr"))
+                                            ds.Tables[1].Rows[0]["F10023"] = Convert.ToDateTime(hfDate["UltimaZiLucr"]);
+                                        break;
+                                    case "F100993":
+                                        if (hfDate.Contains("DataPlecarii"))
+                                            ds.Tables[1].Rows[0]["F100993"] = Convert.ToDateTime(hfDate["DataPlecarii"]);
+                                        break;
+                                    default:
+                                        break;
                                 }
 
                             }

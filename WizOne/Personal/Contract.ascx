@@ -501,12 +501,15 @@
     }
 
     function cmbGradInvalid_SelectedIndexChanged(s) {
-        if (cmbGradInvalid.GetSelectedIndex() > 0)
+        if (cmbGradInvalid.GetSelectedIndex() > 0) {
             deDataValabInvalid.SetEnabled(true);
+            hfDate.Remove("DataValabInvalid");
+        }
         else {
             deDataValabInvalid.SetEnabled(false);
             var dtTmp = new Date(2100, 0, 1, 0, 0, 0, 0)
             deDataValabInvalid.SetValue(dtTmp);
+            hfDate.Set("DataValabInvalid", dtTmp);
         }
         CompletareZile(cmbNivelFunctie);
         ValidareZile(1);
@@ -533,6 +536,11 @@
             deUltimaZiLucr.SetValue(dtTmp);
             deDataPlecarii.SetValue(dtTmp);
 
+            hfDate.Set("DeLaData", dtTmp);
+            hfDate.Set("LaData", dtTmp);
+            hfDate.Set("UltimaZiLucr", dtTmp);
+            hfDate.Set("DataPlecarii", dtTmp);
+
             txtNrZile.SetValue("");
             txtNrLuni.SetValue("");
         }
@@ -543,6 +551,12 @@
             deLaData.SetEnabled(true);
             deUltimaZiLucr.SetEnabled(true);
             deDataPlecarii.SetEnabled(true);
+
+            hfDate.Remove("DeLaData");
+            hfDate.Remove("LaData");
+            hfDate.Remove("UltimaZiLucr");
+            hfDate.Remove("DataPlecarii");
+
             if (<%=Session["MP_AreContract"] %> == 0)
                 deDeLaData.SetValue(deDataAng.GetValue());
 
@@ -1703,4 +1717,5 @@
         </dx:ASPxCallbackPanel>    
   <dx:ASPxHiddenField runat="server" ID="hfTipAngajat" ClientInstanceName="hfTipAngajat" />
   <dx:ASPxHiddenField runat="server" ID="hfIntRepTM" ClientInstanceName="hfIntRepTM" />
+
 </body>

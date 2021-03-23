@@ -833,6 +833,7 @@
     <Content Include="Pagini\CalculVenit.aspx" />
     <Content Include="Pagini\Captcha.aspx" />
     <Content Include="Pagini\CodConfirmare.aspx" />
+    <Content Include="Pagini\Contr2.aspx" />
     <Content Include="Pagini\Delegari.aspx" />
     <Content Include="Pagini\ExportSAP.aspx" />
     <Content Include="Pagini\Fisiere.aspx" />
@@ -849,6 +850,7 @@
     <Content Include="Pagini\TrimitereFluturasi.aspx" />
     <Content Include="Pagini\VerificareBD.aspx" />
     <Content Include="Personal\Activitati.ascx" />
+    <Content Include="Personal\Contracte2.ascx" />
     <Content Include="Personal\Cursuri.ascx" />
     <Content Include="Personal\Evaluare.ascx" />
     <Content Include="Personal\Calcul.ascx" />
@@ -1324,6 +1326,7 @@
     </Compile>
     <Compile Include="ConcediiMedicale\Aprobare.aspx.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ConcediiMedicale\Aprobare.aspx.designer.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>
@@ -1740,6 +1743,13 @@
     <Compile Include="Pagini\CodConfirmare.aspx.designer.cs">
       <DependentUpon>CodConfirmare.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pagini\Contr2.aspx.cs">
+      <DependentUpon>Contr2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Contr2.aspx.designer.cs">
+      <DependentUpon>Contr2.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pagini\Delegari.aspx.cs">
       <DependentUpon>Delegari.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1851,6 +1861,13 @@
     </Compile>
     <Compile Include="Personal\Activitati.ascx.designer.cs">
       <DependentUpon>Activitati.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Contracte2.ascx.cs">
+      <DependentUpon>Contracte2.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Contracte2.ascx.designer.cs">
+      <DependentUpon>Contracte2.ascx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Cursuri.ascx.cs">
       <DependentUpon>Cursuri.ascx</DependentUpon>

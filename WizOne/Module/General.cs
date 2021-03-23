@@ -6225,14 +6225,22 @@ namespace WizOne.Module
         }
 
 
-        public static void PontajInitGeneral(int idUser, int an, int luna, string contracte = "")
+        public static void PontajInitGeneral(int idUser, int an, int luna, string contracte = "", string dept = "", int f10003 = -99)
         {
             try
             {
                 //Florin 2020.06.30
                 string filtru = "";
                 if (contracte != "")
-                    filtru = $@"AND Y.""Denumire"" IN ('{contracte}')";
+                    filtru = $@" AND Y.""Denumire"" IN ('{contracte}')";
+
+                //Florin 2021.03.23
+                if (dept != "")
+                    filtru = $@" AND G.F00608 IN ('{dept}')";
+
+                //Florin 2021.03.23
+                if (f10003 != -99)
+                    filtru = $@" AND B.F10003 = {f10003}";
 
                 string strInner = @"OUTER APPLY dbo.DamiNorma(B.F10003, A.""Zi"") dn
                                     OUTER APPLY    dbo.DamiCC(B.F10003, A.""Zi"") dc

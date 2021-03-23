@@ -740,7 +740,7 @@ namespace WizOne.Pagini
                     }
                     else if (command == "btnPrint")
                     {
-                        lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat", "IdAutoAct", "SporVechime", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev", "TipContract" });
+                        lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat", "IdAutoAct", "SporVechime", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev", "TipContract", "PunctLucru" });
 
                         if (lst?.FirstOrDefault() == null) return;
                     }
@@ -1347,7 +1347,7 @@ namespace WizOne.Pagini
                                         }
 
                                         //modificari contract
-                                        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1)
+                                        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1 || Convert.ToInt32(General.Nz(obj[20], 0)) == 1 || Convert.ToInt32(General.Nz(obj[21], 0)) == 1)
                                         {
                                             if (General.Nz(obj[12], "").ToString() == "")
                                             {
@@ -1427,7 +1427,7 @@ namespace WizOne.Pagini
                                             }
                                         }
 
-                                        if (idRap == "")
+                                        if ((idRap ?? "") == "")
                                         {
                                             msg = "Nu este setat raportul";
                                             break;
@@ -1451,7 +1451,7 @@ namespace WizOne.Pagini
                                             //candidati
                                             if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1) idTipDoc = 1;
                                             //modificari contract
-                                            if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1 || Convert.ToInt32(General.Nz(obj[20], 0)) == 1)
+                                            if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1 || Convert.ToInt32(General.Nz(obj[20], 0)) == 1 || Convert.ToInt32(General.Nz(obj[21], 0)) == 1)
                                             {
                                                 if (General.Nz(obj[12], "").ToString() == "")
                                                 {

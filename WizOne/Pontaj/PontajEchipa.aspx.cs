@@ -2199,8 +2199,8 @@ namespace WizOne.Pontaj
                 if (General.Nz(cmbAng.Value, "").ToString() == "")
                 {
                     string roluri = (cmbRol.Value ?? -99).ToString();
-                    if (chkRoluri.Checked)
-                        roluri = cmbRol.Items.ToCommaSeparatedString();
+                    //if (chkRoluri.Checked)
+                    //    roluri = cmbRol.Items.ToCommaSeparatedString();
 
                     strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, roluri, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
                 }

@@ -166,8 +166,11 @@ namespace WizOne.Pagini
                         grDate.KeyFieldName = "Id";
                         break;
                     case "Eval_CategCompetente":
-                        dt = General.IncarcaDT(@"select ""IdCategorie"" as ""Id"", ""CodCategorie"", ""DenCategorie"" from ""Eval_CategCompetente"" ", null);
-                        grDate.KeyFieldName = "Id";
+                        dt = General.IncarcaDT(
+                                @"SELECT A.""IdCategorie"" as ""Id"", A.""CodCategorie"", A.""DenCategorie"", A.""Sectiune"", A.""Subsectiune"", B.""Denumire"" AS ""Calificativ"" 
+                                FROM ""Eval_CategCompetente"" A
+                                LEFT JOIN ""Eval_tblTipValori"" B ON A.""IdCalificativ""=B.""Id""", null);
+                         grDate.KeyFieldName = "Id";
                         break;
                     case "Eval_ListaObiectiv":
                         dt = General.IncarcaDT(@"select ""IdLista"" as ""Id"", ""CodLista"", ""DenLista"" from ""Eval_ListaObiectiv"" ", null);

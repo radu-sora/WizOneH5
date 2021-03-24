@@ -136,13 +136,18 @@ namespace WizOne.Personal
                 if (General.Nz(ds.Tables[0].Rows[0]["F100927"], "").ToString() != "")
                     cmbDurTimpMunca.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100927"]);
 
-                cmbTipNorma.DataSource = General.GetTipNorma(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0 ? "1" : "2");
+
+                //Florin #715
+                //cmbTipNorma.DataSource = General.GetTipNorma(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0 ? "1" : "2");
+                cmbTipNorma.DataSource = General.GetTipNorma("1 OR 1=1");
                 cmbTipNorma.DataBind();
                 //Florin 2019.09.05
                 if (General.Nz(ds.Tables[0].Rows[0]["F100926"], "").ToString() != "")
                     cmbTipNorma.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100926"]);
 
-                if (ds.Tables[0].Rows[0]["F10010"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
+                //Florin #715
+                //if (ds.Tables[0].Rows[0]["F10010"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
+                if (Convert.ToInt32(cmbTipNorma.Value) != 3 && (ds.Tables[0].Rows[0]["F10010"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0))
                 {
                     cmbIntRepTimpMunca.ClientEnabled = false;
                     txtNrOre.ClientEnabled = false;
@@ -187,10 +192,14 @@ namespace WizOne.Personal
                 cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca(tipAng == 0 ? "1" : "2");
                 cmbDurTimpMunca.DataBind();
 
-                cmbTipNorma.DataSource = General.GetTipNorma(tipAng == 0 ? "1" : "2");
+                //Florin #715
+                //cmbTipNorma.DataSource = General.GetTipNorma(tipAng == 0 ? "1" : "2");
+                cmbTipNorma.DataSource = General.GetTipNorma("1 OR 1=1");
                 cmbTipNorma.DataBind();
 
-                if (tipAng == 0)
+                //Florin #715
+                //if (tipAng == 0)
+                if (Convert.ToInt32(cmbTipNorma.Value) != 3 && tipAng == 0)
                 {
                     cmbIntRepTimpMunca.ClientEnabled = false;
                     txtNrOre.ClientEnabled = false;
@@ -263,7 +272,7 @@ namespace WizOne.Personal
                 if (dtFunc != null && dtFunc.Rows.Count > 0)
                 {
                     DataRow[] drFunc = dtFunc.Select("F71802 = " + (ds.Tables[0].Rows[0]["F10071"] as int? ?? 0).ToString());
-                    if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != null && drFunc[0]["F71813"].ToString().Length > 0)
+                    if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != DBNull.Value && drFunc[0]["F71813"].ToString().Length > 0)
                     {
                         cmbNivelFunctie.Value = Convert.ToInt32(drFunc[0]["F71813"].ToString());
                         if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
@@ -284,7 +293,7 @@ namespace WizOne.Personal
 
             }
             
-            //SetDurataTimpMunca();
+            SetDurataTimpMunca();
 
             ASPxRadioButtonList rbCtrRadiat = Contract_DataList.Items[0].FindControl("rbCtrRadiat") as ASPxRadioButtonList;
             rbCtrRadiat.Value = General.Nz(table.Rows[0]["F1001077"], 0).ToString();
@@ -292,11 +301,11 @@ namespace WizOne.Personal
             rbCtrRadiat.Items[1].Text = Dami.TraduCuvant(rbCtrRadiat.Items[1].Text);
 
             DataTable dtComp = General.IncarcaDT("SELECT * FROM F002 WHERE F00202 = " + ds.Tables[0].Rows[0]["F10002"].ToString(), null);
-            if ((dtComp.Rows[0]["F00287"] != null && dtComp.Rows[0]["F00287"].ToString() == "1") || (dtComp.Rows[0]["F00288"] != null && dtComp.Rows[0]["F00288"].ToString() == "1"))
+            if ((dtComp.Rows[0]["F00287"] != DBNull.Value && dtComp.Rows[0]["F00287"].ToString() == "1") || (dtComp.Rows[0]["F00288"] != DBNull.Value && dtComp.Rows[0]["F00288"].ToString() == "1"))
                 chkConstr.ClientEnabled = true;
 
             ASPxComboBox cmbCOR = Contract_DataList.Items[0].FindControl("cmbCOR") as ASPxComboBox;
-            cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == null || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
+            cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == DBNull.Value || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
                         
             ds.Tables[1].Rows[0]["F100935"] = nrLuni;
             ds.Tables[1].Rows[0]["F100936"] = nrZile;
@@ -332,7 +341,7 @@ namespace WizOne.Personal
 
             if (Dami.ValoareParam("ValidariPersonal") == "1")
             {
-                string[] lstTextBox = new string[7] { "txtNrCtrInt", "txtSalariu", "txtPerProbaZL", "txtPerProbaZC", "txtNrZilePreavizDemisie", "txtNrZilePreavizConc", "txtNrOre"};   //"txtZileCOCuvAnCrt",
+                string[] lstTextBox = new string[7] { "txtNrCtrInt", "txtSalariu", "txtPerProbaZL", "txtPerProbaZC", "txtNrZilePreavizDemisie", "txtNrZilePreavizConc", "txtNrOre"};    //"txtZileCOCuvAnCrt"
                 for (int i = 0; i < lstTextBox.Count(); i++)
                 {
                     ASPxTextBox txt = Contract_DataList.Items[0].FindControl(lstTextBox[i]) as ASPxTextBox;
@@ -381,6 +390,65 @@ namespace WizOne.Personal
             lgDataInc.InnerText = Dami.TraduCuvant("Data incetare");
             HtmlGenericControl lgSitCOCtr = Contract_DataList.Items[0].FindControl("lgSitCOCtr") as HtmlGenericControl;
             lgSitCOCtr.InnerText = Dami.TraduCuvant("Situatie CO");
+
+            ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
+            if (!IsPostBack)
+            {
+                //Florin 2020.10.02
+                ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
+                string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
+                Session["MP_cmbPost"] = General.IncarcaDT(sqlPost);
+                cmbPost.DataSource = Session["MP_cmbPost"];
+                cmbPost.DataBind();
+
+                General.AflaIdPost();
+                cmbPost.Value = Session["MP_IdPost"];
+            }
+            else if (Contract_pnlCtl.IsCallback)
+            {
+                cmbPost.DataSource = Session["MP_cmbPost"];
+                cmbPost.DataBind();
+            }
+
+            //2020.12.21
+            if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
+            {
+                //Functie
+                ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
+                if (cmbFunctie != null)
+                    cmbFunctie.ClientEnabled = false;
+                ASPxButton btnFunc = Contract_DataList.Items[0].FindControl("btnFunc") as ASPxButton;
+                if (btnFunc != null)
+                    btnFunc.ClientEnabled = false;
+                ASPxButton btnFuncIst = Contract_DataList.Items[0].FindControl("btnFuncIst") as ASPxButton;
+                if (btnFuncIst != null)
+                    btnFuncIst.ClientEnabled = false;
+                if (cmbNivelFunctie != null)
+                    cmbNivelFunctie.ClientEnabled = false;
+                ASPxDateEdit deDataModifFunctie = Contract_DataList.Items[0].FindControl("deDataModifFunctie") as ASPxDateEdit;
+                if (deDataModifFunctie != null)
+                    deDataModifFunctie.ClientEnabled = false;
+
+                //COR
+                if (cmbCOR != null)
+                    cmbCOR.ClientEnabled = false;
+                ASPxButton btnCautaCOR = Contract_DataList.Items[0].FindControl("btnCautaCOR") as ASPxButton;
+                if (btnCautaCOR != null)
+                    btnCautaCOR.ClientEnabled = false;
+                ASPxButton btnCOR = Contract_DataList.Items[0].FindControl("btnCOR") as ASPxButton;
+                if (btnCOR != null)
+                    btnCOR.ClientEnabled = false;
+                ASPxButton btnCORIst = Contract_DataList.Items[0].FindControl("btnCORIst") as ASPxButton;
+                if (btnCORIst != null)
+                    btnCORIst.ClientEnabled = false;
+                ASPxDateEdit deDataModifCOR = Contract_DataList.Items[0].FindControl("deDataModifCOR") as ASPxDateEdit;
+                if (deDataModifCOR != null)
+                    deDataModifCOR.ClientEnabled = false;
+
+                //Post
+                if (cmbPost != null)
+                    cmbPost.ClientEnabled = false;
+            }
 
             General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));
 
@@ -868,6 +936,44 @@ namespace WizOne.Personal
                         Session["InformatiaCurentaPersonal"] = ds;
                     }
                     break;
+                case "cmbPost":
+                    {
+                        ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
+                        Session["MP_IdPost"] = cmbPost.Value;
+                        Contract_pnlCtl.JSProperties["cpControl"] = "cmbPost";
+                        DataTable dtPost = cmbPost.DataSource as DataTable;
+                        DataRow drPost = null;
+                        if (dtPost != null)
+                        {
+                            DataRow[] arr = dtPost.Select("Id=" + cmbPost.Value);
+                            if (arr.Count() > 0)
+                                drPost = arr[0];
+                        }
+
+                        //Florin 2021.03.03 #8
+                        if (drPost != null)
+                            Session["MP_SalariulMinPost"] = drPost["SalariuMin"];
+
+                        General.AdaugaDosar(ref ds, Session["Marca"]);
+                        General.AdaugaBeneficiile(ref ds, Session["Marca"]);
+                        General.AdaugaEchipamente(ref ds, Session["Marca"]);
+                    }
+                    break;
+                case "cmbFunctie":
+                    {
+                        //Florin 2020.10.02
+                        ASPxComboBox cmbPost = Contract_DataList.Items[0].FindControl("cmbPost") as ASPxComboBox;
+                        ASPxComboBox cmbFunctie = Contract_DataList.Items[0].FindControl("cmbFunctie") as ASPxComboBox;
+                        string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
+                        Session["MP_cmbPost"] = General.IncarcaDT(sqlPost);
+                        cmbPost.DataSource = Session["MP_cmbPost"];
+                        cmbPost.DataBind();
+                        cmbPost.Value = null;
+                    }
+                    break;
+                case "btnPost":
+                    ModifAvans((int)Constante.Atribute.Post);
+                    break;
             }
 
         }
@@ -906,20 +1012,41 @@ namespace WizOne.Personal
             //else
             //    txtZileCOCuvAnCrt.Text = "";
         }
-        
 
 
+        //Florin #715
         protected void SetDurataTimpMunca()
         {
             ASPxComboBox cmbDurTimpMunca = Contract_DataList.Items[0].FindControl("cmbDurTimpMunca") as ASPxComboBox;
-            ASPxComboBox cmbTipNorma = Contract_DataList.Items[0].FindControl("cmbTipNorma") as ASPxComboBox;
+            if (cmbDurTimpMunca != null)
+            {
+                ASPxComboBox cmbTipNorma = Contract_DataList.Items[0].FindControl("cmbTipNorma") as ASPxComboBox;
+                //ObjectDataSource cmbDTMDataSource = cmbDurTimpMunca.NamingContainer.FindControl("dsDTM") as ObjectDataSource;
+                //if (cmbDTMDataSource != null && cmbTipNorma != null)
+                //{
+                //    cmbDTMDataSource.SelectParameters.Clear();
+                //    cmbDTMDataSource.SelectParameters.Add("param", cmbTipNorma.SelectedIndex.ToString());
+                //    cmbDurTimpMunca.DataBindItems();
+                //}
 
-            ObjectDataSource cmbDTMDataSource = cmbDurTimpMunca.NamingContainer.FindControl("dsDTM") as ObjectDataSource;
+                if (cmbTipNorma != null && cmbDurTimpMunca != null)
+                {
+                    if (Convert.ToInt32(General.Nz(cmbTipNorma.Value, -99)) == 3)
+                    {
+                        cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca("3");
+                        cmbDurTimpMunca.DataBind();
+                        cmbDurTimpMunca.Value = 6;
+                        //cmbDurTimpMunca.ClientEnabled = false;
+                    }
 
-            cmbDTMDataSource.SelectParameters.Clear();
-            cmbDTMDataSource.SelectParameters.Add("param", cmbTipNorma.SelectedIndex.ToString()); 
-            cmbDurTimpMunca.DataBindItems();
+                    ASPxComboBox cmbIntRepTimpMunca = Contract_DataList.Items[0].FindControl("cmbIntRepTimpMunca") as ASPxComboBox;
+                    if (cmbIntRepTimpMunca != null)
+                        cmbIntRepTimpMunca.ClientEnabled = true;
 
+                    ASPxTextBox txtNrOre = Contract_DataList.Items[0].FindControl("txtNrOre") as ASPxTextBox;
+                    txtNrOre.ClientEnabled = true;
+                }
+            }
         }
 
         public DateTime SetDataRevisal(DateTime data)

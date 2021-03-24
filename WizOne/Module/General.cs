@@ -3044,6 +3044,9 @@ namespace WizOne.Module
                 cond = " WHERE F09105 = 1";
             if (param == "2")
                 cond = " WHERE F09105 = 2";
+            //Florin #715
+            if (param == "3")
+                cond = " WHERE F09105 = 3";
             string sql = @"SELECT * FROM F091 " + cond + " ORDER BY F09103";
             if (Constante.tipBD == 2)
                 sql = General.SelectOracle("F091", "F09102") + cond + " ORDER BY F09103";
@@ -6011,7 +6014,7 @@ namespace WizOne.Module
                              WHERE D.""IdUser"" = {idUser} AND C.""IdRol"" IN ({idRol}) 
                              GROUP BY B.F10003) X 
                              INNER JOIN F100 A ON A.F10003=X.F10003 
-                             WHERE A.F10025 <> 900 AND {General.TruncateDate("A.F10022")} <> {General.TruncateDate("A.F100993")} {strFiltru} {General.FiltruActivi(an, luna, zi)}
+                             WHERE A.F10025 <> 900 AND COALESCE({General.TruncateDate("A.F10022")},{General.CurrentDate()}) <> COALESCE({General.TruncateDate("A.F100993")},{General.CurrentDate()}) {strFiltru} {General.FiltruActivi(an, luna, zi)}
                              GROUP BY X.F10003";
 
                     str = " AND A.F10003 IN (" + strSql + ")";
@@ -6222,14 +6225,22 @@ namespace WizOne.Module
         }
 
 
-        public static void PontajInitGeneral(int idUser, int an, int luna, string contracte = "")
+        public static void PontajInitGeneral(int idUser, int an, int luna, string contracte = "", string dept = "", int f10003 = -99)
         {
             try
             {
                 //Florin 2020.06.30
                 string filtru = "";
                 if (contracte != "")
-                    filtru = $@"AND Y.""Denumire"" IN ('{contracte}')";
+                    filtru = $@" AND Y.""Denumire"" IN ('{contracte}')";
+
+                //Florin 2021.03.23
+                if (dept != "")
+                    filtru = $@" AND G.F00608 IN ('{dept}')";
+
+                //Florin 2021.03.23
+                if (f10003 != -99)
+                    filtru = $@" AND B.F10003 = {f10003}";
 
                 string strInner = @"OUTER APPLY dbo.DamiNorma(B.F10003, A.""Zi"") dn
                                     OUTER APPLY    dbo.DamiCC(B.F10003, A.""Zi"") dc
@@ -6242,7 +6253,7 @@ namespace WizOne.Module
                 }
 
                 //initializam Ptj_Intrari
-                string strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"")
+                string strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"", F100958, F100959)
                                 SELECT B.F10003, A.""Zi"", -1 AS F06204, A.""ZiSapt"", 
                                 CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
                                 CASE WHEN C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
@@ -6263,7 +6274,9 @@ namespace WizOne.Module
                                 WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
                                 WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
                                 WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
-                                END END AS ""IdProgram""
+                                END END AS ""IdProgram"",
+                                COALESCE(sd.Subdept, (SELECT C.F100958 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100958, 
+                                COALESCE(br.Birou, (SELECT C.F100959 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100959
 
                                 FROM ""tblZile"" A
                                 INNER JOIN F100 B ON 1=1 AND B.F10022 <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= B.F10023
@@ -6272,9 +6285,11 @@ namespace WizOne.Module
                                 {strInner}                                
                                 LEFT JOIN F006 G ON G.F00607 = dd.Dept
                                 INNER JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" BB WHERE BB.F10003 = B.F10003 AND BB.""DataInceput"" <= A.Zi AND A.Zi <= BB.""DataSfarsit"")
+                                OUTER APPLY dbo.DamiSubdept(B.F10003, A.Zi) sd
+                                OUTER APPLY dbo.DamiBirou(B.F10003, A.Zi) br                                 
                                 WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {General.FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0 {filtru};";
                 if (Constante.tipBD == 2)
-                    strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"")
+                    strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"", F100958, F100959)
                                 SELECT B.F10003, A.""Zi"", -1 AS F06204, A.""ZiSapt"", 
                                 CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
                                 CASE WHEN C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
@@ -6295,7 +6310,9 @@ namespace WizOne.Module
                                 WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
                                 WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
                                 WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
-                                END END AS ""IdProgram""
+                                END END AS ""IdProgram"",
+								COALESCE(""DamiSubdept""(B.F10003, A.""Ziua""), (SELECT C.F100958 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100958,
+                                COALESCE(""DamiBirou""(B.F10003, A.""Ziua""), (SELECT C.F100959 FROM F1001 C WHERE C.F10003=B.F10003)) AS F100958
 
                                 FROM ""tblZile"" A
                                 INNER JOIN F100 B ON 1=1 AND B.F10022  <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= B.F10023
@@ -6508,8 +6525,13 @@ namespace WizOne.Module
                     //if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
                     if (denDept != "") strFiltru += @" AND A.F10007 IN (SELECT F00607 FROM F006 WHERE F00608 IN ('" + denDept.Replace(",", "','") + "'))";
 
-                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, F100958, F100959, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
-                                 {0} {1} {2} {3} ";
+
+                    //Florin #773
+                    string strLast = "";
+                    if (cuInOut == 1)
+                        strLast = @", ""FirstIn"", ""LastOut""";
+
+                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, F100958, F100959, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"" " + strLast + ") {0} {1} {2} {3} ";
 
                     //Florin 2020.06.30 am modificat 1 cu cuNormaZL
                     strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, cuNormaZL, cuInOut), strFiltru, strFiltruZile, usr);
@@ -6817,8 +6839,11 @@ namespace WizOne.Module
                                  ,CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR CONVERT(date, X.Ziua) > CONVERT(date, ddp.DataPlecare) THEN CONVERT(int,NULL) ELSE dn.Norma * 60 END AS Val0";
                     if (cuInOut == 1)
                     {
+                        //Florin #773 - am adaugat FirstIn si LastOut
                         inOut = @",(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraInInitializare), DATEPART(MINUTE,OraInInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS In1
-                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraOutInitializare), DATEPART(MINUTE,OraOutInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS Out1";
+                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraOutInitializare), DATEPART(MINUTE,OraOutInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS Out1
+                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraInInitializare), DATEPART(MINUTE,OraInInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS FirstIn
+                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraOutInitializare), DATEPART(MINUTE,OraOutInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS LastOut";
                     }
 
                     for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)               //pt fiecare zi din luna
@@ -9014,5 +9039,320 @@ namespace WizOne.Module
 
         } 
 
+        public static void SalveazaPost(object f10003, object idPost, DateTime dtModif)
+        {
+            try
+            {
+                if (f10003 == null || idPost == null) return;
+
+                string sqlPost =
+                    $@"BEGIN
+                        IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND {General.TruncateDate("DataInceput")} = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= {General.TruncateDate("DataSfarsit")}) <> 0)
+                            BEGIN
+                                IF (@2 <> -99)
+                                    BEGIN
+                                        IF ((SELECT COUNT(*) FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND ""IdPost""=@2 AND {General.TruncateDate("DataSfarsit")}={General.ToDataUniv(dtModif.AddDays(-1))}) = 1)
+                                            BEGIN
+                                                DELETE ""Org_relPostAngajat"" WHERE F10003=@1 AND {General.TruncateDate("DataInceput")}  = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= {General.TruncateDate("DataSfarsit")};
+                                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={General.ToDataUniv(2100, 1, 1)} WHERE F10003=@1 AND ""IdPost""=@2 AND {General.TruncateDate("DataSfarsit")}={General.ToDataUniv(dtModif.AddDays(-1))};
+                                            END;
+                                        ELSE
+                                            UPDATE ""Org_relPostAngajat"" SET ""IdPost"" = @2 WHERE F10003=@1 AND {General.TruncateDate("DataInceput")}  = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= {General.TruncateDate("DataSfarsit")}
+                                    END;                                
+                                ELSE
+                                    DELETE ""Org_relPostAngajat"" WHERE F10003=@1 AND {General.TruncateDate("DataInceput")}  = {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= {General.TruncateDate("DataSfarsit")};
+                            END;
+                        ELSE
+                            BEGIN
+			                    DECLARE @Id int
+			                    SELECT @Id=IdAuto FROM ""Org_relPostAngajat"" WHERE  F10003=@1 AND {General.TruncateDate("DataInceput")}  <= {General.ToDataUniv(dtModif)} AND {General.ToDataUniv(dtModif)} <= {General.TruncateDate("DataSfarsit")};
+
+                                IF (@2 <> -99)
+                                    BEGIN
+                                        INSERT INTO ""Org_relPostAngajat""(""IdPost"", F10003, ""DataInceput"", ""DataSfarsit"", ""IdPostVechi"", USER_NO, TIME) VALUES(@2, @1, {General.ToDataUniv(dtModif)}, 
+                                        COALESCE((SELECT ""DataSfarsit"" FROM ""Org_relPostAngajat"" WHERE IdAuto=@Id), {General.ToDataUniv(2100, 1, 1)}), 
+                                        (SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE IdAuto=@Id), @3, {General.CurrentDate()});
+                                    END;                            
+                                UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit""={General.ToDataUniv(dtModif.AddDays(-1))} WHERE IdAuto=@Id;
+                            END;                     
+                    END;";
+                General.ExecutaNonQuery(sqlPost, new object[] { f10003, idPost, HttpContext.Current.Session["UserId"] });
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "SalveazaPost", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        //public static void AdaugaBeneficiile(ref DataSet ds, object f10003, DataRow drPost)
+        //{
+        //    try
+        //    {
+        //        string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + f10003.ToString();
+        //        DataTable dtBen = new DataTable();
+        //        if (ds.Tables.Contains("Admin_Beneficii"))
+        //        {
+        //            dtBen = ds.Tables["Admin_Beneficii"];
+        //        }
+        //        else
+        //        {
+        //            dtBen = General.IncarcaDT($@"SELECT * FROM ""Admin_Beneficii"" WHERE ""Marca"" = @1", new object[] { f10003 });
+        //            dtBen.TableName = "Admin_Beneficii";
+        //            dtBen.PrimaryKey = new DataColumn[] { dtBen.Columns["IdAuto"] };
+        //            ds.Tables.Add(dtBen);
+        //        }
+
+        //        //stergem toate beneficiile existente
+        //        for (int i = 0; i < dtBen.Rows.Count; i++)
+        //        {
+        //            dtBen.Rows[i].Delete();
+        //        }
+
+        //        for (int i = 1; i <= 10; i++)
+        //        {
+        //            int idBen = Convert.ToInt32(General.Nz(drPost["IdBeneficiu" + i], -99));
+        //            if (idBen != -99 && dtBen.Select("IdObiect=" + idBen).Count() <= 0)
+        //            {
+        //                DataRow drBen = ds.Tables["Admin_Beneficii"].NewRow();
+        //                drBen["Marca"] = f10003;
+        //                drBen["IdObiect"] = idBen;
+        //                drBen["DataPrimire"] = DateTime.Now;
+        //                drBen["DataExpirare"] = new DateTime(2100, 1, 1);
+        //                drBen["TIME"] = DateTime.Now;
+        //                drBen["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
+
+        //                if (Constante.tipBD == 1)
+        //                    drBen["IdAuto"] = Convert.ToInt32(General.Nz(dtBen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+        //                else
+        //                    drBen["IdAuto"] = Dami.NextId("Admin_Beneficii");
+        //                if (Convert.ToInt32(drBen["IdAuto"].ToString()) < 1000000)
+        //                    drBen["IdAuto"] = Convert.ToInt32(drBen["IdAuto"].ToString()) + 1000000;
+
+        //                dtBen.Rows.Add(drBen);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "AdaugaBeneficiile", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+        public static void AdaugaBeneficiile(ref DataSet ds, object f10003)
+        {
+            try
+            {
+                string sqlFinal = "SELECT * FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + f10003.ToString();
+                DataTable dt = new DataTable();
+                if (ds.Tables.Contains("Admin_Beneficii"))
+                {
+                    dt = ds.Tables["Admin_Beneficii"];
+                }
+                else
+                {
+                    dt = General.IncarcaDT($@"SELECT * FROM ""Admin_Beneficii"" WHERE ""Marca"" = @1", new object[] { f10003 });
+                    dt.TableName = "Admin_Beneficii";
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
+                    ds.Tables.Add(dt);
+                }
+
+                //stergem inregistrarile
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i].RowState != DataRowState.Deleted && General.Nz(dt.Rows[i]["VineDinPosturi"], 0).ToString() == "1" && dt.Rows[i]["Fisier"] == DBNull.Value)
+                        dt.Rows[i].Delete();
+                }
+
+                DataTable dtOrg = General.IncarcaDT(
+                    $@"SELECT A.*, B.""Denumire"" AS ""Caracteristica"" 
+                    FROM ""Org_PosturiBeneficii"" A
+                    LEFT JOIN ""Admin_Obiecte"" B ON A.""IdObiect"" = B.""Id""
+                    WHERE ""IdPost"" = @1", new object[] { HttpContext.Current.Session["MP_IdPost"] });
+
+                for (int i = 0; i < dtOrg.Rows.Count; i++)
+                {
+                    if (dt.Select("IdObiect=" + dtOrg.Rows[i]["IdObiect"]).Count() == 0)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["Marca"] = f10003;
+                        dr["IdObiect"] = dtOrg.Rows[i]["IdObiect"];
+                        dr["Caracteristica"] = dtOrg.Rows[i]["Caracteristica"];
+                        dr["VineDinPosturi"] = 1;
+                        dr["TIME"] = DateTime.Now;
+                        dr["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
+
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "AdaugaBeneficiile", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        public static void AdaugaDosar(ref DataSet ds, object f10003)
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                if (ds.Tables.Contains("Atasamente"))
+                {
+                    dt = ds.Tables["Atasamente"];
+                }
+                else
+                {
+                    dt = General.IncarcaDT(@"SELECT * FROM ""Atasamente"" WHERE IdEmpl=@1", new object[] { f10003 });
+                    dt.TableName = "Atasamente";
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
+                    ds.Tables.Add(dt);
+                }
+
+                //stergem inregistrarile
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i].RowState != DataRowState.Deleted && General.Nz(dt.Rows[i]["VineDinPosturi"], 0).ToString() == "1" && dt.Rows[i]["Attach"] == DBNull.Value)
+                        dt.Rows[i].Delete();
+                }
+
+                DataTable dtOrg = General.IncarcaDT($@"SELECT * FROM ""Org_PosturiDosar"" WHERE ""IdPost""=@1", new object[] { HttpContext.Current.Session["MP_IdPost"] });
+
+                for (int i = 0; i < dtOrg.Rows.Count; i++)
+                {
+                    if (dt.Select("IdCategory=" + dtOrg.Rows[i]["IdObiect"]).Count() == 0)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["IdEmpl"] = f10003;
+                        dr["IdCategory"] = dtOrg.Rows[i]["IdObiect"];
+                        dr["VineDinPosturi"] = 1;
+                        dr["TIME"] = DateTime.Now;
+                        dr["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
+
+                        dt.Rows.Add(dr);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "AdaugaDosar", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        public static void AdaugaEchipamente(ref DataSet ds, object f10003)
+        {
+            try
+            {
+                string sqlFinal = "SELECT * FROM \"Admin_Echipamente\" WHERE \"Marca\" = " + f10003.ToString();
+                DataTable dt = new DataTable();
+                if (ds.Tables.Contains("Admin_Echipamente"))
+                {
+                    dt = ds.Tables["Admin_Echipamente"];
+                }
+                else
+                {
+                    dt = General.IncarcaDT($@"SELECT * FROM ""Admin_Echipamente"" WHERE ""Marca"" = @1", new object[] { f10003 });
+                    dt.TableName = "Admin_Echipamente";
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
+                    ds.Tables.Add(dt);
+                }
+
+                //stergem inregistrarile
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i].RowState != DataRowState.Deleted && General.Nz(dt.Rows[i]["VineDinPosturi"], 0).ToString() == "1" && dt.Rows[i]["Fisier"] == DBNull.Value)
+                        dt.Rows[i].Delete();
+                }
+
+                DataTable dtOrg = General.IncarcaDT(
+                    $@"SELECT A.*, B.""Denumire"" AS ""Caracteristica"" 
+                    FROM ""Org_PosturiEchipamente"" A
+                    LEFT JOIN ""Admin_Obiecte"" B ON A.""IdObiect"" = B.""Id""
+                    WHERE ""IdPost"" = @1", new object[] { HttpContext.Current.Session["MP_IdPost"] });
+
+                for (int i = 0; i < dtOrg.Rows.Count; i++)
+                {
+                    if (dt.Select("IdObiect=" + dtOrg.Rows[i]["IdObiect"]).Count() == 0)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["Marca"] = f10003;
+                        dr["IdObiect"] = dtOrg.Rows[i]["IdObiect"];
+                        dr["Caracteristica"] = dtOrg.Rows[i]["Caracteristica"];
+                        dr["VineDinPosturi"] = 1;
+                        dr["TIME"] = DateTime.Now;
+                        dr["USER_NO"] = HttpContext.Current.Session["UserId"] ?? DBNull.Value;
+
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "AdaugaEchipamente", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        public static void AflaIdPost()
+        {
+            try
+            {
+                if (HttpContext.Current.Session["MP_IdPost"] == null)
+                {
+                    string sqlIdPost = $@"SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
+                    HttpContext.Current.Session["MP_IdPost"] = General.ExecutaScalar(sqlIdPost, new object[] { HttpContext.Current.Session["Marca"] });
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "AflaIdPost", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        public static void CreeazaAtributePost(int id, object f10003, object idPost, DateTime dtModif)
+        {
+            try
+            {
+                //Florin 2021.03.02 #710 - la ramura cu functie am adaugat sa se salveaza si PostId; este necesar pt functia de salvare post din F704
+                General.ExecutaNonQuery(
+                    $@"
+                    BEGIN
+                        IF((SELECT COUNT(*) FROM Avs_Cereri WHERE Id={id} AND FunctieId IS NOT NULL) > 0)
+                            BEGIN
+                                INSERT INTO Avs_Cereri(Id, F10003, IdAtribut, IdCircuit, Pozitie, TotalCircuit, Culoare, IdStare, Explicatii, DataModif, USER_NO, TIME, UserIntrod, GenerareDoc, IdParinte, FunctieId, FunctieNume, PostId)
+                                SELECT NEXT VALUE FOR Avs_Cereri_SEQ, F10003, 2, IdCircuit, Pozitie, TotalCircuit, Culoare, IdStare, Explicatii, DataModif, USER_NO, GetDate(), UserIntrod, GenerareDoc, {id}, FunctieId, FunctieNume, {idPost} FROM Avs_Cereri WHERE Id={id};
+                                
+                                INSERT INTO Avs_CereriIstoric(Id, IdCircuit, IdPost, IdUser, IdStare, Pozitie, CUloare, Aprobat, DataAprobare, Inlocuitor, IdUserInlocuitor, IdRol, IdSuper, USER_NO, TIME)
+                                SELECT CONVERT(int, (SELECT current_value FROM sys.sequences WHERE name = 'Avs_Cereri_SEQ')), IdCircuit, IdPost, IdUser, IdStare, Pozitie, CUloare, Aprobat, DataAprobare, Inlocuitor, IdUserInlocuitor, IdRol, IdSuper, USER_NO, GetDate() FROM Avs_CereriIstoric WHERE Id={id};
+                            END;
+
+                        IF((SELECT COUNT(*) FROM Avs_Cereri WHERE Id={id} AND CORCod IS NOT NULL) > 0)
+                            BEGIN
+                                INSERT INTO Avs_Cereri(Id, F10003, IdAtribut, IdCircuit, Pozitie, TotalCircuit, Culoare, IdStare, Explicatii, DataModif, USER_NO, TIME, UserIntrod, GenerareDoc, IdParinte, CORCod, CORNume)
+                                SELECT NEXT VALUE FOR Avs_Cereri_SEQ, F10003, 3, IdCircuit, Pozitie, TotalCircuit, Culoare, IdStare, Explicatii, DataModif, USER_NO, GetDate(), UserIntrod, GenerareDoc, {id}, CORCod, CORNume FROM Avs_Cereri WHERE Id={id}
+
+                                INSERT INTO Avs_CereriIstoric(Id, IdCircuit, IdPost, IdUser, IdStare, Pozitie, CUloare, Aprobat, DataAprobare, Inlocuitor, IdUserInlocuitor, IdRol, IdSuper, USER_NO, TIME)
+                                SELECT CONVERT(int, (SELECT current_value FROM sys.sequences WHERE name = 'Avs_Cereri_SEQ')), IdCircuit, IdPost, IdUser, IdStare, Pozitie, CUloare, Aprobat, DataAprobare, Inlocuitor, IdUserInlocuitor, IdRol, IdSuper, USER_NO, GetDate() FROM Avs_CereriIstoric WHERE Id={id};
+                            END;
+
+                        IF((SELECT COUNT(*) FROM Avs_Cereri WHERE Id={id} AND DeptId IS NOT NULL) > 0)
+                            BEGIN
+                                INSERT INTO Avs_Cereri(Id, F10003, IdAtribut, IdCircuit, Pozitie, TotalCircuit, Culoare, IdStare, Explicatii, DataModif, USER_NO, TIME, UserIntrod, GenerareDoc, IdParinte, SubcompanieId, SubcompanieNume, FilialaId, FilialaNume, SectieId, SectieNume, DeptId, DeptNume)
+                                SELECT NEXT VALUE FOR Avs_Cereri_SEQ, F10003, 5, IdCircuit, Pozitie, TotalCircuit, Culoare, IdStare, Explicatii, DataModif, USER_NO, GetDate(), UserIntrod, GenerareDoc, {id}, SubcompanieId, SubcompanieNume, FilialaId, FilialaNume, SectieId, SectieNume, DeptId, DeptNume FROM Avs_Cereri WHERE Id={id}
+
+                                INSERT INTO Avs_CereriIstoric(Id, IdCircuit, IdPost, IdUser, IdStare, Pozitie, CUloare, Aprobat, DataAprobare, Inlocuitor, IdUserInlocuitor, IdRol, IdSuper, USER_NO, TIME)
+                                SELECT CONVERT(int, (SELECT current_value FROM sys.sequences WHERE name = 'Avs_Cereri_SEQ')), IdCircuit, IdPost, IdUser, IdStare, Pozitie, CUloare, Aprobat, DataAprobare, Inlocuitor, IdUserInlocuitor, IdRol, IdSuper, USER_NO, GetDate() FROM Avs_CereriIstoric WHERE Id={id};
+                            END;                   
+                    END;");
+
+
+                //Florin 2021.03.02 #710
+                //SalveazaPost(f10003, idPost, dtModif);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "CreeazaAtributePost", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

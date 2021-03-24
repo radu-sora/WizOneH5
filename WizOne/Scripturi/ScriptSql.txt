@@ -9519,7 +9519,6 @@ GO
 alter table f100 alter column f10032 int
 GO
 
-
 alter table PtjSpecial_Sabloane add Decalare int
 GO
 
@@ -15167,6 +15166,7 @@ GO
 INSERT INTO "Securitate" ("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu") VALUES('Absente.Lista', 'btnAnulare', '-', 6, 1, 1, 0)
 GO
 
+
 ----  2.2.132.01  ----
 
 
@@ -15175,84 +15175,103 @@ UPDATE F1001 SET F1001109 = (select f10022 from f100 where f1001.F10003 = f100.f
 ALTER TABLE F9101 ADD  F9101109 DATETIME;                                                  
 ALTER TABLE F0991 ADD  F0991109 DATETIME;  
 
+
 ----  2.2.132.02  ----
 
 
 ALTER TABLE F100 ALTER COLUMN F10081 NVARCHAR(50)
 GO
 
+
+----  2.2.132.04  ----
+
+
+UPDATE Eval_ConfigObiective SET ColumnType='System.DateTime' WHERE Id=6
+GO
+
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 69, 'Nota Finala', 0)
+GO
+
+
 ----  2.2.133  ----
 
-INSERT [dbo].[MeniuLista] ([Id], [Denumire], [Descriere], [Activ], [USER_NO], [TIME]) VALUES (15, N'Cursuri', N'', 1, NULL, NULL)
+
+CREATE TABLE [dbo].[Eval_relGrupSetAngajati](
+	[IdGrup] [int] NOT NULL,
+	[IdSetAngajati] [int] NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_Eval_relGrupSetAngajati] PRIMARY KEY CLUSTERED 
+(
+	[IdGrup] ASC,
+	[IdSetAngajati] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
 GO
 
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(125, 'Cursuri', 'Cursuri', 'Curs\Cursuri', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(126, 'Sesiuni de cursuri', 'Sesiuni de cursuri', 'Curs\CursuriSesiuni', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(127, 'Aprobare training', 'Aprobare training', 'Curs\Aprobare', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(128, 'Circuit', 'Circuit', 'Pagini\SablonNomen[Curs_Circuit]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(129, 'Cursuri anterioare', 'Cursuri anterioare', 'Curs\CursuriAnterioare', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(130, 'Feedback trainer', 'Feedback trainer', 'Curs\AprobareTrainer', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(131, 'Planificare', 'Planificarea oamenilor pe cursuri', 'Curs\CursuriInregistrare', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(132, 'Vizualizare cursuri disponibile', 'Vizualizare cursuri', 'Curs\CursuriView', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(133, 'Vizualizare istoric', 'Vizualizare istoric', 'Curs\CursuriIstoric', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(134, 'Categorii costuri curs', 'Categorii costuri', 'Pagini\SablonNomen[Curs_tblCosturi]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(135, 'Categorii nivel1', 'Categorii nivel1', 'Pagini\SablonNomen[Curs_tblCateg_Niv1]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(136, 'Categorii nivel2', 'Categorii nivel2', 'Pagini\SablonNomen[Curs_tblCateg_Niv2]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(137, 'Categorii nivel3', 'Categorii nivel3', 'Pagini\SablonNomen[Curs_tblCateg_Niv3]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(138, 'Categorii note', 'Nomenclator categorii note', 'Pagini\SablonNomen[Curs_tblCategoriiNote]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(139, 'Categorii valori note', 'Nomenclator categorii valori note', 'Pagini\SablonNomen[Curs_tblCategNoteValori]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(140, 'Certificari', 'Certificari', 'Pagini\SablonNomen[Curs_tblCertificari]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(141, 'Competente', 'Competente', 'Pagini\SablonNomen[tblCompetente]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(142, 'Competente si Cursuri', 'Competente si Cursuri', 'Pagini\SablonNomen[Curs_relCursCompetente]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(143, 'Competente si Functii', 'Competente si Functii', 'Pagini\SablonNomen[Curs_relCompetenteFunctii]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(144, 'Furnizori', 'Furnizori', 'Pagini\SablonNomen[Curs_tblFurnizori]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(145, 'Locatii', 'Locatii', 'Pagini\SablonNomen[Curs_tblLocatii]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(146, 'Organizatori', 'Organizatori', 'Pagini\SablonNomen[Curs_tblOrganizatori]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(147, 'Stari anterioare', 'Stari anterioare', 'Pagini\SablonNomen[Curs_tblStariAnterior]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(148, 'Stari circuit', 'Stari circuit', 'Pagini\SablonNomen[Curs_tblStari]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(149, 'Tematici', 'Tematici', 'Pagini\SablonNomen[Curs_tblTematici]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(150, 'Tipuri competente', 'Tipuri competente', 'Pagini\SablonNomen[tblGrupCompetente]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(151, 'Traineri', 'Traineri', 'Pagini\SablonNomen[Curs_tblTraineri]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(152, 'Definire elemente de cost', 'Definire elemente de cost', 'Pagini\SablonNomen[Curs_tblCentreCost]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(153, 'Competente si Functii Academice', 'Competente si Functii Academice', 'Pagini\SablonNomen[Curs_relCompetenteFunctiiAcad]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(154, 'Stari Sesiuni Curs', 'Stari Sesiuni Curs', 'Pagini\SablonNomen[Curs_tblStariSesiune]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(155, 'Tip Sesiuni', 'Tip Sesiuni', 'Pagini\SablonNomen[Curs_tblTipSesiuni]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(156, 'Categorii Sesiuni', 'Categorii Sesiuni', 'Pagini\SablonNomen[Curs_tblCategSesiuni]', 1, 'm1.png')
-GO
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(157, 'Diplome', 'Diplome', 'Pagini\SablonNomen[Documente]', 1, 'm1.png')
+ALTER TABLE [dbo].[Eval_relGrupSetAngajati] ADD  CONSTRAINT [DF_Eval_relGrupSetAngajati_TIME]  DEFAULT (getdate()) FOR [TIME]
 GO
 
+
+ALTER TABLE Eval_CategCompetente ADD Sectiune nvarchar(250)
+GO
+ALTER TABLE Eval_CategCompetente ADD Subsectiune nvarchar(250)
+GO
+ALTER TABLE Eval_CategCompetente ADD IdCalificativ int
+GO
+
+CREATE TABLE [dbo].[Eval_RaspunsMultiplu](
+	[F10003] [int] NULL,
+	[Data] [datetime] NULL,
+	[Sectiune] [nvarchar](250) NULL,
+	[Subsectiune] [nvarchar](250) NULL,
+	[CategorieCompetentaId] [int] NULL,
+	[CategorieCompetentaDenumire] [nvarchar](250) NULL,
+	[CompetentaId] [int] NULL,
+	[CompetentaDenumire] [nvarchar](250) NULL,
+	[CalificativId] [int] NULL,
+	[CalificativDenumire] [nvarchar](50) NULL,
+	[FunctiaId] [int] NULL,
+	[FunctiaDenumire] [nvarchar](250) NULL,
+	[Observatii] [nvarchar](max) NULL,
+	[IdUser] [int] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [PK_Eval_RaspunsMultiplu] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Eval_RaspunsMultiplu] ADD  CONSTRAINT [DF_Eval_RaspunsMultiplu_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(124, 'Evaluare multipla', 'Evaluare multipla', 'Eval\EvalMultiplu', 1, 'm1.png')
+GO 
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(125, 'Grupuri per eval. multipla', 'Grupuri per eval. multipla', 'Pagini\SablonNomen[Eval_relGrupSetAngajati]', 1, 'm1.png')
+GO
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(126, 'Categorii competente', 'Categorii competente', 'Pagini\SablonNomen[Eval_CategCompetente]', 1, 'm1.png')
+GO
+
+INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo, IdAutomat) VALUES('Eval_CategCompetente','IdCalificativ',2,1,'SELECT Id, Denumire FROM Eval_tblTipValori', 0)
+GO
+INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo, IdAutomat) VALUES('Eval_relGrupSetAngajati','IdGrup',2,1,'SELECT Id, Denumire FROM tblGrupUsers', 0)
+GO
+INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo, IdAutomat) VALUES('Eval_relGrupSetAngajati','IdSetAngajati',2,1,'SELECT IdSetAng, DenSet FROM Eval_SetAngajati', 0)
+GO
+
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 70, 'Evaluare Multipla Raport', 0)
+GO
+
+CREATE VIEW [dbo].[viewEvaluareMultipla]
+AS
+SELECT 1 AS IdQuiz, F10003, Sectiune, Subsectiune, CategorieCompetentaDenumire, CompetentaDenumire, CalificativDenumire FROM Eval_RaspunsMultiplu
+GO
+
+ALTER TABLE Eval_DrepturiTab ADD Vizibil int
+GO
 
 
 DELETE F069 WHERE F06904 =2021
@@ -15356,11 +15375,19 @@ ALTER TABLE F077 ALTER COLUMN F07704 VARCHAR(50)
 GO
 
 
+----  2.2.133.01  ----
+
+
+INSERT INTO F091 (F09101, F09102, F09103, F09104, F09105) SELECT 91, 6, 'Timp munca conform OUG 132/2020', 'TimpOUG132', 3 FROM F010 WHERE NOT EXISTS (SELECT * FROM F091 WHERE F09102 = 6)
+GO
+INSERT INTO F092 (F09201, F09202, F09203, F09204) SELECT 92, 3, 'Intreaga OUG132', 'NormaOUG132' FROM F010 WHERE NOT EXISTS (SELECT * FROM F092 WHERE F09202 = 3)
+GO
+
+
 ----  2.2.134  ----
 
+
 ---- Cursuri START
-
-
 
 CREATE TABLE [dbo].[Curs_Anterior](
 	[F10003] [int] NULL,
@@ -15995,40 +16022,78 @@ CREATE TABLE [dbo].[Curs_tblTraineri](
 	[IdAuto] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
 
-
-CREATE TABLE [dbo].[Documente](
-	[IdDocument] [int] NOT NULL,
-	[IdCategory] [int] NOT NULL,
-	[IdEntitate] [int] NOT NULL,
-	[DescrDocument] [nvarchar](250) NULL,
-	[Meniu] [nvarchar](250) NULL,
-	[BodyDocument1] [nvarchar](4000) NULL,
-	[BodyDocument1RTF] [nvarchar](4000) NULL,
-	[BodyDocument2] [nvarchar](4000) NULL,
-	[BodyDocument2RTF] [nvarchar](4000) NULL,
-	[BodyDocument3] [nvarchar](4000) NULL,
-	[BodyDocument3RTF] [nvarchar](4000) NULL,
-	[CuSubraport] [int] NULL,
- CONSTRAINT [Documente_PK] PRIMARY KEY CLUSTERED 
-(
-	[IdDocument] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
+INSERT [dbo].[MeniuLista] ([Id], [Denumire], [Descriere], [Activ], [USER_NO], [TIME]) VALUES (15, N'Cursuri', N'', 1, NULL, NULL)
 GO
 
-
-
-alter table Curs_tblstari drop column esteAnterior
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(125, 'Cursuri', 'Cursuri', 'Curs\Cursuri', 1, 'm1.png')
 GO
-drop  Curs_tblCompetente
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(126, 'Sesiuni de cursuri', 'Sesiuni de cursuri', 'Curs\CursuriSesiuni', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(127, 'Aprobare training', 'Aprobare training', 'Curs\Aprobare', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(128, 'Circuit', 'Circuit', 'Pagini\SablonNomen[Curs_Circuit]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(129, 'Cursuri anterioare', 'Cursuri anterioare', 'Curs\CursuriAnterioare', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(130, 'Feedback trainer', 'Feedback trainer', 'Curs\AprobareTrainer', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(131, 'Planificare', 'Planificarea oamenilor pe cursuri', 'Curs\CursuriInregistrare', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(132, 'Vizualizare cursuri disponibile', 'Vizualizare cursuri', 'Curs\CursuriView', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(133, 'Vizualizare istoric', 'Vizualizare istoric', 'Curs\CursuriIstoric', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(134, 'Categorii costuri curs', 'Categorii costuri', 'Pagini\SablonNomen[Curs_tblCosturi]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(135, 'Categorii nivel1', 'Categorii nivel1', 'Pagini\SablonNomen[Curs_tblCateg_Niv1]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(136, 'Categorii nivel2', 'Categorii nivel2', 'Pagini\SablonNomen[Curs_tblCateg_Niv2]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(137, 'Categorii nivel3', 'Categorii nivel3', 'Pagini\SablonNomen[Curs_tblCateg_Niv3]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(138, 'Categorii note', 'Nomenclator categorii note', 'Pagini\SablonNomen[Curs_tblCategoriiNote]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(139, 'Categorii valori note', 'Nomenclator categorii valori note', 'Pagini\SablonNomen[Curs_tblCategNoteValori]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(140, 'Certificari', 'Certificari', 'Pagini\SablonNomen[Curs_tblCertificari]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(141, 'Competente', 'Competente', 'Pagini\SablonNomen[tblCompetente]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(142, 'Competente si Cursuri', 'Competente si Cursuri', 'Pagini\SablonNomen[Curs_relCursCompetente]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(143, 'Competente si Functii', 'Competente si Functii', 'Pagini\SablonNomen[Curs_relCompetenteFunctii]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(144, 'Furnizori', 'Furnizori', 'Pagini\SablonNomen[Curs_tblFurnizori]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(145, 'Locatii', 'Locatii', 'Pagini\SablonNomen[Curs_tblLocatii]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(146, 'Organizatori', 'Organizatori', 'Pagini\SablonNomen[Curs_tblOrganizatori]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(147, 'Stari anterioare', 'Stari anterioare', 'Pagini\SablonNomen[Curs_tblStariAnterior]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(148, 'Stari circuit', 'Stari circuit', 'Pagini\SablonNomen[Curs_tblStari]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(149, 'Tematici', 'Tematici', 'Pagini\SablonNomen[Curs_tblTematici]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(150, 'Tipuri competente', 'Tipuri competente', 'Pagini\SablonNomen[tblGrupCompetente]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(151, 'Traineri', 'Traineri', 'Pagini\SablonNomen[Curs_tblTraineri]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(152, 'Definire elemente de cost', 'Definire elemente de cost', 'Pagini\SablonNomen[Curs_tblCentreCost]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(153, 'Competente si Functii Academice', 'Competente si Functii Academice', 'Pagini\SablonNomen[Curs_relCompetenteFunctiiAcad]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(154, 'Stari Sesiuni Curs', 'Stari Sesiuni Curs', 'Pagini\SablonNomen[Curs_tblStariSesiune]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(155, 'Tip Sesiuni', 'Tip Sesiuni', 'Pagini\SablonNomen[Curs_tblTipSesiuni]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(156, 'Categorii Sesiuni', 'Categorii Sesiuni', 'Pagini\SablonNomen[Curs_tblCategSesiuni]', 1, 'm1.png')
+GO
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(157, 'Diplome', 'Diplome', 'Pagini\SablonNomen[Documente]', 1, 'm1.png')
 GO
 
-
-GO
 ALTER TABLE [dbo].[Curs_Anterior] ADD  CONSTRAINT [DF__tmp_ms_xx___TIME__7B5C1DA2]  DEFAULT (getdate()) FOR [TIME]
 GO
 ALTER TABLE [dbo].[Curs_Anterior] ADD  CONSTRAINT [DF__Curs_Ante__areFi__5A6F5FCC]  DEFAULT ((0)) FOR [areFisier]
@@ -16119,6 +16184,13 @@ CREATE SEQUENCE [dbo].[Curs_tblCurs_SEQ]
  CACHE 
 GO
 
+
+alter table Curs_tblstari drop column esteAnterior
+GO
+drop  Curs_tblCompetente
+GO
+
+
 CREATE SEQUENCE [dbo].[Curs_relSesiuneDocumente_SEQ] 
  AS [bigint]
  START WITH 1
@@ -16136,6 +16208,7 @@ CREATE SEQUENCE [dbo].[Curs_Inregistrare_SEQ]
  MAXVALUE 9999999999999
  CACHE 
 GO
+
 
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('hasNomenclatorTraineri', '1', '', 6)
 GO
@@ -16169,6 +16242,7 @@ GO
 
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('alocareCursCosturiXCentruCost', '1', '0 - costurile aferente cursurilor nu se aloca pe vreun centru de cost din tabela Curs_tblCentreCost; 1 - costurile se aolca pe centrele de cost definite in Curs_tblCentreCost', 6)
 GO
+
 
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Curs_IDuriManager', '1', 'lista Id-uri Manager (cu virgula intre valori)', 6)
 GO
@@ -16297,10 +16371,244 @@ GO
 INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (11, 668112, 668094, 18, 1, N'Trainer', NULL, N'm1.png', 151, 2, CAST(N'2020-12-11 11:41:11.680' AS DateTime))
 GO
 
-
 ---- Cursuri END
 
 
+-- https://github.com/wizromRD/WizOne/issues/8
+-- Organigrama
+
+IF ((SELECT COUNT(*) FROM Org_Posturi) = 0)
+INSERT INTO Org_Posturi(Id, Denumire, Stare, IdSuperior, NivelIerarhic, DataInceput, DataSfarsit, DenumireRO, DenumireEN, NumeGrupRO, NumeGrupEN)
+VALUES(1, 'CONSILIU DE ADMINISTRATIE', 1, 0, 'N', '2000-01-01', '2200-01-01', 'CONSILIU DE ADMINISTRATIE', 'BOARD OF DIRECTORS', 'CONSILIU DE ADMINISTRATIE', 'BOARD OF DIRECTORS')
+GO
+
+ALTER TABLE "Org_Posturi" ADD "CampExtra1" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra2" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra3" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra4" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra5" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra6" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra7" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra8" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra9" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra10" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra11" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra12" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra13" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra14" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra15" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra16" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra17" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra18" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra19" nvarchar(MAX)
+GO
+ALTER TABLE "Org_Posturi" ADD "CampExtra20" nvarchar(MAX)
+GO
+
+
+
+
+CREATE TABLE [dbo].[Org_tblConfig](
+	[Id] [int] NOT NULL,
+	[Eticheta] [nvarchar](500) NULL,
+	[Vizibil] [int] NULL,
+	[Ordine] [int] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_Org_tblConfig_1] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Org_tblConfig] ADD  CONSTRAINT [DF_Org_tblConfig_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+
+
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Atributii speciale', 1, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Criterii de evaluare', 2, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Observatii', 3, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Conditii de lucru', 4, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Scopul postului', 5, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Profilul postului', 6, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Responsabilitati', 7, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Sarcini secundare', 8, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Responsabilitati de supraveghere', 9, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Autoritatea de a lua decizii', 10, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 11', 11, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 12', 12, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 13', 13, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 14', 14, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 15', 15, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 16', 16, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 17', 17, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 18', 18, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 19', 19, 1)
+GO
+INSERT INTO "Org_tblConfig"("Eticheta", "Id", "Vizibil") VALUES('Denumire 20', 20, 1)
+GO
+
+INSERT INTO tblModule(Id, Denumire) VALUES(12, 'Organigrama')
+GO
+
+CREATE TABLE [dbo].[Org_PosturiDosar](
+	[IdPost] [int] NOT NULL,
+	[IdObiect] [int] NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_Org_PosturiDosar] PRIMARY KEY CLUSTERED 
+(
+	[IdPost] ASC,
+	[IdObiect] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Org_PosturiDosar] ADD  CONSTRAINT [DF_Org_PosturiDosar_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+CREATE TABLE [dbo].[Org_PosturiPozitii](
+	[IdPost] [int] NULL,
+	[Pozitii] [int] NULL,
+	[PozitiiAprobate] [int] NULL,
+	[DataInceput] [datetime] NULL,
+	[DataSfarsit] [datetime] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [PK_Org_PosturiPozitii] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Org_PosturiPozitii] ADD  CONSTRAINT [DF_Org_PosturiPozitii_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+ALTER TABLE Avs_Cereri ADD PostId int
+GO
+ALTER TABLE Avs_Cereri ADD PostNume nvarchar(500)
+GO
+
+ALTER TABLE Org_Posturi ADD StudiiSuperioare int
+GO
+
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('MP_FolosesteOrganigrama', '0', '1 - in fereastra de selectie sablon se adauga un combobox cu posturile', 12)
+GO
+
+ALTER TABLE "Org_Posturi" ADD "CampuriExtra" nvarchar(100)
+GO
+
+CREATE FUNCTION [dbo].[DamiPozitii] (@IdPost int, @dt DATE) 
+RETURNs table AS 
+return 
+
+	WITH 
+
+	HCEfectiv (IdPost, Activi, Suspendati, Candidati)  as
+	(
+		SELECT IdPost, 
+		SUM(CASE WHEN Y.F10022 <= @dt AND @dt <= Z.DataPlecare THEN 1 ELSE 0 END) AS Activi,
+		SUM(CASE WHEN 
+			(Y.F100922 <= @dt AND @dt <= (CASE WHEN COALESCE(Y.F100924, '2100-01-01') = '2100-01-01' THEN Y.F100923 ELSE Y.F100924 END)) 
+			AND 
+			(Y.F10022 <= @dt AND @dt <= Z.DataPlecare) 
+		THEN 1 ELSE 0 END) AS Suspendati,  
+		SUM(CASE WHEN Y.F10025 IN (900) THEN 1 ELSE 0 END) AS Candidati
+		FROM Org_relPostAngajat X 
+		INNER JOIN F100 Y ON X.F10003=Y.F10003
+		OUTER APPLY DamiDataPlecare(X.F10003, @dt) Z
+		WHERE X.DataInceput <= @dt AND @dt <= X.DataSfarsit GROUP BY IdPost
+	),
+
+	tree (Id, IdSuperior, Stare, DataInceput, DataSfarsit, Pozitii, PozitiiAprobate, Activi, Suspendati, Candidati) as 
+	(
+		SELECT A.Id, A.IdSuperior, A.Stare, A.DataInceput, A.DataSfarsit, COALESCE(B.Pozitii,0) AS Pozitii, COALESCE(B.PozitiiAprobate,0) AS PozitiiAprobate,
+		COALESCE(C.Activi,0) AS Activi, COALESCE(C.Suspendati,0) AS Suspendati, COALESCE(C.Candidati,0) AS Candidati
+		FROM Org_Posturi A
+		LEFT JOIN Org_PosturiPozitii B ON A.Id = B.IdPost AND B.DataInceput <= @dt AND @dt <= B.DataSfarsit 
+		LEFT JOIN HCEfectiv C ON A.Id = C.IdPost
+		WHERE A.Id = @IdPost AND A.DataInceput <= @dt AND @dt <= A.DataSfarsit AND COALESCE(A.Stare,0)=1
+		UNION ALL
+		SELECT A.Id, A.IdSuperior, A.Stare, A.DataInceput, A.DataSfarsit, 
+		(SELECT COALESCE(X.Pozitii,0) AS Pozitii FROM Org_PosturiPozitii X WHERE X.IdPost=A.Id AND X.DataInceput <= @dt AND @dt <= X.DataSfarsit) AS Pozitii,
+		(SELECT COALESCE(X.PozitiiAprobate,0) AS PozitiiAprobate FROM Org_PosturiPozitii X WHERE X.IdPost=A.Id AND X.DataInceput <= @dt AND @dt <= X.DataSfarsit) AS PozitiiAprobate,
+		(SELECT COALESCE(Y.Activi,0) AS Activi FROM HCEfectiv Y WHERE Y.IdPost = A.Id) AS Activi,
+		(SELECT COALESCE(Y.Suspendati,0) AS Suspendati FROM HCEfectiv Y WHERE Y.IdPost = A.Id) AS Suspendati,
+		(SELECT COALESCE(Y.Candidati,0) AS Candidati FROM HCEfectiv Y WHERE Y.IdPost = A.Id) AS Candidati
+		FROM Org_Posturi A 
+		INNER JOIN tree D on A.IdSuperior = D.Id AND D.DataInceput <= @dt AND @dt <= D.DataSfarsit
+		WHERE 
+		A.DataInceput <= @dt AND @dt <= A.DataSfarsit AND COALESCE(A.Stare,0)=1
+	)
+
+	SELECT 
+	SUM(COALESCE(Pozitii,0)) AS Pozitii,  
+	SUM(COALESCE(PozitiiAprobate,0)) AS PozitiiAprobate, 
+	SUM(COALESCE(Activi,0)) AS Activi, 
+	SUM(COALESCE(Suspendati,0)) AS Suspendati, 
+	SUM(COALESCE(Candidati,0)) AS Candidati
+	FROM tree;
+
+GO
+
+INSERT INTO "Avs_tblAtribute" ("Id", "Denumire", "Activ") VALUES(37, 'Post', 1)
+GO
+
+ALTER TABLE Avs_Cereri ADD IdParinte int
+GO
+
+ALTER TABLE Org_Posturi ADD IdSubdept int
+GO
+ALTER TABLE Org_Posturi ADD IdBirou int
+GO
+
+ALTER TABLE Org_Posturi ADD Ordine int
+GO
+
+ALTER TABLE Atasamente ADD VineDinPosturi int
+GO
+ALTER TABLE Atasamente ADD EsteLaDosar int
+GO
 
 
 ALTER TABLE Avs_Cereri ADD DetBifa1 int 
@@ -16314,7 +16622,138 @@ GO
 ALTER TABLE Avs_Cereri ADD DetBifa5 int 
 GO
 
+CREATE TABLE [dbo].[Org_PosturiEchipamente](
+	[IdPost] [int] NOT NULL,
+	[IdObiect] [int] NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_Org_PosturiEchipamente] PRIMARY KEY CLUSTERED 
+(
+	[IdPost] ASC,
+	[IdObiect] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
 
+ALTER TABLE [dbo].[Org_PosturiEchipamente] ADD  CONSTRAINT [DF_Org_PosturiEchipamente_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+
+CREATE TABLE [dbo].[Org_PosturiBeneficii](
+	[IdPost] [int] NOT NULL,
+	[IdObiect] [int] NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_Org_PosturiBeneficii] PRIMARY KEY CLUSTERED 
+(
+	[IdPost] ASC,
+	[IdObiect] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Org_PosturiBeneficii] ADD  CONSTRAINT [DF_Org_PosturiBeneficii_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu1
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu2
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu3
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu4
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu5
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu6
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu7
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu8
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu9
+GO
+ALTER TABLE Org_Posturi DROP COLUMN IdBeneficiu10
+GO
+
+
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (1, 1, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (2, 2, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (3, 3, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (4, 3, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (5, 3, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (6, 3, 1, 0, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (7, 3, 1, 0, 2, NULL)
+GO
+
+ALTER FUNCTION [dbo].[DamiDataPlecare] (@f10003 int, @dt DATE) 
+RETURNs table AS 
+return 
+
+	 
+       SELECT top 1 DataPlecare =   DataPlecare from
+(
+SELECT top 1 1 as rank, F70403 marca,  F70406 - 1 dataplecare,  F70406 Data from f704 join f100 on f70403 = f10003 WHERE F70404=4 AND F70406 <= @dt and F70406 - 1 >= f10022 and F70403 = @f10003 ORDER BY F70406 DESC
+union
+select 2 as rank, f10003 marca, f10023 Dataplecare,   DATEFROMPARTS(f01011, f01012, 1) data from f100 join f010 on 1=1 where f10003 =@f10003 and DATEFROMPARTS(f01011, f01012, 1)<=@dt
+union
+select top 1 3 as rank, f91003 marca, f91023 dataplecare,  DATEFROMPARTS(year, MONTH, 1) data from f910 where DATEFROMPARTS(year, MONTH, 1)<= @dt and f91003 = @f10003 order by year desc, month desc
+union
+select 4 as rank, f10003 marca, F10023 dataplecare, DATEFROMPARTS(1900,1,1) data from f100 where f10003 =@f10003
+) x
+order by data desc, rank
+
+
+
+
+
+CREATE SEQUENCE [dbo].[Curs_relSesiuneDocumente_SEQ] 
+ AS [bigint]
+ START WITH 1
+ INCREMENT BY 1
+ MINVALUE 1
+ MAXVALUE 9999999999999
+ CACHE 
+GO
+
+
+ALTER TABLE Avs_Cereri ADD DetBifa1 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa2 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa3 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa4 int 
+GO
+ALTER TABLE Avs_Cereri ADD DetBifa5 int 
+GO
+
+CREATE TABLE [dbo].[Documente](
+	[IdDocument] [int] NOT NULL,
+	[IdCategory] [int] NOT NULL,
+	[IdEntitate] [int] NOT NULL,
+	[DescrDocument] [nvarchar](250) NULL,
+	[Meniu] [nvarchar](250) NULL,
+	[BodyDocument1] [nvarchar](4000) NULL,
+	[BodyDocument1RTF] [nvarchar](4000) NULL,
+	[BodyDocument2] [nvarchar](4000) NULL,
+	[BodyDocument2RTF] [nvarchar](4000) NULL,
+	[BodyDocument3] [nvarchar](4000) NULL,
+	[BodyDocument3RTF] [nvarchar](4000) NULL,
+	[CuSubraport] [int] NULL,
+ CONSTRAINT [Documente_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdDocument] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
 
 
 CREATE TABLE [dbo].[tblRelNomenDoc](
@@ -16540,13 +16979,72 @@ order by data desc, rank
 GO
 
 
+--https://github.com/wizromRD/WizOne/issues/718
+--De discutat functionalitatea butonului Imprima de pe Post #718
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('IdRaportFisaPost', '-99', 'Id Raport pentru fisa post din modulul de Organigrama', 12)
+GO
+
+INSERT [dbo].[DynReportTypes] ([DynReportTypeId], [Name]) VALUES (5, N'Dashboard')
+GO
+
+ALTER FUNCTION [dbo].[DamiPozitii] (@IdPost int, @dt DATE) 
+RETURNs table AS 
+return 
+
+	WITH 
+
+	HCEfectiv (IdPost, Activi, Suspendati, Candidati)  as
+	(
+		SELECT IdPost, 
+		SUM(CASE WHEN Y.F10025=900 THEN 0 ELSE CASE WHEN Y.F10022 <= @dt AND @dt <= Z.DataPlecare THEN 1 ELSE 0 END END) AS Activi,
+		SUM(CASE WHEN 
+			(Y.F100922 <= @dt AND @dt <= (CASE WHEN COALESCE(Y.F100924, '2100-01-01') = '2100-01-01' THEN Y.F100923 ELSE Y.F100924 END)) 
+			AND 
+			(Y.F10022 <= @dt AND @dt <= Z.DataPlecare) 
+		THEN 1 ELSE 0 END) AS Suspendati,  
+		SUM(CASE WHEN Y.F10025 IN (900) THEN 1 ELSE 0 END) AS Candidati
+		FROM Org_relPostAngajat X 
+		INNER JOIN F100 Y ON X.F10003=Y.F10003
+		OUTER APPLY DamiDataPlecare(X.F10003, @dt) Z
+		WHERE X.DataInceput <= @dt AND @dt <= X.DataSfarsit GROUP BY IdPost
+	),
+
+	tree (Id, IdSuperior, Stare, DataInceput, DataSfarsit, Pozitii, PozitiiAprobate, Activi, Suspendati, Candidati) as 
+	(
+		SELECT A.Id, A.IdSuperior, A.Stare, A.DataInceput, A.DataSfarsit, COALESCE(B.Pozitii,0) AS Pozitii, COALESCE(B.PozitiiAprobate,0) AS PozitiiAprobate,
+		COALESCE(C.Activi,0) AS Activi, COALESCE(C.Suspendati,0) AS Suspendati, COALESCE(C.Candidati,0) AS Candidati
+		FROM Org_Posturi A
+		LEFT JOIN Org_PosturiPozitii B ON A.Id = B.IdPost AND B.DataInceput <= @dt AND @dt <= B.DataSfarsit 
+		LEFT JOIN HCEfectiv C ON A.Id = C.IdPost
+		WHERE A.Id = @IdPost AND A.DataInceput <= @dt AND @dt <= A.DataSfarsit AND COALESCE(A.Stare,0)=1
+		UNION ALL
+		SELECT A.Id, A.IdSuperior, A.Stare, A.DataInceput, A.DataSfarsit, 
+		(SELECT COALESCE(X.Pozitii,0) AS Pozitii FROM Org_PosturiPozitii X WHERE X.IdPost=A.Id AND X.DataInceput <= @dt AND @dt <= X.DataSfarsit) AS Pozitii,
+		(SELECT COALESCE(X.PozitiiAprobate,0) AS PozitiiAprobate FROM Org_PosturiPozitii X WHERE X.IdPost=A.Id AND X.DataInceput <= @dt AND @dt <= X.DataSfarsit) AS PozitiiAprobate,
+		(SELECT COALESCE(Y.Activi,0) AS Activi FROM HCEfectiv Y WHERE Y.IdPost = A.Id) AS Activi,
+		(SELECT COALESCE(Y.Suspendati,0) AS Suspendati FROM HCEfectiv Y WHERE Y.IdPost = A.Id) AS Suspendati,
+		(SELECT COALESCE(Y.Candidati,0) AS Candidati FROM HCEfectiv Y WHERE Y.IdPost = A.Id) AS Candidati
+		FROM Org_Posturi A 
+		INNER JOIN tree D on A.IdSuperior = D.Id AND D.DataInceput <= @dt AND @dt <= D.DataSfarsit
+		WHERE 
+		A.DataInceput <= @dt AND @dt <= A.DataSfarsit AND COALESCE(A.Stare,0)=1
+	)
+
+	SELECT 
+	SUM(COALESCE(Pozitii,0)) AS Pozitii,  
+	SUM(COALESCE(PozitiiAprobate,0)) AS PozitiiAprobate, 
+	SUM(COALESCE(Activi,0)) AS Activi, 
+	SUM(COALESCE(Suspendati,0)) AS Suspendati, 
+	SUM(COALESCE(Candidati,0)) AS Candidati
+	FROM tree;
+
+
 ALTER TABLE F099 ADD F099995 int 
 GO
 ALTER TABLE F099 ADD F099996 int 
 GO
 ALTER TABLE F099 ADD F099997 int 
 GO
-
 
 alter table f100 alter column f100891 varchar(50)
 GO
@@ -16558,162 +17056,63 @@ GO
 UPDATE "tblParametrii" SET "Explicatie" = 'Introdusa pentru GDPR, daca este 1 activeaza mecanismul de Two Factor Authentication; 2 - se trimite codul doar celor care au si alte roluri in afara de Angajat' WHERE "Nume" = '2FA'
 GO
 
-
--- inserare numar de inregistrare care se va incrementa automat, acesta apare cu data pe document doar daca exista linia in tabela:
-INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) SELECT MAX(NRCRT)+1,'ADEV_SANATATE_REG', '1' AS NR from F800_ADEVERINTE_CONFIG;
+ALTER TABLE Admin_Beneficii ADD VineDinPosturi int
 GO
--- Daca exista Stampila.jpg se aduce pe document sub semnatura 1. Se pot seta dimensiunile prin urmatorii parametrii:
-INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) SELECT MAX(NRCRT)+1,'AdevSubsolDimX', '5943600' AS NR from F800_ADEVERINTE_CONFIG 
+ALTER TABLE Admin_Beneficii ADD Fisier varbinary(max)
 GO
-INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) SELECT MAX(NRCRT)+1,'AdevSubsolDimY', '900430' AS NR from F800_ADEVERINTE_CONFIG 
+ALTER TABLE Admin_Beneficii ADD FisierNume nvarchar(500)
 GO
-
-
-
-
-
-ALTER TABLE F112 ADD  F11215  nvarchar(50)            
-GO
-UPDATE "tblParametrii" SET "Explicatie" = '0 - Blocat Susp si Detasari - nu poate sa introduca nici suspendari si nici detasari, 1 - Blocat Detasari - nu poate sa introduca detasari, 2 - Blocat Susp - nu poate sa introduca suspendari, 3 - Deblocat - poate sa introduca si suspendari si detasari' WHERE "Nume" = 'BlocheazaSuspendariWS'
+ALTER TABLE Admin_Beneficii ADD FisierExtensie nvarchar(50)
 GO
 
-
-
-
-CREATE TABLE [dbo].[CM_Cereri](
-	[Id] [int] NOT NULL,
-	[F10003] [int] NOT NULL,
-	[IdStare] [int] NULL,
-	[TipProgram] [int] NOT NULL,
-	[TipConcediu] [int] NOT NULL,
-	[CodIndemnizatie] [int] NULL,
-	[SerieCM] [nvarchar](20) NULL,
-	[NumarCM] [nvarchar](20) NULL,
-	[DataCM] DATETIME null,
-	[Prescris] [int] NULL,
-	[DataInceput] DATETIME null,
-	[DataSfarsit] DATETIME null,
-	[NrZile] [int] NULL,
-	[CodDiagnostic] [int] NULL,
-	[CodUrgenta] [int] NULL,
-	[CodInfectoContag] [int] NULL,
-	[Initial] [int] NULL,
-	[ZileCMInitial] [int] NULL,
-	[SerieCMInitial] [nvarchar](20) NULL,
-	[NumarCMInitial] [nvarchar](20) NULL,
-	[DataCMInitial] DATETIME null,
-	[CodTransfer1] [int] NULL,
-	[CodTransfer2] [int] NULL,
-	[CodTransfer3] [int] NULL,
-	[CodTransfer4] [int] NULL,
-	[CodTransfer5] [int] NULL,
-	[NrZileCT1] [int] NULL,
-	[NrZileCT2] [int] NULL,
-	[NrZileCT3] [int] NULL,
-	[NrZileCT4] [int] NULL,
-	[NrZileCT5] [int] NULL,
-	[BazaCalculCM] [int] NULL,
-	[ZileBazaCalculCM] [int] NULL,
-	[MedieZileBazaCalcul] [int] NULL,
-	[MedieZilnicaCM] [int] NULL,
-	[Stagiu] [int] NULL,
-	[NrAvizMedicExpert] [nvarchar](20) NULL,
-	[DataAvizDSP] DATETIME null,
-	[MedicCurant] [nvarchar](250) NULL,
-	[CNPCopil] [nvarchar](13) NULL,
-	[Document] [int] NULL,
-	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
-	[USER_NO] [int] NULL,
-	[TIME] [datetime] NULL,
- CONSTRAINT [CM_Cereri_PK] PRIMARY KEY CLUSTERED 
-(
-	[IdAuto] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
+ALTER TABLE Admin_Echipamente ADD VineDinPosturi int
+GO
+ALTER TABLE Admin_Echipamente ADD Fisier varbinary(max)
+GO
+ALTER TABLE Admin_Echipamente ADD FisierNume nvarchar(500)
+GO
+ALTER TABLE Admin_Echipamente ADD FisierExtensie nvarchar(50)
 GO
 
-
-CREATE TABLE [dbo].[CM_CereriIstoric](
-	[IdCerere] [int] NULL,
-	[IdCircuit] [int] NULL,
-	[IdSuper] [int] NULL,
-	[IdStare] [int] NULL,
-	[IdUser] [int] NULL,
-	[Pozitie] [int] NULL,
-	[Culoare] [nvarchar](50) NULL,
-	[Aprobat] [int] NULL,
-	[DataAprobare] [datetime] NULL,
-	[USER_NO] [int] NULL,
-	[TIME] [datetime] NULL,
-	[IdAuto] [int] IDENTITY(1,1) NOT NULL
- CONSTRAINT [CM_CereriIstoric_PK] PRIMARY KEY CLUSTERED 
-(
-	[IdAuto] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
+ALTER TABLE Admin_Beneficii ADD EsteLaDosar int
 GO
 
-
-
-CREATE TABLE [dbo].[CM_Circuit](
-	[Super1] [int] NULL,
-	[Super2] [int] NULL,
-	[Super3] [int] NULL,
-	[Super4] [int] NULL,
-	[Super5] [int] NULL,
-	[Super6] [int] NULL,
-	[Super7] [int] NULL,
-	[Super8] [int] NULL,
-	[Super9] [int] NULL,
-	[Super10] [int] NULL,
-	[Super11] [int] NULL,
-	[Super12] [int] NULL,
-	[Super13] [int] NULL,
-	[Super14] [int] NULL,
-	[Super15] [int] NULL,
-	[Super16] [int] NULL,
-	[Super17] [int] NULL,
-	[Super18] [int] NULL,
-	[Super19] [int] NULL,
-	[Super20] [int] NULL,
-	[USER_NO] [int] NULL,
-	[TIME] [datetime] NULL,
-	[Id] [int] IDENTITY(1,1) NOT NULL,
- CONSTRAINT [CM_Circuit_PK] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
+ALTER TABLE Admin_Echipamente ADD EsteLaDosar int
 GO
 
-
-CREATE TABLE [dbo].[CM_tblStari](
-	[Id] [int] NULL,
-	[Denumire] [nvarchar](50) NULL,
-	[Culoare] [nvarchar](50) NULL,
-	[USER_NO] [int] NULL,
-	[TIME] [datetime] NULL,
-	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
- CONSTRAINT [CM_tblStari_PK] PRIMARY KEY CLUSTERED 
-(
-	[IdAuto] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Organigrama', 'Organigrama', 'Organigrama\Lista', 1, 'm1.png')
 GO
 
-INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME]) VALUES (-1, N'Anulat', N'#FF0000', NULL, NULL)
-GO
-INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME]) VALUES (1, N'Solicitat', N'#9ACCFF', NULL, NULL)
-GO
-INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME]) VALUES (2, N'In curs', N'#FFA500', NULL, NULL)
-GO
-INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME]) VALUES (3, N'Aprobat', N'#9BBB59', NULL, NULL)
-GO
-INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME]) VALUES (4, N'Transferat', N'#39A1FF', NULL, NULL)
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Nivel Hay', 'Nivel Hay', 'Pagini\SablonNomen[Org_tblNivelHay]', 1, 'm1.png')
 GO
 
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Asignare angajat pe post', 'Asignare angajat pe post', 'Pagini\SablonNomen[Org_relPostAngajat]', 1, 'm1.png')
+GO
 
+INSERT INTO MeniuLista(Id, Denumire, Descriere, Activ) VALUES((SELECT MAX(Id) FROM MeniuLista) + 1, 'Organigrama','Organigrama', 1)
+GO
+
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'DataReferinta', NULL, 0, NULL, 0, 3, NULL, NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'F10003', 2, 1, 'select F10003, F10008+'' ''+ F10009 from f100', 0, 3, NULL, 'Nume Angajat')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'IdPost', 2, 1, 'select Id, Denumire from Org_Posturi', NULL, 3, NULL, 'Denumire Post')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'IdPostVechi', 2, 1, 'select Id, Denumire from Org_Posturi', 0, 3, NULL, 'Post Anterior')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'modifCOR', 1, 1, NULL, 0, 3, NULL, 'COR Modificat')
+GO   
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'modifFunctie', 1, 1, NULL, 0, 3, NULL, 'Functie Modificata')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'modifSalariu', 1, 1, NULL, 0, 3, NULL, 'Salariu Modificat')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'modifStructura', 1, 1, NULL, 0, 3, NULL, 'Structura Modificata')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'SalariuAvizat', 7, 1, NULL, 0, 3, NULL, 'Salariu Post')
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'Stare', NULL, 0, NULL, 0, 3, NULL, NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'TIME', NULL, 0, NULL, 0, 3, NULL, NULL)
+GO
+INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'USER_NO', NULL, 0, NULL, 0, 3, NULL, NULL)
+GO

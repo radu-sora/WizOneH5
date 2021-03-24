@@ -60,7 +60,12 @@ namespace WizOne.Tactil
                     lnk.Command += new CommandEventHandler(lnk_Command);
                     lnk.CommandName = "Action";
                     lnk.CommandArgument = General.Nz(dt.Rows[i]["IdParam"], "").ToString() + (dt.Rows[i]["IdParam2"] != null && dt.Rows[i]["IdParam2"].ToString().Length > 0 ? "_" + General.Nz(dt.Rows[i]["IdParam2"], "").ToString() : "");
-                    lnk.OnClientClick = "AspLoading()";
+
+                    //Florin 2020.11.27
+                    string txt = "";
+                    if (General.Nz(dt.Rows[i]["Nume"], "").ToString().ToLower().IndexOf("raport") >= 0)
+                        txt = Dami.TraduCuvant("Va rugam asteptati, se printeaza");
+                    lnk.OnClientClick = "AspLoading('" + txt + "')";
 
                     if (nume.ToLower() == "raport")
                     {

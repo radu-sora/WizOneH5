@@ -1752,13 +1752,13 @@
   <data name="InapoiInSite" xml:space="preserve">
     <value>Back to the application</value>
   </data>
-  <data name="AbsenteDeTipZi" xml:space="preserve">
-    <value>Day Absences</value>
-  </data> 
-  <data name="AbsenteDeTipOra" xml:space="preserve">
-    <value>Hour Absences</value>
-  </data>   
-    <data name="PrimaPaginaCereri" xml:space="preserve">
+  <data name="PrimaPaginaCereri" xml:space="preserve">
     <value>First Page - Requests</value>
+  </data> 
+  <data name="NrPozitii" xml:space="preserve">
+    <value>No of positions</value>
   </data>
+  <data name="NrPozitiiAprobate" xml:space="preserve">
+    <value>No of approved positions</value>
+  </data>  
 </root>

@@ -212,7 +212,13 @@
 
      
     
-    
+    <script>
+        function OnGridBatchEditStartEditing(s, e) {
+            var col = e.focusedColumn.fieldName;
+            if (s.cp_ColoaneRO != null && s.cp_ColoaneRO.indexOf(col + ";") >= 0)
+                e.cancel = true; 
+        }
+    </script>
 
     
     

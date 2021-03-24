@@ -1,23 +1,19 @@
-﻿using DevExpress.Web;
+﻿using DevExpress.DataProcessing;
+using DevExpress.Web;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Globalization;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using WizOne.Module;
-using System.Drawing;
-using System.Data.SqlClient;
-using System.Data.SqlTypes;
-using DevExpress.DataProcessing;
-using DevExpress.XtraSpreadsheet.Import.OpenXml;
 
 namespace WizOne.Pontaj
 {
@@ -143,11 +139,6 @@ namespace WizOne.Pontaj
             {
                 Session["PaginaWeb"] = "Pontaj.PontajEchipa";
 
-                //CultureInfo newCulture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
-                //newCulture.NumberFormat.NumberDecimalSeparator = ".";
-                //System.Threading.Thread.CurrentThread.CurrentCulture = newCulture;
-                //System.Threading.Thread.CurrentThread.CurrentUICulture = newCulture;
-
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.Chimpex))
                     divHovercard.Visible = false;
 
@@ -269,9 +260,6 @@ namespace WizOne.Pontaj
                     IncarcaRoluri();
                     IncarcaAngajati();
 
-                    
-                    
-
                     #region Filtru Retinut
 
                     if (Request.QueryString["tip"] != null)
@@ -322,15 +310,6 @@ namespace WizOne.Pontaj
 
                     #endregion
 
-                    //DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
-                    //cmbStare.DataSource = dtStari;
-                    //cmbStare.DataBind();
-
-                    //GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                    //colStari.PropertiesComboBox.DataSource = dtStari;
-
-
-
                     cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
                     cmbCateg.DataBind();
 
@@ -377,6 +356,8 @@ namespace WizOne.Pontaj
             try
             {
                 RetineFiltru("1");
+
+                grDate.Selection.UnselectAll();
 
                 string struc = "";
 
@@ -438,9 +419,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, cmbCtr.Value == null ? "" : cmbCtr.Value.ToString().Replace(",", "', '"));
-
-                //grDate.KeyFieldName = "F10003";
+                General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, cmbCtr.Value == null ? "" : cmbCtr.Value.ToString().Replace(",", "', '"), cmbDept.Value == null ? "" : cmbDept.Value.ToString().Replace(",", "', '"), Convert.ToInt32(General.Nz(cmbAng.Value,-99)));
 
                 string strSql = DamiSelect();
 
@@ -2020,20 +1999,23 @@ namespace WizOne.Pontaj
                 }
                 #endregion
 
-
+                //Florin 2020.12.04
                 foreach (var col in grDate.Columns.OfType<GridViewDataSpinEditColumn>())
-                    f_uri += $",COALESCE(X.{col.FieldName},0) AS {col.FieldName}";
-
+                {
+                    if (col.FieldName == "Comentarii")
+                        f_uri += $",COALESCE(X.{col.FieldName},'0') AS {col.FieldName}";
+                    else
+                        f_uri += $",COALESCE(X.{col.FieldName},0) AS {col.FieldName}";
+                }
 
                 if (Dami.ValoareParam("TipCalculDate") == "2")
                     strInner += $@"LEFT JOIN DamiDataPlecare_Table ddp ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
                 else
                     strInner += $@"OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
 
-
                 //Radu 02.02.2021 -  am adaugat DataInceput, DataSfarsit, ZileCONeefectuate si ZLPNeefectuate
-                strSql = "SELECT X.F10003, CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, convert(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate, " 
-                        + " A.F10008  " + Dami.Operator() + "  ' '  " + Dami.Operator() + "  A.F10009 AS \"AngajatNume\", Y.\"Norma\", C.\"Denumire\" AS \"DescContract\", L.F06205, FCT.F71804 AS \"Functie\", A.F100901 AS EID, COALESCE(K.\"Culoare\", '#FFFFFFFF') AS \"Culoare\", X.\"IdStare\", K.\"Denumire\" AS \"Stare\", " +
+                strSql = "SELECT X.F10003, CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, convert(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate, " + 
+                        " A.F10008  " + Dami.Operator() + "  ' '  " + Dami.Operator() + "  A.F10009 AS \"AngajatNume\", Y.\"Norma\", C.\"Denumire\" AS \"DescContract\", L.F06205, FCT.F71804 AS \"Functie\", A.F100901 AS EID, COALESCE(K.\"Culoare\", '#FFFFFFFF') AS \"Culoare\", X.\"IdStare\", K.\"Denumire\" AS \"Stare\", " +
                         "S2.F00204 AS \"Companie\", S3.F00305 AS \"Subcompanie\", S4.F00406 AS \"Filiala\", H.F00507 AS \"Sectie\",I.F00608 AS \"Dept\", S7.F00709 AS \"Subdept\", S8.F00810 AS \"Birou\", " + campCategorie + " " +
                         "{0} " +
                         f_uri + 
@@ -2199,8 +2181,9 @@ namespace WizOne.Pontaj
                 if (General.Nz(cmbAng.Value, "").ToString() == "")
                 {
                     string roluri = (cmbRol.Value ?? -99).ToString();
-                    //if (chkRoluri.Checked)
-                    //    roluri = cmbRol.Items.ToCommaSeparatedString();
+                    if (chkRoluri.Checked)
+                        roluri = String.Join(",", cmbRol.Items);
+                    //roluri = cmbRol.Items.ToCommaSeparatedString();
 
                     strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, roluri, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
                 }
@@ -2434,14 +2417,7 @@ namespace WizOne.Pontaj
             string op = "+";
             if (Constante.tipBD == 2) op = "||";
 
-            //List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "AngajatNume" });
-            //if (lst == null || lst.Count() == 0 || lst[0] == null) return;
-            //object[] arr = lst[0] as object[];
-
             DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
-
-            //strSql = string.Format(strSql, arr[0].ToString(), ziua.Year, ziua.Month, op);
-
             strSql = string.Format(strSql, General.Nz(f10003,-99), ziua.Year, ziua.Month, op);
 
             grDateIstoric.DataSource = General.IncarcaDT(strSql, null);

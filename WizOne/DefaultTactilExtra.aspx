@@ -33,24 +33,17 @@
         </script>
        <asp:ScriptManager ID="ScriptManager1" runat="server">
         </asp:ScriptManager>
-        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-            <ContentTemplate>
+
                 <asp:Timer ID="Timer1" runat="server" OnTick="Resetare" Interval="15000" >                    
                     </asp:Timer>
         <div id="panouExt" runat="server"  class="outer">
             <div  class="inner">
                 Pentru accesarea aplicatiei va rugam apropiati cardul de cititor
             </div>
+            <input type = "text" id="txtPan1" name="txtPan1" runat="server"  autocomplete="off" class="hide" maxlength="15" onserverchange="txtPan1_TextChanged" onblur="this.focus()"/>
 		</div>
         <div id="butoane" runat="server" class="innerbuttonscard">
             <table>
-
-  
-                <tr>
-                    <td colspan="3">
-                         <input type = "text" id="txtPan1" name="txtPan1" runat="server"  autocomplete="off" class="hide" maxlength="15" onserverchange="txtPan1_TextChanged" onblur="this.focus()"  />
-                    </td>
-                </tr>
                 <tr>
                     <td>
                         <dx:ASPxButton ID="btn7" ClientInstanceName="btn7" ClientIDMode="Static" ClientVisible="false"  TabIndex="7" runat="server" Height="30px" Text="7" style="font-size:30px;text-align:center" AutoPostBack="false" CssClass="divider" RenderMode="Outline" oncontextMenu="ctx(this,event)" meta:resourcekey="btn7" >
@@ -141,10 +134,7 @@
             </table>
 		</div>
    
-           </ContentTemplate>
-    </asp:UpdatePanel>	   
-
-    <dx:ASPxHiddenField ID="hfPIN" runat="server"></dx:ASPxHiddenField>        
+       <dx:ASPxHiddenField ID="hfPIN" runat="server"></dx:ASPxHiddenField>        
 
     </form>
 

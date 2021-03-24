@@ -81,6 +81,9 @@ namespace WizOne
                     return;
                 }
 
+                //Florin 2021.03.03 #818
+                int delogat = Convert.ToInt32(General.Nz(Session["VineDinDelogare"], 0));
+
                 if (!IsPostBack)
                 {
                     arrIncercari = "";
@@ -102,11 +105,15 @@ namespace WizOne
                     case "3":
                     case "4":
                         {
-                            string usrTMP = System.Web.HttpContext.Current.User.Identity.Name.ToString();
-                            int poz = usrTMP.IndexOf(@"\");
-                            if (poz > 0) usrTMP = usrTMP.Remove(0, poz + 1);
+                            //Florin 2021.03.03 #818
+                            if (delogat == 0)
+                            {
+                                string usrTMP = System.Web.HttpContext.Current.User.Identity.Name.ToString();
+                                int poz = usrTMP.IndexOf(@"\");
+                                if (poz > 0) usrTMP = usrTMP.Remove(0, poz + 1);
 
-                            Verifica(usrTMP, "", false);
+                                Verifica(usrTMP, "", false);
+                            }
                         }
                         break;
                     case "5":
@@ -120,7 +127,7 @@ namespace WizOne
                                     string usrTMP = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Upn).Select(c => c.Value).SingleOrDefault();
                                     int poz = usrTMP.IndexOf("@");
                                     if (poz > 0) usrTMP = usrTMP.Remove(poz);
-                                    General.MemoreazaEroarea(usrTMP);
+                                    //General.MemoreazaEroarea(usrTMP);
                                     string txtRas = Verifica(usrTMP, "", false, false);
 
                                     if (General.Nz(Session["SecApp"], "").ToString() != "OK")

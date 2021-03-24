@@ -393,15 +393,29 @@ namespace WizOne.Pontaj
                         colDpt.PropertiesComboBox.DataSource = dtDpt;
                     }
 
-                    GridViewDataComboBoxColumn colCC = (grCC.Columns["F06204"] as GridViewDataComboBoxColumn);
-                    if (colCC != null)
-                    {
-                        string sqlCC = General.Nz(General.ExecutaScalar(@"SELECT ""SursaCombo"" FROM ""Ptj_tblAdminCC"" WHERE ""Camp""='F06204'", null), "").ToString().Trim();
-                        if (sqlCC == "")
-                            sqlCC = "SELECT F06204 AS Id, F06205 AS Denumire FROM F062";
-                        DataTable dt = General.IncarcaDT(sqlCC, null);
-                        colCC.PropertiesComboBox.DataSource = dt;
-                    }
+                    //Radu 17.03.2021 
+                    //GridViewDataComboBoxColumn colCC = (grCC.Columns["F06204"] as GridViewDataComboBoxColumn);
+                    //if (colCC != null)
+                    //{
+                    //    string sqlCC = General.Nz(General.ExecutaScalar(@"SELECT ""SursaCombo"" FROM ""Ptj_tblAdminCC"" WHERE ""Camp""='F06204'", null), "").ToString().Trim();
+                    //    if (sqlCC == "")
+                    //    {                                               
+                    //        DateTime ziuaCC = DateTime.Now;
+                    //        if (General.Nz(Request.QueryString["Tip"], "").ToString() == "1" || General.Nz(Request.QueryString["Tip"], "").ToString() == "10")
+                    //        {                    
+                    //            object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "IdStare" }) as object[];
+                    //            if (obj != null && obj.Count() != 0 && obj[0] != null)
+                    //                ziuaCC = new DateTime(txtZiua.Date.Year, txtZiua.Date.Month, Convert.ToInt32(obj[0].ToString()));                                
+                    //        }
+                    //        else
+                    //            ziuaCC = txtZiua.Date;
+                    //        sqlCC = "SELECT F06204 AS Id, F06205 AS Denumire FROM F062 WHERE F06208 <= CONVERT(DATETIME, '" + ziuaCC.Day.ToString().PadLeft(2, '0') + "/" + ziuaCC.Month.ToString().PadLeft(2, '0') 
+                    //            + "/" + ziuaCC.Year.ToString() + "', 103) AND CONVERT(DATETIME, '" + ziuaCC.Day.ToString().PadLeft(2, '0') + "/" + ziuaCC.Month.ToString().PadLeft(2, '0')
+                    //            + "/" + ziuaCC.Year.ToString() + "', 103) <= F06209";
+                    //    }
+                    //    DataTable dt = General.IncarcaDT(sqlCC, null);
+                    //    colCC.PropertiesComboBox.DataSource = dt;
+                    //}
 
                     GridViewDataComboBoxColumn colPro = (grCC.Columns["IdProiect"] as GridViewDataComboBoxColumn);
                     if (colPro != null)
@@ -1580,7 +1594,9 @@ namespace WizOne.Pontaj
                     dynamic newValue = upd.NewValues[numeCol];
                     if (oldValue != null && upd.OldValues[numeCol].GetType() == typeof(System.DBNull))
                         oldValue = null;
-                       
+                    if (newValue != null && upd.NewValues[numeCol].GetType() == typeof(System.DBNull))
+                        newValue = null;
+
                     if (oldValue != newValue)
                     {
                         //daca sunt valorile temporare ValTmp
@@ -2718,6 +2734,26 @@ namespace WizOne.Pontaj
                     {
                         case "btnCC":
                             {
+                                //Radu 17.03.2021  
+                                GridViewDataComboBoxColumn colCC = (grCC.Columns["F06204"] as GridViewDataComboBoxColumn);
+                                if (colCC != null)
+                                {
+                                    string sqlCC = General.Nz(General.ExecutaScalar(@"SELECT ""SursaCombo"" FROM ""Ptj_tblAdminCC"" WHERE ""Camp""='F06204'", null), "").ToString().Trim();
+                                    if (sqlCC == "")
+                                    {                                                         
+                                        DateTime ziuaCC = DateTime.Now;
+                                        if (General.Nz(Request.QueryString["Tip"], "").ToString() == "1" || General.Nz(Request.QueryString["Tip"], "").ToString() == "10")                                                                  
+                                            ziuaCC = new DateTime(txtAnLuna.Date.Year, txtAnLuna.Date.Month, Convert.ToInt32(arr[1].ToString()));                                        
+                                        else
+                                            ziuaCC = txtAnLuna.Date;
+                                        sqlCC = "SELECT F06204 AS Id, F06205 AS Denumire FROM F062 WHERE F06208 <= CONVERT(DATETIME, '" + ziuaCC.Day.ToString().PadLeft(2, '0') + "/" + ziuaCC.Month.ToString().PadLeft(2, '0')
+                                            + "/" + ziuaCC.Year.ToString() + "', 103) AND CONVERT(DATETIME, '" + ziuaCC.Day.ToString().PadLeft(2, '0') + "/" + ziuaCC.Month.ToString().PadLeft(2, '0')
+                                            + "/" + ziuaCC.Year.ToString() + "', 103) <= F06209";
+                                    }
+                                    DataTable dtCC = General.IncarcaDT(sqlCC, null);
+                                    colCC.PropertiesComboBox.DataSource = dtCC;
+                                }
+
                                 lblZiuaCC.Text = "Centrii de cost - Ziua " + Convert.ToDateTime(lst[1]).Day;
                                 DataTable dt = SursaCC(Convert.ToInt32(lst[0]), General.ToDataUniv(Convert.ToDateTime(lst[1])));
                                 Session["PtjCC"] = dt;

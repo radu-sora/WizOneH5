@@ -740,7 +740,7 @@ namespace WizOne.Pagini
                     }
                     else if (command == "btnPrint")
                     {
-                        lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat", "IdAutoAct", "SporVechime", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev", "TipContract" });
+                        lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat", "IdAutoAct", "SporVechime", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev", "TipContract", "PunctLucru" });
 
                         if (lst?.FirstOrDefault() == null) return;
                     }
@@ -827,14 +827,16 @@ namespace WizOne.Pagini
 
 
                                                 int idRegistru = -99;
-                                                int nrStart = 0;
+                                                int nrStart = 1;
                                                 string docNr = "";
                                                 DataTable dtSet = General.IncarcaDT(@"SELECT * FROM ""MP_ActAdSetari""");
                                                 DataRow[] arr = dtSet.Select("IdTip=" + idTipDoc);
                                                 if (arr.Count() > 0)
                                                 {
                                                     idRegistru = Convert.ToInt32(General.Nz(arr[0]["IdRegistru"], -99));
-                                                    nrStart = Convert.ToInt32(General.Nz(arr[0]["NrStart"], 0));
+                                                    nrStart = Convert.ToInt32(General.Nz(arr[0]["NrStart"], 1));
+                                                    //Florin #765
+                                                    nrStart -= 1;
                                                 }
 
                                                 string filtruSup = "";
@@ -1019,7 +1021,7 @@ namespace WizOne.Pagini
 
                                         if (Dami.ValoareParam("FinalizareCuActeAditionale") == "1")
                                         {
-                                            DataTable dtAvs = General.IncarcaDT($@"SELECT * FROM ""Avs_Cereri"" WHERE ""IdActAd""=@1", new object[] { obj[3] });
+                                            DataTable dtAvs = General.IncarcaDT($@"SELECT * FROM ""Avs_Cereri"" WHERE ""IdActAd""=@1 AND ""IdParinte"" IS NULL", new object[] { obj[3] });
                                             for (int x = 0; x < dtAvs.Rows.Count; x++)
                                             {
                                                 //cazul cand este angajat
@@ -1033,8 +1035,10 @@ namespace WizOne.Pagini
                                                 {
                                                     Cereri pag = new Cereri();
                                                     pag.TrimiteInF704(Convert.ToInt32(General.Nz(dr["Id"], -99)));
-                                                    if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
-                                                        General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
+
+                                                    //Florin 2020.10.07 - se trateaza cazul in functia TrimiteInF704
+                                                    //if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
+                                                    //    General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
                                                 }
                                             }
                                         }
@@ -1343,7 +1347,7 @@ namespace WizOne.Pagini
                                         }
 
                                         //modificari contract
-                                        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1)
+                                        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1 || Convert.ToInt32(General.Nz(obj[20], 0)) == 1 || Convert.ToInt32(General.Nz(obj[21], 0)) == 1)
                                         {
                                             if (General.Nz(obj[12], "").ToString() == "")
                                             {
@@ -1423,7 +1427,7 @@ namespace WizOne.Pagini
                                             }
                                         }
 
-                                        if (idRap == "")
+                                        if ((idRap ?? "") == "")
                                         {
                                             msg = "Nu este setat raportul";
                                             break;
@@ -1447,7 +1451,7 @@ namespace WizOne.Pagini
                                             //candidati
                                             if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1) idTipDoc = 1;
                                             //modificari contract
-                                            if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1 || Convert.ToInt32(General.Nz(obj[20], 0)) == 1)
+                                            if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1 || Convert.ToInt32(General.Nz(obj[20], 0)) == 1 || Convert.ToInt32(General.Nz(obj[21], 0)) == 1)
                                             {
                                                 if (General.Nz(obj[12], "").ToString() == "")
                                                 {

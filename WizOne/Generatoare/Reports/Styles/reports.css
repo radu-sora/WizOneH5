@@ -1,9 +1,4 @@
-﻿html, form {
-    width: 100%;
-    height: 100%
-}
-
-/* Bootstrap custom theme */
+﻿/* Bootstrap custom theme */
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
     color: #fff;
@@ -12,6 +7,9 @@
 }
 
 /* Page elements */
+.d-none {
+    display: none;
+}
 
 /* Dynamic report view & design layout */
 .report-view-template {

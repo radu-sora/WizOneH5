@@ -251,26 +251,36 @@
             </div>
 
             <div class="row">
-                <div class="col-md-1">
-				        <dx:ASPxComboBox  DataSourceID="dsSablon"   ID="cmbSablon"  runat="server" DropDownStyle="DropDown" Width="200" DropDownHeight="150"  DropDownWidth="200"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false"  >
-                             <ClientSideEvents SelectedIndexChanged="function(s, e){ popUpSablon.PerformWindowCallback(popUpSablon.GetWindow(0), 'Sablon') }" />
-				        </dx:ASPxComboBox>
+                <div class="col-md-12">
+                    <label id="lblPost" runat="server" visible="false" style="width:100%; text-align:left;">Selectie post</label>
+				    <dx:ASPxComboBox ID="cmbPost" ClientInstanceName="cmbPost" runat="server" DropDownStyle="DropDownList" Width="200" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Visible="false" >
+                        <ClientSideEvents SelectedIndexChanged="function(s, e){ popUpSablon.PerformWindowCallback(popUpSablon.GetWindow(0), 'Post') }"  />
+                    </dx:ASPxComboBox>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12">
+                    <label style="width:100%; text-align:left;">Selectie tip angajat</label>
+				    <dx:ASPxComboBox  DataSourceID="dsSablon"   ID="cmbSablon"  runat="server" DropDownStyle="DropDown" Width="200" DropDownHeight="150"  DropDownWidth="200"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false"  >
+                            <ClientSideEvents SelectedIndexChanged="function(s, e){ popUpSablon.PerformWindowCallback(popUpSablon.GetWindow(0), 'Sablon') }" />
+				    </dx:ASPxComboBox>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-1">
+                <div class="col-md-12">
 	                 <dx:ASPxCheckBox ID="chkCandidat"  runat="server" Text="Candidat" TextAlign="Left"  ClientInstanceName="chkCandidat" >  
                           <ClientSideEvents CheckedChanged="function(s, e){ popUpSablon.PerformWindowCallback(popUpSablon.GetWindow(0), 'Candidat') }" />                   
                     </dx:ASPxCheckBox>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-1">
+                <div class="col-md-12">
 	                 <dx:ASPxLabel  ID="lblText" runat="server"  Text="" Width="400" style="text-align: left;"></dx:ASPxLabel >	
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-1">
+                <div class="col-md-12">
 	                 <dx:ASPxCheckBox ID="chkUser"  runat="server" Text="Creeaza utilizator" TextAlign="Left"  Checked="true" ClientInstanceName="chkUser" />  
                 </div>
             </div>

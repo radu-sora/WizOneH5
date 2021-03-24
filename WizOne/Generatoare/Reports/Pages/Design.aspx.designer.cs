@@ -7,11 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Wizrom.Reports.Pages {
-    
-    
-    public partial class Design {
-        
+namespace Wizrom.Reports.Pages
+{
+
+
+    public partial class Design
+    {
+
+        /// <summary>
+        /// ReportTemplate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder ReportTemplate;
+
         /// <summary>
         /// ChartTypeComboBox control.
         /// </summary>
@@ -20,7 +31,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox ChartTypeComboBox;
-        
+
         /// <summary>
         /// ChartOptionsCheckBoxList control.
         /// </summary>
@@ -29,7 +40,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBoxList ChartOptionsCheckBoxList;
-        
+
         /// <summary>
         /// CustomDocumentCallbackPanel control.
         /// </summary>
@@ -38,7 +49,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel CustomDocumentCallbackPanel;
-        
+
         /// <summary>
         /// CustomDocumentRichEdit control.
         /// </summary>
@@ -47,7 +58,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRichEdit.ASPxRichEdit CustomDocumentRichEdit;
-        
+
         /// <summary>
         /// CustomCubePivotGrid control.
         /// </summary>
@@ -56,7 +67,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPivotGrid.ASPxPivotGrid CustomCubePivotGrid;
-        
+
         /// <summary>
         /// CustomCubeWebChartControl control.
         /// </summary>
@@ -65,7 +76,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.XtraCharts.Web.WebChartControl CustomCubeWebChartControl;
-        
+
         /// <summary>
         /// CustomTableGridView control.
         /// </summary>
@@ -74,7 +85,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView CustomTableGridView;
-        
+
         /// <summary>
         /// CustomTableGridViewExporter control.
         /// </summary>
@@ -83,7 +94,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridViewExporter CustomTableGridViewExporter;
-        
+
         /// <summary>
         /// ReportDesignerCallbackPanel control.
         /// </summary>
@@ -92,7 +103,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel ReportDesignerCallbackPanel;
-        
+
         /// <summary>
         /// ReportDesigner control.
         /// </summary>
@@ -101,5 +112,23 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.XtraReports.Web.ASPxReportDesigner ReportDesigner;
+
+        /// <summary>
+        /// DashboardTemplate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder DashboardTemplate;
+
+        /// <summary>
+        /// DashboardDesigner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.DashboardWeb.ASPxDashboard DashboardDesigner;
     }
 }

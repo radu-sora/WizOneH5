@@ -718,7 +718,7 @@ namespace WizOne.Eval
                     //FLorin 2020.11.12 Begin
                     if (Convert.ToInt32(cmbTipObiect.Value.ToString()) == 23)
                     {
-                        rwNewSectiune["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(Session["TemplateIdObiectiv"],1)) + 1;
+                        rwNewSectiune["TemplateIdObiectiv"] = Convert.ToInt32(General.Nz(Session["TemplateIdObiectiv"], 1)) + 1;
                         Session["TemplateIdObiectiv"] = rwNewSectiune["TemplateIdObiectiv"];
                     }
 
@@ -884,14 +884,14 @@ namespace WizOne.Eval
                             cmbTipObiect.Value = rwDataCurrent["TipData"];
 
                             #region configObiective
-                            if (cmbTipObiect.Value !=null && Convert.ToInt32(cmbTipObiect.Value.ToString()) == 23)
+                            if (cmbTipObiect.Value != null && Convert.ToInt32(cmbTipObiect.Value.ToString()) == 23)
                             {
                                 partGridObiective.Visible = true;
                                 Session["isEditingObiectivTemplate"] = 1;
                                 Session["isEditingCompetenteTemplate"] = null;
 
                                 int TemplateId = Convert.ToInt32(General.Nz(rwDataCurrent["TemplateIdObiectiv"], Session["TemplateIdObiectiv"]));
-                                
+
                                 rwDataCurrent["TemplateIdObiectiv"] = TemplateId;
                                 ShowTemplateObiectiv(TemplateId);
 
@@ -910,7 +910,7 @@ namespace WizOne.Eval
                             #endregion
 
                             #region configCompetente
-                            if (cmbTipObiect.Value!=null && Convert.ToInt32(cmbTipObiect.Value.ToString()) == 5)
+                            if (cmbTipObiect.Value != null && Convert.ToInt32(cmbTipObiect.Value.ToString()) == 5)
                             {
                                 partGridCompetente.Visible = true;
                                 Session["isEditingObiectivTemplate"] = null;
@@ -1010,7 +1010,7 @@ namespace WizOne.Eval
 
                     //Florin 2020.11.06
                     List<metaDate> tmpListaTblTipValori = Session["nomenEval_tblTipValori"] as List<metaDate>;
-                    if (tmpListaTblTipValori.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 1 && Convert.ToInt32(General.Nz(cmbTipObiect.Value, -1)) == 2)
+                    if (tmpListaTblTipValori.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 1 && (Convert.ToInt32(General.Nz(cmbTipObiect.Value, -1)) == 2 || Convert.ToInt32(General.Nz(cmbTipObiect.Value, -1)) == 3))
                     {
                         lblSursaDate.ClientVisible = true;
                         cmbSursaDate.ClientVisible = true;
@@ -1137,7 +1137,7 @@ namespace WizOne.Eval
 
                 //Florin 2020.11.06 - este pusa de 2 ori (este si mai sus din cauza return-ului de deasupra)
                 List<metaDate> tmpListaTblTipValori2 = Session["nomenEval_tblTipValori"] as List<metaDate>;
-                if (tmpListaTblTipValori2.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 1 && Convert.ToInt32(General.Nz(cmbTipObiect.Value, -1)) == 2)
+                if (tmpListaTblTipValori2.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value, -1)) == 1 && (Convert.ToInt32(General.Nz(cmbTipObiect.Value, -1)) == 2 || Convert.ToInt32(General.Nz(cmbTipObiect.Value, -1)) == 3))
                 {
                     lblSursaDate.ClientVisible = true;
                     cmbSursaDate.ClientVisible = true;
@@ -1312,7 +1312,7 @@ namespace WizOne.Eval
                                 rwIntrebare["TemplateIdObiectiv"] = DBNull.Value;
                             }
                             int IdTipObiect = -99;
-                            if (Int32.TryParse(cmbTipObiect.Value.ToString(), out IdTipObiect))
+                            if (Int32.TryParse(General.Nz(cmbTipObiect.Value,-99).ToString(), out IdTipObiect))
                             {
                                 partGridObiective.Visible = IdTipObiect == 23 ? true : false;
                                 Session["isEditingObiectivTemplate"] = IdTipObiect == 23 ? 1 : 0;

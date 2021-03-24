@@ -1327,6 +1327,21 @@ namespace WizOne.Avs
                     lblTxt4Nou.Text = text4;
                     cmb2Nou.Visible = true;
                     cmb2Nou.Enabled = true;
+
+                    //Florin 2020.10.05
+                    lbl3Act.Visible = true;
+                    lblTxt7Act.Visible = true;
+                    lblTxt7Act.Text = "Post";
+                    cmb3Act.Visible = true;
+                    cmb3Act.Enabled = true;
+                    cmb3Act.Width = 250;
+
+                    lbl3Nou.Visible = true;
+                    lblTxt7Nou.Visible = true;
+                    lblTxt7Nou.Text = "Post";
+                    cmb3Nou.Visible = true;
+                    cmb3Nou.Enabled = true;
+                    cmb3Nou.Width = 250;
                 }
 
                 lblTxt1Act.Visible = true;
@@ -1424,6 +1439,110 @@ namespace WizOne.Avs
                 lblTxt6Nou.Text = text8;
                 de2Nou.Visible = true;
             }
+            //if(nr == 37)            //Post = 37 este id-ul de post din Org_tblAtribute
+            //{// 4 x CB
+
+            //    lbl1Act.Visible = true;
+            //    lbl1Act.InnerText = text1;
+            //    cmb1Act.Visible = true;
+
+            //    lbl1Nou.Visible = true;
+            //    lbl1Nou.InnerText = text2;
+            //    cmb1Nou.Visible = true;
+
+            //    lbl2Act.Visible = true;
+            //    lbl2Act.InnerText = text3;
+            //    cmb2Act.Visible = true;
+            //    cmb2Act.ClientEnabled = false;
+
+            //    lbl2Nou.Visible = true;
+            //    lbl2Nou.InnerText = text4;
+            //    cmb2Nou.Visible = true;
+            //    cmb2Nou.ClientEnabled = false;
+
+            //    lbl3Act.Visible = true;
+            //    lbl3Act.InnerText = text5;
+            //    cmb3Act.Visible = true;
+            //    cmb3Act.ClientEnabled = false;
+
+            //    lbl3Nou.Visible = true;
+            //    lbl3Nou.InnerText = text6;
+            //    cmb3Nou.Visible = true;
+            //    cmb3Nou.ClientEnabled = false;
+
+            //    lbl4Act.Visible = true;
+            //    lbl4Act.InnerText = text7;
+            //    cmb4Act.Visible = true;
+            //    cmb4Act.ClientEnabled = false;
+
+            //    lbl4Nou.Visible = true;
+            //    lbl4Nou.InnerText = text8;
+            //    cmb4Nou.Visible = true;
+            //    cmb4Nou.ClientEnabled = false;
+            //}
+
+            if (nr == 37)            //Post = 37 este id-ul de post din Org_tblAtribute
+            {// 1 CB + 4 x TB
+                lbl1Act.Visible = true;
+                lblTxt3Act.Visible = true;
+                lblTxt3Act.Text = text1;
+                cmb1Act.Visible = true;
+                cmb1Act.Enabled = false;
+
+                lbl1Nou.Visible = true;
+                lblTxt3Nou.Visible = true;
+                lblTxt3Nou.Text = text2;
+                cmb1Nou.Visible = true;
+                cmb1Nou.Enabled = true;
+
+                lbl8Act.Visible = true;
+                lblTxt1Act.Visible = true;
+                lblTxt1Act.Text = text3;
+                txt1Act.Visible = true;
+                txt1Act.Enabled = false;
+
+                lbl8Nou.Visible = true;
+                lblTxt1Nou.Visible = true;
+                lblTxt1Nou.Text = text4;
+                txt1Nou.Visible = true;
+                txt1Nou.Enabled = false;
+
+                lbl9Act.Visible = true;
+                lblTxt2Act.Visible = true;
+                lblTxt2Act.Text = text5;
+                txt2Act.Visible = true;
+                txt2Act.ClientEnabled = false;
+
+                lbl9Nou.Visible = true;
+                lblTxt2Nou.Visible = true;
+                lblTxt2Nou.Text = text6;
+                txt2Nou.Visible = true;
+                txt2Nou.ClientEnabled = false;
+
+                lbl14Act.Visible = true;
+                lblTxt14Act.Visible = true;
+                lblTxt14Act.Text = text7;
+                txt3Act.Visible = true;
+                txt3Act.ClientEnabled = false;
+
+                lbl15Nou.Visible = true;
+                lblTxt15Nou.Visible = true;
+                lblTxt15Nou.Text = text8;
+                txt3Nou.Visible = true;
+                txt3Nou.ClientEnabled = false;
+
+                lbl15Act.Visible = true;
+                lblTxt15Act.Visible = true;
+                lblTxt15Act.Text = text9;
+                txt4Act.Visible = true;
+                txt4Act.ClientEnabled = false;
+
+                lbl16Nou.Visible = true;
+                lblTxt16Nou.Visible = true;
+                lblTxt16Nou.Text = text10;
+                txt4Nou.Visible = true;
+                txt4Nou.ClientEnabled = false;
+            }
 
         }
 
@@ -1468,7 +1587,21 @@ namespace WizOne.Avs
 
                 dtTemp = General.IncarcaDT("SELECT F100931 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 txt4Act.Text = dtTemp.Rows[0][0].ToString();
-                
+
+                string sqlPost = $@"SELECT Id, Denumire FROM Org_Posturi WHERE IdFunctie={General.Nz(cmb1Act.Value, -99)} AND CONVERT(DATE, DataInceput) <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE, DataSfarsit)";
+                string sqlIdPost = $"SELECT IdPost FROM Org_relPostAngajat WHERE F10003=@1 AND CONVERT(DATE, DataInceput) <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE, DataSfarsit)";
+                if (Constante.tipBD == 2)
+                {
+                    sqlPost = $@"SELECT ""Id"", ""Denumire"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmb1Act.Value, -99)} AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
+                    sqlIdPost = $@"SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003=@1 AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
+                }
+                DataTable dtPost = General.IncarcaDT(sqlPost);
+                cmb3Act.DataSource = dtPost;
+                cmb3Act.DataBind();
+                cmb3Nou.DataSource = dtPost;
+                cmb3Nou.DataBind();
+                cmb3Act.Value = General.ExecutaScalar(sqlIdPost, new object[] { cmbAng.Value });
+                //cmb3Nou.Value = cmb3Act.Value;
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.CodCOR)
@@ -2132,6 +2265,78 @@ namespace WizOne.Avs
                 //}
 
             }
+
+
+            //Florin 2020.12.22
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Post)
+            {
+                ArataCtl(37, "Post actual", "Post nou", "Functie Actuala", "Functie Noua", "COR Actual", "COR Nou", "Structura Actuala", "Structura Noua", "Nivel functie Actual", "Nivel functie Nou");
+                string strSql = $@"SELECT A.""Id"", A.""Denumire"", B.F71804 AS ""Functie"", B.F71802 AS ""FunctieId"", C.F72204 AS COR, C.F72202 AS ""CORCod"",
+                    F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
+                    A.F10002 AS ""CompanieId"", A.F10004 AS ""SubcompanieId"", A.F10005 AS ""FilialaId"", A.F10006 AS ""SectieId"", A.F10007 AS ""DeptId"", A.""IdSubdept"", A.""IdBirou"",
+                    COALESCE(F00204 + ', ', '') + COALESCE(F00305 + ', ', '') + COALESCE(F00406 + ', ', '') + COALESCE(F00507 + ', ', '') + COALESCE(F00608,'') + COALESCE(F00709, '') + COALESCE(F00810, '') AS ""Structura"",
+                    N.""Denumire"" AS ""NivelFunctie""
+                    FROM ""Org_Posturi"" A
+                    LEFT JOIN F718 B ON A.""IdFunctie"" = B.F71802
+                    LEFT JOIN F722 C ON A.""CodCOR"" = C.F72202 AND F72206 = (SELECT MAX(F72206) FROM F722)
+                    LEFT JOIN F002 E ON A.F10002 = E.F00202
+                    LEFT JOIN F003 F ON A.F10004 = F.F00304
+                    LEFT JOIN F004 G ON A.F10005 = G.F00405
+                    LEFT JOIN F005 H ON A.F10006 = H.F00506
+                    LEFT JOIN F006 I ON A.F10007 = I.F00607
+                    LEFT JOIN F007 K ON A.""IdSubdept"" = K.F00708  
+                    LEFT JOIN F008 L ON A.""IdBirou"" = L.F00809
+                    LEFT JOIN ""tblNivelFunctie"" N ON B.F71813 = N.""Id""
+                    WHERE CONVERT(date, A.""DataInceput"") <= {General.ToDataUniv(txtDataMod.Date)} AND {General.ToDataUniv(txtDataMod.Date)} <= CONVERT(date, A.""DataSfarsit"")";
+                DataTable dtNou = General.IncarcaDT(strSql + @" ORDER BY A.""Denumire"" ");
+                DataTable dtAct = General.IncarcaDT(strSql + $@" AND A.""Id""=(SELECT ""IdPost"" FROM ""Org_relPostAngajat"" WHERE F10003={General.Nz(cmbAng.Items[cmbAng.SelectedIndex].Value, -99)} AND CONVERT(date, ""DataInceput"") <= {General.ToDataUniv(txtDataMod.Date)} AND {General.ToDataUniv(txtDataMod.Date)} <= CONVERT(date, ""DataSfarsit"")) ");
+
+                cmb1Act.DataSource = dtAct;
+                cmb1Act.DataBind();
+                cmb1Nou.DataSource = dtNou;
+                cmb1Nou.DataBind();
+
+                if (dtAct.Rows.Count > 0)
+                {
+                    cmb1Act.Value = Convert.ToInt32(General.Nz(dtAct.Rows[0]["Id"], -1));
+                    txt1Act.Text = General.Nz(dtAct.Rows[0]["Functie"], "").ToString();
+                    txt2Act.Text = General.Nz(dtAct.Rows[0]["COR"], "").ToString();
+                    txt3Act.Text = General.Nz(dtAct.Rows[0]["Structura"], "").ToString();
+                    txt4Act.Text = General.Nz(dtAct.Rows[0]["NivelFunctie"], "").ToString();
+                }
+
+                if (Session["Valoare1Noua"] != null)
+                {
+                    string[] param = Session["Valoare1Noua"].ToString().Split(';');
+                    cmb1Nou.Value = Convert.ToInt32(param[1]);
+                    ListEditItem item = cmb1Nou.Items[cmb1Nou.SelectedIndex];
+                    txt1Nou.Text = General.Nz(item.GetFieldValue("Functie"), "").ToString();
+                    txt2Nou.Text = General.Nz(item.GetFieldValue("COR"), "").ToString();
+                    txt3Nou.Text = General.Nz(item.GetFieldValue("Structura"), "").ToString();
+                    txt4Nou.Text = General.Nz(item.GetFieldValue("NivelFunctie"), "").ToString();
+                }
+
+                txt1Act.Width = Unit.Pixel(250);
+                txt2Act.Width = Unit.Pixel(250);
+                txt3Act.Width = Unit.Pixel(500);
+                txt4Act.Width = Unit.Pixel(250);
+                txt1Nou.Width = Unit.Pixel(250);
+                txt2Nou.Width = Unit.Pixel(250);
+                txt3Nou.Width = Unit.Pixel(500);
+                txt4Nou.Width = Unit.Pixel(250);
+
+                txt1Act.Style["margin-left"] = "15px";
+                txt1Act.Style["margin-right"] = "15px";
+                txt2Act.Style["margin-right"] = "15px";
+                txt3Act.Style["margin-right"] = "15px";
+                txt1Nou.Style["margin-left"] = "15px";
+                txt1Nou.Style["margin-right"] = "15px";
+                txt2Nou.Style["margin-right"] = "15px";
+                txt3Nou.Style["margin-right"] = "15px";
+            }
+
+
+
         }
 
 
@@ -2374,6 +2579,18 @@ namespace WizOne.Avs
                             if (e.Parameter.Split(';')[1] == "txt1Nou" || e.Parameter.Split(';')[1] == "txt2Nou" || e.Parameter.Split(';')[1] == "txt3Nou" || e.Parameter.Split(';')[1] == "txt4Nou")
                                 ValidareZile(0);
                         }
+
+                        //Florin 2020.10.05
+                        if (e.Parameter.Split(';')[1] == "cmb1Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Functie)
+                        {
+                            string sqlPost = $@"SELECT Id, Denumire FROM Org_Posturi WHERE IdFunctie={General.Nz(cmb1Nou.Value, -99)} AND CONVERT(DATE, DataInceput) <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= CONVERT(DATE, DataSfarsit)";
+                            if (Constante.tipBD == 2)
+                                sqlPost = $@"SELECT ""Id"", ""Denumire"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmb1Nou.Value, -99)} AND TRUNCATE(""DataInceput"") <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= TRUNCATE(""DataSfarsit"")";
+                            DataTable dtPost = General.IncarcaDT(sqlPost);
+                            cmb3Nou.DataSource = dtPost;
+                            cmb3Nou.DataBind();
+                        }
+
                         break;
                     case "3":
                         {
@@ -2618,6 +2835,14 @@ namespace WizOne.Avs
                         Session["Valoare4Noua"] = "cmb4Nou;2";
                         IncarcaDate();
                     }
+
+                    //Florin #715
+                    if (Convert.ToInt32(cmb4Nou.Value) == 3)
+                    {
+                        cmb5Nou.Value = 6;
+                        Session["Valoare5Noua"] = "cmb5Nou;6";
+                        IncarcaDate();
+                    }
                     break;
                 case "cmb5Nou":
                     if (Convert.ToInt32(cmb5Nou.Value ?? -1) == 2 && txt1Nou.Text.Length > 0 && Convert.ToInt32(txt1Nou.Text) > 30)
@@ -2655,11 +2880,19 @@ namespace WizOne.Avs
                     }
                     else
                     {
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati introdus intervalul corect!");
-                        txt1Nou.Text = "";
+                        //Florin #715
+                        if (Convert.ToInt32(General.Nz(cmb4Nou.Value,-99)) != 3)
+                        {
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati introdus intervalul corect!");
+                            txt1Nou.Text = "";
+                        }
                     }
                     break;
             }
+
+            //Florin #715
+            if (Convert.ToInt32(cmb4Nou.Value) == 3)
+                cmb5Nou.ClientEnabled = false;
         }
 
         private void SetDataRevisal(int param, DateTime dataMod, int atribut, out string data)
@@ -3102,6 +3335,16 @@ namespace WizOne.Avs
                         if (cmb1Nou.Value == null) strErr += ", tip contract";
                         //if ((cmb2Nou.Value == null || Convert.ToInt32(cmb2Nou.Value) != 1) && (de1Nou.Value == null || de2Nou.Value == null)) strErr += ", date durata contract";
                         break;
+                    case (int)Constante.Atribute.Post:
+                        {
+                            if (cmb1Nou.Value == null) strErr += ", post";
+
+                            ListEditItem leiNou = cmb1Nou.SelectedItem;
+                            if (General.Nz(leiNou.GetFieldValue("Functie"), "").ToString() == "") strErr += ", functie";
+                            if (General.Nz(leiNou.GetFieldValue("CORCod"), "").ToString() == "") strErr += ", COR";
+                            if (General.Nz(leiNou.GetFieldValue("DeptId"), "").ToString() == "") strErr += ", structura";
+                        }
+                        break;
                 }
 
                 if (strErr != "")
@@ -3411,6 +3654,7 @@ namespace WizOne.Avs
 
             int idUrm = -99;
             idUrm = Convert.ToInt32(Dami.NextId("Avs_Cereri"));
+            string explicatii = "";
 
             DataSet ds = Session["AvsCereri"] as DataSet;
             DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
@@ -3526,8 +3770,9 @@ namespace WizOne.Avs
                     camp2 = txt1Nou.Text + ", " + txt2Nou.Text;
                     break;
                 case (int)Constante.Atribute.Functie:
-                    camp1 = "\"FunctieId\", \"FunctieNume\", \"PerProbaZL\", \"PerProbaZC\", \"PreavizDemisie\", \"PreavizConcediere\"";
-                    camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', " + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text) + ", " + (txt2Nou.Text.Length <= 0 ? "NULL" : txt2Nou.Text) + ", " + (txt3Nou.Text.Length <= 0 ? "NULL" : txt3Nou.Text) + ", " + (txt4Nou.Text.Length <= 0 ? "NULL" : txt4Nou.Text);
+                    //Florin 2020.10.05 - am adaugat IdPost
+                    camp1 = "\"FunctieId\", \"FunctieNume\", \"PerProbaZL\", \"PerProbaZC\", \"PreavizDemisie\", \"PreavizConcediere\", \"PostId\", \"PostNume\"";
+                    camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', " + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text) + ", " + (txt2Nou.Text.Length <= 0 ? "NULL" : txt2Nou.Text) + ", " + (txt3Nou.Text.Length <= 0 ? "NULL" : txt3Nou.Text) + ", " + (txt4Nou.Text.Length <= 0 ? "NULL" : txt4Nou.Text) + ", " + (cmb3Nou.Value ?? "null").ToString() + "," + (cmb3Nou.Value == null ? "null" : "'" + cmb3Nou.Text + "'");
                     if (cmb2Nou.Value != null)
                         sqlFunc = "UPDATE F718 SET F71813 = " + cmb2Nou.Value.ToString() + " WHERE F71802 = " + cmb1Nou.Value.ToString();
                     break;
@@ -3733,6 +3978,36 @@ namespace WizOne.Avs
                     camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "'";
 
                     break;
+                case (int)Constante.Atribute.Post:              //Florin #710
+                    if (cmb1Act.Value != cmb1Nou.Value)
+                    {
+                        camp1 = @" ""PostId"", ""PostNume""";
+                        camp2 = $@"{General.Nz(cmb1Nou.Value, -99)},'{cmb1Nou.Text}'";
+                        ListEditItem leiAct = cmb1Act.SelectedItem;
+                        ListEditItem leiNou = cmb1Nou.SelectedItem;
+
+                        if (leiAct == null || (int?)leiAct.GetFieldValue("FunctieId") != (int?)leiNou.GetFieldValue("FunctieId"))
+                        {
+                            camp1 += @", ""FunctieId"", ""FunctieNume""";
+                            camp2 += $@", {General.Nz(leiNou.GetFieldValue("FunctieId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Functie"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Functie") + "'" : "NULL")}";
+                            explicatii += ",Functia" + Environment.NewLine;
+                        }
+                        if (leiAct == null || (int?)leiAct.GetFieldValue("CORCod") != (int?)leiNou.GetFieldValue("CORCod"))
+                        {
+                            camp1 += @", ""CORCod"", ""CORNume""";
+                            camp2 += $@", {General.Nz(leiNou.GetFieldValue("CORCod"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("COR"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("COR") + "'" : "NULL")}";
+                            explicatii += ",COR" + Environment.NewLine;
+                        }
+                        if (leiAct == null || (int?)leiAct.GetFieldValue("DeptId") != (int?)leiNou.GetFieldValue("DeptId"))
+                        {
+                            camp1 += @", ""SubcompanieId"", ""SubcompanieNume"", ""FilialaId"", ""FilialaNume"", ""SectieId"", ""SectieNume"", ""DeptId"", ""DeptNume"", ""SubdeptId"", ""SubdeptNume"", ""BirouId"", ""BirouNume""";
+                            camp2 += $@", {General.Nz(leiNou.GetFieldValue("SubcompanieId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Subcompanie"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Subcompanie") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("FilialaId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Filiala"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Filiala") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("SectieId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Sectie"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Sectie") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("DeptId"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Dept"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Dept") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("IdSubdept"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Subdept"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Subdept") + "'" : "NULL")}, {General.Nz(leiNou.GetFieldValue("IdBirou"), "NULL")}, {(General.Nz(leiNou.GetFieldValue("Birou"), "").ToString() != "" ? "'" + leiNou.GetFieldValue("Birou") + "'" : "NULL")}";
+                            explicatii += ",Structura";
+                        }
+                        if (explicatii.Length > 0)
+                            explicatii = explicatii.Substring(1);
+                    }
+                    break;
             }
 
 
@@ -3866,7 +4141,7 @@ namespace WizOne.Avs
             }
 
             sql = "INSERT INTO \"Avs_Cereri\" (\"Id\", F10003, \"IdAtribut\", \"IdCircuit\", \"Explicatii\", \"Document\", \"Motiv\", \"DataModif\", \"DataConsemnare\", \"Corectie\", \"Actualizat\", \"UserIntrod\", USER_NO, TIME, \"IdStare\", \"Culoare\", \"TotalCircuit\", \"Pozitie\", \"GenerareDoc\", {0}) "
-                + "VALUES (" + idUrm.ToString() + ", " + F10003.ToString() + ", " + idAtr.ToString() + ", " + idCircuit.ToString() + ", '" + txtExpl.Text + "', '" + txtDocument.Text + "', '', " + dataModif + ", null, 0, 0, " + Session["UserId"].ToString() + ", "
+                + "VALUES (" + idUrm.ToString() + ", " + F10003.ToString() + ", " + idAtr.ToString() + ", " + idCircuit.ToString() + ", '" + txtExpl.Text + Environment.NewLine + explicatii + "', '" + txtDocument.Text + "', '', " + dataModif + ", null, 0, 0, " + Session["UserId"].ToString() + ", "
                 + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", " + idStare.ToString() + ", (SELECT \"Culoare\" FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idStare.ToString() + "), " + total.ToString() + ", " + pozUser.ToString() + ", " + (chkGen.Checked ? "1" : "0") + ",  {1})";
 
 
@@ -3887,6 +4162,11 @@ namespace WizOne.Avs
                     General.ExecutaNonQuery(sqlFis, new object[] { "Avs_Cereri", idUrm, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
                 }
             }
+
+            //Florin #710
+            //daca este post, creeam automat linii si pentru celelalte 3 atribute: Functie, COR, Structura
+            if (idStare == 3 && idAtr == (int)Constante.Atribute.Post)
+                General.CreeazaAtributePost(idUrm, F10003, General.Nz(cmb1Nou.Value, -99), dtModif);
 
             #region OLD
             //dtTemp = General.IncarcaDT(sql, null);
@@ -3940,10 +4220,11 @@ namespace WizOne.Avs
             if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idAtr + ",") >=0) || !chkGen.Checked))
             {
                 TrimiteInF704(idUrm);
-                if (idAtr == 2)
-                    General.ModificaFunctieAngajat(F10003, Convert.ToInt32(General.Nz(cmb1Nou.Value,-99)), Convert.ToDateTime(txtDataMod.Value), new DateTime(2100,1,1));
-            }
 
+                //Florin 2020.10.07 - se trateaza cazul in functia TrimiteInF704
+                //if (idAtr == 2)
+                //    General.ModificaFunctieAngajat(F10003, Convert.ToInt32(General.Nz(cmb1Nou.Value,-99)), Convert.ToDateTime(txtDataMod.Value), new DateTime(2100,1,1));
+            }
 
             string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
@@ -3980,6 +4261,9 @@ namespace WizOne.Avs
                 if (checkComboBoxStare.Value != null) filtru += " AND a.\"IdStare\" IN (" + FiltruTipStari(checkComboBoxStare.Value.ToString()).Replace(";", ",").Substring(0, FiltruTipStari(checkComboBoxStare.Value.ToString()).Length - 1) + ")";
                 if (General.Nz(cmbAngFiltru.Value, "").ToString() == "" && f10003 != -99) filtru += " AND a.F10003=" + f10003;
 
+                if (Dami.ValoareParam("MP_FolosesteOrganigrama") == "1")
+                    filtru += @" AND A.""IdParinte"" IS NULL";
+
                 if (Constante.tipBD == 1)
                 {
                     strSql = "select a.\"Id\", a.F10003, b.F10008 + ' ' + b.F10009 AS \"NumeAngajat\", a.\"IdAtribut\", c.\"Denumire\" AS \"NumeAtribut\" , a.\"DataModif\", a.\"Explicatii\", a.\"Motiv\", a.\"IdStare\", a.\"Culoare\",  " +
@@ -4012,6 +4296,7 @@ namespace WizOne.Avs
                             " when 34 then (select \"Ptj_Contracte\".\"Denumire\" from \"Ptj_Contracte\" where \"Ptj_Contracte\".\"Id\" = a.\"ProgramLucru\") " +
                             " when 35 then a.\"TipContractNume\"" +
                             " when 36 then a.\"DurataContractNume\"" +
+                            " when 37 then a.\"PostNume\"" +
                             " when 101 then a.Nume + ' ' + a.Prenume " +
                             " when 102 then (select F06303 from F063 where F06302 = a.CASS) " +
                             " when 103 then (select F71204 from F712 where F71202 = a.\"Studii\") " +
@@ -4062,6 +4347,7 @@ namespace WizOne.Avs
                             " when 34 then (select \"Ptj_Contracte\".\"Denumire\" from \"Ptj_Contracte\" where \"Ptj_Contracte\".\"Id\" = a.\"ProgramLucru\") " +
                             " when 35 then a.\"TipContractNume\"" +
                             " when 36 then a.\"DurataContractNume\"" +
+                            " when 37 then a.\"PostNume\"" +
                             " when 101 then a.\"Nume\" || ' ' || a.\"Prenume\" " +
                             " when 102 then (select F06303 from F063 where F06302 = a.CASS) " +
                             " when 103 then (select F71204 from F712 where F71202 = a.\"Studii\") " +
@@ -4384,11 +4670,19 @@ namespace WizOne.Avs
                         {
                             if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                             {
+                                //Florin 2021.03.02  #710 - am adaugat selecturile la zile proba ZL, zile proba ZC, zile demisie si zile concediere
                                 act = 1;
-                                sql100 = "UPDATE F100 SET F10071 = " + dtCer.Rows[0]["FunctieId"].ToString() + ", F100992 = " + data + ", F100975 = " + dtCer.Rows[0]["PerProbaZL"].ToString()
-                                    + ", F1009742 = " + dtCer.Rows[0]["PreavizDemisie"].ToString() + ", F100931 = " + dtCer.Rows[0]["PreavizConcediere"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                sql100 = "UPDATE F100 SET F10071 = " + dtCer.Rows[0]["FunctieId"].ToString() + ", F100992 = " + data +
+                                    ", F100975 = (SELECT NrZileLucrProba FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + dtCer.Rows[0]["FunctieId"].ToString() + "))" +
+                                    ", F1009742 = (SELECT NrZileDemisie FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + dtCer.Rows[0]["FunctieId"].ToString() + "))" +
+                                    ", F100931 = (SELECT NrZileConcediere FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + dtCer.Rows[0]["FunctieId"].ToString() + "))" + 
+                                    " WHERE F10003 = " + f10003.ToString();
                                 if (dtF1001 != null && dtF1001.Rows.Count > 0)
-                                    sql1001 = "UPDATE F1001 SET F1001063 = " + dtCer.Rows[0]["PerProbaZC"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                    sql1001 = "UPDATE F1001 SET F1001063 = (SELECT NrZileCalProba FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + dtCer.Rows[0]["FunctieId"].ToString() + ")) WHERE F10003 = " + f10003.ToString();
+
+                                //Florin 2021.03.11 - am mutat functia la Post
+                                ////Florin 2020.10.06
+                                //General.SalveazaPost(f10003, dtCer.Rows[0]["PostId"], Convert.ToDateTime(dtCer.Rows[0]["DataModif"]));
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 2, 'Functie', " + data + ", " + dtCer.Rows[0]["FunctieId"].ToString() + ", 'Modificari in avans', '"
@@ -4407,10 +4701,19 @@ namespace WizOne.Avs
                                 int afisare = Convert.ToInt32(Dami.ValoareParam("Avs_CampuriZileProbaPreavizCOR", "0"));
                                 if (afisare == 1)
                                 {
-                                    sql100 = "UPDATE F100 SET F10098 = " + dtCer.Rows[0]["CORCod"].ToString() + ", F100975 = " + dtCer.Rows[0]["PerProbaZL"].ToString()
-                                            + ", F1009742 = " + dtCer.Rows[0]["PreavizDemisie"].ToString() + ", F100931 = " + dtCer.Rows[0]["PreavizConcediere"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                    //sql100 = "UPDATE F100 SET F10098 = " + dtCer.Rows[0]["CORCod"].ToString() + ", F100975 = " + dtCer.Rows[0]["PerProbaZL"].ToString()
+                                    //        + ", F1009742 = " + dtCer.Rows[0]["PreavizDemisie"].ToString() + ", F100931 = " + dtCer.Rows[0]["PreavizConcediere"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                    //if (dtF1001 != null && dtF1001.Rows.Count > 0)
+                                    //    sql1001 = "UPDATE F1001 SET F100956 = " + data + ", F1001063 = " + dtCer.Rows[0]["PerProbaZC"].ToString() + " WHERE F10003 = " + f10003.ToString();
+
+                                    //Florin 2021.03.02  #710 - am adaugat selecturile la zile proba ZL, zile proba ZC, zile demisie si zile concediere
+                                    sql100 = "UPDATE F100 SET F10098 = " + dtCer.Rows[0]["CORCod"].ToString() +
+                                            ", F100975 = (SELECT NrZileLucrProba FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + dtCer.Rows[0]["FunctieId"].ToString() + "))" +
+                                            ", F1009742 = (SELECT NrZileDemisie FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + dtCer.Rows[0]["FunctieId"].ToString() + "))" +
+                                            ", F100931 = (SELECT NrZileConcediere FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + dtCer.Rows[0]["FunctieId"].ToString() + "))" +
+                                            " WHERE F10003 = " + f10003.ToString();
                                     if (dtF1001 != null && dtF1001.Rows.Count > 0)
-                                        sql1001 = "UPDATE F1001 SET F100956 = " + data + ", F1001063 = " + dtCer.Rows[0]["PerProbaZC"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                        sql1001 = "UPDATE F1001 SET F100956 = " + data + ", F1001063 = (SELECT NrZileCalProba FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + dtCer.Rows[0]["FunctieId"].ToString() + ")) WHERE F10003 = " + f10003.ToString();
                                 }
 
                             }
@@ -4429,6 +4732,9 @@ namespace WizOne.Avs
                             General.IncarcaDT(sql100Temp, null);
                             //}
 
+                            //Florin 2020.10.09
+                            //Inactivam angajatul pe post
+                            General.ExecutaNonQuery($@"UPDATE ""Org_relPostAngajat"" SET ""DataSfarsit"" = {General.ToDataUniv(Convert.ToDateTime(dtCer.Rows[0]["DataModif"]))} WHERE F10003=3537 AND ""DataSfarsit"" >= {General.ToDataUniv(Convert.ToDateTime(dtCer.Rows[0]["DataModif"]))}");
 
                             //sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             //+ " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", " + dtCer.Rows[0]["MotivId"].ToString() + ", 'Modificari in avans', '"
@@ -4656,8 +4962,6 @@ namespace WizOne.Avs
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70468, F70469, USER_NO, TIME) "
                                 + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", " + dtCer.Rows[0]["IdAtribut"].ToString() + ", 'Prelungire CIM', " + data + ", " + dtCer.Rows[0]["DurataContract"].ToString() + ", 'Modificari in avans', '"
                                 + dateDoc + "', " + act.ToString() + ", " + data9 + ", " + data10 + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
-
-
                         }
                         break;
                     case (int)Constante.Atribute.Organigrama:
@@ -4668,12 +4972,12 @@ namespace WizOne.Avs
                                 sql100 = "UPDATE F100 SET F10004 = " + dtCer.Rows[0]["SubcompanieId"].ToString() + ", F10005 = " + dtCer.Rows[0]["FilialaId"].ToString() + ", F10006 = "
                                     + dtCer.Rows[0]["SectieId"].ToString() + ", F10007 = " + dtCer.Rows[0]["DeptId"].ToString() + " WHERE F10003 = " + f10003.ToString();
                                 if (dtF1001 != null && dtF1001.Rows.Count > 0)
-                                    sql1001 = "UPDATE F1001 SET F100958 = " + dtCer.Rows[0]["SubdeptId"].ToString() + ", F100959 = " + dtCer.Rows[0]["BirouId"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                    sql1001 = "UPDATE F1001 SET F100958 = " + General.Nz(dtCer.Rows[0]["SubdeptId"],"NULL").ToString() + ", F100959 = " + General.Nz(dtCer.Rows[0]["BirouId"],"NULL").ToString() + " WHERE F10003 = " + f10003.ToString();
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70414, F70415, F70416, F70417, F70418, F704180, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 5, 'Organigrama', " + data + ", " + dtCer.Rows[0]["DeptId"].ToString() + ", 'Modificari in avans', '"
-                            + dateDoc + "', " + dtCer.Rows[0]["SubcompanieId"].ToString() + ", " + dtCer.Rows[0]["FilialaId"].ToString() + ", " + dtCer.Rows[0]["SectieId"].ToString()
-                            + ", " + dtCer.Rows[0]["DeptId"].ToString() + ", " + dtCer.Rows[0]["SubdeptId"].ToString() + ", " + dtCer.Rows[0]["BirouId"].ToString() + ",  " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dateDoc + "', " + General.Nz(dtCer.Rows[0]["SubcompanieId"],"NULL").ToString() + ", " + General.Nz(dtCer.Rows[0]["FilialaId"],"NULL").ToString() + ", " + General.Nz(dtCer.Rows[0]["SectieId"],"NULL").ToString()
+                            + ", " + General.Nz(dtCer.Rows[0]["DeptId"],"NULL").ToString() + ", " + General.Nz(dtCer.Rows[0]["SubdeptId"],"NULL").ToString() + ", " + General.Nz(dtCer.Rows[0]["BirouId"],"NULL").ToString() + ",  " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.Componente:
@@ -5009,7 +5313,7 @@ namespace WizOne.Avs
                                 General.IncarcaDT(sql100Tmp, null); //pentru ca se modifica F10023, trebuie rulat CalculCO, de aceea se executa aici si nu la sfarsit
                             }
                             else
-                                sql1001 = "UPDATE F1001 SET F1001137 = " + data  + " WHERE F10003 = " + f10003.ToString();
+                                sql1001 = "UPDATE F1001 SET F1001137 = " + data + " WHERE F10003 = " + f10003.ToString();
 
                             if (modifTip)
                                 sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
@@ -5032,14 +5336,26 @@ namespace WizOne.Avs
                                 General.CalculCO(dtSf.Year, f10003);
                         }
                         break;
+                    case (int)Constante.Atribute.Post:
+                        {
+                            DataTable dtPst = General.IncarcaDT(@"SELECT * FROM ""Avs_Cereri"" WHERE ""IdParinte""=@1", new object[] { id });
+                            for (int i = 0; i < dtPst.Rows.Count; i++)
+                            {
+                                TrimiteInF704(Convert.ToInt32(dtPst.Rows[i]["Id"]));
+                            }
+
+                            //Florin 2021.03.11
+                            General.SalveazaPost(f10003, dtCer.Rows[0]["PostId"], Convert.ToDateTime(dtCer.Rows[0]["DataModif"]));
+                        }
+                        break;
                     default:
                         return;
                 }
 
-                if (sql.Length > 0) General.IncarcaDT(sql, null);
-                if (sql1.Length > 0) General.IncarcaDT(sql1, null);
-                if (sql100.Length > 0) General.IncarcaDT(sql100, null);
-                if (sql1001.Length > 0) General.IncarcaDT(sql1001, null);
+                if (sql.Length > 0) General.ExecutaNonQuery(sql);
+                if (sql1.Length > 0) General.ExecutaNonQuery(sql1);
+                if (sql100.Length > 0) General.ExecutaNonQuery(sql100);
+                if (sql1001.Length > 0) General.ExecutaNonQuery(sql1001);
 
 
                 //Radu 09.09.2020 - actualizare data consemnare
@@ -5054,7 +5370,7 @@ namespace WizOne.Avs
                 //procesul acesta s-a mutat din ActeAditionale aici
                 //marcam campul Actualizat din Avs_Cereri cand se duce in F100
                 if (act == 1)
-                General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""Actualizat""=1 WHERE ""Id""=@1", new object[] { id });
+                    General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""Actualizat""=1 WHERE ""Id""=@1", new object[] { id });
 
             }
             catch (Exception)
@@ -5296,6 +5612,8 @@ namespace WizOne.Avs
 
             try
             {
+                string filtru = CreeazaFiltruPost();
+
                 //strSql = $@"SELECT A.Id, A.Denumire 
                 //        FROM Avs_tblAtribute A
                 //        INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
@@ -5306,18 +5624,19 @@ namespace WizOne.Avs
 
                 strSql = $@"SELECT A.""Id"", A.""Denumire"" FROM ""Avs_tblAtribute"" A
                         INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut"" AND B.""Super1""=0
-                        WHERE {Session["User_Marca"]} = @3 AND {cmbRol.Value} = 0
+                        WHERE {Session["User_Marca"]} = @3 AND {cmbRol.Value} = 0 {filtru}
                         UNION
                         SELECT A.""Id"", A.""Denumire"" 
                         FROM ""Avs_tblAtribute"" A
                         INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut""
                         INNER JOIN ""F100Supervizori"" C ON (-1 * B.""Super1"") = C.""IdSuper""
-                        WHERE C.""IdUser""=@1 AND C.""IdSuper""=@2 AND C.F10003=@3
+                        WHERE C.""IdUser""=@1 AND C.""IdSuper""=@2 AND C.F10003=@3 {filtru}
                         GROUP BY A.""Id"", A.""Denumire""
                         UNION
                         SELECT A.""Id"", A.""Denumire"" 
                         FROM ""Avs_tblAtribute"" A
                         INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut"" AND B.""Super1""=@1
+                        WHERE 1=1 {filtru}
                         ORDER BY ""Denumire"" ";
             }
             catch (Exception ex)
@@ -5373,6 +5692,8 @@ namespace WizOne.Avs
 
             try
             {
+                string filtru = CreeazaFiltruPost();
+
                 string strSql = $@"SELECT B.Super1 AS Id, COALESCE(S.Alias,S.Denumire) AS Denumire 
                     FROM Avs_tblAtribute A
                     INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut AND B.Super1=0
@@ -7090,6 +7411,26 @@ namespace WizOne.Avs
                 return false;
             else
                 return true;
+        }
+
+        private static string CreeazaFiltruPost()
+        {
+            //daca se foloseste organigrama aratam postul si ascundem COR, functie si structura, iar daca nu se foloseste invers
+            string filtru = "";
+
+            try
+            {
+                if (General.Nz(Dami.ValoareParam("MP_FolosesteOrganigrama"),"0").ToString() == "1")
+                    filtru = " AND A.Id NOT IN (2,3,5)";
+                else
+                    filtru = " AND A.Id <> 37";
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Avs.Cereri", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return filtru;
         }
 
     }

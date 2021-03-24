@@ -17530,3 +17530,13 @@ INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCom
 GO
 INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'USER_NO', NULL, 0, NULL, 0, 3, NULL, NULL)
 GO
+
+CREATE NONCLUSTERED INDEX idx_F910
+ON [dbo].[F9101] ([F91003])
+INCLUDE ([F910958],[F910959],[YEAR],[MONTH])
+GO
+
+CREATE NONCLUSTERED INDEX idx2_F910
+ON [dbo].[F910] ([F91003])
+INCLUDE ([F91022],[F91053])
+GO

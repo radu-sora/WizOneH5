@@ -192,6 +192,7 @@ namespace WizOne.Pontaj
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnExport.Text = Dami.TraduCuvant("btnExport", "Export");
                 btnIstoricAprobare.Text = Dami.TraduCuvant("btnIstoricAprobare", "Istoric aprobare");
+                btnModif.Text = Dami.TraduCuvant("btnModif", "Salveaza");
 
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                 btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
@@ -214,6 +215,8 @@ namespace WizOne.Pontaj
 
                 //Radu 27.11.2019
                 popUpExport.HeaderText = Dami.TraduCuvant("Export pontaj");
+                popUpModif.HeaderText = Dami.TraduCuvant("Modificare pontaj");
+
                 ASPxButton btnExp = popUpExport.FindControl("btnExp") as ASPxButton;
                 if (btnExp != null)
                     btnExp.Text = Dami.TraduCuvant("btnExp", "Export");

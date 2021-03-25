@@ -17116,3 +17116,11 @@ INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCom
 GO
 INSERT [dbo].[tblNomenConfig] ([Tabela], [Camp], [TipCamp], [Vizibil], [SursaCombo], [IdAutomat], [USER_NO], [TIME], [Alias]) VALUES ('Org_relPostAngajat', 'USER_NO', NULL, 0, NULL, 0, 3, NULL, NULL)
 GO
+
+
+----  2.2.134.01  ----
+
+
+insert into [F800_ADEVERINTE_CONFIG] (nrcrt, ETICHETA, VALOARE) values (84,'ADI', '22:00 - 05:00')
+
+insert into [F800_ADEVERINTE_CONFIG] (nrcrt, ETICHETA, VALOARE) values (85, 'ADV', '31/03/2021')

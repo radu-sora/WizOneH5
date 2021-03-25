@@ -8779,9 +8779,10 @@ namespace WizOne.Module
 
             try
             {
+                //Florin 2021.03.24 - am adaugat filtrul  -  AND F10023 >= {General.ToDataUniv(dt)}
                 string sqlCnt = $@"
                     SELECT
-                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999)) AS ""NrAng"",
+                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999) AND F10023 >= {General.ToDataUniv(dt)}) AS ""NrAng"",
                     (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(dt.Year, dt.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(dt.Year, dt.Month, 99)}) AS ""NrPtj"" {General.FromDual()}";
 
                 if (contracte != "")

@@ -41,6 +41,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
     <LangVersion>7.1</LangVersion>
+    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
+    <LegacyPublishPropertiesPageEnabled>true</LegacyPublishPropertiesPageEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -422,8 +424,7 @@
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\reports.css" />
+    <Content Include="Content\bootstrap.min.css" />  
     <Content Include="Contracte\Lista.aspx" />
     <Content Include="Contracte\Detalii.aspx" />
     <Content Include="Curs\Aprobare.aspx" />
@@ -1034,9 +1035,7 @@
     <None Include="Generatoare\Reports\Models\ReportsModel.edmx.diagram">
       <DependentUpon>ReportsModel.edmx</DependentUpon>
     </None>
-    <Content Include="Generatoare\Reports\Pages\Download.ashx" />
-    <Content Include="Organigrama\Diagrama.xlsm" />
-    <Content Include="Organigrama\Temp\Diagrama1078.xlsm" />
+    <Content Include="Generatoare\Reports\Pages\Download.ashx" />  
     <Content Include="LocalSTS.exe.config" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsOraModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

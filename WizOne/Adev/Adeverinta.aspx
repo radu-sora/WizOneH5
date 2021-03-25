@@ -703,6 +703,25 @@
 							    </dx:ASPxTextBox >
 						    </td>
                         </tr>
+                        <tr>
+                            <td align="left">
+                                <dx:ASPxLabel  ID="lblIntOrar" Width="100" runat="server"  Text="Interval orar" ></dx:ASPxLabel >
+                            </td>
+                            <td align="left">
+							    <dx:ASPxTextBox  ID="txtInterval"  Width="200" runat="server" AutoPostBack="false" >        
+                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
+							    </dx:ASPxTextBox >
+                            </td>
+                            <td align="left">
+                                <dx:ASPxLabel  ID="ASPxLabel2" Width="100" runat="server"  Text="Data valabilitate" ></dx:ASPxLabel >
+                            </td>
+                              <td align="right">
+                                 <dx:ASPxDateEdit ID="deDataValab" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                                    <CalendarProperties FirstDayOfWeek="Monday" />
+                                     <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandler(s); }" />      
+                                </dx:ASPxDateEdit>
+                            </td>
+                        </tr>
                     </table>
                   </fieldset >
                    <fieldset border="0">                     

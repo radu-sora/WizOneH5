@@ -809,8 +809,6 @@ namespace WizOne.Personal
                 //salvam postul
                 General.SalveazaPost(Session["Marca"], Session["MP_IdPost"], DateTime.Now);
 
-                //Florin 2019.09.23
-                GolireVariabile();
 
                 //Radu 15.01.2020
                 string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
@@ -820,9 +818,11 @@ namespace WizOne.Personal
 
                 HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                 {
-                    NotifAsync.TrimiteNotificare("Personal.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM F100 Z WHERE F10003=" + marca.ToString(), "F100", marca, idUser, marcaUser, arrParam);
+                    NotifAsync.TrimiteNotificare("Personal.Lista", (int)Constante.TipNotificare.Notificare, "SELECT Z.*, " + (esteNou ? "1" : "2") + @" AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM F100 Z WHERE F10003=" + marca.ToString(), "F100", marca, idUser, marcaUser, arrParam);
                 });
 
+                //Florin 2019.09.23
+                GolireVariabile();
                 //Florin 2018.11.22
                 //trimitem la lista de angajati        
                 Response.Redirect("~/Personal/Lista.aspx", false);

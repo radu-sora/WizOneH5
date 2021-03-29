@@ -740,8 +740,8 @@ namespace WizOne.Module
                 string condSuplim = "";
                 if (totiAngajatii == 1)
                 {
-                    idStare = "(1, 2, 3)";
-                    condSuplim = $@" AND A.""IdStare"" IN (1, 2, 3) ";
+                    idStare = "(1, 2)";
+                    condSuplim = $@" AND A.""IdStare"" IN (1, 2) ";
                 }
 
                 string strSql = $@"SELECT A.*, 0 AS ""Rol"",

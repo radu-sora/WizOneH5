@@ -23,6 +23,8 @@
             Franke = 25,
             Chimpex = 26,
             Euroins = 27,
+            ALKA_CO = 28,
+            ALKA_Trading = 29,
             Groupama = 34,
             Zitec = 45,
             BancaCarpatica = 65,

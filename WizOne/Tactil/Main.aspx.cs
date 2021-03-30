@@ -261,6 +261,8 @@ namespace WizOne.Tactil
                         dlreport.PrinterName = numeImprimanta;
                     dlreport.CreateDocument();
 
+                    General.CreazaLog("Parametrul: " + Dami.ValoareParam("TactilImprimanta") + "\n NumeImprimanta: " + dlreport.PrinterName);
+
                     ReportPrintTool pt = new ReportPrintTool(dlreport);
                     pt.Print();
 

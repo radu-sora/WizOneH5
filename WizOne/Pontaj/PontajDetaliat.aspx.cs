@@ -1692,6 +1692,10 @@ namespace WizOne.Pontaj
                                 absentaDeTipZi = true;
                                 if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
                                     strSql += $@"DELETE FROM ""Ptj_CC"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
+
+                                //Radu 30.03.2021
+                                cmp += @", ""ValStr""='" + newValue + "'";
+                                row["ValStr"] = newValue;
                             }
                             continue;
                         }

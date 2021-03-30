@@ -422,7 +422,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, cmbCtr.Value == null ? "" : cmbCtr.Value.ToString().Replace(",", "', '"), cmbDept.Value == null ? "" : cmbDept.Value.ToString().Replace(",", "', '"), Convert.ToInt32(General.Nz(cmbAng.Value,-99)));
+                General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, cmbCtr.Value == null ? "" : cmbCtr.Value.ToString().Replace("\\\\", "', '"), cmbDept.Value == null ? "" : cmbDept.Value.ToString().Replace("\\\\", "', '"), Convert.ToInt32(General.Nz(cmbAng.Value,-99)));
 
                 string strSql = DamiSelect();
 
@@ -1986,11 +1986,11 @@ namespace WizOne.Pontaj
                 if (General.Nz(cmbSub.Value, "").ToString() != "") strFiltru += " AND A.F10004 = " + cmbSub.Value;
                 if (General.Nz(cmbFil.Value, "").ToString() != "") strFiltru += " AND A.F10005 = " + cmbFil.Value;
                 if (General.Nz(cmbSec.Value, "").ToString() != "") strFiltru += " AND A.F10006 = " + cmbSec.Value;
-                if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") != "1") strFiltru += @" AND A.""Dept"" IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
+                if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") != "1") strFiltru += @" AND A.""Dept"" IN ('" + cmbDept.Value.ToString().Replace("\\\\", "','") + "')";
                 if (General.Nz(cmbSubDept.Value, "").ToString() != "") strFiltru += @" AND Y.F100958=" + cmbSubDept.Value;
                 if (General.Nz(cmbBirou.Value, "").ToString() != "") strFiltru += @" AND Y.F100959=" + cmbBirou.Value;
                 if (General.Nz(cmbStare.Value, "").ToString() != "") strFiltru += @" AND COALESCE(X.""IdStare"",1) = " + cmbStare.Value;
-                if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += $@" AND C.""Denumire"" IN ('{cmbCtr.Value.ToString().Replace(",", "','")}')";
+                if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += $@" AND C.""Denumire"" IN ('{cmbCtr.Value.ToString().Replace("\\\\", "','")}')";
                 if (General.Nz(cmbAng.Value, "").ToString() != "") strFiltru += " AND A.F10003=" + cmbAng.Value;
                 if (General.Nz(cmbCateg.Value, "").ToString() != "") strFiltru += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
 
@@ -2082,7 +2082,7 @@ namespace WizOne.Pontaj
                 if (General.Nz(cmbAng.Value, "").ToString() == "") strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, (cmbRol.Value ?? -99).ToString(), 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
                 if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
                 {
-                    pvtFiltru += @" AND B.F00608 IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
+                    pvtFiltru += @" AND B.F00608 IN ('" + cmbDept.Value.ToString().Replace("\\\\", "','") + "')";
                     pvtInner = " INNER JOIN F006 B ON A.F10007=B.F00607 ";
                 }
                 #endregion
@@ -2177,7 +2177,7 @@ namespace WizOne.Pontaj
 
                 if (General.Nz(cmbDept.Value, "").ToString() != "" && Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
                 {
-                    pvtFiltru += @" AND B.F00608 IN ('" + cmbDept.Value.ToString().Replace(",", "','") + "')";
+                    pvtFiltru += @" AND B.F00608 IN ('" + cmbDept.Value.ToString().Replace("\\\\", "','") + "')";
                     pvtInner = " INNER JOIN F006 B ON A.F10007=B.F00607 ";
                 }
 
@@ -2577,7 +2577,7 @@ namespace WizOne.Pontaj
                 cmbSubDept.DataSource = General.IncarcaDT(
                     $@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 
                     INNER JOIN F006 ON F007.F00707=F006.F00607 
-                    WHERE F00608 IN ('{General.Nz(cmbDept.Value, -99).ToString().Replace(",", "','")}')
+                    WHERE F00608 IN ('{General.Nz(cmbDept.Value, -99).ToString().Replace("\\\\", "','")}')
                     AND F00714 <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= F00715");
                 cmbSubDept.DataBind();
             }

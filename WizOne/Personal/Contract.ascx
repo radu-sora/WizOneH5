@@ -311,10 +311,14 @@
         if (cmbExcIncet.GetValue() == "" || cmbExcIncet.GetValue() == 0) {
             txtNrLuni.SetValue(nrLuni);
             txtNrZile.SetValue(nrZile);
+            hfDate.Set("NrLuni", nrLuni);
+            hfDate.Set("NrZile", nrZile);
         }
         else {
             txtNrLuni.SetValue("0");
             txtNrZile.SetValue("0");
+            hfDate.Set("NrLuni", "0");
+            hfDate.Set("NrZile", "0");
         }
     }
 
@@ -323,6 +327,8 @@
         if (cmbExcIncet.GetValue() != "" && cmbExcIncet.GetValue() != 0) {
             txtNrLuni.SetValue("0");
             txtNrZile.SetValue("0");
+            hfDate.Set("NrLuni", "0");
+            hfDate.Set("NrZile", "0");
         }
         else {
             var dateDeLa = new Date(deDeLaData.GetDate());
@@ -551,6 +557,8 @@
 
             txtNrZile.SetValue("");
             txtNrLuni.SetValue("");
+            hfDate.Set("NrLuni", "0");
+            hfDate.Set("NrZile", "0");
         }
 
         if (cmbDurCtr.GetValue() == 2) {

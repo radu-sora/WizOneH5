@@ -1827,6 +1827,14 @@ namespace WizOne.Personal
                                         if (hfDate.Contains("DataPlecarii"))
                                             ds.Tables[1].Rows[0]["F100993"] = Convert.ToDateTime(hfDate["DataPlecarii"]);
                                         break;
+                                    case "F100935":
+                                        if (hfDate.Contains("NrLuni"))
+                                            ds.Tables[1].Rows[0]["F100935"] = Convert.ToInt32(hfDate["NrLuni"]);
+                                        break;
+                                    case "F100936":
+                                        if (hfDate.Contains("NrZile"))
+                                            ds.Tables[1].Rows[0]["F100936"] = Convert.ToInt32(hfDate["NrZile"]);
+                                        break;
                                     default:
                                         break;
                                 }

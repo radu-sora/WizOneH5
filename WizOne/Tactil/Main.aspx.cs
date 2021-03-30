@@ -256,6 +256,9 @@ namespace WizOne.Tactil
                     dlreport.Margins.Right = 50;
                     dlreport.PrintingSystem.ShowMarginsWarning = false;
                     dlreport.ShowPrintMarginsWarning = false;
+                    string numeImprimanta = Dami.ValoareParam("TactilImprimanta").Trim();
+                    if (numeImprimanta != "")
+                        dlreport.PrinterName = numeImprimanta;
                     dlreport.CreateDocument();
 
                     ReportPrintTool pt = new ReportPrintTool(dlreport);

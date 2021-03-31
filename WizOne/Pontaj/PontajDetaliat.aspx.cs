@@ -2216,14 +2216,25 @@ namespace WizOne.Pontaj
                                 break;
                             case 7:                             //Numeric
                                 {
-                                    c = new GridViewDataSpinEditColumn();
-                                    c.PropertiesSpinEdit.DecimalPlaces = 0;
-                                    c.PropertiesSpinEdit.NumberType = SpinEditNumberType.Integer;
-                                    c.PropertiesSpinEdit.MinValue = 0;
-                                    c.PropertiesSpinEdit.MaxValue = 2000;
-                                    c.PropertiesSpinEdit.DisplayFormatString = "N0";
-                                    c.PropertiesSpinEdit.DisplayFormatInEditMode = true;
-                                    if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
+                                    GridViewDataSpinEditColumn colNumerica = new GridViewDataSpinEditColumn();
+                                    colNumerica.PropertiesSpinEdit.DecimalPlaces = 0;
+                                    colNumerica.PropertiesSpinEdit.NumberType = SpinEditNumberType.Integer;
+                                    colNumerica.PropertiesSpinEdit.MinValue = 0;
+                                    colNumerica.PropertiesSpinEdit.MaxValue = 2000;
+                                    colNumerica.PropertiesSpinEdit.DisplayFormatString = "N0";
+                                    colNumerica.PropertiesSpinEdit.DisplayFormatInEditMode = true;
+                                    if (unb) colNumerica.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
+
+                                    colNumerica.Name = colName;
+                                    colNumerica.FieldName = colField;
+                                    colNumerica.Caption = Dami.TraduCuvant(alias);
+                                    colNumerica.Visible = vizibil;
+                                    colNumerica.ReadOnly = blocat;
+                                    colNumerica.Width = Unit.Pixel(latime);
+                                    colNumerica.VisibleIndex = i + 4;
+                                    colNumerica.ToolTip = tt;
+
+                                    continue;
                                 }
                                 break;
                             case 8:                             //Time

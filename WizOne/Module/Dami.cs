@@ -826,7 +826,7 @@ namespace WizOne.Module
             {
                 Posturi.FormLista pagRef = new Posturi.FormLista();
 
-                DataTable dt = pagRef.SelectGrid(out strSql);
+                DataTable dt = pagRef.SelectGrid(out strSql, false);
             }
             catch (Exception ex)
             {

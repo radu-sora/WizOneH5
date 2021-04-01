@@ -562,11 +562,16 @@ namespace WizOne.Posturi
                             else
                             {
                                 if (ctl.GetType() == typeof(ASPxDateEdit))
-                                    ctl.Value = dt.Rows[0][dt.Columns[i].ColumnName] == DBNull.Value ? new DateTime(2100, 1, 1) : Convert.ToDateTime(dt.Rows[0][dt.Columns[i].ColumnName].ToString());
+                                    ctl.Value = dt.Rows[0][dt.Columns[i].ColumnName] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(dt.Rows[0][dt.Columns[i].ColumnName].ToString());
                                 if (ctl.GetType() == typeof(ASPxCheckBox))
                                     ctl.Checked = dt.Rows[0][dt.Columns[i].ColumnName] == DBNull.Value ? false : Convert.ToInt32(dt.Rows[0][dt.Columns[i].ColumnName].ToString()) == 1 ? true : false;
                                 if (ctl.GetType() == typeof(ASPxTextBox) || ctl.GetType() == typeof(ASPxComboBox))
-                                    ctl.Value = dt.Rows[0][dt.Columns[i].ColumnName] == DBNull.Value ? "" : dt.Rows[0][dt.Columns[i].ColumnName].ToString();
+                                {
+                                    if (dt.Columns[i].ColumnName == "NrOre")
+                                        ctl.Value = dt.Rows[0][dt.Columns[i].ColumnName] == DBNull.Value ? 8 : Convert.ToInt32(dt.Rows[0][dt.Columns[i].ColumnName].ToString());
+                                    else
+                                        ctl.Value = dt.Rows[0][dt.Columns[i].ColumnName] == DBNull.Value ? "" : dt.Rows[0][dt.Columns[i].ColumnName].ToString();
+                                }
                             }
                         }
                     }
@@ -590,12 +595,32 @@ namespace WizOne.Posturi
             try
             {
                 string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
+                string cmpData = "";
                 string op = "+";
 
                 if (Constante.tipBD == 2)
                 {
                     cmp = "ROWNUM";
                     op = "||";
+                }
+                DateTime data = DateTime.Now;
+                if (data != null)
+                {
+                    string dataRef = data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString();
+                    if (Constante.tipBD == 2)
+                    {
+                        cmpData = " WHERE  B.F00310 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= B.F00311 AND "
+                            + " C.F00411 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= C.F00412 AND "
+                            + " D.F00513 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= D.F00514 AND "
+                            + " E.F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= E.F00623  ";
+                    }
+                    else
+                    {
+                        cmpData = " WHERE B.F00310 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= B.F00311 AND "
+                            + " C.F00411 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= C.F00412 AND "
+                            + " D.F00513 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= D.F00514 AND "
+                            + " E.F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= E.F00623  ";
+                    }
                 }
 
                 string strSql = @"SELECT {0} as ""IdAuto"", a.F00204 AS ""Companie"",b.F00305 AS ""Subcompanie"",c.F00406 AS ""Filiala"",d.F00507 AS ""Sectie"",e.F00608 AS ""Dept"", F.F00709 AS ""Subdept"", G.F00810 AS ""Birou"",
@@ -608,9 +633,10 @@ namespace WizOne.Posturi
                                 INNER JOIN F006 E ON D.F00506 = E.F00606
                                 LEFT JOIN F007 F ON E.F00607 = F.F00707
                                 LEFT JOIN F008 G ON F.F00708 = G.F00808
+                                {2}
                                 ORDER BY E.F00607";
 
-                strSql = string.Format(strSql, cmp, op);
+                strSql = string.Format(strSql, cmp, op, cmpData);
 
                 q = General.IncarcaDT(strSql, null);
             }

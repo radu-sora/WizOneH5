@@ -818,6 +818,24 @@ namespace WizOne.Module
             return strSql;
         }
 
+        internal static string SelectReferate()
+        {
+            string strSql = "";
+
+            try
+            {
+                Posturi.FormLista pagRef = new Posturi.FormLista();
+
+                DataTable dt = pagRef.SelectGrid(out strSql);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
+        }
+
         internal static string SelectDecont()
         {
             string strSql = "";

@@ -241,8 +241,8 @@ namespace WizOne.Posturi
 
                 grDate.KeyFieldName = "Id";
 
-
-                dt = SelectGrid();
+                string strSql = "";
+                dt = SelectGrid(out strSql);
 
 
                 grDate.DataSource = dt;
@@ -750,11 +750,11 @@ namespace WizOne.Posturi
             return val;
         }
 
-        public DataTable SelectGrid()
+        public DataTable SelectGrid(out string strSql)
         {
 
             DataTable q = null;
-
+            strSql = "";
             try
             {
                 string strSub = "";
@@ -819,7 +819,7 @@ namespace WizOne.Posturi
                 string nvl = "ISNULL";
                 if (Constante.tipBD == 2) nvl = "nvl";
 
-                string strSql = "select " + idAuto + ", x.* from ( " +
+                strSql = "select " + idAuto + ", x.* from ( " +
                                 "select a.\"Id\", a.\"IdFormular\", a.\"IdPost\", a.\"IdCircuit\", a.F10003, a.\"Culoare\", a.\"DataInceput\", a.\"IdStare\", " +
                                 " b.\"Denumire\" as \"DescFormular\", org1.\"PostDenumire\" as \"DescPost\", " +
                                 " org1.\"NumeComplet\", " +

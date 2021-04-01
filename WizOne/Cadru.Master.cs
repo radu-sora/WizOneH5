@@ -15,6 +15,17 @@ namespace WizOne
     //Test Florin 2019.05.29
     public partial class Cadru : System.Web.UI.MasterPage
     {
+        private bool IsMobileDevice
+        {
+            get
+            {
+                var userAgent = Request.ServerVariables["HTTP_USER_AGENT"];
+                var devices = new string[] { "iPhone", "iPad", "Android", "Windows Phone" }; // Add more devices
+
+                return devices.Any(d => userAgent.Contains(d));
+            }
+        }        
+
         protected override void FrameworkInitialize()
         {            
             var targetId = Request["__EVENTTARGET"];
@@ -67,7 +78,7 @@ namespace WizOne
 
                         string sFont = Dami.ValoareParam("GridFontSize", "0");
                         if (sFont != "0" && General.IsNumeric(sFont)) grDate.Font.Size = FontUnit.Point(Convert.ToInt32(sFont));
-                    }
+                    }                    
                 }
 
 
@@ -203,6 +214,18 @@ namespace WizOne
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+        protected void HeaderBrand_Init(object sender, EventArgs e)
+        {
+            if (IsMobileDevice)            
+                (sender as System.Web.UI.HtmlControls.HtmlAnchor).HRef = Dami.ValoareParam("DHPM", "~/Pagini/Calendar");                            
+        }
+
+        protected void HeaderBrandExpand_Init(object sender, EventArgs e)
+        {            
+            if (IsMobileDevice)            
+                (sender as System.Web.UI.HtmlControls.HtmlAnchor).HRef = Dami.ValoareParam("DHPM", "~/Pagini/Calendar");                
+        }        
 
         protected void btnSaveTheme_Click(object sender, EventArgs e)
         {

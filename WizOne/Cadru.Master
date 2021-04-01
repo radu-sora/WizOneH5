@@ -44,11 +44,11 @@
                 <ExpandButton Paddings-PaddingRight="10px" />
             </Styles>
             <ExpandBarTemplate>
-                <a href="~/Pagini/MainPage.aspx" runat="server"><img src="~/Fisiere/Imagini/WizOne.png" alt="WizOne" class="header-brand" runat="server" /></a>
+                <a href="~/Pagini/MainPage.aspx" runat="server" oninit="HeaderBrandExpand_Init"><img src="~/Fisiere/Imagini/WizOne.png" alt="WizOne" class="header-brand" runat="server" /></a>
             </ExpandBarTemplate>
             <PanelCollection>
                 <dx:PanelContent runat="server">
-                    <a href="~/Pagini/MainPage.aspx" runat="server"><img src="~/Fisiere/Imagini/WizOne.png" alt="WizOne" class="header-brand header-brand-row" runat="server" /></a>
+                    <a href="~/Pagini/MainPage.aspx" runat="server" oninit="HeaderBrand_Init"><img src="~/Fisiere/Imagini/WizOne.png" alt="WizOne" class="header-brand header-brand-row" runat="server" /></a>
                     <div class="header-menu">
 
                         <div id="divCmbProfile" runat="server">

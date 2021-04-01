@@ -1836,6 +1836,8 @@ namespace WizOne.Pontaj
                     int nrMin = 0;
                     string tipAfisare = Dami.ValoareParam("TipAfisareOre", "1");
                     DataTable dtVal = Session["PontajEchipa_Valuri"] as DataTable;
+
+                    int valTotal = 0;
                     
                     string[] arrVal = null;
                     if (txtCol.Count > 0 && txtCol["valuri"] != null)
@@ -1860,6 +1862,7 @@ namespace WizOne.Pontaj
                                 break;
                             }
                         }
+                        valTotal += Convert.ToInt32((Convert.ToDecimal(val)));
 
                         int valCalc = 0;
 
@@ -1891,6 +1894,14 @@ namespace WizOne.Pontaj
 
                         cmp += ",\"" + colNume.Replace("Val", "ValModif") + "\"=4";
                         if (General.Nz(dr["VerificareNrMaxOre"],0).ToString() == "1") nrMin += valCalc;
+                    }
+
+                    //Radu 01.04.2021
+                    string mesaj = Dami.VerificareDepasireNorma(f10003, ziua, valTotal, 2);
+                    if (mesaj != "")
+                    {
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
+                        return;
                     }
 
                     if (cmp != "")

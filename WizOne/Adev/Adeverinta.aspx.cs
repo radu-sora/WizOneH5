@@ -529,6 +529,16 @@ namespace WizOne.Adev
                     case "ADF": txtFunc.Text = lista[sufix]; break;
                     case "ADD": txtDom.Text = lista[sufix]; break;
                     case "ADL": txtLoc.Text = lista[sufix]; break;
+                    case "ADI": txtInterval.Text = lista[sufix]; break;
+                    case "ADV":
+                        DateTime ultimaZi = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+                        if (lista[sufix] != null && lista[sufix].Length > 0)
+                            deDataValab.Date = Convert.ToDateTime(lista[sufix]) < DateTime.Now  ? ultimaZi : Convert.ToDateTime(lista[sufix]);
+                        else
+                            deDataValab.Date = ultimaZi;
+                        if (Convert.ToDateTime(lista[sufix]) < DateTime.Now)
+                            lista[sufix] = ultimaZi.Day.ToString().PadLeft(2, '0') + "/" + ultimaZi.Month.ToString().PadLeft(2, '0') + "/" + ultimaZi.Year.ToString();
+                        break;
                     case "DIS":
                         int dis = 0;
                         int.TryParse(lista[sufix], out dis);
@@ -1011,6 +1021,18 @@ namespace WizOne.Adev
                         if (!lista.ContainsKey("ADL"))
                             lista.Add("ADL", "");
                         lista["ADL"] = param[1];
+                        break;
+                    case "txtInterval":
+                        if (!lista.ContainsKey("ADI"))
+                            lista.Add("ADI", "");
+                        lista["ADI"] = param[1];
+                        break;
+                    case "deDataValab":
+                        if (!lista.ContainsKey("ADV"))
+                            lista.Add("ADV", "");
+                        DateTime ultimaZi = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+                        lista["ADV"] = param[1] == null || param[1].Length <= 0 ? ultimaZi.Day.ToString().PadLeft(2, '0') + "/" + ultimaZi.Month.ToString().PadLeft(2, '0') + "/" + ultimaZi.Year.ToString() : 
+                            Convert.ToDateTime(param[1]).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(param[1]).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(param[1]).Year.ToString();
                         break;
                     case "chkDIS":
                         if (!lista.ContainsKey("DIS"))

@@ -866,6 +866,9 @@
     <Content Include="Generatoare\Reports\Pages\Design.aspx" />
     <Content Include="Generatoare\Reports\Pages\Manage.aspx" />
     <Content Include="Generatoare\Reports\Pages\View.aspx" />
+    <Content Include="Generatoare\Reports\Scripts\dashboard-exit-extension.js" />
+    <Content Include="Generatoare\Reports\Scripts\dashboard-save-as-extension.js" />
+    <Content Include="Generatoare\Reports\Styles\reports.css" />
     <Content Include="Global.asax" />
     <Content Include="Info.aspx" />
     <Content Include="LogOut.aspx" />

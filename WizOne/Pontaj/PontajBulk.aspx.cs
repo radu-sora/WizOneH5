@@ -32,6 +32,8 @@ namespace WizOne.Pontaj
 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
 
+                foreach (var col in grCC.Columns.OfType<GridViewDataColumn>())
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
                 #endregion
 
@@ -103,7 +105,11 @@ namespace WizOne.Pontaj
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.NewRow();
 
-                dr["F10003"] = Session["User_Marca"];
+                GridViewDataComboBoxColumn colAng = (grCC.Columns["F10003"] as GridViewDataComboBoxColumn);
+                if (colAng.Visible == false)
+                    dr["F10003"] = Session["User_Marca"];
+                else
+                    dr["F10003"] = e.NewValues["F10003"] ?? DBNull.Value;
                 dr["Ziua"] = e.NewValues["Ziua"] ?? DBNull.Value;
                 dr["F06204"] = e.NewValues["F06204"] ?? DBNull.Value;
                 dr["IdActivitate"] = e.NewValues["IdActivitate"] ?? DBNull.Value;
@@ -124,7 +130,8 @@ namespace WizOne.Pontaj
                 else
                 {
                     dt.Rows.Add(dr);
-                    string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] as int? ?? -99), Convert.ToDateTime(dr["Ziua"]));
+                    //string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] as int? ?? -99), Convert.ToDateTime(dr["Ziua"]));
+                    string txt = General.SalveazaDate(dt, "Ptj_CC");
                     if (txt != "")
                     {
                         msgError = txt;
@@ -137,8 +144,10 @@ namespace WizOne.Pontaj
 
                         e.Cancel = true;
                         grCC.CancelEdit();
-                        Session["InformatiaCurenta"] = dt;
-                        grCC.DataSource = dt;
+                        //Session["InformatiaCurenta"] = dt;
+                        //grCC.DataSource = dt;
+
+                        IncarcaGrid();
                     }  
                 }
             }
@@ -169,6 +178,11 @@ namespace WizOne.Pontaj
                     return;
                 }
 
+                GridViewDataComboBoxColumn colAng = (grCC.Columns["F10003"] as GridViewDataComboBoxColumn);
+                if (colAng.Visible == false)
+                    dr["F10003"] = Session["User_Marca"];
+                else
+                    dr["F10003"] = e.NewValues["F10003"] ?? DBNull.Value;
                 dr["Ziua"] = e.NewValues["Ziua"] ?? DBNull.Value;
                 dr["F06204"] = e.NewValues["F06204"] ?? DBNull.Value;
                 dr["IdActivitate"] = e.NewValues["IdActivitate"] ?? DBNull.Value;
@@ -188,7 +202,8 @@ namespace WizOne.Pontaj
                 }
                 else
                 {
-                    string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] as int? ?? -99), Convert.ToDateTime(dr["Ziua"]));
+                    //string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] as int? ?? -99), Convert.ToDateTime(dr["Ziua"]));
+                    string txt = General.SalveazaDate(dt, "Ptj_CC");
                     if (txt != "")
                     {
                         msgError = txt;
@@ -201,8 +216,10 @@ namespace WizOne.Pontaj
 
                         e.Cancel = true;
                         grCC.CancelEdit();
-                        Session["InformatiaCurenta"] = dt;
-                        grCC.DataSource = dt;
+                        //Session["InformatiaCurenta"] = dt;
+                        //grCC.DataSource = dt;
+
+                        IncarcaGrid();
                     }
                 }
             }
@@ -261,7 +278,8 @@ namespace WizOne.Pontaj
                 else
                 {
                     dr.Delete();
-                    SalveazaDate(f10003, ziua);
+                    //SalveazaDate(f10003, ziua);
+                    General.SalveazaDate(dt, "Ptj_CC");
                     if (msg != "")
                         grCC.JSProperties["cpAlertMessage"] = msg;
 

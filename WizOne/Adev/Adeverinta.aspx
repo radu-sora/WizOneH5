@@ -715,7 +715,7 @@
                             <td align="left">
                                 <dx:ASPxLabel  ID="ASPxLabel2" Width="100" runat="server"  Text="Data valabilitate" ></dx:ASPxLabel >
                             </td>
-                              <td align="right">
+                              <td align="left">
                                  <dx:ASPxDateEdit ID="deDataValab" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
                                     <CalendarProperties FirstDayOfWeek="Monday" />
                                      <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandler(s); }" />      

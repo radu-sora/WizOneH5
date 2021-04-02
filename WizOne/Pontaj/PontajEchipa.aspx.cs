@@ -1826,6 +1826,10 @@ namespace WizOne.Pontaj
                 if (General.Nz(cmbTipAbs.Value, "").ToString() != "")
                 {
                     sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{cmbTipAbs.Text}', Val0=NULL, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+                    
+                    //Florin 2021.04.02 - #881
+                    if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
+                        sqlUpd += Environment.NewLine + $@"DELETE FROM ""Ptj_CC"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                 }
                 else
                 {

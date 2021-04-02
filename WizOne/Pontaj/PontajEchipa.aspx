@@ -537,6 +537,35 @@
                         (cmbRol.GetValue() == 1 && (idStare == 1 || idStare == 4)) ||
                         (cmbRol.GetValue() == 2 && (idStare == 1 || idStare == 2 || idStare == 4 || idStare == 6)) ||
                         (cmbRol.GetValue() == 3)) {
+                        if (typeof grDate.cp_PoateModifica[f10003] != "undefined" && grDate.cp_PoateModifica[f10003] != null) {
+                            var sir = grDate.cp_PoateModifica[f10003];
+                            var arr = sir.substring(1).split(',');
+
+                            switch (arr[ziua.replace('Ziua', '')]) {
+                                case "-33":
+                                    swal({
+                                        title: "Atentie", text: "Rolul dumneavoastra nu permite stergerea",
+                                        type: "warning"
+                                    });
+                                    return;
+                                case "1":
+                                    //NOP
+                                    break;
+                                case "2":
+                                    swal({
+                                        title: "Atentie", text: "Pontare venita din cereri",
+                                        type: "warning"
+                                    });
+                                    break;
+                                case "3":
+                                    swal({
+                                        title: "Atentie", text: "Nu este permisa stergerea pontarilor venite din cereri",
+                                        type: "warning"
+                                    });
+                                    return;
+                            }
+                        }
+
                         txtCol.Set('coloana', ziua);
                         txtCol.Set('f10003', f10003);
                         popUpModif.Show();

@@ -1949,15 +1949,18 @@ namespace WizOne.Pontaj
             try
             {
                 var lstZile = new Dictionary<int, object>();
+                var lstPoateModifica = new Dictionary<int, object>();
 
                 var grid = sender as ASPxGridView;
                 for (int i = 0; i < grid.VisibleRowCount; i++)
                 {
-                    var rowValues = grid.GetRowValues(i, new string[] { "F10003", "ZileLucrate" }) as object[];
+                    var rowValues = grid.GetRowValues(i, new string[] { "F10003", "ZileLucrate", "tblRoluri_PoateModifica" }) as object[];
                     lstZile.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[1] ?? "");
+                    lstPoateModifica.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[2] ?? "");
                 }
 
                 grid.JSProperties["cp_ZileLucrate"] = lstZile;
+                grid.JSProperties["cp_PoateModifica"] = lstPoateModifica;
             }
             catch (Exception ex)
             {
@@ -2109,7 +2112,18 @@ namespace WizOne.Pontaj
                                 FROM F100 X
                                 INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
                                 WHERE X.F10003=A.F10003
-                                FOR XML PATH ('')) AS ""ZileGri""";
+                                FOR XML PATH ('')) AS ""ZileGri"",
+                                (SELECT ',' + CONVERT(nvarchar(10),
+                                CASE WHEN 
+                                (SELECT COUNT(*) FROM ""Ptj_Cereri"" X
+                                INNER JOIN ""Ptj_tblAbsente"" Y ON X.""IdAbsenta"" = Y.""Id""
+                                WHERE X.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= X.""DataSfarsit"" AND Y.""DenumireScurta"" = P.""ValStr"" AND
+                                X.F10003 = P.F10003 AND X.""IdStare"" = 3 AND Y.""IdTipOre"" = 1 AND COALESCE(Y.""NuTrimiteInPontaj"",0) != 1) = 0
+                                THEN - 55 ELSE(SELECT CASE WHEN COALESCE(""PoateSterge"", 0) = 0 THEN - 33 ELSE COALESCE(""TipMesaj"", 1) END FROM ""Ptj_tblRoluri"" WHERE ""Id"" = {General.Nz(cmbRol.Value,0)}) END)
+                                FROM ""tblZile"" ZL
+                                LEFT JOIN ""Ptj_Intrari"" P ON ZL.""Zi"" = P.""Ziua"" AND P.F10003 = A.F10003
+                                WHERE {dtInc} <= ZL.""Zi"" AND ZL.""Zi"" <= {dtSf}
+                                FOR XML PATH('')) AS ""tblRoluri_PoateModifica""";
                     strInner = $@"INNER JOIN (
                                 SELECT F10003 {zileAs} FROM 
                                 (SELECT A.F10003, A.{cmpValStr}, A.Ziua FROM Ptj_Intrari A {pvtInner} WHERE {dtInc} <= CAST(A.Ziua AS date) AND CAST(A.Ziua AS date) <= {dtSf} {pvtFiltru}) AS source  

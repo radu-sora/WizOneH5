@@ -1905,7 +1905,7 @@ namespace WizOne.Pontaj
                 }
 
                 string sqlPtj = General.CreazaSelectFromRow(dt.Rows[0]);
-                string msg = Notif.TrimiteNotificare("Pontaj.PontajDetaliat", (int)Constante.TipNotificare.Validare, sqlPtj, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                string msg = Notif.TrimiteNotificare("Pontaj.PontajEchipa", (int)Constante.TipNotificare.Validare, sqlPtj, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                 if (msg != "" && msg.Substring(0, 1) == "2")
                 {
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg.Substring(2));

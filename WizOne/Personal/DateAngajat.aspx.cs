@@ -809,6 +809,11 @@ namespace WizOne.Personal
                 //salvam postul
                 General.SalveazaPost(Session["Marca"], Session["MP_IdPost"], DateTime.Now);
 
+                //Florin 2021.04.05
+                //#847 - daca este candidat actualizam data si nr document in circuit documente
+                if (Convert.ToInt32(General.Nz(ds.Tables[1].Rows[0]["F10025"], 0)) == 900 && General.Nz(ds.Tables[1].Rows[0]["F100985"], "").ToString() != "" && ds.Tables[1].Rows[0]["F100986"] != DBNull.Value)
+                    General.ExecutaNonQuery($@"UPDATE ""Admin_NrActAd"" SET DocNr=@1, DocData=@2 WHERE F10003=@3", new object[] { ds.Tables[1].Rows[0]["F100985"], ds.Tables[1].Rows[0]["F100986"], Session["Marca"] });
+
 
                 //Radu 15.01.2020
                 string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };

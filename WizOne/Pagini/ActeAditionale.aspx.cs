@@ -890,7 +890,7 @@ namespace WizOne.Pagini
                                                 //}
 
                                                 if (Convert.ToInt32(General.Nz(id, -99)) != -99)
-                                                    General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[4] + ")", new object[] { id });
+                                                    General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1, TIME={General.CurrentDate()}, USER_NO=@2  WHERE ""Id"" IN (-1" + obj[4] + ")", new object[] { id, Session["UserId"] });
 
                                                 msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
                                                 if (Convert.ToDateTime(General.Nz(obj[1], 0)) < DateTime.Now)
@@ -963,13 +963,13 @@ namespace WizOne.Pagini
                                             {
                                                 General.ExecutaNonQuery($@"
                                                     BEGIN
-                                                        UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1{obj[4]});
-                                                        UPDATE ""Admin_NrActAd"" SET ""Tiparit""=1 WHERE ""IdAuto""=@1;
+                                                        UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1, TIME={General.CurrentDate()}, USER_NO={Session["UserId"]} WHERE ""Id"" IN (-1{obj[4]});
+                                                        UPDATE ""Admin_NrActAd"" SET ""Tiparit""=1, TIME={General.CurrentDate()}, USER_NO={Session["UserId"]} WHERE ""IdAuto""=@1;
                                                     END;", new object[] { id });
                                             }
                                         }
                                         else
-                                            General.ExecutaNonQuery($@"UPDATE ""Admin_NrActAd"" SET ""Tiparit""=1 WHERE ""IdAuto""=@1", new object[] { General.Nz(obj[3], -99) });
+                                            General.ExecutaNonQuery($@"UPDATE ""Admin_NrActAd"" SET ""Tiparit""=1, TIME={General.CurrentDate()}, USER_NO=@2 WHERE ""IdAuto""=@1", new object[] { General.Nz(obj[3], -99), Session["UserId"] });
 
                                         msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
                                     }
@@ -1005,16 +1005,16 @@ namespace WizOne.Pagini
                                             continue;
                                         }
 
-                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1 WHERE ""IdAuto""=@1;";
+                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1, TIME={General.CurrentDate()}, USER_NO={Session["UserId"]} WHERE ""IdAuto""=@1;";
 
                                         //cazul cand este candidat
                                         if (Convert.ToInt32(General.Nz(obj[10], 0)) == 1)
                                         {
                                             DateTime dtLucru = General.DamiDataLucru();
                                             if (Convert.ToDateTime(obj[1]).Year == dtLucru.Year && Convert.ToDateTime(obj[1]).Month == dtLucru.Month)
-                                                strSql += $@"UPDATE F100 SET F10025=0 WHERE F10003=@2;";
+                                                strSql += $@"UPDATE F100 SET F10025=0, TIME={General.CurrentDate()}, USER_NO=@3 WHERE F10003=@2;";
                                             else
-                                                strSql += $@"UPDATE F100 SET F10025=999 WHERE F10003=@2;";
+                                                strSql += $@"UPDATE F100 SET F10025=999, TIME={General.CurrentDate()}, USER_NO=@3 WHERE F10003=@2;";
                                         }
 
                                         General.ExecutaNonQuery("BEGIN " + strSql + " END;", new object[] { obj[3], obj[0], Session["UserId"] });
@@ -1077,7 +1077,7 @@ namespace WizOne.Pagini
                                             continue;
                                         }
 
-                                        DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET ""Revisal""=1 WHERE ""IdAuto""=@1", new object[] { obj[3] });
+                                        DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET ""Revisal""=1, TIME={General.CurrentDate()}, USER_NO=@2 WHERE ""IdAuto""=@1", new object[] { obj[3], Session["UserId"] });
                                         msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
                                     }
                                     catch (Exception ex)

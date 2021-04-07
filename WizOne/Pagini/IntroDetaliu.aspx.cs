@@ -163,6 +163,9 @@ namespace WizOne.Pagini
                 //evaluare - filtrare questionare 360 sau proiect si care trebuie completate
                 lstBadges.Add(new metaBadge { StringSelect = Dami.SelectEvaluare(), Pagina = "../Eval/EvalLista.aspx?q=34", Eticheta = Dami.TraduCuvant("Evaluari 360"), RutaImg = "bdgEvl.jpg" });
 
+                //Radu 31.03.2021 - Referate
+                lstBadges.Add(new metaBadge { StringSelect = Dami.SelectReferate(), Pagina = "../Posturi/FormLista.aspx?pp=1", Eticheta = Dami.TraduCuvant("Referate"), RutaImg = "bdgPtj.jpg" });
+
 
                 int j = 0;
 

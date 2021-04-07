@@ -45,12 +45,20 @@ namespace WizOne.Module
                     {
                         string ntf_Campuri = "";
                         string ntf_Conditii = "";
-
+                
                         CreazaSelect(Convert.ToInt32(dtReg.Rows[i]["Id"]), strSelect, numePagina, userId, userMarca, out ntf_Campuri, out ntf_Conditii);
                         if (ntf_Campuri == "" || ntf_Conditii == "") continue;
                         string strFiltru = "SELECT * FROM (" + strSelect + ") ent WHERE 1 = 1 " + ntf_Conditii;
                         strFiltru = strFiltru.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
-                        DataTable dtFiltru = General.IncarcaDT(strFiltru, null);
+                        DataTable dtFiltru = new DataTable();
+                        try
+                        {
+                            dtFiltru = General.IncarcaDT(strFiltru, null);
+                        }
+                        catch (Exception ex)
+                        {
+                            General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+                        }
                         if (dtFiltru.Rows.Count != 0)
                         {
                             string strSele = "SELECT " + ntf_Campuri + " FROM (" + strSelect + ") ent WHERE 1 = 1 " + ntf_Conditii;

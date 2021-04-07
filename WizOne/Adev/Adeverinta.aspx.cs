@@ -594,6 +594,7 @@ namespace WizOne.Adev
                 lista.Add("AdevDimX", "1314450");
             if (!lista.ContainsKey("AdevDimY"))
                 lista.Add("AdevDimY", "790575");
+            Session["AdevListaParam"] = lista;
             return lista;
         }
 
@@ -1674,11 +1675,33 @@ namespace WizOne.Adev
                     lstFiles.ForEach(f => System.IO.File.Move(f, Path.Combine(temp, Path.GetFileName(f))));
 
                     // create a new archive
-                    ZipFile.CreateFromDirectory(temp, archive);      
-                    Response.ContentType = "application/zip";
-                    Response.AddHeader("Content-Disposition", "attachment; filename=" + numeArhiva + ".zip");
-                    Response.TransmitFile(archive);
+                    ZipFile.CreateFromDirectory(temp, archive);
+                    byte[] fisierGen = File.ReadAllBytes(archive);
+
+                    if (fisierGen != null)
+                    {
+                        MemoryStream stream = new MemoryStream(fisierGen);
+                        Response.Clear();
+                        MemoryStream ms = stream;
+
+                        Response.ContentType = "application/zip";
+                        Response.AddHeader("Content-Disposition", "attachment; filename=" + numeArhiva + ".zip");
+                        Response.Buffer = true;
+                        ms.WriteTo(Response.OutputStream);
+
+                        HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
+                        HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
+                        HttpContext.Current.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event
+
+                    }
+                    //Response.TransmitFile(archive);
                     System.IO.File.Delete(archive);
+
+
+
+
+
+
                 }
 
                 return null;

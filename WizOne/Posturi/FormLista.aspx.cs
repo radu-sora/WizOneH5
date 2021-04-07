@@ -241,8 +241,8 @@ namespace WizOne.Posturi
 
                 grDate.KeyFieldName = "Id";
 
-
-                dt = SelectGrid();
+                string strSql = "";
+                dt = SelectGrid(out strSql);
 
 
                 grDate.DataSource = dt;
@@ -750,20 +750,20 @@ namespace WizOne.Posturi
             return val;
         }
 
-        public DataTable SelectGrid()
+        public DataTable SelectGrid(out string strSql, bool param = true)
         {
 
             DataTable q = null;
-
+            strSql = "";
             try
             {
                 string strSub = "";
                 string filtru = "";
-                if (checkComboBoxStare.Value != null) filtru += @" AND A.""IdStare"" IN (" + DamiStari() + ")";
-                int idFormular = Convert.ToInt32(cmbForm.Value ?? -99);
-                int nivel = Convert.ToInt32(cmbNivel.Value ?? 1);
-                DateTime dtInc = Convert.ToDateTime(dtDataInceput.Value ?? new DateTime(1900, 1, 1)).Date;
-                DateTime dtSf = Convert.ToDateTime(dtDataSfarsit.Value ?? new DateTime(2200, 12, 31)).Date;
+                if (param && checkComboBoxStare.Value != null) filtru += @" AND A.""IdStare"" IN (" + DamiStari() + ")";
+                int idFormular = param ? Convert.ToInt32(cmbForm.Value ?? -99) : -99;
+                int nivel = param ? Convert.ToInt32(cmbNivel.Value ?? 1) : 1;
+                DateTime dtInc = param ? Convert.ToDateTime(dtDataInceput.Value ?? new DateTime(1900, 1, 1)).Date : new DateTime(1900, 1, 1);
+                DateTime dtSf = param ? Convert.ToDateTime(dtDataSfarsit.Value ?? new DateTime(2200, 12, 31)).Date : new DateTime(2200, 12, 31);
                 int idUser = Convert.ToInt32(Session["UserId"].ToString());
 
                 string dt = (Constante.tipBD == 1 ? "getdate()" : "sysdate");
@@ -819,7 +819,7 @@ namespace WizOne.Posturi
                 string nvl = "ISNULL";
                 if (Constante.tipBD == 2) nvl = "nvl";
 
-                string strSql = "select " + idAuto + ", x.* from ( " +
+                strSql = "select " + idAuto + ", x.* from ( " +
                                 "select a.\"Id\", a.\"IdFormular\", a.\"IdPost\", a.\"IdCircuit\", a.F10003, a.\"Culoare\", a.\"DataInceput\", a.\"IdStare\", " +
                                 " b.\"Denumire\" as \"DescFormular\", org1.\"PostDenumire\" as \"DescPost\", " +
                                 " org1.\"NumeComplet\", " +

@@ -742,7 +742,7 @@
         }
 
 
-        var textSeparator = ",";
+        var textSeparator = "\\\\";
         //first one
         function OnListBoxSelectionChanged1(listBox, args) {
             if (args.index == 0)

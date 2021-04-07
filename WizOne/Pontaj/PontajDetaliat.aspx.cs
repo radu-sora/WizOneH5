@@ -1588,6 +1588,11 @@ namespace WizOne.Pontaj
                 //Florin 2020.09.16
                 string modifInOut = General.Nz(row["ModifInOut"],"").ToString();
 
+                //Florin 2021.04.07 - #888
+                string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null,""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
+                                ""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null
+                                WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+
                 foreach (var l in dic)
                 {
                     string numeCol = l.Key.ToString();
@@ -1683,6 +1688,8 @@ namespace WizOne.Pontaj
                         {
                             strSql += $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
                             VALUES({f10003}, {General.ToDataUniv(ziua)}, '{newValue}', '{oldValue}', {Session["UserID"]}, {General.CurrentDate()}, 'Pontajul Detaliat - modificare pontare', {Session["UserId"]}, {General.CurrentDate()});" + Environment.NewLine;
+                            //Florin 2021.04.07 - #888
+                            sqlDel = $@"";
                         }
 
                         //daca este ValAbs, stergem pontajul pe centrii de cost
@@ -1761,6 +1768,7 @@ namespace WizOne.Pontaj
                     else
                         General.ExecutaNonQuery(
                             "BEGIN " + Environment.NewLine +
+                            sqlDel + Environment.NewLine +
                             strSql + Environment.NewLine +
                             "END;", null);
                 }

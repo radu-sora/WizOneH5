@@ -267,7 +267,7 @@ namespace WizOne.Tactil
                     pt.Print();
 
                     File.Delete(filePath);
-                    MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess, "");
+                    //MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess, "");
                 }
 
             }

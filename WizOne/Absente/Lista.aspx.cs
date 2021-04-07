@@ -65,6 +65,7 @@ namespace WizOne.Absente
                 btnAproba.Text = Dami.TraduCuvant("btnAproba", "Aproba");
                 btnIstoricExtins.Text = Dami.TraduCuvant("btnIstoricExtins", "Istoric Extins");
 
+                btnEdit.Image.ToolTip = Dami.TraduCuvant("btnEdit", "Modificare");
                 btnDelete.Image.ToolTip = Dami.TraduCuvant("btnDelete", "Sterge");
                 btnIstoric.Image.ToolTip = Dami.TraduCuvant("btnIstoric", "Istoric");
                 btnDivide.Image.ToolTip = Dami.TraduCuvant("btnDivide", "Divide");

@@ -594,6 +594,7 @@ namespace WizOne.Adev
                 lista.Add("AdevDimX", "1314450");
             if (!lista.ContainsKey("AdevDimY"))
                 lista.Add("AdevDimY", "790575");
+            Session["AdevListaParam"] = lista;
             return lista;
         }
 

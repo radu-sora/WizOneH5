@@ -1248,7 +1248,7 @@ namespace WizOne.Absente
                 dic.Add("DataSfarsit", General.ToDataUniv(dtDataSf.Date));
                 dic.Add("NrZile", (nrZile == null ? "NULL" : nrZile));
                 dic.Add("NrZileViitor", "NULL");
-                dic.Add("Observatii", (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'"));
+                dic.Add("Observatii", (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString().Replace("'", "''") + "'"));
                 dic.Add("IdStare", (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()));
                 dic.Add("IdCircuit", idCircuit);
                 dic.Add("UserIntrod", General.Nz(Session["UserId"], "-99").ToString());

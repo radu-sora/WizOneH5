@@ -102,6 +102,22 @@ namespace WizOne.Personal
                             txtEIDDI.Text = "FM0" + txtMarca.Text;
                         }
                     }
+                    if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.ALKA_CO)
+                    {
+                        if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                        {
+                            ASPxTextBox txtEIDDI = DateIdentificare_DataList.Items[0].FindControl("txtEIDDI") as ASPxTextBox;
+                            txtEIDDI.Text = "10" + txtMarca.Text.PadLeft(4, '0');
+                        }
+                    }
+                    if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.ALKA_Trading)
+                    {
+                        if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                        {
+                            ASPxTextBox txtEIDDI = DateIdentificare_DataList.Items[0].FindControl("txtEIDDI") as ASPxTextBox;
+                            txtEIDDI.Text = "70" + txtMarca.Text.PadLeft(4, '0');
+                        }
+                    }
                 }
                 
                 if (Dami.ValoareParam("ValidariPersonal") == "1")

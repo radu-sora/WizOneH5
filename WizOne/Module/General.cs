@@ -6172,7 +6172,7 @@ namespace WizOne.Module
                 {
                     string strSql = "";
                     string strFiltru = "";
-                    if (denDept != "") strFiltru = " AND B.\"F00608\" IN ('" + denDept.Replace(",","','") + "')";
+                    if (denDept != "") strFiltru = " AND B.\"F00608\" IN ('" + denDept.Replace("\\\\","','") + "')";
                     if (idAngajat != -99) strFiltru = " AND A.\"F10003\"=" + idAngajat;
 
                     if (Constante.tipBD == 1)
@@ -8807,10 +8807,10 @@ namespace WizOne.Module
                     SELECT
                     (SELECT COUNT(*) FROM F100 A
                     INNER JOIN ""F100Contracte"" B ON A.F10003=B.F10003 AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit""
-                    INNER JOIN ""Ptj_Contracte"" C ON B.""IdContract""=C.""Id"" AND C.""Denumire"" IN ('{contracte.Replace(",", "','")}')
+                    INNER JOIN ""Ptj_Contracte"" C ON B.""IdContract""=C.""Id"" AND C.""Denumire"" IN ('{contracte.Replace("\\\\", "','")}')
                     WHERE A.F10025 IN (0,999)) AS ""NrAng"",
                     (SELECT COUNT(DISTINCT A.F10003) FROM ""Ptj_Intrari"" A
-                    INNER JOIN ""Ptj_Contracte"" C ON A.""IdContract"" = C.""Id"" AND C.""Denumire"" IN ('{contracte.Replace(",", "', '")}')
+                    INNER JOIN ""Ptj_Contracte"" C ON A.""IdContract"" = C.""Id"" AND C.""Denumire"" IN ('{contracte.Replace("\\\\", "', '")}')
                     WHERE {General.ToDataUniv(dt.Year, dt.Month)} <= A.""Ziua"" AND A.""Ziua"" <=  {General.ToDataUniv(dt.Year, dt.Month, 99)}) AS ""NrPtj"" {General.FromDual()}";
                 }
 

@@ -1168,6 +1168,14 @@ namespace WizOne.Pagini
                     if (!result)
                         continue;
 
+                    if (numeTabela == "F100")
+                    {
+                        int an = DateTime.Now.Year;
+                        DataTable dtAng = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + marcaInit, null);
+                        if (dtAng != null && dtAng.Rows.Count > 0 && dtAng.Rows[0]["F10022"] != DBNull.Value) an = Convert.ToDateTime(dtAng.Rows[0]["F10022"]).Year;
+                        General.CalculCO(an, Convert.ToInt32(marcaInit));
+                    }
+
                     switch (numeTabela)
                     {
                         case "Avs_Cereri":

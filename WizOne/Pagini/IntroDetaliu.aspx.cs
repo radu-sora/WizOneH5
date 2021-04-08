@@ -166,6 +166,9 @@ namespace WizOne.Pagini
                 //Radu 31.03.2021 - Referate
                 lstBadges.Add(new metaBadge { StringSelect = Dami.SelectReferate(), Pagina = "../Posturi/FormLista.aspx?pp=1", Eticheta = Dami.TraduCuvant("Referate"), RutaImg = "bdgPtj.jpg" });
 
+                //Radu 08.04.2021 - Cursuri
+                lstBadges.Add(new metaBadge { StringSelect = Dami.SelectCursuri(), Pagina = "../Curs/CursuriInregistrare.aspx?pp=1", Eticheta = Dami.TraduCuvant("Cursuri"), RutaImg = "bdgCrs.jpg" });
+
 
                 int j = 0;
 

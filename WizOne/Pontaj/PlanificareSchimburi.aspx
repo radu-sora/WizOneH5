@@ -1,8 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="PlanificareSchimburi.aspx.cs" Inherits="WizOne.Pontaj.PlanificareSchimburi" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
-</asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
@@ -239,7 +237,8 @@
 
     <dx:ASPxGridViewExporter ID="grDateExport" GridViewID="grDate" runat="server"></dx:ASPxGridViewExporter>  
 
-    <script>
+
+   <script>
         function EmptyFields() {
 
             var este = false;
@@ -457,4 +456,4 @@
         }
 
     </script>
-</asp:Content>
+  </asp:Content>

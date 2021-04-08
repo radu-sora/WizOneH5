@@ -201,8 +201,8 @@ namespace WizOne.Curs
                 if (Session["CursuriInreg_Grid"] == null)
                 {
                     grDate.KeyFieldName = "IdAuto";
-
-                    dt = GetmetaCurs_InregistrareFiltru(arr, General.VarSession("EsteAdmin").ToString() == "1" ? 0 : 3, Convert.ToInt32(cmbCursFiltru.Value ?? -99), Convert.ToInt32(cmbSesiuneFiltru.Value ?? -99), Convert.ToInt32(Session["UserId"].ToString()), (f10003 ?? -99));
+                    string strSql = "";
+                    dt = GetmetaCurs_InregistrareFiltru(arr, General.VarSession("EsteAdmin").ToString() == "1" ? 0 : 3, Convert.ToInt32(cmbCursFiltru.Value ?? -99), Convert.ToInt32(cmbSesiuneFiltru.Value ?? -99), Convert.ToInt32(Session["UserId"].ToString()), (f10003 ?? -99), out strSql);
 
                     grDate.DataSource = dt;
                     grDate.DataBind();
@@ -1118,8 +1118,9 @@ namespace WizOne.Curs
 
         }
 
-        public DataTable GetmetaCurs_InregistrareFiltru(string filtruStari, int tipUser, int idCurs, int idSesiune, decimal IdUser, decimal? F10003)
+        public DataTable GetmetaCurs_InregistrareFiltru(string filtruStari, int tipUser, int idCurs, int idSesiune, decimal IdUser, decimal? F10003, out string strSql)
         {
+            strSql = "";
             try
             {
                 string lstStari = filtruStari.Replace(";", ",");
@@ -1196,7 +1197,7 @@ namespace WizOne.Curs
                     cond = " AND a.\"IdSesiune\" = " + idSesiune;
 
                 q2 = General.IncarcaDT(sql + join + cond, null);
-
+                strSql = sql + join + cond;
                 return q2;
             }
             catch (Exception ex)

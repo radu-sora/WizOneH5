@@ -836,6 +836,24 @@ namespace WizOne.Module
             return strSql;
         }
 
+        internal static string SelectCursuri()
+        {
+            string strSql = "";
+
+            try
+            {
+                Curs.CursuriInregistrare pagRef = new Curs.CursuriInregistrare();
+
+                DataTable dt = pagRef.GetmetaCurs_InregistrareFiltru("", General.VarSession("EsteAdmin").ToString() == "1" ? 0 : 3, -99, -99, Convert.ToInt32(HttpContext.Current.Session["UserId"].ToString()), -99, out strSql); ;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
+        }
+
         internal static string SelectDecont()
         {
             string strSql = "";

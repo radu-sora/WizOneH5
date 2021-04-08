@@ -665,7 +665,7 @@ namespace WizOne.Pontaj
                     FROM ""Ptj_Contracte"" A
                     LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,8))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb8"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program8"", A.""Program0"") ELSE B.""IdProgram"" END)
-                    ) X
+                    ) X WHERE X.""ProgramId"" IS NOT NULL
                     UNION 
                     SELECT -1 * ""Id"", COALESCE(""DenumireScurta"",""Denumire""), -99 FROM ""Ptj_tblAbsente""", null);
 

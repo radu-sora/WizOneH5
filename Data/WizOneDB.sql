@@ -72,10 +72,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE view [dbo].[Schedule]
-as 
+AS
 SELECT 'CR' + CAST(ce.IdAuto AS VARCHAR) AS Id, 1 AS Type, ce.Id AS InternalId, ce.F10003 AS EmployeeId, 
 		ab.Denumire AS Name, ce.Observatii AS Remarks, ce.IdAbsenta AS LabelId, ce.IdStare AS StatusId,
-		ce.DataInceput AS StartDate, ce.DataSfarsit AS EndDate 
+		ce.DataInceput AS StartDate, DATEADD(DD, 1, ce.DataSfarsit) AS EndDate 
 FROM Ptj_Cereri AS ce
 INNER JOIN Ptj_tblAbsente AS ab ON ce.IdAbsenta = ab.Id
 INNER JOIN Ptj_tblStari AS st ON ce.IdStare = st.Id

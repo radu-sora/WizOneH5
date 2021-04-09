@@ -10,7 +10,7 @@
                 <dx:ASPxLabel ID="TitleLabel" runat="server" Text="Modifica sau creaza rapoarte noi" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </div>
             <div>
-                <dx:ASPxButton ID="ReportNewButton" ClientIDMode="Static" ClientInstanceName="btnNew" runat="server" Text="Raport nou" Image-Url="~/Fisiere/Imagini/Icoane/adauga.png" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="ReportNewButton" ClientIDMode="Static" ClientInstanceName="btnNew" runat="server" Text="Raport nou" Image-Url="~/Fisiere/Imagini/Icoane/adauga.png" AutoPostBack="false" CssClass="hidden-xs" oncontextMenu="ctx(this,event)">
                     <ClientSideEvents Click="function(s, e) {
                         pageControl.onReportNewButtonClick();
                     }" />
@@ -21,7 +21,8 @@
             </div>        
         </div>        
         <div class="page-content-data invisible">
-            <dx:ASPxGridView ID="ReportsGridView" ClientInstanceName="reportsGridView" runat="server" Width="100%" CssClass="dx-grid-adaptive dx-grid-adaptive-hide-desktop-search dx-grid-adaptive-hide-header"
+            <dx:ASPxGridView ID="ReportsGridView" ClientInstanceName="reportsGridView" runat="server" Width="100%" 
+                CssClass="dx-grid-adaptive dx-grid-adaptive-hide-desktop-search dx-grid-adaptive-hide-header dx-grid-adaptive-hide-column1 dx-grid-adaptive-hide-column5"
                 DataSourceID="ReportsDataSource" AutoGenerateColumns="False" KeyFieldName="Id"
                 OnDataBinding="ReportsGridView_DataBinding">
                 <Settings ShowFilterRow="True" VerticalScrollBarMode="Auto" />        
@@ -39,7 +40,7 @@
                     <Header Font-Bold="true" Wrap="True" />                    
                 </Styles>                
                 <Columns>
-                    <dx:GridViewCommandColumn Caption=" " Name="butoaneGrid" ShowClearFilterButton="true" Width="60px">
+                    <dx:GridViewCommandColumn Caption=" " Name="butoaneGrid" ShowClearFilterButton="true" Width="60px">                        
                         <CustomButtons>
                             <dx:GridViewCommandColumnCustomButton ID="ReportEditButton" Image-Url="~/Fisiere/Imagini/Icoane/edit.png" Image-ToolTip="Editare" Text=" " />
                             <dx:GridViewCommandColumnCustomButton ID="ReportDeleteButton" Image-Url="~/Fisiere/Imagini/Icoane/sterge.png" Image-ToolTip="Stergere" Text=" " />

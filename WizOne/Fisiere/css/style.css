@@ -484,18 +484,23 @@ a, a:focus, a:hover {
     .dx-grid-adaptive.dx-grid-adaptive-hide-group div[class*="dxgvAdaptiveGroupPanel"],
     .dx-grid-adaptive.dx-grid-adaptive-hide-header div[class*="dxgvAdaptiveHeaderPanel"],
     .dx-grid-adaptive.dx-grid-adaptive-hide-header-column1 div[class*="dxgvAdaptiveHeaderPanel"] > .dxgvADH:nth-child(2),
-    /* Works only for AdaptivityMode = HideDataCells with one column detail section */
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td > table > tbody > tr:nth-child(1),
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column2 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td > table > tbody > tr:nth-child(2),
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column3 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td > table > tbody > tr:nth-child(3),
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column4 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td > table > tbody > tr:nth-child(4),  
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column5 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td > table > tbody > tr:nth-child(5)    
+    /* Works only for AdaptivityMode = HideDataCells with one column detail section (incomplete! - deprecated) */
     /* Header section */
-    .dx-grid-adaptive.dx-grid-adaptive-hide-filter .dxgvHSDC > div > table > tbody > tr[class*="dxgvFilterRow"],
-    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvHSDC > div > table > tbody > tr > td:first-child,
+    /*.dx-grid-adaptive.dx-grid-adaptive-hide-filter .dxgvHSDC > div > table > tbody > tr[class*="dxgvFilterRow"],
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvHSDC > div > table > tbody > tr > td:first-child,*/
     /* Data section */
-    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class="dxgvArm"] > td:first-child,
+    /*.dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class="dxgvArm"] > td:first-child,
     .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td:first-child,
-    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class*="dxgvDetailRow"] > td:first-child > table > tbody > tr:first-child {
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class*="dxgvDetailRow"] > td:first-child > table > tbody > tr:first-child*/ {
         display: none;
     }
 
-    /* Fix DX adaptive layout bug when using swipe left/right with AdaptivityMode = HideDataCells (incomplete!) */
+    /* Fix DX adaptive layout bug when using swipe left/right with AdaptivityMode = HideDataCells (incomplete! - deprecated) */
     /*.dx-grid-adaptive .dxgvRBB > tbody > tr > td {
         overflow: hidden;
         text-overflow: ellipsis;

@@ -80,6 +80,17 @@ namespace Wizrom.Reports.Pages
                 };
         }
 
+        private bool IsMobileDevice
+        {
+            get
+            {
+                var userAgent = Request.ServerVariables["HTTP_USER_AGENT"];
+                var devices = new string[] { "iPhone", "iPad", "Android", "Windows Phone" }; // Add more devices
+
+                return devices.Any(d => userAgent.Contains(d));
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             Dami.AccesApp();
@@ -92,7 +103,7 @@ namespace Wizrom.Reports.Pages
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0)
                     Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
-                TitleLabel.Text = Dami.TraduCuvant("Modifica sau creaza rapoarte noi");
+                TitleLabel.Text = IsMobileDevice ? Dami.TraduCuvant("Lista rapoarte") : Dami.TraduCuvant("Modifica sau creaza rapoarte noi");
                 ReportNewButton.Text = Dami.TraduCuvant("ReportNewButton", "Raport nou");
                 ReportViewButton.Text = Dami.TraduCuvant("ReportViewButton", "Afisare");
                 ReportDesignButton.Text = Dami.TraduCuvant("ReportDesignButton", "Design");

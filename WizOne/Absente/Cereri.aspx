@@ -145,7 +145,7 @@
                                 <dx:ASPxComboBox ID="cmbAbs" runat="server" ClientInstanceName="cmbAbs" ClientIDMode="Static" Width="100%" ValueField="Id" DropDownWidth="200" 
                                     TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" meta:resourcekey="cmbAbsResource1" >
                                     <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
-                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { txtNrOre.SetValue(); txtNrOreTime.SetValue(); pnlCtl.PerformCallback(2); }" />
+                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { typeof txtNrOre !== 'undefined' && txtNrOre.SetValue(); typeof txtNrOreTime !== 'undefined' && txtNrOreTime.SetValue(); pnlCtl.PerformCallback(2); }" />
                                 </dx:ASPxComboBox>
                             </div>
                             <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">                                

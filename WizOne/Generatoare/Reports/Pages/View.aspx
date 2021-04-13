@@ -456,7 +456,7 @@
         }
 
         function onCustomTableContextMenuItemClick(item) {
-            var isCustomItem = JSON.stringify(item.menu.cpItemsCommands).indexOf(item.name) == -1;
+            var isCustomItem = JSON.stringify(item.menu.cpItemsProps.commands).indexOf(item.name) == -1;
             var isActionItem = item.name[0] != '#'; // No action sign.
 
             if (isCustomItem && isActionItem) {

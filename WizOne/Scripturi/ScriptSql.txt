@@ -17548,3 +17548,107 @@ GO
 insert into [F800_ADEVERINTE_CONFIG] (nrcrt, ETICHETA, VALOARE) values (84,'ADI', '22:00 - 05:00')
 
 insert into [F800_ADEVERINTE_CONFIG] (nrcrt, ETICHETA, VALOARE) values (85, 'ADV', '31/03/2021')
+
+
+
+----  2.2.136  ----
+
+---- Beneficii Start ----
+
+ALTER TABLE Admin_Obiecte ADD DeLaData datetime
+GO
+ALTER TABLE Admin_Obiecte ADD LaData datetime
+GO
+ALTER TABLE Admin_Obiecte ADD Descriere NVARCHAR(MAX)
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Nomenclator beneficii', 'Nomenclator beneficii', 'Beneficii\NomenBeneficii', 1, 'm1.png')
+GO
+
+CREATE TABLE [dbo].[Ben_relSesGrupAng](
+	[IdSesiune] [int] NULL,
+	[IdGrup] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Ben_relSesGrupAng_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[Ben_relSesBen](
+	[IdSesiune] [int] NULL,
+	[IdBeneficiu] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Ben_relSesBen_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Nomenclator sesiuni beneficii', 'Nomenclator sesiuni beneficii', 'Beneficii\SesiuniBeneficii', 1, 'm1.png')
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Seturi de angajati', 'Seturi de angajati', 'Pagini\SablonNomen[Ben_SetAngajati]', 1, 'm1.png')
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Vizualizare sesiuni', 'Vizualizare sesiuni', 'Beneficii\Aprobare', 1, 'm1.png')
+GO
+
+CREATE TABLE [dbo].[Ben_tblStari](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](50) NULL,
+	[Culoare] [nvarchar](50) NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL
+ CONSTRAINT [Ben_tblStari_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (0, 'Inactiv', '')
+GO
+INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (1, 'Initiat', '')
+GO
+INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (2, 'In curs', '')
+GO
+INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (3, 'Aprobat', '')
+GO
+INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (4, 'Respins', '')
+GO
+
+
+CREATE TABLE [dbo].[Ben_Sesiuni](
+	[IdSesiune] [int] NULL,
+	[F10003] [int] NULL,
+	[IdBeneficiu] [int] NULL,
+	[IdStare][int] NULL,
+	[Descriere] [nvarchar](max) NULL,
+	[DataInceput] [datetime] NULL,
+	[DataSfarsit] [datetime] NULL,
+	[DataInceputBen] [datetime] NULL,
+	[DataSfarsitBen] [datetime] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL
+ CONSTRAINT [Ben_Sesiuni_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+---- Beneficii End ----

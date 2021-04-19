@@ -698,6 +698,55 @@ namespace WizOne.Pagini
                 }
                 /*end LeonardM 11.11.2017*/
                 #endregion
+
+
+                //Radu 15.04.2021
+                if (dt.TableName == "Ben_SetAngajati")
+                {
+                    string sqlDelete, sqlDeleteTemp = string.Empty;
+                    string sqlInsert, sqlInsertTemp = string.Empty;
+                    string sqltmp = "";
+                    if (Constante.tipBD == 2)
+                        sqltmp = "SELECT COUNT(*) CNT FROM user_tables WHERE TABLE_NAME = 'Ben_SetAngajatiDetail'";
+                    else
+                    {
+                        sqltmp = "SELECT COUNT(*) AS CNT, max(table_type) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME  = 'Ben_SetAngajatiDetail'";
+                    }
+                    DataTable dtTemp = General.IncarcaDT(sqltmp, null);
+                    if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0 && dtTemp.Rows[0][0].ToString() == "1")
+                    {
+                        if (Constante.tipBD == 2)
+                            sqlDelete = "DROP TABLE \"Ben_SetAngajatiDetail\"";
+                        else
+                            sqlDelete = "DROP " + (dtTemp.Rows[0][1].ToString().ToUpper().Contains("TABLE") ? "TABLE" : "VIEW") + " \"Ben_SetAngajatiDetail\"";
+
+                        General.ExecutaNonQuery(sqlDelete, null);
+                    }
+                    if (Constante.tipBD == 1)
+                        sqlInsert = "CREATE VIEW Ben_SetAngajatiDetail AS ";
+                    else
+                        sqlInsert = "CREATE OR REPLACE VIEW \"Ben_SetAngajatiDetail\"(\"IdGrup\", \"Denumire\", \"F10003\") AS ";
+
+                    sqlInsertTemp = "";
+                    int i = 0;
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        Eval_SetAngajati clsSetAngajati = new Eval_SetAngajati(dr);
+                        sqlInsertTemp += clsSetAngajati.SelectQuery.ToUpper().Replace("SELECT ", "SELECT " + clsSetAngajati.IdSetAng + " AS \"IdGrup\", ");
+                        i++;
+                        if (i < dt.Rows.Count)
+                            sqlInsertTemp += " UNION ";
+                    }
+                    sqlInsert += sqlInsertTemp;
+                    bool valid = General.ExecutaNonQuery(sqlInsert, null);
+                    if (!valid)
+                    {
+                        MessageBox.Show("Eroare la salvare!", MessageBox.icoSuccess);
+                        return;
+                    }
+                }
+
+
                 MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
             }
             catch (Exception ex)

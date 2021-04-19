@@ -413,6 +413,10 @@
     <Content Include="Avs\Detalii.aspx" />
     <Content Include="Avs\Istoric.aspx" />
     <Content Include="Avs\IstoricModificari.aspx" />
+    <Content Include="Beneficii\Aprobare.aspx" />
+    <Content Include="Beneficii\NomenBeneficii.aspx" />
+    <Content Include="Beneficii\relSesiuniBen.aspx" />
+    <Content Include="Beneficii\SesiuniBeneficii.aspx" />
     <Content Include="BP\Aprobare.aspx" />
     <Content Include="BP\CrearePrime.aspx" />
     <Content Include="BP\ImportPrime.aspx" />
@@ -1327,6 +1331,34 @@
     </Compile>
     <Compile Include="Avs\IstoricModificari.aspx.designer.cs">
       <DependentUpon>IstoricModificari.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Beneficii\Aprobare.aspx.cs">
+      <DependentUpon>Aprobare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Beneficii\Aprobare.aspx.designer.cs">
+      <DependentUpon>Aprobare.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Beneficii\NomenBeneficii.aspx.cs">
+      <DependentUpon>NomenBeneficii.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Beneficii\NomenBeneficii.aspx.designer.cs">
+      <DependentUpon>NomenBeneficii.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Beneficii\relSesiuniBen.aspx.cs">
+      <DependentUpon>relSesiuniBen.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Beneficii\relSesiuniBen.aspx.designer.cs">
+      <DependentUpon>relSesiuniBen.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Beneficii\SesiuniBeneficii.aspx.cs">
+      <DependentUpon>SesiuniBeneficii.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Beneficii\SesiuniBeneficii.aspx.designer.cs">
+      <DependentUpon>SesiuniBeneficii.aspx</DependentUpon>
     </Compile>
     <Compile Include="BP\Aprobare.aspx.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>

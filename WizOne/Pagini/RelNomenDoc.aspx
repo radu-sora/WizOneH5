@@ -43,14 +43,22 @@
                                 <dx:GridViewDataComboBoxColumn FieldName="IdNomen1" Name="IdNomen1" Caption="Nomenclator 1" VisibleIndex="1">
                                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
                                     </PropertiesComboBox>
+                                     <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                                 </dx:GridViewDataComboBoxColumn>
-                                <dx:GridViewDataTextColumn FieldName="Val1" Name="Val1" Caption="Valoare 1"  Width="100px" VisibleIndex="2"/>
+                                <dx:GridViewDataTextColumn FieldName="Val1" Name="Val1" Caption="Valoare 1"  Width="100px" VisibleIndex="2">
+                                     <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                                </dx:GridViewDataTextColumn>
                                 <dx:GridViewDataComboBoxColumn FieldName="IdNomen2" Name="IdNomen2" Caption="Nomenclator 2" VisibleIndex="3">
                                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
                                     </PropertiesComboBox>
+                                     <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                                 </dx:GridViewDataComboBoxColumn>
-                                <dx:GridViewDataTextColumn FieldName="Val2" Name="Val2" Caption="Valoare 2"  Width="100px" VisibleIndex="4"/>
-                                <dx:GridViewDataTextColumn FieldName="Document" Name="Document" Caption="Document"  Width="75px" Visible="false"/>
+                                <dx:GridViewDataTextColumn FieldName="Val2" Name="Val2" Caption="Valoare 2"  Width="100px" VisibleIndex="4">
+                                     <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                                </dx:GridViewDataTextColumn>
+                                <dx:GridViewDataTextColumn FieldName="Document" Name="Document" Caption="Document"  Width="75px" Visible="false">
+                                     <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                                </dx:GridViewDataTextColumn>
 
                                 <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
                                 <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO"  Width="75px" Visible="false"/>

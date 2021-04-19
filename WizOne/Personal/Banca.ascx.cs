@@ -41,7 +41,7 @@ namespace WizOne.Personal
             cmbSucGar.DataSource = General.GetSucursale(Convert.ToInt32(cmbBancaGar.SelectedItem == null ? gar : cmbBancaGar.SelectedItem.Value));
             cmbSucGar.DataBindItems();
 
-            string[] etichete = new string[12] { "lblIBANSal", "lblNrCard", "lblBancaSal", "lblSucursalaSal", "lblDataModifSal", "lblIBANGar", "lblBancaGar", "lblSucursalaGar", "lblDataModifGar",
+            string[] etichete = new string[12] { "lblIBANSal", "lblNrCard", "lblBancaSal", "lblSucursalaSal", "lblDataModifBan", "lblIBANGar", "lblBancaGar", "lblSucursalaGar", "lblDataModifGar",
                                                 "lblIBANTichete", "lblDataIncTichete", "lblDataSfTichete"};
             for (int i = 0; i < etichete.Count(); i++)
             {

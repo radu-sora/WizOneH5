@@ -77,10 +77,10 @@
 					        </tr>
 					        <tr>
 						        <td >		
-							        <dx:ASPxLabel  ID="lblDataModifSal" runat="server"  Text="Data modificarii"></dx:ASPxLabel >	
+							        <dx:ASPxLabel  ID="lblDataModifBan" runat="server"  Text="Data modificarii"></dx:ASPxLabel >	
 						        </td>
 						        <td>			
-							        <dx:ASPxDateEdit  ID="deDataModifSal" ClientInstanceName="deDataModifSal" Width="100" runat="server" TabIndex="5" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001040") %>'  AutoPostBack="false"  >
+							        <dx:ASPxDateEdit  ID="deDataModifBan" ClientInstanceName="deDataModifBan" Width="100" runat="server" TabIndex="5" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001040") %>'  AutoPostBack="false"  >
                                         <CalendarProperties FirstDayOfWeek="Monday" />
 							        </dx:ASPxDateEdit>					
 						        </td>

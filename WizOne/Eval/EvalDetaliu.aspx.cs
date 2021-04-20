@@ -594,7 +594,7 @@ namespace WizOne.Eval
 
                 //Florin 2021.02.25
                 //Florin 2020.12.17
-                for (int i = 69; i <= 72; i++)
+                for (int i = 69; i <= 73; i++)
                 {
                     if (i == 70) continue;
                     string nota = CalculNota(i).ToString("0.##");
@@ -1319,6 +1319,7 @@ namespace WizOne.Eval
                         case 69: //Nota Finala
                         case 71: //Nota obiective
                         case 72: //Nota competente
+                        case 73: //Nota competente per categorie
                             ctl = CreeazaNota(ent.Id, ent.TipData);
                             break;
                         case 70: //raport evaluare multipla
@@ -3570,50 +3571,53 @@ namespace WizOne.Eval
 
                             }
                             break;
-                        case "21":      //CLAIM                          
-                            if (clsUpd.IdQuiz != 8 && clsUpd.IdQuiz != 11 && clsUpd.IdQuiz != 24)
-                            {
-                                //foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
-                                //                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
-                                //sumaClaim += Convert.ToInt32(General.Nz(clsUpd.Calificativ, 0)) * Convert.ToInt32(General.Nz(clsUpd.Pondere, 0));
-                                //Radu 07.05.2020
-                                decimal val = decimal.Parse(General.Nz(clsUpd.Calificativ, 0).ToString(), CultureInfo.InvariantCulture);
-                                sumaClaim += val * (decimal)clsUpd.Pondere;
-                            }                            
-                            break;
+
+                            //Florin 2021.04.20
+                        //case "21":      //CLAIM                          
+                        //    if (clsUpd.IdQuiz != 8 && clsUpd.IdQuiz != 11 && clsUpd.IdQuiz != 24)
+                        //    {
+                        //        //foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
+                        //        //                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
+                        //        //sumaClaim += Convert.ToInt32(General.Nz(clsUpd.Calificativ, 0)) * Convert.ToInt32(General.Nz(clsUpd.Pondere, 0));
+                        //        //Radu 07.05.2020
+                        //        decimal val = decimal.Parse(General.Nz(clsUpd.Calificativ, 0).ToString(), CultureInfo.InvariantCulture);
+                        //        sumaClaim += val * (decimal)clsUpd.Pondere;
+                        //    }                            
+                        //    break;
                     }
                 }
 
-                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 21)
-                {
-                    Eval_QuizIntrebari txtSumaOb = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTE FOR INDIVIDUAL OBJECTIVES") && p.IdQuiz == idQuiz).FirstOrDefault();
-                    if (txtSumaOb != null)
-                    {
-                        Eval_RaspunsLinii linieSumaOb = lstEval_RaspunsLinii.Where(p => p.Id == txtSumaOb.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
-                        PropertyInfo val = linieSumaOb.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-                        if (val != null)
-                            val.SetValue(linieSumaOb, sumaClaim.ToString(), null);
-                    }
+                //Florin 2021.04.20
+                //if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 21)
+                //{
+                //    Eval_QuizIntrebari txtSumaOb = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTE FOR INDIVIDUAL OBJECTIVES") && p.IdQuiz == idQuiz).FirstOrDefault();
+                //    if (txtSumaOb != null)
+                //    {
+                //        Eval_RaspunsLinii linieSumaOb = lstEval_RaspunsLinii.Where(p => p.Id == txtSumaOb.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
+                //        PropertyInfo val = linieSumaOb.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                //        if (val != null)
+                //            val.SetValue(linieSumaOb, sumaClaim.ToString(), null);
+                //    }
 
-                    decimal notaFinala = sumaClaim;
-                    Eval_QuizIntrebari txtNotaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("FINAL NOTE") && p.IdQuiz == idQuiz).FirstOrDefault();
-                    if (txtNotaFinala != null)
-                    {
-                        Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == txtNotaFinala.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
-                        PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-                        if (val != null)
-                        {
-                            string s = val.GetValue(linieNotaFinala, null).ToString();
-                            if (s.Length > 0)
-                            {
-                                decimal rez = 0;
-                                decimal.TryParse(s, out rez);
-                                notaFinala += rez;
-                            }
-                            val.SetValue(linieNotaFinala, notaFinala.ToString(), null);
-                        }
-                    }
-                }
+                //    decimal notaFinala = sumaClaim;
+                //    Eval_QuizIntrebari txtNotaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("FINAL NOTE") && p.IdQuiz == idQuiz).FirstOrDefault();
+                //    if (txtNotaFinala != null)
+                //    {
+                //        Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == txtNotaFinala.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
+                //        PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                //        if (val != null)
+                //        {
+                //            string s = val.GetValue(linieNotaFinala, null).ToString();
+                //            if (s.Length > 0)
+                //            {
+                //                decimal rez = 0;
+                //                decimal.TryParse(s, out rez);
+                //                notaFinala += rez;
+                //            }
+                //            val.SetValue(linieNotaFinala, notaFinala.ToString(), null);
+                //        }
+                //    }
+                //}
 
                 for (int x = 0; x < e.DeleteValues.Count; x++)
                 {
@@ -3840,58 +3844,61 @@ namespace WizOne.Eval
 
                             }
                             break;
-                        case "21":  //CLAIM
-                            if (clsUpd.IdQuiz != 8 && clsUpd.IdQuiz != 11 && clsUpd.IdQuiz != 24)
-                            {
-                                //foreach (Eval_CompetenteAngajatTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
-                                //                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
 
-                                //Florin 2020.05.06
-                                decimal val = decimal.Parse(General.Nz(clsUpd.Calificativ, 0).ToString(), CultureInfo.InvariantCulture);
-                                sumaClaim += val * clsUpd.Pondere;
+                            //Florin 2021.04.20
+                            //case "21":  //CLAIM
+                            //    if (clsUpd.IdQuiz != 8 && clsUpd.IdQuiz != 11 && clsUpd.IdQuiz != 24)
+                            //    {
+                            //        //foreach (Eval_CompetenteAngajatTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
+                            //        //                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
 
-                            }
-                            break;
+                            //        //Florin 2020.05.06
+                            //        decimal val = decimal.Parse(General.Nz(clsUpd.Calificativ, 0).ToString(), CultureInfo.InvariantCulture);
+                            //        sumaClaim += val * clsUpd.Pondere;
+
+                            //    }
+                            //    break;
                     }
                 }
 
-                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 21)
-                {
-                    string tipComp = "";
-                    if (categComp.ToUpper().Contains("PROFESSIONAL") || categComp.ToUpper().Contains("PROFESIONALE"))
-                        tipComp = "NOTE FOR PROFESSIONAL COMPETENCES";
-                    if (categComp.ToUpper().Contains("PERSONAL"))
-                        tipComp = "NOTE FOR PERSONAL COMPETENCES";
+                //Florin 2021.04.20
+                //if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 21)
+                //{
+                //    string tipComp = "";
+                //    if (categComp.ToUpper().Contains("PROFESSIONAL") || categComp.ToUpper().Contains("PROFESIONALE"))
+                //        tipComp = "NOTE FOR PROFESSIONAL COMPETENCES";
+                //    if (categComp.ToUpper().Contains("PERSONAL"))
+                //        tipComp = "NOTE FOR PERSONAL COMPETENCES";
 
-                    Eval_QuizIntrebari txtSumaComp = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains(tipComp) && p.IdQuiz == idQuiz).FirstOrDefault();
-                    if (txtSumaComp != null)
-                    {
-                        Eval_RaspunsLinii linieSumaComp = lstEval_RaspunsLinii.Where(p => p.Id == txtSumaComp.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
-                        PropertyInfo val = linieSumaComp.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-                        if (val != null)
-                            val.SetValue(linieSumaComp, sumaClaim.ToString(), null);
-                    }
+                //    Eval_QuizIntrebari txtSumaComp = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains(tipComp) && p.IdQuiz == idQuiz).FirstOrDefault();
+                //    if (txtSumaComp != null)
+                //    {
+                //        Eval_RaspunsLinii linieSumaComp = lstEval_RaspunsLinii.Where(p => p.Id == txtSumaComp.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
+                //        PropertyInfo val = linieSumaComp.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                //        if (val != null)
+                //            val.SetValue(linieSumaComp, sumaClaim.ToString(), null);
+                //    }
 
 
-                    decimal notaFinala = sumaClaim;
-                    Eval_QuizIntrebari txtNotaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("FINAL NOTE") && p.IdQuiz == idQuiz).FirstOrDefault();
-                    if (txtNotaFinala != null)
-                    {
-                        Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == txtNotaFinala.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
-                        PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
-                        if (val != null)
-                        {
-                            string s = val.GetValue(linieNotaFinala, null).ToString();
-                            if (s.Length > 0)
-                            {
-                                decimal rez = 0;
-                                decimal.TryParse(s, out rez);
-                                notaFinala += rez;
-                            }
-                            val.SetValue(linieNotaFinala, notaFinala.ToString(), null);
-                        }
-                    }
-                }
+                //    decimal notaFinala = sumaClaim;
+                //    Eval_QuizIntrebari txtNotaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("FINAL NOTE") && p.IdQuiz == idQuiz).FirstOrDefault();
+                //    if (txtNotaFinala != null)
+                //    {
+                //        Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == txtNotaFinala.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
+                //        PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                //        if (val != null)
+                //        {
+                //            string s = val.GetValue(linieNotaFinala, null).ToString();
+                //            if (s.Length > 0)
+                //            {
+                //                decimal rez = 0;
+                //                decimal.TryParse(s, out rez);
+                //                notaFinala += rez;
+                //            }
+                //            val.SetValue(linieNotaFinala, notaFinala.ToString(), null);
+                //        }
+                //    }
+                //}
 
                 for (int x = 0; x < e.DeleteValues.Count; x++)
                 {
@@ -5922,6 +5929,37 @@ namespace WizOne.Eval
                                     val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
                                         $@"SELECT CASE WHEN (select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2), COALESCE(IdCalificativ,0) ) )/(select COUNT(*) from Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 and COALESCE(IdCalificativ,0) <>0) END AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
                                         new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
+                            }
+                        }
+                        break;
+                    case (int)Module.IdClienti.Clienti.Claim:
+                        {
+                            switch (tipData)
+                            {
+                                case 69:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT ROUND(SUM(Total),2) FROM (
+                                        (SELECT SUM(CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE CONVERT(decimal(18,2),Calificativ) END * COALESCE(Pondere,0)) AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                        UNION
+                                        (SELECT SUM(CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE CONVERT(decimal(18,2),Calificativ) END * COALESCE(Pondere,0)) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
+                                        ) X",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
+                                case 71:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT SUM(CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE CONVERT(decimal(18,2),Calificativ) END * COALESCE(Pondere,0)) AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
+                                case 72:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT SUM(CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE CONVERT(decimal(18,2),Calificativ) END * COALESCE(Pondere,0)) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
+                                    break;
+                                case 73:
+                                    val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                                        $@"SELECT SUM(CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE CONVERT(decimal(18,2),Calificativ) END * COALESCE(Pondere,0)) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3 AND IdLinieQuiz=@4",
+                                        new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"], Session["CompletareChestionarCompetente_LinieQuiz"] }), 0));
                                     break;
                             }
                         }

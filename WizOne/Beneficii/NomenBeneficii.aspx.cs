@@ -46,7 +46,7 @@ namespace WizOne.Beneficii
                 if (IsPostBack)
                 {
                     DataTable dt = Session["NomenBen_Grid"] as DataTable;
-                    grDate.KeyFieldName = "IdCategorie;Id";
+                    grDate.KeyFieldName = "Id";
                     grDate.DataSource = dt;
                     grDate.DataBind();
 
@@ -67,20 +67,21 @@ namespace WizOne.Beneficii
         {
             try
             {
-                string strSql = @"select a.""IdCategorie"", CAST (a.""Id"" AS INT) as ""Id"", a.""Denumire"", a.""DeLaData"", a.""LaData"", a.""Descriere"", a.USER_NO, a.TIME
+                string strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", a.""DeLaData"", a.""LaData"", a.""Descriere"", a.USER_NO, a.TIME, a.ValoareEstimata
                                 from ""Admin_Obiecte"" a
                                 inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
-                                where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY ""NumeCompus""";
+                                where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY a.""Denumire""";
 
                 DataTable dt = General.IncarcaDT(strSql, null);
-                grDate.KeyFieldName = "IdCategorie;Id";
+                grDate.KeyFieldName = "Id";
                 grDate.DataSource = dt;              
                 grDate.DataBind();
                 Session["NomenBen_Grid"] = dt;
 
                 if (!IsPostBack)
                 {
-                    DataTable dtCateg = General.IncarcaDT(@"select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal'", null);
+                    DataTable dtCateg = General.IncarcaDT(@"SELECT  a.""Id"" FROM ""Admin_Categorii"" a
+                                where a.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal')", null);
                     if (dtCateg != null && dtCateg.Rows.Count > 0)
                         Session["NomenBen_IdCateg"] = Convert.ToInt32(dtCateg.Rows[0][0].ToString());
                     else
@@ -123,7 +124,11 @@ namespace WizOne.Beneficii
                 dr["Denumire"] = txtDen.Text;
                 dr["DeLaData"] = deDeLaData.Date;
                 dr["LaData"] = deLaData.Date;
-                dr["Id"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("Id")), 0)) + 1;
+                int id = 1;
+                DataTable dtId = General.IncarcaDT("SELECT MAX(Id) + 1 FROM Admin_Obiecte", null);
+                if (dtId != null && dtId.Rows.Count > 0)
+                    id = Convert.ToInt32(dtId.Rows[0][0].ToString());
+                dr["Id"] =id;
                 dr["Descriere"] = txtDesc.Text;
 
                 metaUploadFile itm = Session["DocUpload_NomenBen"] as metaUploadFile;
@@ -137,7 +142,7 @@ namespace WizOne.Beneficii
                 e.Cancel = true;
                 grDate.CancelEdit();
                 grDate.DataSource = dt;
-                grDate.KeyFieldName = "IdCategorie;Id";
+                grDate.KeyFieldName = "Id";
                 Session["NomenBen_Grid"] = dt;
                 General.SalveazaDate(dt, "Admin_Obiecte");
             }
@@ -178,7 +183,7 @@ namespace WizOne.Beneficii
                 e.Cancel = true;
                 grDate.CancelEdit();
                 grDate.DataSource = dt;
-                grDate.KeyFieldName = "IdCategorie;Id";
+                grDate.KeyFieldName = "Id";
                 Session["NomenBen_Grid"] = dt;
                 General.SalveazaDate(dt, "Admin_Obiecte");
             }
@@ -249,9 +254,7 @@ namespace WizOne.Beneficii
                 HtmlTableCell lblLa = (HtmlTableCell)grDate.FindEditFormTemplateControl("lblLa");
                 lblLa.InnerText = Dami.TraduCuvant("La");
                 HtmlTableCell lblDesc = (HtmlTableCell)grDate.FindEditFormTemplateControl("lblDesc");
-                lblDesc.InnerText = Dami.TraduCuvant("Descriere");
-                HtmlTableCell lblDoc = (HtmlTableCell)grDate.FindEditFormTemplateControl("lblDoc");
-                lblDoc.InnerText = Dami.TraduCuvant("Document");
+                lblDesc.InnerText = Dami.TraduCuvant("Descriere");    
 
                 ASPxUploadControl btnDocUploadBen = (ASPxUploadControl)grDate.FindEditFormTemplateControl("btnDocUploadBen");
                 btnDocUploadBen.BrowseButton.Text = Dami.TraduCuvant("Incarca Document");

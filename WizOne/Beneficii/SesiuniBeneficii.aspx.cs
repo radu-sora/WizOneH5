@@ -18,7 +18,14 @@ namespace WizOne.Beneficii
     public partial class SesiuniBeneficii : System.Web.UI.Page
     {
 
+        public class metaSesiuniBen
+        {
+            public int Id { get; set; }
+            public DateTime DataInceput { get; set; }
+            public DateTime DataSfarsit { get; set; }
  
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -137,7 +144,7 @@ namespace WizOne.Beneficii
                 {
                     grDate.KeyFieldName = "Id";
 
-                    dt = General.IncarcaDT("SELECT * FROM \"Ben_tblSesiuni\" WHERE \"DataInceput\" <= " + dtSf + " AND \"DataSfarsit\" >= " + dtInc , null);
+                    dt = General.IncarcaDT("SELECT * FROM \"Ben_tblSesiuni\" WHERE \"DataInceput\" <= " + General.ToDataUniv(dtSf) + " AND \"DataSfarsit\" >= " + General.ToDataUniv(dtInc), null);
 
                     grDate.DataSource = dt;
                     grDate.DataBind();
@@ -288,7 +295,7 @@ namespace WizOne.Beneficii
             {
                 string msg = "";
                 DataTable dt = Session["SesiuniBen_Grid"] as DataTable;
-                List<int> ids = new List<int>();
+                List<metaSesiuniBen> ids = new List<metaSesiuniBen>();
                 string lstIds = "";
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "DataInceput", "DataSfarsit", "IdStare" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null) return;
@@ -297,7 +304,7 @@ namespace WizOne.Beneficii
                 {
                     object[] arr = lst[i] as object[];    
 
-                    ids.Add(Convert.ToInt32(General.Nz(arr[0], 0)));
+                    ids.Add(new metaSesiuniBen { Id = Convert.ToInt32(General.Nz(arr[0], 0)), DataInceput = Convert.ToDateTime(General.Nz(arr[1], 0)), DataSfarsit = Convert.ToDateTime(General.Nz(arr[2], 0)) });
                     lstIds += ", " + General.Nz(arr[0], 0);
             }
 
@@ -323,7 +330,7 @@ namespace WizOne.Beneficii
         }
 
 
-        public string InitializareSesiune(List<int> arr, int idUser, int userMarca)
+        public string InitializareSesiune(List<metaSesiuniBen> arr, int idUser, int userMarca)
         {
             string log = string.Empty;
             try
@@ -332,17 +339,15 @@ namespace WizOne.Beneficii
 
                 for (int i = 0; i < arr.Count; i++)
                 {
-                    DataTable dtAng = General.IncarcaDT("SELECT a.* FROM Ben_SetAngajatiDetail a LEFT JOIN Ben_relSesGrupAng b ON a.IdGrup = b.IdGrup WHERE b.IdSesiune = " + arr[i].ToString(), null);
+                    DataTable dtAng = General.IncarcaDT("SELECT a.* FROM Ben_SetAngajatiDetail a LEFT JOIN Ben_relSesGrupAng b ON a.IdGrup = b.IdGrup WHERE b.IdSesiune = " + arr[i].Id.ToString(), null);
                     if (dtAng != null && dtAng.Rows.Count > 0)
                     {
                         for (int j = 0; j < dtAng.Rows.Count; j++)
                         {
-                            General.ExecutaNonQuery("DELETE FROM Ben_Sesiuni WHERE IdSesiune = " + arr[i].ToString() + " AND F10003 = " + dtAng.Rows[j]["F10003"].ToString(), null);
+                            General.ExecutaNonQuery("DELETE FROM Ben_Sesiuni WHERE IdSesiune = " + arr[i].Id.ToString() + " AND F10003 = " + dtAng.Rows[j]["F10003"].ToString(), null);
 
-                            DataTable dtBen = General.IncarcaDT("INSERT INTO Ben_Sesiuni(IdSesiune, F10003, IdStare, DataInceput, DataSfarsit, USER_NO, TIME) VALUES(" + arr[i].ToString() + ", " + dtAng.Rows[j]["F10003"].ToString() + ", 1, " 
-                                + "(SELECT DataInceput FROM Admin_Obiecte a  inner join Admin_Categorii b on a.IdCategorie = b.Id where b.IdArie = (select Valoare from tblParametrii where Nume = 'ArieTabBeneficiiDinPersonal') AND Id = " + arr[i].ToString() 
-                                + "), (SELECT DataSfarsit FROM Admin_Obiecte a  inner join Admin_Categorii b on a.IdCategorie = b.Id where b.IdArie = (select Valoare from tblParametrii where Nume = 'ArieTabBeneficiiDinPersonal') AND Id = " + arr[i].ToString()
-                                + "), " + idUser + ", GETDATE()) OUTPUT Inserted.IdAuto", null);
+                            DataTable dtBen = General.IncarcaDT("INSERT INTO Ben_Sesiuni(IdSesiune, F10003, IdStare, DataInceput, DataSfarsit, USER_NO, TIME) OUTPUT Inserted.IdAuto VALUES(" + arr[i].Id.ToString() + ", " + dtAng.Rows[j]["F10003"].ToString() + ", 1, " 
+                                + General.ToDataUniv(Convert.ToDateTime(arr[i].DataInceput.ToString())) + ", " + General.ToDataUniv(Convert.ToDateTime(arr[i].DataSfarsit.ToString())) + ", " + idUser + ", GETDATE()) ", null);
 
                             string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
                             int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);

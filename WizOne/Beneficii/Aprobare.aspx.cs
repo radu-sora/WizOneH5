@@ -97,25 +97,18 @@ namespace WizOne.Beneficii
       
 
                 DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
+                GridViewDataComboBoxColumn colAng = (grDate.Columns["F10003"] as GridViewDataComboBoxColumn);
+                colAng.PropertiesComboBox.DataSource = dtAng;
+
                 cmbAngFiltru.DataSource = dtAng;
                 cmbAngFiltru.DataBind();
+
+                if (!IsPostBack)
+                    Session["BeneficiiAprob_Grid"] = null;
 
                 IncarcaGrid();
 
 
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void grDate_DataBinding(object sender, EventArgs e)
-        {
-            try
-            {
-                //IncarcaGrid();
             }
             catch (Exception ex)
             {
@@ -129,6 +122,7 @@ namespace WizOne.Beneficii
         {
             try
             {
+                Session["BeneficiiAprob_Grid"] = null;
                 IncarcaGrid();
             }
             catch (Exception ex)
@@ -145,7 +139,7 @@ namespace WizOne.Beneficii
                 cmbAngFiltru.Value = null;
                 cmbSesiuneFiltru.Value = null;
                 checkComboBoxStare.Value = null;
-
+                Session["BeneficiiAprob_Grid"] = null;
                 IncarcaGrid();
             }
             catch (Exception ex)
@@ -210,23 +204,28 @@ namespace WizOne.Beneficii
             try
             {
 
-                grDate.KeyFieldName = "IdAuto";                
-                dt = SelectGrid();
+                if (Session["BeneficiiAprob_Grid"] == null)
+                {
+                    dt = SelectGrid();
+                    grDate.DataSource = dt;
+                    grDate.KeyFieldName = "IdAuto";
+                    grDate.DataBind();
+                    Session["BeneficiiAprob_Grid"] = dt;
+                }
+                else
+                {
+                    grDate.KeyFieldName = "IdAuto";
 
+                    dt = Session["BeneficiiAprob_Grid"] as DataTable;
+                    grDate.DataSource = dt;
+                    grDate.DataBind();
+                }
 
-                grDate.DataSource = dt;
-                grDate.DataBind();
-                Session["BeneficiiAprob_Grid"] = dt;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-            finally
-            {
-                dt.Dispose();
-                dt = null;
             }
         }
 
@@ -340,7 +339,23 @@ namespace WizOne.Beneficii
         {
             try
             {
-              
+                if (e.VisibleIndex == -1) return;
+                if (e.VisibleIndex >= 0)
+                {
+                    DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
+                    if (values != null)
+                    {
+                        if (e.ButtonID == "btnArata")
+                        {
+                            if (Session["BenAprobare_HR"] != null && Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 1)
+                            {
+                                e.Visible = DefaultBoolean.False;
+
+                            }
+                        }                       
+
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -360,8 +375,8 @@ namespace WizOne.Beneficii
                 {
                     if (e.ButtonType == ColumnCommandButtonType.Edit)
                     {
-                        if (Session["BenAprobare_HR"] != null && Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 1)
-                            e.Visible = false;
+                        if (Session["BenAprobare_HR"] != null && Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 1)                        
+                            e.Visible = false;                        
                         else
                         {
                             int idStare = Convert.ToInt32(values.Row["IdStare"].ToString());
@@ -439,9 +454,9 @@ namespace WizOne.Beneficii
                     if (msg.Length <= 0)
                     {
                         if (tipMsg == 0)
-                            MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "");
+                            MessageBox.Show("Nu exista cereri valide", MessageBox.icoWarning, "");
                         else
-                            grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
+                            grDate.JSProperties["cpAlertMessage"] = "Nu exista cereri valide";
 
                     }
                     else
@@ -451,6 +466,7 @@ namespace WizOne.Beneficii
                         else
                             grDate.JSProperties["cpAlertMessage"] = msg;
                     }
+                    grDate.Selection.UnselectAll();
                     return;
                 }
 
@@ -614,7 +630,7 @@ namespace WizOne.Beneficii
                 strSql = @"select CAST (a.""Id"" AS INT) as ""Id"", a.""Denumire"", a.""DeLaData"", a.""LaData"", a.""Descriere""
                                 from ""Admin_Obiecte"" a
                                 inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
-                                where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY ""NumeCompus""";
+                                where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY a.""Denumire""";
 
 
             }
@@ -659,7 +675,7 @@ namespace WizOne.Beneficii
                 if (Convert.ToInt32(cmbSesiuneFiltru.Value ?? -99) != -99) filtru += " AND \"IdSesiune\" = " + Convert.ToInt32(cmbSesiuneFiltru.Value ?? -99);
                 if (checkComboBoxStare.Value != null) filtru += @" AND ""IdStare"" IN (" + DamiStari() + ")";
 
-                strSql = "SELECT * FROM Ben_Sesiuni WHERE 1=1 " + filtru ;     
+                strSql = "SELECT IdAuto, F10003, IdSesiune, IdBeneficiu, DataInceput, DataSfarsit, IdStare, DataInceputBen, DataSfarsitBen, Descriere, USER_NO, TIME FROM Ben_Sesiuni WHERE 1=1 " + filtru ;     
 
                 q = General.IncarcaDT(strSql, null);
             }

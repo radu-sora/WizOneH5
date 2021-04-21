@@ -104,9 +104,9 @@ namespace WizOne.Beneficii
         {
             try
             {
-                string sql = "SELECT  a.\"Denumire\", a.\"Id\" FROM "
-                    + " \"Ben_SetAngajatiDetail\" a "
-                    + "  GROUP BY  a.\"Denumire\", a.\"Id\" ORDER BY a.\"Denumire\" ";      
+                string sql = "SELECT DenSet AS \"Denumire\", IdSetAng AS \"Id\" FROM "
+                    + " \"Ben_SetAngajati\"  "
+                    + "  ORDER BY \"Denumire\" ";      
 
                 return General.IncarcaDT(sql, null);
             }
@@ -124,7 +124,7 @@ namespace WizOne.Beneficii
                 string sql =  @"select  CAST (a.""Id"" AS INT) as ""Id"", a.""Denumire""
                                 from ""Admin_Obiecte"" a
                                 inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
-                                where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY ""NumeCompus""";
+                                where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY a.""Denumire""";
 
                 return General.IncarcaDT(sql, null);
             }

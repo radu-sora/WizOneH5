@@ -70,8 +70,6 @@
                         <ClientSideEvents CustomButtonClick="function(s, e) { grDate_CustomButtonClick(s, e); }"  ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />           
                         <Columns>           
                             <dx:GridViewCommandColumn Width="50px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"  >       
-                            </dx:GridViewCommandColumn>    
-                            <dx:GridViewCommandColumn Width="100px" ButtonType="Image"  Caption="Document"  >
                                 <CustomButtons>
                                     <dx:GridViewCommandColumnCustomButton ID="btnDoc" Visibility="BrowsableRow">
                                         <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/view.png" />
@@ -95,6 +93,7 @@
 
 						    <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" Width="50px"  Visible="false" ShowInCustomizationForm="false"/>
                             <dx:GridViewDataTextColumn FieldName="IdCategorie" Name="IdCategorie" Caption="IdCategorie" Width="50px"  Visible="false" ShowInCustomizationForm="false"/>
+                             <dx:GridViewDataTextColumn FieldName="ValoareEstimata" Name="ValoareEstimata" Caption="ValoareEstimata" Width="50px"  Visible="false" ShowInCustomizationForm="false"/>
                             <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
                             <dx:GridViewDataDateColumn FieldName="TIME" Name="Time" Caption="Time" Visible="false" ShowInCustomizationForm="false" />
                         </Columns>
@@ -135,8 +134,8 @@
                                         </tr>
                                         <tr>
                                             <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtDen" runat="server" Width="250px" Value='<%# Bind("Denumire") %>' />
-                                            <td style="padding:10px !important;"><dx:ASPxDateEdit ID="deDeLaData" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DeLa") %>' /></td>
-                                            <td style="padding:10px !important;"><dx:ASPxDateEdit ID="deLaData" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("La") %>' /></td>
+                                            <td style="padding:10px !important;"><dx:ASPxDateEdit ID="deDeLaData" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DeLaData") %>' /></td>
+                                            <td style="padding:10px !important;"><dx:ASPxDateEdit ID="deLaData" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("LaData") %>' /></td>
                                                                                        
                                         </tr>
                                         <tr>

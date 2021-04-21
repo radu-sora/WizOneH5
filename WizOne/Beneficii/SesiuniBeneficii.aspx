@@ -21,14 +21,14 @@
         }  
 
         function GoToAng(Value) {
-            strUrl = getAbsoluteUrl + "Beneficii/relSesiuneBen.aspx?tip=1&qwe=" + Value;
+            strUrl = getAbsoluteUrl + "Beneficii/relSesiuniBen.aspx?tip=1&qwe=" + Value;
             popGen.SetHeaderText("Grupuri angajati");
             popGen.SetContentUrl(strUrl);
             popGen.Show();
         } 
 
         function GoToBen(Value) {
-            strUrl = getAbsoluteUrl + "Beneficii/relSesiuneBen.aspx?tip=2&qwe=" + Value;
+            strUrl = getAbsoluteUrl + "Beneficii/relSesiuniBen.aspx?tip=2&qwe=" + Value;
             popGen.SetHeaderText("Beneficii");
             popGen.SetContentUrl(strUrl);
             popGen.Show();
@@ -122,7 +122,9 @@
                     <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                     <Columns>
                         <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true"  SelectAllCheckboxMode="AllPages" />
-
+                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="1" ButtonType="Image" Caption=" "  Name="butoaneGrid"  >       
+                          
+                        </dx:GridViewCommandColumn>  
                         <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Denumire"   Width="200px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                          </dx:GridViewDataTextColumn>

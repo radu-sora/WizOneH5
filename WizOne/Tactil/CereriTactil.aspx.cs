@@ -139,7 +139,7 @@ namespace WizOne.Tactil
 
 
                 cmbAbs.DataSource = dtAbs;
-                if (dtAbs != null && dtAbs.Rows.Count > 0)
+                if (dtAbs != null && dtAbs.Rows.Count > 0 && !IsPostBack)
                     cmbAbs.Value = Convert.ToInt32(dtAbs.Rows[0]["Id"].ToString());
              
                 DataTable dtZile = General.IncarcaDT("SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + General.Nz(General.VarSession("User_Marca"), -99).ToString() + " AND \"An\" = " + DateTime.Now.Year, null);
@@ -1046,14 +1046,16 @@ namespace WizOne.Tactil
                     if (dtCtr != null)
                     {
                         int esteSL = 0;
-                        int esteSD = 0;
+                        int esteS = 0;
+                        int esteD = 0;
                         int esteZL = 1;
 
                         esteSL = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM HOLIDAYS WHERE DAY =@1", new object[] { txtDataInc.Date }) ?? 0);
-                        if (txtDataInc.Date.DayOfWeek == DayOfWeek.Saturday || txtDataInc.Date.DayOfWeek == DayOfWeek.Sunday) esteSD = 1;
-                        if (esteSL == 1 || esteSD == 1) esteZL = 0;
+                        if (txtDataInc.Date.DayOfWeek == DayOfWeek.Saturday) esteS = 1;
+                        if (txtDataInc.Date.DayOfWeek == DayOfWeek.Sunday) esteD = 1;
+                        if (esteSL == 1 || esteS == 1 || esteD == 1) esteZL = 0;
 
-                        if ((esteSL != 0 && Convert.ToInt32(General.Nz(dtCtr["SL"], 0)) == 1) || (esteSD != 0 && Convert.ToInt32(General.Nz(dtCtr["SD"], 0)) == 1) || (esteZL != 0 && Convert.ToInt32(General.Nz(dtCtr["ZL"], 0)) == 1))
+                        if ((esteSL != 0 && Convert.ToInt32(General.Nz(dtCtr["SL"], 0)) == 1) || (esteS != 0 && Convert.ToInt32(General.Nz(dtCtr["S"], 0)) == 1) || (esteD != 0 && Convert.ToInt32(General.Nz(dtCtr["D"], 0)) == 1) || (esteZL != 0 && Convert.ToInt32(General.Nz(dtCtr["ZL"], 0)) == 1))
                         {
                             //are voie sa ponteze aceasta absenta
                         }

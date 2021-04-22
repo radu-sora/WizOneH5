@@ -1404,60 +1404,61 @@ namespace WizOne.Module
             return id;
         }
 
-        //Radu 01.04.2021
-        public static string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrOre, int tip)
-        {
-            //tip
-            //tip - 1  vine din cererei - unde trebuie sa luam in caclul si valorile care deja exista in pontaj
-            //tip - 2  vine din pontaj  - valorile sunt deja in pontaj
+        //Florin 2021.04.22 - #903 - dezactivat - aceasta verificare se face cu ajutorul unei validari
+        ////Radu 01.04.2021
+        //public static string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrOre, int tip)
+        //{
+        //    //tip
+        //    //tip - 1  vine din cererei - unde trebuie sa luam in caclul si valorile care deja exista in pontaj
+        //    //tip - 2  vine din pontaj  - valorile sunt deja in pontaj
 
 
-            string msg = "";
+        //    string msg = "";
 
-            try
-            {               
-                //calculam norma
-                string strSql = "SELECT CAST(Norma as int) FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
-                //if (Constante.tipBD == 2) strSql = "SELECT \"DamiNorma\"(" + f10003 + ", " + General.ToDataUniv(dtInc, 2) + ") FROM DUAL";
-                DataTable dtRap = General.IncarcaDT(strSql, null);
-                int norma = dtRap == null || dtRap.Rows.Count <= 0 ? 0 : Convert.ToInt32(dtRap.Rows[0][0].ToString());
+        //    try
+        //    {               
+        //        //calculam norma
+        //        string strSql = "SELECT CAST(Norma as int) FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
+        //        //if (Constante.tipBD == 2) strSql = "SELECT \"DamiNorma\"(" + f10003 + ", " + General.ToDataUniv(dtInc, 2) + ") FROM DUAL";
+        //        DataTable dtRap = General.IncarcaDT(strSql, null);
+        //        int norma = dtRap == null || dtRap.Rows.Count <= 0 ? 0 : Convert.ToInt32(dtRap.Rows[0][0].ToString());
 
-                int sumaPtj = 0;
-                if (tip == 1)
-                {
-                    //absentele din pontaj care intra in suma de ore
-                    DataTable dtVal = General.IncarcaDT("SELECT \"OreInVal\" FROM \"Ptj_tblAbsente\" WHERE COALESCE(\"VerificareNrMaxOre\",0) = 1", null);
-                    string val = "";
-                    for (int i = 0; i < dtVal.Rows.Count; i++)
-                    {
-                        val += "+COALESCE(\"" + (dtVal.Rows[i][0] == DBNull.Value ? "0" : dtVal.Rows[i][0].ToString()) + "\",0)";
-                    }
+        //        int sumaPtj = 0;
+        //        if (tip == 1)
+        //        {
+        //            //absentele din pontaj care intra in suma de ore
+        //            DataTable dtVal = General.IncarcaDT("SELECT \"OreInVal\" FROM \"Ptj_tblAbsente\" WHERE COALESCE(\"VerificareNrMaxOre\",0) = 1", null);
+        //            string val = "";
+        //            for (int i = 0; i < dtVal.Rows.Count; i++)
+        //            {
+        //                val += "+COALESCE(\"" + (dtVal.Rows[i][0] == DBNull.Value ? "0" : dtVal.Rows[i][0].ToString()) + "\",0)";
+        //            }
 
-                    if (val != "")
-                    {
-                        DataTable entSumPtj = General.IncarcaDT("SELECT COALESCE(SUM( " + val.Substring(1) + " ),0) FROM \"Ptj_Intrari\" WHERE F10003=" + f10003 + " AND \"Ziua\"=" + General.ToDataUniv(dtInc), null);
-                        sumaPtj = Convert.ToInt32(entSumPtj.Rows[0][0].ToString());
-                    }
-                }
+        //            if (val != "")
+        //            {
+        //                DataTable entSumPtj = General.IncarcaDT("SELECT COALESCE(SUM( " + val.Substring(1) + " ),0) FROM \"Ptj_Intrari\" WHERE F10003=" + f10003 + " AND \"Ziua\"=" + General.ToDataUniv(dtInc), null);
+        //                sumaPtj = Convert.ToInt32(entSumPtj.Rows[0][0].ToString());
+        //            }
+        //        }
 
-                //suma de ore din Cereri
-                DataTable entSumCere = General.IncarcaDT("SELECT COALESCE(SUM(COALESCE(\"NrOre\",0)),0) FROM \"Ptj_Cereri\" WHERE F10003=" + f10003 + " AND \"DataInceput\" = " + General.ToDataUniv(dtInc) + " AND \"IdStare\" IN (1,2)", null);
-                int sumaCere = Convert.ToInt32(Convert.ToDecimal(entSumCere.Rows[0][0].ToString()));
+        //        //suma de ore din Cereri
+        //        DataTable entSumCere = General.IncarcaDT("SELECT COALESCE(SUM(COALESCE(\"NrOre\",0)),0) FROM \"Ptj_Cereri\" WHERE F10003=" + f10003 + " AND \"DataInceput\" = " + General.ToDataUniv(dtInc) + " AND \"IdStare\" IN (1,2)", null);
+        //        int sumaCere = Convert.ToInt32(Convert.ToDecimal(entSumCere.Rows[0][0].ToString()));
 
-                if (((sumaCere * 60) + sumaPtj + (nrOre * 60)) > (norma * 60))
-                {
-                    msg = "Totalul de ore depaseste norma pe aceasta zi";
-                    return msg;
-                }              
+        //        if (((sumaCere * 60) + sumaPtj + (nrOre * 60)) > (norma * 60))
+        //        {
+        //            msg = "Totalul de ore depaseste norma pe aceasta zi";
+        //            return msg;
+        //        }              
 
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
-            }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
 
-            return msg;
-        }
+        //    return msg;
+        //}
 
         //internal static int NextId(string tabela, int nrInreg = 1)
         //{

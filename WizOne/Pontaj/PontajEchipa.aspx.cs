@@ -1900,13 +1900,14 @@ namespace WizOne.Pontaj
                         if (General.Nz(dr["VerificareNrMaxOre"],0).ToString() == "1") nrMin += valCalc;
                     }
 
-                    //Radu 01.04.2021
-                    string mesaj = Dami.VerificareDepasireNorma(f10003, ziua, valTotal, 2);
-                    if (mesaj != "")
-                    {
-                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
-                        return;
-                    }
+                    //Florin 2021.04.22 - #903 - dezactivat - aceasta verificare se face cu ajutorul unei validari
+                    ////Radu 01.04.2021
+                    //string mesaj = Dami.VerificareDepasireNorma(f10003, ziua, valTotal, 2);
+                    //if (mesaj != "")
+                    //{
+                    //    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
+                    //    return;
+                    //}
 
                     if (cmp != "")
                     {

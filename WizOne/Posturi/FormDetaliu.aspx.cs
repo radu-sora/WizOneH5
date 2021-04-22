@@ -562,7 +562,12 @@ namespace WizOne.Posturi
                             else
                             {
                                 if (ctl.GetType() == typeof(ASPxDateEdit))
-                                    ctl.Value = dt.Rows[0][dt.Columns[i].ColumnName] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(dt.Rows[0][dt.Columns[i].ColumnName].ToString());
+                                {
+                                    if (dt.Columns[i].ColumnName == "DataSfarsit")
+                                        ctl.Value = dt.Rows[0][dt.Columns[i].ColumnName] == DBNull.Value ? new DateTime(2100, 1, 1) : Convert.ToDateTime(dt.Rows[0][dt.Columns[i].ColumnName].ToString());
+                                    else
+                                        ctl.Value = dt.Rows[0][dt.Columns[i].ColumnName] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(dt.Rows[0][dt.Columns[i].ColumnName].ToString());
+                                }
                                 if (ctl.GetType() == typeof(ASPxCheckBox))
                                     ctl.Checked = dt.Rows[0][dt.Columns[i].ColumnName] == DBNull.Value ? false : Convert.ToInt32(dt.Rows[0][dt.Columns[i].ColumnName].ToString()) == 1 ? true : false;
                                 if (ctl.GetType() == typeof(ASPxTextBox) || ctl.GetType() == typeof(ASPxComboBox))

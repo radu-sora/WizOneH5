@@ -153,7 +153,19 @@
                     }
                 }
                 else if (e.command === 'REFRESH|') {
-                    scheduler.GotoToday();
+                    var intervals = scheduler.GetVisibleIntervals();
+
+                    if (intervals.length) {
+                        var start = intervals[0].GetStart();
+                        var end = intervals[intervals.length - 1].GetEnd();
+                        var current = new Date();
+
+                        if (current.getTime() < start.getTime() || current.getTime() > end.getTime()) {
+                            setTimeout(function () {
+                                scheduler.GotoToday();
+                            }, 500);
+                        }                        
+                    }
                 }                
             }
         };

@@ -23,11 +23,6 @@
         }
 
 
-        function CloseDeferedWindow() {
-            popUpDivide.Hide();
-        }
-
-
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
                 swal({

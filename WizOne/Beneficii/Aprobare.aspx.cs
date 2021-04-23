@@ -103,6 +103,19 @@ namespace WizOne.Beneficii
                 cmbAngFiltru.DataSource = dtAng;
                 cmbAngFiltru.DataBind();
 
+                //if (IsPostBack)
+                //{
+                //    DataTable dt = Session["BeneficiiAprob_Grid"] as DataTable;
+                //    grDate.KeyFieldName = "IdAuto";
+                //    grDate.DataSource = dt;
+                //    grDate.DataBind();
+
+                //}
+                //else
+                //    IncarcaGrid();
+
+
+
                 if (!IsPostBack)
                     Session["BeneficiiAprob_Grid"] = null;
 
@@ -155,13 +168,15 @@ namespace WizOne.Beneficii
             {
                 DataTable dt = Session["BeneficiiAprob_Grid"] as DataTable;
 
-                if (dt != null)
-                {
-                    for (int i = 0; i < dt.Rows.Count; i++)
-                        General.ExecutaNonQuery("UPDATE \"Ben_Sesiuni\" SET \"Descriere\" = '" + dt.Rows[i]["Descriere"].ToString() + "', IdBeneficiu = " + dt.Rows[i]["IdBeneficiu"].ToString() 
-                            + ", IdStare = 2, DataInceputBen = " + dt.Rows[i]["DataInceputBen"].ToString() + ", DataSfarsitBen = " + dt.Rows[i]["DataSfarsitBen"].ToString() + " WHERE \"IdSesiune\" = " + dt.Rows[i]["IdSesiune"].ToString() + " AND F10003 = " + dt.Rows[i]["F10003"].ToString(), null);
-                    IncarcaGrid();
-                }
+                //if (dt != null)
+                //{
+                //    for (int i = 0; i < dt.Rows.Count; i++)
+                //        General.ExecutaNonQuery("UPDATE \"Ben_Sesiuni\" SET \"Descriere\" = '" + dt.Rows[i]["Descriere"].ToString() + "', IdBeneficiu = " + dt.Rows[i]["IdBeneficiu"].ToString() 
+                //            + ", IdStare = 2, DataInceputBen = " + General.ToDataUniv(Convert.ToDateTime(dt.Rows[i]["DataInceputBen"])) + ", DataSfarsitBen = " + General.ToDataUniv(Convert.ToDateTime(dt.Rows[i]["DataSfarsitBen"])) + " WHERE \"IdSesiune\" = " + dt.Rows[i]["IdSesiune"].ToString() + " AND F10003 = " + dt.Rows[i]["F10003"].ToString(), null);
+                //    IncarcaGrid();
+                //}
+                General.SalveazaDate(dt, "Ben_Sesiuni");
+                MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes!"), MessageBox.icoSuccess);
             }
             catch (Exception ex)
             {
@@ -203,6 +218,12 @@ namespace WizOne.Beneficii
 
             try
             {
+
+                //DataTable dt = SelectGrid();
+                //grDate.KeyFieldName = "IdAuto";
+                //grDate.DataSource = dt;
+                //grDate.DataBind();
+                //Session["BeneficiiAprob_Grid"] = dt;
 
                 if (Session["BeneficiiAprob_Grid"] == null)
                 {
@@ -296,17 +317,23 @@ namespace WizOne.Beneficii
                     if (!col.AutoIncrement && !col.ReadOnly && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
                     {
                         var edc = e.NewValues[col.ColumnName];
-                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
-                        DataRow dr = dtBen.Select("Id = " + row["IdBeneficiu"].ToString()).FirstOrDefault();
-                        if (col.ColumnName == "Descriere")   
-                            row[col.ColumnName] = dr["Descriere"];                        
-                        if (col.ColumnName == "DataInceputBen")
-                            row[col.ColumnName] = dr["DeLaData"];
-                        if (col.ColumnName == "DataSfarsitBen")
-                            row[col.ColumnName] = dr["LaData"];
+                        if (col.ColumnName != "Descriere" && col.ColumnName != "DataInceputBen" && col.ColumnName != "DataSfarsitBen")
+                            row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;                       
+
+                        if (col.ColumnName == "IdBeneficiu" && e.NewValues[col.ColumnName] != null)
+                        {
+                            DataRow dr = dtBen.Select("Id = " + e.NewValues[col.ColumnName].ToString()).FirstOrDefault();
+                            row["Descriere"] = dr["Descriere"]; 
+                            row["DataInceputBen"] = dr["DeLaData"]; 
+                            row["DataSfarsitBen"] = dr["LaData"];
+                        }    
+
+
                     }
 
                 }
+
+                row["IdStare"] = 2;
 
                 e.Cancel = true;
                 grDate.CancelEdit();
@@ -339,23 +366,23 @@ namespace WizOne.Beneficii
         {
             try
             {
-                if (e.VisibleIndex == -1) return;
-                if (e.VisibleIndex >= 0)
-                {
-                    DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
-                    if (values != null)
-                    {
-                        if (e.ButtonID == "btnArata")
-                        {
-                            if (Session["BenAprobare_HR"] != null && Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 1)
-                            {
-                                e.Visible = DefaultBoolean.False;
+                //if (e.VisibleIndex == -1) return;
+                //if (e.VisibleIndex >= 0)
+                //{
+                //    DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
+                //    if (values != null)
+                //    {
+                //        if (e.ButtonID == "btnArata")
+                //        {
+                //            if (Session["BenAprobare_HR"] != null && Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 1)
+                //            {
+                //                e.Visible = DefaultBoolean.False;
 
-                            }
-                        }                       
+                //            }
+                //        }                       
 
-                    }
-                }
+                //    }
+                //}
             }
             catch (Exception ex)
             {
@@ -368,23 +395,23 @@ namespace WizOne.Beneficii
         {
             try
             {
-                if (e.VisibleIndex == -1) return;
+                //if (e.VisibleIndex == -1) return;
 
-                DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
-                if (values != null)
-                {
-                    if (e.ButtonType == ColumnCommandButtonType.Edit)
-                    {
-                        if (Session["BenAprobare_HR"] != null && Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 1)                        
-                            e.Visible = false;                        
-                        else
-                        {
-                            int idStare = Convert.ToInt32(values.Row["IdStare"].ToString());
-                            if (idStare > 2)
-                                e.Visible = false;
-                        }
-                }
-                }
+                //DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
+                //if (values != null)
+                //{
+                //    if (e.ButtonType == ColumnCommandButtonType.Edit)
+                //    {
+                //        if (Session["BenAprobare_HR"] != null && Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 1)                        
+                //            e.Visible = false;                        
+                //        else
+                //        {
+                //            int idStare = Convert.ToInt32(values.Row["IdStare"].ToString());
+                //            if (idStare > 2)
+                //                e.Visible = false;
+                //        }
+                //    }
+                //}
             }
             catch (Exception ex)
             {
@@ -477,6 +504,7 @@ namespace WizOne.Beneficii
                 else
                     grDate.JSProperties["cpAlertMessage"] = msg;
 
+                Session["BeneficiiAprob_Grid"] = null;
                 IncarcaGrid();
 
                 grDate.Selection.UnselectAll();

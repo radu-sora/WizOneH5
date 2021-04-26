@@ -1755,8 +1755,23 @@ namespace WizOne.Personal
 
                 //string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, vechime, esteNou);
                 //Radu 21.04.2020
+                //Radu 21.04.2021 - data se citeste cf. param.
+                int param = Convert.ToInt32(Dami.ValoareParam("ModCalculZileCOCuveniteDataReferinta", "1"));
+                string dtCalcul = dtSf;
+                switch (param)
+                {
+                    case 1:
+                        dtCalcul = dtSf;
+                        break;
+                    case 2:
+                        dtCalcul = dtInc;
+                        break;
+                    case 3:
+                        dtCalcul = General.CurrentDate();
+                        break;
+                }
 
-                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date,'" + an + "-" + luna.ToString().PadLeft(2, '0') + "-" + zi.ToString().PadLeft(2, '0') + "'), 1, " + f10072 + ")";
+                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date," + dtCalcul + "), 1, " + f10072 + ")";
                 DataTable dtCO = General.IncarcaDT(strSql, null);
 
                 //DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });

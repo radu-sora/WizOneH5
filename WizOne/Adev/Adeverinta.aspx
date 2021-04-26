@@ -133,7 +133,7 @@
                     <tr id="bulk1" runat="server">
                         <td>
                             <div style="float:left; padding-right:15px;  padding-bottom:10px;">
-                                <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px">Roluri</label>
+                                <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px">Supervizor</label>
                                 <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" >
                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlLoading.Show(); pnlCtl.PerformCallback('cmbRol'); }" />
                                 </dx:ASPxComboBox>
@@ -168,11 +168,7 @@
                                 <dx:ASPxComboBox ID="cmbSec" ClientInstanceName="cmbSec" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSectie" TextField="Sectie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSec'); }" />
                                 </dx:ASPxComboBox>
-                            </div>
-                            <div style="float:left; padding-right:15px;">
-                                <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:120px;">Categorie</label>
-                                <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="150px" ValueField="F72402" TextField="F72404" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
-                            </div>
+                            </div>         
                         </td>
                     </tr>
                     <tr id="bulk2" runat="server">
@@ -200,15 +196,23 @@
                             <div style="float:left; padding-right:15px;">
                                 <label id="lblCtr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Contract</label>
                                 <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" />
-                            </div>   
-                            <div style="float:left; padding-right:15px;">
-                                <label id="lblDataPlec" runat="server" style="display:inline-block; float:left; padding-right:15px; width:120px;">Data plecarii</label>
-                                <dx:ASPxDateEdit ID="deDataPlec" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
-                                    <CalendarProperties FirstDayOfWeek="Monday" />
-                                </dx:ASPxDateEdit>
-                            </div>                               
+                            </div>                                
                         </td> 
                         </tr>
+                        <tr id="bulk3" runat="server">
+                            <td>
+                                 <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                    <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Categorie</label>
+                                    <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="150px" ValueField="F72402" TextField="F72404" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
+                                </div>
+                                <div style="float:left; padding-right:15px;">
+                                    <label id="lblDataPlec" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Data plecarii</label>
+                                    <dx:ASPxDateEdit ID="deDataPlec" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                                        <CalendarProperties FirstDayOfWeek="Monday" />
+                                    </dx:ASPxDateEdit>
+                                </div> 
+                            </td>
+                         </tr>
                         <tr>
                             <td>
                                 <div style="float:left; padding-right:15px; padding-bottom:10px;">

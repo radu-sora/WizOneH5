@@ -490,7 +490,7 @@ namespace WizOne
                                         if (IsMobileDevice)                                            
                                             Response.Redirect(Dami.ValoareParam("DHPM", "~/Pagini/Calendar"), false);                                        
                                         else
-                                            Response.Redirect("~/Pagini/MainPage.aspx", false);
+                                            Response.Redirect("~/Pagini/MainPage", false);                                            
                                     }
                                 }
                             }

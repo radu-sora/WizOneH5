@@ -547,7 +547,7 @@ namespace WizOne.Pontaj
 
                 Session["PrintParametrii"] = first + "#$" + dt.Year + "#$" + dt.Month + "#$" + dt.Day + "#$" + tip;
 
-                Response.Redirect("~/Reports/Imprima.aspx?tip=" + tip, false);
+                Response.Redirect("~/Reports/Imprima?tip=" + tip, false);
             }
             catch (Exception ex)
             {
@@ -560,7 +560,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                Response.Redirect("~/Pontaj/PontajEchipa.aspx?tip=1", false);
+                Response.Redirect("~/Pontaj/PontajEchipa?tip=1", false);
             }
             catch (Exception ex)
             {
@@ -573,7 +573,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                Response.Redirect("~/Absente/Lista.aspx", false);
+                Response.Redirect("~/Absente/Lista", false);
             }
             catch (Exception ex)
             {

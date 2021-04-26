@@ -313,9 +313,9 @@ namespace WizOne.Eval
                                 #endregion
 
                                 if (Page.IsCallback)
-                                    ASPxWebControl.RedirectOnCallback("~/Eval/EvalDetaliu.aspx");
+                                    ASPxWebControl.RedirectOnCallback("~/Eval/EvalDetaliu");
                                 else
-                                    Response.Redirect("~/Eval/EvalDetaliu.aspx", false);
+                                    Response.Redirect("~/Eval/EvalDetaliu", false);
 
                                 #region OLD
                                 //string url = "~/Eval/EvalDetaliu.aspx";

@@ -156,7 +156,7 @@ namespace WizOne.Posturi
                     });
 
 
-                Response.Redirect("~/Posturi/FormLista.aspx", false);
+                Response.Redirect("~/Posturi/FormLista", false);
 
             }
             catch (Exception ex)

@@ -495,7 +495,7 @@ namespace WizOne.Avs
         {
             try
             {
-                Response.Redirect("~/Avs/Lista.aspx", false);
+                Response.Redirect("~/Avs/Lista", false);
             }
             catch (Exception ex)
             {

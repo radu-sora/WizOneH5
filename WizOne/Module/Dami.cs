@@ -471,12 +471,12 @@ namespace WizOne.Module
                 if (Constante.esteTactil)
                 {
                     if (HttpContext.Current.Session["SecApp"].ToString() != "OK_Tactil")
-                        HttpContext.Current.Response.Redirect("~/Default.aspx");
+                        HttpContext.Current.Response.Redirect("~/Default");
                 }
                 else
                 {
                     if (HttpContext.Current.Session["SecApp"].ToString() != "OK")
-                        HttpContext.Current.Response.Redirect("~/Default.aspx");
+                        HttpContext.Current.Response.Redirect("~/Default");
                 }
             }
             catch (Exception ex)
@@ -494,11 +494,11 @@ namespace WizOne.Module
                     //Radu 24.04.2020
                     string tip = Dami.ValoareParam("TipInfoChiosc", "0");
                     if (tip == "0")
-                        HttpContext.Current.Response.Redirect("~/DefaultTactil.aspx");
+                        HttpContext.Current.Response.Redirect("~/DefaultTactil");
                     else if (tip == "1" || tip == "2")
-                        HttpContext.Current.Response.Redirect("~/DefaultTactilFaraCard.aspx");
+                        HttpContext.Current.Response.Redirect("~/DefaultTactilFaraCard");
                     else if (tip == "3")
-                        HttpContext.Current.Response.Redirect("~/DefaultTactilExtra.aspx");
+                        HttpContext.Current.Response.Redirect("~/DefaultTactilExtra");
 
                 }
             }
@@ -513,7 +513,7 @@ namespace WizOne.Module
             try
             {
                 if (General.VarSession("EsteAdmin").ToString() == "0")
-                    HttpContext.Current.Response.Redirect("Default.aspx");
+                    HttpContext.Current.Response.Redirect("Default");
             }
             catch (Exception ex)
             {

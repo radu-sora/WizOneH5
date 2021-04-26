@@ -327,7 +327,7 @@ namespace WizOne.Personal
                     {
                         case "btnEdit":
                             {
-                                string url = "~/Personal/DateAngajat.aspx";                                
+                                string url = "~/Personal/DateAngajat";                                
                                 if (url != "")
                                 {
                                     Session["Marca"] = arr[1];

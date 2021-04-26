@@ -294,7 +294,7 @@ namespace WizOne.Tactil
         {
             try
             {
-                Response.Redirect("../Tactil/Main.aspx", false);       
+                Response.Redirect("../Tactil/Main", false);       
             }
             catch (Exception ex)
             {
@@ -310,11 +310,11 @@ namespace WizOne.Tactil
                 //Radu 24.04.2020
                 string tip = Dami.ValoareParam("TipInfoChiosc", "0");
                 if (tip == "0")
-                    Response.Redirect("../DefaultTactil.aspx", false);
+                    Response.Redirect("../DefaultTactil", false);
                 else if (tip == "1" || tip == "2")
-                    Response.Redirect("../DefaultTactilFaraCard.aspx", false);
+                    Response.Redirect("../DefaultTactilFaraCard", false);
                 else if (tip == "3")
-                    Response.Redirect("../DefaultTactilExtra.aspx", false);
+                    Response.Redirect("../DefaultTactilExtra", false);
             }
             catch (Exception ex)
             {
@@ -1387,9 +1387,9 @@ namespace WizOne.Tactil
                 Session["Absente_Cereri_Date_Aditionale"] = null;
                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
 
-                // ASPxPanel.RedirectOnCallback("../Tactil/Main.aspx");
-                //Response.Redirect("../Tactil/Main.aspx", false);
-                Response.RedirectLocation = System.Web.VirtualPathUtility.ToAbsolute("~/Tactil/Main.aspx");
+                // ASPxPanel.RedirectOnCallback("../Tactil/Main");
+                //Response.Redirect("../Tactil/Main", false);
+                Response.RedirectLocation = System.Web.VirtualPathUtility.ToAbsolute("~/Tactil/Main");
 
 
             }

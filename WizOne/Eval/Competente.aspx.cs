@@ -85,7 +85,7 @@ namespace WizOne.Eval
             try
             {
                 HttpContext.Current.Session["Sablon_Tabela"] = "Eval_CategCompetente";
-                Response.Redirect("~/Pagini/SablonLista.aspx", false);
+                Response.Redirect("~/Pagini/SablonLista", false);
             }
             catch (Exception ex)
             {
@@ -143,7 +143,7 @@ namespace WizOne.Eval
                 General.SalveazaDate(dt, "Eval_CategCompetenteDet");
 
                 HttpContext.Current.Session["Sablon_Tabela"] = "Eval_CategCompetente";
-                Response.Redirect("~/Pagini/SablonLista.aspx", false);
+                Response.Redirect("~/Pagini/SablonLista", false);
             }
             catch (Exception ex)
             {

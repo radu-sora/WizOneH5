@@ -298,7 +298,7 @@ namespace WizOne.Posturi
                             string descPost = (dr[0]["DescPost"] == DBNull.Value ? "" : dr[0]["DescPost"].ToString());
                             DateTime dtVigoare = dr[0]["DataInceput"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(dr[0]["DataInceput"].ToString());
 
-                            string url = "~/Posturi/FormDetaliu.aspx";
+                            string url = "~/Posturi/FormDetaliu";
                             Session["FormDetaliu_Id"] = id;
                             Session["FormDetaliu_IdFormular"] = idFormular;                            
                             Session["FormDetaliu_IdStare"] = idStare;                   
@@ -1125,7 +1125,7 @@ namespace WizOne.Posturi
                         return;
                     }            
 
-                    string url = "~/Posturi/FormDetaliu.aspx";
+                    string url = "~/Posturi/FormDetaliu";
                     Session["FormDetaliu_Id"] = id;
                     Session["FormDetaliu_IdFormular"] = idFrm;
                     Session["FormDetaliu_IdStare"] = 0;

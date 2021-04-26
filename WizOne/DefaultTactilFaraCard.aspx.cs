@@ -226,7 +226,7 @@ namespace WizOne
                         if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
                             Session["TimeOutSecunde"] = Convert.ToInt32(dt.Rows[0][0].ToString());
                         //Response.Redirect("~/Tactil/Main.aspx", false);
-                        Response.RedirectLocation = System.Web.VirtualPathUtility.ToAbsolute("~/Tactil/Main.aspx");
+                        Response.RedirectLocation = System.Web.VirtualPathUtility.ToAbsolute("~/Tactil/Main");
                     }
                     else
                     {

@@ -5171,7 +5171,7 @@ namespace WizOne.Eval
 
                     Session["PrintParametrii"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) + ";" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) + ";" + Session["UserId"] + ";Super" + (Session["Eval_ActiveTab"] ?? "1").ToString() + ";0";
                     Session["PaginaWeb"] = "Eval/EvalDetaliu.aspx";
-                    Response.Redirect("~/Reports/Imprima.aspx", true);
+                    Response.Redirect("~/Reports/Imprima", true);
                 }
             }
             catch (Exception ex)
@@ -5238,7 +5238,7 @@ namespace WizOne.Eval
 				if (msg.Length > 0)                    
 					General.CreazaLog(msg);   
 				
-                string url = "~/Eval/EvalLista.aspx?q=56";
+                string url = "~/Eval/EvalLista?q=56";
                 if (Page.IsCallback)
                     ASPxWebControl.RedirectOnCallback(url);
                 else

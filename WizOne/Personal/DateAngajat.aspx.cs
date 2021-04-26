@@ -830,7 +830,7 @@ namespace WizOne.Personal
                 GolireVariabile();
                 //Florin 2018.11.22
                 //trimitem la lista de angajati        
-                Response.Redirect("~/Personal/Lista.aspx", false);
+                Response.Redirect("~/Personal/Lista", false);
             }
             catch (Exception ex)
             {

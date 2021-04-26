@@ -176,7 +176,7 @@ namespace WizOne.CereriDiverse
                 Session["grDate_Filtru"] = "CereriDiverse.Lista;" + grDate.FilterExpression;
                 Session["Sablon_CheiePrimara"] = -99;
                 Session["Sablon_TipActiune"] = "New";
-                Response.Redirect("~/CereriDiverse/Cereri.aspx", false);
+                Response.Redirect("~/CereriDiverse/Cereri", false);
             }
             catch (Exception ex)
             {

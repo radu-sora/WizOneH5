@@ -382,7 +382,7 @@ namespace WizOne.Pontaj
 						ELSE ValStr END AS ValStr");
                 Session["PrintDocument"] = "PontajDinamic";
                 Session["PrintParametrii"] = req + struc;
-                Response.Redirect("~/Reports/Imprima.aspx?tip=30", false);
+                Response.Redirect("~/Reports/Imprima?tip=30", false);
             }
             catch (Exception ex)
             {

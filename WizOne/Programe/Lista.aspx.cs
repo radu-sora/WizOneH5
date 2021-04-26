@@ -84,7 +84,7 @@ namespace WizOne.Programe
                     {
                         case "btnEdit":
                             {
-                                string url = "~/Programe/Detalii.aspx";
+                                string url = "~/Programe/Detalii";
                                 if (url != "")
                                 {
                                     Session["InformatiaCurenta"] = null;
@@ -159,7 +159,7 @@ namespace WizOne.Programe
         {
             try
             {
-                string url = "~/Programe/Detalii.aspx";
+                string url = "~/Programe/Detalii";
                 if (url != "")
                 {
                     Session["IdProgram"] = -99;

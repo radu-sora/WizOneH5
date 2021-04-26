@@ -265,7 +265,7 @@ namespace WizOne.Organigrama
                 if (Page.IsCallback)
                     ASPxWebControl.RedirectOnCallback("~/Organigrama/Lista.aspx");
                 else
-                    Response.Redirect("~/Organigrama/Lista.aspx", false);
+                    Response.Redirect("~/Organigrama/Lista", false);
             }
             catch (Exception ex)
             {

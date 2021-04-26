@@ -17546,8 +17546,16 @@ GO
 
 
 insert into [F800_ADEVERINTE_CONFIG] (nrcrt, ETICHETA, VALOARE) values (84,'ADI', '22:00 - 05:00')
-
+GO
 insert into [F800_ADEVERINTE_CONFIG] (nrcrt, ETICHETA, VALOARE) values (85, 'ADV', '31/03/2021')
+GO
+
+
+----  2.2.135  ----
+
+
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 73, 'Nota Competente per categorie', 0)
+GO
 
 
 ----  2.2.135.01  ----

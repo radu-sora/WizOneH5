@@ -17534,6 +17534,7 @@ GO
 
 ----  2.2.134.01  ----
 
+
 CREATE NONCLUSTERED INDEX idx_F910
 ON [dbo].[F9101] ([F91003])
 INCLUDE ([F910958],[F910959],[YEAR],[MONTH])
@@ -17544,7 +17545,14 @@ ON [dbo].[F910] ([F91003])
 INCLUDE ([F91022],[F91053])
 GO
 
-
 insert into [F800_ADEVERINTE_CONFIG] (nrcrt, ETICHETA, VALOARE) values (84,'ADI', '22:00 - 05:00')
-
+GO
 insert into [F800_ADEVERINTE_CONFIG] (nrcrt, ETICHETA, VALOARE) values (85, 'ADV', '31/03/2021')
+GO
+
+
+----  2.2.135  ----
+
+
+INSERT INTO Eval_tblTipCamp(IdCategorie, Id, Denumire, Preluare) VALUES(1, 73, 'Nota Competente per categorie', 0)
+GO

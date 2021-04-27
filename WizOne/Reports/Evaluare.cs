@@ -380,7 +380,9 @@ namespace WizOne.Reports
                                         {
                                             decimal nota = Convert.ToDecimal(DaMiRaspuns(dtRasp.Select("Id = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0"))[0], super));
                                             string desc = "";
-                                            if (Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) == (int)IdClienti.Clienti.Alka)
+                                            if (Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) == (int)IdClienti.Clienti.Alka
+                                                || Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) == (int)IdClienti.Clienti.ALKA_CO
+                                                | Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) == (int)IdClienti.Clienti.ALKA_Trading)
                                             {
                                                 if (1 <= nota && nota <= 1.99m) desc = "Necesita imbunatatire rapida";
                                                 if (2 <= nota && nota <= 2.99m) desc = "Nesatisfacator/Sub asteptari";
@@ -412,7 +414,9 @@ namespace WizOne.Reports
 
                                 if (Convert.ToInt32(arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0") == 5 || Convert.ToInt32(arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0") == 6)
                                 {
-                                    if (Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) != (int)IdClienti.Clienti.Alka)
+                                    if (Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) == (int)IdClienti.Clienti.Alka
+                                        || Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) == (int)IdClienti.Clienti.ALKA_CO
+                                        | Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) == (int)IdClienti.Clienti.ALKA_Trading)
                                     {
                                         //adaugam total rating la fiecare grup
                                         int tipCalcul = 1;

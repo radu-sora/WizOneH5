@@ -242,6 +242,15 @@ a, a:focus, a:hover {
     background-color: #e7e7e7;
 }
 
+.footer-menu > a.running:before  {
+    position: absolute;
+    margin: 5px 0 0 -10px;    
+    border-top: 6px solid transparent;
+    border-left: 8px solid #f30c0c;
+    border-bottom: 6px solid transparent;
+    content: '';
+}
+
 .footer-menu > a > img {
     width: 32px;
     height: 32px;
@@ -261,44 +270,44 @@ a, a:focus, a:hover {
 
 /* Theme selector control */
 .theme-selector {
-    width:250px;
+    width: 250px;
 }
 
 .theme-selector > tbody > tr > td {
-    vertical-align:top;
+    vertical-align: top;
 }
 
 .theme-selector > tbody > tr > td > ul {
-    list-style:none;
-    padding:0 0 4px 0;
-    line-height:1;    
+    list-style: none;
+    padding: 0 0 4px 0;
+    line-height: 1;    
 }
 
 .theme-selector > tbody > tr > td > ul > li {
-    padding:4px 0 4px 16px;    
-    cursor:pointer;   
+    padding: 4px 0 4px 16px;    
+    cursor: pointer;   
 }
 
 .theme-selector > tbody > tr > td > ul > li:not(.theme-selector-group-heder):hover,
 .theme-selector > tbody > tr > td > ul > li:not(.theme-selector-group-heder):focus {
-    background-color:#f5f5f5;
+    background-color: #f5f5f5;
 }
 
 .theme-selector > tbody > tr > td > ul > li.selected:before {
-    position:absolute;
-    margin-left:-16px;
-    border-top:10px solid transparent;
-    border-left:10px solid #00588a;
-    border-bottom:10px solid transparent;
-    content:'';
+    position: absolute;
+    margin-left: -16px;
+    border-top: 10px solid transparent;
+    border-left: 10px solid #00588a;
+    border-bottom: 10px solid transparent;
+    content: '';
 }
 
 .theme-selector > tbody > tr > td > ul > li > span {
-    margin-right:8px;
+    margin-right: 8px;
 }
 
 .theme-selector > tbody > tr > td > ul > li > * {
-    vertical-align:middle;
+    vertical-align: middle;
 }
 
 .theme-selector > tbody > tr > td > ul > li > span.ThemeDefault,
@@ -320,9 +329,9 @@ a, a:focus, a:hover {
 .theme-selector > tbody > tr > td > ul > li > span.ThemeRedWine,
 .theme-selector > tbody > tr > td > ul > li > span.ThemeSoftOrange,
 .theme-selector > tbody > tr > td > ul > li > span.ThemeYouthful {
-    width:20px;
-    height:20px;
-    display:inline-block;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
 }
 .theme-selector > tbody > tr > td > ul > li > span.ThemeDefault {
     background-color: #DCDCDC;
@@ -384,9 +393,9 @@ a, a:focus, a:hover {
 
 /* Account settings control */
 .account-form {
-    display:block;
-    line-height:1.5;
-    padding:0 16px 11px; 
+    display: block;
+    line-height: 1.5;
+    padding: 0 16px 11px; 
 }
 
 /* Page content layout */

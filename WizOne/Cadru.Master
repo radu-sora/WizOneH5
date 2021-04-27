@@ -210,11 +210,11 @@
 
         <dx:ASPxPanel ID="pnlFooter" runat="server" FixedPosition="WindowBottom" Width="100%" BackColor="#FFFFFF" CssClass="footer">
             <PanelCollection>
-                <dx:PanelContent ID="PanelContent1" runat="server">                    
+                <dx:PanelContent ID="PanelContent1" runat="server">
                     <div class="footer-menu">
                         <asp:Repeater ID="FooterMenu" runat="server">
                             <ItemTemplate>
-                                <a href="<%# Eval("Url") %>" class="<%# Eval("Selected") as bool? ?? false ? "selected" : "" %>">
+                                <a href="<%# Eval("Url") %>" class="<%# (Eval("Selected") as bool? ?? false ? "selected" : "") + (Eval("Running") as bool? ?? false ? "running" : "") %>">
                                     <img src="<%# Eval("ImageUrl") %>" />
                                     <p><%# Eval("Name") %></p>
                                 </a>                        

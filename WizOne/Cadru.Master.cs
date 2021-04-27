@@ -440,7 +440,9 @@ namespace WizOne
                         Name = row["NumeMobil"] as string ?? row["Nume"],
                         Url = ResolveClientUrl(row["Pagina"] as string),
                         ImageUrl = ResolveClientUrl("Fisiere/Imagini/Icoane/" + row["Imagine"]),
-                        Selected = "/" + (row["Pagina"] as string ?? "").Replace('\\', '/') == Request.RawUrl
+                        Selected = Request.RawUrl.EndsWith("/" + (row["Pagina"] as string ?? "").Replace('\\', '/')),
+                        Running = (row["Pagina"] as string ?? "") == "Pontaj\\PontajAngajat" && !Request.RawUrl.EndsWith("/" + (row["Pagina"] as string ?? "").Replace('\\', '/')) ?
+                            General.RunSqlScalar<int>("SELECT COUNT(*) FROM [Schedule] WHERE [Type] = 2 AND [StatusId] = 2 AND [EmployeeId] = @1", null, Session["User_Marca"]) == 1 : false
                     });
                 FooterMenu.DataBind();                
             }

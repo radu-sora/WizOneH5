@@ -366,23 +366,17 @@ namespace WizOne.Beneficii
         {
             try
             {
-                //if (e.VisibleIndex == -1) return;
-                //if (e.VisibleIndex >= 0)
-                //{
-                //    DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
-                //    if (values != null)
-                //    {
-                //        if (e.ButtonID == "btnArata")
-                //        {
-                //            if (Session["BenAprobare_HR"] != null && Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 1)
-                //            {
-                //                e.Visible = DefaultBoolean.False;
+                if (e.VisibleIndex >= 0)
+                {              
+                    if (e.ButtonID == "btnArata")
+                    {
+                        object[] obj = grDate.GetRowValues(e.VisibleIndex, new string[] { "IdStare", "IdBeneficiu" }) as object[];
+                        if (obj[1] == null || obj[1].ToString().Length <= 0)
+                            e.Visible = DefaultBoolean.False;
 
-                //            }
-                //        }                       
-
-                //    }
-                //}
+                        
+                    }                    
+                }
             }
             catch (Exception ex)
             {
@@ -395,23 +389,21 @@ namespace WizOne.Beneficii
         {
             try
             {
-                //if (e.VisibleIndex == -1) return;
+                if (e.VisibleIndex == -1) return;
 
-                //DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
-                //if (values != null)
-                //{
-                //    if (e.ButtonType == ColumnCommandButtonType.Edit)
-                //    {
-                //        if (Session["BenAprobare_HR"] != null && Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 1)                        
-                //            e.Visible = false;                        
-                //        else
-                //        {
-                //            int idStare = Convert.ToInt32(values.Row["IdStare"].ToString());
-                //            if (idStare > 2)
-                //                e.Visible = false;
-                //        }
-                //    }
-                //}
+                if (e.ButtonType == ColumnCommandButtonType.Edit)
+                {
+                    if (Session["BenAprobare_HR"] != null && Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 1)                        
+                        e.Visible = false;                        
+                    else
+                    {
+                        object[] obj = grDate.GetRowValues(e.VisibleIndex, new string[] { "IdStare", "IdBeneficiu" }) as object[];
+                        int idStare = Convert.ToInt32(obj[0].ToString());
+                        if (idStare > 2)
+                            e.Visible = false;
+                    }
+                }
+               
             }
             catch (Exception ex)
             {

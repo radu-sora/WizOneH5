@@ -134,14 +134,14 @@ namespace WizOne.Adev
 
                     cmbRol.SelectedIndex = 0;
 
-                    //dtAng = General.IncarcaDT(SelectAngajati(), null);
-                    cmbAng.DataSource = dtAng;
+                    DataTable dtAngFiltrati = General.IncarcaDT(SelectAngajati("WHERE Rol = " + cmbRol.Value.ToString()), null);
+                    cmbAng.DataSource = dtAngFiltrati;
                     cmbAng.DataBind();
 
-                    cmbAngBulk.DataSource = dtAng;
+                    cmbAngBulk.DataSource = dtAngFiltrati;
                     cmbAngBulk.DataBind();
 
-                    Session["Adev_Angajati"] = dtAng;
+                    Session["Adev_Angajati"] = dtAngFiltrati;
 
                     UpdateControls(lista);
                     if (!lista.ContainsKey("XML"))

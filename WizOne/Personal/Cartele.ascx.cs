@@ -168,8 +168,37 @@ namespace WizOne.Personal
                             }
                         }
                     }
-                }
 
+                    DataTable dtCartele = General.IncarcaDT("SELECT * FROM F100Cartele WHERE Cartela = '" + e.NewValues["Cartela"].ToString() + "'", null);
+                    if (dtCartele != null && dtCartele.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dtCartele.Rows.Count; i++)
+                        {
+                            DateTime dtInc = Convert.ToDateTime(dtCartele.Rows[i]["DataInceput"].ToString());
+                            DateTime dtSf = Convert.ToDateTime(dtCartele.Rows[i]["DataSfarsit"].ToString());
+
+                            if (dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                            {
+                                try
+                                {
+                                    if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
+                                    {
+                                        grDateCartele.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent pe marca " + dtCartele.Rows[i]["F10003"].ToString() + "! " 
+                                                + "Intervalul este: " + dtInc.ToShortDateString() + " - " + dtSf.ToShortDateString() ;
+                                        e.Cancel = true;
+                                        grDateCartele.CancelEdit();
+                                        return;
+                                    }
+                                }
+                                catch (Exception)
+                                {
+
+                                }
+                            }
+
+                        }
+                    }
+                }
                 object[] row = new object[ds.Tables["F100Cartele2"].Columns.Count];
                 int x = 0;
                 foreach (DataColumn col in ds.Tables["F100Cartele2"].Columns)
@@ -269,6 +298,36 @@ namespace WizOne.Personal
                             {
 
                             }
+                        }
+                    }
+
+                    DataTable dtCartele = General.IncarcaDT("SELECT * FROM F100Cartele WHERE Cartela = '" + e.NewValues["Cartela"].ToString() + "'", null);
+                    if (dtCartele != null && dtCartele.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dtCartele.Rows.Count; i++)
+                        {
+                            DateTime dtInc = Convert.ToDateTime(dtCartele.Rows[i]["DataInceput"].ToString());
+                            DateTime dtSf = Convert.ToDateTime(dtCartele.Rows[i]["DataSfarsit"].ToString());
+
+                            if (dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                            {
+                                try
+                                {
+                                    if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
+                                    {
+                                        grDateCartele.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent pe marca " + dtCartele.Rows[i]["F10003"].ToString() + "! "
+                                                + "Intervalul este: " + dtInc.ToShortDateString() + " - " + dtSf.ToShortDateString();
+                                        e.Cancel = true;
+                                        grDateCartele.CancelEdit();
+                                        return;
+                                    }
+                                }
+                                catch (Exception)
+                                {
+
+                                }
+                            }
+
                         }
                     }
                 }

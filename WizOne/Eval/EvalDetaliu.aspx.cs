@@ -2262,7 +2262,9 @@ namespace WizOne.Eval
 
                 decimal nota = CalculNota(tipData);
                 string desc = "";
-                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Alka)
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Alka 
+                    || Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.ALKA_CO
+                    || Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.ALKA_Trading)
                 {
                     if (1 <= nota && nota <= 1.99m) desc = "Necesita imbunatatire rapida";
                     if (2 <= nota && nota <= 2.99m) desc = "Nesatisfacator/Sub asteptari";
@@ -5874,6 +5876,8 @@ namespace WizOne.Eval
                         }
                         break;
                     case (int)Module.IdClienti.Clienti.Alka:
+                    case (int)Module.IdClienti.Clienti.ALKA_CO:
+                    case (int)Module.IdClienti.Clienti.ALKA_Trading:
                         {
                             switch (tipData)
                             {

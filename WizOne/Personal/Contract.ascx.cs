@@ -169,6 +169,7 @@ namespace WizOne.Personal
 
                 string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
                 txtSalariu.Text = ds.Tables[0].Rows[0][salariu].ToString();
+                Session["MP_Salariu"] = txtSalariu.Text;
 
                 CalculCO();
 
@@ -178,6 +179,8 @@ namespace WizOne.Personal
             }
             else
             {
+                txtSalariu.Text = Session["MP_Salariu"].ToString();
+
                 int tipAng = Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString());
                 if (hfTipAngajat.Contains("TipAng")) tipAng = Convert.ToInt32(General.Nz(hfTipAngajat["TipAng"], -1));
                 //Radu 18.09.2019
@@ -629,11 +632,12 @@ namespace WizOne.Personal
                 //    ds.Tables[1].Rows[0]["F1003907"] = param[1];
                 //    Session["InformatiaCurentaPersonal"] = ds;
                 //    break;
-                //case "txtSalariu":
-                //    ds.Tables[0].Rows[0]["F100699"] = param[1];
-                //    ds.Tables[1].Rows[0]["F100699"] = param[1];
-                //    Session["InformatiaCurentaPersonal"] = ds;
-                //    break;
+                case "txtSalariu":
+                    //    ds.Tables[0].Rows[0]["F100699"] = param[1];
+                    //    ds.Tables[1].Rows[0]["F100699"] = param[1];
+                    //    Session["InformatiaCurentaPersonal"] = ds;
+                    Session["MP_Salariu"] = param[1];
+                    break;
                 //case "deDataModifSal":
                 //    data = param[1].Split('.');
                 //    ds.Tables[0].Rows[0]["F100991"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));

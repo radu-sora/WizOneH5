@@ -66,7 +66,13 @@
                             <table style="margin-left:15px;">
                                 <tr>
                                     <td>
-                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                            <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px">Supervizor</label>
+                                            <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" >
+                                                <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlLoading.Show(); pnlCtl.PerformCallback('cmbRol'); }" />
+                                            </dx:ASPxComboBox>
+                                        </div>                      
+                                        <div style="float:left; padding-right:15px;">
                                             <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Angajat</label>
                                             <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" SelectInputTextOnClick="true"
                                                         CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >

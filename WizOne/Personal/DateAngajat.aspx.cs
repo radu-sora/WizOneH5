@@ -830,7 +830,7 @@ namespace WizOne.Personal
                 GolireVariabile();
                 //Florin 2018.11.22
                 //trimitem la lista de angajati        
-                Response.Redirect("~/Personal/Lista.aspx", false);
+                Response.Redirect("~/Personal/Lista", false);
             }
             catch (Exception ex)
             {
@@ -1716,7 +1716,7 @@ namespace WizOne.Personal
                 lstBC.Add("txtNrCard", "F10055");
                 lstBC.Add("cmbBancaSal", "F10018");
                 lstBC.Add("cmbSucSal", "F10019");
-                lstBC.Add("deDataModifSal", "F1001040");
+                lstBC.Add("deDataModifBan", "F1001040");
                 lstBC.Add("txtIBANGar", "F1001028");
                 lstBC.Add("cmbBancaGar", "F1001026");
                 lstBC.Add("cmbSucGar", "F1001027");

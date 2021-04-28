@@ -400,7 +400,7 @@ namespace WizOne.Pagini
                     }
 
                     HttpContext.Current.Session["Sablon_Tabela"] = "Intro";
-                    Response.Redirect("~/Pagini/SablonLista.aspx", false);
+                    Response.Redirect("~/Pagini/SablonLista", false);
 
                 }
 
@@ -479,7 +479,7 @@ namespace WizOne.Pagini
             try
             {
                 HttpContext.Current.Session["Sablon_Tabela"] = "Intro";
-                Response.Redirect("~/Pagini/SablonLista.aspx", false);
+                Response.Redirect("~/Pagini/SablonLista", false);
             }
             catch (Exception ex)
             {

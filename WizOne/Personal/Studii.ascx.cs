@@ -68,7 +68,7 @@ namespace WizOne.Personal
             }
             else
             {
-                string url = "~/Avs/Cereri.aspx";
+                string url = "~/Avs/Cereri";
                 Session["Marca_Atribut"] = Session["Marca"].ToString() + ";" + atribut.ToString() + ";" + strRol;
                 Session["MP_Avans"] = "true";
                 Session["MP_Avans_Tab"] = "Studii";

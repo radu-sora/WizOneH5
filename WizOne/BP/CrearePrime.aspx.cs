@@ -75,7 +75,7 @@ namespace WizOne.BP
         {
             try
             {
-                Response.Redirect("~/Pagini/MainPage.aspx", false);
+                Response.Redirect("~/Pagini/MainPage", false);
             }
             catch (Exception ex)
             {

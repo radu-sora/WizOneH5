@@ -128,7 +128,7 @@ namespace WizOne.Recrutare
             try
             {
                 HttpContext.Current.Session["Sablon_Tabela"] = "Rec_Candidati";
-                Response.Redirect("~/Pagini/SablonLista.aspx", false);
+                Response.Redirect("~/Pagini/SablonLista", false);
             }
             catch (Exception ex)
             {

@@ -74,7 +74,7 @@ namespace WizOne.Eval
                             Session["Eval_QuizSetAngajati"] = null;
                             Session["Eval_ConfigTipTabela"] = null;
 
-                            string url = "~/Eval/QuizDetaliu.aspx";
+                            string url = "~/Eval/QuizDetaliu";
                             if(url!="")
                             {
                                 Session["IdEvalQuiz"] = id;
@@ -164,7 +164,7 @@ namespace WizOne.Eval
                 Session["Eval_ConfigTipTabela"] = null;
 
                 string url = "";
-                url = "~/Eval/QuizDetaliu.aspx";
+                url = "~/Eval/QuizDetaliu";
                 Response.Redirect(url, false);
             }
             catch (Exception ex)
@@ -185,7 +185,7 @@ namespace WizOne.Eval
                 Session["Quiz360"] = 1;
 
                 string url = "";
-                url = "~/Eval/QuizDetaliu.aspx";
+                url = "~/Eval/QuizDetaliu";
                 Response.Redirect(url, false);
             }
             catch (Exception ex)

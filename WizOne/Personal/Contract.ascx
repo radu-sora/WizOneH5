@@ -640,6 +640,7 @@
 
     function txtSalariu_TextChanged(s) {      
         VerifSalariu(s.GetValue(), cmbTimpPartial.GetValue());
+        pnlCtlContract.PerformCallback("txtSalariu;" + s.GetValue());
     }
  
     function VerifSalariu(sal, timp) {

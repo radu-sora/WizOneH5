@@ -198,7 +198,7 @@ namespace WizOne.Tactil
         {
             try
             {
-                Response.Redirect("../Tactil/Main.aspx", false);
+                Response.Redirect("../Tactil/Main", false);
             }
             catch (Exception ex)
             {
@@ -215,11 +215,11 @@ namespace WizOne.Tactil
                 //Radu 24.04.2020
                 string tip = Dami.ValoareParam("TipInfoChiosc", "0");
                 if (tip == "0")
-                    Response.Redirect("../DefaultTactil.aspx", false);
+                    Response.Redirect("../DefaultTactil", false);
                 else if (tip == "1" || tip == "2")
-                    Response.Redirect("../DefaultTactilFaraCard.aspx", false);
+                    Response.Redirect("../DefaultTactilFaraCard", false);
                 else if (tip == "3")
-                    Response.Redirect("../DefaultTactilExtra.aspx", false);
+                    Response.Redirect("../DefaultTactilExtra", false);
             }
             catch (Exception ex)
             {
@@ -237,8 +237,8 @@ namespace WizOne.Tactil
                 if (Session["TactilPrintareAdeverinte"].ToString() == "0")
                 {                   
                     Session["PrintDocument"] = "AdeverintaMedic";
-                    Session["PaginaWeb"] = "Tactil/Adeverinte.aspx";
-                    Response.Redirect("~/Reports/ImprimaTactil.aspx", false);                    
+                    Session["PaginaWeb"] = "Tactil/Adeverinte";
+                    Response.Redirect("~/Reports/ImprimaTactil", false);                    
                 }
                 else
                 {
@@ -275,8 +275,8 @@ namespace WizOne.Tactil
                 {
             
                     Session["PrintDocument"] = "AdeverintaGenerala";
-                    Session["PaginaWeb"] = "Tactil/Adeverinte.aspx";
-                    Response.Redirect("~/Reports/ImprimaTactil.aspx", false);
+                    Session["PaginaWeb"] = "Tactil/Adeverinte";
+                    Response.Redirect("~/Reports/ImprimaTactil", false);
                     
                 }
                 else
@@ -312,8 +312,8 @@ namespace WizOne.Tactil
                 {
               
                     Session["PrintDocument"] = "AdeverintaGenerala";
-                    Session["PaginaWeb"] = "Tactil/Adeverinte.aspx";
-                    Response.Redirect("~/Reports/ImprimaTactil.aspx", false);
+                    Session["PaginaWeb"] = "Tactil/Adeverinte";
+                    Response.Redirect("~/Reports/ImprimaTactil", false);
                     
                 }
                 else
@@ -351,8 +351,8 @@ namespace WizOne.Tactil
    
                    
                         Session["PrintDocument"] = "AdeverintaGenerala";
-                        Session["PaginaWeb"] = "Tactil/Adeverinte.aspx";
-                        Response.Redirect("~/Reports/ImprimaTactil.aspx", false);
+                        Session["PaginaWeb"] = "Tactil/Adeverinte";
+                        Response.Redirect("~/Reports/ImprimaTactil", false);
                     
                 }
                 else
@@ -388,8 +388,8 @@ namespace WizOne.Tactil
                 //if (Session["TactilPrintareAdeverinte"].ToString() == "0")
                 //{
                 //    Session["PrintDocument"] = "AdeverintaMedic";
-                //    Session["PaginaWeb"] = "Tactil/Adeverinte.aspx";
-                //    Response.Redirect("~/Reports/ImprimaTactil.aspx", false);
+                //    Session["PaginaWeb"] = "Tactil/Adeverinte";
+                //    Response.Redirect("~/Reports/ImprimaTactil", false);
                 //}
                 //else
                 {

@@ -91,34 +91,34 @@ namespace WizOne.Pagini
                 switch (Session["Sablon_Tabela"].ToString())
                 {
                     case "Stiri":
-                        url = "~/Pagini/StiriDetaliu.aspx";
+                        url = "~/Pagini/StiriDetaliu";
                         break;
                     case "Intro":
-                        url = "~/Pagini/IntroDetaliu.aspx";
+                        url = "~/Pagini/IntroDetaliu";
                         break;
                     case "MeniuLista":
-                        url = "~/Pagini/MeniuDetaliu.aspx";
+                        url = "~/Pagini/MeniuDetaliu";
                         break;
                     case "Rec_Candidati":
-                        url = "~/Recrutare/Candidati.aspx";
+                        url = "~/Recrutare/Candidati";
                         id = Dami.NextId("Rec_Candidati");
                         break;
                     /*LeonardM 16.10.2017*/
                     case "Eval_Obiectiv":
-                        url = "~/Eval/ActivitatiObiective.aspx";
+                        url = "~/Eval/ActivitatiObiective";
                         break;
                     case "Eval_CategCompetente":
-                        url = "~/Eval/Competente.aspx";
+                        url = "~/Eval/Competente";
                         break;
                     case "Eval_ListaObiectiv":
-                        url = "~/Eval/ListaObiective.aspx";
+                        url = "~/Eval/ListaObiective";
                         break;
                     case "Eval_SetCalificativ":
-                        url = "~/Eval/Calificative.aspx";
+                        url = "~/Eval/Calificative";
                         break;
                     //Radu 24.04.2018
                     case "Eval_tblTipValori":
-                        url = "~/Eval/ValoriLinii.aspx";
+                        url = "~/Eval/ValoriLinii";
                         break;
                 }
 
@@ -247,37 +247,37 @@ namespace WizOne.Pagini
                         case "btnEdit":
                         case "btnClone":
                             {
-                                string url = "~/Pagini/MainPage.aspx";
+                                string url = "~/Pagini/MainPage";
                                 switch (Session["Sablon_Tabela"].ToString())
                                 {
                                     case "Stiri":
-                                        url = "~/Pagini/StiriDetaliu.aspx";
+                                        url = "~/Pagini/StiriDetaliu";
                                         break;
                                     case "Intro":
-                                        url = "~/Pagini/IntroDetaliu.aspx";
+                                        url = "~/Pagini/IntroDetaliu";
                                         break;
                                     case "MeniuLista":
-                                        url = "~/Pagini/MeniuDetaliu.aspx";
+                                        url = "~/Pagini/MeniuDetaliu";
                                         break;
                                     case "Rec_Candidati":
-                                        url = "~/Recrutare/Candidati.aspx";
+                                        url = "~/Recrutare/Candidati";
                                         break;
                                     /*LeonardM 16.10.2017*/
                                     case "Eval_Obiectiv":
-                                        url = "~/Eval/ActivitatiObiective.aspx";
+                                        url = "~/Eval/ActivitatiObiective";
                                         break;
                                     case "Eval_CategCompetente":
-                                        url = "~/Eval/Competente.aspx";
+                                        url = "~/Eval/Competente";
                                         break;
                                     case "Eval_ListaObiectiv":
-                                        url = "~/Eval/ListaObiective.aspx";
+                                        url = "~/Eval/ListaObiective";
                                         break;
                                     case "Eval_SetCalificativ":
-                                        url = "~/Eval/Calificative.aspx";
+                                        url = "~/Eval/Calificative";
                                         break;
                                     //Radu 24.04.2018
                                     case "Eval_tblTipValori":
-                                        url = "~/Eval/ValoriLinii.aspx";
+                                        url = "~/Eval/ValoriLinii";
                                         break;                                        
                                 }
                                 if (url != "")

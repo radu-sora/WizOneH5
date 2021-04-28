@@ -42,7 +42,7 @@ namespace WizOne.Pagini
                     if (cnt == 0)
                         MessageBox.Show("Cod eronat", MessageBox.icoError, "");
                     else
-                        Response.Redirect("~/Pagini/MainPage.aspx", false);
+                        Response.Redirect("~/Pagini/MainPage", false);
                 }
                 else
                     MessageBox.Show("Lipsesc date !", MessageBox.icoWarning, "");

@@ -1,6 +1,7 @@
 ﻿using DevExpress.Web;
 using DevExpress.XtraBars.Docking2010.Views.NativeMdi;
 using DevExpress.XtraRichEdit.API.Native;
+using ProceseSec;
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -211,8 +212,10 @@ namespace WizOne
                 //string tip = Session["TipInfoChiosc"].ToString();
                 //if (tip == "3")
                 if (tipInfoChiosc == 3)
-                {//verificare PIN                    
-                    if (General.Nz(drUsr["PINInfoChiosc"], "").ToString() != pin)
+                {//verificare PIN       
+                    CriptDecript prc = new CriptDecript();
+                    string pinBD = prc.EncryptString(Constante.cheieCriptare, General.Nz(drUsr["PINInfoChiosc"], "").ToString(), 2);
+                    if (pinBD != pin)
                     {
                         MessageBox.Show("PIN incorect!", MessageBox.icoError, "Atentie !");
                         AscundeButoane();
@@ -281,7 +284,7 @@ namespace WizOne
                         DataTable dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TimeoutSecunde'", null);
                         if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
                             Session["TimeOutSecunde"] = Convert.ToInt32(dt.Rows[0][0].ToString());
-                        Response.Redirect("~/Tactil/Main.aspx", false);
+                        Response.Redirect("~/Tactil/Main", false);
          
                     }
                     else

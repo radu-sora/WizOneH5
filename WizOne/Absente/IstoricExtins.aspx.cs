@@ -169,10 +169,10 @@ namespace WizOne.Absente
             try
             {
                 if (Session["IstoricExtins_VineDin"].ToString() == "1")
-                    Response.Redirect("~/Absente/Lista.aspx", false);
+                    Response.Redirect("~/Absente/Lista", false);
                 else
                 {
-                    Response.Redirect("~/Absente/Cereri.aspx", false);
+                    Response.Redirect("~/Absente/Cereri", false);
                     Session["IstoricExtins_VineDin"] += "-OK";
                 }
             }

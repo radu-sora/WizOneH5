@@ -150,24 +150,6 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxComboBox cmbSec;
 
         /// <summary>
-        /// lblCateg control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCateg;
-
-        /// <summary>
-        /// cmbCateg control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbCateg;
-
-        /// <summary>
         /// bulk2 control.
         /// </summary>
         /// <remarks>
@@ -265,6 +247,33 @@ namespace WizOne.Adev
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbCtr;
+
+        /// <summary>
+        /// bulk3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow bulk3;
+
+        /// <summary>
+        /// lblCateg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCateg;
+
+        /// <summary>
+        /// cmbCateg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCateg;
 
         /// <summary>
         /// lblDataPlec control.

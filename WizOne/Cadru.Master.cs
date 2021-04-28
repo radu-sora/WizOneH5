@@ -37,21 +37,21 @@ namespace WizOne
                     Dami.AccesApp();
 
                 //if (!HttpContext.Current.User.Identity.IsAuthenticated)
-                //    Response.Redirect("../Default.aspx", false);
+                //    Response.Redirect("../Default", false);
 
                 if (General.Nz(Session["UserId"],"").ToString() == "" || !General.IsNumeric(Session["UserId"]))
-                    Response.Redirect("../Default.aspx", false);
+                    Response.Redirect("../Default", false);
 
 
                 //Florin 2019.08.19
                 try
                 {
                     if (Session["tblParam"] == null || ((DataTable)Session["tblParam"]).Rows.Count == 0)
-                        Response.Redirect("../Default.aspx", false);
+                        Response.Redirect("../Default", false);
                 }
                 catch (Exception)
                 {
-                    Response.Redirect("../Default.aspx", false);
+                    Response.Redirect("../Default", false);
                 }
 
                 //Radu 26.10.2020
@@ -632,9 +632,9 @@ namespace WizOne
                         break;
                     case "6":
                         if (Page.IsCallback)
-                            ASPxWebControl.RedirectOnCallback("~/LogOut.aspx");
+                            ASPxWebControl.RedirectOnCallback("~/LogOut");
                         else
-                            Response.Redirect("~/LogOut.aspx", false);
+                            Response.Redirect("~/LogOut", false);
 
                         //Pastram limba setata pt a putea traduce fraza din pagina de log out
                         string idLimba = General.Nz(Session["IdLimba"],"RO").ToString();
@@ -645,9 +645,9 @@ namespace WizOne
                         //Florin 2021.03.03 #818
                         Session["VineDinDelogare"] = 1;
 
-                        string url = "~/Default.aspx";
+                        string url = "~/Default";
                         if (Constante.esteTactil)
-                            url = "~/Tactil/MainTactil.aspx";
+                            url = "~/Tactil/MainTactil";
 
                         if (Page.IsCallback)
                             ASPxWebControl.RedirectOnCallback(url);
@@ -672,7 +672,7 @@ namespace WizOne
                     (HttpContext.Current.Request.ApplicationPath.Equals("/")) ? string.Empty : HttpContext.Current.Request.ApplicationPath
                     );
             
-            Response.Redirect(url + "/Pagini/MainPage.aspx");
+            Response.Redirect(url + "/Pagini/MainPage");
         }
     }
 
@@ -786,7 +786,7 @@ namespace WizOne
                 }
 
                 HttpContext.Current.Session["PaginaWeb"] = pag;
-                HttpContext.Current.Response.Redirect("~/" + pag + ".aspx" + param, false);
+                HttpContext.Current.Response.Redirect("~/" + pag + param, false);
             }
             catch (Exception ex)
             {

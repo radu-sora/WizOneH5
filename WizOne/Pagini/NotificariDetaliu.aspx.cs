@@ -376,7 +376,7 @@ namespace WizOne.Pagini
 
                 //Page.ClientScript.RegisterStartupScript(this.GetType(), "ANY_KEY2", "window.parent.popGen.Hide();", true);
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "ANY_KEY2", "window.parent.popGen.SetContentUrl('../Pagini/Notificari.aspx?tip=" + Session["TipNotificare"].ToString() + "'); popGen.SetHeaderText('Notificari');", true);
-                //Response.Redirect("~/Pagini/MeniuLista.aspx", false);
+                //Response.Redirect("~/Pagini/MeniuLista", false);
                 //MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
             }
             catch (Exception ex)

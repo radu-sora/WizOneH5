@@ -1970,7 +1970,7 @@ namespace WizOne.ConcediiMedicale
             {
                 OnOK();
 
-                string url = "~/ConcediiMedicale/Aprobare.aspx";
+                string url = "~/ConcediiMedicale/Aprobare";
                 if (Page.IsCallback)
                     ASPxWebControl.RedirectOnCallback(url);
                 else

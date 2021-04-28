@@ -382,7 +382,7 @@ namespace WizOne.Pontaj
 						ELSE ValStr END AS ValStr");
                 Session["PrintDocument"] = "PontajDinamic";
                 Session["PrintParametrii"] = req + struc;
-                Response.Redirect("~/Reports/Imprima.aspx?tip=30", false);
+                Response.Redirect("~/Reports/Imprima?tip=30", false);
             }
             catch (Exception ex)
             {
@@ -1819,8 +1819,12 @@ namespace WizOne.Pontaj
 
                 DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
 
+                //Florin #916 2021.04.28 + am scos si sqlIst pt ca nu mai este nevoie
+                string valStrOld = "";
+                if (dt.Rows.Count > 0)
+                    valStrOld = General.Nz(dt.Rows[0]["ValStr"], "").ToString();
+
                 string sqlUpd = "";
-                string sqlIst = "";
                 string sqlValStr = "";
                 string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null,""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
                                 ""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null
@@ -1900,21 +1904,20 @@ namespace WizOne.Pontaj
                         if (General.Nz(dr["VerificareNrMaxOre"],0).ToString() == "1") nrMin += valCalc;
                     }
 
-                    //Radu 01.04.2021
-                    string mesaj = Dami.VerificareDepasireNorma(f10003, ziua, valTotal, 2);
-                    if (mesaj != "")
-                    {
-                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
-                        return;
-                    }
+                    //Florin 2021.04.22 - #903 - dezactivat - aceasta verificare se face cu ajutorul unei validari
+                    ////Radu 01.04.2021
+                    //string mesaj = Dami.VerificareDepasireNorma(f10003, ziua, valTotal, 2);
+                    //if (mesaj != "")
+                    //{
+                    //    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
+                    //    return;
+                    //}
 
                     if (cmp != "")
                     {
                         //Florin 2020.04.08 - am adaugat Valstr=null
                         sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null {cmp}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                         sqlValStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""={Dami.ValoareParam("SintaxaValStr")} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
-                        sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME) 
-                                        VALUES ({f10003}, {General.ToDataUniv(ziua)}, (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}), '{General.Nz(dtVal.Rows[0]["ValStr"], "")}', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)}, 'Pontajul echipei - modificare pontaj', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)});";
                     }
                 }
 
@@ -1930,7 +1933,6 @@ namespace WizOne.Pontaj
                         sqlDel + Environment.NewLine +
                         sqlUpd + Environment.NewLine +
                         sqlValStr + Environment.NewLine +
-                        sqlIst + Environment.NewLine +
                         " END;", null);
 
                     if (General.Nz(cmbTipAbs.Value, "").ToString().Trim() == "")
@@ -1944,6 +1946,13 @@ namespace WizOne.Pontaj
                     }
 
                     General.CalculFormule(f10003, null, ziua, null);
+
+                    //Florin #916 2021.04.28
+                    General.ExecutaNonQuery(
+                        $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                        SELECT F10003, Ziua , ValStr, '{valStrOld}', {Session["UserID"]}, {General.CurrentDate()}, 
+                        'Pontajul Detaliat - modificare pontare', {Session["UserId"]}, {General.CurrentDate()} 
+                        FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)} AND ValStr <> '{valStrOld}'");
 
                     IncarcaGrid();
 

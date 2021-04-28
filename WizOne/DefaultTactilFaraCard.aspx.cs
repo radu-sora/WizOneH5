@@ -1,4 +1,5 @@
 ﻿using DevExpress.Web;
+using ProceseSec;
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -156,7 +157,9 @@ namespace WizOne
                 {//verificare PIN
                     string pin = Session["Tactil_PIN"].ToString();
                     Session["Tactil_PIN"] = null;
-                    if (General.Nz(drUsr["PINInfoChiosc"], "").ToString() != pin)
+                    CriptDecript prc = new CriptDecript();
+                    string pinBD = prc.EncryptString(Constante.cheieCriptare, General.Nz(drUsr["PINInfoChiosc"], "").ToString(), 2);
+                    if (pinBD != pin)
                     {
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("PIN incorect!");
                         return;
@@ -223,7 +226,7 @@ namespace WizOne
                         if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
                             Session["TimeOutSecunde"] = Convert.ToInt32(dt.Rows[0][0].ToString());
                         //Response.Redirect("~/Tactil/Main.aspx", false);
-                        Response.RedirectLocation = System.Web.VirtualPathUtility.ToAbsolute("~/Tactil/Main.aspx");
+                        Response.RedirectLocation = System.Web.VirtualPathUtility.ToAbsolute("~/Tactil/Main");
                     }
                     else
                     {

@@ -87,7 +87,7 @@ namespace WizOne.Pagini
                 if (!IsPostBack)
                 {
                     txtAnLuna.Value = DateTime.Now;
-
+                    Session["TrimitereFluturasi_Angajati"] = null;
                     Session["InformatiaCurenta_TF"] = null;
                     IncarcaAngajati();
                     DataTable dtParam = General.IncarcaDT("SELECT \"Nume\", \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" IN ('TrimitereFluturas_Subiect', 'TrimitereFluturas_Continut')", null);
@@ -380,7 +380,11 @@ namespace WizOne.Pagini
                         break;
                     case "EmptyFields":
                         btnFiltruSterge_Click();
-                        return;   
+                        return;
+                    case "cmbRol":
+                        Session["TrimitereFluturasi_Angajati"] = null;
+                        IncarcaAngajati();
+                        break;
                 }
 
                 if (esteStruc)
@@ -621,12 +625,41 @@ namespace WizOne.Pagini
         private void IncarcaAngajati()
         {
             try
-            {
-                DataTable dt = General.IncarcaDT(SelectAngajati(), null);
+            {                
 
+                if (Session["TrimitereFluturasi_Angajati"] == null)
+                {
+                    DataTable dt = General.IncarcaDT(SelectAngajati(), null);
+
+                    DataView view = new DataView(dt);
+                    DataTable dtRol = view.ToTable(true, "Rol", "RolDenumire");
+
+                    string lstIdSuper = Dami.ValoareParam("Adev_IdSuper", "");
+
+                    DataTable dtSuper = new DataTable();
+                    dtSuper.Columns.Add("Rol", typeof(int));
+                    dtSuper.Columns.Add("RolDenumire", typeof(string));
+
+                    if (lstIdSuper.Length > 0)
+                        dtSuper = dtRol.Select("Rol IN (" + lstIdSuper + ")").CopyToDataTable();
+                    else
+                        dtSuper = dtRol;
+
+                    cmbRol.DataSource = dtSuper;
+                    cmbRol.DataBind();
+
+                    cmbRol.SelectedIndex = 0;
+
+                    DataTable dtAngFiltrati = General.IncarcaDT(SelectAngajati("WHERE Rol = " + cmbRol.Value.ToString()), null);
+                    cmbAng.DataSource = dtAngFiltrati;
+                    cmbAng.DataBind();
+
+                    Session["TrimitereFluturasi_Angajati"] = dtAngFiltrati;
+                }
+
+                DataTable dtAng = Session["TrimitereFluturasi_Angajati"] as DataTable;
                 cmbAng.DataSource = null;
-                cmbAng.DataSource = dt;
-                Session["TrimitereFluturasi_Angajati"] = dt;
+                cmbAng.DataSource = dtAng;               
                 cmbAng.DataBind();
             }
             catch (Exception ex)
@@ -642,52 +675,33 @@ namespace WizOne.Pagini
 
             try
             {
-                string semn = "+";
-                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
-                if (Constante.tipBD == 2)
-                {
-                    semn = "||";
-                    cmp = "ROWNUM";
-                }
+                string op = "+";
+                if (Constante.tipBD == 2) op = "||";
 
-                strSql = @"SELECT {2} AS ""IdAuto"", X.* FROM (
-                                SELECT B.F10003 AS F10003, A.F10008 {1} ' ' {1} a.F10009 AS ""NumeComplet"", A.F10008 AS ""Nume"", A.F10009 AS ""Prenume"", 
-                                A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"",A.F10011 AS ""NrContract"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", 
-                                G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament"", D.F71804 AS ""Functia"", 
-                                CAST(COALESCE(A.F10043,0) AS int) AS ""Norma"", A.F100901, A.F10022, A.F10023, COALESCE(C.""IdRol"",1) AS ""IdRol"", COALESCE(A.F10025,0) AS F10025
-                                FROM ""relGrupAngajat"" B
-                                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
-                                INNER JOIN F100 A ON b.F10003 = a.F10003
-                                LEFT JOIN F718 D ON A.F10071 = D.F71802
-                                LEFT JOIN F002 E ON A.F10002 = E.F00202
-                                LEFT JOIN F003 F ON A.F10004 = F.F00304
-                                LEFT JOIN F004 G ON A.F10005 = G.F00405
-                                LEFT JOIN F005 H ON A.F10006 = H.F00506
-                                LEFT JOIN F006 I ON A.F10007 = I.F00607
-                                WHERE C.""IdSuper"" = {0}
-                                UNION
-                                SELECT B.F10003 AS F10003, A.F10008 {1} ' ' {1} a.F10009 AS ""NumeComplet"", A.F10008 AS ""Nume"", A.F10009 AS ""Prenume"", 
-                                A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"",A.F10011 AS ""NrContract"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", 
-                                G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament"", D.F71804 AS ""Functia"", 
-                                CAST(COALESCE(A.F10043,0) as int) AS ""Norma"", A.F100901, A.F10022, A.F10023, COALESCE(C.""IdRol"",1) AS ""IdRol"", COALESCE(A.F10025,0) AS F10025
-                                FROM ""relGrupAngajat"" B
-                                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
-                                INNER JOIN F100 A ON b.F10003 = a.F10003
-                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")
-                                LEFT JOIN F718 D ON A.F10071 = D.F71802
-                                LEFT JOIN F002 E ON A.F10002 = E.F00202
-                                LEFT JOIN F003 F ON A.F10004 = F.F00304
-                                LEFT JOIN F004 G ON A.F10005 = G.F00405
-                                LEFT JOIN F005 H ON A.F10006 = H.F00506
-                                LEFT JOIN F006 I ON A.F10007 = I.F00607
-                                WHERE J.""IdUser"" = {0} ) X WHERE F10025 IN (0, 999) ORDER BY X.""NumeComplet"" ";
-
-                strSql = string.Format(strSql, Session["UserId"].ToString(), semn, cmp);    
+                strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
+                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" , ""Rol"", ""RolDenumire""
+                        FROM (
+                        SELECT A.F10003, 0 AS ""Rol"",  COALESCE((SELECT COALESCE(""Alias"", ""Denumire"") FROM ""tblSupervizori"" WHERE ""Id""=0),'Angajat') AS ""RolDenumire""
+                        FROM F100 A
+                        WHERE A.F10003 = {(Session["Marca"] == null ? "-99" : Session["Marca"].ToString())}
+                        UNION
+                        SELECT A.F10003, B.""IdSuper"" AS ""Rol"", CASE WHEN D.""Alias"" IS NOT NULL AND D.""Alias"" <> '' THEN D.""Alias"" ELSE D.""Denumire"" END AS ""RolDenumire""
+                        FROM F100 A
+                        INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
+                        LEFT JOIN ""tblSupervizori"" D ON D.""Id"" = B.""IdSuper""
+                        WHERE B.""IdUser""= {Session["UserId"]}) B                        
+                        INNER JOIN F100 A ON A.F10003=B.F10003
+                        LEFT JOIN F718 X ON A.F10071=X.F71802
+                        LEFT JOIN F003 F ON A.F10004 = F.F00304
+                        LEFT JOIN F004 G ON A.F10005 = G.F00405
+                        LEFT JOIN F005 H ON A.F10006 = H.F00506
+                        LEFT JOIN F006 I ON A.F10007 = I.F00607 {filtru}";
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                //ArataMesaj("");
+                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 

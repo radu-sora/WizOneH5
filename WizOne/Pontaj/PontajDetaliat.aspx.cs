@@ -1588,6 +1588,9 @@ namespace WizOne.Pontaj
                 //Florin 2020.09.16
                 string modifInOut = General.Nz(row["ModifInOut"],"").ToString();
 
+                //Florin #916 2021.04.28
+                string valStrOld = "";
+
                 //Florin 2021.04.07 - #888
                 string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null,""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
                                 ""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null
@@ -1602,6 +1605,10 @@ namespace WizOne.Pontaj
                         oldValue = null;
                     if (newValue != null && upd.NewValues[numeCol].GetType() == typeof(System.DBNull))
                         newValue = null;
+
+                    //Florin #916 2021.04.28
+                    if (numeCol == "ValStr")
+                        valStrOld = General.Nz(oldValue, "").ToString();
 
                     if (oldValue != newValue)
                     {
@@ -1784,6 +1791,13 @@ namespace WizOne.Pontaj
 
                     General.CalculFormule(f10003, null, ziua, null);
                     //General.ExecValStr(f10003, ziua);
+
+                    //Florin #916 2021.04.28
+                    General.ExecutaNonQuery(
+                        $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                        SELECT F10003, Ziua , ValStr, '{valStrOld}', {Session["UserID"]}, {General.CurrentDate()}, 
+                        'Pontajul Detaliat - modificare pontare', {Session["UserId"]}, {General.CurrentDate()} 
+                        FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)} AND ValStr <> '{valStrOld}'");
                 }
 
                 IncarcaGrid();

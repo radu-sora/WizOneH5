@@ -147,7 +147,7 @@ namespace WizOne.Personal
 
                 //Florin #715
                 //if (ds.Tables[0].Rows[0]["F10010"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
-                if (Convert.ToInt32(cmbTipNorma.Value) != 3 && (ds.Tables[0].Rows[0]["F10010"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0))
+                if ((cmbTipNorma.Value == null || Convert.ToInt32(cmbTipNorma.Value) != 3) && (ds.Tables[0].Rows[0]["F10010"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0))
                 {
                     cmbIntRepTimpMunca.ClientEnabled = false;
                     txtNrOre.ClientEnabled = false;

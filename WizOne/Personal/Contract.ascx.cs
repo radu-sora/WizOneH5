@@ -169,6 +169,7 @@ namespace WizOne.Personal
 
                 string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
                 txtSalariu.Text = ds.Tables[0].Rows[0][salariu].ToString();
+                Session["MP_Salariu"] = txtSalariu.Text;
 
                 CalculCO();
 
@@ -178,6 +179,8 @@ namespace WizOne.Personal
             }
             else
             {
+                txtSalariu.Text = Session["MP_Salariu"].ToString();
+
                 int tipAng = Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString());
                 if (hfTipAngajat.Contains("TipAng")) tipAng = Convert.ToInt32(General.Nz(hfTipAngajat["TipAng"], -1));
                 //Radu 18.09.2019
@@ -629,11 +632,12 @@ namespace WizOne.Personal
                 //    ds.Tables[1].Rows[0]["F1003907"] = param[1];
                 //    Session["InformatiaCurentaPersonal"] = ds;
                 //    break;
-                //case "txtSalariu":
-                //    ds.Tables[0].Rows[0]["F100699"] = param[1];
-                //    ds.Tables[1].Rows[0]["F100699"] = param[1];
-                //    Session["InformatiaCurentaPersonal"] = ds;
-                //    break;
+                case "txtSalariu":
+                    //    ds.Tables[0].Rows[0]["F100699"] = param[1];
+                    //    ds.Tables[1].Rows[0]["F100699"] = param[1];
+                    //    Session["InformatiaCurentaPersonal"] = ds;
+                    Session["MP_Salariu"] = param[1];
+                    break;
                 //case "deDataModifSal":
                 //    data = param[1].Split('.');
                 //    ds.Tables[0].Rows[0]["F100991"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
@@ -1755,8 +1759,23 @@ namespace WizOne.Personal
 
                 //string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, vechime, esteNou);
                 //Radu 21.04.2020
+                //Radu 21.04.2021 - data se citeste cf. param.
+                int param = Convert.ToInt32(Dami.ValoareParam("ModCalculZileCOCuveniteDataReferinta", "1"));
+                string dtCalcul = dtSf;
+                switch (param)
+                {
+                    case 1:
+                        dtCalcul = dtSf;
+                        break;
+                    case 2:
+                        dtCalcul = dtInc;
+                        break;
+                    case 3:
+                        dtCalcul = General.CurrentDate();
+                        break;
+                }
 
-                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date,'" + an + "-" + luna.ToString().PadLeft(2, '0') + "-" + zi.ToString().PadLeft(2, '0') + "'), 1, " + f10072 + ")";
+                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date," + dtCalcul + "), 1, " + f10072 + ")";
                 DataTable dtCO = General.IncarcaDT(strSql, null);
 
                 //DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });

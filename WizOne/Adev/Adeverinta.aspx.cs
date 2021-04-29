@@ -118,19 +118,30 @@ namespace WizOne.Adev
                     DataView view = new DataView(dtAng);
                     DataTable dtRol = view.ToTable(true, "Rol", "RolDenumire");
 
-                    cmbRol.DataSource = dtRol;
+                    string lstIdSuper = Dami.ValoareParam("Adev_IdSuper", "");
+
+                    DataTable dtSuper = new DataTable();
+                    dtSuper.Columns.Add("Rol", typeof(int));
+                    dtSuper.Columns.Add("RolDenumire", typeof(string));
+
+                    if (lstIdSuper.Length > 0)
+                        dtSuper = dtRol.Select("Rol IN (" + lstIdSuper + ")").CopyToDataTable();
+                    else
+                        dtSuper = dtRol;
+
+                    cmbRol.DataSource = dtSuper;  
                     cmbRol.DataBind();
 
                     cmbRol.SelectedIndex = 0;
 
-                    //dtAng = General.IncarcaDT(SelectAngajati(), null);
-                    cmbAng.DataSource = dtAng;
+                    DataTable dtAngFiltrati = General.IncarcaDT(SelectAngajati("WHERE Rol = " + cmbRol.Value.ToString()), null);
+                    cmbAng.DataSource = dtAngFiltrati;
                     cmbAng.DataBind();
 
-                    cmbAngBulk.DataSource = dtAng;
+                    cmbAngBulk.DataSource = dtAngFiltrati;
                     cmbAngBulk.DataBind();
 
-                    Session["Adev_Angajati"] = dtAng;
+                    Session["Adev_Angajati"] = dtAngFiltrati;
 
                     UpdateControls(lista);
                     if (!lista.ContainsKey("XML"))
@@ -680,41 +691,66 @@ namespace WizOne.Adev
                 string lstIdSuper = Dami.ValoareParam("Adev_IdSuper", "");
                 string conditie = "";
                 if (lstIdSuper.Length > 0)
-                    conditie = " AND J.\"IdSuper\" IN (" + lstIdSuper + ")";
+                    //conditie = " AND J.\"IdSuper\" IN (" + lstIdSuper + ")";
+                    conditie = " AND B.\"IdSuper\" IN (" + lstIdSuper + ")";
 
-                string strSql = @"SELECT Y.* FROM(
-                                SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
-                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025, A.F100993, A.F10079, 
-                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"", F08003 AS ""PunctLucru"",
-                                A.F10061, A.F10062
+                //string strSql = @"SELECT Y.* FROM(
+                //                SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
+                //                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025, A.F100993, A.F10079, 
+                //                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"", F08003 AS ""PunctLucru"",
+                //                A.F10061, A.F10062
 
-                                FROM ""relGrupAngajat"" B                                
-                                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""                                
-                                INNER JOIN F100 A ON b.F10003 = a.F10003   
-                                INNER JOIN F1001 X ON A.F10003 = X.F10003                            
-                                LEFT JOIN F718 D ON A.F10071 = D.F71802                                
-                                LEFT JOIN F002 E ON A.F10002 = E.F00202                                
-                                LEFT JOIN F003 F ON A.F10004 = F.F00304                                
-                                LEFT JOIN F004 G ON A.F10005 = G.F00405                                
-                                LEFT JOIN F005 H ON A.F10006 = H.F00506                                
-                                LEFT JOIN F006 I ON A.F10007 = I.F00607                                
-                                LEFT JOIN F007 K ON X.F100958 = K.F00708  
-                                LEFT JOIN F008 L ON X.F100959 = L.F00809    
-                                LEFT JOIN F080 M ON A.F10079 = M.F08002
-                                WHERE C.""IdSuper"" = {1}
+                //                FROM ""relGrupAngajat"" B                                
+                //                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""                                
+                //                INNER JOIN F100 A ON b.F10003 = a.F10003   
+                //                INNER JOIN F1001 X ON A.F10003 = X.F10003                            
+                //                LEFT JOIN F718 D ON A.F10071 = D.F71802                                
+                //                LEFT JOIN F002 E ON A.F10002 = E.F00202                                
+                //                LEFT JOIN F003 F ON A.F10004 = F.F00304                                
+                //                LEFT JOIN F004 G ON A.F10005 = G.F00405                                
+                //                LEFT JOIN F005 H ON A.F10006 = H.F00506                                
+                //                LEFT JOIN F006 I ON A.F10007 = I.F00607                                
+                //                LEFT JOIN F007 K ON X.F100958 = K.F00708  
+                //                LEFT JOIN F008 L ON X.F100959 = L.F00809    
+                //                LEFT JOIN F080 M ON A.F10079 = M.F08002
+                //                WHERE C.""IdSuper"" = {1}
 
-                                UNION
+                //                UNION
+
+                //                SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
+                //                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  , A.F100993, A.F10079, 
+                //                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",  F08003 AS ""PunctLucru"",
+                //                A.F10061, A.F10062
+
+                //                FROM ""relGrupAngajat"" B                                
+                //                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""                                
+                //                INNER JOIN F100 A ON b.F10003 = a.F10003 
+                //                INNER JOIN F1001 X ON A.F10003 = X.F10003                               
+                //                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")                                
+                //                LEFT JOIN F718 D ON A.F10071 = D.F71802                                
+                //                LEFT JOIN F002 E ON A.F10002 = E.F00202                                
+                //                LEFT JOIN F003 F ON A.F10004 = F.F00304                                
+                //                LEFT JOIN F004 G ON A.F10005 = G.F00405                                
+                //                LEFT JOIN F005 H ON A.F10006 = H.F00506                                
+                //                LEFT JOIN F006 I ON A.F10007 = I.F00607
+                //                LEFT JOIN F007 K ON X.F100958 = K.F00708  
+                //                LEFT JOIN F008 L ON X.F100959 = L.F00809  
+                //                LEFT JOIN F080 M ON A.F10079 = M.F08002
+                //                WHERE J.""IdUser"" = {1} {3}
+
+
+                //                ) Y 
+                //                {2}    ";
+                string strSql = @"SELECT Y.* FROM(                                
 
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
                                 A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  , A.F100993, A.F10079, 
                                 F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",  F08003 AS ""PunctLucru"",
                                 A.F10061, A.F10062
 
-                                FROM ""relGrupAngajat"" B                                
-                                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""                                
+                                FROM ""F100Supervizori"" B                                                               
                                 INNER JOIN F100 A ON b.F10003 = a.F10003 
-                                INNER JOIN F1001 X ON A.F10003 = X.F10003                               
-                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")                                
+                                INNER JOIN F1001 X ON A.F10003 = X.F10003   
                                 LEFT JOIN F718 D ON A.F10071 = D.F71802                                
                                 LEFT JOIN F002 E ON A.F10002 = E.F00202                                
                                 LEFT JOIN F003 F ON A.F10004 = F.F00304                                
@@ -724,7 +760,7 @@ namespace WizOne.Adev
                                 LEFT JOIN F007 K ON X.F100958 = K.F00708  
                                 LEFT JOIN F008 L ON X.F100959 = L.F00809  
                                 LEFT JOIN F080 M ON A.F10079 = M.F08002
-                                WHERE J.""IdUser"" = {1} {3}
+                                WHERE B.""IdUser"" = {1} {3}
   
                                                            
                                 ) Y 

@@ -7170,7 +7170,22 @@ namespace WizOne.Module
                 string dtSf = an.ToString() + "-12-31";
 
                 //Florin 2021.04.02 - am inlocuit peste tot unde aparea ultima zi din an cu ziua curenta
-                string dtCalcul = General.CurrentDate();
+                //Radu 21.04.2021 - data se citeste cf. param.
+                int param = Convert.ToInt32(Dami.ValoareParam("ModCalculZileCOCuveniteDataReferinta", "1"));
+                string dtCalcul = dtSf;
+                switch (param)
+                {
+                    case 1:
+                        dtCalcul = dtSf;
+                        break;
+                    case 2:
+                        dtCalcul = dtInc;
+                        break;
+                    case 3:
+                        dtCalcul = General.CurrentDate();
+                        break;
+                }
+
 
                 string filtruIns = "";
                 string f10003 = "-99";

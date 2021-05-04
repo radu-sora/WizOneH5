@@ -1775,7 +1775,7 @@ namespace WizOne.Personal
                         break;
                 }
 
-                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date," + dtCalcul + "), 1, " + f10072 + ")";
+                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date,'" + dtCalcul + "'), 1, " + f10072 + ")";
                 DataTable dtCO = General.IncarcaDT(strSql, null);
 
                 //DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });

@@ -276,9 +276,12 @@ namespace Wizrom.Reports.Code
                 };                
                 var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
                 var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
-                var parameters = xtraReport.ComponentStorage.OfType<SqlDataSource>().
+                var parameters = xtraReport.ObjectStorage.OfType<SqlDataSource>().
                     SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                    Where(p => p.Type != typeof(Expression));
+                    Where(p => p.Type != typeof(Expression)).
+                    Union(xtraReport.ComponentStorage.OfType<SqlDataSource>().
+                    SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                    Where(p => p.Type != typeof(Expression)));
 
                 foreach (var param in parameters)
                 {

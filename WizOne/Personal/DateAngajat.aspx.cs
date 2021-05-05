@@ -510,6 +510,7 @@ namespace WizOne.Personal
                         + (ds.Tables[1].Rows[0]["F100902"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100902"].ToString() + "'") + " AS F100902, "
                         + (ds.Tables[1].Rows[0]["F100904"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100904"].ToString() + "'") + " AS F100904, "
                         + (ds.Tables[2].Rows[0]["F100943"] == DBNull.Value ? "NULL" : ds.Tables[2].Rows[0]["F100943"].ToString()) + " AS F100943, "
+                        + (ds.Tables[1].Rows[0]["F10043"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10043"].ToString()) + " AS F10043, "
                         + idCtr + " AS IdContract ";                
                 
                 //se pot completa in viitor si alte campuri de interes

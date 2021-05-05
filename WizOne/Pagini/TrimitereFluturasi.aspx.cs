@@ -278,7 +278,7 @@ namespace WizOne.Pagini
                         xtraReport.ExportToPdf(mem, pdfOptions);
                         mem.Seek(0, System.IO.SeekOrigin.Begin);
 
-                        Notif.TrimiteMail(lstOne, txtSubiect.Text, (txtContinut.Html ?? "").ToString(), 0, "Fluturaș_" + key, "", 0, "", "", Convert.ToInt32(Session["IdClient"]), mem);     
+                        Notif.TrimiteMail(lstOne, txtSubiect.Text, (txtContinut.Html ?? "").ToString(), 0, "Fluturaș_" + key + ".pdf", "", 0, "", "", Convert.ToInt32(Session["IdClient"]), mem);     
                         mem.Close();
                         mem.Flush();
 

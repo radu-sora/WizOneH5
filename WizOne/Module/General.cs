@@ -7201,7 +7201,7 @@ namespace WizOne.Module
                 //Radu 21.04.2020
                 //string strSql = SelectCalculCO(an, f10003, filtruIns);
                 //string strSql = "select * from calculCO(" + f10003 + ", CONVERT(date,'" + an + "-12-31'), 1, (SELECT F10072 FROM f100 where f10003=" + f10003 + "))";
-                string strSql = "select * from calculCO(" + f10003 + ", CONVERT(date," + dtCalcul + "), 1, (SELECT F10072 FROM f100 where f10003=" + f10003 + "))";
+                string strSql = "select * from calculCO(" + f10003 + ", CONVERT(date,'" + dtCalcul + "'), 1, (SELECT F10072 FROM f100 where f10003=" + f10003 + "))";
                 General.ExecutaNonQuery(strSql, null);
 
 

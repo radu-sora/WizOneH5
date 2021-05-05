@@ -633,7 +633,7 @@ namespace WizOne.Curs
                                 string sql = "SELECT MAX(a.\"Id\") + 1 FROM \"Curs_tblCursSesiune\" a LEFT JOIN \"Curs_tblCurs\" b on a.\"IdCurs\" = b.\"Id\" ";
                                 DataTable dtTmp = General.IncarcaDT(sql, null);
                                 if (dtTmp != null & dtTmp.Rows.Count > 0 && dtTmp.Rows[0][0] != null)
-                                    idSesMax = Convert.ToInt32(dtTmp.Rows[0][0].ToString()) + 1;
+                                    idSesMax = Convert.ToInt32(dtTmp.Rows[0][0].ToString());
                                 row[x] = idSesMax;
                                 break;
                             case "IDCURS":

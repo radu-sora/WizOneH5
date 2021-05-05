@@ -147,7 +147,7 @@ namespace WizOne.Personal
 
                 //Florin #715
                 //if (ds.Tables[0].Rows[0]["F10010"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
-                if (Convert.ToInt32(cmbTipNorma.Value) != 3 && (ds.Tables[0].Rows[0]["F10010"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0))
+                if ((cmbTipNorma.Value == null || Convert.ToInt32(cmbTipNorma.Value) != 3) && (ds.Tables[0].Rows[0]["F10010"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0))
                 {
                     cmbIntRepTimpMunca.ClientEnabled = false;
                     txtNrOre.ClientEnabled = false;
@@ -1775,7 +1775,7 @@ namespace WizOne.Personal
                         break;
                 }
 
-                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date," + dtCalcul + "), 1, " + f10072 + ")";
+                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date,'" + dtCalcul + "'), 1, " + f10072 + ")";
                 DataTable dtCO = General.IncarcaDT(strSql, null);
 
                 //DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });

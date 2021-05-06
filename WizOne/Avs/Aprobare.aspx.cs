@@ -468,10 +468,10 @@ namespace WizOne.Avs
 
                 if (e.VisibleIndex >= 0)
                 {
-                    DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
-                    if (values != null)
+                    object[] obj = grDate.GetRowValues(e.VisibleIndex, new string[] { "IdAtribut", "IdStare" }) as object[];
+                    if (obj != null)
                     {
-                        int idAtr = Convert.ToInt32(values.Row["IdAtribut"].ToString());
+                        int idAtr = Convert.ToInt32(obj[0].ToString());
                         if (e.ButtonID == "btnDetalii")
                         {
                             if (idAtr != (int)Constante.Atribute.Sporuri && idAtr != (int)Constante.Atribute.SporTranzactii

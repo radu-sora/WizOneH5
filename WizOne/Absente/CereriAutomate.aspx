@@ -124,7 +124,7 @@
 
 
                                         <div style="float:left; padding-right:15px;">
-                                            <label id="lblNrOre" runat="server" style="display:none;">Nr. ore</label>
+                                            <label id="lblNrOre" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Nr. ore</label>
                                             <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" style="display:inline-block; float:left; width:75px;"  MinValue="0" MaxValue="999">
                                                 <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
                                             </dx:ASPxSpinEdit>

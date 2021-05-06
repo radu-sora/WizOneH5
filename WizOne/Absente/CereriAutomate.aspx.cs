@@ -216,19 +216,19 @@ namespace WizOne.Absente
                                       
                 if (cmbAbs.Value == null)
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat tip absenta!"), MessageBox.icoError);
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati selectat tip absenta!");
                     return;
                 }
 
                 if (dtDataInc.Value == null || (dtDataSf.Visible == true && dtDataSf.Value == null))
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Lipseste data start/data sfarsit!"), MessageBox.icoError);
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipseste data start/data sfarsit!");
                     return;
                 }
 
                 if (dtDataSf.Visible == true && Convert.ToDateTime(dtDataSf.Value) < Convert.ToDateTime(dtDataInc.Value))
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Data de sfarsit este anterioara datei de start!"), MessageBox.icoError);
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data de sfarsit este anterioara datei de start!");
                     return;
                 }
 
@@ -238,27 +238,34 @@ namespace WizOne.Absente
                 //    return;
                 //}
                 var goigi = txtNrOreInMinute.Text;
-                if (!rbPrel1.Checked && dtDataSf.Visible == false && txtNrOre.Text.Length <= 0)
+                if (!rbPrel1.Checked && txtNrOre.ClientVisible == true && txtNrOre.Text.Length <= 0)
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat numarul de ore!"), MessageBox.icoError);
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati specificat numarul de ore!");
                     return;
                 }
 
                 if (!rbPrel1.Checked && (cmbOraInc.Visible == true && cmbOraInc.Text == ""))
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat ora inceput!"), MessageBox.icoError);
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati specificat ora inceput!");
                     return;              
                 }
                 if (!rbPrel1.Checked && (cmbOraSf.Visible == true && cmbOraSf.Text == ""))
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat ora sfarsit!"), MessageBox.icoError);
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati specificat ora sfarsit!");
                     return;
                 }
 
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun angajat!"), MessageBox.icoError);
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati selectat niciun angajat!");
+                    return;
+                }
+
+                DataTable dtAbs = General.IncarcaDT("SELECT * FROM Ptj_tblAbsente WHERE Id = " + Convert.ToInt32(cmbAbs.Value), null);
+                if (Convert.ToInt32(General.Nz(dtAbs.Rows[0]["IdTipOre"], 1)) == 0 && Convert.ToInt32(General.Nz(dtAbs.Rows[0]["Prezenta"], 1)) == 0 && Convert.ToDateTime(dtDataInc.Value).Date != Convert.ToDateTime(dtDataSf.Value).Date)
+                {
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data inceput si data sfarsit trebuie sa fie aceeasi in cazul acestui tip de absenta");
                     return;
                 }
 
@@ -599,8 +606,8 @@ namespace WizOne.Absente
                         break;
                     case "dtDataInc":
                     case "dtDataSf":
-                        if (dtDataSf.Visible == false)
-                            dtDataSf.Value = dtDataInc.Value;
+                        //if (dtDataSf.Visible == false)
+                        //    dtDataSf.Value = dtDataInc.Value;
                         CalcZile();
                         break;
                     case "EmptyFields":
@@ -733,12 +740,13 @@ namespace WizOne.Absente
                         }
                         else
                         {//tip ora
-                            //lblNrOre.Style["display"] = "inline-block";
+                         //lblNrOre.Style["display"] = "inline-block";
+                            lblNrOre.Visible = true;
                             txtNrOre.ClientVisible = true;
                             txtNrOre.DecimalPlaces = 0;
                             txtNrOre.NumberType = SpinEditNumberType.Integer;
 
-                            lblNr.InnerText = "Nr. ore";
+                            //lblNr.InnerText = "Nr. ore";
                             lblNr.Visible = true;
 
                             if (folosesteInterval == 1)
@@ -769,10 +777,15 @@ namespace WizOne.Absente
                             }
 
 
-                            lblDataInc.InnerText = "Data";
-                            lblDataSf.Visible = false;
-                            dtDataSf.Visible = false;                     
-                            txtNr.Visible = false;
+                            //lblDataInc.InnerText = "Data";
+                            //lblDataSf.Visible = false;
+                            //dtDataSf.Visible = false;                     
+                            lblDataInc.InnerText = "Data inceput";
+                            lblDataSf.Visible = true;
+                            dtDataSf.Visible = true;
+
+                            txtNr.Visible = true;
+                            txtNr.ClientEnabled = false;
                             rbPrel.Visible = true;
                             rbPrel1.Visible = true;
                             rbPrel.Checked = true;
@@ -1189,11 +1202,11 @@ namespace WizOne.Absente
                 if (Constante.tipBD == 1) strTop = "TOP 1";
 
                 string nrZile = "1";
-                if (dtDataSf.Visible != false)
+                //if (dtDataSf.Visible != false)
                     nrZile = txtNr.Text;
-                else
+                if (txtNrOre.ClientVisible == true)
                 {
-                    dtDataSf.Value = dtDataInc.Value;
+                    //dtDataSf.Value = dtDataInc.Value;
                     if (nrOre == -99)
                         nrOre = Convert.ToDecimal(txtNrOre.Text);
                 }

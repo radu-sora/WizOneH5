@@ -7229,14 +7229,14 @@ namespace WizOne.Module
                             //                    + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
                             //                    + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
                             General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
-                                + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = " + dtCalcul + ", @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
+                                + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + dtCalcul + "', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
                                 + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
                         }
                         else
                         {
                             DataTable dtAng = General.IncarcaDT("SELECT F10072 FROM F100 WHERE F10003 = " + f10003);
                             //General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1, " + dtAng.Rows[0][0].ToString() + ");", null);
-                            General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", " + dtCalcul + ", 1, " + dtAng.Rows[0][0].ToString() + ");", null);
+                            General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", '" + dtCalcul + "', 1, " + dtAng.Rows[0][0].ToString() + ");", null);
                         }
                     }
                     else

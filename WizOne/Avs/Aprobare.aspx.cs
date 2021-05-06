@@ -101,6 +101,9 @@ namespace WizOne.Avs
                 cmbAngFiltru.DataSource = dtAng;
                 cmbAngFiltru.DataBind();
 
+                if (!IsPostBack)
+                    Session["Avs_Grid"] = null;
+
                 IncarcaGrid();
 
 
@@ -130,6 +133,7 @@ namespace WizOne.Avs
         {
             try
             {
+                Session["Avs_Grid"] = null;
                 IncarcaGrid();
             }
             catch (Exception ex)
@@ -147,6 +151,7 @@ namespace WizOne.Avs
                 cmbAtributeFiltru.Value = null;
                 checkComboBoxStare.Value = null;
 
+                Session["Avs_Grid"] = null;
                 IncarcaGrid();
             }
             catch (Exception ex)
@@ -166,6 +171,7 @@ namespace WizOne.Avs
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                         General.ExecutaNonQuery("UPDATE \"Avs_Cereri\" SET \"Explicatii\" = '" + dt.Rows[i]["Explicatii"].ToString() + "' WHERE \"Id\" = " + dt.Rows[i]["Id"].ToString(), null);
+                    Session["Avs_Grid"] = null;
                     IncarcaGrid();
                 }
             }
@@ -326,7 +332,11 @@ namespace WizOne.Avs
 
                 //Florin 2019.05.27
                 //dt = GetCereriAprobare(0, Convert.ToInt32(Session["UserId"].ToString()));
-                dt = SelectGrid();
+
+                if (Session["Avs_Grid"] == null)
+                    dt = SelectGrid();
+                else
+                    dt = Session["Avs_Grid"] as DataTable;
 
 
                 grDate.DataSource = dt;
@@ -366,6 +376,7 @@ namespace WizOne.Avs
                             {
                                 //{f10003}, {dtCer.Rows[0]["MotivSuspId"].ToString()},{data11}, {data12}, {data13},
                                 MetodeCereri(3,1);
+                                Session["Avs_Grid"] = null;
                                 IncarcaGrid();
                             }
                             break;                       
@@ -773,6 +784,7 @@ namespace WizOne.Avs
                 else
                     grDate.JSProperties["cpAlertMessage"] = msg;
 
+                Session["Avs_Grid"] = null;
                 IncarcaGrid();
 
                 grDate.Selection.UnselectAll();

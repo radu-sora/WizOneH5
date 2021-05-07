@@ -138,6 +138,56 @@ namespace WizOne.Module
                                         {
                                             if (Dami.ValoareParam("LogNotificari") == "1") General.CreazaLog("Nu exista adrese de mail", "VerificaDate");
                                         }
+
+                                        //Radu 07.05.2021
+                                        if (Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteICS"], 0)) > 0)
+                                        {
+                                            DateTime dtStart = new DateTime(2100, 1, 1);
+                                            DateTime dtSf = new DateTime(2100, 1, 1);
+                                            try
+                                            {
+                                                DataTable dtUser = General.IncarcaDT("SELECT * FROM USERS WHERE F10003 = " + userMarca, null);
+                                                if (dtUser != null && dtUser.Rows.Count > 0 && dtUser.Rows[0]["Mail"] != null && dtUser.Rows[0]["Mail"].ToString().Length > 0)
+                                                {
+                                                    string tipData = "";
+                                                    bool esteCamp = false;
+
+                                                    dtStart = Convert.ToDateTime(DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["DataInceputICS"].ToString().Replace("<<", "").Replace(">>", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp));
+                                                    dtSf = Convert.ToDateTime(DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["DataSfarsitICS"].ToString().Replace("<<", "").Replace(">>", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp));
+                                                    string subiectICS = General.Nz(dtReg.Rows[i]["SubiectICS"], "").ToString();
+                                                    string corpICS = General.Nz(dtReg.Rows[i]["CorpICS"], "").ToString();
+
+                                                    //Radu 15.02.2019
+                                                    DateTime? oraStart = null;
+                                                    DateTime? oraSfarsit = null;
+                                                    if (dtReg.Rows[i]["OraInceputICS"] != null && dtReg.Rows[i]["OraInceputICS"].ToString().Length > 0 && dtReg.Rows[i]["OraSfarsitICS"] != null && dtReg.Rows[i]["OraSfarsitICS"].ToString().Length > 0)
+                                                    {
+                                                        if (dtReg.Rows[i]["OraInceputICS"].ToString().Contains(":"))
+                                                            oraStart = new DateTime(2100, 1, 1, Convert.ToInt32(dtReg.Rows[i]["OraInceputICS"].ToString().Substring(0, 2)), Convert.ToInt32(dtReg.Rows[i]["OraInceputICS"].ToString().Substring(3, 2)), 0);
+                                                        else
+                                                        {
+                                                            string ora = DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["OraInceputICS"].ToString().Replace("<<", "").Replace(">>", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp).ToString();
+                                                            oraStart = new DateTime(2100, 1, 1, Convert.ToInt32(ora.Substring(0, 2)), Convert.ToInt32(ora.Substring(3, 2)), 0);
+                                                        }
+                                                        if (dtReg.Rows[i]["OraSfarsitICS"].ToString().Contains(":"))
+                                                            oraSfarsit = new DateTime(2100, 1, 1, Convert.ToInt32(dtReg.Rows[i]["OraSfarsitICS"].ToString().Substring(0, 2)), Convert.ToInt32(dtReg.Rows[i]["OraSfarsitICS"].ToString().Substring(3, 2)), 0);
+                                                        else
+                                                        {
+                                                            string ora = DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["OraSfarsitICS"].ToString().Replace("<<", "").Replace(">>", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp).ToString();
+                                                            oraSfarsit = new DateTime(2100, 1, 1, Convert.ToInt32(ora.Substring(0, 2)), Convert.ToInt32(ora.Substring(3, 2)), 0);
+                                                        }
+                                                    }
+
+                                                    CreazaCalendarOutlook2(dtUser.Rows[0]["Mail"].ToString(), dtStart, dtSf, subiectICS, corpICS, oraStart == null ? "" : oraStart.Value.Hour.ToString().PadLeft(2, '0') +
+                                                                          ":" + oraStart.Value.Minute.ToString().PadLeft(2, '0'), oraSfarsit == null ? "" : oraSfarsit.Value.Hour.ToString().PadLeft(2, '0') +
+                                                                           ":" + oraSfarsit.Value.Minute.ToString().PadLeft(2, '0'));
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+                                            }
+                                        }
                                     }
                                     break;
                                 case 2:                                 //Validare
@@ -1004,6 +1054,254 @@ namespace WizOne.Module
 
             return str;
         }
+
+        private static void CreazaCalendarOutlook2(string mail, DateTime ziInc, DateTime ziSf, string subiect, string corp, string oraInc, string oraSf)
+        {
+            string log = "1";
+            try
+            {
+                DateTime dtInc = ziInc;
+                DateTime dtSf = ziSf.AddDays(1);
+                log += "2";
+                string strInc = dtInc.Year + dtInc.Month.ToString().PadLeft(2, '0') + dtInc.Day.ToString().PadLeft(2, '0');
+                string strSf = dtSf.Year + dtSf.Month.ToString().PadLeft(2, '0') + dtSf.Day.ToString().PadLeft(2, '0');
+                log += "3";
+                string attCorp = corp;
+                log += "4";
+
+                //Radu 14.02.2019       
+                string tip = "";
+                if (oraInc.Length > 0 && oraSf.Length > 0 && oraSf != "00:00")
+                    tip = "DATE-TIME";
+                else
+                    tip = "DATE";
+                string oraStart = "", oraSfarsit = "";
+                if (tip == "DATE-TIME")
+                {
+                    oraStart = "T" + (oraInc.Length > 4 ? oraInc.Substring(0, 2) + oraInc.Substring(3, 2) + "00" : "000000");
+                    oraSfarsit = "T" + (oraSf.Length > 4 ? oraSf.Substring(0, 2) + oraSf.Substring(3, 2) + "00" : "235959");
+                    strSf = ziSf.Year + ziSf.Month.ToString().PadLeft(2, '0') + ziSf.Day.ToString().PadLeft(2, '0');
+                }
+
+                String[] contents = {
+                        "BEGIN:VCALENDAR",
+                        "BEGIN:VEVENT",
+                        "STATUS:BUSY",      //Radu 12.02.2019
+                        "DTSTART; VALUE = " + tip + ":" + strInc + (tip == "DATE-TIME" ? oraStart : ""),        //Radu 14.02.2019
+                        "DTEND; VALUE = " + tip + ":" + strSf + (tip == "DATE-TIME" ? oraSfarsit : ""),         //Radu 14.02.2019
+                        "DESCRIPTION;ENCODING=QUOTED-PRINTABLE:" + attCorp.Replace("\r","=0D=0A"),
+                        "SUMMARY:" + subiect,
+                        "PRIORITY:3",
+                        "END:VEVENT",
+                        "END:VCALENDAR" };
+                log += "5";
+                string mom = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0');
+                string numeAtt = "Appt_" + mom + ".ics";
+                log += "6";
+                if (!Directory.Exists(HostingEnvironment.MapPath("~/Temp/Calendar"))) Directory.CreateDirectory(HostingEnvironment.MapPath("~/Temp/Calendar"));
+                log += "7";
+                File.WriteAllLines(HostingEnvironment.MapPath("~/Temp/Calendar/" + numeAtt), contents);
+                log += "8";
+                TrimiteMail(mail, subiect, corp.Replace("\r", "<br>"), numeAtt);
+                log += "9";
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+        }
+
+
+        private static object DamiValTabela(string numePagina, string numeGrid, int tipNotif, string camp, DataTable entVal, int idUser, int f10003, out string tipData, out bool esteCamp)
+        {
+            object val = null;
+            tipData = "string";
+            esteCamp = true;
+
+            try
+            {
+                //verificam daca nu cumva acest camp este din alta tabela
+                DataTable q = General.IncarcaDT("SELECT * FROM Ntf_tblCampuri WHERE Pagina = " + numePagina + " AND GRID = " + numeGrid + " AND ALIAS = " + camp, null);
+                if (q != null && q.Rows.Count > 0)
+                {
+
+                    try
+                    {
+                        if (q.Rows[0]["CampSelect"] != null && q.Rows[0]["CampSelect"].ToString().Length > 0)
+                        {
+                            //in cazul in care este direct select
+                            string strSql = q.Rows[0]["CampSelect"].ToString();
+                            for (int i = 0; i < entVal.Columns.Count; i++)
+                            {
+                                strSql = strSql.Replace("ent." + q.Columns[i].ColumnName, q.Rows[0][q.Columns[i].ColumnName].ToString());
+                            }
+
+                            strSql = strSql.Replace("GLOBAL.IDUSER", idUser.ToString()).Replace("GLOBAL.MARCA", f10003.ToString());
+
+                            DataTable rez = General.IncarcaDT(strSql, null);
+
+                            if (rez != null && rez.Rows.Count > 0 && rez.Rows[0][0] != null && rez.Rows[0][0].ToString().Length > 0) val = rez.Rows[0][0].ToString();
+                        }
+                        else
+                        {
+                            if (q.Rows[0]["Tabela"] != null && q.Rows[0]["Tabela"].ToString().Length > 0 && q.Rows[0]["CampLegatura"] != null && q.Rows[0]["CampLegatura"].ToString().Length > 0 && q.Rows[0]["CampEntitate"] != null && q.Rows[0]["CampEntitate"].ToString().Length > 0)
+                            {
+                                //in cazul in care am si restul de campuri completate inseamna ca este camp din alta tabela
+                                object filt = null;
+                                if (entVal.Columns.Contains(q.Rows[0]["CampEntitate"].ToString()))
+                                    filt = entVal.Rows[0][q.Rows[0]["CampEntitate"].ToString()];
+                                else
+                                    filt = q.Rows[0]["CampEntitate"].ToString();
+
+                                string strSql = "";
+
+                                if (Constante.tipBD == 1)
+                                    strSql = "SELECT CONVERT(nvarchar(4000)," + q.Rows[0]["Camp"].ToString() + ") AS cmp FROM " + q.Rows[0]["Tabela"].ToString() + " WHERE " + q.Rows[0]["CampLegatura"].ToString() + "=" + filt.ToString();
+                                else
+                                {
+                                    if (q.Rows[0]["TipData"].ToString().ToLower() == "datetime")
+                                        strSql = "SELECT to_char(" + q.Rows[0]["Camp"].ToString() + ",'dd-mm-yyyy') AS cmp FROM \"" + q.Rows[0]["Tabela"].ToString() + "\" WHERE \"" + q.Rows[0]["CampLegatura"].ToString() + "\"='" + filt.ToString() + "'";
+                                    else
+                                        strSql = "SELECT to_char(" + q.Rows[0]["Camp"].ToString() + ") AS cmp FROM \"" + q.Rows[0]["Tabela"].ToString() + "\" WHERE \"" + q.Rows[0]["CampLegatura"].ToString() + "\"='" + filt.ToString() + "'";
+                                }
+
+                                strSql = strSql.Replace("GLOBAL.IDUSER", idUser.ToString()).Replace("GLOBAL.MARCA", f10003.ToString());
+
+                                DataTable rez = General.IncarcaDT(strSql, null);
+
+                                if (rez != null && rez.Rows.Count > 0 && rez.Rows[0][0] != null && rez.Rows[0][0].ToString().Length > 0) val = rez.Rows[0][0].ToString();
+                            }
+                            else
+                            {
+                                //este camp din entitate
+                                if (entVal.Columns.Contains(q.Rows[0]["Camp"].ToString()))
+                                {
+                                    if (q.Rows[0]["TipData"].ToString().ToLower() == "datetime")
+                                        if (entVal.Rows[0][q.Rows[0]["Camp"].ToString()] != null && entVal.Rows[0][q.Rows[0]["Camp"].ToString()].ToString().Length > 0)
+                                        {
+                                            try
+                                            {
+                                                val = String.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(entVal.Rows[0][q.Rows[0]["Camp"].ToString()].ToString()));
+                                            }
+                                            catch (Exception) { }
+                                        }
+                                        else
+                                        {
+                                            val = "";
+                                        }
+                                    else
+                                        val = entVal.Rows[0][q.Rows[0]["Camp"].ToString()].ToString();
+                                }
+                                else
+                                {
+                                    switch (q.Rows[0]["Camp"].ToString().ToUpper())
+                                    {
+                                        case "GLOBAL.MARCA":
+                                            val = f10003.ToString();
+                                            break;
+                                        case "GLOBAL.IDUSER":
+                                            val = idUser.ToString();
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    tipData = q.Rows[0]["TipData"].ToString();
+                }
+                else
+                {
+                    esteCamp = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return val;
+        }
+
+        private static string TrimiteMail(string mailTO, string subiect, string corpMail, string numeAtt)
+        {
+            string strErr = "";
+            SmtpClient smtp = new SmtpClient();
+
+            try
+            {
+
+                string folosesteCred = Dami.ValoareParam("TrimiteMailCuCredentiale");
+                string cuSSL = Dami.ValoareParam("TrimiteMailCuSSL", "false");
+
+                string smtpMailFrom = Dami.ValoareParam("SmtpMailFrom");
+                string smtpServer = Dami.ValoareParam("SmtpServer");
+                string smtpPort = Dami.ValoareParam("SmtpPort");
+                string smtpMail = Dami.ValoareParam("SmtpMail");
+                string smtpParola = Dami.ValoareParam("SmtpParola");
+
+                string strMsg = "";
+                if (smtpMailFrom == "") strMsg += ", mail from";
+
+                if (smtpServer == "") strMsg += ", serverul de smtp";
+                if (smtpPort == "") strMsg += ", smtp port";
+                if (folosesteCred == "1" || folosesteCred == "2")
+                {
+                    if (smtpMail == "") strMsg += ", smtp mail";
+                    if (smtpParola == "") strMsg += ", smtp parola";
+                }
+
+                if (strMsg != "")
+                {
+                    General.MemoreazaEroarea("Nu exista date despre " + strMsg.Substring(2), "Notif", "TrimiteMail");
+                    return "Nu exista date despre " + strMsg.Substring(2);
+                }
+
+                MailMessage mm = new MailMessage();
+                mm.To.Add(new MailAddress(mailTO));
+                mm.From = new MailAddress(smtpMailFrom);
+                mm.Subject = subiect;
+                mm.Body = corpMail;
+                mm.IsBodyHtml = true;
+                smtp = new SmtpClient(smtpServer);
+                smtp.Port = Convert.ToInt32(smtpPort);
+                smtp.Host = smtpServer;
+
+                if (cuSSL == "1")
+                    smtp.EnableSsl = true;
+                if (folosesteCred == "1")
+                {
+                    NetworkCredential basicCred = new NetworkCredential(smtpMail, smtpParola);
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = basicCred;
+                    ServicePointManager.ServerCertificateValidationCallback += (o, c, ch, er) => true;
+                }
+                else
+                {
+                    smtp.UseDefaultCredentials = true;
+                }
+
+                Attachment mailAttachment = new Attachment(HostingEnvironment.MapPath("~/Temp/Calendar/" + numeAtt));
+                mm.Attachments.Add(mailAttachment);
+                smtp.Send(mm);
+
+                strErr = "";
+
+
+                smtp.Dispose();
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strErr;
+        }
+
 
         internal static string TraduCuvant(string nume, string cuvant = "")
         {

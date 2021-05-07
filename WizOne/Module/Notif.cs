@@ -137,6 +137,57 @@ namespace WizOne.Module
                                         {
                                             if (Dami.ValoareParam("LogNotificari") == "1") General.CreazaLog("Nu exista adrese de mail", "VerificaDate");
                                         }
+
+                                        //Radu 07.05.2021
+                                        if (Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteICS"], 0)) > 0)
+                                        {
+                                            DateTime dtStart = new DateTime(2100, 1, 1);     
+                                            DateTime dtSf = new DateTime(2100, 1, 1);
+                                            try
+                                            {
+                                                DataTable dtUser = General.IncarcaDT("SELECT * FROM USERS WHERE F10003 = " + userMarca, null);                                                
+                                                if (dtUser != null && dtUser.Rows.Count > 0 && dtUser.Rows[0]["Mail"] != null && dtUser.Rows[0]["Mail"].ToString().Length > 0)
+                                                {
+                                                    string tipData = "";
+                                                    bool esteCamp = false;
+
+                                                    dtStart = Convert.ToDateTime(DamiValTabela(numePagina, numeGrid, 1, dtReg.Rows[i]["DataInceputICS"].ToString().Replace("<<", "").Replace(">>", ""), entVal, userId, userMarca, out tipData, out esteCamp));
+                                                    dtSf = Convert.ToDateTime(DamiValTabela(numePagina, numeGrid, 1, dtReg.Rows[i]["DataSfarsitICS"].ToString().Replace("<<", "").Replace(">>", ""), entVal, userId, userMarca, out tipData, out esteCamp));
+                                                    string subiectICS = General.Nz(dtReg.Rows[i]["SubiectICS"], "").ToString();
+                                                    string corpICS = General.Nz(dtReg.Rows[i]["CorpICS"], "").ToString();  
+
+                                                    //Radu 15.02.2019
+                                                    DateTime? oraStart = null;
+                                                    DateTime? oraSfarsit = null;
+                                                    if (dtReg.Rows[i]["OraInceputICS"] != null && dtReg.Rows[i]["OraInceputICS"].ToString().Length > 0 && dtReg.Rows[i]["OraSfarsitICS"] != null && dtReg.Rows[i]["OraSfarsitICS"].ToString().Length > 0)
+                                                    {
+                                                        if (dtReg.Rows[i]["OraInceputICS"].ToString().Contains(":"))
+                                                            oraStart = new DateTime(2100, 1, 1, Convert.ToInt32(dtReg.Rows[i]["OraInceputICS"].ToString().Substring(0, 2)), Convert.ToInt32(dtReg.Rows[i]["OraInceputICS"].ToString().Substring(3, 2)), 0);
+                                                        else
+                                                        {
+                                                            string ora = DamiValTabela(numePagina, numeGrid, 1, dtReg.Rows[i]["OraInceputICS"].ToString().Replace("<<", "").Replace(">>", ""), entVal, userId, userMarca, out tipData, out esteCamp).ToString();
+                                                            oraStart = new DateTime(2100, 1, 1, Convert.ToInt32(ora.Substring(0, 2)), Convert.ToInt32(ora.Substring(3, 2)), 0);
+                                                        }
+                                                        if (dtReg.Rows[i]["OraSfarsitICS"].ToString().Contains(":"))
+                                                            oraSfarsit = new DateTime(2100, 1, 1, Convert.ToInt32(dtReg.Rows[i]["OraSfarsitICS"].ToString().Substring(0, 2)), Convert.ToInt32(dtReg.Rows[i]["OraSfarsitICS"].ToString().Substring(3, 2)), 0);
+                                                        else
+                                                        {
+                                                            string ora = DamiValTabela(numePagina, numeGrid, 1, dtReg.Rows[i]["OraSfarsitICS"].ToString().Replace("<<", "").Replace(">>", ""), entVal, userId, userMarca, out tipData, out esteCamp).ToString();
+                                                            oraSfarsit = new DateTime(2100, 1, 1, Convert.ToInt32(ora.Substring(0, 2)), Convert.ToInt32(ora.Substring(3, 2)), 0);
+                                                        }
+                                                    }
+
+                                                    CreazaCalendarOutlook2(entUsr.Mail, dtStart, dtSf, subiectICS, corpICS, oraStart == null ? "" : oraStart.Value.Hour.ToString().PadLeft(2, '0') +
+                                                                          ":" + oraStart.Value.Minute.ToString().PadLeft(2, '0'), oraSfarsit == null ? "" : oraSfarsit.Value.Hour.ToString().PadLeft(2, '0') +
+                                                                           ":" + oraSfarsit.Value.Minute.ToString().PadLeft(2, '0'));
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+                                            }
+                                        }
+
                                     }
                                     break;
                                 case 2:                                 //Validare
@@ -867,5 +918,184 @@ namespace WizOne.Module
 
             return str;
         }
+
+        //Radu 07.05.2021
+        private void CreazaCalendarOutlook2(string mail, DateTime ziInc, DateTime ziSf, string subiect, string corp, string oraInc, string oraSf)
+        {
+            string log = "1";
+            try
+            {
+                DateTime dtInc = ziInc;
+                DateTime dtSf = ziSf.AddDays(1);
+                log += "2";
+                string strInc = dtInc.Year + dtInc.Month.ToString().PadLeft(2, '0') + dtInc.Day.ToString().PadLeft(2, '0');
+                string strSf = dtSf.Year + dtSf.Month.ToString().PadLeft(2, '0') + dtSf.Day.ToString().PadLeft(2, '0');
+                log += "3";
+                string attCorp = corp;
+                log += "4";
+
+                //Radu 14.02.2019       
+                string tip = "";
+                if (oraInc.Length > 0 && oraSf.Length > 0 && oraSf != "00:00")
+                    tip = "DATE-TIME";
+                else
+                    tip = "DATE";
+                string oraStart = "", oraSfarsit = "";
+                if (tip == "DATE-TIME")
+                {
+                    oraStart = "T" + (oraInc.Length > 4 ? oraInc.Substring(0, 2) + oraInc.Substring(3, 2) + "00" : "000000");
+                    oraSfarsit = "T" + (oraSf.Length > 4 ? oraSf.Substring(0, 2) + oraSf.Substring(3, 2) + "00" : "235959");
+                    strSf = ziSf.Year + ziSf.Month.ToString().PadLeft(2, '0') + ziSf.Day.ToString().PadLeft(2, '0');
+                }
+
+                String[] contents = {
+                        "BEGIN:VCALENDAR",
+                        "BEGIN:VEVENT",
+                        "STATUS:BUSY",      //Radu 12.02.2019
+                        "DTSTART; VALUE = " + tip + ":" + strInc + (tip == "DATE-TIME" ? oraStart : ""),        //Radu 14.02.2019
+                        "DTEND; VALUE = " + tip + ":" + strSf + (tip == "DATE-TIME" ? oraSfarsit : ""),         //Radu 14.02.2019
+                        "DESCRIPTION;ENCODING=QUOTED-PRINTABLE:" + attCorp.Replace("\r","=0D=0A"),
+                        "SUMMARY:" + subiect,
+                        "PRIORITY:3",
+                        "END:VEVENT",
+                        "END:VCALENDAR" };
+                log += "5";
+                string mom = DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0');
+                string numeAtt = "Appt_" + mom + ".ics";
+                log += "6";
+                if (!Directory.Exists(HostingEnvironment.MapPath("~/Temp/Calendar"))) Directory.CreateDirectory(HostingEnvironment.MapPath("~/Temp/Calendar"));
+                log += "7";
+                File.WriteAllLines(HostingEnvironment.MapPath("~/Temp/Calendar/" + numeAtt), contents);
+                log += "8";
+                TrimiteMail(mail, subiect, corp.Replace("\r", "<br>"), numeAtt);
+                log += "9";
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+           
+        }
+
+
+        private object DamiValTabela(string numePagina, string numeGrid, int tipNotif, string camp, object entVal, int idUser, int f10003, out string tipData, out bool esteCamp)
+        {
+            object val = null;
+            tipData = "string";
+            esteCamp = true;
+
+            try
+            {
+                //verificam daca nu cumva acest camp este din alta tabela
+                var q = this.ObjectContext.Ntf_tblCampuri.Where(p => p.Pagina == numePagina && p.Grid == numeGrid && p.Alias == camp);
+                if (q != null && q.Count() > 0)
+                {
+                    var entCmp = q.FirstOrDefault();
+
+                    try
+                    {
+                        if (entCmp.CampSelect != null && entCmp.CampSelect != "")
+                        {
+                            //in cazul in care este direct select
+                            string strSql = entCmp.CampSelect;
+                            foreach (PropertyInfo pr in entVal.GetType().GetProperties())
+                            {
+                                strSql = strSql.Replace("ent." + pr.Name, (pr.GetValue(entVal, null) ?? "").ToString());
+                            }
+
+                            srvGeneral.Replace(ref strSql, "GLOBAL.MARCA", f10003.ToString());
+                            srvGeneral.Replace(ref strSql, "GLOBAL.IDUSER", idUser.ToString());
+
+                            List<string> rez = this.ObjectContext.ExecuteStoreQuery<string>(strSql).ToList();
+
+                            if (rez.Count > 0 && rez[0] != null && rez[0].ToString() != "") val = rez[0].ToString();
+                        }
+                        else
+                        {
+                            if (entCmp.Tabela != null && entCmp.Tabela != "" && entCmp.CampLegatura != null && entCmp.CampLegatura != "" && entCmp.CampEntitate != null && entCmp.CampEntitate != "")
+                            {
+                                //in cazul in care am si restul de campuri completate inseamna ca este camp din alta tabela
+                                object filt = null;
+                                PropertyInfo piLeg = entVal.GetType().GetProperty(entCmp.CampEntitate);
+                                if (piLeg != null)
+                                    filt = piLeg.GetValue(entVal, null);
+                                else
+                                    filt = entCmp.CampEntitate;
+
+                                string strSql = "";
+
+                                if (Constante.tipBD == 1)
+                                    strSql = "SELECT CONVERT(nvarchar(4000)," + entCmp.Camp + ") AS cmp FROM " + entCmp.Tabela + " WHERE " + entCmp.CampLegatura + "=" + filt;
+                                else
+                                {
+                                    if (entCmp.TipData == "datetime")
+                                        strSql = "SELECT to_char(" + entCmp.Camp + ",'dd-mm-yyyy') AS cmp FROM \"" + entCmp.Tabela + "\" WHERE \"" + entCmp.CampLegatura + "\"='" + filt + "'";
+                                    else
+                                        strSql = "SELECT to_char(" + entCmp.Camp + ") AS cmp FROM \"" + entCmp.Tabela + "\" WHERE \"" + entCmp.CampLegatura + "\"='" + filt + "'";
+                                }
+
+                                srvGeneral.Replace(ref strSql, "GLOBAL.MARCA", f10003.ToString());
+                                srvGeneral.Replace(ref strSql, "GLOBAL.IDUSER", idUser.ToString());
+
+                                List<string> rez = this.ObjectContext.ExecuteStoreQuery<string>(strSql).ToList();
+
+                                if (rez.Count > 0 && rez[0] != null && rez[0].ToString() != "") val = rez[0];
+                            }
+                            else
+                            {
+                                //este camp din entitate
+                                PropertyInfo piVal = entVal.GetType().GetProperty(entCmp.Camp.ToString());
+                                if (piVal != null)
+                                {
+                                    if (entCmp.TipData.ToLower() == "datetime")
+                                        if (piVal.GetValue(entVal, null) != null)
+                                        {
+                                            try
+                                            {
+                                                val = String.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(piVal.GetValue(entVal, null)));
+                                            }
+                                            catch (Exception) { }
+                                        }
+                                        else
+                                        {
+                                            val = "";
+                                        }
+                                    else
+                                        val = (piVal.GetValue(entVal, null) ?? "").ToString();
+                                }
+                                else
+                                {
+                                    switch (entCmp.Camp.ToUpper())
+                                    {
+                                        case "GLOBAL.MARCA":
+                                            val = f10003.ToString();
+                                            break;
+                                        case "GLOBAL.IDUSER":
+                                            val = idUser.ToString();
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    tipData = entCmp.TipData;
+                }
+                else
+                {
+                    esteCamp = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                srvGeneral.MemoreazaEroarea(ex.Message.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return val;
+        }
+
     }
 }

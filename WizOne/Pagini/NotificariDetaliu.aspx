@@ -741,6 +741,66 @@
             </PanelCollection>
         </dx:ASPxRoundPanel>
 
+        <dx:ASPxRoundPanel ID="pnlICS" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" Width="100%" HeaderText="Trimite in calendar Outlook" CssClass="pnlAlign indentTop10" >
+            <HeaderStyle Font-Bold="true" />
+            <PanelCollection>
+                <dx:PanelContent>
+                    <table>
+                        <tr>
+                            <td><dx:ASPxCheckBox ID="chkTrimiteICS" runat="server" Text="Trimite ICS" TextAlign="Left" /></td>
+                            <td style="padding-right:15px;"><label id="lblDataInceputICS" runat="server">Data inceput</label></td>
+                            <td style="padding-right:15px;">
+                                <dx:ASPxTextBox ID="txtDataInceputICS" runat="server" ClientInstanceName="txtDataInceputICS" Width="250px">
+                                    <ClientSideEvents GotFocus="onGotFocus" />
+                                </dx:ASPxTextBox>
+                            </td>
+                            <td style="padding-right:15px;"><label id="lblDataSfarsitICS" runat="server">Data sfarsit</label></td>
+                            <td style="padding-right:15px;">
+                                <dx:ASPxTextBox ID="txtDataSfarsitICS" runat="server" ClientInstanceName="txtDataSfarsitICS" Width="250px">
+                                    <ClientSideEvents GotFocus="onGotFocus" />
+                                </dx:ASPxTextBox>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-right:15px;"><label id="lblOraInceputICS" runat="server">Ora inceput</label></td>
+                            <td style="padding-right:15px;">
+                                <dx:ASPxTextBox ID="txtOraInceputICS" runat="server" ClientInstanceName="txtOraInceputICS" Width="250px">
+                                    <ClientSideEvents GotFocus="onGotFocus" />
+                                </dx:ASPxTextBox>
+                            </td>
+                            <td style="padding-right:15px;"><label id="lblOraSfarsitICS" runat="server">Ora sfarsit</label></td>
+                            <td style="padding-right:15px;">
+                                <dx:ASPxTextBox ID="txtOraSfarsitICS" runat="server" ClientInstanceName="txtOraSfarsitICS" Width="250px">
+                                    <ClientSideEvents GotFocus="onGotFocus" />
+                                </dx:ASPxTextBox>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label id="lblSubiectICS" runat="server">Subiect</label></td>
+                            <td>
+                                <dx:ASPxTextBox ID="txtSubiectICS" runat="server" ClientInstanceName="txtSubiectICS" ClientIDMode="Static" Width="390px">
+                                    <ClientSideEvents GotFocus="onGotFocus" />    
+                                </dx:ASPxTextBox>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <dx:ASPxHtmlEditor ID="txtCorpICS" runat="server" ClientInstanceName="txtCorpICS" Height="370px" Width="100%">
+                        <ClientSideEvents GotFocus="onGotFocus" />
+                        <SettingsDialogs>
+                            <InsertImageDialog>
+                                <SettingsImageUpload UploadFolder="~/UploadFiles/Images/">
+                                    <ValidationSettings AllowedFileExtensions=".jpe,.jpeg,.jpg,.gif,.png" MaxFileSize="500000">
+                                    </ValidationSettings>
+                                </SettingsImageUpload>
+                            </InsertImageDialog>
+                        </SettingsDialogs>
+                    </dx:ASPxHtmlEditor>
+
+                </dx:PanelContent>
+            </PanelCollection>
+        </dx:ASPxRoundPanel>
+
 
     </form>
 </body>

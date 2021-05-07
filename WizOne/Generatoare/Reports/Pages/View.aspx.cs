@@ -473,7 +473,10 @@ namespace Wizrom.Reports.Pages
                         var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
                         var parameters = _report.ObjectStorage.OfType<SqlDataSource>().
                             SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                            Where(p => p.Type != typeof(Expression));
+                            Where(p => p.Type != typeof(Expression)).
+                            Union(_report.ComponentStorage.OfType<SqlDataSource>().
+                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                            Where(p => p.Type != typeof(Expression)));                        
 
                         foreach (var param in parameters)
                         {

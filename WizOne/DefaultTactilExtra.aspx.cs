@@ -284,7 +284,7 @@ namespace WizOne
                         DataTable dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TimeoutSecunde'", null);
                         if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
                             Session["TimeOutSecunde"] = Convert.ToInt32(dt.Rows[0][0].ToString());
-                        Response.Redirect("~/Tactil/Main.aspx", false);
+                        Response.Redirect("~/Tactil/Main", false);
          
                     }
                     else

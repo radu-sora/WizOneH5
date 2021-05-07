@@ -258,7 +258,7 @@ namespace WizOne.Absente
                 Session["grDate_Filtru"] = "Absente.Lista;" + grDate.FilterExpression;
                 Session["Sablon_CheiePrimara"] = -99;
                 Session["Sablon_TipActiune"] = "New";
-                Response.Redirect("~/Absente/Cereri.aspx", false);
+                Response.Redirect("~/Absente/Cereri", false);
             }
             catch (Exception ex)
             {
@@ -1030,7 +1030,7 @@ namespace WizOne.Absente
                 {
                     Session["IstoricExtins_VineDin"] = 1;
                     Session["grDate_Filtru"] = "Absente.Lista;" + grDate.FilterExpression;
-                    Response.Redirect("~/Absente/IstoricExtins.aspx", false);
+                    Response.Redirect("~/Absente/IstoricExtins", false);
                 }
                 else
                     MessageBox.Show("Nu exista angajat selectat", MessageBox.icoWarning, "");

@@ -398,7 +398,7 @@ namespace WizOne.Posturi
                     return;
                 }
 
-                string url = "~/Posturi/FormDetaliu.aspx";
+                string url = "~/Posturi/FormDetaliu";
                 Session["FormDetaliu_Id"] = null;
                 Session["FormDetaliu_IdFormular"] = Convert.ToInt32(cmbForm.Items[cmbForm.SelectedIndex].Value.ToString());
                 Session["FormDetaliu_IdStare"] = 0;

@@ -131,38 +131,38 @@ namespace WizOne.Tactil
                         if (msg != "")                        
                             MessageBox.Show(msg, MessageBox.icoWarning, "");
                         else
-                            Response.Redirect("~/Tactil/MainTactil.aspx", false);
+                            Response.Redirect("~/Tactil/MainTactil", false);
                         break;
                     case "adeverinte":
-                        Response.Redirect("~/Tactil/Adeverinte.aspx", false);
+                        Response.Redirect("~/Tactil/Adeverinte", false);
                         break;
                     case "co":
                         Session["CereriTactil"] = "CerereCO";
-                        Response.Redirect("~/Tactil/CereriTactil.aspx", false);
+                        Response.Redirect("~/Tactil/CereriTactil", false);
                         break;
                     case "biletvoie":
                         Session["CereriTactil"] = "BiletVoie";
-                        Response.Redirect("~/Tactil/CereriTactil.aspx", false);
+                        Response.Redirect("~/Tactil/CereriTactil", false);
                         break;
                     case "cop":
                         Session["CereriTactil"] = "PlanificareCO";
-                        Response.Redirect("~/Tactil/CereriTactil.aspx", false);
+                        Response.Redirect("~/Tactil/CereriTactil", false);
                         break;
                     case "absenteora":  //Radu 02.04.2019
                         Session["CereriTactil"] = "AbsenteOra";
-                        Response.Redirect("~/Tactil/CereriTactil.aspx", false);
+                        Response.Redirect("~/Tactil/CereriTactil", false);
                         break;
                     case "cereriistoric":
-                        Response.Redirect("~/Tactil/ListaTactil.aspx", false);
+                        Response.Redirect("~/Tactil/ListaTactil", false);
                         break;
                     case "pontaj":
-                        Response.Redirect("~/Tactil/PontajDetaliatTactil.aspx", false);
+                        Response.Redirect("~/Tactil/PontajDetaliatTactil", false);
                         break;
                     case "cereridiverse":
-                        Response.Redirect("~/Tactil/CereriDiverseTactil.aspx", false);
+                        Response.Redirect("~/Tactil/CereriDiverseTactil", false);
                         break;
                     case "cereridiverseistoric":
-                        Response.Redirect("~/Tactil/ListaDiverseTactil.aspx", false);
+                        Response.Redirect("~/Tactil/ListaDiverseTactil", false);
                         break;
                     case "adeverintasanatate":           
                         lnkAdevSanatate_Click(); ;
@@ -229,8 +229,8 @@ namespace WizOne.Tactil
                 //if (Session["TactilPrintareAdeverinte"].ToString() == "0")
                 //{
                 //    Session["PrintDocument"] = "AdeverintaMedic";
-                //    Session["PaginaWeb"] = "Tactil/Adeverinte.aspx";
-                //    Response.Redirect("~/Reports/ImprimaTactil.aspx", false);
+                //    Session["PaginaWeb"] = "Tactil/Adeverinte";
+                //    Response.Redirect("~/Reports/ImprimaTactil", false);
                 //}
                 //else
                 {
@@ -285,11 +285,11 @@ namespace WizOne.Tactil
                 //Radu 24.04.2020
                 string tip = Dami.ValoareParam("TipInfoChiosc", "0");
                 if (tip == "0")
-                    Response.Redirect("../DefaultTactil.aspx", false);
+                    Response.Redirect("../DefaultTactil", false);
                 else if (tip == "1" || tip == "2")
-                    Response.Redirect("../DefaultTactilFaraCard.aspx", false);
+                    Response.Redirect("../DefaultTactilFaraCard", false);
                 else if (tip == "3")
-                    Response.Redirect("../DefaultTactilExtra.aspx", false);
+                    Response.Redirect("../DefaultTactilExtra", false);
             }
             catch (Exception ex)
             {

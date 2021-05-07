@@ -73,11 +73,11 @@ namespace WizOne
                     //Radu 23.04.2020
                     string tip = Dami.ValoareParam("TipInfoChiosc", "0");
                     if (tip == "0")
-                        Response.Redirect("~/DefaultTactil.aspx", false);
+                        Response.Redirect("~/DefaultTactil", false);
                     else if (tip == "1" || tip == "2")
-                        Response.Redirect("~/DefaultTactilFaraCard.aspx", false);
+                        Response.Redirect("~/DefaultTactilFaraCard", false);
                     else if (tip == "3")
-                        Response.Redirect("~/DefaultTactilExtra.aspx", false);
+                        Response.Redirect("~/DefaultTactilExtra", false);
                     return;
                 }
 
@@ -465,7 +465,7 @@ namespace WizOne
                             {
                                 General.InregistreazaLogarea(1, txtPan1.Text);
                                 Session["SecApp"] = "OK";
-                                Response.Redirect("Pagini/SchimbaParola.aspx", false);
+                                Response.Redirect("Pagini/SchimbaParola", false);
                             }
                             else
                             {
@@ -493,7 +493,7 @@ namespace WizOne
                                             txtRas = ras;
                                         }
                                         else
-                                            Response.Redirect("~/Pagini/CodConfirmare.aspx", false);
+                                            Response.Redirect("~/Pagini/CodConfirmare", false);
                                     }
                                     else
                                     {
@@ -501,7 +501,7 @@ namespace WizOne
                                         if (Constante.tipBD == 2)
                                             General.ExecutaNonQuery("alter session set nls_date_format='DD-MM-RRRR'", null);
 
-                                        Response.Redirect("~/Pagini/MainPage.aspx", false);
+                                        Response.Redirect("~/Pagini/MainPage", false);
                                     }
                                 }
                             }
@@ -534,7 +534,7 @@ namespace WizOne
                     if (schimba)
                     {
                         Session["SecApp"] = "OK";
-                        Response.Redirect("Pagini/SchimbaParola.aspx", false);
+                        Response.Redirect("Pagini/SchimbaParola", false);
                         Session["SchimbaParolaMesaj"] = txtRas;
                     }
                 }

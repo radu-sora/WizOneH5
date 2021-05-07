@@ -78,7 +78,7 @@ namespace WizOne.CereriDiverse
         {
             try
             {
-                Response.Redirect("~/CereriDiverse/Lista.aspx", false);
+                Response.Redirect("~/CereriDiverse/Lista", false);
             }
             catch (Exception ex)
             {

@@ -288,6 +288,13 @@ namespace WizOne.Eval
                                 Session["lstEval_ConfigCompTemplateDetail"] = null;
                                 Session["Eval_RaspunsLinii_Tabel"] = null;
 
+                                //Florin #901 - 2021.04.26
+                                Session["feedEval_Obiectiv"] = null;
+                                Session["feedEval_ObiectivActivitate"] = null;
+                                Session["feedEval_Calificativ"] = null;
+                                Session["feedEval_Competenta"] = null;
+                                Session["feedEval_CompCalificativ"] = null;
+
                                 //Florin 2019.10.23 - retinem filtrul
                                 #region Salvam Filtrul
 
@@ -306,9 +313,9 @@ namespace WizOne.Eval
                                 #endregion
 
                                 if (Page.IsCallback)
-                                    ASPxWebControl.RedirectOnCallback("~/Eval/EvalDetaliu.aspx");
+                                    ASPxWebControl.RedirectOnCallback("~/Eval/EvalDetaliu");
                                 else
-                                    Response.Redirect("~/Eval/EvalDetaliu.aspx", false);
+                                    Response.Redirect("~/Eval/EvalDetaliu", false);
 
                                 #region OLD
                                 //string url = "~/Eval/EvalDetaliu.aspx";

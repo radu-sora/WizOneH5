@@ -246,7 +246,7 @@ namespace WizOne.Pontaj
             {
                 Session["PrintDocument"] = "PontajDetaliat";
                 Session["PrintParametrii"] = cmbAng.Value + ";" + Convert.ToDateTime(txtAnLuna.Value).Year + ";" + Convert.ToDateTime(txtAnLuna.Value).Month;
-                Response.Redirect("~/Reports/Imprima.aspx", true);
+                Response.Redirect("~/Reports/Imprima", true);
             }
             catch (Exception ex)
             {
@@ -259,7 +259,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                Response.Redirect("~/Absente/Lista.aspx", false);
+                Response.Redirect("~/Absente/Lista", false);
             }
             catch (Exception ex)
             {

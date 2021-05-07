@@ -212,7 +212,7 @@ namespace WizOne.Absente
                 }
 
                 Session["IstoricExtins_VineDin"] = 2;
-                Response.Redirect("~/Absente/IstoricExtins.aspx", false);
+                Response.Redirect("~/Absente/IstoricExtins", false);
                 
                 metaCereriDate itm = new metaCereriDate();
                 if (Session["Absente_Cereri_Date"] != null) itm = Session["Absente_Cereri_Date"] as metaCereriDate;
@@ -252,7 +252,7 @@ namespace WizOne.Absente
         {
             try
             {
-                Response.Redirect("~/Absente/Lista.aspx", false);
+                Response.Redirect("~/Absente/Lista", false);
             }
             catch (Exception ex)
             {

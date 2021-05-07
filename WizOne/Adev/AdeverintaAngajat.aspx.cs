@@ -193,8 +193,8 @@ namespace WizOne.Adev
                     Session["NrInregAdev"] = General.GetnrInreg();
                 }
 
-                Session["PaginaWeb"] = "Adev/AdeverintaAngajat.aspx";
-                Response.Redirect("~/Reports/Imprima.aspx", false);
+                Session["PaginaWeb"] = "Adev/AdeverintaAngajat";
+                Response.Redirect("~/Reports/Imprima", false);
                 
 
             }

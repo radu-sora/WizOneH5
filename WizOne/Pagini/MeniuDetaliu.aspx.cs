@@ -231,7 +231,7 @@ namespace WizOne.Pagini
                 General.SalveazaDate(dt, "MeniuLinii");
 
                 HttpContext.Current.Session["Sablon_Tabela"] = "MeniuLista";
-                Response.Redirect("~/Pagini/SablonLista.aspx", false);
+                Response.Redirect("~/Pagini/SablonLista", false);
 
                 //MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
             }
@@ -524,7 +524,7 @@ namespace WizOne.Pagini
             try
             {
                 HttpContext.Current.Session["Sablon_Tabela"] = "MeniuLista";
-                Response.Redirect("~/Pagini/SablonLista.aspx", false);
+                Response.Redirect("~/Pagini/SablonLista", false);
             }
             catch (Exception ex)
             {

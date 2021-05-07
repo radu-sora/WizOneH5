@@ -84,7 +84,7 @@ namespace WizOne.Contracte
                     {
                         case "btnEdit":
                             {
-                                string url = "~/Contracte/Detalii.aspx";
+                                string url = "~/Contracte/Detalii";
                                 if (url != "")
                                 {
                                     Session["InformatiaCurenta"] = null;
@@ -154,7 +154,7 @@ namespace WizOne.Contracte
         {
             try
             {
-                string url = "~/Contracte/Detalii.aspx";
+                string url = "~/Contracte/Detalii";
                 if (url != "")
                 {
                     Session["IdContract"] = -99;

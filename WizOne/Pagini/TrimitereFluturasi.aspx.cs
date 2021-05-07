@@ -278,13 +278,13 @@ namespace WizOne.Pagini
                         xtraReport.ExportToPdf(mem, pdfOptions);
                         mem.Seek(0, System.IO.SeekOrigin.Begin);
 
-                        string numeFis = "Fluturaș_" + key;
+                        string numeFis = "Fluturaș_" + key + ".pdf";
                         if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Elanor)
                         {
                             string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
                             string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
 
-                            numeFis = "P_SLP_02344_" + dataInc + "_" + dataSf + "_00_V2_0000_00000_FILE_" + key + "_" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[2].Replace(' ', '_');
+                            numeFis = "P_SLP_02344_" + dataInc + "_" + dataSf + "_00_V2_0000_00000_FILE_" + key + "_" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[2].Replace(' ', '_') + ".pdf";
                         }
 
                         Notif.TrimiteMail(lstOne, txtSubiect.Text, (txtContinut.Html ?? "").ToString(), 0, numeFis, "", 0, "", "", Convert.ToInt32(Session["IdClient"]), mem);     

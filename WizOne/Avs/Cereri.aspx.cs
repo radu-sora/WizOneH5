@@ -5298,7 +5298,7 @@ namespace WizOne.Avs
                                 modifDur = true;
 
                             if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
-                            {
+                            {                               
                                 sql100Tmp = "UPDATE F100 SET " + (modifTip ? "F100984 = " + dtCer.Rows[0]["TipContract"].ToString() : "") + (modifDur ? (modifTip ? "," : "") +
                                     (dtCer.Rows[0]["DurataContract"].ToString() == "1" ? " F10023 = " + General.ToDataUniv(new DateTime(2100, 1, 1))
                                     + ", F100993 = " + General.ToDataUniv(new DateTime(2100, 1, 1)) + ", F1009741 = 1, F100935 = 0, F100936 = 0 "
@@ -5307,6 +5307,7 @@ namespace WizOne.Avs
                                     : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + ", F1009741 = " 
                                     + (dtCer.Rows[0]["DurataContract"] == DBNull.Value || dtCer.Rows[0]["DurataContract"].ToString().Length <= 0 ? "NULL" : dtCer.Rows[0]["DurataContract"].ToString()) )
                                     : "") +  " WHERE F10003 = " + f10003.ToString();
+
                                 sql1001 = "UPDATE F1001 SET " + (modifTip ? "F1001137 = " + data : "") + (modifDur ? (modifTip ? "," : "") + "F1001138 = " + data : "") + " WHERE F10003 = " + f10003.ToString();
 
 
@@ -5316,9 +5317,9 @@ namespace WizOne.Avs
                                 sql1001 = "UPDATE F1001 SET F1001137 = " + data + " WHERE F10003 = " + f10003.ToString();
 
                             if (modifTip)
-                                sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
+                                sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70468, F70469, USER_NO, TIME) "
                                     + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 35, 'Tip contract', " + data + ", " + dtCer.Rows[0]["TipContract"].ToString() + ", 'Modificari in avans', '"
-                                    + dateDoc + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                                    + dateDoc + "', " + act.ToString() + ", " + General.ToDataUniv(new DateTime(1900, 1, 1)) + ", " + General.ToDataUniv(new DateTime(1900, 1, 1)) + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
 
                             if (modifDur)
                                 sql1 = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70468, F70469, F70409, F70410, F70420, USER_NO, TIME) "

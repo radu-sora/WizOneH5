@@ -17563,3 +17563,24 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ModCalculZileCOCuveniteDataReferinta' , '1', '1 - ultima zi din an, 2 - prima zi din an, 3 - data curenta' , 3)
 GO
+
+
+----  2.2.135.02  ----
+
+declare @name nvarchar(100)
+select @name = [name] from sys.objects where type = 'D' and parent_object_id = object_id('F704') and name like '%F70468%'
+
+if (@name is not null)
+begin
+exec ('alter table [F704] drop constraint [' + @name +']')
+end
+go
+
+declare @name nvarchar(100)
+select @name = [name] from sys.objects where type = 'D' and parent_object_id = object_id('F704') and name like '%F70469%'
+
+if (@name is not null)
+begin
+exec ('alter table [F704] drop constraint [' + @name +']')
+end
+go

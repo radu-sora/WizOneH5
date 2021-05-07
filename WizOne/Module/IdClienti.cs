@@ -32,7 +32,8 @@
             TMK = 67,
             Alka = 68,
             Temad = 69,
-            Elanor = 70
+            Elanor = 70,
+            AFI = 71
         }
 
 

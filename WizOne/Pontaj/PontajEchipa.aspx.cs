@@ -1382,7 +1382,7 @@ namespace WizOne.Pontaj
                                             ws2.Cells[row + 2, nrCol].FillColor = General.Culoare(listaAbsOra[dtOre.Rows[0]["DenScurta"].ToString()]);
                                         }
                                     }
-                                    if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
+                                    if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.AFI) && dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
                                         ws2.Cells[row + 2, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
                                     nrCol++;
                                     idZile = listaId["Zilele 1-31"];
@@ -1548,7 +1548,7 @@ namespace WizOne.Pontaj
                                                 ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(listaAbsOra[dtOre.Rows[0]["DenScurta"].ToString()]);
                                             }
                                         }
-                                        if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
+                                        if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.AFI) && dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
                                             ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
                                         idZile = listaId["Zilele 1-31"];
                                         if (!ignorare)

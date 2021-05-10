@@ -747,37 +747,37 @@
                 <dx:PanelContent>
                     <table>
                         <tr>
-                            <td><dx:ASPxCheckBox ID="chkTrimiteICS" runat="server" Text="Trimite ICS" TextAlign="Left" /></td>
-                            <td style="padding-right:15px;"><label id="lblDataInceputICS" runat="server">Data inceput</label></td>
+                            <td colspan="2" style="padding-right:15px;padding-bottom:10px;"><dx:ASPxCheckBox ID="chkTrimiteICS" runat="server" Text="Trimite ICS" TextAlign="Left" Width="100px" /></td>
+                            <td style="padding-right:15px;padding-bottom:10px;"><label id="lblDataInceputICS" runat="server">Data inceput</label></td>
                             <td style="padding-right:15px;">
-                                <dx:ASPxTextBox ID="txtDataInceputICS" runat="server" ClientInstanceName="txtDataInceputICS" Width="250px">
+                                <dx:ASPxTextBox ID="txtDataInceputICS" runat="server" ClientInstanceName="txtDataInceputICS" Width="90px">
                                     <ClientSideEvents GotFocus="onGotFocus" />
                                 </dx:ASPxTextBox>
                             </td>
-                            <td style="padding-right:15px;"><label id="lblDataSfarsitICS" runat="server">Data sfarsit</label></td>
+                            <td style="padding-right:15px;padding-bottom:10px;"><label id="lblDataSfarsitICS" runat="server">Data sfarsit</label></td>
                             <td style="padding-right:15px;">
-                                <dx:ASPxTextBox ID="txtDataSfarsitICS" runat="server" ClientInstanceName="txtDataSfarsitICS" Width="250px">
-                                    <ClientSideEvents GotFocus="onGotFocus" />
-                                </dx:ASPxTextBox>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-right:15px;"><label id="lblOraInceputICS" runat="server">Ora inceput</label></td>
-                            <td style="padding-right:15px;">
-                                <dx:ASPxTextBox ID="txtOraInceputICS" runat="server" ClientInstanceName="txtOraInceputICS" Width="250px">
-                                    <ClientSideEvents GotFocus="onGotFocus" />
-                                </dx:ASPxTextBox>
-                            </td>
-                            <td style="padding-right:15px;"><label id="lblOraSfarsitICS" runat="server">Ora sfarsit</label></td>
-                            <td style="padding-right:15px;">
-                                <dx:ASPxTextBox ID="txtOraSfarsitICS" runat="server" ClientInstanceName="txtOraSfarsitICS" Width="250px">
+                                <dx:ASPxTextBox ID="txtDataSfarsitICS" runat="server" ClientInstanceName="txtDataSfarsitICS" Width="90px">
                                     <ClientSideEvents GotFocus="onGotFocus" />
                                 </dx:ASPxTextBox>
                             </td>
                         </tr>
                         <tr>
-                            <td><label id="lblSubiectICS" runat="server">Subiect</label></td>
-                            <td>
+                            <td style="padding-right:15px;padding-bottom:10px;"><label id="lblOraInceputICS" runat="server" width="100px">Ora inceput</label></td>
+                            <td style="padding-right:15px;">
+                                <dx:ASPxTextBox ID="txtOraInceputICS" runat="server" ClientInstanceName="txtOraInceputICS" Width="60px">
+                                    <ClientSideEvents GotFocus="onGotFocus" />
+                                </dx:ASPxTextBox>
+                            </td>
+                            <td style="padding-right:15px;padding-bottom:10px;"><label id="lblOraSfarsitICS" runat="server">Ora sfarsit</label></td>
+                            <td style="padding-right:15px;">
+                                <dx:ASPxTextBox ID="txtOraSfarsitICS" runat="server" ClientInstanceName="txtOraSfarsitICS" Width="60px">
+                                    <ClientSideEvents GotFocus="onGotFocus" />
+                                </dx:ASPxTextBox>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-right:15px;padding-bottom:10px;"><label id="lblSubiectICS" runat="server" width="100px">Subiect</label></td>
+                            <td colspan="5" >
                                 <dx:ASPxTextBox ID="txtSubiectICS" runat="server" ClientInstanceName="txtSubiectICS" ClientIDMode="Static" Width="390px">
                                     <ClientSideEvents GotFocus="onGotFocus" />    
                                 </dx:ASPxTextBox>

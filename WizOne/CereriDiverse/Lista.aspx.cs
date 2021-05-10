@@ -21,6 +21,14 @@ namespace WizOne.CereriDiverse
             public string Denumire { get; set; }
         }
 
+        public class metaUploadFile
+        {
+            public object UploadedFile { get; set; }
+            public object UploadedFileName { get; set; }
+            public object UploadedFileExtension { get; set; }
+
+        }
+
         protected void Page_Init(object sender, EventArgs e)
         {
             try
@@ -511,7 +519,8 @@ namespace WizOne.CereriDiverse
                     new object[] { e.NewValues["Raspuns"], id });   //Radu 13.08.2018
 
 
-                if (Session["CereriDiverse_Fisier"] != null)
+                metaUploadFile itm = Session["CereriDiverse_Fisier"] as metaUploadFile;
+                if (itm != null)
                 {
                     string sql = "SELECT COUNT(*) FROM \"tblFisiere\" WHERE \"Tabela\" = 'MP_Cereri' AND \"Id\" = {0} AND \"EsteCerere\" = 0";
                     sql = string.Format(sql, id);
@@ -519,18 +528,16 @@ namespace WizOne.CereriDiverse
                     if (dt == null || dt.Rows.Count == 0 || dt.Rows[0][0] == null || dt.Rows[0][0].ToString().Length <= 0 || Convert.ToInt32(dt.Rows[0][0].ToString()) == 0)
                     {
                         sql = "INSERT INTO \"tblFisiere\" (\"Tabela\", \"Id\", \"Fisier\", \"FisierNume\", \"FisierExtensie\", \"EsteCerere\") VALUES ('MP_Cereri', {0}, @1, '{1}', '.{2}', 0)";
-                        sql = string.Format(sql, id, Session["CereriDiverse_FisierNume"].ToString(), Session["CereriDiverse_FisierExtensie"].ToString());
+                        sql = string.Format(sql, id, itm.UploadedFileName.ToString(), itm.UploadedFileExtension.ToString());
                     }
                     else
                     {
                         sql = "UPDATE \"tblFisiere\" SET \"Fisier\" = @1, \"FisierNume\" = '{0}', \"FisierExtensie\" = '.{1}' WHERE \"Tabela\" = 'MP_Cereri' AND \"Id\" = {2} AND \"EsteCerere\" = 0";
-                        sql = string.Format(sql, Session["CereriDiverse_FisierNume"].ToString(), Session["CereriDiverse_FisierExtensie"].ToString(), id);
+                        sql = string.Format(sql, itm.UploadedFileName.ToString(), itm.UploadedFileExtension.ToString(), id);
                     }
-                    object file = Session["CereriDiverse_Fisier"] as object;
+                    object file = itm.UploadedFile;
                     General.ExecutaNonQuery(sql, new object[] { file });
                     Session["CereriDiverse_Fisier"] = null;
-                    Session["CereriDiverse_FisierNume"] = null;
-                    Session["CereriDiverse_FisierExtensie"] = null;
                 }
 
                 ////List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id" });
@@ -663,14 +670,37 @@ namespace WizOne.CereriDiverse
 
             return val;
         }
-		
-		protected void binImg_ValueChanged(object sender, EventArgs e)
-        {
-            ASPxBinaryImage binImg = sender as ASPxBinaryImage;
-            Session["CereriDiverse_FisierNume"] = binImg.GetUploadedFileName();
-            Session["CereriDiverse_Fisier"] = binImg.Value;
-            Session["CereriDiverse_FisierExtensie"] = binImg.GetUploadedFileName().Split('.')[binImg.GetUploadedFileName().Split('.').Count() - 1];
 
+        //protected void binImg_ValueChanged(object sender, EventArgs e)
+        //      {
+        //          ASPxBinaryImage binImg = sender as ASPxBinaryImage;
+        //          Session["CereriDiverse_FisierNume"] = binImg.GetUploadedFileName();
+        //          Session["CereriDiverse_Fisier"] = binImg.Value;
+        //          Session["CereriDiverse_FisierExtensie"] = binImg.GetUploadedFileName().Split('.')[binImg.GetUploadedFileName().Split('.').Count() - 1];
+
+        //      }
+
+        protected void btnDocUpload_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        {
+            try
+            {
+                if (!e.IsValid) return;
+                ASPxUploadControl btnDocUpload = (ASPxUploadControl)sender;
+
+                metaUploadFile itm = new metaUploadFile();
+                itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
+                itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
+                itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
+
+                Session["CereriDiverse_Fisier"] = itm;
+
+                btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
     }

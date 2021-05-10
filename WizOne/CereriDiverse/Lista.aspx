@@ -129,7 +129,10 @@
         }
 
 
-
+        function EndUpload(s) {
+            lblDoc.innerText = s.cpDocUploadName;
+            s.cpDocUploadName = null;
+        }
 
 
 
@@ -382,13 +385,17 @@
                                     <tr>
                                         <td><dx:ASPxMemo ID="txtRsp" runat="server" Width="500px" Height="150" Text='<%# Bind("Raspuns") %>' OnInit="oRaspunsMemo_Init" /></td>
                                         <td>
-                                            <dx:ASPxBinaryImage ID="binImg" ClientInstanceName="binImg" Width="200" Height="200" ShowLoadingImage="true"  OnValueChanged="binImg_ValueChanged"  runat="server" >                                         
-                                                <EditingSettings Enabled="true">
-                                                    <UploadSettings>
-                                                        <UploadValidationSettings MaxFileSize="4194304"></UploadValidationSettings>
-                                                    </UploadSettings>
-                                                </EditingSettings>
-                                            </dx:ASPxBinaryImage>
+                                            <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
+                                            <dx:ASPxUploadControl ID="btnDocUpload" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
+                                                BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="Incarca document" ShowTextBox="false"
+                                                ClientInstanceName="btnDocUpload" OnFileUploadComplete="btnDocUpload_FileUploadComplete" ValidationSettings-ShowErrors="false">
+                                                <BrowseButton>
+                                                    <Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
+                                                </BrowseButton>
+                                                <ValidationSettings ShowErrors="False"></ValidationSettings>
+
+                                                <ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                                            </dx:ASPxUploadControl>
                                         </td>
                                     </tr>
                                 </table>               

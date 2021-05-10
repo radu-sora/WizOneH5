@@ -5293,8 +5293,9 @@ namespace WizOne.Avs
                             if (dtF100.Rows[0]["F100984"].ToString() != dtCer.Rows[0]["TipContract"].ToString())
                                 modifTip = true;
 
-                            if (dtF100.Rows[0]["F1009741"].ToString() != dtCer.Rows[0]["DurataContract"].ToString() || dtF100.Rows[0]["F100933"].ToString() != dtCer.Rows[0]["DataInceputCIM"].ToString()
-                                || dtF100.Rows[0]["F100934"].ToString() != dtCer.Rows[0]["DataSfarsitCIM"].ToString())
+                            if ((dtF100.Rows[0]["F1009741"] != null && dtF100.Rows[0]["F1009741"].ToString() != dtCer.Rows[0]["DurataContract"].ToString())
+                                || (dtF100.Rows[0]["F100933"] != null &&  dtF100.Rows[0]["F100933"].ToString() != dtCer.Rows[0]["DataInceputCIM"].ToString())
+                                || (dtF100.Rows[0]["F100934"] != null && dtF100.Rows[0]["F100934"].ToString() != dtCer.Rows[0]["DataSfarsitCIM"].ToString()))
                                 modifDur = true;
 
                             if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)

@@ -1921,7 +1921,10 @@ namespace WizOne.Pontaj
                     }
                 }
 
-                string sqlPtj = General.CreazaSelectFromRow(dt.Rows[0]);
+                string idStare = General.Nz(General.ExecutaScalar($@"SELECT ""IdStare"" FROM ""Ptj_Cumulat"" WHERE F10003={f10003} AND ""An""={ziua.Year} AND ""Luna""={ziua.Month}"),"1").ToString();
+
+                //string sablon = @"SELECT {0} AS F10003, {1} AS ""ZiuaInc"", {2} AS ""IdStare"", {3} AS ""An"", {4} AS ""Luna"", {5} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+                string sqlPtj = General.CreazaSelectFromRow(dt.Rows[0],$@",{General.ToDataUniv(Convert.ToDateTime(dt.Rows[0]["Ziua"]))} AS ""ZiuaInc"", {idStare} AS ""IdStare"", {Convert.ToDateTime(dt.Rows[0]["Ziua"]).Year} AS ""An"", {Convert.ToDateTime(dt.Rows[0]["Ziua"]).Month} AS ""Luna"", 5 AS ""Actiune"" ");
                 string msg = Notif.TrimiteNotificare("Pontaj.PontajEchipa", (int)Constante.TipNotificare.Validare, sqlPtj, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                 if (msg != "" && msg.Substring(0, 1) == "2")
                 {

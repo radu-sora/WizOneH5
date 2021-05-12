@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Aprobare.aspx.cs" Inherits="WizOne.Curs.Aprobare" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" Async="true" CodeBehind="Aprobare.aspx.cs" Inherits="WizOne.Curs.Aprobare" %>
 
 
 

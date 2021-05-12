@@ -134,6 +134,16 @@ namespace WizOne.Pagini
                                     chkExcel.Checked = Convert.ToBoolean(General.Nz(dtHead.Rows[0]["TrimiteXLS"], 0));
                                     txtExcel.Value = (dtHead.Rows[0]["SelectXLS"] ?? "").ToString();
                                     txtNumeExcel.Text = (dtHead.Rows[0]["NumeExcel"] ?? "").ToString();
+
+                                    //Radu 11.05.2021
+                                    chkTrimiteICS.Checked = Convert.ToBoolean(General.Nz(dtHead.Rows[0]["TrimiteICS"], 0));
+                                    txtDataInceputICS.Text = (dtHead.Rows[0]["DataInceputICS"] ?? "").ToString();
+                                    txtDataSfarsitICS.Text = (dtHead.Rows[0]["DataSfarsitICS"] ?? "").ToString();
+                                    txtOraInceputICS.Text = (dtHead.Rows[0]["OraInceputICS"] ?? "").ToString();
+                                    txtOraSfarsitICS.Text = (dtHead.Rows[0]["OraSfarsitICS"] ?? "").ToString();
+                                    txtSubiectICS.Text = (dtHead.Rows[0]["SubiectICS"] ?? "").ToString();
+                                    txtCorpICS.Html = (dtHead.Rows[0]["CorpICS"] ?? "").ToString();
+
                                 }
 
 
@@ -277,6 +287,22 @@ namespace WizOne.Pagini
                             drHead["TrimiteXLS"] = chkExcel.Checked;
                             drHead["SelectXLS"] = txtExcel.Text;
                             drHead["NumeExcel"] = txtNumeExcel.Text;
+
+                            //Radu 11.05.2021
+                            drHead["TrimiteICS"] = chkTrimiteICS.Checked;
+                            drHead["DataInceputICS"] = txtDataInceputICS.Text;
+                            drHead["DataSfarsitICS"] = txtDataSfarsitICS.Text;
+                            drHead["OraInceputICS"] = txtOraInceputICS.Text;
+                            drHead["OraSfarsitICS"] = txtOraSfarsitICS.Text;
+                            drHead["SubiectICS"] = txtSubiectICS.Text;
+                            using (MemoryStream mStream = new MemoryStream())
+                            {
+                                txtCorpICS.Export(HtmlEditorExportFormat.Txt, mStream);
+                                string plainText = System.Text.Encoding.UTF8.GetString(mStream.ToArray());
+                                drHead["CorpICS"] = plainText;
+                            }
+
+
                             drHead["USER_NO"] = Session["UserId"];
                             drHead["TIME"] = DateTime.Now;
                             dtHead.Rows.Add(drHead);
@@ -332,6 +358,21 @@ namespace WizOne.Pagini
                             dtHead.Rows[0]["TrimiteXLS"] = chkExcel.Checked;
                             dtHead.Rows[0]["SelectXLS"] = txtExcel.Text;
                             dtHead.Rows[0]["NumeExcel"] = txtNumeExcel.Text;
+
+                            //Radu 11.05.2021
+                            dtHead.Rows[0]["TrimiteICS"] = chkTrimiteICS.Checked;
+                            dtHead.Rows[0]["DataInceputICS"] = txtDataInceputICS.Text;
+                            dtHead.Rows[0]["DataSfarsitICS"] = txtDataSfarsitICS.Text;
+                            dtHead.Rows[0]["OraInceputICS"] = txtOraInceputICS.Text;
+                            dtHead.Rows[0]["OraSfarsitICS"] = txtOraSfarsitICS.Text;
+                            dtHead.Rows[0]["SubiectICS"] = txtSubiectICS.Text;
+                            using (MemoryStream mStream = new MemoryStream())
+                            {
+                                txtCorpICS.Export(HtmlEditorExportFormat.Txt, mStream);
+                                string plainText = System.Text.Encoding.UTF8.GetString(mStream.ToArray());
+                                dtHead.Rows[0]["CorpICS"] = plainText;
+                            }
+
                             dtHead.Rows[0]["USER_NO"] = Session["UserId"];
                             dtHead.Rows[0]["TIME"] = DateTime.Now;
                         }

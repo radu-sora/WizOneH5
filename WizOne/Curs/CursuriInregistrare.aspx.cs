@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
@@ -1519,7 +1520,14 @@ namespace WizOne.Curs
 
                 #region  Notificare strat
 
-                //ctxNtf.TrimiteNotificare("Curs.CursuriInregistrare", "grDate", ent, idUser, f10003);
+                string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+               
+                int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);               
+
+                HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                {
+                    NotifAsync.TrimiteNotificare("Curs.Cursuri", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Curs_Inregistrare Z WHERE F10003=" + f10003.ToString(), "Curs_Inregistrare", f10003, idUser, marcaUser, arrParam);
+                });
 
                 #endregion
 
@@ -1527,7 +1535,7 @@ namespace WizOne.Curs
                 //particula ?0?-  este folosita pentru optimzare - semnaleaza daca procesul s-a incheiat cu succes; 
                 //in caz ca nu s-a incheiat cu succes, pe client nu se mai face refresh la grid si nici nu se mai golesc campurile
                 //if (trimteMesajFinal) 
-                    msg = "?0?-Proces finalizat cu succes !";
+                msg = "?0?-Proces finalizat cu succes !";
             }
             catch (Exception ex)
             {

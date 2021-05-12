@@ -152,8 +152,8 @@ namespace WizOne.Module
                                                     string tipData = "";
                                                     bool esteCamp = false;
 
-                                                    dtStart = Convert.ToDateTime(DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["DataInceputICS"].ToString().Replace("<<", "").Replace(">>", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp));
-                                                    dtSf = Convert.ToDateTime(DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["DataSfarsitICS"].ToString().Replace("<<", "").Replace(">>", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp));
+                                                    dtStart = Convert.ToDateTime(DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["DataInceputICS"].ToString().Replace("#$", "").Replace("$#", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp));
+                                                    dtSf = Convert.ToDateTime(DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["DataSfarsitICS"].ToString().Replace("#$", "").Replace("$#", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp));
                                                     string subiectICS = General.Nz(dtReg.Rows[i]["SubiectICS"], "").ToString();
                                                     string corpICS = General.Nz(dtReg.Rows[i]["CorpICS"], "").ToString();
 
@@ -166,14 +166,14 @@ namespace WizOne.Module
                                                             oraStart = new DateTime(2100, 1, 1, Convert.ToInt32(dtReg.Rows[i]["OraInceputICS"].ToString().Substring(0, 2)), Convert.ToInt32(dtReg.Rows[i]["OraInceputICS"].ToString().Substring(3, 2)), 0);
                                                         else
                                                         {
-                                                            string ora = DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["OraInceputICS"].ToString().Replace("<<", "").Replace(">>", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp).ToString();
+                                                            string ora = DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["OraInceputICS"].ToString().Replace("#$", "").Replace("$#", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp).ToString();
                                                             oraStart = new DateTime(2100, 1, 1, Convert.ToInt32(ora.Substring(0, 2)), Convert.ToInt32(ora.Substring(3, 2)), 0);
                                                         }
                                                         if (dtReg.Rows[i]["OraSfarsitICS"].ToString().Contains(":"))
                                                             oraSfarsit = new DateTime(2100, 1, 1, Convert.ToInt32(dtReg.Rows[i]["OraSfarsitICS"].ToString().Substring(0, 2)), Convert.ToInt32(dtReg.Rows[i]["OraSfarsitICS"].ToString().Substring(3, 2)), 0);
                                                         else
                                                         {
-                                                            string ora = DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["OraSfarsitICS"].ToString().Replace("<<", "").Replace(">>", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp).ToString();
+                                                            string ora = DamiValTabela(numePagina, "grDate", 1, dtReg.Rows[i]["OraSfarsitICS"].ToString().Replace("#$", "").Replace("$#", ""), dtFiltru, userId, userMarca, out tipData, out esteCamp).ToString();
                                                             oraSfarsit = new DateTime(2100, 1, 1, Convert.ToInt32(ora.Substring(0, 2)), Convert.ToInt32(ora.Substring(3, 2)), 0);
                                                         }
                                                     }
@@ -1122,7 +1122,7 @@ namespace WizOne.Module
             try
             {
                 //verificam daca nu cumva acest camp este din alta tabela
-                DataTable q = General.IncarcaDT("SELECT * FROM Ntf_tblCampuri WHERE Pagina = " + numePagina + " AND GRID = " + numeGrid + " AND ALIAS = " + camp, null);
+                DataTable q = General.IncarcaDT("SELECT * FROM Ntf_tblCampuri WHERE Pagina = '" + numePagina + "' AND GRID = '" + numeGrid + "' AND ALIAS = '" + camp + "'", null);
                 if (q != null && q.Rows.Count > 0)
                 {
 
@@ -1134,7 +1134,7 @@ namespace WizOne.Module
                             string strSql = q.Rows[0]["CampSelect"].ToString();
                             for (int i = 0; i < entVal.Columns.Count; i++)
                             {
-                                strSql = strSql.Replace("ent." + q.Columns[i].ColumnName, q.Rows[0][q.Columns[i].ColumnName].ToString());
+                                strSql = strSql.Replace("ent." + entVal.Columns[i].ColumnName, entVal.Rows[0][entVal.Columns[i].ColumnName].ToString());
                             }
 
                             strSql = strSql.Replace("GLOBAL.IDUSER", idUser.ToString()).Replace("GLOBAL.MARCA", f10003.ToString());

@@ -17712,3 +17712,18 @@ CREATE TABLE [dbo].[Ben_SetAngajati](
 GO
 
 ---- Beneficii End ----
+
+ALTER TABLE Ntf_Setari ADD TrimiteICS int
+GO
+ALTER TABLE Ntf_Setari ADD DataInceputICS  VARCHAR(150) 
+GO
+ALTER TABLE Ntf_Setari ADD DataSfarsitICS VARCHAR(150)
+GO
+ALTER TABLE Ntf_Setari ADD OraInceputICS VARCHAR(150)
+GO
+ALTER TABLE Ntf_Setari ADD OraSfarsitICS VARCHAR(150)
+GO
+ALTER TABLE Ntf_Setari ADD SubiectICS NVARCHAR(MAX)
+GO
+ALTER TABLE Ntf_Setari ADD CorpICS NVARCHAR(MAX)
+GO

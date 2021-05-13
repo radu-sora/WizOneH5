@@ -1274,7 +1274,7 @@ namespace WizOne.Module
             return boolRez;
         }
 
-        public static string CreazaSelectFromRow(DataRow dr)
+        public static string CreazaSelectFromRow(DataRow dr, string camp = "")
         {
             string str = "";
             
@@ -1303,7 +1303,7 @@ namespace WizOne.Module
 
                 if (str != "")
                 {
-                    str = "SELECT " + str.Substring(1);
+                    str = "SELECT " + str.Substring(1) + camp;
                     if (Constante.tipBD == 2) str += " FROM DUAL";
                 }
             }

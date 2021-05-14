@@ -112,8 +112,8 @@ namespace WizOne.Revisal
             Config.Add("ORACONN", conn);
             Config.Add("HOST_ADEV", host);
             Config.Add("PORT_ADEV", port);
-
-            bool rez = RapoarteRevisalDLL.Class1.RegistruSalariati(Convert.ToInt64(Session["UserId"].ToString()), Config, HostingEnvironment.MapPath("~/Temp/"), 1);           
+            //Convert.ToInt64(Session["UserId"].ToString())
+            bool rez = RapoarteRevisalDLL.Class1.RegistruSalariati(1, Config, HostingEnvironment.MapPath("~/Temp/"), 1);           
             string FileName = HostingEnvironment.MapPath("~/Temp/RapoarteRevisal/") + "RegistruSalariati.xls";
 
             byte[] fisier = File.ReadAllBytes(FileName);
@@ -206,8 +206,8 @@ namespace WizOne.Revisal
                     Config.Add("ORACONN", conn);
                     Config.Add("HOST_ADEV", host);
                     Config.Add("PORT_ADEV", port);
-
-                    bool rez = RapoarteRevisalDLL.Class1.RaportSalariatWizOne(Convert.ToInt64(Session["UserId"].ToString()), Config, HostingEnvironment.MapPath("~/Temp/"), 1, cmbAng.Value.ToString(), cmbAng.Text.Split('(')[0].TrimEnd());
+                    //Convert.ToInt64(Session["UserId"].ToString())
+                    bool rez = RapoarteRevisalDLL.Class1.RaportSalariatWizOne(1, Config, HostingEnvironment.MapPath("~/Temp/"), 1, cmbAng.Value.ToString(), cmbAng.Text.Split('(')[0].TrimEnd());
 
                  
                     if (rez)

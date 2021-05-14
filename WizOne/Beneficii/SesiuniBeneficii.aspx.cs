@@ -67,6 +67,7 @@ namespace WizOne.Beneficii
                 GridViewDataComboBoxColumn col = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = dt;
 
+
                 if (!IsPostBack)
                 {
                     Session["SesiuniBen_Grid"] = null;
@@ -530,7 +531,25 @@ namespace WizOne.Beneficii
             }
         }
 
+        //protected void ListAng_DataBound(object sender, EventArgs e)
+        //{
+        //    var listBox = (ASPxListBox)sender;
 
+        //    int editingRowVisibleIndex = grDate.EditingRowVisibleIndex;
+        //    string rowValue = grDate.GetRowValues(editingRowVisibleIndex, "SeturiAngajati").ToString();
+        //    string[] rowValueItems = rowValue.Split(',');
+
+        //    List<string> rowValueItemsAsList = new List<string>();
+        //    rowValueItemsAsList.AddRange(rowValueItems);
+
+        //    foreach (ListEditItem item in listBox.Items)
+        //    {
+        //        if (rowValueItemsAsList.Contains(item.Value.ToString()))
+        //        {
+        //            item.Selected = true;
+        //        }
+        //    }
+        //}
     }
 
 

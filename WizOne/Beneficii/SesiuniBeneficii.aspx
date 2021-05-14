@@ -172,19 +172,8 @@
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                            <SettingsHeaderFilter Mode="CheckedList" />
-                        </dx:GridViewDataComboBoxColumn>
-                       
-                        <dx:GridViewDataDropDownEditColumn FieldName="SeturiAngajati" Caption="Seturi angajati" PropertiesDropDownEdit-ClientInstanceName="checkbox">  
-                           <PropertiesDropDownEdit>  
-                               <DropDownWindowTemplate>  
-                                   <dx:ASPxListBox ID="ListAng" runat="server" TextField="Denumire" ValueField="Id" SelectionMode="CheckColumn"  
-                                       ClientInstanceName="listBox" ValueType="System.Int32" OnInit="ListAng_Init">  
-                                       <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged" />  
-                                   </dx:ASPxListBox>  
-                               </DropDownWindowTemplate>  
-                               <ClientSideEvents TextChanged="SynchronizeListBoxValues" DropDown="SynchronizeListBoxValues" />  
-                           </PropertiesDropDownEdit>  
-                       </dx:GridViewDataDropDownEditColumn>                  
+                        </dx:GridViewDataComboBoxColumn>                       
+               
                       
 
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />

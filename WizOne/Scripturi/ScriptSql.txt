@@ -17686,6 +17686,7 @@ CREATE TABLE [dbo].[Ben_tblSesiuni](
 	[IdStare][int] NULL,
 	[DataInceput] [datetime] NULL,
 	[DataSfarsit] [datetime] NULL,
+	[SeturiAngajati] [nvarchar](250) NULL,
 	[USER_NO] [int] NULL,
 	[TIME] [datetime] NULL
  CONSTRAINT [Ben_tblSesiuni_PK] PRIMARY KEY CLUSTERED 

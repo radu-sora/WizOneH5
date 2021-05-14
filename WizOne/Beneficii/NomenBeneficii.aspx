@@ -78,17 +78,21 @@
                             </dx:GridViewCommandColumn>                              
 						    <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Denumire" Width="200px" VisibleIndex="1" >
                                 <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                                <SettingsHeaderFilter Mode="CheckedList" />
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataDateColumn FieldName="DeLaData" Name="DeLaData" Caption="De la"  Width="100px" VisibleIndex="2" >
+                            <dx:GridViewDataDateColumn FieldName="DeLaData" Name="DeLaData" Caption="Valabil De la Data"  Width="100px" VisibleIndex="2" >
                                  <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                                 <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                                <SettingsHeaderFilter Mode="CheckedList" />
                             </dx:GridViewDataDateColumn>
-                            <dx:GridViewDataDateColumn FieldName="LaData" Name="LaData" Caption="La"  Width="100px" VisibleIndex="3">
+                            <dx:GridViewDataDateColumn FieldName="LaData" Name="LaData" Caption="Pana La Data"  Width="100px" VisibleIndex="3">
                                  <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                                 <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                                <SettingsHeaderFilter Mode="CheckedList" />
                             </dx:GridViewDataDateColumn>
                             <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere"  Width="250px" VisibleIndex="4" >  
                                 <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                                <SettingsHeaderFilter Mode="CheckedList" />
                             </dx:GridViewDataTextColumn>
 
 						    <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" Width="50px"  Visible="false" ShowInCustomizationForm="false"/>

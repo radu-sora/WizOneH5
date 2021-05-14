@@ -18,21 +18,7 @@
                     break;     
    
             }
-        }  
-
-        function GoToAng(Value) {
-            strUrl = getAbsoluteUrl + "Beneficii/relSesiuniBen.aspx?tip=1&qwe=" + Value;
-            popGen.SetHeaderText("Grupuri angajati");
-            popGen.SetContentUrl(strUrl);
-            popGen.Show();
-        } 
-
-        function GoToBen(Value) {
-            strUrl = getAbsoluteUrl + "Beneficii/relSesiuniBen.aspx?tip=2&qwe=" + Value;
-            popGen.SetHeaderText("Beneficii");
-            popGen.SetContentUrl(strUrl);
-            popGen.Show();
-        }   
+        }     
 
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
@@ -43,6 +29,56 @@
                 s.cpAlertMessage = null;
             }
         }
+
+
+
+        var textSeparator = ",";
+        var index = -1;
+        function OnBatchEditStartEditing(s, e) {
+            index = e.visibleIndex;
+
+        }
+
+        function OnListBoxSelectionChanged(ListAng, args) {
+            UpdateText();
+
+        }
+
+        function UpdateText() {
+            var selectedItems = listBox.GetSelectedItems();
+            checkbox.SetText(GetSelectedItemsText(selectedItems));
+
+        }
+
+        function SynchronizeListBoxValues(dropDown, args) {
+            listBox.UnselectAll();
+            var texts = dropDown.GetText().split(textSeparator);
+            var values = GetValuesByTexts(texts);
+
+            listBox.SelectValues(values);
+            //    UpdateSelectAllItemState();  
+            UpdateText(); // for remove non-existing texts  
+        }
+
+        function GetSelectedItemsText(items) {
+            var texts = [];
+            for (var i = 0; i < items.length; i++)
+                if (items[i].index >= 0)
+                    texts.push(items[i].text);
+            return texts.join(textSeparator);
+        }
+
+        function GetValuesByTexts(texts) {
+            var actualValues = [];
+            var item;
+            for (var i = 0; i < texts.length; i++) {
+                item = listBox.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+            return actualValues;
+
+        } 
 
     </script>
 
@@ -64,13 +100,6 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnSave"  runat="server" Text="Salveaza" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
-                    }" />
-                    <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
-                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                 </dx:ASPxButton>
@@ -84,13 +113,13 @@
     <table width="20%">   
         <tr>     
                 <td>
-                 <label id="lblDeLa" runat="server" style="display:inline-block;">De la</label>
+                 <label id="lblDeLa" runat="server" style="display:inline-block;">De la data</label>
                     <dx:ASPxDateEdit ID="txtDataInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataIncResource1" >
                         <CalendarProperties FirstDayOfWeek="Monday" />
                     </dx:ASPxDateEdit>
                 </td>
                 <td>
-                    <label id="lblLa" runat="server" style="display:inline-block;">La</label>
+                    <label id="lblLa" runat="server" style="display:inline-block;">La data</label>
                     <dx:ASPxDateEdit ID="txtDataSf" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataSfResource1" >
                         <CalendarProperties FirstDayOfWeek="Monday" />
                     </dx:ASPxDateEdit>                    
@@ -127,34 +156,36 @@
                         </dx:GridViewCommandColumn>  
                         <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Denumire"   Width="200px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                          </dx:GridViewDataTextColumn>
                         <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput"  Width="100px" >         
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit"  Width="100px" >         
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataDateColumn>
                        <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare"  Width="100px" ReadOnly="true">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                           <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataComboBoxColumn>
                        
-                        <dx:GridViewCommandColumn Name="colNomenclatorAng" Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Grupuri angajati">
-                            <CustomButtons>
-                                <dx:GridViewCommandColumnCustomButton ID="btnNomenclatorAng" Visibility="BrowsableRow">
-                                    <Image ToolTip="Grupuri angajati" Url="~/Fisiere/Imagini/Icoane/info.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                            </CustomButtons>                        
-                        </dx:GridViewCommandColumn>                  
-                        <dx:GridViewCommandColumn Name="colNomenclatorBen" Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Beneficii">
-                            <CustomButtons>
-                                <dx:GridViewCommandColumnCustomButton ID="btnNomenclatorBen" Visibility="BrowsableRow">
-                                    <Image ToolTip="Beneficii" Url="~/Fisiere/Imagini/Icoane/info.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                            </CustomButtons>                        
-                        </dx:GridViewCommandColumn>                        
+                        <dx:GridViewDataDropDownEditColumn FieldName="SeturiAngajati" Caption="Seturi angajati" PropertiesDropDownEdit-ClientInstanceName="checkbox">  
+                           <PropertiesDropDownEdit>  
+                               <DropDownWindowTemplate>  
+                                   <dx:ASPxListBox ID="ListAng" runat="server" TextField="Denumire" ValueField="Id" SelectionMode="CheckColumn"  
+                                       ClientInstanceName="listBox" ValueType="System.Int32" OnInit="ListAng_Init">  
+                                       <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged" />  
+                                   </dx:ASPxListBox>  
+                               </DropDownWindowTemplate>  
+                               <ClientSideEvents TextChanged="SynchronizeListBoxValues" DropDown="SynchronizeListBoxValues" />  
+                           </PropertiesDropDownEdit>  
+                       </dx:GridViewDataDropDownEditColumn>                  
+                      
 
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />

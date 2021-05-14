@@ -33,15 +33,6 @@ namespace WizOne.Beneficii
         protected global::DevExpress.Web.ASPxButton btnInit;
 
         /// <summary>
-        /// btnSave control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSave;
-
-        /// <summary>
         /// btnExit control.
         /// </summary>
         /// <remarks>
@@ -112,23 +103,5 @@ namespace WizOne.Beneficii
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate;
-
-        /// <summary>
-        /// btnNomenclatorAng control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnNomenclatorAng;
-
-        /// <summary>
-        /// btnNomenclatorBen control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnNomenclatorBen;
     }
 }

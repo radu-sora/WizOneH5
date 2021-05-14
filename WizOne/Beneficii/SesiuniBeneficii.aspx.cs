@@ -37,11 +37,8 @@ namespace WizOne.Beneficii
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
                 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
                 btnInit.Text = Dami.TraduCuvant("btnInit", "Initiaza");
 
-                btnNomenclatorAng.Image.ToolTip = Dami.TraduCuvant("btnNomenclatorAng", "Grupuri angajati");
-                btnNomenclatorBen.Image.ToolTip = Dami.TraduCuvant("btnNomenclatorBen", "Beneficii");
 
                 lblDeLa.InnerText = Dami.TraduCuvant("De la");
                 lblLa.InnerText = Dami.TraduCuvant("La");
@@ -68,10 +65,15 @@ namespace WizOne.Beneficii
       
                 DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ben_tblStari"" ", null);
                 GridViewDataComboBoxColumn col = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                col.PropertiesComboBox.DataSource = dt;               
+                col.PropertiesComboBox.DataSource = dt;
 
                 if (!IsPostBack)
+                {
                     Session["SesiuniBen_Grid"] = null;
+                    txtDataInc.Value = new DateTime(DateTime.Now.Year, 1, 1);
+                    txtDataSf.Value = new DateTime(DateTime.Now.Year, 12, 31);
+                    IncarcaGrid();
+                }
                 else
                     IncarcaGrid();
 
@@ -270,25 +272,6 @@ namespace WizOne.Beneficii
                
 
 
-        protected void btnSave_Click(object sender, EventArgs e)
-        {
-            try
-            {
-
-                DataTable dt = Session["SesiuniBen_Grid"] as DataTable;
-
-                General.SalveazaDate(dt, "Ben_tblSesiuni");
-
-                MessageBox.Show("Proces finalizat cu succes!", MessageBox.icoSuccess);
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
         protected void btnInit_Click(object sender, EventArgs e)
         {
             try
@@ -392,7 +375,7 @@ namespace WizOne.Beneficii
                     grDate.CancelEdit();
                     return;
                 }
-  
+              
 
                 foreach (DataColumn col in dt.Columns)
                 {
@@ -412,6 +395,8 @@ namespace WizOne.Beneficii
                 Session["SesiuniBen_Grid"] = dt;
                 grDate.DataSource = dt;
                 grDate.DataBind();
+
+                General.SalveazaDate(dt, "Ben_tblSesiuni");
             }
             catch (Exception ex)
             {
@@ -484,6 +469,8 @@ namespace WizOne.Beneficii
                 grDate.KeyFieldName = "Id";
                 Session["SesiuniBen_Grid"] = dt;
                 grDate.DataBind();
+
+                General.SalveazaDate(dt, "Ben_tblSesiuni");
             }
             catch (Exception ex)
             {
@@ -510,6 +497,7 @@ namespace WizOne.Beneficii
                 Session["SesiuniBen_Grid"] = dt;
                 grDate.DataSource = dt;
 
+                General.SalveazaDate(dt, "Ben_tblSesiuni");
 
             }
             catch (Exception ex)

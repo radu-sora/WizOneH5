@@ -1274,7 +1274,7 @@ namespace WizOne.Module
             return boolRez;
         }
 
-        public static string CreazaSelectFromRow(DataRow dr, string camp = "")
+        public static string CreazaSelectFromRow(DataRow dr, string camp = "", bool gol = false)
         {
             string str = "";
             
@@ -1282,21 +1282,24 @@ namespace WizOne.Module
             {
                 for(int i = 0; i < dr.Table.Columns.Count; i++)
                 {
+                    var val = dr[i];
+                    if (gol)
+                        val = null;
                     switch (dr.Table.Columns[i].DataType.ToString())
                     {
                         case "System.String":
-                            str += ", '" + Nz(dr[i],"") + "' AS '" + dr.Table.Columns[i].ColumnName + "'";
+                            str += ", '" + Nz(val, "") + "' AS '" + dr.Table.Columns[i].ColumnName + "'";
                             break;
                         case "System.DateTime":
-                            DateTime dt = Convert.ToDateTime(Nz(dr[i], new DateTime(1900, 1, 1)));
+                            DateTime dt = Convert.ToDateTime(Nz(val, new DateTime(1900, 1, 1)));
                             str += ", " + ToDataUniv(dt) + " AS '" + dr.Table.Columns[i].ColumnName + "'";
                             break;
                         case "System.Double":
                         case "System.Decimal":
-                            str += ", " + Nz(dr[i], "null").ToString().Replace(",", ".") + " AS '" + dr.Table.Columns[i].ColumnName + "'";
+                            str += ", " + Nz(val, "null").ToString().Replace(",", ".") + " AS '" + dr.Table.Columns[i].ColumnName + "'";
                             break;
                         default:
-                            str += ", " + Nz(dr[i],"null") + " AS '" + dr.Table.Columns[i].ColumnName + "'";
+                            str += ", " + Nz(val, "null") + " AS '" + dr.Table.Columns[i].ColumnName + "'";
                             break;
                     }
                 }
@@ -5822,7 +5825,7 @@ namespace WizOne.Module
             return rez;
         }
 
-        public static string ActiuniExec(int actiune, int f10003, int idRol, int idStare, int an, int luna, string pagina, int userId, int userMarca, string motiv = "")
+        public static string ActiuniExec(int actiune, int f10003, int idRol, int idStare, int an, int luna, string pagina, int userId, int userMarca, string motiv = "", string sqlPtj = "")
         {
             //    Actiune
             // 1   -  aprobat
@@ -5877,8 +5880,11 @@ namespace WizOne.Module
                 }
 
                 #region Validare start
-                string sablon = @"SELECT {0} AS F10003, {1} AS ""ZiuaInc"", {2} AS ""IdStare"", {3} AS ""An"", {4} AS ""Luna"", {5} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
-                string sqlVal = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna, actiune);
+
+                //Florin 2021.05.18
+                string sqlVal = sqlPtj.Replace("FROM DUAL", "") + $@", {General.ToDataUniv(an, luna)} AS ""ZiuaInc"", {idStare} AS ""IdStare"", {an} AS ""An"", {luna} AS ""Luna"", {actiune} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+                //string sablon = @"SELECT {0} AS F10003, {1} AS ""ZiuaInc"", {2} AS ""IdStare"", {3} AS ""An"", {4} AS ""Luna"", {5} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+                //string sqlVal = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna, actiune);
 
                 string msg = Notif.TrimiteNotificare(pagina, (int)Constante.TipNotificare.Validare, sqlVal, "", -99, userId, userMarca);
                 if (msg != "" && msg.Substring(0, 1) == "2")
@@ -5955,7 +5961,9 @@ namespace WizOne.Module
 
                 #region  Notificare start
 
-                string sqlNtf = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna, actiune);
+                //Florin 2021.05.18
+                string sqlNtf = sqlPtj.Replace("FROM DUAL", "") + $@", {General.ToDataUniv(an, luna)} AS ""ZiuaInc"", {idStare} AS ""IdStare"", {an} AS ""An"", {luna} AS ""Luna"", {actiune} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+                //string sqlNtf = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna, actiune);
                 Notif.TrimiteNotificare(pagina, (int)Constante.TipNotificare.Notificare, sqlNtf, "Ptj_Cumulat",
                         Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT ""IdAuto"" FROM ""Ptj_Cumulat"" WHERE F10003 =@1 AND ""An"" =@2 AND ""Luna"" =@3", new object[] { f10003, an, luna }), -99)),
                         userId, userMarca);

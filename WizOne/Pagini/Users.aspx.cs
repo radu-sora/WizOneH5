@@ -17,6 +17,58 @@ namespace WizOne.Pagini
     public partial class Users : System.Web.UI.Page
     {
 
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!IsPostBack)
+                {
+                    //Radu 08.05.2019 - sa se afiseze doar utilizatorii de WizOne
+                    string cond = "";
+                    //if (Constante.tipBD == 2)
+                    //    cond = "case when (SELECT COUNT(*) CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from \"relGrupUser\" where \"IdUser\" = F70102) > 0 then 0  else  1 end ELSE  1   END AS TIP ";
+                    //else
+                    //    cond = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from relGrupUser where IdUser = F70102) > 0 then 0  else 1  end  ELSE 1   END  AS TIP ";
+                    if (Constante.tipBD == 2)
+                        cond = "case when (SELECT COUNT(*) AS CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = F70102) > 0 or f70102 = 1 then 1 else 0  end  ELSE 0   END  AS TIP  ";
+                    else
+                        cond = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = F70102) > 0 or f70102 = 1 then 1 else 0  end  ELSE 0   END  AS TIP  ";
+
+
+                    DataTable dt = General.IncarcaDT(@"SELECT * FROM (SELECT A.*, " + cond + " FROM USERS A) B WHERE TIP = 0 ", null);
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["F70102"] };
+
+                    Session["InformatiaCurenta"] = dt;
+
+                    grDate.DataSource = Session["InformatiaCurenta"];
+                    grDate.KeyFieldName = "F70102";
+                    grDate.DataBind();
+
+                    Session["Utilizatori_Parola"] = null;
+                }
+                else
+                {
+                    foreach (var c in grDate.Columns)
+                    {
+                        try
+                        {
+                            GridViewDataColumn col = (GridViewDataColumn)c;
+                            col.Caption = Dami.TraduCuvant(col.FieldName, General.Nz(col.Caption, "").ToString());
+                        }
+                        catch (Exception) { }
+                    }
+
+                    grDate.DataSource = Session["InformatiaCurenta"];
+                    grDate.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -67,47 +119,6 @@ namespace WizOne.Pagini
                 DataTable dtCmbAng = General.IncarcaDT(sqlAng, null);
                 GridViewDataComboBoxColumn colAng = (grDate.Columns["F10003"] as GridViewDataComboBoxColumn);
                 colAng.PropertiesComboBox.DataSource = dtCmbAng;
-
-                if (!IsPostBack)
-                {
-                    //Radu 08.05.2019 - sa se afiseze doar utilizatorii de WizOne
-                    string cond = "";
-                    //if (Constante.tipBD == 2)
-                    //    cond = "case when (SELECT COUNT(*) CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from \"relGrupUser\" where \"IdUser\" = F70102) > 0 then 0  else  1 end ELSE  1   END AS TIP ";
-                    //else
-                    //    cond = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from relGrupUser where IdUser = F70102) > 0 then 0  else 1  end  ELSE 1   END  AS TIP ";
-                    if (Constante.tipBD == 2)
-                        cond = "case when (SELECT COUNT(*) AS CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = F70102) > 0 or f70102 = 1 then 1 else 0  end  ELSE 0   END  AS TIP  ";
-                    else
-                        cond = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = F70102) > 0 or f70102 = 1 then 1 else 0  end  ELSE 0   END  AS TIP  ";
-
-
-                    DataTable dt = General.IncarcaDT(@"SELECT * FROM (SELECT A.*, " + cond + " FROM USERS A) B WHERE TIP = 0 ", null);
-                    dt.PrimaryKey = new DataColumn[] { dt.Columns["F70102"] };
-
-                    Session["InformatiaCurenta"] = dt;
-
-                    grDate.DataSource = Session["InformatiaCurenta"];
-                    grDate.KeyFieldName = "F70102";
-                    grDate.DataBind();
-
-                    Session["Utilizatori_Parola"] = null;
-                }
-                else
-                {
-                    foreach (var c in grDate.Columns)
-                    {
-                        try
-                        {
-                            GridViewDataColumn col = (GridViewDataColumn)c;
-                            col.Caption = Dami.TraduCuvant(col.FieldName, General.Nz(col.Caption,"").ToString());
-                        }
-                        catch (Exception) { }
-                    }
-
-                    grDate.DataSource = Session["InformatiaCurenta"];
-                    grDate.DataBind();
-                }
 
                 grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaUsr", "10"));
             }

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -1176,6 +1177,12 @@ namespace WizOne.Pontaj
                         for (int j = 0; j < dtAbs.Rows.Count; j++)
                             listaAbs.Add(dtAbs.Rows[j]["DenumireScurta"].ToString(), dtAbs.Rows[j]["Culoare"].ToString());
 
+                    DataTable dtAbsOra = General.IncarcaDT("SELECT DISTINCT \"DenumireScurta\", max(\"Culoare\") AS \"Culoare\" FROM \"Ptj_tblAbsente\" WHERE \"IdTipOre\" = 0 and DenumireScurta is not null and LEN(DenumireScurta)  > 0 GROUP BY \"DenumireScurta\"", null);
+                    Dictionary<string, string> listaAbsOra = new Dictionary<string, string>();
+                    if (dtAbsOra != null && dtAbsOra.Rows.Count > 0)
+                        for (int j = 0; j < dtAbsOra.Rows.Count; j++)
+                            listaAbsOra.Add(dtAbsOra.Rows[j]["DenumireScurta"].ToString(), dtAbsOra.Rows[j]["Culoare"].ToString());
+
                     //Radu 05.05.2020
                     DataTable dtZec = General.IncarcaDT("SELECT * FROM \"Ptj_tblFormuleCumulat\"", null);
                     Dictionary<string, int> listaZec = new Dictionary<string, int>();
@@ -1329,7 +1336,53 @@ namespace WizOne.Pontaj
                                     if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) ws2.Cells[row + 2, nrCol].FillColor = Color.FromArgb(217, 243, 253);
                                     if (listaAbs.ContainsKey(dt.Rows[row][i].ToString()))
                                         ws2.Cells[row + 2, nrCol].FillColor = General.Culoare(listaAbs[dt.Rows[row][i].ToString()]);
-                                    if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
+                                    else
+                                    {
+                                        string[] lstOre = dt.Rows[row][i].ToString().Split('/');
+                                        DataTable dtOre = new DataTable();                                       
+                                        dtOre.Columns.Add("DenScurta", typeof(string));
+                                        dtOre.Columns.Add("NrOre", typeof(decimal));
+                                        dtOre.Columns.Add("Cereri", typeof(int));
+                                        dtOre.Columns.Add("Pontaj", typeof(int));
+                                        foreach (DataColumn col in dtOre.Columns)
+                                            col.ReadOnly = false;
+
+                                        for (int k = 0; k < lstOre.Count(); k++)
+                                        {
+                                            int nrLitere = Regex.Matches(lstOre[i], @"[a-zA-Z]").Count;
+                                            if (nrLitere > 0)
+                                            {
+                                                var denScurta = new String(lstOre[i].Where(Char.IsLetter).ToArray());
+                                                decimal nrOre = Convert.ToDecimal(lstOre[i].Replace(denScurta, ""));
+                                                dtOre.Rows.Add(denScurta, nrOre, 0 , 1);
+                                            }
+                                        }
+                                        if (dtOre.Rows.Count > 0)
+                                        {
+                                            if (dtOre.Rows.Count > 1)
+                                            {
+                                                for (int l = 0; l < dtOre.Rows.Count; l++)
+                                                {
+                                                    DataTable dtCer = General.IncarcaDT("SELECT COUNT(*) FROM Ptj_Cereri WHERE F10003 = " + dt.Rows[row]["F10003"].ToString()
+                                                    + " AND IdAbsenta IN (SELECT Id FROM Ptj_tblAbsente WHERE DenumireScurta = '" + dtOre.Rows[l]["DenScurta"].ToString() + "') AND "
+                                                    + " DataInceput <= '" + zi.Year + "-" + zi.Month.ToString().PadLeft(2, '0') + "-" + zi.Day.ToString().PadLeft(2, '0')
+                                                    + "' AND '" + zi.Year + "-" + zi.Month.ToString().PadLeft(2, '0') + "-" + zi.Day.ToString().PadLeft(2, '0')
+                                                    + "' <= DataSfarsit AND IdStare = 3", null);
+                                                    if (dtCer != null && dtCer.Rows.Count > 0 && Convert.ToInt32(dtCer.Rows[0][0].ToString()) > 0)
+                                                    {
+                                                        dtOre.Rows[l]["Cereri"] = 1;
+                                                        dtOre.Rows[l]["Pontaj"] = 0;
+                                                    }
+                                                }
+
+                                                DataView dv = dtOre.DefaultView;
+                                                dtOre.DefaultView.Sort = "Cereri desc, NrOre desc";
+                                                dtOre = dtOre.DefaultView.ToTable();
+                                            }
+                                            ws2.Cells[row + 2, nrCol].FillColor = General.Culoare(listaAbsOra[dtOre.Rows[0]["DenScurta"].ToString()]);
+                                        }
+                                    }
+                                    if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.AFI) && dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
                                         ws2.Cells[row + 2, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
                                     nrCol++;
                                     idZile = listaId["Zilele 1-31"];
@@ -1449,7 +1502,53 @@ namespace WizOne.Pontaj
                                         if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = Color.FromArgb(217, 243, 253);
                                         if (listaAbs.ContainsKey(dt.Rows[row][i].ToString()))
                                             ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(listaAbs[dt.Rows[row][i].ToString()]);
-                                        if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
+                                        else
+                                        {
+                                            string[] lstOre = dt.Rows[row][i].ToString().Split('/');
+                                            DataTable dtOre = new DataTable();
+                                            dtOre.Columns.Add("DenScurta", typeof(string));
+                                            dtOre.Columns.Add("NrOre", typeof(decimal));
+                                            dtOre.Columns.Add("Cereri", typeof(int));
+                                            dtOre.Columns.Add("Pontaj", typeof(int));
+                                            foreach (DataColumn col in dtOre.Columns)
+                                                col.ReadOnly = false;
+
+                                            for (int k = 0; k < lstOre.Count(); k++)
+                                            {
+                                                int nrLitere = Regex.Matches(lstOre[i], @"[a-zA-Z]").Count;
+                                                if (nrLitere > 0)
+                                                {
+                                                    var denScurta = new String(lstOre[i].Where(Char.IsLetter).ToArray());
+                                                    decimal nrOre = Convert.ToDecimal(lstOre[i].Replace(denScurta, ""));
+                                                    dtOre.Rows.Add(denScurta, nrOre, 0, 1);
+                                                }
+                                            }
+                                            if (dtOre.Rows.Count > 0)
+                                            {
+                                                if (dtOre.Rows.Count > 1)
+                                                {
+                                                    for (int l = 0; l < dtOre.Rows.Count; l++)
+                                                    {
+                                                        DataTable dtCer = General.IncarcaDT("SELECT COUNT(*) FROM Ptj_Cereri WHERE F10003 = " + dt.Rows[row]["F10003"].ToString()
+                                                        + " AND IdAbsenta IN (SELECT Id FROM Ptj_tblAbsente WHERE DenumireScurta = '" + dtOre.Rows[l]["DenScurta"].ToString() + "') AND "
+                                                        + " DataInceput <= '" + zi.Year + "-" + zi.Month.ToString().PadLeft(2, '0') + "-" + zi.Day.ToString().PadLeft(2, '0')
+                                                        + "' AND '" + zi.Year + "-" + zi.Month.ToString().PadLeft(2, '0') + "-" + zi.Day.ToString().PadLeft(2, '0')
+                                                        + "' <= DataSfarsit AND IdStare = 3", null);
+                                                        if (dtCer != null && dtCer.Rows.Count > 0 && Convert.ToInt32(dtCer.Rows[0][0].ToString()) > 0)
+                                                        {
+                                                            dtOre.Rows[l]["Cereri"] = 1;
+                                                            dtOre.Rows[l]["Pontaj"] = 0;
+                                                        }
+                                                    }
+
+                                                    DataView dv = dtOre.DefaultView;
+                                                    dtOre.DefaultView.Sort = "Cereri desc, NrOre desc";
+                                                    dtOre = dtOre.DefaultView.ToTable();
+                                                }
+                                                ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(listaAbsOra[dtOre.Rows[0]["DenScurta"].ToString()]);
+                                            }
+                                        }
+                                        if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.AFI) && dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
                                             ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
                                         idZile = listaId["Zilele 1-31"];
                                         if (!ignorare)
@@ -2685,6 +2784,7 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
 
     }
 }

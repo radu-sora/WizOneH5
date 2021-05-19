@@ -222,6 +222,9 @@ namespace WizOne.Pagini
                                     tbl = "";
                                 }
                                 break;
+                            case "19":
+                                tbl = "Beneficii";
+                                break;
                         }
 
                         if (tbl.Length > 0)

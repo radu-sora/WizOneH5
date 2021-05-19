@@ -64,7 +64,7 @@
         </tr>
         <tr>
             <td colspan="2" style="margin-top:15px; display:inline-block; width:100%;">
-                <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" SettingsLoadingPanel-Enabled="false" >
+                <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" SettingsLoadingPanel-Enabled="false"  >
                     <ClientSideEvents EndCallback="function (s,e) { pnlLoading.Hide(); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
                     <PanelCollection>
                         <dx:PanelContent>
@@ -116,6 +116,7 @@
                                                 <Border BorderStyle="None" />
                                                 <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e){ OnListBoxSelectionChanged1(s,e); }" />
+                                                <FilteringSettings ShowSearchUI="true" />
                                             </dx:ASPxListBox>
                                             <table style="width: 100%">
                                                 <tr>
@@ -158,6 +159,7 @@
                                                 <Border BorderStyle="None" />
                                                 <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e){ OnListBoxSelectionChanged2(s,e); }" />
+                                                <FilteringSettings ShowSearchUI="true" />
                                             </dx:ASPxListBox>
                                             <table style="width: 100%">
                                                 <tr>
@@ -521,6 +523,7 @@
     </dx:ASPxPopupControl>
 
     <script type="text/javascript">
+
 
         var limba = "<%= Session["IdLimba"] %>";
 

@@ -659,10 +659,12 @@ namespace WizOne.Module
                         (SELECT ""NrZile""  FROM ""Ptj_CereriDrepturi"" DR WHERE DR.""IdAbs"" IN (A.""IdAbsenta"",-13) AND DR.""IdStare"" IN (A.""IdStare"", -13) AND DR.""IdRol"" IN (A.""Rol"", -13) AND DR.""IdActiune"" IN (3, -13) AND ROWNUM <=1) AS ""Anulare_NrZile"" ";
                 }
 
+                //Radu 27.04.2021 - se doreste afisarea numarului de zile si pentru cereri de tip ora (#833)
+                // CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
                 sqlFinal = $@"SELECT A.""Id"", B.F10003, B.F10008 {Dami.Operator()} ' ' {Dami.Operator()} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", B.F100901 AS EID,
                                 CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
                                 A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
-                                CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
+                                A.""NrZile"" AS ""NrZile"", 
                                 CASE WHEN C.""IdTipOre"" = 0 THEN A.""NrOre"" ELSE NULL END AS ""NrOre"", 
                                 A.""Observatii"", D.F10008 {Dami.Operator()} ' ' {Dami.Operator()} D.F10009 AS ""NumeInlocuitor"", A.""IdStare"", 
                                 CASE WHEN A.""TrimiteLa"" = -13 THEN 'Banca' ELSE CASE WHEN A.""TrimiteLa""= -14 THEN 'Plata' ELSE Q.""Denumire"" END END AS ""TrimiteLa"", 

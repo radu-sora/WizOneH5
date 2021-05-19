@@ -12,13 +12,17 @@
             {
                 case "btnNomenclatorAng":
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToAng);
-                    break;
-                case "btnNomenclatorBen":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToBen);
-                    break;     
+                    break;    
    
             }
-        }     
+        } 
+
+        function GoToAng(Value) {
+            strUrl = getAbsoluteUrl + "Beneficii/relSesiuniBen.aspx?tip=1&qwe=" + Value;
+            popGen.SetHeaderText("Grupuri angajati");
+            popGen.SetContentUrl(strUrl);
+            popGen.Show();
+        } 
 
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
@@ -173,7 +177,13 @@
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataComboBoxColumn>                       
-               
+                        <dx:GridViewCommandColumn Name="colNomenclatorAng" Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Grupuri angajati">
+                            <CustomButtons>
+                                <dx:GridViewCommandColumnCustomButton ID="btnNomenclatorAng" Visibility="BrowsableRow">
+                                    <Image ToolTip="Grupuri angajati" Url="~/Fisiere/Imagini/Icoane/info.png" />
+                                </dx:GridViewCommandColumnCustomButton>
+                            </CustomButtons>                        
+                        </dx:GridViewCommandColumn>               
                       
 
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  ReadOnly="true" Width="75px" Visible="false"  ShowInCustomizationForm="false" />

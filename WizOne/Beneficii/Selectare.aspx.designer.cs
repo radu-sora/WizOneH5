@@ -11,7 +11,7 @@ namespace WizOne.Beneficii
 {
 
 
-    public partial class SesiuniBeneficii
+    public partial class Selectare
     {
 
         /// <summary>
@@ -24,15 +24,6 @@ namespace WizOne.Beneficii
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
 
         /// <summary>
-        /// btnInit control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnInit;
-
-        /// <summary>
         /// btnExit control.
         /// </summary>
         /// <remarks>
@@ -42,75 +33,84 @@ namespace WizOne.Beneficii
         protected global::DevExpress.Web.ASPxButton btnExit;
 
         /// <summary>
-        /// lblDeLa control.
+        /// lgBen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDeLa;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgBen;
 
         /// <summary>
-        /// txtDataInc control.
+        /// lblBen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxDateEdit txtDataInc;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblBen;
 
         /// <summary>
-        /// lblLa control.
+        /// grDateBen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblLa;
+        protected global::DevExpress.Web.ASPxGridView grDateBen;
 
         /// <summary>
-        /// txtDataSf control.
+        /// btnArataBen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxDateEdit txtDataSf;
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnArataBen;
 
         /// <summary>
-        /// btnFiltru control.
+        /// lgSes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnFiltru;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgSes;
 
         /// <summary>
-        /// btnFiltruSterge control.
+        /// lblSes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnFiltruSterge;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSes;
 
         /// <summary>
-        /// grDate control.
+        /// grDateSes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDate;
+        protected global::DevExpress.Web.ASPxGridView grDateSes;
 
         /// <summary>
-        /// btnNomenclatorAng control.
+        /// btnArataSes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnNomenclatorAng;
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnArataSes;
+
+        /// <summary>
+        /// btnValidare control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnValidare;
     }
 }

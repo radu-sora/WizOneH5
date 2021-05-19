@@ -17647,11 +17647,11 @@ CREATE TABLE [dbo].[Ben_tblStari](
 
 GO
 
-INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (0, 'Inactiv', '')
+INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (0, 'Inchis', '')
 GO
-INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (1, 'Initiat', '')
+INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (1, 'Neselectat', '')
 GO
-INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (2, 'In curs', '')
+INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (2, 'Selectat', '')
 GO
 INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (3, 'Aprobat', '')
 GO
@@ -17669,6 +17669,7 @@ CREATE TABLE [dbo].[Ben_Sesiuni](
 	[DataSfarsit] [datetime] NULL,
 	[DataInceputBen] [datetime] NULL,
 	[DataSfarsitBen] [datetime] NULL,
+	[Motiv] [nvarchar](max) NULL,
 	[USER_NO] [int] NULL,
 	[TIME] [datetime] NULL,
 	[IdAuto] [int] IDENTITY(1,1) NOT NULL
@@ -17686,7 +17687,6 @@ CREATE TABLE [dbo].[Ben_tblSesiuni](
 	[IdStare][int] NULL,
 	[DataInceput] [datetime] NULL,
 	[DataSfarsit] [datetime] NULL,
-	[SeturiAngajati] [nvarchar](250) NULL,
 	[USER_NO] [int] NULL,
 	[TIME] [datetime] NULL
  CONSTRAINT [Ben_tblSesiuni_PK] PRIMARY KEY CLUSTERED 
@@ -17727,4 +17727,7 @@ GO
 ALTER TABLE Ntf_Setari ADD SubiectICS NVARCHAR(MAX)
 GO
 ALTER TABLE Ntf_Setari ADD CorpICS NVARCHAR(MAX)
+GO
+INSERT INTO tblParametrii(Nume,Valoare,Explicatie,IdModul)
+VALUES('NrMinuteDeblocareParola',10,'valoare <> 0 = nr minute fata de momentul blocarii dupa care se va debloca userul , 0 = optiune dezactivata  ',0)
 GO

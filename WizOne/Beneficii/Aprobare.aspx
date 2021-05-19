@@ -34,6 +34,40 @@
         }
 
 
+        function OnRespinge(s, e) {
+            if (grDate.GetSelectedRowCount() > 0) {
+                swal({
+                    title: trad_string(limba, 'Sunteti sigur/a ?'), text: trad_string(limba, 'Vreti sa continuati procesul de respingere ?'),
+                    type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        popUpMotiv.Show();                     
+                    }
+                });
+            }
+            else {
+                swal({
+                    title: trad_string(limba, ""), text: trad_string(limba, "Nu exista linii selectate"),
+                    type: "warning"
+                });
+            }
+        }
+
+        function OnMotivRespingere(s, e) {
+            if (ASPxClientUtils.Trim(txtMtv.GetText()) == '') {
+                swal({
+                    title: trad_string(limba, "Operatie nepermisa"), text: trad_string(limba, "Pentru a putea respinge este nevoie de un motiv"),
+                    type: "warning"
+                });
+            }
+            else {
+                popUpMotiv.Hide();
+                grDate.PerformCallback('btnRespinge;' + txtMtv.GetText());
+                txtMtv.SetText('');
+            }
+        }
+
+
         var textSeparator = ",";
         function OnListBoxSelectionChanged(listBox, args) {
             if (args.index == 0)
@@ -92,10 +126,9 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
-                <dx:ASPxButton ID="btnRespinge" runat="server" Text="Respinge" OnClick="btnRespinge_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnRespinge" ClientInstanceName="btnRespinge" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
+                        OnRespinge(s,e);                        
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
                 </dx:ASPxButton>
@@ -153,8 +186,8 @@
                             <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
                             <Items>
                                 <dx:ListEditItem Text="(Selectie toate)" />
-                                <dx:ListEditItem Text="Initiat" Value="1" />
-                                <dx:ListEditItem Text="In Curs" Value="2" />
+                                <dx:ListEditItem Text="Neselectat" Value="1" />
+                                <dx:ListEditItem Text="Selectat" Value="2" />
                                 <dx:ListEditItem Text="Aprobat" Value="3" />
                                 <dx:ListEditItem Text="Respins" Value="4" />
                             </Items>
@@ -174,13 +207,26 @@
                 </dx:ASPxDropDownEdit>
 
             </td>
+            <td>
+                <label id="lblDeLa" runat="server" style="display:inline-block;">Data inceput</label>
+                <dx:ASPxDateEdit ID="txtDataInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataIncResource1" >
+                    <CalendarProperties FirstDayOfWeek="Monday" />
+                </dx:ASPxDateEdit>
+            </td>
+            <td>
+                <label id="lblLa" runat="server" style="display:inline-block;">Data sfarsit</label>
+                <dx:ASPxDateEdit ID="txtDataSf" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataSfResource1" >
+                    <CalendarProperties FirstDayOfWeek="Monday" />
+                </dx:ASPxDateEdit>                    
+            </td> 
+
             <td align="left">
-                <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
+                <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Filtru" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                 </dx:ASPxButton>
             </td>
             <td align="left">
-                <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltruSterge_Click" >                    
+                <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Sterge filtru" oncontextMenu="ctx(this,event)" OnClick="btnFiltruSterge_Click" >                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
                 </dx:ASPxButton>
             </td>                    	
@@ -199,7 +245,7 @@
                     <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                     <Columns>
                         <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" />
-                        <dx:GridViewCommandColumn Width="90px" VisibleIndex="1" ButtonType="Image" ShowEditButton="true" Caption=" " Name="butoaneGrid" >
+                        <dx:GridViewCommandColumn Width="30px" VisibleIndex="1" ButtonType="Image" ShowEditButton="false" Caption=" " Name="butoaneGrid" >
                             <CustomButtons>                               
                                 <dx:GridViewCommandColumnCustomButton ID="btnArata">
                                     <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/view.png" />
@@ -219,11 +265,12 @@
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn> 
-					    <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput sesiune" ReadOnly="true" HeaderStyle-Wrap="True"  Width="100px" >
+                        <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" ReadOnly="true"  Width="150px" />	
+					    <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput sesiune" ReadOnly="true" Visible="false" HeaderStyle-Wrap="True"  Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
-					    <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit sesiune" ReadOnly="true"  HeaderStyle-Wrap="True" Width="100px" >
+					    <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit sesiune" ReadOnly="true" Visible="false"  HeaderStyle-Wrap="True" Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
@@ -231,15 +278,14 @@
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-					    <dx:GridViewDataDateColumn FieldName="DataInceputBen" Name="DataInceputBen" Caption="Data inceput beneficiu" ReadOnly="true"  HeaderStyle-Wrap="True" Width="100px" >
+					    <dx:GridViewDataDateColumn FieldName="DataInceputBen" Name="DataInceputBen" Caption="Data inceput beneficiu" ReadOnly="true" Visible="false"  HeaderStyle-Wrap="True" Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
-					    <dx:GridViewDataDateColumn FieldName="DataSfarsitBen" Name="DataSfarsitBen" Caption="Data sfarsit beneficiu" ReadOnly="true"  HeaderStyle-Wrap="True" Width="100px" >
+					    <dx:GridViewDataDateColumn FieldName="DataSfarsitBen" Name="DataSfarsitBen" Caption="Data sfarsit beneficiu" ReadOnly="true" Visible="false" HeaderStyle-Wrap="True" Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                        </dx:GridViewDataDateColumn>
-					    <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" ReadOnly="true"  Width="150px" />	
+                        </dx:GridViewDataDateColumn>				    
 
 
                        
@@ -270,4 +316,38 @@
             </td>
         </tr>
      </table> 
+
+
+    <dx:ASPxPopupControl ID="popUpMotiv" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
+        EnableViewState="False" PopupElementID="popUpMotivArea" PopupHorizontalAlign="WindowCenter"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="650px" Height="200px" HeaderText="Motiv respingere"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpMotiv" EnableHierarchyRecreation="false">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel1" runat="server">
+                    <table>
+                        <tr>
+                            <td align="right">
+                                <dx:ASPxButton ID="btnRespingeMtv" runat="server" Text="Respinge" AutoPostBack="false" >
+                                    <ClientSideEvents Click="function(s, e) {
+                                        OnMotivRespingere(s,e);
+                                    }" />
+                                    <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
+                                </dx:ASPxButton>
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: #666666;font-family: Tahoma; font-size: 10px;">
+                                <dx:ASPxMemo ID="txtMtv" runat="server" ClientIDMode="Static" ClientInstanceName="txtMtv" Width="630px" Height="180px"></dx:ASPxMemo>
+                            </td>
+                        </tr>
+                    </table>
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
+
 </asp:Content>

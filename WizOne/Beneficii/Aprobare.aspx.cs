@@ -66,7 +66,17 @@ namespace WizOne.Beneficii
                     if (dtHR != null && dtHR.Rows.Count > 0 && Convert.ToInt32(dtHR.Rows[0][0].ToString()) > 0)                                         
                         Session["BenAprobare_HR"] = 1;                    
                     else                  
-                        Session["BenAprobare_HR"] = 0;                    
+                        Session["BenAprobare_HR"] = 0;
+
+                    txtDataInc.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                    txtDataSf.Value = new DateTime(2100, 1, 1);
+
+                    ASPxListBox nestedListBox = checkComboBoxStare.FindControl("listBox") as ASPxListBox;
+                    for (int i = 0; i < nestedListBox.Items.Count; i++)
+                    {
+                        if (Convert.ToInt32(nestedListBox.Items[i].Value) == 2)
+                            nestedListBox.Items[i].Selected = true;
+                    }
                 }
 
                 if (Session["BenAprobare_HR"] != null && Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 1)                
@@ -199,18 +209,7 @@ namespace WizOne.Beneficii
             }
         }
 
-        protected void btnRespinge_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                MetodeCereri(2);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+
 
         private void IncarcaGrid()
         {
@@ -262,6 +261,14 @@ namespace WizOne.Beneficii
                     {
                         grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Insuficienti parametrii");
                         return;
+                    }
+
+                    switch (arr[0])
+                    {   
+                        case "btnRespinge":
+                            MetodeCereri(2, arr[1].Trim());
+                            IncarcaGrid();
+                            break;
                     }
 
                 }
@@ -372,9 +379,7 @@ namespace WizOne.Beneficii
                     {
                         object[] obj = grDate.GetRowValues(e.VisibleIndex, new string[] { "IdStare", "IdBeneficiu" }) as object[];
                         if (obj[1] == null || obj[1].ToString().Length <= 0)
-                            e.Visible = DefaultBoolean.False;
-
-                        
+                            e.Visible = DefaultBoolean.False;                        
                     }                    
                 }
             }
@@ -431,7 +436,7 @@ namespace WizOne.Beneficii
 
 
 
-        private void MetodeCereri(int tipActiune, int tipMsg = 0)
+        private void MetodeCereri(int tipActiune, string motiv = "")
         {
             //actiune  1  - aprobare
             //actiune  2  - respingere
@@ -445,10 +450,8 @@ namespace WizOne.Beneficii
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "IdSesiune", "F10003", "IdStare", "DataInceput", "DataSfarsit", "IdAuto" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
-                    if (tipMsg == 0)
-                        MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "");
-                    else
-                        grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
+             
+                    grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
                     return;
                 }
 
@@ -472,28 +475,22 @@ namespace WizOne.Beneficii
                 {
                     if (msg.Length <= 0)
                     {
-                        if (tipMsg == 0)
-                            MessageBox.Show("Nu exista cereri valide", MessageBox.icoWarning, "");
-                        else
+   
                             grDate.JSProperties["cpAlertMessage"] = "Nu exista cereri valide";
 
                     }
                     else
                     {
-                        if (tipMsg == 0)
-                            MessageBox.Show(msg, MessageBox.icoWarning, "");
-                        else
+          
                             grDate.JSProperties["cpAlertMessage"] = msg;
                     }
                     grDate.Selection.UnselectAll();
                     return;
                 }
 
-                msg = msg + AprobaCerere(Convert.ToInt32(Session["UserId"].ToString()), ids, lstMarci, lstAuto, nrSel, tipActiune);
+                msg = msg + AprobaCerere(Convert.ToInt32(Session["UserId"].ToString()), ids, lstMarci, lstAuto, nrSel, tipActiune, motiv);
   
-                if (tipMsg == 0)
-                    MessageBox.Show(msg, MessageBox.icoWarning, "");
-                else
+        
                     grDate.JSProperties["cpAlertMessage"] = msg;
 
                 Session["BeneficiiAprob_Grid"] = null;
@@ -510,7 +507,7 @@ namespace WizOne.Beneficii
         }
 
 
-        public string AprobaCerere(int idUser, string ids, string lstMarci, string lstAuto, int total, int actiune)
+        public string AprobaCerere(int idUser, string ids, string lstMarci, string lstAuto, int total, int actiune, string motiv = "")
         {
             //actiune  1  - aprobare
             //actiune  2  - respingere
@@ -544,7 +541,7 @@ namespace WizOne.Beneficii
 
                         if (id != -99)
                         {
-                            General.ExecutaNonQuery("UPDATE \"Ben_Sesiuni\" SET \"IdStare\" = " + (actiune == 1 ? "3" : "4") + " WHERE \"IdSesiune\" = " + id + " AND F10003 = " + arrMarci[i], null);                            
+                            General.ExecutaNonQuery("UPDATE \"Ben_Sesiuni\" SET \"IdStare\" = " + (actiune == 1 ? "3" : "4") + ", Motiv = '" + motiv + "' WHERE \"IdSesiune\" = " + id + " AND F10003 = " + arrMarci[i], null);                            
 
                             #region  Notificare start
 

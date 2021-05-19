@@ -416,6 +416,7 @@
     <Content Include="Beneficii\Aprobare.aspx" />
     <Content Include="Beneficii\NomenBeneficii.aspx" />
     <Content Include="Beneficii\relSesiuniBen.aspx" />
+    <Content Include="Beneficii\Selectare.aspx" />
     <Content Include="Beneficii\SesiuniBeneficii.aspx" />
     <Content Include="BP\Aprobare.aspx" />
     <Content Include="BP\CrearePrime.aspx" />
@@ -1354,6 +1355,13 @@
     </Compile>
     <Compile Include="Beneficii\relSesiuniBen.aspx.designer.cs">
       <DependentUpon>relSesiuniBen.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Beneficii\Selectare.aspx.cs">
+      <DependentUpon>Selectare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Beneficii\Selectare.aspx.designer.cs">
+      <DependentUpon>Selectare.aspx</DependentUpon>
     </Compile>
     <Compile Include="Beneficii\SesiuniBeneficii.aspx.cs">
       <DependentUpon>SesiuniBeneficii.aspx</DependentUpon>

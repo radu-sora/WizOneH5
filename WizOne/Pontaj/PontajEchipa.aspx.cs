@@ -1667,10 +1667,14 @@ namespace WizOne.Pontaj
                     return;
                 }
 
+                //Florin 2021.05.18
+                DataRow drPtj = General.IncarcaDR($@"SELECT TOP 1 * FROM ""Ptj_Intrari""");
+                string sqlPtj = General.CreazaSelectFromRow(drPtj, "", true);
+
                 for (int i = 0; i < lst.Count(); i++)
                 {
                     object[] arr = lst[i] as object[];
-                    msg += General.ActiuniExec(actiune, Convert.ToInt32(General.Nz(arr[0], -99)), idRol, Convert.ToInt32(General.Nz(arr[1], -99)), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, "Pontaj.PontajEchipa", Convert.ToInt32(Session["UserId"]), Convert.ToInt32(Session["User_Marca"]), motiv) + System.Environment.NewLine;
+                    msg += General.ActiuniExec(actiune, Convert.ToInt32(General.Nz(arr[0], -99)), idRol, Convert.ToInt32(General.Nz(arr[1], -99)), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, "Pontaj.PontajEchipa", Convert.ToInt32(Session["UserId"]), Convert.ToInt32(Session["User_Marca"]), motiv, sqlPtj) + System.Environment.NewLine;
                 }
 
                 if (msg != "")

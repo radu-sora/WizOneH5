@@ -80,16 +80,6 @@
                                 <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                                 <SettingsHeaderFilter Mode="CheckedList" />
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataDateColumn FieldName="DeLaData" Name="DeLaData" Caption="Valabil De la Data"  Width="100px" VisibleIndex="2" >
-                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                                <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                                <SettingsHeaderFilter Mode="CheckedList" />
-                            </dx:GridViewDataDateColumn>
-                            <dx:GridViewDataDateColumn FieldName="LaData" Name="LaData" Caption="Pana La Data"  Width="100px" VisibleIndex="3">
-                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                                <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                                <SettingsHeaderFilter Mode="CheckedList" />
-                            </dx:GridViewDataDateColumn>
                             <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere"  Width="250px" VisibleIndex="4" >  
                                 <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                                 <SettingsHeaderFilter Mode="CheckedList" />
@@ -133,14 +123,9 @@
                                     <table class="auto-style8">
                                         <tr>
                                             <td id="lblDen" runat="server" style="padding-left:10px !important;">Denumire</td>
-                                            <td id="lblDeLa" runat="server" style="padding-left:10px !important;">De la</td>
-                                            <td id="lblLa" runat="server" style="padding-left:10px !important;">La</td>
                                         </tr>
                                         <tr>
-                                            <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtDen" runat="server" Width="250px" Value='<%# Bind("Denumire") %>' />
-                                            <td style="padding:10px !important;"><dx:ASPxDateEdit ID="deDeLaData" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DeLaData") %>' /></td>
-                                            <td style="padding:10px !important;"><dx:ASPxDateEdit ID="deLaData" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("LaData") %>' /></td>
-                                                                                       
+                                            <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtDen" runat="server" Width="250px" Value='<%# Bind("Denumire") %>' />                                                                                       
                                         </tr>
                                         <tr>
                                             <td id="lblDesc" runat="server" style="padding:10px !important;">Descriere</td>

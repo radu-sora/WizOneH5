@@ -43,6 +43,8 @@ namespace WizOne.Beneficii
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 #endregion
 
+                txtTitlu.Text = Dami.TraduCuvant("Nomenclator beneficii");
+
                 if (IsPostBack)
                 {
                     DataTable dt = Session["NomenBen_Grid"] as DataTable;
@@ -67,7 +69,7 @@ namespace WizOne.Beneficii
         {
             try
             {
-                string strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", a.""DeLaData"", a.""LaData"", a.""Descriere"", a.USER_NO, a.TIME, a.ValoareEstimata
+                string strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", a.""Descriere"", a.USER_NO, a.TIME, a.ValoareEstimata
                                 from ""Admin_Obiecte"" a
                                 inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
                                 where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY a.""Denumire""";
@@ -115,15 +117,13 @@ namespace WizOne.Beneficii
                 DataTable dt = Session["NomenBen_Grid"] as DataTable;
                 DataRow dr = dt.NewRow();
 
-                ASPxDateEdit deDeLaData = grDate.FindEditFormTemplateControl("deDeLaData") as ASPxDateEdit;
-                ASPxDateEdit deLaData = grDate.FindEditFormTemplateControl("deLaData") as ASPxDateEdit;
+
                 ASPxTextBox txtDen = grDate.FindEditFormTemplateControl("txtDen") as ASPxTextBox;
                 ASPxMemo txtDesc = grDate.FindEditFormTemplateControl("txtDesc") as ASPxMemo;
 
                 dr["IdCategorie"] = Convert.ToInt32(Session["NomenBen_IdCateg"].ToString());
                 dr["Denumire"] = txtDen.Text;
-                dr["DeLaData"] = deDeLaData.Date;
-                dr["LaData"] = deLaData.Date;
+
                 int id = 1;
                 DataTable dtId = General.IncarcaDT("SELECT MAX(Id) + 1 FROM Admin_Obiecte", null);
                 if (dtId != null && dtId.Rows.Count > 0)
@@ -166,14 +166,12 @@ namespace WizOne.Beneficii
 
                 DataRow dr = dt.Rows.Find(keys);
 
-                ASPxDateEdit deDeLaData = grDate.FindEditFormTemplateControl("deDeLaData") as ASPxDateEdit;
-                ASPxDateEdit deLaData = grDate.FindEditFormTemplateControl("deLaData") as ASPxDateEdit;
+
                 ASPxTextBox txtDen = grDate.FindEditFormTemplateControl("txtDen") as ASPxTextBox;
                 ASPxMemo txtDesc = grDate.FindEditFormTemplateControl("txtDesc") as ASPxMemo;
 
                 dr["Denumire"] = txtDen.Text;
-                dr["DeLaData"] = deDeLaData.Date;
-                dr["LaData"] = deLaData.Date;
+
                 dr["Descriere"] = txtDesc.Text;
 
                 metaUploadFile itm = Session["DocUpload_NomenBen"] as metaUploadFile;

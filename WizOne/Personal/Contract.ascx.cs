@@ -1761,21 +1761,21 @@ namespace WizOne.Personal
                 //Radu 21.04.2020
                 //Radu 21.04.2021 - data se citeste cf. param.
                 int param = Convert.ToInt32(Dami.ValoareParam("ModCalculZileCOCuveniteDataReferinta", "1"));
-                string dtCalcul = dtSf;
+                string dtCalcul = "'" + dtSf + "'";
                 switch (param)
                 {
                     case 1:
-                        dtCalcul = dtSf;
+                        dtCalcul = "'" + dtSf + "'";
                         break;
                     case 2:
-                        dtCalcul = dtInc;
+                        dtCalcul = "'" + dtInc + "'";
                         break;
                     case 3:
                         dtCalcul = General.CurrentDate();
                         break;
                 }
 
-                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date,'" + dtCalcul + "'), 1, " + f10072 + ")";
+                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date," + dtCalcul + "), 1, " + f10072 + ")";
                 DataTable dtCO = General.IncarcaDT(strSql, null);
 
                 //DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });

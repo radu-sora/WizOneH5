@@ -150,6 +150,15 @@ namespace WizOne.Beneficii
         protected global::DevExpress.Web.ASPxDateEdit txtDataSf;
 
         /// <summary>
+        /// lblF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblF;
+
+        /// <summary>
         /// btnFiltru control.
         /// </summary>
         /// <remarks>
@@ -157,6 +166,15 @@ namespace WizOne.Beneficii
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltru;
+
+        /// <summary>
+        /// lblSF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSF;
 
         /// <summary>
         /// btnFiltruSterge control.

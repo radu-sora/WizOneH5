@@ -7180,14 +7180,14 @@ namespace WizOne.Module
                 //Florin 2021.04.02 - am inlocuit peste tot unde aparea ultima zi din an cu ziua curenta
                 //Radu 21.04.2021 - data se citeste cf. param.
                 int param = Convert.ToInt32(Dami.ValoareParam("ModCalculZileCOCuveniteDataReferinta", "1"));
-                string dtCalcul = dtSf;
+                string dtCalcul = "'" + dtSf + "'";
                 switch (param)
                 {
                     case 1:
-                        dtCalcul = dtSf;
+                        dtCalcul = "'" + dtSf + "'";
                         break;
                     case 2:
-                        dtCalcul = dtInc;
+                        dtCalcul = "'" + dtInc + "'";
                         break;
                     case 3:
                         dtCalcul = General.CurrentDate();
@@ -7209,7 +7209,7 @@ namespace WizOne.Module
                 //Radu 21.04.2020
                 //string strSql = SelectCalculCO(an, f10003, filtruIns);
                 //string strSql = "select * from calculCO(" + f10003 + ", CONVERT(date,'" + an + "-12-31'), 1, (SELECT F10072 FROM f100 where f10003=" + f10003 + "))";
-                string strSql = "select * from calculCO(" + f10003 + ", CONVERT(date,'" + dtCalcul + "'), 1, (SELECT F10072 FROM f100 where f10003=" + f10003 + "))";
+                string strSql = "select * from calculCO(" + f10003 + ", CONVERT(date," + dtCalcul + "), 1, (SELECT F10072 FROM f100 where f10003=" + f10003 + "))";
                 General.ExecutaNonQuery(strSql, null);
 
 
@@ -7237,7 +7237,7 @@ namespace WizOne.Module
                             //                    + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
                             //                    + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
                             General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
-                                + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + dtCalcul + "', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
+                                + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = " + dtCalcul + ", @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
                                 + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
                         }
                         else

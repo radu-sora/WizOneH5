@@ -33,13 +33,13 @@ namespace WizOne.Beneficii
         protected global::DevExpress.Web.ASPxButton btnExit;
 
         /// <summary>
-        /// lgBen control.
+        /// pnlBen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgBen;
+        protected global::DevExpress.Web.ASPxRoundPanel pnlBen;
 
         /// <summary>
         /// lblBen control.
@@ -69,13 +69,13 @@ namespace WizOne.Beneficii
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnArataBen;
 
         /// <summary>
-        /// lgSes control.
+        /// pnlSes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgSes;
+        protected global::DevExpress.Web.ASPxRoundPanel pnlSes;
 
         /// <summary>
         /// lblSes control.
@@ -84,7 +84,7 @@ namespace WizOne.Beneficii
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSes;
+        protected global::DevExpress.Web.ASPxLabel lblSes;
 
         /// <summary>
         /// grDateSes control.

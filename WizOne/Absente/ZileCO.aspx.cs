@@ -449,7 +449,12 @@ namespace WizOne.Absente
                 {
                     if (e.Parameters == "btnCO")
                     {
-                        General.CalculCO(Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)), Convert.ToInt32(cmbAng.Value ?? -99), true);                        
+                        for (int i = 0; i < grDate.VisibleRowCount; i++)
+                        {
+                            DataRowView obj = grDate.GetRow(i) as DataRowView;
+                            string marca = obj["F10003"].ToString();
+                            General.CalculCO(Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)), Convert.ToInt32(marca), true);
+                        }
                     }
                     if (e.Parameters == "btnSI") CalculSI();
                     IncarcaGrid();

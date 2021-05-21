@@ -60,13 +60,7 @@ namespace WizOne.Beneficii
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
-
-
-      
-                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ben_tblStari"" ", null);
-                GridViewDataComboBoxColumn col = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                col.PropertiesComboBox.DataSource = dt;
-
+                    
 
                 if (!IsPostBack)
                 {
@@ -192,18 +186,7 @@ namespace WizOne.Beneficii
         {
             try
             {
-                if (e.DataColumn.FieldName == "IdStare")
-                {
-                    GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                    DataTable dt = colStari.PropertiesComboBox.DataSource as DataTable;
-
-                    string idStare = e.GetValue("IdStare").ToString();
-                    DataRow[] lst = dt.Select("Id=" + idStare);
-                    //if (lst.Count() > 0 && lst[0]["Culoare"] != null)
-                    //{
-                    //    e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(lst[0]["Culoare"].ToString());
-                    //}
-                }
+    
             }
             catch (Exception ex)
             {
@@ -277,33 +260,33 @@ namespace WizOne.Beneficii
         {
             try
             {
-                string msg = "";
-                DataTable dt = Session["SesiuniBen_Grid"] as DataTable;
-                List<metaSesiuniBen> ids = new List<metaSesiuniBen>();
-                string lstIds = "";
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "DataInceput", "DataSfarsit", "IdStare" });
-                if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+            //    string msg = "";
+            //    DataTable dt = Session["SesiuniBen_Grid"] as DataTable;
+            //    List<metaSesiuniBen> ids = new List<metaSesiuniBen>();
+            //    string lstIds = "";
+            //    List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "DataInceput", "DataSfarsit", "IdStare" });
+            //    if (lst == null || lst.Count() == 0 || lst[0] == null) return;
 
-                for (int i = 0; i < lst.Count(); i++)
-                {
-                    object[] arr = lst[i] as object[];    
+            //    for (int i = 0; i < lst.Count(); i++)
+            //    {
+            //        object[] arr = lst[i] as object[];    
 
-                    ids.Add(new metaSesiuniBen { Id = Convert.ToInt32(General.Nz(arr[0], 0)), DataInceput = Convert.ToDateTime(General.Nz(arr[1], 0)), DataSfarsit = Convert.ToDateTime(General.Nz(arr[2], 0)) });
-                    lstIds += ", " + General.Nz(arr[0], 0);
-            }
+            //        ids.Add(new metaSesiuniBen { Id = Convert.ToInt32(General.Nz(arr[0], 0)), DataInceput = Convert.ToDateTime(General.Nz(arr[1], 0)), DataSfarsit = Convert.ToDateTime(General.Nz(arr[2], 0)) });
+            //        lstIds += ", " + General.Nz(arr[0], 0);
+            //}
 
-                if (ids.Count != 0)
-                {
-                    msg += InitializareSesiune(ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
-                    General.ExecutaNonQuery("UPDATE Ben_tblSesiuni SET IdStare = 1 WHERE Id IN (" + lstIds.Substring(1) + ")", null);
-                    Session["SesiuniBen_Grid"] = null;
-                    IncarcaGrid();
-                }
+            //    if (ids.Count != 0)
+            //    {
+            //        msg += InitializareSesiune(ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+            //        General.ExecutaNonQuery("UPDATE Ben_tblSesiuni SET IdStare = 1 WHERE Id IN (" + lstIds.Substring(1) + ")", null);
+            //        Session["SesiuniBen_Grid"] = null;
+            //        IncarcaGrid();
+            //    }
 
-                grDate.JSProperties["cpAlertMessage"] = msg;
-                grDate.Selection.UnselectAll();  
+            //    grDate.JSProperties["cpAlertMessage"] = msg;
+            //    grDate.Selection.UnselectAll();  
 
-                MessageBox.Show("Proces finalizat cu succes!", MessageBox.icoSuccess);
+            //    MessageBox.Show("Proces finalizat cu succes!", MessageBox.icoSuccess);
 
             }
             catch (Exception ex)
@@ -328,10 +311,10 @@ namespace WizOne.Beneficii
                     {
                         for (int j = 0; j < dtAng.Rows.Count; j++)
                         {
-                            General.ExecutaNonQuery("DELETE FROM Ben_Sesiuni WHERE IdSesiune = " + arr[i].Id.ToString() + " AND F10003 = " + dtAng.Rows[j]["F10003"].ToString(), null);
+                            General.ExecutaNonQuery("DELETE FROM Ben_Cereri WHERE IdSesiune = " + arr[i].Id.ToString() + " AND F10003 = " + dtAng.Rows[j]["F10003"].ToString(), null);
 
-                            DataTable dtBen = General.IncarcaDT("INSERT INTO Ben_Sesiuni(IdSesiune, F10003, IdStare, DataInceput, DataSfarsit, USER_NO, TIME) OUTPUT Inserted.IdAuto VALUES(" + arr[i].Id.ToString() + ", " + dtAng.Rows[j]["F10003"].ToString() + ", 1, " 
-                                + General.ToDataUniv(Convert.ToDateTime(arr[i].DataInceput.ToString())) + ", " + General.ToDataUniv(Convert.ToDateTime(arr[i].DataSfarsit.ToString())) + ", " + idUser + ", GETDATE()) ", null);
+                            DataTable dtBen = General.IncarcaDT("INSERT INTO Ben_Cereri(IdSesiune, F10003, IdStare, USER_NO, TIME) OUTPUT Inserted.IdAuto VALUES(" + arr[i].Id.ToString() + ", " + dtAng.Rows[j]["F10003"].ToString() + ", 1, " 
+                                + idUser + ", GETDATE()) ", null);
 
                             string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
                             int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
@@ -341,7 +324,7 @@ namespace WizOne.Beneficii
 
                             HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                             {
-                                NotifAsync.TrimiteNotificare("Beneficii.Aprobare", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Ben_Sesiuni Z WHERE IdAuto=" + idAuto, "Ben_Sesiuni", idAuto, idUser, marcaUser, arrParam);
+                                NotifAsync.TrimiteNotificare("Beneficii.Aprobare", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Ben_Cereri Z WHERE IdAuto=" + idAuto, "Ben_Cereri", idAuto, idUser, marcaUser, arrParam);
                             });
                         }
                     }
@@ -511,7 +494,7 @@ namespace WizOne.Beneficii
         {
             try
             {
-                e.NewValues["IdStare"] = 0;  
+                //e.NewValues["IdStare"] = 0;  
 
                 int idSesMax = 1;
                 string sql = "SELECT MAX(\"Id\") + 1 FROM \"Ben_tblSesiuni\"   ";
@@ -520,8 +503,8 @@ namespace WizOne.Beneficii
                     idSesMax = Convert.ToInt32(dtTmp.Rows[0][0].ToString()) + 1;
 
                 e.NewValues["Id"] = idSesMax;
-                if (e.NewValues["IdStare"] == null)
-                    e.NewValues["IdStare"] = 0;
+                //if (e.NewValues["IdStare"] == null)
+                //    e.NewValues["IdStare"] = 0;
 
             }
             catch (Exception ex)

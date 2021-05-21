@@ -19,7 +19,7 @@
         function grDateSes_CustomButtonClick(s, e) {
             switch (e.buttonID) {
                 case "btnArataSes":
-                    grDateSes.GetRowValues(e.visibleIndex, 'IdBeneficiu', GoToAtasMode);
+                    grDateSes.GetRowValues(e.visibleIndex, 'Id', GoToAtasMode);
                     break;
             }
         }
@@ -105,15 +105,13 @@
         </tr>
     </table> 
     <br /> 
-        <table width="60%">   
-        <tr>
-            <td>
-                <fieldset class="fieldset-auto-width">
-                	<legend id="lgBen" runat="server" class="legend-font-size">Beneficii active</legend>                  
-                </fieldset>
-            </td>                    	
-        </tr>
-    </table>
+
+<dx:ASPxRoundPanel ID="pnlBen" ClientInstanceName="pnlBen" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Beneficii active" Width="100%">
+    <HeaderStyle Font-Bold="true" />
+   
+    <PanelCollection>
+        <dx:PanelContent>
+
     <br />
     <table width="60%">   
         <tr>
@@ -123,25 +121,23 @@
         </tr>
     </table>
     <br />
-     <table width="100%"> 
+     <table width="48%"> 
         <tr>
            <td align="left">
                 <dx:ASPxGridView ID="grDateBen" runat="server" ClientInstanceName="grDateBen" ClientIDMode="Static"  AutoGenerateColumns="false"  >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
-                    <Settings ShowFilterRow="False" ShowGroupPanel="True" HorizontalScrollBarMode="Auto"  />
+                    <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto"  />
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsSearchPanel Visible="False" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                     <ClientSideEvents CustomButtonClick="grDateBen_CustomButtonClick"  ContextMenu="ctx"  />
                     <Columns>
-                        <dx:GridViewDataComboBoxColumn FieldName="Id" Name="Id" Caption="Beneficiu" ReadOnly="true"  Width="150px" >
+                        <dx:GridViewDataComboBoxColumn FieldName="IdBeneficiu" Name="IdBeneficiu" Caption="Beneficiu" ReadOnly="true"  Width="150px" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn> 
-                        <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" ReadOnly="true"  Width="250px" />	
-					    <dx:GridViewDataDateColumn FieldName="LaData" Name="LaData" Caption="Valabilitate" ReadOnly="true"   Width="100px" >
+                        <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" ReadOnly="true"  Width="500px" />	
+					    <dx:GridViewDataDateColumn FieldName="DataSfarsitBen" Name="DataSfarsitBen" Caption="Valabilitate" ReadOnly="true"   Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewCommandColumn Width="90px" ButtonType="Image" Caption="Atasament" Name="butoaneGrid" >
                             <CustomButtons>                               
@@ -156,30 +152,30 @@
         </tr>
      </table>
     <br />
-       <table width="60%">   
-        <tr>
-            <td>
-                <fieldset class="fieldset-auto-width">
-                	<legend id="lgSes" runat="server" class="legend-font-size">Sesiune activa pentru selectarea Beneficiilor</legend>                  
-                </fieldset>
-            </td>                    	
-        </tr>
-    </table>
+        </dx:PanelContent>
+    </PanelCollection>
+</dx:ASPxRoundPanel>
+
+<dx:ASPxRoundPanel ID="pnlSes" ClientInstanceName="pnlSes" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Sesiune activa pentru selectarea Beneficiilor" Width="100%">
+    <HeaderStyle Font-Bold="true" />
+    <PanelCollection>
+        <dx:PanelContent>
+
     <br />
     <table width="60%">   
         <tr>
             <td>
-                <label id="lblSes" runat="server" style="display:inline-block;"></label>                  
+                <dx:ASPxLabel ID ="lblSes" runat="server" style="display:inline-block;" EncodeHtml="False" />              
             </td>                    	
         </tr>
     </table>
     <br />
-     <table width="100%"> 
+     <table width="48%"> 
         <tr>
            <td align="left">
                 <dx:ASPxGridView ID="grDateSes" runat="server" ClientInstanceName="grDateSes" ClientIDMode="Static"  AutoGenerateColumns="false"  >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="true" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
-                    <Settings ShowFilterRow="False" ShowGroupPanel="True" HorizontalScrollBarMode="Auto"  />
+                    <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto"  />
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsSearchPanel Visible="False" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -187,9 +183,8 @@
                     <Columns>
                         <dx:GridViewDataComboBoxColumn FieldName="Id" Name="Id" Caption="Beneficiu" ReadOnly="true"  Width="150px" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn> 
-                        <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" ReadOnly="true"  Width="250px" />	
+                        <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" ReadOnly="true"  Width="500px" />	
                         <dx:GridViewCommandColumn Width="90px" ButtonType="Image" Caption="Atasament" Name="butoaneGrid" >
                             <CustomButtons>                               
                                 <dx:GridViewCommandColumnCustomButton ID="btnArataSes">
@@ -213,4 +208,8 @@
             </td>                    	
         </tr>
     </table>
+
+        </dx:PanelContent>
+    </PanelCollection>
+</dx:ASPxRoundPanel>
 </asp:Content>

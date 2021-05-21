@@ -17585,10 +17585,6 @@ go
 
 ---- Beneficii Start ----
 
-ALTER TABLE Admin_Obiecte ADD DeLaData datetime
-GO
-ALTER TABLE Admin_Obiecte ADD LaData datetime
-GO
 ALTER TABLE Admin_Obiecte ADD Descriere NVARCHAR(MAX)
 GO
 
@@ -17609,20 +17605,6 @@ CREATE TABLE [dbo].[Ben_relSesGrupAng](
 
 GO
 
-CREATE TABLE [dbo].[Ben_relSesBen](
-	[IdSesiune] [int] NULL,
-	[IdBeneficiu] [int] NULL,
-	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
-	[USER_NO] [int] NULL,
-	[TIME] [datetime] NULL,
- CONSTRAINT [Ben_relSesBen_PK] PRIMARY KEY CLUSTERED 
-(
-	[IdAuto] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-
 INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Nomenclator sesiuni beneficii', 'Nomenclator sesiuni beneficii', 'Beneficii\SesiuniBeneficii', 1, 'm1.png')
 GO
 
@@ -17634,6 +17616,10 @@ GO
 
 INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Selectare beneficii', 'Selectare beneficii', 'Beneficii\Selectare', 1, 'm1.png')
 GO
+
+INSERT INTO MeniuLista(Id, Denumire) VALUES (16, 'Beneficii')
+GO
+
 
 CREATE TABLE [dbo].[Ben_tblStari](
 	[Id] [int] NULL,
@@ -17650,10 +17636,7 @@ CREATE TABLE [dbo].[Ben_tblStari](
 
 GO
 
-INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (0, 'Inchis', '')
-GO
-INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (1, 'Neselectat', '')
-GO
+
 INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (2, 'Selectat', '')
 GO
 INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (3, 'Aprobat', '')
@@ -17662,21 +17645,16 @@ INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (4, 'Respins', '')
 GO
 
 
-CREATE TABLE [dbo].[Ben_Sesiuni](
+CREATE TABLE [dbo].[Ben_Cereri](
 	[IdSesiune] [int] NULL,
 	[F10003] [int] NULL,
 	[IdBeneficiu] [int] NULL,
 	[IdStare][int] NULL,
-	[Descriere] [nvarchar](max) NULL,
-	[DataInceput] [datetime] NULL,
-	[DataSfarsit] [datetime] NULL,
-	[DataInceputBen] [datetime] NULL,
-	[DataSfarsitBen] [datetime] NULL,
 	[Motiv] [nvarchar](max) NULL,
 	[USER_NO] [int] NULL,
 	[TIME] [datetime] NULL,
 	[IdAuto] [int] IDENTITY(1,1) NOT NULL
- CONSTRAINT [Ben_Sesiuni_PK] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [Ben_Cereri_PK] PRIMARY KEY CLUSTERED 
 (
 	[IdAuto] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -17687,9 +17665,10 @@ GO
 CREATE TABLE [dbo].[Ben_tblSesiuni](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Denumire] [nvarchar](50) NULL,	
-	[IdStare][int] NULL,
 	[DataInceput] [datetime] NULL,
 	[DataSfarsit] [datetime] NULL,
+	[DataInceputBen] [datetime] NULL,
+	[DataSfarsitBen] [datetime] NULL,
 	[USER_NO] [int] NULL,
 	[TIME] [datetime] NULL
  CONSTRAINT [Ben_tblSesiuni_PK] PRIMARY KEY CLUSTERED 
@@ -17714,6 +17693,30 @@ CREATE TABLE [dbo].[Ben_SetAngajati](
 ) ON [PRIMARY]
 
 GO
+
+drop table Ben_Beneficii
+GO
+drop table Ben_Facturi
+Go
+drop table Ben_Stiri
+Go
+drop table Ben_tblAprobari
+Go
+drop table Ben_tblBeneficii
+Go
+drop table Ben_tblBeneficiiGrupuri
+Go
+drop table Ben_tblBeneficiiTipuri
+Go
+drop table Ben_tblConfig
+Go
+drop table Ben_tblDocTip
+Go
+drop table Ben_tblFurnizori
+Go
+drop table Ben_tblTichete
+Go
+
 
 ---- Beneficii End ----
 

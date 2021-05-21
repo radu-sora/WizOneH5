@@ -109,10 +109,10 @@
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divCtr" runat="server">
                                     <label id="lblCtr" runat="server" oncontextMenu="ctx(this,event)">Contract</label><br />
 
-                                    <dx:ASPxDropDownEdit ClientIDMode="Static" ClientInstanceName="checkComboBox1" ID="cmbCtr" Width="250px" runat="server" AnimationType="None" oncontextMenu="ctx(this,event)">
+                                    <dx:ASPxDropDownEdit ClientIDMode="Static" ClientInstanceName="checkComboBox1" ID="cmbCtr" Width="250px" DropDownWindowHeight="300" DropDownWindowWidth="400" runat="server" AnimationType="None" oncontextMenu="ctx(this,event)">
                                         <DropDownWindowStyle BackColor="#EDEDED" />
                                         <DropDownWindowTemplate>
-                                            <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox1" SelectionMode="CheckColumn" runat="server" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+                                            <dx:ASPxListBox Width="100%" Height="250" ID="listBox" ClientInstanceName="checkListBox1" SelectionMode="CheckColumn" runat="server" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
                                                 <Border BorderStyle="None" />
                                                 <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e){ OnListBoxSelectionChanged1(s,e); }" />
@@ -152,14 +152,14 @@
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divDept" runat="server">
                                     <label id="lblDept" runat="server" oncontextMenu="ctx(this,event)">Dept.</label><br />
-                                    <dx:ASPxDropDownEdit ClientIDMode="Static" ClientInstanceName="checkComboBox2" ID="cmbDept" Width="250px" runat="server" AnimationType="None" oncontextMenu="ctx(this,event)">
+                                    <dx:ASPxDropDownEdit ClientIDMode="Static" ClientInstanceName="checkComboBox2" ID="cmbDept" Width="250px" runat="server" DropDownWindowHeight="300" DropDownWindowWidth="400"  AnimationType="None" oncontextMenu="ctx(this,event)">
                                         <DropDownWindowStyle BackColor="#EDEDED" />
                                         <DropDownWindowTemplate>
-                                            <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox2" SelectionMode="CheckColumn" runat="server" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" OnCallback="listBox_Callback">
+                                            <dx:ASPxListBox Width="100%" Height="250" ID="listBox" ClientInstanceName="checkListBox2" SelectionMode="CheckColumn" runat="server" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" OnCallback="listBox_Callback">
                                                 <Border BorderStyle="None" />
                                                 <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e){ OnListBoxSelectionChanged2(s,e); }" />
-                                                <FilteringSettings ShowSearchUI="true" />
+                                                <FilteringSettings ShowSearchUI="true" />                                                
                                             </dx:ASPxListBox>
                                             <table style="width: 100%">
                                                 <tr>

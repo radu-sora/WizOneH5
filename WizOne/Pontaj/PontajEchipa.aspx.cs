@@ -1349,11 +1349,11 @@ namespace WizOne.Pontaj
 
                                         for (int k = 0; k < lstOre.Count(); k++)
                                         {
-                                            int nrLitere = Regex.Matches(lstOre[i], @"[a-zA-Z]").Count;
+                                            int nrLitere = Regex.Matches(lstOre[k], @"[a-zA-Z]").Count;
                                             if (nrLitere > 0)
                                             {
-                                                var denScurta = new String(lstOre[i].Where(Char.IsLetter).ToArray());
-                                                decimal nrOre = Convert.ToDecimal(lstOre[i].Replace(denScurta, ""));
+                                                var denScurta = new String(lstOre[k].Where(Char.IsLetter).ToArray());
+                                                decimal nrOre = Convert.ToDecimal(lstOre[k].Replace(denScurta, ""));
                                                 dtOre.Rows.Add(denScurta, nrOre, 0 , 1);
                                             }
                                         }
@@ -1515,11 +1515,11 @@ namespace WizOne.Pontaj
 
                                             for (int k = 0; k < lstOre.Count(); k++)
                                             {
-                                                int nrLitere = Regex.Matches(lstOre[i], @"[a-zA-Z]").Count;
+                                                int nrLitere = Regex.Matches(lstOre[k], @"[a-zA-Z]").Count;
                                                 if (nrLitere > 0)
                                                 {
-                                                    var denScurta = new String(lstOre[i].Where(Char.IsLetter).ToArray());
-                                                    decimal nrOre = Convert.ToDecimal(lstOre[i].Replace(denScurta, ""));
+                                                    var denScurta = new String(lstOre[k].Where(Char.IsLetter).ToArray());
+                                                    decimal nrOre = Convert.ToDecimal(lstOre[k].Replace(denScurta, ""));
                                                     dtOre.Rows.Add(denScurta, nrOre, 0, 1);
                                                 }
                                             }

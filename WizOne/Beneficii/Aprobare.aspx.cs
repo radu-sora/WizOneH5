@@ -185,7 +185,7 @@ namespace WizOne.Beneficii
                 //            + ", IdStare = 2, DataInceputBen = " + General.ToDataUniv(Convert.ToDateTime(dt.Rows[i]["DataInceputBen"])) + ", DataSfarsitBen = " + General.ToDataUniv(Convert.ToDateTime(dt.Rows[i]["DataSfarsitBen"])) + " WHERE \"IdSesiune\" = " + dt.Rows[i]["IdSesiune"].ToString() + " AND F10003 = " + dt.Rows[i]["F10003"].ToString(), null);
                 //    IncarcaGrid();
                 //}
-                General.SalveazaDate(dt, "Ben_Sesiuni");
+                //General.SalveazaDate(dt, "Ben_Cereri");
                 MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes!"), MessageBox.icoSuccess);
             }
             catch (Exception ex)
@@ -330,9 +330,9 @@ namespace WizOne.Beneficii
                         if (col.ColumnName == "IdBeneficiu" && e.NewValues[col.ColumnName] != null)
                         {
                             DataRow dr = dtBen.Select("Id = " + e.NewValues[col.ColumnName].ToString()).FirstOrDefault();
-                            row["Descriere"] = dr["Descriere"]; 
-                            row["DataInceputBen"] = dr["DeLaData"]; 
-                            row["DataSfarsitBen"] = dr["LaData"];
+                            //row["Descriere"] = dr["Descriere"]; 
+                            //row["DataInceputBen"] = dr["DeLaData"]; 
+                            //row["DataSfarsitBen"] = dr["LaData"];
                         }    
 
 
@@ -541,7 +541,7 @@ namespace WizOne.Beneficii
 
                         if (id != -99)
                         {
-                            General.ExecutaNonQuery("UPDATE \"Ben_Sesiuni\" SET \"IdStare\" = " + (actiune == 1 ? "3" : "4") + ", Motiv = '" + motiv + "' WHERE \"IdSesiune\" = " + id + " AND F10003 = " + arrMarci[i], null);                            
+                            General.ExecutaNonQuery("UPDATE \"Ben_Cereri\" SET \"IdStare\" = " + (actiune == 1 ? "3" : "4") + ", Motiv = '" + motiv + "' WHERE \"IdSesiune\" = " + id + " AND F10003 = " + arrMarci[i], null);                            
 
                             #region  Notificare start
 
@@ -550,7 +550,7 @@ namespace WizOne.Beneficii
 
                             HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                             {
-                                NotifAsync.TrimiteNotificare("Beneficii.Aprobare", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 2 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Ben_Sesiuni Z WHERE IdAuto=" + arrAuto[i], "Ben_Sesiuni", Convert.ToInt32(arrAuto[i]), idUser, marcaUser, arrParam);
+                                NotifAsync.TrimiteNotificare("Beneficii.Aprobare", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 2 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Ben_Cereri Z WHERE IdAuto=" + arrAuto[i], "Ben_Cereri", Convert.ToInt32(arrAuto[i]), idUser, marcaUser, arrParam);
                             });
 
                             #endregion
@@ -644,7 +644,7 @@ namespace WizOne.Beneficii
 
             try
             {
-                strSql = @"select CAST (a.""Id"" AS INT) as ""Id"", a.""Denumire"", a.""DeLaData"", a.""LaData"", a.""Descriere""
+                strSql = @"select CAST (a.""Id"" AS INT) as ""Id"", a.""Denumire"",  a.""Descriere""
                                 from ""Admin_Obiecte"" a
                                 inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
                                 where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY a.""Denumire""";
@@ -692,7 +692,12 @@ namespace WizOne.Beneficii
                 if (Convert.ToInt32(cmbSesiuneFiltru.Value ?? -99) != -99) filtru += " AND \"IdSesiune\" = " + Convert.ToInt32(cmbSesiuneFiltru.Value ?? -99);
                 if (checkComboBoxStare.Value != null) filtru += @" AND ""IdStare"" IN (" + DamiStari() + ")";
 
-                strSql = "SELECT IdAuto, F10003, IdSesiune, IdBeneficiu, DataInceput, DataSfarsit, IdStare, DataInceputBen, DataSfarsitBen, Descriere, USER_NO, TIME FROM Ben_Sesiuni WHERE 1=1 " + filtru ;     
+                strSql = "SELECT a.IdAuto, a.F10003, a.IdSesiune, a.IdBeneficiu, b.DataInceput, b.DataSfarsit, a.IdStare, b.DataInceputBen, b.DataSfarsitBen, c.Descriere, a.USER_NO, a.TIME FROM Ben_Cereri a "
+                    + " LEFT JOIN Ben_tblSesiuni b ON a.IdSesiune = b.Id "
+                    + " LEFT JOIN Admin_Obiecte c ON c.Id = a.IdBeneficiu "
+                    + " inner join Admin_Categorii d on c.IdCategorie = d.Id "
+                    + " where d.IdArie = (select Valoare from tblParametrii where Nume = 'ArieTabBeneficiiDinPersonal') ";
+                    //+ " WHERE 1=1 " + filtru ;     
 
                 q = General.IncarcaDT(strSql, null);
             }

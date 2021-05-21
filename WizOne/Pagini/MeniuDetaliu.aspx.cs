@@ -182,6 +182,8 @@ namespace WizOne.Pagini
                                     //Radu 27.04.2021
                                     //dr["IdMeniu"] = Convert.ToInt32(General.Nz(dr["IdMeniu"], 0)) + idMeniu;
                                     dr["IdMeniu"] = idMeniu + 1;
+                                    //Radu 21.05.2021
+                                    idMeniu++;
                                     //if (Convert.ToInt32(General.Nz(dr["Parinte"], 0)) != 0) dr["Parinte"] = Convert.ToInt32(General.Nz(dr["Parinte"], 0)) + idMeniu;
                                 }
                             }

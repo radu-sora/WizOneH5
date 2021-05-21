@@ -7,6 +7,8 @@
     
     <script language="javascript" type="text/javascript">
 
+        var limba = "<%= Session["IdLimba"] %>";
+
         function grDate_CustomButtonClick(s, e) {
             switch(e.buttonID)
             {
@@ -221,11 +223,13 @@
             </td> 
 
             <td align="left">
+                <label id="lblF" runat="server" style="display:inline-block;"></label>
                 <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Filtru" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                 </dx:ASPxButton>
             </td>
             <td align="left">
+                <label id="lblSF" runat="server" style="display:inline-block;"></label>
                 <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Sterge filtru" oncontextMenu="ctx(this,event)" OnClick="btnFiltruSterge_Click" >                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
                 </dx:ASPxButton>
@@ -238,14 +242,14 @@
            <td align="left">
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static"  AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCommandButtonInitialize="grDate_CommandButtonInitialize" >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
-                    <Settings ShowFilterRow="False" ShowGroupPanel="True" HorizontalScrollBarMode="Auto"  />
+                    <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto"  />
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsSearchPanel Visible="False" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                     <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                     <Columns>
                         <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" />
-                        <dx:GridViewCommandColumn Width="30px" VisibleIndex="1" ButtonType="Image" ShowEditButton="false" Caption=" " Name="butoaneGrid" >
+                        <dx:GridViewCommandColumn Width="30px"  ButtonType="Image" ShowEditButton="false" Visible="false" Caption=" " Name="butoaneGrid" >
                             <CustomButtons>                               
                                 <dx:GridViewCommandColumnCustomButton ID="btnArata">
                                     <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/view.png" />
@@ -266,11 +270,11 @@
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn> 
                         <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" ReadOnly="true"  Width="150px" />	
-					    <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput sesiune" ReadOnly="true" Visible="false" HeaderStyle-Wrap="True"  Width="100px" >
+					    <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput sesiune" ReadOnly="true" HeaderStyle-Wrap="True"  Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
-					    <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit sesiune" ReadOnly="true" Visible="false"  HeaderStyle-Wrap="True" Width="100px" >
+					    <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit sesiune" ReadOnly="true"  HeaderStyle-Wrap="True" Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
@@ -291,27 +295,7 @@
                        
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME" ReadOnly="true" Width="50px" Visible="false"  ShowInCustomizationForm="false"/>
-                    </Columns>
-                    <SettingsCommandButton>
-                        <UpdateButton ButtonType="Link" Text="Actualizeaza">
-                            <Styles>
-                                <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10" Font-Bold="true">
-                                </Style>
-                            </Styles>
-                        </UpdateButton>
-                        <CancelButton ButtonType="Link" Text="Anulare"  Image-ToolTip="Anulare">
-                            <Styles>
-                                <Style Font-Bold="true" />
-                            </Styles>
-                        </CancelButton>
-
-                        <EditButton Image-ToolTip="Edit">
-                            <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
-                            <Styles>
-                                <Style Paddings-PaddingRight="5px" />
-                            </Styles>
-                        </EditButton>
-                    </SettingsCommandButton>                    
+                    </Columns>                  
                 </dx:ASPxGridView>                    
             </td>
         </tr>

@@ -335,12 +335,12 @@
 
         function onCustomizeMenu(actions) {
             if (toolbarType == 1) {
-                for (var action = 0; action < actions.length; action++) {
-                    if (actions[action].id != DevExpress.Report.Preview.ActionId.Print &&
+                for (var action = 0; action < actions.length; action++) { 
+                    if (actions[action].id != DevExpress.Reporting.Viewer.ActionId.Print &&
                         actions[action].imageClassName != 'dxrd-image-run-wizard' &&
                         actions[action].imageClassName != 'dxrd-image-exit') {
                         actions[action].visible = false;
-                    } else if (actions[action].id == DevExpress.Report.Preview.ActionId.Print) {
+                    } else if (actions[action].id == DevExpress.Reporting.Viewer.ActionId.Print) {
                         actions[action].hasSeparator = false;
                     }
                 }

@@ -222,6 +222,7 @@ namespace WizOne.Pagini
 
             try
             {
+                string interval = Dami.ValoareParam("IntervalTrimitereEmailuri", "15");
                 foreach (int key in lstMarci.Keys)
                 {
                     List<Notif.metaAdreseMail> lstOne = new List<Notif.metaAdreseMail>();
@@ -290,6 +291,9 @@ namespace WizOne.Pagini
                         Notif.TrimiteMail(lstOne, txtSubiect.Text, (txtContinut.Html ?? "").ToString(), 0, numeFis, "", 0, "", "", Convert.ToInt32(Session["IdClient"]), mem);     
                         mem.Close();
                         mem.Flush();
+
+                        System.Threading.Thread.Sleep(Convert.ToInt32(interval) * 1000);
+
 
                     }
 

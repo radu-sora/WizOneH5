@@ -17584,3 +17584,6 @@ begin
 exec ('alter table [F704] drop constraint [' + @name +']')
 end
 go
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('Eval_EliminCondForm360' , '0', 'Eliminare conditie formulare 360: 1 - se elimina, iar formularele 360 se afiseaza fara restrictii; 0 (sau absent) - se pastreaza' , 5)
+GO

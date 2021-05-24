@@ -69,7 +69,7 @@ namespace WizOne.Beneficii
         {
             try
             {
-                string strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", a.""Descriere"", a.USER_NO, a.TIME, a.ValoareEstimata
+                string strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", a.""Descriere"", a.DeLaData, a.LaData, a.USER_NO, a.TIME, a.ValoareEstimata
                                 from ""Admin_Obiecte"" a
                                 inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
                                 where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY a.""Denumire""";
@@ -119,6 +119,8 @@ namespace WizOne.Beneficii
 
 
                 ASPxTextBox txtDen = grDate.FindEditFormTemplateControl("txtDen") as ASPxTextBox;
+                ASPxDateEdit deDeLaData = grDate.FindEditFormTemplateControl("deDeLaData") as ASPxDateEdit;
+                ASPxDateEdit deLaData = grDate.FindEditFormTemplateControl("deLaData") as ASPxDateEdit;
                 ASPxMemo txtDesc = grDate.FindEditFormTemplateControl("txtDesc") as ASPxMemo;
 
                 dr["IdCategorie"] = Convert.ToInt32(Session["NomenBen_IdCateg"].ToString());
@@ -129,6 +131,9 @@ namespace WizOne.Beneficii
                 if (dtId != null && dtId.Rows.Count > 0)
                     id = Convert.ToInt32(dtId.Rows[0][0].ToString());
                 dr["Id"] =id;
+
+                dr["DeLaData"] = deDeLaData.Date;
+                dr["LaData"] = deLaData.Date;
                 dr["Descriere"] = txtDesc.Text;
 
                 metaUploadFile itm = Session["DocUpload_NomenBen"] as metaUploadFile;
@@ -168,10 +173,13 @@ namespace WizOne.Beneficii
 
 
                 ASPxTextBox txtDen = grDate.FindEditFormTemplateControl("txtDen") as ASPxTextBox;
+                ASPxDateEdit deDeLaData = grDate.FindEditFormTemplateControl("deDeLaData") as ASPxDateEdit;
+                ASPxDateEdit deLaData = grDate.FindEditFormTemplateControl("deLaData") as ASPxDateEdit;
                 ASPxMemo txtDesc = grDate.FindEditFormTemplateControl("txtDesc") as ASPxMemo;
 
                 dr["Denumire"] = txtDen.Text;
-
+                dr["DeLaData"] = deDeLaData.Date;
+                dr["LaData"] = deLaData.Date;
                 dr["Descriere"] = txtDesc.Text;
 
                 metaUploadFile itm = Session["DocUpload_NomenBen"] as metaUploadFile;
@@ -248,9 +256,9 @@ namespace WizOne.Beneficii
                 HtmlTableCell lblDen = (HtmlTableCell)grDate.FindEditFormTemplateControl("lblDen");
                 lblDen.InnerText = Dami.TraduCuvant("Denumire");
                 HtmlTableCell lblDeLa = (HtmlTableCell)grDate.FindEditFormTemplateControl("lblDeLa");
-                lblDeLa.InnerText = Dami.TraduCuvant("De la");
+                lblDeLa.InnerText = Dami.TraduCuvant("Data inceput");
                 HtmlTableCell lblLa = (HtmlTableCell)grDate.FindEditFormTemplateControl("lblLa");
-                lblLa.InnerText = Dami.TraduCuvant("La");
+                lblLa.InnerText = Dami.TraduCuvant("Data sfarsit");
                 HtmlTableCell lblDesc = (HtmlTableCell)grDate.FindEditFormTemplateControl("lblDesc");
                 lblDesc.InnerText = Dami.TraduCuvant("Descriere");    
 

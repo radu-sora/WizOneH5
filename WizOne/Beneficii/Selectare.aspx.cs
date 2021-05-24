@@ -107,8 +107,12 @@ namespace WizOne.Beneficii
                         DataTable dt = Session["SelectBen_Ses"] as DataTable;
                         string msg = "Sesiunea pentru selectarea Beneficiilor este deschisa pana in data de <b>" + Convert.ToDateTime(dtSes.Rows[0]["DataSfarsit"].ToString()).ToShortDateString() 
                             + "</b>.\n Selectarea Beneficiilor se face pentru perioda <b>" + Convert.ToDateTime(dtSes.Rows[0]["DataInceputBen"].ToString()).ToShortDateString() + "</b> - <b>" +
-                             Convert.ToDateTime(dtSes.Rows[0]["DataSfarsitBen"].ToString()).ToShortDateString() + "</b>.";               
-                        switch (Convert.ToInt32(dt.Rows[0]["IdStare"].ToString()))
+                             Convert.ToDateTime(dtSes.Rows[0]["DataSfarsitBen"].ToString()).ToShortDateString() + "</b>.";
+                        Session["Select_Sesiune"] = dtSes;
+                        int idStare = 1;
+                        if (dt != null && dt.Rows.Count > 0)
+                            idStare = Convert.ToInt32(dt.Rows[0]["IdStare"].ToString());
+                        switch (idStare)
                         {
                             case 1:
                                 msg += "\n<b>Pana in acest moment nu ti-ai exprimat optiunea privind selectarea Beneficiilor. Te rugam sa faci acest lucru pana la expirarea sesiunii</b>.";
@@ -203,10 +207,12 @@ namespace WizOne.Beneficii
 
                 object[] arr = lst[0] as object[];
 
-                DataTable dt = Session["SelectBen_Ses"] as DataTable;
+                DataTable dt = Session["Select_Sesiune"] as DataTable;
 
-                General.ExecutaNonQuery("UPDATE \"Ben_Cereri\" SET IdBeneficiu = " + arr[0].ToString()
-                    + ", IdStare = 2  WHERE \"IdSesiune\" = " + dt.Rows[0]["IdSesiune"].ToString() + " AND F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99), null);
+                General.ExecutaNonQuery("DELETE FROM Ben_Cereri WHERE \"IdSesiune\" = " + dt.Rows[0]["Id"].ToString() + " AND F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99), null);
+
+                General.ExecutaNonQuery("INSERT INTO \"Ben_Cereri\" (IdSesiune, F10003, IdBeneficiu, IdStare, USER_NO, TIME) VALUES (" + dt.Rows[0]["Id"].ToString() + ", " + Convert.ToInt32(Session["User_Marca"] ?? -99) + ", "
+                    + arr[0].ToString() + ", 2, " + Session["UserId"] + ", GETDATE())", null);           
 
                 Session["SelectareBeneficii"] = 2;
                 string msg = Session["SelectareText"].ToString();
@@ -404,7 +410,8 @@ namespace WizOne.Beneficii
                                  from ""Admin_Obiecte"" a
                                  inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
                                  LEFT JOIN Ben_tblSesiuni c on c.""DataInceput"" <= getdate() and getdate() <= c.""DataSfarsit""
-                                 where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal')                                 
+                                 where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') 
+                                 and a.""DeLaData"" <= getdate() and getdate() <= a.""LaData""  
                                  ORDER BY a.""Denumire""";
 
 

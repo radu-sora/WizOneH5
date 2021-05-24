@@ -5021,7 +5021,7 @@ namespace WizOne.Avs
                             sql100 = "UPDATE F100 SET ";
                             for (int i = 50; i <= 69; i++)
                             {
-                                sql100 += " F1006" + i + " = " + dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString();
+                                sql100 += " F1006" + i + " = " + (dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString() == "-1" ? "0" : dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString());
                                 if (i < 69)
                                     sql100 += ", ";
                             }
@@ -5032,7 +5032,7 @@ namespace WizOne.Avs
                         for (int i = 50; i <= 69; i++)
                         {
                             camp1 += " F7046" + i + ", ";
-                            camp2 += dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString() + ", ";
+                            camp2 += (dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString() == "-1" ? "0" : dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString()) + ", ";
                         }
                         sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, " + camp1 + " F70467, F70420, USER_NO, TIME) "
                         + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 11, 'Sporuri', " + data + ", 0, 'Modificari in avans', '"

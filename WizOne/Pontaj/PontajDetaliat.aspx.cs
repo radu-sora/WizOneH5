@@ -406,13 +406,11 @@ namespace WizOne.Pontaj
                             {
                                 object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "IdStare" }) as object[];
                                 if (obj != null && obj.Count() != 0 && obj[0] != null)
-                                    ziuaCC = new DateTime(txtZiua.Date.Year, txtZiua.Date.Month, Convert.ToInt32(obj[0].ToString()));
+                                    ziuaCC = new DateTime(txtAnLuna.Date.Year, txtAnLuna.Date.Month, Convert.ToInt32(obj[0].ToString()));
                             }
                             else
                                 ziuaCC = txtZiua.Date;
-                            sqlCC = "SELECT F06204 AS Id, F06205 AS Denumire FROM F062 WHERE F06208 <= CONVERT(DATETIME, '" + ziuaCC.Day.ToString().PadLeft(2, '0') + "/" + ziuaCC.Month.ToString().PadLeft(2, '0')
-                                + "/" + ziuaCC.Year.ToString() + "', 103) AND CONVERT(DATETIME, '" + ziuaCC.Day.ToString().PadLeft(2, '0') + "/" + ziuaCC.Month.ToString().PadLeft(2, '0')
-                                + "/" + ziuaCC.Year.ToString() + "', 103) <= F06209";
+                            sqlCC = $@"SELECT F06204 AS Id, F06205 AS Denumire FROM F062 WHERE F06208 <= {General.ToDataUniv(ziuaCC)} AND {General.ToDataUniv(ziuaCC)} <= F06209";
                         }
                         DataTable dt = General.IncarcaDT(sqlCC, null);
                         colCC.PropertiesComboBox.DataSource = dt;
@@ -2785,9 +2783,8 @@ namespace WizOne.Pontaj
                                             ziuaCC = new DateTime(txtAnLuna.Date.Year, txtAnLuna.Date.Month, Convert.ToInt32(arr[1].ToString()));                                        
                                         else
                                             ziuaCC = txtAnLuna.Date;
-                                        sqlCC = "SELECT F06204 AS Id, F06205 AS Denumire FROM F062 WHERE F06208 <= CONVERT(DATETIME, '" + ziuaCC.Day.ToString().PadLeft(2, '0') + "/" + ziuaCC.Month.ToString().PadLeft(2, '0')
-                                            + "/" + ziuaCC.Year.ToString() + "', 103) AND CONVERT(DATETIME, '" + ziuaCC.Day.ToString().PadLeft(2, '0') + "/" + ziuaCC.Month.ToString().PadLeft(2, '0')
-                                            + "/" + ziuaCC.Year.ToString() + "', 103) <= F06209";
+
+                                        sqlCC = $@"SELECT F06204 AS Id, F06205 AS Denumire FROM F062 WHERE F06208 <= {General.ToDataUniv(ziuaCC)} AND {General.ToDataUniv(ziuaCC)} <= F06209";
                                     }
                                     DataTable dtCC = General.IncarcaDT(sqlCC, null);
                                     colCC.PropertiesComboBox.DataSource = dtCC;
@@ -3101,16 +3098,16 @@ namespace WizOne.Pontaj
                         dr["La"] = DBNull.Value;
                     else
                         dr["La"] = new DateTime(Convert.ToDateTime(lst[1]).Year, Convert.ToDateTime(lst[1]).Month, Convert.ToDateTime(lst[1]).Day, oraLa.Hour, oraLa.Minute, oraLa.Second);
-                    dr["NrOre1"] = upd.NewValues["NrOre1"] ?? DBNull.Value;
-                    dr["NrOre2"] = upd.NewValues["NrOre2"] ?? DBNull.Value;
-                    dr["NrOre3"] = upd.NewValues["NrOre3"] ?? DBNull.Value;
-                    dr["NrOre4"] = upd.NewValues["NrOre4"] ?? DBNull.Value;
-                    dr["NrOre5"] = upd.NewValues["NrOre5"] ?? DBNull.Value;
-                    dr["NrOre6"] = upd.NewValues["NrOre6"] ?? DBNull.Value;
-                    dr["NrOre7"] = upd.NewValues["NrOre7"] ?? DBNull.Value;
-                    dr["NrOre8"] = upd.NewValues["NrOre8"] ?? DBNull.Value;
-                    dr["NrOre9"] = upd.NewValues["NrOre9"] ?? DBNull.Value;
-                    dr["NrOre10"] = upd.NewValues["NrOre10"] ?? DBNull.Value;
+                    dr["NrOre1"] = upd.NewValues["NrOre1"] ?? 0;
+                    dr["NrOre2"] = upd.NewValues["NrOre2"] ?? 0;
+                    dr["NrOre3"] = upd.NewValues["NrOre3"] ?? 0;
+                    dr["NrOre4"] = upd.NewValues["NrOre4"] ?? 0;
+                    dr["NrOre5"] = upd.NewValues["NrOre5"] ?? 0;
+                    dr["NrOre6"] = upd.NewValues["NrOre6"] ?? 0;
+                    dr["NrOre7"] = upd.NewValues["NrOre7"] ?? 0;
+                    dr["NrOre8"] = upd.NewValues["NrOre8"] ?? 0;
+                    dr["NrOre9"] = upd.NewValues["NrOre9"] ?? 0;
+                    dr["NrOre10"] = upd.NewValues["NrOre10"] ?? 0;
                     if (Dami.ValoareParam("PontajCCcuAprobare", "0") == "0")
                         dr["IdStare"] = 3;
                     else
@@ -3147,16 +3144,26 @@ namespace WizOne.Pontaj
                     if (upd.NewValues["IdDept"] != null) dr["IdDept"] = upd.NewValues["IdDept"] ?? DBNull.Value;
                     if (upd.NewValues["De"] != null) dr["De"] = new DateTime(Convert.ToDateTime(lst[1]).Year, Convert.ToDateTime(lst[1]).Month, Convert.ToDateTime(lst[1]).Day, oraDeLa.Hour, oraDeLa.Minute, oraDeLa.Second);
                     if (upd.NewValues["La"] != null) dr["La"] = new DateTime(Convert.ToDateTime(lst[1]).Year, Convert.ToDateTime(lst[1]).Month, Convert.ToDateTime(lst[1]).Day, oraLa.Hour, oraLa.Minute, oraLa.Second);
-                    if (upd.NewValues["NrOre1"] != null) dr["NrOre1"] = upd.NewValues["NrOre1"] ?? DBNull.Value;
-                    if (upd.NewValues["NrOre2"] != null) dr["NrOre2"] = upd.NewValues["NrOre2"] ?? DBNull.Value;
-                    if (upd.NewValues["NrOre3"] != null) dr["NrOre3"] = upd.NewValues["NrOre3"] ?? DBNull.Value;
-                    if (upd.NewValues["NrOre4"] != null) dr["NrOre4"] = upd.NewValues["NrOre4"] ?? DBNull.Value;
-                    if (upd.NewValues["NrOre5"] != null) dr["NrOre5"] = upd.NewValues["NrOre5"] ?? DBNull.Value;
-                    if (upd.NewValues["NrOre6"] != null) dr["NrOre6"] = upd.NewValues["NrOre6"] ?? DBNull.Value;
-                    if (upd.NewValues["NrOre7"] != null) dr["NrOre7"] = upd.NewValues["NrOre7"] ?? DBNull.Value;
-                    if (upd.NewValues["NrOre8"] != null) dr["NrOre8"] = upd.NewValues["NrOre8"] ?? DBNull.Value;
-                    if (upd.NewValues["NrOre9"] != null) dr["NrOre9"] = upd.NewValues["NrOre9"] ?? DBNull.Value;
-                    if (upd.NewValues["NrOre10"] != null) dr["NrOre10"] = upd.NewValues["NrOre10"] ?? DBNull.Value;
+                    //if (upd.NewValues["NrOre1"] != null) dr["NrOre1"] = upd.NewValues["NrOre1"] ?? DBNull.Value;
+                    //if (upd.NewValues["NrOre2"] != null) dr["NrOre2"] = upd.NewValues["NrOre2"] ?? DBNull.Value;
+                    //if (upd.NewValues["NrOre3"] != null) dr["NrOre3"] = upd.NewValues["NrOre3"] ?? DBNull.Value;
+                    //if (upd.NewValues["NrOre4"] != null) dr["NrOre4"] = upd.NewValues["NrOre4"] ?? DBNull.Value;
+                    //if (upd.NewValues["NrOre5"] != null) dr["NrOre5"] = upd.NewValues["NrOre5"] ?? DBNull.Value;
+                    //if (upd.NewValues["NrOre6"] != null) dr["NrOre6"] = upd.NewValues["NrOre6"] ?? DBNull.Value;
+                    //if (upd.NewValues["NrOre7"] != null) dr["NrOre7"] = upd.NewValues["NrOre7"] ?? DBNull.Value;
+                    //if (upd.NewValues["NrOre8"] != null) dr["NrOre8"] = upd.NewValues["NrOre8"] ?? DBNull.Value;
+                    //if (upd.NewValues["NrOre9"] != null) dr["NrOre9"] = upd.NewValues["NrOre9"] ?? DBNull.Value;
+                    //if (upd.NewValues["NrOre10"] != null) dr["NrOre10"] = upd.NewValues["NrOre10"] ?? DBNull.Value;
+                    dr["NrOre1"] = upd.NewValues["NrOre1"] ?? 0;
+                    dr["NrOre2"] = upd.NewValues["NrOre2"] ?? 0;
+                    dr["NrOre3"] = upd.NewValues["NrOre3"] ?? 0;
+                    dr["NrOre4"] = upd.NewValues["NrOre4"] ?? 0;
+                    dr["NrOre5"] = upd.NewValues["NrOre5"] ?? 0;
+                    dr["NrOre6"] = upd.NewValues["NrOre6"] ?? 0;
+                    dr["NrOre7"] = upd.NewValues["NrOre7"] ?? 0;
+                    dr["NrOre8"] = upd.NewValues["NrOre8"] ?? 0;
+                    dr["NrOre9"] = upd.NewValues["NrOre9"] ?? 0;
+                    dr["NrOre10"] = upd.NewValues["NrOre10"] ?? 0;
                     if (upd.NewValues["IdStare"] != null) dr["IdStare"] = upd.NewValues["IdStare"] ?? DBNull.Value;
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;
@@ -3490,5 +3497,17 @@ namespace WizOne.Pontaj
 
         }
 
+        protected void grCC_RowValidating(object sender, ASPxDataValidationEventArgs e)
+        {
+            //Florin 2021.05.25 - #928
+            //suprimam erorile care provin din validarile devexpress
+
+            List<GridViewColumn> lst = e.EditorPropertiesErrors.Keys.ToList();
+            foreach (var item in lst)
+            {
+                if (e.EditorPropertiesErrors.ContainsKey(item))
+                    e.EditorPropertiesErrors.Remove(item); // Removes automatically calculated validation errors based on column settings  
+            }
+        }
     }
 }

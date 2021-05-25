@@ -316,7 +316,7 @@
                     <br />
                     <dx:ASPxHiddenField ID="ccValori" runat="server" ClientInstanceName="ccValori" ClientIDMode="Static"></dx:ASPxHiddenField>
                     <dx:ASPxGridView ID="grCC" runat="server" ClientInstanceName="grCC" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"
-                        OnCustomCallback="grCC_CustomCallback" OnBatchUpdate="grCC_BatchUpdate" OnHtmlDataCellPrepared="grCC_HtmlDataCellPrepared" OnCustomColumnDisplayText="grCC_CustomColumnDisplayText">
+                        OnCustomCallback="grCC_CustomCallback" OnBatchUpdate="grCC_BatchUpdate" OnHtmlDataCellPrepared="grCC_HtmlDataCellPrepared" OnCustomColumnDisplayText="grCC_CustomColumnDisplayText" OnRowValidating="grCC_RowValidating">
                         <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                         <Settings ShowFilterRow="False" ShowColumnHeaders="true" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" VerticalScrollBarStyle="VirtualSmooth" VerticalScrollableHeight="130" />
                         <SettingsSearchPanel Visible="false" />
@@ -382,25 +382,25 @@
                                 </PropertiesTimeEdit>
                             </dx:GridViewDataTimeEditColumn>
 
-                            <dx:GridViewDataTextColumn FieldName="NrOre1" Width="100px">
+                            <dx:GridViewDataTextColumn FieldName="NrOre1" Name="NrOre1" Width="100px">
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn FieldName="NrOre2" Width="100px">
+                            <dx:GridViewDataTextColumn FieldName="NrOre2" Name="NrOre2" Width="100px">
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn FieldName="NrOre3" Width="100px">
+                            <dx:GridViewDataTextColumn FieldName="NrOre3" Name="NrOre3" Width="100px">
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn FieldName="NrOre4" Width="100px">
+                            <dx:GridViewDataTextColumn FieldName="NrOre4" Name="NrOre4" Width="100px">
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn FieldName="NrOre5" Width="100px">
+                            <dx:GridViewDataTextColumn FieldName="NrOre5" Name="NrOre5" Width="100px">
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn FieldName="NrOre6" Width="100px">
+                            <dx:GridViewDataTextColumn FieldName="NrOre6" Name="NrOre6" Width="100px">
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn FieldName="NrOre7" Width="100px">
+                            <dx:GridViewDataTextColumn FieldName="NrOre7" Name="NrOre7" Width="100px">
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn FieldName="NrOre8" Width="100px">
+                            <dx:GridViewDataTextColumn FieldName="NrOre8" Name="NrOre8" Width="100px">
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn FieldName="NrOre9" Width="100px">
+                            <dx:GridViewDataTextColumn FieldName="NrOre9" Name="NrOre9" Width="100px">
                             </dx:GridViewDataTextColumn>
-                            <dx:GridViewDataTextColumn FieldName="NrOre10" Width="100px">
+                            <dx:GridViewDataTextColumn FieldName="NrOre10" Name="NrOre10" Width="100px">
                             </dx:GridViewDataTextColumn>
 
                             <dx:GridViewDataTextColumn FieldName="F10003" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />

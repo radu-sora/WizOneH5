@@ -3833,12 +3833,12 @@ namespace WizOne.Avs
                     for (int i = 0; i < dsCalcul.Tables["Sporuri1"].Rows.Count; i++)
                     {
                         camp1 += "\"Spor" + i.ToString() + "\"" + ", ";
-                        camp2 += dsCalcul.Tables["Sporuri1"].Rows[i]["F02504"].ToString() + ", ";                 
+                        camp2 += (dsCalcul.Tables["Sporuri1"].Rows[i]["Anulare"].ToString() == "0" ? dsCalcul.Tables["Sporuri1"].Rows[i]["F02504"].ToString() : "-1") + ", ";                 
                     }
                     for (int i = 0; i < dsCalcul.Tables["Sporuri2"].Rows.Count; i++)
                     {
                         camp1 += "\"Spor" + (i + 10).ToString() + "\"" + ", ";
-                        camp2 += dsCalcul.Tables["Sporuri2"].Rows[i]["F02504"].ToString() + ", ";              
+                        camp2 += (dsCalcul.Tables["Sporuri2"].Rows[i]["Anulare"].ToString() == "0" ? dsCalcul.Tables["Sporuri2"].Rows[i]["F02504"].ToString() : "-1") + ", ";              
                     }
                     sir = ds.Tables[0].Rows[0]["F10067"].ToString();          
                     camp1 += "\"Tarife\"";
@@ -5021,7 +5021,7 @@ namespace WizOne.Avs
                             sql100 = "UPDATE F100 SET ";
                             for (int i = 50; i <= 69; i++)
                             {
-                                sql100 += " F1006" + i + " = " + dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString();
+                                sql100 += " F1006" + i + " = " + (dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString() == "-1" ? "0" : dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString());
                                 if (i < 69)
                                     sql100 += ", ";
                             }
@@ -5032,7 +5032,7 @@ namespace WizOne.Avs
                         for (int i = 50; i <= 69; i++)
                         {
                             camp1 += " F7046" + i + ", ";
-                            camp2 += dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString() + ", ";
+                            camp2 += (dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString() == "-1" ? "0" : dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString()) + ", ";
                         }
                         sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, " + camp1 + " F70467, F70420, USER_NO, TIME) "
                         + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 11, 'Sporuri', " + data + ", 0, 'Modificari in avans', '"
@@ -6333,6 +6333,7 @@ namespace WizOne.Avs
                 dt.Columns.Add("F02504", typeof(int));
                 dt.Columns.Add("F01105", typeof(int));
                 dt.Columns.Add("Id", typeof(int));
+                dt.Columns.Add("Anulare", typeof(int));
 
                 string sql = "";
                 string cmp = "ISNULL";
@@ -6357,7 +6358,7 @@ namespace WizOne.Avs
                             + cmp + "((select top 1 f01107 from f025 "
                             + " left join f021 on f02510 = f02104 "
                             + " left join f011 on f02106 = f01104 "
-                            + " where f02504 = f10065" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\" "
+                            + " where f02504 = f10065" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\", 0 AS Anulare "
                             + " from f100 where f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
                     else
                         sql += "select " + (i + 1).ToString() + " as \"Id\", f10065" + i + " as F02504, CASE WHEN f10065" + i + " = 0 THEN 'Spor " + (i + 1).ToString() + "' ELSE (SELECT F02505 FROM F025 WHERE F02504 = F10065" + i + " AND ROWNUM <= 1) END as \"Spor\", "
@@ -6421,6 +6422,7 @@ namespace WizOne.Avs
                 dt.Columns.Add("F02504", typeof(int));
                 dt.Columns.Add("F01105", typeof(int));
                 dt.Columns.Add("Id", typeof(int));
+                dt.Columns.Add("Anulare", typeof(int));
 
                 string sql = "";
                 string cmp = "ISNULL";
@@ -6444,7 +6446,7 @@ namespace WizOne.Avs
                             + cmp + "((select top 1 f01107 from f025 "
                             + " left join f021 on f02510 = f02104 "
                             + " left join f011 on f02106 = f01104 "
-                            + " where f02504 = f10066" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\" "
+                            + " where f02504 = f10066" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\", 0 AS Anulare "
                             + " from f100 where f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
                     else
                         sql += "select " + (i + 11).ToString() + " as \"Id\", f10066" + i + " as F02504, CASE WHEN f10066" + i + " = 0 THEN 'Spor " + (i + 11).ToString() + "' ELSE (SELECT F02505 FROM F025 WHERE F02504 = F10066" + i + " AND ROWNUM <= 1) END as \"Spor\", "
@@ -6538,6 +6540,9 @@ namespace WizOne.Avs
                             }
                             if (col.ColumnName == "F01105")
                                 val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                            if (col.ColumnName == "Anulare")
+                                if (e.NewValues["Spor"].ToString() == "0" && e.NewValues["Spor"].ToString() != e.OldValues["Spor"].ToString())
+                                    row[col.ColumnName] = 1;
                         }
                     }
                 }
@@ -6634,6 +6639,9 @@ namespace WizOne.Avs
                             }
                             if (col.ColumnName == "F01105")
                                 val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                            if (col.ColumnName == "Anulare")
+                                if (e.NewValues["Spor"].ToString() == "0" && e.NewValues["Spor"].ToString() != e.OldValues["Spor"].ToString())
+                                    row[col.ColumnName] = 1;
                         }
                     }
                 }

@@ -684,6 +684,7 @@
                             <dx:GridViewDataTextColumn FieldName="F02504" VisibleIndex="3" Visible="false"/>
                             <dx:GridViewDataTextColumn FieldName="F01105" VisibleIndex="4" Visible="false"/>            
                             <dx:GridViewDataTextColumn FieldName="Id" VisibleIndex="5" Visible="false"/>      
+                            <dx:GridViewDataTextColumn FieldName="Anulare" VisibleIndex="6" Visible="false"/> 
                         </Columns>       
                         <SettingsCommandButton>
                             <UpdateButton ButtonType="Link" Text="Actualizeaza">
@@ -738,7 +739,8 @@
 			                </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn FieldName="F02504" VisibleIndex="3" Visible="false"/>
                             <dx:GridViewDataTextColumn FieldName="F01105" VisibleIndex="4" Visible="false"/> 
-                            <dx:GridViewDataTextColumn FieldName="Id" VisibleIndex="5" Visible="false"/>      
+                            <dx:GridViewDataTextColumn FieldName="Id" VisibleIndex="5" Visible="false"/>   
+                            <dx:GridViewDataTextColumn FieldName="Anulare" VisibleIndex="6" Visible="false"/> 
                         </Columns>       
                         <SettingsCommandButton>
                             <UpdateButton ButtonType="Link" Text="Actualizeaza">

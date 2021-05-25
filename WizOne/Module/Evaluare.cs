@@ -1454,8 +1454,9 @@ namespace WizOne.Module
 	                    end, -99) {7}
                 and {0}(ist.""IdSuper"", -99)  = {8}
                 and fnume.F10025 in (0, 999)
+                
+                {14}
 
-                and (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.F10003 != {10})) 
                 {9}";
 
                 //Florin 2020.01.17 - am elminat 2 filtre
@@ -1486,7 +1487,12 @@ namespace WizOne.Module
                 //    sqlCoordonator = string.Format(sqlCoordonator, idUserFiltru);
                 //}
 
-
+                //Radu 21.05.2021
+                string conditieFiltru = @"and (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.F10003 != {0})) ";
+                conditieFiltru = string.Format(conditieFiltru, HttpContext.Current.Session["User_Marca"].ToString());
+                string paramCond = Dami.ValoareParam("Eval_EliminCondForm360", "0");
+                if (paramCond != "0")
+                    conditieFiltru = "";
 
                 string idQuizFiltru = string.Empty;
                 if (idQuiz != -99)
@@ -1554,9 +1560,9 @@ namespace WizOne.Module
                 }
 
                 if (Constante.tipBD == 1) //SQL
-                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
+                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie, conditieFiltru);
                 else                      //ORACLE
-                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
+                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie, conditieFiltru);
 
                 //Florin  2018.07.05
                 strSQL = strSQL.Replace("@1", Dami.TraduCuvant("Evaluare angajat"));

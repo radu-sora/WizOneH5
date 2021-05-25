@@ -1284,7 +1284,12 @@ namespace WizOne.Module
                 {
                     var val = dr[i];
                     if (gol)
+                    {
                         val = null;
+                        if (dr.Table.Columns[i].ColumnName == "F10003")
+                            continue;
+                    }
+
                     switch (dr.Table.Columns[i].DataType.ToString())
                     {
                         case "System.String":
@@ -5882,7 +5887,7 @@ namespace WizOne.Module
                 #region Validare start
 
                 //Florin 2021.05.18
-                string sqlVal = sqlPtj.Replace("FROM DUAL", "") + $@", {General.ToDataUniv(an, luna)} AS ""ZiuaInc"", {idStare} AS ""IdStare"", {an} AS ""An"", {luna} AS ""Luna"", {actiune} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+                string sqlVal = sqlPtj.Replace("FROM DUAL", "") + $@", {f10003} AS F10003, {General.ToDataUniv(an, luna)} AS ""ZiuaInc"", {idStare} AS ""IdStare"", {an} AS ""An"", {luna} AS ""Luna"", {actiune} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
                 //string sablon = @"SELECT {0} AS F10003, {1} AS ""ZiuaInc"", {2} AS ""IdStare"", {3} AS ""An"", {4} AS ""Luna"", {5} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
                 //string sqlVal = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna, actiune);
 

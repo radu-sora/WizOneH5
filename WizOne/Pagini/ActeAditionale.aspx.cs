@@ -96,6 +96,7 @@ namespace WizOne.Pagini
             try
             {
                 string companie = "";
+                string subcompanie = "";
                 string strSql = "";
                 string filtru = "";
                 var filter = JObject.Parse(Session["Filtru_ActeAditionale"] as string) as dynamic;
@@ -123,6 +124,9 @@ namespace WizOne.Pagini
                     if (filter.depasire != null) filtru += " AND \"TermenDepasire\" = " + General.ToDataUniv((DateTime)filter.depasire);
 
                     if (filter.cmp != null) companie = " AND B.F10002 = " + (int)filter.cmp;
+
+                    //Florin 2021.05.25 - #928
+                    if (filter.subcomp != null) subcompanie = " AND B.F10004 = " + (int)filter.subcomp;
 
                     switch ((int?)filter.status ?? 0)
                     {
@@ -226,7 +230,7 @@ namespace WizOne.Pagini
                             FROM Avs_Cereri A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
-                            WHERE A.IdStare = 3 AND A.DataModif >= {General.ToDataUniv(dtInit)} {companie} {filtruSup} AND COALESCE(A.""GenerareDoc"",1)=1
+                            WHERE A.IdStare = 3 AND A.DataModif >= {General.ToDataUniv(dtInit)} {companie} {subcompanie} {filtruSup} AND COALESCE(A.""GenerareDoc"",1)=1
                             GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
@@ -238,7 +242,7 @@ namespace WizOne.Pagini
                             CASE WHEN (COALESCE(B.F10025,-99) <> 900 AND COALESCE(J.Semnat,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat
                             FROM F100 B
                             LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
-                            WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
+                            WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie} {subcompanie}) X
                             ) AS Y
                             WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"], -99)), "", "")}) " + filtru;
 
@@ -297,7 +301,7 @@ namespace WizOne.Pagini
                             FROM ""Avs_Cereri"" A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""
-                            WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= {General.ToDataUniv(dtInit)} {companie} {filtruSup} AND COALESCE(A.""GenerareDoc"",1)=1
+                            WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= {General.ToDataUniv(dtInit)} {companie} {subcompanie} {filtruSup} AND COALESCE(A.""GenerareDoc"",1)=1
                             GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente"", B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31, 32, 33) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",
@@ -309,7 +313,7 @@ namespace WizOne.Pagini
                             CASE WHEN (COALESCE(B.F10025,-99) <> 900 AND COALESCE(J.""Semnat"",0) = 1) THEN 1 ELSE 0 END AS ""CandidatAngajat""
                             FROM F100 A
                             LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
-                            WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
+                            WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie} {subcompanie}) X
                             ) 
                             WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"], -99)), "", "")}) " + filtru;
 
@@ -676,6 +680,11 @@ namespace WizOne.Pagini
 
                     //in cazul in care se sterge atasamentul din managemetul de personal
                     General.ExecutaNonQuery(@"UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=NULL WHERE ""IdAutoAtasamente"" NOT IN (SELECT ""IdAuto"" FROM ""Atasamente"")", null);
+
+                    //Florin 2021.05.25 - #928
+                    DataTable dtSrc = General.IncarcaDT("SELECT F00304, F00305 FROM F003 ORDER BY F00305");
+                    cmbSub.DataSource = dtSrc;
+                    cmbSub.DataBind();
                 }
                 else if (cmbAng.IsCallback)
                 {

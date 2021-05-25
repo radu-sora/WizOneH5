@@ -72,6 +72,11 @@
                     </div>
 
                     <div class="Absente_Cereri_CampuriSup">
+                        <label id="lblStru" runat="server" style="display:inline-block;">Subcompanie</label>
+				        <dx:ASPxComboBox ID="cmbSub" ClientInstanceName="cmbSub" ClientIDMode="Static" runat="server" DropDownStyle="DropDown" ValueField="F00304" TextField="F00305" ValueType="System.Int32" AutoPostBack="false" Width="250" ItemStyle-Wrap="True" />
+                    </div>
+
+                    <div class="Absente_Cereri_CampuriSup">
                         <label id="lblStatus" runat="server" style="display:inline-block;">Status</label>
                         <dx:ASPxComboBox ID="cmbStatus" ClientInstanceName="cmbStatus" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" >
                             <Items>
@@ -335,7 +340,8 @@
                 ang: cmbAng.GetValue(),
                 status: cmbStatus.GetValue(),
                 data: getLocalDate(txtData.GetDate()),
-                depasire: getLocalDate(txtDepasire.GetDate())
+                depasire: getLocalDate(txtDepasire.GetDate()),
+                subcomp: cmbSub.GetValue()
             }));
         }
 
@@ -346,6 +352,7 @@
             cmbStatus.SetValue();
             txtData.SetDate();
             txtDepasire.SetDate();
+            cmbSub.SetValue();
             grDate.PerformCallback('btnFilter;{}');
         }
 

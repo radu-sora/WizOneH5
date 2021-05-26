@@ -17747,3 +17747,8 @@ GO
 INSERT INTO tblParametrii(Nume,Valoare,Explicatie,IdModul)
 VALUES('NrMinuteDeblocareParola',10,'valoare <> 0 = nr minute fata de momentul blocarii dupa care se va debloca userul , 0 = optiune dezactivata  ',0)
 GO
+
+
+INSERT INTO tblParametrii(Nume,Valoare,Explicatie,IdModul)
+VALUES('IntervalTrimitereEmailuri','15','valoare (in secunde) intre mail-urile trimise din pagina TrimitereFluturasi',0)
+GO

@@ -45,6 +45,8 @@ namespace WizOne.Avs
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
 
+                Session["PaginaWeb"] = "Avs.Cereri";
+
                 DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
                 GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 colStari.PropertiesComboBox.DataSource = dtStari;
@@ -6541,7 +6543,7 @@ namespace WizOne.Avs
                             if (col.ColumnName == "F01105")
                                 val = Convert.ToInt32(e.NewValues[col.ColumnName]);
                             if (col.ColumnName == "Anulare")
-                                if (e.NewValues["Spor"].ToString() == "0" && e.NewValues["Spor"].ToString() != e.OldValues["Spor"].ToString())
+                                if (e.NewValues["F02504"].ToString() == "0") // && e.NewValues["F02504"].ToString() != e.OldValues["F02504"].ToString())
                                     row[col.ColumnName] = 1;
                         }
                     }
@@ -6640,7 +6642,7 @@ namespace WizOne.Avs
                             if (col.ColumnName == "F01105")
                                 val = Convert.ToInt32(e.NewValues[col.ColumnName]);
                             if (col.ColumnName == "Anulare")
-                                if (e.NewValues["Spor"].ToString() == "0" && e.NewValues["Spor"].ToString() != e.OldValues["Spor"].ToString())
+                                if (e.NewValues["F02504"].ToString() == "0") // && e.NewValues["F02504"].ToString() != e.OldValues["F02504"].ToString())
                                     row[col.ColumnName] = 1;
                         }
                     }

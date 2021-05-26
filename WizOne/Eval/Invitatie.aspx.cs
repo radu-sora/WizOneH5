@@ -107,7 +107,10 @@ namespace WizOne.Eval
 
                     cmbPar.DataSource = cmbUsr.DataSource;
                     cmbPar.DataBind();
-                    cmbPar.Value = Convert.ToInt32(Session["UserId"]);
+                    //Radu 25.05.2021
+                    string paramCond = Dami.ValoareParam("Eval_EliminCondForm360", "0");
+                    if (paramCond == "0")
+                        cmbPar.Value = Convert.ToInt32(Session["UserId"]);
                 }
                 else
                 {
@@ -193,7 +196,7 @@ namespace WizOne.Eval
                     }
                     else
                     {
-                        idUsr = Convert.ToInt32(Session["UserId"] ?? -99);
+                        idUsr = Convert.ToInt32(Session["UserId"] ?? -99);  
                         f10003 = Convert.ToInt32(General.Nz(General.ExecutaScalar("SELECT F10003 FROM USERS WHERE F70102=" + Convert.ToInt32(cmbUsr.Value ?? -99), null), -99));
                     }
                 }

@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
@@ -571,10 +572,17 @@ namespace WizOne.Curs
                             #endregion
 
 
-    
+
                             #region  Notificare start
 
-                            //ctxNtf.TrimiteNotificare("Avs.Aprobare", "grDate", entCer, idUser, f10003);
+                            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+
+                            int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+                            HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                            {
+                                NotifAsync.TrimiteNotificare("Curs.Aprobare", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Curs_Inregistrare Z WHERE Id=" + id.ToString(), "Curs_Inregistrare", id, idUser, marcaUser, arrParam);
+                            });
 
                             #endregion
 
@@ -986,6 +994,15 @@ namespace WizOne.Curs
                     //    ctxNtf.TrimiteNotificare("Curs.CursuriInregistrare", "grDate", ent, idUser, (ent.F10003 ?? -99));
                     //else
                     //    ctxNtf.TrimiteNotificare("Curs.Aprobare", "grDate", ent, idUser, (ent.F10003 ?? -99));
+
+                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+
+                    int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+                    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                    {
+                        NotifAsync.TrimiteNotificare("Curs.Aprobare", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Curs_Inregistrare Z WHERE Id=" + id.ToString(), "Curs_Inregistrare", id, idUser, marcaUser, arrParam);
+                    });
 
                     #endregion
 

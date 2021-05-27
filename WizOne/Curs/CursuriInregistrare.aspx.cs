@@ -1526,7 +1526,7 @@ namespace WizOne.Curs
 
                 HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                 {
-                    NotifAsync.TrimiteNotificare("Curs.Cursuri", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Curs_Inregistrare Z WHERE F10003=" + f10003.ToString(), "Curs_Inregistrare", f10003, idUser, marcaUser, arrParam);
+                    NotifAsync.TrimiteNotificare("Curs.CursuriInregistrare", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Curs_Inregistrare Z WHERE Id=" + idUrmat.ToString(), "Curs_Inregistrare", idUrmat, idUser, marcaUser, arrParam);
                 });
 
                 #endregion

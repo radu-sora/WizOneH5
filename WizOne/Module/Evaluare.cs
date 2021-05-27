@@ -1540,7 +1540,7 @@ namespace WizOne.Module
                 conditieFiltru = string.Format(conditieFiltru, HttpContext.Current.Session["User_Marca"].ToString());
                 string paramCond = Dami.ValoareParam("Eval_EliminCondForm360", "0");
                 if (paramCond != "0" && Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) > 0)
-                    conditieFiltru = "";
+                    conditieFiltru = @"and (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.Pozitie = ist.Pozitie)) ";
 
                 if (Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) == 0)
                     filtruHR = " INNER ";
@@ -1551,7 +1551,7 @@ namespace WizOne.Module
                     filtruSuper = $@" AND ((ctg.""Id"" != 0  AND ist.""IdUser"" = {HttpContext.Current.Session["UserId"]}) OR (ctg.""Id"" = 0 AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN (0,{idHR})))) ";
                     //Radu 25.05.2021
                     if (paramCond != "0")
-                        filtruSuper = $@" AND (ctg.""Id"" != 0  OR (ctg.""Id"" = 0 AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN (0,{idHR})))) ";
+                        filtruSuper = $@" AND ((ctg.""Id"" != 0 and rasp.Pozitie = ist.Pozitie)  OR (ctg.""Id"" = 0 AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN (0,{idHR})))) ";
                 }
 
                 string rolFiltru = string.Empty;
@@ -1562,7 +1562,7 @@ namespace WizOne.Module
                     //Radu 25.05.2021
                     if (paramCond != "0" && Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) > 0)
                     {
-                        rolFiltru = @"{0}(ist.""IdSuper"", -99) ";
+                        rolFiltru = @"{0}(ist.""IdSuper"", -99) AND (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.Pozitie = ist.Pozitie))";
                         rolFiltru = Constante.tipBD == 1 ? string.Format(rolFiltru, "isnull") : string.Format(rolFiltru, "nvl");
                     }
                     else

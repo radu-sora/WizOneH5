@@ -4055,7 +4055,7 @@ namespace WizOne.Avs
                                 total.ToString() + " AS \"TotalCircuit\", " +
                                 pozUser.ToString() + " AS \"Pozitie\", " +
                                 (chkGen.Checked ? "1" : "0") + " AS \"GenerareDoc\", " +
-                                "'" + txtExpl.Text + "' AS Explicatii " +
+                                "'" + txtExpl.Text + "' AS Explicatii, " +
                                 Session["UserId"] + " AS USER_NO, " + General.CurrentDate() + " AS TIME ";
             string msg = Notif.TrimiteNotificare("Avs.Cereri", (int)Constante.TipNotificare.Validare, sqlCer + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
             if (msg != "" && msg.Substring(0, 1) == "2")

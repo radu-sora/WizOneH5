@@ -494,8 +494,10 @@ namespace WizOne.Absente
                         if (Constante.tipBD == 2) strSql += " AND " + General.ToDataUniv(DateTime.Now) + " > TRUNC(B.F10023)";
                         break;
                     case 4:                         //in avans
-                        if (Constante.tipBD == 1) strSql += " AND CONVERT(date,B.F10022) > " + General.ToDataUniv(DateTime.Now);
-                        if (Constante.tipBD == 2) strSql += " AND TRUNC(B.F10022) > " + General.ToDataUniv(DateTime.Now);
+                        //if (Constante.tipBD == 1) strSql += " AND CONVERT(date,B.F10022) > " + General.ToDataUniv(DateTime.Now);
+                        //if (Constante.tipBD == 2) strSql += " AND TRUNC(B.F10022) > " + General.ToDataUniv(DateTime.Now);
+                        //Radu 26.05.2021 - #940
+                        strSql += " AND B.F10025 = 999 ";
                         break;
                 }
 

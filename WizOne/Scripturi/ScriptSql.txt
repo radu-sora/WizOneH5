@@ -17629,6 +17629,8 @@ GO
 
 INSERT INTO MeniuLista(Id, Denumire) VALUES (16, 'Beneficii')
 GO
+INSERT [dbo].[MeniuLinii] ([Id], [IdMeniu], [Parinte], [Ordine], [Stare], [Nume], [Descriere], [Imagine], [IdNomen], [USER_NO], [TIME]) VALUES (16, (SELECT MAX(Id) FROM MeniuLinii) + 1, 0, 1, 1, N'Beneficii', NULL, N'pred.png', NULL, 2, GETDATE())
+GO
 
 
 CREATE TABLE [dbo].[Ben_tblStari](
@@ -17647,11 +17649,11 @@ CREATE TABLE [dbo].[Ben_tblStari](
 GO
 
 
-INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (2, 'Selectat', '')
+INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (2, 'Selectat', '#FFA500')
 GO
-INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (3, 'Aprobat', '')
+INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (3, 'Aprobat', '#9BBB59')
 GO
-INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (4, 'Respins', '')
+INSERT INTO Ben_tblStari(Id, Denumire, Culoare) VALUES (4, 'Respins', '#FF0000')
 GO
 
 
@@ -17703,6 +17705,21 @@ CREATE TABLE [dbo].[Ben_SetAngajati](
 ) ON [PRIMARY]
 
 GO
+
+Ben_SetAngajati CodSet 2 1 NULL 0 2 2021-04-22 Set Angajati
+Ben_SetAngajati DenSet 2 1 NULL 0 2 2021-04-22 Denumire
+Ben_SetAngajati IdSetAng 0 1 NULL 1 2 2021-04-22 Id
+Ben_SetAngajati SelectQuery 2 1 NULL 0 2 2021-04-22 Conditie Aplicata
+
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", "Alias") VALUES('Ben_SetAngajati','CodSet',2,1,NULL,0,'Set Angajati');
+GO
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", "Alias") VALUES('Ben_SetAngajati','DenSet',2,1,NULL,0,'Denumire');
+GO
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", "Alias") VALUES('Ben_SetAngajati','IdSetAng',0,1,NULL,0,'Id');
+GO
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", "Alias") VALUES('Ben_SetAngajati','SelectQuery',2,1,NULL,0,'Conditie Aplicata');
+GO
+
 
 drop table Ben_Beneficii
 GO

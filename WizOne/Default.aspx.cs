@@ -175,7 +175,7 @@ namespace WizOne
 
                 //Radu 02.02.2021
                 string txtLogare = Dami.ValoareParam("TextLogare", "");
-                if (txtLogare.Length > 0)
+                //if (txtLogare.Length > 0)
                 {
                     lblTxt.Text = txtLogare;
                     //lblTxt.Border.BorderStyle = System.Web.UI.WebControls.BorderStyle.Solid;

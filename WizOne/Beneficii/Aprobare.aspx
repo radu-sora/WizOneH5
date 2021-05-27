@@ -158,8 +158,8 @@
     <table width="60%">   
         <tr>
             <td align="left">
-                <label id="lblAngFiltru" runat="server" style="display:inline-block;">Angajat</label>
-                <dx:ASPxComboBox ID="cmbAngFiltru" ClientInstanceName="cmbAngFiltru" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
+                <label id="lblAngFiltru" runat="server" visible="false" style="display:inline-block;">Angajat</label>
+                <dx:ASPxComboBox ID="cmbAngFiltru"  visible="false" ClientInstanceName="cmbAngFiltru" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
                             CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >
                     <Columns>
                         <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
@@ -172,15 +172,15 @@
                 </dx:ASPxComboBox>
             </td>
             <td align="left">
-                <label id="lblSesFiltru" runat="server" style="display:inline-block;">Sesiune</label>
-                <dx:ASPxComboBox ID="cmbSesiuneFiltru" runat="server" ClientInstanceName="cmbSesiuneFiltru" ClientIDMode="Static" Width="215px" ValueField="Id" DropDownWidth="200" 
+                <label id="lblSesFiltru"  visible="false" runat="server" style="display:inline-block;">Sesiune</label>
+                <dx:ASPxComboBox ID="cmbSesiuneFiltru"  visible="false" runat="server" ClientInstanceName="cmbSesiuneFiltru" ClientIDMode="Static" Width="215px" ValueField="Id" DropDownWidth="200" 
                     TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >                           
                 </dx:ASPxComboBox>
             </td>                    								
 
 			<td align="left">		
-                <label id="lblStare" runat="server" style="display:inline-block;">Stare</label>	
-                <dx:ASPxDropDownEdit ClientInstanceName="checkComboBoxStare" ID="checkComboBoxStare" Width="210px" runat="server" AnimationType="None">
+                <label id="lblStare" runat="server"  visible="false" style="display:inline-block;">Stare</label>	
+                <dx:ASPxDropDownEdit ClientInstanceName="checkComboBoxStare"  visible="false" ID="checkComboBoxStare" Width="210px" runat="server" AnimationType="None">
                     <DropDownWindowStyle BackColor="#EDEDED" />
                     <DropDownWindowTemplate>
                         <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
@@ -210,27 +210,27 @@
 
             </td>
             <td>
-                <label id="lblDeLa" runat="server" style="display:inline-block;">Data inceput</label>
-                <dx:ASPxDateEdit ID="txtDataInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataIncResource1" >
+                <label id="lblDeLa" runat="server"  visible="false" style="display:inline-block;">Data inceput</label>
+                <dx:ASPxDateEdit ID="txtDataInc"  visible="false" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataIncResource1" >
                     <CalendarProperties FirstDayOfWeek="Monday" />
                 </dx:ASPxDateEdit>
             </td>
             <td>
-                <label id="lblLa" runat="server" style="display:inline-block;">Data sfarsit</label>
-                <dx:ASPxDateEdit ID="txtDataSf" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataSfResource1" >
+                <label id="lblLa" runat="server"  visible="false"  style="display:inline-block;">Data sfarsit</label>
+                <dx:ASPxDateEdit ID="txtDataSf"  visible="false" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataSfResource1" >
                     <CalendarProperties FirstDayOfWeek="Monday" />
                 </dx:ASPxDateEdit>                    
             </td> 
 
             <td align="left">
-                <label id="lblF" runat="server" style="display:inline-block;"></label>
-                <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Filtru" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
+                <label id="lblF" runat="server"  visible="false" style="display:inline-block;"></label>
+                <dx:ASPxButton ID="btnFiltru"  visible="false" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Filtru" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                 </dx:ASPxButton>
             </td>
             <td align="left">
-                <label id="lblSF" runat="server" style="display:inline-block;"></label>
-                <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Sterge filtru" oncontextMenu="ctx(this,event)" OnClick="btnFiltruSterge_Click" >                    
+                <label id="lblSF" runat="server"  visible="false" style="display:inline-block;"></label>
+                <dx:ASPxButton ID="btnFiltruSterge"  visible="false" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Sterge filtru" oncontextMenu="ctx(this,event)" OnClick="btnFiltruSterge_Click" >                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
                 </dx:ASPxButton>
             </td>                    	
@@ -260,19 +260,26 @@
                         <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" ReadOnly="true" Width="150px" >
                             <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown" />
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdSesiune" Name="IdSesiune" Caption="Sesiune" ReadOnly="true" Width="150px" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataComboBoxColumn> 
                         <dx:GridViewDataComboBoxColumn FieldName="IdBeneficiu" Name="IdBeneficiu" Caption="Beneficiu"  Width="150px" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataComboBoxColumn> 
-                        <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" ReadOnly="true"  Width="150px" />	
+                        <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" ReadOnly="true"  Width="150px" >	
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
 					    <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput sesiune" ReadOnly="true" HeaderStyle-Wrap="True"  Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataDateColumn>
 					    <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit sesiune" ReadOnly="true"  HeaderStyle-Wrap="True" Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
@@ -281,14 +288,17 @@
                         <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="150px"  >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataComboBoxColumn>
 					    <dx:GridViewDataDateColumn FieldName="DataInceputBen" Name="DataInceputBen" Caption="Data inceput beneficiu" ReadOnly="true" Visible="false"  HeaderStyle-Wrap="True" Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataDateColumn>
 					    <dx:GridViewDataDateColumn FieldName="DataSfarsitBen" Name="DataSfarsitBen" Caption="Data sfarsit beneficiu" ReadOnly="true" Visible="false" HeaderStyle-Wrap="True" Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataDateColumn>				    
 
 

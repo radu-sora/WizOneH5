@@ -21,19 +21,21 @@ namespace WizOne
         {
             try
             {
+                txtVers.Text = Constante.versiune;
+
                 if (!IsPostBack)
                 {
                     Session.Clear();
                     General.InitSessionVariables();
 
                     if (string.IsNullOrEmpty(Request["arg"]))
-                        Response.Write(Dami.TraduCuvant("Date insuficiente"));
+                        divRas.InnerText = Dami.TraduCuvant("Date insuficiente");
                     else
                     {
                         string txt = General.Decrypt_QueryString(Request["arg"]);
 
                         if (txt == "")
-                            Response.Write(Dami.TraduCuvant("Date insuficiente"));
+                            divRas.InnerText = Dami.TraduCuvant("Date insuficiente");
                         else
                         {
                             string[] arr = txt.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
@@ -45,7 +47,7 @@ namespace WizOne
                             string numePagina = arr[9];
 
                             if (cheie1.ToUpper() != "WIZ" || cheie2.ToUpper() != "ONE" || mail == "" || tipActiune == "" || idCerere == "")
-                                Response.Write(Dami.TraduCuvant("Date insuficiente"));
+                                divRas.InnerText = Dami.TraduCuvant("Date insuficiente");
                             else
                             {
                                 string sqlUsr = $@"SELECT F70102, ""IdLimba"" FROM USERS WHERE ""Mail""=@1
@@ -81,7 +83,7 @@ namespace WizOne
                                             DataRow drAdr = General.IncarcaDR(sqlAdr, new object[] { idUsr, idCerere });
                                             if (drAdr == null)
                                             {
-                                                Response.Write(Dami.TraduCuvant("Date insuficiente"));
+                                                divRas.InnerText = Dami.TraduCuvant("Date insuficiente");
                                             }
                                             else
                                             {
@@ -92,7 +94,7 @@ namespace WizOne
                                                 if (dr != null && dr["DataAprobare"] != DBNull.Value)
                                                 {
                                                     DateTime dtApr = Convert.ToDateTime(dr["DataAprobare"]);
-                                                    Response.Write("Cererea a fost deja aprobata in data de " + dtApr.Day.ToString().PadLeft(2, '0') + "-" + dtApr.Month.ToString().PadLeft(2, '0') + "-" + dtApr.Year);
+                                                    divRas.InnerText = "Cererea a fost deja aprobata in data de " + dtApr.Day.ToString().PadLeft(2, '0') + "-" + dtApr.Month.ToString().PadLeft(2, '0') + "-" + dtApr.Year;
                                                 }
                                                 else
                                                 {
@@ -100,7 +102,7 @@ namespace WizOne
                                                     lst.Add(new General.metaCereriRol { Id = Convert.ToInt32(idCerere), Rol = rol });
                                                     General.MemoreazaEroarea("Vine din Raspuns");
                                                     string rez = General.MetodeCereri(Convert.ToInt32(tipActiune), lst, idUser, marcaUser, "");
-                                                    Response.Write(rez);
+                                                    divRas.InnerText = rez;
                                                 }
                                             }
                                         }
@@ -110,7 +112,7 @@ namespace WizOne
                                             DataRow drCum = General.IncarcaDR(@"SELECT F10003, ""An"", ""Luna"", ""IdStare"" FROM ""Ptj_Cumulat"" WHERE ""IdAuto""=@1", new object[] { idCerere });
                                             if (drCum == null)
                                             {
-                                                Response.Write(Dami.TraduCuvant("Date insuficiente"));
+                                                divRas.InnerText = Dami.TraduCuvant("Date insuficiente");
                                                 return;
                                             }
 
@@ -139,7 +141,7 @@ namespace WizOne
                                             DataRow drAdr = General.IncarcaDR(sqlAdr, new object[] { mail, f10003 });
                                             if (drAdr == null)
                                             {
-                                                Response.Write(Dami.TraduCuvant("Date insuficiente"));
+                                                divRas.InnerText = Dami.TraduCuvant("Date insuficiente");
                                                 return;
                                             }
 
@@ -151,7 +153,7 @@ namespace WizOne
                                             if (dr != null)
                                             {
                                                 DateTime dtApr = Convert.ToDateTime(dr["DataAprobare"]);
-                                                Response.Write("Cererea a fost deja aprobata in data de " + dtApr.Day.ToString().PadLeft(2, '0') + "-" + dtApr.Month.ToString().PadLeft(2, '0') + "-" + dtApr.Year);
+                                                divRas.InnerText = "Cererea a fost deja aprobata in data de " + dtApr.Day.ToString().PadLeft(2, '0') + "-" + dtApr.Month.ToString().PadLeft(2, '0') + "-" + dtApr.Year;
                                                 return;
                                             }
 
@@ -159,7 +161,7 @@ namespace WizOne
                                             //in cereri respingerea este 2 iar in pontaj este 0
                                             if (tipActiune == "2") tipActiune = "0";
                                             string rez = General.ActiuniExec(Convert.ToInt32(tipActiune), f10003, idRol, idStare, an, luna, "Pontaj.Aprobare", idUser, marcaUser) + System.Environment.NewLine;
-                                            Response.Write(rez);
+                                            divRas.InnerText = rez;
 
 
 

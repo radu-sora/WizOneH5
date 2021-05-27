@@ -237,3 +237,7 @@ a
     max-width:400px;
     padding:20px;
 }
+
+.app_ras {
+   display: flex; height:350px; justify-content: center; align-items: center;
+}

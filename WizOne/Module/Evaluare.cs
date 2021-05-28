@@ -1316,7 +1316,7 @@ namespace WizOne.Module
 		                when rasp.""LuatLaCunostinta"" = 1 then 'Luat la cunostinta'
 		                else 
 						    CASE 
-						    WHEN COALESCE(chest.""CategorieQuiz"",0)=1 THEN (CASE WHEN COALESCE((SELECT MIN(COALESCE(""Aprobat"",0)) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz""=rasp.""IdQuiz"" AND ""IdUser""={11}),0) = 1 THEN 'Finalizat' ELSE 'Evaluare 360' END)
+						    WHEN COALESCE(chest.""CategorieQuiz"",0)=1 THEN ({16} THEN 'Finalizat' ELSE 'Evaluare 360' END)
 						    WHEN COALESCE(chest.""CategorieQuiz"",0)=2 THEN (CASE WHEN COALESCE((SELECT MIN(COALESCE(""Aprobat"",0)) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz""=rasp.""IdQuiz"" AND ""IdUser""={11}),0) = 1 THEN 'Finalizat' ELSE 'Evaluare pe proiect' END)
 						    ELSE
                                 case
@@ -1540,7 +1540,7 @@ namespace WizOne.Module
                 conditieFiltru = string.Format(conditieFiltru, HttpContext.Current.Session["User_Marca"].ToString());
                 string paramCond = Dami.ValoareParam("Eval_EliminCondForm360", "0");
                 if (paramCond != "0" && Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) > 0)
-                    conditieFiltru = "";
+                    conditieFiltru = @"and (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.Pozitie = ist.Pozitie)) ";
 
                 if (Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) == 0)
                     filtruHR = " INNER ";
@@ -1551,8 +1551,13 @@ namespace WizOne.Module
                     filtruSuper = $@" AND ((ctg.""Id"" != 0  AND ist.""IdUser"" = {HttpContext.Current.Session["UserId"]}) OR (ctg.""Id"" = 0 AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN (0,{idHR})))) ";
                     //Radu 25.05.2021
                     if (paramCond != "0")
-                        filtruSuper = $@" AND (ctg.""Id"" != 0  OR (ctg.""Id"" = 0 AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN (0,{idHR})))) ";
+                        filtruSuper = $@" AND ((ctg.""Id"" != 0 and rasp.Pozitie = ist.Pozitie)  OR (ctg.""Id"" = 0 AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN (0,{idHR})))) ";
                 }
+
+                string condFinalizare = @"CASE WHEN COALESCE((SELECT MIN(COALESCE(""Aprobat"",0)) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz""=rasp.""IdQuiz"" AND ""IdUser""={0}),0) = 1";
+                condFinalizare = string.Format(condFinalizare, HttpContext.Current.Session["UserId"].ToString());
+                if (paramCond != "0")
+                    condFinalizare = @" CASE WHEN rasp.""Finalizat"" = 1 ";
 
                 string rolFiltru = string.Empty;
                 if (rol != -99)
@@ -1562,7 +1567,7 @@ namespace WizOne.Module
                     //Radu 25.05.2021
                     if (paramCond != "0" && Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) > 0)
                     {
-                        rolFiltru = @"{0}(ist.""IdSuper"", -99) ";
+                        rolFiltru = @"{0}(ist.""IdSuper"", -99) AND (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.Pozitie = ist.Pozitie))";
                         rolFiltru = Constante.tipBD == 1 ? string.Format(rolFiltru, "isnull") : string.Format(rolFiltru, "nvl");
                     }
                     else
@@ -1574,9 +1579,9 @@ namespace WizOne.Module
 
 
                 if (Constante.tipBD == 1) //SQL
-                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie, conditieFiltru, " OR ctg.\"Id\" != 0 ");
+                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie, conditieFiltru, paramCond != "0" ? " OR ctg.\"Id\" != 0 " : "", condFinalizare);
                 else                      //ORACLE
-                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie, conditieFiltru, " OR ctg.\"Id\" != 0 ");
+                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie, conditieFiltru, paramCond != "0" ? " OR ctg.\"Id\" != 0 " : "", condFinalizare);
 
                 //Florin  2018.07.05
                 strSQL = strSQL.Replace("@1", Dami.TraduCuvant("Evaluare angajat"));

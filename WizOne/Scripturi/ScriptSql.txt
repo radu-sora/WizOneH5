@@ -17706,10 +17706,6 @@ CREATE TABLE [dbo].[Ben_SetAngajati](
 
 GO
 
-Ben_SetAngajati CodSet 2 1 NULL 0 2 2021-04-22 Set Angajati
-Ben_SetAngajati DenSet 2 1 NULL 0 2 2021-04-22 Denumire
-Ben_SetAngajati IdSetAng 0 1 NULL 1 2 2021-04-22 Id
-Ben_SetAngajati SelectQuery 2 1 NULL 0 2 2021-04-22 Conditie Aplicata
 
 INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", "Alias") VALUES('Ben_SetAngajati','CodSet',2,1,NULL,0,'Set Angajati');
 GO

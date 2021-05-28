@@ -498,7 +498,7 @@ namespace WizOne.Absente
                 {
                     if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
                     {
-                        decimal nr = Convert.ToDecimal(dtDataSf.Visible == false ? txtNrOre.Value ?? 0: txtNr.Value ?? 0);
+                        decimal nr = Convert.ToDecimal(txtNrOre.ClientVisible == true ? txtNrOre.Value ?? 0: txtNr.Value ?? 0);
                         General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), idCer, 5, trimiteLaInlocuitor, nr);
                     }
 

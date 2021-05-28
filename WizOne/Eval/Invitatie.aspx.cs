@@ -264,21 +264,45 @@ namespace WizOne.Eval
                 string strSql = "";
                 int idStare = 1;
 
-                if (Dami.ValoareParam("Eval_AprobareInvitatie") == "1")
+                //Radu 28.05.2021 - #943
+                string paramCond = Dami.ValoareParam("Eval_EliminCondForm360", "0");
+                if (paramCond != "0")
                 {
-                    strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, ({DamiRol()}), {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
-                    idStare = 3;
+                    if (Dami.ValoareParam("Eval_AprobareInvitatie") == "1")
+                    {
+                        strSql += $@"UPDATE ""Eval_RaspunsIstoric"" SET ""IdSuper"" = ({DamiRol()}), ""IdUser"" = {idUsr} FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003};" + System.Environment.NewLine;
+                        idStare = 3;
 
-                    strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
+                        strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
+                    }
+                    else
+                    {
+                        if ((rbTip.Value ?? "").ToString() == "1")
+                        {
+                            strSql += $@"UPDATE ""Eval_RaspunsIstoric"" SET ""IdSuper"" = ({DamiRol()}), ""IdUser"" = {idUsr} WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003};" + System.Environment.NewLine;
+                            idStare = 3;
+                        }
+                        strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
+                    }
                 }
                 else
                 {
-                    if ((rbTip.Value ?? "").ToString() == "1")
+                    if (Dami.ValoareParam("Eval_AprobareInvitatie") == "1")
                     {
                         strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, ({DamiRol()}), {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
                         idStare = 3;
+
+                        strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
                     }
-                    strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
+                    else
+                    {
+                        if ((rbTip.Value ?? "").ToString() == "1")
+                        {
+                            strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, ({DamiRol()}), {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
+                            idStare = 3;
+                        }
+                        strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
+                    }
                 }
 
 

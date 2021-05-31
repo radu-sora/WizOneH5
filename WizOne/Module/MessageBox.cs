@@ -19,11 +19,23 @@ namespace WizOne.Module
             try
             {
                 string mesaj = "";
-                var ert = obj.GetType();
 
-                if (obj.GetType().Name == "ArgumentException")
+                //Florin 2021.05.31
+
+                //if (obj.GetType().Name == "ArgumentException")
+                //{
+                //    Exception ex = obj as Exception;
+                //    mesaj = ex.Message.ToString();
+                //    if (ex.InnerException != null) mesaj += ex.InnerException.ToString();
+                //}
+                //else
+                //{
+                //    mesaj = obj.ToString();
+                //}
+
+                Exception ex = obj as Exception;
+                if (ex != null)
                 {
-                    Exception ex = obj as Exception;
                     mesaj = ex.Message.ToString();
                     if (ex.InnerException != null) mesaj += ex.InnerException.ToString();
                 }

@@ -33,7 +33,7 @@ namespace WizOne.ConcediiMedicale
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
                 if (!IsPostBack)
                 {
                     int marca = -99;

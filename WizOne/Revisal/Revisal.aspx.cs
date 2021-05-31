@@ -31,7 +31,7 @@ namespace WizOne.Revisal
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 #region Traducere
 

@@ -51,7 +51,7 @@ namespace WizOne.Tactil
                 if (Constante.esteTactil)
                     Dami.AccesTactil();
                 else
-                    Dami.AccesApp();
+                    Dami.AccesApp(this.Page);
 
 
                 lnkSave.Attributes.Add("onClick", "return false;");

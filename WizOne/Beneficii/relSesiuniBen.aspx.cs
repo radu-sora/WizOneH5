@@ -32,7 +32,7 @@ namespace WizOne.Beneficii
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
        
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
 

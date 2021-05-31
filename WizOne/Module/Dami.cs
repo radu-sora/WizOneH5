@@ -464,10 +464,22 @@ namespace WizOne.Module
             }
         }
 
-        internal static void AccesApp()
+        internal static void AccesApp(Page pag = null)
         {
             try
             {
+                //Florin 2021.05.31
+                if (pag != null)
+                {
+                    DataTable dt = HttpContext.Current.Session["tmpMeniu2"] as DataTable;
+                    string strPag = pag.ToString().ToLower().Replace("_aspx", "").Replace("asp.", "").Replace("_", "\\");
+                    //if (dt.Select($"Pagina = '{strPag}'").Count() == 0 && strPag.ToLower().IndexOf("mainpage") < 0)
+                    var ert = General.Nz(HttpContext.Current.Session["tmpMeniu3"], "").ToString().ToLower().Replace("/", "\\");
+                    var edc = General.Nz(HttpContext.Current.Session["tmpMeniu3"], "").ToString().ToLower().Replace("/", "\\").IndexOf(strPag);
+                    if (dt.Select($"Pagina = '{strPag}'").Count() > 0 && General.Nz(HttpContext.Current.Session["tmpMeniu3"],"").ToString().ToLower().Replace("/","\\").IndexOf(strPag) < 0)
+                        HttpContext.Current.Response.Redirect("~/Pagini/MainPage");
+                }
+
                 if (Constante.esteTactil)
                 {
                     if (HttpContext.Current.Session["SecApp"].ToString() != "OK_Tactil")

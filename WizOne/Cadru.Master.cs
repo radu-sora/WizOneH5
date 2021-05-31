@@ -34,7 +34,7 @@ namespace WizOne
                 if (Constante.esteTactil)
                     Dami.AccesTactil();
                 else
-                    Dami.AccesApp();
+                    Dami.AccesApp(this.Page);
 
                 //if (!HttpContext.Current.User.Identity.IsAuthenticated)
                 //    Response.Redirect("../Default", false);
@@ -252,6 +252,16 @@ namespace WizOne
                         cmbProfile.DataSource = dtPro;
                         cmbProfile.DataBindItems();
                     }
+
+                    DataTable dtMnuSec = General.IncarcaDT(
+                        $@"SELECT Pagina FROM tblMeniuri WHERE Pagina NOT IN 
+                        (SELECT E.Pagina
+                        FROM MeniuLinii B
+                        INNER JOIN relGrupMeniu2 C ON B.IdMeniu = C.IdMeniu
+                        INNER JOIN relGrupUser D ON C.IdGrup = D.IdGrup
+                        LEFT JOIN tblMeniuri E ON E.Id = B.IdNomen
+                        WHERE D.IdUser = {Session["UserId"].ToString()} AND B.Stare = 1 AND E.Pagina IS NOT NULL AND E.Pagina <> '') ");
+                    Session["tmpMeniu2"] = dtMnuSec;
                 }
 
                 if (General.VarSession("EsteAdmin").ToString() == "0") 

@@ -92,7 +92,7 @@ namespace WizOne.Personal
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 DataTable table = General.IncarcaDT("SELECT * FROM \"MP_NotaLichidare_Stari\"", null);
                 GridViewDataComboBoxColumn col = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);

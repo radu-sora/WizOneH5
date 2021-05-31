@@ -16,7 +16,7 @@ namespace WizOne.Personal
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 if (!IsPostBack)
                 {      

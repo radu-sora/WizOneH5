@@ -22,7 +22,7 @@ namespace WizOne.Pagini
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 #region Traducere
 
@@ -38,7 +38,7 @@ namespace WizOne.Pagini
 
                 if (!IsPostBack)
                 {        
-                    txtDataInc.Value = DateTime.Now;               
+                    txtDataInc.Value = DateTime.Now;
                 }
 
                 cmbUserVechi.DataSource = General.IncarcaDT("SELECT F70102, F70104 FROM USERS ORDER BY F70104", null);

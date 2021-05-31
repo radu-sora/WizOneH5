@@ -62,7 +62,7 @@ namespace WizOne.Tactil
                 if (Constante.esteTactil)
                     Dami.AccesTactil();
                 else
-                    Dami.AccesApp();
+                    Dami.AccesApp(this.Page);
 
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];

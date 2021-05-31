@@ -24,7 +24,7 @@ namespace WizOne.BP
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
 
                 #region Traducere

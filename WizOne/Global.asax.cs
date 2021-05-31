@@ -24,6 +24,19 @@ namespace WizOne
             }
         }
 
+        protected void Application_PreSendRequestHeaders()
+        {
+            //Florin 2021.05.31 - pct 14
+            if(Request.IsSecureConnection)
+            {
+                Response.Cookies.Add(
+                    new HttpCookie("key", "value")
+                    {
+                        Secure = true,
+                    });
+            }
+        }
+
         protected void Application_Start(object sender, EventArgs e)
         {
             try

@@ -121,6 +121,16 @@ namespace WizOne
                 //Florin 2021.05.31 #909 pct 15
                 HttpContext.Current.Response.AddHeader("X-FRAME-OPTIONS", "DENY");
 
+                //Florin 2021.05.31 #909 pct 18
+                if (Request.IsSecureConnection)
+                {
+                    HttpContext.Current.Response.AddHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+                }
+
+                //Florin 2021.05.31 #909 pct 19
+                HttpContext.Current.Response.AddHeader("X-XSS-Protection", "1; mode=block");
+                //<add name="X-XSS-Protection" value="1; mode=block"></add>
+
                 //Response.Cache.SetCacheability(HttpCacheability.NoCache);
                 //Response.Cache.SetExpires(DateTime.Now);
                 //Response.Cache.SetNoStore();

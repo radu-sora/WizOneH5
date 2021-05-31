@@ -118,6 +118,9 @@ namespace WizOne
         {
             try
             {
+                //Florin 2021.05.31 #909 pct 15
+                HttpContext.Current.Response.AddHeader("X-FRAME-OPTIONS", "DENY");
+
                 //Response.Cache.SetCacheability(HttpCacheability.NoCache);
                 //Response.Cache.SetExpires(DateTime.Now);
                 //Response.Cache.SetNoStore();

@@ -242,5 +242,5 @@ a
 }
 
 .app_ras {
-   display: flex; height:350px; justify-content: center; align-items: center;
+   display: flex; height:200px; justify-content: center; align-items: center; margin:80px 50px;
 }

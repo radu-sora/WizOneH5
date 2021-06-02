@@ -2388,7 +2388,7 @@ namespace WizOne.Module
                                 CASE WHEN D.""IdAuto"" IS NOT NULL THEN D.""IdAuto"" ELSE B.""IdAuto"" END AS ""IdIst"",
                                 COALESCE(F.""IdStare"",1) AS ""IdStareCumulat"", COALESCE(C.""IdTipOre"",0) AS ""IdTipOre"",
                                 COALESCE(C.""Compensare"",0) AS ""Compensare"", 
-                                COALESCE(C.""OreInVal"",'') AS ""OreInVal"", COALESCE(""NuTrimiteInPontaj"",0) AS ""NuTrimiteInPontaj"", E.""RespectaOrdinea"", RL.""Rol"",
+                                COALESCE(C.""OreInVal"",'') AS ""OreInVal"", COALESCE(""NuTrimiteInPontaj"",0) AS ""NuTrimiteInPontaj"", E.""RespectaOrdinea"", RL.""Rol"", C.""Denumire"" AS ""DenumireAbsenta"", 
                                 {strDrepturi}
                                 FROM ({strSelect.Substring(6)}) RL
                                 INNER JOIN ""Ptj_Cereri"" A ON RL.""Id"" = A.""Id""
@@ -2601,11 +2601,13 @@ namespace WizOne.Module
                             NotifAsync.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + dr["Id"], "Ptj_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca, arrParam);
                         });
 
-
+                        //Florin 2021.05.28
+                        DateTime dtInc = Convert.ToDateTime(dr["DataInceput"]);
+                        DateTime dtSf = Convert.ToDateTime(dr["DataSfarsit"]);
                         if (tipActiune == 1)
-                            log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("a fost aprobata") + System.Environment.NewLine;
+                            log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a fost aprobata") + System.Environment.NewLine;
                         else
-                            log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("a fost respinsa") + System.Environment.NewLine;
+                            log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a fost respinsa") + System.Environment.NewLine;
                     }
                 }
             }
@@ -5967,7 +5969,7 @@ namespace WizOne.Module
                 #region  Notificare start
 
                 //Florin 2021.05.18
-                string sqlNtf = sqlPtj.Replace("FROM DUAL", "") + $@", {General.ToDataUniv(an, luna)} AS ""ZiuaInc"", {idStare} AS ""IdStare"", {an} AS ""An"", {luna} AS ""Luna"", {actiune} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+                string sqlNtf = sqlPtj.Replace("FROM DUAL", "") + $@", {f10003} AS F10003, {General.ToDataUniv(an, luna)} AS ""ZiuaInc"", {idStare} AS ""IdStare"", {an} AS ""An"", {luna} AS ""Luna"", {actiune} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
                 //string sqlNtf = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna, actiune);
                 Notif.TrimiteNotificare(pagina, (int)Constante.TipNotificare.Notificare, sqlNtf, "Ptj_Cumulat",
                         Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT ""IdAuto"" FROM ""Ptj_Cumulat"" WHERE F10003 =@1 AND ""An"" =@2 AND ""Luna"" =@3", new object[] { f10003, an, luna }), -99)),

@@ -445,6 +445,8 @@
     <Content Include="Default.aspx" />
     <Content Include="DefaultTactilExtra.aspx" />
     <Content Include="DefaultTactilFaraCard.aspx" />
+    <Content Include="Error\404.aspx" />
+    <Content Include="Error\GenericErrorPage.aspx" />
     <Content Include="Eval\ActivitatiObiective.aspx" />
     <Content Include="Eval\Calificative.aspx" />
     <Content Include="Eval\Competente.aspx" />
@@ -1537,6 +1539,20 @@
     </Compile>
     <Compile Include="DefaultTactilFaraCard.aspx.designer.cs">
       <DependentUpon>DefaultTactilFaraCard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Error\404.aspx.cs">
+      <DependentUpon>404.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Error\404.aspx.designer.cs">
+      <DependentUpon>404.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Error\GenericErrorPage.aspx.cs">
+      <DependentUpon>GenericErrorPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Error\GenericErrorPage.aspx.designer.cs">
+      <DependentUpon>GenericErrorPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Eval\ActivitatiObiective.aspx.cs">
       <DependentUpon>ActivitatiObiective.aspx</DependentUpon>

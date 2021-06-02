@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Error
+namespace WizOne
 {
 
 
-    public partial class _404
+    public partial class ErrorPage
     {
     }
 }

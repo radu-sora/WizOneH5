@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace WizOne.Error
+namespace WizOne.ErrorPages
 {
-    public partial class GenericErrorPage : System.Web.UI.Page
+    public partial class Oops : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

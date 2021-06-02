@@ -445,8 +445,8 @@
     <Content Include="Default.aspx" />
     <Content Include="DefaultTactilExtra.aspx" />
     <Content Include="DefaultTactilFaraCard.aspx" />
-    <Content Include="Error\404.aspx" />
-    <Content Include="Error\GenericErrorPage.aspx" />
+    <Content Include="ErrorPage.aspx" />
+    <Content Include="ErrorPages\Oops.aspx" />
     <Content Include="Eval\ActivitatiObiective.aspx" />
     <Content Include="Eval\Calificative.aspx" />
     <Content Include="Eval\Competente.aspx" />
@@ -1540,19 +1540,19 @@
     <Compile Include="DefaultTactilFaraCard.aspx.designer.cs">
       <DependentUpon>DefaultTactilFaraCard.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Error\404.aspx.cs">
-      <DependentUpon>404.aspx</DependentUpon>
+    <Compile Include="ErrorPage.aspx.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Error\404.aspx.designer.cs">
-      <DependentUpon>404.aspx</DependentUpon>
+    <Compile Include="ErrorPage.aspx.designer.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Error\GenericErrorPage.aspx.cs">
-      <DependentUpon>GenericErrorPage.aspx</DependentUpon>
+    <Compile Include="ErrorPages\Oops.aspx.cs">
+      <DependentUpon>Oops.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Error\GenericErrorPage.aspx.designer.cs">
-      <DependentUpon>GenericErrorPage.aspx</DependentUpon>
+    <Compile Include="ErrorPages\Oops.aspx.designer.cs">
+      <DependentUpon>Oops.aspx</DependentUpon>
     </Compile>
     <Compile Include="Eval\ActivitatiObiective.aspx.cs">
       <DependentUpon>ActivitatiObiective.aspx</DependentUpon>

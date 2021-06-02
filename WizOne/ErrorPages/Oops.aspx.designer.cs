@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Error
+namespace WizOne.ErrorPages
 {
 
 
-    public partial class GenericErrorPage
+    public partial class Oops
     {
     }
 }

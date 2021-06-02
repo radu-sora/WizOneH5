@@ -5969,7 +5969,7 @@ namespace WizOne.Module
                 #region  Notificare start
 
                 //Florin 2021.05.18
-                string sqlNtf = sqlPtj.Replace("FROM DUAL", "") + $@", {General.ToDataUniv(an, luna)} AS ""ZiuaInc"", {idStare} AS ""IdStare"", {an} AS ""An"", {luna} AS ""Luna"", {actiune} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+                string sqlNtf = sqlPtj.Replace("FROM DUAL", "") + $@", {f10003} AS F10003, {General.ToDataUniv(an, luna)} AS ""ZiuaInc"", {idStare} AS ""IdStare"", {an} AS ""An"", {luna} AS ""Luna"", {actiune} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
                 //string sqlNtf = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna, actiune);
                 Notif.TrimiteNotificare(pagina, (int)Constante.TipNotificare.Notificare, sqlNtf, "Ptj_Cumulat",
                         Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT ""IdAuto"" FROM ""Ptj_Cumulat"" WHERE F10003 =@1 AND ""An"" =@2 AND ""Luna"" =@3", new object[] { f10003, an, luna }), -99)),

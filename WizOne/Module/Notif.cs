@@ -719,7 +719,8 @@ namespace WizOne.Module
         }
 
         public static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel, int idClient, MemoryStream mem  = null) //Radu 29.06.2020 - am adaugat mem
-        {
+        {        
+
             try
             {
                 string folosesteCred = Dami.ValoareParam("TrimiteMailCuCredentiale");
@@ -838,8 +839,9 @@ namespace WizOne.Module
             }
             catch (Exception ex)
             {
-                General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+                General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);             
             }
+
         }
 
         private static void SalveazaInBaza(string nume, string corp, string tblAtasamente_Tabela, int tblAtasamente_Id, int userId)

@@ -121,6 +121,10 @@ namespace WizOne
                 //Florin 2021.05.31 #909 pct 15
                 HttpContext.Current.Response.AddHeader("X-FRAME-OPTIONS", "DENY");
 
+                //Florin 2021.05.31 #909 pct 20
+                if ((int)Session["IdClient"] == (int)IdClienti.Clienti.Asirom)
+                    HttpContext.Current.Response.AddHeader("Content-Security-Policy", "default-src 'self' vigrohr.wizone.ro");
+
                 //Florin 2021.05.31 #909 pct 18
                 if (Request.IsSecureConnection)
                 {

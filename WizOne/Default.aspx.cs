@@ -40,7 +40,7 @@ namespace WizOne
                     }
                     else
                     {
-                        MessageBox.Show("Lipseste linkul de redirectionare (parametrul SAML_Link)", MessageBox.icoWarning, "Eroare configurare");
+                        MessageBox.Show(Dami.TraduCuvant("Lipseste linkul de redirectionare (parametrul SAML_Link)"), MessageBox.icoWarning, "Eroare configurare");
                     }
                 }
             }
@@ -155,7 +155,7 @@ namespace WizOne
                             }
                             else
                             {
-                                MessageBox.Show("Lipseste certificatul (parametrul SAML_Certificat)", MessageBox.icoWarning, "Eroare configurare");
+                                MessageBox.Show(Dami.TraduCuvant("Lipseste certificatul (parametrul SAML_Certificat)"), MessageBox.icoWarning, Dami.TraduCuvant("Eroare configurare"));
                                 return;
                             }
                         }
@@ -200,7 +200,7 @@ namespace WizOne
                     if (IsReCaptchValid())
                         Verifica(General.Strip(txtPan1.Text), txtPan2.Text, true);
                     else
-                        MessageBox.Show("Va rugam verificati codul captcha", MessageBox.icoWarning, "Captcha");
+                        MessageBox.Show(Dami.TraduCuvant("Va rugam verificati codul captcha"), MessageBox.icoWarning, "Captcha");
                 }
                 else
                     Verifica(General.Strip(txtPan1.Text), txtPan2.Text, true);
@@ -235,7 +235,7 @@ namespace WizOne
                 {
                     if (dr["Mail"].ToString() == "")
                     {
-                        MessageBox.Show("Adresa de mail nu exista", MessageBox.icoWarning);
+                        MessageBox.Show(Dami.TraduCuvant("Adresa de mail nu exista"), MessageBox.icoWarning);
                     }
                     else
                     {
@@ -248,7 +248,7 @@ namespace WizOne
 
                             General.ExecutaNonQuery(sqlUp,new string[] { utilizator });
 
-                            MessageBox.Show("Parola a fost resetata", MessageBox.icoSuccess);
+                            MessageBox.Show(Dami.TraduCuvant("Parola a fost resetata"), MessageBox.icoSuccess);
                         }
                         else
                         {
@@ -258,9 +258,9 @@ namespace WizOne
                             string msg = General.TrimiteMail(dr["Mail"].ToString(), "", "", "Parola uitata in aplicatie!", "Parola dvs. pentru conectarea la WizOne este: " + parola);
 
                             if (msg == "") 
-                                MessageBox.Show("Parola a fost trimisa la adresa dvs de mail", MessageBox.icoSuccess);
+                                MessageBox.Show(Dami.TraduCuvant("Parola a fost trimisa la adresa dvs de mail"), MessageBox.icoSuccess);
                             else
-                                MessageBox.Show(msg, MessageBox.icoInfo);
+                                MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoInfo);
                         }
                     }
 
@@ -528,14 +528,14 @@ namespace WizOne
 
                 if (txtRas != "" && cuMesaj)
                 {
-                    MessageBox.Show(txtRas, MessageBox.icoWarning);
+                    MessageBox.Show(Dami.TraduCuvant(txtRas), MessageBox.icoWarning);
 
                     //Radu 06.01.2020
                     if (schimba)
                     {
                         Session["SecApp"] = "OK";
                         Response.Redirect("Pagini/SchimbaParola", false);
-                        Session["SchimbaParolaMesaj"] = txtRas;
+                        Session["SchimbaParolaMesaj"] = Dami.TraduCuvant(txtRas);
                     }
                 }
             }
@@ -545,7 +545,7 @@ namespace WizOne
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
-            return txtRas;
+            return Dami.TraduCuvant(txtRas);
         }
 
         private string VerificaUser(string utilizator, string parola, bool dinButon)
@@ -856,6 +856,10 @@ namespace WizOne
 
                 //Florin 2020.01.03
                 Session["Eval_tblCategorieObiective"] = null;
+
+                //Florin 2021.06.02  #909
+                Session["tmpMeniu2"] = "";
+                Session["tmpMeniu3"] = "";
 
 
                 string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""

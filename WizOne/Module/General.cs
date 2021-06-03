@@ -5665,6 +5665,9 @@ namespace WizOne.Module
                 HttpContext.Current.Session["TemplateIdCompetenta"] = 1;
                 HttpContext.Current.Session["QuizIntrebari_Id"] = 1;
 
+                //Florin 2021.06.02  #909
+                HttpContext.Current.Session["tmpMeniu2"] = "";
+                HttpContext.Current.Session["tmpMeniu3"] = "";
 
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";

@@ -61,11 +61,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Eroare la conectare. Contactati administratorul aplicatie..
+        /// </summary>
+        internal static string ContulEsteBlocatContactatiAdministratorulDeSistem {
+            get {
+                return ResourceManager.GetString("ContulEsteBlocatContactatiAdministratorulDeSistem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nr. Minute.
         /// </summary>
         internal static string NrOre1 {
             get {
                 return ResourceManager.GetString("NrOre1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eroare la conectare.
+        /// </summary>
+        internal static string UtilizatorInexistentContactatiAdministratorulDeSistem {
+            get {
+                return ResourceManager.GetString("UtilizatorInexistentContactatiAdministratorulDeSistem", resourceCulture);
             }
         }
     }

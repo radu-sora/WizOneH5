@@ -162,8 +162,12 @@ namespace WizOne.Module
             try 
 	        {
                 //if (!Regex.IsMatch(txt,@"^[a-zA-Z'.\s]{0,40}$")) rez = "";
-                rez = txt.Trim(new Char[] { ' ','/','-','(',')','*','&','%','$','#' });
-	        }
+
+                //NU FUNCTIONEAZA ????????????????
+                rez = txt.Trim(new Char[] { ' ','/','-','(',')','*','&','%','$','#','"','=' });
+
+                rez = txt.Replace(" ", "").Replace("/", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("*", "").Replace("&", "").Replace("%", "").Replace("$", "").Replace("#", "").Replace("\"", "").Replace("'", "").Replace("=","");
+            }
 	        catch (Exception ex)
 	        {
                 MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);

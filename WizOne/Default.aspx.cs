@@ -65,8 +65,9 @@ namespace WizOne
 
                 #endregion
 
-                //Florin 2018.09.10
-                txtVers.Text = Constante.versiune;
+                //Florin 2021.06.03 - #909 - pct 25
+                ////Florin 2018.09.10
+                //txtVers.Text = Constante.versiune;
 
                 if (Constante.esteTactil)
                 {

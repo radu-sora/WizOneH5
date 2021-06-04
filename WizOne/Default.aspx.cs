@@ -461,6 +461,10 @@ namespace WizOne
                             string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
                             if (tipVerif == "") tipVerif = "1";
 
+                            //Florin 2021.06.04 #909
+                            int idUnic = Dami.SetIdUnic((int)Session["UserId"]);
+                            Session["UniqueId"] = idUnic;
+
                             //Radu 21.03.2018 - daca tipVerif este 2 sau 4, nu mai trebuie sa verificam validitatea parolei
                             if (Convert.ToInt32(General.Nz(drUsr["ResetareParola"], 0)) == 1 && (tipVerif == "1" || tipVerif == "3"))
                             {
@@ -861,6 +865,9 @@ namespace WizOne
                 //Florin 2021.06.02  #909
                 Session["tmpMeniu2"] = "";
                 Session["tmpMeniu3"] = "";
+
+                //Florin 2021.06.04
+                Session["UniqueId"] = -99;
 
 
                 string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""

@@ -140,6 +140,10 @@ namespace WizOne.Pagini
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow found = dt.Rows.Find(keys);
+
+                //Florin 2021.06.04 #909
+                Dami.SetIdUnic((int)keys[0]);
+
                 found.Delete();
 
                 e.Cancel = true;
@@ -455,7 +459,8 @@ namespace WizOne.Pagini
                 Session["InformatiaCurenta"] = dt;
                 ASPxPopupControl1.ShowOnPageLoad = false;
 
-
+                //Florin 2021.06.04 #909
+                Dami.SetIdUnic((int)General.Nz(dr["F70102"], -99));
             }
             catch (Exception ex)
             {

@@ -17585,7 +17585,9 @@ go
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('Eval_EliminCondForm360' , '0', 'Eliminare conditie formulare 360: 1 - se elimina, iar formularele 360 se afiseaza fara restrictii; 0 (sau absent) - se pastreaza' , 5)
 GO
 
+
 ----  2.2.136  ----
+
 
 ---- Beneficii Start ----
 
@@ -17764,4 +17766,20 @@ GO
 
 INSERT INTO tblParametrii(Nume,Valoare,Explicatie,IdModul)
 VALUES('IntervalTrimitereEmailuri','15','valoare (in secunde) intre mail-urile trimise din pagina TrimitereFluturasi',0)
+GO
+
+
+----  2.2.137  ----
+
+
+ALTER TABLE USERS ADD IdUnic int
+GO
+
+CREATE SEQUENCE [dbo].[IdUnic_SEQ] 
+ AS [bigint]
+ START WITH 1
+ INCREMENT BY 1
+ MINVALUE 1
+ MAXVALUE 9999999999999
+ CACHE 
 GO

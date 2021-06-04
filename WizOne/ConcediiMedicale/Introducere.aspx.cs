@@ -1162,7 +1162,7 @@ namespace WizOne.ConcediiMedicale
                                     
             txtCodIndemn.Text = "";          
 
-            if (dtMARDEF.Rows[0]["CODIND"] != null && Convert.ToInt32(dtMARDEF.Rows[0]["CODIND"].ToString()) > 0)
+            if (dtMARDEF.Rows[0]["CODIND"] != null && dtMARDEF.Rows[0]["CODIND"].ToString().Length > 0 && Convert.ToInt32(dtMARDEF.Rows[0]["CODIND"].ToString()) > 0)
             {
                 txtCodIndemn.Text = dtMARDEF.Rows[0]["CODIND"].ToString().PadLeft(2, '0');
             }

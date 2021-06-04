@@ -423,6 +423,7 @@
     <Content Include="BP\ImportPrime.aspx" />
     <Content Include="CereriDiverse\Cereri.aspx" />
     <Content Include="CereriDiverse\Lista.aspx" />
+    <Content Include="ConcediiMedicale\Aprobare.aspx" />
     <Content Include="ConcediiMedicale\Introducere.aspx" />
     <Content Include="ConcediiMedicale\Istoric.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -1411,6 +1412,13 @@
     </Compile>
     <Compile Include="CereriDiverse\Lista.aspx.designer.cs">
       <DependentUpon>Lista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ConcediiMedicale\Aprobare.aspx.cs">
+      <DependentUpon>Aprobare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ConcediiMedicale\Aprobare.aspx.designer.cs">
+      <DependentUpon>Aprobare.aspx</DependentUpon>
     </Compile>
     <Compile Include="ConcediiMedicale\Introducere.aspx.cs">
       <DependentUpon>Introducere.aspx</DependentUpon>

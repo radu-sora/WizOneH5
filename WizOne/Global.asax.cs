@@ -121,10 +121,10 @@ namespace WizOne
                 //Florin 2021.05.31 #909 pct 15
                 HttpContext.Current.Response.AddHeader("X-FRAME-OPTIONS", "DENY");
 
-                //Florin 2021.05.31 #909 pct 20
-                string idClient = General.Nz(General.ExecutaScalar($@"SELECT Valoare FROM tblParametrii WHERE Nume = 'IdClient'"), "").ToString();
-                if (idClient == IdClienti.Clienti.Asirom.ToString() || idClient == IdClienti.Clienti.Omniasig.ToString() || idClient == IdClienti.Clienti.Claim.ToString())
-                    HttpContext.Current.Response.AddHeader("Content-Security-Policy", "default-src 'self' vigrohr.wizone.ro");
+                ////Florin 2021.05.31 #909 pct 20
+                //string idClient = General.Nz(General.ExecutaScalar($@"SELECT Valoare FROM tblParametrii WHERE Nume = 'IdClient'"), "").ToString();
+                //if (idClient == IdClienti.Clienti.Asirom.ToString() || idClient == IdClienti.Clienti.Omniasig.ToString() || idClient == IdClienti.Clienti.Claim.ToString())
+                //    HttpContext.Current.Response.AddHeader("Content-Security-Policy", "default-src 'self' vigrohr.wizone.ro");
 
                 //Florin 2021.05.31 #909 pct 18
                 if (Request.IsSecureConnection)

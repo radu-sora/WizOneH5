@@ -877,6 +877,7 @@
     <Content Include="Global.asax" />
     <Content Include="Info.aspx" />
     <Content Include="LogOut.aspx" />
+    <Content Include="Organigrama\Diagrama.aspx" />
     <Content Include="Organigrama\Lista.aspx" />
     <Content Include="Organigrama\Posturi.aspx" />
     <Content Include="Organigrama\PosturiValidare.aspx" />
@@ -1762,6 +1763,13 @@
     <Compile Include="Module\Notif.cs" />
     <Compile Include="Module\NotifAsync.cs" />
     <Compile Include="Module\Saml.cs" />
+    <Compile Include="Organigrama\Diagrama.aspx.cs">
+      <DependentUpon>Diagrama.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Organigrama\Diagrama.aspx.designer.cs">
+      <DependentUpon>Diagrama.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Organigrama\Lista.aspx.cs">
       <DependentUpon>Lista.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -17916,3 +17916,19 @@ SELECT @ZileCuveniteAn, isnull(@ZileCuvenite,0), @ZileCuveniteZi, isnull((select
 
  RETURN;
 END
+
+
+----  2.2.137  ----
+
+
+ALTER TABLE USERS ADD IdUnic int
+GO
+
+CREATE SEQUENCE [dbo].[IdUnic_SEQ] 
+ AS [bigint]
+ START WITH 1
+ INCREMENT BY 1
+ MINVALUE 1
+ MAXVALUE 9999999999999
+ CACHE 
+GO

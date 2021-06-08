@@ -4718,7 +4718,7 @@ namespace WizOne.Avs
                                             ", F100931 = (SELECT NrZileConcediere FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + idFunctie + "))" +
                                             " WHERE F10003 = " + f10003.ToString();
                                     if (dtF1001 != null && dtF1001.Rows.Count > 0)
-                                        sql1001 = "UPDATE F1001 SET F100956 = " + data + ", F1001063 = (SELECT NrZileCalProba FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + dtCer.Rows[0]["FunctieId"].ToString() + ")) WHERE F10003 = " + f10003.ToString();
+                                        sql1001 = "UPDATE F1001 SET F100956 = " + data + ", F1001063 = (SELECT NrZileCalProba FROM tblNivelFunctie WHERE Id = (SELECT F71813 FROM F718 WHERE F71802=" + idFunctie + ")) WHERE F10003 = " + f10003.ToString();
                                 }
 
                             }
@@ -5303,6 +5303,12 @@ namespace WizOne.Avs
 
                             //Florin 2021.03.11
                             General.SalveazaPost(f10003, dtCer.Rows[0]["PostId"], Convert.ToDateTime(dtCer.Rows[0]["DataModif"]));
+
+                            //Florin 2021.06.08
+                            if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month)
+                            {
+                                General.AdaugaDiferentePost((int)dtCer.Rows[0]["PostId"], f10003);
+                            }
                         }
                         break;
                     default:

@@ -205,6 +205,9 @@ namespace WizOne.Pagini
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         General.SalveazaPost(dt.Rows[i]["F10003"], dt.Rows[i]["PostId"], Convert.ToDateTime(dt.Rows[i]["DataModif"]));
+
+                        //Florin 2021.06.08
+                        General.AdaugaDiferentePost((int)dt.Rows[i]["PostId"], (int)dt.Rows[i]["F10003"]);
                     }
 
                     //Florin 2021.03.02 #710

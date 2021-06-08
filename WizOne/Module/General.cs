@@ -9411,5 +9411,56 @@ namespace WizOne.Module
                 General.MemoreazaEroarea(ex, "CreeazaAtributePost", new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+        public static void AdaugaDiferentePost(int idPost, int f10003)
+        {
+            try
+            {
+                //actualizam doarul personal al tuturor angajatilor care sunt pe acest post
+                General.ExecutaNonQuery($@"
+                    BEGIN
+                        DELETE FROM Atasamente WHERE IdEmpl = @2 AND Attach IS NULL;
+                        INSERT INTO Atasamente(IdEmpl, IdCategory, VineDinPosturi, DateAttach, USER_NO, TIME)
+                        SELECT A.F10003, C.IdObiect, 1, GetDate(), {HttpContext.Current.Session["UserId"]}, GetDate() 
+                        FROM Org_relPostAngajat A
+                        INNER JOIN Org_PosturiDosar C ON A.IdPost=C.IdPost
+                        LEFT JOIN Atasamente B ON A.F10003 = B.IdEmpl AND B.IdCategory=C.IdObiect
+                        WHERE A.IdPost=@1 AND A.F10003 = @2 AND B.IdCategory IS NULL
+                        GROUP BY A.F10003, C.IdObiect;
+                    END;", new object[] { idPost, f10003 });
+
+                //actualizam echipamentele tuturor angajatilor care sunt pe acest post
+                General.ExecutaNonQuery($@"
+                    BEGIN
+                        DELETE FROM Admin_Echipamente WHERE Marca = @2 AND DataPrimire IS NULL AND Caracteristica IS NULL;
+                        INSERT INTO Admin_Echipamente(Marca, IdObiect, Caracteristica, VineDinPosturi, USER_NO, TIME)
+                        SELECT A.F10003, C.IdObiect, D.Denumire, 1, {HttpContext.Current.Session["UserId"]}, GetDate() 
+                        FROM Org_relPostAngajat A
+                        INNER JOIN Org_PosturiEchipamente C ON A.IdPost=C.IdPost
+                        LEFT JOIN Admin_Echipamente B ON A.F10003 = B.Marca AND B.IdObiect=C.IdObiect
+                        LEFT JOIN ""Admin_Obiecte"" D ON C.""IdObiect"" = D.""Id""
+                        WHERE A.IdPost=@1 AND A.F10003 = @2 AND B.IdObiect IS NULL
+                        GROUP BY A.F10003, C.IdObiect, D.Denumire;
+                    END;", new object[] { idPost, f10003 });
+
+                //actualizam beneficiile tuturor angajatilor care sunt pe acest post
+                General.ExecutaNonQuery($@"
+                    BEGIN
+                        DELETE FROM Admin_Beneficii WHERE Marca = @2 AND DataPrimire IS NULL AND Caracteristica IS NULL;
+                        INSERT INTO Admin_Beneficii(Marca, IdObiect, Caracteristica, VineDinPosturi, USER_NO, TIME)
+                        SELECT A.F10003, C.IdObiect, D.Denumire, 1, {HttpContext.Current.Session["UserId"]}, GetDate() 
+                        FROM Org_relPostAngajat A
+                        INNER JOIN Org_PosturiBeneficii C ON A.IdPost=C.IdPost
+                        LEFT JOIN Admin_Beneficii B ON A.F10003 = B.Marca AND B.IdObiect=C.IdObiect
+                        LEFT JOIN ""Admin_Obiecte"" D ON C.""IdObiect"" = D.""Id""
+                        WHERE A.IdPost=@1 AND A.F10003 = @2 AND B.IdObiect IS NULL
+                        GROUP BY A.F10003, C.IdObiect, D.Denumire;
+                    END;", new object[] { idPost, f10003 });
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "AdaugaDiferentePost", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

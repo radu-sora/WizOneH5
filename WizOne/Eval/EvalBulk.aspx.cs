@@ -19,7 +19,7 @@ namespace WizOne.Eval
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 #region Traducere
 

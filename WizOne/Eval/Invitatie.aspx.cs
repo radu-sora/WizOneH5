@@ -60,7 +60,7 @@ namespace WizOne.Eval
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
                 Session["PaginaWeb"] = "Eval.Invitatie";
 
                 #region Traducere

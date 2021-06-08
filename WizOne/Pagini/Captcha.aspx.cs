@@ -20,7 +20,7 @@ namespace WizOne.Pagini
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Dami.AccesApp();
+            //Dami.AccesApp(this.Page);
 
             HtmlGenericControl div = new HtmlGenericControl("div");
             div.Attributes["class"] = "ssSchimba";

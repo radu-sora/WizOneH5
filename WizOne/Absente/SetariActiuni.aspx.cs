@@ -22,7 +22,7 @@ namespace WizOne.Absente
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 #region Traducere
 

@@ -12,7 +12,7 @@ namespace WizOne.Reports
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Dami.AccesApp();
+            Dami.AccesApp(this.Page);
 
             #region Traducere
             string ctlPost = Request.Params["__EVENTTARGET"];

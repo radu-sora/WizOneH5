@@ -20,7 +20,7 @@ namespace WizOne.Pagini
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
 
                 #region Traducere

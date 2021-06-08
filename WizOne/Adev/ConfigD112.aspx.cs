@@ -28,7 +28,7 @@ namespace WizOne.Adev
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 if (!IsPostBack)
                 {

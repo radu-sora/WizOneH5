@@ -23,7 +23,7 @@ namespace WizOne.WebService
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 
                 

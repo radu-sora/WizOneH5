@@ -33,7 +33,7 @@ namespace WizOne.WebService
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 SodexoOnline.resultContactList listaContacte = new SodexoOnline.resultContactList();
                 if (Session["Sodexo_ListaContacte"] != null)

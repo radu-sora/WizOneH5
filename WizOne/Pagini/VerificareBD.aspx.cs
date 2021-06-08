@@ -26,7 +26,7 @@ namespace WizOne.Pagini
             DataTable dtRef = new DataTable();
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
 
                 #region Traducere

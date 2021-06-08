@@ -32,7 +32,7 @@ namespace WizOne.Curs
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
        
                 //btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");

@@ -445,6 +445,8 @@
     <Content Include="Default.aspx" />
     <Content Include="DefaultTactilExtra.aspx" />
     <Content Include="DefaultTactilFaraCard.aspx" />
+    <Content Include="ErrorPage.aspx" />
+    <Content Include="ErrorPages\Oops.aspx" />
     <Content Include="Eval\ActivitatiObiective.aspx" />
     <Content Include="Eval\Calificative.aspx" />
     <Content Include="Eval\Competente.aspx" />
@@ -945,13 +947,13 @@
     <Content Include="FisiereApp\Studii\init" />
     <Content Include="Fisiere\BDReferintaORA.csv" />
     <Content Include="Fisiere\BDReferintaSQL.csv" />
-    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\jquery-3.1.1.js" />
-    <Content Include="Scripts\jquery-3.1.1.min.js" />
-    <Content Include="Scripts\jquery-3.1.1.slim.js" />
-    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <None Include="Scripts\jquery-3.6.0.intellisense.js" />
+    <Content Include="Scripts\jquery-3.6.0.js" />
+    <Content Include="Scripts\jquery-3.6.0.min.js" />
+    <Content Include="Scripts\jquery-3.6.0.slim.js" />
+    <Content Include="Scripts\jquery-3.6.0.slim.min.js" />
     <Content Include="Scripturi\ScriptOracle.txt" />
     <Content Include="Scripturi\ScriptSql.txt" />
     <Content Include="Tactil\Adeverinte.aspx" />
@@ -1069,8 +1071,8 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.6.0.min.map" />
     <None Include="Web References\SodexoOnline\paper.wsdl" />
     <None Include="Web References\SodexoOnline\paper.xsd">
       <SubType>Designer</SubType>
@@ -1538,6 +1540,20 @@
     </Compile>
     <Compile Include="DefaultTactilFaraCard.aspx.designer.cs">
       <DependentUpon>DefaultTactilFaraCard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorPage.aspx.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ErrorPage.aspx.designer.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorPages\Oops.aspx.cs">
+      <DependentUpon>Oops.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ErrorPages\Oops.aspx.designer.cs">
+      <DependentUpon>Oops.aspx</DependentUpon>
     </Compile>
     <Compile Include="Eval\ActivitatiObiective.aspx.cs">
       <DependentUpon>ActivitatiObiective.aspx</DependentUpon>

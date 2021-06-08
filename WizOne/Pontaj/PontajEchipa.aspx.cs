@@ -169,7 +169,7 @@ namespace WizOne.Pontaj
                 else
                     txtTitlu.Text = General.VarSession("Titlu").ToString();
 
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
                 cmbStare.DataSource = dtStari;

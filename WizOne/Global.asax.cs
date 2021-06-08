@@ -24,6 +24,19 @@ namespace WizOne
             }
         }
 
+        protected void Application_PreSendRequestHeaders()
+        {
+            //Florin 2021.05.31 - pct 14
+            if(Request.IsSecureConnection)
+            {
+                Response.Cookies.Add(
+                    new HttpCookie("key", "value")
+                    {
+                        Secure = true,
+                    });
+            }
+        }
+
         protected void Application_Start(object sender, EventArgs e)
         {
             try
@@ -105,6 +118,24 @@ namespace WizOne
         {
             try
             {
+                //Florin 2021.05.31 #909 pct 15
+                HttpContext.Current.Response.AddHeader("X-FRAME-OPTIONS", "DENY");
+
+                ////Florin 2021.05.31 #909 pct 20
+                //string idClient = General.Nz(General.ExecutaScalar($@"SELECT Valoare FROM tblParametrii WHERE Nume = 'IdClient'"), "").ToString();
+                //if (idClient == IdClienti.Clienti.Asirom.ToString() || idClient == IdClienti.Clienti.Omniasig.ToString() || idClient == IdClienti.Clienti.Claim.ToString())
+                //    HttpContext.Current.Response.AddHeader("Content-Security-Policy", "default-src 'self' vigrohr.wizone.ro");
+
+                //Florin 2021.05.31 #909 pct 18
+                if (Request.IsSecureConnection)
+                {
+                    HttpContext.Current.Response.AddHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+                }
+
+                //Florin 2021.05.31 #909 pct 19
+                HttpContext.Current.Response.AddHeader("X-XSS-Protection", "1; mode=block");
+                //<add name="X-XSS-Protection" value="1; mode=block"></add>
+
                 //Response.Cache.SetCacheability(HttpCacheability.NoCache);
                 //Response.Cache.SetExpires(DateTime.Now);
                 //Response.Cache.SetNoStore();

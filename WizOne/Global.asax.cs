@@ -26,14 +26,21 @@ namespace WizOne
 
         protected void Application_PreSendRequestHeaders()
         {
-            //Florin 2021.05.31 - pct 14
-            if(Request.IsSecureConnection)
+            try
             {
-                Response.Cookies.Add(
-                    new HttpCookie("key", "value")
-                    {
-                        Secure = true,
-                    });
+                //Florin 2021.05.31 - pct 14
+                if (Request.IsSecureConnection)
+                {
+                    Response.Cookies.Add(
+                        new HttpCookie("key", "value")
+                        {
+                            Secure = true,
+                        });
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Global.asax");
             }
         }
 
@@ -89,87 +96,26 @@ namespace WizOne
             }            
         }
 
-        protected void Session_Start(object sender, EventArgs e)
-        {
-            try
-            {
-                //General.InitSessionVariables();                
-                //string ti = "nvarchar";
-                //if (Constante.tipBD == 2) ti = "varchar2";
-
-                //string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
-                //                UNION
-                //                SELECT 'AnLucru', CAST(F01011 AS {0}(10)), '', 1, 0 FROM F010
-                //                UNION
-                //                SELECT 'LunaLucru', CAST(F01012 AS {0}(10)), '', 1, 0 FROM F010";
-                //strSql = string.Format(strSql, ti);
-
-                ////Session["tblParam"] = General.IncarcaDT(strSql, new string[] { Session["UserId"].ToString() });
-                //Session["tblParam"] = General.IncarcaDT(strSql, null);
-                //Session["IdClient"] = Convert.ToInt32(Dami.ValoareParam("IdClient","1"));
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "Global.asax");
-            }
-        }
-
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             try
             {
-                //Florin 2021.05.31 #909 pct 15
-                HttpContext.Current.Response.AddHeader("X-FRAME-OPTIONS", "DENY");
-
-                ////Florin 2021.05.31 #909 pct 20
-                //string idClient = General.Nz(General.ExecutaScalar($@"SELECT Valoare FROM tblParametrii WHERE Nume = 'IdClient'"), "").ToString();
-                //if (idClient == IdClienti.Clienti.Asirom.ToString() || idClient == IdClienti.Clienti.Omniasig.ToString() || idClient == IdClienti.Clienti.Claim.ToString())
-                //    HttpContext.Current.Response.AddHeader("Content-Security-Policy", "default-src 'self' vigrohr.wizone.ro");
-
                 //Florin 2021.05.31 #909 pct 18
                 if (Request.IsSecureConnection)
                 {
                     HttpContext.Current.Response.AddHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
-                }
-
-                //Florin 2021.05.31 #909 pct 19
-                HttpContext.Current.Response.AddHeader("X-XSS-Protection", "1; mode=block");
-                //<add name="X-XSS-Protection" value="1; mode=block"></add>
-
-                //Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                //Response.Cache.SetExpires(DateTime.Now);
-                //Response.Cache.SetNoStore();
-                //Response.Cache.SetMaxAge(new TimeSpan(0, 0, 30));
-
-                //Response.AddHeader("Cache-Control", "max-age=0,no-cache,no-store,must-revalidate");
-                //Response.AddHeader("Pragma", "no-cache");
-                //Response.AddHeader("Expires", "Tue, 01 Jan 1970 00:00:00 GMT");                
+                }            
             }
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, "Global.asax");
             }
-        }
-
-        protected void Application_AuthenticateRequest(object sender, EventArgs e)
-        {
-
         }
 
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception ex = Server.GetLastError();
             if (ex is HttpUnhandledException) General.MemoreazaEroarea(ex, "AppError");          
-        }
-
-        protected void Session_End(object sender, EventArgs e)
-        {
-            //Session.RemoveAll();
-            //Session.Abandon();
-        }
-
-        protected void Application_End(object sender, EventArgs e)
-        {
         }
 
         protected void Application_PreRequestHandlerExecute(object sender, EventArgs e)

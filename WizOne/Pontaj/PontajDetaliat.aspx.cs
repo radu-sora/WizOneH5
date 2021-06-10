@@ -2238,6 +2238,8 @@ namespace WizOne.Pontaj
                                 break;
                             case 7:                             //Numeric
                                 {
+                                    //Florin 2021.06.10
+                                    //de la upgrade-ul controalelor de Devexpress trebuie specificat in clar tipul de coloana (GridViewDataSpinEditColumn), altfel la tipul 7 da eroare
                                     GridViewDataSpinEditColumn colNumerica = new GridViewDataSpinEditColumn();
                                     colNumerica.PropertiesSpinEdit.DecimalPlaces = 0;
                                     colNumerica.PropertiesSpinEdit.NumberType = SpinEditNumberType.Integer;
@@ -2256,9 +2258,16 @@ namespace WizOne.Pontaj
                                     colNumerica.VisibleIndex = i + 4;
                                     colNumerica.ToolTip = tt;
 
+                                    if (colNumerica.FieldName.Length >= 6 && colNumerica.FieldName.ToLower().Substring(0, 6) == "valtmp")
+                                        colNumerica.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+                                    if (grDate.Columns["Stare"] != null)
+                                        grDate.Columns["Stare"].Columns.Add(colNumerica);
+                                    else
+                                        grDate.Columns.Add(colNumerica);
+
                                     continue;
                                 }
-                                break;
                             case 8:                             //Time
                             case 9:                             //Time - fara spin buttons
                                 {

@@ -24,13 +24,13 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
 
         /// <summary>
-        /// btnPrint control.
+        /// btnRapCM control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnPrint;
+        protected global::DevExpress.Web.ASPxButton btnRapCM;
 
         /// <summary>
         /// btnAproba control.
@@ -114,15 +114,6 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnEdit;
 
         /// <summary>
-        /// btnDelete control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnDelete;
-
-        /// <summary>
         /// btnIstoric control.
         /// </summary>
         /// <remarks>
@@ -130,5 +121,14 @@ namespace WizOne.ConcediiMedicale
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnIstoric;
+
+        /// <summary>
+        /// popRap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxPopupControl popRap;
     }
 }

@@ -1,10 +1,12 @@
 ﻿using DevExpress.Utils;
 using DevExpress.Web;
 using DevExpress.Web.Internal;
+using ProceseSec;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -31,17 +33,17 @@ namespace WizOne.ConcediiMedicale
             {
                 Dami.AccesApp();
 
+                txtTitlu.Text = Dami.TraduCuvant("Aprobare concediu medical");
+
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
                 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                btnPrint.Text = Dami.TraduCuvant("btnPrint", "Print CM");
                 btnAproba.Text = Dami.TraduCuvant("btnAproba", "Aproba");
                 btnTransfera.Text = Dami.TraduCuvant("btnTransfera", "Transfera");
                 btnAdauga.Text = Dami.TraduCuvant("btnAdauga", "Adauga CM");
 
-                btnDelete.Image.ToolTip = Dami.TraduCuvant("btnDelete", "Sterge");
                 btnIstoric.Image.ToolTip = Dami.TraduCuvant("btnIstoric", "Istoric");               
                 
                 foreach (GridViewColumn c in grDate.Columns)
@@ -58,28 +60,42 @@ namespace WizOne.ConcediiMedicale
                 }
 
                 #endregion
+                CriptDecript prc = new CriptDecript();
+                //string param = General.Nz(Request["tip"], prc.EncryptString(Constante.cheieCriptare, "Introducere", 1)).ToString();
+                //param = prc.EncryptString(Constante.cheieCriptare, param, 2);
+                //int tip = param == "Aprobare" ? 2 : 1;
+                int tip = Convert.ToInt32(General.Nz(Request["tip"], "1").ToString());
 
-                int tip = Convert.ToInt32(General.Nz(Request["tip"], 1));
                 if (tip == 1)
                 {
-                    btnPrint.ClientVisible = false;
+                    txtTitlu.Text = Dami.TraduCuvant("Introducere concediu medical");             
                     btnAproba.ClientVisible = false;
-                    btnTransfera.ClientVisible = false;
+                    btnTransfera.ClientVisible = false; 
+                    btnRapCM.ClientVisible = false;
                 }
+                else
+                    btnAdauga.ClientVisible = false;
 
-                txtTitlu.Text = General.VarSession("Titlu").ToString();    
+                //txtTitlu.Text = General.VarSession("Titlu").ToString();    
 
                 DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""CM_tblStari"" ", null);
                 GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 colStari.PropertiesComboBox.DataSource = dtStari;  
  
-
                 DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
                 cmbAngFiltru.DataSource = dtAng;
                 cmbAngFiltru.DataBind();
 
+                GridViewDataComboBoxColumn colAng = (grDate.Columns["F10003"] as GridViewDataComboBoxColumn);
+                colAng.PropertiesComboBox.DataSource = dtAng;
+
                 if (!IsPostBack)
+                {
                     Session["CM_Grid"] = null;
+                    Session["CM_Aprobare"] = null;
+                    Session["CM_Id"] = null;
+                    Session["CM_Stare"] = null;
+                }
 
                 IncarcaGrid();
 
@@ -127,7 +143,62 @@ namespace WizOne.ConcediiMedicale
         {
             try
             {
-          
+                int nrSel = 0;
+                string ids = "" ;
+                string msg = "";
+
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare" });
+                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                {
+                    MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "");         
+                    return;
+                }
+
+                for (int i = 0; i < lst.Count(); i++)
+                {
+                    object[] arr = lst[i] as object[];
+                    DateTime? data = arr[4] as DateTime?;
+
+                    if (Convert.ToInt32(General.Nz(arr[1], 0)) == 0 || Convert.ToInt32(General.Nz(arr[2], 0)) == 0 || Convert.ToInt32(General.Nz(arr[3], 0)) == 0 || Convert.ToInt32(General.Nz(arr[4], 0)) == 0)
+                    {
+                        msg += "CM pt marca " + arr[5] + " - " + Dami.TraduCuvant("Date lipsa") + System.Environment.NewLine;
+                        continue;
+                    }
+
+                    if (Convert.ToInt32(General.Nz(arr[6], 0)) > 1)
+                    {
+                        msg += "CM pt marca " + arr[5] + " - " + Dami.TraduCuvant("deja aprobat") + System.Environment.NewLine;
+                        continue;
+                    }
+
+                    ids += "," + arr[0];
+                    nrSel++;
+                }
+
+                if (nrSel == 0)
+                {
+                    if (msg.Length <= 0)                    
+                        MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "");  
+                    else
+                        MessageBox.Show(msg, MessageBox.icoWarning, "");
+                    return;
+                }
+                string[] lstIds = ids.Substring(1).Split(',');
+                for (int i = 0; i < lstIds.Length; i++)
+                {
+                    string sql = "UPDATE CM_CereriIstoric SET Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = 3), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + lstIds[i] + " AND Pozitie = 2";
+                    General.ExecutaNonQuery(sql, null);
+
+                    sql = "UPDATE CM_Cereri SET IdStare = 3 WHERE Id = " + lstIds[i];
+                    General.ExecutaNonQuery(sql, null);
+
+                }
+
+                Session["CM_Grid"] = null;
+                IncarcaGrid();
+
+                MessageBox.Show(msg + (msg.Length > 0 ? System.Environment.NewLine : "") + (nrSel == 1 ? "S-a aprobat un concediu medical!" : "S-au aprobat " + nrSel + " concedii medicale!"), MessageBox.icoInfo, "");
+
             }
             catch (Exception ex)
             {
@@ -163,23 +234,87 @@ namespace WizOne.ConcediiMedicale
             }
         }
 
-        protected void btnPrint_Click(object sender, EventArgs e)
-        {
-            try
-            {
-           
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+
 
         protected void btnTransfera_Click(object sender, EventArgs e)
         {
             try
             {
+                int nrSel = 0;
+                string ids = "";
+                string msg = "";
+
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare" });
+                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                {
+                    MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "");
+                    return;
+                }
+                for (int i = 0; i < lst.Count(); i++)
+                {
+                    object[] arr = lst[i] as object[];
+                    DateTime? data = arr[4] as DateTime?;
+
+                    if (Convert.ToInt32(General.Nz(arr[6], 0)) < 3)
+                    {
+                        msg += "CM pt marca " + arr[5] + " - " + Dami.TraduCuvant("nu este aprobat") + System.Environment.NewLine;
+                        continue;
+                    }
+
+                    if (Convert.ToInt32(General.Nz(arr[6], 0)) == 4)
+                    {
+                        msg += "CM pt marca " + arr[5] + " - " + Dami.TraduCuvant("deja transferat") + System.Environment.NewLine;
+                        continue;
+                    }
+
+                    ids += "," + arr[0];
+                    nrSel++;
+                }
+
+                if (nrSel == 0)
+                {
+                    if (msg.Length <= 0)
+                        MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "");
+                    else
+                        MessageBox.Show(msg, MessageBox.icoWarning, "");
+                    return;
+                }
+                string[] lstIds = ids.Substring(1).Split(',');
+                for (int i = 0; i < lstIds.Length; i++)
+                {
+                    DataTable dt = General.IncarcaDT("SELECT * FROM CM_Cereri WHERE Id = " + lstIds[i], null);
+
+                    string sql = "INSERT INTO F300 (F30001, F30002, F30003, F30004, F30005, F30006, F30007, F30010, F30011, F30015, F30035, F30036, F30037, F30038, F30050,  USER_NO, TIME,"
+                             + " F30012, F30014,  F30021, F30022, F30023, F30039, F30040, F30041, F30044, F30045, F30046, F30051, F30053, F300612, F300613, F300614, F30054, F30042, F300620, F300601, F300602, F300607, F300609, F300610, F300619, F300603, F300606, F300608, F300611, F300615, F300616, F300617, F300618, F30013)"
+                             + " SELECT 300, F10002, F10003, F10004, F10005, F10006, F10007, {0},  1, {1}, {2}, {2}, "
+                             + " {3}, {4}, CASE WHEN F10053 IS NULL OR F10053=0 THEN F00615 ELSE F10053 END, "
+                             + " {5}, {6}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {8}, {9}, {10}, 0, 'Transfer', {11}, '{12}', '{13}', {14}, {15}, {16}, {17}, {2}, '{18}', '{19}', {20}, '{21}', '{22}', '{23}', {24}, {25}"
+                             + " FROM F100, F006 WHERE F10003 = {7} AND F10007=F00607";
+                    sql = string.Format(sql, dt.Rows[0]["Cod"].ToString(), dt.Rows[0]["Suma"].ToString().ToString(new CultureInfo("en-US")).Replace(',', '.'),
+                        "CONVERT(DATETIME, '" + Convert.ToDateTime(dt.Rows[0]["DataCM"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dt.Rows[0]["DataCM"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dt.Rows[0]["DataCM"].ToString()).Year + "', 103)",
+                        "CONVERT(DATETIME, '" + Convert.ToDateTime(dt.Rows[0]["DataInceput"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dt.Rows[0]["DataInceput"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dt.Rows[0]["DataInceput"].ToString()).Year + "', 103)",
+                        "CONVERT(DATETIME, '" + Convert.ToDateTime(dt.Rows[0]["DataSfarsit"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dt.Rows[0]["DataSfarsit"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dt.Rows[0]["DataSfarsit"].ToString()).Year + "', 103)",
+                        
+                        Session["UserId"].ToString(),
+                         (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), dt.Rows[0]["F10003"].ToString(),
+                         dt.Rows[0]["BazaCalculCM"].ToString().ToString(new CultureInfo("en-US")), dt.Rows[0]["ZileBazaCalculCM"].ToString(), dt.Rows[0]["MedieZilnicaCM"].ToString().ToString(new CultureInfo("en-US")), dt.Rows[0]["MedieZileBazaCalcul"].ToString().ToString(new CultureInfo("en-US")),
+                          dt.Rows[0]["SerieCM"].ToString(), dt.Rows[0]["NumarCM"].ToString(), dt.Rows[0]["CodIndemnizatie"].ToString(), dt.Rows[0]["CodUrgenta"].ToString(), dt.Rows[0]["CodInfectoContag"].ToString(), dt.Rows[0]["CodDiagnostic"].ToString(),
+                          dt.Rows[0]["SerieCMInitial"].ToString(), dt.Rows[0]["NumarCMInitial"].ToString(), dt.Rows[0]["Prescris"].ToString(), dt.Rows[0]["NrAvizMedicExpert"].ToString(), dt.Rows[0]["MedicCurant"].ToString(), dt.Rows[0]["CNPCopil"].ToString(),
+                          "CONVERT(DATETIME, '" + Convert.ToDateTime(dt.Rows[0]["DataAvizDSP"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dt.Rows[0]["DataAvizDSP"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dt.Rows[0]["DataAvizDSP"].ToString()).Year + "', 103)",
+                           dt.Rows[0]["NrZile"].ToString());
+                    General.ExecutaNonQuery(sql, null);
+
+                    sql = "UPDATE CM_Cereri SET IdStare = 4 WHERE Id = " + lstIds[i];
+                    General.ExecutaNonQuery(sql, null);
+
+                }
+
+                Session["CM_Grid"] = null;
+                IncarcaGrid();
+
+                MessageBox.Show(msg + (msg.Length > 0 ? System.Environment.NewLine : "") + (nrSel == 1 ? "S-a transferat un concediu medical!" : "S-au transferat " + nrSel + " concedii medicale!"), MessageBox.icoInfo, "");
+
+
 
             }
             catch (Exception ex)
@@ -226,23 +361,20 @@ namespace WizOne.ConcediiMedicale
                 string str = e.Parameters;
                 if (str != "")
                 {
-                    string[] arr = e.Parameters.Split(';');
-                    if (arr.Length != 2 || arr[0] == "" || arr[1] == "")
-                    {
-                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Insuficienti parametrii");
-                        return;
-                    }
+                    string[] arr = e.Parameters.Replace(',', ';').Split(';');        
 
                     switch (arr[0])
-                    {
-                        case "btnDelete":
-                            {
-                                MetodeCereri(3,1);
-                                IncarcaGrid();
-                            }
-                            break;
+                    {      
                         case "btnEdit":
                             Session["CM_Id"] = arr[1];
+                            Session["CM_Stare"] = arr[2];
+                            CriptDecript prc = new CriptDecript();
+                            //string param = General.Nz(Request["tip"], prc.EncryptString(Constante.cheieCriptare, "Introducere", 1)).ToString();
+                            //param = prc.EncryptString(Constante.cheieCriptare, param, 2);
+                            //int tip = param == "Aprobare" ? 2 : 1;
+                            int tip = Convert.ToInt32(General.Nz(Request["tip"], "1").ToString());
+                            if (tip == 2)
+                                Session["CM_Aprobare"] = 1;
                             string url = "~/ConcediiMedicale/Introducere.aspx";
                             if (Page.IsCallback)
                                 ASPxWebControl.RedirectOnCallback(url);
@@ -413,358 +545,7 @@ namespace WizOne.ConcediiMedicale
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
-        }
-
-         
-
-
-        private void MetodeCereri(int tipActiune, int tipMsg = 0)
-        {
-            //actiune  1  - aprobare
-            //actiune  2  - respingere
-            //actiune  3  - anulare 
-
-            try
-            {
-                int nrSel = 0;
-                string ids = "", idsAtr = "", lstDataModif = "", lstMarci = "";
-                string comentarii = "";
-                string msg = "";
-
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "IdAtribut", "NumeAngajat", "DataModif", "F10003", "Revisal", "Actualizat", "PoateModifica", "ValoareNoua", "Semnat" });
-                if (lst == null || lst.Count() == 0 || lst[0] == null)
-                {
-                    if (tipMsg == 0)
-                        MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "");
-                    else
-                        grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
-                    return;
-                }
-
-                for (int i = 0; i < lst.Count(); i++)
-                {
-                    object[] arr = lst[i] as object[];
-                    DateTime? data = arr[4] as DateTime?;
-                    switch (Convert.ToInt32(General.Nz(arr[1], 0)))
-                    {
-                        case -1:
-                            msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("este anulata") + System.Environment.NewLine;
-                            continue;
-                        case 0:
-                            msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("este respinsa") + System.Environment.NewLine;
-                            continue;
-                        case 3:                            
-                            msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("este deja aprobata") + System.Environment.NewLine;
-                            continue; 
-                        case 4:
-                            msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Nu puteti aproba o cerere planificata. Trebuie trecuta in starea solicitat.") + System.Environment.NewLine;
-                            continue;
-                    }
-
-                    //Florin 2019.03.26
-                    //Nu se poate anula o cerere daca este trimisa in revisal
-                    if (tipActiune == 3 && Convert.ToInt32(General.Nz(arr[6],0)) == 1)
-                    {
-                        msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Cererea este trimisa in Revisal") + System.Environment.NewLine;
-                        continue;
-                    }
-
-                    //Florin 2020.08.04
-                    //Nu se poate respinge sau anula o cerere pt program de lucru daca este trimisa in status semnat
-                    if ((tipActiune == 2 || tipActiune == 3) && (Convert.ToInt32(General.Nz(arr[2], 0)) == 34 || Convert.ToInt32(General.Nz(arr[2], 0)) == 35) && Convert.ToInt32(General.Nz(arr[10], 0)) == 1)
-                    {
-                        msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Cererea este trimisa la semnat") + System.Environment.NewLine;
-                        continue;
-                    }
-
-                    //Florin 2019.05.23
-                    //Nu se poate respinge sau anula o cerere daca este actualizata in F100
-                    if ((tipActiune == 2 || tipActiune == 3) && Convert.ToInt32(General.Nz(arr[7], 0)) == 1)
-                    {
-                        msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Datele au fost trimise in personal") + System.Environment.NewLine;
-                        continue;
-                    }
-
-                    //Florin 2019.05.28
-                    //daca este aprobare sau respingere si nu are dreptul de a modifica, il blocam; aici, implicit, se respecta ordinea
-                    //algoritmul de modificare se calculeaza in selectul cu care se populeaza grodul
-                    //daca este HR are voie, daca 'Fara Rol' si userul logat este la pozitie care trebuie sa aprobe poate modifica, daca rolul selectat di combo box si userul logat este acelasi cu idSuper si user-ul de la pozitia care trebuie sa aprobe poate modifica
-                    if ((tipActiune == 1 || tipActiune == 2) && Convert.ToInt32(General.Nz(arr[8], 0)) == 0)
-                    {
-                        msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Nu este randul dvs.") + System.Environment.NewLine;
-                        continue;
-                    }
-
-                    //Florin 2020.05.13
-                    if (tipActiune == 3 && (Convert.ToInt32(General.Nz(arr[2],0)) == Convert.ToInt32(Constante.Atribute.Suspendare) || Convert.ToInt32(General.Nz(arr[2], 0)) == Convert.ToInt32(Constante.Atribute.RevenireSuspendare)))
-                    {
-                        int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar(
-                            @"SELECT COUNT(*)
-                            FROM ""Avs_Cereri"" B
-                            INNER JOIN F111 A ON A.F11103 = B.F10003 AND A.F11104 = B.""IdAtribut"" AND CAST(A.F11105 AS DATE) = CAST(B.""DataInceputSusp"" AS DATE)
-                            AND CAST(A.F11106 AS DATE) = CAST(B.""DataSfEstimSusp"" AS DATE) AND CAST(A.F11107 AS DATE) = CAST(B.""DataIncetareSusp"" AS DATE)
-                            WHERE B.""Id""=706", new object[] { arr[0] }),0));
-                        if (cnt == 1)
-                        {
-                            msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Datele au fost actualizate in personal") + System.Environment.NewLine;
-                            continue;
-                        }
-                    }
-
-           
-
-                    
-
-                    nrSel++;
-
-                }
-
-
-                //Florin 2019.03.04
-
-                //grDate.JSProperties["cpAlertMessage"] = msg;
-                //grDate.DataBind();
-
-                if (nrSel == 0)
-                {
-                    if (msg.Length <= 0)
-                    {
-                        if (tipMsg == 0)
-                            MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "");
-                        else
-                            grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
-
-                    }
-                    else
-                    {
-                        if (tipMsg == 0)
-                            MessageBox.Show(msg, MessageBox.icoWarning, "");
-                        else
-                            grDate.JSProperties["cpAlertMessage"] = msg;
-                    }
-                    return;
-                }
-
-                msg = msg + AprobaCerere(Convert.ToInt32(Session["UserId"].ToString()), ids, idsAtr, lstDataModif, lstMarci, nrSel, tipActiune, General.ListaCuloareValoare()[5], false, comentarii, Convert.ToInt32(Session["User_Marca"].ToString()));
-                //grDate.JSProperties["cpAlertMessage"] = msg;
-                //Session["Avs_Grid"] = null;
-                if (tipMsg == 0)
-                    MessageBox.Show(msg, MessageBox.icoWarning, "");
-                else
-                    grDate.JSProperties["cpAlertMessage"] = msg;
-
-                IncarcaGrid();
-
-                grDate.Selection.UnselectAll();
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-
-        public string AprobaCerere(int idUser, string ids, string idsAtr, string lstDataModif, string lstMarci, int total, int actiune, string culoareValoare, bool HR, string comentarii, int f10003)
-        {
-            //actiune  1  - aprobare
-            //actiune  2  - respingere
-            //actiune  3  - anulare 
-
-
-            string msg = "";
-            string msgValid = "";
-
-            try
-            {
-                if (ids == "") return "Nu exista cereri pentru aceasta actiune !";
-
-                string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
-                //if (("," + idHR + ",").IndexOf("," + General.Nz(cmbRol.Value, -99).ToString() + ",") >= 0)
-                //    HR = true;
-
-                int nr = 0;
-                string[] arr = ids.Split(new string[] { ";" }, StringSplitOptions.None);
-                string[] arrAtr = idsAtr.Split(new string[] { ";" }, StringSplitOptions.None);
-                string[] arrDataModif = lstDataModif.Split(new string[] { ";" }, StringSplitOptions.None);
-                string[] arrMarci = lstMarci.Split(new string[] { ";" }, StringSplitOptions.None);
-
-                for (int i = 0; i <= arr.Length - 1; i++)
-                {
-                    if (arr[i] != "")
-                    {
-                        int id = -99;
-
-                        try
-                        {
-                            id = Convert.ToInt32(arr[i]);
-                        }
-                        catch (Exception)
-                        {
-                        }
-
-                        if (id != -99)
-                        {
-                            string sql = "SELECT * FROM \"Avs_Cereri\" WHERE \"Id\" = " + id.ToString();
-                            DataTable dtCer = General.IncarcaDT(sql, null);
-                            sql = "SELECT * FROM \"Avs_CereriIstoric\" WHERE \"Id\" = " + id.ToString() + (!HR ? " AND \"IdUser\" = " + idUser.ToString() : "") 
-                                + (actiune == 1 || actiune == 2 ? " AND \"Aprobat\" IS NULL" : " AND (\"Aprobat\" IS NULL  OR (\"Aprobat\" = 1 AND \"Pozitie\" = " + dtCer.Rows[0]["TotalCircuit"].ToString() + "))");
-                            DataTable dtCerIst = General.IncarcaDT(sql, null);
-
-                            if (dtCerIst == null || dtCerIst.Rows.Count == 0) continue;
-
-
-                            sql = "SELECT * FROM \"Avs_Circuit\" WHERE \"IdAtribut\" = " + arrAtr[i];
-                            DataTable dtCir = General.IncarcaDT(sql, null);
-
-
-                            //Florin 2019.03.25
-                            //Nu exista campul RespectaOrdinea
-
-                            //if (dtCir != null && dtCir.Rows.Count > 0)
-                            //{
-                            //    if (!HR && dtCir.Rows[0]["RespectaOrdinea"] != null && Convert.ToInt32(dtCir.Rows[0]["RespectaOrdinea"].ToString()) == 1)
-                            //        if (Convert.ToInt32(General.Nz(dtCerIst.Rows[0]["Pozitie"], 0)) != (Convert.ToInt32(General.Nz(dtCer.Rows[0]["Pozitie"], 0)) + 1))
-                            //            continue;
-                            //}
-                            //else
-                            //    continue;
-
-                            int idStare = 2;
-
-                            //Florin 2019.05.28
-                            //if (HR)
-                            //    idStare = 3;
-                            //else
-                            //    if (idStare == 2 && dtCer.Rows[0]["TotalCircuit"].ToString() == dtCerIst.Rows[0]["Pozitie"].ToString()) idStare = 3;
-
-                            if (idStare == 2 && dtCer.Rows[0]["TotalCircuit"].ToString() == dtCerIst.Rows[0]["Pozitie"].ToString()) idStare = 3;
-
-
-                            if (actiune == 2)
-                                idStare = 0;
-
-                            if (actiune == 3)
-                            {
-                                idStare = -1;
-                                sql = "DELETE FROM F704 WHERE F70403 = " + arrMarci[i] + " AND F70404 = " + arrAtr[i] + " AND F70406 = "
-                                          + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + arrDataModif[i] + "', 103) " : "TO_DATE('" + arrDataModif[i] + "', 'dd/mm/yyyy')"); 
-                                General.ExecutaNonQuery(sql, null);
-                            }
-
-                            string culoare = "";
-                            sql = "SELECT * FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idStare.ToString();
-                            DataTable dtCul = General.IncarcaDT(sql, null);
-                            if (dtCul != null && dtCul.Rows.Count > 0 && dtCul.Rows[0]["Culoare"] != null && dtCul.Rows[0]["Culoare"].ToString().Length > 0)
-                                culoare = dtCul.Rows[0]["Culoare"].ToString();
-                            else
-                                culoare = "#FFFFFFFF";
-
-                            sql = "UPDATE \"Avs_Cereri\" SET \"Pozitie\" = " + dtCerIst.Rows[0]["Pozitie"].ToString() + ", \"IdStare\" = " + idStare.ToString() + ", \"Culoare\" = '" + culoare 
-                                + "' WHERE \"Id\" = " + id.ToString();
-                            General.IncarcaDT(sql, null);
-
-                            if (actiune == 1 || actiune == 2)
-                            {
-                                //Florin 2019.05.28
-                                //sql = "UPDATE \"Avs_CereriIstoric\" SET \"DataAprobare\" = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", \"Aprobat\" = 1, \"IdStare\" = " + idStare.ToString() + ", \"Culoare\" = '" + culoare
-                                //    + "', USER_NO = " + idUser.ToString() + ", TIME = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate")
-                                //    + (dtCerIst.Rows[0]["IdUser"].ToString() != idUser.ToString() ? ", \"IdUserInlocuitor\" = " + idUser.ToString() : "")
-                                //    + " WHERE \"Id\" = " + id.ToString() + " AND \"IdUSer\"=" + Session["UserId"];
-                                sql = "UPDATE \"Avs_CereriIstoric\" SET \"DataAprobare\" = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", \"Aprobat\" = 1, \"IdStare\" = " + idStare.ToString() + ", \"Culoare\" = '" + culoare
-                                + "', USER_NO = " + idUser.ToString() + ", TIME = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate")
-                                + (dtCerIst.Rows[0]["IdUser"].ToString() != idUser.ToString() ? ", \"IdUserInlocuitor\" = " + idUser.ToString() : "")
-                                + " WHERE \"Id\" = " + id.ToString() + " AND \"Pozitie\"=" + dtCerIst.Rows[0]["Pozitie"].ToString();
-                            }
-                            else
-                            {
-                                //Florin 2019.06.03
-                                //daca anuleaza, introducem o linie noua cu anulat
-                                //sql = $@"INSERT INTO ""Avs_CereriIstoric"" (""Id"", ""IdCircuit"", ""IdUser"", ""IdStare"", ""Pozitie"", ""Culoare"", ""Aprobat"", ""DataAprobare"", ""Inlocuitor"", ""IdSuper"")
-                                //        VALUES ({id}, {dtCerIst.Rows[0]["IdCircuit"]}, {Session["UserId"]}, -1, 22, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = -1), 1, {General.CurrentDate()}, null, {-1 * Convert.ToInt32(General.Nz(cmbRol.Value,0))})";
-                            }
-                            General.IncarcaDT(sql, null);
-
-
-                            #region Validare start
-
-                            //string corpMesaj = "";
-                            //bool stop;
-
-                            //srvNotif ctxNtf = new srvNotif();
-                            //ctxNtf.ValidareRegula("Avs.Aprobare", "grDate", entCer, idUser, f10003, out corpMesaj, out stop);
-
-                            //if (corpMesaj != "")
-                            //{
-                            //    msgValid += corpMesaj + "\r\n";
-                            //    if (stop)
-                            //    {
-                            //        continue;
-                            //    }
-                            //}
-
-                            #endregion
-
-                            //ctx.SaveChanges();
-
-
-
-                            if (actiune == 3)
-                            {
-                                try
-                                {
-                                    General.ExecutaNonQuery(
-                                        $@"BEGIN
-                                        DELETE FROM ""Admin_NrActAd"" WHERE ""IdAuto""=(SELECT ""IdActAd"" FROM ""Avs_Cereri"" WHERE ""ID""=@1);
-                                        UPDATE ""Avs_Cereri"" SET ""IdActAd"" = null WHERE ""Id""=@1;
-                                        END", new object[] { id });
-
-
-                                    //UPDATE ""Admin_NrActAd"" SET ""DocNr""=null, ""DocData""=null, ""Tiparit""=0, ""Semnat""=0, ""Revisal""=0 WHERE ""IdAuto""=(SELECT ""IdActAd"" FROM ""Avs_Cereri"" WHERE ""ID""=@1);
-                                }
-                                catch (Exception){}
-                            }
-
-                            #region  Notificare start
-
-                            //ctxNtf.TrimiteNotificare("Avs.Aprobare", "grDate", entCer, idUser, f10003);
-
-                            #endregion
-
-                            nr++;
-                            
-                        }
-                    }
-                }
-
-                if (nr > 0)
-                {
-                    if (actiune == 1)
-                        msg = "S-au aprobat " + nr.ToString() + " cereri din " + total + " !";
-                    else
-                        msg = "S-au respins " + nr.ToString() + " cereri din " + total + " !";
-
-                    if (msgValid != "") msg = msg + "/n/r" + msgValid;
-                }
-                else
-                {
-                    if (msgValid != "")
-                        msg = msgValid;
-                    else
-                        msg = "Nu exista cereri pentru aceasta actiune !";
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return msg;
-
-        }
-
+        }         
 
         private string SelectAngajati()
         {
@@ -824,12 +605,20 @@ namespace WizOne.ConcediiMedicale
                 string filtru = "";
 
 
-                if (Convert.ToInt32(cmbAngFiltru.Value ?? -99) != -99) filtru += " AND a.F10003 = " + Convert.ToInt32(cmbAngFiltru.Value ?? -99);
+                //if (Convert.ToInt32(cmbAngFiltru.Value ?? -99) != -99) filtru += " AND a.F10003 = " + Convert.ToInt32(cmbAngFiltru.Value ?? -99);
 
                 //daca este rol de hr aratam toate cererile
-                string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
+                //string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
 
-                strSql = "SELECT * FROM CM_Cereri";
+                CriptDecript prc = new CriptDecript();
+                //string param = General.Nz(Request["tip"], prc.EncryptString(Constante.cheieCriptare, "Introducere", 1)).ToString();
+                //param = prc.EncryptString(Constante.cheieCriptare, param, 2);
+                //int tip = param == "Aprobare" ? 2 : 1;
+                int tip = Convert.ToInt32(General.Nz(Request["tip"], "1").ToString());
+                if (tip == 2)
+                    strSql = "SELECT * FROM CM_Cereri";
+                else
+                    strSql = "SELECT * FROM CM_Cereri WHERE F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ")";
 
                 q = General.IncarcaDT(strSql, null);
             }

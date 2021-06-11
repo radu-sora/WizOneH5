@@ -15,6 +15,15 @@ namespace WizOne.ConcediiMedicale
     {
 
         /// <summary>
+        /// txtTitlu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel txtTitlu;
+
+        /// <summary>
         /// btnDocUpload control.
         /// </summary>
         /// <remarks>
@@ -33,13 +42,13 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.ASPxButton btnSave;
 
         /// <summary>
-        /// btnExit control.
+        /// btnBack control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnExit;
+        protected global::DevExpress.Web.ASPxButton btnBack;
 
         /// <summary>
         /// pnlCtl control.
@@ -49,6 +58,15 @@ namespace WizOne.ConcediiMedicale
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
+
+        /// <summary>
+        /// pnlDateGen control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxRoundPanel pnlDateGen;
 
         /// <summary>
         /// lblAng control.
@@ -249,150 +267,6 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.ASPxTextBox txtNrZile;
 
         /// <summary>
-        /// lblCalcul control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblCalcul;
-
-        /// <summary>
-        /// lblCT1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblCT1;
-
-        /// <summary>
-        /// cmbCT1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbCT1;
-
-        /// <summary>
-        /// txtCT1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtCT1;
-
-        /// <summary>
-        /// lblCT2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblCT2;
-
-        /// <summary>
-        /// cmbCT2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbCT2;
-
-        /// <summary>
-        /// txtCT2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtCT2;
-
-        /// <summary>
-        /// lblCT3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblCT3;
-
-        /// <summary>
-        /// cmbCT3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbCT3;
-
-        /// <summary>
-        /// txtCT3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtCT3;
-
-        /// <summary>
-        /// lblCT4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblCT4;
-
-        /// <summary>
-        /// cmbCT4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbCT4;
-
-        /// <summary>
-        /// txtCT4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtCT4;
-
-        /// <summary>
-        /// lblCT5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblCT5;
-
-        /// <summary>
-        /// cmbCT5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbCT5;
-
-        /// <summary>
-        /// txtCT5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtCT5;
-
-        /// <summary>
         /// lblCodDiag control.
         /// </summary>
         /// <remarks>
@@ -447,6 +321,195 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.ASPxTextBox txtCodInfCont;
 
         /// <summary>
+        /// chkUrgenta control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkUrgenta;
+
+        /// <summary>
+        /// divCT1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCT1;
+
+        /// <summary>
+        /// lblCT1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblCT1;
+
+        /// <summary>
+        /// cmbCT1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCT1;
+
+        /// <summary>
+        /// txtCT1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtCT1;
+
+        /// <summary>
+        /// divCT2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCT2;
+
+        /// <summary>
+        /// lblCT2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblCT2;
+
+        /// <summary>
+        /// cmbCT2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCT2;
+
+        /// <summary>
+        /// txtCT2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtCT2;
+
+        /// <summary>
+        /// divCT3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCT3;
+
+        /// <summary>
+        /// lblCT3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblCT3;
+
+        /// <summary>
+        /// cmbCT3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCT3;
+
+        /// <summary>
+        /// txtCT3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtCT3;
+
+        /// <summary>
+        /// divCT4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCT4;
+
+        /// <summary>
+        /// lblCT4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblCT4;
+
+        /// <summary>
+        /// cmbCT4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCT4;
+
+        /// <summary>
+        /// txtCT4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtCT4;
+
+        /// <summary>
+        /// divCT5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCT5;
+
+        /// <summary>
+        /// lblCT5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblCT5;
+
+        /// <summary>
+        /// cmbCT5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCT5;
+
+        /// <summary>
+        /// txtCT5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtCT5;
+
+        /// <summary>
         /// rbConcInit control.
         /// </summary>
         /// <remarks>
@@ -465,22 +528,13 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.ASPxRadioButton rbConcCont;
 
         /// <summary>
-        /// lblZCMAnt control.
+        /// btnCMAnt control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZCMAnt;
-
-        /// <summary>
-        /// txtZCMAnt control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtZCMAnt;
+        protected global::DevExpress.Web.ASPxButton btnCMAnt;
 
         /// <summary>
         /// lblSCMInit control.
@@ -537,6 +591,33 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.ASPxDateEdit deDataCMInit;
 
         /// <summary>
+        /// lblZCMAnt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblZCMAnt;
+
+        /// <summary>
+        /// txtZCMAnt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtZCMAnt;
+
+        /// <summary>
+        /// divbtnMZ control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divbtnMZ;
+
+        /// <summary>
         /// btnMZ control.
         /// </summary>
         /// <remarks>
@@ -544,6 +625,15 @@ namespace WizOne.ConcediiMedicale
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnMZ;
+
+        /// <summary>
+        /// divlblBCCM control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divlblBCCM;
 
         /// <summary>
         /// lblBCCM control.
@@ -645,13 +735,13 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.ASPxRadioButton rbOptiune2;
 
         /// <summary>
-        /// btnCMAnt control.
+        /// pnlDateAd control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnCMAnt;
+        protected global::DevExpress.Web.ASPxRoundPanel pnlDateAd;
 
         /// <summary>
         /// lblNrAviz control.

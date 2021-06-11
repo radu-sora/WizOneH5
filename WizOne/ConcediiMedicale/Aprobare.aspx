@@ -9,15 +9,12 @@
 
         function grDate_CustomButtonClick(s, e) {
             switch(e.buttonID)
-            { 
-                case "btnDelete":
-                    grDate.GetRowValues(e.visibleIndex, 'IdStare', GoToDeleteMode);
-                    break;
+            {       
                 case "btnIstoric":
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToIstoric);
                     break;
                 case "btnEdit":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToEditMode);
+                    grDate.GetRowValues(e.visibleIndex, 'Id;IdStare', GoToEditMode);
                     break;
             }
         }
@@ -84,12 +81,14 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
-                <dx:ASPxButton ID="btnPrint" runat="server" Text="Print CM" OnClick="btnPrint_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnRapCM" ClientInstanceName="btnRapCM" ClientIDMode="Static" runat="server" Text="Rapoarte" AutoPostBack="false" oncontextMenu="ctx(this,event)">
                     <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
+                        strUrl = getAbsoluteUrl + 'Personal/ListaDocumente.aspx?qwe=' + s.name;
+                        popRap.SetHeaderText('Rapoarte');
+                        popRap.SetContentUrl(strUrl);
+                        popRap.Show();                       
                     }" />
-                    <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
+                    <Image Url="~/Fisiere/Imagini/Icoane/arata.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAproba" runat="server" Text="Aproba" OnClick="btnAproba_Click" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
@@ -122,8 +121,8 @@
     <table width="20%">   
         <tr>
             <td align="left">
-                <label id="lblAngFiltru" runat="server" style="display:inline-block;">Angajat</label>
-                <dx:ASPxComboBox ID="cmbAngFiltru" ClientInstanceName="cmbAngFiltru" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
+                <label id="lblAngFiltru" runat="server" visible="false" style="display:inline-block;">Angajat</label>
+                <dx:ASPxComboBox ID="cmbAngFiltru" ClientInstanceName="cmbAngFiltru" Visible="false" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
                             CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >
                     <Columns>
                         <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
@@ -137,7 +136,7 @@
             </td>   
 
             <td align="left">
-                <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
+                <dx:ASPxButton ID="btnFiltru" Visible="false" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                 </dx:ASPxButton>
             </td>
@@ -150,7 +149,7 @@
            <td align="left">
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static"  AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCommandButtonInitialize="grDate_CommandButtonInitialize" >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
-                    <Settings ShowFilterRow="False" ShowGroupPanel="True" HorizontalScrollBarMode="Auto"  />
+                    <Settings ShowFilterRow="False" HorizontalScrollBarMode="Auto"  />
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsSearchPanel Visible="False" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -161,10 +160,7 @@
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnEdit">
                                     <Image ToolTip="Modificare" Url="~/Fisiere/Imagini/Icoane/edit.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                                <dx:GridViewCommandColumnCustomButton ID="btnDelete">
-                                    <Image ToolTip="Anulare" Url="~/Fisiere/Imagini/Icoane/sterge.png" />
-                                </dx:GridViewCommandColumnCustomButton>
+                                </dx:GridViewCommandColumnCustomButton>             
                                 <dx:GridViewCommandColumnCustomButton ID="btnIstoric">
                                     <Image ToolTip="Istoric" Url="~/Fisiere/Imagini/Icoane/motive.png" />
                                 </dx:GridViewCommandColumnCustomButton>              
@@ -176,7 +172,7 @@
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" ReadOnly="true" Width="300px" >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="NumarCM" Name="NumarCM" Caption="Numar CM" ReadOnly="true" Width="100px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
@@ -207,6 +203,11 @@
                         <dx:GridViewDataCheckColumn FieldName="Document" Name="Document" Caption="Document" ReadOnly="true" Width="100px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataCheckColumn>
+                    
+                        <dx:GridViewDataTextColumn FieldName="BazaCalculCM" Name="BazaCalculCM" Caption="BazaCalculCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />                        
+                        <dx:GridViewDataTextColumn FieldName="ZileBazaCalculCM" Name="ZileBazaCalculCM" Caption="ZileBazaCalculCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="MedieZileBazaCalcul" Name="MedieZileBazaCalcul" Caption="MedieZileBazaCalcul" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="MedieZilnicaCM" Name="MedieZilnicaCM" Caption="MedieZilnicaCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
 
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
@@ -237,4 +238,16 @@
             </td>
         </tr>
      </table> 
+
+        <dx:ASPxPopupControl ID="popRap" runat="server" AllowDragging="True" AllowResize="True"
+            CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Middle"
+            EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
+            PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="550px" MinHeight="500px"
+            Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popRap" EnableHierarchyRecreation="True">                
+                <ContentCollection>
+                    <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                    </dx:PopupControlContentControl>
+                </ContentCollection>
+        </dx:ASPxPopupControl>
+
 </asp:Content>

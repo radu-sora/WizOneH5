@@ -18048,3 +18048,8 @@ GO
 
 
 ----CM END ----
+
+
+INSERT INTO F800 (F80001, F80002, F80003, F80004)
+VALUES (800, 'ADEV_CIC_SUPRAVEGHERE', '1', 'In adeverinta CIC apare coloana Zile supraveghere')
+GO

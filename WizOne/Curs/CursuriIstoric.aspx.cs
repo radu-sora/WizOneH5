@@ -86,7 +86,15 @@ namespace WizOne.Curs
                 DataTable dt = Session["CursuriIstoric_Grid"] as DataTable;
                 grDate.DataSource = dt;
                 grDate.DataBind();
-         
+
+                if (!IsPostBack)
+                {
+                    int marca = Convert.ToInt32(General.Nz(Session["User_Marca"], -99).ToString());
+                    if (marca > 0)
+                        cmbAng.Value = marca;
+                    IncarcaGrid();
+                }
+
 
             }
             catch (Exception ex)

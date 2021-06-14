@@ -856,6 +856,24 @@ namespace WizOne.Module
             return strSql;
         }
 
+        internal static string SelectAprobareCursuri()
+        {
+            string strSql = "";
+
+            try
+            {
+                Curs.Aprobare pagRef = new Curs.Aprobare();
+
+                DataTable dt = pagRef.GetCurs_CereriAprobare(-99, Convert.ToInt32(HttpContext.Current.Session["UserId"].ToString()), 0, "", out strSql);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
+        }
+
         internal static string SelectDecont()
         {
             string strSql = "";

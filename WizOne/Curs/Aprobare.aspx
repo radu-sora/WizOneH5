@@ -209,13 +209,13 @@
                 </dx:ASPxDropDownEdit>
 
             </td>
-            <td align="left">
-                <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
+            <td align="left"  valign="bottom">
+                <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Filtru" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                 </dx:ASPxButton>
             </td>
-            <td align="left">
-                <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltruSterge_Click" >                    
+            <td align="left"  valign="bottom">
+                <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" Text="Sterge filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltruSterge_Click" >                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
                 </dx:ASPxButton>
             </td>                    	
@@ -227,7 +227,7 @@
            <td align="left">
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static"  AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback"  OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCommandButtonInitialize="grDate_CommandButtonInitialize" >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
-                    <Settings ShowFilterRow="False" ShowGroupPanel="True" HorizontalScrollBarMode="Auto"  />
+                    <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto"  />
                     <SettingsEditing Mode="Inline" />
                     <SettingsSearchPanel Visible="False" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />

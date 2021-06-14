@@ -63,8 +63,18 @@ namespace WizOne.Curs
 
                 #endregion
 
-                txtTitlu.Text = General.VarSession("Titlu").ToString();               
-
+                txtTitlu.Text = General.VarSession("Titlu").ToString();      
+                
+                if (!IsPostBack)
+                {
+                    ASPxListBox nestedListBox = checkComboBoxStare.FindControl("listBox") as ASPxListBox;
+                    for (int i = 0; i < nestedListBox.Items.Count; i++)
+                    {
+                        if (Convert.ToInt32(nestedListBox.Items[i].Value) == 1 || Convert.ToInt32(nestedListBox.Items[i].Value) == 2)
+                            nestedListBox.Items[i].Selected = true;
+                    }
+                    checkComboBoxStare.Text = "Solicitat,In Curs";
+                }
 
                 DataTable dt = new DataTable();
                 dt.Columns.Add("Id", typeof(int));
@@ -222,8 +232,8 @@ namespace WizOne.Curs
                 int F10003 = Convert.ToInt32(cmbAng.Value ?? -99);     
 
                 grDate.KeyFieldName = "IdAuto";
-
-                dt = GetCurs_CereriAprobare(F10003, Convert.ToInt32(Session["UserId"].ToString()), aleMele, DamiStari());
+                string strSql = "";
+                dt = GetCurs_CereriAprobare(F10003, Convert.ToInt32(Session["UserId"].ToString()), aleMele, DamiStari(), out strSql);
 
                 grDate.DataSource = dt;
                 grDate.DataBind();
@@ -649,7 +659,7 @@ namespace WizOne.Curs
             return val;
         }
 
-        public DataTable GetCurs_CereriAprobare(int f10003, int idUser, int tip, string filtruStari)
+        public DataTable GetCurs_CereriAprobare(int f10003, int idUser, int tip, string filtruStari, out string strSql)
         {
             //tip
             /* modificare tip filtre 
@@ -661,10 +671,9 @@ namespace WizOne.Curs
             //1  -  Ale mele
 
             DataTable q = null;
-
+            strSql = "";
             try
             {
-                string strSql = "";
                 string filtru = "";
 
                 if (f10003 != -99) filtru += " AND a.F10003 = " + f10003;
@@ -747,7 +756,7 @@ namespace WizOne.Curs
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
                                 /*LeonardM 08.06.2016
                                 filtrare angajati activi*/
-                                and A.F10025 in (0, 999)
+                                WHERE A.F10025 in (0, 999)
                                 /*end LeonardM 08.06.2016*/";
 
                 inn1 = @" B.""IdSuper"" = -1 * c.""Super1"" OR B.""IdSuper"" = -1 * c.""Super2"" OR B.""IdSuper"" = -1 * c.""Super3"" OR B.""IdSuper"" = -1 * c.""Super4"" OR B.""IdSuper"" = -1 * c.""Super5"" OR B.""IdSuper"" = -1 * c.""Super6""  OR B.""IdSuper"" = -1 * c.""Super7"" OR B.""IdSuper"" = -1 * c.""Super8"" OR B.""IdSuper"" = -1 * c.""Super9"" OR B.""IdSuper"" = -1 * c.""Super10"" OR B.""IdSuper"" = -1 * c.""Super11"" OR B.""IdSuper"" = -1 * c.""Super12"" OR B.""IdSuper"" = -1 * c.""Super13"" OR B.""IdSuper"" = -1 * c.""Super14"" OR B.""IdSuper"" = -1 * c.""Super15"" OR B.""IdSuper"" = -1 * c.""Super16"" OR B.""IdSuper"" = -1 * c.""Super17"" OR B.""IdSuper"" = -1 * c.""Super18"" OR B.""IdSuper"" = -1 * c.""Super19"" OR B.""IdSuper"" = -1 * c.""Super20"" ";

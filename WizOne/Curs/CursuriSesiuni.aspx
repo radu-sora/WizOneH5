@@ -100,13 +100,6 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
-                <dx:ASPxButton ID="btnSave"  runat="server" Text="Salveaza" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
-                    }" />
-                    <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
-                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                 </dx:ASPxButton>
@@ -126,13 +119,13 @@
                 </dx:ASPxComboBox>
             </td>  
 
-            <td align="left">
-                <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
+            <td align="left"  valign="bottom"> 
+                <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Filtru" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                 </dx:ASPxButton>
             </td>
-            <td align="left">
-                <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltruSterge_Click" >                    
+            <td align="left"  valign="bottom">
+                <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" Text="Sterge filtru" oncontextMenu="ctx(this,event)" OnClick="btnFiltruSterge_Click" >                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
                 </dx:ASPxButton>
             </td>                    	
@@ -145,7 +138,7 @@
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static"  AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback"  OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCommandButtonInitialize="grDate_CommandButtonInitialize"
                     OnRowUpdating="grDate_RowUpdating" OnRowInserting="grDate_RowInserting" OnRowDeleting="grDate_RowDeleting" OnInitNewRow="grDate_InitNewRow">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
-                    <Settings ShowFilterRow="False" ShowGroupPanel="True" HorizontalScrollBarMode="Auto"  />
+                    <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto"  />
                     <SettingsEditing Mode="Inline" />
                     <SettingsSearchPanel Visible="False" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />

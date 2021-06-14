@@ -77,7 +77,7 @@ namespace WizOne.ConcediiMedicale
                 btnCMAnt.ClientVisible = false;
             }
 
-            if (Session["CM_Stare"] != null && Session["CM_Stare"].ToString() == "3")
+            if (Session["CM_Stare"] != null && Convert.ToInt32(Session["CM_Stare"].ToString()) >= 3)
             {
                 btnSave.ClientVisible = false;
             }

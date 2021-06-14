@@ -52,7 +52,12 @@ namespace WizOne.Curs
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
-        
+
+
+                DataTable dt1 = General.IncarcaDT(@"SELECT * FROM ""Curs_tblLocatii"" ", null);
+                GridViewDataComboBoxColumn col1 = (grDate.Columns["Locatie"] as GridViewDataComboBoxColumn);
+                col1.PropertiesComboBox.DataSource = dt1;
+    
 
                 grDate.KeyFieldName = "IdAuto";
                 DataTable dt = Session["CursuriView_Grid"] as DataTable;
@@ -127,10 +132,10 @@ namespace WizOne.Curs
                                               left join ""tblParametrii"" a on 1 = 1
                                                                       and a.""Nume"" = 'hasNomenclatorTraineri'),
                                     cteTraineri (""IdSesiune"", ""IdCurs"", ""TrainerId"", ""TrainerNume"", ""ValoareNomenclatorTrainer"")
-                                    as (select ""Id"" as ""IdSesiune"", ""IdCurs"", ""TrainerId"", ""TrainerNume"", 0 as ""ValoareNomenclatorTrainer""
+                                    as (select ""Id"" as ""IdSesiune"", ""IdCurs"", ""TrainerId"", (SELECT Denumire from Curs_tblTraineri x where x.IdUser = TrainerId) as ""TrainerNume"", 0 as ""ValoareNomenclatorTrainer""
                                     from ""Curs_tblCursSesiune""
                                     union all
-                                    select a.""IdSesiune"" as ""IdSesiune"",  a.""IdCurs"", a.""IdTrainer"" as ""TrainerId"", a.""DenumireTrainer"" as ""TrainerNume"", 1 as ""ValoareNomenclatorTrainer""
+                                    select a.""IdSesiune"" as ""IdSesiune"",  a.""IdCurs"", a.""IdTrainer"" as ""TrainerId"", (SELECT Denumire from Curs_tblTraineri x where x.IdUser = a.IdTrainer) as ""TrainerNume"", 1 as ""ValoareNomenclatorTrainer""
                                     from ""Curs_relSesiuneTrainer"" a
                                     inner join (select ""IdCurs"", ""IdSesiune"", max(""IdTrainer"") as ""IdTrainer""
                                                 from ""Curs_relSesiuneTrainer"" b

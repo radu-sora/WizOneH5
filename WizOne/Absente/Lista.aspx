@@ -98,13 +98,20 @@
         }
 
 
-        function OnEndCallback(s, e) {
-            if (s.cpAlertMessage != null) {
-                swal({
-                    title: trad_string(limba, ""), text: s.cpAlertMessage,
-                    type: "warning"
-                });
+        function OnEndCallback(s, e) {         
+            if (s.cpAlertMessage != null) { 
+                if (s.cpSuccessMessage != null) 
+                    swal({
+                        title: trad_string(limba, ""), text: s.cpAlertMessage,
+                        type: "success"
+                    });
+                else
+                    swal({
+                        title: trad_string(limba, ""), text: s.cpAlertMessage,
+                        type: "warning"
+                    });
                 s.cpAlertMessage = null;
+                s.cpSuccessMessage = null;
             }
 
             AdjustSize();

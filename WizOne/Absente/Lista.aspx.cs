@@ -422,7 +422,7 @@ namespace WizOne.Absente
                                     {
                                         if (General.Nz(drAbs["DenumireScurta"], "").ToString().ToUpper() != "D1" && General.Nz(drAbs["DenumireScurta"], "").ToString().ToUpper() != "D2")
                                         {
-                                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Puteti anula numai cerereile cu tip de absenta Delegatie");
+                                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Puteti anula numai cererile cu tip de absenta Delegatie");
                                             return;
                                         }
 
@@ -459,10 +459,12 @@ namespace WizOne.Absente
                                             grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti stabilite drepturi pentru a realiza aceasta operatie");
                                         else
                                         {
-                                            if (ziDrp.Year == 2222 && ziDrp.Month == 12 && ziDrp.Day == 13)
-                                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pontajul a fost aprobat");
-                                            else
-                                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data inceput trebuie sa fie mai mare sau egala decat") + " " + ziDrp.Date.ToShortDateString();
+                                        if (ziDrp.Year == 2222 && ziDrp.Month == 12 && ziDrp.Day == 13)
+                                        {
+                                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pontajul a fost aprobat");                                            
+                                        }
+                                        else
+                                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data inceput trebuie sa fie mai mare sau egala decat") + " " + ziDrp.Date.ToShortDateString();
                                         }
                                         return;
                                     }
@@ -608,6 +610,8 @@ namespace WizOne.Absente
                                         string strPopUp = "Proces realizat cu succes";
                                         if (msg != "")
                                             strPopUp += " " + Dami.TraduCuvant("cu urmatorul avertisment") + Environment.NewLine + msg;
+                                        else
+                                            grDate.JSProperties["cpSuccessMessage"] = "1";
                                         grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(strPopUp);
                                     }
                                 }

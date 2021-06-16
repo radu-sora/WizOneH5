@@ -4,6 +4,8 @@
 
     <script>
 
+        var limba = "<%= Session["IdLimba"] %>";
+
         function StartUpload() {
             //pnlLoading.Show();
         }
@@ -29,12 +31,20 @@
 
         function OnEndCallback(s, e) {
             pnlLoading.Hide();
+            debugger;
             if (s.cpAlertMessage != null) {
-                swal({
-                    title: "", text: s.cpAlertMessage,
-                    type: "warning"
-                });
+                if (s.cpSuccessMessage != null)
+                    swal({
+                        title: trad_string(limba, ""), text: s.cpAlertMessage,
+                        type: "success"
+                    });
+                else
+                    swal({
+                        title: trad_string(limba, ""), text: s.cpAlertMessage,
+                        type: "warning"
+                    });
                 s.cpAlertMessage = null;
+                s.cpSuccessMessage = null;
             }
             if (s.cp_InfoMessage != null) {
                 swal({

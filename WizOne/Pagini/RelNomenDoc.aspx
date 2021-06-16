@@ -113,6 +113,7 @@
                                                 <td colspan="5" style="vertical-align:top;padding:10px !important;">
                                                     <dx:ASPxHtmlEditor ID="txtContinut" runat="server" ClientInstanceName="txtContinut" Height="300px" Width="900"  Html='<%# Bind("Document") %>'>
                                                         <ClientSideEvents  />
+                                                        <Settings AllowHtmlView ="false" />
                                                         <SettingsDialogs>
                                                             <InsertImageDialog>
                                                                 <SettingsImageUpload UploadFolder="~/UploadFiles/Images/">

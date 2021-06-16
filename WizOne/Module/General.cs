@@ -162,8 +162,12 @@ namespace WizOne.Module
             try 
 	        {
                 //if (!Regex.IsMatch(txt,@"^[a-zA-Z'.\s]{0,40}$")) rez = "";
-                rez = txt.Trim(new Char[] { ' ','/','-','(',')','*','&','%','$','#' });
-	        }
+
+                //NU FUNCTIONEAZA ????????????????
+                rez = txt.Trim(new Char[] { ' ','/','-','(',')','*','&','%','$','#','"','=' });
+
+                rez = txt.Replace(" ", "").Replace("/", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("*", "").Replace("&", "").Replace("%", "").Replace("$", "").Replace("#", "").Replace("\"", "").Replace("'", "").Replace("=","");
+            }
 	        catch (Exception ex)
 	        {
                 MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
@@ -5665,6 +5669,12 @@ namespace WizOne.Module
                 HttpContext.Current.Session["TemplateIdCompetenta"] = 1;
                 HttpContext.Current.Session["QuizIntrebari_Id"] = 1;
 
+                //Florin 2021.06.02  #909
+                HttpContext.Current.Session["tmpMeniu2"] = "";
+                HttpContext.Current.Session["tmpMeniu3"] = "";
+
+                //Florin 2021.06.04 #909
+                HttpContext.Current.Session["UniqueId"] = -99;
 
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";

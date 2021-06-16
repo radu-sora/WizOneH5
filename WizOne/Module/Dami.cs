@@ -464,19 +464,39 @@ namespace WizOne.Module
             }
         }
 
-        internal static void AccesApp()
+        internal static void AccesApp(Page pag = null)
         {
             try
             {
+                //Florin 2021.04.06 #909
+                int idUnic = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT IdUnic FROM USERS WHERE F70102 = @1", new object[] { HttpContext.Current.Session["UserId"] }),-99));
+                if (idUnic != (int)HttpContext.Current.Session["UniqueId"])
+                {
+                    HttpContext.Current.Response.Redirect("../Default", false);
+                    return;
+                }
+
+                //Florin 2021.05.31
+                if (pag != null)
+                {
+                    DataTable dt = HttpContext.Current.Session["tmpMeniu2"] as DataTable;
+                    string strPag = pag.ToString().ToLower().Replace("_aspx", "").Replace("asp.", "").Replace("_", "\\");
+                    //if (dt.Select($"Pagina = '{strPag}'").Count() == 0 && strPag.ToLower().IndexOf("mainpage") < 0)
+                    var ert = General.Nz(HttpContext.Current.Session["tmpMeniu3"], "").ToString().ToLower().Replace("/", "\\");
+                    var edc = General.Nz(HttpContext.Current.Session["tmpMeniu3"], "").ToString().ToLower().Replace("/", "\\").IndexOf(strPag);
+                    if (dt != null && dt.Select($"Pagina = '{strPag}'").Count() > 0 && General.Nz(HttpContext.Current.Session["tmpMeniu3"],"").ToString().ToLower().Replace("/","\\").IndexOf(strPag) < 0)
+                        HttpContext.Current.Response.Redirect("~/Pagini/MainPage");
+                }
+
                 if (Constante.esteTactil)
                 {
                     if (HttpContext.Current.Session["SecApp"].ToString() != "OK_Tactil")
-                        HttpContext.Current.Response.Redirect("~/Default");
+                        HttpContext.Current.Response.Redirect("~/Default", false);
                 }
                 else
                 {
                     if (HttpContext.Current.Session["SecApp"].ToString() != "OK")
-                        HttpContext.Current.Response.Redirect("~/Default");
+                        HttpContext.Current.Response.Redirect("~/Default", false);
                 }
             }
             catch (Exception ex)
@@ -1803,6 +1823,23 @@ namespace WizOne.Module
         internal static string TimeStamp()
         {
             return DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0');
+        }
+
+        internal static int SetIdUnic(int idUser)
+        {
+            int id = -99;
+
+            try
+            {
+                id = NextId("IdUnic");
+                General.ExecutaNonQuery($@"UPDATE USERS SET IdUnic = @2 WHERE F70102 = @1", new object[] { idUser, id });
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "SetIdUnic", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return id;
         }
 
     }

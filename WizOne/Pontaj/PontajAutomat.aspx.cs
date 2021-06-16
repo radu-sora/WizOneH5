@@ -21,7 +21,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 #region Traducere
 

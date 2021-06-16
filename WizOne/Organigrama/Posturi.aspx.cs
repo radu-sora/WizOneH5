@@ -31,7 +31,7 @@ namespace WizOne.Organigrama
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];

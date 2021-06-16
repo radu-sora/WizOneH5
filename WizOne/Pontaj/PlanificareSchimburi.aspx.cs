@@ -41,7 +41,7 @@ namespace WizOne.Pontaj
             {
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];

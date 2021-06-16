@@ -38,7 +38,7 @@ namespace WizOne.Curs
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
        
                 //btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnIncarca.ToolTip = Dami.TraduCuvant("btnIncarca", "Incarca document");

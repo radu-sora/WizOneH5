@@ -24,7 +24,7 @@ namespace WizOne.Eval
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
                 Session["PaginaWeb"] = "Eval.EvalLista";
 
                 #region Traducere

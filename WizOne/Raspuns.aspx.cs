@@ -21,7 +21,7 @@ namespace WizOne
         {
             try
             {
-                txtVers.Text = Constante.versiune;
+                //txtVers.Text = Constante.versiune;
 
                 if (!IsPostBack)
                 {

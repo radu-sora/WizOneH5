@@ -34,8 +34,8 @@ namespace WizOne.Pagini
                 Session["PaginaWeb"] = "Pagini.MainPage";
 
                 if (!IsPostBack || (ctlPost?.Contains("pnlHeader") ?? false))   //Radu 29.01.2020
-                {                    
-
+                {
+                    Session["tmpMeniu3"] = "";
                     if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0)
                         Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
@@ -241,6 +241,9 @@ namespace WizOne.Pagini
 
                         divPanel.Controls.Add(pnl);
 
+                        if ((bool?)layoutData["wdgBadges" + j]?[0] ?? false)
+                            Session["tmpMeniu3"] += ";" + ele.Pagina;
+
                         j++;
                     }
 
@@ -331,6 +334,9 @@ namespace WizOne.Pagini
                             pnl.Controls.Add(btn);
 
                             divPanel.Controls.Add(pnl);
+
+                            if ((bool?)layoutData["wdgMnu" + i]?[0] ?? false)
+                                Session["tmpMeniu3"] += ";" + pag;
                         }
                     }
 

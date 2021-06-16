@@ -95,7 +95,7 @@ namespace Wizrom.Reports.Pages
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Dami.AccesApp();
+            Dami.AccesApp(this.Page);
 
             if (!IsPostBack)
             {

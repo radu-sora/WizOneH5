@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="WizOne.Default" culture="auto" meta:resourcekey="PageResource1" uiculture="auto" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="WizOne.Default" culture="auto" uiculture="auto" %>
 
 <!DOCTYPE html>
 
@@ -8,8 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title id="txtVers" runat="server">WizOne versiunea 1.1.001</title>
+    <title>WizOne</title>
 
     <link rel="stylesheet" type="text/css" href="fisiere/css/login.css" />
 
@@ -41,7 +40,7 @@
                     </div>
                     <span id="lblPan2" runat="server">Parola</span>
                     <asp:TextBox ID="txtPan2" runat="server" TabIndex="2" MaxLength="50" 
-                        TextMode="Password" meta:resourcekey="txtPan2Resource1"></asp:TextBox>
+                        TextMode="Password" meta:resourcekey="txtPan2Resource1" AutoCompleteType="Disabled"></asp:TextBox>
                     <asp:RequiredFieldValidator id="rfv2" ControlToValidate="txtPan2" 
                         ValidationGroup="IntroGrup" ErrorMessage="Introdu parola" runat="Server" 
                         meta:resourcekey="rfv2Resource1" />

@@ -21,7 +21,7 @@ namespace WizOne.Organigrama
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 #region Traducere
 

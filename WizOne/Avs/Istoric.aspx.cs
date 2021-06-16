@@ -33,7 +33,7 @@ namespace WizOne.Avs
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
                 if (!IsPostBack)
                 {

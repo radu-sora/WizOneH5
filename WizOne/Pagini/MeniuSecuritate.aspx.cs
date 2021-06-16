@@ -24,7 +24,7 @@ namespace WizOne.Pagini
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp(this.Page);
 
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();

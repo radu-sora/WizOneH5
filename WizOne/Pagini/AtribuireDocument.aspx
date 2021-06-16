@@ -130,6 +130,7 @@
                                             <td colspan="2" style="vertical-align:top;padding:10px;" class="auto-style3">
                                                 <dx:ASPxHtmlEditor ID="txtDoc" runat="server" ClientInstanceName="txtDoc" Height="370px" Width="800">
                                                     <ClientSideEvents GotFocus="onGotFocus" />
+                                                    <Settings AllowHtmlView ="false" />
                                                     <SettingsDialogs>
                                                         <InsertImageDialog>
                                                             <SettingsImageUpload UploadFolder="~/UploadFiles/Images/">

@@ -52,6 +52,7 @@
     <br />
 
     <dx:ASPxHtmlEditor ID="txtContinut" runat="server" Height="370px">
+        <Settings AllowHtmlView ="false" />
         <SettingsDialogs>
             <InsertImageDialog>
                 <SettingsImageUpload UploadFolder="~/UploadFiles/Images/">

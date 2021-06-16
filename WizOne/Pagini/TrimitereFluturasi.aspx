@@ -230,6 +230,7 @@
 
                             <dx:ASPxHtmlEditor ID="txtContinut" runat="server" ClientInstanceName="txtContinut" Height="370px" Width="100%">
                                 <ClientSideEvents GotFocus="onGotFocus" />
+                                <Settings AllowHtmlView ="false" />
                                 <SettingsDialogs>
                                     <InsertImageDialog>
                                         <SettingsImageUpload UploadFolder="~/UploadFiles/Images/">

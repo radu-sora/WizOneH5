@@ -16,7 +16,14 @@
                 case "btnEdit":
                     grDate.GetRowValues(e.visibleIndex, 'Id;IdStare', GoToEditMode);
                     break;
+                case "btnArata":
+                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToArataMode);
+                    break;
             }
+        }
+
+        function GoToArataMode(Value) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=20&id=' + Value, '_blank ');
         }
 
         function GoToEditMode(Value) {
@@ -144,7 +151,7 @@
         </tr>
     </table>
     <br />
-     <table width="100%"> 
+     <table width="80%"> 
         <tr>
            <td align="left">
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static"  AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCommandButtonInitialize="grDate_CommandButtonInitialize" >
@@ -163,7 +170,10 @@
                                 </dx:GridViewCommandColumnCustomButton>             
                                 <dx:GridViewCommandColumnCustomButton ID="btnIstoric">
                                     <Image ToolTip="Istoric" Url="~/Fisiere/Imagini/Icoane/motive.png" />
-                                </dx:GridViewCommandColumnCustomButton>              
+                                </dx:GridViewCommandColumnCustomButton> 
+                                <dx:GridViewCommandColumnCustomButton ID="btnArata">
+                                    <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/arata.png" />
+                                </dx:GridViewCommandColumnCustomButton> 
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="150px" VisibleIndex="2" >

@@ -110,7 +110,7 @@
 						</td>
 						<td colspan="2">							
 							<dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
-									CallbackPageSize="15"  OnSelectedIndexChanged="cmbAng_SelectedIndexChanged" TextFormatString="{0} {1}" >
+									CallbackPageSize="15"  OnSelectedIndexChanged="cmbAng_SelectedIndexChanged" TextFormatString="{0} {1}" ItemStyle-Wrap="True">
 								<Columns>
 									<dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
 									<dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
@@ -122,13 +122,13 @@
 							</dx:ASPxComboBox>							
 						</td>	
                         <td>
-                            <dx:ASPxRadioButton ID="rbProgrNorm" Width="160" runat="server" Text="CM program normal" Enabled="true"  ClientInstanceName="rbProgrNorm"
+                            <dx:ASPxRadioButton ID="rbProgrNorm" Width="160" runat="server" Text="CM program normal"   ClientInstanceName="rbProgrNorm"
                                  GroupName="Program">
                                 <ClientSideEvents CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />
                             </dx:ASPxRadioButton>
 						</td>
                         <td colspan="2">
-                            <dx:ASPxRadioButton ID="rbProgrTure" Width="150" runat="server" Text="CM program in ture" Enabled="true"  ClientInstanceName="rbProgrTure"
+                            <dx:ASPxRadioButton ID="rbProgrTure" Width="150" runat="server" Text="CM program in ture"   ClientInstanceName="rbProgrTure"
                                  GroupName="Program">
                                 <ClientSideEvents CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />
                             </dx:ASPxRadioButton>
@@ -291,7 +291,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						
-							        <dx:ASPxTextBox  ID="txtCT2" Width="50"  Enabled="false" runat="server"  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT2" Width="50"  runat="server"  AutoPostBack="false" >
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -308,7 +308,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						  
-							        <dx:ASPxTextBox  ID="txtCT3" Width="50"  Enabled="false" runat="server"  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT3" Width="50"   runat="server"  AutoPostBack="false" >
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -325,7 +325,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						  
-							        <dx:ASPxTextBox  ID="txtCT4" Width="50" Enabled="false"  runat="server" AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT4" Width="50"  runat="server" AutoPostBack="false" >
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -342,7 +342,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						    
-							        <dx:ASPxTextBox  ID="txtCT5" Width="50" Enabled="false"  runat="server"  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT5" Width="50" runat="server"  AutoPostBack="false" >
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -351,7 +351,7 @@
                     <tr>
                         <td>
 							<div style="float:left; padding-bottom:15px;">
-								<dx:ASPxRadioButton ID="rbConcInit" Width="125" runat="server" Text="Initial" Enabled="true"  ClientInstanceName="rbConcInit"
+								<dx:ASPxRadioButton ID="rbConcInit" Width="125" runat="server" Text="Initial"   ClientInstanceName="rbConcInit"
 									 GroupName="Concedii">
 									<ClientSideEvents CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />
 								</dx:ASPxRadioButton>
@@ -359,7 +359,7 @@
 						</td>
                         <td>
 							<div style="float:left; padding-bottom:15px;">
-								<dx:ASPxRadioButton ID="rbConcCont"  Width="125" runat="server" Text="Continuare" Enabled="true" ClientInstanceName="rbConcCont" 
+								<dx:ASPxRadioButton ID="rbConcCont"  Width="125" runat="server" Text="Continuare"  ClientInstanceName="rbConcCont" 
 									 GroupName="Concedii">
 									<ClientSideEvents CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />
 								</dx:ASPxRadioButton>
@@ -379,7 +379,7 @@
 							</div>
 						</td>
 						<td>
-							<dx:ASPxTextBox  ID="txtSCMInit" Width="140"  MaxLength="10" runat="server" Enabled="false"  AutoPostBack="false" >
+							<dx:ASPxTextBox  ID="txtSCMInit" Width="140"  MaxLength="10" runat="server"   AutoPostBack="false" >
                                 <ClientSideEvents  />
 							</dx:ASPxTextBox>
 						</td>
@@ -387,7 +387,7 @@
 							<dx:ASPxLabel  ID="lblNrCMInit" runat="server" Width="100" Text="Numar CM initial"></dx:ASPxLabel >	
 						</td>
 						<td>
-							<dx:ASPxTextBox  ID="txtNrCMInit" Width="100"  MaxLength="15" runat="server" Enabled="false"  AutoPostBack="false" >
+							<dx:ASPxTextBox  ID="txtNrCMInit" Width="100"  MaxLength="15" runat="server"   AutoPostBack="false" >
                                 <ClientSideEvents  />
 							</dx:ASPxTextBox>										
 						</td>
@@ -396,7 +396,7 @@
 						</td>
 						<td>
 							<div style="float:left; padding-right:15px;">
-								<dx:ASPxDateEdit  ID="deDataCMInit" Width="100"  runat="server"  Enabled="false" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
+								<dx:ASPxDateEdit  ID="deDataCMInit" Width="100"  runat="server"  DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
 									<CalendarProperties FirstDayOfWeek="Monday" />
 									<ClientSideEvents  />
 								</dx:ASPxDateEdit>										
@@ -406,7 +406,7 @@
 							<dx:ASPxLabel  ID="lblZCMAnt" runat="server" Width="100" Text="Zile CM initial" ></dx:ASPxLabel >	
 						</td>
 						<td>
-							<dx:ASPxTextBox  ID="txtZCMAnt" Width="75"  runat="server" Enabled="false"  AutoPostBack="false" >
+							<dx:ASPxTextBox  ID="txtZCMAnt" Width="75"  runat="server"  AutoPostBack="false" >
                                 <ClientSideEvents  />
 							</dx:ASPxTextBox>
 						</td>
@@ -467,14 +467,14 @@
                     </tr>
                     <tr>
                        <td>
-                            <dx:ASPxRadioButton ID="rbOptiune1" Width="125" runat="server" Text="Media zilnica pt. CM cf. O 158/2005" Enabled="true" Visible="false"  ClientInstanceName="rbOptiune1"
+                            <dx:ASPxRadioButton ID="rbOptiune1" Width="125" runat="server" Text="Media zilnica pt. CM cf. O 158/2005"  Visible="false"  ClientInstanceName="rbOptiune1"
                                  GroupName="Avans">
                             </dx:ASPxRadioButton>
 						</td>
                      </tr>
                     <tr>
                        <td>
-                            <dx:ASPxRadioButton ID="rbOptiune2" Width="125" runat="server" Text="Media zilnica pt. AMBP cf. L 346/2002" Enabled="true"  Visible="false" ClientInstanceName="rbOptiune2"
+                            <dx:ASPxRadioButton ID="rbOptiune2" Width="125" runat="server" Text="Media zilnica pt. AMBP cf. L 346/2002"   Visible="false" ClientInstanceName="rbOptiune2"
                                  GroupName="Avans">
                             </dx:ASPxRadioButton>
 						</td>
@@ -582,7 +582,7 @@
  
                                           <td >
  
-                                             <dx:ASPxRadioButton ID = "rbZileCal" Width= "150" runat= "server" Visible="false" Text= "x zile calendaristice" Enabled= "true"  ClientInstanceName= "rbZileCal"
+                                             <dx:ASPxRadioButton ID = "rbZileCal" Width= "150" runat= "server" Visible="false" Text= "x zile calendaristice" ClientInstanceName= "rbZileCal"
  
                                                   GroupName= "Zile" >
  
@@ -593,7 +593,7 @@
 					                </tr>
 					                <tr>
                                         <td>
-                                            <dx:ASPxRadioButton ID = "rbZileFNUASS" Width= "150" runat= "server" Visible="false" Text= "0 zile" Enabled= "true"  ClientInstanceName= "rbZileFNUASS"
+                                            <dx:ASPxRadioButton ID = "rbZileFNUASS" Width= "150" runat= "server" Visible="false" Text= "0 zile"  ClientInstanceName= "rbZileFNUASS"
  
                                                   GroupName= "Zile" >
  

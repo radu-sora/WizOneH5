@@ -18053,3 +18053,19 @@ GO
 INSERT INTO F800 (F80001, F80002, F80003, F80004)
 VALUES (800, 'ADEV_CIC_SUPRAVEGHERE', '1', 'In adeverinta CIC apare coloana Zile supraveghere')
 GO
+
+ALTER VIEW [dbo].[Admin_Cursuri_VIEW] as
+ select Marca,NumeComplet,IdTipCurs,IdDescriereCurs,NumeFurnizor,TemaCurs,Info,NrOre,DataCurs,Buget,PerioadaAmortizare,AutorizareExpirare,USER_NO,[TIME],IdAuto,DataInceput, DataSfarsit, NrZile,IdMoneda, Operator
+from
+Admin_Cursuri
+UNION ALL
+SELECT Marca,NumeComplet,IdTipCurs,IdDescriereCurs,NumeFurnizor,TemaCurs,Info,NrOre,DataCurs,Buget,PerioadaAmortizare,AutorizareExpirare,USER_NO,[TIME],IdAuto,DataInceput, DataSfarsit, NrZile,IdMoneda, null as Operator
+from
+Cursuri_VIEW
+UNION ALL
+SELECT Id_Angajat as marca, Curs_tblCursSesiune.denumire as numecomplet, tipsesiune as idtipcurs, null as IdDescriereCurs, null as NumeFurnizor, null as TemaCurs, Curs_tblCursSesiune.observatii as info, TotalOre as nrore,
+null as datacurs,Curs_tblCursSesiune.Buget, null as PerioadaAmortizare, null as AutorizareExpirare,Curs_tblCursSesiune.USER_NO,Curs_tblCursSesiune.[TIME],Curs_tblCursSesiune.IdAuto, DataInceput, DataSfarsit, null as NrZile,  IdMoneda, curs_tblcurs.OrganizatorId as Operator
+
+from Curs_tblCursSesiune 
+join curs_tblcurs on curs_tblcurs.id = Curs_tblCursSesiune.IdCurs
+join Curs_relCursAngajati on Curs_relCursAngajati.Id_Curs = curs_tblcurs.id 

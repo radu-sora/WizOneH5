@@ -33,7 +33,7 @@ namespace WizOne.ConcediiMedicale
             {
                 Dami.AccesApp();
 
-                txtTitlu.Text = Dami.TraduCuvant("Aprobare concediu medical");
+                txtTitlu.Text = Dami.TraduCuvant("Lista concedii medicale");
 
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
@@ -64,17 +64,25 @@ namespace WizOne.ConcediiMedicale
                 //string param = General.Nz(Request["tip"], prc.EncryptString(Constante.cheieCriptare, "Introducere", 1)).ToString();
                 //param = prc.EncryptString(Constante.cheieCriptare, param, 2);
                 //int tip = param == "Aprobare" ? 2 : 1;
-                int tip = Convert.ToInt32(General.Nz(Request["tip"], "1").ToString());
+                //int tip = Convert.ToInt32(General.Nz(Request["tip"], "1").ToString());
+
+                string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
+                string sql = "SELECT COUNT(*) FROM \"F100Supervizori\" WHERE \"IdUser\" = {0} AND \"IdSuper\" IN ({1})";
+                sql = string.Format(sql, Session["UserId"].ToString(), idHR);
+                DataTable dtHR = General.IncarcaDT(sql, null);
+                int tip = 1;
+                if (dtHR != null && dtHR.Rows.Count > 0 && dtHR.Rows[0][0] != null && dtHR.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtHR.Rows[0][0].ToString()) > 0)
+                {
+                    tip = 2;
+                    Session["CM_HR"] = "1";
+                }
 
                 if (tip == 1)
-                {
-                    txtTitlu.Text = Dami.TraduCuvant("Introducere concediu medical");             
+                {            
                     btnAproba.ClientVisible = false;
                     btnTransfera.ClientVisible = false; 
                     btnRapCM.ClientVisible = false;
-                }
-                else
-                    btnAdauga.ClientVisible = false;
+                }              
 
                 //txtTitlu.Text = General.VarSession("Titlu").ToString();    
 
@@ -371,10 +379,7 @@ namespace WizOne.ConcediiMedicale
                             CriptDecript prc = new CriptDecript();
                             //string param = General.Nz(Request["tip"], prc.EncryptString(Constante.cheieCriptare, "Introducere", 1)).ToString();
                             //param = prc.EncryptString(Constante.cheieCriptare, param, 2);
-                            //int tip = param == "Aprobare" ? 2 : 1;
-                            int tip = Convert.ToInt32(General.Nz(Request["tip"], "1").ToString());
-                            if (tip == 2)
-                                Session["CM_Aprobare"] = 1;
+                            //int tip = param == "Aprobare" ? 2 : 1;  
                             string url = "~/ConcediiMedicale/Introducere.aspx";
                             if (Page.IsCallback)
                                 ASPxWebControl.RedirectOnCallback(url);
@@ -614,7 +619,7 @@ namespace WizOne.ConcediiMedicale
                 //string param = General.Nz(Request["tip"], prc.EncryptString(Constante.cheieCriptare, "Introducere", 1)).ToString();
                 //param = prc.EncryptString(Constante.cheieCriptare, param, 2);
                 //int tip = param == "Aprobare" ? 2 : 1;
-                int tip = Convert.ToInt32(General.Nz(Request["tip"], "1").ToString());
+                int tip = Convert.ToInt32(General.Nz(Session["CM_HR"], "1").ToString());
                 if (tip == 2)
                     strSql = "SELECT * FROM CM_Cereri";
                 else

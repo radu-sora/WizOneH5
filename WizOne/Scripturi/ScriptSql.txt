@@ -17917,6 +17917,24 @@ SELECT @ZileCuveniteAn, isnull(@ZileCuvenite,0), @ZileCuveniteZi, isnull((select
 END
 
 
+----  2.2.137  ----
+
+
+ALTER TABLE USERS ADD IdUnic int
+GO
+
+CREATE SEQUENCE [dbo].[IdUnic_SEQ] 
+ AS [bigint]
+ START WITH 1
+ INCREMENT BY 1
+ MINVALUE 1
+ MAXVALUE 9999999999999
+ CACHE 
+GO
+
+
+----  2.2.138  ----
+
 ---- CM START ----
 
 CREATE SEQUENCE [dbo].[CM_Cereri_SEQ] 
@@ -18039,12 +18057,8 @@ GO
 INSERT INTO MeniuLista(Id, Denumire, Descriere, Activ) VALUES((SELECT MAX(Id) FROM MeniuLista) + 1, 'Concedii medicale','Concedii medicale', 1)
 GO
 
-INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Introducere', 'Introducere', 'ConcediiMedicale\Aprobare?tip=1', 1, 'm1.png')
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Lista', 'Lista', 'ConcediiMedicale\Aprobare', 1, 'm1.png')
 GO
-
-INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Aprobare', 'Aprobare', 'ConcediiMedicale\Aprobare?tip=2', 1, 'm1.png')
-GO
-
 
 
 ----CM END ----

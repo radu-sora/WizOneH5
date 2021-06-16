@@ -480,6 +480,7 @@
 
                     <dx:ASPxHtmlEditor ID="txtContinut" runat="server" ClientInstanceName="txtContinut" Height="370px" Width="100%">
                         <ClientSideEvents GotFocus="onGotFocus" />
+                        <Settings AllowHtmlView ="false" />
                         <SettingsDialogs>
                             <InsertImageDialog>
                                 <SettingsImageUpload UploadFolder="~/UploadFiles/Images/">
@@ -694,6 +695,7 @@
 
                             <dx:ASPxHtmlEditor ID="txtAtt" runat="server" ClientInstanceName="txtAtt" Height="370px" Width="100%">
                                 <ClientSideEvents GotFocus="onGotFocus" />
+                                <Settings AllowHtmlView ="false" />
                                 <SettingsDialogs>
                                     <InsertImageDialog>
                                         <SettingsImageUpload UploadFolder="~/UploadFiles/Images/">
@@ -787,6 +789,7 @@
 
                     <dx:ASPxHtmlEditor ID="txtCorpICS" runat="server" ClientInstanceName="txtCorpICS" Height="370px" Width="100%">
                         <ClientSideEvents GotFocus="onGotFocus" />
+                        <Settings AllowHtmlView ="false" />
                         <SettingsDialogs>
                             <InsertImageDialog>
                                 <SettingsImageUpload UploadFolder="~/UploadFiles/Images/">

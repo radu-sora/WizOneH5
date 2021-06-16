@@ -293,8 +293,6 @@ namespace WizOne.Pagini
                         mem.Flush();
 
                         System.Threading.Thread.Sleep(Convert.ToInt32(interval) * 1000);
-
-
                     }
 
                 }

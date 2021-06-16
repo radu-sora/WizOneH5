@@ -56,7 +56,7 @@ namespace WizOne.Module
                 double Medie10;
 
                 //'dblCol11 = 0
-                double nTZS = 0, nTZS6 = 0, SumaZile12 = 0, SumaDblRON, SumaDbl;
+                double nTZS = 0, nTZS6 = 0, SumaZile12 = 0, SumaDblRON = 0, SumaDbl = 0;
                 int nStageCount = 0;
 
                 int nTmp, nTmp1, nTmpTZSLuna, TmpZileLucrate, TmpZileCM, TmpZileLuna, zileLucrate10 = 0, nrzileCM10 = 0, nrZileLuna10 = 0;
@@ -1238,14 +1238,14 @@ namespace WizOne.Module
        
     if (nchkMedie6Luni == 1) 
         {
-         //if (tCol7 >= 22)
-         //    bAreStagiu = true;
-         //   else
-         //   {
-         //    bAreStagiu = false;
-         //   }
-            
-            long nrluc;
+            //if (zileDiff_Stagiu_ZL <= 0)
+            //    bAreStagiu = true;
+            //else
+            //{
+            //    bAreStagiu = false;
+            //}
+
+                    long nrluc;
             if (nrluni_stagiu == 1) 
                 nrluc = zile_lucratoare_ul;
             else
@@ -1270,10 +1270,10 @@ namespace WizOne.Module
          arCM.tzsTotal6 = nTZS6;
         
          arCM.bpsTOTAL6 = dblBPS6;
-         //arCM.bpsTOTAL6 = Format(arCM.bpsTOTAL6, "#,##0.00");
+         arCM.bpsTOTAL6 = Convert.ToDouble(arCM.bpsTOTAL6.ToString("#,##0.00"));
         
          arCM.bpsTOTALRON6 = dblBPSRON6;
-         //arCM.bpsTOTALRON6 = Format(arCM.bpsTOTALRON6, "#,##0.00");
+         arCM.bpsTOTALRON6 = Convert.ToDouble(arCM.bpsTOTALRON6.ToString("#,##0.00"));
         
             // if (SumaDblRON > 0)          
                 //arCM.total = Format(CDbl(Format(dblBPS6 / 10000, "#,##0")), "#,##0.0000") & " + " & Format(dblBPSRON6, "#,##0.0000") & " = " & Format(SumaDbl, "#,##0.0000")
@@ -1288,14 +1288,16 @@ namespace WizOne.Module
          //szTxtMedieZilnica6_10 = "Media zilnica pentru CM propusa la 6 luni:"
          if (nTZS6 != 0) 
         {
-             //if (SumaDblRON > 0) 
-               //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
-               // else
-               //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
-               
-            //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
-            
-             //Medie6 = CDbl(Format(SumaDbl / nTZS6, "#,##0.00"))
+                //if (SumaDblRON > 0)
+                //    szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
+                //    else
+                //    szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
+
+
+                //    szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
+
+
+                Medie6 = Convert.ToDouble((SumaDbl / nTZS6).ToString("#,##0.00"));
             }
             else
         {
@@ -1334,11 +1336,11 @@ namespace WizOne.Module
             
          arCM.tzsTotal6 = nTZS;
         
-         arCM.bpsTOTAL6e = dblBPS;
-       // arCM.bpsTOTAL6").Value = Format(arCM.bpsTOTAL6").Value, "#,##0.00")
+         arCM.bpsTOTAL6 = dblBPS;
+         arCM.bpsTOTAL6 = Convert.ToDouble(arCM.bpsTOTAL6.ToString("#,##0.00"));
              
          arCM.bpsTOTALRON6 = dblBPSRON;
-      // arCM.bpsTOTALRON6 = Format(arCM.bpsTOTALRON6").Value, "#,##0.00")
+         arCM.bpsTOTALRON6 = Convert.ToDouble(arCM.bpsTOTALRON6.ToString("#,##0.00"));
              
          //if (SumaDblRON > 0) 
           // arCM.TOTAL.Caption = Format(CDbl(Format(dblBPS / 10000, "#,##0")), "#,##0.0000") & " + " & Format(dblBPSRON, "#,##0.0000") & " = " & Format(SumaDbl, "#,##0.0000")
@@ -1352,13 +1354,13 @@ namespace WizOne.Module
         // szTxtMedieZilnica6_10 = "Media zilnica pentru CM propusa la 10 luni:"
          if (nTZS != 0) 
         {
-             //if (SumaDblRON > 0) 
-               //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
-                //else
-              // szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
-                
-             //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
-             //Medie10 = CDbl(Format(SumaDbl / nTZS, "#,##0.0000"))
+                        //if (SumaDblRON > 0) 
+                        //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
+                        //else
+                        // szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
+
+                        //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
+                        Medie10 = Convert.ToDouble((SumaDbl / nTZS).ToString("#,##0.0000"));
             
               }
             else

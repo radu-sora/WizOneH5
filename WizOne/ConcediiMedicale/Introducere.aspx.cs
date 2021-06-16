@@ -151,16 +151,16 @@ namespace WizOne.ConcediiMedicale
                     AfisareCalculManual(true);
             }
 
-            if (cmbTipConcediu.Value != null && Convert.ToInt32(cmbTipConcediu.Value) == 9)
-            {
-                lblCNP.ClientVisible = true;
-                cmbCNPCopil.ClientVisible = true;
-            }
-            else
-            {
-                lblCNP.ClientVisible = false;
-                cmbCNPCopil.ClientVisible = false;
-            }
+            //if (cmbTipConcediu.Value != null && Convert.ToInt32(cmbTipConcediu.Value) == 9)
+            //{
+            //    lblCNP.ClientVisible = true;
+            //    cmbCNPCopil.ClientVisible = true;
+            //}
+            //else
+            //{
+            //    lblCNP.ClientVisible = false;
+            //    cmbCNPCopil.ClientVisible = false;
+            //}
 
             if (Session["CM_NrZile"] != null)
                 txtNrZile.Text = Session["CM_NrZile"].ToString();
@@ -361,6 +361,16 @@ namespace WizOne.ConcediiMedicale
             if (deLaData.Value == null)
             {
                 return Dami.TraduCuvant("Data invalida!");
+            }
+
+            if (Convert.ToDateTime(deDeLaData.Value).Year > Convert.ToDateTime(deLaData.Value).Year)
+            {
+                return Dami.TraduCuvant("Data de sfarsit este anterioara datei de inceput!");
+            }
+
+            if (Convert.ToDateTime(deDeLaData.Value).Year != Convert.ToDateTime(deLaData.Value).Year || Convert.ToDateTime(deDeLaData.Value).Month != Convert.ToDateTime(deLaData.Value).Month)
+            {
+                return Dami.TraduCuvant("Data de sfarsit trebuie sa fie in aceeasi luna cu data de inceput!");
             }
 
 
@@ -1007,7 +1017,7 @@ namespace WizOne.ConcediiMedicale
             sql = string.Format(sql, id, Session["MarcaCM"].ToString(), (rbProgrNorm.Checked ? "1" : "0"), Convert.ToInt32(cmbTipConcediu.Value ?? 0), txtCodIndemn.Text, txtSerie.Text, //5
                 txtNr.Text, "CONVERT(DATETIME, '" + dtData.Day.ToString().PadLeft(2, '0') + "/" + dtData.Month.ToString().PadLeft(2, '0') + "/" + dtData.Year.ToString() + "', 103)", Convert.ToInt32(cmbLocPresc.Value ?? 0), //8
                 "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)", "CONVERT(DATETIME, '" + dtEnd.Day.ToString().PadLeft(2, '0') + "/" + dtEnd.Month.ToString().PadLeft(2, '0') + "/" + dtEnd.Year.ToString() + "', 103)", //10
-                zile, txtCodDiag.Text.Length <= 0 ? "0" : txtCodDiag.Text, txtCodUrgenta.Text.Length <= 0 ? "0" : txtCodUrgenta.Text, txtCodInfCont.Text.Length <= 0 ? "0" : txtCodInfCont.Text, (rbConcInit.Checked ? "1" : "0"), txtZCMAnt.Text.Length <= 0 ? "0" : txtZCMAnt.Text, //16
+                zile, txtCodDiag.Text.Length <= 0 ? "0" : txtCodDiag.Text, txtCodUrgenta.Text.Length <= 0 ? "NULL" : txtCodUrgenta.Text, txtCodInfCont.Text.Length <= 0 ? "NULL" : txtCodInfCont.Text, (rbConcInit.Checked ? "1" : "0"), txtZCMAnt.Text.Length <= 0 ? "0" : txtZCMAnt.Text, //16
                 txtSCMInit.Text, txtNrCMInit.Text, "CONVERT(DATETIME, '" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + (dtDataCMInit.Year < 1900 ? 2100 : dtDataCMInit.Year).ToString() + "', 103)", //19
                 Convert.ToInt32(cmbCT1.Value ?? 0), Convert.ToInt32(cmbCT2.Value ?? 0), Convert.ToInt32(cmbCT3.Value ?? 0), Convert.ToInt32(cmbCT4.Value ?? 0), Convert.ToInt32(cmbCT5.Value ?? 0), //24
                 txtCT1.Text.Length <= 0 ? "0" : txtCT1.Text, txtCT2.Text.Length <= 0 ? "0" : txtCT2.Text, txtCT3.Text.Length <= 0 ? "0" : txtCT3.Text, txtCT4.Text.Length <= 0 ? "0" : txtCT4.Text, txtCT5.Text.Length <= 0 ? "0" : txtCT5.Text, //29
@@ -1404,22 +1414,23 @@ namespace WizOne.ConcediiMedicale
             Session["MARDEF"] = dtMARDEF;
             OnZileAng();
 
-            if (no == 9)
-            {
-                lblCNP.ClientVisible = true;
-                cmbCNPCopil.ClientVisible = true;
-            }
-            else
-            {
-                lblCNP.ClientVisible = false;
-                cmbCNPCopil.ClientVisible = false;
-            }
+            //if (no == 9)
+            //{
+            //    lblCNP.ClientVisible = true;
+            //    cmbCNPCopil.ClientVisible = true;
+            //}
+            //else
+            //{
+            //    lblCNP.ClientVisible = false;
+            //    cmbCNPCopil.ClientVisible = false;
+            //}
         }
 
         void OnSelStartDate()
         {
             Session["CM_StartDate"] = Convert.ToDateTime(deDeLaData.Value);
             InitWorkingDays();
+            deData.Value = deDeLaData.Value;
         }
 
         void OnSelEndDate()

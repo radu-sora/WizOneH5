@@ -158,7 +158,7 @@
 							</dx:ASPxTextBox>
 						</td>
 						<td >
-							<dx:ASPxLabel  ID="lblLocPresc" Width="100" runat="server"  Text="Prescris de" ></dx:ASPxLabel >	
+							<dx:ASPxLabel  ID="lblLocPresc" Width="100" runat="server"  Text="Loc prescriere" ></dx:ASPxLabel >	
 						</td>
                         <td>				
 							<dx:ASPxComboBox  ID="cmbLocPresc" Width="100"  runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id"  ValueType="System.Int32">
@@ -166,6 +166,34 @@
 							</dx:ASPxComboBox >
 						</td>
 
+					</tr>
+					<tr>
+						<td>		
+							<div style="float:left; padding-bottom:15px;">
+								<dx:ASPxLabel  ID="lblDeLaData" runat="server"   Width="100" Text="Data inceput"></dx:ASPxLabel >	
+							</div>
+						</td>
+                        <td>								
+							<dx:ASPxDateEdit  ID="deDeLaData" Width="140" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"   AutoPostBack="false"  >
+								<CalendarProperties FirstDayOfWeek="Monday" />
+								<ClientSideEvents  ValueChanged ="function(s,e){ OnTextChangedHandler(s); }" />
+							</dx:ASPxDateEdit>					
+						</td>
+						<td>					
+							<dx:ASPxLabel  ID="lblLaData" runat="server"  Width="100" Text="Data sfarsit"></dx:ASPxLabel >	
+						</td>
+                        <td>						
+							<dx:ASPxDateEdit  ID="deLaData" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
+								<CalendarProperties FirstDayOfWeek="Monday" />
+								<ClientSideEvents ValueChanged="function(s,e){ OnTextChangedHandler(s); }" />
+							</dx:ASPxDateEdit>										
+						</td>
+						<td>									
+							<dx:ASPxLabel  ID="lblNrZile" Width="100" runat="server"  Text="Nr. zile" ></dx:ASPxLabel >	
+						</td>
+                        <td>					
+							<dx:ASPxTextBox  ID="txtNrZile"  Width="100" runat="server" ReadOnly="true"  AutoPostBack="false" ></dx:ASPxTextBox >
+						</td>
 					</tr>
 					<tr>				
 						<td >
@@ -194,34 +222,6 @@
                                 <CalendarProperties FirstDayOfWeek="Monday" />
                                 <ClientSideEvents  />
 							</dx:ASPxDateEdit>										
-						</td>
-					</tr>
-					<tr>
-						<td>		
-							<div style="float:left; padding-bottom:15px;">
-								<dx:ASPxLabel  ID="lblDeLaData" runat="server"   Width="100" Text="Data inceput"></dx:ASPxLabel >	
-							</div>
-						</td>
-                        <td>								
-							<dx:ASPxDateEdit  ID="deDeLaData" Width="140" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"   AutoPostBack="false"  >
-								<CalendarProperties FirstDayOfWeek="Monday" />
-								<ClientSideEvents  ValueChanged ="function(s,e){ OnTextChangedHandler(s); }" />
-							</dx:ASPxDateEdit>					
-						</td>
-						<td>					
-							<dx:ASPxLabel  ID="lblLaData" runat="server"  Width="100" Text="Data sfarsit"></dx:ASPxLabel >	
-						</td>
-                        <td>						
-							<dx:ASPxDateEdit  ID="deLaData" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
-								<CalendarProperties FirstDayOfWeek="Monday" />
-								<ClientSideEvents ValueChanged="function(s,e){ OnTextChangedHandler(s); }" />
-							</dx:ASPxDateEdit>										
-						</td>
-						<td>									
-							<dx:ASPxLabel  ID="lblNrZile" Width="100" runat="server"  Text="Nr. zile" ></dx:ASPxLabel >	
-						</td>
-                        <td>					
-							<dx:ASPxTextBox  ID="txtNrZile"  Width="100" runat="server" ReadOnly="true"  AutoPostBack="false" ></dx:ASPxTextBox >
 						</td>
 					</tr>
 					<tr>

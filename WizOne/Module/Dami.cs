@@ -661,7 +661,7 @@ namespace WizOne.Module
 
                 //Radu 27.04.2021 - se doreste afisarea numarului de zile si pentru cereri de tip ora (#833)
                 // CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
-                sqlFinal = $@"SELECT A.""Id"", B.F10003, B.F10008 {Dami.Operator()} ' ' {Dami.Operator()} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", B.F100901 AS EID,
+                sqlFinal = $@"SELECT A.""Id"", B.F10003, B.F10008 {Dami.Operator()} ' ' {Dami.Operator()} B.F10009 AS ""NumeAngajat"", F00305 AS Subcompania, A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", B.F100901 AS EID,
                                 CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
                                 A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
                                 A.""NrZile"" AS ""NrZile"", 
@@ -700,6 +700,7 @@ namespace WizOne.Module
                                 LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
                                 LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
                                 LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
+                                LEFT JOIN F003 ON F00304 = B.F10004
                                 WHERE 1=1 ";
             }
             catch (Exception ex)

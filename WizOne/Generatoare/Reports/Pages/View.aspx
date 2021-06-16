@@ -291,7 +291,7 @@
 
             if (validateParam && !validateParam.Visible) {
                 var items = webDocumentViewer.previewModel.actionLists.toolbarItems();
-                var confirmItemsId = [DevExpress.Report.Preview.ActionId.Print, DevExpress.Report.Preview.ActionId.PrintPage, DevExpress.Report.Preview.ActionId.ExportTo];
+                var confirmItemsId = [DevExpress.Reporting.Viewer.ActionId.Print, DevExpress.Reporting.Viewer.ActionId.PrintPage, DevExpress.Reporting.Viewer.ActionId.ExportTo];
                 var confirmItems = items.filter(function (item) { return confirmItemsId.indexOf(item.id) > -1 });
                         
                 for (var item in confirmItems) {
@@ -743,9 +743,9 @@
         function showActionConfirmationModal(actionId) {
             var messages = {};
 
-            messages[DevExpress.Report.Preview.ActionId.Print] = 'Printarea a fost efectuata cu succes?';
-            messages[DevExpress.Report.Preview.ActionId.PrintPage] = 'Printarea paginii a fost efectuata cu succes?';
-            messages[DevExpress.Report.Preview.ActionId.ExportTo] = 'Exportul a fost efectuat cu succes?';
+            messages[DevExpress.Reporting.Viewer.ActionId.Print] = 'Printarea a fost efectuata cu succes?';
+            messages[DevExpress.Reporting.Viewer.ActionId.PrintPage] = 'Printarea paginii a fost efectuata cu succes?';
+            messages[DevExpress.Reporting.Viewer.ActionId.ExportTo] = 'Exportul a fost efectuat cu succes?';
 
             swal({
                 title: 'Confirmare', text: messages[actionId],

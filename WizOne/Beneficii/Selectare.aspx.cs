@@ -395,7 +395,7 @@ namespace WizOne.Beneficii
 
                 strSql = "SELECT Ben_Cereri.IdAuto, F10003, IdSesiune, IdBeneficiu, DataInceput, DataSfarsit, Ben_Cereri.IdStare, DataInceputBen, DataSfarsitBen, Motiv, Ben_Cereri.USER_NO, Ben_Cereri.TIME FROM Ben_Cereri "
                     + " LEFT JOIN Ben_tblSesiuni ON Ben_Cereri.IdSesiune = Ben_tblSesiuni.Id "
-                    + " WHERE DataInceput <= GETDATE() AND GETDATE() <= DataSfarsit AND F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99);
+                    + " WHERE convert(date, DataInceput) <= convert(date, GETDATE()) AND convert(date, GETDATE()) <= convert(date, DataSfarsit) AND F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99);
                 DataTable dt = General.IncarcaDT(strSql, null);
                 Session["SelectBen_Ses"] = dt;
 
@@ -411,7 +411,7 @@ namespace WizOne.Beneficii
                                  inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
                                  LEFT JOIN Ben_tblSesiuni c on c.""DataInceput"" <= getdate() and getdate() <= c.""DataSfarsit""
                                  where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') 
-                                 and a.""DeLaData"" <= getdate() and getdate() <= a.""LaData""  
+                                 and convert(date, a.""DeLaData"") <= convert(date, getdate()) and convert(date, getdate()) <= convert(date, a.""LaData"")  
                                  ORDER BY a.""Denumire""";
 
 

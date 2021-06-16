@@ -1352,7 +1352,7 @@ namespace WizOne.Pontaj
                                             int nrLitere = Regex.Matches(lstOre[k], @"[a-zA-Z]").Count;
                                             if (nrLitere > 0)
                                             {
-                                                var denScurta = new String(lstOre[k].Where(Char.IsLetter).ToArray());
+                                                var denScurta = new string(lstOre[k].SkipWhile(c => !char.IsLetter(c)).ToArray());                                               
                                                 decimal nrOre = Convert.ToDecimal(lstOre[k].Replace(denScurta, ""));
                                                 dtOre.Rows.Add(denScurta, nrOre, 0 , 1);
                                             }
@@ -1518,7 +1518,7 @@ namespace WizOne.Pontaj
                                                 int nrLitere = Regex.Matches(lstOre[k], @"[a-zA-Z]").Count;
                                                 if (nrLitere > 0)
                                                 {
-                                                    var denScurta = new String(lstOre[k].Where(Char.IsLetter).ToArray());
+                                                    var denScurta = new string(lstOre[k].SkipWhile(c => !char.IsLetter(c)).ToArray());
                                                     decimal nrOre = Convert.ToDecimal(lstOre[k].Replace(denScurta, ""));
                                                     dtOre.Rows.Add(denScurta, nrOre, 0, 1);
                                                 }

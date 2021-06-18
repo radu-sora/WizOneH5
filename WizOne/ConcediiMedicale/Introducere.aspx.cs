@@ -84,6 +84,13 @@ namespace WizOne.ConcediiMedicale
                 btnSave.ClientVisible = false;
             }
 
+            string sql = "SELECT F01012, F01011 FROM F010";
+            DataTable dtLC = General.IncarcaDT(sql, null);
+            deDeLaData.MinDate = new DateTime(Convert.ToInt32(dtLC.Rows[0][1].ToString()), Convert.ToInt32(dtLC.Rows[0][0].ToString()), 1);
+            deLaData.MinDate = new DateTime(Convert.ToInt32(dtLC.Rows[0][1].ToString()), Convert.ToInt32(dtLC.Rows[0][0].ToString()), 1);
+            if (Session["CM_StartDate"] != null)            
+                deLaData.MaxDate = new DateTime(Convert.ToDateTime(Session["CM_StartDate"].ToString()).Year, Convert.ToDateTime(Session["CM_StartDate"].ToString()).Month, DateTime.DaysInMonth(Convert.ToDateTime(Session["CM_StartDate"].ToString()).Year, Convert.ToDateTime(Session["CM_StartDate"].ToString()).Month));
+                  
             if (!IsPostBack)
             {
                 dtAngajati = General.IncarcaDT(SelectAngajati(), null);
@@ -113,6 +120,10 @@ namespace WizOne.ConcediiMedicale
             }
             else
             {
+                DataTable dtCopil = Session["CM_CNPCopil"] as DataTable;
+                cmbCNPCopil.DataSource = dtCopil;
+                cmbCNPCopil.DataBind();
+
                 dtAngajati = Session["CM_Angajati"] as DataTable;
                 cmbAng.DataSource = dtAngajati;
                 cmbAng.DataBind();
@@ -126,8 +137,6 @@ namespace WizOne.ConcediiMedicale
                 //if (Session["CM_EndDate"] != null)
                 //    deLaData.Value = Session["CM_EndDate"] as DateTime?;
 
-                string sql = "SELECT F01012, F01011 FROM F010";
-                DataTable dtLC = General.IncarcaDT(sql, null);
 
                 DateTime dtTmp = Convert.ToDateTime(Session["CM_StartDate"]);
                 if (dtTmp.Month > Convert.ToInt32(dtLC.Rows[0][0].ToString()) && Session["CM_HR"] != null && Session["CM_HR"].ToString() == "1")
@@ -227,7 +236,7 @@ namespace WizOne.ConcediiMedicale
                 txtNrAviz.Text = dtCM.Rows[0]["NrAvizMedicExpert"] == DBNull.Value ? "" : dtCM.Rows[0]["NrAvizMedicExpert"].ToString();
                 deDataAviz.Value = Convert.ToDateTime(dtCM.Rows[0]["DataAvizDSP"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataAvizDSP"].ToString());
                 txtMedic.Text = dtCM.Rows[0]["MedicCurant"] == DBNull.Value ? "" : dtCM.Rows[0]["MedicCurant"].ToString();
-                cmbCNPCopil.Value = Convert.ToInt32(dtCM.Rows[0]["CNPCopil"] == DBNull.Value ? "0" : dtCM.Rows[0]["CNPCopil"].ToString());
+                cmbCNPCopil.Value = dtCM.Rows[0]["CNPCopil"] == DBNull.Value ? null : dtCM.Rows[0]["CNPCopil"].ToString();
             }
 
             txtNrAviz.MaxLength = 10;
@@ -451,6 +460,19 @@ namespace WizOne.ConcediiMedicale
                 }
             }
 
+            DataTable dtCM = General.IncarcaDT("SELECT * FROM CM_Cereri");
+            for (int i = 0; i < dtCM.Rows.Count; i++)
+            {
+                if (Session["CM_Id"] == null &&
+                    dtCM.Rows[i]["SerieCM"].ToString().Length > 0 && dtCM.Rows[i]["SerieCM"].ToString() == txtSerie.Text
+                  && dtCM.Rows[i]["NumarCM"].ToString().Length > 0 && dtCM.Rows[i]["NumarCM"].ToString() == txtNr.Text)
+                {
+                    bErr = true;
+                    szErrMsg += System.Environment.NewLine + "- exista deja un CM cu aceeasi serie si acelasi numar !";
+                    break;
+                }
+            }
+
             if (rbConcCont.Checked)
             {
                 if (deDataCMInit.Value == null)
@@ -595,7 +617,7 @@ namespace WizOne.ConcediiMedicale
                 int nrZileLC = diff + 1;
 
                 int limitazile = 90;
-                int zile = GetZileMed_cod_ind(marca, Convert.ToDateTime(deLaData.Value), txtCodIndemn.Text, (cmbCNPCopil.Value ?? "0").ToString(), out limitazile);
+                int zile = GetZileMed_cod_ind(marca, Convert.ToDateTime(deLaData.Value), txtCodIndemn.Text, (cmbCNPCopil.Value ?? "").ToString(), out limitazile);
 
                 if (zile + nrZileLC > limitazile)
                 {
@@ -984,7 +1006,7 @@ namespace WizOne.ConcediiMedicale
 
 
             sql += "VALUES ({0}, {1}, {2}, {3}, {4}, '{5}', '{6}', {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, '{17}', '{18}', {19}, "
-                + " {20}, {21}, {22}, {23}, {24}, {25}, {26}, {27}, {28}, {29}, {30}, {31}, {32},  {33}, '{34}', {35}, '{36}', {37}, {38}, {39}, {40}, {41}, {42}, {43}, {44}, {45} )";
+                + " {20}, {21}, {22}, {23}, {24}, {25}, {26}, {27}, {28}, {29}, {30}, {31}, {32},  {33}, '{34}', {35}, '{36}', '{37}', {38}, {39}, {40}, {41}, {42}, {43}, {44}, {45} )";
 
             //sql = string.Format(sql, dtAng.Rows[0]["F10003"].ToString(), dtAng.Rows[0]["F10004"].ToString(), dtAng.Rows[0]["F10005"].ToString(), dtAng.Rows[0]["F10006"].ToString(), dtAng.Rows[0]["F10007"].ToString(), //4
             //    cod, 1, tarif.ToString(new CultureInfo("en-US")), zile, proc.ToString(new CultureInfo("en-US")), suma.ToString(new CultureInfo("en-US")), 0, 0, 0, //13
@@ -1014,6 +1036,11 @@ namespace WizOne.ConcediiMedicale
             else
                 id = Dami.NextId("CM_Cereri");
 
+            DataTable dtF = new DataTable();
+            dtF = General.IncarcaDT("SELECT * FROM \"tblFisiere\"", null);
+            if (Session["CM_Id"] != null && dtF.Select("Tabela = 'CM_Cereri' AND Id = " + Session["CM_Id"].ToString()).Count() == 0)
+                Session["CM_Document"] = 1;
+
             sql = string.Format(sql, id, Session["MarcaCM"].ToString(), (rbProgrNorm.Checked ? "1" : "0"), Convert.ToInt32(cmbTipConcediu.Value ?? 0), txtCodIndemn.Text, txtSerie.Text, //5
                 txtNr.Text, "CONVERT(DATETIME, '" + dtData.Day.ToString().PadLeft(2, '0') + "/" + dtData.Month.ToString().PadLeft(2, '0') + "/" + dtData.Year.ToString() + "', 103)", Convert.ToInt32(cmbLocPresc.Value ?? 0), //8
                 "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)", "CONVERT(DATETIME, '" + dtEnd.Day.ToString().PadLeft(2, '0') + "/" + dtEnd.Month.ToString().PadLeft(2, '0') + "/" + dtEnd.Year.ToString() + "', 103)", //10
@@ -1021,9 +1048,9 @@ namespace WizOne.ConcediiMedicale
                 txtSCMInit.Text, txtNrCMInit.Text, "CONVERT(DATETIME, '" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + (dtDataCMInit.Year < 1900 ? 2100 : dtDataCMInit.Year).ToString() + "', 103)", //19
                 Convert.ToInt32(cmbCT1.Value ?? 0), Convert.ToInt32(cmbCT2.Value ?? 0), Convert.ToInt32(cmbCT3.Value ?? 0), Convert.ToInt32(cmbCT4.Value ?? 0), Convert.ToInt32(cmbCT5.Value ?? 0), //24
                 txtCT1.Text.Length <= 0 ? "0" : txtCT1.Text, txtCT2.Text.Length <= 0 ? "0" : txtCT2.Text, txtCT3.Text.Length <= 0 ? "0" : txtCT3.Text, txtCT4.Text.Length <= 0 ? "0" : txtCT4.Text, txtCT5.Text.Length <= 0 ? "0" : txtCT5.Text, //29
-                txtBCCM.Text.Length <= 0 ? "0" : txtBCCM.Text.ToString(new CultureInfo("en-US")), txtZBC.Text.Length <= 0 ? "0" : txtZBC.Text, txtMZBC.Text.Length <= 0 ? "0" : txtMZBC.Text.ToString(new CultureInfo("en-US")), txtMZ.Text.Length <= 0 ? "0" : txtMZ.Text.ToString(new CultureInfo("en-US")), //33
+                txtBCCM.Text.Length <= 0 ? "0" : txtBCCM.Text.ToString(new CultureInfo("en-US")), txtZBC.Text.Length <= 0 ? "0" : txtZBC.Text, txtMZBC.Text.Length <= 0 ? "0" : txtMZBC.Text.ToString(new CultureInfo("en-US")), txtMZ.Text.Length <= 0 ? "0" : txtMZ.Text.Replace(',', '.').ToString(new CultureInfo("en-US")), //33
                 txtNrAviz.Text, "CONVERT(DATETIME, '" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + (dtAviz.Year < 1900 ? 2100 : dtAviz.Year).ToString() + "', 103)", txtMedic.Text, //36
-                Convert.ToInt32(cmbCNPCopil.Value ?? 0), 1, (Session["CM_Document"] == null ? 0 : 1), (chkUrgenta.Checked ? "1" : "0"), suma.ToString(new CultureInfo("en-US")), tarif.ToString(new CultureInfo("en-US")), cod, Convert.ToInt32(Session["UserId"].ToString()), "GETDATE()"); //43
+                (cmbCNPCopil.Value ?? ""), 1, (Session["CM_Document"] == null ? 0 : 1), (chkUrgenta.Checked ? "1" : "0"), suma.ToString(new CultureInfo("en-US")), tarif.ToString(new CultureInfo("en-US")), cod, Convert.ToInt32(Session["UserId"].ToString()), "GETDATE()"); //43
 
             //cod, 1, tarif.ToString(new CultureInfo("en-US")), zile, proc.ToString(new CultureInfo("en-US")), suma.ToString(new CultureInfo("en-US")), 0, 0, 0, //13
             //(Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)"
@@ -1425,12 +1452,24 @@ namespace WizOne.ConcediiMedicale
             //    cmbCNPCopil.ClientVisible = false;
             //}
         }
+        void OnSelAngajat(string marca)
+        {
+            DataTable dt = General.IncarcaDT("SELECT F11012 as Id, F11010 + ' ' + f11005 as Denumire FROM F010, F110 WHERE F01002 = F11002 AND ((DATEPART(yyyy,F11006)+18) * 100 + DATEPART(mm,F11006)) >= (F01011 * 100 + F01012) AND F11003 = " + marca, null);
+            cmbCNPCopil.DataSource = dt;            
+            cmbCNPCopil.DataBind();
+            Session["CM_CNPCopil"] = dt;
+        }
+
 
         void OnSelStartDate()
         {
             Session["CM_StartDate"] = Convert.ToDateTime(deDeLaData.Value);
             InitWorkingDays();
             deData.Value = deDeLaData.Value;
+
+            string sql = "SELECT F01012, F01011 FROM F010";
+            DataTable dtLC = General.IncarcaDT(sql, null);
+            deLaData.MaxDate = new DateTime(Convert.ToDateTime(deDeLaData.Value).Year, Convert.ToDateTime(deDeLaData.Value).Month, DateTime.DaysInMonth(Convert.ToDateTime(deDeLaData.Value).Year, Convert.ToDateTime(deDeLaData.Value).Month));
         }
 
         void OnSelEndDate()
@@ -1461,12 +1500,33 @@ namespace WizOne.ConcediiMedicale
                 rbOptiune2.Visible = true;
                 rbOptiune1.Checked = true;
                 btnMZ.Enabled = false;
+                btnMZ.ClientVisible = false;
+                lblBCCM.ClientVisible = false;
+                lblZBC.ClientVisible = false;
+                lblMZBC.ClientVisible = false;
+                lblMZ.ClientVisible = false;
+                txtBCCM.ClientVisible = false;
+                txtZBC.ClientVisible = false;
+                txtMZBC.ClientVisible = false;
+                txtMZ.ClientVisible = false;
             }
             else
             {
                 rbOptiune1.Visible = false;
                 rbOptiune2.Visible = false;
-                btnMZ.Enabled = true;
+                if (Session["CM_HR"] != null && Session["CM_HR"].ToString() == "1")
+                {
+                    btnMZ.Enabled = true;
+                    btnMZ.ClientVisible = true;
+                    lblBCCM.ClientVisible = true;
+                    lblZBC.ClientVisible = true;
+                    lblMZBC.ClientVisible = true;
+                    lblMZ.ClientVisible = true;
+                    txtBCCM.ClientVisible = true;
+                    txtZBC.ClientVisible = true;
+                    txtMZBC.ClientVisible = true;
+                    txtMZ.ClientVisible = true;
+                }
             }
 
             DataTable dtMARDEF = new DataTable();
@@ -2071,6 +2131,9 @@ namespace WizOne.ConcediiMedicale
             DataSet ds = Session["ConcediiMedicale"] as DataSet;
             switch (param[0])
             {
+                case "cmbAng":
+                    OnSelAngajat(param[1]);
+                    break;
                 case "cmbTipConcediu":
                     OnSelChangeTip();
                     break;

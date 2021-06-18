@@ -76,6 +76,8 @@ namespace WizOne.ConcediiMedicale
                     tip = 2;
                     Session["CM_HR"] = "1";
                 }
+                else
+                    Session["CM_HR"] = "0";
 
                 if (tip == 1)
                 {            
@@ -564,28 +566,24 @@ namespace WizOne.ConcediiMedicale
                         from
                         (SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"",
                         X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
-                        FROM ""Avs_CereriIstoric"" B
-                        INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id""
-                        INNER JOIN F100 A ON A.F10003 = C.F10003
+                        FROM  F100 A
                         LEFT JOIN F718 X ON A.F10071 = X.F71802
                         LEFT JOIN F003 F ON A.F10004 = F.F00304
                         LEFT JOIN F004 G ON A.F10005 = G.F00405
                         LEFT JOIN F005 H ON A.F10006 = H.F00506
                         LEFT JOIN F006 I ON A.F10007 = I.F00607
-                        left join ""F100Supervizori"" FF on C.f10003 = FF.f10003 and(-1 * B.""IdSuper"") = FF.IdSuper
-                        WHERE case when B.""IdSuper"" >= 0 then  B.""IdUser"" else FF.IdUser end = {Session["UserId"]}
+                        left join ""F100Supervizori"" FF on A.f10003 = FF.f10003 
+                        WHERE  FF.IdUser  = {Session["UserId"]}
                         union
                         SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"", 
                         X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament""
-                        FROM ""Avs_CereriIstoric"" B
-                        INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id""
-                        INNER JOIN F100 A ON A.F10003 = C.F10003
+                        FROM F100 A 
                         LEFT JOIN F718 X ON A.F10071 = X.F71802
                         LEFT JOIN F003 F ON A.F10004 = F.F00304
                         LEFT JOIN F004 G ON A.F10005 = G.F00405
                         LEFT JOIN F005 H ON A.F10006 = H.F00506
                         LEFT JOIN F006 I ON A.F10007 = I.F00607
-                        left join ""F100Supervizori"" GG on C.f10003 = GG.f10003 and CHARINDEX(',' + CONVERT(nvarchar(20),GG.""IdSuper"") + ','  ,  ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0                     
+                        left join ""F100Supervizori"" GG on A.f10003 = GG.f10003 and CHARINDEX(',' + CONVERT(nvarchar(20),GG.""IdSuper"") + ','  ,  ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0                     
                         WHERE gg.iduser = {Session["UserId"]} ) T order by T.""NumeComplet"" ";
 
             }
@@ -619,8 +617,8 @@ namespace WizOne.ConcediiMedicale
                 //string param = General.Nz(Request["tip"], prc.EncryptString(Constante.cheieCriptare, "Introducere", 1)).ToString();
                 //param = prc.EncryptString(Constante.cheieCriptare, param, 2);
                 //int tip = param == "Aprobare" ? 2 : 1;
-                int tip = Convert.ToInt32(General.Nz(Session["CM_HR"], "1").ToString());
-                if (tip == 2)
+                int tip = Convert.ToInt32(General.Nz(Session["CM_HR"], "0").ToString());
+                if (tip == 1)
                     strSql = "SELECT * FROM CM_Cereri";
                 else
                     strSql = "SELECT * FROM CM_Cereri WHERE F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ")";

@@ -118,7 +118,8 @@
 									<dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
 									<dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />
 									<dx:ListBoxColumn FieldName="Functia" Caption="Functia" Width="130px" />
-								</Columns>                            
+								</Columns> 
+								<ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
 							</dx:ASPxComboBox>							
 						</td>	
                         <td>
@@ -470,9 +471,7 @@
                             <dx:ASPxRadioButton ID="rbOptiune1" Width="125" runat="server" Text="Media zilnica pt. CM cf. O 158/2005"  Visible="false"  ClientInstanceName="rbOptiune1"
                                  GroupName="Avans">
                             </dx:ASPxRadioButton>
-						</td>
-                     </tr>
-                    <tr>
+						</td>            
                        <td>
                             <dx:ASPxRadioButton ID="rbOptiune2" Width="125" runat="server" Text="Media zilnica pt. AMBP cf. L 346/2002"   Visible="false" ClientInstanceName="rbOptiune2"
                                  GroupName="Avans">

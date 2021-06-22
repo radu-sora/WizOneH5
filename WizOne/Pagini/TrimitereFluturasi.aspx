@@ -44,6 +44,10 @@
             </td>
             <td align="right">  
                 <dx:ASPxButton ID="btnTrimitere" ClientInstanceName="btnTrimitere" ClientIDMode="Static" runat="server" Text="Trimitere" AutoPostBack="true" OnClick="btnTrimitere_Click" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) {
+                        pnlLoading.Show();
+                        e.processOnServer = true;
+                    }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/mail.png"></Image>
                 </dx:ASPxButton>  
                 <dx:ASPxButton ID="btnSalvare" ClientInstanceName="btnSalvare" ClientIDMode="Static" runat="server" Text="Salvare" AutoPostBack="true" OnClick="btnSalvare_Click" oncontextMenu="ctx(this,event)" >
@@ -230,6 +234,7 @@
 
                             <dx:ASPxHtmlEditor ID="txtContinut" runat="server" ClientInstanceName="txtContinut" Height="370px" Width="100%">
                                 <ClientSideEvents GotFocus="onGotFocus" />
+                                <Settings AllowHtmlView ="false" />
                                 <SettingsDialogs>
                                     <InsertImageDialog>
                                         <SettingsImageUpload UploadFolder="~/UploadFiles/Images/">

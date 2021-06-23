@@ -598,9 +598,9 @@ namespace WizOne.Pontaj
                         if (Constante.tipBD == 1)
                         {
                             oraIn = ", \"In1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraintrare from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
-                            oraOut = ", \"Out1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
+                            oraOut = ", \"Out1\" =convert(datetime, convert(varchar, (case when (select convert(date, OraIntrare) from Ptj_Programe where id=" + sablon["IdProgram" + i].ToString() + ") = (select convert(date, OraIesire) from Ptj_Programe where id=" + sablon["IdProgram" + i].ToString() + ") then Ziua else Ziua+1 end), 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
                             firstIn = ", \"FirstInPaid\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraintrare from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
-                            lastOut = ", \"LastOutPaid\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
+                            lastOut = ", \"LastOutPaid\" =convert(datetime, convert(varchar, (case when (select convert(date, OraIntrare) from Ptj_Programe where id=" + sablon["IdProgram" + i].ToString() + ") = (select convert(date, OraIesire) from Ptj_Programe where id=" + sablon["IdProgram" + i].ToString() + ") then Ziua else Ziua+1 end), 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
 
                         }
                         else

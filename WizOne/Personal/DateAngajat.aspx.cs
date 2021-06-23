@@ -585,6 +585,9 @@ namespace WizOne.Personal
 
                     InserareAngajat(Session["Marca"].ToString(), ds.Tables[1], ds.Tables[2]);
 
+                    ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                    Session["Marca"] = Convert.ToInt32(ds.Tables[1].Rows[0]["F10003"].ToString());
+
                     //Florin 2019.06.24
                     //Mihnea 2019.06.13
                     int tip_pass = 0;
@@ -1269,6 +1272,10 @@ namespace WizOne.Personal
                         if (cnt != 0)
                         {
                             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                            ds.Tables[0].Rows[0]["F10003"] = marcaFin;
+                            ds.Tables[1].Rows[0]["F10003"] = marcaFin;
+                            ds.Tables[2].Rows[0]["F10003"] = marcaFin;
+
                             dt100.Rows[0]["F10003"] = marcaFin;
                             dt1001.Rows[0]["F10003"] = marcaFin;
 
@@ -1320,6 +1327,8 @@ namespace WizOne.Personal
                             General.ExecutaNonQuery("UPDATE F111 SET F11103 = " + marcaFin + " WHERE F11103 = " + marcaInit, null);
 
                             Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;
+
+                            Session["InformatiaCurentaPersonal"] = ds;
                         }
                     }
                 }   

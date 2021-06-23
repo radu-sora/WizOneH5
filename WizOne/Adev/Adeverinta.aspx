@@ -269,10 +269,10 @@
                     <td>
                         <dx:ASPxLabel ID="lblTipGen" runat="server" Text="Tip generare:" >                                
                         </dx:ASPxLabel>
-                        <dx:ASPxRadioButton ID="rbTipGen1" Width="175" runat="server" RepeatDirection="Horizontal"  Text="intr-un singur fisier" Enabled="true"  ClientInstanceName="rbTipGen1"
+                        <dx:ASPxRadioButton ID="rbTipGen1" Width="175" runat="server" RepeatDirection="Horizontal"  Text="intr-un singur fisier" Enabled="true" oncontextMenu="ctx(this,event)"  ClientInstanceName="rbTipGen1"
                                 GroupName="TipGen">                                                                
                         </dx:ASPxRadioButton>
-                        <dx:ASPxRadioButton ID="rbTipGen2"  Width="175" runat="server" RepeatDirection="Horizontal"  Text="in fisiere separate" Enabled="true" ClientInstanceName="rbTipGen2" 
+                        <dx:ASPxRadioButton ID="rbTipGen2"  Width="175" runat="server" RepeatDirection="Horizontal"  Text="in fisiere separate" Enabled="true" oncontextMenu="ctx(this,event)" ClientInstanceName="rbTipGen2" 
                                 GroupName="TipGen">                              
                         </dx:ASPxRadioButton>
                     </td>
@@ -287,7 +287,7 @@
                         <tr>
                             <td>
                                 <label id="lblAdev" runat="server" style="display:inline-block;">Tip adeverinta</label>
-                                <dx:ASPxComboBox ID="cmbAdev" runat="server" ClientInstanceName="cmbAdev" ClientIDMode="Static" Width="175px" ValueField="Id" DropDownWidth="175" 
+                                <dx:ASPxComboBox ID="cmbAdev" runat="server" ClientInstanceName="cmbAdev" ClientIDMode="Static" Width="175px" ValueField="Id" oncontextMenu="ctx(this,event)" DropDownWidth="175" 
                                     TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >   
                                     <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />  
                                 </dx:ASPxComboBox>
@@ -296,7 +296,7 @@
                         <tr>
                             <td>
                                 <label id="lblAng" runat="server" style="display:inline-block;">Angajat</label>
-                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="175px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
+                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="175px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)"
                                         CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >     
                                     <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />                               
                                     <Columns>
@@ -314,17 +314,17 @@
 
                         <tr>
                             <td>
-                                <dx:ASPxCheckBox ID="chkVenit"  runat="server" Text="Angajati cu venituri in ..." TextAlign="Left" ClientInstanceName="chkVenit" >
+                                <dx:ASPxCheckBox ID="chkVenit"  runat="server" Text="Angajati cu venituri in ..." TextAlign="Left" ClientInstanceName="chkVenit" oncontextMenu="ctx(this,event)">
                                     <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
                                 </dx:ASPxCheckBox>
                             </td>
                             <td>
-                                <dx:ASPxCheckBox ID="chkCIC"  runat="server"  Text="CIC" TextAlign="Left" ClientInstanceName="chkCIC" >
+                                <dx:ASPxCheckBox ID="chkCIC"  runat="server"  Text="CIC" TextAlign="Left" ClientInstanceName="chkCIC" oncontextMenu="ctx(this,event)">
                                     <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
                                 </dx:ASPxCheckBox>
                             </td>
                             <td>
-                                <dx:ASPxCheckBox ID="chkActivi"  runat="server"  Text="Activi" TextAlign="Left"  ClientInstanceName="chkActivi" >
+                                <dx:ASPxCheckBox ID="chkActivi"  runat="server"  Text="Activi" TextAlign="Left"  ClientInstanceName="chkActivi" oncontextMenu="ctx(this,event)">
                                     <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
                                 </dx:ASPxCheckBox>
                             </td>
@@ -352,24 +352,24 @@
                     <table width="10%" >
                         <tr>
                             <td align="left">                             
-                                    <dx:ASPxCheckBox ID="chkRep1"  runat="server" Width="180"  Text="Apare reprezentant legal 1?" TextAlign="Left" ClientInstanceName="chkRep1" >
+                                    <dx:ASPxCheckBox ID="chkRep1"  runat="server" Width="180"  Text="Apare reprezentant legal 1?" TextAlign="Left" ClientInstanceName="chkRep1" oncontextMenu="ctx(this,event)">
                                     </dx:ASPxCheckBox>   
                              </td>  
                             <td align="right">                               
-                                    <dx:ASPxCheckBox ID="chkRep2"  runat="server" Width="180"  Text="Apare reprezentant legal 2?" TextAlign="Left" ClientInstanceName="chkRep2" >
+                                    <dx:ASPxCheckBox ID="chkRep2"  runat="server" Width="180"  Text="Apare reprezentant legal 2?" TextAlign="Left" ClientInstanceName="chkRep2" oncontextMenu="ctx(this,event)">
                                     </dx:ASPxCheckBox>                                
                             </td>
                         </tr>    
                         <tr>
 						    <td >
 							    <dx:ASPxLabel  ID="lblNumeRL1" Width="100" runat="server"  Text="Nume: " ></dx:ASPxLabel >	
-							    <dx:ASPxTextBox  ID="txtNumeRL1"  Width="100" runat="server" AutoPostBack="false" >         
+							    <dx:ASPxTextBox  ID="txtNumeRL1"  Width="100" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">         
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                          
 							    </dx:ASPxTextBox >
 						    </td>
 						    <td >
 							    <dx:ASPxLabel  ID="lblNumeRL2" Width="100" runat="server"  Text="Nume: " ></dx:ASPxLabel >	
-							    <dx:ASPxTextBox  ID="txtNumeRL2"  Width="100" runat="server"  AutoPostBack="false" >  
+							    <dx:ASPxTextBox  ID="txtNumeRL2"  Width="100" runat="server"  AutoPostBack="false" oncontextMenu="ctx(this,event)">  
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                                  
 							    </dx:ASPxTextBox >
 						    </td>
@@ -377,13 +377,13 @@
                         <tr>
 						    <td >
 							    <dx:ASPxLabel  ID="lblFunctieRL1" Width="100" runat="server"  Text="Functie: " ></dx:ASPxLabel >	
-							    <dx:ASPxTextBox  ID="txtFunctieRL1"  Width="100" runat="server"  AutoPostBack="false" >  
+							    <dx:ASPxTextBox  ID="txtFunctieRL1"  Width="100" runat="server"  AutoPostBack="false" oncontextMenu="ctx(this,event)">  
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                                  
 							    </dx:ASPxTextBox >
 						    </td>
 						    <td >
 							    <dx:ASPxLabel  ID="lblFunctieRL2" Width="100" runat="server"  Text="Functie: " ></dx:ASPxLabel >	
-							    <dx:ASPxTextBox  ID="txtFunctieRL2"  Width="100" runat="server"   AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtFunctieRL2"  Width="100" runat="server"   AutoPostBack="false" oncontextMenu="ctx(this,event)">
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							    </dx:ASPxTextBox >
 						    </td>
@@ -397,11 +397,11 @@
                             <td>
                                 <dx:ASPxLabel ID="lblInterval" runat="server" Text="Interval:" >                                
                                 </dx:ASPxLabel>
-                                <dx:ASPxRadioButton ID="rbInterval1" Width="75" runat="server" RepeatDirection="Horizontal"  Text="12 luni" Enabled="true"  ClientInstanceName="rbInterval1"
+                                <dx:ASPxRadioButton ID="rbInterval1" Width="75" runat="server" RepeatDirection="Horizontal"  Text="12 luni" Enabled="true"  ClientInstanceName="rbInterval1" oncontextMenu="ctx(this,event)"
                                      GroupName="Interval"> 
                                     <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                    
                                 </dx:ASPxRadioButton>
-                                <dx:ASPxRadioButton ID="rbInterval2"  Width="175" runat="server" RepeatDirection="Horizontal"  Text="24 luni" Enabled="true" ClientInstanceName="rbInterval2" 
+                                <dx:ASPxRadioButton ID="rbInterval2"  Width="175" runat="server" RepeatDirection="Horizontal"  Text="24 luni" Enabled="true" ClientInstanceName="rbInterval2"  oncontextMenu="ctx(this,event)"
                                      GroupName="Interval">
                                     <ClientSideEvents  CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                  
                                 </dx:ASPxRadioButton>
@@ -409,11 +409,11 @@
                             <td>
                                 <dx:ASPxLabel ID="lblEmitent" runat="server" Text="Emitent:" >                                
                                 </dx:ASPxLabel> 
-                                <dx:ASPxRadioButton ID="rbEmitent1" Width="75" runat="server" RepeatDirection="Horizontal" Text="Angajator" Enabled="true"  ClientInstanceName="rbEmitent1"
+                                <dx:ASPxRadioButton ID="rbEmitent1" Width="75" runat="server" RepeatDirection="Horizontal" Text="Angajator" Enabled="true"  ClientInstanceName="rbEmitent1" oncontextMenu="ctx(this,event)"
                                      GroupName="Emitent">                                    
                                      <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />
                                 </dx:ASPxRadioButton>
-                                <dx:ASPxRadioButton ID="rbEmitent2"  Width="125" runat="server" RepeatDirection="Horizontal" Text="Casa de sanatate" Enabled="true" ClientInstanceName="rbEmitent2" 
+                                <dx:ASPxRadioButton ID="rbEmitent2"  Width="125" runat="server" RepeatDirection="Horizontal" Text="Casa de sanatate" Enabled="true" ClientInstanceName="rbEmitent2"  oncontextMenu="ctx(this,event)"
                                      GroupName="Emitent">     
                                      <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                            
                                 </dx:ASPxRadioButton>
@@ -424,7 +424,7 @@
 							    <dx:ASPxLabel  ID="lblCoduri" Width="300" runat="server"  Text="Coduri indemnizatii excluse din document" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="left">
-							    <dx:ASPxTextBox  ID="txtCoduri"  Width="200" runat="server" AutoPostBack="false" >     
+							    <dx:ASPxTextBox  ID="txtCoduri"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">     
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                              
 							    </dx:ASPxTextBox >
 						    </td>
@@ -436,7 +436,7 @@
                     <table width="10%" >
                         <tr>
                             <td align="left">                             
-                                    <dx:ASPxCheckBox ID="chkSalNet"  runat="server" Width="150"  Text="Include salariul net?" TextAlign="Left" ClientInstanceName="chkSalNet" >
+                                    <dx:ASPxCheckBox ID="chkSalNet"  runat="server" Width="150"  Text="Include salariul net?" TextAlign="Left" ClientInstanceName="chkSalNet" oncontextMenu="ctx(this,event)">
                                          <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />
                                     </dx:ASPxCheckBox>   
                              </td> 
@@ -446,7 +446,7 @@
 							    <dx:ASPxLabel  ID="lblAnul" Width="100" runat="server"  Text="Anul " ></dx:ASPxLabel >	
 						    </td>	
 						    <td>
-							    <dx:ASPxComboBox ID="cmbAnul"  Width="75"  runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id"  ValueType="System.Int32">
+							    <dx:ASPxComboBox ID="cmbAnul"  Width="75"  runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id"  ValueType="System.Int32" oncontextMenu="ctx(this,event)">
                                      <ClientSideEvents   SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
 							    </dx:ASPxComboBox >
 						    </td>
@@ -457,13 +457,13 @@
                                 </dx:ASPxLabel>
                             </td>
                             <td>
-                                <dx:ASPxRadioButton ID="rbSumeContract1" Width="75" runat="server" Text="pe Marca" Enabled="true"  ClientInstanceName="rbSumeContract1"
+                                <dx:ASPxRadioButton ID="rbSumeContract1" Width="75" runat="server" Text="pe Marca" Enabled="true"  ClientInstanceName="rbSumeContract1" oncontextMenu="ctx(this,event)"
                                      GroupName="SumeCtr">                                    
                                      <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />
                                 </dx:ASPxRadioButton>
                             </td>
                             <td>
-                                <dx:ASPxRadioButton ID="rbSumeContract2"  Width="75" runat="server" Text="pe CNP" Enabled="true" ClientInstanceName="rbSumeContract2" 
+                                <dx:ASPxRadioButton ID="rbSumeContract2"  Width="75" runat="server" Text="pe CNP" Enabled="true" ClientInstanceName="rbSumeContract2" oncontextMenu="ctx(this,event)"
                                      GroupName="SumeCtr">           
                                      <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                      
                                 </dx:ASPxRadioButton>
@@ -479,7 +479,7 @@
 							    <dx:ASPxLabel  ID="lblVarstaCopil" Width="175" runat="server"  Text="Varsta copil pentru filtrare" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="left">
-							    <dx:ASPxTextBox  ID="txtVarstaCopil"  Width="50" runat="server" AutoPostBack="false" >      
+							    <dx:ASPxTextBox  ID="txtVarstaCopil"  Width="50" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">      
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                             
 							    </dx:ASPxTextBox >
 						    </td>
@@ -487,7 +487,7 @@
 							    <dx:ASPxLabel  ID="lblVenit" Width="100" runat="server"  Text="Venit net realizat" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="right">
-							    <dx:ASPxTextBox  ID="txtVenit"  Width="200" runat="server"  AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtVenit"  Width="200" runat="server"  AutoPostBack="false" oncontextMenu="ctx(this,event)">
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							    </dx:ASPxTextBox >
 						    </td>
@@ -497,7 +497,7 @@
 							    <dx:ASPxLabel  ID="lblZileLucrate" Width="100" runat="server"  Text="Zile lucrate" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="left">
-							    <dx:ASPxTextBox  ID="txtZileLucrate"  Width="200" runat="server" AutoPostBack="false" >   
+							    <dx:ASPxTextBox  ID="txtZileLucrate"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">   
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                                
 							    </dx:ASPxTextBox >
 						    </td>
@@ -505,7 +505,7 @@
 							    <dx:ASPxLabel  ID="lblZileAbsente" Width="100" runat="server"  Text="Zile absente" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="right">
-							    <dx:ASPxTextBox  ID="txtZileAbsente"  Width="200" runat="server"  AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtZileAbsente"  Width="200" runat="server"  AutoPostBack="false" oncontextMenu="ctx(this,event)">
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							    </dx:ASPxTextBox >
 						    </td>
@@ -515,7 +515,7 @@
 							    <dx:ASPxLabel  ID="lblZileCO" Width="100" runat="server"  Text="Zile CO" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="left">
-							    <dx:ASPxTextBox  ID="txtZileCO"  Width="200" runat="server" AutoPostBack="false" >    
+							    <dx:ASPxTextBox  ID="txtZileCO"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">    
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                               
 							    </dx:ASPxTextBox >
 						    </td>
@@ -523,7 +523,7 @@
 							    <dx:ASPxLabel  ID="lblZileCM" Width="100" runat="server"  Text="Zile CM" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="right">
-							    <dx:ASPxTextBox  ID="txtZileCM"  Width="200" runat="server"  AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtZileCM"  Width="200" runat="server"  AutoPostBack="false" oncontextMenu="ctx(this,event)">
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							    </dx:ASPxTextBox >
 						    </td>
@@ -546,7 +546,7 @@
 							    <dx:ASPxLabel  ID="lblTitlu" Width="100" runat="server"  Text="Titlu" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="left">
-							    <dx:ASPxTextBox  ID="txtTitlu"  Width="200" runat="server" AutoPostBack="false" > 
+							    <dx:ASPxTextBox  ID="txtTitlu"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)"> 
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                                  
 							    </dx:ASPxTextBox >
 						    </td>
@@ -554,7 +554,7 @@
 							    <dx:ASPxLabel  ID="lblCompartiment" Width="100" runat="server"  Text="Compartimentul" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="left">
-							    <dx:ASPxTextBox  ID="txtCompartiment"  Width="200" runat="server"  AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtCompartiment"  Width="200" runat="server"  AutoPostBack="false" oncontextMenu="ctx(this,event)">
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							    </dx:ASPxTextBox >
 						    </td>
@@ -578,7 +578,7 @@
 							    <dx:ASPxLabel  ID="lblZileSusp" Width="100" runat="server"  Text="Zile suspendare" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="left">
-							    <dx:ASPxTextBox  ID="txtZileSusp"  Width="200" runat="server" AutoPostBack="false" >        
+							    <dx:ASPxTextBox  ID="txtZileSusp"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">        
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
 							    </dx:ASPxTextBox >
 						    </td>
@@ -603,7 +603,7 @@
 							    <dx:ASPxLabel   Width="100" runat="server"  Text="     " ></dx:ASPxLabel >	
 						    </td>
                             <td align="left">                             
-                                    <dx:ASPxCheckBox ID="chkDIS"  runat="server" Width="300"  Text="Doar suspendarile din intervalul raportat" TextAlign="Right" ClientInstanceName="chkDIS" >
+                                    <dx:ASPxCheckBox ID="chkDIS"  runat="server" Width="300"  Text="Doar suspendarile din intervalul raportat" TextAlign="Right" ClientInstanceName="chkDIS" oncontextMenu="ctx(this,event)">
                                          <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />
                                     </dx:ASPxCheckBox>   
                              </td>                             
@@ -617,11 +617,11 @@
                             <td>
                                 <dx:ASPxLabel ID="lblFunctie" runat="server" Text="Functia angajatului:" >                                
                                 </dx:ASPxLabel>
-                                <dx:ASPxRadioButton ID="rbFunc1" Width="75" runat="server" RepeatDirection="Horizontal"  Text="COR" Enabled="true"  ClientInstanceName="rbFunc1"
+                                <dx:ASPxRadioButton ID="rbFunc1" Width="75" runat="server" RepeatDirection="Horizontal"  Text="COR" Enabled="true"  ClientInstanceName="rbFunc1" oncontextMenu="ctx(this,event)"
                                      GroupName="Functie">    
                                      <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                
                                 </dx:ASPxRadioButton>
-                                <dx:ASPxRadioButton ID="rbFunc2"  Width="175" runat="server" RepeatDirection="Horizontal"  Text="Interna" Enabled="true" ClientInstanceName="rbFunc2" 
+                                <dx:ASPxRadioButton ID="rbFunc2"  Width="175" runat="server" RepeatDirection="Horizontal"  Text="Interna" Enabled="true" ClientInstanceName="rbFunc2"  oncontextMenu="ctx(this,event)"
                                      GroupName="Functie">        
                                      <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                         
                                 </dx:ASPxRadioButton>
@@ -631,10 +631,10 @@
                                 <dx:ASPxLabel  ID="lblCFP" Width="100" runat="server"  Text="Zile CFP" ></dx:ASPxLabel >
 						    </td>
 						    <td align="left">
-							    <dx:ASPxTextBox  ID="txtNEM"  Width="200" runat="server" AutoPostBack="false" >        
+							    <dx:ASPxTextBox  ID="txtNEM"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">        
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
 							    </dx:ASPxTextBox >
-							    <dx:ASPxTextBox  ID="txtCFP"  Width="200" runat="server" AutoPostBack="false" >        
+							    <dx:ASPxTextBox  ID="txtCFP"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">        
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
 							    </dx:ASPxTextBox >
 						    </td>
@@ -648,11 +648,11 @@
                             <td>
                                 <dx:ASPxLabel ID="lblIntervalStagiu" runat="server" Text="Interval:" >                                
                                 </dx:ASPxLabel>
-                                <dx:ASPxRadioButton ID="rbIntervalStagiu1" Width="75" runat="server" RepeatDirection="Horizontal"  Text="6 luni" Enabled="true"  ClientInstanceName="rbIntervalStagiu1"
+                                <dx:ASPxRadioButton ID="rbIntervalStagiu1" Width="75" runat="server" RepeatDirection="Horizontal"  Text="6 luni" Enabled="true"  ClientInstanceName="rbIntervalStagiu1" oncontextMenu="ctx(this,event)"
                                      GroupName="IntervalStagiu"> 
                                     <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                    
                                 </dx:ASPxRadioButton>
-                                <dx:ASPxRadioButton ID="rbIntervalStagiu2"  Width="175" runat="server" RepeatDirection="Horizontal"  Text="12 luni" Enabled="true" ClientInstanceName="rbIntervalStagiu2" 
+                                <dx:ASPxRadioButton ID="rbIntervalStagiu2"  Width="175" runat="server" RepeatDirection="Horizontal"  Text="12 luni" Enabled="true" ClientInstanceName="rbIntervalStagiu2" oncontextMenu="ctx(this,event)"
                                      GroupName="IntervalStagiu">
                                     <ClientSideEvents  CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                  
                                 </dx:ASPxRadioButton>
@@ -661,7 +661,7 @@
 							    <dx:ASPxLabel  ID="lblBCM" Width="100" runat="server"  Text="Baza calcul CM" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="right">
-							    <dx:ASPxTextBox  ID="txtBCM"  Width="200" runat="server"  AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtBCM"  Width="200" runat="server"  AutoPostBack="false" oncontextMenu="ctx(this,event)">
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							    </dx:ASPxTextBox >
 						    </td>
@@ -676,7 +676,7 @@
 							    <dx:ASPxLabel  ID="lblSubsem" Width="100" runat="server"  Text="Subsemnatul" ></dx:ASPxLabel >
                              </td>
                              <td align="left">
-							    <dx:ASPxTextBox  ID="txtSubsem"  Width="200" runat="server" AutoPostBack="false" >        
+							    <dx:ASPxTextBox  ID="txtSubsem"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">        
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
 							    </dx:ASPxTextBox >
                              </td>
@@ -684,7 +684,7 @@
                                 <dx:ASPxLabel  ID="lblDom" Width="200" runat="server"  Text="Domeniul activitatii profesionale" ></dx:ASPxLabel >
                             </td>
                              <td align="left">
-                                 <dx:ASPxTextBox  ID="txtDom"  Width="200" runat="server" AutoPostBack="false" >        
+                                 <dx:ASPxTextBox  ID="txtDom"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">        
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
 							    </dx:ASPxTextBox >
                             </td>
@@ -694,7 +694,7 @@
                                 <dx:ASPxLabel  ID="lblFunc" Width="100" runat="server"  Text="Functia" ></dx:ASPxLabel >
                             </td>
                             <td align="left">
-							    <dx:ASPxTextBox  ID="txtFunc"  Width="200" runat="server" AutoPostBack="false" >        
+							    <dx:ASPxTextBox  ID="txtFunc"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">        
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
 							    </dx:ASPxTextBox >
                             </td>
@@ -702,7 +702,7 @@
 							    <dx:ASPxLabel  ID="lbllLoc" Width="200" runat="server"  Text="Locul de desfasurare al activitatii profesionale" ></dx:ASPxLabel >
 						    </td>
                             <td align="right">
-							    <dx:ASPxTextBox  ID="txtLoc"  Width="200" runat="server" AutoPostBack="false" >        
+							    <dx:ASPxTextBox  ID="txtLoc"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">        
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
 							    </dx:ASPxTextBox >
 						    </td>
@@ -712,7 +712,7 @@
                                 <dx:ASPxLabel  ID="lblIntOrar" Width="100" runat="server"  Text="Interval orar" ></dx:ASPxLabel >
                             </td>
                             <td align="left">
-							    <dx:ASPxTextBox  ID="txtInterval"  Width="200" runat="server" AutoPostBack="false" >        
+							    <dx:ASPxTextBox  ID="txtInterval"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">        
                                     <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
 							    </dx:ASPxTextBox >
                             </td>
@@ -720,7 +720,7 @@
                                 <dx:ASPxLabel  ID="ASPxLabel2" Width="100" runat="server"  Text="Data valabilitate" ></dx:ASPxLabel >
                             </td>
                               <td align="left">
-                                 <dx:ASPxDateEdit ID="deDataValab" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                                 <dx:ASPxDateEdit ID="deDataValab" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)">
                                     <CalendarProperties FirstDayOfWeek="Monday" />
                                      <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandler(s); }" />      
                                 </dx:ASPxDateEdit>

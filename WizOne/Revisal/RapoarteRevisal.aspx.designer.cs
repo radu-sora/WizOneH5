@@ -15,24 +15,6 @@ namespace WizOne.Revisal
     {
 
         /// <summary>
-        /// btnExit control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnExit;
-
-        /// <summary>
-        /// pnlCtl control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
-
-        /// <summary>
         /// btnRegSal control.
         /// </summary>
         /// <remarks>
@@ -51,48 +33,57 @@ namespace WizOne.Revisal
         protected global::DevExpress.Web.ASPxButton btnRapSal;
 
         /// <summary>
-        /// grAng control.
+        /// btnExit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl grAng;
+        protected global::DevExpress.Web.ASPxButton btnExit;
 
         /// <summary>
-        /// legAng control.
+        /// Menu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl legAng;
+        protected global::DevExpress.Web.ASPxMenu Menu;
 
         /// <summary>
-        /// cmbAng control.
+        /// lblRol control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbAng;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRol;
 
         /// <summary>
-        /// btnCont control.
+        /// cmbRol control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnCont;
+        protected global::DevExpress.Web.ASPxComboBox cmbRol;
 
         /// <summary>
-        /// btnRen control.
+        /// grDateReg control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnRen;
+        protected global::DevExpress.Web.ASPxGridView grDateReg;
+
+        /// <summary>
+        /// grDateRap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView grDateRap;
     }
 }

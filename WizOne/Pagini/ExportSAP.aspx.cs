@@ -77,7 +77,7 @@ namespace WizOne.Pagini
                 string cale = Dami.ValoareParam("CaleConfigPeopleSoft", "");       
                 if (cale.Length <= 0)
                 {
-                    mesaj = "Nu ati precizat calea fisierului Config in tblParametrii!";
+                    mesaj = Dami.TraduCuvant("Nu ati precizat calea fisierului Config in tblParametrii") + "!";
                     return mesaj;
                 }
 
@@ -116,7 +116,7 @@ namespace WizOne.Pagini
                     }
                     else
                     {
-                        mesaj = Dami.TraduCuvant("Fisierul nu a fost generat!");
+                        mesaj = Dami.TraduCuvant("Fisierul nu a fost generat") + "!";
                     }
                 }
 
@@ -138,13 +138,13 @@ namespace WizOne.Pagini
             {       
                 if (!chk1.Checked && !chk2.Checked && !chk3.Checked && !chk4.Checked && !chk5.Checked)
                 {
-                    MessageBox.Show("Nu ati bifat nicio optiune!");
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati bifat nicio optiune") + "!");
                     return;
                 }
 
                 if (chk2.Checked && chk3.Checked)
                 {
-                    MessageBox.Show("Nu puteti bifa ambele tipuri de Pontaj (Estimat si Lichidare) in acelasi timp!");
+                    MessageBox.Show(Dami.TraduCuvant("Nu puteti bifa ambele tipuri de Pontaj (Estimat si Lichidare) in acelasi timp") + "!");
                     return;
                 }
                 Export();                

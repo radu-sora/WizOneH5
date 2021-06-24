@@ -592,6 +592,11 @@ a, a:focus, a:hover {
             right: 0 !important;
         }
 
+    /* DX scheduler support for info only tooltip (only for hint tooltip type) */
+    .dx-scheduler-adaptive.dx-scheduler-adaptive-info-tooltip .dxsc-detailed-apt-tooltip .dxsc-dat-bottom > .dxsc-dat-buttons-container {
+        display: none;
+    }
+
 /* BS fix for vertical/horizontal space between rows and wrapped cols. Make BS cols same height. */
 .row.row-fix {
     display: flex;

@@ -6,12 +6,12 @@
     <!-- Page content -->
     <div class="page-content">        
         <div class="page-content-data invisible">
-            <dx:ASPxScheduler ID="Scheduler" ClientInstanceName="scheduler" runat="server" Width="100%" CssClass="dx-scheduler-adaptive"
+            <dx:ASPxScheduler ID="Scheduler" ClientInstanceName="scheduler" runat="server" Width="100%" CssClass="dx-scheduler-adaptive dx-scheduler-adaptive-info-tooltip"
                 AppointmentDataSourceID="ScheduleItemsDataSource" OnAppointmentDeleting="Scheduler_AppointmentDeleting" OnPopupMenuShowing="Scheduler_PopupMenuShowing">
                 <OptionsView VerticalScrollBarMode="Auto" />
                 <OptionsAdaptivity Enabled="true" />
                 <OptionsCustomization AllowAppointmentEdit="None" />
-                <OptionsToolTips AppointmentToolTipMode="Auto" ShowAppointmentToolTip="false" />                
+                <OptionsToolTips AppointmentToolTipMode="Auto" ShowAppointmentToolTip="true" />                
                 <ViewVisibleInterval>
                     <OptionsCalendar AppointmentDatesHighlightMode="Labels">
                         <SettingsAdaptivity SwitchToSingleViewAtWindowInnerWidth="1024" />

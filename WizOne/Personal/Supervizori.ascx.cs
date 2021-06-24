@@ -284,10 +284,10 @@ namespace WizOne.Personal
                                     row[x] = Dami.NextId("F100Supervizori2");
                                 break;
                             case "DATAINCEPUT":
-                                row[x] = new DateTime(1900, 1, 1);
+                                //row[x] = new DateTime(1900, 1, 1);
                                 break;
                             case "DATASFARSIT":
-                                row[x] = new DateTime(2100, 1, 1);
+                                //row[x] = new DateTime(2100, 1, 1);
                                 break;
                             case "USER_NO":
                                 row[x] = Session["UserId"];

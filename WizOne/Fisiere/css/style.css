@@ -516,6 +516,16 @@ a, a:focus, a:hover {
         white-space: nowrap;
     }*/
 
+    /* DX gridview command column support for adaptive scaling */
+    .dx-grid-adaptive.dx-grid-adaptive-scale-commandcolumn .dxgvADCMDC > a {
+        margin: 0 10px 0 0;
+        padding: 0 !important;
+    }
+        .dx-grid-adaptive.dx-grid-adaptive-scale-commandcolumn .dxgvADCMDC > a > img {
+            width: 32px;
+            height: 32px;
+        }
+
     /* DX gridview popup support for adaptive fullscreen */
     .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys,
     .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW,

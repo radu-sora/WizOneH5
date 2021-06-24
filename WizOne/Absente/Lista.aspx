@@ -317,7 +317,7 @@
         </div>
         <div class="page-content-data invisible">
             <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"
-                CssClass="dx-grid-adaptive dx-grid-adaptive-hide-group dx-grid-adaptive-hide-header dx-grid-adaptive-fullscreen-popup"
+                CssClass="dx-grid-adaptive dx-grid-adaptive-hide-group dx-grid-adaptive-hide-header dx-grid-adaptive-scale-commandcolumn dx-grid-adaptive-fullscreen-popup"
                 OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCustomUnboundColumnData="grDate_CustomUnboundColumnData">
                 <Settings ShowFilterRow="True" ShowFilterRowMenu="true" ShowGroupPanel="True" HorizontalScrollBarMode="Auto" VerticalScrollBarMode="Auto" />
                 <SettingsAdaptivity AdaptivityMode="HideDataCellsWindowLimit" AdaptiveDetailColumnCount="1" HideDataCellsAtWindowInnerWidth="1024" />

@@ -472,8 +472,8 @@
                                  GroupName="Avans">
                             </dx:ASPxRadioButton>
 						</td>            
-                       <td>
-                            <dx:ASPxRadioButton ID="rbOptiune2" Width="125" runat="server" Text="Media zilnica pt. AMBP cf. L 346/2002"   Visible="false" ClientInstanceName="rbOptiune2"
+                       <td colspan="2">
+                            <dx:ASPxRadioButton ID="rbOptiune2" Width="140" runat="server" Text="Media zilnica pt. AMBP cf. L 346/2002"   Visible="false" ClientInstanceName="rbOptiune2"
                                  GroupName="Avans">
                             </dx:ASPxRadioButton>
 						</td>
@@ -507,7 +507,7 @@
 								<dx:ASPxLabel  ID="lblDataAviz" runat="server" Width="100" Text="Data aviz Dir. Sanatate Publica" ></dx:ASPxLabel >	
 							</td>
 							<td>					
-								<dx:ASPxDateEdit  ID="deDataAviz" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
+								<dx:ASPxDateEdit  ID="deDataAviz" Width="125"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
 									<CalendarProperties FirstDayOfWeek="Monday" />
 									<ClientSideEvents  />
 								</dx:ASPxDateEdit>	
@@ -526,7 +526,7 @@
 								<dx:ASPxLabel  ID="lblCNP" runat="server" Width="100"  Text="CNP/CIS copil"></dx:ASPxLabel >	
 							</td>
 							<td>						
-								<dx:ASPxComboBox  ID="cmbCNPCopil" Width="100"  runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id"  ValueType="System.String">
+								<dx:ASPxComboBox  ID="cmbCNPCopil" Width="125"  runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id"  ValueType="System.String">
 									<ClientSideEvents  />
 								</dx:ASPxComboBox >										
 							</td>

@@ -189,7 +189,7 @@ namespace WizOne.ConcediiMedicale
 
                 Session["MarcaCM"] = Convert.ToInt32(cmbAng.SelectedItem.Value);
 
-                cmbCNPCopil.DataSource = General.IncarcaDT("SELECT F11012 as Id, F11010 + ' ' + f11005 as Denumire FROM F010, F110 WHERE F01002 = F11002 AND ((DATEPART(yyyy,F11006)+18) * 100 + DATEPART(mm,F11006)) >= (F01011 * 100 + F01012) AND F11003 = " + dtCM.Rows[0]["F10003"].ToString(), null);
+                cmbCNPCopil.DataSource = General.IncarcaDT("SELECT F11012 as Id, F11012 as Denumire FROM F010, F110 WHERE F01002 = F11002 AND ((DATEPART(yyyy,F11006)+18) * 100 + DATEPART(mm,F11006)) >= (F01011 * 100 + F01012) AND F11003 = " + dtCM.Rows[0]["F10003"].ToString(), null);
                 cmbCNPCopil.DataBind();
 
                 txtCodIndemn.Text = (dtCM.Rows[0]["CodIndemnizatie"] == DBNull.Value ? "" : dtCM.Rows[0]["CodIndemnizatie"].ToString()).PadLeft(2, '0');
@@ -481,7 +481,7 @@ namespace WizOne.ConcediiMedicale
                 }
             }
             else
-                deDataCMInit.Value = deLaData.Value;
+                deDataCMInit.Value = deDeLaData.Value;
 
 
             string szCoduriIndemnizatie = ",01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,51,91,";
@@ -1038,7 +1038,7 @@ namespace WizOne.ConcediiMedicale
 
             DataTable dtF = new DataTable();
             dtF = General.IncarcaDT("SELECT * FROM \"tblFisiere\"", null);
-            if (Session["CM_Id"] != null && dtF.Select("Tabela = 'CM_Cereri' AND Id = " + Session["CM_Id"].ToString()).Count() == 0)
+            if (Session["CM_Id"] != null && dtF.Select("Tabela = 'CM_Cereri' AND Id = " + Session["CM_Id"].ToString()).Count() == 1)
                 Session["CM_Document"] = 1;
 
             sql = string.Format(sql, id, Session["MarcaCM"].ToString(), (rbProgrNorm.Checked ? "1" : "0"), Convert.ToInt32(cmbTipConcediu.Value ?? 0), txtCodIndemn.Text, txtSerie.Text, //5
@@ -1454,7 +1454,7 @@ namespace WizOne.ConcediiMedicale
         }
         void OnSelAngajat(string marca)
         {
-            DataTable dt = General.IncarcaDT("SELECT F11012 as Id, F11010 + ' ' + f11005 as Denumire FROM F010, F110 WHERE F01002 = F11002 AND ((DATEPART(yyyy,F11006)+18) * 100 + DATEPART(mm,F11006)) >= (F01011 * 100 + F01012) AND F11003 = " + marca, null);
+            DataTable dt = General.IncarcaDT("SELECT F11012 as Id, F11012 as Denumire FROM F010, F110 WHERE F01002 = F11002 AND ((DATEPART(yyyy,F11006)+18) * 100 + DATEPART(mm,F11006)) >= (F01011 * 100 + F01012) AND F11003 = " + marca, null);
             cmbCNPCopil.DataSource = dt;            
             cmbCNPCopil.DataBind();
             Session["CM_CNPCopil"] = dt;

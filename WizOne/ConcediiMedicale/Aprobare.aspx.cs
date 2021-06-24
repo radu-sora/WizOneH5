@@ -108,6 +108,7 @@ namespace WizOne.ConcediiMedicale
                 }
 
                 IncarcaGrid();
+                grDate.SettingsPager.PageSize = 25;
 
 
             }

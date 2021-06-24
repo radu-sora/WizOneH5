@@ -89,7 +89,7 @@ function OnBatchEditEndEditing(s, e) {
 
 function OnEditMode(e, idx, Value) {
     var valStr = "";
-
+    debugger;
     for (i = 0; i <= 20; i++) {
         var val = 0;
         var valOre = 0;

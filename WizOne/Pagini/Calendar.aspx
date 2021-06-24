@@ -14,7 +14,7 @@
                 <OptionsToolTips AppointmentToolTipMode="Auto" ShowAppointmentToolTip="false" />                
                 <ViewVisibleInterval>
                     <OptionsCalendar AppointmentDatesHighlightMode="Labels">
-                        <SettingsAdaptivity SwitchToSingleViewAtWindowInnerWidth="768" />
+                        <SettingsAdaptivity SwitchToSingleViewAtWindowInnerWidth="1024" />
                     </OptionsCalendar>
                 </ViewVisibleInterval>
                 <Views>

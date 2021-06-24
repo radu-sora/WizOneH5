@@ -97,10 +97,10 @@
                 <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static" runat="server" Text="Inapoi" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" meta:resourcekey="btnBackResource1" >
                     <Image Url="~/Fisiere/Imagini/Icoane/sgSt.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnIstoricExtins" ClientInstanceName="btnIstoricExtins" ClientIDMode="Static" runat="server" Text="Istoric Extins" OnClick="btnIstoricExtins_Click" CssClass="hidden-xs" oncontextMenu="ctx(this,event)" meta:resourcekey="btnIstoricExtinsResource1" >
+                <dx:ASPxButton ID="btnIstoricExtins" ClientInstanceName="btnIstoricExtins" ClientIDMode="Static" runat="server" Text="Istoric Extins" OnClick="btnIstoricExtins_Click" CssClass="hidden-xs hidden-sm" oncontextMenu="ctx(this,event)" meta:resourcekey="btnIstoricExtinsResource1" >
                     <Image Url="~/Fisiere/Imagini/Icoane/istoric.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" PostBackUrl="../Pagini/MainPage.aspx" CssClass="hidden-xs" oncontextMenu="ctx(this,event)" meta:resourcekey="btnExitResource1" >
+                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" PostBackUrl="../Pagini/MainPage.aspx" CssClass="hidden-xs hidden-sm" oncontextMenu="ctx(this,event)" meta:resourcekey="btnExitResource1" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                 </dx:ASPxButton>
             </div>
@@ -116,7 +116,7 @@
                             <div id="divRol" runat="server" class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                                 <dx:ASPxLabel ID="lblRol" runat="server" AssociatedControlID="cmbRol" Text="Roluri" Font-Bold="true" />
                                 <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="100%" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" meta:resourcekey="cmbRolResource1" >
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback(7); }" />
                                 </dx:ASPxComboBox>
                             </div>
@@ -124,7 +124,7 @@
                                 <dx:ASPxLabel ID="lblAng" runat="server" AssociatedControlID="cmbAng" Text="Angajat" Font-Bold="true" />
                                 <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="100%" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" OnCallback="cmbAng_Callback"
                                     CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" meta:resourcekey="cmbAngResource1" >
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                                     <Columns>
                                         <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" meta:resourcekey="ListBoxColumnResource1" />
                                         <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" meta:resourcekey="ListBoxColumnResource2" />
@@ -144,7 +144,7 @@
                                 <dx:ASPxLabel ID="lblTip" runat="server" AssociatedControlID="cmbAbs" Text="Tip Cerere" Font-Bold="true" />                                
                                 <dx:ASPxComboBox ID="cmbAbs" runat="server" ClientInstanceName="cmbAbs" ClientIDMode="Static" Width="100%" ValueField="Id" DropDownWidth="200" 
                                     TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" meta:resourcekey="cmbAbsResource1" >
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { typeof txtNrOre !== 'undefined' && txtNrOre.SetValue(); typeof txtNrOreTime !== 'undefined' && txtNrOreTime.SetValue(); pnlCtl.PerformCallback(2); }" />
                                 </dx:ASPxComboBox>
                             </div>
@@ -152,7 +152,7 @@
                                 <dx:ASPxLabel ID="lblDataInc" runat="server" AssociatedControlID="txtDataInc" Text="Data Inceput" Font-Bold="true" />
                                 <dx:ASPxDateEdit ID="txtDataInc" runat="server" Width="100%" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto" meta:resourcekey="txtDataIncResource1" >
                                     <CalendarProperties FirstDayOfWeek="Monday" />
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                                     <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback(3); }" />
                                 </dx:ASPxDateEdit>
                             </div>
@@ -160,7 +160,7 @@
                                 <dx:ASPxLabel ID="lblDataSf" runat="server" AssociatedControlID="txtDataSf" Text="Data Sfarsit" Font-Bold="true" />
                                 <dx:ASPxDateEdit ID="txtDataSf" runat="server" Width="100%" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto" meta:resourcekey="txtDataSfResource1" >
                                     <CalendarProperties FirstDayOfWeek="Monday" />
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                                     <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback(6); }" />
                                 </dx:ASPxDateEdit>
                             </div>
@@ -186,7 +186,7 @@
                                 <dx:ASPxLabel ID="lblInl" runat="server" AssociatedControlID="cmbInloc" Text="Inlocuitor" Font-Bold="true" />
                                 <dx:ASPxComboBox ID="cmbInloc" runat="server" Width="100%" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
                                     CallbackPageSize="15" EnableCallbackMode="True" EnableViewState="false" TextFormatString="{0} {1}" AllowNull="true" meta:resourcekey="cmbInlocResource1" >
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                                     <Columns>
                                         <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" meta:resourcekey="ListBoxColumnResource7" />
                                         <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" meta:resourcekey="ListBoxColumnResource8" />
@@ -213,14 +213,14 @@
                             <div id="divOraInc" runat="server" class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                                 <dx:ASPxLabel ID="lblOraInc" runat="server" AssociatedControlID="cmbOraInc" Text="Ora Inceput" Font-Bold="true" />
                                 <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="100%" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); pnlCtl.PerformCallback(8); }" />
                                 </dx:ASPxComboBox>
                             </div>
                             <div id="divOraSf" runat="server" class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                                 <dx:ASPxLabel ID="lblOraSf" runat="server" AssociatedControlID="cmbOraSf" Text="Ora Sfarsit" Font-Bold="true" />
                                 <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="100px" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); pnlCtl.PerformCallback(8); }" />
                                 </dx:ASPxComboBox>
                             </div>

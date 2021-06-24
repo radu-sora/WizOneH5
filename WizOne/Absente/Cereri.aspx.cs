@@ -1523,7 +1523,7 @@ namespace WizOne.Absente
                             cmb.Width = Unit.Percentage(100);
                             cmb.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
                             cmb.SettingsAdaptivity.Mode = DropDownEditAdaptivityMode.OnWindowInnerWidth;
-                            cmb.SettingsAdaptivity.SwitchToModalAtWindowInnerWidth = 768;
+                            cmb.SettingsAdaptivity.SwitchToModalAtWindowInnerWidth = 1024;
                             try
                             {
                                 if (General.Nz(dr["Sursa"], "").ToString() != "")
@@ -1557,7 +1557,7 @@ namespace WizOne.Absente
                             dte.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
                             dte.PickerDisplayMode = DatePickerDisplayMode.Auto;
                             dte.SettingsAdaptivity.Mode = DropDownEditAdaptivityMode.OnWindowInnerWidth;
-                            dte.SettingsAdaptivity.SwitchToModalAtWindowInnerWidth = 768;
+                            dte.SettingsAdaptivity.SwitchToModalAtWindowInnerWidth = 1024;
                             if (General.Nz(dr["Sursa"], "").ToString() != "")
                             {
                                 string sel = InlocuiesteCampuri(dr["Sursa"].ToString());

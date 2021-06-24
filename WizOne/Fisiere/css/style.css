@@ -26,7 +26,7 @@ a, a:focus, a:hover {
     height: 45px;
 }
 
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     .header-brand-row {
         display: none;
     }
@@ -147,7 +147,7 @@ a, a:focus, a:hover {
     margin-right: 8px;
 }
 
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     .header-menu {
         display: flex;
         flex-direction: column;        
@@ -185,7 +185,7 @@ a, a:focus, a:hover {
 }
 
 /* Side menu control */
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     html {
         padding-left: 0 !important;
     }
@@ -203,14 +203,14 @@ a, a:focus, a:hover {
     overflow: auto;
 }
 
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     .content {
         padding: 0;
     }
 }
 
 /* Footer control */
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     .footer {
         padding: 0 !important;
         z-index: 1003 !important;
@@ -262,7 +262,7 @@ a, a:focus, a:hover {
     overflow-x: hidden;
 }
 
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     .footer-menu {
         display: flex;
     }
@@ -424,7 +424,7 @@ a, a:focus, a:hover {
         overflow: hidden;
     }    
 
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     .page-content > div.page-content-header {
         padding-top: 5px;
     }
@@ -462,13 +462,13 @@ a, a:focus, a:hover {
                     height: 100% !important;
                 }
 
-@media all and (min-width:768px) {
+@media all and (min-width:1024px) {
     .dx-grid-adaptive.dx-grid-adaptive-hide-desktop-search div[class*="dxgvSearchPanel"] {
         display: none;
     }
 }
 
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     /* Fix DX gridview main container */
     .dx-grid-adaptive {
         border: none;
@@ -536,7 +536,7 @@ a, a:focus, a:hover {
     padding-bottom: 20px;
 }
 
-@media all and (min-width:768px) {
+@media all and (min-width:1024px) {
     .dx-dropdownwindow-adaptive > div:last-child > table[class*="dxeListBox_"] {
         border-top: 0;
         border-left: 0;
@@ -547,7 +547,7 @@ a, a:focus, a:hover {
     }
 }
 
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     .dx-dropdownwindow-adaptive > div:last-child {
         margin: 20px 20px 0;
         width: calc(100% - 40px) !important;
@@ -556,7 +556,7 @@ a, a:focus, a:hover {
 }
 
 /* DX popup support for adaptive fullscreen (set at container level) */
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     .dx-popup-adaptive-fullscreen > .dxmodalSys,
     .dx-popup-adaptive-fullscreen > .dxmodalSys > .dxpclW,
     .dx-popup-adaptive-fullscreen > .dxmodalSys > .dxpclW > .dxpc-mainDiv {
@@ -599,7 +599,7 @@ a, a:focus, a:hover {
         padding-bottom: 10px;
     }
 
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     .row.row-fix {
         margin-left: -5px;
         margin-right: -5px;        
@@ -625,7 +625,7 @@ a, a:focus, a:hover {
         margin-left: 5px;
     }
 
-@media all and (max-width:768px) {
+@media all and (max-width:1024px) {
     .panel.panel-adaptive-fullscreen {
         display: flex;
         flex-direction: column;

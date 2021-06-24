@@ -233,7 +233,7 @@
                 <dx:ASPxButton ID="btnSolNoua" ClientInstanceName="btnSolNoua" Font-Bold="true" ClientIDMode="Static" runat="server" Text="Solicitare noua" OnClick="btnNew_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnIstoricExtins" ClientInstanceName="btnIstoricExtins" ClientIDMode="Static" runat="server" Text="Istoric Extins" AutoPostBack="true" CssClass="hidden-xs" OnClick="btnIstoricExtins_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnIstoricExtins" ClientInstanceName="btnIstoricExtins" ClientIDMode="Static" runat="server" Text="Istoric Extins" AutoPostBack="true" CssClass="hidden-xs hidden-sm" OnClick="btnIstoricExtins_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/istoric.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnRespinge" ClientInstanceName="btnRespinge" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
@@ -244,7 +244,7 @@
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                     <ClientSideEvents Click="function(s, e) { OnAproba(s, e); }" />
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" CssClass="hidden-xs" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" CssClass="hidden-xs hidden-sm" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                 </dx:ASPxButton>
             </div>            
@@ -254,7 +254,7 @@
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                     <dx:ASPxLabel ID="lblViz" runat="server" AssociatedControlID="cmbViz" Text="Vizualizare" Font-Bold="true" />
                     <dx:ASPxComboBox ID="cmbViz" ClientInstanceName="cmbViz" ClientIDMode="Static" runat="server" Width="100%" AutoPostBack="false">
-                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                         <ClientSideEvents SelectedIndexChanged="function(s,e) { SetComboViz(); }" Init="function(s,e) { SetComboViz(); }" />
                     </dx:ASPxComboBox>
                 </div>
@@ -262,13 +262,13 @@
                     <dx:ASPxLabel ID="lblRol" runat="server" AssociatedControlID="cmbRol" Text="Rol" Font-Bold="true" />
                     <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="100%" AutoPostBack="false"
                         ValueField="Id" TextField="Denumire" ValueType="System.Int32">
-                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                     </dx:ASPxComboBox>
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">                        
                     <dx:ASPxLabel ID="lblStare" runat="server" AssociatedControlID="cmbStare" Text="Stare" Font-Bold="true" />
                     <dx:ASPxDropDownEdit ID="cmbStare" ClientInstanceName="cmbStare" runat="server" Width="100%">
-                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" ModalDropDownCaption="Choose Values" />
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" ModalDropDownCaption="Choose Values" />
                         <DropDownApplyButton Visibility="ModalDropDown" />                        
                         <DropDownWindowStyle CssClass="dx-dropdownwindow-adaptive" />
                         <DropDownWindowTemplate>
@@ -284,7 +284,7 @@
                                 </Items>
                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { updateComboBoxText(cmbStare, lstStare); }" />
                             </dx:ASPxListBox>
-                            <dx:ASPxButton ID="btnInchide" runat="server" AutoPostBack="False" Text="Inchide" CssClass="pull-right hidden-xs" style="margin:7px">
+                            <dx:ASPxButton ID="btnInchide" runat="server" AutoPostBack="False" Text="Inchide" CssClass="pull-right hidden-xs hidden-sm" style="margin:7px">
                                 <ClientSideEvents Click="function(s, e) { cmbStare.HideDropDown(); }" />
                             </dx:ASPxButton>                                                
                         </DropDownWindowTemplate>
@@ -297,14 +297,14 @@
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                     <dx:ASPxLabel ID="lblDtInc" runat="server" AssociatedControlID="txtDtInc" Text="Data Inceput" Font-Bold="true" />
                     <dx:ASPxDateEdit ID="txtDtInc" runat="server" Width="100%" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto">
-                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                         <CalendarProperties FirstDayOfWeek="Monday" />
                     </dx:ASPxDateEdit>                        
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                     <dx:ASPxLabel ID="lblDtSf" runat="server" AssociatedControlID="txtDtSf" Text="Data Sfarsit" Font-Bold="true" />
                     <dx:ASPxDateEdit ID="txtDtSf" runat="server" Width="100%" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto">
-                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                         <CalendarProperties FirstDayOfWeek="Monday" />
                     </dx:ASPxDateEdit>
                 </div>
@@ -320,13 +320,13 @@
                 CssClass="dx-grid-adaptive dx-grid-adaptive-hide-group dx-grid-adaptive-hide-header dx-grid-adaptive-fullscreen-popup"
                 OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCustomUnboundColumnData="grDate_CustomUnboundColumnData">
                 <Settings ShowFilterRow="True" ShowFilterRowMenu="true" ShowGroupPanel="True" HorizontalScrollBarMode="Auto" VerticalScrollBarMode="Auto" />
-                <SettingsAdaptivity AdaptivityMode="HideDataCellsWindowLimit" AdaptiveDetailColumnCount="1" HideDataCellsAtWindowInnerWidth="768" />
+                <SettingsAdaptivity AdaptivityMode="HideDataCellsWindowLimit" AdaptiveDetailColumnCount="1" HideDataCellsAtWindowInnerWidth="1024" />
                 <SettingsEditing Mode="PopupEditForm" />
                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                 <SettingsSearchPanel Visible="true" />                
                 <SettingsPopup>
                     <EditForm Modal="true" HorizontalAlign="WindowCenter" VerticalAlign="WindowCenter">
-                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchAtWindowInnerWidth="768" FixedHeader="true" MinWidth="100%" MinHeight="100%" />
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchAtWindowInnerWidth="1024" FixedHeader="true" MinWidth="100%" MinHeight="100%" />
                     </EditForm>
                 </SettingsPopup>
                 <SettingsCommandButton>
@@ -405,13 +405,13 @@
                     </dx:GridViewDataMemoColumn>                    
                     <dx:GridViewDataComboBoxColumn FieldName="NumeInlocuitor" Name="NumeInlocuitor" Caption="Inlocuitor" Width="250px" ShowInCustomizationForm="false" VisibleIndex="12">
                         <PropertiesComboBox DropDownStyle="DropDownList" ValueField="NumeComplet" ValueType="System.String" TextField="NumeComplet" Width="100%">
-                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                         </PropertiesComboBox>
                     </dx:GridViewDataComboBoxColumn>
 
                     <dx:GridViewDataComboBoxColumn FieldName="TrimiteLa" Name="TrimiteLa" Caption="Tip aditional solicitare" Width="250px" VisibleIndex="14">
                         <PropertiesComboBox DropDownStyle="DropDownList" ValueField="Denumire" ValueType="System.String" TextField="Denumire" Width="100%">
-                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                         </PropertiesComboBox>
                     </dx:GridViewDataComboBoxColumn>                                           
                     <dx:GridViewDataMemoColumn FieldName="Comentarii" Name="Comentarii" Caption="Comentarii" Width="250px" VisibleIndex="15">

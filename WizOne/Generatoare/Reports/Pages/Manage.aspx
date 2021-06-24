@@ -10,14 +10,14 @@
                 <dx:ASPxLabel ID="TitleLabel" runat="server" Text="Modifica sau creaza rapoarte noi" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </div>
             <div>
-                <dx:ASPxButton ID="ReportNewButton" ClientIDMode="Static" ClientInstanceName="btnNew" runat="server" Text="Raport nou" Image-Url="~/Fisiere/Imagini/Icoane/adauga.png" AutoPostBack="false" CssClass="hidden-xs" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="ReportNewButton" ClientIDMode="Static" ClientInstanceName="btnNew" runat="server" Text="Raport nou" Image-Url="~/Fisiere/Imagini/Icoane/adauga.png" AutoPostBack="false" CssClass="hidden-xs hidden-sm" oncontextMenu="ctx(this,event)">
                     <ClientSideEvents Click="function(s, e) {
                         pageControl.onReportNewButtonClick();
                     }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="ReportViewButton" runat="server" Text="Afisare" Image-Url="~/Fisiere/Imagini/Icoane/arata.png" OnClick="ReportViewButton_Click" oncontextMenu="ctx(this,event)" />
-                <dx:ASPxButton ID="ReportDesignButton" ClientIDMode="Static" ClientInstanceName="btnDesign" runat="server" Text="Design" Image-Url="~/Fisiere/Imagini/Icoane/schimba.png" CssClass="hidden-xs" OnClick="ReportDesignButton_Click" oncontextMenu="ctx(this,event)" />
-                <dx:ASPxButton ID="ExitButton" runat="server" Text="Iesire" Image-Url="~/Fisiere/Imagini/Icoane/iesire.png" PostBackUrl="~/Pagini/MainPage.aspx" CssClass="hidden-xs" oncontextMenu="ctx(this,event)" />
+                <dx:ASPxButton ID="ReportDesignButton" ClientIDMode="Static" ClientInstanceName="btnDesign" runat="server" Text="Design" Image-Url="~/Fisiere/Imagini/Icoane/schimba.png" CssClass="hidden-xs hidden-sm" OnClick="ReportDesignButton_Click" oncontextMenu="ctx(this,event)" />
+                <dx:ASPxButton ID="ExitButton" runat="server" Text="Iesire" Image-Url="~/Fisiere/Imagini/Icoane/iesire.png" PostBackUrl="~/Pagini/MainPage.aspx" CssClass="hidden-xs hidden-sm" oncontextMenu="ctx(this,event)" />
             </div>        
         </div>        
         <div class="page-content-data invisible">
@@ -26,7 +26,7 @@
                 DataSourceID="ReportsDataSource" AutoGenerateColumns="False" KeyFieldName="Id"
                 OnDataBinding="ReportsGridView_DataBinding">
                 <Settings ShowFilterRow="True" VerticalScrollBarMode="Auto" />        
-                <SettingsAdaptivity AdaptivityMode="HideDataCellsWindowLimit" AdaptiveDetailColumnCount="1" HideDataCellsAtWindowInnerWidth="768" />
+                <SettingsAdaptivity AdaptivityMode="HideDataCellsWindowLimit" AdaptiveDetailColumnCount="1" HideDataCellsAtWindowInnerWidth="1024" />
                 <SettingsSearchPanel Visible="true" />
                 <SettingsEditing Mode="Inline" />        
                 <SettingsBehavior AllowSelectByRowClick="true" AllowSelectSingleRowOnly="true" AllowFocusedRow="true" />
@@ -56,7 +56,7 @@
                     <dx:GridViewDataTextColumn FieldName="Description" Caption="Descriere" />
                     <dx:GridViewDataComboBoxColumn FieldName="TypeId" Caption="Tip raport" Width="150px">
                         <PropertiesComboBox DataSourceID="ReportTypesDataSource" ValueField="ReportTypeId" TextField="Name">
-                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="768" />
+                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                             <ValidationSettings Display="Dynamic" ErrorDisplayMode="Text" ErrorTextPosition="Bottom" SetFocusOnError="true">
                                 <RequiredField IsRequired="True" ErrorText="Tipul raportului este obligatoriu" />
                             </ValidationSettings>

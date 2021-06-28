@@ -326,7 +326,7 @@
                 <SettingsSearchPanel Visible="true" />                
                 <SettingsPopup>
                     <EditForm Modal="true" HorizontalAlign="WindowCenter" VerticalAlign="WindowCenter">
-                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchAtWindowInnerWidth="1024" FixedHeader="true" MinWidth="100%" MinHeight="100%" />
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchAtWindowInnerWidth="1024" MinWidth="100%" MinHeight="100%" />
                     </EditForm>
                 </SettingsPopup>
                 <SettingsCommandButton>

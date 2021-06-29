@@ -526,7 +526,7 @@ a, a:focus, a:hover {
             height: 32px;
         }
 
-    /* DX gridview popup support for adaptive fullscreen */
+    /* DX gridview popup support for adaptive fullscreen */        
     .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys,
     .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW,
     .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv {
@@ -538,6 +538,24 @@ a, a:focus, a:hover {
         .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv .dxgPEFTW > tbody > tr > td > div {
             height: 100%;
         }
+
+        /* Fix for Safari on iOS (the footer is hiding below Safari’s menu bar) */
+        .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW {
+            height: 100%;
+        }
+            .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+                .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv > dxpc-contentWrapper {
+                    flex: 1 0 0;
+                    overflow: hidden;
+                }
+                    .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv > dxpc-contentWrapper > dxpc-content {
+                        height: 100% !important;
+                        min-height: 100% !important;
+                    }
 }
 
 /* DX dropdown responsive editor */

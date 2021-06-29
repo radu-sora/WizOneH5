@@ -548,11 +548,11 @@ a, a:focus, a:hover {
                 flex-direction: column;
                 height: 100%;
             }
-                .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv > dxpc-contentWrapper {
+                .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv > .dxpc-contentWrapper {
                     flex: 1 0 0;
                     overflow: hidden;
                 }
-                    .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv > dxpc-contentWrapper > dxpc-content {
+                    .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv > .dxpc-contentWrapper > .dxpc-content {
                         height: 100% !important;
                         min-height: 100% !important;
                     }

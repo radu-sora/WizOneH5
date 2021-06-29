@@ -79,7 +79,7 @@ namespace WizOne.ConcediiMedicale
                 btnCMAnt.ClientVisible = false;
             }
 
-            if (Session["CM_Stare"] != null && Convert.ToInt32(Session["CM_Stare"].ToString()) >= 3)
+            if (Session["CM_Stare"] != null && Convert.ToInt32(Session["CM_Stare"].ToString()) > 3)
             {
                 btnSave.ClientVisible = false;
             }
@@ -193,7 +193,7 @@ namespace WizOne.ConcediiMedicale
                 cmbCNPCopil.DataBind();
 
                 txtCodIndemn.Text = (dtCM.Rows[0]["CodIndemnizatie"] == DBNull.Value ? "" : dtCM.Rows[0]["CodIndemnizatie"].ToString()).PadLeft(2, '0');
-                cmbLocPresc.Value = Convert.ToInt32(dtCM.Rows[0]["Prescris"] == DBNull.Value ? "0" : dtCM.Rows[0]["Prescris"].ToString());
+                cmbLocPresc.Value = Convert.ToInt32(dtCM.Rows[0]["LocPrescriere"] == DBNull.Value ? "0" : dtCM.Rows[0]["LocPrescriere"].ToString());
                 txtSerie.Text = dtCM.Rows[0]["SerieCM"] == DBNull.Value ? "" : dtCM.Rows[0]["SerieCM"].ToString();
                 txtNr.Text = dtCM.Rows[0]["NumarCM"] == DBNull.Value ? "" : dtCM.Rows[0]["NumarCM"].ToString();
                 deData.Value = Convert.ToDateTime(dtCM.Rows[0]["DataCM"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataCM"].ToString());
@@ -1001,7 +1001,7 @@ namespace WizOne.ConcediiMedicale
             //    " F300601, F300602, F300603,  F30053, F300618, F30039, F30040, F30042, F30035, F300606, F300607, F300619, F300608, F300609, F300610, F300611, F300612, F300613, F300614, F300615, F300616, F300617, F300621, " + (avans ? cmpAvans : "") + ") ";
 
 
-            string sql = "INSERT INTO CM_Cereri (Id, F10003, TipProgram, TipConcediu, CodIndemnizatie, SerieCM, NumarCM, DataCM, Prescris, DataInceput, DataSfarsit, NrZile, CodDiagnostic, CodUrgenta, CodInfectoContag, Initial, ZileCMInitial, SerieCMInitial, NumarCMInitial, DataCMInitial, " +
+            string sql = "INSERT INTO CM_Cereri (Id, F10003, TipProgram, TipConcediu, CodIndemnizatie, SerieCM, NumarCM, DataCM, LocPrescriere, DataInceput, DataSfarsit, NrZile, CodDiagnostic, CodUrgenta, CodInfectoContag, Initial, ZileCMInitial, SerieCMInitial, NumarCMInitial, DataCMInitial, " +
                      " CodTransfer1, CodTransfer2, CodTransfer3,  CodTransfer4, CodTransfer5, NrZileCT1, NrZileCT2, NrZileCT3, NrZileCT4, NrZileCT5, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, NrAvizMedicExpert, DataAvizDSP, MedicCurant, CNPCopil, IdStare, Document, Urgenta, Suma, Tarif, Cod, USER_NO, TIME) ";
 
 
@@ -1070,7 +1070,9 @@ namespace WizOne.ConcediiMedicale
             //: "TO_DATE('" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Year.ToString() + "', 'dd/mm/yyyy')"), (avans ? valAvans : "")); //41
 
 
-
+            bool medie = true;
+            if (txtBCCM.Text.Length <= 0 || txtBCCM.Text == "0" || txtZBC.Text.Length <= 0 || txtZBC.Text == "0" || txtMZBC.Text.Length <= 0 || txtMZBC.Text == "0" || txtMZ.Text.Length <= 0 || txtMZ.Text == "0")
+                medie = false;
 
             if (!((chkStagiu.Checked && (cod == 4450 || cod == 4449))))
                 if (General.ExecutaNonQuery(sql, null))
@@ -1095,7 +1097,7 @@ namespace WizOne.ConcediiMedicale
                         sql = "INSERT INTO CM_CereriIstoric(IdCerere, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare) VALUES(" + id + ", 1, " + Session["UserId"].ToString() + ", 1, (SELECT Culoare FROM CM_tblStari WHERE Id = 1), 1, GETDATE())";
                         General.ExecutaNonQuery(sql, null);
                         if (Session["CM_HR"] != null && Session["CM_HR"].ToString() == "1")
-                            sql = "INSERT INTO CM_CereriIstoric(IdCerere, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare) VALUES(" + id + ", 3, " + Session["UserId"].ToString() + ", 2, (SELECT Culoare FROM CM_tblStari WHERE Id = 3), 1, GETDATE())";
+                            sql = "INSERT INTO CM_CereriIstoric(IdCerere, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare) VALUES(" + id + ", " + (medie ? "3" : "1") + ", " + Session["UserId"].ToString() + ", 2, (SELECT Culoare FROM CM_tblStari WHERE Id = " + (medie ? "3" : "1") + "), 1, GETDATE())";
                         else
                             sql = "INSERT INTO CM_CereriIstoric(IdCerere, Pozitie) VALUES(" + id + ", 2)";
                         General.ExecutaNonQuery(sql, null);
@@ -1105,7 +1107,7 @@ namespace WizOne.ConcediiMedicale
                         if (Session["CM_HR"] != null && Session["CM_HR"].ToString() == "1")
                         {
                             General.ExecutaNonQuery("DELETE FROM CM_CereriIstoric WHERE IdCerere = " + id + " AND Pozitie = 2", null);
-                            sql = "INSERT INTO CM_CereriIstoric(IdCerere, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare) VALUES(" + id + ", 3, " + Session["UserId"].ToString() + ", 2, (SELECT Culoare FROM CM_tblStari WHERE Id = 3), 1, GETDATE())";
+                            sql = "INSERT INTO CM_CereriIstoric(IdCerere, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare) VALUES(" + id + ", " + (medie ? "3" : "1") + ", " + Session["UserId"].ToString() + ", 2, (SELECT Culoare FROM CM_tblStari WHERE Id = " + (medie ? "3" : "1") + "), 1, GETDATE())";
                             General.ExecutaNonQuery(sql, null);
                         }
                         else
@@ -1986,17 +1988,20 @@ namespace WizOne.ConcediiMedicale
 
             if (Session["CM_Preluare"] != null && Convert.ToInt32(Session["CM_Preluare"].ToString()) == 1)
             {
-                txtZCMAnt.Text = Session["ZileCMAnterior"].ToString();
-                string[] param = Session["SerieNrCMInitial"].ToString().Split(' ');
-                txtSerie.Text = param[0];
-                txtNr.Text = param[1];
-                txtSCMInit.Text = param[0];
-                txtNrCMInit.Text = param[1];
-                txtBCCM.Text = Session["BazaCalculCM"].ToString();
-                txtZBC.Text = Session["ZileBazCalcul"].ToString();
-                txtMZ.Text = Session["MediaZilnica"].ToString();
+                txtZCMAnt.Text = General.Nz(Session["ZileCMAnterior"], "").ToString();
+                string[] param = General.Nz(Session["SerieNrCMInitial"], "").ToString().Split(' ');
+                if (param.Length > 1)
+                {
+                    txtSerie.Text = param[0];
+                    txtNr.Text = param[1];
+                    txtSCMInit.Text = param[0];
+                    txtNrCMInit.Text = param[1];
+                }
+                txtBCCM.Text = General.Nz(Session["BazaCalculCM"], "").ToString();
+                txtZBC.Text = General.Nz(Session["ZileBazCalcul"], "").ToString();
+                txtMZ.Text = General.Nz(Session["MediaZilnica"], "").ToString();
 
-                txtMZBC.Text = Session["MedieZilnicaBazaCalculCM"].ToString();
+                txtMZBC.Text = General.Nz(Session["MedieZilnicaBazaCalculCM"], "").ToString();
                 DateTime? dt = Session["DataCMICalculCM"] as DateTime?;
                 deDataCMInit.Value = dt;
 

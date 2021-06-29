@@ -17956,7 +17956,7 @@ CREATE TABLE [dbo].[CM_Cereri](
 	[SerieCM] [nvarchar](20) NULL,
 	[NumarCM] [nvarchar](20) NULL,
 	[DataCM] [datetime] NULL,
-	[Prescris] [int] NULL,
+	[LocPrescriere] [int] NULL,
 	[DataInceput] [datetime] NULL,
 	[DataSfarsit] [datetime] NULL,
 	[NrZile] [int] NULL,
@@ -17978,10 +17978,10 @@ CREATE TABLE [dbo].[CM_Cereri](
 	[NrZileCT3] [int] NULL,
 	[NrZileCT4] [int] NULL,
 	[NrZileCT5] [int] NULL,
-	[BazaCalculCM] [int] NULL,
+	[BazaCalculCM] [decimal](18,4) NULL,
 	[ZileBazaCalculCM] [int] NULL,
-	[MedieZileBazaCalcul] [int] NULL,
-	[MedieZilnicaCM] [int] NULL,
+	[MedieZileBazaCalcul] [decimal](18,4) NULL,
+	[MedieZilnicaCM] [decimal](18,4) NULL,
 	[NrAvizMedicExpert] [nvarchar](20) NULL,
 	[DataAvizDSP] [datetime] NULL,
 	[MedicCurant] [nvarchar](250) NULL,
@@ -18045,6 +18045,8 @@ SET IDENTITY_INSERT [dbo].[CM_tblStari] ON
 GO
 
 INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (1, N'Inregistrat', N'#9ACCFF', NULL, NULL, 2)
+GO
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (2, N'Medie rulata', NULL, NULL, NULL, 2)
 GO
 INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (3, N'Aprobat', N'#9BBB59', NULL, NULL, 4)
 GO

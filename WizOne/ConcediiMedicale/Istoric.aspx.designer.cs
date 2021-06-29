@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.ConcediiMedicale {
-    
-    
-    public partial class Istoric {
-        
+namespace WizOne.ConcediiMedicale
+{
+
+
+    public partial class Istoric
+    {
+
         /// <summary>
         /// form1 control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.ConcediiMedicale {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
+
         /// <summary>
         /// btnPreluare control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.ConcediiMedicale {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnPreluare;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>

@@ -708,6 +708,15 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.ASPxTextBox txtMZ;
 
         /// <summary>
+        /// chkModMan control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkModMan;
+
+        /// <summary>
         /// chkStagiu control.
         /// </summary>
         /// <remarks>

@@ -457,6 +457,10 @@
                                 <ClientSideEvents  />
 							</dx:ASPxTextBox>										
 						</td>
+                        <td>
+                            <dx:ASPxCheckBox ID = "chkModMan" runat= "server" Width= "150" Text= "Modificare manuala" TextAlign= "Right" ClientInstanceName= "chkModMan" > 
+                             </dx:ASPxCheckBox>
+                        </td>  
 					</tr> 
 
                     <tr>
@@ -468,12 +472,12 @@
                     </tr>
                     <tr>
                        <td>
-                            <dx:ASPxRadioButton ID="rbOptiune1" Width="125" runat="server" Text="Media zilnica pt. CM cf. O 158/2005"  Visible="false"  ClientInstanceName="rbOptiune1"
+                            <dx:ASPxRadioButton ID="rbOptiune1" Width="125" runat="server" Text="Media zilnica pt. CM cf. O 158/2005"    ClientInstanceName="rbOptiune1"
                                  GroupName="Avans">
                             </dx:ASPxRadioButton>
 						</td>            
                        <td colspan="2">
-                            <dx:ASPxRadioButton ID="rbOptiune2" Width="140" runat="server" Text="Media zilnica pt. AMBP cf. L 346/2002"   Visible="false" ClientInstanceName="rbOptiune2"
+                            <dx:ASPxRadioButton ID="rbOptiune2" Width="140" runat="server" Text="Media zilnica pt. AMBP cf. L 346/2002"    ClientInstanceName="rbOptiune2"
                                  GroupName="Avans">
                             </dx:ASPxRadioButton>
 						</td>

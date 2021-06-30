@@ -186,6 +186,12 @@ namespace WizOne.ConcediiMedicale
                         continue;
                     }
 
+                    if (Convert.ToInt32(General.Nz(arr[6], 0)) == -1)
+                    {
+                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("anulat") + System.Environment.NewLine;
+                        continue;
+                    }
+
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) < 2)
                     {
                         msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("nu are calculata media") + System.Environment.NewLine;
@@ -256,7 +262,7 @@ namespace WizOne.ConcediiMedicale
                 string msg = "";
                 List<metaCereriCM> ids = new List<metaCereriCM>();
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare", "DataInceput", "Initial" });
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare", "DataInceput", "Initial", "ModifManuala" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate"), MessageBox.icoWarning, "");
@@ -273,6 +279,18 @@ namespace WizOne.ConcediiMedicale
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) == 4)
                     {
                         msg += Dami.TraduCuvant("CM pt marca") + " "  + arr[5] + " - " + Dami.TraduCuvant("deja transferat") + System.Environment.NewLine;
+                        continue;
+                    }
+
+                    if (Convert.ToInt32(General.Nz(arr[6], 0)) == -1)
+                    {
+                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("anulat") + System.Environment.NewLine;
+                        continue;
+                    }
+
+                    if (Convert.ToInt32(General.Nz(arr[9], 0)) == 1)
+                    {
+                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("modificare manuala") + System.Environment.NewLine;
                         continue;
                     }
 
@@ -740,8 +758,66 @@ namespace WizOne.ConcediiMedicale
             return q;
         }
 
+        protected void btnAnulare_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int nrSel = 0;
+                string ids = "";
+                string msg = "";
 
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare" });
+                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate"), MessageBox.icoWarning, "");
+                    return;
+                }
 
+                for (int i = 0; i < lst.Count(); i++)
+                {
+                    object[] arr = lst[i] as object[];
+                    DateTime? data = arr[4] as DateTime?;        
 
+                    if (Convert.ToInt32(General.Nz(arr[6], 0)) > 2)
+                    {
+                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("deja aprobat") + System.Environment.NewLine;
+                        continue;
+                    }         
+
+                    ids += "," + arr[0];
+                    nrSel++;
+                }
+
+                if (nrSel == 0)
+                {
+                    if (msg.Length <= 0)
+                        MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate"), MessageBox.icoWarning, "");
+                    else
+                        MessageBox.Show(msg, MessageBox.icoWarning, "");
+                    return;
+                }
+                string[] lstIds = ids.Substring(1).Split(',');
+                for (int i = 0; i < lstIds.Length; i++)
+                {
+                    string sql = "UPDATE CM_CereriIstoric SET Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = -1), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + lstIds[i] + " AND Pozitie = 2";
+                    General.ExecutaNonQuery(sql, null);
+
+                    sql = "UPDATE CM_Cereri SET IdStare = -1 WHERE Id = " + lstIds[i];
+                    General.ExecutaNonQuery(sql, null);
+
+                }
+
+                Session["CM_Grid"] = null;
+                IncarcaGrid();
+
+                MessageBox.Show(msg + (msg.Length > 0 ? System.Environment.NewLine : "") + (nrSel == 1 ? Dami.TraduCuvant("S-a anulat un concediu medical!") : Dami.TraduCuvant("S-au anulat") + " " + nrSel + " " + Dami.TraduCuvant("concedii medicale") + "!"), MessageBox.icoInfo, "");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

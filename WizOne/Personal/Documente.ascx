@@ -622,7 +622,66 @@
 						        </td>
 					        </tr>
 						  </table>
-					  </fieldset>
+					  </fieldset>			
+					<fieldset >
+						  <legend id="lgCampAd" runat="server" class="legend-font-size">Date aditionale</legend>
+						  <table id="lgCampAdTable" runat="server" width="60%">
+                            <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblCampAd1" runat="server" Width="100"  Text="Camp 1"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtCampAd1" Width="150"  runat="server"  TabIndex="41" AutoPostBack="false" >
+							        </dx:ASPxTextBox>
+						        </td>
+					        </tr>
+                            <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblCampAd2" runat="server" Width="100"  Text="Camp 2"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtCampAd2" Width="150"  runat="server"  TabIndex="42" AutoPostBack="false" >
+							        </dx:ASPxTextBox>
+						        </td>
+					        </tr>
+                            <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblCampAd3" runat="server" Width="100"  Text="Camp 3"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtCampAd3" Width="150"  runat="server"  TabIndex="43" AutoPostBack="false" >
+							        </dx:ASPxTextBox>
+						        </td>
+					        </tr>
+                            <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblCampAd4" runat="server" Width="100"  Text="Camp 4"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtCampAd4" Width="150"  runat="server"  TabIndex="44" AutoPostBack="false" >
+							        </dx:ASPxTextBox>
+						        </td>
+					        </tr>
+                            <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblCampAd5" runat="server" Width="100"  Text="Camp 5"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtCampAd5" Width="150"  runat="server"  TabIndex="45" AutoPostBack="false" >
+							        </dx:ASPxTextBox>
+						        </td>
+					        </tr>
+                            <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblCampAd6" runat="server" Width="100"  Text="Camp 6"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtCampAd6" Width="150"  runat="server"  TabIndex="46" AutoPostBack="false" >
+							        </dx:ASPxTextBox>
+						        </td>
+					        </tr>
+						  </table>
+					</fieldset>
 				</td>
                 </tr>      
 			</div>

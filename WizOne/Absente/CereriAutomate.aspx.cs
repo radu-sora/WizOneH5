@@ -408,8 +408,9 @@ namespace WizOne.Absente
                     continue;
                 }
 
+                int idCerere = Dami.NextId("Ptj_Cereri");
 
-                General.SelectCereriIstoric(marca, -1, Convert.ToInt32(drAbs["IdCircuit"]), 0, out sqlIst, out trimiteLaInlocuitor, -99, dtDataInc.Date);
+                General.SelectCereriIstoric(marca, -1, Convert.ToInt32(drAbs["IdCircuit"]), 0, out sqlIst, out trimiteLaInlocuitor, idCerere, dtDataInc.Date);
 
                 #endregion
 
@@ -419,7 +420,7 @@ namespace WizOne.Absente
 
                 if (Constante.tipBD == 1)
                 {
-                    sqlCer = CreazaSelectCuValori(marca, 1, lstOre.ContainsKey(marca) ? lstOre[marca] : -99);
+                    sqlCer = CreazaSelectCuValori(marca, 1, lstOre.ContainsKey(marca) ? lstOre[marca] : -99, idCerere);
 
                     sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"",""IdCerereDivizata"", USER_NO, TIME, ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
                                 OUTPUT Inserted.Id, Inserted.IdStare ";
@@ -1181,7 +1182,7 @@ namespace WizOne.Absente
         }
 
         //Florin 2020-04-30
-        public string CreazaSelectCuValori(int marca, int tip = 1, decimal nrOre = -99)
+        public string CreazaSelectCuValori(int marca, int tip = 1, decimal nrOre = -99, int idCerere = -99)
         {
             //tip = 1 intoarce un select
             //tip = 2 intoarce ca values; necesar pt Oracle
@@ -1212,7 +1213,7 @@ namespace WizOne.Absente
                 }
 
                 //Radu 01.02.2021 - citire idCerere din secventa
-                int idCerere = Dami.NextId("Ptj_Cereri");
+                //int idCerere = Dami.NextId("Ptj_Cereri");
                 string sqlIdCerere = idCerere.ToString();
                 if (idCerere == -99)
                     sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";

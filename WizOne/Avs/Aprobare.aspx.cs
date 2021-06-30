@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
@@ -983,7 +984,12 @@ namespace WizOne.Avs
 
                             #region  Notificare start
 
-                            //ctxNtf.TrimiteNotificare("Avs.Aprobare", "grDate", entCer, idUser, f10003);
+                            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(HttpContext.Current.Session["IdClient"], "1").ToString(), General.Nz(HttpContext.Current.Session["IdLimba"], "RO").ToString() };
+
+                            HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                            {
+                                NotifAsync.TrimiteNotificare("Avs.Aprobare", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Avs_Cereri"" Z WHERE ""Id""=" + id, "Avs_Cereri",id, idUser, Convert.ToInt32(dtCer.Rows[0]["F10003"].ToString()), arrParam);
+                            });
 
                             #endregion
 

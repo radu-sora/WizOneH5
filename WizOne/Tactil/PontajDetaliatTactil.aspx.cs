@@ -63,7 +63,7 @@ namespace WizOne.Tactil
                         grDate.Columns["Cheia"].Caption = "Marca";
                     }
 
-                    CreazaGrid();
+                    CreeazaGrid();
 
                     DataTable dtVal = General.IncarcaDT(Constante.tipBD == 1 ? @"SELECT TOP 0 * FROM ""Ptj_IstoricVal"" " : @"SELECT * FROM ""Ptj_IstoricVal"" WHERE ROWNUM = 0 ", null);
                     Session["Ptj_IstoricVal"] = dtVal;
@@ -732,7 +732,7 @@ namespace WizOne.Tactil
 
    
 
-        private void CreazaGrid()
+        private void CreeazaGrid()
         {
             try
             {
@@ -746,6 +746,7 @@ namespace WizOne.Tactil
                                 COALESCE(B.""DenumireScurta"",'') AS ""ColScurta""
                                 FROM ""Ptj_tblAdmin"" A
                                 LEFT JOIN ""Ptj_tblAbsente"" B ON A.""Coloana""=B.""OreInVal""
+                                WHERE COALESCE(ActivTactil, 0) = 1
                                 ORDER BY A.""Ordine"" ", null);
 
                 if (dtCol != null)
@@ -761,17 +762,17 @@ namespace WizOne.Tactil
                         string alias = General.Nz(dr["ColAlias"], General.Nz(dr["Coloana"], "col" + i).ToString()).ToString();
                         bool vizibil = Convert.ToBoolean(General.Nz(dr["Vizibil"], false));
                         bool blocat = Convert.ToBoolean(General.Nz(dr["Blocat"], false));
-                        int latime = Convert.ToInt32(General.Nz(dr["Latime"], 80));
+                        int latime = Convert.ToInt32(General.Nz(dr["LatimeTactil"], 80));
                         int tipCol = Convert.ToInt32(General.Nz(dr["TipColoana"],1));
                         string tt = General.Nz(dr["ColTT"], General.Nz(dr["Coloana"], "col" + i).ToString()).ToString();
                         bool unb = false;
 
-                        if (colField != "ValStr" && colField != "Dept")
-                            continue;
-                        if (colField == "Dept")
-                            latime = 420;                
-                        if (colField == "ValStr")
-                            latime = 300;
+                        //if (colField != "ValStr" && colField != "Dept")
+                        //    continue;
+                        //if (colField == "Dept")
+                        //    latime = 420;                
+                        //if (colField == "ValStr")
+                        //    latime = 300;
 
 
                         if (Constante.lstValuri.IndexOf(colField + ";") >= 0)
@@ -1131,6 +1132,15 @@ namespace WizOne.Tactil
                 grDateTotaluri.KeyFieldName = "TextAfisare";
                 grDateTotaluri.DataBind();
                 Session["InformatiaCurenta_Totaluri"] = dtTot;
+
+                DataTable dtTotConfig = General.IncarcaDT("SELECT * FROM Ptj_tblPrint WHERE Denumire = 'TotaluriTactil'", null);
+                if (dtTotConfig != null && dtTotConfig.Rows.Count > 0)
+                {
+                    grDateTotaluri.Visible = Convert.ToInt32(dtTotConfig.Rows[0]["Activ"].ToString()) == 1 ? true : false;
+                    tdTotaluri.Width = General.Nz(dtTotConfig.Rows[0]["Lungime"], "300").ToString();
+                }
+
+
             }
         }
 

@@ -18087,3 +18087,19 @@ null as datacurs,Curs_tblCursSesiune.Buget, null as PerioadaAmortizare, null as 
 from Curs_tblCursSesiune 
 join curs_tblcurs on curs_tblcurs.id = Curs_tblCursSesiune.IdCurs
 join Curs_relCursAngajati on Curs_relCursAngajati.Id_Curs = curs_tblcurs.id 
+
+
+
+alter table Ptj_tblAdmin add ActivTactil int
+GO
+alter table Ptj_tblAdmin add LatimeTactil int
+GO
+
+update Ptj_tblAdmin set ActivTactil = 1 where Coloana in ('Dept', 'ValStr')
+GO
+update Ptj_tblAdmin set LatimeTactil = 420 where Coloana in ('Dept')
+GO
+update Ptj_tblAdmin set LatimeTactil = 300 where Coloana in ('ValStr')
+GO
+insert into Ptj_tblPrint(Id, Denumire, Activ, Lungime) values (200, 'TotaluriTactil', 1, 300)
+GO

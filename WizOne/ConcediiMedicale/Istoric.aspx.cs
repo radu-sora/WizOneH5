@@ -138,10 +138,10 @@ namespace WizOne.ConcediiMedicale
 
                 szT += " UNION ";
 
-                szT += " SELECT 200 + ROW_NUMBER() OVER (ORDER BY DataCM) as \"IdAuto\", F10003 AS f94003, Cod AS F94010, TipConcediu as TipCM, CONVERT(VARCHAR,DataSfarsit,103) AS DataSfarsit, CONVERT(VARCHAR,DataInceput,103) AS ";
+                szT += " SELECT 200 + ROW_NUMBER() OVER (ORDER BY DataCM) as \"IdAuto\", F10003 AS f94003, Cod AS F94010, F02105 as TipCM, CONVERT(VARCHAR,DataSfarsit,103) AS DataSfarsit, CONVERT(VARCHAR,DataInceput,103) AS ";
                 szT += " DataStart, CONVERT(VARCHAR, DATEDIFF(day, DataInceput, DataSfarsit) + 1, 103) AS ZileCalendaristice, NrZile AS ZileLucratoare, Suma, SerieCM +' ' + NumarCM AS SerieNrCM, SerieCMInitial  +' ' + NumarCMInitial AS ";
                 szT += " SerieNrCMInit, BazaCalculCM AS BCCM, ZileBazaCalculCM AS ZBCCM, MedieZilnicaCM AS MediaZilnica, MedieZileBazaCalcul, DataCM AS F94036 ";
-                szT += " FROM CM_Cereri, F021 WHERE Cod = F02104 AND F10003 = 17 AND ";
+                szT += " FROM CM_Cereri, F021 WHERE Cod = F02104 AND F10003 = {0} AND ";
                 szT += " (Cod IN(select CODE1 from mardef) OR Cod IN(select CODE2 from mardef) OR Cod IN(select CODE3 from mardef) OR Cod IN(select CODE4 from mardef))  ";
 
                 szT += "ORDER BY F94036 DESC ";                

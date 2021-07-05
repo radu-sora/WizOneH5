@@ -30,25 +30,27 @@ namespace WizOne.Module
             public double bpsTOTALRON6;
             public double AMBP_Total;
             public double bpsTOTAL6e;
-            public int Medie7;
+            public double Medie7;
             public int zl12;
         }
 
 
-        public static void CreateDetails(int marca, string strCNP_marci, out double Medie6, out double BCCM, out int ZBCCM, out double MNTZ)
+        public static void CreateDetails(int marca, string strCNP_marci, int optiune, out double Medie6, out double BCCM, out int ZBCCM, out double MNTZ, out bool bAreStagiu)
         {
 
             Medie6 = 0;
             BCCM = 0;
             ZBCCM = 0;
             MNTZ = 0;
+            bAreStagiu = false;
             try
             {
 
                 double dblBPS = 0, dblBPSRON = 0, dblBPS6 = 0, dblBPSRON6 = 0, dblMedieZilnica, dblMedieZilnica6 /*dblCol11*/;
                 bool calculez, bAllowRedistr;
 
-                //bool bAreStagiu = false;
+                double BazaCalcul1, BazaCalcul2;
+                int NumarZileBazaCalcul;
 
                 //int nZileLunaCurentaPropusa;
 
@@ -609,7 +611,7 @@ namespace WizOne.Module
                         }
                         else
                         {
-                            //arCM.bpsRON[i] = "-";
+                            arCM.bpsRON[i] = 0;
                             arCM.bps[i] = TestBazaCalcul(year, month, i, arCM);
                             dblBPS = dblBPS + arCM.bps[i];
                         }
@@ -618,7 +620,7 @@ namespace WizOne.Module
                     else
                     {
                         //arCM.bps[i] = "-";
-                        //arCM.bpsRON[i] = "-";
+                        arCM.bpsRON[i] = 0;
                     }
 
                     if (i > 12 - 6)
@@ -1051,104 +1053,110 @@ namespace WizOne.Module
 
                     if (szBazaCMFUNASS.Length > 4)
                     {
-                    //    if (Not IsNumeric(arCM.total[i])) 
-                    //    {
-                    //arCM.AMBP[i] = "-";
-                    //    }
-                    //    else
-                    //    {
-                        switch (arCM.an[i])
-                        {
-                            case 2015:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2014:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2013:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2012:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2011:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2010:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2009:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2008:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2007:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2006:
-                                if (arCM.luna[i] <= 10)
-                                    arCM.AMBP[i] = arCM.total[i];
-                                else
+                        if (arCM.total[i] <= 0)
+                            arCM.AMBP[i] = 0;
+                        //    if (Not IsNumeric(arCM.total[i])) 
+                        //    {
+                        //arCM.AMBP[i] = "-";
+                        //    }
+                        //    else
+                        //    {
+                        else
+                            switch (arCM.an[i])
+                            {
+                                case 2015:
                                     arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2014:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2013:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2012:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2011:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2010:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2009:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2008:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2007:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2006:
+                                    if (arCM.luna[i] <= 10)
+                                        arCM.AMBP[i] = arCM.total[i];
+                                    else
+                                        arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
 
-                                break;
-                            default:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                        }
+                                    break;
+                                default:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                            }
                 //}
                     }
                     else
                     {
-                //if (Not IsNumeric(arCM.bpsRON[i])) 
-                //        {
-                //    arCM.AMBP[i] = "-";
-                //}
-                //        else
-                //        {
-                        switch (arCM.an[i])
-                        {
-                            case 2015:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2014:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2013:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2012:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2011:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2010:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2009:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2008:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2007:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2006:
-                                if (arCM.luna[i] <= 10)
-                                    arCM.AMBP[i] = arCM.bpsRON[i];
-                                else
+                        if (arCM.bpsRON[i] <= 0)
+                            arCM.AMBP[i] = 0;
+                        //if (Not IsNumeric(arCM.bpsRON[i])) 
+                        //        {
+                        //    arCM.AMBP[i] = "-";
+                        //}
+                        //        else
+                        //        {
+                        else
+                            switch (arCM.an[i])
+                            {
+                                case 2015:
                                     arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2014:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2013:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2012:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2011:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2010:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2009:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2008:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2007:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2006:
+                                    if (arCM.luna[i] <= 10)
+                                        arCM.AMBP[i] = arCM.bpsRON[i];
+                                    else
+                                        arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
 
-                                break;
-                            default:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
+                                    break;
+                                default:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
 
 
-                        }
+                            }
 
                 //}
                     }
@@ -1185,12 +1193,12 @@ namespace WizOne.Module
          //arCM.total[i] = Format(arCM.total[i], "#,##0.00");
         //arCM.bps[i] = Format(arCM.bps[i], "#,##0.00");
                        
-         //if (arCM.bpsRON[i] != "-" )
-           // arCM.bpsRON[i] = Format(arCM.bpsRON[i], "#,##0.00");
+         if (arCM.bpsRON[i] != 0 )
+            arCM.bpsRON[i] = arCM.bpsRON[i];
           
                 
          //if InStr(1, arCM.bpsRON[i], ".", vbTextCompare) = Len(arCM.bpsRON[i])
-         //   arCM.bpsRON[i] = Format(arCM.bpsRON[i], "#,##0.00");
+         //   arCM.bpsRON[i] = arCM.bpsRON[i];
 
 
 
@@ -1238,12 +1246,12 @@ namespace WizOne.Module
        
     if (nchkMedie6Luni == 1) 
         {
-            //if (zileDiff_Stagiu_ZL <= 0)
-            //    bAreStagiu = true;
-            //else
-            //{
-            //    bAreStagiu = false;
-            //}
+            if (zileDiff_Stagiu_ZL <= 0)
+                bAreStagiu = true;
+            else
+            {
+                bAreStagiu = false;
+            }
 
                     long nrluc;
             if (nrluni_stagiu == 1) 
@@ -1253,19 +1261,21 @@ namespace WizOne.Module
            
             if (zile_lucrate_12 < nrluc) 
             {
-                //arCM.Label62.Visible = true;
-               // if (nrluni_stagiu == 1) 
-                    //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_ul & " de zile lucratoare in ultima luna ! (stagiu valabil pana la 01.07.2018 cf. Ordin 8/2018 din MO 190/2018)"
-               // else
-                    //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_6 & " de zile lucratoare in ultimele 6 luni !"
-                
-                //stagiu_print = "NU";
-            }
+                        bAreStagiu = false;
+                        //arCM.Label62.Visible = true;
+                        // if (nrluni_stagiu == 1) 
+                        //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_ul & " de zile lucratoare in ultima luna ! (stagiu valabil pana la 01.07.2018 cf. Ordin 8/2018 din MO 190/2018)"
+                        // else
+                        //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_6 & " de zile lucratoare in ultimele 6 luni !"
+
+                        //stagiu_print = "NU";
+                    }
             else
             {
-                //arCM.Label62.Visible = false;
-                //stagiu_print = "DA";
-            }
+                        bAreStagiu = true;
+                        //arCM.Label62.Visible = false;
+                        //stagiu_print = "DA";
+                    }
         
          arCM.tzsTotal6 = nTZS6;
         
@@ -1319,22 +1329,27 @@ namespace WizOne.Module
                 nrluc = zile_lucratoare_ul;
             else
                 nrluc = zile_lucratoare_6;
-           
 
-            //if (zile_lucrate_12 < nrluc) 
-                //arCM.Label62.Visible = True
-               // if (nrluni_stagiu == 1) 
-                    //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_ul & " de zile lucratoare in ultima luna ! (stagiu valabil pana la 01.07.2018 cf. Ordin 8/2018 din MO 190/2018)"
-               // else
-                    //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_6 & " de zile lucratoare in ultimele 6 luni !"
-               
-                //stagiu_print = "NU"
-           // else
-                //arCM.Label62.Visible = False
-                //stagiu_print = "DA"
-          
-            
-         arCM.tzsTotal6 = nTZS;
+
+                    if (zile_lucrate_12 < nrluc)
+                    {
+                        //arCM.Label62.Visible = True
+                        // if (nrluni_stagiu == 1) 
+                        //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_ul & " de zile lucratoare in ultima luna ! (stagiu valabil pana la 01.07.2018 cf. Ordin 8/2018 din MO 190/2018)"
+                        // else
+                        //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_6 & " de zile lucratoare in ultimele 6 luni !"
+
+                        //stagiu_print = "NU"
+                        bAreStagiu = false;
+                    }
+                    else
+                    {
+                        //arCM.Label62.Visible = False
+                        //stagiu_print = "DA"
+                        bAreStagiu = true;
+                    }
+
+                        arCM.tzsTotal6 = nTZS;
         
          arCM.bpsTOTAL6 = dblBPS;
          arCM.bpsTOTAL6 = Convert.ToDouble(arCM.bpsTOTAL6.ToString("#,##0.00"));
@@ -1436,9 +1451,20 @@ namespace WizOne.Module
                 BCCM = arCM.AMBP_Total;
                 ZBCCM = (int)arCM.tzsTotal6;
 
-                //BazaCalcul1 = CDbl(arCM.AMBP_Total);
-                //BazaCalcul2 = CDbl(arCM.BPSTOTALRON6);
-                //NumarZileBazaCalcul = CInt(arCM.tzsTotal6);
+                BazaCalcul1 = Convert.ToDouble(arCM.AMBP_Total);
+                BazaCalcul2 = Convert.ToDouble(arCM.bpsTOTALRON6);
+                NumarZileBazaCalcul = Convert.ToInt32(arCM.tzsTotal6);
+
+                if (optiune == 1)
+                {
+                    BCCM = BazaCalcul1;
+                    Medie6 = BCCM / NumarZileBazaCalcul;
+                }
+                else
+                {
+                    BCCM = BazaCalcul2;
+                    
+                }
 
                 szsql = "TRUNCATE TABLE TMP_" + marca + "_CM";
                 General.ExecutaNonQuery(szsql, null);

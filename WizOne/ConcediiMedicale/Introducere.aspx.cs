@@ -83,6 +83,7 @@ namespace WizOne.ConcediiMedicale
             if (Session["CM_Stare"] != null && Convert.ToInt32(Session["CM_Stare"].ToString()) > 3)
             {
                 btnSave.ClientVisible = false;
+                btnDocUpload.ClientVisible = false;
             }
 
             if (Session["CM_Stare"] != null && Convert.ToInt32(Session["CM_Stare"].ToString()) == -1)
@@ -112,6 +113,7 @@ namespace WizOne.ConcediiMedicale
                 cmbTipConcediu.SelectedIndex = 0;
                 OnSelChangeTip();
 
+                rbOptiune1.Checked = true;
                 rbConcInit.Checked = true;
                 rbConcCont.Checked = false;
                 rbProgrNorm.Checked = true;
@@ -478,7 +480,7 @@ namespace WizOne.ConcediiMedicale
                 }
             }
 
-            DataTable dtCM = General.IncarcaDT("SELECT * FROM CM_Cereri");
+            DataTable dtCM = General.IncarcaDT("SELECT * FROM CM_Cereri WHERE IdStare != -1");
             for (int i = 0; i < dtCM.Rows.Count; i++)
             {
                 if (Session["CM_Id"] == null &&
@@ -670,7 +672,8 @@ namespace WizOne.ConcediiMedicale
 
             DataTable dt069 = General.IncarcaDT("SELECT * FROM F069 WHERE F06904 = " + dtLC.Rows[0][1].ToString() + " AND F06905 = " + dtLC.Rows[0][0].ToString(), null);
 
-            if (!avans && Session["CM_HR"] != null && Session["CM_HR"].ToString() == "1")
+            if (!avans && txtBCCM.Text.Length > 0 && Convert.ToDouble(txtBCCM.Text) > 0 && txtZBC.Text.Length > 0 && Convert.ToDouble(txtZBC.Text) > 0
+                && txtMZ.Text.Length > 0 && Convert.ToDouble(txtMZ.Text) > 0 && txtMZBC.Text.Length > 0 && Convert.ToDouble(txtMZBC.Text) > 0)
             {
                 int zile2 = 0;
                 int zile = 0;
@@ -1068,7 +1071,7 @@ namespace WizOne.ConcediiMedicale
                 txtCT1.Text.Length <= 0 ? "0" : txtCT1.Text, txtCT2.Text.Length <= 0 ? "0" : txtCT2.Text, txtCT3.Text.Length <= 0 ? "0" : txtCT3.Text, txtCT4.Text.Length <= 0 ? "0" : txtCT4.Text, txtCT5.Text.Length <= 0 ? "0" : txtCT5.Text, //29
                 txtBCCM.Text.Length <= 0 ? "0" : txtBCCM.Text.ToString(new CultureInfo("en-US")), txtZBC.Text.Length <= 0 ? "0" : txtZBC.Text, txtMZBC.Text.Length <= 0 ? "0" : txtMZBC.Text.ToString(new CultureInfo("en-US")), txtMZ.Text.Length <= 0 ? "0" : txtMZ.Text.Replace(',', '.').ToString(new CultureInfo("en-US")), //33
                 txtNrAviz.Text, "CONVERT(DATETIME, '" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + (dtAviz.Year < 1900 ? 2100 : dtAviz.Year).ToString() + "', 103)", txtMedic.Text, //36
-                (cmbCNPCopil.Value ?? ""), 1, (Session["CM_Document"] == null ? 0 : 1), (chkUrgenta.Checked ? "1" : "0"), suma.ToString(new CultureInfo("en-US")), tarif.ToString(new CultureInfo("en-US")), cod, (chkModMan.Checked ? "1" : "0"), (rbOptiune1.Checked ? "1" : "2"), Convert.ToInt32(Session["UserId"].ToString()), "GETDATE()"); //47
+                (cmbCNPCopil.Value ?? ""), (chkModMan.Checked ? 2 : 1), (Session["CM_Document"] == null ? 0 : 1), (chkUrgenta.Checked ? "1" : "0"), suma.ToString().Replace(',', '.'), tarif.ToString().Replace(',', '.'), cod, (chkModMan.Checked ? "1" : "0"), (rbOptiune1.Checked ? "1" : "2"), Convert.ToInt32(Session["UserId"].ToString()), "GETDATE()"); //47
 
             //cod, 1, tarif.ToString(new CultureInfo("en-US")), zile, proc.ToString(new CultureInfo("en-US")), suma.ToString(new CultureInfo("en-US")), 0, 0, 0, //13
             //(Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)"
@@ -1101,14 +1104,18 @@ namespace WizOne.ConcediiMedicale
 
                         string sqlParam = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'BCCM'";
                         DataTable dtParam = General.IncarcaDT(sqlParam, null);
+                        string sqltmp = "";
                         if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
                         {
                             nn = Convert.ToInt32(dtParam.Rows[0][0].ToString()) - 1;
-                            string sqltmp = "UPDATE F100 SET F10069{0} = 0.0 WHERE F10003 = {1}";
+                            sqltmp = "UPDATE F100 SET F10069{0} = 0.0 WHERE F10003 = {1}";
                             sqltmp = string.Format(sqltmp, nn, marca);
                             if (!General.ExecutaNonQuery(sqltmp, null))
                                 MessageBox.Show(Dami.TraduCuvant("Nu am putut actualiza Tariful CM pe angajat!"));
                         }
+                        sqltmp = "UPDATE CM_Cereri SET  BazaCalculCM = 0, ZileBazaCalculCM = 0, MedieZileBazaCalcul = 0, MedieZilnicaCM = 0, Tarif = 0 WHERE Id = {0}";
+                        sqltmp = string.Format(sqltmp, id);
+                        General.ExecutaNonQuery(sqltmp, null);
                     }
                     if (Session["CM_Id"] == null)
                     {
@@ -1163,7 +1170,7 @@ namespace WizOne.ConcediiMedicale
             int Z2 = 0, Z3 = 0;
             if (txtCT1.Text.Length <= 0) return;
             int ZL = 0;
-            bool trans = int.TryParse((Session["CM_NrZile"] == null ? "0" : Session["CM_NrZile"].ToString()), out ZL);
+            bool trans = int.TryParse((Session["CM_NrZile"] == null ? "" : Session["CM_NrZile"].ToString()), out ZL);
 
             int ZLA = 0;
             int.TryParse(txtZCMAnt.Text, out ZLA);
@@ -1304,7 +1311,7 @@ namespace WizOne.ConcediiMedicale
                 }
             }
             txtCT5.Text = total.ToString();
-            txtCT6.Text = total.ToString();
+            txtCT4.Text = total.ToString();
         }
 
         void OnUpdateZL()
@@ -1396,7 +1403,7 @@ namespace WizOne.ConcediiMedicale
                 }
             }
             txtCT5.Text = total.ToString();
-            txtCT6.Text = total.ToString();
+            txtCT4.Text = total.ToString();
         }
 
         private void OnSelChangeTip()
@@ -1574,9 +1581,10 @@ namespace WizOne.ConcediiMedicale
                 return;
             }
 
-            if (Session["CM_EndDate"] != null)
+            if (deLaData.Value != null)
             {
-                dte = Convert.ToDateTime(Session["CM_EndDate"]);
+                dte = Convert.ToDateTime(deLaData.Value);
+                Session["CM_EndDate"] = dte;
             }
             else
             {
@@ -1649,7 +1657,9 @@ namespace WizOne.ConcediiMedicale
             {
                 nrZL3 = nrZL;
             }
-            txtNrZile.Text = nrZL.ToString(); OnUpdateZL();
+            txtNrZile.Text = nrZL.ToString();
+            Session["CM_NrZile"] = txtNrZile.Text;
+            OnUpdateZL();
             txtCT1.Text = nrZL3.ToString(); OnUpdateZ1();
             string s;
             int total = 0;
@@ -1684,8 +1694,7 @@ namespace WizOne.ConcediiMedicale
                 }
             }
             txtCT5.Text = total.ToString();
-            txtCT6.Text = total.ToString();
-            Session["CM_NrZile"] = txtNrZile.Text;
+            txtCT4.Text = total.ToString();           
         }
 
         bool IsHoliday(DateTime dt)
@@ -2054,12 +2063,25 @@ namespace WizOne.ConcediiMedicale
             DataTable dt = General.IncarcaDT("SELECT F10003 FROM F100 WHERE F10017 = (SELECT F10017 FROM F100 WHERE F10003 = " + Session["MarcaCM"].ToString() + ")", null);
             for (int i = 0; i < dt.Rows.Count; i++)
                 strCNP_marci += "," + dt.Rows[i][0].ToString();
-            Module.ConcediiMedicale.CreateDetails(Convert.ToInt32(Session["MarcaCM"].ToString()), strCNP_marci.Substring(1), out Medie6, out BCCM, out ZBCCM, out MNTZ);
+            bool areStagiu = false;
+            Module.ConcediiMedicale.CreateDetails(Convert.ToInt32(Session["MarcaCM"].ToString()), strCNP_marci.Substring(1), (rbOptiune1.Checked ? 1 : 2), out Medie6, out BCCM, out ZBCCM, out MNTZ, out areStagiu);
 
             txtBCCM.Text = BCCM.ToString(new CultureInfo("en-US"));
             txtZBC.Text = ZBCCM.ToString();
             txtMZ.Text = Medie6.ToString("0.##").ToString(new CultureInfo("en-US"));
             txtMZBC.Text = MNTZ.ToString("0.##").ToString(new CultureInfo("en-US"));
+
+            if (!areStagiu)
+            {  
+                txtBCCM.Text = "0";
+                txtZBC.Text = "0";
+                txtMZ.Text = "0";
+                txtMZBC.Text = "0";
+                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Angajatul nu are stagiu!");
+                chkStagiu.Checked = true;
+            }
+            else
+                chkStagiu.Checked = false;
         }
 
      
@@ -2098,7 +2120,7 @@ namespace WizOne.ConcediiMedicale
                     return;
 			  
 			    if (cod_ind == 15)
-                    txtCodIndemn.Text ="RM";
+                    txtCodDiag.Text ="RM";
 
                 int no = -1;
                 for (int i = 0; i < dtMARDEF.Rows.Count; i++)
@@ -2135,7 +2157,7 @@ namespace WizOne.ConcediiMedicale
                 txtCT3.Enabled = true;
                 txtCT4.Enabled = true;
                 txtCT5.Enabled = true;
-                txtCT6.Enabled = true;
+                //txtCT6.Enabled = true;
             }
             else
             {
@@ -2143,7 +2165,7 @@ namespace WizOne.ConcediiMedicale
                 txtCT3.Enabled = false;
                 txtCT4.Enabled = false;
                 txtCT5.Enabled = false;
-                txtCT6.Enabled = false;
+                //txtCT6.Enabled = false;
                 OnUpdateZLP();
             }
 
@@ -2704,7 +2726,7 @@ namespace WizOne.ConcediiMedicale
             txtCC.Text = "9999";
             OnUpdateCcNo();
             txtDetalii.Text = "";
-            txtCodIndemn.Text = "";
+            //txtCodIndemn.Text = "";
             txtCodDiag.Text = "";
             txtCodUrgenta.Text = "";
             txtCodInfCont.Text = "";
@@ -2721,13 +2743,16 @@ namespace WizOne.ConcediiMedicale
             txtCT4.Text = "";
             cmbCT5.SelectedIndex = -1;
             txtCT5.Text = "";
-            cmbCT6.SelectedIndex = -1;
-            txtCT6.Text = "";
+            //cmbCT6.SelectedIndex = -1;
+            //txtCT6.Text = "";
             //rbOptiune1.Visible = false;
             //rbOptiune1.Visible = false;
             btnMZ.Enabled = true;
             Session["CM_StartDate"] = null;
             Session["CM_EndDate"] = null;
+            Session["CM_NrZile"] = null;
+            Session["CM_Grid"] = null;
+            Session["CM_Document"] = null;
         }
 
         protected void btnDocUpload_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)

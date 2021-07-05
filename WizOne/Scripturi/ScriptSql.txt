@@ -18044,11 +18044,11 @@ CREATE TABLE [dbo].[CM_tblStari](
 GO
 SET IDENTITY_INSERT [dbo].[CM_tblStari] ON 
 GO
-INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (-1, N'Anulat', NULL, NULL, NULL, 1)
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (-1, N'Anulat', N'#FF0000', NULL, NULL, 1)
 GO
 INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (1, N'Inregistrat', N'#9ACCFF', NULL, NULL, 2)
 GO
-INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (2, N'Medie rulata', NULL, NULL, NULL, 3)
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (2, N'Medie rulata', N'#FFA500', NULL, NULL, 3)
 GO
 INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (3, N'Aprobat', N'#9BBB59', NULL, NULL, 4)
 GO

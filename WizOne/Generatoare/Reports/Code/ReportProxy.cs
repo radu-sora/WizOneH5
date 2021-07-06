@@ -15,6 +15,8 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web;
+using System.Web.SessionState;
+using WizOne.Module;
 using Wizrom.Reports.Models;
 
 namespace Wizrom.Reports.Code

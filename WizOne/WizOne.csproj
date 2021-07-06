@@ -14,7 +14,7 @@
     <RootNamespace>WizOne</RootNamespace>
     <AssemblyName>WizOne</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -53,8 +53,11 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Charts.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Charts.Core.19.1.4\lib\net452\DevExpress.Charts.v19.1.Core.dll</HintPath>
+    <Reference Include="Adeverinte_Word">
+      <HintPath>..\Artifacts\Adeverinte_Word.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Charts.v20.2.Core">
+      <HintPath>..\packages\DevExpress.Charts.Core.20.2.4\lib\net452\DevExpress.Charts.v20.2.Core.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.CodeParser.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.CodeParser.20.2.4\lib\net452\DevExpress.CodeParser.v20.2.dll</HintPath>
@@ -417,7 +420,6 @@
     <Content Include="ContracteLucru\ContractDetaliu.aspx" />
     <Content Include="ContracteLucru\ContractVal.ascx" />
     <Content Include="ContracteLucru\ContractZilnic.ascx" />
-    <Content Include="Content\reports.css" />
     <Content Include="Contracte\Lista.aspx" />
     <Content Include="Contracte\Detalii.aspx" />
     <Content Include="Default.aspx" />
@@ -2580,6 +2582,7 @@
       <LastGenOutput>General.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\AdeverintaGenerala.resx">
       <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
     </EmbeddedResource>

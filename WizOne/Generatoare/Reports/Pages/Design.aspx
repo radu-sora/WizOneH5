@@ -1,9 +1,12 @@
-﻿<%@ Page Title="Design Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="Design.aspx.cs" Inherits="Wizrom.Reports.Pages.Design" %>
+﻿<%@ Page Title="Design Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" ClientIDMode="Static" CodeBehind="Design.aspx.cs" Inherits="Wizrom.Reports.Pages.Design" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <!-- Modal dialogs -->
+    <link rel="stylesheet" type="text/css" href="../Styles/reports.css" />
 
-    <!-- Page content -->
+    <!-- Modal dialogs -->
+    
+    <!-- Page content --> 
+<asp:PlaceHolder ID="ReportTemplate" runat="server">
     <table class="report-design-template">
         <tr>
             <td id="customLayoutSection">
@@ -337,10 +340,10 @@
             </td>
         </tr>
     </table>
-    
-    <script type="text/html" id="dxrd-savereport-dialog-content-simple">
+
+    <script type="text/html" id="report-save-as-dialog-content-simple">
         <div data-bind="dxTextBox: { value: $data.reportName }"></div>
-    </script>
+    </script>    
     <script>
         // Globals
         var reportType = '<%: ReportType %>';
@@ -376,8 +379,8 @@
                 previewModel.parametersModel.initialize = function (params) {
                     var model = this;
 
-                    model._initialize(params);
-
+                    model._initialize(params); // TODO: If there are no parameters then submit is called automatically and therefore 
+                    //       this line must be moved after refreshCustomLayoutSection(true) to have correct call order of refreshCustomLayoutSection, init then load.
                     if (customLayoutVisible) {
                         if (params.parameters.length) { // Show only the parameters panel.
                             $('#' + reportDesigner.name + ' div.dxrd-right-tabs div[title="' + previewModel.exportModel.tabInfo.text + '"]').hide();
@@ -451,7 +454,7 @@
             data.Popup.title = 'Save As...';
             data.Popup.width(400);
             data.Popup.height(180);
-            data.Customize('dxrd-savereport-dialog-content-simple', data.Popup.model());
+            data.Customize('report-save-as-dialog-content-simple', data.Popup.model());
         }
 
         function onReportSaving(report) {
@@ -678,5 +681,98 @@
                 customCubeWebChartControl.PerformCallback();
             }
         }
-    </script>    
+    </script>  
+</asp:PlaceHolder>
+<asp:PlaceHolder ID="DashboardTemplate" runat="server">
+    <dx:ASPxDashboard ID="DashboardDesigner" ClientInstanceName="dashboardDesigner" runat="server" WorkingMode="Designer" UseDashboardConfigurator="true"
+        EnableCustomSql="true" ShowConfirmationOnBrowserClosing="false">
+        <ClientSideEvents
+            BeforeRender="function(s, e) {
+                onDashboardDesignerBeforeRender();
+            }" />
+    </dx:ASPxDashboard>            
+    
+    <script type="text/html" id="dashboard-save-as-extension">
+	    <div class="dx-dashboard-typography dx-dashboard-popup" data-bind="dxPopup: {            
+                title: 'Save As...',
+                width: 400,
+                height: 185,
+                visible: savePopupVisible,
+                showCloseButton: true,
+                toolbarItems: [{
+                    toolbar: 'bottom',
+                    widget: 'dxButton',
+                    location: 'after',
+                    options: {
+                        text: 'Save',
+                        onClick: onSavePopupOkClick
+                    }
+                }, {
+                    toolbar: 'bottom',
+                    widget: 'dxButton',
+                    location: 'after',
+                    options: {
+                        text: 'Cancel',
+                        onClick: onSavePopupCancelClick,
+                        onInitialized: function (e) { e.element.addClass('dx-dashboard-confirm-sub-button'); }
+                    }
+                }]
+            }">
+		    <div data-bind="dxTextBox: { value: savePopupNewName }"></div>
+	    </div>
+    </script>
+    <script type="text/html" id="dashboard-exit-extension">
+	    <div class="dx-dashboard-typography dx-dashboard-popup" data-bind="dxPopup: {
+                title: 'Save Dashboard',
+                width: 400,
+                height: 185,
+                visible: savePopupVisible,
+                showCloseButton: true,
+                toolbarItems: [{
+                    toolbar: 'bottom',
+                    widget: 'dxButton',
+                    location: 'after',
+                    options: {
+                        text: 'Yes',
+                        onClick: onSavePopupYesClick
+                    }
+                }, {
+                    toolbar: 'bottom',
+                    widget: 'dxButton',
+                    location: 'after',
+                    options: {
+                        text: 'No',
+                        onClick: onSavePopupNoClick                        
+                    }
+                }, {
+                    toolbar: 'bottom',
+                    widget: 'dxButton',
+                    location: 'after',
+                    options: {
+                        text: 'Cancel',
+                        onClick: onSavePopupCancelClick                        
+                    }
+                }]
+            }">
+		    <div data-bind="text: savePopupMessage"></div>
+	    </div>
+    </script>
+    <script src="../Scripts/dashboard-save-as-extension.js"></script>
+    <script src="../Scripts/dashboard-exit-extension.js"></script>
+    <script>
+        // Globals        
+
+        // Main functions
+        function onDashboardDesignerBeforeRender() {
+            var dashboardControl = dashboardDesigner.getDashboardControl();
+            var createDashboardExtension = dashboardControl.findExtension('create-dashboard');
+
+            //dashboardControl.unregisterExtension('create-dashboard'); // Don't remove! Save as extension use this extension to create new dashboard.
+            dashboardControl.menuItems.remove(createDashboardExtension._newDashboardMenuItem); // Only hide!
+            dashboardControl.unregisterExtension('open-dashboard');
+            dashboardControl.registerExtension(new CustomExtensions.SaveAsDashboardExtension(dashboardControl));
+            dashboardControl.registerExtension(new CustomExtensions.ExitDashboardExtension(dashboardControl));
+        }
+    </script>
+</asp:PlaceHolder>    
 </asp:Content>

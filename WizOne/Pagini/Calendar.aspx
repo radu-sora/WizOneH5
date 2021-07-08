@@ -11,7 +11,7 @@
                 <OptionsView VerticalScrollBarMode="Auto" />
                 <OptionsAdaptivity Enabled="true" />
                 <OptionsCustomization AllowAppointmentEdit="None" />
-                <OptionsToolTips AppointmentToolTipMode="Auto" ShowAppointmentToolTip="true" />                
+                <OptionsToolTips AppointmentToolTipMode="Hint" ShowAppointmentToolTip="true" />                
                 <ViewVisibleInterval>
                     <OptionsCalendar AppointmentDatesHighlightMode="Labels">
                         <SettingsAdaptivity SwitchToSingleViewAtWindowInnerWidth="1024" />

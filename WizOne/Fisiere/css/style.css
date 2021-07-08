@@ -602,11 +602,11 @@ a, a:focus, a:hover {
     .dx-scheduler-adaptive > tbody > tr:first-child {
         height: 0;
     }
-    .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > div:nth-child(3) {
+    .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > .dxAC {
         height: 100% !important;
         overflow-y: auto !important;
     }
-        .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > div:nth-child(3) > div:first-child {
+        .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > .dxAC > div:first-child {
             right: 0 !important;
         }
 
@@ -614,6 +614,11 @@ a, a:focus, a:hover {
     .dx-scheduler-adaptive.dx-scheduler-adaptive-info-tooltip .dxsc-detailed-apt-tooltip .dxsc-dat-bottom > .dxsc-dat-buttons-container {
         display: none;
     }
+
+/* DX dashboard fix for fullscreen popup */
+.dx-designer .dx-popup-wrapper {
+    position: fixed !important;
+}
 
 /* BS fix for vertical/horizontal space between rows and wrapped cols. Make BS cols same height. */
 .row.row-fix {

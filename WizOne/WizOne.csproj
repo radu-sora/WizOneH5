@@ -414,12 +414,6 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Generatoare\Reports\Styles\reports.css" />
-    <Content Include="ContracteLucru\Contract.aspx" />
-    <Content Include="ContracteLucru\ContractAbsente.ascx" />
-    <Content Include="ContracteLucru\ContractCiclic.ascx" />
-    <Content Include="ContracteLucru\ContractDetaliu.aspx" />
-    <Content Include="ContracteLucru\ContractVal.ascx" />
-    <Content Include="ContracteLucru\ContractZilnic.ascx" />
     <Content Include="Contracte\Lista.aspx" />
     <Content Include="Contracte\Detalii.aspx" />
     <Content Include="Default.aspx" />

@@ -489,7 +489,7 @@ namespace WizOne.ConcediiMedicale
             try
             { 
 
-                grDate.KeyFieldName = "F30052";
+                grDate.KeyFieldName = "Id";
 
                 if (Session["CM_Grid"] == null)
                     dt = SelectGrid();
@@ -756,15 +756,11 @@ namespace WizOne.ConcediiMedicale
       
                 int tip = Convert.ToInt32(General.Nz(Session["CM_HR"], "0").ToString());
                 if (tip == 1)
-                    strSql = "SELECT F30003, F300601, F300602, F300606, F300608, F300619, F30037, F30038, MAX(F300612) as F300612, MAX(F300613) as F300613, MAX(F300614) as F300614, MAX(F300620) as F300620, " 
-                        + "MAX(F300623) as F300623, MAX(F300624) as F300624, MAX(F30014) as F30014, MIN(F30052) AS F30052, MAX(USER_NO) AS USER_NO, MAX(TIME) AS TIME, " 
-                        + "(CASE WHEN MAX(F300612) = 0 AND MAX(F300613) = 0 AND MAX(F300614) = 0 AND MAX(F300620) = 0 THEN 1 ELSE 2 END) AS IdStare, " 
-                        + "(SELECT COUNT(*) FROM tblFisiere WHERE Tabela = 'F300' AND Id = MIN(F30052)) AS Document FROM F300  GROUP BY F30003, F300601, F300602, F300606, F300608, F300619, F30037, F30038";
+                    strSql = "SELECT F10003, SerieCM, NumarCM, SerieCMInitial, NumarCMInitial, CodDiagnostic, DataInceput, DataSfarsit, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, "
+                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile FROM CM_Cereri ";
                 else
-                    strSql = "SELECT F30003, F300601, F300602, F300606, F300608, F300619, F30037, F30038, MAX(F300612) as F300612, MAX(F300613) as F300613, MAX(F300614) as F300614, MAX(F300620) as F300620, "
-                       + "MAX(F300623) as F300623, MAX(F300624) as F300624, MAX(F30014) as F30014, MIN(F30052) AS F30052, MAX(USER_NO) AS USER_NO, MAX(TIME) AS TIME, "
-                       + "(CASE WHEN MAX(F300612) = 0 AND MAX(F300613) = 0 AND MAX(F300614) = 0 AND MAX(F300620) = 0 THEN 1 ELSE 2 END) AS IdStare, "
-                       + "(SELECT COUNT(*) FROM tblFisiere WHERE Tabela = 'F300' AND Id = MIN(F30052)) AS Document FROM F300 WHERE F30003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ") GROUP BY F30003, F300601, F300602, F300606, F300608, F300619, F30037, F30038";
+                    strSql = "SELECT F10003, SerieCM, NumarCM, SerieCMInitial, NumarCMInitial, CodDiagnostic, DataInceput, DataSfarsit, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, "
+                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile FROM CM_Cereri WHERE F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ") ";
                            
                 
                 q = General.IncarcaDT(strSql, null);

@@ -9,10 +9,7 @@
 
         function grDate_CustomButtonClick(s, e) {
             switch(e.buttonID)
-            {       
-                case "btnIstoric":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToIstoric);
-                    break;
+            {    
                 case "btnEdit":
                     grDate.GetRowValues(e.visibleIndex, 'Id;IdStare', GoToEditMode);
                     break;
@@ -47,14 +44,7 @@
                     }
                 });
             }
-        }
-
-        function GoToIstoric(Value) {
-            strUrl = getAbsoluteUrl + "Pagini/Istoric.aspx?tip=9&qwe=" + Value;
-            popGen.SetHeaderText("Istoric");
-            popGen.SetContentUrl(strUrl);
-            popGen.Show();
-        }
+        } 
 
 
         function CloseDeferedWindow() {
@@ -104,20 +94,13 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/calcul.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnAnulare" runat="server" Text="Anuleaza" OnClick="btnAnulare_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnAnulare" runat="server" Text="Sterge" OnClick="btnAnulare_Click" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
                         e.processOnServer = true;
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
-                </dx:ASPxButton>
-                <dx:ASPxButton ID="btnAproba" runat="server" Text="Aproba" OnClick="btnAproba_Click" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
-                    }" />
-                    <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
-                </dx:ASPxButton>
+                </dx:ASPxButton>  
                 <dx:ASPxButton ID="btnTransfera" runat="server" Text="Transfera" OnClick="btnTransfera_Click" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
@@ -181,10 +164,7 @@
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnEdit">
                                     <Image ToolTip="Modificare" Url="~/Fisiere/Imagini/Icoane/edit.png" />
-                                </dx:GridViewCommandColumnCustomButton>             
-                                <dx:GridViewCommandColumnCustomButton ID="btnIstoric">
-                                    <Image ToolTip="Istoric" Url="~/Fisiere/Imagini/Icoane/motive.png" />
-                                </dx:GridViewCommandColumnCustomButton> 
+                                </dx:GridViewCommandColumnCustomButton>     
                                 <dx:GridViewCommandColumnCustomButton ID="btnArata">
                                     <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/arata.png" />
                                 </dx:GridViewCommandColumnCustomButton> 
@@ -194,66 +174,55 @@
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" ReadOnly="true" Width="300px" >
+                        <dx:GridViewDataComboBoxColumn FieldName="F30003" Name="F30003" Caption="Angajat" ReadOnly="true" Width="300px" >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                            <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown" >
+                                <Columns>
+                                    <dx:ListBoxColumn FieldName="F30003" Caption="Marca" Width="130px" />
+                                    <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
+                                </Columns>
+                            </PropertiesComboBox>
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="NumarCM" Name="NumarCM" Caption="Numar CM" ReadOnly="true" Width="100px"  >
+                        <dx:GridViewDataTextColumn FieldName="F300601" Name="F300601" Caption="Serie CM" ReadOnly="true" Width="100px" >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="SerieCM" Name="SerieCM" Caption="Serie CM" ReadOnly="true" Width="100px" >
+                        <dx:GridViewDataTextColumn FieldName="F300602" Name="F300602" Caption="Numar CM" ReadOnly="true" Width="100px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="NumarCMInitial" Name="NumarCMInitial" Caption="Numar CM initial" ReadOnly="true" Width="150px"  >
+                        <dx:GridViewDataTextColumn FieldName="F300606" Name="F300606" Caption="Serie CM initial" ReadOnly="true" Width="120px" >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="SerieCMInitial" Name="SerieCMInitial" Caption="Serie CM initial" ReadOnly="true" Width="120px" >
+                        <dx:GridViewDataTextColumn FieldName="F300608" Name="F300608" Caption="Numar CM initial" ReadOnly="true" Width="150px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataTextColumn>
-			            <dx:GridViewDataTextColumn FieldName="CodDiagnostic" Name="CodDiagnostic" Caption="Cod diagnostic" ReadOnly="true"  Width="120px" >	
+			            <dx:GridViewDataTextColumn FieldName="F300619" Name="F300619" Caption="Cod diagnostic" ReadOnly="true"  Width="120px" >	
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataTextColumn>
-					    <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput" ReadOnly="true"  Width="120px" >
+					    <dx:GridViewDataDateColumn FieldName="F30037" Name="F30037" Caption="Data inceput" ReadOnly="true"  Width="120px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>
-					    <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit" ReadOnly="true"  Width="100px" >
+					    <dx:GridViewDataDateColumn FieldName="F30038" Name="F30038" Caption="Data sfarsit" ReadOnly="true"  Width="100px" >
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                        </dx:GridViewDataDateColumn>
-					    <dx:GridViewDataTextColumn FieldName="NrZile" Name="NrZile" Caption="Cantitate" ReadOnly="true"  Width="150px" >	
-                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                        </dx:GridViewDataTextColumn>
+                        </dx:GridViewDataDateColumn>	
                         <dx:GridViewDataCheckColumn FieldName="Document" Name="Document" Caption="Document" ReadOnly="true" Width="100px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataCheckColumn>
                     
-                        <dx:GridViewDataTextColumn FieldName="BazaCalculCM" Name="BazaCalculCM" Caption="BazaCalculCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />                        
-                        <dx:GridViewDataTextColumn FieldName="ZileBazaCalculCM" Name="ZileBazaCalculCM" Caption="ZileBazaCalculCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="MedieZileBazaCalcul" Name="MedieZileBazaCalcul" Caption="MedieZileBazaCalcul" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="MedieZilnicaCM" Name="MedieZilnicaCM" Caption="MedieZilnicaCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="Initial" Name="Initial" Caption="Initial" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="ModifManuala" Name="ModifManuala" Caption="ModifManuala" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="Optiune" Name="Optiune" Caption="Optiune" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="F300612" Name="F300612" Caption="BazaCalculCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />                        
+                        <dx:GridViewDataTextColumn FieldName="F300613" Name="F300613" Caption="ZileBazaCalculCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="F300620" Name="F300620" Caption="MedieZileBazaCalcul" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="F300614" Name="F300614" Caption="MedieZilnicaCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="F300624" Name="F300624" Caption="ModifManuala" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="F30014" Name="F30014" Caption="Procent" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="F300623" Name="F300623" Caption="Optiune" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
 
-                        <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="F30052" Name="F30052" Caption="Id" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME" ReadOnly="true" Width="50px" Visible="false" />
                     </Columns>
                     <SettingsCommandButton>
-                        <UpdateButton ButtonType="Link" Text="Actualizeaza">
-                            <Styles>
-                                <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10" Font-Bold="true">
-                                </Style>
-                            </Styles>
-                        </UpdateButton>
-                        <CancelButton ButtonType="Link" Text="Anulare"  Image-ToolTip="Anulare">
-                            <Styles>
-                                <Style Font-Bold="true" />
-                            </Styles>
-                        </CancelButton>
-
                         <EditButton Image-ToolTip="Edit">
                             <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
                             <Styles>

@@ -182,6 +182,16 @@
 							        </dx:ASPxDateEdit>										
 						        </td>
 					        </tr>
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>				
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>								
 				        </table>
                       <asp:ObjectDataSource runat="server" ID="dsTN" TypeName="WizOne.Module.General" SelectMethod="GetF733"/>
                       <asp:ObjectDataSource runat="server" ID="dsCet" TypeName="WizOne.Module.General" SelectMethod="GetCetatenie"/>
@@ -334,6 +344,16 @@
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>	
 				        </table>
 			        </fieldset>
 			        <fieldset >
@@ -409,7 +429,7 @@
 
             <td  valign="top" >
 			      <fieldset >
-				        <legend id="lgStudii" runat="server"></legend>
+				        <legend id="lgStudii" runat="server" class="legend-font-size"></legend>
 				        <table id="lgStudiiTable" runat="server" width="60%">	
 					        <tr>				
 						        <td >
@@ -430,7 +450,7 @@
                                     <dx:ASPxButton ID="btnStudiiIst" ClientInstanceName="btnStudiiIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
                                          <ClientSideEvents Click="function(s,e){ GoToIstoricDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
-                                        <Paddings PaddingLeft="10px" PaddingRight="10px"/>
+                                        <Paddings PaddingLeft="10px" PaddingRight="20px"/>
                                     </dx:ASPxButton>
                                 </td>
 					        </tr>
@@ -471,7 +491,7 @@
                                     <dx:ASPxButton ID="btnTitluAcadIst" ClientInstanceName="btnTitluAcadIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
                                          <ClientSideEvents Click="function(s,e){ GoToIstoricDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
-                                        <Paddings PaddingLeft="10px" PaddingRight="10px"/>
+                                        <Paddings PaddingLeft="10px" PaddingRight="20px"/>
                                     </dx:ASPxButton>
                                 </td>
 					        </tr>
@@ -486,7 +506,7 @@
 					        </tr>
                             <tr>				
 						        <td>		
-							        <dx:ASPxLabel  ID="lblNrCarteMunca" runat="server"  Text="Numar carte munca"></dx:ASPxLabel >	
+							        <dx:ASPxLabel  ID="lblNrCarteMunca" runat="server"  Text="Nr. carte munca"></dx:ASPxLabel >	
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtNrCarteMunca" Width="150"  runat="server" Text='<%# Eval("F10012") %>' TabIndex="28" AutoPostBack="false" >
@@ -512,6 +532,11 @@
 							        </dx:ASPxDateEdit>										
 						        </td>
 					        </tr>
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>	
 				        </table>
                       <asp:ObjectDataSource runat="server" ID="dsStudii" TypeName="WizOne.Module.General" SelectMethod="GetStudii"/>
                       <asp:ObjectDataSource runat="server" ID="dsTitluAcad" TypeName="WizOne.Module.General" SelectMethod="GetTitluAcademic"/>
@@ -621,6 +646,41 @@
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>	
+							<tr>
+								<td>
+									<br />
+								</td>
+							</tr>	
 						  </table>
 					  </fieldset>			
 					<fieldset >

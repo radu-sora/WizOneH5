@@ -45,11 +45,9 @@ namespace WizOne.ConcediiMedicale
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
                 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                btnAproba.Text = Dami.TraduCuvant("btnAproba", "Aproba");
                 btnTransfera.Text = Dami.TraduCuvant("btnTransfera", "Transfera");
                 btnAdauga.Text = Dami.TraduCuvant("btnAdauga", "Adauga CM");
-
-                btnIstoric.Image.ToolTip = Dami.TraduCuvant("btnIstoric", "Istoric");               
+             
                 
                 foreach (GridViewColumn c in grDate.Columns)
                 {
@@ -65,11 +63,6 @@ namespace WizOne.ConcediiMedicale
                 }
 
                 #endregion
-                CriptDecript prc = new CriptDecript();
-                //string param = General.Nz(Request["tip"], prc.EncryptString(Constante.cheieCriptare, "Introducere", 1)).ToString();
-                //param = prc.EncryptString(Constante.cheieCriptare, param, 2);
-                //int tip = param == "Aprobare" ? 2 : 1;
-                //int tip = Convert.ToInt32(General.Nz(Request["tip"], "1").ToString());
 
                 string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
                 string sql = "SELECT COUNT(*) FROM \"F100Supervizori\" WHERE \"IdUser\" = {0} AND \"IdSuper\" IN ({1})";
@@ -86,7 +79,6 @@ namespace WizOne.ConcediiMedicale
 
                 if (tip == 1)
                 {            
-                    btnAproba.ClientVisible = false;
                     btnTransfera.ClientVisible = false; 
                     btnRapCM.ClientVisible = false;
                     btnCalcul.ClientVisible = false;
@@ -497,7 +489,7 @@ namespace WizOne.ConcediiMedicale
             try
             { 
 
-                grDate.KeyFieldName = "IdAuto";
+                grDate.KeyFieldName = "F30052";
 
                 if (Session["CM_Grid"] == null)
                     dt = SelectGrid();
@@ -761,24 +753,20 @@ namespace WizOne.ConcediiMedicale
             try
             {
                 string strSql = "";
-                string filtru = "";
-
-
-                //if (Convert.ToInt32(cmbAngFiltru.Value ?? -99) != -99) filtru += " AND a.F10003 = " + Convert.ToInt32(cmbAngFiltru.Value ?? -99);
-
-                //daca este rol de hr aratam toate cererile
-                //string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
-
-                CriptDecript prc = new CriptDecript();
-                //string param = General.Nz(Request["tip"], prc.EncryptString(Constante.cheieCriptare, "Introducere", 1)).ToString();
-                //param = prc.EncryptString(Constante.cheieCriptare, param, 2);
-                //int tip = param == "Aprobare" ? 2 : 1;
+      
                 int tip = Convert.ToInt32(General.Nz(Session["CM_HR"], "0").ToString());
                 if (tip == 1)
-                    strSql = "SELECT * FROM CM_Cereri";
+                    strSql = "SELECT F30003, F300601, F300602, F300606, F300608, F300619, F30037, F30038, MAX(F300612) as F300612, MAX(F300613) as F300613, MAX(F300614) as F300614, MAX(F300620) as F300620, " 
+                        + "MAX(F300623) as F300623, MAX(F300624) as F300624, MAX(F30014) as F30014, MIN(F30052) AS F30052, MAX(USER_NO) AS USER_NO, MAX(TIME) AS TIME, " 
+                        + "(CASE WHEN MAX(F300612) = 0 AND MAX(F300613) = 0 AND MAX(F300614) = 0 AND MAX(F300620) = 0 THEN 1 ELSE 2 END) AS IdStare, " 
+                        + "(SELECT COUNT(*) FROM tblFisiere WHERE Tabela = 'F300' AND Id = MIN(F30052)) AS Document FROM F300  GROUP BY F30003, F300601, F300602, F300606, F300608, F300619, F30037, F30038";
                 else
-                    strSql = "SELECT * FROM CM_Cereri WHERE F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ")";
-
+                    strSql = "SELECT F30003, F300601, F300602, F300606, F300608, F300619, F30037, F30038, MAX(F300612) as F300612, MAX(F300613) as F300613, MAX(F300614) as F300614, MAX(F300620) as F300620, "
+                       + "MAX(F300623) as F300623, MAX(F300624) as F300624, MAX(F30014) as F30014, MIN(F30052) AS F30052, MAX(USER_NO) AS USER_NO, MAX(TIME) AS TIME, "
+                       + "(CASE WHEN MAX(F300612) = 0 AND MAX(F300613) = 0 AND MAX(F300614) = 0 AND MAX(F300620) = 0 THEN 1 ELSE 2 END) AS IdStare, "
+                       + "(SELECT COUNT(*) FROM tblFisiere WHERE Tabela = 'F300' AND Id = MIN(F30052)) AS Document FROM F300 WHERE F30003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ") GROUP BY F30003, F300601, F300602, F300606, F300608, F300619, F30037, F30038";
+                           
+                
                 q = General.IncarcaDT(strSql, null);
             }
             catch (Exception ex)

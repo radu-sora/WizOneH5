@@ -3677,14 +3677,14 @@ namespace WizOne.Avs
                 ds.Tables.Add(dt);
             }
 
-            string sql = "SELECT COUNT(*) FROM \"Avs_Circuit\" WHERE \"IdAtribut\" = " + cmbAtribute.Value.ToString();
+            string sql = "SELECT COUNT(*) FROM \"Avs_Circuit\" WHERE \"IdAtribut\" = " + cmbAtribute.Value.ToString() + " AND Super1 = -1 * " + cmbRol.Value;
             string strSql = "";
             DataTable dtTemp = General.IncarcaDT(sql, null);
             int nr = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
             if (nr == 0)
             {
                 //ArataMesaj("Atributul nu are circuit alocat!");
-                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Atributul nu are circuit alocat!");
+                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Atributul nu are circuit alocat pentru rolul selectat!");
                 //MessageBox.Show(Dami.TraduCuvant("Atributul nu are circuit alocat!"), MessageBox.icoError);
                 return false;
             }
@@ -3705,9 +3705,9 @@ namespace WizOne.Avs
                 cond2 = " AND ROWNUM = 1 ";
             }
 
-            sql = "SELECT " + cond1 + " c.*, b.\"IdUser\" FROM \"F100Supervizori\" b, \"Avs_Circuit\" c WHERE b.F10003 = " + F10003.ToString() + " AND c.\"IdAtribut\" = " + cmbAtribute.Value.ToString()
+            sql = "SELECT  c.*, b.\"IdUser\" FROM \"F100Supervizori\" b, \"Avs_Circuit\" c WHERE b.F10003 = " + F10003.ToString() + " AND c.\"IdAtribut\" = " + cmbAtribute.Value.ToString()
                 + " AND (c.\"Super1\" = 0 OR c.\"Super1\" = -1 * b.\"IdSuper\" OR c.\"Super2\" = 0 OR c.\"Super2\" = -1 * b.\"IdSuper\" OR c.\"Super3\" = 0 OR c.\"Super3\" = -1 * b.\"IdSuper\" OR c.\"Super4\" = 0 OR c.\"Super4\" = -1 * b.\"IdSuper\" OR c.\"Super5\" = 0 OR c.\"Super5\" = -1 * b.\"IdSuper\" OR c.\"Super6\" = 0 OR c.\"Super6\" = -1 * b.\"IdSuper\" OR c.\"Super7\" = 0 OR c.\"Super7\" = -1 * b.\"IdSuper\" OR c.\"Super8\" = 0 OR c.\"Super8\" = -1 * b.\"IdSuper\" OR c.\"Super9\" = 0 OR c.\"Super9\" = -1 * b.\"IdSuper\" OR c.\"Super10\" = 0 OR c.\"Super10\" = -1 * b.\"IdSuper\" OR c.\"Super11\" = 0 OR c.\"Super11\" = -1 * b.\"IdSuper\" OR c.\"Super12\" = 0 OR c.\"Super12\" = -1 * b.\"IdSuper\" OR c.\"Super13\" = 0 OR c.\"Super13\" = -1 * b.\"IdSuper\" OR c.\"Super14\" = 0 OR c.\"Super14\" = -1 * b.\"IdSuper\" OR c.\"Super15\" = 0 OR c.\"Super15\" = -1 * b.\"IdSuper\" OR c.\"Super16\" = 0 OR c.\"Super16\" = -1 * b.\"IdSuper\" OR c.\"Super17\" = 0 OR c.\"Super17\" = -1 * b.\"IdSuper\" OR c.\"Super18\" = 0 OR c.\"Super18\" = -1 * b.\"IdSuper\" OR c.\"Super19\" = 0 OR c.\"Super19\" = -1 * b.\"IdSuper\" OR c.\"Super20\" = 0 OR c.\"Super20\" = -1 * b.\"IdSuper\") "
-                + " AND b.\"IdUser\" = " + Session["UserId"] + cond2;
+                + " AND b.\"IdUser\" = " + Session["UserId"] + cond2 + " AND Super1 = -1 * " + cmbRol.Value; 
             DataTable dtCir = General.IncarcaDT(sql, null);
 
 
@@ -3715,9 +3715,9 @@ namespace WizOne.Avs
                 idCircuit = Convert.ToInt32(dtCir.Rows[0]["Id"].ToString());
             else
             {
-                sql = "SELECT " + cond1 + " c.*, b.\"IdUser\" FROM \"F100Supervizori\" b, \"Avs_Circuit\" c WHERE b.F10003 = " + F10003.ToString() + " AND c.\"IdAtribut\" = " + cmbAtribute.Value.ToString()
+                sql = "SELECT  c.*, b.\"IdUser\" FROM \"F100Supervizori\" b, \"Avs_Circuit\" c WHERE b.F10003 = " + F10003.ToString() + " AND c.\"IdAtribut\" = " + cmbAtribute.Value.ToString()
                     + " AND (c.\"Super1\" = 0 OR c.\"Super1\" = -1 * b.\"IdSuper\" OR c.\"Super2\" = 0 OR c.\"Super2\" = -1 * b.\"IdSuper\" OR c.\"Super3\" = 0 OR c.\"Super3\" = -1 * b.\"IdSuper\" OR c.\"Super4\" = 0 OR c.\"Super4\" = -1 * b.\"IdSuper\" OR c.\"Super5\" = 0 OR c.\"Super5\" = -1 * b.\"IdSuper\" OR c.\"Super6\" = 0 OR c.\"Super6\" = -1 * b.\"IdSuper\" OR c.\"Super7\" = 0 OR c.\"Super7\" = -1 * b.\"IdSuper\" OR c.\"Super8\" = 0 OR c.\"Super8\" = -1 * b.\"IdSuper\" OR c.\"Super9\" = 0 OR c.\"Super9\" = -1 * b.\"IdSuper\" OR c.\"Super10\" = 0 OR c.\"Super10\" = -1 * b.\"IdSuper\" OR c.\"Super11\" = 0 OR c.\"Super11\" = -1 * b.\"IdSuper\" OR c.\"Super12\" = 0 OR c.\"Super12\" = -1 * b.\"IdSuper\" OR c.\"Super13\" = 0 OR c.\"Super13\" = -1 * b.\"IdSuper\" OR c.\"Super14\" = 0 OR c.\"Super14\" = -1 * b.\"IdSuper\" OR c.\"Super15\" = 0 OR c.\"Super15\" = -1 * b.\"IdSuper\" OR c.\"Super16\" = 0 OR c.\"Super16\" = -1 * b.\"IdSuper\" OR c.\"Super17\" = 0 OR c.\"Super17\" = -1 * b.\"IdSuper\" OR c.\"Super18\" = 0 OR c.\"Super18\" = -1 * b.\"IdSuper\" OR c.\"Super19\" = 0 OR c.\"Super19\" = -1 * b.\"IdSuper\" OR c.\"Super20\" = 0 OR c.\"Super20\" = -1 * b.\"IdSuper\") "
-                    + cond2;
+                    + cond2 + " AND Super1 = -1 * " + cmbRol.Value;
                 dtCir = General.IncarcaDT(sql, null);
 
                 if (dtCir != null && dtCir.Rows.Count > 0)

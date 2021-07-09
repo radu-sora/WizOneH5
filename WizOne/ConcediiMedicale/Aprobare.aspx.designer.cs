@@ -51,15 +51,6 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.ASPxButton btnAnulare;
 
         /// <summary>
-        /// btnAproba control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnAproba;
-
-        /// <summary>
         /// btnTransfera control.
         /// </summary>
         /// <remarks>
@@ -130,15 +121,6 @@ namespace WizOne.ConcediiMedicale
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnEdit;
-
-        /// <summary>
-        /// btnIstoric control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnIstoric;
 
         /// <summary>
         /// btnArata control.

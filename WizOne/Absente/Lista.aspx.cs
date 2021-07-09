@@ -302,6 +302,8 @@ namespace WizOne.Absente
                 if (Convert.ToInt32(General.Nz(cmbViz.Value, 1)) == 3) esteHR = true;
                 if (ids.Count != 0) msg += General.MetodeCereri(1, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), "",  esteHR);
                 grDate.JSProperties["cpAlertMessage"] = msg;
+                if (msg.Contains("a fost aprobata"))
+                    grDate.JSProperties["cpSuccessMessage"] = "1";
                 grDate.DataBind();
                 grDate.Selection.UnselectAll();
             }

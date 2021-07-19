@@ -177,7 +177,7 @@
                          cmbSesiune.PerformCallback(s.GetValue()); }" />
                 </dx:ASPxComboBox>
             </td>
-            <td>
+            <td colspan="2">
                 <label id="lblSesiune" runat="server" style="display:inline-block;">Sesiune</label>
                 <dx:ASPxComboBox ID="cmbSesiune" runat="server" ClientInstanceName="cmbSesiune" ClientIDMode="Static" Width="215px" ValueField="Id" DropDownWidth="200" 
                     TextField="Denumire" ValueType="System.Int32" AutoPostBack="false"  OnCallback="cmbSesiune_Callback" >
@@ -212,15 +212,17 @@
                         <Image Url="../Fisiere/Imagini/Icoane/arata.png" Width="16px" Height="16px"></Image>
                         <Paddings PaddingLeft="0px" PaddingRight="0px" />
                         <ClientSideEvents Click="function(s,e) { window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=16&id=-99', '_blank '); }" />
-                    </dx:ASPxButton>
-             
-                    <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Height="28px"  AutoPostBack="true"  OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" meta:resourcekey="btnSaveResource1" >    
-                        <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
-                    </dx:ASPxButton>
+                    </dx:ASPxButton>             
+
                 </td>
                 <td>
                     <dx:ASPxCheckBox ID="chkListaAsteptare"  runat="server" Width="150" Text="Lista asteptare"  TextAlign="Left"  ClientInstanceName="chkbxLA" >                                    
                     </dx:ASPxCheckBox>
+                </td>
+                <td>  
+                    <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Height="28px"  AutoPostBack="true"  OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" meta:resourcekey="btnSaveResource1" >    
+                        <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
+                    </dx:ASPxButton>
                 </td>
             </tr>
     </table>

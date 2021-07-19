@@ -110,7 +110,7 @@
     <br /> 
 
 
-    <table width="20%">   
+    <table width="25%">   
         <tr>           
             <td align="left">
                 <label id="lblCurs" runat="server" style="display:inline-block;">Selectare curs</label>

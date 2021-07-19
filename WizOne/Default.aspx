@@ -40,7 +40,7 @@
                     </div>
                     <span id="lblPan2" runat="server">Parola</span>
                     <asp:TextBox ID="txtPan2" runat="server" TabIndex="2" MaxLength="50" 
-                        TextMode="Password" meta:resourcekey="txtPan2Resource1" AutoCompleteType="Disabled"></asp:TextBox>
+                        TextMode="Password" meta:resourcekey="txtPan2Resource1" autocomplete="off"></asp:TextBox>
                     <asp:RequiredFieldValidator id="rfv2" ControlToValidate="txtPan2" 
                         ValidationGroup="IntroGrup" ErrorMessage="Introdu parola" runat="Server" 
                         meta:resourcekey="rfv2Resource1" />

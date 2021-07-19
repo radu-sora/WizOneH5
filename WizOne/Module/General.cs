@@ -6859,8 +6859,9 @@ namespace WizOne.Module
 
                 if (Constante.tipBD == 1)
                 {
+                    //#969 - s-a adaugat denumirea scurta la norma
                     if (cuNorma)
-                        nrm = @" ,CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR CONVERT(date, X.Ziua) > CONVERT(date, ddp.DataPlecare) THEN CONVERT(int,NULL) ELSE dn.Norma END AS ValStr
+                        nrm = @" ,CONVERT(nvarchar(50),(CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR CONVERT(date, X.Ziua) > CONVERT(date, ddp.DataPlecare) THEN CONVERT(int,NULL) ELSE dn.Norma END)) + COALESCE((SELECT RTRIM(LTRIM(COALESCE(DenumireScurta,''))) FROM Ptj_tblAbsente WHERE OreInVal='Val0'),'') AS ValStr
                                  ,CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR CONVERT(date, X.Ziua) > CONVERT(date, ddp.DataPlecare) THEN CONVERT(int,NULL) ELSE dn.Norma * 60 END AS Val0";
                     if (cuInOut == 1)
                     {
@@ -6925,7 +6926,7 @@ namespace WizOne.Module
                 else
                 {
                     if (cuNorma)
-                        nrm = @" ,CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=6 OR (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 OR TRUNC(X.""Ziua"") > TRUNC(""DamiDataPlecare""(A.F10003, X.""Ziua"")) THEN NULL ELSE ""DamiNorma""(A.F10003, X.""Ziua"") END AS ""ValStr""
+                        nrm = @" ,CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=6 OR (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 OR TRUNC(X.""Ziua"") > TRUNC(""DamiDataPlecare""(A.F10003, X.""Ziua"")) THEN NULL ELSE ""DamiNorma""(A.F10003, X.""Ziua"") END || COALESCE((SELECT TRUNC(COALESCE(""DenumireScurta"",'')) FROM ""Ptj_tblAbsente"" WHERE ""OreInVal""='Val0'),'') AS ""ValStr""
                                  ,CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=6 OR (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 OR TRUNC(X.""Ziua"") > TRUNC(""DamiDataPlecare""(A.F10003, X.""Ziua"")) THEN NULL ELSE ""DamiNorma""(A.F10003, X.""Ziua"") * 60 END AS ""Val0"" ";
 
                     if (cuInOut == 1)

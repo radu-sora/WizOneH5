@@ -1370,6 +1370,11 @@ namespace WizOne.Absente
             if (dtDataInc.Value == null || dtDataSf.Value == null)
                 return;
 
+            int adunaZL = 0;
+            ListEditItem itm = cmbAbs.SelectedItem;
+            if (itm != null)
+                adunaZL = Convert.ToInt32(General.Nz(itm.GetFieldValue("AdunaZileLibere"), 0));
+
             DateTime dtStart = Convert.ToDateTime(dtDataInc.Value);
             DateTime dtSfarsit = Convert.ToDateTime(dtDataSf.Value);
 
@@ -1379,11 +1384,16 @@ namespace WizOne.Absente
             DataTable dtHolidays = General.IncarcaDT(strSql, null);
 
             int i = 0;
-            for (DateTime zi = dtStart; zi <= dtSfarsit; zi = zi.AddDays(1))
+            if (adunaZL == 1)
+                i = (dtSfarsit - dtStart).Days + 1;
+            else
             {
-                bool ziLibera = EsteZiLibera(zi, dtHolidays);
-                if (zi.DayOfWeek.ToString().ToLower() != "saturday" && zi.DayOfWeek.ToString().ToLower() != "sunday" && !ziLibera)
-                    i++;
+                for (DateTime zi = dtStart; zi <= dtSfarsit; zi = zi.AddDays(1))
+                {
+                    bool ziLibera = EsteZiLibera(zi, dtHolidays);
+                    if (zi.DayOfWeek.ToString().ToLower() != "saturday" && zi.DayOfWeek.ToString().ToLower() != "sunday" && !ziLibera)
+                        i++;
+                }
             }
             txtNr.Text = i.ToString();
             Session["CereriAut_NrZile"] = i;

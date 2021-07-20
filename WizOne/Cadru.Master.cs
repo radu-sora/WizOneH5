@@ -37,21 +37,21 @@ namespace WizOne
                     Dami.AccesApp(this.Page);
 
                 //if (!HttpContext.Current.User.Identity.IsAuthenticated)
-                //    Response.Redirect("../Default", false);
+                //    Response.Redirect("~/Default", false);
 
                 if (General.Nz(Session["UserId"],"").ToString() == "" || !General.IsNumeric(Session["UserId"]))
-                    Response.Redirect("../Default", false);
+                    Response.Redirect("~/Default", false);
 
 
                 //Florin 2019.08.19
                 try
                 {
                     if (Session["tblParam"] == null || ((DataTable)Session["tblParam"]).Rows.Count == 0)
-                        Response.Redirect("../Default", false);
+                        Response.Redirect("~/Default", false);
                 }
                 catch (Exception)
                 {
-                    Response.Redirect("../Default", false);
+                    Response.Redirect("~/Default", false);
                 }
 
                 //Radu 26.10.2020

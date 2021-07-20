@@ -472,7 +472,7 @@ namespace WizOne.Module
                 int idUnic = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT IdUnic FROM USERS WHERE F70102 = @1", new object[] { HttpContext.Current.Session["UserId"] }),-99));
                 if (idUnic != (int)HttpContext.Current.Session["UniqueId"])
                 {
-                    HttpContext.Current.Response.Redirect("../Default", false);
+                    HttpContext.Current.Response.Redirect("~/Default", false);
                     return;
                 }
 

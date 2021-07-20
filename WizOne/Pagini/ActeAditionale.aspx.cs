@@ -166,6 +166,14 @@ namespace WizOne.Pagini
                     catch (Exception) { }
                 }
 
+                //#885 - Florin 2021.07.20
+                //s-a modificat filtrul
+                string Avans_IDuriRoluriHR = Dami.ValoareParam("Avans_IDuriRoluriHR").Trim();
+                if (Avans_IDuriRoluriHR == "")
+                    Avans_IDuriRoluriHR = "-99";
+
+                filtru = $@" WHERE F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser={General.Nz(Session["UserId"], -99)} AND IdSuper IN ({Avans_IDuriRoluriHR}))" + filtru;
+
                 if (Constante.tipBD == 1)
                 {
                     #region SQL
@@ -243,8 +251,9 @@ namespace WizOne.Pagini
                             FROM F100 B
                             LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
                             WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie} {subcompanie}) X
-                            ) AS Y
-                            WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"], -99)), "", "")}) " + filtru;
+                            ) AS Y " + 
+                            filtru;
+                            //WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"], -99)), "", "")}) " + filtru;
 
                     #endregion
                 }
@@ -314,8 +323,9 @@ namespace WizOne.Pagini
                             FROM F100 A
                             LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
                             WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie} {subcompanie}) X
-                            ) 
-                            WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"], -99)), "", "")}) " + filtru;
+                            ) " +
+                            filtru;
+                            //WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"], -99)), "", "")}) " + filtru;
 
                     #endregion
                 }

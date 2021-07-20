@@ -87,6 +87,15 @@ namespace WizOne.Tactil
         protected global::DevExpress.Web.ASPxGridView grDate;
 
         /// <summary>
+        /// tdTotaluri control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdTotaluri;
+
+        /// <summary>
         /// grDateTotaluri control.
         /// </summary>
         /// <remarks>

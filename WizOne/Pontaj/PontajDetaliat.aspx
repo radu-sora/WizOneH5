@@ -560,11 +560,13 @@
 
     <script>
 
+        var limba = "<%= Session["IdLimba"] %>";
+
         function grDate_CustomButtonClick(s, e) {
             switch (e.buttonID) {
                 case "btnGoToCC":
                     var cheie = s.GetRowKey(s.GetFocusedRowIndex());
-                    lblZiuaCC.SetText('Centrii de cost - Ziua ' + cheie);
+                    lblZiuaCC.SetText(trad_string(limba, "Centrii de cost - Ziua") + ' ' + cheie);
                     ccValori.Set('cheia', cheie);
                     grCC.PerformCallback('btnCC;' + cheie);
                     if (<%: pontajCCSterge %> == 1) {
@@ -661,7 +663,7 @@
                     case -33:
                         e.cancel = true;
                         swal({
-                            title: "Atentie", text: "Rolul dumneavoastra nu permite stergerea",
+                            title: trad_string(limba, "Atentie"), text: trad_string(limba, "Rolul dumneavoastra nu permite stergerea"),
                             type: "warning"
                         });
                         break;
@@ -670,14 +672,14 @@
                         break;
                     case 2:
                         swal({
-                            title: "Atentie", text: "Pontare venita din cereri",
+                            title: trad_string(limba, "Atentie"), text: trad_string(limba, "Pontare venita din cereri"),
                             type: "warning"
                         });
                         break;
                     case 3:
                         e.cancel = true;
                         swal({
-                            title: "Atentie", text: "Nu este permisa stergerea pontarilor venite din cereri",
+                            title: trad_string(limba, "Atentie"), text: trad_string(limba, "Nu este permisa stergerea pontarilor venite din cereri"),             
                             type: "warning"
                         });
                         break;
@@ -774,7 +776,7 @@
         function OnRecalcParam() {
             if (txtDataInc.GetText() == '' || txtDataSf.GetText() == '' || txtMarcaInc.GetText() == '' || txtMarcaSf.GetText() == '') {
                 swal({
-                    title: "Date insuficiente", text: "Lipsesc date pentru recalcul",
+                    title: trad_string(limba, "Date insuficiente"), text: trad_string(limba, "Lipsesc date pentru recalcul"),  
                     type: "warning"
                 });
             }
@@ -798,8 +800,8 @@
                 var dtInc = new Date(data.getFullYear(), data.getMonth(), data.getDate());
                 if (dtInc <= dtBlocare) {
                     swal({
-                        title: "Atentie", text: "Pontajul este blocat pana la data de " + dtBlocare.getDate() + "/" + (dtBlocare.getMonth() + 1) + "/" + dtBlocare.getFullYear() + "! \n Doriti sa continuati?",
-                        type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da!", cancelButtonText: "Nu", closeOnConfirm: true
+                        title: trad_string(limba, "Atentie"), text: trad_string(limba, "Pontajul este blocat pana la data de") + " " + dtBlocare.getDate() + "/" + (dtBlocare.getMonth() + 1) + "/" + dtBlocare.getFullYear() + "! \n " + trad_string(limba, "Doriti sa continuati") + "?",
+                        type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: trad_string(limba, "Da") + "!", cancelButtonText: trad_string(limba, "Nu"), closeOnConfirm: true
                     }, function (isConfirm) {
                         if (isConfirm) {
                             grDate.PerformCallback("btnRecalcParam;" + dayInc + "/" + monthInc + "/" + yearInc + ";" + daySf + "/" + monthSf + "/" + yearSf + ";" + txtMarcaInc.GetText() + ";" + txtMarcaSf.GetText());
@@ -842,8 +844,8 @@
                                     if (key == 45)              // scade o zi   tasta -
                                     {
                                         swal({
-                                            title: "Atentie", text: "Sunteti sigur/a ca doriti sa continuati modificarea datei de rapoartare a In/Out-ului?",
-                                            type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da!", cancelButtonText: "Nu", closeOnConfirm: true
+                                            title: trad_string(limba, "Atentie"), text: trad_string(limba, "Sunteti sigur/a ca doriti sa continuati modificarea datei de raportare a In/Out-ului") + "?",                                            
+                                            type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: trad_string(limba, "Da") + "!", cancelButtonText: trad_string(limba, "Nu"), closeOnConfirm: true
                                         }, function (isConfirm) {
                                             if (isConfirm) {
                                                 var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
@@ -864,8 +866,8 @@
                                     else if (key == 43)        // adauga o zi  tasta +
                                     {
                                         swal({
-                                            title: "Atentie", text: "Sunteti sigur/a ca doriti sa continuati modificarea datei de rapoartare a In/Out-ului?",
-                                            type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da!", cancelButtonText: "Nu", closeOnConfirm: true
+                                            title: trad_string(limba, "Atentie"), text: trad_string(limba, "Sunteti sigur/a ca doriti sa continuati modificarea datei de raportare a In/Out-ului") + "?",
+                                            type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: trad_string(limba, "Da") + "!", cancelButtonText: trad_string(limba, "Nu"), closeOnConfirm: true
                                         }, function (isConfirm) {
                                             if (isConfirm) {
                                                 var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
@@ -876,7 +878,7 @@
                                                     grDate.batchEditApi.EndEdit();
                                                     swal({
                                                         title: "",
-                                                        text: "Proces realizat cu succes",
+                                                        text: trad_string(limba, "Proces realizat cu succes"),
                                                         type: "warning"
                                                     });
                                                 }

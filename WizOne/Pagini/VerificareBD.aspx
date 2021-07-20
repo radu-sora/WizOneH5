@@ -18,6 +18,9 @@
         <table width="100%">
                 <tr>
                     <td align="right">
+                        <dx:ASPxButton ID="btnExport" ClientInstanceName="btnExport" ClientIDMode="Static" runat="server" Text="Export" AutoPostBack="true" OnClick="btnExport_Click" oncontextMenu="ctx(this,event)" >                            
+                            <Image Url="~/Fisiere/Imagini/Icoane/ExportToXls.png"></Image>
+                        </dx:ASPxButton>
                         <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
                             <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                         </dx:ASPxButton>

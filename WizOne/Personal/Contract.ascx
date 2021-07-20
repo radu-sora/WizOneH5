@@ -1160,6 +1160,8 @@
                 <asp:ObjectDataSource runat="server" ID="dsLocatieInt"  TypeName="WizOne.Module.General" SelectMethod="GetLocatieInt" />
                 <asp:ObjectDataSource runat="server" ID="dsNivelHay"  TypeName="WizOne.Module.General" SelectMethod="GetNivelHay" />
 			  </fieldset>
+            </td>
+            <td valign="top">
 			  <fieldset class="fieldset-auto-width">
 				<legend id="lgTipM" runat="server" class="legend-font-size">Tip munca</legend>
 				<table id="lgTipMTable" runat="server" width="60%">	

@@ -1761,4 +1761,8 @@
   <data name="NrPozitiiAprobate" xml:space="preserve">
     <value>No of approved positions</value>
   </data>  
+<data name="Nuputetiaprobaocerereplanificata.Trebuietrecutainstareasolicitat." xml:space="preserve">
+    <value>You cannot approve a planned request. It should be moved to requested status.</value>
+  </data>
+  
 </root>

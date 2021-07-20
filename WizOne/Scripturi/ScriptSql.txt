@@ -15147,7 +15147,6 @@ Update F095 set F09511='Nedeterminat' where F09505=CONVERT(DATETIME, '01/01/2100
 Update F095 set F09511='Determinat' where F09505<>CONVERT(DATETIME, '01/01/2100',103) and (F09511 is null or F09511='0');
 
 
-
 INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES(123, 'Circuit formulare', 'Circuit formulare', 'Pagini\SablonNomen[Org_Circuit]', 1, 'm1.png')
 GO 
 
@@ -17931,4 +17930,176 @@ CREATE SEQUENCE [dbo].[IdUnic_SEQ]
  MINVALUE 1
  MAXVALUE 9999999999999
  CACHE 
+GO
+
+
+----  2.2.138  ----
+
+---- CM START ----
+
+CREATE SEQUENCE [dbo].[CM_Cereri_SEQ] 
+ AS [bigint]
+ START WITH 1
+ INCREMENT BY 1
+ MINVALUE 1
+ MAXVALUE 9999999999999
+ CACHE 
+GO
+
+CREATE TABLE [dbo].[CM_Cereri](
+	[Id] [int] NOT NULL,
+	[F10003] [int] NOT NULL,
+	[TipProgram] [int] NOT NULL,
+	[TipConcediu] [int] NOT NULL,
+	[Cod] [int] NULL,
+	[CodIndemnizatie] [int] NULL,
+	[SerieCM] [nvarchar](20) NULL,
+	[NumarCM] [nvarchar](20) NULL,
+	[DataCM] [datetime] NULL,
+	[LocPrescriere] [int] NULL,
+	[DataInceput] [datetime] NULL,
+	[DataSfarsit] [datetime] NULL,
+	[NrZile] [int] NULL,
+	[CodDiagnostic] [int] NULL,
+	[CodUrgenta] [int] NULL,
+	[CodInfectoContag] [int] NULL,
+	[Initial] [int] NULL,
+	[ZileCMInitial] [int] NULL,
+	[SerieCMInitial] [nvarchar](20) NULL,
+	[NumarCMInitial] [nvarchar](20) NULL,
+	[DataCMInitial] [datetime] NULL,
+	[CodTransfer1] [int] NULL,
+	[CodTransfer2] [int] NULL,
+	[CodTransfer3] [int] NULL,
+	[CodTransfer4] [int] NULL,
+	[CodTransfer5] [int] NULL,
+	[NrZileCT1] [int] NULL,
+	[NrZileCT2] [int] NULL,
+	[NrZileCT3] [int] NULL,
+	[NrZileCT4] [int] NULL,
+	[NrZileCT5] [int] NULL,
+	[BazaCalculCM] [decimal](18,4) NULL,
+	[ZileBazaCalculCM] [int] NULL,
+	[MedieZileBazaCalcul] [decimal](18,4) NULL,
+	[MedieZilnicaCM] [decimal](18,4) NULL,
+	[NrAvizMedicExpert] [nvarchar](20) NULL,
+	[DataAvizDSP] [datetime] NULL,
+	[MedicCurant] [nvarchar](250) NULL,
+	[CNPCopil] [nvarchar](13) NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdStare] [int] NULL,
+	[Document] [int] NULL,
+	[Stagiu] [int] NULL,
+	[Urgenta] [int] NULL,
+	[Suma] [numeric](15, 2) NULL,
+	[Tarif] [numeric](15, 2) NULL,
+	[ModifManuala] [int] NULL,
+	[Optiune] [int] NULL,
+ CONSTRAINT [CM_Cereri_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+CREATE TABLE [dbo].[CM_CereriIstoric](
+	[IdCerere] [int] NULL,
+	[IdCircuit] [int] NULL,
+	[IdSuper] [int] NULL,
+	[IdStare] [int] NULL,
+	[IdUser] [int] NULL,
+	[Pozitie] [int] NULL,
+	[Culoare] [nvarchar](50) NULL,
+	[Aprobat] [int] NULL,
+	[DataAprobare] [datetime] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [CM_CereriIstoric_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+CREATE TABLE [dbo].[CM_tblStari](
+	[Id] [int] NULL,
+	[Denumire] [nvarchar](50) NULL,
+	[Culoare] [nvarchar](50) NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [CM_tblStari_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET IDENTITY_INSERT [dbo].[CM_tblStari] ON 
+GO
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (-1, N'Anulat', N'#FF0000', NULL, NULL, 1)
+GO
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (1, N'Inregistrat', N'#9ACCFF', NULL, NULL, 2)
+GO
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (2, N'Medie rulata', N'#FFA500', NULL, NULL, 3)
+GO
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (3, N'Aprobat', N'#9BBB59', NULL, NULL, 4)
+GO
+INSERT [dbo].[CM_tblStari] ([Id], [Denumire], [Culoare], [USER_NO], [TIME], [IdAuto]) VALUES (4, N'Transferat', N'#39A1FF', NULL, NULL, 5)
+GO
+SET IDENTITY_INSERT [dbo].[CM_tblStari] OFF
+GO
+
+
+INSERT INTO MeniuLista(Id, Denumire, Descriere, Activ) VALUES((SELECT MAX(Id) FROM MeniuLista) + 1, 'Concedii medicale','Concedii medicale', 1)
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Lista', 'Lista', 'ConcediiMedicale\Aprobare', 1, 'm1.png')
+GO
+
+
+----CM END ----
+
+
+INSERT INTO F800 (F80001, F80002, F80003, F80004)
+VALUES (800, 'ADEV_CIC_SUPRAVEGHERE', '1', 'In adeverinta CIC apare coloana Zile supraveghere')
+GO
+
+ALTER VIEW [dbo].[Admin_Cursuri_VIEW] as
+ select Marca,NumeComplet,IdTipCurs,IdDescriereCurs,NumeFurnizor,TemaCurs,Info,NrOre,DataCurs,Buget,PerioadaAmortizare,AutorizareExpirare,USER_NO,[TIME],IdAuto,DataInceput, DataSfarsit, NrZile,IdMoneda, Operator
+from
+Admin_Cursuri
+UNION ALL
+SELECT Marca,NumeComplet,IdTipCurs,IdDescriereCurs,NumeFurnizor,TemaCurs,Info,NrOre,DataCurs,Buget,PerioadaAmortizare,AutorizareExpirare,USER_NO,[TIME],IdAuto,DataInceput, DataSfarsit, NrZile,IdMoneda, null as Operator
+from
+Cursuri_VIEW
+UNION ALL
+SELECT Id_Angajat as marca, Curs_tblCursSesiune.denumire as numecomplet, tipsesiune as idtipcurs, null as IdDescriereCurs, null as NumeFurnizor, null as TemaCurs, Curs_tblCursSesiune.observatii as info, TotalOre as nrore,
+null as datacurs,Curs_tblCursSesiune.Buget, null as PerioadaAmortizare, null as AutorizareExpirare,Curs_tblCursSesiune.USER_NO,Curs_tblCursSesiune.[TIME],Curs_tblCursSesiune.IdAuto, DataInceput, DataSfarsit, null as NrZile,  IdMoneda, curs_tblcurs.OrganizatorId as Operator
+
+from Curs_tblCursSesiune 
+join curs_tblcurs on curs_tblcurs.id = Curs_tblCursSesiune.IdCurs
+join Curs_relCursAngajati on Curs_relCursAngajati.Id_Curs = curs_tblcurs.id 
+
+
+
+alter table Ptj_tblAdmin add ActivTactil int
+GO
+alter table Ptj_tblAdmin add LatimeTactil int
+GO
+
+update Ptj_tblAdmin set ActivTactil = 1 where Coloana in ('Dept', 'ValStr')
+GO
+update Ptj_tblAdmin set LatimeTactil = 420 where Coloana in ('Dept')
+GO
+update Ptj_tblAdmin set LatimeTactil = 300 where Coloana in ('ValStr')
+GO
+insert into Ptj_tblPrint(Id, Denumire, Activ, Lungime) values (200, 'TotaluriTactil', 1, 300)
 GO

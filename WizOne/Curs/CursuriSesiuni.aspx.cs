@@ -37,7 +37,6 @@ namespace WizOne.Curs
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
                 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
 
                 btnDoc.Image.ToolTip = Dami.TraduCuvant("btnDoc", "Documente");
                 btnNomenclatorTraineri.Image.ToolTip = Dami.TraduCuvant("btnNomenclatorTraineri", "Trainer");
@@ -151,7 +150,7 @@ namespace WizOne.Curs
                 col = (grDate.Columns["IdQuiz"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = dt;
 
-                DataTable dtCurs = General.IncarcaDT("SELECT * FROM \"Curs_tblCurs\"", null);
+                DataTable dtCurs = General.IncarcaDT("SELECT * FROM \"Curs_tblCurs\" ORDER BY Denumire", null);
                 cmbCurs.DataSource = dtCurs;
                 cmbCurs.DataBind();
 
@@ -402,24 +401,24 @@ namespace WizOne.Curs
                
 
 
-        protected void btnSave_Click(object sender, EventArgs e)
-        {
-            try
-            {
+        //protected void btnSave_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
 
-                DataTable dt = Session["CursuriSesiuni_Grid"] as DataTable;
+        //        DataTable dt = Session["CursuriSesiuni_Grid"] as DataTable;
 
-                General.SalveazaDate(dt, "Curs_tblCursSesiune");
+        //        General.SalveazaDate(dt, "Curs_tblCursSesiune");
 
-                MessageBox.Show("Proces finalizat cu succes!", MessageBox.icoSuccess);
+        //        MessageBox.Show("Proces finalizat cu succes!", MessageBox.icoSuccess);
 
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         /*LeonardM 01.09.2015 - verificare daca angajatul a terminat cursurile anterioare pentru a participa la cursul prezent*/
         public DataTable GetVerificareAbsolvireCursAnterior(int F10003, int idCurs)
@@ -530,6 +529,8 @@ namespace WizOne.Curs
                 Session["CursuriSesiuni_Grid"] = dt;
                 grDate.DataSource = dt;
                 grDate.DataBind();
+
+                General.SalveazaDate(dt, "Curs_tblCursSesiune");
             }
             catch (Exception ex)
             {
@@ -655,6 +656,8 @@ namespace WizOne.Curs
                 grDate.KeyFieldName = "IdAuto";
                 Session["CursuriSesiuni_Grid"] = dt;
                 grDate.DataBind();
+
+                General.SalveazaDate(dt, "Curs_tblCursSesiune");
             }
             catch (Exception ex)
             {
@@ -681,7 +684,7 @@ namespace WizOne.Curs
                 Session["CursuriSesiuni_Grid"] = dt;
                 grDate.DataSource = dt;
 
-
+                General.SalveazaDate(dt, "Curs_tblCursSesiune");
             }
             catch (Exception ex)
             {

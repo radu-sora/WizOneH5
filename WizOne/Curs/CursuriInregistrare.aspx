@@ -177,7 +177,7 @@
                          cmbSesiune.PerformCallback(s.GetValue()); }" />
                 </dx:ASPxComboBox>
             </td>
-            <td>
+            <td colspan="2">
                 <label id="lblSesiune" runat="server" style="display:inline-block;">Sesiune</label>
                 <dx:ASPxComboBox ID="cmbSesiune" runat="server" ClientInstanceName="cmbSesiune" ClientIDMode="Static" Width="215px" ValueField="Id" DropDownWidth="200" 
                     TextField="Denumire" ValueType="System.Int32" AutoPostBack="false"  OnCallback="cmbSesiune_Callback" >
@@ -212,15 +212,17 @@
                         <Image Url="../Fisiere/Imagini/Icoane/arata.png" Width="16px" Height="16px"></Image>
                         <Paddings PaddingLeft="0px" PaddingRight="0px" />
                         <ClientSideEvents Click="function(s,e) { window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=16&id=-99', '_blank '); }" />
-                    </dx:ASPxButton>
-             
-                    <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Height="28px"  AutoPostBack="true"  OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" meta:resourcekey="btnSaveResource1" >    
-                        <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
-                    </dx:ASPxButton>
+                    </dx:ASPxButton>             
+
                 </td>
                 <td>
                     <dx:ASPxCheckBox ID="chkListaAsteptare"  runat="server" Width="150" Text="Lista asteptare"  TextAlign="Left"  ClientInstanceName="chkbxLA" >                                    
                     </dx:ASPxCheckBox>
+                </td>
+                <td>  
+                    <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Height="28px"  AutoPostBack="true"  OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" meta:resourcekey="btnSaveResource1" >    
+                        <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
+                    </dx:ASPxButton>
                 </td>
             </tr>
     </table>
@@ -310,7 +312,7 @@
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static"  AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback"  OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCommandButtonInitialize="grDate_CommandButtonInitialize"
                     OnRowUpdating="grDate_RowUpdating">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
-                    <Settings ShowFilterRow="False" ShowGroupPanel="True" HorizontalScrollBarMode="Auto"  />
+                    <Settings ShowFilterRow="False" ShowGroupPanel="false" HorizontalScrollBarMode="Auto"  />
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsSearchPanel Visible="False" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />

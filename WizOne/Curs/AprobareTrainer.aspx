@@ -77,13 +77,6 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnSave"  runat="server" Text="Salveaza" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
-                    }" />
-                    <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
-                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                 </dx:ASPxButton>
@@ -130,7 +123,7 @@
            <td align="left">
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static"  AutoGenerateColumns="false" OnDataBinding="grDate_DataBinding"  OnRowUpdating="grDate_RowUpdating">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
-                    <Settings ShowFilterRow="False" ShowGroupPanel="True" HorizontalScrollBarMode="Auto"  />
+                    <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto"  />
                     <SettingsEditing Mode="Inline" />
                     <SettingsSearchPanel Visible="False" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />

@@ -37,7 +37,7 @@ namespace WizOne.Curs
                 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");                
                 btnFinalizare.Text = Dami.TraduCuvant("btnFinalizare", "Finalizare sesiune");
-                btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
+        
              
                 
                 foreach (GridViewColumn c in grDate.Columns)
@@ -142,25 +142,25 @@ namespace WizOne.Curs
             }
         }
 
-        protected void btnSave_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (cmbCurs.Value == null || cmbSesiune.Value == null)
-                {
-                    MessageBox.Show("Lipsesc date !", MessageBox.icoInfo, "Atentie !");
-                    return;
-                }
-                DataTable dt = Session["AprobareTrainer_Grid"] as DataTable;
-                General.SalveazaDate(dt, "Curs_Inregistrare");
+        //protected void btnSave_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (cmbCurs.Value == null || cmbSesiune.Value == null)
+        //        {
+        //            MessageBox.Show("Lipsesc date !", MessageBox.icoInfo, "Atentie !");
+        //            return;
+        //        }
+        //        DataTable dt = Session["AprobareTrainer_Grid"] as DataTable;
+        //        General.SalveazaDate(dt, "Curs_Inregistrare");
                 
-                MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoInfo);
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoInfo);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
@@ -188,6 +188,8 @@ namespace WizOne.Curs
                 grDate.CancelEdit();
                 Session["AprobareTrainer_Grid"] = dt;
                 grDate.DataSource = dt;
+
+                General.SalveazaDate(dt, "Curs_Inregistrare");
             }
             catch (Exception ex)
             {

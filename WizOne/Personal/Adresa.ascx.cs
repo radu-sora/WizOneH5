@@ -22,7 +22,7 @@ namespace WizOne.Personal
 
                 if (!IsPostBack)
                 {
-                    Session["MP_CautaAdresa"] = null;        
+                    Session["MP_CautaAdresa"] = null;                
                 }
 
                 btnCauta.Visibility = GridViewCustomButtonVisibility.EditableRow;
@@ -110,6 +110,15 @@ namespace WizOne.Personal
                     lblAdresa.Text = DamiAdresa(dt);
                     DataTable dtLoc = General.IncarcaDT("SELECT * FROM LOCALITATI", null);
                     HttpContext.Current.Session["MP_AdresaLocalitati"] = dtLoc;
+
+                    hfSiruta.Add("SirutaNivel1", ds.Tables[1].Rows[0]["F100921"]);
+                    hfSiruta.Add("SirutaNivel2", ds.Tables[1].Rows[0]["F100914"]);
+                    hfSiruta.Add("SirutaNivel3", ds.Tables[1].Rows[0]["F100897"]);
+
+                    hfSiruta.Add("NumeNivel1", ds.Tables[1].Rows[0]["F100891"]);
+                    hfSiruta.Add("NumeNivel2", ds.Tables[1].Rows[0]["F10081"] == DBNull.Value || ds.Tables[1].Rows[0]["F10081"].ToString().Length <= 0 ? ds.Tables[1].Rows[0]["F100907"] : ds.Tables[1].Rows[0]["F10081"]);     
+                    hfSiruta.Add("NumeNivel3", ds.Tables[1].Rows[0]["F10082"] == DBNull.Value || ds.Tables[1].Rows[0]["F10082"].ToString().Length <= 0 ? ds.Tables[1].Rows[0]["F100908"] : ds.Tables[1].Rows[0]["F10082"]);
+                                 
                 }
 
                 HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
@@ -164,7 +173,7 @@ namespace WizOne.Personal
                 int idAuto = 0;
                 object[] row = new object[ds.Tables["F100Adrese"].Columns.Count];
                 int x = 0;
-                int tipArtera = 0;
+                int tipArtera = 0;                
 
                 if (!e.NewValues.Contains("NumeNivel1"))
                     e.NewValues.Add("NumeNivel1", General.Nz(hfSiruta["NumeNivel1"], ""));
@@ -263,6 +272,8 @@ namespace WizOne.Personal
                 }             
 
                 ds.Tables["F100Adrese"].Rows.Add(row);
+           
+                idAuto = Convert.ToInt32(ds.Tables["F100Adrese"].Rows[ds.Tables["F100Adrese"].Rows.Count - 1]["IdAuto"].ToString());      
 
                 if (General.Nz(e.NewValues["Principal"], 0).ToString() == "1")
                 {
@@ -310,8 +321,9 @@ namespace WizOne.Personal
 
                     for (int i = 0; i < ds.Tables["F100Adrese"].Rows.Count; i++)
                     {
-                        if (idAuto.ToString() != ds.Tables["F100Adrese"].Rows[i]["IdAuto"].ToString())
-                            ds.Tables["F100Adrese"].Rows[i]["Principal"] = 0;
+                        if (ds.Tables["F100Adrese"].Rows[i].RowState != DataRowState.Deleted)
+                            if (idAuto.ToString() != ds.Tables["F100Adrese"].Rows[i]["IdAuto"].ToString())
+                                ds.Tables["F100Adrese"].Rows[i]["Principal"] = 0;
                     }
                 }
 

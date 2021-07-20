@@ -502,6 +502,7 @@ namespace WizOne.Personal
                 General.ExecutaNonQuery("DELETE FROM \"F100Info\" WHERE F10003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"F100Rating\" WHERE F10003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"F100Supervizori2\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F095 WHERE F09503 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM F110 WHERE F11003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM F111 WHERE F11103 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM F112 WHERE F11203 = " + id, null);

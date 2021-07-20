@@ -39,253 +39,263 @@ namespace WizOne.Pagini
 
                 #endregion
 
-                string[] file1 = File.ReadAllLines(HostingEnvironment.MapPath("~/Fisiere/" + "BDReferintaSQL.csv"));
-
-                if (Constante.tipBD == 2)
-                    file1 = File.ReadAllLines(HostingEnvironment.MapPath("~/Fisiere/" + "BDReferintaORA.csv"));
-
-                // General.ExecutaNonQuery("DROP TABLE \"StructuraRef\"", null);
-
-                dtRef.Columns.Add("IdAuto", typeof(int));
-                dtRef.Columns.Add("TABLE_NAME_REF", typeof(string));
-                dtRef.Columns.Add("COLUMN_NAME_REF", typeof(string));
-                dtRef.Columns.Add("COLUMN_DEFAULT_REF", typeof(string));
-                dtRef.Columns.Add("IS_NULLABLE_REF", typeof(string));
-                dtRef.Columns.Add("DATA_TYPE_REF", typeof(string));
-                dtRef.Columns.Add("CHARACTER_MAXIMUM_LENGTH_REF", typeof(int));
-                dtRef.Columns.Add("NUMERIC_PRECISION_REF", typeof(int));
-                dtRef.Columns.Add("NUMERIC_SCALE_REF", typeof(int));
-                for (int i = 0; i < file1.Length; i++)
+                if (!IsPostBack)
                 {
-                    if (file1[i].Split(',').Length > 8)
+                    string[] file1 = File.ReadAllLines(HostingEnvironment.MapPath("~/Fisiere/" + "BDReferintaSQL.csv"));
+
+                    if (Constante.tipBD == 2)
+                        file1 = File.ReadAllLines(HostingEnvironment.MapPath("~/Fisiere/" + "BDReferintaORA.csv"));
+
+                    // General.ExecutaNonQuery("DROP TABLE \"StructuraRef\"", null);
+
+                    dtRef.Columns.Add("IdAuto", typeof(int));
+                    dtRef.Columns.Add("TABLE_NAME_REF", typeof(string));
+                    dtRef.Columns.Add("COLUMN_NAME_REF", typeof(string));
+                    dtRef.Columns.Add("COLUMN_DEFAULT_REF", typeof(string));
+                    dtRef.Columns.Add("IS_NULLABLE_REF", typeof(string));
+                    dtRef.Columns.Add("DATA_TYPE_REF", typeof(string));
+                    dtRef.Columns.Add("CHARACTER_MAXIMUM_LENGTH_REF", typeof(int));
+                    dtRef.Columns.Add("NUMERIC_PRECISION_REF", typeof(int));
+                    dtRef.Columns.Add("NUMERIC_SCALE_REF", typeof(int));
+                    for (int i = 0; i < file1.Length; i++)
                     {
-                        dtRef.Rows.Add(i + 1, file1[i].Split(',')[0], file1[i].Split(',')[1], file1[i].Split(',')[2] + file1[i].Split(',')[3] + file1[i].Split(',')[4],
-                        file1[i].Split(',')[5], file1[i].Split(',')[6], file1[i].Split(',')[7] == "NULL" ? null : file1[i].Split(',')[7],
-                        file1[i].Split(',')[8] == "NULL" ? null : file1[i].Split(',')[8], file1[i].Split(',')[9] == "NULL" ? null : file1[i].Split(',')[9]);
+                        if (file1[i].Split(',').Length > 8)
+                        {
+                            dtRef.Rows.Add(i + 1, file1[i].Split(',')[0], file1[i].Split(',')[1], file1[i].Split(',')[2] + file1[i].Split(',')[3] + file1[i].Split(',')[4],
+                            file1[i].Split(',')[5], file1[i].Split(',')[6], file1[i].Split(',')[7] == "NULL" ? null : file1[i].Split(',')[7],
+                            file1[i].Split(',')[8] == "NULL" ? null : file1[i].Split(',')[8], file1[i].Split(',')[9] == "NULL" ? null : file1[i].Split(',')[9]);
+                        }
+                        else
+                            dtRef.Rows.Add(i + 1, file1[i].Split(',')[0], file1[i].Split(',')[1], file1[i].Split(',')[2] == "NULL" ? null : file1[i].Split(',')[2],
+                                file1[i].Split(',')[3], file1[i].Split(',')[4], file1[i].Split(',')[5] == "NULL" ? null : file1[i].Split(',')[5],
+                                file1[i].Split(',')[6] == "NULL" ? null : file1[i].Split(',')[6], file1[i].Split(',')[7] == "NULL" ? null : file1[i].Split(',')[7]);
                     }
+
+                    //General.ExecutaNonQuery("CREATE TABLE \"StructuraRef\" (TABLE_NAME_REF VARCHAR(128), COLUMN_NAME_REF VARCHAR(128), COLUMN_DEFAULT_REF VARCHAR(256), IS_NULLABLE_REF VARCHAR(3), " 
+                    //                     + " DATA_TYPE_REF VARCHAR(20), CHARACTER_MAXIMUM_LENGTH_REF INT, NUMERIC_PRECISION_REF INT, NUMERIC_SCALE_REF INT) ", null);
+
+                    //for (int i = 0; i < dtRef.Rows.Count; i++)
+                    //    General.ExecutaNonQuery("INSERT INTO \"StructuraRef\" VALUES ('" + dtRef.Rows[i][0].ToString() + "', '" + dtRef.Rows[i][1].ToString() + "', '" + dtRef.Rows[i][2].ToString() + "', '" 
+                    //        + dtRef.Rows[i][3].ToString() + "', '" + dtRef.Rows[i][4].ToString() + "', " + dtRef.Rows[i][5].ToString() + ", " + dtRef.Rows[i][6].ToString() + ", " + dtRef.Rows[i][7].ToString() + ")", null);
+
+                    string sql = "";
+                    if (Constante.tipBD == 1)
+                        sql = "select  a.* from ("
+                        + "select  TABLE_NAME as TABLE_NAME_CLIENT, COLUMN_NAME AS COLUMN_NAME_CLIENT, "
+                        + " ISNULL(COLUMN_DEFAULT, '') AS COLUMN_DEFAULT_CLIENT, ISNULL(IS_NULLABLE, '') AS IS_NULLABLE_CLIENT, ISNULL(DATA_TYPE, '') AS DATA_TYPE_CLIENT, ISNULL(CHARACTER_MAXIMUM_LENGTH, '') AS CHARACTER_MAX_LENGTH_CLIENT, "
+                        + "CONVERT(INT, ISNULL(NUMERIC_PRECISION, 0)) AS NUMERIC_PRECISION_CLIENT, CONVERT(INT, ISNULL(NUMERIC_SCALE, 0)) AS NUMERIC_SCALE_CLIENT from INFORMATION_SCHEMA.COLUMNS "
+                        + " where TABLE_NAME not in ('ADDRESS', 'BENEFICII', 'CAEN_ITM', 'CCCLIENT', 'CLIENTI', 'CODURIPOSTALE', 'COMPACC', 'CONTRACTE', 'COR_ITM', 'CORECTIE', 'CRTEVAL', "
+                                              + "  'CURS_PENSIE_F', 'DAILYCHANGES', 'DEPCLNT', 'ETICHETE', 'F1002', 'HOLIDAYS', 'JUDETE', 'LOCALITATI', 'LOCATIE_MUNCA', 'LOCATII', 'MARDEF', 'MARTABLE', "
+                                              + "  'NOTACONT', 'NOTAPLAUTO', 'NROP_SOMAJ', 'ORASE_ITM', 'PENSIE_F', 'PERSCONT', 'PLAN_TABLE', 'PLCLIENT', 'POZE', 'PROCESE', 'PSTCLNT', "
+                                              + "  'RAPORT_DATE_ANGAJAT_TBL', 'REGISTRU_VECHIME', 'REPORTS', 'RSCPST', 'SALARIATI', 'SCHCLNT', 'SCRACC', 'SPORCLNT', 'SPORURI', 'SPVCLNT', "
+                                              + "   'STATUS', 'TABLEDEN', 'TAXE', 'TAXE_ARHIVA', 'USERHIST', 'ZileHand', 'F100', 'F099', 'F1001', 'F0991') "
+                                              + "  and TABLE_NAME not like  'D00%' and TABLE_NAME not like 'D100%' and TABLE_NAME not like 'D110%' and TABLE_NAME not like 'D205%' and TABLE_NAME not like 'F2%' "
+                                              + "  and TABLE_NAME not like 'F3%' and TABLE_NAME not like 'F4%' and TABLE_NAME not like 'F5%' and TABLE_NAME not like 'F7%' and TABLE_NAME not like 'F9%' "
+                                              + "  and TABLE_NAME not like 'EMPL%' and TABLE_NAME not like 'ANG_%'  and TABLE_NAME not like 'TEST%' "
+                                              + "  and TABLE_NAME not like 'H0%' and TABLE_NAME not like 'H1%' and TABLE_NAME not like 'REP_%' and TABLE_NAME not like 'WT_%' and TABLE_NAME not like '%TMP%' and TABLE_NAME not in (select TABLE_NAME from INFORMATION_SCHEMA.VIEWS) "
+
+                                              + " UNION "
+
+                                              + "   select 'VIEW: ' + TABLE_NAME, COLUMN_NAME, '' AS COLUMN_DEFAULT_CLIENT, '' AS IS_NULLABLE,  '' AS DATA_TYPE, "
+                                              + " 0 as CHARACTER_MAXIMUM_LENGTH,  0 as NUMERIC_PRECISION, 0 NUMERIC_SCALE from INFORMATION_SCHEMA.COLUMNS  where TABLE_NAME in (select TABLE_NAME from INFORMATION_SCHEMA.VIEWS)"
+
+                                              + " UNION "
+
+                                              + "select  routine_type as TABLE_NAME, ROUTINE_NAME as COLUMN_NAME, '' as COLUMN_DEFAULT, "
+                                              + " '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
+                                              + " from information_schema.routines  where routine_type = 'FUNCTION' "
+
+                                                + " UNION "
+
+                                              + "select  'SEQUENCE' as TABLE_NAME, SEQUENCE_NAME as COLUMN_NAME, '' as COLUMN_DEFAULT, "
+                                              + " '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
+                                              + " from information_schema.SEQUENCES  "
+
+                                              + " union "
+
+                                              + " select  'tblParametrii' as TABLE_NAME, Nume as COLUMN_NAME, '' as COLUMN_DEFAULT, "
+                                              + " '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
+                                              + " from tblParametrii "
+
+                                              + " UNION "
+
+                                                + " select  'tblMeniuri' as TABLE_NAME, Pagina as COLUMN_NAME, '' as COLUMN_DEFAULT,  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as "
+                                               + "    CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE  from tblMeniuri "
+
+                                              + ") a order by TABLE_NAME_CLIENT, COLUMN_NAME_CLIENT";
                     else
-                        dtRef.Rows.Add(i + 1, file1[i].Split(',')[0], file1[i].Split(',')[1], file1[i].Split(',')[2] == "NULL" ? null : file1[i].Split(',')[2],
-                            file1[i].Split(',')[3], file1[i].Split(',')[4], file1[i].Split(',')[5] == "NULL" ? null : file1[i].Split(',')[5],
-                            file1[i].Split(',')[6] == "NULL" ? null : file1[i].Split(',')[6], file1[i].Split(',')[7] == "NULL" ? null : file1[i].Split(',')[7]);
+                    {
+                        string numeBaza = "";
+
+                        CriptDecript prc = new CriptDecript();
+                        Constante.cnnWeb = prc.EncryptString(Constante.cheieCriptare, ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString, 2);
+                        string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
+                        numeBaza = tmp.Split(';')[0];
+
+
+                        sql = "select a.* from  ( "
+                            + "select  TABLE_NAME AS TABLE_NAME_CLIENT, COLUMN_NAME AS COLUMN_NAME_CLIENT, '' AS COLUMN_DEFAULT_CLIENT, NVL(NULLABLE, '') AS IS_NULLABLE_CLIENT, NVL(DATA_TYPE, '') AS DATA_TYPE_CLIENT, "
+                            + " NVL(DATA_LENGTH, 0) AS CHARACTER_MAX_LENGTH_CLIENT, nvl(DATA_PRECISION, 0) AS NUMERIC_PRECISION_CLIENT, NVL(DATA_SCALE, 0) AS NUMERIC_SCALE_CLIENT from dba_tab_columns  where TABLE_NAME not in "
+                            + "('ADDRESS', 'BENEFICII', 'CAEN_ITM', 'CCCLIENT', 'CLIENTI', 'CODURIPOSTALE', 'COMPACC', 'CONTRACTE', 'COR_ITM', 'CORECTIE', 'CRTEVAL', 'CURS_PENSIE_F', "
+                            + " 'DAILYCHANGES', 'DEPCLNT', 'ETICHETE', 'F1002', 'JUDETE', 'LOCALITATI', 'LOCATIE_MUNCA', 'LOCATII', 'MARDEF', 'MARTABLE', 'NOTACONT', 'NOTAPLAUTO', "
+                            + " 'NROP_SOMAJ', 'ORASE_ITM', 'PENSIE_F', 'PERSCONT', 'PLAN_TABLE', 'PLCLIENT', 'POZE', 'PROCESE', 'PSTCLNT', 'RAPORT_DATE_ANGAJAT_TBL', 'REGISTRU_VECHIME', "
+                            + " 'REPORTS', 'RSCPST', 'SALARIATI', 'SCHCLNT', 'SCRACC', 'SPORCLNT', 'SPORURI', 'SPVCLNT', 'STATUS', 'TABLEDEN', 'TAXE', 'TAXE_ARHIVA', 'USERHIST', 'ZileHand', "
+                            + "  'F100', 'F099', 'F1001', 'F0991')   and TABLE_NAME not like  'D00%' and TABLE_NAME not like 'D100%' and TABLE_NAME not like 'D110%' "
+                            + "  and TABLE_NAME not like 'D205%' and TABLE_NAME not like 'F2%'   and TABLE_NAME not like 'F3%' and TABLE_NAME not like 'F4%' "
+                            + "  and TABLE_NAME not like 'F5%' and TABLE_NAME not like 'F7%' and TABLE_NAME not like 'F9%'   and TABLE_NAME not like 'H0%' "
+                            + "  and TABLE_NAME not like 'H1%' and TABLE_NAME not like 'REP_%' and TABLE_NAME not like 'WT_%'  and TABLE_NAME not like '%TMP%' "
+                            + "  and TABLE_NAME not like 'EMPL%' and TABLE_NAME not like 'ANG_%'  and TABLE_NAME not like 'TEST%' "
+                            + "  and TABLE_NAME not in (select view_NAME from dba_views where owner = '{0}') and owner = '{0}' "
+
+                            + "  UNION "
+
+                           + "   select 'VIEW: ' || TABLE_NAME, COLUMN_NAME,   ''  AS COLUMN_DEFAULT, '' AS IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, "
+                           + " 0 AS NUMERIC_PRECISION, 0 AS NUMERIC_SCALE from dba_tab_columns where TABLE_NAME in (select view_NAME from  dba_views where owner = '{0}') and owner = '{0}' "
+
+                           + " union "
+
+                           + "   select  object_type as TABLE_NAME, OBJECT_NAME as COLUMN_NAME, '' as COLUMN_DEFAULT, "
+                            + "  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
+                            + "    from dba_objects  where owner = '{0}' and object_type = 'PROCEDURE' "
+
+
+                            + "    UNION "
+                           + "       select  object_type as TABLE_NAME, OBJECT_NAME as COLUMN_NAME, '' as COLUMN_DEFAULT, "
+                            + "  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
+                            + "    from dba_objects  where owner = '{0}' and object_type = 'FUNCTION' "
+
+
+                            + "        UNION "
+                            + "      select  object_type as TABLE_NAME, OBJECT_NAME as COLUMN_NAME, '' as COLUMN_DEFAULT, "
+                            + "  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
+                            + "    from dba_objects  where owner = '{0}' and object_type = 'SEQUENCE' "
+
+
+                             + "   union "
+
+                            + "          select  'tblParametrii' as TABLE_NAME, \"Nume\" as COLUMN_NAME, '' as COLUMN_DEFAULT, "
+                            + "  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
+                            + "    from \"tblParametrii\" "
+
+                            + " UNION "
+
+                            + " select  'tblMeniuri' as TABLE_NAME, \"Pagina\" as COLUMN_NAME, '' as COLUMN_DEFAULT,  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as "
+                           + "    CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE  from \"tblMeniuri\" "
+
+                             + "   ) a  order by TABLE_NAME_CLIENT, COLUMN_NAME_CLIENT ";
+                        sql = string.Format(sql, numeBaza);
+                    }
+
+                    DataTable dtClient = General.IncarcaDT(sql, null);
+
+
+                    DataColumn[] dc1 = new DataColumn[2], dc2 = new DataColumn[2];
+                    for (int i = 1; i < 3; i++)
+                        dc1[i - 1] = dtRef.Columns[i];
+                    for (int i = 1; i < 3; i++)
+                        dc2[i - 1] = dtClient.Columns[i - 1];
+
+
+                    //var res = from bdRef in dtRef.AsEnumerable()
+                    //          join bdClient in dtClient.AsEnumerable()
+                    //            on bdRef.Field<string>("TABLE_NAME_REF") equals bdClient.Field<string>("TABLE_NAME_CLIENT")
+                    //          select bdRef;
+
+                    ////myRow.Field<int>("RowNo")
+
+
+                    //var leftOuterJoin =
+                    //    from bdRef in dtRef.AsEnumerable()
+                    //    join bdClient in dtClient.AsEnumerable() on new { TableName = bdRef.Field<string>("TABLE_NAME_REF"), ColumnName =  bdRef.Field<string>("COLUMN_NAME_REF") } 
+                    //        equals new { TableName = bdClient.Field<string>("TABLE_NAME_CLIENT"), ColumnName = bdClient.Field<string>("COLUMN_NAME_CLIENT") } into temp
+                    //    from bdClient in temp.DefaultIfEmpty()
+                    //    select new
+                    //    {
+                    //        TableNameRef = bdRef.Field<string>("TABLE_NAME_REF"),
+                    //        ColumnNameRef = bdRef.Field<string>("COLUMN_NAME_REF"),
+                    //        ColumnDefaultRef = bdRef.Field<string>("COLUMN_DEFAULT_REF"),
+                    //        IsNullableRef = bdRef.Field<string>("IS_NULLABLE_REF"),
+                    //        DataTypeRef = bdRef.Field<string>("DATA_TYPE_REF"),
+                    //        CharMaxLengthRef = bdRef.Field<int?>("CHARACTER_MAXIMUM_LENGTH_REF"),
+                    //        NumPrecRef = bdRef.Field<int?>("NUMERIC_PRECISION_REF"),
+                    //        NumScaleRef = bdRef.Field<int?>("NUMERIC_SCALE_REF"),
+                    //        TableNameClient = bdClient.Field<string>("TABLE_NAME_CLIENT"),
+                    //        ColumnNameClient = bdClient.Field<string>("COLUMN_NAME_CLIENT"),
+                    //        ColumnDefaultClient = bdClient.Field<string>("COLUMN_DEFAULT_CLIENT"),
+                    //        IsNullableClient = bdClient.Field<string>("IS_NULLABLE_CLIENT"),
+                    //        DataTypeClient = bdClient.Field<string>("DATA_TYPE_CLIENT"),
+                    //        CharMaxLengthClient = bdClient.Field<int?>("CHARACTER_MAXIMUM_LENGTH_CLIENT"),
+                    //        NumPrecClient = bdClient.Field<int?>("NUMERIC_PRECISION_CLIENT"),
+                    //        NumScaleClient = bdClient.Field<int?>("NUMERIC_SCALE_CLIENT")
+                    //    };
+                    //var rightOuterJoin =
+                    //    from bdClient in dtClient.AsEnumerable()
+                    //    join bdRef in dtRef.AsEnumerable() on new { TableName = bdClient.Field<string>("TABLE_NAME_CLIENT"), ColumnName = bdClient.Field<string>("TABLE_NAME_CLIENT") }
+                    //        equals new { TableName = bdRef.Field<string>("TABLE_NAME_REF"), ColumnName = bdRef.Field<string>("TABLE_NAME_REF") } into temp
+                    //    from bdRef in temp.DefaultIfEmpty()
+                    //    select new
+                    //    {
+                    //        TableNameRef = bdRef.Field<string>("TABLE_NAME_REF"),
+                    //        ColumnNameRef = bdRef.Field<string>("COLUMN_NAME_REF"),
+                    //        ColumnDefaultRef = bdRef.Field<string>("COLUMN_DEFAULT_REF"),
+                    //        IsNullableRef = bdRef.Field<string>("IS_NULLABLE_REF"),
+                    //        DataTypeRef = bdRef.Field<string>("DATA_TYPE_REF"),
+                    //        CharMaxLengthRef = bdRef.Field<int?>("CHARACTER_MAXIMUM_LENGTH_REF"),
+                    //        NumPrecRef = bdRef.Field<int?>("NUMERIC_PRECISION_REF"),
+                    //        NumScaleRef = bdRef.Field<int?>("NUMERIC_SCALE_REF"),
+                    //        TableNameClient = bdClient.Field<string>("TABLE_NAME_CLIENT"),
+                    //        ColumnNameClient = bdClient.Field<string>("COLUMN_NAME_CLIENT"),
+                    //        ColumnDefaultClient = bdClient.Field<string>("COLUMN_DEFAULT_CLIENT"),
+                    //        IsNullableClient = bdClient.Field<string>("IS_NULLABLE_CLIENT"),
+                    //        DataTypeClient = bdClient.Field<string>("DATA_TYPE_CLIENT"),
+                    //        CharMaxLengthClient = bdClient.Field<int?>("CHARACTER_MAXIMUM_LENGTH_CLIENT"),
+                    //        NumPrecClient = bdClient.Field<int?>("NUMERIC_PRECISION_CLIENT"),
+                    //        NumScaleClient = bdClient.Field<int?>("NUMERIC_SCALE_CLIENT")
+                    //    };
+                    //var fullOuterJoin = leftOuterJoin.Union(rightOuterJoin);
+
+
+
+                    DataTable dtJoin = Join(dtRef, dtClient, dc1, dc2);
+                    //DataTable dtJoin = Join(dtRef, dtClient, null, null);
+
+
+                    DataTable dtRezultat = new DataTable();
+                    foreach (DataColumn col in dtJoin.Columns)
+                    {
+                        dtRezultat.Columns.Add(col.ColumnName, col.DataType);
+                    }
+
+                    for (int i = 0; i < dtJoin.Rows.Count; i++)
+                        if (dtJoin.Rows[i]["TABLE_NAME_REF"].ToString().ToUpper() != dtJoin.Rows[i]["TABLE_NAME_CLIENT"].ToString().ToUpper()
+                            || dtJoin.Rows[i]["COLUMN_NAME_REF"].ToString().ToUpper() != dtJoin.Rows[i]["COLUMN_NAME_CLIENT"].ToString().ToUpper()
+                            || dtJoin.Rows[i]["COLUMN_DEFAULT_REF"].ToString().ToUpper() != dtJoin.Rows[i]["COLUMN_DEFAULT_CLIENT"].ToString().ToUpper()
+                            || dtJoin.Rows[i]["IS_NULLABLE_REF"].ToString() != dtJoin.Rows[i]["IS_NULLABLE_CLIENT"].ToString()
+                            || dtJoin.Rows[i]["DATA_TYPE_REF"].ToString() != dtJoin.Rows[i]["DATA_TYPE_CLIENT"].ToString()
+                            || dtJoin.Rows[i]["CHARACTER_MAXIMUM_LENGTH_REF"].ToString() != dtJoin.Rows[i]["CHARACTER_MAX_LENGTH_CLIENT"].ToString()
+                            || dtJoin.Rows[i]["NUMERIC_PRECISION_REF"].ToString() != dtJoin.Rows[i]["NUMERIC_PRECISION_CLIENT"].ToString()
+                            || dtJoin.Rows[i]["NUMERIC_SCALE_REF"].ToString() != dtJoin.Rows[i]["NUMERIC_SCALE_CLIENT"].ToString())
+                            dtRezultat.ImportRow(dtJoin.Rows[i]);
+
+                    //grDate.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+                    for (int i = 0; i < grDate.Columns.Count; i++)
+                        if (grDate.Columns[i].Name.Contains("REF"))
+                            grDate.Columns[i].HeaderStyle.BackColor = Color.FromArgb(255, 255, 179, 128);
+
+                    grDate.SettingsPager.PageSize = 25;
+                    grDate.DataSource = dtRezultat;
+                    grDate.DataBind();
+                    Session["VerifBD_Grid"] = dtRezultat;
                 }
-
-                //General.ExecutaNonQuery("CREATE TABLE \"StructuraRef\" (TABLE_NAME_REF VARCHAR(128), COLUMN_NAME_REF VARCHAR(128), COLUMN_DEFAULT_REF VARCHAR(256), IS_NULLABLE_REF VARCHAR(3), " 
-                //                     + " DATA_TYPE_REF VARCHAR(20), CHARACTER_MAXIMUM_LENGTH_REF INT, NUMERIC_PRECISION_REF INT, NUMERIC_SCALE_REF INT) ", null);
-
-                //for (int i = 0; i < dtRef.Rows.Count; i++)
-                //    General.ExecutaNonQuery("INSERT INTO \"StructuraRef\" VALUES ('" + dtRef.Rows[i][0].ToString() + "', '" + dtRef.Rows[i][1].ToString() + "', '" + dtRef.Rows[i][2].ToString() + "', '" 
-                //        + dtRef.Rows[i][3].ToString() + "', '" + dtRef.Rows[i][4].ToString() + "', " + dtRef.Rows[i][5].ToString() + ", " + dtRef.Rows[i][6].ToString() + ", " + dtRef.Rows[i][7].ToString() + ")", null);
-
-                string sql = "";
-                if (Constante.tipBD == 1)
-                    sql = "select  a.* from ("
-                    + "select  TABLE_NAME as TABLE_NAME_CLIENT, COLUMN_NAME AS COLUMN_NAME_CLIENT, "
-                    + " ISNULL(COLUMN_DEFAULT, '') AS COLUMN_DEFAULT_CLIENT, ISNULL(IS_NULLABLE, '') AS IS_NULLABLE_CLIENT, ISNULL(DATA_TYPE, '') AS DATA_TYPE_CLIENT, ISNULL(CHARACTER_MAXIMUM_LENGTH, '') AS CHARACTER_MAX_LENGTH_CLIENT, " 
-                    + "CONVERT(INT, ISNULL(NUMERIC_PRECISION, 0)) AS NUMERIC_PRECISION_CLIENT, CONVERT(INT, ISNULL(NUMERIC_SCALE, 0)) AS NUMERIC_SCALE_CLIENT from INFORMATION_SCHEMA.COLUMNS "
-                    + " where TABLE_NAME not in ('ADDRESS', 'BENEFICII', 'CAEN_ITM', 'CCCLIENT', 'CLIENTI', 'CODURIPOSTALE', 'COMPACC', 'CONTRACTE', 'COR_ITM', 'CORECTIE', 'CRTEVAL', "
-                                          + "  'CURS_PENSIE_F', 'DAILYCHANGES', 'DEPCLNT', 'ETICHETE', 'F1002', 'HOLIDAYS', 'JUDETE', 'LOCALITATI', 'LOCATIE_MUNCA', 'LOCATII', 'MARDEF', 'MARTABLE', "
-                                          + "  'NOTACONT', 'NOTAPLAUTO', 'NROP_SOMAJ', 'ORASE_ITM', 'PENSIE_F', 'PERSCONT', 'PLAN_TABLE', 'PLCLIENT', 'POZE', 'PROCESE', 'PSTCLNT', "
-                                          + "  'RAPORT_DATE_ANGAJAT_TBL', 'REGISTRU_VECHIME', 'REPORTS', 'RSCPST', 'SALARIATI', 'SCHCLNT', 'SCRACC', 'SPORCLNT', 'SPORURI', 'SPVCLNT', "
-                                          + "   'STATUS', 'TABLEDEN', 'TAXE', 'TAXE_ARHIVA', 'USERHIST', 'ZileHand', 'F100', 'F099', 'F1001', 'F0991') "
-                                          + "  and TABLE_NAME not like  'D00%' and TABLE_NAME not like 'D100%' and TABLE_NAME not like 'D110%' and TABLE_NAME not like 'D205%' and TABLE_NAME not like 'F2%' "
-                                          + "  and TABLE_NAME not like 'F3%' and TABLE_NAME not like 'F4%' and TABLE_NAME not like 'F5%' and TABLE_NAME not like 'F7%' and TABLE_NAME not like 'F9%' "
-                                          + "  and TABLE_NAME not like 'EMPL%' and TABLE_NAME not like 'ANG_%'  and TABLE_NAME not like 'TEST%' "
-                                          + "  and TABLE_NAME not like 'H0%' and TABLE_NAME not like 'H1%' and TABLE_NAME not like 'REP_%' and TABLE_NAME not like 'WT_%' and TABLE_NAME not like '%TMP%' and TABLE_NAME not in (select TABLE_NAME from INFORMATION_SCHEMA.VIEWS) "
-
-                                          + " UNION "
-
-                                          + "   select 'VIEW: ' + TABLE_NAME, COLUMN_NAME, '' AS COLUMN_DEFAULT_CLIENT, '' AS IS_NULLABLE,  '' AS DATA_TYPE, " 
-                                          + " 0 as CHARACTER_MAXIMUM_LENGTH,  0 as NUMERIC_PRECISION, 0 NUMERIC_SCALE from INFORMATION_SCHEMA.COLUMNS  where TABLE_NAME in (select TABLE_NAME from INFORMATION_SCHEMA.VIEWS)"
-
-                                          + " UNION "
-
-                                          + "select  routine_type as TABLE_NAME, ROUTINE_NAME as COLUMN_NAME, '' as COLUMN_DEFAULT, "
-                                          + " '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
-                                          + " from information_schema.routines  where routine_type = 'FUNCTION' "
-
-                                            + " UNION "
-
-                                          + "select  'SEQUENCE' as TABLE_NAME, SEQUENCE_NAME as COLUMN_NAME, '' as COLUMN_DEFAULT, "
-                                          + " '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
-                                          + " from information_schema.SEQUENCES  "
-
-                                          + " union "
-
-                                          + " select  'tblParametrii' as TABLE_NAME, Nume as COLUMN_NAME, '' as COLUMN_DEFAULT, "
-                                          + " '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
-                                          + " from tblParametrii "
-
-                                          + " UNION "
-
-                                            + " select  'tblMeniuri' as TABLE_NAME, Pagina as COLUMN_NAME, '' as COLUMN_DEFAULT,  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as "
-                                           + "    CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE  from tblMeniuri "
-
-                                          + ") a order by TABLE_NAME_CLIENT, COLUMN_NAME_CLIENT";
                 else
                 {
-                    string numeBaza = "";
-
-                    CriptDecript prc = new CriptDecript();
-                    Constante.cnnWeb = prc.EncryptString(Constante.cheieCriptare, ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString, 2);                   
-                    string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
-                    numeBaza = tmp.Split(';')[0];
-                  
-
-                    sql = "select a.* from  ( "
-                        + "select  TABLE_NAME AS TABLE_NAME_CLIENT, COLUMN_NAME AS COLUMN_NAME_CLIENT, '' AS COLUMN_DEFAULT_CLIENT, NVL(NULLABLE, '') AS IS_NULLABLE_CLIENT, NVL(DATA_TYPE, '') AS DATA_TYPE_CLIENT, " 
-                        + " NVL(DATA_LENGTH, 0) AS CHARACTER_MAX_LENGTH_CLIENT, nvl(DATA_PRECISION, 0) AS NUMERIC_PRECISION_CLIENT, NVL(DATA_SCALE, 0) AS NUMERIC_SCALE_CLIENT from dba_tab_columns  where TABLE_NAME not in "
-                        + "('ADDRESS', 'BENEFICII', 'CAEN_ITM', 'CCCLIENT', 'CLIENTI', 'CODURIPOSTALE', 'COMPACC', 'CONTRACTE', 'COR_ITM', 'CORECTIE', 'CRTEVAL', 'CURS_PENSIE_F', "
-                        + " 'DAILYCHANGES', 'DEPCLNT', 'ETICHETE', 'F1002', 'JUDETE', 'LOCALITATI', 'LOCATIE_MUNCA', 'LOCATII', 'MARDEF', 'MARTABLE', 'NOTACONT', 'NOTAPLAUTO', "
-                        + " 'NROP_SOMAJ', 'ORASE_ITM', 'PENSIE_F', 'PERSCONT', 'PLAN_TABLE', 'PLCLIENT', 'POZE', 'PROCESE', 'PSTCLNT', 'RAPORT_DATE_ANGAJAT_TBL', 'REGISTRU_VECHIME', "
-                        + " 'REPORTS', 'RSCPST', 'SALARIATI', 'SCHCLNT', 'SCRACC', 'SPORCLNT', 'SPORURI', 'SPVCLNT', 'STATUS', 'TABLEDEN', 'TAXE', 'TAXE_ARHIVA', 'USERHIST', 'ZileHand', "
-                        + "  'F100', 'F099', 'F1001', 'F0991')   and TABLE_NAME not like  'D00%' and TABLE_NAME not like 'D100%' and TABLE_NAME not like 'D110%' "
-                        + "  and TABLE_NAME not like 'D205%' and TABLE_NAME not like 'F2%'   and TABLE_NAME not like 'F3%' and TABLE_NAME not like 'F4%' "
-                        + "  and TABLE_NAME not like 'F5%' and TABLE_NAME not like 'F7%' and TABLE_NAME not like 'F9%'   and TABLE_NAME not like 'H0%' "
-                        + "  and TABLE_NAME not like 'H1%' and TABLE_NAME not like 'REP_%' and TABLE_NAME not like 'WT_%'  and TABLE_NAME not like '%TMP%' "
-                        + "  and TABLE_NAME not like 'EMPL%' and TABLE_NAME not like 'ANG_%'  and TABLE_NAME not like 'TEST%' "
-                        + "  and TABLE_NAME not in (select view_NAME from dba_views where owner = '{0}') and owner = '{0}' "
-
-                        + "  UNION "
-
-                       + "   select 'VIEW: ' || TABLE_NAME, COLUMN_NAME,   ''  AS COLUMN_DEFAULT, '' AS IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, "
-                       + " 0 AS NUMERIC_PRECISION, 0 AS NUMERIC_SCALE from dba_tab_columns where TABLE_NAME in (select view_NAME from  dba_views where owner = '{0}') and owner = '{0}' "
-
-                       + " union "
-
-                       + "   select  object_type as TABLE_NAME, OBJECT_NAME as COLUMN_NAME, '' as COLUMN_DEFAULT, "
-                        + "  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
-                        + "    from dba_objects  where owner = '{0}' and object_type = 'PROCEDURE' "
-
-
-                        + "    UNION "
-                       + "       select  object_type as TABLE_NAME, OBJECT_NAME as COLUMN_NAME, '' as COLUMN_DEFAULT, "
-                        + "  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
-                        + "    from dba_objects  where owner = '{0}' and object_type = 'FUNCTION' "
-
-
-                        + "        UNION "
-                        + "      select  object_type as TABLE_NAME, OBJECT_NAME as COLUMN_NAME, '' as COLUMN_DEFAULT, "
-                        + "  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
-                        + "    from dba_objects  where owner = '{0}' and object_type = 'SEQUENCE' "
-
-
-                         + "   union "
-
-                        + "          select  'tblParametrii' as TABLE_NAME, \"Nume\" as COLUMN_NAME, '' as COLUMN_DEFAULT, "
-                        + "  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE "
-                        + "    from \"tblParametrii\" "
-
-                        + " UNION "
-
-                        + " select  'tblMeniuri' as TABLE_NAME, \"Pagina\" as COLUMN_NAME, '' as COLUMN_DEFAULT,  '' as IS_NULLABLE, '' as DATA_TYPE, 0 as "
-                       + "    CHARACTER_MAXIMUM_LENGTH, 0 as NUMERIC_PRECISION, 0 as NUMERIC_SCALE  from \"tblMeniuri\" "
-
-                         + "   ) a  order by TABLE_NAME_CLIENT, COLUMN_NAME_CLIENT ";
-                    sql = string.Format(sql, numeBaza);
+                    DataTable dtRez = Session["VerifBD_Grid"] as DataTable;
+                    grDate.SettingsPager.PageSize = 25;
+                    grDate.DataSource = dtRez;
+                    grDate.DataBind();
                 }
-
-                DataTable dtClient = General.IncarcaDT(sql, null);
-
-
-                DataColumn[] dc1 = new DataColumn[2], dc2 = new DataColumn[2];
-                for (int i = 1; i < 3; i++)
-                    dc1[i - 1] = dtRef.Columns[i];
-                for (int i = 1; i < 3; i++)
-                    dc2[i - 1] = dtClient.Columns[i - 1];
-
-
-                //var res = from bdRef in dtRef.AsEnumerable()
-                //          join bdClient in dtClient.AsEnumerable()
-                //            on bdRef.Field<string>("TABLE_NAME_REF") equals bdClient.Field<string>("TABLE_NAME_CLIENT")
-                //          select bdRef;
-
-                ////myRow.Field<int>("RowNo")
-
-
-                //var leftOuterJoin =
-                //    from bdRef in dtRef.AsEnumerable()
-                //    join bdClient in dtClient.AsEnumerable() on new { TableName = bdRef.Field<string>("TABLE_NAME_REF"), ColumnName =  bdRef.Field<string>("COLUMN_NAME_REF") } 
-                //        equals new { TableName = bdClient.Field<string>("TABLE_NAME_CLIENT"), ColumnName = bdClient.Field<string>("COLUMN_NAME_CLIENT") } into temp
-                //    from bdClient in temp.DefaultIfEmpty()
-                //    select new
-                //    {
-                //        TableNameRef = bdRef.Field<string>("TABLE_NAME_REF"),
-                //        ColumnNameRef = bdRef.Field<string>("COLUMN_NAME_REF"),
-                //        ColumnDefaultRef = bdRef.Field<string>("COLUMN_DEFAULT_REF"),
-                //        IsNullableRef = bdRef.Field<string>("IS_NULLABLE_REF"),
-                //        DataTypeRef = bdRef.Field<string>("DATA_TYPE_REF"),
-                //        CharMaxLengthRef = bdRef.Field<int?>("CHARACTER_MAXIMUM_LENGTH_REF"),
-                //        NumPrecRef = bdRef.Field<int?>("NUMERIC_PRECISION_REF"),
-                //        NumScaleRef = bdRef.Field<int?>("NUMERIC_SCALE_REF"),
-                //        TableNameClient = bdClient.Field<string>("TABLE_NAME_CLIENT"),
-                //        ColumnNameClient = bdClient.Field<string>("COLUMN_NAME_CLIENT"),
-                //        ColumnDefaultClient = bdClient.Field<string>("COLUMN_DEFAULT_CLIENT"),
-                //        IsNullableClient = bdClient.Field<string>("IS_NULLABLE_CLIENT"),
-                //        DataTypeClient = bdClient.Field<string>("DATA_TYPE_CLIENT"),
-                //        CharMaxLengthClient = bdClient.Field<int?>("CHARACTER_MAXIMUM_LENGTH_CLIENT"),
-                //        NumPrecClient = bdClient.Field<int?>("NUMERIC_PRECISION_CLIENT"),
-                //        NumScaleClient = bdClient.Field<int?>("NUMERIC_SCALE_CLIENT")
-                //    };
-                //var rightOuterJoin =
-                //    from bdClient in dtClient.AsEnumerable()
-                //    join bdRef in dtRef.AsEnumerable() on new { TableName = bdClient.Field<string>("TABLE_NAME_CLIENT"), ColumnName = bdClient.Field<string>("TABLE_NAME_CLIENT") }
-                //        equals new { TableName = bdRef.Field<string>("TABLE_NAME_REF"), ColumnName = bdRef.Field<string>("TABLE_NAME_REF") } into temp
-                //    from bdRef in temp.DefaultIfEmpty()
-                //    select new
-                //    {
-                //        TableNameRef = bdRef.Field<string>("TABLE_NAME_REF"),
-                //        ColumnNameRef = bdRef.Field<string>("COLUMN_NAME_REF"),
-                //        ColumnDefaultRef = bdRef.Field<string>("COLUMN_DEFAULT_REF"),
-                //        IsNullableRef = bdRef.Field<string>("IS_NULLABLE_REF"),
-                //        DataTypeRef = bdRef.Field<string>("DATA_TYPE_REF"),
-                //        CharMaxLengthRef = bdRef.Field<int?>("CHARACTER_MAXIMUM_LENGTH_REF"),
-                //        NumPrecRef = bdRef.Field<int?>("NUMERIC_PRECISION_REF"),
-                //        NumScaleRef = bdRef.Field<int?>("NUMERIC_SCALE_REF"),
-                //        TableNameClient = bdClient.Field<string>("TABLE_NAME_CLIENT"),
-                //        ColumnNameClient = bdClient.Field<string>("COLUMN_NAME_CLIENT"),
-                //        ColumnDefaultClient = bdClient.Field<string>("COLUMN_DEFAULT_CLIENT"),
-                //        IsNullableClient = bdClient.Field<string>("IS_NULLABLE_CLIENT"),
-                //        DataTypeClient = bdClient.Field<string>("DATA_TYPE_CLIENT"),
-                //        CharMaxLengthClient = bdClient.Field<int?>("CHARACTER_MAXIMUM_LENGTH_CLIENT"),
-                //        NumPrecClient = bdClient.Field<int?>("NUMERIC_PRECISION_CLIENT"),
-                //        NumScaleClient = bdClient.Field<int?>("NUMERIC_SCALE_CLIENT")
-                //    };
-                //var fullOuterJoin = leftOuterJoin.Union(rightOuterJoin);
-
-
-
-                DataTable dtJoin = Join(dtRef, dtClient, dc1, dc2);
-                //DataTable dtJoin = Join(dtRef, dtClient, null, null);
-
-
-                DataTable dtRezultat = new DataTable();
-                foreach (DataColumn col in dtJoin.Columns)
-                {
-                    dtRezultat.Columns.Add(col.ColumnName, col.DataType);
-                }
-
-                for (int i = 0; i < dtJoin.Rows.Count; i++)
-                    if (dtJoin.Rows[i]["TABLE_NAME_REF"].ToString().ToUpper() != dtJoin.Rows[i]["TABLE_NAME_CLIENT"].ToString().ToUpper()
-                        || dtJoin.Rows[i]["COLUMN_NAME_REF"].ToString().ToUpper() != dtJoin.Rows[i]["COLUMN_NAME_CLIENT"].ToString().ToUpper()
-                        || dtJoin.Rows[i]["COLUMN_DEFAULT_REF"].ToString().ToUpper() != dtJoin.Rows[i]["COLUMN_DEFAULT_CLIENT"].ToString().ToUpper()
-                        || dtJoin.Rows[i]["IS_NULLABLE_REF"].ToString() != dtJoin.Rows[i]["IS_NULLABLE_CLIENT"].ToString()
-                        || dtJoin.Rows[i]["DATA_TYPE_REF"].ToString() != dtJoin.Rows[i]["DATA_TYPE_CLIENT"].ToString()
-                        || dtJoin.Rows[i]["CHARACTER_MAXIMUM_LENGTH_REF"].ToString() != dtJoin.Rows[i]["CHARACTER_MAX_LENGTH_CLIENT"].ToString()
-                        || dtJoin.Rows[i]["NUMERIC_PRECISION_REF"].ToString() != dtJoin.Rows[i]["NUMERIC_PRECISION_CLIENT"].ToString()
-                        || dtJoin.Rows[i]["NUMERIC_SCALE_REF"].ToString() != dtJoin.Rows[i]["NUMERIC_SCALE_CLIENT"].ToString())
-                        dtRezultat.ImportRow(dtJoin.Rows[i]);
-
-                //grDate.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
-
-                for (int i = 0; i < grDate.Columns.Count; i++)
-                    if (grDate.Columns[i].Name.Contains("REF"))
-                        grDate.Columns[i].HeaderStyle.BackColor = Color.FromArgb(255, 255, 179, 128);
-
-                grDate.SettingsPager.PageSize = 25;
-                grDate.DataSource = dtRezultat;
-                grDate.DataBind();
-           
-
+                
 
 
             }
@@ -296,6 +306,45 @@ namespace WizOne.Pagini
             }
         }
 
+
+        protected void btnExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DevExpress.Spreadsheet.Workbook book = new DevExpress.Spreadsheet.Workbook();
+                DevExpress.Spreadsheet.Worksheet ws2 = book.Worksheets["Sheet1"];                
+
+                for (int i = 0; i < grDate.VisibleColumns.Count; i++)
+                    ws2.Cells[0, i].Value = grDate.VisibleColumns[i].Caption;
+
+                for (int i = 0; i < grDate.VisibleRowCount; i++)
+                    for (int j = 0; j < grDate.VisibleColumns.Count; j++)
+                    {
+                        object[] obj = grDate.GetRowValues(i, grDate.VisibleColumns[j].Name, "IdAuto") as object[];
+                        ws2.Cells[i + 1, j].Value = (obj[0] ?? "").ToString();
+                    }
+
+                byte[] byteArray = book.SaveDocument(DevExpress.Spreadsheet.DocumentFormat.Xls);
+
+                DateTime ora = DateTime.Now;
+                string numeXLS = "VerificareBD.xls";
+
+                MemoryStream stream = new MemoryStream(byteArray);
+                Response.Clear();
+                MemoryStream ms = stream;
+                Response.ContentType = "application/vnd.ms-excel";
+                Response.AddHeader("content-disposition", "attachment;filename=" + numeXLS);
+                Response.Buffer = true;
+                ms.WriteTo(Response.OutputStream);
+
+                MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoInfo, "Export");
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
 
         public static DataTable Join(DataTable First, DataTable Second, DataColumn[] FJC, DataColumn[] SJC)

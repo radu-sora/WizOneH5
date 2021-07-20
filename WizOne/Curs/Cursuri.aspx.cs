@@ -36,7 +36,6 @@ namespace WizOne.Curs
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
                 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
                 btnDoc.Image.ToolTip = Dami.TraduCuvant("btnDoc", "Documente");
                 btnComp.Image.ToolTip = Dami.TraduCuvant("btnComp", "Competente");
                 btnTitl.Image.ToolTip = Dami.TraduCuvant("btnTitl", "Titluri");
@@ -183,22 +182,22 @@ namespace WizOne.Curs
 
 
 
-        protected void btnSave_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DataTable dt = Session["Cursuri_Grid"] as DataTable;
+        //protected void btnSave_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        DataTable dt = Session["Cursuri_Grid"] as DataTable;
 
-                General.SalveazaDate(dt, "Curs_tblCurs");
+        //        General.SalveazaDate(dt, "Curs_tblCurs");
 
-                MessageBox.Show("Proces finalizat cu succes!", MessageBox.icoSuccess);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        MessageBox.Show("Proces finalizat cu succes!", MessageBox.icoSuccess);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
      
 
@@ -305,6 +304,8 @@ namespace WizOne.Curs
                 grDate.CancelEdit();
                 Session["Cursuri_Grid"] = dt;
                 grDate.DataSource = dt;
+
+                General.SalveazaDate(dt, "Curs_tblCurs");
             }
             catch (Exception ex)
             {
@@ -389,6 +390,8 @@ namespace WizOne.Curs
                 grDate.DataSource = dt;
                 grDate.KeyFieldName = "IdAuto";
                 Session["Cursuri_Grid"] = dt;
+
+                General.SalveazaDate(dt, "Curs_tblCurs");
             }
             catch (Exception ex)
             {
@@ -415,7 +418,7 @@ namespace WizOne.Curs
                 Session["Cursuri_Grid"] = dt;
                 grDate.DataSource = dt;
 
-
+                General.SalveazaDate(dt, "Curs_tblCurs");
             }
             catch (Exception ex)
             {

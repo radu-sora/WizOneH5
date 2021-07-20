@@ -10,6 +10,7 @@ using System.Web.UI.WebControls;
 using WizOne.Module;
 using System.Drawing;
 using System.Diagnostics;
+using System.Web.UI.HtmlControls;
 
 namespace WizOne.Personal
 {
@@ -159,6 +160,42 @@ namespace WizOne.Personal
                 }
 
                 General.SecuritatePersonal(Documente_DataList, Convert.ToInt32(Session["UserId"].ToString()));
+
+                HtmlGenericControl lgCampAd = Documente_DataList.Items[0].FindControl("lgCampAd") as HtmlGenericControl;
+                HtmlTable lgCampAdTable = Documente_DataList.Items[0].FindControl("lgCampAdTable") as HtmlTable;
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) != (int)IdClienti.Clienti.Garrett)
+                {
+                    lgCampAd.Visible = false;
+                    lgCampAdTable.Visible = false;
+                }
+                else
+                {
+                    lgCampAd.InnerText = Dami.TraduCuvant("Date aditionale");
+                    DataTable dt2 = General.IncarcaDT("SELECT * FROM F1002 WHERE MARCA = " + Session["Marca"].ToString(), null);
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        ASPxLabel lbl = Documente_DataList.Items[0].FindControl("lblCampAd" + i) as ASPxLabel;
+                        lbl.Text = Dami.TraduCuvant((dt2 != null && dt2.Rows.Count > 0 && dt2.Rows[0]["DENUMIRECAMP" + i] != null ? dt2.Rows[0]["DENUMIRECAMP" + i].ToString() : "Camp " + i)) + ": ";
+                    }
+                    if (!IsPostBack)
+                    {
+                        for (int i = 1; i <= 6; i++)
+                        {
+                            ASPxTextBox txt = Documente_DataList.Items[0].FindControl("txtCampAd" + i) as ASPxTextBox;
+                            txt.Text = (dt2 != null && dt2.Rows.Count > 0 && dt2.Rows[0]["VALOARECAMP" + i] != null ? dt2.Rows[0]["VALOARECAMP" + i].ToString() : "");
+                        }
+
+                        if (!ds.Tables.Contains("F1002"))
+                        {                      
+                            dt2.TableName = "F1002";
+                            dt2.PrimaryKey = new DataColumn[] { dt2.Columns["MARCA"] };
+                            ds.Tables.Add(dt2);
+                            Session["InformatiaCurentaPersonal"] = ds;
+                        }
+                    }
+
+                }
+
             }
             catch (Exception ex)
             {

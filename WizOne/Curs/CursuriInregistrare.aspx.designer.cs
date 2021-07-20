@@ -132,15 +132,6 @@ namespace WizOne.Curs
         protected global::DevExpress.Web.ASPxButton btnArataDoc;
 
         /// <summary>
-        /// btnSave control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSave;
-
-        /// <summary>
         /// chkListaAsteptare control.
         /// </summary>
         /// <remarks>
@@ -148,6 +139,15 @@ namespace WizOne.Curs
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkListaAsteptare;
+
+        /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnSave;
 
         /// <summary>
         /// lblAngFiltru control.

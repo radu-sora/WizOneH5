@@ -23,6 +23,28 @@
         opener.PreluareCM();
     };
 
+    function OnEndCallback(s, e) {
+        if (s.cpAlertMessage != null) {
+            swal({
+                title: "", text: s.cpAlertMessage,
+                type: "warning"
+            });
+            s.cpAlertMessage = null;
+        }
+    }
+    function OnPreluare() {
+        var nr = "<%=Session["ZileCMAnterior"] %>";
+        if (nr == 0) {
+            swal({
+                title: "", text: "Datele din certificatul medical nu pot fi preluate!\nNu exista certificat medical in ultima zi a lunii anterioare!",
+                type: "warning"
+            });
+            e.processOnServer = false;
+        }
+        else
+            e.processOnServer = true;
+    }
+
 </script>
 
 <body>
@@ -31,15 +53,17 @@
             <tr>
                 <td style="float:right; text-align:right;">
                     <dx:ASPxButton ID="btnPreluare" ClientInstanceName="btnPreluare" ClientIDMode="Static" runat="server" Text="Preluare" AutoPostBack="true" OnClick="btnPreluare_Click" oncontextMenu="ctx(this,event)" >
+                        <ClientSideEvents Click="OnPreluare" />
                     </dx:ASPxButton>
                 </td>
-            </tr>
+            </tr> 
             <tr>
                 <td>
-                    <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared"  >
+                    <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared"  OnCustomCallback="grDate_CustomCallback" >
                         <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="true" AllowSort="false" />
-                        <Settings ShowFilterRow="False" ShowGroupPanel="False" />
+                        <Settings ShowFilterRow="False" ShowGroupPanel="False"  />
                         <SettingsSearchPanel Visible="False" />    
+                        <ClientSideEvents ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                         <Columns>	
                             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" ReadOnly="true" Visible="false" Width="50px" />
                             <dx:GridViewDataTextColumn FieldName="TipCM" Name="TipCM" Caption="TipCM" ReadOnly="true" Width="180px" />

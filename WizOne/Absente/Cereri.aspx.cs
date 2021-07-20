@@ -1019,6 +1019,7 @@ namespace WizOne.Absente
                 else
                 {
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+                    pnlCtl.JSProperties["cpSuccessMessage"] = "1";
                     if (Dami.ValoareParam("IesireDinCereri") == "1")
                         ASPxPanel.RedirectOnCallback("~/Absente/Lista.aspx");
                 }

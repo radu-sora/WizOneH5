@@ -98,13 +98,20 @@
         }
 
 
-        function OnEndCallback(s, e) {
-            if (s.cpAlertMessage != null) {
-                swal({
-                    title: trad_string(limba, ""), text: s.cpAlertMessage,
-                    type: "warning"
-                });
+        function OnEndCallback(s, e) {         
+            if (s.cpAlertMessage != null) { 
+                if (s.cpSuccessMessage != null) 
+                    swal({
+                        title: trad_string(limba, ""), text: s.cpAlertMessage,
+                        type: "success"
+                    });
+                else
+                    swal({
+                        title: trad_string(limba, ""), text: s.cpAlertMessage,
+                        type: "warning"
+                    });
                 s.cpAlertMessage = null;
+                s.cpSuccessMessage = null;
             }
 
             AdjustSize();
@@ -523,25 +530,26 @@
 
                         <dx:GridViewDataTextColumn FieldName="F10003" Name="Marca" Caption="Marca" ReadOnly="true" Width="100px" VisibleIndex="3" Settings-AutoFilterCondition="Equals" />
                         <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="250px" VisibleIndex="4" Settings-AutoFilterCondition="Contains" />
-                        <dx:GridViewDataTextColumn FieldName="EID" Name="EID" Caption="EID" ReadOnly="true" Width="100px" VisibleIndex="5" Settings-AutoFilterCondition="Equals" />
+                        <dx:GridViewDataTextColumn FieldName="Subcompania" Name="Subcompania" Caption="Subcompania" ReadOnly="true" Width="250px" VisibleIndex="5" Settings-AutoFilterCondition="Contains" />
+                        <dx:GridViewDataTextColumn FieldName="EID" Name="EID" Caption="EID" ReadOnly="true" Width="100px" VisibleIndex="6" Settings-AutoFilterCondition="Equals" />
 
-                        <dx:GridViewDataComboBoxColumn FieldName="IdAbsenta" Name="IdAbsenta" Caption="Absenta" ReadOnly="true" Width="250px" VisibleIndex="6">
+                        <dx:GridViewDataComboBoxColumn FieldName="IdAbsenta" Name="IdAbsenta" Caption="Absenta" ReadOnly="true" Width="250px" VisibleIndex="7">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                             <Settings FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data Inceput" ReadOnly="true" Width="100px" VisibleIndex="7" >
+                        <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data Inceput" ReadOnly="true" Width="100px" VisibleIndex="8" >
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data Sfarsit" ReadOnly="true" Width="100px" VisibleIndex="8" >
+                        <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data Sfarsit" ReadOnly="true" Width="100px" VisibleIndex="9" >
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="NrZile" Name="NrZile" Caption="Nr. zile" ReadOnly="true" Width="70px" VisibleIndex="9" />
-                        <dx:GridViewDataTextColumn FieldName="NumarOre" Name="NumarOre" Caption="Nr. ore" ReadOnly="true"  Width="100px" UnboundType="String" VisibleIndex="10"/>
+                        <dx:GridViewDataTextColumn FieldName="NrZile" Name="NrZile" Caption="Nr. zile" ReadOnly="true" Width="70px" VisibleIndex="10" />
+                        <dx:GridViewDataTextColumn FieldName="NumarOre" Name="NumarOre" Caption="Nr. ore" ReadOnly="true"  Width="100px" UnboundType="String" VisibleIndex="11"/>
                         <dx:GridViewDataTextColumn FieldName="NrOre" Name="NrOre" ReadOnly="true" Width="70px" Visible="false"  />
-                        <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii" Width="250px" VisibleIndex="11" >
+                        <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii" Width="250px" VisibleIndex="12" >
                             <EditFormSettings Visible="False"/>
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="NumeInlocuitor" Name="NumeInlocuitor" Caption="Inlocuitor" ReadOnly="true" Width="250px" ShowInCustomizationForm="false" VisibleIndex="12" />
+                        <dx:GridViewDataTextColumn FieldName="NumeInlocuitor" Name="NumeInlocuitor" Caption="Inlocuitor" ReadOnly="true" Width="250px" ShowInCustomizationForm="false" VisibleIndex="13" />
                         
                         <dx:GridViewDataTextColumn FieldName="TrimiteLa" Name="TrimiteLa" Caption="Tip aditional solicitare" Width="250px" VisibleIndex="14" />
                         <dx:GridViewDataTextColumn FieldName="Comentarii" Name="Comentarii" Caption="Comentarii" Width="250px" VisibleIndex="15" />

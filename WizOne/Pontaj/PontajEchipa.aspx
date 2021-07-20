@@ -542,9 +542,8 @@
                         (cmbRol.GetValue() == 3)) {
                         if (typeof grDate.cp_PoateModifica[f10003] != "undefined" && grDate.cp_PoateModifica[f10003] != null) {
                             var sir = grDate.cp_PoateModifica[f10003];
-                            var arr = sir.substring(1).split(',');
-
-                            switch (arr[ziua.replace('Ziua', '')]) {
+                            var arr = sir.substring(1).split(',');                       
+                            switch (arr[parseInt(ziua.replace('Ziua', '')) - 1]) {
                                 case "-33":
                                     swal({
                                         title: "Atentie", text: "Rolul dumneavoastra nu permite stergerea",

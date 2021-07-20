@@ -230,13 +230,12 @@
 			                      </fieldset>
                                 </td>
                  
-                                <td style="padding:0px 15px;"></td>
-
+                          
                                 <td valign="top">
-
+                              
                                     <asp:DataList ID="DateIdentificare_DataList" runat="server">            
                                         <ItemTemplate> 
-
+                                    <td valign="top">
 			                        <fieldset class="fieldset-auto-width">
 				                    <legend id="lgIdent" runat="server" class="legend-font-size">Date unice de identificare</legend>
 				                    <table id="lgIdentTable" runat="server" width="40%">	
@@ -279,7 +278,8 @@
 					                    </tr>					
 				                    </table>
 			                        </fieldset>
-
+                                    </td>
+                                     <td valign="top">
 			                        <fieldset class="fieldset-auto-width">
 				                    <legend id="lgSex" runat="server" class="legend-font-size">Data nasterii si Sex</legend>
 				                    <table id="lgSexTable" runat="server" width="60%">	
@@ -318,8 +318,8 @@
 					                    </tr>						
 				                    </table>
 			                        </fieldset>
-          
-        
+                                </td>
+                                <td valign="top">
 	
 			                        <fieldset class="fieldset-auto-width">
 				                    <legend id="lgNume" runat="server" class="legend-font-size">Nume si prenume</legend>
@@ -402,10 +402,10 @@
 				                    </table>
                                     <asp:ObjectDataSource runat="server" ID="dsStareCivila" TypeName="WizOne.Module.General" SelectMethod="GetStareCivila"/>
 			                        </fieldset>
-               
+                                        </td> 
                                         </ItemTemplate>
                                     </asp:DataList>
-                                </td> 
+                              </td>
                             </tr>
 			            </table>
 

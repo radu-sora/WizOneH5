@@ -951,7 +951,7 @@ namespace WizOne.Curs
                     /*end LeonardM 01.09.2015*/
 
 
-                    MessageBox.Show(Dami.TraduCuvant(msg.Replace("?0?-", "")), MessageBox.icoSuccess);
+                    MessageBox.Show(Dami.TraduCuvant(msg.Replace("?0?-", "")), (!msg.Contains("succes") ? MessageBox.icoWarning : MessageBox.icoSuccess));
 
                     if (msg != "" && msg.Substring(0, 4) == "?0?-")
                     {
@@ -1287,10 +1287,11 @@ namespace WizOne.Curs
                 q = General.IncarcaDT("SELECT a.* FROM \"Curs_Circuit\" a " +
                                       " LEFT JOIN  \"relGrupAngajat\" b on a.\"IdGrupAngajat\" = b.\"IdGrup\" " +
                                       " JOIN \"Curs_tblCursSesiune\" c on a.\"IdInternExtern\" = c.\"InternExtern\" " +
-                                      " WHERE F10003 = " + f10003 + " and c.\"Id\" = " + idSesiune + 
-                                      " and a.\"Super1\" = " + (idUser == f10003 ? 0 : (-1) * idSuperv) + " ORDER BY a.\"IdGrupAngajat\"", null);
+                                      " WHERE F10003 = " + f10003 + " and c.\"Id\" = " + idSesiune +
 
+                                      " AND ((a.Super1 < 0 AND a.Super1 = " + (-1) * idSuperv + ") OR (a.Super1 >= 0 AND a.Super1 = " + (idUser == f10003 ? 0 : idUser) + ")) ORDER BY a.\"IdGrupAngajat\"", null);
 
+        
                 if (q == null || q.Rows.Count <= 0)
                 {
                     msg = "?0?-Nu se poate adauga, deoarece nu exista circuit definit!";

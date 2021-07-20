@@ -56,7 +56,7 @@
             </tr>
         </table>
 
-    <table width="67%"  >
+    <table   >
         <tr>
             <td  align="center" valign="top" width="675">               
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
@@ -85,7 +85,7 @@
                     
                 </dx:ASPxGridView>
             </td>
-            <td  align="left" valign="top">
+            <td  align="left" valign="top" id="tdTotaluri" runat="server" Width="300">
                  <dx:ASPxGridView ID="grDateTotaluri"  runat="server" ClientInstanceName="grDateTotaluri" ClientIDMode="Static" AutoGenerateColumns="false" style="font-size:15px;left:auto">
                     <SettingsBehavior AllowSelectByRowClick="false" AllowFocusedRow="false" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="false" ColumnResizeMode="Control"  />
                     <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />

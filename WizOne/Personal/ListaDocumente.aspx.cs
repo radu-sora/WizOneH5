@@ -27,6 +27,15 @@ namespace WizOne.Personal
                         case "btnDocPersonal":
                             idButon = "1";
                             break;
+                        case "btnRapCM":
+                            idButon = "2";
+                            break;
+                    }
+
+                    if (idButon == "2")
+                    {
+                        GridViewDataTextColumn colId = (grDate.Columns["Id"] as GridViewDataTextColumn);
+                        colId.Visible = false;
                     }
 
                     string strSql = "";

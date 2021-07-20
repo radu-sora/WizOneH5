@@ -15,6 +15,7 @@
             Omniasig = 16,
             Generali = 17,
 			Harting = 18,
+            Garrett = 19,
             Pelifilip = 20,
             Claim = 21,
             Dnata = 22,

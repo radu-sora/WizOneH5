@@ -24,15 +24,6 @@ namespace WizOne.Curs
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
 
         /// <summary>
-        /// btnSave control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSave;
-
-        /// <summary>
         /// btnExit control.
         /// </summary>
         /// <remarks>

@@ -30,24 +30,27 @@ namespace WizOne.Module
             public double bpsTOTALRON6;
             public double AMBP_Total;
             public double bpsTOTAL6e;
-            public int Medie7;
+            public double Medie7;
             public int zl12;
         }
 
 
-        public static void CreateDetails(int marca, string strCNP_marci, out double Medie6, out double BCCM, out int ZBCCM)
+        public static void CreateDetails(int marca, string strCNP_marci, int optiune, out double Medie6, out double BCCM, out int ZBCCM, out double MNTZ, out bool bAreStagiu)
         {
 
             Medie6 = 0;
             BCCM = 0;
             ZBCCM = 0;
+            MNTZ = 0;
+            bAreStagiu = false;
             try
             {
 
-                double dblBPS, dblBPSRON, dblBPS6 = 0, dblBPSRON6 = 0, dblMedieZilnica, dblMedieZilnica6 /*dblCol11*/;
+                double dblBPS = 0, dblBPSRON = 0, dblBPS6 = 0, dblBPSRON6 = 0, dblMedieZilnica, dblMedieZilnica6 /*dblCol11*/;
                 bool calculez, bAllowRedistr;
 
-                //bool bAreStagiu = false;
+                double BazaCalcul1, BazaCalcul2;
+                int NumarZileBazaCalcul;
 
                 //int nZileLunaCurentaPropusa;
 
@@ -55,14 +58,15 @@ namespace WizOne.Module
                 double Medie10;
 
                 //'dblCol11 = 0
-                double nTZS = 0, nTZS6 = 0, SumaZile12 = 0, SumaDblRON, SumaDbl;
+                double nTZS = 0, nTZS6 = 0, SumaZile12 = 0, SumaDblRON = 0, SumaDbl = 0;
                 int nStageCount = 0;
 
                 int nTmp, nTmp1, nTmpTZSLuna, TmpZileLucrate, TmpZileCM, TmpZileLuna, zileLucrate10 = 0, nrzileCM10 = 0, nrZileLuna10 = 0;
+                int countLuniMNTZ = 0, countZileMNTZ = 0;
 
                 //string szTxtMedieZilnica6_10, szValMedieZilnica6_10, szTmpTxt;
 
-          
+
                 int[] zileLucrate = new int[13];
                 int[] nrzileCM = new int[13];
                 int[] nrzileLuna = new int[13], zileRedistribDebug= new int[13];
@@ -72,6 +76,7 @@ namespace WizOne.Module
 
                 double[] BCCAS = new double[13];
                 double[] VALCM = new double[13];
+                double[] VALCM_AMBP = new double[13];                
                 double[] SumaZi = new double[13], SumaZiRON= new double[12], ardTOTAL = new double[13];
 
                 int i, j, nLunaFractionata;
@@ -123,7 +128,8 @@ namespace WizOne.Module
                     szPP += " + " + szZAMBP;
                 }
 
-                szCASTOT = lista["BASS"].Replace("F200", "F920");
+                if (lista.ContainsKey("BASS") && lista["BASS"].Length > 0)
+                    szCASTOT = lista["BASS"].Replace("F200", "F920");
 
                 string sql = " SELECT F01011, F01012 FROM F010";
                 DataTable dt010 = General.IncarcaDT(sql, null);
@@ -168,17 +174,17 @@ namespace WizOne.Module
                 }
                 else
                 {
-                    szsql = "SELECT COUNT(*) AS CNT FROM tempdb.sys.objects where name like '#TMP_" + marca + "_CM%'";
+                    szsql = "SELECT COUNT(*) AS CNT FROM sys.objects where name like 'TMP_" + marca + "_CM%'";
                     DataTable dtTemp = General.IncarcaDT(szsql, null);
                     if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && Convert.ToInt32(dtTemp.Rows[0][0].ToString()) > 0)
                     {
-                        szsql = "TRUNCATE TABLE #TMP_" + marca + "_CM";
+                        szsql = "TRUNCATE TABLE TMP_" + marca + "_CM";
                         General.ExecutaNonQuery(szsql, null);
-                        szsql = "DROP TABLE #TMP_" + marca + "_CM";
+                        szsql = "DROP TABLE TMP_" + marca + "_CM";
                         General.ExecutaNonQuery(szsql, null);
                     }
 
-                    szsql = "CREATE TABLE #TMP_" + marca + "_CM";
+                    szsql = "CREATE TABLE TMP_" + marca + "_CM";
                     szsql += " (LUNA NUMERIC(10,0),";
                     szsql += " AN NUMERIC(10,0),";
                     szsql += " SUM1_NN NUMERIC(22,5),";
@@ -192,7 +198,7 @@ namespace WizOne.Module
 
                     General.ExecutaNonQuery(szsql, null);
 
-                    szsql = "INSERT INTO #TMP_" + marca + "_CM (LUNA, AN, SUM1_NN, SUM2_PP, SUM3_BCCAS_2017, SUM3_BCCAS_2018, SUM4_CASTOT_2017, SUM4_CASTOT_2018)";
+                    szsql = "INSERT INTO TMP_" + marca + "_CM (LUNA, AN, SUM1_NN, SUM2_PP, SUM3_BCCAS_2017, SUM3_BCCAS_2018, SUM4_CASTOT_2017, SUM4_CASTOT_2018)";
                     szsql += " SELECT F06905, F06904, 0, 0, 0, 0, 0, 0 FROM";
                     szsql += " (SELECT ROW_NUMBER() OVER (ORDER BY F06904 DESC, F06905 DESC) AS RN, F06905, F06904";
                     szsql += " From F069, F010";
@@ -203,7 +209,27 @@ namespace WizOne.Module
                     General.ExecutaNonQuery(szsql, null);
                 }
 
-                string szBCCAS_2017, szCASTOT_2017 = "", szBCCAS_2018, szCASTOT_2018 = "";
+                // din 2018 nu mai am SOMA am doar CASIGM
+                string szBCCAS_2017, szCASTOT_2017, szBCCAS_2018, szCASTOT_2018, szSOM_T_V, szSOM_T_Q, mesaj_Somaj, mesaj_Somaj1;
+                //somaj tehnic pandemie :((
+                szSOM_T_V = "F92004306";
+                szSOM_T_Q = "F92004305";
+                szsql = "SELECT F73102 FROM F731 WHERE F73104='V somaj tehnic plaf'";
+                DataTable rs = General.IncarcaDT(szsql, null);
+                if (rs != null && rs.Rows.Count > 0)
+                    szSOM_T_V = "F92004" + (Convert.ToInt32(rs.Rows[0]["F73102"].ToString()) >= 41 ? (Convert.ToInt32(rs.Rows[0]["F73102"].ToString()) + 59).ToString() : "0" + (Convert.ToInt32(rs.Rows[0]["F73102"].ToString()) + 59).ToString());
+
+                szsql = "SELECT F73102 FROM F731 WHERE F73104='Q somaj tehnic plaf'";
+                rs = General.IncarcaDT(szsql, null);
+                if (rs != null && rs.Rows.Count > 0)
+                    szSOM_T_Q = "F92004" + (Convert.ToInt32(rs.Rows[0]["F73102"].ToString()) >= 41 ? (Convert.ToInt32(rs.Rows[0]["F73102"].ToString()) + 59).ToString() : "0" + (Convert.ToInt32(rs.Rows[0]["F73102"].ToString()) + 59).ToString());
+
+                //lungime mesaj 168
+                //mesaj_Somaj = "Angajatul a avut in urmatoarele luni somaj tehnic suportat din bugetul de somaj, pentru aceste zile se ia in calcul valoarea salariului minim aferent perioadei de somaj";
+                //mesaj_Somaj1 = "   SOMAJ TEHNIC";    // lungime 15
+
+
+                szBCCAS_2017 = ""; szCASTOT_2017 = ""; szBCCAS_2018 = ""; szCASTOT_2018 = "";
                 if (szBazaCMFUNASS.Length > 4)
                 {
                     //szBCCAS = " 0 ";
@@ -268,14 +294,14 @@ namespace WizOne.Module
                 }
                 else
                 {
-                    szsql = ";MERGE #TMP_" + marca + "_CM USING (SELECT MONTH, YEAR, SUM(" + szNN + ") AS S1, SUM(" + szPP + ") AS S2, ";
+                    szsql = ";MERGE TMP_" + marca + "_CM USING (SELECT MONTH, YEAR, SUM(" + szNN + ") AS S1, SUM(" + szPP + ") AS S2, ";
                     szsql += " SUM(" + szBCCAS_2017 + ") AS S37, SUM(" + szBCCAS_2018 + ") AS S38, SUM(" + szCASTOT_2017 + ") AS S47, SUM(" + szCASTOT_2018 + ") AS S48 ";
                     szsql += " FROM F920 WHERE F92003 IN (" + strCNP_marci + ") GROUP BY MONTH, YEAR) ta ON (ta.MONTH = LUNA AND ta.YEAR = AN) ";
                     szsql += " WHEN MATCHED THEN ";
                     szsql += " UPDATE SET SUM1_NN = S1, SUM2_PP = S2, SUM3_BCCAS_2017 = S37, SUM4_CASTOT_2017 = S47, SUM3_BCCAS_2018 = S38, SUM4_CASTOT_2018 = S48;";
                     General.ExecutaNonQuery(szsql, null);
 
-                    szsql = ";MERGE #TMP_" + marca + "_CM USING (SELECT MONTH, YEAR, SUM(ZILE_NN) AS S1, SUM(ZILE_PP) AS S2, SUM(BAZA_MEDIE_CM)  As S4 ";
+                    szsql = ";MERGE TMP_" + marca + "_CM USING (SELECT MONTH, YEAR, SUM(ZILE_NN) AS S1, SUM(ZILE_PP) AS S2, SUM(BAZA_MEDIE_CM)  As S4 ";
                     szsql += " FROM F9_ISTORICVENITURI WHERE MARCA IN (" + strCNP_marci + ") GROUP BY MONTH, YEAR) ta ON (ta.MONTH = LUNA AND ta.YEAR = AN) ";
                     szsql += " WHEN MATCHED THEN UPDATE SET SUM1_NN = SUM1_NN + S1, SUM2_PP = SUM2_PP + S2, ";
                     szsql += " SUM4_CASTOT_2017 = SUM4_CASTOT_2017 + S4, SUM4_CASTOT_2018 = SUM4_CASTOT_2018 + S4;";
@@ -338,17 +364,32 @@ namespace WizOne.Module
                     }
                     else
                     {
-                        szsql = "SELECT SUM1_NN, SUM2_PP, CASE WHEN AN < 2018 THEN SUM3_BCCAS_2017 else SUM3_BCCAS_2018 END, CASE WHEN AN < 2018 THEN SUM4_CASTOT_2017 else SUM4_CASTOT_2018 END ";
-                        szsql += " FROM #TMP_" + marca + "_CM WHERE AN = " + year + " AND LUNA = " + month;
+                        //szsql = "SELECT SUM1_NN, SUM2_PP, CASE WHEN AN < 2018 THEN SUM3_BCCAS_2017 else SUM3_BCCAS_2018 END, CASE WHEN AN < 2018 THEN SUM4_CASTOT_2017 else SUM4_CASTOT_2018 END ";
+                        //szsql += " FROM #TMP_" + marca + "_CM WHERE AN = " + year + " AND LUNA = " + month;
+
+                        szsql = "SELECT SUM1_NN, SUM2_PP, A, B + ROUND(SUM_SOM_T_V, 0), SOM_T, ROUND(SUM_SOM_T, 0) - ROUND(SUM_SOM_T_V, 0) From (";
+                        szsql += " SELECT SUM1_NN, SUM2_PP, CASE WHEN AN < 2018 THEN SUM3_BCCAS_2017 ELSE SUM3_BCCAS_2018 END AS A,";
+                        szsql += " CASE WHEN AN < 2018 THEN SUM4_CASTOT_2017 ELSE SUM4_CASTOT_2018 END AS B,";
+                        szsql += " SUM(CASE WHEN ISNULL(" + szSOM_T_V + ",0) > 0 THEN F06911/F06907 * " + szSOM_T_Q + " ELSE 0 END) AS SUM_SOM_T,";
+                        szsql += " SUM(CASE WHEN ISNULL(" + szSOM_T_V + ",0) > 0 THEN 1 ELSE 0 END) AS SOM_T, SUM(ISNULL(" + szSOM_T_V + ", 0)) AS SUM_SOM_T_V ";
+                        szsql += " FROM TMP_" + marca + "_CM LEFT JOIN F920 ON YEAR = AN AND MONTH = LUNA AND F92003 IN (" + strCNP_marci + "), F069 WHERE AN = " + year + " AND LUNA = " + month + " AND F06904 = AN AND F06905 = LUNA ";
+                        szsql += " GROUP BY SUM1_NN, SUM2_PP, CASE WHEN AN < 2018 THEN SUM3_BCCAS_2017 ELSE SUM3_BCCAS_2018 END,";
+                        szsql += " CASE WHEN AN < 2018 THEN SUM4_CASTOT_2017 ELSE SUM4_CASTOT_2018 END ) tab";
                     }
 
                     DataTable dt = General.IncarcaDT(szsql, null);
 
+                    if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][4] != null && dt.Rows[0][4].ToString() == "1")                 
+                    {
+                        //mesaj_Somaj = mesaj_Somaj + (mesaj_Somaj.Length > 168 ? ", " : ": ") + (month < 10 ? "0" : "") + month + "." + year;
+                        //mesaj_Somaj1 = mesaj_Somaj1 + (mesaj_Somaj1.Length > 15 ? ", " : ": ") + (month < 10 ? "0" : "") + month + "." + year;
+                    }
+
                     switch (i)
                     {
                         case 6:
-                            zileLucrate6 = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][0].ToString()) : 0);
-                            nrzileCM6 = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][1].ToString()) : 0);
+                            zileLucrate6 = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][0].ToString()) : 0);
+                            nrzileCM6 = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][1].ToString()) : 0);
                             nrZileLuna6 = nTmp;
 
                             zileLucrate[i] = zileLucrate6;
@@ -357,13 +398,15 @@ namespace WizOne.Module
 
                             BCCAS[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][2] != null && dt.Rows[0][2].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][2].ToString()) : 0);
                             VALCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][3] != null && dt.Rows[0][3].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][3].ToString()) : 0);
+                            VALCM_AMBP[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][5] != null && dt.Rows[0][5].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][5].ToString()) : 0);
+                       
 
                             if (nZileLunaCurenta == 0 || nchkMedie6Luni == 2)
                             {
                                 arCM.zl[i] = nTmp;
                                 nrzileLuna[i] = nTmp;
-                                zileLucrate[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][0].ToString()) : 0);
-                                nrzileCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][1].ToString()) : 0);
+                                zileLucrate[i] = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][0].ToString()) : 0);
+                                nrzileCM[i] = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][1].ToString()) : 0);
                             }
                             else
                             {
@@ -406,24 +449,25 @@ namespace WizOne.Module
                                 arCM.total[i] = (int)(zileLucrate[i] * SumaZi[i]);
                             break;
                         case 2:
-                            zileLucrate10 = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][0].ToString()) : 0);
-                            nrzileCM10 = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][1].ToString()) : 0);
+                            zileLucrate10 = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][0].ToString()) : 0);
+                            nrzileCM10 = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][1].ToString()) : 0);
                             nrZileLuna10 = nTmp;
 
 
-                            zileLucrate[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][0].ToString()) : 0);
-                            nrzileCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][1].ToString()) : 0);
+                            zileLucrate[i] = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][0].ToString()) : 0);
+                            nrzileCM[i] = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][1].ToString()) : 0);
 
 
-                            BCCAS[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][2] != null && dt.Rows[0][2].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][2].ToString()) : 0);
-                            VALCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][3] != null && dt.Rows[0][3].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][3].ToString()) : 0);
+                            BCCAS[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][2] != null && dt.Rows[0][2].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][2].ToString()) : 0);
+                            VALCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][3] != null && dt.Rows[0][3].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][3].ToString()) : 0);
+                            VALCM_AMBP[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][5] != null && dt.Rows[0][5].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][5].ToString()) : 0);
 
                             if (nZileLunaCurenta == 0 || nchkMedie6Luni == 1)
                             {
                                 arCM.zl[i] = nTmp;
                                 nrzileLuna[i] = nTmp;
-                                zileLucrate[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][0].ToString()) : 0);
-                                nrzileCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][0].ToString()) : 0);
+                                zileLucrate[i] = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][0].ToString()) : 0);
+                                nrzileCM[i] = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][0].ToString()) : 0);
                             }
                             else
                             {
@@ -471,14 +515,14 @@ namespace WizOne.Module
 
                             break;
                         case 12:
-                            zileLucrate[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][0].ToString()) : 0);
-                            nrzileCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][1].ToString()) : 0);
+                            zileLucrate[i] = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][0].ToString()) : 0);
+                            nrzileCM[i] = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][1].ToString()) : 0);
 
                             if (nZileLunaCurenta == 0)
                             {
                                 arCM.zl[i] = nTmp;
                                 nrzileLuna[i] = nTmp;
-                                nrzileCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][1].ToString()) : 0);
+                                nrzileCM[i] =(int) (dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][1].ToString()) : 0);
                             }
                             else
                             {
@@ -508,8 +552,9 @@ namespace WizOne.Module
                             arCM.stComplet[i] = arCM.zl[i] == arCM.tzs[i] ? "DA" : arCM.zl[i] > arCM.tzs[i] ? "NU" : "DA (Err)";
 
 
-                            BCCAS[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][2] != null && dt.Rows[0][2].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][2].ToString()) : 0);
-                            VALCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][3] != null && dt.Rows[0][3].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][3].ToString()) : 0);
+                            BCCAS[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][2] != null && dt.Rows[0][2].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][2].ToString()) : 0);
+                            VALCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][3] != null && dt.Rows[0][3].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][3].ToString()) : 0);
+                            VALCM_AMBP[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][5] != null && dt.Rows[0][5].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][5].ToString()) : 0);
 
                             if (nZileLunaCurenta == 0)
                                 arCM.total[i] = (int)(BCCAS[i] + VALCM[i]);
@@ -520,8 +565,8 @@ namespace WizOne.Module
                             arCM.zl[i] = nTmp;
                             nrzileLuna[i] = nTmp;
 
-                            zileLucrate[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][0].ToString()) : 0);
-                            nrzileCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][1].ToString()) : 0);
+                            zileLucrate[i] = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][0].ToString()) : 0);
+                            nrzileCM[i] = (int)(dt != null && dt.Rows.Count > 0 && dt.Rows[0][1] != null && dt.Rows[0][1].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][1].ToString()) : 0);
 
                             if (zileLucrate[i] + nrzileCM[i] > nTmp)
                                 zileLucrate[i] = nTmp - nrzileCM[i];
@@ -542,8 +587,9 @@ namespace WizOne.Module
                             arCM.zileLucrate[i] = zileLucrate[i];
                             arCM.nrzileCM[i] = nrzileCM[i];
 
-                            BCCAS[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][2] != null && dt.Rows[0][2].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][2].ToString()) : 0);
-                            VALCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][3] != null && dt.Rows[0][3].ToString().Length > 0 ? Convert.ToInt32(dt.Rows[0][3].ToString()) : 0);
+                            BCCAS[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][2] != null && dt.Rows[0][2].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][2].ToString()) : 0);
+                            VALCM[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][3] != null && dt.Rows[0][3].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][3].ToString()) : 0);
+                            VALCM_AMBP[i] = (dt != null && dt.Rows.Count > 0 && dt.Rows[0][5] != null && dt.Rows[0][5].ToString().Length > 0 ? Convert.ToDouble(dt.Rows[0][5].ToString()) : 0);
 
                             if (arCM.tzs[i] != 0)
                                 SumaZi[i] = (BCCAS[i] + VALCM[i]) / arCM.tzs[i];
@@ -552,6 +598,29 @@ namespace WizOne.Module
 
                             arCM.total[i] = (int)(BCCAS[i] + VALCM[i]);
                             break;
+                    }
+
+
+                    if (i > 12 - 10)
+                    {
+                        if ((year > 2005) || (year == 2005 && month >= 7))
+                        {
+                            //arCM.bps[i] = "-";
+                            arCM.bpsRON[i] = TestBazaCalcul(year, month, i, arCM);
+                            dblBPSRON = dblBPSRON + arCM.bpsRON[i];
+                        }
+                        else
+                        {
+                            arCM.bpsRON[i] = 0;
+                            arCM.bps[i] = TestBazaCalcul(year, month, i, arCM);
+                            dblBPS = dblBPS + arCM.bps[i];
+                        }
+
+                    }
+                    else
+                    {
+                        //arCM.bps[i] = "-";
+                        arCM.bpsRON[i] = 0;
                     }
 
                     if (i > 12 - 6)
@@ -588,6 +657,7 @@ namespace WizOne.Module
                     zileRedistribDebug[i] = 0;
                 }
 
+                //calcul zile de redistribuit
                 if (nZileLunaCurenta == 0)
                 {
                     for (i = 12; i >= 1; i--)
@@ -598,7 +668,7 @@ namespace WizOne.Module
                 }
                 else
                 {
-                    for (i = 12; i >= 1; i--)
+                    for (i = 11; i >= 1; i--)
                         if (arCM.tzs[i] > 0 || (arCM.tzs[i] == 0 && (ExistZileStagiu(i, arCM) == true)))
                             if ((i > 6 && nchkMedie6Luni == 1) || (i > 2 && nchkMedie6Luni == 2))
                                 if (arCM.zl[i] >= arCM.tzs[i])
@@ -983,110 +1053,135 @@ namespace WizOne.Module
 
                     if (szBazaCMFUNASS.Length > 4)
                     {
-                    //    if (Not IsNumeric(arCM.total[i])) 
-                    //    {
-                    //arCM.AMBP[i] = "-";
-                    //    }
-                    //    else
-                    //    {
-                        switch (arCM.an[i])
-                        {
-                            case 2015:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2014:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2013:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2012:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2011:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2010:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2009:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2008:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2007:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                            case 2006:
-                                if (arCM.luna[i] <= 10)
-                                    arCM.AMBP[i] = arCM.total[i];
-                                else
+                        if (arCM.total[i] <= 0)
+                            arCM.AMBP[i] = 0;
+                        //    if (Not IsNumeric(arCM.total[i])) 
+                        //    {
+                        //arCM.AMBP[i] = "-";
+                        //    }
+                        //    else
+                        //    {
+                        else
+                            switch (arCM.an[i])
+                            {
+                                case 2015:
                                     arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2014:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2013:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2012:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2011:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2010:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2009:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2008:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2007:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                                case 2006:
+                                    if (arCM.luna[i] <= 10)
+                                        arCM.AMBP[i] = arCM.total[i];
+                                    else
+                                        arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
 
-                                break;
-                            default:
-                                arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
-                                break;
-                        }
+                                    break;
+                                default:
+                                    arCM.AMBP[i] = (arCM.total[i] > valSalM ? valSalM : arCM.total[i]);
+                                    break;
+                            }
                 //}
                     }
                     else
                     {
-                //if (Not IsNumeric(arCM.bpsRON[i])) 
-                //        {
-                //    arCM.AMBP[i] = "-";
-                //}
-                //        else
-                //        {
-                        switch (arCM.an[i])
-                        {
-                            case 2015:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2014:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2013:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2012:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2011:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2010:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2009:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2008:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2007:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
-                            case 2006:
-                                if (arCM.luna[i] <= 10)
-                                    arCM.AMBP[i] = arCM.bpsRON[i];
-                                else
+                        if (arCM.bpsRON[i] <= 0)
+                            arCM.AMBP[i] = 0;
+                        //if (Not IsNumeric(arCM.bpsRON[i])) 
+                        //        {
+                        //    arCM.AMBP[i] = "-";
+                        //}
+                        //        else
+                        //        {
+                        else
+                            switch (arCM.an[i])
+                            {
+                                case 2015:
                                     arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2014:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2013:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2012:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2011:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2010:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2009:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2008:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2007:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
+                                case 2006:
+                                    if (arCM.luna[i] <= 10)
+                                        arCM.AMBP[i] = arCM.bpsRON[i];
+                                    else
+                                        arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
 
-                                break;
-                            default:
-                                arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
-                                break;
+                                    break;
+                                default:
+                                    arCM.AMBP[i] = (arCM.bpsRON[i] > valSalM ? valSalM : arCM.bpsRON[i]);
+                                    break;
 
 
-                        }
+                            }
 
                 //}
                     }
             //arCM.AMBP[i] = Format(arCM.AMBP[i], "#,##0.00");
             if (calculez)
                 arCM.AMBP_Total = Convert.ToDouble(arCM.AMBP_Total +  arCM.AMBP[i]);
+
+            if (i > 6)
+            {
+                if (arCM.tzs[i] > 0)
+                {
+                    countLuniMNTZ = countLuniMNTZ + 1;
+                    countZileMNTZ = countZileMNTZ + arCM.tzs[i];
+                    MNTZ = MNTZ + arCM.AMBP[i];
+                }
+            }
+            else
+            {
+                if (countLuniMNTZ < 6 && arCM.tzs[i] > 0)
+                {
+                    countLuniMNTZ = countLuniMNTZ + 1;
+                    countZileMNTZ = countZileMNTZ + arCM.tzs[i];
+                    MNTZ = MNTZ + arCM.AMBP[i];
+                }
+            }
 
         }
 
@@ -1098,12 +1193,12 @@ namespace WizOne.Module
          //arCM.total[i] = Format(arCM.total[i], "#,##0.00");
         //arCM.bps[i] = Format(arCM.bps[i], "#,##0.00");
                        
-         //if (arCM.bpsRON[i] != "-" )
-           // arCM.bpsRON[i] = Format(arCM.bpsRON[i], "#,##0.00");
+         if (arCM.bpsRON[i] != 0 )
+            arCM.bpsRON[i] = arCM.bpsRON[i];
           
                 
          //if InStr(1, arCM.bpsRON[i], ".", vbTextCompare) = Len(arCM.bpsRON[i])
-         //   arCM.bpsRON[i] = Format(arCM.bpsRON[i], "#,##0.00");
+         //   arCM.bpsRON[i] = arCM.bpsRON[i];
 
 
 
@@ -1151,14 +1246,14 @@ namespace WizOne.Module
        
     if (nchkMedie6Luni == 1) 
         {
-         //if (tCol7 >= 22)
-         //    bAreStagiu = true;
-         //   else
-         //   {
-         //    bAreStagiu = false;
-         //   }
-            
-            long nrluc;
+            if (zileDiff_Stagiu_ZL <= 0)
+                bAreStagiu = true;
+            else
+            {
+                bAreStagiu = false;
+            }
+
+                    long nrluc;
             if (nrluni_stagiu == 1) 
                 nrluc = zile_lucratoare_ul;
             else
@@ -1166,27 +1261,29 @@ namespace WizOne.Module
            
             if (zile_lucrate_12 < nrluc) 
             {
-                //arCM.Label62.Visible = true;
-               // if (nrluni_stagiu == 1) 
-                    //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_ul & " de zile lucratoare in ultima luna ! (stagiu valabil pana la 01.07.2018 cf. Ordin 8/2018 din MO 190/2018)"
-               // else
-                    //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_6 & " de zile lucratoare in ultimele 6 luni !"
-                
-                //stagiu_print = "NU";
-            }
+                        bAreStagiu = false;
+                        //arCM.Label62.Visible = true;
+                        // if (nrluni_stagiu == 1) 
+                        //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_ul & " de zile lucratoare in ultima luna ! (stagiu valabil pana la 01.07.2018 cf. Ordin 8/2018 din MO 190/2018)"
+                        // else
+                        //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_6 & " de zile lucratoare in ultimele 6 luni !"
+
+                        //stagiu_print = "NU";
+                    }
             else
             {
-                //arCM.Label62.Visible = false;
-                //stagiu_print = "DA";
-            }
+                        bAreStagiu = true;
+                        //arCM.Label62.Visible = false;
+                        //stagiu_print = "DA";
+                    }
         
          arCM.tzsTotal6 = nTZS6;
         
          arCM.bpsTOTAL6 = dblBPS6;
-         //arCM.bpsTOTAL6 = Format(arCM.bpsTOTAL6, "#,##0.00");
+         arCM.bpsTOTAL6 = Convert.ToDouble(arCM.bpsTOTAL6.ToString("#,##0.00"));
         
          arCM.bpsTOTALRON6 = dblBPSRON6;
-         //arCM.bpsTOTALRON6 = Format(arCM.bpsTOTALRON6, "#,##0.00");
+         arCM.bpsTOTALRON6 = Convert.ToDouble(arCM.bpsTOTALRON6.ToString("#,##0.00"));
         
             // if (SumaDblRON > 0)          
                 //arCM.total = Format(CDbl(Format(dblBPS6 / 10000, "#,##0")), "#,##0.0000") & " + " & Format(dblBPSRON6, "#,##0.0000") & " = " & Format(SumaDbl, "#,##0.0000")
@@ -1201,14 +1298,16 @@ namespace WizOne.Module
          //szTxtMedieZilnica6_10 = "Media zilnica pentru CM propusa la 6 luni:"
          if (nTZS6 != 0) 
         {
-             //if (SumaDblRON > 0) 
-               //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
-               // else
-               //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
-               
-            //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
-            
-             //Medie6 = CDbl(Format(SumaDbl / nTZS6, "#,##0.00"))
+                //if (SumaDblRON > 0)
+                //    szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
+                //    else
+                //    szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
+
+
+                //    szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS6 & " = " & Format(SumaDbl / nTZS6, "#,##0.00")
+
+
+                Medie6 = Convert.ToDouble((SumaDbl / nTZS6).ToString("#,##0.00"));
             }
             else
         {
@@ -1230,28 +1329,33 @@ namespace WizOne.Module
                 nrluc = zile_lucratoare_ul;
             else
                 nrluc = zile_lucratoare_6;
-           
 
-            //if (zile_lucrate_12 < nrluc) 
-                //arCM.Label62.Visible = True
-               // if (nrluni_stagiu == 1) 
-                    //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_ul & " de zile lucratoare in ultima luna ! (stagiu valabil pana la 01.07.2018 cf. Ordin 8/2018 din MO 190/2018)"
-               // else
-                    //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_6 & " de zile lucratoare in ultimele 6 luni !"
-               
-                //stagiu_print = "NU"
-           // else
-                //arCM.Label62.Visible = False
-                //stagiu_print = "DA"
-          
-            
-         arCM.tzsTotal6 = nTZS;
+
+                    if (zile_lucrate_12 < nrluc)
+                    {
+                        //arCM.Label62.Visible = True
+                        // if (nrluni_stagiu == 1) 
+                        //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_ul & " de zile lucratoare in ultima luna ! (stagiu valabil pana la 01.07.2018 cf. Ordin 8/2018 din MO 190/2018)"
+                        // else
+                        //arCM.Label62 = "ATENTIE ! Angajatul are stagiu " & zile_lucrate_12 & " zile in ultimele 12 luni, mai mic decat necesarul de " & zile_lucratoare_6 & " de zile lucratoare in ultimele 6 luni !"
+
+                        //stagiu_print = "NU"
+                        bAreStagiu = false;
+                    }
+                    else
+                    {
+                        //arCM.Label62.Visible = False
+                        //stagiu_print = "DA"
+                        bAreStagiu = true;
+                    }
+
+                        arCM.tzsTotal6 = nTZS;
         
-         arCM.bpsTOTAL6e = dblBPS;
-       // arCM.bpsTOTAL6").Value = Format(arCM.bpsTOTAL6").Value, "#,##0.00")
+         arCM.bpsTOTAL6 = dblBPS;
+         arCM.bpsTOTAL6 = Convert.ToDouble(arCM.bpsTOTAL6.ToString("#,##0.00"));
              
          arCM.bpsTOTALRON6 = dblBPSRON;
-      // arCM.bpsTOTALRON6 = Format(arCM.bpsTOTALRON6").Value, "#,##0.00")
+         arCM.bpsTOTALRON6 = Convert.ToDouble(arCM.bpsTOTALRON6.ToString("#,##0.00"));
              
          //if (SumaDblRON > 0) 
           // arCM.TOTAL.Caption = Format(CDbl(Format(dblBPS / 10000, "#,##0")), "#,##0.0000") & " + " & Format(dblBPSRON, "#,##0.0000") & " = " & Format(SumaDbl, "#,##0.0000")
@@ -1265,13 +1369,13 @@ namespace WizOne.Module
         // szTxtMedieZilnica6_10 = "Media zilnica pentru CM propusa la 10 luni:"
          if (nTZS != 0) 
         {
-             //if (SumaDblRON > 0) 
-               //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
-                //else
-              // szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
-                
-             //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
-             //Medie10 = CDbl(Format(SumaDbl / nTZS, "#,##0.0000"))
+                        //if (SumaDblRON > 0) 
+                        //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
+                        //else
+                        // szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
+
+                        //szValMedieZilnica6_10 = Format(SumaDbl, "#,##0.00") & " / " & nTZS & " = " & Format(SumaDbl / nTZS, "#,##0.00")
+                        Medie10 = Convert.ToDouble((SumaDbl / nTZS).ToString("#,##0.0000"));
             
               }
             else
@@ -1281,39 +1385,43 @@ namespace WizOne.Module
             }
     
        }
-    
-     //arCM.fld_Medie6.Text = szValMedieZilnica6_10
-    
-     //   'Linii doar ptr teste
-     //szTmpTxt = "Linii : "
-     //For i = 12 To 1 Step -1
-     //    if (bUseLineDebug[i] = True) Then
-     //        szTmpTxt = szTmpTxt & "  L_" & CStr[i] & "=" & CStr(zileRedistribDebug[i]) & " "
-     //       End if
-     //Next i
 
-    // arCM.Label47.Caption = szTmpTxt
-    
-     //if (nchkMedie6Luni == 1) 
-     //    //arCM.Label49.Caption = "ZL = " & CStr(nStageCount_ZL_6) & "  TZS = " & CStr(nStageCount_TZS_6)
-     //   else
-     //    //arCM.Label49.Caption = "ZL = " & CStr(nStageCount_ZL_10) & "  TZS = " & CStr(nStageCount_TZS_10)
-        
-       
-     //    arCM.Medie7 = 0;
-     //     if (arCM.tzsTotal6 > 0) 
-     //       arCM.Medie7 = Convert.ToDouble(arCM.AMBP_Total / arCM.tzsTotal6);
-     //     Medie7 = CDbl(arCM.Medie7;
-         
-        //arCM.Medie7 = Format(CDbl(arCM.AMBP_Total").Value), "#,##0.00") & " / " & Format(arCM.tzsTotal6").Value, "#,##0") & " = " & Format(arCM.Medie7").Value, "#,##0.00")
-       // 'Linii doar ptr teste
-       
- 
-        //if (szBazaCMAMBP.Length > 4) 
-        //    Call CreateDetails1(nMarca, strCNP_marci)
-     
-            
-        
+                //arCM.fld_Medie6.Text = szValMedieZilnica6_10
+
+                //   'Linii doar ptr teste
+                //szTmpTxt = "Linii : "
+                //For i = 12 To 1 Step -1
+                //    if (bUseLineDebug[i] = True) Then
+                //        szTmpTxt = szTmpTxt & "  L_" & CStr[i] & "=" & CStr(zileRedistribDebug[i]) & " "
+                //       End if
+                //Next i
+
+                // arCM.Label47.Caption = szTmpTxt
+
+                //if (nchkMedie6Luni == 1) 
+                //    //arCM.Label49.Caption = "ZL = " & CStr(nStageCount_ZL_6) & "  TZS = " & CStr(nStageCount_TZS_6)
+                //   else
+                //    //arCM.Label49.Caption = "ZL = " & CStr(nStageCount_ZL_10) & "  TZS = " & CStr(nStageCount_TZS_10)
+
+
+                //    arCM.Medie7 = 0;
+                //     if (arCM.tzsTotal6 > 0) 
+                //       arCM.Medie7 = Convert.ToDouble(arCM.AMBP_Total / arCM.tzsTotal6);
+                //     Medie7 = CDbl(arCM.Medie7;
+
+                //arCM.Medie7 = Format(CDbl(arCM.AMBP_Total").Value), "#,##0.00") & " / " & Format(arCM.tzsTotal6").Value, "#,##0") & " = " & Format(arCM.Medie7").Value, "#,##0.00")
+                // 'Linii doar ptr teste
+
+
+                //if (szBazaCMAMBP.Length > 4) 
+                //    Call CreateDetails1(nMarca, strCNP_marci)
+
+                if (countLuniMNTZ > 0)
+                    MNTZ = countZileMNTZ / countLuniMNTZ;
+                else
+                    MNTZ = 0;   
+
+
                 if (Constante.tipBD == 2) 
                 {
                     szsql = "SELECT COUNT(*) AS CNT FROM USER_TABLES WHERE TABLE_NAME = 'TMP_" + marca + "_CM'";
@@ -1328,13 +1436,13 @@ namespace WizOne.Module
                 }
                 else
                 {
-                    szsql = "SELECT COUNT(*) AS CNT FROM tempdb.sys.objects where name like '#TMP_" + marca + "_CM%'";
+                    szsql = "SELECT COUNT(*) AS CNT FROM tempdb.sys.objects where name like 'TMP_" + marca + "_CM%'";
                     DataTable dtTmp = General.IncarcaDT(szsql, null);
                     if (dtTmp != null && dtTmp.Rows.Count > 0 && dtTmp.Rows[0][0] != null && dtTmp.Rows[0][0].ToString().Length > 0)
                     {
-                        szsql = "TRUNCATE TABLE #TMP_" + marca + "_CM";
+                        szsql = "TRUNCATE TABLE TMP_" + marca + "_CM";
                         General.ExecutaNonQuery(szsql, null);
-                        szsql = "DROP TABLE #TMP_" + marca + "_CM";
+                        szsql = "DROP TABLE TMP_" + marca + "_CM";
                         General.ExecutaNonQuery(szsql, null);
                     }
                 }
@@ -1343,14 +1451,28 @@ namespace WizOne.Module
                 BCCM = arCM.AMBP_Total;
                 ZBCCM = (int)arCM.tzsTotal6;
 
-               //BazaCalcul1 = CDbl(arCM.AMBP_Total);
-               //BazaCalcul2 = CDbl(arCM.BPSTOTALRON6);
-               //NumarZileBazaCalcul = CInt(arCM.tzsTotal6);
-   
-            
+                BazaCalcul1 = Convert.ToDouble(arCM.AMBP_Total);
+                BazaCalcul2 = Convert.ToDouble(arCM.bpsTOTALRON6);
+                NumarZileBazaCalcul = Convert.ToInt32(arCM.tzsTotal6);
+
+                if (optiune == 1)
+                {
+                    BCCM = BazaCalcul1;
+                    Medie6 = BCCM / NumarZileBazaCalcul;
+                }
+                else
+                {
+                    BCCM = BazaCalcul2;
+                    
+                }
+
+                szsql = "TRUNCATE TABLE TMP_" + marca + "_CM";
+                General.ExecutaNonQuery(szsql, null);
+                szsql = "DROP TABLE TMP_" + marca + "_CM";
+                General.ExecutaNonQuery(szsql, null);
 
 
-			}
+            }
 			catch(Exception ex)
 			{
                 General.MemoreazaEroarea(ex, "CreateDetails", new StackTrace().GetFrame(0).GetMethod().Name);
@@ -1363,7 +1485,7 @@ namespace WizOne.Module
         {
             Dictionary<String, String> lista = new Dictionary<string, string>();
 
-            string sql = "SELECT  \"Nume\" AS ETICHETA, \"Valoare\" AS VALOARE FROM \"tblParametrii\" WHERE \"Nume\" IN ('BAZA_CMFNUASS', 'BAZA_CMAMBP', 'NN', 'PP', 'ZAMBP2', 'ZAMBP', 'BASS', 'SOMA')";
+            string sql = "SELECT  \"Nume\" AS ETICHETA, \"Valoare\" AS VALOARE FROM \"tblParametrii\" WHERE \"Nume\" IN ('BAZA_CMFNUASS', 'BAZA_CMAMBP', 'NN', 'PP', 'ZAMBP2', 'ZAMBP', 'BASS', 'SOMA', 'SAL_MIN', 'NR_SAL_MIN')";
             DataTable dtParam = General.IncarcaDT(sql, null);
             if (dtParam != null && dtParam.Rows.Count > 0)
                 for (int i = 0; i < dtParam.Rows.Count; i++)

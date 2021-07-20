@@ -179,7 +179,7 @@
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsSearchPanel Visible="False" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
-                    <ClientSideEvents CustomButtonClick="grDateSes_CustomButtonClick"  ContextMenu="ctx"  />
+                    <ClientSideEvents CustomButtonClick="grDateSes_CustomButtonClick"  ContextMenu="ctx"   EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                     <Columns>
                         <dx:GridViewDataComboBoxColumn FieldName="Id" Name="Id" Caption="Beneficiu" ReadOnly="true"  Width="150px" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />

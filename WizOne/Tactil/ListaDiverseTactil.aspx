@@ -165,15 +165,15 @@
                                 </dx:GridViewCommandColumnCustomButton>
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
-						<dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="70px" VisibleIndex="2"/>
-                        <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="170px" VisibleIndex="3" >
+						<dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="60px" VisibleIndex="2"/>
+                        <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="80px" VisibleIndex="3" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                             <Settings FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-						<dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="200px" VisibleIndex="4" Settings-AutoFilterCondition="Contains" />
-						<dx:GridViewDataTextColumn FieldName="TipCerere" Name="TipCerere" Caption="Tip Cerere" ReadOnly="true" Width="150px" VisibleIndex="5" />
-						<dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Cerere" ReadOnly="true" Width="350px" VisibleIndex="6" />
-						<dx:GridViewDataTextColumn FieldName="Raspuns" Name="Raspuns" Caption="Raspuns" ReadOnly="true" Width="350px" VisibleIndex="7" />											
+						<dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="150px" VisibleIndex="4" Settings-AutoFilterCondition="Contains" />
+						<dx:GridViewDataTextColumn FieldName="TipCerere" Name="TipCerere" Caption="Tip Cerere" ReadOnly="true" Width="140px" VisibleIndex="5" />
+						<dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Cerere" ReadOnly="true" Width="140px" VisibleIndex="6" />
+						<dx:GridViewDataTextColumn FieldName="Raspuns" Name="Raspuns" Caption="Raspuns" ReadOnly="true" Width="140px" VisibleIndex="7" />											
                     </Columns>                                                            
                 </dx:ASPxGridView>
                     

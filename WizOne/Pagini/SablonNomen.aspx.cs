@@ -51,6 +51,14 @@ namespace WizOne.Pagini
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
+                //Radu 14.06.2021
+                if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                {
+                    grDate.Settings.ShowGroupPanel = false;
+                    btnSave.ClientVisible = false;
+                }
+
                 if (!IsPostBack)
                 {
                     DataSet ds = new DataSet();
@@ -463,6 +471,11 @@ namespace WizOne.Pagini
 
                 e.Cancel = true;
                 grDate.DataSource = dt;
+
+                //Radu 14.06.2021
+                if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                    General.SalveazaDate(dt, Session["Sablon_Tabela"].ToString());
             }
             catch (Exception ex)
             {
@@ -536,6 +549,11 @@ namespace WizOne.Pagini
                 grDate.CancelEdit();
                 Session["InformatiaCurenta"] = dt;
                 grDate.DataSource = dt;
+
+                //Radu 14.06.2021
+                if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                    General.SalveazaDate(dt, Session["Sablon_Tabela"].ToString());
             }
             catch (Exception ex)
             {
@@ -585,6 +603,11 @@ namespace WizOne.Pagini
                 grDate.CancelEdit();
                 Session["InformatiaCurenta"] = dt;
                 grDate.DataSource = dt;
+
+                //Radu 14.06.2021
+                if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                    General.SalveazaDate(dt, Session["Sablon_Tabela"].ToString());
 
             }
             catch (Exception ex)

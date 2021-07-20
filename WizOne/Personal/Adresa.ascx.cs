@@ -272,6 +272,8 @@ namespace WizOne.Personal
                 }             
 
                 ds.Tables["F100Adrese"].Rows.Add(row);
+           
+                idAuto = Convert.ToInt32(ds.Tables["F100Adrese"].Rows[ds.Tables["F100Adrese"].Rows.Count - 1]["IdAuto"].ToString());      
 
                 if (General.Nz(e.NewValues["Principal"], 0).ToString() == "1")
                 {

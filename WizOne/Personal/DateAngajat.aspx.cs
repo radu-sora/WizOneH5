@@ -588,6 +588,36 @@ namespace WizOne.Personal
                     ds = Session["InformatiaCurentaPersonal"] as DataSet;
                     Session["Marca"] = Convert.ToInt32(ds.Tables[1].Rows[0]["F10003"].ToString());
 
+
+                    //Radu 20.07.2021 - #946
+                    if (Convert.ToInt32(ds.Tables[1].Rows[0]["F10025"].ToString()) != 999)
+                    {
+                        string dataStart = "", dataSfarsit = "", tip = "";
+                        int nrLuni = 0, nrZile = 0;
+                        if (ds.Tables[1].Rows[0]["F1009741"].ToString() == "1")
+                        {
+                            dataStart = "CONVERT(DATETIME, '01/01/2100', 103)";
+                            dataSfarsit = "CONVERT(DATETIME, '01/01/2100', 103)";
+                            tip = "Nedeterminat";
+                        }
+                        else
+                        {
+                            DateTime dtSt = Convert.ToDateTime(ds.Tables[1].Rows[0]["F100933"].ToString());
+                            DateTime dtSf = Convert.ToDateTime(ds.Tables[1].Rows[0]["F100934"].ToString());
+                            dataStart = "CONVERT(DATETIME, '" + dtSt.Day.ToString().PadLeft(2, '0') + "/" + dtSt.Month.ToString().PadLeft(2, '0') + "/" + dtSt.Year.ToString() + "', 103)";
+                            dataSfarsit = "CONVERT(DATETIME, '" + dtSf.Day.ToString().PadLeft(2, '0') + "/" + dtSf.Month.ToString().PadLeft(2, '0') + "/" + dtSf.Year.ToString() + "', 103)";
+                            Personal.Contract pagCtr = new Personal.Contract();
+                            pagCtr.CalculLuniSiZile(dtSt, dtSf, out nrLuni, out nrZile);
+                            tip = "Determinat";
+                        }                        
+
+                        string sql095 = "INSERT INTO F095 (F09501, F09502, F09503, F09504, F09505, F09506, F09507, F09508, F09509, F09510, F09511, USER_NO, TIME)"
+                            + " VALUES (95, '{0}', {1}, '{2}', {3}, {4}, {5}, {6}, {7}, 0, '{8}', {9}, GETDATE())";
+                        sql095 = string.Format(sql095, ds.Tables[1].Rows[0]["F10017"].ToString(), ds.Tables[1].Rows[0]["F10003"].ToString(), ds.Tables[1].Rows[0]["F100985"].ToString(),
+                            dataStart, dataSfarsit, nrLuni, nrZile, (ds.Tables[1].Rows[0]["F100929"] == DBNull.Value ? "0" : ds.Tables[1].Rows[0]["F100929"].ToString()), tip, Session["UserId"].ToString());
+                        General.ExecutaNonQuery(sql095, null);
+                    }
+
                     //Florin 2019.06.24
                     //Mihnea 2019.06.13
                     int tip_pass = 0;

@@ -18103,3 +18103,82 @@ update Ptj_tblAdmin set LatimeTactil = 300 where Coloana in ('ValStr')
 GO
 insert into Ptj_tblPrint(Id, Denumire, Activ, Lungime) values (200, 'TotaluriTactil', 1, 300)
 GO
+
+
+
+--  Modificare tabela Ptj_ContracteSchimburi BEGIN
+
+
+
+CREATE TABLE [dbo].[Ptj_ContracteSchimburi_OLD](
+	[IdContract] [int] NOT NULL,
+	[TipSchimb] [int] NOT NULL,
+	[Denumire] [nvarchar](500) NULL,
+	[IdProgram] [int] NOT NULL,
+	[OraInceput] [datetime] NULL,
+	[OraInceputDeLa] [datetime] NULL,
+	[OraInceputLa] [datetime] NULL,
+	[OraSfarsit] [datetime] NULL,
+	[OraSfarsitDeLa] [datetime] NULL,
+	[OraSfarsitLa] [datetime] NULL,
+	[ModVerificare] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Ptj_ContracteSchimburi_OLD_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdContract] ASC,
+	[IdProgram] ASC,
+	[TipSchimb] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Ptj_ContracteSchimburi_OLD] ADD  CONSTRAINT [DF_Ptj_ContracteSchimburi_OLD_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+
+INSERT INTO Ptj_ContracteSchimburi_OLD(IdContract, TipSchimb, Denumire, IdProgram, OraInceput, OraInceputDeLa, OraInceputLa, OraSfarsit, OraSfarsitDeLa, OraSfarsitLa, ModVerificare, USER_NO, TIME)
+SELECT IdContract, TipSchimb, Denumire, IdProgram, OraInceput, OraInceputDeLa, OraInceputLa, OraSfarsit, OraSfarsitDeLa, OraSfarsitLa, ModVerificare, USER_NO, TIME
+FROM Ptj_ContracteSchimburi
+GO
+
+DROP TABLE Ptj_ContracteSchimburi
+GO
+
+CREATE TABLE [dbo].[Ptj_ContracteSchimburi](
+	[IdContract] [int] NOT NULL,
+	[IdProgram] [int] NOT NULL,
+	[TipSchimb] [int] NOT NULL,
+	[Denumire] [nvarchar](500) NULL,
+	[OraInceput] [datetime] NULL,
+	[OraInceputDeLa] [datetime] NULL,
+	[OraInceputLa] [datetime] NULL,
+	[OraSfarsit] [datetime] NULL,
+	[OraSfarsitDeLa] [datetime] NULL,
+	[OraSfarsitLa] [datetime] NULL,
+	[ModVerificare] [int] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [Ptj_ContracteSchimburi_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdContract] ASC,
+	[IdProgram] ASC,
+	[TipSchimb] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Ptj_ContracteSchimburi] ADD  CONSTRAINT [DF_Ptj_ContracteSchimburi_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+INSERT INTO Ptj_ContracteSchimburi(IdContract, TipSchimb, Denumire, IdProgram, OraInceput, OraInceputDeLa, OraInceputLa, OraSfarsit, OraSfarsitDeLa, OraSfarsitLa, ModVerificare, USER_NO, TIME)
+SELECT IdContract, TipSchimb, Denumire, IdProgram, OraInceput, OraInceputDeLa, OraInceputLa, OraSfarsit, OraSfarsitDeLa, OraSfarsitLa, ModVerificare, USER_NO, TIME
+FROM Ptj_ContracteSchimburi_OLD
+GO
+
+DROP TABLE Ptj_ContracteSchimburi_OLD
+GO
+
+--  Modificare tabela Ptj_ContracteSchimburi END

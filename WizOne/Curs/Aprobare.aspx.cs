@@ -695,10 +695,10 @@ namespace WizOne.Curs
                 strSql = @"SELECT distinct {1} FROM ""Curs_Inregistrare"" A
                         INNER JOIN ""Curs_CereriIstoric"" F ON A.""Id""=F.""IdCerere""
                         WHERE 1=1 {0}
-                        ORDER BY A.TIME";
+                        ";
 
                 strSql = string.Format(strSql, filtru, lstCampuri);
-                q = General.IncarcaDT(strSql, null);
+                q = General.IncarcaDT(strSql + " ORDER BY A.TIME ", null);
             }
             catch (Exception ex)
             {

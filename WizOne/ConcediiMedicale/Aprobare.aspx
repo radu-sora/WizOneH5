@@ -104,6 +104,13 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/calcul.png"></Image>
                 </dx:ASPxButton>
+                <dx:ASPxButton ID="btnAproba" runat="server" Text="Aprobare" OnClick="btnAproba_Click" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) {
+                        pnlLoading.Show();
+                        e.processOnServer = true;
+                    }" />
+                    <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
+                </dx:ASPxButton>  
                 <dx:ASPxButton ID="btnAnulare" runat="server" Text="Sterge" OnClick="btnAnulare_Click" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
@@ -178,6 +185,9 @@
                                 <dx:GridViewCommandColumnCustomButton ID="btnArata">
                                     <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/arata.png" />
                                 </dx:GridViewCommandColumnCustomButton> 
+                                <dx:GridViewCommandColumnCustomButton ID="btnIstoric">
+                                    <Image ToolTip="Istoric" Url="~/Fisiere/Imagini/Icoane/motive.png" />
+                                </dx:GridViewCommandColumnCustomButton>
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="150px" VisibleIndex="2" >
@@ -229,6 +239,7 @@
                         <dx:GridViewDataTextColumn FieldName="MedieZilnicaCM" Name="MedieZilnicaCM" Caption="MedieZilnicaCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="ModifManuala" Name="ModifManuala" Caption="ModifManuala" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="Optiune" Name="Optiune" Caption="Optiune" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="Initial" Name="Initial" Caption="Initial" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
 
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />

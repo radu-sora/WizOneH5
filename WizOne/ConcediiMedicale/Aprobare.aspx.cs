@@ -78,7 +78,8 @@ namespace WizOne.ConcediiMedicale
                     Session["CM_HR"] = "0";
 
                 if (tip == 1)
-                {            
+                {
+                    btnAproba.ClientVisible = false;
                     btnTransfera.ClientVisible = false; 
                     btnRapCM.ClientVisible = false;
                     btnCalcul.ClientVisible = false;

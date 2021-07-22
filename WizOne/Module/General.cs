@@ -9413,6 +9413,9 @@ namespace WizOne.Module
             }
         }
 
+
+        //#951 - Florin 2021.07.21
+        //s-a scos delete; se doreste doar adaugarea de elemente
         public static void AdaugaDiferentePost(int idPost, int f10003)
         {
             try
@@ -9420,7 +9423,7 @@ namespace WizOne.Module
                 //actualizam doarul personal al tuturor angajatilor care sunt pe acest post
                 General.ExecutaNonQuery($@"
                     BEGIN
-                        DELETE FROM Atasamente WHERE IdEmpl = @2 AND Attach IS NULL;
+                        --DELETE FROM Atasamente WHERE IdEmpl = @2 AND Attach IS NULL;
                         INSERT INTO Atasamente(IdEmpl, IdCategory, VineDinPosturi, DateAttach, USER_NO, TIME)
                         SELECT A.F10003, C.IdObiect, 1, GetDate(), {HttpContext.Current.Session["UserId"]}, GetDate() 
                         FROM Org_relPostAngajat A
@@ -9433,7 +9436,7 @@ namespace WizOne.Module
                 //actualizam echipamentele tuturor angajatilor care sunt pe acest post
                 General.ExecutaNonQuery($@"
                     BEGIN
-                        DELETE FROM Admin_Echipamente WHERE Marca = @2 AND DataPrimire IS NULL AND Caracteristica IS NULL;
+                        --DELETE FROM Admin_Echipamente WHERE Marca = @2 AND DataPrimire IS NULL AND Caracteristica IS NULL;
                         INSERT INTO Admin_Echipamente(Marca, IdObiect, Caracteristica, VineDinPosturi, USER_NO, TIME)
                         SELECT A.F10003, C.IdObiect, D.Denumire, 1, {HttpContext.Current.Session["UserId"]}, GetDate() 
                         FROM Org_relPostAngajat A
@@ -9447,7 +9450,7 @@ namespace WizOne.Module
                 //actualizam beneficiile tuturor angajatilor care sunt pe acest post
                 General.ExecutaNonQuery($@"
                     BEGIN
-                        DELETE FROM Admin_Beneficii WHERE Marca = @2 AND DataPrimire IS NULL AND Caracteristica IS NULL;
+                        --DELETE FROM Admin_Beneficii WHERE Marca = @2 AND DataPrimire IS NULL AND Caracteristica IS NULL;
                         INSERT INTO Admin_Beneficii(Marca, IdObiect, Caracteristica, VineDinPosturi, USER_NO, TIME)
                         SELECT A.F10003, C.IdObiect, D.Denumire, 1, {HttpContext.Current.Session["UserId"]}, GetDate() 
                         FROM Org_relPostAngajat A

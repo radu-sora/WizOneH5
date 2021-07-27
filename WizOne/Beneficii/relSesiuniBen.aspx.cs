@@ -63,18 +63,32 @@ namespace WizOne.Beneficii
                         col.PropertiesComboBox.DataSource = dt;
                         break;
                     case 2:
-                        lblTitlu.Text = Dami.TraduCuvant("Beneficii");
+                        lblTitlu.Text = Dami.TraduCuvant("Grup beneficii");
                         c = new GridViewDataComboBoxColumn();
-                        c.Name = "IdBeneficiu";
-                        c.FieldName = "IdBeneficiu";
-                        c.Caption = Dami.TraduCuvant("Beneficii");
+                        c.Name = "IdGrup";
+                        c.FieldName = "IdGrup";
+                        c.Caption = Dami.TraduCuvant("Grup beneficii");
                         c.PropertiesComboBox.TextField = "Denumire";
                         c.PropertiesComboBox.ValueField = "Id";
                         if (!IsPostBack)
                             grDate.Columns.Add(c);
 
+                        c = new GridViewDataDateColumn();
+                        c.Name = "DataInceput";
+                        c.FieldName = "DataInceput";
+                        c.Caption = Dami.TraduCuvant("Data inceput");
+                        if (!IsPostBack)
+                            grDate.Columns.Add(c);
+
+                        c = new GridViewDataDateColumn();
+                        c.Name = "DataSfarsit";
+                        c.FieldName = "DataSfarsit";
+                        c.Caption = Dami.TraduCuvant("Data sfarsit");
+                        if (!IsPostBack)
+                            grDate.Columns.Add(c);
+
                         dt = GetBeneficii();
-                        col = (grDate.Columns["IdBeneficiu"] as GridViewDataComboBoxColumn);
+                        col = (grDate.Columns["IdGrup"] as GridViewDataComboBoxColumn);
                         col.PropertiesComboBox.DataSource = dt;
                         break;
                    
@@ -121,10 +135,12 @@ namespace WizOne.Beneficii
         {
             try
             {
-                string sql =  @"select  CAST (a.""Id"" AS INT) as ""Id"", a.""Denumire""
-                                from ""Admin_Obiecte"" a
-                                inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
-                                where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY a.""Denumire""";
+                //string sql =  @"select  CAST (a.""Id"" AS INT) as ""Id"", a.""Denumire""
+                //                from ""Admin_Obiecte"" a
+                //                inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
+                //                where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY a.""Denumire""";
+
+                string sql = @"SELECT * FROM ""Ben_tblGrupBeneficii"" ORDER BY ""Id""";
 
                 return General.IncarcaDT(sql, null);
             }
@@ -151,7 +167,7 @@ namespace WizOne.Beneficii
                         strSql = " SELECT * FROM \"Ben_relSesGrupAng\" WHERE \"IdSesiune\" = " + id;
                         break;
                     case 2:
-                        strSql = " SELECT * FROM \"Ben_relSesBen\" WHERE \"IdSesiune\" = " + id;
+                        strSql = " SELECT * FROM \"Ben_relSesGrupBen\" WHERE \"IdSesiune\" = " + id;
                         break;                   
                 }
 
@@ -194,7 +210,7 @@ namespace WizOne.Beneficii
                         General.SalveazaDate(dt, "Ben_relSesGrupAng");
                         break;
                     case 2:
-                        General.SalveazaDate(dt, "Ben_relSesBen");
+                        General.SalveazaDate(dt, "Ben_relSesGrupBen");
                         break;                   
                 }               
 
@@ -232,9 +248,9 @@ namespace WizOne.Beneficii
                         }
                         break;
                     case 2:
-                        if (e.NewValues["IdBeneficiu"] == null)
+                        if (e.NewValues["IdGrup"] == null)
                         {
-                            grDate.JSProperties["cpAlertMessage"] = "Lipseste beneficiul!";
+                            grDate.JSProperties["cpAlertMessage"] = "Lipseste grupul!";
                             e.Cancel = true;
                             grDate.CancelEdit();
                             return;
@@ -305,7 +321,7 @@ namespace WizOne.Beneficii
                             e.NewValues["IdAuto"] = Dami.NextId("Ben_relSesGrupAng");
                             break;
                         case 2:
-                            e.NewValues["IdAuto"] = Dami.NextId("Ben_relSesBen");
+                            e.NewValues["IdAuto"] = Dami.NextId("Ben_relSesGrupBen");
                             break;                        
                     }
                 }
@@ -316,16 +332,16 @@ namespace WizOne.Beneficii
                     case 1:
                         if (e.NewValues["IdGrup"] == null)
                         {
-                            grDate.JSProperties["cpAlertMessage"] = "Lipseste grupuk!";
+                            grDate.JSProperties["cpAlertMessage"] = "Lipseste grupul!";
                             e.Cancel = true;
                             grDate.CancelEdit();
                             return;
                         }
                         break;
                     case 3:
-                        if (e.NewValues["IdBeneficiu"] == null)
+                        if (e.NewValues["IdGrup"] == null)
                         {
-                            grDate.JSProperties["cpAlertMessage"] = "Lipseste beneficiul!";
+                            grDate.JSProperties["cpAlertMessage"] = "Lipseste grupul!";
                             e.Cancel = true;
                             grDate.CancelEdit();
                             return;

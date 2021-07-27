@@ -123,6 +123,15 @@ namespace WizOne.Beneficii
         protected global::DevExpress.Web.ASPxGridView grDate;
 
         /// <summary>
+        /// btnNomenclatorBen control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnNomenclatorBen;
+
+        /// <summary>
         /// btnNomenclatorAng control.
         /// </summary>
         /// <remarks>

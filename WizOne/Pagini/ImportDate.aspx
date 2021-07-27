@@ -89,11 +89,11 @@
 							    <dx:ASPxLabel  ID="lblSablon" Width="200" runat="server"  Text="Selectare sablon import" ></dx:ASPxLabel >	
                             </td>
                             <td>
-							    <dx:ASPxComboBox Width="150"  ID="cmbSablon" ClientInstanceName="cmbSablon"  runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" OnCallback="cmbSablon_Callback" >                                                              
+							    <dx:ASPxComboBox Width="200"  ID="cmbSablon" ClientInstanceName="cmbSablon"  runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" OnCallback="cmbSablon_Callback" >                                                              
                                     <Columns>
                                         <dx:ListBoxColumn FieldName="Id" Caption="Id" Visible="false" />
-                                        <dx:ListBoxColumn FieldName="Denumire" Caption="Denumire" Width="130px" />
-                                        <dx:ListBoxColumn FieldName="Tabela" Caption="Tabela" Width="130px" />                                   
+                                        <dx:ListBoxColumn FieldName="Denumire" Caption="Denumire" Width="200px" />
+                                        <dx:ListBoxColumn FieldName="Tabela" Caption="Tabela" Width="200px" />                                   
                                     </Columns>
                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { grDateNomen.PerformCallback(); grDateViz.PerformCallback(); }" />
 							    </dx:ASPxComboBox>

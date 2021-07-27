@@ -948,7 +948,7 @@ namespace WizOne.Pagini
                                 case "varchar2":
                                 case "nvarchar2":
                                     if (ws2.Cells[j, k].Value != null && ws2.Cells[j, k].Value.ToString().Length > 0)
-                                        val = "'" + ws2.Cells[j, k].Value.ToString() + "'";
+                                        val = "'" + ws2.Cells[j, k].Value.ToString().Replace("'","''") + "'";
                                     break;
                                 case "date":
                                 case "datetime":

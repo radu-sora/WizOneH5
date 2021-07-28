@@ -12,7 +12,10 @@
             {
                 case "btnArataBen":
                     grDateBen.GetRowValues(e.visibleIndex, 'IdBeneficiu', GoToAtasMode);
-                    break;       
+                    break;   
+                case "btnArataAngBen":
+                    grDateBen.GetRowValues(e.visibleIndex, 'F10003', GoToAtasAngMode);
+                    break;      
             }
         }
 
@@ -20,12 +23,19 @@
             switch (e.buttonID) {
                 case "btnArataSes":
                     grDateSes.GetRowValues(e.visibleIndex, 'Id', GoToAtasMode);
-                    break;      
+                    break;     
+                case "btnArataAngSes":
+                    grDateSes.GetRowValues(e.visibleIndex, 'F10003', GoToAtasAngMode);
+                    break;  
             }
         }
 
         function GoToAtasMode(Value) {
             window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=19&id=' + Value, '_blank ')
+        }
+
+        function GoToAtasAngMode(Value) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=21&id=' + Value, '_blank ')
         }
 
 
@@ -132,7 +142,13 @@
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                     <ClientSideEvents CustomButtonClick="grDateBen_CustomButtonClick"  ContextMenu="ctx"  />
                     <Columns>
-                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"  /> 
+                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"  > 
+                            <CustomButtons> 
+                                <dx:GridViewCommandColumnCustomButton ID="btnArataAngBen">
+                                    <Image ToolTip="Arata document angajat" Url="~/Fisiere/Imagini/Icoane/view.png" />
+                                </dx:GridViewCommandColumnCustomButton>                                   
+                            </CustomButtons>
+                        </dx:GridViewCommandColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdBeneficiu" Name="IdBeneficiu" Caption="Beneficiu" ReadOnly="true"  Width="150px" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn> 
@@ -147,6 +163,7 @@
                                 </dx:GridViewCommandColumnCustomButton>                
                             </CustomButtons>
                         </dx:GridViewCommandColumn>  
+                        <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="F10003"   Width="50px" ReadOnly="true" Visible="false"  ShowInCustomizationForm="false"/>	
                     </Columns> 
                     <SettingsCommandButton>
                         <UpdateButton ButtonType="Link" Text="Actualizeaza">
@@ -231,7 +248,13 @@
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                     <ClientSideEvents CustomButtonClick="grDateSes_CustomButtonClick"  ContextMenu="ctx"   EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                     <Columns>
-                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"  /> 
+                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"  > 
+                            <CustomButtons> 
+                                <dx:GridViewCommandColumnCustomButton ID="btnArataAngSes">
+                                    <Image ToolTip="Arata document angajat" Url="~/Fisiere/Imagini/Icoane/view.png" />
+                                </dx:GridViewCommandColumnCustomButton>                                   
+                            </CustomButtons>
+                        </dx:GridViewCommandColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="Id" Name="Id" Caption="Beneficiu" ReadOnly="true"  Width="150px" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn> 
@@ -254,6 +277,7 @@
                             </CustomButtons>
                         </dx:GridViewCommandColumn>                       
                         <dx:GridViewCommandColumn Width="100px" ButtonType="Image" Caption="Selecteaza" ShowSelectCheckbox="true" SelectAllCheckboxMode="None" />
+                        <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="F10003"   Width="50px" ReadOnly="true" Visible="false"  ShowInCustomizationForm="false"/>	
                     </Columns>     
                     <SettingsCommandButton>
                         <UpdateButton ButtonType="Link" Text="Actualizeaza">

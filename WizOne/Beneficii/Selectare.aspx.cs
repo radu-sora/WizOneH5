@@ -342,10 +342,11 @@ namespace WizOne.Beneficii
                 //                 where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal')
                 //                 AND a.""DeLaData"" <= getdate() and getdate() <= a.""LaData""
                 //                 ORDER BY a.""Denumire""";
-                strSql = @"Select Ben_Cereri.*, Ben_tblSesiuni.DataSfarsitBen, c.Descriere from Ben_Cereri
+                strSql = @"Select Ben_Cereri.*, e.DataSfarsit as DataSfarsitBen, c.Descriere from Ben_Cereri
                     Join Ben_tblSesiuni on Ben_Cereri.IdSesiune = Ben_tblSesiuni.Id
                      LEFT JOIN Admin_Obiecte c ON c.Id = Ben_Cereri.IdBeneficiu 
                      inner join Admin_Categorii d on c.IdCategorie = d.Id 
+                     left join Ben_relSesGrupBen e on e.IdSesiune = Ben_Cereri.IdSesiune and e.IdGrup = c.IdGrup   
                      where d.IdArie = (select Valoare from tblParametrii where Nume = 'ArieTabBeneficiiDinPersonal')                   
                     AND Ben_Cereri.idstare = 3 and cast(getdate() as date) between DataInceputBen and DataSfarsitBen
                     And F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99);
@@ -412,7 +413,7 @@ namespace WizOne.Beneficii
                 //                AND a.""DeLaData"" <=GETDATE() AND GETDATE() <= a.""LaData""
                 //                ORDER BY a.""Denumire""";
 
-                strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", d.DataInceput as DataInceputBen, d.DataSfarsit as DataSfarsitBen, a.""Descriere"", a.USER_NO, a.TIME, a.ValoareEstimata
+                strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", d.DataInceput as DataInceputBen, d.DataSfarsit as DataSfarsitBen, a.""Descriere"", a.USER_NO, a.TIME, a.ValoareEstimata, {0} AS F10003
                                  from ""Admin_Obiecte"" a
                                  inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
                                  LEFT JOIN Ben_tblSesiuni c on c.""DataInceput"" <= getdate() and getdate() <= c.""DataSfarsit""
@@ -421,6 +422,7 @@ namespace WizOne.Beneficii
                                  and convert(date, a.""DeLaData"") <= convert(date, getdate()) and convert(date, getdate()) <= convert(date, a.""LaData"")  
                                  ORDER BY a.""Denumire""";
 
+                strSql = string.Format(strSql, Convert.ToInt32(Session["User_Marca"] ?? -99));
 
                 q = General.IncarcaDT(strSql, null);
             }

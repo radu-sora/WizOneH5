@@ -60,6 +60,15 @@ namespace WizOne.Beneficii
         protected global::DevExpress.Web.ASPxGridView grDateBen;
 
         /// <summary>
+        /// btnArataAngBen control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnArataAngBen;
+
+        /// <summary>
         /// btnArataBen control.
         /// </summary>
         /// <remarks>
@@ -94,6 +103,15 @@ namespace WizOne.Beneficii
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDateSes;
+
+        /// <summary>
+        /// btnArataAngSes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnArataAngSes;
 
         /// <summary>
         /// btnArataSes control.

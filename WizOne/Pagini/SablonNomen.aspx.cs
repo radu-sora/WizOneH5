@@ -53,7 +53,7 @@ namespace WizOne.Pagini
 
                 //Radu 14.06.2021
                 if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
-                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente" || Session["Sablon_Tabela"].ToString().ToLower().Contains("ben_"))
                 {
                     grDate.Settings.ShowGroupPanel = false;
                     btnSave.ClientVisible = false;
@@ -474,7 +474,7 @@ namespace WizOne.Pagini
 
                 //Radu 14.06.2021
                 if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
-                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente" || Session["Sablon_Tabela"].ToString().ToLower().Contains("ben_"))
                     General.SalveazaDate(dt, Session["Sablon_Tabela"].ToString());
             }
             catch (Exception ex)
@@ -552,7 +552,7 @@ namespace WizOne.Pagini
 
                 //Radu 14.06.2021
                 if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
-                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente" || Session["Sablon_Tabela"].ToString().ToLower().Contains("ben_"))
                     General.SalveazaDate(dt, Session["Sablon_Tabela"].ToString());
             }
             catch (Exception ex)
@@ -606,7 +606,7 @@ namespace WizOne.Pagini
 
                 //Radu 14.06.2021
                 if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
-                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente" || Session["Sablon_Tabela"].ToString().ToLower().Contains("ben_"))
                     General.SalveazaDate(dt, Session["Sablon_Tabela"].ToString());
 
             }

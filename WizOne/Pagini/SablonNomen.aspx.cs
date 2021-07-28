@@ -752,14 +752,20 @@ namespace WizOne.Pagini
 
                     sqlInsertTemp = "";
                     int i = 0;
+
                     foreach (DataRow dr in dt.Rows)
                     {
                         Eval_SetAngajati clsSetAngajati = new Eval_SetAngajati(dr);
+
+                        clsSetAngajati.SelectQuery = clsSetAngajati.SelectQuery.ToUpper().Replace("(SELECT ", "(SELECT_ ");
+
                         sqlInsertTemp += clsSetAngajati.SelectQuery.ToUpper().Replace("SELECT ", "SELECT " + clsSetAngajati.IdSetAng + " AS \"IdGrup\", ");
                         i++;
                         if (i < dt.Rows.Count)
                             sqlInsertTemp += " UNION ";
                     }
+                    sqlInsertTemp = sqlInsertTemp.Replace("(SELECT_ ", "(SELECT ");
+
                     sqlInsert += sqlInsertTemp;
                     bool valid = General.ExecutaNonQuery(sqlInsert, null);
                     if (!valid)

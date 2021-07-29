@@ -51,7 +51,7 @@
                         <dx:ASPxButton ID="btnRegSal" ClientInstanceName="btnRegSal" ClientIDMode="Static"  runat="server"  Text="Genereaza registru" Width="180" OnClick="btnRegSal_Click"  oncontextMenu="ctx(this,event)"> 
                        
                         </dx:ASPxButton>                        
-                        <dx:ASPxButton ID="btnRapSal" ClientInstanceName="btnRapSal" ClientIDMode="Static"  runat="server"  Text="Genereaza registru salariat" Width="180"  OnClick="btnRapSal_Click"  oncontextMenu="ctx(this,event)">                                                       
+                        <dx:ASPxButton ID="btnRapSal" ClientVisible="false" ClientInstanceName="btnRapSal" ClientIDMode="Static"  runat="server"  Text="Genereaza registru salariat" Width="180"  OnClick="btnRapSal_Click"  oncontextMenu="ctx(this,event)">                                                       
                      
                         </dx:ASPxButton>
                         <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
@@ -132,7 +132,7 @@
             <tr>
                 <td colspan="2">
                   
-                    <dx:ASPxGridView ID="grDateRap" runat="server" ClientInstanceName="grDateRap" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"  OnCustomCallback="grDateRap_CustomCallback" >
+                    <dx:ASPxGridView ID="grDateRap" ClientVisible="false" runat="server" ClientInstanceName="grDateRap" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"  OnCustomCallback="grDateRap_CustomCallback" >
                         <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="true" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                         <Settings ShowStatusBar="Hidden" HorizontalScrollBarMode="Visible" ShowFilterRow="False" VerticalScrollBarMode="Visible" VerticalScrollableHeight="500" />                   
                         <ClientSideEvents ContextMenu="ctx"  EndCallback="function(s,e) { OnEndCallback(s,e); }"  />

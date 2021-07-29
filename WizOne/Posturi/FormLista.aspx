@@ -141,6 +141,13 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                 </dx:ASPxButton>
+                <dx:ASPxButton ID="btnAprobareHR" runat="server" Text="Aprobare HR" OnClick="btnAprobareHR_Click" ClientVisible="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) {
+                        pnlLoading.Show();
+                        e.processOnServer = true;
+                    }" />
+                    <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
+                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnNou"  runat="server" Text="Adauga" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function (s,e) { popUpNou.Show(); pnlCtl.PerformCallback(cmbFormNou.GetValue()); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/new.png"></Image>

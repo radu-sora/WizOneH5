@@ -395,6 +395,13 @@
                                 <tr>
                                     <td>
                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                            <dx:ASPxCheckBox ID="chkModifPrg"  runat="server" style="display:inline-block; float:left;   width:150px; padding-bottom:10px; vertical-align:text-bottom;" Text="Programul sa nu fie modificat in timpul calculului"  TextAlign="Left" ClientInstanceName="chkbx7" oncontextMenu="ctx(this,event)"/>                                    
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
                                             <dx:ASPxCheckBox ID="chkPontare"  runat="server" style="display:inline-block; float:left;   width:150px; padding-bottom:10px; vertical-align:text-bottom;" Text="Pentru pontare"  TextAlign="Left" ClientInstanceName="chkbx5" oncontextMenu="ctx(this,event)"/>                                    
                                             <dx:ASPxCheckBox ID="chkPlanif"  runat="server" style="display:inline-block; float:left;  width:150px; padding-bottom:10px; vertical-align:text-bottom;" Text="Pentru planificare"  TextAlign="Left" ClientInstanceName="chkbx6" oncontextMenu="ctx(this,event)"/>   
                                         </div>
@@ -468,7 +475,7 @@
     <dx:ASPxPopupControl ID="popUpModif" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
         CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
         EnableViewState="False" PopupElementID="popUpModifArea" PopupHorizontalAlign="WindowCenter"
-        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="550px" Height="200px" HeaderText="Modificare pontaj"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="550px" Height="250px" HeaderText="Modificare pontaj"
         FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpModif" EnableHierarchyRecreation="false">
         <ContentCollection>
             <dx:PopupControlContentControl runat="server">
@@ -528,6 +535,20 @@
                             <div class="col-md-12">
                                 <div style="display:inline-table;">
                                     <dx:ASPxComboBox ID="cmbProgr" runat="server" ClientIDMode="Static" ClientInstanceName="cmbProgr" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="Denumire" AutoPostBack="false" TextFormatString="{0}"/>                                                                                     
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span style="font-weight:bold; font-size:14px;" id="modifCtr" runat="server">Contract</span>
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row" style="text-align:center;">
+                            <div class="col-md-12">
+                                <div style="display:inline-table;">
+                                    <dx:ASPxComboBox ID="cmbContract" runat="server" ClientIDMode="Static" ClientInstanceName="cmbContract" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="Denumire" AutoPostBack="false" TextFormatString="{0}"/>                                                                                     
                                 </div>
                             </div>
                         </div>

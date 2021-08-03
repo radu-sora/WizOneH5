@@ -951,6 +951,15 @@ namespace WizOne.Pontaj
         protected global::DevExpress.Web.ASPxCheckBox chkDecalare;
 
         /// <summary>
+        /// chkModifPrg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkModifPrg;
+
+        /// <summary>
         /// chkPontare control.
         /// </summary>
         /// <remarks>
@@ -1093,6 +1102,24 @@ namespace WizOne.Pontaj
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbProgr;
+
+        /// <summary>
+        /// modifCtr control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl modifCtr;
+
+        /// <summary>
+        /// cmbContract control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbContract;
 
         /// <summary>
         /// txtValuri control.

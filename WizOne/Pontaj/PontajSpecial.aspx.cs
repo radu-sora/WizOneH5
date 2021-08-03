@@ -59,6 +59,7 @@ namespace WizOne.Pontaj
                 modifAbsZi.InnerText = Dami.TraduCuvant("Absente de tip zi");
                 modifAbsOra.InnerText = Dami.TraduCuvant("Absente de tip ora");
                 modifPrgLucru.InnerText = Dami.TraduCuvant("Program de lucru");
+                modifCtr.InnerText = Dami.TraduCuvant("Contract");
 
                 foreach (dynamic c in grDate.Columns)
                 {
@@ -90,6 +91,9 @@ namespace WizOne.Pontaj
                     string sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram1\",  NULL AS \"IdProgram2\", NULL AS \"IdProgram3\", NULL AS \"IdProgram4\", NULL AS \"IdProgram5\", NULL AS \"IdProgram6\", NULL AS \"IdProgram7\", NULL AS \"IdProgram8\", NULL AS \"IdProgram9\", NULL AS \"IdProgram10\","
                         + " NULL AS \"IdProgram11\",  NULL AS \"IdProgram12\", NULL AS \"IdProgram13\", NULL AS \"IdProgram14\", NULL AS \"IdProgram15\", NULL AS \"IdProgram16\", NULL AS \"IdProgram17\", NULL AS \"IdProgram18\", NULL AS \"IdProgram19\", NULL AS \"IdProgram20\","
                         + " NULL AS \"IdProgram21\",  NULL AS \"IdProgram22\", NULL AS \"IdProgram23\", NULL AS \"IdProgram24\", NULL AS \"IdProgram25\", NULL AS \"IdProgram26\", NULL AS \"IdProgram27\", NULL AS \"IdProgram28\", NULL AS \"IdProgram29\", NULL AS \"IdProgram30\", NULL AS \"IdProgram31\","
+                        + " NULL AS \"IdContract1\",  NULL AS \"IdContract2\", NULL AS \"IdContract3\", NULL AS \"IdContract4\", NULL AS \"IdContract5\", NULL AS \"IdContract6\", NULL AS \"IdContract7\", NULL AS \"IdContract8\", NULL AS \"IdContract9\", NULL AS \"IdContract10\","
+                        + " NULL AS \"IdContract11\",  NULL AS \"IdContract12\", NULL AS \"IdContract13\", NULL AS \"IdContract14\", NULL AS \"IdContract15\", NULL AS \"IdContract16\", NULL AS \"IdContract17\", NULL AS \"IdContract18\", NULL AS \"IdContract19\", NULL AS \"IdContract20\","
+                        + " NULL AS \"IdContract21\",  NULL AS \"IdContract22\", NULL AS \"IdContract23\", NULL AS \"IdContract24\", NULL AS \"IdContract25\", NULL AS \"IdContract26\", NULL AS \"IdContract27\", NULL AS \"IdContract28\", NULL AS \"IdContract29\", NULL AS \"IdContract30\", NULL AS \"IdContract31\","
                         + " NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
                         + " NULL as \"Ziua11\", NULL as \"Ziua12\",  NULL as \"Ziua13\", NULL as \"Ziua14\", NULL as \"Ziua15\", NULL as \"Ziua16\", NULL as \"Ziua17\", NULL as \"Ziua18\", NULL as \"Ziua19\", NULL as \"Ziua20\", "
                         + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
@@ -379,6 +383,8 @@ namespace WizOne.Pontaj
 
                 for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
                 {
+                    sablonSpecial["IdContract" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "IdContract" + (i + ziStart - 1) : "IdContract" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
+
                     sablonSpecial["IdProgram" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "IdProgram" + (i + ziStart - 1) : "IdProgram" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
                     sablonSpecial["Ziua" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "Ziua" + (i + ziStart - 1) : "Ziua" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
                     sablonSpecial["ValZiua" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "ValZiua" + (i + ziStart - 1) : "ValZiua" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
@@ -592,6 +598,7 @@ namespace WizOne.Pontaj
 
                     string sql = "";
                     string oraIn = "", oraOut = "", firstIn = "", lastOut = "";
+                    string contract = "", modifProg = "";
 
                     if (sablon["IdProgram" + i] != null && sablon["IdProgram" + i].ToString().Length > 0)
                     {
@@ -619,6 +626,15 @@ namespace WizOne.Pontaj
                         firstIn = ", \"FirstInPaid\" = NULL ";
                         lastOut = ", \"LastOutPaid\" = NULL ";
                     }
+
+
+                    if (sablon["IdContract" + i] != null && sablon["IdContract" + i].ToString().Length > 0)                    
+                        contract = ", IdContract = " + sablon["IdContract" + i].ToString();                    
+
+                    if (chkModifPrg.Checked)                    
+                        modifProg = ", ModifProgram = 1 ";                    
+                    else                    
+                        modifProg = ", ModifProgram = 0 ";          
 
                     string sirVal = "";
                     List<string> listaVal = new List<string>();
@@ -656,7 +672,7 @@ namespace WizOne.Pontaj
                     string planif = "";
                     if (chkPlanif.Checked)
                     {
-                        planif = (chkPontare.Checked ? ", " : "") + " \"IdContractP\" =  \"IdContract\" , \"IdProgramP\" = " + (sablon["IdProgram" + i] != null && sablon["IdProgram" + i].ToString().Length > 0 ? sablon["IdProgram" + i].ToString() : "NULL");
+                        planif = (chkPontare.Checked ? ", " : "") + " \"IdContractP\" =  " + (sablon["IdContract" + i] != null && sablon["IdContract" + i].ToString().Length > 0 ? sablon["IdContract" + i].ToString() : "\"IdContract\" ") + ", \"IdProgramP\" = " + (sablon["IdProgram" + i] != null && sablon["IdProgram" + i].ToString().Length > 0 ? sablon["IdProgram" + i].ToString() : "NULL");
                     }
                     // "ValStr" not in (select coalesce("DenumireScurta",'xyz') from "Ptj_tblAbsente" where "IdTipOre"=1)
                     if (data.Length > 0)
@@ -664,7 +680,7 @@ namespace WizOne.Pontaj
                         data = data.Substring(1);
 
                         //sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
-                        sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
+                        sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + contract + modifProg + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
 
                     }
                     if (chkPontare.Checked && lstZileGolite != null && lstZileGolite.Count > 0)
@@ -684,7 +700,7 @@ namespace WizOne.Pontaj
                     {
                         sqlSDSL = sqlSDSL.Substring(2);
                         //sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET  " + (chkPontare.Checked ? "\"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
-                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET  " + (chkPontare.Checked ? "\"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE (" + sqlSDSL + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1));";
+                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET  " + (chkPontare.Checked ? "\"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + contract + modifProg + " WHERE (" + sqlSDSL + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1));";
                     }
                     else
                         sqlFin += sql + ";";
@@ -864,7 +880,11 @@ namespace WizOne.Pontaj
                                     General.ExecutaNonQuery("INSERT INTO \"PtjSpecial_Sabloane\" (\"Id\") SELECT " + cmp + "(MAX(\"Id\"), 0) + 1 FROM \"PtjSpecial_Sabloane\"", null);
                                     sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram1\",  NULL AS \"IdProgram2\", NULL AS \"IdProgram3\", NULL AS \"IdProgram4\", NULL AS \"IdProgram5\", NULL AS \"IdProgram6\", NULL AS \"IdProgram7\", NULL AS \"IdProgram8\", NULL AS \"IdProgram9\", NULL AS \"IdProgram10\","
                         + " NULL AS \"IdProgram11\",  NULL AS \"IdProgram12\", NULL AS \"IdProgram13\", NULL AS \"IdProgram14\", NULL AS \"IdProgram15\", NULL AS \"IdProgram16\", NULL AS \"IdProgram17\", NULL AS \"IdProgram18\", NULL AS \"IdProgram19\", NULL AS \"IdProgram20\","
-                        + " NULL AS \"IdProgram21\",  NULL AS \"IdProgram22\", NULL AS \"IdProgram23\", NULL AS \"IdProgram24\", NULL AS \"IdProgram25\", NULL AS \"IdProgram26\", NULL AS \"IdProgram27\", NULL AS \"IdProgram28\", NULL AS \"IdProgram29\", NULL AS \"IdProgram30\", NULL AS \"IdProgram31\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
+                        + " NULL AS \"IdProgram21\",  NULL AS \"IdProgram22\", NULL AS \"IdProgram23\", NULL AS \"IdProgram24\", NULL AS \"IdProgram25\", NULL AS \"IdProgram26\", NULL AS \"IdProgram27\", NULL AS \"IdProgram28\", NULL AS \"IdProgram29\", NULL AS \"IdProgram30\", NULL AS \"IdProgram31\", " 
+                                       + " NULL AS \"IdContract1\",  NULL AS \"IdContract2\", NULL AS \"IdContract3\", NULL AS \"IdContract4\", NULL AS \"IdContract5\", NULL AS \"IdContract6\", NULL AS \"IdContract7\", NULL AS \"IdContract8\", NULL AS \"IdContract9\", NULL AS \"IdContract10\","
+                        + " NULL AS \"IdContract11\",  NULL AS \"IdContract12\", NULL AS \"IdContract13\", NULL AS \"IdContract14\", NULL AS \"IdContract15\", NULL AS \"IdContract16\", NULL AS \"IdContract17\", NULL AS \"IdContract18\", NULL AS \"IdContract19\", NULL AS \"IdContract20\","
+                        + " NULL AS \"IdContract21\",  NULL AS \"IdContract22\", NULL AS \"IdContract23\", NULL AS \"IdContract24\", NULL AS \"IdContract25\", NULL AS \"IdContract26\", NULL AS \"IdContract27\", NULL AS \"IdContract28\", NULL AS \"IdContract29\", NULL AS \"IdContract30\", NULL AS \"IdContract31\","
+                        + " NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
                                       + " NULL as \"Ziua11\", NULL as \"Ziua12\",  NULL as \"Ziua13\", NULL as \"Ziua14\", NULL as \"Ziua15\", NULL as \"Ziua16\", NULL as \"Ziua17\", NULL as \"Ziua18\", NULL as \"Ziua19\", NULL as \"Ziua20\", "
                                       + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
                                       + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
@@ -918,6 +938,7 @@ namespace WizOne.Pontaj
                                         if (tx.Text.Length <= 0)
                                         {
                                             linii[0]["IdProgram" + i.ToString()] = DBNull.Value;
+                                            linii[0]["IdContract" + i.ToString()] = DBNull.Value;
                                             linii[0]["ValZiua" + i.ToString()] = DBNull.Value;
                                         }
 
@@ -927,7 +948,9 @@ namespace WizOne.Pontaj
                                                 linii[0]["ValZiua" + i.ToString()] = item.Value;
                                             if (item.Key == "IdProgram_" + "txtZiua" + i.ToString())
                                                 linii[0]["IdProgram" + i.ToString()] = item.Value ?? DBNull.Value;
-                                        }                         
+                                            if (item.Key == "IdContract_" + "txtZiua" + i.ToString())
+                                                linii[0]["IdContract" + i.ToString()] = item.Value ?? DBNull.Value;
+                                    }                         
                                       
                                     //}
                                 }
@@ -946,7 +969,11 @@ namespace WizOne.Pontaj
                         General.ExecutaNonQuery("DELETE FROM \"PtjSpecial_Sabloane\" WHERE \"Id\" = " + Convert.ToInt32(cmbSablon.Value), null);
                         sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram1\",  NULL AS \"IdProgram2\", NULL AS \"IdProgram3\", NULL AS \"IdProgram4\", NULL AS \"IdProgram5\", NULL AS \"IdProgram6\", NULL AS \"IdProgram7\", NULL AS \"IdProgram8\", NULL AS \"IdProgram9\", NULL AS \"IdProgram10\","
                         + " NULL AS \"IdProgram11\",  NULL AS \"IdProgram12\", NULL AS \"IdProgram13\", NULL AS \"IdProgram14\", NULL AS \"IdProgram15\", NULL AS \"IdProgram16\", NULL AS \"IdProgram17\", NULL AS \"IdProgram18\", NULL AS \"IdProgram19\", NULL AS \"IdProgram20\","
-                        + " NULL AS \"IdProgram21\",  NULL AS \"IdProgram22\", NULL AS \"IdProgram23\", NULL AS \"IdProgram24\", NULL AS \"IdProgram25\", NULL AS \"IdProgram26\", NULL AS \"IdProgram27\", NULL AS \"IdProgram28\", NULL AS \"IdProgram29\", NULL AS \"IdProgram30\", NULL AS \"IdProgram31\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
+                        + " NULL AS \"IdProgram21\",  NULL AS \"IdProgram22\", NULL AS \"IdProgram23\", NULL AS \"IdProgram24\", NULL AS \"IdProgram25\", NULL AS \"IdProgram26\", NULL AS \"IdProgram27\", NULL AS \"IdProgram28\", NULL AS \"IdProgram29\", NULL AS \"IdProgram30\", NULL AS \"IdProgram31\", " 
+                        + " NULL AS \"IdContract1\",  NULL AS \"IdContract2\", NULL AS \"IdContract3\", NULL AS \"IdContract4\", NULL AS \"IdContract5\", NULL AS \"IdContract6\", NULL AS \"IdContract7\", NULL AS \"IdContract8\", NULL AS \"IdContract9\", NULL AS \"IdContract10\","
+                        + " NULL AS \"IdContract11\",  NULL AS \"IdContract12\", NULL AS \"IdContract13\", NULL AS \"IdContract14\", NULL AS \"IdContract15\", NULL AS \"IdContract16\", NULL AS \"IdContract17\", NULL AS \"IdContract18\", NULL AS \"IdContract19\", NULL AS \"IdContract20\","
+                        + " NULL AS \"IdContract21\",  NULL AS \"IdContract22\", NULL AS \"IdContract23\", NULL AS \"IdContract24\", NULL AS \"IdContract25\", NULL AS \"IdContract26\", NULL AS \"IdContract27\", NULL AS \"IdContract28\", NULL AS \"IdContract29\", NULL AS \"IdContract30\", NULL AS \"IdContract31\","
+                        + " NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
                           + " NULL as \"Ziua11\", NULL as \"Ziua12\",  NULL as \"Ziua13\", NULL as \"Ziua14\", NULL as \"Ziua15\", NULL as \"Ziua16\", NULL as \"Ziua17\", NULL as \"Ziua18\", NULL as \"Ziua19\", NULL as \"Ziua20\", "
                           + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
                           + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
@@ -1349,6 +1376,10 @@ namespace WizOne.Pontaj
                 DataTable dtProgr = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Programe""", null);
                 cmbProgr.DataSource = dtProgr;
                 cmbProgr.DataBind();
+
+                DataTable dtCtr = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte""", null);
+                cmbContract.DataSource = dtCtr;
+                cmbContract.DataBind();
 
                 DataTable dtVal = General.IncarcaDT($@"SELECT COALESCE(A.""OreInVal"",'') AS ""ValAbs"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", COALESCE(A.""NrMax"", 23) AS ""NrMax"" 
                         FROM ""Ptj_tblAbsente"" A WHERE  COALESCE(A.""IdTipOre"",1)=0 AND A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' ORDER BY A.""OreInVal"" ", null);

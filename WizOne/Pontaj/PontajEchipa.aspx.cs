@@ -2355,7 +2355,7 @@ namespace WizOne.Pontaj
                     if (chkOre.Checked)
                     {
                         if (Constante.tipBD == 1)
-                            campuri += $@",COALESCE(CONVERT(VARCHAR(5), pvtIn.""Ziua{i}I"", 108),'') AS ""Ziua{i}I""" + $@",COALESCE(CONVERT(VARCHAR(5), pvtOut.""Ziua{i}O"", 108),'') AS ""Ziua{i}O""";
+                            campuri += $@",COALESCE(CONVERT(VARCHAR(5), pvtIn.""Ziua{i}I"", 108),'') AS ""Ziua{i}I""" + $@",COALESCE(CONVERT(VARCHAR(5), pvtOut.""Ziua{i}O"", 108),'') AS ""Ziua{i}O"", pvtCuloare.""CuloareValoare{i}"" AS ""CuloareValoare{i}""";
                         else
                             campuri += $@",TO_CHAR(pvtIn.""Ziua{i}I"", 'HH24:mi') AS ""Ziua{i}I""" + $@",TO_CHAR(pvtOut.""Ziua{i}O"", 'HH24:mi') AS ""Ziua{i}O""";
                     }
@@ -2363,7 +2363,7 @@ namespace WizOne.Pontaj
                     if (chkPauza.Checked)
                     {
                         if (Constante.tipBD == 1)
-                            campuri += $@",COALESCE(pvtPauza.""Ziua{i}P"",'') AS ""Ziua{i}P""";
+                            campuri += $@",COALESCE(pvtPauza.""Ziua{i}P"",'') AS ""Ziua{i}P"", pvtCuloare.""CuloareValoare{i}"" AS ""CuloareValoare{i}""";
                         else
                             campuri += $@",COALESCE(TO_CHAR(pvtPauza.""Ziua{i}P""),'') AS ""Ziua{i}P""";
                     }

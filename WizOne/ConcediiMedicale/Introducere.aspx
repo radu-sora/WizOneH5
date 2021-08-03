@@ -27,14 +27,14 @@
         pnlLoading.Hide();
         if (s.cpAlertMessage != null) {
             swal({
-                title: "", text: s.cpAlertMessage,
+                title: "Atentie", text: s.cpAlertMessage,
                 type: "warning"
             });
             s.cpAlertMessage = null;
         }
     }
 
-    function GoToViewHistory(s) {
+	function GoToViewHistory(s) {		
         strUrl = getAbsoluteUrl + "ConcediiMedicale/Istoric.aspx";
         popGenIst.SetHeaderText("Vizualizare CM luna anterioara");
         popGenIst.SetContentUrl(strUrl);
@@ -584,25 +584,17 @@
                                      <tr >
  
                                           <td >
- 
-                                             <dx:ASPxRadioButton ID = "rbZileCal" Width= "150" runat= "server" Visible="false" Text= "x zile calendaristice" ClientInstanceName= "rbZileCal"
- 
-                                                  GroupName= "Zile" >
- 
-                                                 <ClientSideEvents CheckedChanged= "function(s,e){ OnValueChangedHandler(s); }" />
- 
-                                             </dx:ASPxRadioButton>
+											<dx:ASPxCheckBox ID="chkZileCal" runat="server" Width="150" Visible="false" Text="x zile calendaristice" TextAlign="Left" ClientInstanceName="chkZileCal">
+												<ClientSideEvents  />
+											</dx:ASPxCheckBox> 
+                     
                                         </td>
 					                </tr>
 					                <tr>
                                         <td>
-                                            <dx:ASPxRadioButton ID = "rbZileFNUASS" Width= "150" runat= "server" Visible="false" Text= "0 zile"  ClientInstanceName= "rbZileFNUASS"
- 
-                                                  GroupName= "Zile" >
- 
-                                                 <ClientSideEvents CheckedChanged= "function(s,e){ OnValueChangedHandler(s); }" />
- 
-                                             </dx:ASPxRadioButton>
+											<dx:ASPxCheckBox ID="chkZileFNUASS" runat="server" Width="150" Visible="false" Text="0 zile" TextAlign="Left" ClientInstanceName="chkZileFNUASS">
+												<ClientSideEvents  />
+											</dx:ASPxCheckBox>      
                                         </td> 
 					                </tr>
 					                <tr>

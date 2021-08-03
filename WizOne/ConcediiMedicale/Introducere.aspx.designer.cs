@@ -879,22 +879,22 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.ASPxPanel pnlZile;
 
         /// <summary>
-        /// rbZileCal control.
+        /// chkZileCal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxRadioButton rbZileCal;
+        protected global::DevExpress.Web.ASPxCheckBox chkZileCal;
 
         /// <summary>
-        /// rbZileFNUASS control.
+        /// chkZileFNUASS control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxRadioButton rbZileFNUASS;
+        protected global::DevExpress.Web.ASPxCheckBox chkZileFNUASS;
 
         /// <summary>
         /// chkCalcul control.

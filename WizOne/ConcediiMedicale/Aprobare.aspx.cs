@@ -235,6 +235,7 @@ namespace WizOne.ConcediiMedicale
             {
                 string url = "~/ConcediiMedicale/Introducere.aspx";
                 Session["CM_Id"] = null;
+                Session["CM_Id_Nou"] = null;
                 Session["CM_NrZile"] = null;
                 Session["CM_Grid"] = null;
                 Session["CM_Document"] = null;

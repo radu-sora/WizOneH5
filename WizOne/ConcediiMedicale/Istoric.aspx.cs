@@ -34,6 +34,15 @@ namespace WizOne.ConcediiMedicale
             try
             {
                 Dami.AccesApp(this.Page);
+
+                if (Session["CM_HR"] == null || Session["CM_HR"].ToString() != "1")
+                {
+                    grDate.Columns["Suma"].Visible = false;
+                    grDate.Columns["BCCM"].Visible = false;
+                    grDate.Columns["ZBCCM"].Visible = false;
+                    grDate.Columns["MediaZilnica"].Visible = false;
+                }
+
                 if (!IsPostBack)
                 {
                     int marca = -99;
@@ -195,8 +204,8 @@ namespace WizOne.ConcediiMedicale
                     }
 
                 }
-
-	        return dtCM;
+            Session["CM_Preluare"] = 1;
+            return dtCM;
         }
 
         //protected void btnPreluare_Click(object sender, EventArgs e)
@@ -210,7 +219,7 @@ namespace WizOne.ConcediiMedicale
                 //MessageBox.Show("Datele din certificatul medical nu pot fi preluate!\nNu exista certificat medical in ultima zi a lunii anterioare!");
                 //else
                 {
-                    Session["CM_Preluare"] = 1;
+                    //Session["CM_Preluare"] = 1;
                     this.ClientScript.RegisterClientScriptBlock(this.GetType(), "Close", "window.close();", true);
                 }
             }

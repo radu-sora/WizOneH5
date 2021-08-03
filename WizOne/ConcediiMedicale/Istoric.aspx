@@ -32,7 +32,7 @@
             s.cpAlertMessage = null;
         }
     }
-    function OnPreluare() {
+    function OnPreluare(s, e) {
         var nr = "<%=Session["ZileCMAnterior"] %>";
         if (nr == 0) {
             swal({
@@ -53,7 +53,7 @@
             <tr>
                 <td style="float:right; text-align:right;">
                     <dx:ASPxButton ID="btnPreluare" ClientInstanceName="btnPreluare" ClientIDMode="Static" runat="server" Text="Preluare" AutoPostBack="true" OnClick="btnPreluare_Click" oncontextMenu="ctx(this,event)" >
-                        <ClientSideEvents Click="OnPreluare" />
+                        <ClientSideEvents Click="function(s,e) { OnPreluare(s,e); }" />
                     </dx:ASPxButton>
                 </td>
             </tr> 

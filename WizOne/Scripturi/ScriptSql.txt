@@ -18229,3 +18229,67 @@ GO
 
 
 ----CM END ----
+
+
+alter table PtjSpecial_Sabloane add IdContract1 int
+GO
+alter table PtjSpecial_Sabloane add IdContract2 int
+GO
+alter table PtjSpecial_Sabloane add IdContract3 int
+GO
+alter table PtjSpecial_Sabloane add IdContract4 int
+GO
+alter table PtjSpecial_Sabloane add IdContract5 int
+GO
+alter table PtjSpecial_Sabloane add IdContract6 int
+GO
+alter table PtjSpecial_Sabloane add IdContract7 int
+GO
+alter table PtjSpecial_Sabloane add IdContract8 int
+GO
+alter table PtjSpecial_Sabloane add IdContract9 int
+GO
+alter table PtjSpecial_Sabloane add IdContract10 int
+GO
+alter table PtjSpecial_Sabloane add IdContract11 int
+GO
+alter table PtjSpecial_Sabloane add IdContract12 int
+GO
+alter table PtjSpecial_Sabloane add IdContract13 int
+GO
+alter table PtjSpecial_Sabloane add IdContract14 int
+GO
+alter table PtjSpecial_Sabloane add IdContract15 int
+GO
+alter table PtjSpecial_Sabloane add IdContract16 int
+GO
+alter table PtjSpecial_Sabloane add IdContract17 int
+GO
+alter table PtjSpecial_Sabloane add IdContract18 int
+GO
+alter table PtjSpecial_Sabloane add IdContract19 int
+GO
+alter table PtjSpecial_Sabloane add IdContract20 int
+GO
+alter table PtjSpecial_Sabloane add IdContract21 int
+GO
+alter table PtjSpecial_Sabloane add IdContract22 int
+GO
+alter table PtjSpecial_Sabloane add IdContract23 int
+GO
+alter table PtjSpecial_Sabloane add IdContract24 int
+GO
+alter table PtjSpecial_Sabloane add IdContract25 int
+GO
+alter table PtjSpecial_Sabloane add IdContract26 int
+GO
+alter table PtjSpecial_Sabloane add IdContract27 int
+GO
+alter table PtjSpecial_Sabloane add IdContract28 int
+GO
+alter table PtjSpecial_Sabloane add IdContract29 int
+GO
+alter table PtjSpecial_Sabloane add IdContract30 int
+GO
+alter table PtjSpecial_Sabloane add IdContract31 int
+GO

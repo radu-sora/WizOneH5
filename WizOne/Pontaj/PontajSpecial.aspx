@@ -17,7 +17,7 @@
         }
 
         function OnModif(s, e) {   
-            popUpModif.Hide();      
+            popUpModif.Hide(); 
             txtValuri.Set(__name_text_box, "");
             var texts = "";
             if (cmbTipAbs.GetText() != "")
@@ -38,10 +38,12 @@
                         txtValuri.Set(__name_text_box, valoare + lista[0] + "=" + $(this).val());
                     }
                 });
-             
+                
                 txtValuri.Set("IdProgram_" + __name_text_box, cmbProgr.GetValue());
+                txtValuri.Set("IdContract_" + __name_text_box, cmbContract.GetValue());
                 if (texts != "")
-                    texts = texts.substring(1);               
+                    texts = texts.substring(1);  
+                txtValuri.Set("ValStr_" + __name_text_box, texts);
                     
             }
 
@@ -77,6 +79,7 @@
             EmptyVal();
             cmbTipAbs.SetValue(null);
             cmbProgr.SetValue(null);
+            cmbContract.SetValue(null);
         }
 
         function EmptyVal() {
@@ -395,7 +398,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
-                                            <dx:ASPxCheckBox ID="chkModifPrg"  runat="server" style="display:inline-block; float:left;   width:150px; padding-bottom:10px; vertical-align:text-bottom;" Text="Programul sa nu fie modificat in timpul calculului"  TextAlign="Left" ClientInstanceName="chkbx7" oncontextMenu="ctx(this,event)"/>                                    
+                                            <dx:ASPxCheckBox ID="chkModifPrg"  runat="server" style="display:inline-block; float:left;   width:300px; padding-bottom:10px; vertical-align:text-bottom;" Text="Programul sa nu fie modificat in timpul calculului"  TextAlign="Left" ClientInstanceName="chkbx7" oncontextMenu="ctx(this,event)"/>                                    
                                         </div>
                                     </td>
                                 </tr>

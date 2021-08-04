@@ -103,7 +103,11 @@ namespace WizOne.Pontaj
                         + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
                         + "SELECT  \"Id\",  \"Denumire\", \"IdProgram1\", \"IdProgram2\", \"IdProgram3\",  \"IdProgram4\",  \"IdProgram5\",  \"IdProgram6\",  \"IdProgram7\",  \"IdProgram8\",  \"IdProgram9\",  \"IdProgram10\","
                         + "  \"IdProgram11\",   \"IdProgram12\",  \"IdProgram13\",  \"IdProgram14\",  \"IdProgram15\",  \"IdProgram16\",  \"IdProgram17\",  \"IdProgram18\",  \"IdProgram19\",  \"IdProgram20\","
-                        + "  \"IdProgram21\",   \"IdProgram22\",  \"IdProgram23\",  \"IdProgram24\",  \"IdProgram25\",  \"IdProgram26\",  \"IdProgram27\",  \"IdProgram28\",  \"IdProgram29\",  \"IdProgram30\",  \"IdProgram31\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
+                        + "  \"IdProgram21\",   \"IdProgram22\",  \"IdProgram23\",  \"IdProgram24\",  \"IdProgram25\",  \"IdProgram26\",  \"IdProgram27\",  \"IdProgram28\",  \"IdProgram29\",  \"IdProgram30\",  \"IdProgram31\", " 
+                        + " \"IdContract1\", \"IdContract2\", \"IdContract3\",  \"IdContract4\",  \"IdContract5\",  \"IdContract6\",  \"IdContract7\",  \"IdContract8\",  \"IdContract9\",  \"IdContract10\","
+                        + "  \"IdContract11\",   \"IdContract12\",  \"IdContract13\",  \"IdContract14\",  \"IdContract15\",  \"IdContract16\",  \"IdContract17\",  \"IdContract18\",  \"IdContract19\",  \"IdContract20\","
+                        + "  \"IdContract21\",   \"IdContract22\",  \"IdContract23\",  \"IdContract24\",  \"IdContract25\",  \"IdContract26\",  \"IdContract27\",  \"IdContract28\",  \"IdContract29\",  \"IdContract30\",  \"IdContract31\", "
+                        + "\"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
                         + " \"Ziua11\", \"Ziua12\",  \"Ziua13\", \"Ziua14\", \"Ziua15\", \"Ziua16\", \"Ziua17\", \"Ziua18\", \"Ziua19\", \"Ziua20\", "
                         + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
                         + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "
@@ -893,7 +897,11 @@ namespace WizOne.Pontaj
                                       + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
                                       + "SELECT  \"Id\",  \"Denumire\", \"IdProgram1\", \"IdProgram2\", \"IdProgram3\",  \"IdProgram4\",  \"IdProgram5\",  \"IdProgram6\",  \"IdProgram7\",  \"IdProgram8\",  \"IdProgram9\",  \"IdProgram10\","
                         + "  \"IdProgram11\",   \"IdProgram12\",  \"IdProgram13\",  \"IdProgram14\",  \"IdProgram15\",  \"IdProgram16\",  \"IdProgram17\",  \"IdProgram18\",  \"IdProgram19\",  \"IdProgram20\","
-                        + "  \"IdProgram21\",   \"IdProgram22\",  \"IdProgram23\",  \"IdProgram24\",  \"IdProgram25\",  \"IdProgram26\",  \"IdProgram27\",  \"IdProgram28\",  \"IdProgram29\",  \"IdProgram30\",  \"IdProgram31\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
+                        + "  \"IdProgram21\",   \"IdProgram22\",  \"IdProgram23\",  \"IdProgram24\",  \"IdProgram25\",  \"IdProgram26\",  \"IdProgram27\",  \"IdProgram28\",  \"IdProgram29\",  \"IdProgram30\",  \"IdProgram31\", "
+                          + " \"IdContract1\", \"IdContract2\", \"IdContract3\",  \"IdContract4\",  \"IdContract5\",  \"IdContract6\",  \"IdContract7\",  \"IdContract8\",  \"IdContract9\",  \"IdContract10\","
+                        + "  \"IdContract11\",   \"IdContract12\",  \"IdContract13\",  \"IdContract14\",  \"IdContract15\",  \"IdContract16\",  \"IdContract17\",  \"IdContract18\",  \"IdContract19\",  \"IdContract20\","
+                        + "  \"IdContract21\",   \"IdContract22\",  \"IdContract23\",  \"IdContract24\",  \"IdContract25\",  \"IdContract26\",  \"IdContract27\",  \"IdContract28\",  \"IdContract29\",  \"IdContract30\",  \"IdContract31\", "
+                        + " \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
                                       + " \"Ziua11\", \"Ziua12\",  \"Ziua13\", \"Ziua14\", \"Ziua15\", \"Ziua16\", \"Ziua17\", \"Ziua18\", \"Ziua19\", \"Ziua20\", "
                                       + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
                                       + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "
@@ -934,7 +942,7 @@ namespace WizOne.Pontaj
                                     tx.Visible = true;
                                     //if (tx.Text.Length > 0)
                                     //{
-                                        linii[0]["Ziua" + i.ToString()] = tx.Text;
+                                        //linii[0]["Ziua" + i.ToString()] = tx.Text;
                                         if (tx.Text.Length <= 0)
                                         {
                                             linii[0]["IdProgram" + i.ToString()] = DBNull.Value;
@@ -950,6 +958,8 @@ namespace WizOne.Pontaj
                                                 linii[0]["IdProgram" + i.ToString()] = item.Value ?? DBNull.Value;
                                             if (item.Key == "IdContract_" + "txtZiua" + i.ToString())
                                                 linii[0]["IdContract" + i.ToString()] = item.Value ?? DBNull.Value;
+                                            if (item.Key == "ValStr_" + "txtZiua" + i.ToString())
+                                                linii[0]["Ziua" + i.ToString()] = item.Value ?? DBNull.Value;
                                     }                         
                                       
                                     //}
@@ -982,7 +992,11 @@ namespace WizOne.Pontaj
                           + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
                           + "SELECT  \"Id\",  \"Denumire\", \"IdProgram1\", \"IdProgram2\", \"IdProgram3\",  \"IdProgram4\",  \"IdProgram5\",  \"IdProgram6\",  \"IdProgram7\",  \"IdProgram8\",  \"IdProgram9\",  \"IdProgram10\","
                         + "  \"IdProgram11\",   \"IdProgram12\",  \"IdProgram13\",  \"IdProgram14\",  \"IdProgram15\",  \"IdProgram16\",  \"IdProgram17\",  \"IdProgram18\",  \"IdProgram19\",  \"IdProgram20\","
-                        + "  \"IdProgram21\",   \"IdProgram22\",  \"IdProgram23\",  \"IdProgram24\",  \"IdProgram25\",  \"IdProgram26\",  \"IdProgram27\",  \"IdProgram28\",  \"IdProgram29\",  \"IdProgram30\",  \"IdProgram31\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
+                        + "  \"IdProgram21\",   \"IdProgram22\",  \"IdProgram23\",  \"IdProgram24\",  \"IdProgram25\",  \"IdProgram26\",  \"IdProgram27\",  \"IdProgram28\",  \"IdProgram29\",  \"IdProgram30\",  \"IdProgram31\", " 
+                        + " \"IdContract1\", \"IdContract2\", \"IdContract3\",  \"IdContract4\",  \"IdContract5\",  \"IdContract6\",  \"IdContract7\",  \"IdContract8\",  \"IdContract9\",  \"IdContract10\","
+                        + "  \"IdContract11\",   \"IdContract12\",  \"IdContract13\",  \"IdContract14\",  \"IdContract15\",  \"IdContract16\",  \"IdContract17\",  \"IdContract18\",  \"IdContract19\",  \"IdContract20\","
+                        + "  \"IdContract21\",   \"IdContract22\",  \"IdContract23\",  \"IdContract24\",  \"IdContract25\",  \"IdContract26\",  \"IdContract27\",  \"IdContract28\",  \"IdContract29\",  \"IdContract30\",  \"IdContract31\", "
+                        + " \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
                           + " \"Ziua11\", \"Ziua12\",  \"Ziua13\", \"Ziua14\", \"Ziua15\", \"Ziua16\", \"Ziua17\", \"Ziua18\", \"Ziua19\", \"Ziua20\", "
                           + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
                           + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "

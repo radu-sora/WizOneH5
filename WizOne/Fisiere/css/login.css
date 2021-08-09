@@ -13,7 +13,7 @@ background-size:cover;
 
 .outer{
 width:410px;
-height:450px;
+height:370px;
 position: absolute;
 top:0;
 bottom: 0;
@@ -43,12 +43,10 @@ color:#00588a;
     color: #00588a;
 }
 
-.inner
-{
+.inner {
     position:absolute;
     top:110px;
     left:55px;
-    height: 550px;
     width:290px;
     display:inline-block;
     text-align:left;
@@ -226,10 +224,9 @@ a
     }
 
 .captcha {
-    display: inline-block;
-    bottom: 0px;
-    left: 50px;
     position: absolute;
+    top: 370px;
+    left: 50px;
 }
 
 .logOut {
@@ -237,10 +234,14 @@ a
     justify-content: center;
     align-items: center;
     height: 340px;
-    max-width:400px;
-    padding:20px;
+    max-width: 400px;
+    padding: 20px;
 }
 
 .app_ras {
-   display: flex; height:200px; justify-content: center; align-items: center; margin:80px 50px;
+    display: flex;
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+    margin: 80px 50px;
 }

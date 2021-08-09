@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne {
-    
-    
-    public partial class Cadru {
-        
+namespace WizOne
+{
+
+
+    public partial class Cadru
+    {
+
         /// <summary>
         /// txtVers1 control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlTitle txtVers1;
-        
+
         /// <summary>
         /// head control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
-        
+
         /// <summary>
         /// form1 control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
+
         /// <summary>
         /// ScriptManager1 control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.ScriptManager ScriptManager1;
-        
+
         /// <summary>
         /// pnlLoading control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLoadingPanel pnlLoading;
-        
+
         /// <summary>
         /// pnlHeader control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPanel pnlHeader;
-        
+
         /// <summary>
         /// divCmbProfile control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCmbProfile;
-        
+
         /// <summary>
         /// etiProfile control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl etiProfile;
-        
+
         /// <summary>
         /// cmbProfile control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbProfile;
-        
+
         /// <summary>
         /// etiLimbi control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl etiLimbi;
-        
+
         /// <summary>
         /// aRo control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton aRo;
-        
+
         /// <summary>
         /// aEn control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton aEn;
-        
+
         /// <summary>
         /// aFr control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton aFr;
-        
+
         /// <summary>
         /// aEs control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton aEs;
-        
+
         /// <summary>
         /// aDe control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton aDe;
-        
+
         /// <summary>
         /// aIt control.
         /// </summary>
@@ -155,7 +157,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton aIt;
-        
+
         /// <summary>
         /// aBg control.
         /// </summary>
@@ -164,7 +166,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton aBg;
-        
+
         /// <summary>
         /// aRu control.
         /// </summary>
@@ -173,7 +175,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton aRu;
-        
+
         /// <summary>
         /// etiTeme control.
         /// </summary>
@@ -182,7 +184,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl etiTeme;
-        
+
         /// <summary>
         /// etiCont control.
         /// </summary>
@@ -191,7 +193,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl etiCont;
-        
+
         /// <summary>
         /// lblNume control.
         /// </summary>
@@ -200,7 +202,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblNume;
-        
+
         /// <summary>
         /// txtNume control.
         /// </summary>
@@ -209,7 +211,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtNume;
-        
+
         /// <summary>
         /// lblAng control.
         /// </summary>
@@ -218,7 +220,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblAng;
-        
+
         /// <summary>
         /// txtAng control.
         /// </summary>
@@ -227,7 +229,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtAng;
-        
+
         /// <summary>
         /// lblLimbi control.
         /// </summary>
@@ -236,7 +238,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblLimbi;
-        
+
         /// <summary>
         /// txtLimba control.
         /// </summary>
@@ -245,7 +247,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtLimba;
-        
+
         /// <summary>
         /// lblParola control.
         /// </summary>
@@ -254,7 +256,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblParola;
-        
+
         /// <summary>
         /// txtParola control.
         /// </summary>
@@ -263,7 +265,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtParola;
-        
+
         /// <summary>
         /// lblConfirma control.
         /// </summary>
@@ -272,7 +274,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblConfirma;
-        
+
         /// <summary>
         /// txtConfirma control.
         /// </summary>
@@ -281,7 +283,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtConfirma;
-        
+
         /// <summary>
         /// lblParolaRap control.
         /// </summary>
@@ -290,7 +292,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblParolaRap;
-        
+
         /// <summary>
         /// txtParolaRap control.
         /// </summary>
@@ -299,7 +301,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtParolaRap;
-        
+
         /// <summary>
         /// lblConfirmaRap control.
         /// </summary>
@@ -308,7 +310,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblConfirmaRap;
-        
+
         /// <summary>
         /// txtConfirmaRap control.
         /// </summary>
@@ -317,7 +319,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtConfirmaRap;
-        
+
         /// <summary>
         /// lnkOut control.
         /// </summary>
@@ -326,7 +328,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lnkOut;
-        
+
         /// <summary>
         /// etiLog control.
         /// </summary>
@@ -335,7 +337,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl etiLog;
-        
+
         /// <summary>
         /// pnlMeniu control.
         /// </summary>
@@ -344,7 +346,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPanel pnlMeniu;
-        
+
         /// <summary>
         /// PanelContent2 control.
         /// </summary>
@@ -353,7 +355,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.PanelContent PanelContent2;
-        
+
         /// <summary>
         /// mnuSide control.
         /// </summary>
@@ -362,7 +364,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxNavBar mnuSide;
-        
+
         /// <summary>
         /// pnlFooter control.
         /// </summary>
@@ -371,7 +373,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPanel pnlFooter;
-        
+
         /// <summary>
         /// PanelContent1 control.
         /// </summary>
@@ -380,7 +382,16 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.PanelContent PanelContent1;
-        
+
+        /// <summary>
+        /// FooterMenu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater FooterMenu;
+
         /// <summary>
         /// txtVers control.
         /// </summary>
@@ -389,7 +400,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl txtVers;
-        
+
         /// <summary>
         /// txtLunaLucru control.
         /// </summary>
@@ -398,7 +409,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl txtLunaLucru;
-        
+
         /// <summary>
         /// txtUsr control.
         /// </summary>
@@ -407,7 +418,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl txtUsr;
-        
+
         /// <summary>
         /// pnlContent1 control.
         /// </summary>
@@ -416,7 +427,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPanel pnlContent1;
-        
+
         /// <summary>
         /// ContentPlaceHolder1 control.
         /// </summary>
@@ -425,7 +436,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder ContentPlaceHolder1;
-        
+
         /// <summary>
         /// mnuCtx control.
         /// </summary>
@@ -434,7 +445,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupMenu mnuCtx;
-        
+
         /// <summary>
         /// popGen control.
         /// </summary>
@@ -443,7 +454,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupControl popGen;
-        
+
         /// <summary>
         /// popGenIst control.
         /// </summary>
@@ -452,7 +463,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupControl popGenIst;
-        
+
         /// <summary>
         /// popGenD112 control.
         /// </summary>
@@ -461,7 +472,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupControl popGenD112;
-        
+
         /// <summary>
         /// popGenDetalii control.
         /// </summary>
@@ -470,7 +481,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupControl popGenDetalii;
-        
+
         /// <summary>
         /// callBackProfile control.
         /// </summary>
@@ -479,7 +490,7 @@ namespace WizOne {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallback callBackProfile;
-        
+
         /// <summary>
         /// __TEME control.
         /// </summary>

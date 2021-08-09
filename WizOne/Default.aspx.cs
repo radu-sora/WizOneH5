@@ -24,6 +24,17 @@ namespace WizOne
     {
         static string arrIncercari = "";
 
+        private bool IsMobileDevice
+        {
+            get
+            {
+                var userAgent = Request.ServerVariables["HTTP_USER_AGENT"];
+                var devices = new string[] { "iPhone", "iPad", "Android", "Windows Phone" }; // Add more devices
+
+                return devices.Any(d => userAgent.Contains(d));
+            }
+        }
+
         protected void Page_Init(object sender, EventArgs e)
         {
             try
@@ -506,7 +517,10 @@ namespace WizOne
                                         if (Constante.tipBD == 2)
                                             General.ExecutaNonQuery("alter session set nls_date_format='DD-MM-RRRR'", null);
 
-                                        Response.Redirect("~/Pagini/MainPage", false);
+                                        if (IsMobileDevice)                                            
+                                            Response.Redirect(Dami.ValoareParam("DHPM", "~/Pagini/Calendar"), false);                                        
+                                        else
+                                            Response.Redirect("~/Pagini/MainPage", false);                                            
                                     }
                                 }
                             }

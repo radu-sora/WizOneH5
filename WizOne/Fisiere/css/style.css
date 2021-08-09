@@ -15,128 +15,299 @@ a, a:focus, a:hover {
     color:gray;
 }
 
+/* Header brand image */
+.header-brand {
+    float: left;
+    margin-left: 10px;
+    height: 35px;
+}
+
+.header-brand-row {
+    height: 45px;
+}
+
+@media all and (max-width:1024px) {
+    .header-brand-row {
+        display: none;
+    }
+}
+
 /* Header menu control */
-.HeaderMeniu {
-    float:right; 
-    height:45px;
-    line-height:45px;
+.header-menu {
+    float: right;
+    height: 45px;
+    line-height: 45px;
+    color: grey;
 }
 
-.HeaderMeniu > div {
-    display:inline-block;
-    vertical-align:middle;    
+.header-menu > div {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 10px;    
+    border-radius: 4px;
 }
 
-.HeaderMeniu > div > table {
-    display:inline-table;
-    vertical-align:middle;
+.header-menu > div.open {
+    background-color: #e7e7e7;
 }
 
-.HeaderMeniu > div > a {
-    margin-left:13px;
-    cursor:pointer;
+.header-menu > div:not(.open):hover,
+.header-menu > div:not(.open):focus {
+    background-color: #f5f5f5;
+}    
+
+.header-menu > div > table {
+    display: inline-table;
+    vertical-align: middle;
 }
 
-.HeaderMeniu > div > a > img {
+.header-menu > div > a {    
+    display: block;
+}
+
+.header-menu > div > a > img {
     margin-right: 5px;
 }
 
-.HeaderMeniu > div > label,
-.HeaderMeniu > div > a > label {
-    display:inline;
-    vertical-align:middle;
+.header-menu > div > span,
+.header-menu > div > a > span {
+    vertical-align: middle;
+    font-weight: bold;
 }
 
-.HeaderMeniu > div > ul.dropdown-menu {
-    min-width:0;
+.header-menu > div > .modal-backdrop {
+    visibility: hidden;
 }
 
-.HeaderMeniu > div > ul.dropdown-menu:before {
-    position:absolute;
-    top:-11px;
-    left:9px;
-    border-right:11px solid transparent;
-    border-bottom:11px solid #ccc;
-    border-left:11px solid transparent;
-    border-bottom-color:rgba(0, 0, 0, 0.2);
-    content:'';
+.header-menu > div > .dropdown-menu {
+    min-width: 0;
 }
 
-.HeaderMeniu > div > ul.dropdown-menu:after {
-    position:absolute;
-    top:-10px;
-    left:10px;
-    border-right:10px solid transparent;
-    border-bottom:10px solid #ffffff;
-    border-left:10px solid transparent;
-    content:'';
+.header-menu > div > .dropdown-menu:before {
+    position: absolute;
+    top: -11px;
+    left: 9px;
+    border-right: 11px solid transparent;
+    border-bottom: 11px solid #ccc;
+    border-left: 11px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+    content: '';
 }
 
-.HeaderMeniu > div > ul.dropdown-menu > li:first-child > div {
-    padding-top:4px;
-    padding-right:8px;
+.header-menu > div > .dropdown-menu:after {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #ffffff;
+    border-left: 10px solid transparent;
+    content: '';
 }
 
-.HeaderMeniu > div > ul.dropdown-menu > li:first-child > div > button {
-    float:right;
-    font-size:16px;
+.header-menu > div:not(.open) > .dropdown-menu {
+    display: block;
+    visibility: hidden;
 }
 
-.HeaderMeniu > div > ul.dropdown-menu > li > a {
-    color:gray;
+.header-menu > div.open > .dropdown-menu {
+    opacity: 1;
 }
 
-.HeaderMeniu > div > ul.dropdown-menu > li > a > img {
-    margin-top:-3px;
-    margin-right:8px;
+.header-menu > div > .dropdown-menu > li:first-child > div {
+    padding-top: 4px;
+    padding-right: 8px;
 }
 
-.HeaderMeniu > div > ul.dropdown-menu > li > a.selected > img {
-    border:#00588a solid 2px;
-    margin-left:-2px;
-    margin-right:5px;    
+.header-menu > div > .dropdown-menu > li:first-child > div > button {
+    float: right;
+    font-size: 16px;
+}
+
+.header-menu > div > .dropdown-menu > li > a {
+    padding: 4px 16px;
+    color: gray;
+}
+
+.header-menu > div > .dropdown-menu > li > a:hover,
+.header-menu > div > .dropdown-menu > li > a:focus {
+    background-color: #f5f5f5;
+}
+
+.header-menu > div > .dropdown-menu > li > a.selected:before {
+    position: absolute;
+    margin-left: -16px;
+    border-top: 10px solid transparent;
+    border-left: 10px solid #00588a;
+    border-bottom: 10px solid transparent;
+    content: '';
+}
+
+.header-menu > div > .dropdown-menu > li > a > img {
+    margin-top: -3px;
+    margin-right: 8px;
+}
+
+@media all and (max-width:1024px) {
+    .header-menu {
+        display: flex;
+        flex-direction: column;        
+        float: none;
+        height: auto;
+    }
+              
+    .header-menu > div.open > .modal-backdrop {
+        visibility: visible;
+        opacity: 0.5;
+    }
+
+    .header-menu > div > .dropdown-menu {
+        position: fixed;
+        margin: 0;
+        z-index: 1050;
+        overflow: hidden;
+        outline: 0;
+    }
+
+    .header-menu > div > .dropdown-menu[aria-labelledby="LangButton"] {
+        top: calc(50% - 135px);
+        left: calc(50% - 62px);        
+    }
+
+    .header-menu > div > .dropdown-menu[aria-labelledby="ThemeButton"] {
+        top: calc(50% - 203px);
+        left: calc(50% - 126px);        
+    }
+
+    .header-menu > div > .dropdown-menu[aria-labelledby="AccButton"] {
+        top: calc(50% - 191px);
+        left: calc(50% - 92px);        
+    }
+}
+
+/* Side menu control */
+@media all and (max-width:1024px) {
+    html {
+        padding-left: 0 !important;
+    }
+
+    .side-menu {
+        display: none !important;
+    }
+}
+
+/* Content control */
+.content {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    overflow: auto;
+}
+
+@media all and (max-width:1024px) {
+    .content {
+        padding: 0;
+    }
+}
+
+/* Footer control */
+@media all and (max-width:1024px) {
+    .footer {
+        padding: 0 !important;
+        z-index: 1003 !important;
+    }
+
+    .footer > table {
+        display: none;
+    }
+}
+
+/* Footer menu control */
+.footer-menu {
+    display: none;
+    width: 100%;
+    height: 60px;
+    color: grey;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.footer-menu > a {
+    flex-grow: 1;
+    flex-basis: 0;    
+    text-align: center;    
+    overflow: hidden;    
+}
+
+.footer-menu > a.selected {
+    background-color: #e7e7e7;
+}
+
+.footer-menu > a.running:before  {
+    position: absolute;
+    margin: 5px 0 0 -10px;    
+    border-top: 6px solid transparent;
+    border-left: 8px solid #f30c0c;
+    border-bottom: 6px solid transparent;
+    content: '';
+}
+
+.footer-menu > a > img {
+    width: 32px;
+    height: 32px;
+    margin: 5px 0;
+}
+
+.footer-menu > a > p {
+    margin: 0 5px;
+    overflow-x: hidden;
+}
+
+@media all and (max-width:1024px) {
+    .footer-menu {
+        display: flex;
+    }
 }
 
 /* Theme selector control */
 .theme-selector {
-    width:250px;
+    width: 250px;
 }
 
 .theme-selector > tbody > tr > td {
-    vertical-align:top;
+    vertical-align: top;
 }
 
 .theme-selector > tbody > tr > td > ul {
-    list-style:none;
-    padding:0 0 4px 0;
-    line-height:1;    
+    list-style: none;
+    padding: 0 0 4px 0;
+    line-height: 1;    
 }
 
 .theme-selector > tbody > tr > td > ul > li {
-    padding:4px 0 4px 16px;    
-    cursor:pointer;   
+    padding: 4px 0 4px 16px;    
+    cursor: pointer;   
 }
 
 .theme-selector > tbody > tr > td > ul > li:not(.theme-selector-group-heder):hover,
 .theme-selector > tbody > tr > td > ul > li:not(.theme-selector-group-heder):focus {
-    background-color:#f5f5f5;
+    background-color: #f5f5f5;
 }
 
 .theme-selector > tbody > tr > td > ul > li.selected:before {
-  position:absolute;
-  margin-left:-16px;
-  border-top:10px solid transparent;
-  border-left:10px solid #00588a;
-  border-bottom:10px solid transparent;
-  content:'';
+    position: absolute;
+    margin-left: -16px;
+    border-top: 10px solid transparent;
+    border-left: 10px solid #00588a;
+    border-bottom: 10px solid transparent;
+    content: '';
 }
 
 .theme-selector > tbody > tr > td > ul > li > span {
-    margin-right:8px;
+    margin-right: 8px;
 }
 
 .theme-selector > tbody > tr > td > ul > li > * {
-    vertical-align:middle;
+    vertical-align: middle;
 }
 
 .theme-selector > tbody > tr > td > ul > li > span.ThemeDefault,
@@ -158,9 +329,9 @@ a, a:focus, a:hover {
 .theme-selector > tbody > tr > td > ul > li > span.ThemeRedWine,
 .theme-selector > tbody > tr > td > ul > li > span.ThemeSoftOrange,
 .theme-selector > tbody > tr > td > ul > li > span.ThemeYouthful {
-    width:20px;
-    height:20px;
-    display:inline-block;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
 }
 .theme-selector > tbody > tr > td > ul > li > span.ThemeDefault {
     background-color: #DCDCDC;
@@ -222,10 +393,309 @@ a, a:focus, a:hover {
 
 /* Account settings control */
 .account-form {
-    display:block;
-    line-height:1.5;
-    padding:0 16px 11px; 
+    display: block;
+    line-height: 1.5;
+    padding: 0 16px 11px; 
 }
+
+/* Page content layout */
+.page-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+    .page-content > div.page-content-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+        .page-content > div.page-content-header > div:nth-child(1),
+        .page-content > div.page-content-header > div:nth-child(2) > * {
+            margin-bottom: 10px;
+        }
+        .page-content > div.page-content-header > div:nth-child(2) {
+            float: right;
+        }
+    .page-content > div.page-content-data {
+        height: 100%;
+        overflow: hidden;
+    }    
+
+@media all and (max-width:1024px) {
+    .page-content > div.page-content-header {
+        padding-top: 5px;
+    }
+        .page-content > div.page-content-header > div:nth-child(1),
+        .page-content > div.page-content-header > div:nth-child(2) > * {
+            margin-bottom: 5px;
+        }
+    .page-content > div:not(.page-content-data) {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+/* DX gridview responsive layout. Works only for VerticalScrollBarMode = Auto */
+.dx-grid-adaptive {
+    width: 100% !important;
+    height: 100%;
+}
+    .dx-grid-adaptive > tbody > tr > td {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+        .dx-grid-adaptive > tbody > tr > td > .dxgvCSD {
+            flex: 1 0 0;
+            height: 100% !important;
+        }
+        .dx-grid-adaptive > tbody > tr > td > .dxAC {
+            flex: 1 0 0;
+        }
+            .dx-grid-adaptive > tbody > tr > td > .dxAC > div {
+                height: 100%;
+            }
+                .dx-grid-adaptive > tbody > tr > td > .dxAC > div > .dxgvCSD {
+                    height: 100% !important;
+                }
+
+@media all and (min-width:1024px) {
+    .dx-grid-adaptive.dx-grid-adaptive-hide-desktop-search div[class*="dxgvSearchPanel"] {
+        display: none;
+    }
+}
+
+@media all and (max-width:1024px) {
+    /* Fix DX gridview main container */
+    .dx-grid-adaptive {
+        border: none;
+    }
+        .dx-grid-adaptive > tbody > tr > td {
+            padding: 0 !important;
+        }
+
+    /* Fix DX search panel for max width */
+    .dx-grid-adaptive div[class*="dxgvSearchPanel"] {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+        .dx-grid-adaptive div[class*="dxgvSearchPanel"] > table {
+            width: 100%;
+            max-width: 100%;
+        }
+    
+    /* Works only for AdaptivityMode = HideDataCellsWindowLimit */
+    .dx-grid-adaptive div[class*="dxgvAdaptiveHeaderPanel"] + .dxgvHSDC, /* Fix DX adaptive layout bug when using swipe left/right */
+    .dx-grid-adaptive.dx-grid-adaptive-hide-group div[class*="dxgvGroupPanel"],
+    .dx-grid-adaptive.dx-grid-adaptive-hide-group div[class*="dxgvAdaptiveGroupPanel"],
+    .dx-grid-adaptive.dx-grid-adaptive-hide-header div[class*="dxgvAdaptiveHeaderPanel"],
+    .dx-grid-adaptive.dx-grid-adaptive-hide-header-column1 div[class*="dxgvAdaptiveHeaderPanel"] > .dxgvADH:nth-child(2),
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td > table > tbody > tr:nth-child(1),
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column2 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td > table > tbody > tr:nth-child(2),
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column3 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td > table > tbody > tr:nth-child(3),
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column4 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td > table > tbody > tr:nth-child(4),  
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column5 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td > table > tbody > tr:nth-child(5)    
+    /* Works only for AdaptivityMode = HideDataCells with one column detail section (incomplete! - deprecated) */
+    /* Header section */
+    /*.dx-grid-adaptive.dx-grid-adaptive-hide-filter .dxgvHSDC > div > table > tbody > tr[class*="dxgvFilterRow"],
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvHSDC > div > table > tbody > tr > td:first-child,*/
+    /* Data section */
+    /*.dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class="dxgvArm"] > td:first-child,
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class*="dxgvDataRow"] > td:first-child,
+    .dx-grid-adaptive.dx-grid-adaptive-hide-column1 .dxgvCSD > table > tbody > tr[class*="dxgvDetailRow"] > td:first-child > table > tbody > tr:first-child*/ {
+        display: none;
+    }
+
+    /* Fix DX adaptive layout bug when using swipe left/right with AdaptivityMode = HideDataCells (incomplete! - deprecated) */
+    /*.dx-grid-adaptive .dxgvRBB > tbody > tr > td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }*/
+
+    /* DX gridview command column support for adaptive scaling */
+    .dx-grid-adaptive.dx-grid-adaptive-scale-commandcolumn .dxgvADCMDC > a {
+        margin: 0 10px 0 0;
+        padding: 0 !important;
+    }
+        .dx-grid-adaptive.dx-grid-adaptive-scale-commandcolumn .dxgvADCMDC > a > img {
+            width: 32px;
+            height: 32px;
+        }
+
+    /* DX gridview popup support for adaptive fullscreen */        
+    .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys,
+    .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW,
+    .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv {
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+        .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv .dxgPEFTW > tbody > tr > td,
+        .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv .dxgPEFTW > tbody > tr > td > div {
+            height: 100%;
+        }
+
+        /* Fix for Safari on iOS (the footer is hiding below Safari’s menu bar) */
+        .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW {
+            height: 100%;
+        }
+            .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+                .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv > .dxpc-contentWrapper {
+                    flex: 1 0 0;
+                    overflow: hidden;
+                }
+                    .dx-grid-adaptive.dx-grid-adaptive-fullscreen-popup .dxmodalSys > .dxpclW > .dxpc-mainDiv > .dxpc-contentWrapper > .dxpc-content {
+                        height: 100% !important;
+                        min-height: 100% !important;
+                    }
+}
+
+/* DX dropdown responsive editor */
+.dx-dropdownwindow-adaptive {
+    font-size: 0;
+    padding-bottom: 20px;
+}
+
+@media all and (min-width:1024px) {
+    .dx-dropdownwindow-adaptive > div:last-child > table[class*="dxeListBox_"] {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+    }
+    .dx-dropdownwindow-adaptive > div:last-child > table[class*="dxeListBox_"][class*="dxeFocused_"] {
+        border-bottom-color: transparent;
+    }
+}
+
+@media all and (max-width:1024px) {
+    .dx-dropdownwindow-adaptive > div:last-child {
+        margin: 20px 20px 0;
+        width: calc(100% - 40px) !important;
+        min-width: 250px;
+    }
+}
+
+/* DX popup support for adaptive fullscreen (set at container level) */
+@media all and (max-width:1024px) {
+    .dx-popup-adaptive-fullscreen > .dxmodalSys,
+    .dx-popup-adaptive-fullscreen > .dxmodalSys > .dxpclW,
+    .dx-popup-adaptive-fullscreen > .dxmodalSys > .dxpclW > .dxpc-mainDiv {
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+}
+
+/* DX scheduler responsive layout. Works only for VerticalScrollBarMode = Auto */
+.dx-scheduler-adaptive {
+    width: 100%;
+    height: 100%;
+}
+    .dx-scheduler-adaptive > tbody > tr:first-child {
+        height: 0;
+    }
+    .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > .dxAC {
+        height: 100% !important;
+        overflow-y: auto !important;
+    }
+        .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > .dxAC > div:first-child {
+            right: 0 !important;
+        }
+
+    /* DX scheduler support for info only tooltip (only for hint tooltip type) */
+    .dx-scheduler-adaptive.dx-scheduler-adaptive-info-tooltip .dxsc-detailed-apt-tooltip .dxsc-dat-bottom > .dxsc-dat-buttons-container {
+        display: none;
+    }
+
+/* DX dashboard fix for fullscreen popup */
+.dx-designer .dx-popup-wrapper {
+    position: fixed !important;
+}
+
+/* BS fix for vertical/horizontal space between rows and wrapped cols. Make BS cols same height. */
+.row.row-fix {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    /*line-height: 0.8;*/
+    margin-left: -10px;
+    margin-right: -10px;
+    
+}    
+    .row.row-fix > div[class^="col-"],
+    .row.row-fix > div[class*=" col-"] {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+
+@media all and (max-width:1024px) {
+    .row.row-fix {
+        margin-left: -5px;
+        margin-right: -5px;        
+    }        
+        .row.row-fix > div[class^="col-"],
+        .row.row-fix > div[class*=" col-"] {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 5px;
+        }
+}
+
+/* BS panel support for slim, command box and adaptive layout */
+.panel.panel-slim {
+    border: none;
+    margin-bottom: 0;
+}
+.panel-footer.panel-footer-commandbox {
+    display: flex;
+    justify-content: flex-end;
+}
+    .panel-footer.panel-footer-commandbox > *:not(:first-child) {
+        margin-left: 5px;
+    }
+
+@media all and (max-width:1024px) {
+    .panel.panel-adaptive-fullscreen {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+        .panel.panel-adaptive-fullscreen > .panel-body {
+            flex: 1 0 0;
+            overflow-y: auto;
+        }
+}
+
+/* BS label support for inline fields */
+.label-inline {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+/* File uploader custom control */
+.file-uploader {
+    display: flex;
+    align-items: flex-end;
+}
+    .file-uploader > *:not(:last-child) {
+        margin-right: 10px;
+    }
+    .file-uploader > label {
+        margin-bottom: 0;
+        line-height: 1.1;
+        overflow: hidden;
+    }
+
+
            
 /* Badge widget */
 .badgeContainer {
@@ -374,29 +844,25 @@ a, a:focus, a:hover {
 
 
 
-.Absente_Cereri_AbsDesc
-{
-    position:relative;
-    float:left;
-    width:20px;
-    height:20px;
+.Absente_Cereri_AbsDesc {
+    position: relative;
+    float: left;
+    /*width:20px;*/
+    /*height:20px;*/
     /*margin-left:15px;*/
-    text-align:left;
+    margin-right: 5px;
+    text-align: left;
 }
 
-#txtAbsDesc
-{
-    visibility:hidden;
-    position:absolute;
-    z-index:1500 !important;
-    width:250px !important;
-    height:auto !important;
-    top:30px;
-    left:-20px;
-    border:solid 1px gray;
+#txtAbsDesc {
+    visibility: hidden;
+    position: absolute;
+    z-index: 1500 !important;    
+    top: 18px;
+    border: solid 1px gray;
     border-radius: 15px;
-    padding:10px;
-    background-color:#fff !important;
+    padding: 10px;
+    background-color: #fff !important;
 }
 
 

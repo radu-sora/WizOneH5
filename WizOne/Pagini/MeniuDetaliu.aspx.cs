@@ -64,15 +64,22 @@ namespace WizOne.Pagini
                     max = Convert.ToInt32(General.ExecutaScalar("SELECT COALESCE(MAX(\"IdMeniu\"),0) FROM \"MeniuLinii\"", null)) + 1;
                     txtMax["Max"] = max;
                     txtMax2.Value = max.ToString();
-                    Session["IdMaxValue"] = max;
+                    Session["IdMaxValue"] = max;                                       
 
-                    int id = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
-                
+                    int id = Convert.ToInt32(Session["Sablon_CheiePrimara"]);                
+                    DataTable dtTemp = new DataTable();
                     DataTable dt = new DataTable();
+                    
+                    dt.Columns.Add("Stare", typeof(bool));
+                    dt.Columns.Add("StareMobil", typeof(bool));
+
                     if (Session["Sablon_TipActiune"].ToString() == "Clone")
-                        dt = General.IncarcaDT(@"SELECT * FROM ""MeniuLinii"" WHERE ""Id""=@1 ", new string[] { "-99" });
+                        dtTemp = General.IncarcaDT(@"SELECT * FROM ""MeniuLinii"" WHERE ""Id""=@1 ", new string[] { "-99" });
                     else
-                        dt = General.IncarcaDT(@"SELECT * FROM ""MeniuLinii"" WHERE ""Id""=@1 ", new string[] { id.ToString() });
+                        dtTemp = General.IncarcaDT(@"SELECT * FROM ""MeniuLinii"" WHERE ""Id""=@1 ", new string[] { id.ToString() });                    
+                    
+                    dt.Load(dtTemp.CreateDataReader(), LoadOption.OverwriteChanges);
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdMeniu"] };
 
                     switch (Session["Sablon_TipActiune"].ToString())
                     {
@@ -110,6 +117,9 @@ namespace WizOne.Pagini
                                         drDes["Imagine"] = dr["Imagine"];
                                         drDes["USER_NO"] = Session["UserId"];
                                         drDes["TIME"] = DateTime.Now;
+                                        drDes["StareMobil"] = dr["StareMobil"];
+                                        drDes["NumeMobil"] = dr["NumeMobil"];
+                                        drDes["OrdineMobil"] = dr["OrdineMobil"];
                                         dt.Rows.Add(drDes);
                                     }
                                 }
@@ -117,17 +127,15 @@ namespace WizOne.Pagini
                             break;
                     }
 
-                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdMeniu"] };
-                    Session["InformatiaCurenta"] = dt;
-                    grDate.DataSource = dt;
-                    grDate.DataBind();
+                    Session["Icons"] = IncarcaIcoane();
+                    Session["Menus"] = General.IncarcaDT(@"SELECT * FROM ""tblMeniuri"" ", null);
+                    Session["InformatiaCurenta"] = dt;                    
+                }                
 
-                }
-                else
-                {
-                    grDate.DataSource = Session["InformatiaCurenta"];
-                    grDate.DataBind();
-                }
+                (grDate.Columns["Imagine"] as TreeListComboBoxColumn).PropertiesComboBox.DataSource = Session["Icons"];
+                (grDate.Columns["IdNomen"] as TreeListComboBoxColumn).PropertiesComboBox.DataSource = Session["Menus"];
+                grDate.DataSource = Session["InformatiaCurenta"];
+                grDate.DataBind();
             }
             catch (Exception ex)
             {
@@ -417,27 +425,8 @@ namespace WizOne.Pagini
                     }
                 }
 
-                if (e.Column.FieldName == "IdNomen" && level != 3)
-                    e.Editor.ReadOnly = true;
-
-
-                if (e.Column.FieldName == "IdNomen" && level == 3)
-                {
-                    ASPxComboBox cmb = e.Editor as ASPxComboBox;
-                    cmb.Items.Clear();
-
-                    DataTable dtCmb = General.IncarcaDT(@"SELECT * FROM ""tblMeniuri"" ", null);
-                    cmb.DataSource = dtCmb;
-                    cmb.DataBindItems();
-                }
-                if (e.Column.FieldName == "Imagine")
-                {
-                    ASPxComboBox cmb = e.Editor as ASPxComboBox;
-                    cmb.Items.Clear();
-
-                    cmb.DataSource = IncarcaIcoane();
-                    cmb.DataBindItems();
-                }
+                if (level != 3 && (new string[] { "IdNomen", "StareMobil", "NumeMobil", "OrdineMobil" }).Contains(e.Column.FieldName))
+                    e.Editor.Visible = false;                                
             }
             catch (Exception ex)
             {

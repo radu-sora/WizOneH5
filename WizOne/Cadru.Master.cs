@@ -15,6 +15,17 @@ namespace WizOne
     //Test Florin 2019.05.29
     public partial class Cadru : System.Web.UI.MasterPage
     {
+        private bool IsMobileDevice
+        {
+            get
+            {
+                var userAgent = Request.ServerVariables["HTTP_USER_AGENT"];
+                var devices = new string[] { "iPhone", "iPad", "Android", "Windows Phone" }; // Add more devices
+
+                return devices.Any(d => userAgent.Contains(d));
+            }
+        }        
+
         protected override void FrameworkInitialize()
         {            
             var targetId = Request["__EVENTTARGET"];
@@ -77,7 +88,7 @@ namespace WizOne
 
                         string sFont = Dami.ValoareParam("GridFontSize", "0");
                         if (sFont != "0" && General.IsNumeric(sFont)) grDate.Font.Size = FontUnit.Point(Convert.ToInt32(sFont));
-                    }
+                    }                    
                 }
 
 
@@ -300,6 +311,18 @@ namespace WizOne
             }
         }
 
+        protected void HeaderBrand_Init(object sender, EventArgs e)
+        {
+            if (IsMobileDevice)            
+                (sender as System.Web.UI.HtmlControls.HtmlAnchor).HRef = Dami.ValoareParam("DHPM", "~/Pagini/Calendar");                            
+        }
+
+        protected void HeaderBrandExpand_Init(object sender, EventArgs e)
+        {            
+            if (IsMobileDevice)            
+                (sender as System.Web.UI.HtmlControls.HtmlAnchor).HRef = Dami.ValoareParam("DHPM", "~/Pagini/Calendar");                
+        }        
+
         protected void btnSaveTheme_Click(object sender, EventArgs e)
         {
             try
@@ -471,13 +494,13 @@ namespace WizOne
         {
             try
             {
-                string strSql = @"SELECT B.""IdMeniu"", B.""Parinte"", B.""Nume"", B.""Imagine"", B.""Ordine"", E.""Pagina"", B.""Descriere"" 
+                string strSql = @"SELECT B.""IdMeniu"", B.""Parinte"", B.""Nume"", B.""Imagine"", B.""Ordine"", E.""Pagina"", B.""Descriere"", B.""StareMobil"", B.""NumeMobil"", B.""OrdineMobil""
                                 FROM ""MeniuLinii"" B
                                 INNER JOIN ""relGrupMeniu2"" C ON B.""IdMeniu"" = C.""IdMeniu""
                                 INNER JOIN ""relGrupUser"" D ON C.""IdGrup"" = D.""IdGrup""
                                 LEFT JOIN ""tblMeniuri"" E ON E.""Id"" = B.""IdNomen""
                                 WHERE D.""IdUser"" = @1 AND B.""Stare"" = 1
-                                GROUP BY B.""Parinte"", B.""IdMeniu"", B.""Nume"", B.""Imagine"", B.""Ordine"", E.""Pagina"", B.""Descriere""
+                                GROUP BY B.""Parinte"", B.""IdMeniu"", B.""Nume"", B.""Imagine"", B.""Ordine"", E.""Pagina"", B.""Descriere"", B.""StareMobil"", B.""NumeMobil"", B.""OrdineMobil""
                                 ORDER BY B.""Parinte"", B.""Ordine"" ";
 
                 strSql = string.Format(strSql, Session["UserId"].ToString());
@@ -503,6 +526,21 @@ namespace WizOne
                     
                     mnuSide.Groups.Add(modul);
                 }
+
+                FooterMenu.DataSource = dt.AsEnumerable().
+                    Where(row => (row["StareMobil"] as int? ?? 0) == 1 && !(row["Pagina"] as string ?? "").Contains('[')).
+                    Take(5). // Fixed for now
+                    OrderBy(row => row["OrdineMobil"] as int? ?? 0).
+                    Select(row => new
+                    {
+                        Name = row["NumeMobil"] as string ?? row["Nume"],
+                        Url = ResolveClientUrl(row["Pagina"] as string),
+                        ImageUrl = ResolveClientUrl("Fisiere/Imagini/Icoane/" + row["Imagine"]),
+                        Selected = Request.RawUrl.EndsWith("/" + (row["Pagina"] as string ?? "").Replace('\\', '/')),
+                        Running = (row["Pagina"] as string ?? "") == "Pontaj\\PontajAngajat" && !Request.RawUrl.EndsWith("/" + (row["Pagina"] as string ?? "").Replace('\\', '/')) ?
+                            General.RunSqlScalar<int>("SELECT COUNT(*) FROM [Schedule] WHERE [Type] = 2 AND [StatusId] = 2 AND [EmployeeId] = @1", null, Session["User_Marca"]) == 1 : false
+                    });
+                FooterMenu.DataBind();                
             }
             catch (Exception ex)
             {
@@ -671,7 +709,8 @@ namespace WizOne
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }
+        }        
+        
 
         //Radu 25.03.2019        
         protected void OnImageClick(object sender, EventArgs e)
@@ -685,11 +724,6 @@ namespace WizOne
             Response.Redirect(url + "/Pagini/MainPage");
         }
     }
-
-
-
-
-
 
     public class GroupTemplate : System.Web.UI.UserControl, ITemplate
     {
@@ -803,13 +837,6 @@ namespace WizOne
                 General.MemoreazaEroarea(ex, Path.GetFileName(this.Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
     }
-
-
-
-
-
-
 }
 

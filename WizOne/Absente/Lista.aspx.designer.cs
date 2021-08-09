@@ -93,7 +93,7 @@ namespace WizOne.Absente
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblViz;
+        protected global::DevExpress.Web.ASPxLabel lblViz;
 
         /// <summary>
         /// cmbViz control.
@@ -111,7 +111,7 @@ namespace WizOne.Absente
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRol;
+        protected global::DevExpress.Web.ASPxLabel lblRol;
 
         /// <summary>
         /// cmbRol control.
@@ -129,7 +129,7 @@ namespace WizOne.Absente
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblStare;
+        protected global::DevExpress.Web.ASPxLabel lblStare;
 
         /// <summary>
         /// cmbStare control.
@@ -147,7 +147,7 @@ namespace WizOne.Absente
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDtInc;
+        protected global::DevExpress.Web.ASPxLabel lblDtInc;
 
         /// <summary>
         /// txtDtInc control.
@@ -165,7 +165,7 @@ namespace WizOne.Absente
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDtSf;
+        protected global::DevExpress.Web.ASPxLabel lblDtSf;
 
         /// <summary>
         /// txtDtSf control.
@@ -373,14 +373,5 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxMemo txtMtv;
-
-        /// <summary>
-        /// ge control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxGlobalEvents ge;
     }
 }

@@ -24,7 +24,13 @@ namespace WizOne.Beneficii
             public string Denumire { get; set; }
         }
 
-      
+        public class metaUploadFile
+        {
+            public object UploadedFile { get; set; }
+            public object UploadedFileName { get; set; }
+            public object UploadedFileExtension { get; set; }
+
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -106,8 +112,7 @@ namespace WizOne.Beneficii
                         IncarcaGridSes();                        
                         DataTable dt = Session["SelectBen_Ses"] as DataTable;
                         string msg = "Sesiunea pentru selectarea Beneficiilor este deschisa pana in data de <b>" + Convert.ToDateTime(dtSes.Rows[0]["DataSfarsit"].ToString()).ToShortDateString() 
-                            + "</b>.\n Selectarea Beneficiilor se face pentru perioda <b>" + Convert.ToDateTime(dtSes.Rows[0]["DataInceputBen"].ToString()).ToShortDateString() + "</b> - <b>" +
-                             Convert.ToDateTime(dtSes.Rows[0]["DataSfarsitBen"].ToString()).ToShortDateString() + "</b>.";
+                            + "</b>.\n Selectarea Beneficiilor se face pentru perioada specificata in tabelul de mai jos.";
                         Session["Select_Sesiune"] = dtSes;
                         int idStare = 1;
                         if (dt != null && dt.Rows.Count > 0)
@@ -337,10 +342,11 @@ namespace WizOne.Beneficii
                 //                 where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal')
                 //                 AND a.""DeLaData"" <= getdate() and getdate() <= a.""LaData""
                 //                 ORDER BY a.""Denumire""";
-                strSql = @"Select Ben_Cereri.*, Ben_tblSesiuni.DataSfarsitBen, c.Descriere from Ben_Cereri
+                strSql = @"Select Ben_Cereri.*, e.DataSfarsit as DataSfarsitBen, c.Descriere from Ben_Cereri
                     Join Ben_tblSesiuni on Ben_Cereri.IdSesiune = Ben_tblSesiuni.Id
                      LEFT JOIN Admin_Obiecte c ON c.Id = Ben_Cereri.IdBeneficiu 
                      inner join Admin_Categorii d on c.IdCategorie = d.Id 
+                     left join Ben_relSesGrupBen e on e.IdSesiune = Ben_Cereri.IdSesiune and e.IdGrup = c.IdGrup   
                      where d.IdArie = (select Valoare from tblParametrii where Nume = 'ArieTabBeneficiiDinPersonal')                   
                     AND Ben_Cereri.idstare = 3 and cast(getdate() as date) between DataInceputBen and DataSfarsitBen
                     And F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99);
@@ -393,9 +399,10 @@ namespace WizOne.Beneficii
             {
                 string strSql = "";
 
-                strSql = "SELECT Ben_Cereri.IdAuto, F10003, IdSesiune, IdBeneficiu, DataInceput, DataSfarsit, Ben_Cereri.IdStare, DataInceputBen, DataSfarsitBen, Motiv, Ben_Cereri.USER_NO, Ben_Cereri.TIME FROM Ben_Cereri "
+                strSql = "SELECT Ben_Cereri.IdAuto, F10003, Ben_Cereri.IdSesiune, IdBeneficiu, Ben_tblSesiuni.DataInceput, Ben_tblSesiuni.DataSfarsit, Ben_Cereri.IdStare, Ben_relSesGrupBen.DataInceput as DataInceputBen, Ben_relSesGrupBen.DataSfarsit as DataSfarsitBen, Motiv, Ben_Cereri.USER_NO, Ben_Cereri.TIME FROM Ben_Cereri "
                     + " LEFT JOIN Ben_tblSesiuni ON Ben_Cereri.IdSesiune = Ben_tblSesiuni.Id "
-                    + " WHERE convert(date, DataInceput) <= convert(date, GETDATE()) AND convert(date, GETDATE()) <= convert(date, DataSfarsit) AND F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99);
+                    + " left join Ben_relSesGrupBen on Ben_tblSesiuni.Id = Ben_relSesGrupBen.IdSesiune "
+                    + " WHERE convert(date, Ben_tblSesiuni.DataInceput) <= convert(date, GETDATE()) AND convert(date, GETDATE()) <= convert(date, Ben_tblSesiuni.DataSfarsit) AND F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99);
                 DataTable dt = General.IncarcaDT(strSql, null);
                 Session["SelectBen_Ses"] = dt;
 
@@ -406,14 +413,16 @@ namespace WizOne.Beneficii
                 //                AND a.""DeLaData"" <=GETDATE() AND GETDATE() <= a.""LaData""
                 //                ORDER BY a.""Denumire""";
 
-                strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", c.""DataInceputBen"", c.""DataSfarsitBen"", a.""Descriere"", a.USER_NO, a.TIME, a.ValoareEstimata
+                strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", d.DataInceput as DataInceputBen, d.DataSfarsit as DataSfarsitBen, a.""Descriere"", a.USER_NO, a.TIME, a.ValoareEstimata, {0} AS F10003
                                  from ""Admin_Obiecte"" a
                                  inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
                                  LEFT JOIN Ben_tblSesiuni c on c.""DataInceput"" <= getdate() and getdate() <= c.""DataSfarsit""
+                                 left join Ben_relSesGrupBen d on c.Id = d.IdSesiune and d.IdGrup = a.IdGrup  
                                  where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') 
                                  and convert(date, a.""DeLaData"") <= convert(date, getdate()) and convert(date, getdate()) <= convert(date, a.""LaData"")  
                                  ORDER BY a.""Denumire""";
 
+                strSql = string.Format(strSql, Convert.ToInt32(Session["User_Marca"] ?? -99));
 
                 q = General.IncarcaDT(strSql, null);
             }
@@ -427,6 +436,107 @@ namespace WizOne.Beneficii
         }
 
 
+        protected void btnDocUploadBen_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        {
+            try
+            {
+                if (!e.IsValid) return;
+                ASPxUploadControl btnDocUpload = (ASPxUploadControl)sender;
+
+                metaUploadFile itm = new metaUploadFile();
+                itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
+                itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
+                itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
+
+                Session["DocUpload_SelBen"] = itm;
+
+                //btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+        }
+
+        protected void btnDocUploadSes_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        {
+            try
+            {
+                if (!e.IsValid) return;
+                ASPxUploadControl btnDocUpload = (ASPxUploadControl)sender;
+
+                metaUploadFile itm = new metaUploadFile();
+                itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
+                itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
+                itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
+
+                Session["DocUpload_SelSes"] = itm;
+
+                //btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+        }
+
+        protected void grDateBen_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                DataTable dt = Session["Select_GridBen"] as DataTable;
+
+                DataRow dr = dt.Rows.Find(keys);
+
+                metaUploadFile itm = Session["DocUpload_SelBen"] as metaUploadFile;
+                if (itm != null)
+                    General.LoadFile(itm.UploadedFileName.ToString(), itm.UploadedFile, "Beneficii_Ang", Convert.ToInt32(Session["User_Marca"] ?? -99));
+
+                e.Cancel = true;
+                grDateBen.CancelEdit();
+                grDateBen.DataSource = dt;
+                grDateBen.KeyFieldName = "IdBeneficiu";
+                Session["Select_GridBen"] = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateSes_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                DataTable dt = Session["Select_GridSes"] as DataTable;
+
+                DataRow dr = dt.Rows.Find(keys);
+
+                metaUploadFile itm = Session["DocUpload_SelSes"] as metaUploadFile;
+                if (itm != null)
+                    General.LoadFile(itm.UploadedFileName.ToString(), itm.UploadedFile, "Beneficii_Ang", Convert.ToInt32(Session["User_Marca"] ?? -99));
+
+                e.Cancel = true;
+                grDateSes.CancelEdit();
+                grDateSes.DataSource = dt;
+                grDateSes.KeyFieldName = "Id";
+                Session["Select_GridSes"] = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
     }
 }

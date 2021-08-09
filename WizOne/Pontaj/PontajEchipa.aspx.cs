@@ -759,11 +759,11 @@ namespace WizOne.Pontaj
 
                                     string strTmp = "";
                                     if (Constante.tipBD == 1)
-                                        strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString().Replace(",", "."), ent.F30042,
+                                        strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString().Replace(",", "."), ent.F30015.ToString().Replace(",", "."), ent.F30042,
                                                 ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
                                                 General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
                                     else
-                                        strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString().Replace(",", "."), ent.F30042, Dami.NextId("F300"),
+                                        strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString().Replace(",", "."), ent.F30015.ToString().Replace(",", "."), ent.F30042, Dami.NextId("F300"),
                                                 ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
                                                 General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
 
@@ -935,11 +935,11 @@ namespace WizOne.Pontaj
 
                                             string strTmp = "";
                                             if (Constante.tipBD == 1)
-                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString().Replace(",", "."), ent.F30042,
+                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString().Replace(",", "."), ent.F30015.ToString().Replace(",", "."), ent.F30042,
                                                         ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
                                                         General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
                                             else
-                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString(), ent.F30015.ToString().Replace(",", "."), ent.F30042, Dami.NextId("F300"),
+                                                strTmp = string.Format(strSql, ent.F30003, ent.F30010, ent.F30013.ToString().Replace(",", "."), ent.F30014.ToString().Replace(",", "."), ent.F30015.ToString().Replace(",", "."), ent.F30042, Dami.NextId("F300"),
                                                         ent.F30004, ent.F30005, ent.F30006, ent.F30007, ent.F30050, General.ToDataUnivPontaj(ent.F30035, 2), General.ToDataUnivPontaj(ent.F30036, 2),
                                                         General.ToDataUnivPontaj(ent.F30037, 2), General.ToDataUnivPontaj(ent.F30038, 2), 1, General.ToDataUnivPontaj(DateTime.Now, 2), ent.F30011, ent.F30002);
 
@@ -2355,7 +2355,7 @@ namespace WizOne.Pontaj
                     if (chkOre.Checked)
                     {
                         if (Constante.tipBD == 1)
-                            campuri += $@",COALESCE(CONVERT(VARCHAR(5), pvtIn.""Ziua{i}I"", 108),'') AS ""Ziua{i}I""" + $@",COALESCE(CONVERT(VARCHAR(5), pvtOut.""Ziua{i}O"", 108),'') AS ""Ziua{i}O""";
+                            campuri += $@",COALESCE(CONVERT(VARCHAR(5), pvtIn.""Ziua{i}I"", 108),'') AS ""Ziua{i}I""" + $@",COALESCE(CONVERT(VARCHAR(5), pvtOut.""Ziua{i}O"", 108),'') AS ""Ziua{i}O"", pvtCuloare.""CuloareValoare{i}"" AS ""CuloareValoare{i}""";
                         else
                             campuri += $@",TO_CHAR(pvtIn.""Ziua{i}I"", 'HH24:mi') AS ""Ziua{i}I""" + $@",TO_CHAR(pvtOut.""Ziua{i}O"", 'HH24:mi') AS ""Ziua{i}O""";
                     }
@@ -2363,7 +2363,7 @@ namespace WizOne.Pontaj
                     if (chkPauza.Checked)
                     {
                         if (Constante.tipBD == 1)
-                            campuri += $@",COALESCE(pvtPauza.""Ziua{i}P"",'') AS ""Ziua{i}P""";
+                            campuri += $@",COALESCE(pvtPauza.""Ziua{i}P"",'') AS ""Ziua{i}P"", pvtCuloare.""CuloareValoare{i}"" AS ""CuloareValoare{i}""";
                         else
                             campuri += $@",COALESCE(TO_CHAR(pvtPauza.""Ziua{i}P""),'') AS ""Ziua{i}P""";
                     }

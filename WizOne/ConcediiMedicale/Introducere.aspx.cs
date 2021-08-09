@@ -644,13 +644,14 @@ namespace WizOne.ConcediiMedicale
                 code = Convert.ToInt32(dtMARDEF.Rows[0]["CODE4"].ToString());
 
             //bool CM90 = false;
+            int zile = 0;
             if (!codExcl90.Contains(code.ToString()))
             {
                 int diff = (dtEnd - dtStart).Days;
                 int nrZileLC = diff + 1;
 
                 int limitazile = 90;
-                int zile = GetZileMed_cod_ind(marca, Convert.ToDateTime(deLaData.Value), txtCodIndemn.Text, (cmbCNPCopil.Value ?? "").ToString(), out limitazile);
+                zile = GetZileMed_cod_ind(marca, Convert.ToDateTime(deLaData.Value), txtCodIndemn.Text, (cmbCNPCopil.Value ?? "").ToString(), out limitazile);
 
                 if (zile + nrZileLC > limitazile)
                 {
@@ -676,247 +677,12 @@ namespace WizOne.ConcediiMedicale
             {
                 return Dami.TraduCuvant("Data invalida!");
             }
-            DateTime odtCarantina = new DateTime(2020, 7, 21, 0, 0, 0);
-            int tab_procent = Convert.ToInt32(dtMARDEF.Rows[0]["TABLE_NO"].ToString());
-            if (chkUrgenta.Checked)
-                tab_procent = 3;
-            if (Convert.ToInt32(txtCodIndemn.Text) == 7 && Convert.ToDateTime(deData.Value) < odtCarantina)
-                tab_procent = 1;
-
-            DataTable dt069 = General.IncarcaDT("SELECT * FROM F069 WHERE F06904 = " + dtLC.Rows[0][1].ToString() + " AND F06905 = " + dtLC.Rows[0][0].ToString(), null);
-
-            if (!avans /*&& txtBCCM.Text.Length > 0 && Convert.ToDouble(txtBCCM.Text) > 0 && txtZBC.Text.Length > 0 && Convert.ToDouble(txtZBC.Text) > 0
-                && txtMZ.Text.Length > 0 && Convert.ToDouble(txtMZ.Text) > 0 && txtMZBC.Text.Length > 0 && Convert.ToDouble(txtMZBC.Text) > 0*/)
-            {
-                int zile2 = 0;
-                int zile = 0;
-                if (Convert.ToInt32(dtMARDEF.Rows[0]["CODE1"].ToString()) > 0 && Convert.ToInt32(dtMARDEF.Rows[0]["PERC1"].ToString()) >= 0 && (Convert.ToInt32(txtCodIndemn.Text) != 5 || txtCodDiag.Text != "064"))
-                {
-                    zile = Convert.ToInt32(Session["CM_NrZileCT1"] == null ? "0" : Session["CM_NrZileCT1"].ToString());
-                    zile2 = Convert.ToInt32(Session["CM_NrZileCT2"] == null ? "0" : Session["CM_NrZileCT2"].ToString());
-                    if (zile > 0 || (zile == 0 && zile2 == 0))
-                    {
-                        procent = GetMARpercent(tab_procent, vechime) * (Convert.ToInt32(dtMARDEF.Rows[0]["PERC1"].ToString()) / 100);
-                        suma4450 += (Convert.ToDouble(txtMZ.Text.Trim().Length <= 0 ? "0" : txtMZ.Text.Trim()) * zile * (procent / 100));
-                        suma4450 = rotunjire(2, 1, suma4450);
-                        AddConcediu(Convert.ToInt32(dtMARDEF.Rows[0]["CODE1"].ToString()), zile, cc, procent, 0, true, marca, false);
-                    }
-                }
-                if (Convert.ToInt32(dtMARDEF.Rows[0]["CODE2"].ToString()) > 0 && Convert.ToInt32(dtMARDEF.Rows[0]["PERC2"].ToString()) >= 0)
-                {
-                    if (Convert.ToInt32(txtCodIndemn.Text) == 5 && txtCodDiag.Text == "064")
-                        zile = Convert.ToInt32(Session["CM_NrZileCT1"] == null ? "0" : Session["CM_NrZileCT1"].ToString()) + Convert.ToInt32(Session["CM_NrZileCT2"] == null ? "0" : Session["CM_NrZileCT2"].ToString());
-                    else
-                        zile = Convert.ToInt32(Session["CM_NrZileCT2"] == null ? "0" : Session["CM_NrZileCT2"].ToString());
-                    if (zile > 0)
-                    {
-                        procent = GetMARpercent(tab_procent, vechime) * (Convert.ToInt32(dtMARDEF.Rows[0]["PERC2"].ToString()) / 100);
-                        suma4450 += (Convert.ToDouble(txtMZ.Text.Trim().Length <= 0 ? "0" : txtMZ.Text.Trim()) * zile * (procent / 100));
-                        suma4450 = rotunjire(2, 1, suma4450);
-                        AddConcediu(Convert.ToInt32(dtMARDEF.Rows[0]["CODE2"].ToString()), zile, cc, procent, 0, true, marca, false);
-                    }
-                }
-                if (Convert.ToInt32(dtMARDEF.Rows[0]["CODE3"].ToString()) > 0 && Convert.ToInt32(dtMARDEF.Rows[0]["PERC3"].ToString()) >= 0)
-                {
-                    zile = Convert.ToInt32(Session["CM_NrZileCT3"] == null ? "0" : Session["CM_NrZileCT3"].ToString());
-                    if (zile > 0)
-                    {
-                        procent = GetMARpercent(tab_procent, vechime) * (Convert.ToInt32(dtMARDEF.Rows[0]["PERC3"].ToString()) / 100);
-                        // mihad 19.03.2018
-                        suma4450 += (Convert.ToDouble(txtMZ.Text.Trim().Length <= 0 ? "0" : txtMZ.Text.Trim()) * zile * (procent / 100));
-                        suma4450 = rotunjire(2, 1, suma4450);
-                        AddConcediu(Convert.ToInt32(dtMARDEF.Rows[0]["CODE3"].ToString()), zile, cc, procent, 0, true, marca, false);
-                    }
-                }
-                if (Convert.ToInt32(dtMARDEF.Rows[0]["CODE4"].ToString()) > 0 && Convert.ToInt32(dtMARDEF.Rows[0]["PERC4"].ToString()) >= 0)
-                {
-                    zile = Convert.ToInt32(Session["CM_NrZile"] == null ? txtNrZile.Text : Session["CM_NrZile"].ToString());
-                    if (zile >= 0)  //Radu 27.05.2015	- am pus >= ca sa poata fi introduse concedii medicale cu Cod 4 de 0 ZL
-                    {
-                        int cod_ind = Convert.ToInt32(txtCodIndemn.Text);
-                        double mntz = Convert.ToDouble(txtMZBC.Text.Trim().Length <= 0 ? "0" : txtMZBC.Text.Trim());
-                        if (cod_ind == 10 && mntz > 0)
-                        {// reducere timp de lucru
-                            sumaReducereTimpLucru = (Convert.ToDouble(txtMZ.Text.Trim().Length <= 0 ? "0" : txtMZ.Text.Trim()) * mntz);
-                            sumaReducereTimpLucru = sumaReducereTimpLucru - (Convert.ToInt32(dtAng.Rows[0]["F100699"].ToString()) * 0.75);
-                            if (sumaReducereTimpLucru > (Convert.ToDouble(txtMZ.Text.Trim().Length <= 0 ? "0" : txtMZ.Text.Trim()) * mntz * 0.25))
-                                sumaReducereTimpLucru = Convert.ToDouble(txtMZ.Text.Trim().Length <= 0 ? "0" : txtMZ.Text.Trim()) * mntz * 0.25;
-                            sumaReducereTimpLucru = rotunjire(2, 1, (sumaReducereTimpLucru / Convert.ToInt32(dt069.Rows[0]["F06907"].ToString())) * zile);
-                        }
-                        else
-                            sumaReducereTimpLucru = 0;
-
-                        procent = GetMARpercent(tab_procent, vechime) * (Convert.ToInt32(dtMARDEF.Rows[0]["PERC4"].ToString()) / 100);
-                        // mihad 19.03.2018
-                        suma4450 += (Convert.ToDouble(txtMZ.Text.Trim().Length <= 0 ? "0" : txtMZ.Text.Trim()) * zile * (procent / 100));
-                        suma4450 = rotunjire(2, 1, suma4450);
-                        AddConcediu(Convert.ToInt32(dtMARDEF.Rows[0]["CODE4"].ToString()), zile, cc, procent, 0, true, marca, false);
-                    }
-                }
-
-                if (Convert.ToInt32(dtMARDEF.Rows[0]["CODE5"].ToString()) > 0 && Convert.ToInt32(dtMARDEF.Rows[0]["PERC5"].ToString()) >= 0)
-                {
-                    zile = Convert.ToInt32(Session["CM_NrZileCT5"] == null ? "0" : Session["CM_NrZileCT5"].ToString());
-                    if (zile > 0)
-                    {
-                        // cod 4449 in loc de 4450 pentru concediile pe perioada 01.01.2018 - 30.06.2018
-                        if (Convert.ToInt32(dtMARDEF.Rows[0]["CODE5"].ToString()) == 4450)
-                        {
-
-                            // venituri mici ce le iese suma CM mai mica decat plafon
-                            suma4449 = rotunjire(2, 1, (((3131.0 / Convert.ToInt32(dt069.Rows[0]["F06907"].ToString())) * 0.35) * zile * 0.105));
-                            suma4450 = rotunjire(2, 1, suma4450);
-
-                            if (rotunjire(2, 1, (suma4450 * 0.25)) < suma4449)
-                            {
-                                suma_4450_subplafon = suma4450;
-                            }
-                            //
-                            else
-                            {
-                                suma_4450_subplafon = 0;
 
 
-                                if ((dtStart.Year == 2018 && dtStart.Month <= 6) || dtStart.Year < 2018)
-                                    dtMARDEF.Rows[0]["CODE5"] = 4449;
-                                else
-                                {
-                                    // caut daca nu e cod special		
-                                    string szCoduri = "";
-                                    dtParam = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'CM_TARIF35'", null);
-                                    if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null)
-                                        szCoduri = dtParam.Rows[0][0].ToString();
-
-                                    if (Convert.ToInt32(dtMARDEF.Rows[0]["CODE4"].ToString()) > 0 && szCoduri.Contains(dtMARDEF.Rows[0]["CODE4"].ToString()) && ((dtStart.Year == 2018 && dtStart.Month <= 9) || dtStart.Year < 2018))
-                                    {
-                                        dtMARDEF.Rows[0]["CODE5"] = 4449;
-                                    }
-                                    else
-                                    {
-                                        // caut initialul daca nu e in perioada
-                                        string serie_i = "", numar_i = "";
-                                        serie_i = txtSCMInit.Text;
-                                        numar_i = txtNrCMInit.Text;
-                                        if (serie_i.Length > 0 && numar_i.Length > 0)
-                                        {
-                                            string szT = "";
-                                            if (Constante.tipBD == 2)
-                                                szT = "SELECT TO_CHAR(F94037,'DD/MM/YYYY') FROM F940 WHERE F940601 = '{0}' AND F940602 = '{1}' AND F94003 = {2} AND F94010 >= 4401 AND F94010 < 4449 ORDER BY F94010";
-                                            else
-                                                szT = "SELECT CONVERT(VARCHAR,F94037,103) FROM F940 WHERE F940601 = '{0}' AND F940602 = '{1}' AND F94003 = {2} AND F94010 >= 4401 AND F94010 < 4449 ORDER BY F94010";
-
-                                            sql = "";
-                                            sql = string.Format(szT, serie_i, numar_i, marca);
-
-                                            DataTable dtIstoric = General.IncarcaDT(sql, null);
-
-                                            if (dtIstoric != null && dtIstoric.Rows.Count > 0)
-                                            {
-                                                for (int i = 0; i < dtIstoric.Rows.Count; i++)
-                                                {
-                                                    DateTime data_i = new DateTime(Convert.ToInt32(dtIstoric.Rows[i][0].ToString().Substring(6, 4)), Convert.ToInt32(dtIstoric.Rows[i][0].ToString().Substring(3, 2)), Convert.ToInt32(dtIstoric.Rows[i][0].ToString().Substring(0, 2)));
-
-                                                    if ((data_i.Year == 2018 && data_i.Month <= 6) || dtStart.Year < 2018)
-                                                        dtMARDEF.Rows[0]["CODE5"] = 4449;
-                                                    else
-                                                    {
-                                                        if ((Convert.ToInt32(dtMARDEF.Rows[0]["CODE4"].ToString()) > 0) && szCoduri.Contains(dtMARDEF.Rows[0]["CODE4"].ToString()) && ((dtStart.Year == 2018 && dtStart.Month <= 9) || dtStart.Year < 2018))
-                                                        {
-                                                            dtMARDEF.Rows[0]["CODE5"] = 4449;
-                                                        }
-                                                        else
-                                                            suma_4450_subplafon = suma4450;
-                                                    }
-                                                }
-                                            }
-                                            else
-                                                suma_4450_subplafon = suma4450;
-                                        }
-                                        else
-                                            suma_4450_subplafon = suma4450;
-                                    }
-                                }
-                            }
-                        }
-
-                        procent = GetMARpercent(tab_procent, vechime) * (Convert.ToInt32(dtMARDEF.Rows[0]["PERC5"].ToString()) / 100);
-                        DataTable dtF300 = General.IncarcaDT("SELECT * FROM F300 WHERE F30003 = " + marca + " AND F30010 = " + dtMARDEF.Rows[0]["CODE5"].ToString(), null);
-
-                        foreach (DataColumn col in dtF300.Columns)
-                            col.ReadOnly = false;
-
-                        if (dtF300 != null && dtF300.Rows.Count > 0)
-                        {
-                            if (!(chkStagiu.Checked && (Convert.ToInt32(dtF300.Rows[0]["F30010"].ToString()) == 4450 || Convert.ToInt32(dtF300.Rows[0]["F30010"].ToString()) == 4449)))
-                            {
-                                string sName = dtMARDEF.Rows[0]["NAME"].ToString();
-                                if (!(Convert.ToInt32(dtMARDEF.Rows[0]["NO"].ToString()) == 3 || Convert.ToInt32(dtMARDEF.Rows[0]["NO"].ToString()) == 4 || sName.Contains("AMBP")))
-                                {
-                                    dtF300.Rows[0]["F30013"] = Convert.ToInt32(dtF300.Rows[0]["F30013"].ToString()) + zile;
-                                    dtF300.Rows[0]["F30015"] = Convert.ToInt32(dtF300.Rows[0]["F30015"].ToString()) + suma_4450_subplafon;
-                                    sql = "UPDATE F300 SET F30013 = {0}, F30015 = {1} WHERE F30003 = " + marca + " AND F30010 = " + dtMARDEF.Rows[0]["CODE5"].ToString();
-                                    sql = string.Format(sql, dtF300.Rows[0]["F30013"].ToString(), dtF300.Rows[0]["F30015"].ToString());
-                                    General.ExecutaNonQuery(sql, null);
-                                }
-                            }
-                            if (Convert.ToInt32(dtF300.Rows[0]["F300620"].ToString()) > 0 && Convert.ToInt32(dtF300.Rows[0]["F300607"].ToString()) == 10 && sumaReducereTimpLucru > 0)
-                                dtF300.Rows[0]["F30015"] = Convert.ToInt32(dtF300.Rows[0]["F30015"].ToString()) + sumaReducereTimpLucru;
-                        }
-                        else
-                            AddConcediu(Convert.ToInt32(dtMARDEF.Rows[0]["CODE5"].ToString()), zile, cc, procent, 0, true, marca, false);
-
-                        //CR Ambasada SUA
-                        string data1Amb = "CONVERT(DATETIME,'" + Convert.ToDateTime(deDeLaData.Value).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(deDeLaData.Value).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(deDeLaData.Value).Year.ToString() + "',103)";
-                        string data2Amb = "CONVERT(DATETIME,'" + Convert.ToDateTime(deLaData.Value).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(deLaData.Value).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(deLaData.Value).Year.ToString() + "',103)";
-                        string sqlAmb = "UPDATE F300 SET F30042 = '{0} ' + F30042 WHERE F30003 = {1} AND F30037 = {2} AND F30038 = {3} AND CONVERT(VARCHAR, F30010) IN ('{4}', '{5}', '{6}', '{7}')";
-                        sqlAmb = string.Format(sqlAmb, dtMARDEF.Rows[0]["CODE5"].ToString(), marca, data1Amb, data2Amb, dtMARDEF.Rows[0]["CODE1"].ToString(), dtMARDEF.Rows[0]["CODE2"].ToString(),
-                            dtMARDEF.Rows[0]["CODE3"].ToString(), dtMARDEF.Rows[0]["CODE4"].ToString());
-                        General.ExecutaNonQuery(sqlAmb, null);
-                    }
-                }
-
-                if (Convert.ToInt32(dtMARDEF.Rows[0]["CODE6"].ToString()) > 0 && Convert.ToInt32(dtMARDEF.Rows[0]["PERC6"].ToString()) >= 0)
-                {
-                    zile = Convert.ToInt32(txtCT6.Text);
-                    if (zile > 0)
-                    {
-                        procent = GetMARpercent(tab_procent, vechime) * (Convert.ToInt32(dtMARDEF.Rows[0]["PERC6"].ToString()) / 100);
-                        DataTable dtF300 = General.IncarcaDT("SELECT * FROM F300 WHERE F30003 = " + marca + " AND F30010 = " + dtMARDEF.Rows[0]["CODE6"].ToString(), null);
-
-                        if (dtF300 != null && dtF300.Rows.Count > 0)
-                        {
-                            //string sz;
-                            dtF300.Rows[0]["F300611"] = Convert.ToInt32(cmbLocPresc.Value);
-                            dtF300.Rows[0]["F300612"] = Convert.ToInt32(txtBCCM.Text);
-                            dtF300.Rows[0]["F300613"] = Convert.ToInt32(txtZBC.Text);
-                            dtF300.Rows[0]["F300614"] = Convert.ToInt32(txtMZ.Text.Trim().Length <= 0 ? "0" : txtMZ.Text.Trim());
-                            dtF300.Rows[0]["F300615"] = txtNrAviz.Text;
-                            dtF300.Rows[0]["F300616"] = txtMedic.Text;
-                            dtF300.Rows[0]["F300617"] = (cmbCNPCopil.Value ?? "").ToString();
-                            dtF300.Rows[0]["F300620"] = Convert.ToDouble(txtMZBC.Text);
+            zile = Convert.ToInt32(Session["CM_NrZile"] == null ? txtNrZile.Text : Session["CM_NrZile"].ToString());
+            AddConcediu(0, zile, cc, 0, 0, false, marca, avans);
 
 
-                            string sName = dtMARDEF.Rows[0]["NAME"].ToString();
-                            if (!(Convert.ToInt32(dtMARDEF.Rows[0]["NO"].ToString()) == 3 || Convert.ToInt32(dtMARDEF.Rows[0]["NO"].ToString()) == 4 || sName.Contains("AMBP")))
-                            {
-                                dtF300.Rows[0]["F30013"] = Convert.ToInt32(dtF300.Rows[0]["F30013"].ToString()) + zile;
-                                sql = "UPDATE F300 SET F30013 = {0}, F300611 = {1}, F300612 = {2}, F300613 = {3}, F300614 = {4}, F300615 = {5}, F300616 = {6}, F300617 = {7} WHERE F30003 = " + marca + " AND F30010 = " + dtMARDEF.Rows[0]["CODE6"].ToString();
-                                sql = string.Format(sql, dtF300.Rows[0]["F30013"].ToString(), dtF300.Rows[0]["F300611"].ToString(), dtF300.Rows[0]["F300612"].ToString(), dtF300.Rows[0]["F300613"].ToString(), dtF300.Rows[0]["F300614"].ToString(),
-                                     dtF300.Rows[0]["F300615"].ToString(), dtF300.Rows[0]["F300616"].ToString(), dtF300.Rows[0]["F300617"].ToString());
-                                General.ExecutaNonQuery(sql, null);
-                            }
-                        }
-                        else
-                            AddConcediu(Convert.ToInt32(dtMARDEF.Rows[0]["CODE6"].ToString()), zile, cc, procent, 0, true, marca, false);
-
-                    }
-                }
-            }
-            else
-            {
-                int zile = Convert.ToInt32(Session["CM_NrZile"] == null ? txtNrZile.Text : Session["CM_NrZile"].ToString());
-                AddConcediu(0, zile, cc, 0, 0, false, marca, avans);
-            }
             Session["MARDEF"] = dtMARDEF;
             //MessageBox.Show("Proces realizat cu succes!");
             return "";
@@ -928,31 +694,6 @@ namespace WizOne.ConcediiMedicale
 
             string sqlAng = "SELECT * FROM F100 WHERE F10003 = " + marca;
             DataTable dtAng = General.IncarcaDT(sqlAng, null);
-
-            //ASPxComboBox cmbLocPresc = DataList1.Items[0].FindControl("cmbLocPresc") as ASPxComboBox;
-            //ASPxDateEdit deDeLaData = DataList1.Items[0].FindControl("deDeLaData") as ASPxDateEdit;
-            //ASPxDateEdit deLaData = DataList1.Items[0].FindControl("deLaData") as ASPxDateEdit;
-            //ASPxDateEdit deDataAviz = DataList1.Items[0].FindControl("deDataAviz") as ASPxDateEdit;
-            //ASPxDateEdit deData = DataList1.Items[0].FindControl("deData") as ASPxDateEdit;
-            //ASPxTextBox txtSerie = DataList1.Items[0].FindControl("txtSerie") as ASPxTextBox;
-            //ASPxTextBox txtNr = DataList1.Items[0].FindControl("txtNr") as ASPxTextBox;
-            //ASPxTextBox txtZCMAnt = DataList1.Items[0].FindControl("txtZCMAnt") as ASPxTextBox;
-            //ASPxTextBox txtDetalii = DataList1.Items[0].FindControl("txtDetalii") as ASPxTextBox;
-            //ASPxTextBox txtSCMInit = DataList1.Items[0].FindControl("txtSCMInit") as ASPxTextBox;
-            //ASPxTextBox txtCodIndemn = DataList1.Items[0].FindControl("txtCodIndemn") as ASPxTextBox;
-            //ASPxTextBox txtCodDiag = DataList1.Items[0].FindControl("txtCodDiag") as ASPxTextBox;
-            //ASPxTextBox txtNrCMInit = DataList1.Items[0].FindControl("txtNrCMInit") as ASPxTextBox;
-            //ASPxTextBox txtCodUrgenta = DataList1.Items[0].FindControl("txtCodUrgenta") as ASPxTextBox;
-            //ASPxTextBox txtCodInfCont = DataList1.Items[0].FindControl("txtCodInfCont") as ASPxTextBox;
-            //ASPxTextBox txtBCCM = DataList1.Items[0].FindControl("txtBCCM") as ASPxTextBox;
-            //ASPxTextBox txtZBC = DataList1.Items[0].FindControl("txtZBC") as ASPxTextBox;
-            //ASPxTextBox txtMZ = DataList1.Items[0].FindControl("txtMZ") as ASPxTextBox;
-            //ASPxTextBox txtNrAviz = DataList1.Items[0].FindControl("txtNrAviz") as ASPxTextBox;
-            //ASPxTextBox txtMedic = DataList1.Items[0].FindControl("txtMedic") as ASPxTextBox;
-            //ASPxTextBox txtCNP = DataList1.Items[0].FindControl("txtCNP") as ASPxTextBox;
-            //ASPxCheckBox chkCalcul = DataList1.Items[0].FindControl("chkCalcul") as ASPxCheckBox;
-            //ASPxCheckBox chkStagiu = DataList1.Items[0].FindControl("chkStagiu") as ASPxCheckBox;
-
 
 
             DateTime dtStart = Convert.ToDateTime(deDeLaData.Value);
@@ -1111,28 +852,30 @@ namespace WizOne.ConcediiMedicale
             if (txtBCCM.Text.Length <= 0 || txtBCCM.Text == "0" || txtZBC.Text.Length <= 0 || txtZBC.Text == "0" || txtMZBC.Text.Length <= 0 || txtMZBC.Text == "0" || txtMZ.Text.Length <= 0 || txtMZ.Text == "0")
                 medie = false;
 
-            if (!((chkStagiu.Checked && (cod == 4450 || cod == 4449))))
-                if (General.ExecutaNonQuery(sql, null))
-                {
-                    if (chkStagiu.Checked)
-                    {
-                        int nn = 0;
+            General.ExecutaNonQuery(sql, null);
 
-                        string sqlParam = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'BCCM'";
-                        DataTable dtParam = General.IncarcaDT(sqlParam, null);
-                        string sqltmp = "";
-                        if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
-                        {
-                            nn = Convert.ToInt32(dtParam.Rows[0][0].ToString()) - 1;
-                            sqltmp = "UPDATE F100 SET F10069{0} = 0.0 WHERE F10003 = {1}";
-                            sqltmp = string.Format(sqltmp, nn, marca);
-                            if (!General.ExecutaNonQuery(sqltmp, null))
-                                MessageBox.Show(Dami.TraduCuvant("Nu am putut actualiza Tariful CM pe angajat!"));
-                        }
-                        sqltmp = "UPDATE CM_Cereri SET  BazaCalculCM = 0, ZileBazaCalculCM = 0, MedieZileBazaCalcul = 0, MedieZilnicaCM = 0, Tarif = 0 WHERE Id = {0}";
-                        sqltmp = string.Format(sqltmp, id);
-                        General.ExecutaNonQuery(sqltmp, null);
-                    }
+            //if (!((chkStagiu.Checked && (cod == 4450 || cod == 4449))))
+            //    if (General.ExecutaNonQuery(sql, null))
+            //    {
+                    //if (chkStagiu.Checked)
+                    //{
+                    //    int nn = 0;
+
+                    //    string sqlParam = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'BCCM'";
+                    //    DataTable dtParam = General.IncarcaDT(sqlParam, null);
+                    //    string sqltmp = "";
+                    //    if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
+                    //    {
+                    //        nn = Convert.ToInt32(dtParam.Rows[0][0].ToString()) - 1;
+                    //        sqltmp = "UPDATE F100 SET F10069{0} = 0.0 WHERE F10003 = {1}";
+                    //        sqltmp = string.Format(sqltmp, nn, marca);
+                    //        if (!General.ExecutaNonQuery(sqltmp, null))
+                    //            MessageBox.Show(Dami.TraduCuvant("Nu am putut actualiza Tariful CM pe angajat!"));
+                    //    }
+                    //    sqltmp = "UPDATE CM_Cereri SET  BazaCalculCM = 0, ZileBazaCalculCM = 0, MedieZileBazaCalcul = 0, MedieZilnicaCM = 0, Tarif = 0 WHERE Id = {0}";
+                    //    sqltmp = string.Format(sqltmp, id);
+                    //    General.ExecutaNonQuery(sqltmp, null);
+                    //}
                     if (Session["CM_Id"] == null)
                     {
                         sql = "INSERT INTO CM_CereriIstoric(IdCerere, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare) VALUES(" + id + ", 1, " + Session["UserId"].ToString() + ", 1, (SELECT Culoare FROM CM_tblStari WHERE Id = 1), 1, GETDATE())";
@@ -1159,14 +902,12 @@ namespace WizOne.ConcediiMedicale
                         }
                     }
 
-
-
-                }
-                else
-                {
-                    MessageBox.Show(Dami.TraduCuvant("Tranzactia nu a fost adaugata!"));
-                    return false;
-                }
+          //      }
+          //      else
+          //      {
+          //          MessageBox.Show(Dami.TraduCuvant("Tranzactia nu a fost adaugata!"));
+         //           return false;
+         //       }
             return true;
         }
 

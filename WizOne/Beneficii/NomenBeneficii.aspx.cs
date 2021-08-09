@@ -45,6 +45,11 @@ namespace WizOne.Beneficii
 
                 txtTitlu.Text = Dami.TraduCuvant("Nomenclator beneficii");
 
+                string sql = @"SELECT * FROM ""Ben_tblGrupBeneficii"" ORDER BY ""Id""";               
+                DataTable dtGrup = General.IncarcaDT(sql, null);
+                GridViewDataComboBoxColumn col = (grDate.Columns["IdGrup"] as GridViewDataComboBoxColumn);
+                col.PropertiesComboBox.DataSource = dtGrup;
+
                 if (IsPostBack)
                 {
                     DataTable dt = Session["NomenBen_Grid"] as DataTable;
@@ -69,7 +74,7 @@ namespace WizOne.Beneficii
         {
             try
             {
-                string strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", a.""Descriere"", a.DeLaData, a.LaData, a.USER_NO, a.TIME, a.ValoareEstimata
+                string strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", a.""Descriere"", a.DeLaData, a.LaData, a.USER_NO, a.TIME, a.ValoareEstimata, a.RON, a.EURO, a.IdGrup
                                 from ""Admin_Obiecte"" a
                                 inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
                                 where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') ORDER BY a.""Denumire""";
@@ -123,6 +128,10 @@ namespace WizOne.Beneficii
                 ASPxDateEdit deLaData = grDate.FindEditFormTemplateControl("deLaData") as ASPxDateEdit;
                 ASPxMemo txtDesc = grDate.FindEditFormTemplateControl("txtDesc") as ASPxMemo;
 
+                ASPxTextBox txtRON = grDate.FindEditFormTemplateControl("txtRON") as ASPxTextBox;
+                ASPxTextBox txtEURO = grDate.FindEditFormTemplateControl("txtEURO") as ASPxTextBox;
+                ASPxComboBox cmbGrup = grDate.FindEditFormTemplateControl("cmbGrup") as ASPxComboBox;
+
                 dr["IdCategorie"] = Convert.ToInt32(Session["NomenBen_IdCateg"].ToString());
                 dr["Denumire"] = txtDen.Text;
 
@@ -135,6 +144,11 @@ namespace WizOne.Beneficii
                 dr["DeLaData"] = deDeLaData.Date;
                 dr["LaData"] = deLaData.Date;
                 dr["Descriere"] = txtDesc.Text;
+
+                dr["RON"] = txtRON.Text;
+                dr["EURO"] = txtEURO.Text;
+                dr["IdGrup"] = cmbGrup.Value ?? DBNull.Value;
+
 
                 metaUploadFile itm = Session["DocUpload_NomenBen"] as metaUploadFile;
                 if (itm != null)                
@@ -177,10 +191,18 @@ namespace WizOne.Beneficii
                 ASPxDateEdit deLaData = grDate.FindEditFormTemplateControl("deLaData") as ASPxDateEdit;
                 ASPxMemo txtDesc = grDate.FindEditFormTemplateControl("txtDesc") as ASPxMemo;
 
+                ASPxTextBox txtRON = grDate.FindEditFormTemplateControl("txtRON") as ASPxTextBox;
+                ASPxTextBox txtEURO = grDate.FindEditFormTemplateControl("txtEURO") as ASPxTextBox;
+                ASPxComboBox cmbGrup = grDate.FindEditFormTemplateControl("cmbGrup") as ASPxComboBox;
+
                 dr["Denumire"] = txtDen.Text;
                 dr["DeLaData"] = deDeLaData.Date;
                 dr["LaData"] = deLaData.Date;
                 dr["Descriere"] = txtDesc.Text;
+
+                dr["RON"] = txtRON.Text;
+                dr["EURO"] = txtEURO.Text;
+                dr["IdGrup"] = cmbGrup.Value ?? DBNull.Value;
 
                 metaUploadFile itm = Session["DocUpload_NomenBen"] as metaUploadFile;
                 if (itm != null)
@@ -260,11 +282,23 @@ namespace WizOne.Beneficii
                 HtmlTableCell lblLa = (HtmlTableCell)grDate.FindEditFormTemplateControl("lblLa");
                 lblLa.InnerText = Dami.TraduCuvant("Data sfarsit");
                 HtmlTableCell lblDesc = (HtmlTableCell)grDate.FindEditFormTemplateControl("lblDesc");
-                lblDesc.InnerText = Dami.TraduCuvant("Descriere");    
+                lblDesc.InnerText = Dami.TraduCuvant("Descriere");
+         
+                HtmlTableCell lblGrup = (HtmlTableCell)grDate.FindEditFormTemplateControl("lblGrup");
+                lblGrup.InnerText = Dami.TraduCuvant("Grup beneficii");
 
                 ASPxUploadControl btnDocUploadBen = (ASPxUploadControl)grDate.FindEditFormTemplateControl("btnDocUploadBen");
                 btnDocUploadBen.BrowseButton.Text = Dami.TraduCuvant("Incarca Document");
                 btnDocUploadBen.ToolTip = Dami.TraduCuvant("Incarca Document");
+
+                ASPxComboBox cmbGrup = grDate.FindEditFormTemplateControl("cmbGrup") as ASPxComboBox;
+                if (cmbGrup != null)
+                {
+                    string sql = @"SELECT * FROM ""Ben_tblGrupBeneficii"" ORDER BY ""Id""";
+                    DataTable dtGrup = General.IncarcaDT(sql, null);
+                    cmbGrup.DataSource = dtGrup;
+                    cmbGrup.DataBindItems();
+                }
             }
             catch (Exception ex)
             {

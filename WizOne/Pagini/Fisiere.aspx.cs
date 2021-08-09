@@ -228,6 +228,9 @@ namespace WizOne.Pagini
                             case "20":
                                 tbl = "CM_Cereri";
                                 break;
+                            case "21":
+                                tbl = "Beneficii_Ang";
+                                break;
                         }
 
                         if (tbl.Length > 0)

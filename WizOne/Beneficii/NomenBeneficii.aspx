@@ -80,17 +80,29 @@
                                 <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                                 <SettingsHeaderFilter Mode="CheckedList" />
                             </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataDateColumn FieldName="DeLaData" Name="DeLaData" Caption="Data inceput"  Width="100px" VisibleIndex="2">         
-                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                            <SettingsHeaderFilter Mode="CheckedList" />
-                        </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataDateColumn FieldName="LaData" Name="LaData" Caption="Data sfarsit"  Width="100px" VisibleIndex="3">         
-                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                            <SettingsHeaderFilter Mode="CheckedList" />
-                        </dx:GridViewDataDateColumn>
+                            <dx:GridViewDataDateColumn FieldName="DeLaData" Name="DeLaData" Caption="Data inceput"  Width="100px" VisibleIndex="2">         
+                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                                <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                                <SettingsHeaderFilter Mode="CheckedList" />
+                            </dx:GridViewDataDateColumn>
+                            <dx:GridViewDataDateColumn FieldName="LaData" Name="LaData" Caption="Data sfarsit"  Width="100px" VisibleIndex="3">         
+                                <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                                <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                                <SettingsHeaderFilter Mode="CheckedList" />
+                            </dx:GridViewDataDateColumn>
                             <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere"  Width="250px" VisibleIndex="4" >  
+                                <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                                <SettingsHeaderFilter Mode="CheckedList" />
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataComboBoxColumn FieldName="IdGrup" Name="IdGrup" Caption="Grup beneficii" Width="100px" VisibleIndex="4">
+                                <Settings SortMode="DisplayText" />
+                                <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            </dx:GridViewDataComboBoxColumn>
+						    <dx:GridViewDataTextColumn FieldName="RON" Name="RON" Caption="RON" Width="70px" VisibleIndex="5" >
+                                <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                                <SettingsHeaderFilter Mode="CheckedList" />
+                            </dx:GridViewDataTextColumn>
+						    <dx:GridViewDataTextColumn FieldName="EURO" Name="EURO" Caption="EURO" Width="70px" VisibleIndex="6" >
                                 <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                                 <SettingsHeaderFilter Mode="CheckedList" />
                             </dx:GridViewDataTextColumn>
@@ -147,6 +159,16 @@
                                         <tr>
                                             <td rowspan="3" style="vertical-align:top;padding:10px !important;"><dx:ASPxMemo ID="txtDesc" runat="server" Width="500px" Height="150" Text='<%# Bind("Descriere") %>' /></td>
                                        </tr>
+                                        <tr>
+                                            <td id="lblRON" runat="server" style="padding-left:10px !important;">RON</td>
+                                            <td id="lblEURO" runat="server" style="padding-left:10px !important;">EURO</td>
+                                            <td id="lblGrup" runat="server" style="padding-left:10px !important;">Grup beneficii</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtRON" runat="server" Width="70px" Value='<%# Bind("RON") %>' /> 
+                                            <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtEURO" runat="server" Width="70px" Value='<%# Bind("EURO") %>' /> 
+                                             <td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbGrup" runat="server" Width="100px" ValueField="Id" DropDownWidth="100" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("IdGrup") %>' />
+                                        </tr>
                                     <tr>
                                         <td style="padding:10px !important;" colspan="3">
                                             <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>

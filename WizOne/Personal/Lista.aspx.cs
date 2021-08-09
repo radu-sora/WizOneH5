@@ -2,6 +2,8 @@
 using System;
 using System.Data;
 using System.IO;
+using System.Reflection;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
@@ -117,6 +119,7 @@ namespace WizOne.Personal
                     //if (!IsPostBack && dtPost.Rows.Count > 0)
                     //    cmbPost.Value = Convert.ToInt32(General.Nz(dtPost.Rows[0]["Id"], -99));
                 }
+
             }
             catch (Exception ex)
             {

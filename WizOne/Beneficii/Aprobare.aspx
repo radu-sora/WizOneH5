@@ -15,6 +15,9 @@
                 case "btnArata":
                     grDate.GetRowValues(e.visibleIndex, 'IdBeneficiu', GoToAtasMode);
                     break;
+                case "btnArataAng":
+                    grDate.GetRowValues(e.visibleIndex, 'F10003', GoToAtasAngMode);
+                    break;
             }
         }
 
@@ -22,6 +25,10 @@
 
         function GoToAtasMode(Value) {
             window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=19&id=' + Value, '_blank ')
+        }
+
+        function GoToAtasAngMode(Value) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=21&id=' + Value, '_blank ')
         }
 
 
@@ -249,11 +256,11 @@
                     <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                     <Columns>
                         <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" />
-                        <dx:GridViewCommandColumn Width="30px"  ButtonType="Image" ShowEditButton="false" Visible="false" Caption=" " Name="butoaneGrid" >
-                            <CustomButtons>                               
-                                <dx:GridViewCommandColumnCustomButton ID="btnArata">
-                                    <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/view.png" />
-                                </dx:GridViewCommandColumnCustomButton>                
+                        <dx:GridViewCommandColumn Width="30px"  ButtonType="Image" ShowEditButton="false" Visible="true" Caption=" " Name="butoaneGrid" >
+                            <CustomButtons> 
+                                <dx:GridViewCommandColumnCustomButton ID="btnArataAng">
+                                    <Image ToolTip="Arata document angajat" Url="~/Fisiere/Imagini/Icoane/view.png" />
+                                </dx:GridViewCommandColumnCustomButton>                                   
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
                          <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />

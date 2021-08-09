@@ -71,6 +71,9 @@ namespace WizOne.Revisal
 
                     btnRapSal.ClientVisible = false;
                     grDateRap.ClientVisible = false;
+                    //btnRapSal.Style["display"] = "none";
+                    //grDateRap.Style["display"] = "none";
+                 
                     cmbRol.SelectedIndex = 0;
 
                     IncarcaGridRap((cmbRol.Value ?? -99).ToString());  

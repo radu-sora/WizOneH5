@@ -53,7 +53,7 @@ namespace WizOne.Pagini
 
                 //Radu 14.06.2021
                 if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
-                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente" || Session["Sablon_Tabela"].ToString().ToLower().Contains("ben_"))
                 {
                     grDate.Settings.ShowGroupPanel = false;
                     btnSave.ClientVisible = false;
@@ -474,7 +474,7 @@ namespace WizOne.Pagini
 
                 //Radu 14.06.2021
                 if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
-                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente" || Session["Sablon_Tabela"].ToString().ToLower().Contains("ben_"))
                     General.SalveazaDate(dt, Session["Sablon_Tabela"].ToString());
             }
             catch (Exception ex)
@@ -552,7 +552,7 @@ namespace WizOne.Pagini
 
                 //Radu 14.06.2021
                 if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
-                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente" || Session["Sablon_Tabela"].ToString().ToLower().Contains("ben_"))
                     General.SalveazaDate(dt, Session["Sablon_Tabela"].ToString());
             }
             catch (Exception ex)
@@ -606,7 +606,7 @@ namespace WizOne.Pagini
 
                 //Radu 14.06.2021
                 if (Session["Sablon_Tabela"].ToString().ToLower().Contains("curs_") || Session["Sablon_Tabela"].ToString().ToLower() == "tblcompetente"
-                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente")
+                    || Session["Sablon_Tabela"].ToString().ToLower() == "tblgrupcompetente" || Session["Sablon_Tabela"].ToString().ToLower().Contains("ben_"))
                     General.SalveazaDate(dt, Session["Sablon_Tabela"].ToString());
 
             }
@@ -752,14 +752,20 @@ namespace WizOne.Pagini
 
                     sqlInsertTemp = "";
                     int i = 0;
+
                     foreach (DataRow dr in dt.Rows)
                     {
                         Eval_SetAngajati clsSetAngajati = new Eval_SetAngajati(dr);
+
+                        clsSetAngajati.SelectQuery = clsSetAngajati.SelectQuery.ToUpper().Replace("(SELECT ", "(SELECT_ ");
+
                         sqlInsertTemp += clsSetAngajati.SelectQuery.ToUpper().Replace("SELECT ", "SELECT " + clsSetAngajati.IdSetAng + " AS \"IdGrup\", ");
                         i++;
                         if (i < dt.Rows.Count)
                             sqlInsertTemp += " UNION ";
                     }
+                    sqlInsertTemp = sqlInsertTemp.Replace("(SELECT_ ", "(SELECT ");
+
                     sqlInsert += sqlInsertTemp;
                     bool valid = General.ExecutaNonQuery(sqlInsert, null);
                     if (!valid)

@@ -191,16 +191,6 @@
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                             <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataDateColumn FieldName="DataInceputBen" Name="DataInceputBen" Caption="Data inceput valabilitate beneficiu" HeaderStyle-Wrap="True"  Width="100px" >         
-                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                            <SettingsHeaderFilter Mode="CheckedList" />
-                        </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataDateColumn FieldName="DataSfarsitBen" Name="DataSfarsitBen" Caption="Data sfarsit valabilitate beneficiu"  HeaderStyle-Wrap="True"   Width="100px" >         
-                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                            <SettingsHeaderFilter Mode="CheckedList" />
-                        </dx:GridViewDataDateColumn> 
                        <dx:GridViewCommandColumn Name="colGrupBen" Width="100px" ButtonType="Image" ShowEditButton="false"  Caption="Grupuri beneficii">
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnNomenclatorBen" Visibility="BrowsableRow">

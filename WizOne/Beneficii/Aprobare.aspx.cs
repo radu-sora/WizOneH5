@@ -375,12 +375,12 @@ namespace WizOne.Beneficii
             {
                 if (e.VisibleIndex >= 0)
                 {              
-                    if (e.ButtonID == "btnArata")
-                    {
-                        object[] obj = grDate.GetRowValues(e.VisibleIndex, new string[] { "IdStare", "IdBeneficiu" }) as object[];
-                        if (obj[1] == null || obj[1].ToString().Length <= 0)
-                            e.Visible = DefaultBoolean.False;                        
-                    }                    
+                    //if (e.ButtonID == "btnArata")
+                    //{
+                    //    object[] obj = grDate.GetRowValues(e.VisibleIndex, new string[] { "IdStare", "IdBeneficiu" }) as object[];
+                    //    if (obj[1] == null || obj[1].ToString().Length <= 0)
+                    //        e.Visible = DefaultBoolean.False;                        
+                    //}                    
                 }
             }
             catch (Exception ex)

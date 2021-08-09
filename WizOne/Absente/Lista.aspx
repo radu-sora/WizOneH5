@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Lista.aspx.cs" Inherits="WizOne.Absente.Lista" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-
     
     <script>
 
@@ -169,32 +168,25 @@
             }            
         }
 
-        function SetComboViz()
-        {
+        function SetComboViz() {
             if (typeof cmbRol !== 'undefined') {
-                if (cmbViz.GetValue() == 3)
-                {
+                if (cmbViz.GetValue() == 3) {
                     cmbRol.SetEnabled(false);
                     cmbRol.SetValue(-1);
                 }
-                else
+                else {
                     cmbRol.SetEnabled(true);
+                }
             }
         }
 
-        function SetEnabled() {
-            if (typeof cmbViz !== 'undefined') {
-                var esteActiv = true;
-                if (cmbViz.GetValue() == 4)
-                    esteActiv = false;
+        function SetEnabled() {            
+            var esteActiv = cmbViz.GetValue() !== 4;            
 
-                if (typeof btnRespinge !== 'undefined')
-                    btnRespinge.SetEnabled(esteActiv);
-                if (typeof btnRespinge !== 'undefined')
-                    btnAproba.SetEnabled(esteActiv);
-                if (typeof btnRespinge !== 'undefined')
-                    btnSolNoua.SetEnabled(esteActiv);
-            }
+            typeof btnRespinge !== 'undefined' && btnRespinge.SetEnabled(esteActiv);
+            typeof btnAproba !== 'undefined' && btnAproba.SetEnabled(esteActiv);            
+            btnSolNoua.SetEnabled(esteActiv);
+            cmbAng.SetEnabled(esteActiv);
         }
 
         function OnRespinge(s, e)
@@ -257,18 +249,7 @@
                     type: "warning"
                 });
             }
-        }
-
-
-        function StartUpload() {
-            //pnlLoading.Show();
-        }
-
-        function EndUpload(s) {
-            //pnlLoading.Hide();
-            //lblDoc.innerText = s.cpDocUploadName;
-            //s.cpDocUploadName = null;
-        }        
+        }               
     </script>
 
 </asp:Content>
@@ -288,15 +269,15 @@
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAnulare" ClientInstanceName="btnAnulare" ClientIDMode="Static" runat="server" Text="Anulare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
-                    <ClientSideEvents Click="function(s, e) { OnAnulare(s, e); grDate.PerformCallback('btnFiltru;-99'); }" />                    
+                    <ClientSideEvents Click="function(s, e) { OnAnulare(s, e); }" />                    
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnRespinge" ClientInstanceName="btnRespinge" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
-                    <ClientSideEvents Click="function(s, e) { OnRespinge(s, e); grDate.PerformCallback('btnFiltru;-99'); }" />
+                    <ClientSideEvents Click="function(s, e) { OnRespinge(s, e); }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
-                    <ClientSideEvents Click="function(s, e) { OnAproba(s, e); grDate.PerformCallback('btnFiltru;-99'); }" />                    
+                    <ClientSideEvents Click="function(s, e) { OnAproba(s, e); }" />                    
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" PostBackUrl="~/Pagini/MainPage.aspx" CssClass="hidden-xs hidden-sm" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
@@ -307,9 +288,10 @@
             <div class="row row-fix">
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                     <dx:ASPxLabel ID="lblViz" runat="server" AssociatedControlID="cmbViz" Text="Vizualizare" Font-Bold="true" />
-                    <dx:ASPxComboBox ID="cmbViz" ClientInstanceName="cmbViz" ClientIDMode="Static" runat="server" Width="100%" AutoPostBack="false">
+                    <dx:ASPxComboBox ID="cmbViz" ClientInstanceName="cmbViz" ClientIDMode="Static" runat="server" Width="100%" AutoPostBack="false"
+                        ValueType="System.Int32">
                         <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
-                        <ClientSideEvents SelectedIndexChanged="function(s, e) { SetComboViz(); /*pnlCtl.PerformCallback('cmbViz');*/ SetEnabled(); grDate.PerformCallback('btnFiltru;-99'); }" Init="function(s,e) { SetComboViz(); }" />
+                        <ClientSideEvents Init="function(s,e) { SetComboViz(); }" SelectedIndexChanged="function(s, e) { SetComboViz(); SetEnabled(); pageControl.onFilterChange(true); }" />
                     </dx:ASPxComboBox>
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
@@ -317,18 +299,18 @@
                     <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="100%" AutoPostBack="false"
                         ValueField="Id" TextField="Denumire" ValueType="System.Int32">
                         <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
-                        <ClientSideEvents SelectedIndexChanged="function(s, e) { /*pnlCtl.PerformCallback('cmbRol');*/ grDate.PerformCallback('btnFiltru;-99'); }" />
+                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pageControl.onFilterChange(true); }" />
                     </dx:ASPxComboBox>
                 </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">                        
+                <div class="col-lg-1 col-md-4 col-sm-4 col-xs-6">                        
                     <dx:ASPxLabel ID="lblStare" runat="server" AssociatedControlID="cmbStare" Text="Stare" Font-Bold="true" />
                     <dx:ASPxDropDownEdit ID="cmbStare" ClientInstanceName="cmbStare" runat="server" Width="100%">
-                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" ModalDropDownCaption="Choose Values" />
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" ModalDropDownCaption="Selectie stari" />
                         <DropDownApplyButton Visibility="ModalDropDown" />                        
                         <DropDownWindowStyle CssClass="dx-dropdownwindow-adaptive" />
                         <DropDownWindowTemplate>
                             <dx:ASPxListBox ID="lstStare" ClientInstanceName="lstStare" runat="server" SelectionMode="CheckColumn" Width="100%" Height="170px" 
-                                EnableSelectAll="true" SelectAllText="(Selectie toate)">                                
+                                EnableSelectAll="true" SelectAllText="(Selectie toate)" ValueType="System.Int32">                                
                                 <Items>                                
                                     <dx:ListEditItem Text="Solicitat" Value="1" />
                                     <dx:ListEditItem Text="In Curs" Value="2" />
@@ -340,35 +322,44 @@
                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { updateComboBoxText(cmbStare, lstStare); }" />
                             </dx:ASPxListBox>
                             <dx:ASPxButton ID="btnInchide" runat="server" AutoPostBack="False" Text="Inchide" CssClass="pull-right hidden-xs hidden-sm" style="margin:7px">
-                                <ClientSideEvents Click="function(s, e) { cmbStare.HideDropDown(); /*pnlCtl.PerformCallback('cmbStare');*/ }" />
+                                <ClientSideEvents Click="function(s, e) { cmbStare.HideDropDown(); pageControl.onFilterChange(); }" />
                             </dx:ASPxButton>                                                
                         </DropDownWindowTemplate>
                         <ClientSideEvents 
                             TextChanged="function(s, e) { updateListBoxValues(cmbStare, lstStare); }" 
                             DropDown="function(s, e) { updateListBoxValues(cmbStare, lstStare); }" 
-                            DropDownCommandButtonClick="function(s, e) { cmbStare.HideDropDown(); /*pnlCtl.PerformCallback('cmbStare');*/ }" />
+                            DropDownCommandButtonClick="function(s, e) { cmbStare.HideDropDown(); pageControl.onFilterChange(); }" />
                     </dx:ASPxDropDownEdit>
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                     <dx:ASPxLabel ID="lblDtInc" runat="server" AssociatedControlID="txtDtInc" Text="Data Inceput" Font-Bold="true" />
-                    <dx:ASPxDateEdit ID="txtDtInc" runat="server" Width="100%" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto">
+                    <dx:ASPxDateEdit ID="txtDtInc" ClientInstanceName="txtDtInc" runat="server" Width="100%" 
+                        DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto" AllowNull="false">
                         <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                         <CalendarProperties FirstDayOfWeek="Monday" />
-                        <ClientSideEvents ValueChanged="function(s, e) { /*pnlCtl.PerformCallback('txtDtInc');*/ }" />
+                        <ClientSideEvents ValueChanged="function(s, e) { pageControl.onFilterChange(); }" />
                     </dx:ASPxDateEdit>                        
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                     <dx:ASPxLabel ID="lblDtSf" runat="server" AssociatedControlID="txtDtSf" Text="Data Sfarsit" Font-Bold="true" />
-                    <dx:ASPxDateEdit ID="txtDtSf" runat="server" Width="100%" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto">
+                    <dx:ASPxDateEdit ID="txtDtSf" ClientInstanceName="txtDtSf" runat="server" Width="100%" 
+                        DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto" AllowNull="false">
                         <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                         <CalendarProperties FirstDayOfWeek="Monday" />
-                        <ClientSideEvents ValueChanged="function(s, e) { /*pnlCtl.PerformCallback('txtDtSf');*/ }" />
+                        <ClientSideEvents ValueChanged="function(s, e) { pageControl.onFilterChange(); }" />
                     </dx:ASPxDateEdit>
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                    <dx:ASPxLabel ID="lblAng" runat="server" AssociatedControlID="cmbAng" Text="Angajat" Font-Bold="true" />
+                    <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="100%" AutoPostBack="false"                        
+                        ValueField="F10003" TextField="NumeAngajat" ValueType="System.Int32" AllowNull="true" OnCallback="cmbAng_Callback">
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />                        
+                    </dx:ASPxComboBox>
+                </div>
+                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                     <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
-                        <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnFiltru;-99'); }" />
+                        <ClientSideEvents Click="function(s, e) { pageControl.onFilterButtonClick(); }" />
                     </dx:ASPxButton>
                 </div>
             </div>            
@@ -376,7 +367,7 @@
         <div class="page-content-data invisible">
             <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"
                 CssClass="dx-grid-adaptive dx-grid-adaptive-hide-group dx-grid-adaptive-hide-header dx-grid-adaptive-scale-commandcolumn dx-grid-adaptive-fullscreen-popup"
-                OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCustomUnboundColumnData="grDate_CustomUnboundColumnData">
+                OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCustomUnboundColumnData="grDate_CustomUnboundColumnData">
                 <Settings ShowFilterRow="True" ShowFilterRowMenu="true" ShowGroupPanel="True" HorizontalScrollBarMode="Auto" VerticalScrollBarMode="Auto" />
                 <SettingsAdaptivity AdaptivityMode="HideDataCellsWindowLimit" AdaptiveDetailColumnCount="1" HideDataCellsAtWindowInnerWidth="1024" />
                 <SettingsEditing Mode="PopupEditForm" />
@@ -526,9 +517,7 @@
                                         <BrowseButton>
                                             <Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
                                         </BrowseButton>
-                                        <ValidationSettings ShowErrors="False"></ValidationSettings>
-
-                                        <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s, e) { EndUpload(s); }" />
+                                        <ValidationSettings ShowErrors="False"></ValidationSettings>                                        
                                     </dx:ASPxUploadControl>                                    
                                 </div>
                                 <div id="CampBifaEditContainer" runat="server" class="col-xs-6">
@@ -589,7 +578,6 @@
                 </dx:PopupControlContentControl>
             </ContentCollection>
     </dx:ASPxPopupControl>
-
 
     <dx:ASPxPopupControl ID="popUpMotiv" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
         CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
@@ -673,8 +661,40 @@
                 if (!e.isCallback) { // Validate document ready                    
                     this.pageContent.find('> div[class*="invisible"]').removeClass('invisible'); // To hide DX controls UI init issues.
                 }
-            }            
-        };
+            },
+            onFilterChange: function (updateResult) {                
+                cmbAng.PerformCallback(JSON.stringify({
+                    viz: cmbViz.GetValue(),
+                    rol: typeof cmbRol !== 'undefined' ? cmbRol.GetValue() : null,
+                    stare: lstStare.GetSelectedValues(),
+                    dtInc: this.getLocalDate(txtDtInc.GetDate()),
+                    dtSf: this.getLocalDate(txtDtSf.GetDate()),
+                    ang: cmbAng.GetValue()
+                }));
+                updateResult && this.onFilterButtonClick();
+            },
+            onFilterButtonClick: function () {
+                grDate.PerformCallback('btnFiltru;' + JSON.stringify({
+                    viz: cmbViz.GetValue(),
+                    rol: typeof cmbRol !== 'undefined' ? cmbRol.GetValue() : null,
+                    stare: lstStare.GetSelectedValues(),
+                    dtInc: this.getLocalDate(txtDtInc.GetDate()),
+                    dtSf: this.getLocalDate(txtDtSf.GetDate()),
+                    ang: cmbAng.GetValue()
+                }));
+            },            
+            /* Internal */
+            getLocalDate: function (date) {
+                var localDate = null;
+
+                if (date instanceof Date) {
+                    localDate = new Date();
+                    localDate.setTime(date.getTime() + (date.getTimezoneOffset() * (-1) * 60 * 1000));
+                }
+
+                return localDate;
+            }
+        }
 
         pageControl.init();
     </script>

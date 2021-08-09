@@ -17,7 +17,11 @@
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="ReportViewButton" runat="server" Text="Afisare" Image-Url="~/Fisiere/Imagini/Icoane/arata.png" OnClick="ReportViewButton_Click" oncontextMenu="ctx(this,event)" />
                 <dx:ASPxButton ID="ReportDesignButton" ClientIDMode="Static" ClientInstanceName="btnDesign" runat="server" Text="Design" Image-Url="~/Fisiere/Imagini/Icoane/schimba.png" CssClass="hidden-xs hidden-sm" OnClick="ReportDesignButton_Click" oncontextMenu="ctx(this,event)" />
-                <dx:ASPxButton ID="ExitButton" runat="server" Text="Iesire" Image-Url="~/Fisiere/Imagini/Icoane/iesire.png" PostBackUrl="~/Pagini/MainPage.aspx" CssClass="hidden-xs hidden-sm" oncontextMenu="ctx(this,event)" />
+                <dx:ASPxButton ID="ExitButton" runat="server" Text="Iesire" Image-Url="~/Fisiere/Imagini/Icoane/iesire.png" PostBackUrl="~/Pagini/MainPage.aspx" CssClass="hidden-xs hidden-sm" oncontextMenu="ctx(this,event)">
+                    <ClientSideEvents Click="function(s, e) { 
+                        ASPxClientUtils.DeleteCookie('ReportsGridViewCookies'); 
+                    }" />
+                </dx:ASPxButton>
             </div>        
         </div>        
         <div class="page-content-data invisible">
@@ -60,6 +64,11 @@
                             <ValidationSettings Display="Dynamic" ErrorDisplayMode="Text" ErrorTextPosition="Bottom" SetFocusOnError="true">
                                 <RequiredField IsRequired="True" ErrorText="Tipul raportului este obligatoriu" />
                             </ValidationSettings>
+                        </PropertiesComboBox>
+                    </dx:GridViewDataComboBoxColumn>
+                    <dx:GridViewDataComboBoxColumn FieldName="IdModul" Caption="Modul" Width="150px">
+                        <PropertiesComboBox ValueField="Id" TextField="Denumire">
+                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                         </PropertiesComboBox>
                     </dx:GridViewDataComboBoxColumn>
                     <dx:GridViewDataCheckColumn FieldName="Restricted" Caption="Parola" Width="70px">

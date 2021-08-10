@@ -21,7 +21,16 @@
 
     function OnClick(s) {       
         pnlCtl.PerformCallback(s.name);
+	}
+
+	function SetareLuna(s) {
+		var an = parseInt("<%=Session["CM_An"] %>");
+        var luna = parseInt("<%=Session["CM_Luna"] %>");
+		var data = new Date(an, luna - 1);
+		data.setHours(0, 0, 0, 0);
+		deDeLaData.SetDate(data);
     }
+
 
 	function OnEndCallback(s, e) {
         pnlLoading.Hide();
@@ -34,7 +43,8 @@
         }
     }
 
-	function GoToViewHistory(s) {		
+	function GoToViewHistory(s) {	
+		debugger;
         strUrl = getAbsoluteUrl + "ConcediiMedicale/Istoric.aspx";
         popGenIst.SetHeaderText("Vizualizare CM luna anterioara");
         popGenIst.SetContentUrl(strUrl);
@@ -175,18 +185,18 @@
 							</div>
 						</td>
                         <td>								
-							<dx:ASPxDateEdit  ID="deDeLaData" Width="140" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"   AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="deDeLaData" Width="140" ClientInstanceName="deDeLaData" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"   AutoPostBack="false"  >
 								<CalendarProperties FirstDayOfWeek="Monday" />
-								<ClientSideEvents  ValueChanged ="function(s,e){ OnTextChangedHandler(s); }" />
+								<ClientSideEvents  ValueChanged ="function(s,e){ OnTextChangedHandler(s); }"  DropDown="function(s,e){ SetareLuna(s); }"/>
 							</dx:ASPxDateEdit>					
 						</td>
 						<td>					
 							<dx:ASPxLabel  ID="lblLaData" runat="server"  Width="100" Text="Data sfarsit"></dx:ASPxLabel >	
 						</td>
                         <td>						
-							<dx:ASPxDateEdit  ID="deLaData" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="deLaData" Width="100"  ClientInstanceName="deLaData" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
 								<CalendarProperties FirstDayOfWeek="Monday" />
-								<ClientSideEvents ValueChanged="function(s,e){ OnTextChangedHandler(s); }" />
+								<ClientSideEvents ValueChanged="function(s,e){ OnTextChangedHandler(s); }"  />
 							</dx:ASPxDateEdit>										
 						</td>
 						<td>									
@@ -368,7 +378,7 @@
 						</td>
                        <td>                    
                             <dx:ASPxButton ID="btnCMAnt" ClientInstanceName="btnCMAnt"   Width="75" ClientIDMode="Static"  runat="server"   Text="CM luna anterioara" oncontextMenu="ctx(this,event)" AutoPostBack="false">
-                                <ClientSideEvents Click="function(s,e){ window.open('Istoric.aspx','','height=500,width=1000,left='+(window.outerWidth / 2 + window.screenX - 300)+', top=' + (window.outerHeight / 2 + window.screenY - 200)); }" />                                
+                                   <ClientSideEvents Click="function(s,e){ window.open('Istoric.aspx','','height=500,width=1000,left='+(window.outerWidth / 2 + window.screenX - 300)+', top=' + (window.outerHeight / 2 + window.screenY - 200)); }" />                                                             
                             </dx:ASPxButton>
                         </td>
 
@@ -651,6 +661,8 @@
             </dx:PanelContent>
           </PanelCollection>
         </dx:ASPxCallbackPanel>
+
+
 </body>
 
 </asp:Content>

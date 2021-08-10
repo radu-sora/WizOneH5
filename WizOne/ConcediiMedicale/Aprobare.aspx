@@ -226,9 +226,9 @@
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>	
-                        <dx:GridViewDataCheckColumn FieldName="NrZile" Name="NrZile" Caption="NrZile" ReadOnly="true" Width="100px"  >
+                        <dx:GridViewDataTextColumn FieldName="NrZile" Name="NrZile" Caption="NrZile" ReadOnly="true" Width="100px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                        </dx:GridViewDataCheckColumn>
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewDataCheckColumn FieldName="Document" Name="Document" Caption="Document" ReadOnly="true" Width="100px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataCheckColumn>

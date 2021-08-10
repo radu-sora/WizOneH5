@@ -239,6 +239,7 @@ namespace WizOne.ConcediiMedicale
                 Session["CM_NrZile"] = null;
                 Session["CM_Grid"] = null;
                 Session["CM_Document"] = null;
+                Session["MarcaCM"] = null;
 
                 if (Page.IsCallback)
                     ASPxWebControl.RedirectOnCallback(url);

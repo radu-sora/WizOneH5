@@ -33,7 +33,7 @@
         }
     }
     function OnPreluare(s, e) {
-        var nr = "<%=Session["ZileCMAnterior"] %>";
+<%--        var nr = "<%=Session["ZileCMAnterior"] %>";
         if (nr == 0) {
             swal({
                 title: "", text: "Datele din certificatul medical nu pot fi preluate!\nNu exista certificat medical in ultima zi a lunii anterioare!",
@@ -41,7 +41,7 @@
             });
             e.processOnServer = false;
         }
-        else
+        else--%>
             e.processOnServer = true;
     }
 
@@ -53,7 +53,7 @@
             <tr>
                 <td style="float:right; text-align:right;">
                     <dx:ASPxButton ID="btnPreluare" ClientInstanceName="btnPreluare" ClientIDMode="Static" runat="server" Text="Preluare" AutoPostBack="true" OnClick="btnPreluare_Click" oncontextMenu="ctx(this,event)" >
-                        <ClientSideEvents Click="function(s,e) { OnPreluare(s,e); }" />
+                       
                     </dx:ASPxButton>
                 </td>
             </tr> 
@@ -65,6 +65,7 @@
                         <SettingsSearchPanel Visible="False" />    
                         <ClientSideEvents ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
                         <Columns>	
+                            <dx:GridViewCommandColumn Width="100px" ButtonType="Image" Caption="Selecteaza" ShowSelectCheckbox="true" SelectAllCheckboxMode="None" />
                             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" ReadOnly="true" Visible="false" Width="50px" />
                             <dx:GridViewDataTextColumn FieldName="TipCM" Name="TipCM" Caption="TipCM" ReadOnly="true" Width="180px" />
                             <dx:GridViewDataTextColumn FieldName="DataStart" Name="DataStart" Caption="Data start" ReadOnly="true" Width="70px" />

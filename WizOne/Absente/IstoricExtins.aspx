@@ -423,7 +423,7 @@
         <SettingsPager Mode="ShowAllRecords" />
         <ClientSideEvents SelectionChanged="function(s, e) { grLeg.GetRowValues(grLeg.GetFocusedRowIndex(), 'Id;Culoare', OnGetRowValues); }" />
         <Columns>
-            <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="None" CellStyle-CssClass="hide_column" />
+            <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" CellStyle-CssClass="hide_column" />
             <dx:GridViewDataColorEditColumn FieldName="Culoare" Caption=" " Width="30px">
                 <dataitemtemplate>
                     <div style="width:15px; height:15px; border: #9f9f9f 1px solid; background:<%#Container.Text %>"></div>

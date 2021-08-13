@@ -16,6 +16,7 @@ using Oracle.ManagedDataAccess.Client;
 using DevExpress.Utils.DPI;
 using DevExpress.Web.Data;
 using DevExpress.Web.Internal;
+using System.Web.Hosting;
 
 namespace WizOne.Personal
 {
@@ -483,6 +484,15 @@ namespace WizOne.Personal
                 General.ExecutaNonQuery("UPDATE \"MP_NotaLichidare_Detalii\" SET \"IdStare\" = " + idStare + " WHERE \"IdNotaLichidare\" = " + idNota, null);
                 grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes!");
 
+                string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };                
+                int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+                int idUser = Convert.ToInt32(Session["UserId"] ?? -99);
+
+                HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                {
+                    NotifAsync.TrimiteNotificare("Personal.NotaLichidare", (int)Constante.TipNotificare.Notificare, "SELECT Z.* FROM MP_NotaLichidare Z WHERE Z.IdAuto=" + idNota.ToString(), "MP_NotaLichidare", idNota, idUser, marcaUser, arrParam);
+                });
+
             }
             catch (Exception ex)
             {
@@ -497,7 +507,9 @@ namespace WizOne.Personal
                 grDateDet.CancelEdit();
 
                 DataTable dt = Session["NL_GridDet"] as DataTable;
-                        
+
+                int idNota = -99;
+                string rol = "";
 
                 for (int i = 0; i < e.UpdateValues.Count; i++)
                 {
@@ -517,6 +529,11 @@ namespace WizOne.Personal
                             row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
                         }
 
+                        if (col.ColumnName == "IdNotaLichidare")
+                            idNota = Convert.ToInt32(row[col.ColumnName].ToString());
+                        if (col.ColumnName == "Rol")
+                            rol = row[col.ColumnName].ToString();
+
                         if (col.ColumnName == "USER_NO")
                             row[col.ColumnName] = Session["UserId"].ToString();
                         if (col.ColumnName == "TIME")
@@ -530,6 +547,15 @@ namespace WizOne.Personal
                 grDateDet.DataSource = dt;
                 General.SalveazaDate(dt, "MP_NotaLichidare_Detalii");
                 grDateDet.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes!");
+
+                string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+                int idUser = Convert.ToInt32(Session["UserId"] ?? -99);
+
+                HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                {
+                    NotifAsync.TrimiteNotificare("Personal.NotaLichidare", (int)Constante.TipNotificare.Notificare, "SELECT Z.*, Y.Rol, Y.Valoare, Y.Datorii, Y.Comentarii, Y.Supervizor FROM MP_NotaLichidare Z LEFT JOIN MP_NotaLichidare_Detalii Y ON Z.IdAuto = Y.IdNotaLichidare WHERE Z.IdAuto=" + idNota.ToString() + " AND Y.Rol = '" + rol + "'", "MP_NotaLichidare", idNota, idUser, marcaUser, arrParam);
+                });
 
             }
             catch (Exception ex)

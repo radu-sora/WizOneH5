@@ -208,7 +208,11 @@ namespace WizOne.ConcediiMedicale
                 int anLucru = Convert.ToInt32(dt010.Rows[0]["F01011"].ToString());
                 int lunaLucru = Convert.ToInt32(dt010.Rows[0]["F01012"].ToString());
 
-                DateTime odtDate = new DateTime(anLucru, lunaLucru, 1);
+                DateTime odtDate = new DateTime();
+                if (Session["CM_StartDate"] != null)
+                    odtDate = Convert.ToDateTime(Session["CM_StartDate"]);
+                else
+                    odtDate = new DateTime(anLucru, lunaLucru, 1);
 
                 int nrZileConcPrec = 0;
                 if (dtCM != null && dtCM.Rows.Count > 0)
@@ -293,7 +297,7 @@ namespace WizOne.ConcediiMedicale
                         Session["SerieNrCMInitial"] = arr[3].ToString();
                     }
 
-                    Session["DataCMICalculCM"] = Convert.ToDateTime(arr[5].ToString());
+                    Session["DataCMICalculCM"] = new DateTime(Convert.ToInt32(arr[5].ToString().Substring(6, 4)), Convert.ToInt32(arr[5].ToString().Substring(3, 2)), Convert.ToInt32(arr[5].ToString().Substring(0, 2)));
 
                     Session["CM_Preluare"] = 1;
                     this.ClientScript.RegisterClientScriptBlock(this.GetType(), "Close", "window.close();", true);

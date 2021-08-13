@@ -177,7 +177,21 @@ namespace WizOne.ConcediiMedicale
                 }
 
                 if (Session["CM_TipConcediu"] != null)
-                    InitWorkingDays();
+                {
+                    sql = "SELECT F10033 FROM F100 WHERE F10003 = " + Session["MarcaCM"].ToString();
+                    DataTable dtAng = General.IncarcaDT(sql, null);
+                    if (dtAng.Rows[0][0] != null && Convert.ToInt32(dtAng.Rows[0][0].ToString()) == 1)
+                    {
+                        chkZileFNUASS.Checked = true;
+                    }
+                    else
+                    {
+                        chkZileCal.Checked = true;
+                    }
+                    OnZileAng();
+                    //InitWorkingDays();
+                }
+
 
                 DataTable dtMARDEF = Session["MARDEF"] as DataTable;
                 if (dtMARDEF != null && dtMARDEF.Rows.Count > 0)
@@ -260,6 +274,7 @@ namespace WizOne.ConcediiMedicale
                 deDeLaData.Value = Convert.ToDateTime(dtCM.Rows[0]["DataInceput"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataInceput"].ToString());
                 deLaData.Value = Convert.ToDateTime(dtCM.Rows[0]["DataSfarsit"] == DBNull.Value ? "01/01/2100" : dtCM.Rows[0]["DataSfarsit"].ToString());
                 txtNrZile.Text = dtCM.Rows[0]["NrZile"] == DBNull.Value ? "" : dtCM.Rows[0]["NrZile"].ToString();
+                Session["CM_NrZile"] = txtNrZile.Text;
                 cmbCT1.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer1"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer1"].ToString());
                 cmbCT2.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer2"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer2"].ToString());
                 cmbCT3.Value = Convert.ToInt32(dtCM.Rows[0]["CodTransfer3"] == DBNull.Value ? "0" : dtCM.Rows[0]["CodTransfer3"].ToString());
@@ -982,7 +997,7 @@ namespace WizOne.ConcediiMedicale
             bool trans = int.TryParse((Session["CM_NrZile"] == null ? "" : Session["CM_NrZile"].ToString()), out ZL);            
 
             int ZLA = 0;
-            int.TryParse(txtZCMAnt.Text, out ZLA);
+            int.TryParse((Session["ZileCMAnterior"] ?? "0").ToString(), out ZLA);
 
             int Z1 = 0;
             //int.TryParse(Session["CM_NrZileCT1"].ToString(), out Z1);
@@ -1165,7 +1180,7 @@ namespace WizOne.ConcediiMedicale
             int.TryParse(Session["CM_NrZile"].ToString(), out ZL);
 
             int ZLA = 0;
-            int.TryParse(txtZCMAnt.Text, out ZLA);
+            int.TryParse((Session["ZileCMAnterior"] ?? "0").ToString(), out ZLA);
 
             int tipConcediu = Convert.ToInt32((Session["CM_TipConcediu"] ?? "-1").ToString());
 
@@ -1210,8 +1225,11 @@ namespace WizOne.ConcediiMedicale
                     break;
             }
 
-            txtCT1.Text = Z1.ToString();
-            Session["CM_NrZileCT1"] = txtCT1.Text;
+            if (Session["CM_NrZileCT1"] == null)
+            {
+                txtCT1.Text = Z1.ToString();
+                Session["CM_NrZileCT1"] = txtCT1.Text;
+            }
             //OnUpdateZ1();
 
             int total = 0;
@@ -1229,15 +1247,15 @@ namespace WizOne.ConcediiMedicale
 
                 if (add1 == 1)
                 {
-                    total += txtCT1.Text.Length > 0 ? Convert.ToInt32(txtCT1.Text) : 0;
+                    total += Session["CM_NrZileCT1"] != null ? Convert.ToInt32(Session["CM_NrZileCT1"].ToString()) : 0;
                 }
                 if (add2 == 1)
                 {
-                    total += txtCT2.Text.Length > 0 ? Convert.ToInt32(txtCT2.Text) : 0;
+                    total += Session["CM_NrZileCT2"] != null ? Convert.ToInt32(Session["CM_NrZileCT2"].ToString()) : 0;
                 }
                 if (add3 == 1)
                 {
-                    total += txtCT3.Text.Length > 0 ? Convert.ToInt32(txtCT3.Text) : 0;
+                    total += Session["CM_NrZileCT3"] != null ? Convert.ToInt32(Session["CM_NrZileCT1"].ToString()) : 0;
                 }
                 if (add4 == 1)
                 {
@@ -1277,6 +1295,8 @@ namespace WizOne.ConcediiMedicale
             //ASPxRadioButton rbZileCal = DataList1.Items[0].FindControl("rbZileCal") as ASPxRadioButton;
             //ASPxRadioButton rbZileFNUASS = DataList1.Items[0].FindControl("rbZileFNUASS") as ASPxRadioButton;          
 
+            if (cmbTipConcediu.Value == null)
+                return;
             int no = Convert.ToInt32(cmbTipConcediu.SelectedItem.Value);
             Session["CM_TipConcediu"] = no;
             string sql = "SELECT * FROM MARDEF WHERE NO = " + no;
@@ -1474,7 +1494,7 @@ namespace WizOne.ConcediiMedicale
 
             int nrZL3 = 0;
             int ZLA = 0;
-            int.TryParse(txtZCMAnt.Text, out ZLA);
+            int.TryParse((Session["ZileCMAnterior"] ?? "0").ToString(), out ZLA);
 
             int code4 = 0;
 
@@ -1535,7 +1555,7 @@ namespace WizOne.ConcediiMedicale
             txtCT1.Text = nrZL3.ToString();
             if (Session["CM_NrZileCT1"] == null)
                 Session["CM_NrZileCT1"] = txtCT1.Text;
-            if (Session["CM_NrZileCT2"] == null)
+            //if (Session["CM_NrZileCT2"] == null)
                 OnUpdateZ1();
             string s;
             int total = 0;
@@ -1883,9 +1903,9 @@ namespace WizOne.ConcediiMedicale
 
                     }       
                 }
-                Session["ZileCMAnterior"] = 0; 
+              
             }
-
+            Session["ZileCMAnterior"] = txtZCMAnt.Text;
         }
     
 
@@ -1918,8 +1938,8 @@ namespace WizOne.ConcediiMedicale
                 string[] param = General.Nz(Session["SerieNrCMInitial"], "").ToString().Split(' ');
                 if (param.Length > 1)
                 {
-                    txtSerie.Text = param[0];
-                    txtNr.Text = param[1];
+                    //txtSerie.Text = param[0];
+                    //txtNr.Text = param[1];
                     txtSCMInit.Text = param[0];
                     txtNrCMInit.Text = param[1];
                 }
@@ -2120,6 +2140,7 @@ namespace WizOne.ConcediiMedicale
                     OnUpdateCcNo();
                     break;
                 case "txtCT1":
+                    Session["CM_NrZileCT1"] = null;
                     OnUpdateZ1();
                     break;
                 case "txtNrZile":

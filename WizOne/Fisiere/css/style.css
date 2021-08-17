@@ -681,6 +681,11 @@ a, a:focus, a:hover {
     vertical-align: middle;
 }
 
+/* BS extensions */
+.max-width-lg {
+    max-width: 1400px;
+}
+
 /* File uploader custom control */
 .file-uploader {
     display: flex;

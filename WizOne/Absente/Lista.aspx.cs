@@ -302,7 +302,7 @@ namespace WizOne.Absente
             cmbAng.DataSource = dt;
             cmbAng.DataBind();
             
-            if (dt.Select("F10003=" + selAng).Count() > 0) //TODO: BUG - On first Lista page load the cmbAng selected value is not restored after return from request page.
+            if (dt.Select("F10003=" + selAng).Count() > 0) //TODO: BUG - On first page load the cmbAng selected value is not restored after returning from the request page.
                 cmbAng.Value = selAng;
         }
 

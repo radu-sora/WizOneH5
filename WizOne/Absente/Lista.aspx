@@ -284,7 +284,7 @@
                 </dx:ASPxButton>
             </div>            
         </div>
-        <div>
+        <div class="max-width-lg">
             <div class="row row-fix">
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                     <dx:ASPxLabel ID="lblViz" runat="server" AssociatedControlID="cmbViz" Text="Vizualizare" Font-Bold="true" />

@@ -115,7 +115,7 @@
                 </dx:ASPxButton>
             </div>
         </div>
-        <div>
+        <div class="max-width-lg">
             <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" meta:resourcekey="pnlCtlResource1" >
                 <SettingsLoadingPanel Enabled="False" />
                 <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />

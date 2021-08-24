@@ -321,6 +321,15 @@ namespace WizOne.ConcediiMedicale
         protected global::DevExpress.Web.ASPxTextBox txtCodInfCont;
 
         /// <summary>
+        /// chkStagiu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkStagiu;
+
+        /// <summary>
         /// chkUrgenta control.
         /// </summary>
         /// <remarks>
@@ -715,15 +724,6 @@ namespace WizOne.ConcediiMedicale
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkModMan;
-
-        /// <summary>
-        /// chkStagiu control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBox chkStagiu;
 
         /// <summary>
         /// rbOptiune1 control.

@@ -29,6 +29,7 @@ namespace WizOne.ConcediiMedicale
             public double MedieZileBazaCalcul { get; set; }
             public double MedieZilnicaCM { get; set; }
             public int Optiune { get; set; }
+            public DateTime DataInceput { get; set; }
         }     
 
 
@@ -171,25 +172,25 @@ namespace WizOne.ConcediiMedicale
 
                     if (Convert.ToDouble(General.Nz(arr[1], 0)) == 0 || Convert.ToInt32(General.Nz(arr[2], 0)) == 0 || Convert.ToDouble(General.Nz(arr[3], 0)) == 0 || Convert.ToDouble(General.Nz(arr[4], 0)) == 0)
                     {
-                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("Date lipsa") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("Date lipsa") + System.Environment.NewLine;
                         continue;
                     }
 
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) > 2)
                     {
-                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("deja aprobat") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("deja aprobat") + System.Environment.NewLine;
                         continue;
                     }
 
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) == -1)
                     {
-                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("anulat") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("anulat") + System.Environment.NewLine;
                         continue;
                     }
 
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) < 2)
                     {
-                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("nu are calculata media") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("nu are calculata media") + System.Environment.NewLine;
                         continue;
                     }
 
@@ -278,26 +279,26 @@ namespace WizOne.ConcediiMedicale
 
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) == 4)
                     {
-                        msg += Dami.TraduCuvant("CM pt marca") + " "  + arr[5] + " - " + Dami.TraduCuvant("deja transferat") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " "  + arr[5] + " - " + Dami.TraduCuvant("deja transferat") + System.Environment.NewLine;
                         continue;
                     }
 
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) == -1)
                     {
-                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("anulat") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("anulat") + System.Environment.NewLine;
                         continue;
                     }
 
                     if (Convert.ToInt32(General.Nz(arr[9], 0)) == 1)
                     {
-                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("modificare manuala") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("modificare manuala") + System.Environment.NewLine;
                         continue;
                     }
 
                     if ((Convert.ToDateTime(arr[7]).Year > Convert.ToInt32(dtLC.Rows[0][1].ToString())) ||
                         (Convert.ToDateTime(arr[7]).Year == Convert.ToInt32(dtLC.Rows[0][1].ToString()) && Convert.ToDateTime(arr[7]).Month > Convert.ToInt32(dtLC.Rows[0][0].ToString())))
                     {
-                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("este in avans") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("este in avans") + System.Environment.NewLine;
                         continue;
                     }
 
@@ -364,14 +365,17 @@ namespace WizOne.ConcediiMedicale
                         + MNTZ.ToString("0.##").Replace(',', '.') + ", MedieZilnicaCM = " + Medie6.ToString("0.##").Replace(',', '.') + " WHERE Id = " + ids[k].Id;
                     General.ExecutaNonQuery(sql, null);
 
-                    sql = "UPDATE CM_Cereri SET IdStare = 2, USER_NO = " + Session["UserId"].ToString() + ", TIME = GETDATE() WHERE Id = " + ids[k].Id + " AND IdStare < 2";
-                    General.ExecutaNonQuery(sql, null);
+                    if (BCCM != 0 && ZBCCM != 0 && MNTZ != 0 && Medie6 != 0)
+                    {
+                        sql = "UPDATE CM_Cereri SET IdStare = 2, USER_NO = " + Session["UserId"].ToString() + ", TIME = GETDATE() WHERE Id = " + ids[k].Id + " AND IdStare < 2";
+                        General.ExecutaNonQuery(sql, null);
 
-                    sql = "UPDATE CM_CereriIstoric SET IdStare = 2, IdUser = " + Session["UserId"].ToString() + ", Culoare = (SELECT Culoare FROM CM_tblStari WHERE Id = 2)  WHERE IdCerere = " + ids[k].Id + " AND Pozitie = 2 AND IdStare < 2";
-                    General.ExecutaNonQuery(sql, null);
+                        sql = "UPDATE CM_CereriIstoric SET IdStare = 2, IdUser = " + Session["UserId"].ToString() + ", Culoare = (SELECT Culoare FROM CM_tblStari WHERE Id = 2)  WHERE IdCerere = " + ids[k].Id + " AND Pozitie = 2 AND IdStare < 2";
+                        General.ExecutaNonQuery(sql, null);
+                    }
                 }
 
-                MessageBox.Show(msg + (msg.Length > 0 ? System.Environment.NewLine : "") + Dami.TraduCuvant("S-a calculat media pt") + " " + (nrSel == 1 ? Dami.TraduCuvant("un concediu medical") + "!" : nrSel + " " + Dami.TraduCuvant("concedii medicale") + "!") +
+                MessageBox.Show(msg + (msg.Length > 0 ? System.Environment.NewLine : "") + Dami.TraduCuvant("S-a calculat media pentru") + " " + (nrSel == 1 ? Dami.TraduCuvant("un concediu medical") + "!" : nrSel + " " + Dami.TraduCuvant("concedii medicale") + "!") +
                     (msgStagiu.Length > 0 ? System.Environment.NewLine + Dami.TraduCuvant("Urmatorii angajati nu au stagiu") + ":" + msgStagiu.Substring(1) : ""), MessageBox.icoInfo, ""); ;
 
                 Session["CM_Grid"] = null;
@@ -411,13 +415,13 @@ namespace WizOne.ConcediiMedicale
 
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) < 3)
                     {
-                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("nu este aprobat") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("nu este aprobat") + System.Environment.NewLine;
                         continue;
                     }
 
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) == 4)
                     {
-                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("deja transferat") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("deja transferat") + System.Environment.NewLine;
                         continue;
                     }
 
@@ -664,15 +668,15 @@ namespace WizOne.ConcediiMedicale
                                         string sName = dtMARDEF.Rows[0]["NAME"].ToString();
                                         if (!(Convert.ToInt32(dtMARDEF.Rows[0]["NO"].ToString()) == 3 || Convert.ToInt32(dtMARDEF.Rows[0]["NO"].ToString()) == 4 || sName.Contains("AMBP")))
                                         {
-                                            dtF300.Rows[0]["F30013"] = Convert.ToInt32(dtF300.Rows[0]["F30013"].ToString()) + zile;
-                                            dtF300.Rows[0]["F30015"] = Convert.ToInt32(dtF300.Rows[0]["F30015"].ToString()) + suma_4450_subplafon;
+                                            dtF300.Rows[0]["F30013"] = Convert.ToInt32(Convert.ToDouble(dtF300.Rows[0]["F30013"].ToString())) + zile;
+                                            dtF300.Rows[0]["F30015"] = Convert.ToInt32(Convert.ToDouble(dtF300.Rows[0]["F30015"].ToString())) + suma_4450_subplafon;
                                             sql = "UPDATE F300 SET F30013 = {0}, F30015 = {1} WHERE F30003 = " + dt.Rows[0]["F10003"].ToString() + " AND F30010 = " + dtMARDEF.Rows[0]["CODE5"].ToString();
                                             sql = string.Format(sql, dtF300.Rows[0]["F30013"].ToString(), dtF300.Rows[0]["F30015"].ToString());
                                             General.ExecutaNonQuery(sql, null);
                                         }
                                     }
-                                    if (Convert.ToInt32(dtF300.Rows[0]["F300620"].ToString()) > 0 && Convert.ToInt32(dtF300.Rows[0]["F300607"].ToString()) == 10 && sumaReducereTimpLucru > 0)
-                                        dtF300.Rows[0]["F30015"] = Convert.ToInt32(dtF300.Rows[0]["F30015"].ToString()) + sumaReducereTimpLucru;
+                                    if (Convert.ToInt32(Convert.ToDouble(dtF300.Rows[0]["F300620"].ToString())) > 0 && Convert.ToInt32(dtF300.Rows[0]["F300607"].ToString()) == 10 && sumaReducereTimpLucru > 0)
+                                        dtF300.Rows[0]["F30015"] = Convert.ToInt32(Convert.ToDouble(dtF300.Rows[0]["F30015"].ToString())) + sumaReducereTimpLucru;
                                 }
                                 else
                                     AddConcediu(Convert.ToInt32(dtMARDEF.Rows[0]["CODE5"].ToString()), zile, cc, procent, suma4450 /*0*/, true, Convert.ToInt32(dt.Rows[0]["F10003"].ToString()), false);
@@ -1047,10 +1051,10 @@ namespace WizOne.ConcediiMedicale
             try
             {
                 int nrSel = 0;
-                string ids = "";
+                List<metaCereriCM> ids = new List<metaCereriCM>();
                 string msg = "";
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare" });
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare", "DataInceput" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate"), MessageBox.icoWarning, "");
@@ -1060,15 +1064,24 @@ namespace WizOne.ConcediiMedicale
                 for (int i = 0; i < lst.Count(); i++)
                 {
                     object[] arr = lst[i] as object[];
-                    DateTime? data = arr[4] as DateTime?;        
+                    DateTime? data = arr[7] as DateTime?;
 
-                    if (Convert.ToInt32(General.Nz(arr[6], 0)) > 2)
+                    if (Convert.ToInt32(General.Nz(arr[6], 0)) < 0)
                     {
-                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("deja aprobat") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("deja anulat") + System.Environment.NewLine;
                         continue;
-                    }         
+                    }
 
-                    ids += "," + arr[0];
+                    ids.Add(new metaCereriCM
+                    {
+                        Id = Convert.ToInt32(General.Nz(arr[0], 0)),
+                        F10003 = Convert.ToInt32(General.Nz(arr[5], 0)),
+                        BazaCalculCM = Convert.ToDouble(General.Nz(arr[1], 0)),
+                        ZileBazaCalculCM = Convert.ToInt32(General.Nz(arr[2], 0)),
+                        MedieZileBazaCalcul = Convert.ToDouble(General.Nz(arr[3], 0)),
+                        MedieZilnicaCM = Convert.ToDouble(General.Nz(arr[4], 0)),
+                        DataInceput = (data ?? new DateTime(2100, 1, 1))
+                    });
                     nrSel++;
                 }
 
@@ -1080,15 +1093,36 @@ namespace WizOne.ConcediiMedicale
                         MessageBox.Show(msg, MessageBox.icoWarning, "");
                     return;
                 }
-                string[] lstIds = ids.Substring(1).Split(',');
-                for (int i = 0; i < lstIds.Length; i++)
+
+                for (int i = 0; i < ids.Count; i++)
                 {
-                    string sql = "UPDATE CM_CereriIstoric SET Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = -1), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + lstIds[i] + " AND Pozitie = 2";
+                    string sql = "UPDATE CM_CereriIstoric SET Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = -1), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + ids[i].Id + " AND Pozitie = 2";
                     General.ExecutaNonQuery(sql, null);
 
-                    sql = "UPDATE CM_Cereri SET IdStare = -1 WHERE Id = " + lstIds[i];
+                    sql = "UPDATE CM_Cereri SET IdStare = -1 WHERE Id = " + ids[i].Id;
                     General.ExecutaNonQuery(sql, null);
 
+                    //actualizare F300
+                    DataTable dtVerif = General.IncarcaDT("SELECT COUNT(*) FROM F300 WHERE F30003 = " + ids[i].F10003 + " AND F30010 <> 4450 AND F30036 <> CONVERT(DATETIME, '" 
+                        + ids[i].DataInceput.Day.ToString().PadLeft(2, '0') + "/" + ids[i].DataInceput.Month.ToString().PadLeft(2, '0') + "/" + ids[i].DataInceput.Year + "', 103) AND F30010 BETWEEN 4400 AND 4499", null);
+                    if (dtVerif != null && dtVerif.Rows.Count > 0 && Convert.ToInt32(dtVerif.Rows[0][0].ToString()) > 0)
+                    {
+                        DataTable dtTemp = General.IncarcaDT("select sum(F30013), round(sum(F30012 * F30013 * F30014/100), 0) FROM F300 WHERE F30003 = " + +ids[i].F10003 + " AND F30010 BETWEEN 4400 AND 4499 AND F30010 <> 4450 AND F30036 = CONVERT(DATETIME, '"
+                        + ids[i].DataInceput.Day.ToString().PadLeft(2, '0') + "/" + ids[i].DataInceput.Month.ToString().PadLeft(2, '0') + "/" + ids[i].DataInceput.Year + "', 103)", null);
+
+                        int zile = Convert.ToInt32(Convert.ToDouble(dtTemp.Rows[0][0].ToString()));
+                        int suma = Convert.ToInt32(Convert.ToDouble(dtTemp.Rows[0][1].ToString()));
+
+                        sql = "UPDATE F300 SET F30013 = F30013 - " + zile + ", F30015 = F30015 - " + suma.ToString() + " WHERE F30010 = 4450 AND F30003 = " + ids[i].F10003;
+                        General.ExecutaNonQuery(sql, null);
+
+                        General.ExecutaNonQuery("DELETE FROM F300 WHERE F30003 = " + +ids[i].F10003 + " AND F30010 BETWEEN 4400 AND 4499 AND F30010 <> 4450 AND F30036 = CONVERT(DATETIME, '"
+                        + ids[i].DataInceput.Day.ToString().PadLeft(2, '0') + "/" + ids[i].DataInceput.Month.ToString().PadLeft(2, '0') + "/" + ids[i].DataInceput.Year + "', 103)", null);
+                    }
+                    else
+                    {
+                        General.ExecutaNonQuery("DELETE FROM F300 WHERE F30003 = " + +ids[i].F10003 + " AND F30010 BETWEEN 4400 AND 4499", null);
+                    }
                 }
 
                 Session["CM_Grid"] = null;
@@ -1296,7 +1330,15 @@ namespace WizOne.ConcediiMedicale
             //          28                                30                              29
             , dt.Rows[0]["F10003"].ToString(), Session["UserId"].ToString(),(avans ? valAvans : ""));
 
-      
+            //verificare existenta linie cu 4450 in F300 pe marca actuala; daca exista, se actualizeaza, nu se insereaza alta noua
+            if (cod == 4450)
+            {
+                DataTable dtVerif = General.IncarcaDT("SELECT COUNT(*) FROM F300 WHERE F30010 = 4450 AND F30003 = " + marca, null);
+                if (dtVerif != null && dtVerif.Rows.Count > 0 && Convert.ToInt32(dtVerif.Rows[0][0].ToString()) > 0)
+                {
+                    sql = "UPDATE F300 SET F30013 = F30013 + " + zile + ", F30015 = F30015 + " + suma.ToString().Replace(',', '.') + " WHERE F30010 = 4450 AND F30003 = " + marca;
+                }
+            }
 
             if (!((Convert.ToInt32(dt.Rows[0]["Stagiu"] == DBNull.Value ? "0" : dt.Rows[0]["Stagiu"].ToString()) == 1 && (cod == 4450 || cod == 4449))))
                 if (General.ExecutaNonQuery(sql, null))

@@ -78,6 +78,7 @@
                             <dx:GridViewDataTextColumn FieldName="BCCM" Name="BCCM" Caption="Baza calcul CM" ReadOnly="true" Width="100px" />
                             <dx:GridViewDataTextColumn FieldName="ZBCCM" Name="ZBCCM" Caption="Zile baza calcul CM" ReadOnly="true" Width="100px" />
                             <dx:GridViewDataTextColumn FieldName="MediaZilnica" Name="MediaZilnica" Caption="Media zilnica" ReadOnly="true" Width="100px" />
+                            <dx:GridViewDataTextColumn FieldName="MedieZileBazaCalcul" Name="MedieZileBazaCalcul" Caption="Media zile baza calcul" ReadOnly="true" Width="100px" />
 						</Columns>
                     </dx:ASPxGridView>
                     

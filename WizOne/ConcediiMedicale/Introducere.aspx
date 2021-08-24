@@ -52,7 +52,7 @@
     }
 
     window.PreluareCM = function () {
-        pnlCtl.PerformCallback("PreluareCM");
+		pnlCtl.PerformCallback("PreluareCM");
 	}
 
     function StartUpload() {
@@ -263,6 +263,13 @@
 							</dx:ASPxTextBox>
 						</td>
 					</tr>
+                    <tr>
+                        <td>
+                            <dx:ASPxCheckBox ID="chkStagiu" runat="server" Width="140" Text="Nu are stagiu de cotizare"  TextAlign="Left" ClientInstanceName="chkStagiu">
+                                <ClientSideEvents  />
+                            </dx:ASPxCheckBox>
+                        </td>
+                    </tr>
 					<tr>
                         <td colspan="2">
 							<div style="float:left; padding-bottom:15px;">
@@ -285,7 +292,7 @@
 							        </dx:ASPxComboBox>
 						        </td>
                                 <td>						  
-							        <dx:ASPxTextBox  ID="txtCT1" Width="50"  runat="server"  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT1" Width="50"  runat="server"  AutoPostBack="false" ClientInstanceName="txtCT1" >
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -302,7 +309,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						
-							        <dx:ASPxTextBox  ID="txtCT2" Width="50"  runat="server"  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT2" Width="50"  runat="server"  AutoPostBack="false" ClientInstanceName="txtCT2" >
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -319,7 +326,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						  
-							        <dx:ASPxTextBox  ID="txtCT3" Width="50"   runat="server"  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT3" Width="50"   runat="server"  AutoPostBack="false" ClientInstanceName="txtCT3">
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -336,7 +343,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						  
-							        <dx:ASPxTextBox  ID="txtCT4" Width="50"  runat="server" AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT4" Width="50"  runat="server" AutoPostBack="false" ClientInstanceName="txtCT4">
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -353,7 +360,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						    
-							        <dx:ASPxTextBox  ID="txtCT5" Width="50" runat="server"  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT5" Width="50" runat="server"  AutoPostBack="false" ClientInstanceName="txtCT5">
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -472,14 +479,6 @@
                              </dx:ASPxCheckBox>
                         </td>  
 					</tr> 
-
-                    <tr>
-                        <td>
-                            <dx:ASPxCheckBox ID="chkStagiu" runat="server" Width="175" Text="Nu are stagiu de cotizare" Visible="false" TextAlign="Right" ClientInstanceName="chkStagiu">
-                                <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
-                            </dx:ASPxCheckBox>
-                        </td>
-                    </tr>
                     <tr>
                        <td>
                             <dx:ASPxRadioButton ID="rbOptiune1" Width="125" runat="server" Text="Media zilnica pt. CM cf. O 158/2005"    ClientInstanceName="rbOptiune1"

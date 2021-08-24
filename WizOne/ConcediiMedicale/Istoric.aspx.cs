@@ -183,10 +183,11 @@ namespace WizOne.ConcediiMedicale
 
                     szT += ", F300612 AS BCCM, F300613 AS ZBCCM, F300614 AS MediaZilnica, F300620 AS MedieZileBazaCalcul, F30036 AS F94036 ";
 
-                    szT += " FROM F300, F021 ";
-                    szT += "WHERE F30010 = F02104 AND ";
-                    szT += "F30003 = {0} AND ";
-                    szT += "(F30010 IN (select CODE1 from mardef) OR F30010 IN (select CODE2 from mardef) OR F30010 IN (select CODE3 from mardef) OR F30010 IN (select CODE4 from mardef)) ";
+                    szT += " FROM (SELECT F30003, min(F30010) as F30010, f30037, f30038, sum (F30013) as F30013, sum(F30015) as f30015, F300601, F300602, F300606, F300608, ";
+                    szT += "  max(F300612) as f300612, max(f300613) as F300613, max(f300614) as f300614, max(f300620) as f300620, min(f30036) as f30036 from f300 where f30003 = {0} ";
+                    szT += "  AND(F30010 IN (select CODE1 from mardef) OR F30010 IN (select CODE2 from mardef) OR F30010 IN (select CODE3 from mardef) OR F30010 IN (select CODE4 from mardef)) ";
+                    szT += " group by F30003,F300601, F300602, F300606, F300608, f30037, f30038) as F300, F021 ";
+                    szT += "WHERE F30010 = F02104  ";    
 
                     szT += " UNION ";
 
@@ -274,7 +275,7 @@ namespace WizOne.ConcediiMedicale
                 //MessageBox.Show("Datele din certificatul medical nu pot fi preluate!\nNu exista certificat medical in ultima zi a lunii anterioare!");
                 //else
                 {
-                    List<object> lst = grDate.GetSelectedFieldValues(new string[] { "BCCM", "ZBCCM", "MediaZilnica", "SerieNrCM", "SerieNrCMInit", "DataStart" });
+                    List<object> lst = grDate.GetSelectedFieldValues(new string[] { "BCCM", "ZBCCM", "MediaZilnica", "SerieNrCM", "SerieNrCMInit", "DataStart", "MedieZileBazaCalcul" });
                     if (lst == null || lst.Count() == 0 || lst[0] == null)
                     {
 
@@ -287,12 +288,13 @@ namespace WizOne.ConcediiMedicale
                     Session["BazaCalculCM"] = Convert.ToDouble(arr[0].ToString());
                     Session["ZileBazaCalcul"] = Convert.ToDouble(arr[1].ToString());
                     Session["MediaZilnica"] = Convert.ToDouble(arr[2].ToString());
+                    Session["MedieZileBazaCalculCM"] = Convert.ToDouble(arr[6].ToString());
 
-                    if (arr[4] != null && arr[4].ToString().Trim().Length > 0)
-                    {
-                        Session["SerieNrCMInitial"] = arr[4].ToString();
-                    }
-                    else
+                    //if (arr[4] != null && arr[4].ToString().Trim().Length > 0)
+                    //{
+                    //    Session["SerieNrCMInitial"] = arr[4].ToString();
+                    //}
+                    //else
                     {
                         Session["SerieNrCMInitial"] = arr[3].ToString();
                     }

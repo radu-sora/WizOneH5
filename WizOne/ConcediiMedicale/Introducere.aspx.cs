@@ -78,6 +78,7 @@ namespace WizOne.ConcediiMedicale
                 divlblBCCM.Visible = false;
                 //btnCMAnt.ClientVisible = false;
                 chkModMan.ClientVisible = false;
+                chkStagiu.ClientVisible = false;
             }
 
             if (Session["CM_Stare"] != null && Convert.ToInt32(Session["CM_Stare"].ToString()) > 3)
@@ -133,8 +134,18 @@ namespace WizOne.ConcediiMedicale
                 Session["CM_NrZileCT4"] = null;
                 Session["CM_NrZileCT5"] = null;
                 Session["CM_CodIndemn"] = null;
-                Session["MARDEF"] = null;
-                Session["CM_TipConcediu"] = null;               
+                Session["MARDEF"] = null;            
+
+                Session["CM_TipConcediu"] = null;
+
+                Session["ZileCMAnterior"] = null;
+                Session["SerieNrCMInitial"] = null;
+                Session["BazaCalculCM"] = null;
+                Session["ZileBazaCalcul"] = null;
+                Session["MediaZilnica"] = null;
+                Session["DataCMICalculCM"] = null;
+
+                Session["MedieZileBazaCalculCM"] = null;
 
 
                 //if (Session["CM_Id"] == null)
@@ -846,11 +857,11 @@ namespace WizOne.ConcediiMedicale
 
 
             string sql = "INSERT INTO CM_Cereri (Id, F10003, TipProgram, TipConcediu, CodIndemnizatie, SerieCM, NumarCM, DataCM, LocPrescriere, DataInceput, DataSfarsit, NrZile, CodDiagnostic, CodUrgenta, CodInfectoContag, Initial, ZileCMInitial, SerieCMInitial, NumarCMInitial, DataCMInitial, " +
-                     " CodTransfer1, CodTransfer2, CodTransfer3,  CodTransfer4, CodTransfer5, NrZileCT1, NrZileCT2, NrZileCT3, NrZileCT4, NrZileCT5, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, NrAvizMedicExpert, DataAvizDSP, MedicCurant, CNPCopil, IdStare, Document, Urgenta, Suma, Tarif, Cod, ModifManuala, Optiune, USER_NO, TIME) ";
+                     " CodTransfer1, CodTransfer2, CodTransfer3,  CodTransfer4, CodTransfer5, NrZileCT1, NrZileCT2, NrZileCT3, NrZileCT4, NrZileCT5, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, NrAvizMedicExpert, DataAvizDSP, MedicCurant, CNPCopil, IdStare, Document, Urgenta, Suma, Tarif, Cod, ModifManuala, Optiune, Stagiu, USER_NO, TIME) ";
 
 
             sql += "VALUES ({0}, {1}, {2}, {3}, {4}, '{5}', '{6}', {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, '{17}', '{18}', {19}, "
-                + " {20}, {21}, {22}, {23}, {24}, {25}, {26}, {27}, {28}, {29}, {30}, {31}, {32},  {33}, '{34}', {35}, '{36}', '{37}', {38}, {39}, {40}, {41}, {42}, {43}, {44}, {45}, {46}, {47} )";
+                + " {20}, {21}, {22}, {23}, {24}, {25}, {26}, {27}, {28}, {29}, {30}, {31}, {32},  {33}, '{34}', {35}, '{36}', '{37}', {38}, {39}, {40}, {41}, {42}, {43}, {44}, {45}, {46}, {47}, {48} )";
 
             //sql = string.Format(sql, dtAng.Rows[0]["F10003"].ToString(), dtAng.Rows[0]["F10004"].ToString(), dtAng.Rows[0]["F10005"].ToString(), dtAng.Rows[0]["F10006"].ToString(), dtAng.Rows[0]["F10007"].ToString(), //4
             //    cod, 1, tarif.ToString(new CultureInfo("en-US")), zile, proc.ToString(new CultureInfo("en-US")), suma.ToString(new CultureInfo("en-US")), 0, 0, 0, //13
@@ -894,7 +905,7 @@ namespace WizOne.ConcediiMedicale
                 (Session["CM_NrZileCT1"] == null ? "0" : Session["CM_NrZileCT1"].ToString()), (Session["CM_NrZileCT2"] == null ? "0" : Session["CM_NrZileCT2"].ToString()), (Session["CM_NrZileCT3"] == null ? "0" : Session["CM_NrZileCT3"].ToString()), (Session["CM_NrZileCT4"] == null ? "0" : Session["CM_NrZileCT4"].ToString()), (Session["CM_NrZileCT5"] == null ? "0" : Session["CM_NrZileCT5"].ToString()),  //29
                 txtBCCM.Text.Length <= 0 ? "0" : txtBCCM.Text.ToString(new CultureInfo("en-US")), txtZBC.Text.Length <= 0 ? "0" : txtZBC.Text, txtMZBC.Text.Length <= 0 ? "0" : txtMZBC.Text.ToString(new CultureInfo("en-US")), txtMZ.Text.Length <= 0 ? "0" : txtMZ.Text.Replace(',', '.').ToString(new CultureInfo("en-US")), //33
                 txtNrAviz.Text, "CONVERT(DATETIME, '" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + (dtAviz.Year < 1900 ? 2100 : dtAviz.Year).ToString() + "', 103)", txtMedic.Text, //36
-                (cmbCNPCopil.Value ?? ""), (chkModMan.Checked ? 2 : 1), (Session["CM_Document"] == null ? 0 : 1), (chkUrgenta.Checked ? "1" : "0"), suma.ToString().Replace(',', '.'), tarif.ToString().Replace(',', '.'), cod, (chkModMan.Checked ? "1" : "0"), (rbOptiune1.Checked ? "1" : "2"), Convert.ToInt32(Session["UserId"].ToString()), "GETDATE()"); //47
+                (cmbCNPCopil.Value ?? ""), (chkModMan.Checked ? 2 : 1), (Session["CM_Document"] == null ? 0 : 1), (chkUrgenta.Checked ? "1" : "0"), suma.ToString().Replace(',', '.'), tarif.ToString().Replace(',', '.'), cod, (chkModMan.Checked ? "1" : "0"), (rbOptiune1.Checked ? "1" : "2"), (chkStagiu.Checked ? "1" : "0"), Convert.ToInt32(Session["UserId"].ToString()), "GETDATE()"); //48
 
             //cod, 1, tarif.ToString(new CultureInfo("en-US")), zile, proc.ToString(new CultureInfo("en-US")), suma.ToString(new CultureInfo("en-US")), 0, 0, 0, //13
             //(Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() + "', 103)"
@@ -1887,8 +1898,8 @@ namespace WizOne.ConcediiMedicale
 
                     if (dt1 == dt2)
                     {
-                        txtSerie.Text = codBoala;
-                        txtNr.Text = codParafa;
+                        //txtSerie.Text = codBoala;
+                        //txtNr.Text = codParafa;
                         if (Session["ZileCMAnterior"] != null && Session["ZileCMAnterior"].ToString() == "0")   // le mai completez doar daca nu am ales eu din fereastra altceva
                         {
                             txtSCMInit.Text = codBoala;
@@ -1947,7 +1958,7 @@ namespace WizOne.ConcediiMedicale
                 txtZBC.Text = General.Nz(Session["ZileBazaCalcul"], "").ToString();
                 txtMZ.Text = General.Nz(Session["MediaZilnica"], "").ToString();
 
-                txtMZBC.Text = General.Nz(Session["MedieZilnicaBazaCalculCM"], "").ToString();
+                txtMZBC.Text = General.Nz(Session["MedieZileBazaCalculCM"], "").ToString();
                 DateTime? dt = Session["DataCMICalculCM"] as DateTime?;
                 deDataCMInit.Value = dt;
 
@@ -2700,7 +2711,7 @@ namespace WizOne.ConcediiMedicale
             Session["MediaZilnica"] = null;
             Session["DataCMICalculCM"] = null;
 
-            Session["MedieZilnicaBazaCalculCM"] = null;
+            Session["MedieZileBazaCalculCM"] = null;
         }
 
         protected void btnDocUpload_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)

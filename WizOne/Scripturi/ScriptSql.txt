@@ -18227,6 +18227,8 @@ GO
 INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Lista', 'Lista', 'ConcediiMedicale\Aprobare', 1, 'm1.png')
 GO
 
+INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('CM_CaleFisierRezultat', '', 'calea catre locatia unde va fi salvat rezultatul calculului', 13)
+GO
 
 ----CM END ----
 

@@ -40,7 +40,20 @@
                 type: "warning"
             });
             s.cpAlertMessage = null;
-        }
+		}
+
+		
+<%--		var nr1 = parseInt("<%=Session["CM_NrZileCT1"] %>");
+		var nr2 = parseInt("<%=Session["CM_NrZileCT2"] %>");
+		var nr3 = parseInt("<%=Session["CM_NrZileCT3"] %>");
+		var nr4 = parseInt("<%=Session["CM_NrZileCT4"] %>");
+		var nr5 = parseInt("<%=Session["CM_NrZileCT5"] %>");
+
+		txtCT1.SetValue(nr1);
+		txtCT2.SetValue(nr2);
+		txtCT3.SetValue(nr3);
+		txtCT4.SetValue(nr4);
+        txtCT5.SetValue(nr5);--%>
     }
 
 	function GoToViewHistory(s) {	

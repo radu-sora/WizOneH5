@@ -1123,10 +1123,12 @@ namespace WizOne.ConcediiMedicale
             txtCT2.Text = Z2.ToString();
             txtCT3.Text = Z3.ToString();
 
-            Session["CM_NrZileCT1"] = txtCT1.Text;
-            Session["CM_NrZileCT2"] = txtCT2.Text;
-            Session["CM_NrZileCT3"] = txtCT3.Text;
-
+            if (Session["CM_NrZileCT1"] == null)
+            {
+                Session["CM_NrZileCT1"] = txtCT1.Text;
+                Session["CM_NrZileCT2"] = txtCT2.Text;
+                Session["CM_NrZileCT3"] = txtCT3.Text;
+            }
             int total = 0;
             string s = dtMARDEF.Rows[0]["NAME"].ToString();
             if (Convert.ToInt32(dtMARDEF.Rows[0]["NO"].ToString()) == 3 || Convert.ToInt32(dtMARDEF.Rows[0]["NO"].ToString()) == 4 || s.Contains("AMBP"))

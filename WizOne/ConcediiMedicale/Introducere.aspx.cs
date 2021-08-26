@@ -1585,17 +1585,29 @@ namespace WizOne.ConcediiMedicale
                 int add3 = (dtMARDEF.Rows[0]["ADD3"] != null ? Convert.ToInt32(dtMARDEF.Rows[0]["ADD3"].ToString()) : 0);
                 int add4 = (dtMARDEF.Rows[0]["ADD4"] != null ? Convert.ToInt32(dtMARDEF.Rows[0]["ADD4"].ToString()) : 0);
 
+                //if (add1 == 1)
+                //{
+                //    total += Session["CM_NrZileCT1"] != null ? Convert.ToInt32(Session["CM_NrZileCT1"].ToString()) : 0;
+                //}
+                //if (add2 == 1)
+                //{
+                //    total += Session["CM_NrZileCT2"] != null ? Convert.ToInt32(Session["CM_NrZileCT2"].ToString()) : 0;
+                //}
+                //if (add3 == 1)
+                //{
+                //    total += Session["CM_NrZileCT3"] != null ? Convert.ToInt32(Session["CM_NrZileCT3"].ToString()) : 0;
+                //}
                 if (add1 == 1)
                 {
-                    total += Session["CM_NrZileCT1"] != null ? Convert.ToInt32(Session["CM_NrZileCT1"].ToString()) : 0;
+                    total += txtCT1.Text.Length > 0 ? Convert.ToInt32(txtCT1.Text) : 0;
                 }
                 if (add2 == 1)
                 {
-                    total += Session["CM_NrZileCT2"] != null ? Convert.ToInt32(Session["CM_NrZileCT2"].ToString()) : 0;
+                    total += txtCT2.Text.Length > 0 ? Convert.ToInt32(txtCT2.Text) : 0;
                 }
                 if (add3 == 1)
                 {
-                    total += Session["CM_NrZileCT3"] != null ? Convert.ToInt32(Session["CM_NrZileCT3"].ToString()) : 0;
+                    total += txtCT3.Text.Length > 0 ? Convert.ToInt32(txtCT3.Text) : 0;
                 }
                 if (add4 == 1)
                 {

@@ -149,7 +149,13 @@ namespace WizOne.Personal
                 + " SELECT a.\"Id\" FROM \"Admin_Activitati\" c "
                 + " JOIN \"Admin_Obiecte\" a on c.\"IdObiect\" = a.\"Id\" "
                 + " JOIN \"Admin_Categorii\" b ON a.\"IdCategorie\" = b.\"Id\" "
-                + " WHERE c.\"Marca\" = {0} ";
+                + " WHERE c.\"Marca\" = {0} "
+                + " UNION "
+                + " SELECT a.\"Id\" FROM \"Admin_Medicina\" c "
+                + " JOIN \"Admin_Obiecte\" a on c.\"IdObiect\" = a.\"Id\" "
+                + " JOIN \"Admin_Categorii\" b ON a.\"IdCategorie\" = b.\"Id\" "
+                + " WHERE c.\"Marca\" = {0} "
+                ;
 
             totalAng = string.Format(totalAng, marca);
 

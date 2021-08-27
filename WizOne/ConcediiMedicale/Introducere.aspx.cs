@@ -1123,7 +1123,7 @@ namespace WizOne.ConcediiMedicale
             txtCT2.Text = Z2.ToString();
             txtCT3.Text = Z3.ToString();
 
-            if (Session["CM_NrZileCT1"] == null)
+            //if (Session["CM_NrZileCT1"] == null)
             {
                 Session["CM_NrZileCT1"] = txtCT1.Text;
                 Session["CM_NrZileCT2"] = txtCT2.Text;
@@ -1585,30 +1585,30 @@ namespace WizOne.ConcediiMedicale
                 int add3 = (dtMARDEF.Rows[0]["ADD3"] != null ? Convert.ToInt32(dtMARDEF.Rows[0]["ADD3"].ToString()) : 0);
                 int add4 = (dtMARDEF.Rows[0]["ADD4"] != null ? Convert.ToInt32(dtMARDEF.Rows[0]["ADD4"].ToString()) : 0);
 
-                //if (add1 == 1)
-                //{
-                //    total += Session["CM_NrZileCT1"] != null ? Convert.ToInt32(Session["CM_NrZileCT1"].ToString()) : 0;
-                //}
-                //if (add2 == 1)
-                //{
-                //    total += Session["CM_NrZileCT2"] != null ? Convert.ToInt32(Session["CM_NrZileCT2"].ToString()) : 0;
-                //}
-                //if (add3 == 1)
-                //{
-                //    total += Session["CM_NrZileCT3"] != null ? Convert.ToInt32(Session["CM_NrZileCT3"].ToString()) : 0;
-                //}
                 if (add1 == 1)
                 {
-                    total += txtCT1.Text.Length > 0 ? Convert.ToInt32(txtCT1.Text) : 0;
+                    total += Session["CM_NrZileCT1"] != null ? Convert.ToInt32(Session["CM_NrZileCT1"].ToString()) : 0;
                 }
                 if (add2 == 1)
                 {
-                    total += txtCT2.Text.Length > 0 ? Convert.ToInt32(txtCT2.Text) : 0;
+                    total += Session["CM_NrZileCT2"] != null ? Convert.ToInt32(Session["CM_NrZileCT2"].ToString()) : 0;
                 }
                 if (add3 == 1)
                 {
-                    total += txtCT3.Text.Length > 0 ? Convert.ToInt32(txtCT3.Text) : 0;
+                    total += Session["CM_NrZileCT3"] != null ? Convert.ToInt32(Session["CM_NrZileCT3"].ToString()) : 0;
                 }
+                //if (add1 == 1)
+                //{
+                //    total += txtCT1.Text.Length > 0 ? Convert.ToInt32(txtCT1.Text) : 0;
+                //}
+                //if (add2 == 1)
+                //{
+                //    total += txtCT2.Text.Length > 0 ? Convert.ToInt32(txtCT2.Text) : 0;
+                //}
+                //if (add3 == 1)
+                //{
+                //    total += txtCT3.Text.Length > 0 ? Convert.ToInt32(txtCT3.Text) : 0;
+                //}
                 if (add4 == 1)
                 {
                     total += Session["CM_NrZile"] != null ? Convert.ToInt32(Session["CM_NrZile"].ToString()) : 0;
@@ -1977,6 +1977,7 @@ namespace WizOne.ConcediiMedicale
                 deDataCMInit.Value = dt;
 
                 On93Prel();
+                InitWorkingDays();
             }
 
             //Session["CM_Preluare"] = null;
@@ -2141,6 +2142,7 @@ namespace WizOne.ConcediiMedicale
                     OnSelStartDate();
                     break;
                 case "deLaData":
+                    Session["CM_NrZileCT1"] = null;
                     OnSelEndDate(param[1]);
                     break;
                 case "rbConcInit":

@@ -810,7 +810,7 @@ namespace WizOne.ConcediiMedicale
             if (bFTarif)
                 tarif = Convert.ToDouble(txtMZ.Text.Length <= 0 ? "0" : txtMZ.Text);
 
-            if (Convert.ToInt32(MNTZ) > 0 && Convert.ToInt32(txtCodIndemn.Text) == 10 && sumaReducereTimpLucru > 0)
+            if (Convert.ToInt32(Convert.ToDouble(MNTZ)) > 0 && Convert.ToInt32(txtCodIndemn.Text) == 10 && sumaReducereTimpLucru > 0)
                 suma = sumaReducereTimpLucru;
 
             if (chkCalcul.Checked)
@@ -1567,9 +1567,12 @@ namespace WizOne.ConcediiMedicale
             //OnUpdateZL();
             txtCT1.Text = nrZL3.ToString();
             if (Session["CM_NrZileCT1"] == null)
+            {
                 Session["CM_NrZileCT1"] = txtCT1.Text;
-            //if (Session["CM_NrZileCT2"] == null)
                 OnUpdateZ1();
+            }
+            //if (Session["CM_NrZileCT2"] == null)
+                //OnUpdateZ1();
             string s;
             int total = 0;
 

@@ -192,10 +192,12 @@
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="150px" VisibleIndex="2" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText"  />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" ReadOnly="true" Width="300px" >
+                        <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" ReadOnly="true" Width="250px" >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                             <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown" >
                                 <Columns>
                                     <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
@@ -212,7 +214,7 @@
                         <dx:GridViewDataTextColumn FieldName="SerieCMInitial" Name="SerieCMInitial" Caption="Serie CM initial" ReadOnly="true" Width="120px" >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="NumarCMInitial" Name="NumarCMInitial" Caption="Numar CM initial" ReadOnly="true" Width="150px"  >
+                        <dx:GridViewDataTextColumn FieldName="NumarCMInitial" Name="NumarCMInitial" Caption="Numar CM initial" ReadOnly="true" Width="120px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataTextColumn>
 			            <dx:GridViewDataTextColumn FieldName="CodDiagnostic" Name="CodDiagnostic" Caption="Cod diagnostic" ReadOnly="true"  Width="120px" >	
@@ -226,20 +228,24 @@
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataDateColumn>	
-                        <dx:GridViewDataTextColumn FieldName="NrZile" Name="NrZile" Caption="NrZile" ReadOnly="true" Width="100px"  >
+                        <dx:GridViewDataTextColumn FieldName="NrZile" Name="NrZile" Caption="NrZile" ReadOnly="true" Width="70px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataCheckColumn FieldName="Document" Name="Document" Caption="Document" ReadOnly="true" Width="100px"  >
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                         </dx:GridViewDataCheckColumn>
-                    
+                        <dx:GridViewDataCheckColumn FieldName="ModifManuala" Name="ModifManuala" Caption="Modificare manuala" HeaderStyle-Wrap="True" ReadOnly="true" Width="100px"  >
+                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataCheckColumn>
+                        <dx:GridViewDataCheckColumn FieldName="Stagiu" Name="Stagiu" Caption="Fara stagiu" ReadOnly="true" Width="100px" >
+                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+                        </dx:GridViewDataCheckColumn>
+
                         <dx:GridViewDataTextColumn FieldName="BazaCalculCM" Name="BazaCalculCM" Caption="BazaCalculCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />                        
                         <dx:GridViewDataTextColumn FieldName="ZileBazaCalculCM" Name="ZileBazaCalculCM" Caption="ZileBazaCalculCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="MedieZileBazaCalcul" Name="MedieZileBazaCalcul" Caption="MedieZileBazaCalcul" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="MedieZilnicaCM" Name="MedieZilnicaCM" Caption="MedieZilnicaCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="ModifManuala" Name="ModifManuala" Caption="ModifManuala" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="Optiune" Name="Optiune" Caption="Optiune" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="Stagiu" Name="Stagiu" Caption="Stagiu" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="MedieZilnicaCM" Name="MedieZilnicaCM" Caption="MedieZilnicaCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />                        
+                        <dx:GridViewDataTextColumn FieldName="Optiune" Name="Optiune" Caption="Optiune" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />                        
                         <dx:GridViewDataTextColumn FieldName="Initial" Name="Initial" Caption="Initial" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
 
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />

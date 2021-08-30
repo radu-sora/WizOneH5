@@ -31,6 +31,9 @@ namespace WizOne.ConcediiMedicale
             public int Optiune { get; set; }
             public int Stagiu { get; set; }
             public DateTime DataInceput { get; set; }
+            public string SerieCMInitial { get; set; }
+            public string NumarCMInitial { get; set; }
+
         }     
 
 
@@ -265,7 +268,7 @@ namespace WizOne.ConcediiMedicale
                 string msgTransf = "", msgAnulat = "", msgModMan = "", msgAv = "";
                 List<metaCereriCM> ids = new List<metaCereriCM>();
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare", "DataInceput", "Initial", "ModifManuala", "Optiune", "Stagiu" });
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare", "DataInceput", "Initial", "ModifManuala", "Optiune", "Stagiu", "SerieCMInitial", "NumarCMInitial" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate"), MessageBox.icoWarning, "");
@@ -310,7 +313,9 @@ namespace WizOne.ConcediiMedicale
 
                     ids.Add(new metaCereriCM { Id = Convert.ToInt32(General.Nz(arr[0], 0)), F10003 = Convert.ToInt32(General.Nz(arr[5], 0)), Initial = Convert.ToInt32(General.Nz(arr[8], 0)),
                                     BazaCalculCM = Convert.ToDouble(General.Nz(arr[1], 0)), ZileBazaCalculCM = Convert.ToInt32(General.Nz(arr[2], 0)), MedieZileBazaCalcul = Convert.ToDouble(General.Nz(arr[3], 0)),
-                                    MedieZilnicaCM = Convert.ToDouble(General.Nz(arr[4], 0)), Optiune = Convert.ToInt32(General.Nz(arr[10], 0)), Stagiu = Convert.ToInt32(General.Nz(arr[11], 0))
+                                    MedieZilnicaCM = Convert.ToDouble(General.Nz(arr[4], 0)), Optiune = Convert.ToInt32(General.Nz(arr[10], 0)), Stagiu = Convert.ToInt32(General.Nz(arr[11], 0)),
+                                    SerieCMInitial = Convert.ToString(General.Nz(arr[12], "")),
+                                    NumarCMInitial = Convert.ToString(General.Nz(arr[13], ""))
                     });
                     nrSel++;
                 }
@@ -367,10 +372,38 @@ namespace WizOne.ConcediiMedicale
                     }
                     else
                     {
-                        BCCM = ids[k].BazaCalculCM;
-                        ZBCCM = ids[k].ZileBazaCalculCM;
-                        MNTZ = ids[k].MedieZileBazaCalcul;
-                        Medie6 = ids[k].MedieZilnicaCM;
+                        if (ids[k].BazaCalculCM != 0 && ids[k].ZileBazaCalculCM != 0 && ids[k].MedieZileBazaCalcul != 0 && ids[k].MedieZilnicaCM != 0)
+                        {
+                            BCCM = ids[k].BazaCalculCM;
+                            ZBCCM = ids[k].ZileBazaCalculCM;
+                            MNTZ = ids[k].MedieZileBazaCalcul;
+                            Medie6 = ids[k].MedieZilnicaCM;
+                        }
+                        else
+                        {
+                            sql = "select CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) as Id, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM from cm_cereri where SerieCM = '" + ids[k].SerieCMInitial + "' and NumarCM = '" + ids[k].NumarCMInitial + "' "
+                                    + " union "
+                                    + " select 100 + CONVERT(int, ROW_NUMBER() OVER(ORDER BY(SELECT 1))) as Id, f300612 as BazaCalculCM, F300613 as ZileBazaCalculCM, f300614 as MedieZileBazaCalcul, f300620 as MedieZilnicaCM "
+                                    + " from f300 where F300601 = '" + ids[k].SerieCMInitial + "' and F300602 = '" + ids[k].NumarCMInitial + "' "
+                                    + " union "
+                                    + " select 200 + CONVERT(int, ROW_NUMBER() OVER(ORDER BY(SELECT 1))) as Id, f940612 as BazaCalculCM, F940613 as ZileBazaCalculCM, f940614 as MedieZileBazaCalcul, f940620 as MedieZilnicaCM "
+                                    + " from f940 where F940601 = '" + ids[k].SerieCMInitial + "' and F940602 = '" + ids[k].NumarCMInitial + "' ORDER BY Id";
+                            DataTable dtCalcul = General.IncarcaDT(sql, null);
+                            if (dtCalcul != null && dtCalcul.Rows.Count > 0)
+                            {
+                                BCCM = Convert.ToDouble(dtCalcul.Rows[0]["BazaCalculCM"].ToString());
+                                ZBCCM = Convert.ToInt32(dtCalcul.Rows[0]["ZileBazaCalculCM"].ToString());
+                                MNTZ = Convert.ToDouble(dtCalcul.Rows[0]["MedieZileBazaCalcul"].ToString());
+                                Medie6 = Convert.ToDouble(dtCalcul.Rows[0]["MedieZilnicaCM"].ToString());
+                            }
+                            else
+                            {
+                                BCCM = 0;
+                                ZBCCM = 0;
+                                MNTZ = 0;
+                                Medie6 = 0;
+                            }
+                        }
                     }
 
                     sql = "UPDATE CM_Cereri SET BazaCalculCM = " + BCCM.ToString().Replace(',', '.') + ", ZileBazaCalculCM = " + ZBCCM.ToString() + ", MedieZileBazaCalcul = " 
@@ -391,36 +424,43 @@ namespace WizOne.ConcediiMedicale
                 text = Dami.TraduCuvant("S-a calculat media pentru") + " " + (nrSel == 1 ? Dami.TraduCuvant("un concediu medical") + "!" : nrSel + " " + Dami.TraduCuvant("concedii medicale") + "!");
 
                 //MessageBox.Show(msg + (msg.Length > 0 ? System.Environment.NewLine : "") + Dami.TraduCuvant("S-a calculat media pentru") + " " + (nrSel == 1 ? Dami.TraduCuvant("un concediu medical") + "!" : nrSel + " " + Dami.TraduCuvant("concedii medicale") + "!") +
-                MessageBox.Show(text + System.Environment.NewLine + Dami.TraduCuvant("Rezultatele au fost salvate in fisier."));
+                MessageBox.Show(text + (msgStagiu.Length > 0 ? System.Environment.NewLine + Dami.TraduCuvant("Urmatorii angajati nu au stagiu") + ":" + msgStagiu.Substring(1) + System.Environment.NewLine + Dami.TraduCuvant("Va rugam verificati si bifati corespunzator concediile medicale respective!") : "") + System.Environment.NewLine + Dami.TraduCuvant("Rezultatele au fost salvate in fisier."));
 
                 //(msgStagiu.Length > 0 ? System.Environment.NewLine + Dami.TraduCuvant("Urmatorii angajati nu au stagiu") + ":" + msgStagiu.Substring(1) : ""), MessageBox.icoInfo, ""); ;
 
-                string cale = Dami.ValoareParam("CM_CaleFisierRezultat", "");
-                if (cale.Length > 0)
+                try
                 {
-                    StreamWriter sw = new StreamWriter(cale + "\\Calcul.txt", true);
-                    //              
-                    text += "\r\n" + "Data:    " + DateTime.Now.ToString() + "\r\n";
+                    string cale = Dami.ValoareParam("CM_CaleFisierRezultat", "");
+                    if (cale.Length > 0)
+                    {
+                        StreamWriter sw = new StreamWriter(cale + "\\Calcul.txt", true);
+                        //              
+                        text += "\r\n" + "Data:    " + DateTime.Now.ToString() + "\r\n";
 
-                    if (msgTransf.Length > 0)
-                        text += "CM deja transferat:" + msgTransf.Substring(1) + "\r\n";
+                        if (msgTransf.Length > 0)
+                            text += "CM deja transferat:" + msgTransf.Substring(1) + "\r\n";
 
-                    if (msgAnulat.Length > 0)
-                        text += "CM anulat:" + msgAnulat.Substring(1) + "\r\n";
+                        if (msgAnulat.Length > 0)
+                            text += "CM anulat:" + msgAnulat.Substring(1) + "\r\n";
 
-                    if (msgModMan.Length > 0)
-                        text += "CM modificat manual:" + msgModMan.Substring(1) + "\r\n";
+                        if (msgModMan.Length > 0)
+                            text += "CM modificat manual:" + msgModMan.Substring(1) + "\r\n";
 
-                    if (msgAv.Length > 0)
-                        text += "CM in avans:" + msgAv.Substring(1) + "\r\n";
+                        if (msgAv.Length > 0)
+                            text += "CM in avans:" + msgAv.Substring(1) + "\r\n";
 
-                    if (msgStagiu.Length > 0)
-                        text += "Urmatorii angajati nu au stagiu:" + msgStagiu.Substring(1) + "\r\n";
-                    //
-                    sw.Write(text + "-----------------------------------------------------" + "\r\n");
-                    //
-                    sw.Close();
-                    sw.Dispose();
+                        if (msgStagiu.Length > 0)
+                            text += "Urmatorii angajati nu au stagiu:" + msgStagiu.Substring(1) + "\r\n";
+                        //
+                        sw.Write(text + "-----------------------------------------------------" + "\r\n");
+                        //
+                        sw.Close();
+                        sw.Dispose();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
                 }
 
                 Session["CM_Grid"] = null;
@@ -429,7 +469,6 @@ namespace WizOne.ConcediiMedicale
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -1310,8 +1349,8 @@ namespace WizOne.ConcediiMedicale
                 dtAviz = new DateTime(2100, 1, 1);
             //                                                                                                                               0              1       2       3       4                               5       5       6       7
             string sql = "INSERT INTO " + (avans ? "F300_CM_AVANS" : "F300") + " (F30001, F30002, F30003, F30004, F30005, F30006, F30007, F30010, F30011, F30012, F30013, F30014, F30015, F30021, F30022, F30023, F30036, F30037, F30038, F30050, " +
-                //    8        9       10       11      12                       13      5        14       15       16      17       18       19        20      21      22         23       24      25        26       27      30               29
-                " F300601, F300602, F300603,  F30053, F300618, F30039, F30040, F30042, F30035, F300606, F300607, F300619, F300608, F300609, F300610, F300611, F300612, F300613, F300614, F300615, F300616, F300617, F300621, USER_NO " + (avans ? cmpAvans : "") + ") ";
+                //    8        9       10       11      12                       13      5        14       15       16      17       18       19        20      21      22         23       24      25        26       31       27      30               29
+                " F300601, F300602, F300603,  F30053, F300618, F30039, F30040, F30042, F30035, F300606, F300607, F300619, F300608, F300609, F300610, F300611, F300612, F300613, F300614, F300615, F300616, F300617, F300620, F300621, USER_NO " + (avans ? cmpAvans : "") + ") ";
 
             //string sql = "INSERT INTO CM_Cereri (Id, F10003, TipProgram, TipConcediu, CodIndemnizatie, SerieCM, NumarCM, DataCM, LocPrescriere, DataInceput, DataSfarsit, NrZile, CodDiagnostic, CodUrgenta, CodInfectoContag, Initial, ZileCMInitial, SerieCMInitial, NumarCMInitial, DataCMInitial, " +
             //         " CodTransfer1, CodTransfer2, CodTransfer3,  CodTransfer4, CodTransfer5, NrZileCT1, NrZileCT2, NrZileCT3, NrZileCT4, NrZileCT5, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, NrAvizMedicExpert, DataAvizDSP, MedicCurant, CNPCopil, IdStare, Document, Urgenta, Suma, Tarif, Cod, ModifManuala, Optiune, USER_NO, TIME) ";
@@ -1380,8 +1419,8 @@ namespace WizOne.ConcediiMedicale
             "CONVERT(DATETIME, '" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + dtAviz.Year.ToString() + "', 103)", //12
             // 13           14                                                  15                                      16                                          17                                          18                                                                                               19                                                                                         20
              detalii, dt.Rows[0]["SerieCMInitial"].ToString(), dt.Rows[0]["CodIndemnizatie"].ToString().PadLeft(2, '0'), dt.Rows[0]["CodDiagnostic"].ToString(), dt.Rows[0]["NumarCMInitial"].ToString(), (dt.Rows[0]["CodUrgenta"] == DBNull.Value ? "" : dt.Rows[0]["CodUrgenta"].ToString()), (dt.Rows[0]["CodInfectoContag"] == DBNull.Value ? "" : dt.Rows[0]["CodInfectoContag"].ToString()), dt.Rows[0]["LocPrescriere"].ToString(),
-             //21    22         23                                  24                                      25                                                  26
-             BCCM, ZileBCCM, MZCM.Replace(',', '.'), dt.Rows[0]["NrAvizMedicExpert"].ToString(), dt.Rows[0]["MedicCurant"].ToString(), (dt.Rows[0]["CNPCopil"] == DBNull.Value ? "" : dt.Rows[0]["CNPCopil"].ToString()),
+             //21    22         23                                  24                                      25                                                  26                                                          31    
+             BCCM, ZileBCCM, MZCM.Replace(',', '.'), dt.Rows[0]["NrAvizMedicExpert"].ToString(), dt.Rows[0]["MedicCurant"].ToString(), (dt.Rows[0]["CNPCopil"] == DBNull.Value ? "" : dt.Rows[0]["CNPCopil"].ToString()), MNTZ.Replace(',', '.'),
              "CONVERT(DATETIME, '" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Year.ToString() + "', 103)" //27
             //          28                                30                              29
             , dt.Rows[0]["F10003"].ToString(), Session["UserId"].ToString(),(avans ? valAvans : ""));

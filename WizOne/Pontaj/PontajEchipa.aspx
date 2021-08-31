@@ -244,7 +244,7 @@
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
 
-                        <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains"/>
+                        <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="150px" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="Norma" Caption="Norma" ReadOnly="true" FixedStyle="Left" VisibleIndex="4" Width="80px"/>
                         <dx:GridViewDataTextColumn FieldName="DescContract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="5" Width="150px" Settings-AutoFilterCondition="Contains"/>

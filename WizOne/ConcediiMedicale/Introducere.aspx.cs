@@ -91,7 +91,7 @@ namespace WizOne.ConcediiMedicale
             {
                 btnSave.ClientVisible = false;
                 btnDocUpload.ClientVisible = false;
-            }
+            }            
 
             string sql = "SELECT F01012, F01011 FROM F010";
             DataTable dtLC = General.IncarcaDT(sql, null);
@@ -102,6 +102,16 @@ namespace WizOne.ConcediiMedicale
 
             Session["CM_An"] = Convert.ToInt32(dtLC.Rows[0][1].ToString());
             Session["CM_Luna"] = Convert.ToInt32(dtLC.Rows[0][0].ToString());
+
+            if (Session["CM_DataStart"] != null)
+            {
+                DateTime dtStart = Convert.ToDateTime(Session["CM_DataStart"].ToString());
+                if (dtStart < new DateTime (Convert.ToInt32(dtLC.Rows[0][1].ToString()), Convert.ToInt32(dtLC.Rows[0][0].ToString()), 1))
+                {
+                    btnSave.ClientVisible = false;
+                    btnDocUpload.ClientVisible = false;
+                }
+            }
 
             if (!IsPostBack)
             {
@@ -230,6 +240,12 @@ namespace WizOne.ConcediiMedicale
                 //txtMZ.Text = General.Nz(Session["MediaZilnica"], "").ToString();
 
                 //txtMZBC.Text = General.Nz(Session["MedieZilnicaBazaCalculCM"], "").ToString();
+                txtCT1.Text = (Session["CM_NrZileCT1"] != null ? Convert.ToInt32(Session["CM_NrZileCT1"].ToString()) : 0).ToString();
+                txtCT2.Text = (Session["CM_NrZileCT2"] != null ? Convert.ToInt32(Session["CM_NrZileCT2"].ToString()) : 0).ToString();
+                txtCT3.Text = (Session["CM_NrZileCT3"] != null ? Convert.ToInt32(Session["CM_NrZileCT3"].ToString()) : 0).ToString();
+                txtCT4.Text = (Session["CM_NrZileCT4"] != null ? Convert.ToInt32(Session["CM_NrZileCT4"].ToString()) : 0).ToString();
+                txtCT5.Text = (Session["CM_NrZileCT5"] != null ? Convert.ToInt32(Session["CM_NrZileCT5"].ToString()) : 0).ToString();
+
             }
 
             if (rbProgrNorm.Checked)
@@ -903,7 +919,7 @@ namespace WizOne.ConcediiMedicale
                 txtSCMInit.Text, txtNrCMInit.Text, "CONVERT(DATETIME, '" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + (dtDataCMInit.Year < 1900 ? 2100 : dtDataCMInit.Year).ToString() + "', 103)", //19
                 Convert.ToInt32(cmbCT1.Value ?? 0), Convert.ToInt32(cmbCT2.Value ?? 0), Convert.ToInt32(cmbCT3.Value ?? 0), Convert.ToInt32(cmbCT4.Value ?? 0), Convert.ToInt32(cmbCT5.Value ?? 0), //24
                 (Session["CM_NrZileCT1"] == null ? "0" : Session["CM_NrZileCT1"].ToString()), (Session["CM_NrZileCT2"] == null ? "0" : Session["CM_NrZileCT2"].ToString()), (Session["CM_NrZileCT3"] == null ? "0" : Session["CM_NrZileCT3"].ToString()), (Session["CM_NrZileCT4"] == null ? "0" : Session["CM_NrZileCT4"].ToString()), (Session["CM_NrZileCT5"] == null ? "0" : Session["CM_NrZileCT5"].ToString()),  //29
-                txtBCCM.Text.Length <= 0 ? "0" : txtBCCM.Text.ToString(new CultureInfo("en-US")), txtZBC.Text.Length <= 0 ? "0" : txtZBC.Text, txtMZBC.Text.Length <= 0 ? "0" : txtMZBC.Text.ToString(new CultureInfo("en-US")), txtMZ.Text.Length <= 0 ? "0" : txtMZ.Text.Replace(',', '.').ToString(new CultureInfo("en-US")), //33
+                txtBCCM.Text.Length <= 0 ? "0" : txtBCCM.Text.Replace(',', '.'), txtZBC.Text.Length <= 0 ? "0" : txtZBC.Text, txtMZBC.Text.Length <= 0 ? "0" : txtMZBC.Text.Replace(',', '.'), txtMZ.Text.Length <= 0 ? "0" : txtMZ.Text.Replace(',', '.'), //33
                 txtNrAviz.Text, "CONVERT(DATETIME, '" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + (dtAviz.Year < 1900 ? 2100 : dtAviz.Year).ToString() + "', 103)", txtMedic.Text, //36
                 (cmbCNPCopil.Value ?? ""), (chkModMan.Checked ? 2 : 1), (Session["CM_Document"] == null ? 0 : 1), (chkUrgenta.Checked ? "1" : "0"), suma.ToString().Replace(',', '.'), tarif.ToString().Replace(',', '.'), cod, (chkModMan.Checked ? "1" : "0"), (rbOptiune1.Checked ? "1" : "2"), (chkStagiu.Checked ? "1" : "0"), Convert.ToInt32(Session["UserId"].ToString()), "GETDATE()"); //48
 
@@ -1388,11 +1404,12 @@ namespace WizOne.ConcediiMedicale
         void OnSelStartDate()
         {
             Session["CM_StartDate"] = Convert.ToDateTime(deDeLaData.Value);
+ 
             InitWorkingDays();
             deData.Value = deDeLaData.Value;
 
-            string sql = "SELECT F01012, F01011 FROM F010";
-            DataTable dtLC = General.IncarcaDT(sql, null);
+            //string sql = "SELECT F01012, F01011 FROM F010";
+            //DataTable dtLC = General.IncarcaDT(sql, null);
             deLaData.MaxDate = new DateTime(Convert.ToDateTime(deDeLaData.Value).Year, Convert.ToDateTime(deDeLaData.Value).Month, DateTime.DaysInMonth(Convert.ToDateTime(deDeLaData.Value).Year, Convert.ToDateTime(deDeLaData.Value).Month));
         }
 
@@ -2186,6 +2203,7 @@ namespace WizOne.ConcediiMedicale
                 //    OnZileAng();
                 //    break;
                 case "PreluareCM":
+                    Session["CM_NrZileCT1"] = null;
                     OnButtonVizualizareZileCMdinIstoric();
                     break;
                 case "btnMZ":

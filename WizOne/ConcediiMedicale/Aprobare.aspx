@@ -11,7 +11,7 @@
             switch(e.buttonID)
             {    
                 case "btnEdit":
-                    grDate.GetRowValues(e.visibleIndex, 'Id;IdStare', GoToEditMode);
+                    grDate.GetRowValues(e.visibleIndex, 'Id;IdStare;DI', GoToEditMode);
                     break;
                 case "btnArata":
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToArataMode);
@@ -142,6 +142,13 @@
     <table width="20%">   
         <tr>
             <td align="left">
+                <label id="lblAnLuna" runat="server" oncontextMenu="ctx(this,event)">Luna/An</label><br />
+                <dx:ASPxDateEdit ID="txtAnLuna" ClientInstanceName="txtAnLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >                    
+                    <CalendarProperties FirstDayOfWeek="Monday" />
+                </dx:ASPxDateEdit>
+            </td>
+
+            <td align="left">
                 <label id="lblAngFiltru" runat="server" visible="false" style="display:inline-block;">Angajat</label>
                 <dx:ASPxComboBox ID="cmbAngFiltru" ClientInstanceName="cmbAngFiltru" Visible="false" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
                             CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >
@@ -157,7 +164,7 @@
             </td>   
 
             <td align="left">
-                <dx:ASPxButton ID="btnFiltru" Visible="false" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
+                <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                 </dx:ASPxButton>
             </td>
@@ -247,6 +254,7 @@
                         <dx:GridViewDataTextColumn FieldName="MedieZilnicaCM" Name="MedieZilnicaCM" Caption="MedieZilnicaCM" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />                        
                         <dx:GridViewDataTextColumn FieldName="Optiune" Name="Optiune" Caption="Optiune" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />                        
                         <dx:GridViewDataTextColumn FieldName="Initial" Name="Initial" Caption="Initial" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="DI" Name="DI" Caption="DI" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
 
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />

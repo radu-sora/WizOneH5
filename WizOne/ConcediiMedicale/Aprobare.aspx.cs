@@ -109,6 +109,12 @@ namespace WizOne.ConcediiMedicale
                     Session["CM_Aprobare"] = null;
                     Session["CM_Id"] = null;
                     Session["CM_Stare"] = null;
+
+                    sql = "SELECT F01012, F01011 FROM F010";
+                    DataTable dtLC = General.IncarcaDT(sql, null);
+                    DateTime dtF010 = new DateTime(Convert.ToInt32(dtLC.Rows[0][1].ToString()), Convert.ToInt32(dtLC.Rows[0][0].ToString()), 1);
+
+                    txtAnLuna.Value = dtF010.Date;
                 }
 
                 IncarcaGrid();
@@ -162,21 +168,31 @@ namespace WizOne.ConcediiMedicale
                 string ids = "" ;
                 string msg = "";
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare", "Stagiu" });
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare", "Stagiu", "DI" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate"), MessageBox.icoWarning, "");         
                     return;
                 }
 
+                string sql = "SELECT F01012, F01011 FROM F010";
+                DataTable dtLC = General.IncarcaDT(sql, null);
+                DateTime dtF010 = new DateTime(Convert.ToInt32(dtLC.Rows[0][1].ToString()), Convert.ToInt32(dtLC.Rows[0][0].ToString()), 1);
+
                 for (int i = 0; i < lst.Count(); i++)
                 {
                     object[] arr = lst[i] as object[];
-                    DateTime? data = arr[4] as DateTime?;
+                    DateTime? data = arr[8] as DateTime?;
+
+                    if (data < dtF010)
+                    {
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("este anterior lunii de calcul") + System.Environment.NewLine;
+                        continue;
+                    }
 
                     if ((Convert.ToDouble(General.Nz(arr[1], 0)) == 0 || Convert.ToInt32(General.Nz(arr[2], 0)) == 0 || Convert.ToDouble(General.Nz(arr[3], 0)) == 0 || Convert.ToDouble(General.Nz(arr[4], 0)) == 0) && Convert.ToInt32(General.Nz(arr[7], 0)) == 0)
                     {
-                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("Date lipsa") + System.Environment.NewLine;
+                        msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("date lipsa") + System.Environment.NewLine;
                         continue;
                     }
 
@@ -213,7 +229,7 @@ namespace WizOne.ConcediiMedicale
                 string[] lstIds = ids.Substring(1).Split(',');
                 for (int i = 0; i < lstIds.Length; i++)
                 {
-                    string sql = "UPDATE CM_CereriIstoric SET Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = 3), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + lstIds[i] + " AND Pozitie = 2";
+                    sql = "UPDATE CM_CereriIstoric SET Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = 3), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + lstIds[i] + " AND Pozitie = 2";
                     General.ExecutaNonQuery(sql, null);
 
                     sql = "UPDATE CM_Cereri SET IdStare = 3 WHERE Id = " + lstIds[i];
@@ -280,7 +296,15 @@ namespace WizOne.ConcediiMedicale
 
                 for (int i = 0; i < lst.Count(); i++)
                 {
-                    object[] arr = lst[i] as object[];       
+                    object[] arr = lst[i] as object[];
+
+                    if ((Convert.ToDateTime(arr[7]).Year < Convert.ToInt32(dtLC.Rows[0][1].ToString())) ||
+                        (Convert.ToDateTime(arr[7]).Year == Convert.ToInt32(dtLC.Rows[0][1].ToString()) && Convert.ToDateTime(arr[7]).Month < Convert.ToInt32(dtLC.Rows[0][0].ToString())))
+                    {//CM anterior lunii de calcul
+                        //msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("este in avans") + System.Environment.NewLine;
+                        //msgAv += ", " + arr[5];
+                        continue;
+                    }
 
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) == 4)
                     {
@@ -509,12 +533,12 @@ namespace WizOne.ConcediiMedicale
                         continue;
                     }
 
-                    //if ((Convert.ToDateTime(arr[7]).Year > Convert.ToInt32(dtLC.Rows[0][1].ToString())) ||
-                    //    (Convert.ToDateTime(arr[7]).Year == Convert.ToInt32(dtLC.Rows[0][1].ToString()) && Convert.ToDateTime(arr[7]).Month > Convert.ToInt32(dtLC.Rows[0][0].ToString())))
-                    //{
-                    //    msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("este in avans") + System.Environment.NewLine;
-                    //    continue;
-                    //}
+                    if ((Convert.ToDateTime(arr[7]).Year < Convert.ToInt32(dtLC.Rows[0][1].ToString())) ||
+                        (Convert.ToDateTime(arr[7]).Year == Convert.ToInt32(dtLC.Rows[0][1].ToString()) && Convert.ToDateTime(arr[7]).Month < Convert.ToInt32(dtLC.Rows[0][0].ToString())))
+                    {
+                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("este anterior lunii de calcul") + System.Environment.NewLine;
+                        continue;
+                    }
 
                     ids += "," + arr[0];
                     nrSel++;
@@ -882,6 +906,7 @@ namespace WizOne.ConcediiMedicale
                         case "btnEdit":
                             Session["CM_Id"] = arr[1];
                             Session["CM_Stare"] = arr[2];
+                            Session["CM_DataStart"] = arr[3];
                             CriptDecript prc = new CriptDecript();
                             //string param = General.Nz(Request["tip"], prc.EncryptString(Constante.cheieCriptare, "Introducere", 1)).ToString();
                             //param = prc.EncryptString(Constante.cheieCriptare, param, 2);
@@ -1106,6 +1131,20 @@ namespace WizOne.ConcediiMedicale
 
             DataTable q = null;
 
+            string sql = "SELECT F01012, F01011 FROM F010";
+            DataTable dtLC = General.IncarcaDT(sql, null);
+
+            int an, luna;
+
+            an = Convert.ToInt32(dtLC.Rows[0][0].ToString());
+            luna = Convert.ToInt32(dtLC.Rows[0][1].ToString());
+
+            if (txtAnLuna.Value != null)
+            {
+                an = Convert.ToDateTime(txtAnLuna.Value).Year;
+                luna = Convert.ToDateTime(txtAnLuna.Value).Month;
+            }
+
             try
             {
                 string strSql = "";
@@ -1113,12 +1152,12 @@ namespace WizOne.ConcediiMedicale
                 int tip = Convert.ToInt32(General.Nz(Session["CM_HR"], "0").ToString());
                 if (tip == 1)
                     strSql = "SELECT F10003, SerieCM, NumarCM, SerieCMInitial, NumarCMInitial, CodDiagnostic, DataInceput, DataSfarsit, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, "
-                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu FROM CM_Cereri ";
+                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu, Convert(VARCHAR, DataInceput, 103) as DI FROM CM_Cereri where year(DataInceput) = " + an + " and month(DataInceput) = " + luna + " ORDER BY Id DESC";
                 else
                     strSql = "SELECT F10003, SerieCM, NumarCM, SerieCMInitial, NumarCMInitial, CodDiagnostic, DataInceput, DataSfarsit, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, "
-                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu FROM CM_Cereri WHERE F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ") ";
-                           
-                
+                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu, Convert(VARCHAR, DataInceput, 103) as DI FROM CM_Cereri WHERE F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ") AND year(DataInceput) = " + an + " and month(DataInceput) = " + luna + " ORDER BY Id DESC";
+
+
                 q = General.IncarcaDT(strSql, null);
             }
             catch (Exception ex)
@@ -1145,6 +1184,9 @@ namespace WizOne.ConcediiMedicale
                     return;
                 }
 
+                string sql = "SELECT F01012, F01011 FROM F010";
+                DataTable dtLC = General.IncarcaDT(sql, null);
+
                 for (int i = 0; i < lst.Count(); i++)
                 {
                     object[] arr = lst[i] as object[];
@@ -1163,7 +1205,14 @@ namespace WizOne.ConcediiMedicale
                             msg += Dami.TraduCuvant("CM pentru marca") + " " + arr[5] + " - " + Dami.TraduCuvant("nu aveti drepturi") + System.Environment.NewLine;
                             continue;
                         }
-                    }    
+                    }
+
+                    if ((Convert.ToDateTime(arr[7]).Year < Convert.ToInt32(dtLC.Rows[0][1].ToString())) ||
+                        (Convert.ToDateTime(arr[7]).Year == Convert.ToInt32(dtLC.Rows[0][1].ToString()) && Convert.ToDateTime(arr[7]).Month < Convert.ToInt32(dtLC.Rows[0][0].ToString())))
+                    {
+                        msg += Dami.TraduCuvant("CM pt marca") + " " + arr[5] + " - " + Dami.TraduCuvant("este anterior lunii de calcul") + System.Environment.NewLine;
+                        continue;
+                    }
 
                     ids.Add(new metaCereriCM
                     {
@@ -1189,7 +1238,7 @@ namespace WizOne.ConcediiMedicale
 
                 for (int i = 0; i < ids.Count; i++)
                 {
-                    string sql = "UPDATE CM_CereriIstoric SET Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = -1), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + ids[i].Id + " AND Pozitie = 2";
+                    sql = "UPDATE CM_CereriIstoric SET Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = -1), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + ids[i].Id + " AND Pozitie = 2";
                     General.ExecutaNonQuery(sql, null);
 
                     sql = "UPDATE CM_Cereri SET IdStare = -1 WHERE Id = " + ids[i].Id;

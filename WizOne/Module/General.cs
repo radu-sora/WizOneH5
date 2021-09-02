@@ -1706,6 +1706,7 @@ namespace WizOne.Module
                         int ziLibLeg = Convert.ToInt32(dtAbs.Rows[i]["ZiLiberaLegala"]);
                         string valStr = (dr["ValStr"] ?? "").ToString();
 
+                        //Florin 2021.08.31 - #997 - am adaugat functia nz la structura org.
                         if (Convert.ToInt32(General.Nz(dtAbs.Rows[i]["AreDrepturi"], 0)) == 1)
                         {
                             string sqlIns = "INSERT INTO \"Ptj_Intrari\"(F10003, \"Ziua\", \"ZiSapt\", \"ZiLibera\", \"ZiLiberaLegala\", \"IdContract\", \"Norma\", F10002, F10004, F10005, F10006, F10007, F06204, \"ValStr\", USER_NO, TIME" + ((dr["ValPentruOre"] ?? "").ToString() == "" ? "" : "," + (dr["ValPentruOre"] ?? "").ToString()) + ") \n" +
@@ -1716,12 +1717,12 @@ namespace WizOne.Module
                                 ziLib + ", " +
                                 ziLibLeg + ", " +
                                 "(SELECT X.\"IdContract\" FROM \"F100Contracte\" X WHERE X.F10003 = " + dr["F10003"] + " AND X.\"DataInceput\" <= " + General.ToDataUniv(zi.Date) + " AND " + General.ToDataUniv(zi.Date) + " <= X.\"DataSfarsit\"), " +
-                                dr["F10043"] + ", " +
-                                dr["F10002"] + ", " +
-                                dr["F10004"] + ", " +
-                                dr["F10005"] + ", " +
-                                dr["F10006"] + ", " +
-                                dr["F10007"] + ", " +
+                                Nz(dr["F10043"], "NULL") + ", " +
+                                Nz(dr["F10002"], "NULL") + ", " +
+                                Nz(dr["F10004"], "NULL") + ", " +
+                                Nz(dr["F10005"], "NULL") + ", " +
+                                Nz(dr["F10006"], "NULL") + ", " +
+                                Nz(dr["F10007"], "NULL") + ", " +
                                 "-1, " +
                                 "'" + valStr + "', " +
                                 idUser + ", " +

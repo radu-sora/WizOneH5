@@ -1152,10 +1152,10 @@ namespace WizOne.ConcediiMedicale
                 int tip = Convert.ToInt32(General.Nz(Session["CM_HR"], "0").ToString());
                 if (tip == 1)
                     strSql = "SELECT F10003, SerieCM, NumarCM, SerieCMInitial, NumarCMInitial, CodDiagnostic, DataInceput, DataSfarsit, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, "
-                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu, Convert(VARCHAR, DataInceput, 103) as DI FROM CM_Cereri where year(DataInceput) = " + an + " and month(DataInceput) = " + luna + " ORDER BY Id DESC";
+                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu, Convert(VARCHAR, DataInceput, 103) as DI FROM CM_Cereri where year(DataInceput) = " + an + " and month(DataInceput) = " + luna;
                 else
                     strSql = "SELECT F10003, SerieCM, NumarCM, SerieCMInitial, NumarCMInitial, CodDiagnostic, DataInceput, DataSfarsit, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, "
-                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu, Convert(VARCHAR, DataInceput, 103) as DI FROM CM_Cereri WHERE F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ") AND year(DataInceput) = " + an + " and month(DataInceput) = " + luna + " ORDER BY Id DESC";
+                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu, Convert(VARCHAR, DataInceput, 103) as DI FROM CM_Cereri WHERE F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ") AND year(DataInceput) = " + an + " and month(DataInceput) = " + luna;
 
 
                 q = General.IncarcaDT(strSql, null);
@@ -1405,7 +1405,7 @@ namespace WizOne.ConcediiMedicale
             //         " CodTransfer1, CodTransfer2, CodTransfer3,  CodTransfer4, CodTransfer5, NrZileCT1, NrZileCT2, NrZileCT3, NrZileCT4, NrZileCT5, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, NrAvizMedicExpert, DataAvizDSP, MedicCurant, CNPCopil, IdStare, Document, Urgenta, Suma, Tarif, Cod, ModifManuala, Optiune, USER_NO, TIME) ";
 
             sql += " SELECT 300, F10002, F10003, F10004, F10005, F10006, F10007, {0},  1, {1}, {2}, {3}, "
-                + " {4}, 0, 0, 0, {5}, {5}, {6}, {7}, '{8}', '{9}', {10}, {11}, {12}, 0, 0, '{13}', {5}, '{14}', '{15}', '{16}', '{17}', '{18}', '{19}', {20}, {21}, {22}, {23}, '{24}', '{25}', '{26}', {27}, {30}  {29}"
+                + " {4}, 0, 0, 0, {5}, {5}, {6}, {7}, '{8}', '{9}', {10}, {11}, {12}, 0, 0, '{13}', {5}, '{14}', '{15}', '{16}', '{17}', '{18}', '{19}', {20}, {21}, {22}, {23}, '{24}', '{25}', '{26}', {31}, {27}, {30}  {29}"
 
                 + " FROM F100 WHERE F10003 = {28}";
 
@@ -1468,11 +1468,11 @@ namespace WizOne.ConcediiMedicale
             "CONVERT(DATETIME, '" + dtAviz.Day.ToString().PadLeft(2, '0') + "/" + dtAviz.Month.ToString().PadLeft(2, '0') + "/" + dtAviz.Year.ToString() + "', 103)", //12
             // 13           14                                                  15                                      16                                          17                                          18                                                                                               19                                                                                         20
              detalii, dt.Rows[0]["SerieCMInitial"].ToString(), dt.Rows[0]["CodIndemnizatie"].ToString().PadLeft(2, '0'), dt.Rows[0]["CodDiagnostic"].ToString(), dt.Rows[0]["NumarCMInitial"].ToString(), (dt.Rows[0]["CodUrgenta"] == DBNull.Value ? "" : dt.Rows[0]["CodUrgenta"].ToString()), (dt.Rows[0]["CodInfectoContag"] == DBNull.Value ? "" : dt.Rows[0]["CodInfectoContag"].ToString()), dt.Rows[0]["LocPrescriere"].ToString(),
-             //21    22         23                                  24                                      25                                                  26                                                          31    
-             BCCM, ZileBCCM, MZCM.Replace(',', '.'), dt.Rows[0]["NrAvizMedicExpert"].ToString(), dt.Rows[0]["MedicCurant"].ToString(), (dt.Rows[0]["CNPCopil"] == DBNull.Value ? "" : dt.Rows[0]["CNPCopil"].ToString()), MNTZ.Replace(',', '.'),
+             //21    22         23                                  24                                      25                                                  26                                                          
+             BCCM, ZileBCCM, MZCM.Replace(',', '.'), dt.Rows[0]["NrAvizMedicExpert"].ToString(), dt.Rows[0]["MedicCurant"].ToString(), (dt.Rows[0]["CNPCopil"] == DBNull.Value ? "" : dt.Rows[0]["CNPCopil"].ToString()), 
              "CONVERT(DATETIME, '" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Year.ToString() + "', 103)" //27
-            //          28                                30                              29
-            , dt.Rows[0]["F10003"].ToString(), Session["UserId"].ToString(),(avans ? valAvans : ""));
+            //          28                                29                              30                31
+            , dt.Rows[0]["F10003"].ToString(), (avans ? valAvans : ""), Session["UserId"].ToString(), MNTZ.Replace(',', '.'));
 
             //verificare existenta linie cu 4450 in F300 pe marca actuala; daca exista, se actualizeaza, nu se insereaza alta noua
             if (cod == 4450)

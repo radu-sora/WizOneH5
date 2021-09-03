@@ -698,12 +698,12 @@ namespace WizOne.ConcediiMedicale
                 }
             }
 
-            if (cod == "09")
+            if (cod == "09" || cod == "91")
             {
                 if (cmbCNPCopil.Value == null || cmbCNPCopil.Value.ToString().Length < 13)
                 {
                     bErr = true;
-                    szErrMsg += System.Environment.NewLine + "- pentru cod indemnizatie 09 nu ati completat CNP copil!";
+                    szErrMsg += System.Environment.NewLine + "- pentru cod indemnizatie " + cod + " nu ati completat CNP copil!";
                 }
             }
 
@@ -711,10 +711,10 @@ namespace WizOne.ConcediiMedicale
             if (1 == lLocPrescriere)    // medic de famile, incapacitate temporara de munca
             {
                 int diff = (dtEnd - dtStart).Days;
-                if (diff + 1 > 10 && cod != "08" && cod != "15")
+                if (diff + 1 > 7 && cod != "08" && cod != "15")
                 {
                     bErr = true;
-                    szErrMsg += System.Environment.NewLine + "- concediul medical eliberat pentru incapacitate temporara de munca de catre medicul de familie nu poate depasi 10 zile!";
+                    szErrMsg += System.Environment.NewLine + "- concediul medical eliberat pentru incapacitate temporara de munca de catre medicul de familie nu poate depasi 7 zile!";
                 }
             }
 

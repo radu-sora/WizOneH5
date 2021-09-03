@@ -139,7 +139,7 @@
         </tr>
     </table> 
     <br /> 
-    <table width="20%">   
+    <table width="10%">   
         <tr>
             <td align="left">
                 <label id="lblAnLuna" runat="server" oncontextMenu="ctx(this,event)">Luna/An</label><br />
@@ -163,7 +163,7 @@
                 </dx:ASPxComboBox>
             </td>   
 
-            <td align="left">
+            <td align="left" valign="bottom">
                 <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                 </dx:ASPxButton>

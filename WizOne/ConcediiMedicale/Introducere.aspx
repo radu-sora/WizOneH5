@@ -29,7 +29,7 @@
 		var data = new Date(an, luna - 1);
 		data.setHours(0, 0, 0, 0);
 		deDeLaData.SetDate(data);
-        deLaData.SetDate(data);
+        //deLaData.SetDate(data);
     }
 
 
@@ -201,7 +201,7 @@
                         <td>								
 							<dx:ASPxDateEdit  ID="deDeLaData" Width="140" ClientInstanceName="deDeLaData" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"   AutoPostBack="false"  >
 								<CalendarProperties FirstDayOfWeek="Monday" />
-								<ClientSideEvents DateChanged ="function(s,e){ deLaData.SetDate(null); OnTextChangedHandler(s); }"  DropDown="function(s,e){ SetareLuna(s); }"/>
+								<ClientSideEvents DateChanged ="function(s,e){ OnTextChangedHandler(s); }"  DropDown="function(s,e){ SetareLuna(s); }"/>
 							</dx:ASPxDateEdit>					
 						</td>
 						<td>					

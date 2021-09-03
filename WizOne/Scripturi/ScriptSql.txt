@@ -18295,3 +18295,94 @@ alter table PtjSpecial_Sabloane add IdContract30 int
 GO
 alter table PtjSpecial_Sabloane add IdContract31 int
 GO
+
+
+
+ALTER PROCEDURE [dbo].[CalculCOProc2]
+     @marci nvarchar(4000),
+	@zi datetime,
+	@mod int = 1,
+	@grila int = 0
+AS
+
+BEGIN
+
+DECLARE @f10003 INT;
+DECLARE @ZileCuveniteAn INT;
+DECLARE @ZileCuvenite INT;
+DECLARE @ZileCuveniteZi INT;
+DECLARE @ZileAnPrecedent INT;
+DECLARE @cnt INT;
+DECLARE @cursor_db CURSOR
+
+
+IF @marci = 'P1' -- Toti
+	BEGIN 
+		SET @cursor_db = CURSOR FOR 
+		SELECT f10003 
+		FROM f100
+	END
+
+IF @marci = 'P2' -- Activi
+	BEGIN 
+		SET @cursor_db = CURSOR FOR 
+		SELECT f10003 
+		FROM f100 outer apply DamiDataPlecare(f100.f10003, convert(date, getdate())) ddp
+		WHERE convert(date, getdate()) between convert(date, F10022) and ddp.DataPlecare    
+	END
+
+IF @marci = 'P3' -- Plecati
+	BEGIN 
+		SET @cursor_db = CURSOR FOR 
+		SELECT f10003 
+		FROM f100 outer apply DamiDataPlecare(f100.f10003, convert(date, getdate())) ddp
+		WHERE convert(date, getdate()) > ddp.DataPlecare   
+	END
+
+IF @marci = 'P4' -- In avans
+	BEGIN 
+		DECLARE @sql_xml XML = Cast('<root><U>'+ Replace(@marci, ',', '</U><U>')+ '</U></root>' AS XML)
+
+		SET @cursor_db = CURSOR FOR 
+		SELECT f.x.value('.', 'BIGINT') AS user_id
+		FROM @sql_xml.nodes('/root/U') f(x) 
+	END
+
+IF @marci not like 'P%' 
+	BEGIN
+		SET @cursor_db = CURSOR FOR 
+		SELECT f10003 
+		FROM f100 
+		WHERE convert(date, getdate()) < f10022 
+	END
+
+OPEN @cursor_db  
+FETCH NEXT FROM @cursor_db INTO @f10003  
+
+WHILE @@FETCH_STATUS = 0  
+BEGIN  
+
+	SELECT @ZileCuveniteAn=ZileCuveniteAn, @ZileCuvenite=ZileCuvenite,@ZileCuveniteZi=ZileCuveniteZi,@ZileAnPrecedent=ZileAnPrecedent  FROM CalculCO(@f10003, @zi, @mod, @grila)
+
+	SELECT @cnt = COUNT(*) FROM Ptj_tblZileCO WHERE F10003 = @f10003 and An = year(@zi)
+
+		if (year(@zi) = (SELECT F01011 FROM F010))
+		UPDATE F100 set F100642 =  @ZileCuveniteAn, F100995 =  @ZileCuvenite, F100996 = @ZileAnPrecedent WHERE
+		F10003 = @f10003;
+
+	  if (year(@zi) >= (SELECT F01011 FROM F010))
+	   if(@cnt > 0)
+			UPDATE Ptj_tblZileCO set CuveniteAn = @ZileCuveniteAn, Cuvenite = @ZileCuvenite WHERE
+			F10003 = @f10003 and An = year(@zi);
+		else
+			INSERT INTO Ptj_tblZileCO (F10003, An, Cuvenite, SoldAnterior, Efectuate, CuveniteAn)
+			VALUES (@f10003, year(@zi), @ZileCuvenite, 0, 0, @ZileCuveniteAn)
+
+
+		  FETCH NEXT FROM @cursor_db INTO @f10003 
+END 
+
+CLOSE @cursor_db  
+DEALLOCATE @cursor_db 
+
+END

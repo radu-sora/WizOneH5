@@ -1590,10 +1590,8 @@ namespace WizOne.Pontaj
                 //Florin #916 2021.04.28
                 string valStrOld = "";
 
-                //Florin 2021.04.07 - #888
-                string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null,""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
-                                ""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null
-                                WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+                //Florin 2021.04.07 - #888 si #983
+                string sqlDel = "";
 
                 foreach (var l in dic)
                 {
@@ -1694,10 +1692,9 @@ namespace WizOne.Pontaj
                         {
                             strSql += $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
                             VALUES({f10003}, {General.ToDataUniv(ziua)}, '{newValue}', '{oldValue}', {Session["UserID"]}, {General.CurrentDate()}, 'Pontajul Detaliat - modificare pontare', {Session["UserId"]}, {General.CurrentDate()});" + Environment.NewLine;
-                            //Florin 2021.04.07 - #888
-                            sqlDel = $@"";
                         }
 
+                        //Florin 2021.04.07 - #888 si #983 - am modificat sqlDel
                         //daca este ValAbs, stergem pontajul pe centrii de cost
                         if (numeCol.ToLower() == "valabs")
                         {
@@ -1710,7 +1707,14 @@ namespace WizOne.Pontaj
                                 //Radu 30.03.2021
                                 cmp += @", ""ValStr""='" + newValue + "'";
                                 row["ValStr"] = newValue;
+
+                                sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null,""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
+                                    ""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null
+                                    WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                             }
+                            else
+                                sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+
                             continue;
                         }
 

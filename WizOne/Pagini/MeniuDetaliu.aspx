@@ -55,60 +55,60 @@
         </tr>
     </table>
 
-        <dx:ASPxTreeList ID="grDate" ClientInstanceName="grDate" ClientIDMode="Static" runat="server" AutoGenerateColumns="False" Width="100%" 
-                KeyFieldName="IdMeniu" ParentFieldName="Parinte" OnInitNewNode="grDate_InitNewNode" OnNodeDeleting="grDate_NodeDeleting" OnNodeInserting="grDate_NodeInserting" OnNodeUpdating="grDate_NodeUpdating" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCommandColumnButtonInitialize="grDate_CommandColumnButtonInitialize" >
-            <Settings GridLines="Both" />
-            <SettingsBehavior ExpandCollapseAction="NodeDblClick" AutoExpandAllNodes="true" />
-            <SettingsEditing Mode="Inline" AllowNodeDragDrop="true" AllowRecursiveDelete="true" ConfirmDelete="false" />
-            <SettingsText ConfirmDelete ="Continuati procesul?" />
+    <dx:ASPxTreeList ID="grDate" ClientInstanceName="grDate" ClientIDMode="Static" runat="server" AutoGenerateColumns="False" Width="100%"
+        KeyFieldName="IdMeniu" ParentFieldName="Parinte" OnInitNewNode="grDate_InitNewNode" OnNodeDeleting="grDate_NodeDeleting" OnNodeInserting="grDate_NodeInserting" OnNodeUpdating="grDate_NodeUpdating" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCommandColumnButtonInitialize="grDate_CommandColumnButtonInitialize" >
+        <Settings GridLines="Both" />
+        <SettingsBehavior ExpandCollapseAction="NodeDblClick" AutoExpandAllNodes="true" />
+        <SettingsEditing Mode="Inline" AllowNodeDragDrop="true" AllowRecursiveDelete="true" ConfirmDelete="false" />
+        <SettingsText ConfirmDelete ="Continuati procesul?" />
+            
+        <Columns>
+            <dx:TreeListTextColumn FieldName="Id" Visible="false" />
+            <dx:TreeListTextColumn FieldName="IdMeniu" Visible="false" VisibleIndex="0" />
+            <dx:TreeListTextColumn FieldName="Nume" VisibleIndex="2" />
+            <dx:TreeListTextColumn FieldName="Descriere" Visible="false" VisibleIndex="1" />                
 
-            <Columns>
-                <dx:TreeListTextColumn FieldName="Id" Visible="false" />
-                <dx:TreeListTextColumn FieldName="IdMeniu" Visible="false" VisibleIndex="0" />
-                <dx:TreeListTextColumn FieldName="Nume" VisibleIndex="2" />
-                <dx:TreeListTextColumn FieldName="Descriere" Visible="false" VisibleIndex="1" />
+            <dx:TreeListComboBoxColumn FieldName="Imagine" Width="150" VisibleIndex="3">
+                <PropertiesComboBox ValueField="Denumire" TextField="Denumire" ImageUrlField="CaleImg" DropDownStyle="DropDown" DisplayImageSpacing="10px">
+                    <ItemStyle ImageSpacing="10px" />
+                    <ItemImage Width="16" Height="16" />
+                </PropertiesComboBox>
+            </dx:TreeListComboBoxColumn>
 
-                <dx:TreeListComboBoxColumn FieldName="Imagine" VisibleIndex="3" >
-                    <PropertiesComboBox ValueField="Denumire" TextField="Denumire" ImageUrlField="CaleImg" Width="300" DisplayImageSpacing="10px" DropDownStyle="DropDown">
-                        <ItemStyle ImageSpacing="20px"></ItemStyle>
-                    </PropertiesComboBox>
-                </dx:TreeListComboBoxColumn>
+            <dx:TreeListComboBoxColumn FieldName="IdNomen" Caption="Pagina" VisibleIndex="4">
+                <CellStyle HorizontalAlign="Left"></CellStyle>
+                <PropertiesComboBox ValueField="Id" ValueType="System.String" TextFormatString="{0} ({1})" DropDownStyle="DropDown" DropDownWidth="600">
+                    <Columns>
+                        <dx:ListBoxColumn FieldName="Nume" />
+                        <dx:ListBoxColumn FieldName="Pagina" />
+                        <dx:ListBoxColumn FieldName="Id" Visible="false" />
+                        <dx:ListBoxColumn FieldName="Descriere" Visible="false" />
+                    </Columns>
+                    <ClientSideEvents SelectedIndexChanged="function(s, e) { OnStateChanged(s,e); }"></ClientSideEvents>
+                </PropertiesComboBox>
+            </dx:TreeListComboBoxColumn>
 
-                <dx:TreeListComboBoxColumn FieldName="IdNomen" Caption="Pagina" VisibleIndex="4" >
-                    <PropertiesComboBox TextFormatString="{0} {1}" 
-                         ValueField="Id" TextField="Pagina" ValueType="System.String" Width="300" DropDownWidth="600" DropDownStyle="DropDown">
-                        <Columns>
-                            <dx:ListBoxColumn FieldName="Nume" />
-                            <dx:ListBoxColumn FieldName="Pagina" />
-                            <dx:ListBoxColumn FieldName="Id" Visible="false" />
-                            <dx:ListBoxColumn FieldName="Descriere" Visible="false" />
-                        </Columns>
-                        <ClientSideEvents SelectedIndexChanged="function(s, e) { OnStateChanged(s,e); }"></ClientSideEvents>
-                    </PropertiesComboBox>
-                </dx:TreeListComboBoxColumn>
+            <dx:TreeListTextColumn FieldName="Ordine" Width="1" VisibleIndex="5" >
+                <CellStyle HorizontalAlign="Center"></CellStyle>
+            </dx:TreeListTextColumn>
+            <dx:TreeListCheckColumn FieldName="Stare" Width="1" VisibleIndex="6" />
+            <dx:TreeListCheckColumn FieldName="StareMobil" Width="1" VisibleIndex="7" />
+            <dx:TreeListTextColumn FieldName="NumeMobil" Width="100" VisibleIndex="8">
+                <PropertiesTextEdit MaxLength="20" />
+            </dx:TreeListTextColumn>
+            <dx:TreeListTextColumn FieldName="OrdineMobil" Width="1" VisibleIndex="9" >
+                <CellStyle HorizontalAlign="Center"></CellStyle>
+            </dx:TreeListTextColumn>
 
-                <dx:TreeListTextColumn FieldName="Ordine" Width="60" CellStyle-HorizontalAlign="Center" VisibleIndex="5" >
-                    <CellStyle HorizontalAlign="Center"></CellStyle>
-                </dx:TreeListTextColumn>
-                <dx:TreeListCheckColumn FieldName="Stare" Width="60" CellStyle-HorizontalAlign="Center" VisibleIndex="6" >
-                    <CellStyle HorizontalAlign="Center"></CellStyle>
-                </dx:TreeListCheckColumn>
-                <dx:TreeListCommandColumn ShowNewButtonInHeader="true" Width="100" VisibleIndex="7" >
-                    <EditButton Visible="true">
-                        <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
-                    </EditButton>
-                    <NewButton Visible="true">
-                        <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
-                        <Styles>
-                            <Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
-                        </Styles>
-                    </NewButton>
-                    <DeleteButton Visible="True">
-                        <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" />
-                    </DeleteButton>
-                </dx:TreeListCommandColumn>
-            </Columns>
-        </dx:ASPxTreeList>
+            <dx:TreeListCommandColumn ShowNewButtonInHeader="true" Width="100" VisibleIndex="10" >
+                <EditButton Visible="true" Image-Url="~/Fisiere/Imagini/Icoane/edit.png" />                        
+                <NewButton Visible="true" Image-Url="~/Fisiere/Imagini/Icoane/New.png" />                        
+                <DeleteButton Visible="true" Image-Url="~/Fisiere/Imagini/Icoane/sterge.png" />                        
+                <UpdateButton Image-Url="~/Fisiere/Imagini/Icoane/salveaza.png" />                        
+                <CancelButton Image-Url="~/Fisiere/Imagini/Icoane/renunta.png" />                         
+            </dx:TreeListCommandColumn>
+        </Columns>
+    </dx:ASPxTreeList>
 
     <script type="text/javascript">
         function OnStateChanged(cmb) {

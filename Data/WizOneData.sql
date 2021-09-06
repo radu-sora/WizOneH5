@@ -11,3 +11,6 @@ GO
 
 UPDATE [dbo].[tblMeniuri] SET [Pagina] = 'Generatoare\Reports\Pages\Manage' WHERE [Id] = 24
 GO
+
+INSERT [dbo].[tblParametrii] ([Nume], [Valoare], [Explicatie]) VALUES (N'DHPM', N'~/Pagini/Calendar', N'Pagina de pornire (home page) implicita pe varianta mobile')
+GO

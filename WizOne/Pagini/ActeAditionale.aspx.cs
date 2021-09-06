@@ -351,7 +351,6 @@ namespace WizOne.Pagini
             }
         }
 
-
         // private void IncarcaGrid()
         // {
         //     DataTable dt = new DataTable();
@@ -1707,7 +1706,6 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
 
         //protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         //{

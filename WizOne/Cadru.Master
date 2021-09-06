@@ -7,7 +7,7 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
 
     <title id="txtVers1" runat="server">WizOne versiunea 1.1.001</title>
 
@@ -20,7 +20,7 @@
 
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="form1" runat="server" class="dx-popup-adaptive-fullscreen">
         <asp:ScriptManager ID="ScriptManager1" runat="server" >
             <Scripts>
                 <asp:ScriptReference Path="~/Scripts/jquery-3.6.0.min.js" />
@@ -36,23 +36,30 @@
             <Image Url="~/Fisiere/Imagini/loading.gif" Height="40px" Width="40px"></Image>
         </dx:ASPxLoadingPanel>
 
-        <dx:ASPxPanel ID="pnlHeader" runat="server" FixedPosition="WindowTop" Width="100%" BackColor="#FFFFFF" Collapsible="true" SettingsAdaptivity-CollapseAtWindowInnerWidth="700">
-            <SettingsAdaptivity CollapseAtWindowInnerWidth="700"></SettingsAdaptivity>
+        <dx:ASPxPanel ID="pnlHeader" runat="server" FixedPosition="WindowTop" BackColor="#FFFFFF" Collapsible="true">
+            <SettingsAdaptivity CollapseAtWindowInnerWidth="1024" />
+            <BorderBottom BorderColor="#CCCCCC" BorderStyle="Solid" BorderWidth="1px" />
+            <Styles>
+                <ExpandButton Paddings-PaddingRight="10px" />
+            </Styles>
+            <ExpandBarTemplate>
+                <a href="~/Pagini/MainPage.aspx" runat="server" oninit="HeaderBrandExpand_Init"><img src="~/Fisiere/Imagini/WizOne.png" alt="WizOne" class="header-brand" runat="server" /></a>
+            </ExpandBarTemplate>
             <PanelCollection>
                 <dx:PanelContent runat="server">
-                    <a href="#" runat="server" onserverclick="OnImageClick"><img src="~/Fisiere/Imagini/WizOne.png" alt="WizOne" style="float:left; height:45px; margin-left:15px;" runat="server" /></a>
-                    <div class="HeaderMeniu">
+                    <a href="~/Pagini/MainPage.aspx" runat="server" oninit="HeaderBrand_Init"><img src="~/Fisiere/Imagini/WizOne.png" alt="WizOne" class="header-brand header-brand-row" runat="server" /></a>
+                    <div class="header-menu">
 
                         <div id="divCmbProfile" runat="server">
-                            <label id="etiProfile" runat="server"></label>
+                            <span id="etiProfile" runat="server"></span>
                             <dx:ASPxComboBox ID="cmbProfile" runat="server" AutoPostBack="true" Width="120px" DropDownWidth="200px" ValueField="Id" ValueType="System.Int32" TextField="Denumire" OnSelectedIndexChanged="cmbProfile_SelectedIndexChanged" />
                         </div>
 
                         <div class="dropdown">
                             <a href="#" id="LangButton" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <img src="~/Fisiere/Imagini/Icoane/lang.png" alt="" runat="server" /><label id="etiLimbi" runat="server"></label>
-                            </a>        
-                            <ul class="dropdown-menu" aria-labelledby="LangButton">
+                                <img src="~/Fisiere/Imagini/Icoane/lang.png" alt="" runat="server" /><span id="etiLimbi" runat="server"></span>
+                            </a>
+                            <ul class="dropdown-menu fade" aria-labelledby="LangButton">
                                 <li>
                                     <div class="clearfix" title="Salveaza">
                                         <button type="button" class="btn btn-default btn-xs" runat="server" onserverclick="btnSaveLang_Click">
@@ -69,14 +76,15 @@
                                 <li><asp:LinkButton ID="aIt" runat="server" Visible="false" OnClick="btnLang_Click" title="IT"><img src="~/Fisiere/Imagini/Drapele/it.png" alt="" runat="server" />Italiano</asp:LinkButton></li>        
                                 <li><asp:LinkButton ID="aBg" runat="server" Visible="false" OnClick="btnLang_Click" title="BG"><img src="~/Fisiere/Imagini/Drapele/bg.png" alt="" runat="server" />български</asp:LinkButton></li>                                        
                                 <li><asp:LinkButton ID="aRu" runat="server" Visible="false" OnClick="btnLang_Click" title="RU"><img src="~/Fisiere/Imagini/Drapele/ru.png" alt="" runat="server" />русский</asp:LinkButton></li>    
-                            </ul>                            
+                            </ul>
+                            <div class="modal-backdrop fade"></div>
                         </div>
 
                         <div class="dropdown">
                             <a href="#" id="ThemeButton" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <img src="~/Fisiere/Imagini/Icoane/paleta.png" alt="" runat="server" /><label id="etiTeme" runat="server"></label> 
+                                <img src="~/Fisiere/Imagini/Icoane/paleta.png" alt="" runat="server" /><span id="etiTeme" runat="server"></span> 
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="ThemeButton">
+                            <ul class="dropdown-menu fade" aria-labelledby="ThemeButton">
                                 <li>
                                     <div class="clearfix" title="Salveaza">
                                         <button type="button" class="btn btn-default btn-xs" runat="server" onserverclick="btnSaveTheme_Click">
@@ -123,14 +131,15 @@
                                         </tr>
                                     </table>
                                 </li>
-                            </ul>                                                               
+                            </ul>
+                            <div class="modal-backdrop fade"></div>
                         </div>
 
                         <div class="dropdown">
-                            <a href="#" id="ContButton" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <img src="~/Fisiere/Imagini/Icoane/user.png" alt="" runat="server" /><label id="etiCont" runat="server"></label>
+                            <a href="#" id="AccButton" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <img src="~/Fisiere/Imagini/Icoane/user.png" alt="" runat="server" /><span id="etiCont" runat="server"></span>
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="ContButton">
+                            <ul class="dropdown-menu fade" aria-labelledby="AccButton">
                                 <li>
                                     <div class="clearfix" title="Salveaza">
                                         <button type="button" class="btn btn-default btn-xs" runat="server" onserverclick="btnSaveAcco_Click">
@@ -143,49 +152,49 @@
                                     <div class="account-form">
                                         <dx:ASPxLabel ID="lblNume" AssociatedControlID="txtNume" runat="server" Text="Utilizator" />
                                         <dx:ASPxTextBox ID="txtNume" runat="server" Width="150px" Enabled="false" >
-                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblAng" AssociatedControlID="txtAng" runat="server" Text="Angajat" />
                                         <dx:ASPxTextBox ID="txtAng" runat="server" Width="150px" Enabled="false" >
-                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblLimbi" AssociatedControlID="txtLimba" runat="server" Text="Limba" />
                                         <dx:ASPxTextBox ID="txtLimba" runat="server" Width="150px" Enabled="false" >
-                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblParola" AssociatedControlID="txtParola" runat="server" Text="Parola" />
                                         <dx:ASPxTextBox ID="txtParola" runat="server" Width="150px" Password="true" >
-                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblConfirma" AssociatedControlID="txtConfirma" runat="server" Text="Confirma parola" />
                                         <dx:ASPxTextBox ID="txtConfirma" runat="server" Width="150px" Password="true" >
-                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblParolaRap" AssociatedControlID="txtParolaRap" runat="server" Text="Parola rapoarte" />
                                         <dx:ASPxTextBox ID="txtParolaRap" runat="server" Width="150px" Password="true" >
-                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblConfirmaRap" AssociatedControlID="txtConfirmaRap" runat="server" Text="Confirma parola rapoarte" />
                                         <dx:ASPxTextBox ID="txtConfirmaRap" runat="server" Width="150px" Password="true" >
-                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                     </div>
                                 </li>
-                            </ul> 
+                            </ul>
+                            <div class="modal-backdrop fade"></div>
                         </div>
 
                         <div>
                             <asp:LinkButton ID="lnkOut" runat="server" OnClick="lnkOut_Click">
-                                <img src="~/Fisiere/Imagini/Icoane/logout.png" alt="" runat="server" /><label id="etiLog" runat="server"></label>
+                                <img src="~/Fisiere/Imagini/Icoane/logout.png" alt="" runat="server" /><span id="etiLog" runat="server"></span>
                             </asp:LinkButton>
                         </div>
                     </div>
                 </dx:PanelContent>
-            </PanelCollection>
-            <BorderBottom BorderColor="#CCCCCC" BorderStyle="Solid" BorderWidth="1px" />
+            </PanelCollection>            
         </dx:ASPxPanel>
 
-        <dx:ASPxPanel ID="pnlMeniu" runat="server" FixedPosition="WindowLeft" Width="260px" BackColor="#FFFFFF" Collapsible="true" ScrollBars="Auto">
+        <dx:ASPxPanel ID="pnlMeniu" runat="server" FixedPosition="WindowLeft" Width="260px" BackColor="#FFFFFF" Collapsible="true" ScrollBars="Auto" CssClass="side-menu">
             <PanelCollection>
                 <dx:PanelContent ID="PanelContent2" runat="server">
                     <dx:ASPxNavBar ID="mnuSide" runat="server" AutoCollapse="False" AllowSelectItem="True" EnableViewState="false"
@@ -198,10 +207,20 @@
             </PanelCollection>
         </dx:ASPxPanel>
 
-        <dx:ASPxPanel ID="pnlFooter" runat="server" FixedPosition="WindowBottom" Width="100%" BackColor="#FFFFFF" >
+        <dx:ASPxPanel ID="pnlFooter" runat="server" FixedPosition="WindowBottom" Width="100%" BackColor="#FFFFFF" CssClass="footer">
             <PanelCollection>
                 <dx:PanelContent ID="PanelContent1" runat="server">
-                    <table width="100%">
+                    <div class="footer-menu">
+                        <asp:Repeater ID="FooterMenu" runat="server">
+                            <ItemTemplate>
+                                <a href="<%# Eval("Url") %>" class="<%# (Eval("Selected") as bool? ?? false ? "selected" : "") + (Eval("Running") as bool? ?? false ? "running" : "") %>">
+                                    <img src="<%# Eval("ImageUrl") %>" />
+                                    <p><%# Eval("Name") %></p>
+                                </a>                        
+                            </ItemTemplate>
+                        </asp:Repeater>
+                    </div>
+                    <table style="width:100%">
                         <tr>
                             <td style="width:40%; text-align:left;"><span id="txtVers" runat="server"></span></td>
                             <td style="width:20%; text-align:center;"><span id="txtLunaLucru" runat="server"></span></td>
@@ -213,7 +232,7 @@
             <BorderTop BorderColor="#CCCCCC" BorderStyle="Solid" BorderWidth="1px" />
         </dx:ASPxPanel>
 
-        <dx:ASPxPanel ID="pnlContent1" runat="server" Width="100%" Height="100%" Paddings-Padding="10px" ScrollBars="Auto" >
+        <dx:ASPxPanel ID="pnlContent1" runat="server" CssClass="content">
             <PanelCollection>
                 <dx:PanelContent runat="server">
                
@@ -256,11 +275,12 @@
             EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
             PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="900px" MinHeight="600px"
             Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGen" EnableHierarchyRecreation="True">
-                <ClientSideEvents CloseUp="function(s, e) { s.PerformCallback(); }" />
-                <ContentCollection>
-                    <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
-                    </dx:PopupControlContentControl>
-                </ContentCollection>
+            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchAtWindowInnerWidth="1024" MinWidth="100%" MinHeight="100%" />
+            <ClientSideEvents CloseUp="function(s, e) { s.PerformCallback(); }" />
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>            
         </dx:ASPxPopupControl>
 
         <dx:ASPxPopupControl ID="popGenIst" runat="server" AllowDragging="True" AllowResize="True"
@@ -268,10 +288,10 @@
             EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
             PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="850px" MinHeight="500px"
             Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGenIst" EnableHierarchyRecreation="True">                
-                <ContentCollection>
-                    <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
-                    </dx:PopupControlContentControl>
-                </ContentCollection>
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>
         </dx:ASPxPopupControl>
 
         <dx:ASPxPopupControl ID="popGenD112" runat="server" AllowDragging="True" AllowResize="True"
@@ -279,10 +299,10 @@
             EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
             PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="500px" MinHeight="400px"
             Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGenD112" EnableHierarchyRecreation="True">                
-                <ContentCollection>
-                    <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
-                    </dx:PopupControlContentControl>
-                </ContentCollection>
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>
         </dx:ASPxPopupControl>
 
         <dx:ASPxPopupControl ID="popGenDetalii" runat="server" AllowDragging="True" AllowResize="True"
@@ -290,15 +310,15 @@
             EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
             PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="1500px" MinHeight="600px"
             Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGenDetalii" EnableHierarchyRecreation="True">                
-                <ContentCollection>
-                    <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
-                    </dx:PopupControlContentControl>
-                </ContentCollection>
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>
         </dx:ASPxPopupControl>
 
         <dx:ASPxCallback ID="callBackProfile" runat="server" ClientInstanceName="callBackProfile" OnCallback="callBackProfile_Callback" />
 
-        <input type="hidden" runat="server" name="__TEME" id="__TEME" value="" />
+        <input type="hidden" runat="server" name="__TEME" id="__TEME" value="" />        
     </form>
 
     <script>
@@ -351,6 +371,9 @@
                 $('.account-form').parent().on('click', function (e) {
                     e.stopPropagation();
                 });
+            },
+            onKeyPress: function (e) {
+                e.htmlEvent.keyCode === 13 && e.htmlEvent.preventDefault();
             }
         };
 
@@ -432,6 +455,14 @@
 
             if (timeOutSecunde) {
                 var timeLeftInfo = $("#spanTimeLeft");
+                var tipInfoChiosc = <%= Session["TipInfoChiosc"] %>;
+                var pagina = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
+
+                if (tipInfoChiosc == 1 || tipInfoChiosc == 2) {
+                    pagina = '<%: ResolveClientUrl("~/DefaultTactilFaraCard.aspx") %>';
+                } else if (tipInfoChiosc == 3) {
+                    pagina = '<%: ResolveClientUrl("~/DefaultTactilExtra.aspx") %>';
+                }
 
                 timerControl.init(timeOutSecunde, function (timeLeft) {
                     if (timeLeft < 10) {
@@ -440,24 +471,14 @@
                         timeLeftInfo.text(timeLeft).parent().removeClass('text-danger');
                     }
                 }, function () {
-                        var tipInfoChiosc = <%= Session["TipInfoChiosc"] %>;
-                        var pagina = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
-                        if (tipInfoChiosc == 1 || tipInfoChiosc == 2)
-                            pagina = '<%: ResolveClientUrl("~/DefaultTactilFaraCard.aspx") %>';
-                        if (tipInfoChiosc == 3)
-                            pagina = '<%: ResolveClientUrl("~/DefaultTactilExtra.aspx") %>';
-                        window.location = pagina;
-                    });
+                    window.location = pagina;
+                });
                 timerControl.start();
             }
 
             firstLoad && myModal.length && myModal.modal('show');
             anunt.length && anunt.modal('show');
-        });
-
-        function onAccountFormKeyPress(e) {
-            e.htmlEvent.keyCode === 13 && ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
-        }
+        });        
     </script>    
 </body>
 </html>

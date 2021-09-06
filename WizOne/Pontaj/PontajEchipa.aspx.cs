@@ -260,6 +260,7 @@ namespace WizOne.Pontaj
                     Session["InformatiaCurenta"] = null;
 
                     txtAnLuna.Value = DateTime.Now;
+                    Session["PtjEch_LunaAn"] = DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
 
                     IncarcaRoluri();
                     IncarcaAngajati();
@@ -2581,9 +2582,15 @@ namespace WizOne.Pontaj
                 IncarcaAngajati();
                 if (e.Parameter == "txtAnLuna")
                 {
-                    SetColoaneCuloare();
-                    //Radu 12.02.2021 - daca se schimba luna, trebuie resetata sursa de date a grid-ului, deoarece noua luna poate avea zile in plus
-                    Session["InformatiaCurenta"] = null;
+                    DateTime dt = Convert.ToDateTime(txtAnLuna.Value ?? "01/01/2100");
+                    string luna = dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Year.ToString();
+                    if (luna != Session["PtjEch_LunaAn"].ToString())
+                    {
+                        SetColoaneCuloare();
+                        //Radu 12.02.2021 - daca se schimba luna, trebuie resetata sursa de date a grid-ului, deoarece noua luna poate avea zile in plus
+                        Session["InformatiaCurenta"] = null;
+                        Session["PtjEch_LunaAn"] = luna;
+                    }
                 }
             }
             catch (Exception ex)

@@ -303,6 +303,9 @@
                 </dx:ASPxGridView>
             </td>
         </tr>
+        <tr>
+            <label id="lblNrAng" runat="server">378</label>
+        </tr>
     </table>
 
     <dx:ASPxPopupControl ID="popUpInit" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"

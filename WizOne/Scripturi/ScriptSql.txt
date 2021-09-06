@@ -18135,3 +18135,9 @@ IF NOT EXISTS(SELECT 1 FROM MeniuLinii WHERE Id = 9 AND Nume = N'Pontaj angajat 
 
 GO
 -- END mobile
+
+
+----  2.2.138.01  ----
+
+update F098 set F09805='Art68' where f09804='Art.65 Alin (1) coroborat cu Art. 68: Concediere colectiva'
+GO

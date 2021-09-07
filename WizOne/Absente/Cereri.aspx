@@ -31,7 +31,6 @@
 
         function OnEndCallback(s, e) {
             pnlLoading.Hide();
-            debugger;
             if (s.cpAlertMessage != null) {
                 if (s.cpSuccessMessage != null)
                     swal({

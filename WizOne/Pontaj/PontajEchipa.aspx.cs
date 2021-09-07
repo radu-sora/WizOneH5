@@ -1,4 +1,5 @@
-﻿using DevExpress.DataProcessing;
+﻿using DevExpress.Data;
+using DevExpress.DataProcessing;
 using DevExpress.Web;
 using System;
 using System.Collections.Generic;
@@ -255,9 +256,20 @@ namespace WizOne.Pontaj
 
                 SetColoane();   //Radu 04.02.2021
 
+                //Radu 07.09.2021 - #966
+                grDate.Settings.ShowFooter = true;
+                grDate.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                ASPxSummaryItem totalSummary = new ASPxSummaryItem();
+                totalSummary.FieldName = "AngajatNume";
+                totalSummary.ShowInColumn = "AngajatNume";
+                totalSummary.SummaryType = SummaryItemType.Count;
+                if (grDate.TotalSummary.Count > 0)
+                    grDate.TotalSummary.RemoveAt(0);
+                grDate.TotalSummary.Add(totalSummary);
+
                 if (!IsPostBack)
                 {
-                    Session["InformatiaCurenta"] = null;
+                    Session["InformatiaCurenta"] = null;                  
 
                     txtAnLuna.Value = DateTime.Now;
                     Session["PtjEch_LunaAn"] = DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();

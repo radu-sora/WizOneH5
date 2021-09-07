@@ -537,15 +537,6 @@ namespace WizOne.Pontaj
         protected global::DevExpress.Web.ASPxGridView grDate;
 
         /// <summary>
-        /// lblNrAng control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblNrAng;
-
-        /// <summary>
         /// popUpInit control.
         /// </summary>
         /// <remarks>

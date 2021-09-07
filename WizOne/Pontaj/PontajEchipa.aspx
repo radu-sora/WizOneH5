@@ -193,7 +193,7 @@
                                 <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:8px;" id="rowHovercard" runat="server">
                                     <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
                                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
-                                        <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnFiltru'); }" />
+                                        <ClientSideEvents  Click="function(s, e) { grDate.PerformCallback('btnFiltru'); }" />
                                     </dx:ASPxButton>
                                     <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
                                         <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
@@ -302,9 +302,6 @@
                     
                 </dx:ASPxGridView>
             </td>
-        </tr>
-        <tr>
-            <label id="lblNrAng" runat="server">378</label>
         </tr>
     </table>
 
@@ -682,7 +679,7 @@
                     }
                 });
                 delete s.cp_MesajProces;
-            }
+            }      
         }
         function OnGridInit() {
             window.addEventListener('resize', function () {

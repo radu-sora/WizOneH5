@@ -294,7 +294,8 @@ namespace WizOne.ConcediiMedicale
                 string sql = "SELECT F01012, F01011 FROM F010";
                 DataTable dtLC = General.IncarcaDT(sql, null);
 
-                for (int i = 0; i < lst.Count(); i++)
+                //for (int i = 0; i < lst.Count(); i++)
+                for (int i = lst.Count() - 1; i >= 0; i--)
                 {
                     object[] arr = lst[i] as object[];
 

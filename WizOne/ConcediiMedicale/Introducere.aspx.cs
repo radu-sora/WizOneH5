@@ -2044,7 +2044,7 @@ namespace WizOne.ConcediiMedicale
                 txtMZ.Text = "0";
                 txtMZBC.Text = "0";
                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Angajatul nu are stagiu!");
-                chkStagiu.Checked = true;
+                //chkStagiu.Checked = true;
             }
             else
                 chkStagiu.Checked = false;

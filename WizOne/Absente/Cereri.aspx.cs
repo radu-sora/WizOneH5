@@ -1085,6 +1085,7 @@ namespace WizOne.Absente
 
                 if (idOre == "0")
                 {
+                    //Florin 2021.09.09
                     divNrOre.Visible = true;
 
                     //lblNrOre.Style["display"] = "inline-block";
@@ -1094,6 +1095,7 @@ namespace WizOne.Absente
 
                     if (folosesteInterval == 1)
                     {
+                        //Florin 2021.09.09
                         divOraInc.Visible = true;
                         divOraSf.Visible = true;
 

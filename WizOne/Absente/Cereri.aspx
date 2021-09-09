@@ -228,7 +228,7 @@
                             </div>
                             <div id="divOraSf" runat="server" class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                                 <dx:ASPxLabel ID="lblOraSf" runat="server" AssociatedControlID="cmbOraSf" Text="Ora Sfarsit" Font-Bold="true" />
-                                <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="100px" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
+                                <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="100%" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
                                     <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); pnlCtl.PerformCallback(8); }" />
                                 </dx:ASPxComboBox>

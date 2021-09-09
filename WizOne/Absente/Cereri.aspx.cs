@@ -894,14 +894,11 @@ namespace WizOne.Absente
 
                 //Florin 2019.10.17 - am mutat sqlCer in afara if-ului pt ca trebuie in modulul de notificari indiferent daca este sql sau oracle
                 string sqlCer = CreazaSelectCuValori(1, idCerere);
-                string sqlPre = "";
+                string sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"", USER_NO, TIME, ""IdCerereDivizata"", ""Comentarii"", ""CampBifa"")";
                 string strGen = "";
 
                 if (Constante.tipBD == 1)
                 {
-                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"", USER_NO, TIME, ""IdCerereDivizata"", ""Comentarii"", ""CampBifa"") 
-                                OUTPUT Inserted.Id, Inserted.IdStare ";
-
                     strGen = "BEGIN TRAN " +
                             sqlIst + "; " +
                             sqlPre +
@@ -911,12 +908,10 @@ namespace WizOne.Absente
                 else
                 {
                     string sqlCerOrcl = CreazaSelectCuValori(2);
-                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"", USER_NO, TIME, ""IdCerereDivizata"", ""Comentarii"", ""CampBifa"") ";
-
                     strGen = "BEGIN " +
                                 sqlIst + "; " + Environment.NewLine +
                                 sqlPre +
-                                sqlCerOrcl + " RETURNING \"Id\", \"IdStare\" INTO @out_1, @out_2; " +
+                                sqlCerOrcl + "; " +
                                 @"
                                 EXCEPTION
                                     WHEN DUP_VAL_ON_INDEX THEN
@@ -934,37 +929,39 @@ namespace WizOne.Absente
                 }
                 else
                 {
-                    int idCer = 1;
-                    int idStare = 1;
-                    DataTable dtCer = new DataTable();
+                    General.ExecutaNonQuery(strGen);
+
+                    //int idCer = 1;
+                    //int idStare = 1;
+                    //DataTable dtCer = new DataTable();
                     
-                    try
-                    {
-                        if (Constante.tipBD == 1)
-                        {
-                            dtCer = General.IncarcaDT(strGen, null);
-                            if (dtCer.Rows.Count > 0)
-                            {
-                                idCer = Convert.ToInt32(dtCer.Rows[0]["Id"]);
-                                idStare = Convert.ToInt32(dtCer.Rows[0]["IdStare"]);
-                            }
-                        }
-                        else
-                        {
-                            List<string> lstOut = General.DamiOracleScalar(strGen, new object[] { "int", "int" });
-                            if(lstOut.Count == 2)
-                            {
-                                idCer = Convert.ToInt32(lstOut[0]);
-                                idStare = Convert.ToInt32(lstOut[1]);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        General.ExecutaNonQuery("ROLLBACK TRAN", null);
-                        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-                        return;
-                    }
+                    //try
+                    //{
+                    //    if (Constante.tipBD == 1)
+                    //    {
+                    //        dtCer = General.IncarcaDT(strGen, null);
+                    //        if (dtCer.Rows.Count > 0)
+                    //        {
+                    //            idCer = Convert.ToInt32(dtCer.Rows[0]["Id"]);
+                    //            idStare = Convert.ToInt32(dtCer.Rows[0]["IdStare"]);
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        List<string> lstOut = General.DamiOracleScalar(strGen, new object[] { "int", "int" });
+                    //        if(lstOut.Count == 2)
+                    //        {
+                    //            idCer = Convert.ToInt32(lstOut[0]);
+                    //            idStare = Convert.ToInt32(lstOut[1]);
+                    //        }
+                    //    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    General.ExecutaNonQuery("ROLLBACK TRAN", null);
+                    //    General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                    //    return;
+                    //}
 
 
                     #region Adaugare atasament
@@ -977,7 +974,7 @@ namespace WizOne.Absente
                             string sqlFis = $@"INSERT INTO ""tblFisiere""(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
                             SELECT @1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()} " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
 
-                            General.ExecutaNonQuery(sqlFis, new object[] { "Ptj_Cereri", idCer, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
+                            General.ExecutaNonQuery(sqlFis, new object[] { "Ptj_Cereri", idCerere, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
                         }
                     }
 
@@ -988,7 +985,7 @@ namespace WizOne.Absente
 
                     HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                     {
-                        NotifAsync.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + idCer, "Ptj_Cereri", idCer, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), arrParam);
+                        NotifAsync.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + idCerere, "Ptj_Cereri", idCerere, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), arrParam);
                     });
 
 
@@ -997,11 +994,13 @@ namespace WizOne.Absente
                     //completeaza soldul de ZL; Este numai pt clientul Groupama
                     General.SituatieZLOperatii(Convert.ToInt32(cmbAng.Value ?? -99), txtDataInc.Date, 2, Convert.ToInt32(txtNrZile.Value));
 
+                    string idStare = General.Nz(General.ExecutaScalar(@"SELECT ""IdStare"" FROM ""Ptj_Cereri"" WHERE ""Id"" = @1", new object[] { idCerere }), "1").ToString();
+
                     //trimite in pontaj daca este finalizat
-                    if (idStare == 3)
+                    if (idStare == "3")
                     {
                         if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
-                            General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), idCer, 5, trimiteLaInlocuitor, Convert.ToDecimal(txtNrOre.Value ?? 0));
+                            General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), idCerere, 5, trimiteLaInlocuitor, Convert.ToDecimal(txtNrOre.Value ?? 0));
 
                         if (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 && Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
                             General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={Convert.ToInt32(cmbAng.Value)} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Text))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Text))} ", null);

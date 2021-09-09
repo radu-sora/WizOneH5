@@ -1084,7 +1084,10 @@ namespace WizOne.Absente
                 }
 
                 if (idOre == "0")
-                {                    
+                {
+                    //Florin 2021.09.09
+                    divNrOre.Visible = true;
+
                     //lblNrOre.Style["display"] = "inline-block";
                     txtNrOre.ClientVisible = true;
                     txtNrOre.DecimalPlaces = 0;
@@ -1092,6 +1095,10 @@ namespace WizOne.Absente
 
                     if (folosesteInterval == 1)
                     {
+                        //Florin 2021.09.09
+                        divOraInc.Visible = true;
+                        divOraSf.Visible = true;
+
                         List<Module.Dami.metaGeneral2> lst = ListaInterval(perioada);
 
                         cmbOraInc.DataSource = lst;

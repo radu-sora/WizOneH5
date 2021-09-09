@@ -881,7 +881,7 @@ namespace WizOne.Module
             }
         }
 
-        private static string CreazaHTML(string corpAtt)
+        public static string CreazaHTML(string corpAtt)
         {
             string str = corpAtt;
 

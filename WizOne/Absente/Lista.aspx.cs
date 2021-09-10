@@ -1087,7 +1087,7 @@ namespace WizOne.Absente
 
                 int nr = 0;
                 int nrViitor = 0;
-                nr = General.CalcZile(Convert.ToInt32(obj[1] ?? 0), dtIncOri, dtSfOri, Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(obj[2] ?? 0));
+                nr = General.CalcZile(Convert.ToInt32(obj[1] ?? 0), dtIncOri, dtSfOri, Convert.ToInt32(obj[2] ?? 0));
 
                 //Radu 10.02.2020 - daca chkAnulare este bifata, IdStare = -1
                 string idStare = @"""IdStare""";
@@ -1116,7 +1116,7 @@ namespace WizOne.Absente
 
                 nr = 0;
                 nrViitor = 0;
-                nr = General.CalcZile(Convert.ToInt32(obj[1] ?? 0), dtIncDes, dtSfDes, Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(obj[2] ?? 0));
+                nr = General.CalcZile(Convert.ToInt32(obj[1] ?? 0), dtIncDes, dtSfDes, Convert.ToInt32(obj[2] ?? 0));
 
 
 

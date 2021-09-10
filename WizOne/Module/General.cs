@@ -1696,7 +1696,7 @@ namespace WizOne.Module
                 {
                     string strSql = "";
                     DataRow dr = dt.Rows[0];
-                    DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]).Date, Convert.ToDateTime(dr["DataSfarsit"]).Date, 3, Convert.ToInt32(dr["IdAbsenta"])), null);
+                    DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]).Date, Convert.ToDateTime(dr["DataSfarsit"]).Date, Convert.ToInt32(dr["IdAbsenta"])), null);
 
                     //construim sql-ul prin care adaugam cererea in pontaj
                     for (int i = 0; i < dtAbs.Rows.Count; i++)
@@ -2132,59 +2132,59 @@ namespace WizOne.Module
             trimiteLaInlocuitor = trimite;
         }
 
-        public static void CalcZile(DateTime? dtInc, DateTime? dtSf, string adunaZL, out int nr, out int nrViitor)
-        {
-            int tmpNr = 0;
-            int tmpNrViitor = 0;
-            bool este31 = false;
+        //public static void CalcZile(DateTime? dtInc, DateTime? dtSf, string adunaZL, out int nr, out int nrViitor)
+        //{
+        //    int tmpNr = 0;
+        //    int tmpNrViitor = 0;
+        //    bool este31 = false;
 
-            nr = tmpNr;
-            nrViitor = tmpNrViitor;
+        //    nr = tmpNr;
+        //    nrViitor = tmpNrViitor;
 
-            try
-            {
-                if (dtInc == null || dtSf == null) return;
+        //    try
+        //    {
+        //        if (dtInc == null || dtSf == null) return;
 
-                DataTable dt = General.IncarcaDT($@"SELECT *, YEAR(DAY) AS AN, MONTH(DAY) AS LUNA, DAY(DAY) AS ZI FROM HOLIDAYS WHERE {General.ToDataUniv(Convert.ToDateTime(dtInc))} <= DAY AND DAY <= {General.ToDataUniv(Convert.ToDateTime(dtSf))} ", null);
-                for (DateTime zi = Convert.ToDateTime(dtInc).Date; zi <= Convert.ToDateTime(dtSf); zi = zi.AddDays(1))
-                {
-                    if (adunaZL == "1")
-                    {
-                        nr += 1;
-                    }
-                    else
-                    {
-                        string ert = zi.ToShortDateString();
-                        if (zi.DayOfWeek.ToString().ToLower() != "saturday" && zi.DayOfWeek.ToString().ToLower() != "sunday" && dt.Select("AN=" + zi.Year + " AND LUNA=" + zi.Month + " AND ZI=" + zi.Day).Count() == 0) nr += 1;
-                    }
+        //        DataTable dt = General.IncarcaDT($@"SELECT *, YEAR(DAY) AS AN, MONTH(DAY) AS LUNA, DAY(DAY) AS ZI FROM HOLIDAYS WHERE {General.ToDataUniv(Convert.ToDateTime(dtInc))} <= DAY AND DAY <= {General.ToDataUniv(Convert.ToDateTime(dtSf))} ", null);
+        //        for (DateTime zi = Convert.ToDateTime(dtInc).Date; zi <= Convert.ToDateTime(dtSf); zi = zi.AddDays(1))
+        //        {
+        //            if (adunaZL == "1")
+        //            {
+        //                nr += 1;
+        //            }
+        //            else
+        //            {
+        //                string ert = zi.ToShortDateString();
+        //                if (zi.DayOfWeek.ToString().ToLower() != "saturday" && zi.DayOfWeek.ToString().ToLower() != "sunday" && dt.Select("AN=" + zi.Year + " AND LUNA=" + zi.Month + " AND ZI=" + zi.Day).Count() == 0) nr += 1;
+        //            }
 
-                    if (zi.Day == 31 && zi.Month == 12)
-                    {
-                        nrViitor = nr;
-                        este31 = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MemoreazaEroarea(ex.ToString(), "General", "CalcZile");
-            }
+        //            if (zi.Day == 31 && zi.Month == 12)
+        //            {
+        //                nrViitor = nr;
+        //                este31 = true;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MemoreazaEroarea(ex.ToString(), "General", "CalcZile");
+        //    }
 
-            tmpNr = nr;
-            if (este31)
-                tmpNrViitor = nr - nrViitor;
-            else
-                tmpNrViitor = nrViitor;
-        }
+        //    tmpNr = nr;
+        //    if (este31)
+        //        tmpNrViitor = nr - nrViitor;
+        //    else
+        //        tmpNrViitor = nrViitor;
+        //}
 
         //Florin 2018.08.20 
-        public static int CalcZile(int f10003, DateTime? dtInc, DateTime? dtSf, int idRol, int idAbsenta)
+        public static int CalcZile(int f10003, DateTime? dtInc, DateTime? dtSf, int idAbsenta)
         {
             int nrZile = 0;
 
             try
             {
-                string strSql = $@"SELECT SUM(""AreDrepturi"") FROM ({SelectAbsentaInCereri(f10003, dtInc, dtSf, -99, idAbsenta)}) X";
+                string strSql = $@"SELECT SUM(""AreDrepturi"") FROM ({SelectAbsentaInCereri(f10003, dtInc, dtSf, idAbsenta)}) X";
                 nrZile = Convert.ToInt32(General.Nz(General.ExecutaScalar(strSql, null), 0));
             }
             catch (Exception ex)
@@ -2195,12 +2195,13 @@ namespace WizOne.Module
             return nrZile;
         }
 
-        public static string SelectAbsentaInCereri(int f10003, DateTime? dtInc, DateTime? dtSf, int idRol, int idAbsenta)
+        public static string SelectAbsentaInCereri(int f10003, DateTime? dtInc, DateTime? dtSf, int idAbsenta)
         {
             string strSql = "";
 
             try
             {
+                //Florin 2021.09.10 - #985
                 //#311 si #344
                 strSql = $@"SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                     CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
@@ -2214,13 +2215,12 @@ namespace WizOne.Module
                     END AS ""AreDrepturi"", F.""ValStr""
                     FROM ""tblZile"" P
                     INNER JOIN ""Ptj_tblAbsente"" A ON 1=1
-                    INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta""
+                    INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta"" AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 = {f10003} AND ""DataInceput"" <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <= ""DataSfarsit"")
                     LEFT JOIN HOLIDAYS D on P.""Zi""=D.DAY
                     LEFT JOIN ""Ptj_Intrari"" F ON F.F10003={f10003} AND F.""Ziua""=P.""Zi""
                     WHERE {General.ToDataUniv(dtInc)} <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <= {General.ToDataUniv(dtSf)} 
                     AND A.""Id"" = {idAbsenta}
-                    AND COALESCE(A.""DenumireScurta"", '~') <> '~'
-                    AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 = {f10003} AND ""DataInceput"" <= {General.ToDataUniv(dtInc)} AND {General.ToDataUniv(dtInc)} <= ""DataSfarsit"") ";
+                    AND COALESCE(A.""DenumireScurta"", '~') <> '~' ";
             }
             catch (Exception ex)
             {
@@ -8584,7 +8584,7 @@ namespace WizOne.Module
 
                 //inserare in Ptj_cereri
                 int nrZile = 0;
-                DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(marca), dataInceput.Date, dtSf.Date, 3, idAbs), null);
+                DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(marca), dataInceput.Date, dtSf.Date, idAbs), null);
                 for (int i = 0; i < dtAbs.Rows.Count; i++)
                     if (Convert.ToInt32(General.Nz(dtAbs.Rows[i]["AreDrepturi"], 0)) == 1)
                         nrZile++;

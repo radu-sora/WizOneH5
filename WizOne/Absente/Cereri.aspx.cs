@@ -377,7 +377,7 @@ namespace WizOne.Absente
                     {
                         //Afisam explicatiile
                         txtAbsDesc.InnerText = General.Nz(arr[0]["Explicatii"], "").ToString();
-                        txtNrZile.Value = General.CalcZile(Convert.ToInt32(cmbAng.Value ?? 0), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(cmbAbs.Value ?? 0));
+                        txtNrZile.Value = General.CalcZile(Convert.ToInt32(cmbAng.Value ?? 0), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbAbs.Value ?? 0));
                     }
                 }
 

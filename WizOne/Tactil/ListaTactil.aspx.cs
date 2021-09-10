@@ -611,9 +611,10 @@ namespace WizOne.Tactil
 
                 DateTime dtSplit = new DateTime(2100, 1, 1);
 
-                int adunaZL = 0;
-                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToDateTime(obj[4]).Date, Convert.ToInt32(obj[2])), null);
-                if (drAbs != null) adunaZL = Convert.ToInt32(General.Nz(drAbs["AdunaZileLibere"], 0));
+                //Florin 2021.09.10 - #985
+                //int adunaZL = 0;
+                //DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToDateTime(obj[4]).Date, Convert.ToInt32(obj[2])), null);
+                //if (drAbs != null) adunaZL = Convert.ToInt32(General.Nz(drAbs["AdunaZileLibere"], 0));
 
                 //Radu 01.02.2021 - citire idCerere din secventa
                 int idCerere = Dami.NextId("Ptj_Cereri");
@@ -649,27 +650,31 @@ namespace WizOne.Tactil
                     }
                 }
 
-                int nr = 0;
-                int nrViitor = 0;
-                General.CalcZile(dtIncOri, dtSfOri, adunaZL.ToString(), out nr, out nrViitor);
+                //Florin 2021.09.10 - #985
+                int nrOri = General.CalcZile(Convert.ToInt32(obj[1]), dtIncOri, dtSfOri, Convert.ToInt32(obj[2]));
+                //int nr = 0;
+                //int nrViitor = 0;
+                //General.CalcZile(dtIncOri, dtSfOri, adunaZL.ToString(), out nr, out nrViitor);
+
 
                 string sqlOri = $@"UPDATE ""Ptj_Cereri"" SET 
                                     ""DataSfarsit"" = {General.ToDataUniv(dtSfOri)},
                                     ""IdCerereDivizata""={obj[0]},
-                                    ""NrZile""={nr},
-                                    ""NrZileViitor""={nrViitor},
+                                    ""NrZile""={nrOri},
+                                    ""NrZileViitor""=0,
                                     USER_NO={Session["UserId"]},
                                     TIME={General.CurrentDate()}
                                     WHERE ""Id""={obj[0]}";
 
 
-                nr = 0;
-                nrViitor = 0;
-                General.CalcZile(dtIncDes, dtSfDes, adunaZL.ToString(), out nr, out nrViitor);
+                int nrDes = General.CalcZile(Convert.ToInt32(obj[1]), dtIncDes, dtSfDes, Convert.ToInt32(obj[2]));
+                //nr = 0;
+                //nrViitor = 0;
+                //General.CalcZile(dtIncDes, dtSfDes, adunaZL.ToString(), out nr, out nrViitor);
 
                 string sqlDes = $@"INSERT INTO ""Ptj_Cereri""(F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", USER_NO, TIME, ""Id"", ""TrimiteLa"", ""IdCerereDivizata"", ""Comentarii"", ""NrOre"")
                                 OUTPUT Inserted.Id                                
-                                SELECT F10003, ""IdAbsenta"", {General.ToDataUniv(dtIncDes)} AS""DataInceput"", {General.ToDataUniv(dtSfDes)} AS ""DataSfarsit"", {nr} AS ""NrZile"", {nrViitor} AS ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", {Session["UserId"]}, {General.CurrentDate()}, {sqlIdCerere} AS ""Id"", ""TrimiteLa"", {obj[0]} AS ""IdCerereDivizata"", ""Comentarii"", ""NrOre"" FROM ""Ptj_Cereri"" WHERE ""Id""={obj[0]}";
+                                SELECT F10003, ""IdAbsenta"", {General.ToDataUniv(dtIncDes)} AS""DataInceput"", {General.ToDataUniv(dtSfDes)} AS ""DataSfarsit"", {nrDes} AS ""NrZile"", 0 AS ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", {Session["UserId"]}, {General.CurrentDate()}, {sqlIdCerere} AS ""Id"", ""TrimiteLa"", {obj[0]} AS ""IdCerereDivizata"", ""Comentarii"", ""NrOre"" FROM ""Ptj_Cereri"" WHERE ""Id""={obj[0]}";
 
                 string sqlGen = "BEGIN TRAN " + "\n\r" +
                                 sqlOri + "; " + "\n\r" +

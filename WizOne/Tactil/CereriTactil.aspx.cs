@@ -251,8 +251,7 @@ namespace WizOne.Tactil
                             //int nrViitor = 0;
                             //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
                             //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
-                            nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0),
-                                (cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value ?? 0) : Convert.ToInt32(cmbAbs.Value ?? 0)));;
+                            nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), (cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value ?? 0) : Convert.ToInt32(cmbAbs.Value ?? 0)));;
                             txtNrZile.Value = nr;
                             Session["TactilNrZile"] = nr;
                             //txtNrZileViitor.Value = nrViitor;
@@ -446,8 +445,7 @@ namespace WizOne.Tactil
                         //int nrViitor = 0;
                         //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
                         //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
-                        nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0),
-                           (cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value ?? 0) : Convert.ToInt32(cmbAbs.Value ?? 0))); ;
+                        nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), (cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value ?? 0) : Convert.ToInt32(cmbAbs.Value ?? 0))); ;
                         txtNrZile.Value = nr;
                         Session["TactilNrZile"] = nr;
                         //txtNrZileViitor.Value = nrViitor;

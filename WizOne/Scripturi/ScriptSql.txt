@@ -18435,3 +18435,10 @@ CLOSE @cursor_db
 DEALLOCATE @cursor_db 
 
 END
+
+
+
+UPDATE "tblParametrii" SET "Explicatie" = 'Eliminare conditie formulare 360: 1 - se elimina, iar formularele 360 se afiseaza fara restrictii; 0 (sau absent) - se pastreaza; 2 - se pot trimite invitatii de catre HR in numele unui utilizator'  WHERE "Nume" = 'Eval_EliminCondForm360' 
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Eval_PermiteAutoEvaluare' , '0', 'Permitere auto-evaluare: 1 - se permite; 0 (sau absent) - nu se permite' , 5)
+GO

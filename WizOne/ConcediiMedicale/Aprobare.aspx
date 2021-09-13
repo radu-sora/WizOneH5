@@ -111,7 +111,7 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                 </dx:ASPxButton>  
-                <dx:ASPxButton ID="btnAnulare" runat="server" Text="Sterge" OnClick="btnAnulare_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnAnulare" runat="server" Text="Anulare" OnClick="btnAnulare_Click" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
                         e.processOnServer = true;

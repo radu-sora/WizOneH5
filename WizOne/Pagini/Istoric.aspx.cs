@@ -20,6 +20,10 @@ namespace WizOne.Pagini
             try
             {
                 DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
+                //Radu 13.09.2021
+                int tip = Convert.ToInt32(General.Nz(Request["tip"], -99));
+                if (tip == 9)
+                    dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""CM_tblStari"" ", null);
                 GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 colStari.PropertiesComboBox.DataSource = dtStari;
             }

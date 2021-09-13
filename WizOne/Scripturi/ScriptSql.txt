@@ -18276,6 +18276,9 @@ GO
 INSERT INTO "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('CM_CaleFisierRezultat', '', 'calea catre locatia unde va fi salvat rezultatul calculului', 13)
 GO
 
+insert into tblModule (Id, Denumire) values (13, 'Concedii medicale')
+GO
+
 ----CM END ----
 
 

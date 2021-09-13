@@ -2039,10 +2039,10 @@ namespace WizOne.ConcediiMedicale
 
             if (!areStagiu)
             {  
-                txtBCCM.Text = "0";
-                txtZBC.Text = "0";
-                txtMZ.Text = "0";
-                txtMZBC.Text = "0";
+                //txtBCCM.Text = "0";
+                //txtZBC.Text = "0";
+                //txtMZ.Text = "0";
+                //txtMZBC.Text = "0";
                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Angajatul nu are stagiu!");
                 //chkStagiu.Checked = true;
             }

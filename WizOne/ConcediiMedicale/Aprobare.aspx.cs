@@ -229,7 +229,7 @@ namespace WizOne.ConcediiMedicale
                 string[] lstIds = ids.Substring(1).Split(',');
                 for (int i = 0; i < lstIds.Length; i++)
                 {
-                    sql = "UPDATE CM_CereriIstoric SET Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = 3), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + lstIds[i] + " AND Pozitie = 2";
+                    sql = "UPDATE CM_CereriIstoric SET IdStare = 3, Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = 3), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + lstIds[i] + " AND Pozitie = 2";
                     General.ExecutaNonQuery(sql, null);
 
                     sql = "UPDATE CM_Cereri SET IdStare = 3 WHERE Id = " + lstIds[i];
@@ -846,6 +846,9 @@ namespace WizOne.ConcediiMedicale
 
                     sql = "UPDATE CM_Cereri SET IdStare = 4 WHERE Id = " + lstIds[i];
                     General.ExecutaNonQuery(sql, null);
+
+                    sql = "UPDATE CM_CereriIstoric SET IdStare = 4, IdUser = " + Session["UserId"].ToString() + ", Culoare = (SELECT Culoare FROM CM_tblStari WHERE Id = 4)  WHERE IdCerere = " + lstIds[i] + " AND Pozitie = 2";
+                    General.ExecutaNonQuery(sql, null);
                 }
 
 
@@ -1153,10 +1156,10 @@ namespace WizOne.ConcediiMedicale
                 int tip = Convert.ToInt32(General.Nz(Session["CM_HR"], "0").ToString());
                 if (tip == 1)
                     strSql = "SELECT F10003, SerieCM, NumarCM, SerieCMInitial, NumarCMInitial, CodDiagnostic, DataInceput, DataSfarsit, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, "
-                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu, Convert(VARCHAR, DataInceput, 103) as DI FROM CM_Cereri where year(DataInceput) = " + an + " and month(DataInceput) = " + luna;
+                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu, Convert(VARCHAR, DataInceput, 103) as DI FROM CM_Cereri where year(DataInceput) = " + an + " and month(DataInceput) = " + luna + " ORDER BY Id DESC";
                 else
                     strSql = "SELECT F10003, SerieCM, NumarCM, SerieCMInitial, NumarCMInitial, CodDiagnostic, DataInceput, DataSfarsit, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, "
-                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu, Convert(VARCHAR, DataInceput, 103) as DI FROM CM_Cereri WHERE F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ") AND year(DataInceput) = " + an + " and month(DataInceput) = " + luna;
+                        + "ModifManuala, Optiune,  Id, USER_NO, TIME, IdStare, Document, NrZile, Initial, Stagiu, Convert(VARCHAR, DataInceput, 103) as DI FROM CM_Cereri WHERE F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser = " + Session["UserId"].ToString() + ") AND year(DataInceput) = " + an + " and month(DataInceput) = " + luna + " ORDER BY Id DESC";
 
 
                 q = General.IncarcaDT(strSql, null);
@@ -1239,7 +1242,7 @@ namespace WizOne.ConcediiMedicale
 
                 for (int i = 0; i < ids.Count; i++)
                 {
-                    sql = "UPDATE CM_CereriIstoric SET Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = -1), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + ids[i].Id + " AND Pozitie = 2";
+                    sql = "UPDATE CM_CereriIstoric SET IdStare = -1, Aprobat = 1, DataAprobare = GETDATE(), CULOARE = (SELECT Culoare FROM CM_tblStari WHERE Id = -1), IdUser = " + Session["UserId"].ToString() + " WHERE IdCerere = " + ids[i].Id + " AND Pozitie = 2";
                     General.ExecutaNonQuery(sql, null);
 
                     sql = "UPDATE CM_Cereri SET IdStare = -1 WHERE Id = " + ids[i].Id;

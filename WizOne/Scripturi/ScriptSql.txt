@@ -17971,7 +17971,9 @@ from Curs_tblCursSesiune
 join curs_tblcurs on curs_tblcurs.id = Curs_tblCursSesiune.IdCurs
 join Curs_relCursAngajati on Curs_relCursAngajati.Id_Curs = curs_tblcurs.id 
 
-
+-- Pentru mobile
+ALTER TABLE MeniuLinii ADD [StareMobil] [int] NULL, [NumeMobil] [nvarchar](20) NULL, [OrdineMobil] [int] NULL;
+GO
 
 alter table Ptj_tblAdmin add ActivTactil int
 GO

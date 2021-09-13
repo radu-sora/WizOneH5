@@ -489,29 +489,39 @@ namespace WizOne.Personal
                     idCtr = Convert.ToInt32(dtCtr2.Rows[0]["IdContract"].ToString());
                 }
 
+                string dataExpCI = "NULL";
+                if (ds.Tables[2].Rows[0]["F100963"] != DBNull.Value)
+                {
+                    DateTime dtExpCI = Convert.ToDateTime(ds.Tables[2].Rows[0]["F100963"].ToString());
+                    dataExpCI = "CONVERT(DATETIME, '" + dtExpCI.Day.ToString().PadLeft(2, '0') + "/" + dtExpCI.Month.ToString().PadLeft(2, '0') + "/" + dtExpCI.Year.ToString() + "', 103)";
+                }
+
                 string sqlAng = "SELECT " + ds.Tables[1].Rows[0]["F10003"] + " AS F10003, "
-                        + (ds.Tables[1].Rows[0]["F100901"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100901"].ToString() + "'") + " AS F100901, "
-                        + (ds.Tables[1].Rows[0]["F10071"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10071"].ToString()) + " AS F10071, "
-                        + (ds.Tables[1].Rows[0]["F10050"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10050"].ToString()) + " AS F10050, "
-                        + (ds.Tables[1].Rows[0]["F10051"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10051"].ToString()) + " AS F10051, "
-                        + (ds.Tables[1].Rows[0]["F10061"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10061"].ToString()) + " AS F10061, "
-                        + (ds.Tables[1].Rows[0]["F10062"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10062"].ToString()) + " AS F10062, "
-                        + (ds.Tables[1].Rows[0]["F10004"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10004"].ToString()) + " AS F10004, "
-                        + (ds.Tables[1].Rows[0]["F1009741"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F1009741"].ToString()) + " AS F1009741, "
-                        + (ds.Tables[1].Rows[0]["F100984"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100984"].ToString()) + " AS F100984, "
-                        + (ds.Tables[1].Rows[0]["F100935"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100935"].ToString()) + " AS F100935, "
-                        + (ds.Tables[1].Rows[0]["F100936"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100936"].ToString()) + " AS F100936, "
-                        + (ds.Tables[1].Rows[0]["F100975"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100975"].ToString()) + " AS F100975, "
-                        + (ds.Tables[2].Rows[0]["F1001063"] == DBNull.Value ? "NULL" : ds.Tables[2].Rows[0]["F1001063"].ToString()) + " AS F1001063, "
-                        + (ds.Tables[1].Rows[0]["F1009742"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F1009742"].ToString()) + " AS F1009742, "
-                        + (ds.Tables[1].Rows[0]["F100931"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100931"].ToString()) + " AS F100931, "
-                        + (ds.Tables[2].Rows[0]["F1001046"] == DBNull.Value ? "NULL" : ds.Tables[2].Rows[0]["F1001046"].ToString()) + " AS F1001046, "
-                        + (ds.Tables[1].Rows[0]["F10072"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10072"].ToString()) + " AS F10072, "
-                        + (ds.Tables[1].Rows[0]["F100902"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100902"].ToString() + "'") + " AS F100902, "
-                        + (ds.Tables[1].Rows[0]["F100904"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100904"].ToString() + "'") + " AS F100904, "
-                        + (ds.Tables[2].Rows[0]["F100943"] == DBNull.Value ? "NULL" : ds.Tables[2].Rows[0]["F100943"].ToString()) + " AS F100943, "
-                        + (ds.Tables[1].Rows[0]["F10043"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10043"].ToString()) + " AS F10043, "
-                        + idCtr + " AS IdContract ";                
+                    + (ds.Tables[1].Rows[0]["F100901"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100901"].ToString() + "'") + " AS F100901, "
+                    + (ds.Tables[1].Rows[0]["F10071"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10071"].ToString()) + " AS F10071, "
+                    + (ds.Tables[1].Rows[0]["F10050"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10050"].ToString()) + " AS F10050, "
+                    + (ds.Tables[1].Rows[0]["F10051"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10051"].ToString()) + " AS F10051, "
+                    + (ds.Tables[1].Rows[0]["F10061"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10061"].ToString()) + " AS F10061, "
+                    + (ds.Tables[1].Rows[0]["F10062"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10062"].ToString()) + " AS F10062, "
+                    + (ds.Tables[1].Rows[0]["F10004"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10004"].ToString()) + " AS F10004, "
+                    + (ds.Tables[1].Rows[0]["F1009741"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F1009741"].ToString()) + " AS F1009741, "
+                    + (ds.Tables[1].Rows[0]["F100984"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100984"].ToString()) + " AS F100984, "
+                    + (ds.Tables[1].Rows[0]["F100935"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100935"].ToString()) + " AS F100935, "
+                    + (ds.Tables[1].Rows[0]["F100936"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100936"].ToString()) + " AS F100936, "
+                    + (ds.Tables[1].Rows[0]["F100975"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100975"].ToString()) + " AS F100975, "
+                    + (ds.Tables[2].Rows[0]["F1001063"] == DBNull.Value ? "NULL" : ds.Tables[2].Rows[0]["F1001063"].ToString()) + " AS F1001063, "
+                    + (ds.Tables[1].Rows[0]["F1009742"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F1009742"].ToString()) + " AS F1009742, "
+                    + (ds.Tables[1].Rows[0]["F100931"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F100931"].ToString()) + " AS F100931, "
+                    + (ds.Tables[2].Rows[0]["F1001046"] == DBNull.Value ? "NULL" : ds.Tables[2].Rows[0]["F1001046"].ToString()) + " AS F1001046, "
+                    + (ds.Tables[1].Rows[0]["F10072"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10072"].ToString()) + " AS F10072, "
+                    + (ds.Tables[1].Rows[0]["F100902"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100902"].ToString() + "'") + " AS F100902, "
+                    + (ds.Tables[1].Rows[0]["F100904"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F100904"].ToString() + "'") + " AS F100904, "
+                    + (ds.Tables[2].Rows[0]["F100943"] == DBNull.Value ? "NULL" : ds.Tables[2].Rows[0]["F100943"].ToString()) + " AS F100943, "
+                    + (ds.Tables[1].Rows[0]["F10043"] == DBNull.Value ? "NULL" : ds.Tables[1].Rows[0]["F10043"].ToString()) + " AS F10043, "
+                    + (ds.Tables[1].Rows[0]["F10017"] == DBNull.Value ? "NULL" : "'" + ds.Tables[1].Rows[0]["F10017"].ToString() + "'") + " AS F10017, "
+                    + dataExpCI + " AS F100963, "
+                    + Session["UserId"].ToString() + " AS IdUser, "
+                    + idCtr + " AS IdContract ";                
                 
                 //se pot completa in viitor si alte campuri de interes
                 string msg = Notif.TrimiteNotificare("Personal.Lista", (int)Constante.TipNotificare.Validare, sqlAng + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
@@ -1312,48 +1322,69 @@ namespace WizOne.Personal
                             dt100.Rows[0]["F100985"] = marcaFin;
 
                             if (ds.Tables.Contains("Admin_Activitati") && ds.Tables["Admin_Activitati"].Rows.Count > 0)
-                                ds.Tables["Admin_Activitati"].Rows[0]["Marca"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Admin_Activitati"].Rows.Count; i++)    
+                                    ds.Tables["Admin_Activitati"].Rows[i]["Marca"] = marcaFin;
                             if (ds.Tables.Contains("F100Adrese") && ds.Tables["F100Adrese"].Rows.Count > 0)
-                                ds.Tables["F100Adrese"].Rows[0]["F10003"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["F100Adrese"].Rows.Count; i++)
+                                    ds.Tables["F100Adrese"].Rows[i]["F10003"] = marcaFin;
                             if (ds.Tables.Contains("Atasamente") && ds.Tables["Atasamente"].Rows.Count > 0)
-                                ds.Tables["Atasamente"].Rows[0]["IdEmpl"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Atasamente"].Rows.Count; i++)
+                                    ds.Tables["Atasamente"].Rows[i]["IdEmpl"] = marcaFin;
                             if (ds.Tables.Contains("Admin_Atestate") && ds.Tables["Admin_Atestate"].Rows.Count > 0)
-                                ds.Tables["Admin_Atestate"].Rows[0]["Marca"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Admin_Atestate"].Rows.Count; i++)
+                                    ds.Tables["Admin_Atestate"].Rows[i]["Marca"] = marcaFin;
                             if (ds.Tables.Contains("Admin_Beneficii") && ds.Tables["Admin_Beneficii"].Rows.Count > 0)
-                                ds.Tables["Admin_Beneficii"].Rows[0]["Marca"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Admin_Beneficii"].Rows.Count; i++)
+                                    ds.Tables["Admin_Beneficii"].Rows[i]["Marca"] = marcaFin;
                             if (ds.Tables.Contains("F100Cartele2") && ds.Tables["F100Cartele2"].Rows.Count > 0)
-                                ds.Tables["F100Cartele2"].Rows[0]["F10003"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["F100Cartele2"].Rows.Count; i++)
+                                    ds.Tables["F100Cartele2"].Rows[i]["F10003"] = marcaFin;
                             if (ds.Tables.Contains("F100CentreCost2") && ds.Tables["F100CentreCost2"].Rows.Count > 0)
-                                ds.Tables["F100CentreCost2"].Rows[0]["F10003"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["F100CentreCost2"].Rows.Count; i++)
+                                    ds.Tables["F100CentreCost2"].Rows[i]["F10003"] = marcaFin;
                             if (ds.Tables.Contains("F100Contacte") && ds.Tables["F100Contacte"].Rows.Count > 0)
-                                ds.Tables["F100Contacte"].Rows[0]["F10003"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["F100Contacte"].Rows.Count; i++)
+                                    ds.Tables["F100Contacte"].Rows[i]["F10003"] = marcaFin;
                             if (ds.Tables.Contains("F100Contracte2") && ds.Tables["F100Contracte2"].Rows.Count > 0)
-                                ds.Tables["F100Contracte2"].Rows[0]["F10003"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["F100Contracte2"].Rows.Count; i++)
+                                    ds.Tables["F100Contracte2"].Rows[i]["F10003"] = marcaFin;
                             if (ds.Tables.Contains("Admin_Cursuri") && ds.Tables["Admin_Cursuri"].Rows.Count > 0)
-                                ds.Tables["Admin_Cursuri"].Rows[0]["Marca"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Admin_Cursuri"].Rows.Count; i++)
+                                    ds.Tables["Admin_Cursuri"].Rows[i]["Marca"] = marcaFin;
                             General.ExecutaNonQuery("UPDATE F112 SET F11203 = " + marcaFin + " WHERE F11203 = " + marcaInit, null);
                             if (ds.Tables.Contains("Admin_Echipamente") && ds.Tables["Admin_Echipamente"].Rows.Count > 0 )
-                                ds.Tables["Admin_Echipamente"].Rows[0]["Marca"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Admin_Echipamente"].Rows.Count; i++)
+                                    ds.Tables["Admin_Echipamente"].Rows[i]["Marca"] = marcaFin;
                             if (ds.Tables.Contains("Admin_Evaluare") && ds.Tables["Admin_Evaluare"].Rows.Count > 0)
-                                ds.Tables["Admin_Evaluare"].Rows[0]["Marca"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Admin_Evaluare"].Rows.Count; i++)
+                                    ds.Tables["Admin_Evaluare"].Rows[i]["Marca"] = marcaFin;
                             if (ds.Tables.Contains("Admin_Evolutie") && ds.Tables["Admin_Evolutie"].Rows.Count > 0)
-                                ds.Tables["Admin_Evolutie"].Rows[0]["Marca"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Admin_Evolutie"].Rows.Count; i++)
+                                    ds.Tables["Admin_Evolutie"].Rows[i]["Marca"] = marcaFin;
                             if (ds.Tables.Contains("Admin_Experienta") && ds.Tables["Admin_Experienta"].Rows.Count > 0)
-                                ds.Tables["Admin_Experienta"].Rows[0]["Marca"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Admin_Experienta"].Rows.Count; i++)
+                                    ds.Tables["Admin_Experienta"].Rows[i]["Marca"] = marcaFin;
                             if (ds.Tables.Contains("relGrupAngajat2") && ds.Tables["relGrupAngajat2"].Rows.Count > 0)
-                                ds.Tables["relGrupAngajat2"].Rows[0]["F10003"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["relGrupAngajat2"].Rows.Count; i++)
+                                    ds.Tables["relGrupAngajat2"].Rows[i]["F10003"] = marcaFin;
                             if (ds.Tables.Contains("Admin_Limbi") && ds.Tables["Admin_Limbi"].Rows.Count > 0)
-                                ds.Tables["Admin_Limbi"].Rows[0]["Marca"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Admin_Limbi"].Rows.Count; i++)
+                                    ds.Tables["Admin_Limbi"].Rows[i]["Marca"] = marcaFin;
                             if (ds.Tables.Contains("Admin_Medicina") && ds.Tables["Admin_Medicina"].Rows.Count > 0)
-                                ds.Tables["Admin_Medicina"].Rows[0]["Marca"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Admin_Medicina"].Rows.Count; i++)
+                                    ds.Tables["Admin_Medicina"].Rows[i]["Marca"] = marcaFin;
                             if (ds.Tables.Contains("F110") && ds.Tables["F110"].Rows.Count > 0)
-                                ds.Tables["F110"].Rows[0]["F11003"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["F110"].Rows.Count; i++)
+                                    ds.Tables["F110"].Rows[i]["F11003"] = marcaFin;
                             if (ds.Tables.Contains("Admin_Sanctiuni") && ds.Tables["Admin_Sanctiuni"].Rows.Count > 0)
-                                ds.Tables["Admin_Sanctiuni"].Rows[0]["Marca"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["Admin_Sanctiuni"].Rows.Count; i++)
+                                    ds.Tables["Admin_Sanctiuni"].Rows[i]["Marca"] = marcaFin;
                             if (ds.Tables.Contains("F100Studii") && ds.Tables["F100Studii"].Rows.Count > 0)
-                                ds.Tables["F100Studii"].Rows[0]["F10003"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["F100Studii"].Rows.Count; i++)
+                                    ds.Tables["F100Studii"].Rows[i]["F10003"] = marcaFin;
                             if (ds.Tables.Contains("F100Supervizori2") && ds.Tables["F100Supervizori2"].Rows.Count > 0)
-                                ds.Tables["F100Supervizori2"].Rows[0]["F10003"] = marcaFin;
+                                for (int i = 0; i < ds.Tables["F100Supervizori2"].Rows.Count; i++)
+                                    ds.Tables["F100Supervizori2"].Rows[i]["F10003"] = marcaFin;
                             General.ExecutaNonQuery("UPDATE F111 SET F11103 = " + marcaFin + " WHERE F11103 = " + marcaInit, null);
 
                             Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;

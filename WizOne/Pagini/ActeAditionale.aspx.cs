@@ -120,7 +120,8 @@ namespace WizOne.Pagini
                     }
 
                     if (filter.ang != null) filtru += @" AND ""F10003""= " + (int)filter.ang;
-                    if (filter.data != null) filtru += " AND \"DataModif\" = " + General.ToDataUniv((DateTime)filter.data);
+                    if (filter.dataInc != null) filtru += " AND \"DataModif\" >= " + General.ToDataUniv((DateTime)filter.dataInc);
+                    if (filter.dataSf != null) filtru += " AND \"DataModif\" <= " + General.ToDataUniv((DateTime)filter.dataSf);
                     if (filter.depasire != null) filtru += " AND \"TermenDepasire\" = " + General.ToDataUniv((DateTime)filter.depasire);
 
                     if (filter.cmp != null) companie = " AND B.F10002 = " + (int)filter.cmp;
@@ -640,7 +641,7 @@ namespace WizOne.Pagini
                     if (Session["PaginaWeb"] as string != "Pagini.ActeAditionale")
                     {
                         Session["PaginaWeb"] = "Pagini.ActeAditionale";
-                        Session["Filtru_ActeAditionale"] = "{}";
+                        Session["Filtru_ActeAditionale"] = "{" + $@" ""cmp"": null, ""tip"": null, ""ang"": null, ""status"": null, ""dataInc"": {General.ToDataUniv(Convert.ToInt32(Dami.ValoareParam("AnLucru")),Convert.ToInt32(Dami.ValoareParam("LunaLucru")), 1)}, ""dataSf"": {General.ToDataUniv(2100,1,1)}, ""depasire"": null, ""subcomp"": null " + "}";
                     }
 
                     #region Traducere
@@ -654,7 +655,8 @@ namespace WizOne.Pagini
                     lblTip.InnerText = Dami.TraduCuvant("Tip");
                     lblAng.InnerText = Dami.TraduCuvant("Angajat/Candidat");
                     lblStatus.InnerText = Dami.TraduCuvant("Status");
-                    lblData.InnerText = Dami.TraduCuvant("Data modificarii");
+                    lblDataInceput.InnerText = Dami.TraduCuvant("De la data");
+                    lblDataSfarsit.InnerText = Dami.TraduCuvant("La data");
 
                     btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
 
@@ -669,7 +671,7 @@ namespace WizOne.Pagini
                     if ((cmbCmp.DataSource as DataTable)?.Rows.Count > 1)
                         pnlComp.Visible = true;
 
-                    IncarcaCmbAng(-1, -1);                    
+                    IncarcaCmbAng(-1, -1);
 
                     var filter = JObject.Parse(Session["Filtru_ActeAditionale"] as string) as dynamic;
 
@@ -679,7 +681,8 @@ namespace WizOne.Pagini
                         cmbTip.Value = (int?)filter.tip;
                         cmbAng.Value = (int?)filter.ang;
                         cmbStatus.Value = (int?)filter.status;
-                        txtData.Value = (DateTime?)filter.data;
+                        txtDataInceput.Value = (DateTime?)filter.dataInc;
+                        txtDataSfarsit.Value = (DateTime?)filter.dataSf;
                         txtDepasire.Value = (DateTime?)filter.depasire;                        
                     }
 

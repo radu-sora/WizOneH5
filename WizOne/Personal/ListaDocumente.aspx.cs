@@ -79,7 +79,7 @@ namespace WizOne.Personal
                 if (param.command == "btnArata")
                 {                    
                     var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings((int)param.reportId);
-                    var reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl((int)param.reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, new { Angajat = Session["Marca"].ToString() });
+                    var reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl((int)param.reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, new { Angajat = (Session["Marca"] ?? -99).ToString() });
 
                     grDate.JSProperties["cpReportUrl"] = ResolveClientUrl(reportUrl);
                 }

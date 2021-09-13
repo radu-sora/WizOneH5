@@ -812,6 +812,16 @@
         popGenIst.Show();
     }
 
+    function OnRadiat(s) {
+        if (s.GetValue() == 1) {
+            cmbMotivPlecare.SetValue(500);
+            var dataSistem = new Date();
+            dataSistem.setHours(0, 0, 0, 0);
+            deUltimaZiLucr.SetDate(dataSistem);
+            deDataPlecarii.SetDate(dataSistem);
+        }
+    }
+
 </script>
 
 <body>
@@ -1642,6 +1652,7 @@
                                         <dx:ListEditItem Text="DA" Value="1" />
                                         <dx:ListEditItem Text="NU" Value="0" />
                                     </Items>
+                                    <ClientSideEvents SelectedIndexChanged="function(s,e){ OnRadiat(s); }" />
                                 </dx:ASPxRadioButtonList>
                             </td>
 

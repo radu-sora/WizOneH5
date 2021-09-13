@@ -12,7 +12,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 <script type="text/javascript">
 
-    function OnTextChangedHandler(s) {
+	function OnTextChangedHandler(s) {
         pnlCtl.PerformCallback(s.name + ";" +s.GetText());
     }
     function OnValueChangedHandler(s) {
@@ -21,20 +21,44 @@
 
     function OnClick(s) {       
         pnlCtl.PerformCallback(s.name);
+	}
+
+	function SetareLuna(s) {
+		var an = parseInt("<%=Session["CM_An"] %>");
+        var luna = parseInt("<%=Session["CM_Luna"] %>");
+		var data = new Date(an, luna - 1);
+		data.setHours(0, 0, 0, 0);
+		deDeLaData.SetDate(data);
+        //deLaData.SetDate(data);
     }
+
 
 	function OnEndCallback(s, e) {
         pnlLoading.Hide();
         if (s.cpAlertMessage != null) {
             swal({
-                title: "", text: s.cpAlertMessage,
+                title: "Atentie", text: s.cpAlertMessage,
                 type: "warning"
             });
             s.cpAlertMessage = null;
-        }
+		}
+
+		
+<%--		var nr1 = parseInt("<%=Session["CM_NrZileCT1"] %>");
+		var nr2 = parseInt("<%=Session["CM_NrZileCT2"] %>");
+		var nr3 = parseInt("<%=Session["CM_NrZileCT3"] %>");
+		var nr4 = parseInt("<%=Session["CM_NrZileCT4"] %>");
+		var nr5 = parseInt("<%=Session["CM_NrZileCT5"] %>");
+
+		txtCT1.SetValue(nr1);
+		txtCT2.SetValue(nr2);
+		txtCT3.SetValue(nr3);
+		txtCT4.SetValue(nr4);
+        txtCT5.SetValue(nr5);--%>
     }
 
-    function GoToViewHistory(s) {
+	function GoToViewHistory(s) {	
+		debugger;
         strUrl = getAbsoluteUrl + "ConcediiMedicale/Istoric.aspx";
         popGenIst.SetHeaderText("Vizualizare CM luna anterioara");
         popGenIst.SetContentUrl(strUrl);
@@ -42,7 +66,7 @@
     }
 
     window.PreluareCM = function () {
-        pnlCtl.PerformCallback("PreluareCM");
+		pnlCtl.PerformCallback("PreluareCM");
 	}
 
     function StartUpload() {
@@ -175,18 +199,18 @@
 							</div>
 						</td>
                         <td>								
-							<dx:ASPxDateEdit  ID="deDeLaData" Width="140" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"   AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="deDeLaData" Width="140" ClientInstanceName="deDeLaData" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"   AutoPostBack="false"  >
 								<CalendarProperties FirstDayOfWeek="Monday" />
-								<ClientSideEvents  ValueChanged ="function(s,e){ OnTextChangedHandler(s); }" />
+								<ClientSideEvents DateChanged ="function(s,e){ OnTextChangedHandler(s); }"  DropDown="function(s,e){ SetareLuna(s); }"/>
 							</dx:ASPxDateEdit>					
 						</td>
 						<td>					
 							<dx:ASPxLabel  ID="lblLaData" runat="server"  Width="100" Text="Data sfarsit"></dx:ASPxLabel >	
 						</td>
                         <td>						
-							<dx:ASPxDateEdit  ID="deLaData" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="deLaData" Width="100"  ClientInstanceName="deLaData" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
 								<CalendarProperties FirstDayOfWeek="Monday" />
-								<ClientSideEvents ValueChanged="function(s,e){ OnTextChangedHandler(s); }" />
+								<ClientSideEvents ValueChanged="function(s,e){ OnTextChangedHandler(s); }"  />
 							</dx:ASPxDateEdit>										
 						</td>
 						<td>									
@@ -253,6 +277,13 @@
 							</dx:ASPxTextBox>
 						</td>
 					</tr>
+                    <tr>
+                        <td>
+                            <dx:ASPxCheckBox ID="chkStagiu" runat="server" Width="140" Text="Nu are stagiu de cotizare"  TextAlign="Left" ClientInstanceName="chkStagiu">
+                                <ClientSideEvents  />
+                            </dx:ASPxCheckBox>
+                        </td>
+                    </tr>
 					<tr>
                         <td colspan="2">
 							<div style="float:left; padding-bottom:15px;">
@@ -275,7 +306,7 @@
 							        </dx:ASPxComboBox>
 						        </td>
                                 <td>						  
-							        <dx:ASPxTextBox  ID="txtCT1" Width="50"  runat="server"  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT1" Width="50"  runat="server"  AutoPostBack="false" ClientInstanceName="txtCT1" >
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -292,7 +323,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						
-							        <dx:ASPxTextBox  ID="txtCT2" Width="50"  runat="server"  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT2" Width="50"  runat="server"  AutoPostBack="false" ClientInstanceName="txtCT2" >
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -309,7 +340,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						  
-							        <dx:ASPxTextBox  ID="txtCT3" Width="50"   runat="server"  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT3" Width="50"   runat="server"  AutoPostBack="false" ClientInstanceName="txtCT3">
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -326,7 +357,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						  
-							        <dx:ASPxTextBox  ID="txtCT4" Width="50"  runat="server" AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT4" Width="50"  runat="server" AutoPostBack="false" ClientInstanceName="txtCT4">
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -343,7 +374,7 @@
 							        </dx:ASPxComboBox>
 						    </td>
                             <td>						    
-							        <dx:ASPxTextBox  ID="txtCT5" Width="50" runat="server"  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCT5" Width="50" runat="server"  AutoPostBack="false" ClientInstanceName="txtCT5">
                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
 							        </dx:ASPxTextBox>
 						        </td> 
@@ -368,7 +399,7 @@
 						</td>
                        <td>                    
                             <dx:ASPxButton ID="btnCMAnt" ClientInstanceName="btnCMAnt"   Width="75" ClientIDMode="Static"  runat="server"   Text="CM luna anterioara" oncontextMenu="ctx(this,event)" AutoPostBack="false">
-                                <ClientSideEvents Click="function(s,e){ window.open('Istoric.aspx','','height=500,width=1000,left='+(window.outerWidth / 2 + window.screenX - 300)+', top=' + (window.outerHeight / 2 + window.screenY - 200)); }" />                                
+                                   <ClientSideEvents Click="function(s,e){ window.open('Istoric.aspx','','height=500,width=1000,left='+(window.outerWidth / 2 + window.screenX - 300)+', top=' + (window.outerHeight / 2 + window.screenY - 200)); }" />                                                             
                             </dx:ASPxButton>
                         </td>
 
@@ -462,14 +493,6 @@
                              </dx:ASPxCheckBox>
                         </td>  
 					</tr> 
-
-                    <tr>
-                        <td>
-                            <dx:ASPxCheckBox ID="chkStagiu" runat="server" Width="175" Text="Nu are stagiu de cotizare" Visible="false" TextAlign="Right" ClientInstanceName="chkStagiu">
-                                <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
-                            </dx:ASPxCheckBox>
-                        </td>
-                    </tr>
                     <tr>
                        <td>
                             <dx:ASPxRadioButton ID="rbOptiune1" Width="125" runat="server" Text="Media zilnica pt. CM cf. O 158/2005"    ClientInstanceName="rbOptiune1"
@@ -584,25 +607,17 @@
                                      <tr >
  
                                           <td >
- 
-                                             <dx:ASPxRadioButton ID = "rbZileCal" Width= "150" runat= "server" Visible="false" Text= "x zile calendaristice" ClientInstanceName= "rbZileCal"
- 
-                                                  GroupName= "Zile" >
- 
-                                                 <ClientSideEvents CheckedChanged= "function(s,e){ OnValueChangedHandler(s); }" />
- 
-                                             </dx:ASPxRadioButton>
+											<dx:ASPxCheckBox ID="chkZileCal" runat="server" Width="150" Visible="false" Text="x zile calendaristice" TextAlign="Left" ClientInstanceName="chkZileCal">
+												<ClientSideEvents  />
+											</dx:ASPxCheckBox> 
+                     
                                         </td>
 					                </tr>
 					                <tr>
                                         <td>
-                                            <dx:ASPxRadioButton ID = "rbZileFNUASS" Width= "150" runat= "server" Visible="false" Text= "0 zile"  ClientInstanceName= "rbZileFNUASS"
- 
-                                                  GroupName= "Zile" >
- 
-                                                 <ClientSideEvents CheckedChanged= "function(s,e){ OnValueChangedHandler(s); }" />
- 
-                                             </dx:ASPxRadioButton>
+											<dx:ASPxCheckBox ID="chkZileFNUASS" runat="server" Width="150" Visible="false" Text="0 zile" TextAlign="Left" ClientInstanceName="chkZileFNUASS">
+												<ClientSideEvents  />
+											</dx:ASPxCheckBox>      
                                         </td> 
 					                </tr>
 					                <tr>
@@ -659,6 +674,8 @@
             </dx:PanelContent>
           </PanelCollection>
         </dx:ASPxCallbackPanel>
+
+
 </body>
 
 </asp:Content>

@@ -3,6 +3,7 @@
 
 <script type="text/javascript">
     function OnTextChangedPI(s, e) {
+        debugger;
         var tb = grDatePersIntr.GetEditor("F11006");
         var newItem = s.GetValue();
 
@@ -41,6 +42,7 @@
     }
 
     function OnEndCallbackPI(s, e) {
+        debugger;
         if (s.cpAlertMessage != null) {
             swal({
                 title: "", text: s.cpAlertMessage,

@@ -912,7 +912,7 @@ namespace WizOne.Absente
                             grView.Columns["F10003"].ShowInCustomizationForm = false;
                         }
                         break;
-                    case 3:
+                    case 3:                        
                         CreazaGridAnual(Convert.ToInt32(cmbAn.Value ?? DateTime.Now.Year));
                         break;
                     case 4:
@@ -939,7 +939,7 @@ namespace WizOne.Absente
                             //        SELECT - 3, CASE WHEN COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') = '' THEN '#EE8D3D' ELSE COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') END, '{Dami.TraduCuvant("CO Planificat")}' {cmp}  WHERE (SELECT COUNT(*) FROM ""Ptj_tblAbsente"" WHERE COALESCE(""Planificare"",0)=1) > 0
                             //        ) X ORDER BY ""Id"" ";
 
-                            string sqlLeg = $@"SELECT * FROM (
+                            string sqlLeg = $@"SELECT *, CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) - 1 as Nr FROM (
                                     SELECT ""Id"", ""Culoare"", ""Denumire"" FROM ""Ptj_tblAbsente""
                                     left join ""Ptj_ContracteAbsente"" a on ""Id"" = ""IdAbsenta""
                                     left join ""F100Contracte"" b on a.""IdContract"" = b.""IdContract""
@@ -1060,5 +1060,8 @@ namespace WizOne.Absente
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+
+        
     }
 }

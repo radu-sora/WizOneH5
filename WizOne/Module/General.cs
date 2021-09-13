@@ -1696,7 +1696,7 @@ namespace WizOne.Module
                 {
                     string strSql = "";
                     DataRow dr = dt.Rows[0];
-                    DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]).Date, Convert.ToDateTime(dr["DataSfarsit"]).Date, 3, Convert.ToInt32(dr["IdAbsenta"])), null);
+                    DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]).Date, Convert.ToDateTime(dr["DataSfarsit"]).Date, Convert.ToInt32(dr["IdAbsenta"])), null);
 
                     //construim sql-ul prin care adaugam cererea in pontaj
                     for (int i = 0; i < dtAbs.Rows.Count; i++)
@@ -2132,59 +2132,59 @@ namespace WizOne.Module
             trimiteLaInlocuitor = trimite;
         }
 
-        public static void CalcZile(DateTime? dtInc, DateTime? dtSf, string adunaZL, out int nr, out int nrViitor)
-        {
-            int tmpNr = 0;
-            int tmpNrViitor = 0;
-            bool este31 = false;
+        //public static void CalcZile(DateTime? dtInc, DateTime? dtSf, string adunaZL, out int nr, out int nrViitor)
+        //{
+        //    int tmpNr = 0;
+        //    int tmpNrViitor = 0;
+        //    bool este31 = false;
 
-            nr = tmpNr;
-            nrViitor = tmpNrViitor;
+        //    nr = tmpNr;
+        //    nrViitor = tmpNrViitor;
 
-            try
-            {
-                if (dtInc == null || dtSf == null) return;
+        //    try
+        //    {
+        //        if (dtInc == null || dtSf == null) return;
 
-                DataTable dt = General.IncarcaDT($@"SELECT *, YEAR(DAY) AS AN, MONTH(DAY) AS LUNA, DAY(DAY) AS ZI FROM HOLIDAYS WHERE {General.ToDataUniv(Convert.ToDateTime(dtInc))} <= DAY AND DAY <= {General.ToDataUniv(Convert.ToDateTime(dtSf))} ", null);
-                for (DateTime zi = Convert.ToDateTime(dtInc).Date; zi <= Convert.ToDateTime(dtSf); zi = zi.AddDays(1))
-                {
-                    if (adunaZL == "1")
-                    {
-                        nr += 1;
-                    }
-                    else
-                    {
-                        string ert = zi.ToShortDateString();
-                        if (zi.DayOfWeek.ToString().ToLower() != "saturday" && zi.DayOfWeek.ToString().ToLower() != "sunday" && dt.Select("AN=" + zi.Year + " AND LUNA=" + zi.Month + " AND ZI=" + zi.Day).Count() == 0) nr += 1;
-                    }
+        //        DataTable dt = General.IncarcaDT($@"SELECT *, YEAR(DAY) AS AN, MONTH(DAY) AS LUNA, DAY(DAY) AS ZI FROM HOLIDAYS WHERE {General.ToDataUniv(Convert.ToDateTime(dtInc))} <= DAY AND DAY <= {General.ToDataUniv(Convert.ToDateTime(dtSf))} ", null);
+        //        for (DateTime zi = Convert.ToDateTime(dtInc).Date; zi <= Convert.ToDateTime(dtSf); zi = zi.AddDays(1))
+        //        {
+        //            if (adunaZL == "1")
+        //            {
+        //                nr += 1;
+        //            }
+        //            else
+        //            {
+        //                string ert = zi.ToShortDateString();
+        //                if (zi.DayOfWeek.ToString().ToLower() != "saturday" && zi.DayOfWeek.ToString().ToLower() != "sunday" && dt.Select("AN=" + zi.Year + " AND LUNA=" + zi.Month + " AND ZI=" + zi.Day).Count() == 0) nr += 1;
+        //            }
 
-                    if (zi.Day == 31 && zi.Month == 12)
-                    {
-                        nrViitor = nr;
-                        este31 = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MemoreazaEroarea(ex.ToString(), "General", "CalcZile");
-            }
+        //            if (zi.Day == 31 && zi.Month == 12)
+        //            {
+        //                nrViitor = nr;
+        //                este31 = true;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MemoreazaEroarea(ex.ToString(), "General", "CalcZile");
+        //    }
 
-            tmpNr = nr;
-            if (este31)
-                tmpNrViitor = nr - nrViitor;
-            else
-                tmpNrViitor = nrViitor;
-        }
+        //    tmpNr = nr;
+        //    if (este31)
+        //        tmpNrViitor = nr - nrViitor;
+        //    else
+        //        tmpNrViitor = nrViitor;
+        //}
 
         //Florin 2018.08.20 
-        public static int CalcZile(int f10003, DateTime? dtInc, DateTime? dtSf, int idRol, int idAbsenta)
+        public static int CalcZile(int f10003, DateTime? dtInc, DateTime? dtSf, int idAbsenta)
         {
             int nrZile = 0;
 
             try
             {
-                string strSql = $@"SELECT SUM(""AreDrepturi"") FROM ({SelectAbsentaInCereri(f10003, dtInc, dtSf, -99, idAbsenta)}) X";
+                string strSql = $@"SELECT SUM(""AreDrepturi"") FROM ({SelectAbsentaInCereri(f10003, dtInc, dtSf, idAbsenta)}) X";
                 nrZile = Convert.ToInt32(General.Nz(General.ExecutaScalar(strSql, null), 0));
             }
             catch (Exception ex)
@@ -2195,12 +2195,13 @@ namespace WizOne.Module
             return nrZile;
         }
 
-        public static string SelectAbsentaInCereri(int f10003, DateTime? dtInc, DateTime? dtSf, int idRol, int idAbsenta)
+        public static string SelectAbsentaInCereri(int f10003, DateTime? dtInc, DateTime? dtSf, int idAbsenta)
         {
             string strSql = "";
 
             try
             {
+                //Florin 2021.09.10 - #985
                 //#311 si #344
                 strSql = $@"SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                     CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
@@ -2214,13 +2215,12 @@ namespace WizOne.Module
                     END AS ""AreDrepturi"", F.""ValStr""
                     FROM ""tblZile"" P
                     INNER JOIN ""Ptj_tblAbsente"" A ON 1=1
-                    INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta""
+                    INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta"" AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 = {f10003} AND ""DataInceput"" <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <= ""DataSfarsit"")
                     LEFT JOIN HOLIDAYS D on P.""Zi""=D.DAY
                     LEFT JOIN ""Ptj_Intrari"" F ON F.F10003={f10003} AND F.""Ziua""=P.""Zi""
                     WHERE {General.ToDataUniv(dtInc)} <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <= {General.ToDataUniv(dtSf)} 
                     AND A.""Id"" = {idAbsenta}
-                    AND COALESCE(A.""DenumireScurta"", '~') <> '~'
-                    AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 = {f10003} AND ""DataInceput"" <= {General.ToDataUniv(dtInc)} AND {General.ToDataUniv(dtInc)} <= ""DataSfarsit"") ";
+                    AND COALESCE(A.""DenumireScurta"", '~') <> '~' ";
             }
             catch (Exception ex)
             {
@@ -2418,6 +2418,9 @@ namespace WizOne.Module
                     DataRow dr = dt.Rows[j];
                     if (Convert.ToInt32(General.Nz(dr["Rol"], -99)) == 77 || esteHR) HR = true;
 
+                    DateTime dtInc = Convert.ToDateTime(dr["DataInceput"]);
+                    DateTime dtSf = Convert.ToDateTime(dr["DataSfarsit"]);
+
                     #region Validare stare cerere
                     //Buacata de cod identica cu cea din Cereri -> btnAprobare si btnRespinge
                     //este nevoie de ea si aici pt cazul cand se aproba/respinge de pe mail
@@ -2444,21 +2447,24 @@ namespace WizOne.Module
                     {
                         if (Convert.ToInt32(General.Nz(dr["IdCerere"], -99)) == -99)
                         {
-                            log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("user-ul logat nu se regaseste pe circuit") + System.Environment.NewLine;
+                            //log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("user-ul logat nu se regaseste pe circuit") + System.Environment.NewLine;
+                            log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a intors raspunsul") + ": " + Dami.TraduCuvant("user-ul logat nu se regaseste pe circuit") + System.Environment.NewLine;
                             continue;
                         }
                     }
 
                     if (Convert.ToInt32(General.Nz(dr["Aprobat"], 0)) == 1)
                     {
-                        log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("nu aveti drepturi") + System.Environment.NewLine;
+                        //log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("nu aveti drepturi") + System.Environment.NewLine;
+                        log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a intors raspunsul") + ": " + Dami.TraduCuvant("nu aveti drepturi") + System.Environment.NewLine;
                         continue;
                     }
 
                     //verificam daca se respecta ordinea din circuit numai pt cei care nu sunt HR
                     if (!HR && Convert.ToInt32(General.Nz(dr["RespectaOrdinea"], 0)) == 1 && Convert.ToInt32(General.Nz(dr["PozitieIstoric"], 0)) != (Convert.ToInt32(General.Nz(dr["Pozitie"], 0)) + 1))
                     {
-                        log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("nu se respecta ordinea de pe circuit") + System.Environment.NewLine;
+                        //log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("nu se respecta ordinea de pe circuit") + System.Environment.NewLine;
+                        log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a intors raspunsul") + ": " + Dami.TraduCuvant("nu se respecta ordinea de pe circuit") + System.Environment.NewLine;
                         continue;
                     }
 
@@ -2468,13 +2474,22 @@ namespace WizOne.Module
                         if (Convert.ToDateTime(dr["DataInceput"]).Date < ziDrp)
                         {
                             if (ziDrp.Year == 2111 && ziDrp.Month == 11 && ziDrp.Day == 11)
-                                log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("Nu aveti stabilite drepturi pentru a realiza aceasta operatie") + " " + System.Environment.NewLine;
+                            {
+                                //log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("Nu aveti stabilite drepturi pentru a realiza aceasta operatie") + " " + System.Environment.NewLine;
+                                log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a intors raspunsul") + ": " + Dami.TraduCuvant("nu aveti stabilite drepturi pentru a realiza aceasta operatie") + System.Environment.NewLine;
+                            }
                             else
                             {
                                 if (ziDrp.Year == 2222 && ziDrp.Month == 12 && ziDrp.Day == 13)
-                                    log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("pontajul a fost aprobat") + " " + System.Environment.NewLine;
+                                {
+                                    //log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("pontajul a fost aprobat") + " " + System.Environment.NewLine;
+                                    log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a intors raspunsul") + ": " + Dami.TraduCuvant("pontajul a fost aprobat") + System.Environment.NewLine;
+                                }
                                 else
-                                    log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("data") + " " + (tipActiune == 1 ? Dami.TraduCuvant("aprobare") : Dami.TraduCuvant("respingere")) + " " + Dami.TraduCuvant("cerere este") + " " + ziDrp + System.Environment.NewLine;
+                                {
+                                    //log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("data") + " " + (tipActiune == 1 ? Dami.TraduCuvant("aprobare") : Dami.TraduCuvant("respingere")) + " " + Dami.TraduCuvant("cerere este") + " " + ziDrp + System.Environment.NewLine;
+                                    log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("are data de") + " " + (tipActiune == 1 ? Dami.TraduCuvant("aprobare") : Dami.TraduCuvant("respingere")) + " " + ziDrp + System.Environment.NewLine;
+                                }
                             }
                             continue;
                         }
@@ -2495,7 +2510,8 @@ namespace WizOne.Module
                     //daca este ultimul pe circuit ne asiguram ca s-a ales tipul de compensare => banca sau plata
                     if (idStare == 3 && Convert.ToInt32(General.Nz(dr["Compensare"], 0)) != 0 && Convert.ToInt32(General.Nz(dr["TrimiteLa"], -99)) == -99)
                     {
-                        log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("nu s-a ales tipul de compensare");
+                        //log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("nu s-a ales tipul de compensare");
+                        log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a intors raspunsul") + ": " + Dami.TraduCuvant("nu s-a ales tipul de compensare") + System.Environment.NewLine;
                         continue;
                     }
 
@@ -2550,7 +2566,8 @@ namespace WizOne.Module
                     string msg = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + dr["Id"], "", Convert.ToInt32(dr["Id"]), idUser, userMarca);
                     if (msg != "" && msg.Substring(0,1) == "2")
                     {
-                        log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant(msg.Substring(2));
+                        //log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant(msg.Substring(2));
+                        log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a intors raspunsul") + ": " + Dami.TraduCuvant(msg.Substring(2)) + System.Environment.NewLine;
                         continue;
                     }
                     else
@@ -2571,7 +2588,8 @@ namespace WizOne.Module
 
                             if (!ras)
                             {
-                                log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("a aparut o eroare") + System.Environment.NewLine;
+                                //log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("a aparut o eroare") + System.Environment.NewLine;
+                                log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a intors raspunsul") + ": " + Dami.TraduCuvant("a aparut o eroare") + System.Environment.NewLine;
                                 continue;
                             }
                         }
@@ -2579,7 +2597,8 @@ namespace WizOne.Module
                         {
                             General.ExecutaNonQuery("ROLLBACK TRAN", null);
                             General.MemoreazaEroarea(ex, "Dami", "MetodeCereri - Executa");
-                            log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("a aparut o eroare") + System.Environment.NewLine;
+                            //log += Dami.TraduCuvant("Cererea pt") + " " + dr["NumeComplet"] + "-" + Convert.ToDateTime(dr["DataInceput"]).ToShortDateString() + " - " + Dami.TraduCuvant("a aparut o eroare") + System.Environment.NewLine;
+                            log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a intors raspunsul") + ": " + Dami.TraduCuvant("a aparut o eroare") + System.Environment.NewLine;
                             continue;
                         }
 
@@ -2606,9 +2625,6 @@ namespace WizOne.Module
                             NotifAsync.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + dr["Id"], "Ptj_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca, arrParam);
                         });
 
-                        //Florin 2021.05.28
-                        DateTime dtInc = Convert.ToDateTime(dr["DataInceput"]);
-                        DateTime dtSf = Convert.ToDateTime(dr["DataSfarsit"]);
                         if (tipActiune == 1)
                             log += Dami.TraduCuvant("Cererea de") + " " + dr["DenumireAbsenta"] + " " + Dami.TraduCuvant("solicitata de") + " " + dr["NumeComplet"] + " " + Dami.TraduCuvant("pentru perioada") + " " + dtInc.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtInc.Month) + " " + dtInc.Year + " - " + dtSf.Day.ToString().PadLeft(2, '0') + " " + NumeLuna(dtSf.Month) + " " + dtSf.Year + " " + Dami.TraduCuvant("a fost aprobata") + System.Environment.NewLine;
                         else
@@ -8568,7 +8584,7 @@ namespace WizOne.Module
 
                 //inserare in Ptj_cereri
                 int nrZile = 0;
-                DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(marca), dataInceput.Date, dtSf.Date, 3, idAbs), null);
+                DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(marca), dataInceput.Date, dtSf.Date, idAbs), null);
                 for (int i = 0; i < dtAbs.Rows.Count; i++)
                     if (Convert.ToInt32(General.Nz(dtAbs.Rows[i]["AreDrepturi"], 0)) == 1)
                         nrZile++;

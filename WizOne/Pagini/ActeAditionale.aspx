@@ -89,8 +89,15 @@
                     </div>
 
                     <div class="Absente_Cereri_CampuriSup">
-                        <label id="lblData" runat="server" style="display:inline-block;">Data modificarii</label>
-                        <dx:ASPxDateEdit ID="txtData" runat="server" ClientInstanceName="txtData" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" AllowNull="true" >
+                        <label id="lblDataInceput" runat="server" style="display:inline-block;">De la data</label>
+                        <dx:ASPxDateEdit ID="txtDataInceput" runat="server" ClientInstanceName="txtDataInceput" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" AllowNull="true" >
+                            <CalendarProperties FirstDayOfWeek="Monday" />
+                        </dx:ASPxDateEdit>
+                    </div>
+
+                    <div class="Absente_Cereri_CampuriSup">
+                        <label id="lblDataSfarsit" runat="server" style="display:inline-block;">La data</label>
+                        <dx:ASPxDateEdit ID="txtDataSfarsit" runat="server" ClientInstanceName="txtDataSfarsit" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" AllowNull="true" >
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </div>
@@ -339,7 +346,8 @@
                 tip: cmbTip.GetValue(),
                 ang: cmbAng.GetValue(),
                 status: cmbStatus.GetValue(),
-                data: getLocalDate(txtData.GetDate()),
+                dataInc: getLocalDate(txtDataInceput.GetDate()),
+                dataSf: getLocalDate(txtDataSfarsit.GetDate()),
                 depasire: getLocalDate(txtDepasire.GetDate()),
                 subcomp: cmbSub.GetValue()
             }));
@@ -350,7 +358,8 @@
             cmbTip.SetValue();
             cmbAng.SetValue();
             cmbStatus.SetValue();
-            txtData.SetDate();
+            txtDataInceput.SetDate();
+            txtDataSfarsit.SetDate();
             txtDepasire.SetDate();
             cmbSub.SetValue();
             grDate.PerformCallback('btnFilter;{}');

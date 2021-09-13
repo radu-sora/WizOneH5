@@ -177,22 +177,40 @@ namespace WizOne.Pagini
         protected global::DevExpress.Web.ASPxComboBox cmbStatus;
 
         /// <summary>
-        /// lblData control.
+        /// lblDataInceput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblData;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDataInceput;
 
         /// <summary>
-        /// txtData control.
+        /// txtDataInceput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxDateEdit txtData;
+        protected global::DevExpress.Web.ASPxDateEdit txtDataInceput;
+
+        /// <summary>
+        /// lblDataSfarsit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDataSfarsit;
+
+        /// <summary>
+        /// txtDataSfarsit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxDateEdit txtDataSfarsit;
 
         /// <summary>
         /// lblDepasire control.

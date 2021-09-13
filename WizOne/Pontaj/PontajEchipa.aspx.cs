@@ -1,4 +1,5 @@
-﻿using DevExpress.DataProcessing;
+﻿using DevExpress.Data;
+using DevExpress.DataProcessing;
 using DevExpress.Web;
 using System;
 using System.Collections.Generic;
@@ -255,9 +256,21 @@ namespace WizOne.Pontaj
 
                 SetColoane();   //Radu 04.02.2021
 
+                //Radu 07.09.2021 - #966
+                grDate.Settings.ShowFooter = true;
+                grDate.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                ASPxSummaryItem totalSummary = new ASPxSummaryItem();
+                totalSummary.FieldName = "IdStare";
+                totalSummary.ShowInColumn = "IdStare";
+                totalSummary.SummaryType = SummaryItemType.Count;
+                totalSummary.DisplayFormat = "Nr. ang. {0}";
+                if (grDate.TotalSummary.Count > 0)
+                    grDate.TotalSummary.RemoveAt(0);
+                grDate.TotalSummary.Add(totalSummary);
+
                 if (!IsPostBack)
                 {
-                    Session["InformatiaCurenta"] = null;
+                    Session["InformatiaCurenta"] = null;                  
 
                     txtAnLuna.Value = DateTime.Now;
                     Session["PtjEch_LunaAn"] = DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
@@ -1279,8 +1292,17 @@ namespace WizOne.Pontaj
                         {
                             nrCol = 0;
                             idZile = 0; colZile = 0;
+
+                            int xxx = 0;
+                            if (row == 32)
+                                xxx++;
+
+                            
                             for (int i = 0; i < dt.Columns.Count; i++)
                             {
+                                if (i == 56)
+                                    xxx++;
+
                                 if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
                                 {
                                     int nrZec = 0;

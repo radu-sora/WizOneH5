@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="NotaLichidare.aspx.cs" Inherits="WizOne.Personal.NotaLichidare" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" Async="true" CodeBehind="NotaLichidare.aspx.cs" Inherits="WizOne.Personal.NotaLichidare" %>
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">

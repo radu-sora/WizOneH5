@@ -115,13 +115,13 @@
 
         function OnGetRowValues(values) {
             pnlLoading.Show();
-
+            
             var arr = document.getElementsByClassName("tag_" + values[0]);
             for (var idx = 0; idx < arr.length; ++idx)
             {
                 if (arr[idx] != null)
                 {
-                    if (grLeg.IsRowSelectedOnPage(grLeg.GetFocusedRowIndex()))
+                    if (grLeg.IsRowSelectedOnPage(values[2]))
                         arr[idx].style.background = values[1];
                     else
                         arr[idx].style.background = "#FFFFFF";
@@ -131,7 +131,7 @@
             var arr = document.getElementsByClassName("crs_" + values[0]);
             for (var idx = 0; idx < arr.length; ++idx) {
                 if (arr[idx] != null) {
-                    if (grLeg.IsRowSelectedOnPage(grLeg.GetFocusedRowIndex()))
+                    if (grLeg.IsRowSelectedOnPage(values[2]))
                         arr[idx].style.background = "repeating-linear-gradient(45deg, #000000, #000000 1px," + values[1] + " 1px, " + values[1] + " 5px)";
                     else
                         arr[idx].style.background = "#FFFFFF";
@@ -421,9 +421,9 @@
         <SettingsBehavior AllowSelectByRowClick="false" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" AllowSort="false" />
         <ClientSideEvents ContextMenu="ctx" />
         <SettingsPager Mode="ShowAllRecords" />
-        <ClientSideEvents SelectionChanged="function(s, e) { grLeg.GetRowValues(grLeg.GetFocusedRowIndex(), 'Id;Culoare', OnGetRowValues); }" />
+        <ClientSideEvents SelectionChanged="function(s, e) { for (var i = 0; i < grLeg.GetVisibleRowsOnPage(); i++) { grLeg.GetRowValues(i, 'Id;Culoare;Nr', OnGetRowValues); } }" />
         <Columns>
-            <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="None" CellStyle-CssClass="hide_column" />
+            <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" CellStyle-CssClass="hide_column" />
             <dx:GridViewDataColorEditColumn FieldName="Culoare" Caption=" " Width="30px">
                 <dataitemtemplate>
                     <div style="width:15px; height:15px; border: #9f9f9f 1px solid; background:<%#Container.Text %>"></div>
@@ -431,6 +431,7 @@
             </dx:GridViewDataColorEditColumn>
             <dx:GridViewDataColumn FieldName="Denumire" Caption="Absenta" Name="Denumire" /> 
             <dx:GridViewDataColumn FieldName="Id" Caption="Id" Name="Id" Visible="false" /> 
+            <dx:GridViewDataColumn FieldName="Nr" Caption="Nr" Name="Nr" Visible="false" />
         </Columns>
     </dx:ASPxGridView>
 

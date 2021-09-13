@@ -166,20 +166,25 @@ namespace WizOne.Eval
                 }
 
                 //verificam sa nu participe la propria evaluare; asta se face din momentul initializarii
-                if (btnAproba.Visible == false)
+                //Radu 13.09.2021 - #1005
+                string paramCondAutoEval = Dami.ValoareParam("Eval_PermiteAutoEvaluare", "0");
+                if (paramCondAutoEval == "0")
                 {
-                    if (General.Nz(Session["UserId"], -99).ToString() == General.Nz(cmbUsr.Value, -98).ToString())
+                    if (btnAproba.Visible == false)
                     {
-                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Participantul si user-ul este una si aceeasi persoana");
-                        return;
+                        if (General.Nz(Session["UserId"], -99).ToString() == General.Nz(cmbUsr.Value, -98).ToString())
+                        {
+                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Participantul si user-ul sunt una si aceeasi persoana");
+                            return;
+                        }
                     }
-                }
-                else
-                {
-                    if (General.Nz(cmbPar.Value, -99).ToString() == General.Nz(cmbUsr.Value, -98).ToString())
+                    else
                     {
-                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Participantul si user-ul este una si aceeasi persoana");
-                        return;
+                        if (General.Nz(cmbPar.Value, -99).ToString() == General.Nz(cmbUsr.Value, -98).ToString())
+                        {
+                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Participantul si user-ul sunt una si aceeasi persoana");
+                            return;
+                        }
                     }
                 }
 
@@ -266,7 +271,7 @@ namespace WizOne.Eval
 
                 //Radu 28.05.2021 - #943
                 string paramCond = Dami.ValoareParam("Eval_EliminCondForm360", "0");
-                if (paramCond != "0")
+                if (paramCond == "1")   //Radu 13.09.2021 - #1005
                 {
                     if (Dami.ValoareParam("Eval_AprobareInvitatie") == "1")
                     {
@@ -286,7 +291,7 @@ namespace WizOne.Eval
                     }
                 }
                 else
-                {
+                {// Eval_EliminCondForm360 == 0 sau 2
                     if (Dami.ValoareParam("Eval_AprobareInvitatie") == "1")
                     {
                         strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, ({DamiRol()}), {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;

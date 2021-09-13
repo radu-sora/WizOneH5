@@ -193,7 +193,7 @@
                                 <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:8px;" id="rowHovercard" runat="server">
                                     <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
                                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
-                                        <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnFiltru'); }" />
+                                        <ClientSideEvents  Click="function(s, e) { grDate.PerformCallback('btnFiltru'); }" />
                                     </dx:ASPxButton>
                                     <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
                                         <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
@@ -244,7 +244,7 @@
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
 
-                        <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains"/>
+                        <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="150px" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="Norma" Caption="Norma" ReadOnly="true" FixedStyle="Left" VisibleIndex="4" Width="80px"/>
                         <dx:GridViewDataTextColumn FieldName="DescContract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="5" Width="150px" Settings-AutoFilterCondition="Contains"/>
@@ -679,7 +679,7 @@
                     }
                 });
                 delete s.cp_MesajProces;
-            }
+            }      
         }
         function OnGridInit() {
             window.addEventListener('resize', function () {

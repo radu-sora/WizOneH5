@@ -449,11 +449,58 @@ namespace WizOne.Absente
                 {
                     if (e.Parameters == "btnCO")
                     {
-                        for (int i = 0; i < grDate.VisibleRowCount; i++)
+                        if (cmbAng.Value != null)
                         {
-                            DataRowView obj = grDate.GetRow(i) as DataRowView;
-                            string marca = obj["F10003"].ToString();
-                            General.CalculCO(Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)), Convert.ToInt32(marca), true);
+                            for (int i = 0; i < grDate.VisibleRowCount; i++)
+                            {
+                                DataRowView obj = grDate.GetRow(i) as DataRowView;
+                                string marca = obj["F10003"].ToString();
+                                General.CalculCO(Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)), Convert.ToInt32(marca), true);
+                            }
+                        }
+                        else
+                        {
+                            string marci = "";
+                            switch (Convert.ToInt32(General.Nz(cmbTip.Value, 1)))
+                            {
+                                case 1:                         //toti
+                                    marci = "P1";
+                                    break;
+                                case 2:                         //activi
+                                    marci = "P2";
+                                    break;
+                                case 3:                         //plecati
+                                    marci = "P3";
+                                    break;
+                                case 4:                         //in avans
+                                    marci = "P4";
+                                    break;
+                                default:
+                                    marci = "P1";
+                                    break;
+                            }
+
+                            string dtInc = Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)).ToString() + "-01-01";
+                            string dtSf = Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year)).ToString() + "-12-31";
+
+                            //Florin 2021.04.02 - am inlocuit peste tot unde aparea ultima zi din an cu ziua curenta
+                            //Radu 21.04.2021 - data se citeste cf. param.
+                            int param = Convert.ToInt32(Dami.ValoareParam("ModCalculZileCOCuveniteDataReferinta", "1"));
+                            string dtCalcul = "'" + dtSf + "'";
+                            switch (param)
+                            {
+                                case 1:
+                                    dtCalcul = "'" + dtSf + "'";
+                                    break;
+                                case 2:
+                                    dtCalcul = "'" + dtInc + "'";
+                                    break;
+                                case 3:
+                                    dtCalcul = General.CurrentDate();
+                                    break;
+                            }
+
+                            General.ExecutaNonQuery(" EXEC CalculCOProc2 '" + marci + "', " + dtCalcul + ", 1, 0 ", null);
                         }
                     }
                     if (e.Parameters == "btnSI") CalculSI();

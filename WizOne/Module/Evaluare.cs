@@ -1306,6 +1306,7 @@ namespace WizOne.Module
                 //Radu 19.02.2019 - am inlocuit ist cu istPoz la Stare (pt Evaluare angajat si Evaluare supervizor) si am adaugat AND rasp.F10003 = {10} la Evaluare angajat
                 //Radu 20.02.2019 - am inlocuit Finalizat si PoateModifica
                 //Radu 07.05.2019 - am eliminat conditia de CategorieQuiz pentru Culoare       (COALESCE(chest.""CategorieQuiz"",0)=1 OR COALESCE(chest.""CategorieQuiz"",0)=2) AND 
+                //Radu 14.09.2021 - am adaugat conditia de pe linia cu      when rasp.""Finalizat"" = 1     pentru a pune starea Finalizat pe chestionarele 360 doar cand toti au finalizat
 
                 strSQL = @"
                 select distinct rasp.""IdAuto"", rasp.""IdQuiz"", rasp.""F10003"", chest.""Denumire"", ctg.""Denumire"" AS ""DenumireCategorie"", chest.""CategorieQuiz"", chest.""IdRaport"", chest.""Sincronizare"",
@@ -1320,7 +1321,8 @@ namespace WizOne.Module
 						    WHEN COALESCE(chest.""CategorieQuiz"",0)=2 THEN (CASE WHEN COALESCE((SELECT MIN(COALESCE(""Aprobat"",0)) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz""=rasp.""IdQuiz"" AND ""IdUser""={11}),0) = 1 THEN 'Finalizat' ELSE 'Evaluare pe proiect' END)
 						    ELSE
                                 case
-			                         when rasp.""Finalizat"" = 1 then 'Evaluare finalizata'
+			                         when rasp.""Finalizat"" = 1 and  (ctg.Id = 0 OR (ctg.Id != 0  and  (select count(*) from Eval_RaspunsIstoric where idquiz = {5} and f10003={6} and IdSuper != 0 and aprobat = 1) =
+                                        (select count(*) from Eval_RaspunsIstoric where idquiz = {5} and f10003 = {6} and IdSuper != 0)))   then 'Evaluare finalizata'
 				                     else case 
 						                      when {2} {3}) not between {2} chest.""DataInceput"") and {2} chest.""DataSfarsit"") then 'Evaluare expirata'
 						                      else CASE WHEN COALESCE(chest.""CategorieQuiz"",0)=1 THEN 'Evaluare 360' ELSE
@@ -1342,7 +1344,7 @@ namespace WizOne.Module
 	                end as ""Pozitie"",
                     rasp.""Pozitie"" as ""PozitiePeCircuit"",
 	                /*ist.""IdSuper"",*/
-                    CASE   WHEN COALESCE(chest.""CategorieQuiz"",0)=0 THEN rasp.""Finalizat"" ELSE (SELECT COALESCE(""Aprobat"",0) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz""=rasp.""IdQuiz"" AND ""IdUser""={11}) END AS ""Finalizat"",                     
+                    CASE   WHEN COALESCE(chest.""CategorieQuiz"",0)=0 THEN rasp.""Finalizat"" ELSE (SELECT MIN(COALESCE(""Aprobat"",0)) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz""=rasp.""IdQuiz"" AND ""IdUser""={11}) END AS ""Finalizat"",                     
                     /*rasp.""Finalizat"",*/
 	                case
 		                when {2} {3}) between {2} chest.""DataInceput"") and {2} chest.""DataSfarsit"") then 1
@@ -1538,9 +1540,17 @@ namespace WizOne.Module
                 //Radu 21.05.2021
                 string conditieFiltru = @"and (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.F10003 != {0})) ";
                 conditieFiltru = string.Format(conditieFiltru, HttpContext.Current.Session["User_Marca"].ToString());
+
+                //Radu 13.09.2021 - #1005
+                string paramCondAutoEval = Dami.ValoareParam("Eval_PermiteAutoEvaluare", "0");
+                if (paramCondAutoEval == "1")
+                    conditieFiltru = " ";
+
                 string paramCond = Dami.ValoareParam("Eval_EliminCondForm360", "0");
-                if (paramCond != "0" && Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) > 0)
+                //Radu 13.09.2021 - #1005 Eval_EliminCondForm360 => 0 sau 2 // 1
+                if (paramCond == "1" && Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) > 0)
                     conditieFiltru = @"and (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.Pozitie = ist.Pozitie)) ";
+
 
                 if (Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) == 0)
                     filtruHR = " INNER ";
@@ -1550,13 +1560,13 @@ namespace WizOne.Module
                     //filtruSuper = $@" AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN ({idHR})) ";
                     filtruSuper = $@" AND ((ctg.""Id"" != 0  AND ist.""IdUser"" = {HttpContext.Current.Session["UserId"]}) OR (ctg.""Id"" = 0 AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN (0,{idHR})))) ";
                     //Radu 25.05.2021
-                    if (paramCond != "0")
+                    if (paramCond == "1")
                         filtruSuper = $@" AND ((ctg.""Id"" != 0 and rasp.Pozitie = ist.Pozitie)  OR (ctg.""Id"" = 0 AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN (0,{idHR})))) ";
                 }
 
                 string condFinalizare = @"CASE WHEN COALESCE((SELECT MIN(COALESCE(""Aprobat"",0)) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz""=rasp.""IdQuiz"" AND ""IdUser""={0}),0) = 1";
                 condFinalizare = string.Format(condFinalizare, HttpContext.Current.Session["UserId"].ToString());
-                if (paramCond != "0")
+                if (paramCond == "1")
                     condFinalizare = @" CASE WHEN rasp.""Finalizat"" = 1 ";
 
                 string rolFiltru = string.Empty;
@@ -1565,7 +1575,7 @@ namespace WizOne.Module
                 else
                 {//Radu 20.02.2019                    
                     //Radu 25.05.2021
-                    if (paramCond != "0" && Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) > 0)
+                    if (paramCond == "1" && Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) > 0)
                     {
                         rolFiltru = @"{0}(ist.""IdSuper"", -99) AND (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.Pozitie = ist.Pozitie))";
                         rolFiltru = Constante.tipBD == 1 ? string.Format(rolFiltru, "isnull") : string.Format(rolFiltru, "nvl");

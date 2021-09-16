@@ -18348,7 +18348,7 @@ GO
 
 
 
-ALTER PROCEDURE [dbo].[CalculCOProc2]
+CREATE PROCEDURE [dbo].[CalculCOProc2]
      @marci nvarchar(4000),
 	@zi datetime,
 	@mod int = 1,

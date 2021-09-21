@@ -408,6 +408,8 @@
     <Content Include="Adev\AdeverintaAngajat.aspx" />
     <Content Include="Adev\ConfigCIC.aspx" />
     <Content Include="Adev\ConfigD112.aspx" />
+    <Content Include="AvansXDecont\Document.aspx" />
+    <Content Include="AvansXDecont\DocumentAvans.aspx" />
     <Content Include="Avs\Aprobare.aspx" />
     <Content Include="Avs\Cereri.aspx" />
     <Content Include="Avs\Detalii.aspx" />
@@ -1320,6 +1322,20 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Mesaje.it.resx</DependentUpon>
+    </Compile>
+    <Compile Include="AvansXDecont\Document.aspx.cs">
+      <DependentUpon>Document.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AvansXDecont\Document.aspx.designer.cs">
+      <DependentUpon>Document.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentAvans.aspx.cs">
+      <DependentUpon>DocumentAvans.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentAvans.aspx.designer.cs">
+      <DependentUpon>DocumentAvans.aspx</DependentUpon>
     </Compile>
     <Compile Include="Avs\Aprobare.aspx.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>

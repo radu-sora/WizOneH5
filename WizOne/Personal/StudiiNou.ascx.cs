@@ -111,12 +111,12 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colDom = (grDateStudii.Columns["IdDomeniu"] as GridViewDataComboBoxColumn);
             colDom.PropertiesComboBox.DataSource = dtDom;
 
-            DataTable dtLoc = General.IncarcaDT("select a.siruta, a.denloc as \"Nivel3\", b.denloc as \"Nivel2\", c.denloc as \"Nivel1\" from localitati a "
-                                            + "left  join Localitati b on a.sirsup = b.siruta "
-                                            + "left join Localitati c on b.SIRSUP = c.SIRUTA "
-                                            + "where a.niv = 3", null);
-            GridViewDataComboBoxColumn colLoc = (grDateStudii.Columns["SirutaLocalitate"] as GridViewDataComboBoxColumn);
-            colLoc.PropertiesComboBox.DataSource = dtLoc;
+            //DataTable dtLoc = General.IncarcaDT("select a.siruta, a.denloc as \"Nivel3\", b.denloc as \"Nivel2\", c.denloc as \"Nivel1\" from localitati a "
+            //                                + "left  join Localitati b on a.sirsup = b.siruta "
+            //                                + "left join Localitati c on b.SIRSUP = c.SIRUTA "
+            //                                + "where a.niv = 3", null);
+            //GridViewDataComboBoxColumn colLoc = (grDateStudii.Columns["SirutaLocalitate"] as GridViewDataComboBoxColumn);
+            //colLoc.PropertiesComboBox.DataSource = dtLoc;
 
             HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
         }
@@ -450,16 +450,16 @@ namespace WizOne.Personal
                     cmbDomeniu.DataBindItems();
                 }
 
-                ASPxComboBox cmbLocalitate = grDateStudii.FindEditFormTemplateControl("cmbLocalitate") as ASPxComboBox;
-                if (cmbTipInv != null)
-                {
-                    DataTable dtLoc = General.IncarcaDT("select a.siruta, a.denloc as \"Nivel3\", b.denloc as \"Nivel2\", c.denloc as \"Nivel1\" from localitati a "
-                                                + "left  join Localitati b on a.sirsup = b.siruta "
-                                                + "left join Localitati c on b.SIRSUP = c.SIRUTA "
-                                                + "where a.niv = 3 ORDER BY \"Nivel1\", \"Nivel2\", \"Nivel3\"", null);
-                    cmbLocalitate.DataSource = dtLoc;
-                    cmbLocalitate.DataBindItems();
-                }
+                //ASPxComboBox cmbLocalitate = grDateStudii.FindEditFormTemplateControl("cmbLocalitate") as ASPxComboBox;
+                //if (cmbTipInv != null)
+                //{
+                //    DataTable dtLoc = General.IncarcaDT("select a.siruta, a.denloc as \"Nivel3\", b.denloc as \"Nivel2\", c.denloc as \"Nivel1\" from localitati a "
+                //                                + "left  join Localitati b on a.sirsup = b.siruta "
+                //                                + "left join Localitati c on b.SIRSUP = c.SIRUTA "
+                //                                + "where a.niv = 3 ORDER BY \"Nivel1\", \"Nivel2\", \"Nivel3\"", null);
+                //    cmbLocalitate.DataSource = dtLoc;
+                //    cmbLocalitate.DataBindItems();
+                //}
 
                 HtmlTableCell lblTipInv = (HtmlTableCell)grDateStudii.FindEditFormTemplateControl("lblTipInv");
                 lblTipInv.InnerText = Dami.TraduCuvant("Tip invatamant");
@@ -502,3 +502,28 @@ namespace WizOne.Personal
 
     }
 }
+
+
+
+
+
+                        //<dx:GridViewDataComboBoxColumn FieldName = "SirutaLocalitate" Name="SirutaLocalitate" Caption="Localitate" Width="125px" >
+                        //    <Settings SortMode = "DisplayText" />
+                        //    < PropertiesComboBox TextField="Nivel3" ValueField="SIRUTA" ValueType="System.Int32" DropDownStyle="DropDown">
+                        //        <Columns>
+                        //            <dx:ListBoxColumn FieldName = "Nivel3" Caption="Localitate/Sat/Sector" Width="130px" />
+                        //            <dx:ListBoxColumn FieldName = "Nivel2" Caption="Comuna/Oras/Municipiu" Width="130px" />
+                        //            <dx:ListBoxColumn FieldName = "Nivel1" Caption="Judet" Width="130px" />
+                        //        </Columns>
+                        //    </PropertiesComboBox>
+                        //</dx:GridViewDataComboBoxColumn>
+
+
+
+                                            //<dx:ASPxComboBox ID = "cmbLocalitate" runat="server" AutoPostBack="false" DropDownWidth="200" TextField="Nivel3" Value='<%# Bind("SirutaLocalitate") %>' ValueField="SIRUTA" ValueType="System.Int32" Width="225px" >
+                                            //    <Columns>
+                                            //        <dx:ListBoxColumn FieldName = "Nivel3" Caption="Localitate/Sat/Sector" Width="130px" />
+                                            //        <dx:ListBoxColumn FieldName = "Nivel2" Caption="Comuna/Oras/Municipiu" Width="130px" />
+                                            //        <dx:ListBoxColumn FieldName = "Nivel1" Caption="Judet" Width="130px" />
+                                            //    </Columns>
+                                            //</dx:ASPxComboBox>

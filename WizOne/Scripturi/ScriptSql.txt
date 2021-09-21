@@ -18443,3 +18443,7 @@ UPDATE "tblParametrii" SET "Explicatie" = 'Eliminare conditie formulare 360: 1 -
 GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Eval_PermiteAutoEvaluare' , '0', 'Permitere auto-evaluare: 1 - se permite; 0 (sau absent) - nu se permite' , 5)
 GO
+
+
+alter table F100Studii add DenLocalitate nvarchar(250)
+GO

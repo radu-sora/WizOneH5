@@ -38,16 +38,9 @@
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="NumeInstitutie" Name="NumeInstitutie" Caption="Nume institutie"  Width="150px" />
                         <dx:GridViewDataTextColumn FieldName="NrClase" Name="NrClase" Caption="Numar clase"  Width="75px" />
-                        <dx:GridViewDataComboBoxColumn FieldName="SirutaLocalitate" Name="SirutaLocalitate" Caption="Localitate" Width="125px" >
-                            <Settings SortMode="DisplayText" />
-                            <PropertiesComboBox TextField="Nivel3" ValueField="SIRUTA" ValueType="System.Int32" DropDownStyle="DropDown">
-                                <Columns>
-                                    <dx:ListBoxColumn FieldName="Nivel3" Caption="Localitate/Sat/Sector" Width="130px" />
-                                    <dx:ListBoxColumn FieldName="Nivel2" Caption="Comuna/Oras/Municipiu" Width="130px" />
-                                    <dx:ListBoxColumn FieldName="Nivel1" Caption="Judet" Width="130px" />
-                                </Columns>
-                            </PropertiesComboBox>
-                        </dx:GridViewDataComboBoxColumn>
+
+                        <dx:GridViewDataTextColumn FieldName="DenLocalitate" Name="DenLocalitate" Caption="Localitate"  Width="150px" />
+
                         <dx:GridViewDataDateColumn FieldName="DeLaData" Name="DeLaData" Caption="De la data"  Width="100px" >
                                 <PropertiesDateEdit DisplayFormatString="MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
@@ -123,14 +116,8 @@
                                         <td id="lblNrClase" runat="server" class="auto-style6" style="padding:10px;">Numar clase</td>
                                         <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtNrClase" runat="server" Width="100" Value='<%# Bind("NrClase") %>' /></td>  
                                         <td id="lblLocalitate" runat="server" aria-multiline="True" class="auto-style9" style="padding:10px;">Localitate</td>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            <dx:ASPxComboBox ID="cmbLocalitate" runat="server" AutoPostBack="false" DropDownWidth="200" TextField="Nivel3" Value='<%# Bind("SirutaLocalitate") %>' ValueField="SIRUTA" ValueType="System.Int32" Width="225px" >
-                                                <Columns>
-                                                    <dx:ListBoxColumn FieldName="Nivel3" Caption="Localitate/Sat/Sector" Width="130px" />
-                                                    <dx:ListBoxColumn FieldName="Nivel2" Caption="Comuna/Oras/Municipiu" Width="130px" />
-                                                    <dx:ListBoxColumn FieldName="Nivel1" Caption="Judet" Width="130px" />
-                                                </Columns>
-                                            </dx:ASPxComboBox>
+                                        <td style="padding:10px !important;">
+                                            <dx:ASPxTextBox ID="txtDenLocalitate" runat="server" Width="150" Value='<%# Bind("DenLocalitate") %>' />
                                         </td>                                        
                                     </tr>  
                                     <tr>

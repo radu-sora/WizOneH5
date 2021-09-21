@@ -17971,9 +17971,7 @@ from Curs_tblCursSesiune
 join curs_tblcurs on curs_tblcurs.id = Curs_tblCursSesiune.IdCurs
 join Curs_relCursAngajati on Curs_relCursAngajati.Id_Curs = curs_tblcurs.id 
 
--- Pentru mobile
-ALTER TABLE MeniuLinii ADD [StareMobil] [int] NULL, [NumeMobil] [nvarchar](20) NULL, [OrdineMobil] [int] NULL;
-GO
+
 
 alter table Ptj_tblAdmin add ActivTactil int
 GO
@@ -18350,7 +18348,7 @@ GO
 
 
 
-ALTER PROCEDURE [dbo].[CalculCOProc2]
+CREATE PROCEDURE [dbo].[CalculCOProc2]
      @marci nvarchar(4000),
 	@zi datetime,
 	@mod int = 1,
@@ -18444,4 +18442,8 @@ END
 UPDATE "tblParametrii" SET "Explicatie" = 'Eliminare conditie formulare 360: 1 - se elimina, iar formularele 360 se afiseaza fara restrictii; 0 (sau absent) - se pastreaza; 2 - se pot trimite invitatii de catre HR in numele unui utilizator'  WHERE "Nume" = 'Eval_EliminCondForm360' 
 GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Eval_PermiteAutoEvaluare' , '0', 'Permitere auto-evaluare: 1 - se permite; 0 (sau absent) - nu se permite' , 5)
+GO
+
+
+alter table F100Studii add DenLocalitate nvarchar(250)
 GO

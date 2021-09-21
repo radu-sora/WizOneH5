@@ -18443,3 +18443,578 @@ UPDATE "tblParametrii" SET "Explicatie" = 'Eliminare conditie formulare 360: 1 -
 GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('Eval_PermiteAutoEvaluare' , '0', 'Permitere auto-evaluare: 1 - se permite; 0 (sau absent) - nu se permite' , 5)
 GO
+
+
+
+----  2.2.140  ----
+
+---- AvsXDec START ----
+
+
+  CREATE TABLE "AvsXDec_BankComission" 
+   (	"ComissionId" int, 
+	"BankId" int, 
+	"MinimumPay" NUMERIC(18,4), 
+	"MaximumPay" NUMERIC(18,4), 
+	"CurrencyPayId" int, 
+	"ComissionValue" NUMERIC(18,4), 
+	"ComissionCurrencyId" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+ CONSTRAINT [AvsXDec_BankComission_PK] PRIMARY KEY CLUSTERED 
+(
+	[ComissionId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+--drop table AvsXDec_AvansDetail
+go
+  CREATE TABLE "AvsXDec_AvansDetail" 
+   (	"DocumentId" int, 
+	"DocumentDetailId" int, 
+	"DictionaryItemId" int, 
+	"Amount" NUMERIC(18,4), 
+	"F10003" int, 
+	"CurrencyId" int, 
+	"SoldAmount" NUMERIC(18,4), 
+	"SoldCurrencyId" int, 
+	"FreeTxt" NVARCHAR(4000),
+ CONSTRAINT [AvsXDec_AvansDetail_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentDetailId] ASC,
+	[DocumentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+--drop table AvsXDec_Document
+GO
+  CREATE TABLE "AvsXDec_Document" 
+   (	"DocumentId" int, 
+	"DocumentTypeId" int, 
+	"DocumentStateId" int, 
+	"F10003" int, 
+	"DocumentDate" DATETIME, 
+	"CircuitId" int, 
+	"TotalCircuit" int, 
+	"Culoare" NVARCHAR(200), 
+	"Pozitie" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_Document_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+--drop table AvsXDec_Circuit
+go
+  CREATE TABLE "AvsXDec_Circuit" 
+   (	"CircuitId" int, 
+	"DIM1" int, 
+	"DIM2" int, 
+	"DocumentTypeId" int, 
+	"Super1" int, 
+	"Super2" int, 
+	"Super3" int, 
+	"Super4" int, 
+	"Super5" int, 
+	"Super6" int, 
+	"Super7" int, 
+	"Super8" int, 
+	"Super9" int, 
+	"Super10" int, 
+	"Super11" int, 
+	"Super12" int, 
+	"Super13" int, 
+	"Super14" int, 
+	"Super15" int, 
+	"Super16" int, 
+	"Super17" int, 
+	"Super18" int, 
+	"Super19" int, 
+	"Super20" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_Circuit_PK] PRIMARY KEY CLUSTERED 
+(
+	[CircuitId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+--drop table AvsXDec_DictItemProperty
+GO
+--drop table AvsXDec_DictionaryItem
+GO
+  CREATE TABLE "AvsXDec_DictionaryItem" 
+   (	"DictionaryItemId"int, 
+	"DictionaryItemName" NVARCHAR(200), 
+	"Culoare" NVARCHAR(200), 
+	"DictionaryId" int, 
+	"Ordine" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_DictionaryItem_PK] PRIMARY KEY CLUSTERED 
+(
+	[DictionaryItemId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+--drop table AvsXDec_Dictionary
+GO
+  CREATE TABLE "AvsXDec_Dictionary" 
+   (	"DictionaryId" int, 
+	"DictionaryCode" NVARCHAR(50), 
+	"DictionaryName" NVARCHAR(200), 
+	"hasProperties" int DEFAULT (0), 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_Dictionary_PK] PRIMARY KEY CLUSTERED 
+(
+	[DictionaryId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+--drop table AvsXDec_Decont
+GO
+  CREATE TABLE "AvsXDec_Decont" 
+   (	"DocumentId" int, 
+	"CurrencyId" int, 
+	"RefCurrencyId" int, 
+	"RefCurrencyValue" NUMERIC(18,4), 
+	"TotalPayment" NUMERIC(18,4), 
+	"RefTotalPayment" NUMERIC(18,4), 
+	"StartDate" DATETIME, 
+	"EndDate" DATETIME, 
+	"StartHour" DATETIME, 
+	"EndHour" DATETIME, 
+	"UnconfRestAmount" NUMERIC(18,4), 
+	"TotalAmount" NUMERIC(18,4), 
+	"EstimatedAmount" NUMERIC(18,4), 
+	"PaymentDate" DATETIME, 
+	"PaymentTypeId" int, 
+	"ActionTypeId" int, 
+	"ActionPlace" NVARCHAR(800), 
+	"ActionReason" NVARCHAR(800), 
+	"chkDiurna" int, 
+	"PaymentValueFinance" NUMERIC(18,4), 
+	"ComissionValueFinance" NUMERIC(18,4), 
+	"PaymentCurrencyId" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME, 
+	"RefuseReason" NVARCHAR(400), 
+	"OriginalDoc" int, 
+	"TransportTypeId" int,
+	 CONSTRAINT [AvsXDec_Decont_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+  CREATE TABLE "AvsXDec_relUploadDocumente" 
+   (	"DocumentId" int, 
+	"DocumentDetailId" int, 
+	"IdDocument" int, 
+	"IdAuto" int, 
+	"USER_NO" int, 
+	"TIME" DATE,
+	 CONSTRAINT [AvsXDec_relUploadDocumente_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE "AvsXDec_AccountingPeriod" 
+   (	"PeriodOfAccountId" int, 
+	"PeriodOfAccountName" NVARCHAR(400), 
+	"StartDate" DATETIME, 
+	"EndDate" DATETIME, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_AccountingPeriod_PK] PRIMARY KEY CLUSTERED 
+(
+	[PeriodOfAccountId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+--drop table AvsXDec_BusinessTransaction
+GO
+
+  CREATE TABLE "AvsXDec_BusinessTransaction" 
+   (	"TransactionId" int, 
+	"SrcDocId" int, 
+	"DestDocId" int, 
+	"SrcDocAmount" NUMERIC(18,4), 
+	"DestDocAmount" NUMERIC(18,4), 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_BusinessTransaction_PK] PRIMARY KEY CLUSTERED 
+(
+	[TransactionId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+  CREATE TABLE "AvsXDec_Settings" 
+   (	"KeyField1" int, 
+	"KeyField2" int, 
+	"KeyField3" int, 
+	"F71802" int, 
+	"MinimumPay" NUMERIC(18,4), 
+	"MaximumPay" NUMERIC(18,4), 
+	"CurrencyId" int, 
+	"IdAuto" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_Settings_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+--drop table AvsXDec_DecontDetail
+GO
+  CREATE TABLE "AvsXDec_DecontDetail" 
+   (	"DocumentId" int, 
+	"DocumentDetailId" int, 
+	"Furnizor" NVARCHAR(400), 
+	"DictionaryItemId" int, 
+	"DocNumberDecont" NVARCHAR(200), 
+	"DocDateDecont" DATETIME, 
+	"CurrencyId" int, 
+	"RefCurrencyId" int, 
+	"RefCurrencyValue" NUMERIC(18,4), 
+	"TotalPayment" NUMERIC(18,4), 
+	"RefTotalPayment" NUMERIC(18,4), 
+	"IdDocument" NUMERIC(18,4), 
+	"BugetLine" NVARCHAR(800), 
+	"ExpenseTypeId" int, 
+	"ExpenseTypeAdmId" int, 
+	"FreeTxt" NVARCHAR(400),
+	 CONSTRAINT [AvsXDec_DecontDetail_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentId] ASC,
+	[DocumentDetailId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+--drop table AvsXDec_DocumentStateHistory
+GO
+  CREATE TABLE "AvsXDec_DocumentStateHistory" 
+   (	"Id" int, 
+	"DocumentId" int, 
+	"CircuitId" int, 
+	"IdSuper" int, 
+	"Pozitie" int, 
+	"Culoare" NVARCHAR(200), 
+	"Inlocuitor" int, 
+	"IdUserInlocuitor" int, 
+	"Aprobat" int, 
+	"DataAprobare" DATETIME, 
+	"DocumentStateId" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_DocumentStateHistory_PK] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+  CREATE TABLE "AvsXDec_AccountingYear" 
+   (	"AccPeriodId" int, 
+	"Year" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_AccountingYear_PK] PRIMARY KEY CLUSTERED 
+(
+	[AccPeriodId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+--drop table AvsXDec_Avans
+GO
+  CREATE TABLE "AvsXDec_Avans" 
+   (	"DocumentId" int, 
+	"CurrencyId" int, 
+	"RefCurrencyId" int, 
+	"RefCurrencyValue" NUMERIC(18,4), 
+	"TotalPayment" NUMERIC(18,4), 
+	"RefTotalPayment" NUMERIC(18,4), 
+	"StartDate" DATETIME, 
+	"StartHour" DATETIME, 
+	"EndDate" DATETIME, 
+	"EndHour" DATETIME, 
+	"UnconfRestAmount" NUMERIC(18,4), 
+	"TotalAmount" NUMERIC(18,4), 
+	"EstimatedAmount" NUMERIC(18,4), 
+	"PaymentDate" DATETIME, 
+	"DueDate" DATETIME, 
+	"PaymentTypeId" int, 
+	"ActionTypeId" int, 
+	"ActionPlace" NVARCHAR(800), 
+	"ActionReason" NVARCHAR(800), 
+	"chkDiurna" int, 
+	"TotalComissionPayment" NUMERIC(18,4), 
+	"PaymentCurrencyId" int, 
+	"RefuseReason" NVARCHAR(800), 
+	"AccPeriodId" int, 
+	"PeriodOfAccountId" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME, 
+	"TransportTypeId" int,
+	 CONSTRAINT [AvsXDec_Avans_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+--drop table AvsXDec_DocumentType
+GO
+
+  CREATE TABLE "AvsXDec_DocumentType" 
+   (	"DocumentTypeId" int, 
+	"DocumentTypeCode" NVARCHAR(50), 
+	"DocumentTypeName" NVARCHAR(200), 
+	"Alias" NVARCHAR(400), 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_DocumentType_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentTypeId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+  CREATE TABLE "AvsXDec_AccountancyBill" 
+   (	"DocumentTypeId" int, 
+	"OperationSignId" int, 
+	"PaymentTypeId" int, 
+	"CurrencyId" int, 
+	"BankId" int, 
+	"AgencyId" int, 
+	"Prefix" NVARCHAR(400), 
+	"AccountSymbol" NVARCHAR(400), 
+	"IdAuto" int,
+	 CONSTRAINT [AvsXDec_AccountancyBill_PK] PRIMARY KEY CLUSTERED 
+(
+	[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+---- AvsXDec END ----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Insert into"AvsXDec_BankComission" ("ComissionId","BankId","MinimumPay","MaximumPay","CurrencyPayId","ComissionValue","ComissionCurrencyId",USER_NO,TIME) values ('2','23','-99','-99','12','0','15','22489',GETDATE())
+Go
+Insert into "AvsXDec_BankComission" ("ComissionId","BankId","MinimumPay","MaximumPay","CurrencyPayId","ComissionValue","ComissionCurrencyId",USER_NO,TIME) values ('5','20','-99','-99','12','0','15','22489',GETDATE())
+GO
+Insert into "AvsXDec_BankComission" ("ComissionId","BankId","MinimumPay","MaximumPay","CurrencyPayId","ComissionValue","ComissionCurrencyId",USER_NO,TIME) values ('6','32','-99','-99',null,'0','15','22489',GETDATE())
+GO
+
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('12','18','-99','1001','0','-1','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('13','19','-99','1001','0','-1','-2','-31','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('14','18','-99','2001','0','-1','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'30544',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('16','18','11','1001','0','-1','-2','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'30544',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('17',null,null,'1004','0','-5','-24',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'30544',GETDATE()))
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('25','26',null,'1002','0','-1','-23',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('26','27',null,'1002','0','-1','-24',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('27','25',null,'1002','0','-1','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('28','30',null,'1002','0','-1','-21',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('30','29',null,'1002','0','-1','-26',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('31','28',null,'2002','0','-1','-25',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('19',null,null,'2003','0','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'30544',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('20','28',null,'1002','0','-1','-25',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'30544',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('33','18','11','2001','0','-1','-2','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('34','19','-99','2001','0','-1','-2','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('39','27',null,'2002','0','-1','-24',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('35','26',null,'2002','0','-1','-23',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('36','29',null,'2002','0','-1','-26',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('37','25',null,'2002','0','-1','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('38','30',null,'2002','0','-1','-21',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
+GO
+
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('1','ST','Stari documente','0','-99',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('2','CH','Cheltuieli','0','-99',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('3','REZ','Rezervari','0','-99',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('4','DOCType','Tipuri documente pentru decontare','0','-99',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('5','CURR','Tipuri valute folosite','0','-99',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('6','DOCTypePayments','Tipuri documente cu care se fac plata catre banca','0','-99',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('7','ActionType','Tip deplasare','0','-99',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('8','PayType','Modalitate plata','0','-99',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('9','CH_AvansDecontare','Cheltuieli avans spre decontare','0','-99',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('10','CH_DecontAdministrativ','Tip cheltuieli decont administrativ','0','-99',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('14','BudgetOwner_2003','BudgetOwner decont administativ',null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('12','BudgetOwner_2001','BudgetOwner decont avans deplasare',null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('13','BudgetOwner_2002','BudgetOwner decont cheltuieli',null,'22489',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('17','TransportType','Tip transport','0','-99',GETDATE())
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('15','BudgetOwner_1001','BudgetOwner avans deplasare','0','22489',null)
+GO
+Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('16','BudgetOwner_1002','BudgetOwner avans cheltuieli','0','22489',null)
+GO
+
+
+
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('-1','Anulat','#FFFF0000','1',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('0','Respins','#FFFF0000','1',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('1','Solicitat','#FFFFFF00','1',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('2','In Curs','#FFFFA500','1',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('3','Aprobat','#FF90EE90','1',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('46','Cheltuiala diurna',null,'4','-99','22489',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('51','Avans Logistica',null,'14','-99','22489',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('9','Cazare',null,'2','1',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('38','Taxe de drum, pod, bac',null,'2','4',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('11','Bilete avion',null,'3','1',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('58','Avion',null,'17',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('13','Factura',null,'4',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('14','Bon fiscal',null,'4',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('15','RON',null,'5','1',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('16','EUR',null,'5','2',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('17','Chitanta',null,'6','-99',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('18','Deplasare interna',null,'7','1',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('19','Deplasare externa',null,'7','2',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('20','Cazare',null,'3','3',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('21','Taxi',null,'3','4',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('22','Plata Cash',null,'8','2',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('23','Transfer bancar',null,'8','1',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('24','Diurna',null,'2','3',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('25','Cheltuieli logistica',null,'9',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('26','Cheltuieli juridice',null,'9',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('27','Cheltuieli HR',null,'9',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('28','Cheltuieli IT',null,'9',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('29','Cheltuieli marketing',null,'9',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('30','Cheltuieli financiare',null,'9',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('31','plata utilitatilor',null,'10',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('32','reparatii si consumabile necesare in unitate',null,'10',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('33','cheltuieli de protocol in conformitate cu gradul agentiei si a sumelor alocate',null,'10',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('34','cheltuieli pentru spalarea autoturismelor din unitate conform politicii auto',null,'10',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('35','cheltuieli pentru montarea demontarea anvelopelor la schimbarea de sezon si reparatii ce tin de anvelope',null,'10',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('39','Benzina',null,'2','5',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('40','Protocol',null,'2','6',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('41','Alte cheltuieli',null,'2','7',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('52','Avans IT',null,'14','-99','22489',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('53','Avans Marketing',null,'14','-99','22489',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('4','Trimis la banca','#FF90EE90','1',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('43','USD',null,'5','3','22489',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('5','Acordat','#FF008000','1',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('6','Restituit','#FF90EE90','1',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('7','Contat','#FF90EE90','1',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('8','Inchis','#FF90EE90','1',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('45','OP',null,'6',null,'22489',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('36','Transport',null,'2','2',null,GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('47','Avans Logistica',null,'12',null,'22489',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('48','Avans IT',null,'13',null,'22489',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('49','Avans Logistica',null,'13',null,'22489',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('50','Avans Marketing',null,'13',null,'22489',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('59','Tren',null,'17',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('60','Auto Groupama',null,'17',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('61','Auto propriu',null,'17',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('62','Altul',null,'17',null,'-99',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('54','Avans IT',null,'16',null,'22489',null);
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('55','Avans Logistica',null,'16',null,'22489',null);
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('56','Avans Marketing',null,'16',null,'22489',null);
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('57','Avans Logistica',null,'15',null,'22489',null);
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('63','Avans Juridic',null,'13','-99','30317',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('64','Avans Juridic',null,'16','-99','30317',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('65','Avans Financiar',null,'13','-99','30317',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('66','Avans HR',null,'13','-99','30317',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('67','Avans Financiar',null,'16','-99','30317',GETDATE());
+Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('68','Avans HR',null,'16','-99','30317',GETDATE());
+
+
+Insert into "AvsXDec_AccountingPeriod" ("PeriodOfAccountId","PeriodOfAccountName","StartDate","EndDate",USER_NO,TIME) values ('4','Trimestrul 2',CONVERT(DATETIME, '01/04/2016',103),CONVERT(DATETIME,'30/06/2016',103),'22489',GETDATE());
+Insert into "AvsXDec_AccountingPeriod" ("PeriodOfAccountId","PeriodOfAccountName","StartDate","EndDate",USER_NO,TIME) values ('3','Trimestrul 1',CONVERT(DATETIME,'01/01/2016',103),CONVERT(DATETIME,'31/03/2016',103),'22489',GETDATE());
+Insert into "AvsXDec_AccountingPeriod" ("PeriodOfAccountId","PeriodOfAccountName","StartDate","EndDate",USER_NO,TIME) values ('8','Trimestrul 4',CONVERT(DATETIME,'01/10/2016',103),CONVERT(DATETIME,'31/12/2016',103),'30544',GETDATE());
+Insert into "AvsXDec_AccountingPeriod" ("PeriodOfAccountId","PeriodOfAccountName","StartDate","EndDate",USER_NO,TIME) values ('6','Trimestrul 3',CONVERT(DATETIME,'01/07/2016',103),CONVERT(DATETIME,'30/09/2016',103),'22489',GETDATE());
+
+
+
+Insert into "AvsXDec_AccountingYear" ("AccPeriodId","Year",USER_NO,TIME) values ('1','2016','22489',GETDATE());
+Insert into "AvsXDec_AccountingYear" ("AccPeriodId","Year",USER_NO,TIME) values ('2','2017','30317',GETDATE());
+Insert into "AvsXDec_AccountingYear" ("AccPeriodId","Year",USER_NO,TIME) values ('3','2018','30317',GETDATE());
+
+
+Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('1001','AVDPS','Avans spre deplasare','Avans spre deplasare','-99',GETDATE());
+Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('1002','AVDEC','Avans spre decontare','Avans spre decontare','-99',GETDATE());
+Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('1003','AVADM','Avans Administrativ','Avans Administrativ','-99',GETDATE());
+Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('1004','LSTAVADM','Lista Avansuri Administrative','Lista Avansuri Administrative','-99',GETDATE());
+Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('2001','DCDPS','Decont cheltuieli deplasare','Decont cheltuieli deplasare','-99',GETDATE());
+Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('2002','DCCH','Decont cheltuieli','Decont cheltuieli','-99',GETDATE());
+Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('2003','DECADM','Decont Administrativ','Decont Administrativ','-99',GETDATE());

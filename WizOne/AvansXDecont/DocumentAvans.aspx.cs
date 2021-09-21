@@ -195,7 +195,7 @@ namespace WizOne.AvansXDecont
 								if (lpTipDeplasare.Select("LOWER(DictionaryItemName) LIKE ('%interna%')").Count() != 0)
                                     Session["IdDeplasareInterna"] = lpTipDeplasare.Select("LOWER(DictionaryItemName) LIKE ('%interna%')")[0]["DictionaryItemId"].ToString();
 								if (lpTipDeplasare.Select("LOWER(DictionaryItemName) LIKE ('%externa%')").Count() != 0)
-                                    Session["IdDeplasareInterna"] = lpTipDeplasare.Select("LOWER(DictionaryItemName) LIKE ('%externa%')")[0]["DictionaryItemId"].ToString();
+                                    Session["IdDeplasareExterna"] = lpTipDeplasare.Select("LOWER(DictionaryItemName) LIKE ('%externa%')")[0]["DictionaryItemId"].ToString();
 
 								#region aranjare tip deplasare default
 								/*LeonardM 13.06.2016
@@ -518,21 +518,21 @@ namespace WizOne.AvansXDecont
 		public void SalvareDoc()
 		{
 			string sql = "";
-			
-			if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0)
-			{
-				sql = "UPDATE AvsXDec_AvansDetail SET DictionaryItemId = " + ent.DictionaryItemId + ", DocumentDetailId = " + ent.DocumentDetailId 
-					+ ", Amount = " + ent.Amount + ", DocumentId = " + ent.DocumentId + ", FreeTxt = '" + ent.FreeTxt 
-					+ "' WHERE DocumentDetailId = " + ent.DocumentDetailId + " AND DocumentId = " + ent.DocumentId;
-				General.ExecutaNonQuery(sql, null);	
-			}
-			else
-			{
-				sql = "INSERT INTO AvsXDec_AvansDetail(DictionaryItemId, DocumentDetailId, DocumentId, Amount, FreeTxt) "
-					+ " VALUES (" + ent.DictionaryItemId + ", " + ent.DocumentDetailId + ", " + ent.DocumentId + ", " + ent.Amount + " '" + ent.FreeTxt + "')";
-				General.ExecutaNonQuery(sql, null);					
-			}
-		}
+
+            //if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0)
+            //{
+            //	sql = "UPDATE AvsXDec_AvansDetail SET DictionaryItemId = " + ent.DictionaryItemId + ", DocumentDetailId = " + ent.DocumentDetailId 
+            //		+ ", Amount = " + ent.Amount + ", DocumentId = " + ent.DocumentId + ", FreeTxt = '" + ent.FreeTxt 
+            //		+ "' WHERE DocumentDetailId = " + ent.DocumentDetailId + " AND DocumentId = " + ent.DocumentId;
+            //	General.ExecutaNonQuery(sql, null);	
+            //}
+            //else
+            //{
+            //	sql = "INSERT INTO AvsXDec_AvansDetail(DictionaryItemId, DocumentDetailId, DocumentId, Amount, FreeTxt) "
+            //		+ " VALUES (" + ent.DictionaryItemId + ", " + ent.DocumentDetailId + ", " + ent.DocumentId + ", " + ent.Amount + " '" + ent.FreeTxt + "')";
+            //	General.ExecutaNonQuery(sql, null);					
+            //}
+        }
 
 
         public string SalvareRezervari(string filtruRezervari, int documentId)
@@ -978,8 +978,14 @@ namespace WizOne.AvansXDecont
             {
                 switch (e.Parameter)
                 {
-                    case "cmbCmp":
+                    case "cmbMonedaAvans":
+                        cmbMonedaAvans_SelectedIndexChanged();
                         break;
+
+                    case "cmbActionType":
+                        cmbActionType_EditValueChanged();
+                        break;
+                        
                 }
    
             }
@@ -1187,7 +1193,7 @@ namespace WizOne.AvansXDecont
 
         }		
 		
-		private void cmbMonedaAvans_SelectedIndexChanged(object sender, EventArgs e)
+		private void cmbMonedaAvans_SelectedIndexChanged()
         {
             try
             {
@@ -1198,11 +1204,11 @@ namespace WizOne.AvansXDecont
                 {
                     //case tipAccesPagina.formularNou:
                     //case tipAccesPagina.formularSalvatEditUser:
-                        if (lstConfigCurrencyXPay.Rows.Count != 0)
+                        if (lstConfigCurrencyXPay != null)
                         {
                             cmbModPlata.Value = null;
                             lstConfigCurrencyXPay_PayCopy.Clear();
-							DataRow[] entConfig = dtConfigCurrencyXPay.Select("CurrencyId = " + Convert.ToInt32(cmbMonedaAvans.Value ?? -99));
+							DataRow[] entConfig = lstConfigCurrencyXPay.Select("CurrencyId = " + Convert.ToInt32(cmbMonedaAvans.Value ?? -99));
                             for (int i = 0; i < entConfig.Length; i++)
                             {
                                 if (lstConfigCurrencyXPay_PayCopy != null)
@@ -1290,68 +1296,68 @@ namespace WizOne.AvansXDecont
 
             return q;
         }
-        protected void grDateIstoric_RowDeleting(object sender, DevExpress.Web.Data.ASPxDataDeletingEventArgs e)
+        protected void grDate_RowDeleting(object sender, DevExpress.Web.Data.ASPxDataDeletingEventArgs e)
         {
             try
             {
-                DataTable dt = Session["Org_PosturiPozitii"] as DataTable;
-                DataRow found = dt.Rows.Find(e.Keys["IdAuto"]);
-                found.Delete();            
+                //DataTable dt = Session["Org_PosturiPozitii"] as DataTable;
+                //DataRow found = dt.Rows.Find(e.Keys["IdAuto"]);
+                //found.Delete();            
 
 
-                #region actualizare valoare avans
-                /*LeonardM 25.08.2016
-                 * actualizarea sumelor o realizam mai jos cu diurna,
-                 * deoarece daca dezactivam bifa de diurna se scade de doua ori valoarea diurnei
-                 * si nu e ok*/
-                metaAvsXDec_AvansDetailCheltuieli tmp = tvDateCheltuieli.Grid.GetRow(rowHandle) as metaAvsXDec_AvansDetailCheltuieli;
-                var ent = dds.DataView.Cast<metaVwAvsXDec_Avans>().FirstOrDefault();
-                #endregion
+                //#region actualizare valoare avans
+                ///*LeonardM 25.08.2016
+                // * actualizarea sumelor o realizam mai jos cu diurna,
+                // * deoarece daca dezactivam bifa de diurna se scade de doua ori valoarea diurnei
+                // * si nu e ok*/
+                //metaAvsXDec_AvansDetailCheltuieli tmp = tvDateCheltuieli.Grid.GetRow(rowHandle) as metaAvsXDec_AvansDetailCheltuieli;
+                //var ent = dds.DataView.Cast<metaVwAvsXDec_Avans>().FirstOrDefault();
+                //#endregion
 
-                #region stergere diurna
-                /*verificam daca exista cheltuiala de diurna si o stergem*/
-                List<metaAvsXDec_DictionaryItem> lstCheltuieli = ddsNomenclatorCheltuieli.DataView.Cast<metaAvsXDec_DictionaryItem>().ToList();
-                metaAvsXDec_DictionaryItem itmDiurna = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
-                if (itmDiurna != null)
-                {
-                    if (tmp.DictionaryItemId == itmDiurna.DictionaryItemId)
-                    {
-                        chkIsDiurna.Checked = false;
-                        maxValueDiurna = 0;
-                    }
-                    else
-                    {
-                        ent.EstimatedAmount = (ent.EstimatedAmount ?? 0) - (tmp.Amount ?? 0);
-                        ddsCheltuieli.DataView.Remove(rand);
-                    }
-                }
-                else
-                {
-                    ent.EstimatedAmount = (ent.EstimatedAmount ?? 0) - (tmp.Amount ?? 0);
-                    ddsCheltuieli.DataView.Remove(found);
-                }
-                #endregion
-
-
-                #region cheltuiala Cazare
-                /*LeonardM 15.08.2016
-                * solicitare ca in momentul in care utilizatorul selecteaza cheltuiala cu cazare, sa nu mai poata
-                * face rezervare pentru cazare */
-                metaAvsXDec_DictionaryItem itmCazare = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "cazare").FirstOrDefault();
-                if (itmCazare != null)
-                {
-                    if (tmp.DictionaryItemId == itmCazare.DictionaryItemId)
-                    {
-                        LoadAvansReservations(false);
-                    }
-                }
-                #endregion
+                //#region stergere diurna
+                ///*verificam daca exista cheltuiala de diurna si o stergem*/
+                //List<metaAvsXDec_DictionaryItem> lstCheltuieli = ddsNomenclatorCheltuieli.DataView.Cast<metaAvsXDec_DictionaryItem>().ToList();
+                //metaAvsXDec_DictionaryItem itmDiurna = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
+                //if (itmDiurna != null)
+                //{
+                //    if (tmp.DictionaryItemId == itmDiurna.DictionaryItemId)
+                //    {
+                //        chkIsDiurna.Checked = false;
+                //        maxValueDiurna = 0;
+                //    }
+                //    else
+                //    {
+                //        ent.EstimatedAmount = (ent.EstimatedAmount ?? 0) - (tmp.Amount ?? 0);
+                //        ddsCheltuieli.DataView.Remove(rand);
+                //    }
+                //}
+                //else
+                //{
+                //    ent.EstimatedAmount = (ent.EstimatedAmount ?? 0) - (tmp.Amount ?? 0);
+                //    ddsCheltuieli.DataView.Remove(found);
+                //}
+                //#endregion
 
 
-                e.Cancel = true;
-                grDateIstoric.CancelEdit();
-                Session["Org_PosturiPozitii"] = dt;
-                grDateIstoric.DataSource = dt;
+                //#region cheltuiala Cazare
+                ///*LeonardM 15.08.2016
+                //* solicitare ca in momentul in care utilizatorul selecteaza cheltuiala cu cazare, sa nu mai poata
+                //* face rezervare pentru cazare */
+                //metaAvsXDec_DictionaryItem itmCazare = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "cazare").FirstOrDefault();
+                //if (itmCazare != null)
+                //{
+                //    if (tmp.DictionaryItemId == itmCazare.DictionaryItemId)
+                //    {
+                //        LoadAvansReservations(false);
+                //    }
+                //}
+                //#endregion
+
+
+                //e.Cancel = true;
+                //grDateIstoric.CancelEdit();
+                //Session["Org_PosturiPozitii"] = dt;
+                //grDateIstoric.DataSource = dt;
             }
             catch (Exception ex)
             {
@@ -1362,34 +1368,34 @@ namespace WizOne.AvansXDecont
       
 		
 
-        protected void grDateIstoric_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        protected void grDate_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
         {
             try
             {
-                DataTable dt = Session["Org_PosturiPozitii"] as DataTable;
-                DataRow[] arr = dt.Select("DataInceput <= #" + Convert.ToDateTime(e.NewValues["DataSfarsit"]).ToString("yyyy-MM-dd") + "# AND #" + Convert.ToDateTime(e.NewValues["DataInceput"]).ToString("yyyy-MM-dd") + "# <= DataSfarsit");
-                if (arr.Length == 0)
-                {
-                    DataRow dr = dt.NewRow();
+                //DataTable dt = Session["Org_PosturiPozitii"] as DataTable;
+                //DataRow[] arr = dt.Select("DataInceput <= #" + Convert.ToDateTime(e.NewValues["DataSfarsit"]).ToString("yyyy-MM-dd") + "# AND #" + Convert.ToDateTime(e.NewValues["DataInceput"]).ToString("yyyy-MM-dd") + "# <= DataSfarsit");
+                //if (arr.Length == 0)
+                //{
+                //    DataRow dr = dt.NewRow();
 
-                    dr["IdPost"] = txtId.Value ?? -99;
-                    dr["Pozitii"] = e.NewValues["Pozitii"] ?? 0;
-                    dr["PozitiiAprobate"] = e.NewValues["PozitiiAprobate"] ?? 0;
-                    dr["DataInceput"] = e.NewValues["DataInceput"];
-                    dr["DataSfarsit"] = e.NewValues["DataSfarsit"];
-                    dr["USER_NO"] = Session["UserId"];
-                    dr["TIME"] = DateTime.Now;
-                    dt.Rows.Add(dr);
+                //    dr["IdPost"] = txtId.Value ?? -99;
+                //    dr["Pozitii"] = e.NewValues["Pozitii"] ?? 0;
+                //    dr["PozitiiAprobate"] = e.NewValues["PozitiiAprobate"] ?? 0;
+                //    dr["DataInceput"] = e.NewValues["DataInceput"];
+                //    dr["DataSfarsit"] = e.NewValues["DataSfarsit"];
+                //    dr["USER_NO"] = Session["UserId"];
+                //    dr["TIME"] = DateTime.Now;
+                //    dt.Rows.Add(dr);
 
-                    PopuleazaPozitii(dt);
-                }
-                else
-                    grDateIstoric.JSProperties["cpAlertMessage"] = "Acest interval se intersecteaza cu unul deja existent";
+                //    PopuleazaPozitii(dt);
+                //}
+                //else
+                //    grDateIstoric.JSProperties["cpAlertMessage"] = "Acest interval se intersecteaza cu unul deja existent";
 
-                e.Cancel = true;
-                grDateIstoric.CancelEdit();
-                Session["Org_PosturiPozitii"] = dt;
-                grDateIstoric.DataSource = dt;
+                //e.Cancel = true;
+                //grDateIstoric.CancelEdit();
+                //Session["Org_PosturiPozitii"] = dt;
+                //grDateIstoric.DataSource = dt;
             }
             catch (Exception ex)
             {
@@ -1398,32 +1404,32 @@ namespace WizOne.AvansXDecont
             }
         }
 
-        protected void grDateIstoric_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
             try
             {
-                DataTable dt = Session["Org_PosturiPozitii"] as DataTable;
-                DataRow[] arr = dt.Select("IdAuto <> " + e.Keys["IdAuto"] + " AND DataInceput <= #" + Convert.ToDateTime(e.NewValues["DataSfarsit"]).ToString("yyyy-MM-dd") + "# AND #" + Convert.ToDateTime(e.NewValues["DataInceput"]).ToString("yyyy-MM-dd") + "# <= DataSfarsit");
-                if (arr.Length == 0)
-                {
-                    DataRow dr = dt.Rows.Find(e.Keys["IdAuto"]);
+                //DataTable dt = Session["Org_PosturiPozitii"] as DataTable;
+                //DataRow[] arr = dt.Select("IdAuto <> " + e.Keys["IdAuto"] + " AND DataInceput <= #" + Convert.ToDateTime(e.NewValues["DataSfarsit"]).ToString("yyyy-MM-dd") + "# AND #" + Convert.ToDateTime(e.NewValues["DataInceput"]).ToString("yyyy-MM-dd") + "# <= DataSfarsit");
+                //if (arr.Length == 0)
+                //{
+                //    DataRow dr = dt.Rows.Find(e.Keys["IdAuto"]);
 
-                    dr["Pozitii"] = e.NewValues["Pozitii"] ?? 0;
-                    dr["PozitiiAprobate"] = e.NewValues["PozitiiAprobate"] ?? 0;
-                    dr["DataInceput"] = e.NewValues["DataInceput"];
-                    dr["DataSfarsit"] = e.NewValues["DataSfarsit"];
-                    dr["USER_NO"] = Session["UserId"];
-                    dr["TIME"] = DateTime.Now;
+                //    dr["Pozitii"] = e.NewValues["Pozitii"] ?? 0;
+                //    dr["PozitiiAprobate"] = e.NewValues["PozitiiAprobate"] ?? 0;
+                //    dr["DataInceput"] = e.NewValues["DataInceput"];
+                //    dr["DataSfarsit"] = e.NewValues["DataSfarsit"];
+                //    dr["USER_NO"] = Session["UserId"];
+                //    dr["TIME"] = DateTime.Now;
 
-                    PopuleazaPozitii(dt);
-                }
-                else
-                    grDateIstoric.JSProperties["cpAlertMessage"] = "Acest interval se intersecteaza cu unul deja existent";
+                //    PopuleazaPozitii(dt);
+                //}
+                //else
+                //    grDateIstoric.JSProperties["cpAlertMessage"] = "Acest interval se intersecteaza cu unul deja existent";
 
-                e.Cancel = true;
-                grDateIstoric.CancelEdit();
-                Session["Org_PosturiPozitii"] = dt;
-                grDateIstoric.DataSource = dt;
+                //e.Cancel = true;
+                //grDateIstoric.CancelEdit();
+                //Session["Org_PosturiPozitii"] = dt;
+                //grDateIstoric.DataSource = dt;
             }
             catch (Exception ex)
             {
@@ -1432,7 +1438,7 @@ namespace WizOne.AvansXDecont
             }
         }
 
-        protected void grDateIstoric_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
+        protected void grDate_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
         {
             try
             {
@@ -1452,241 +1458,241 @@ namespace WizOne.AvansXDecont
         }		
 		
 		
-        private void tvDateCheltuieli_ValidateRow(object sender, DevExpress.Xpf.Grid.GridRowValidationEventArgs e)
-        {
-            try
-            {
-                if (e.Row == null) return;
+        //private void tvDateCheltuieli_ValidateRow(object sender, DevExpress.Xpf.Grid.GridRowValidationEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (e.Row == null) return;
 
-                e.ErrorContent += Dami.AreNume(ref grDateCheltuieli, e.RowHandle, "DocumentDetailId", "Lipseste detaliu document. ");
-                e.ErrorContent += Dami.AreNume(ref grDateCheltuieli, e.RowHandle, "DocumentId", "Lipseste document. ");
+        //        e.ErrorContent += Dami.AreNume(ref grDateCheltuieli, e.RowHandle, "DocumentDetailId", "Lipseste detaliu document. ");
+        //        e.ErrorContent += Dami.AreNume(ref grDateCheltuieli, e.RowHandle, "DocumentId", "Lipseste document. ");
 
-                #region verificare completare diurna
-                /*verificam daca exista acelasi tip de cheltuiala anteriori*/
-                List<metaAvsXDec_AvansDetailCheltuieli> lstCheltuieliInserate = ddsCheltuieli.DataView.Cast<metaAvsXDec_AvansDetailCheltuieli>().ToList();
-                List<metaAvsXDec_DictionaryItem> lstCheltuieli = ddsNomenclatorCheltuieli.DataView.Cast<metaAvsXDec_DictionaryItem>().ToList();
-                metaAvsXDec_DictionaryItem itmDiurna = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
-                if ((e.Value as metaAvsXDec_AvansDetailCheltuieli).DictionaryItemId == itmDiurna.DictionaryItemId && chkIsDiurna.IsChecked == false)
-                {
-                    (e.Value as metaAvsXDec_AvansDetailCheltuieli).DictionaryItemId = null;
-                    e.ErrorContent += "Diurna se adauga automat prin bifarea optiunii de calcul diurna!";
-                }
-                if ((e.Value as metaAvsXDec_AvansDetailCheltuieli).DictionaryItemId != null)
-                {
-                    if (lstCheltuieliInserate.Where(p => p.DictionaryItemId == (e.Value as metaAvsXDec_AvansDetailCheltuieli).DictionaryItemId && p.DocumentDetailId != (e.Value as metaAvsXDec_AvansDetailCheltuieli).DocumentDetailId).Count() != 0)
-                    {
-                        (e.Value as metaAvsXDec_AvansDetailCheltuieli).DictionaryItemId = null;
-                        e.ErrorContent += "Acest tip de cheltuiala a mai fost adaugat!";
-                    }
-                }
-                #endregion
+        //        #region verificare completare diurna
+        //        /*verificam daca exista acelasi tip de cheltuiala anteriori*/
+        //        List<metaAvsXDec_AvansDetailCheltuieli> lstCheltuieliInserate = ddsCheltuieli.DataView.Cast<metaAvsXDec_AvansDetailCheltuieli>().ToList();
+        //        List<metaAvsXDec_DictionaryItem> lstCheltuieli = ddsNomenclatorCheltuieli.DataView.Cast<metaAvsXDec_DictionaryItem>().ToList();
+        //        metaAvsXDec_DictionaryItem itmDiurna = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
+        //        if ((e.Value as metaAvsXDec_AvansDetailCheltuieli).DictionaryItemId == itmDiurna.DictionaryItemId && chkIsDiurna.IsChecked == false)
+        //        {
+        //            (e.Value as metaAvsXDec_AvansDetailCheltuieli).DictionaryItemId = null;
+        //            e.ErrorContent += "Diurna se adauga automat prin bifarea optiunii de calcul diurna!";
+        //        }
+        //        if ((e.Value as metaAvsXDec_AvansDetailCheltuieli).DictionaryItemId != null)
+        //        {
+        //            if (lstCheltuieliInserate.Where(p => p.DictionaryItemId == (e.Value as metaAvsXDec_AvansDetailCheltuieli).DictionaryItemId && p.DocumentDetailId != (e.Value as metaAvsXDec_AvansDetailCheltuieli).DocumentDetailId).Count() != 0)
+        //            {
+        //                (e.Value as metaAvsXDec_AvansDetailCheltuieli).DictionaryItemId = null;
+        //                e.ErrorContent += "Acest tip de cheltuiala a mai fost adaugat!";
+        //            }
+        //        }
+        //        #endregion
 
-                if ((string)(e.ErrorContent) != "")
-                    e.IsValid = false;
-                //else
-                //    dds.SubmitChanges();
-            }
-            catch (Exception ex)
-            {
-                Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }	
-        private void tvDateCheltuieli_CellValueChanging(object sender, DevExpress.Xpf.Grid.CellValueChangedEventArgs e)
-        {
-            try
-            {
-                var ent = dds.DataView.Cast<metaVwAvsXDec_Avans>().FirstOrDefault();
-                metaAvsXDec_AvansDetailCheltuieli tmpRowChanged = grDateCheltuieli.GetFocusedRow() as metaAvsXDec_AvansDetailCheltuieli;
-                switch (e.Column.FieldName)
-                {
-                    case "colSel":
-                        ((TableView)sender).PostEditor();
-                        break;
-                    case "Amount":
-                        decimal valoareCheltuieli = 0;
-                        valoareCheltuieli = Convert.ToDecimal(ent.EstimatedAmount ?? 0);
-                        if (e.Value != null)
-                        {
-                            #region verificare limite diurna
-                            /*LeonardM 11.09.2016
-                             * se seteaza implicit diurna cu valoarea conform calculelor, dar poate fi editata
-                             * cerinta Groupama: sa poata fi editata in minus */
-                            List<metaAvsXDec_DictionaryItem> lstCheltuieli_1 = ddsNomenclatorCheltuieli.DataView.Cast<metaAvsXDec_DictionaryItem>().ToList();
-                            metaAvsXDec_DictionaryItem itmDiurna_1 = lstCheltuieli_1.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
-                            if (itmDiurna_1 != null)
-                            {
-                                if (Convert.ToInt32(tmpRowChanged.DictionaryItemId) == itmDiurna_1.DictionaryItemId)
-                                {
-                                    if (Convert.ToDecimal(e.Value) > maxValueDiurna)
-                                    {
-                                        tmpRowChanged.Amount = maxValueDiurna;
-                                        Message.InfoMessage("Diurna nu poate fi mai mare decat " + maxValueDiurna.ToString() + " conform configurarilor stabilite! ");
-                                    }
-                                }
-                            }
-                            #endregion
+        //        if ((string)(e.ErrorContent) != "")
+        //            e.IsValid = false;
+        //        //else
+        //        //    dds.SubmitChanges();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}	
+        //private void tvDateCheltuieli_CellValueChanging(object sender, DevExpress.Xpf.Grid.CellValueChangedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var ent = dds.DataView.Cast<metaVwAvsXDec_Avans>().FirstOrDefault();
+        //        metaAvsXDec_AvansDetailCheltuieli tmpRowChanged = grDateCheltuieli.GetFocusedRow() as metaAvsXDec_AvansDetailCheltuieli;
+        //        switch (e.Column.FieldName)
+        //        {
+        //            case "colSel":
+        //                ((TableView)sender).PostEditor();
+        //                break;
+        //            case "Amount":
+        //                decimal valoareCheltuieli = 0;
+        //                valoareCheltuieli = Convert.ToDecimal(ent.EstimatedAmount ?? 0);
+        //                if (e.Value != null)
+        //                {
+        //                    #region verificare limite diurna
+        //                    /*LeonardM 11.09.2016
+        //                     * se seteaza implicit diurna cu valoarea conform calculelor, dar poate fi editata
+        //                     * cerinta Groupama: sa poata fi editata in minus */
+        //                    List<metaAvsXDec_DictionaryItem> lstCheltuieli_1 = ddsNomenclatorCheltuieli.DataView.Cast<metaAvsXDec_DictionaryItem>().ToList();
+        //                    metaAvsXDec_DictionaryItem itmDiurna_1 = lstCheltuieli_1.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
+        //                    if (itmDiurna_1 != null)
+        //                    {
+        //                        if (Convert.ToInt32(tmpRowChanged.DictionaryItemId) == itmDiurna_1.DictionaryItemId)
+        //                        {
+        //                            if (Convert.ToDecimal(e.Value) > maxValueDiurna)
+        //                            {
+        //                                tmpRowChanged.Amount = maxValueDiurna;
+        //                                Message.InfoMessage("Diurna nu poate fi mai mare decat " + maxValueDiurna.ToString() + " conform configurarilor stabilite! ");
+        //                            }
+        //                        }
+        //                    }
+        //                    #endregion
 
-                            decimal valueExpenseCorrected = 0, minValue = 0, maxValue = 0;
-                            if (tmpRowChanged.DictionaryItemId != null)
-                                if (!SumIsValidForExpense((int)tmpRowChanged.DictionaryItemId, Convert.ToDecimal(e.Value.ToString()), out valueExpenseCorrected, out minValue, out maxValue))
-                                {
-                                    bool depasesteLimitaSetata = false;
+        //                    decimal valueExpenseCorrected = 0, minValue = 0, maxValue = 0;
+        //                    if (tmpRowChanged.DictionaryItemId != null)
+        //                        if (!SumIsValidForExpense((int)tmpRowChanged.DictionaryItemId, Convert.ToDecimal(e.Value.ToString()), out valueExpenseCorrected, out minValue, out maxValue))
+        //                        {
+        //                            bool depasesteLimitaSetata = false;
 
-                                    if (itmDiurna_1 != null)
-                                    {
-                                        if (itmDiurna_1.DictionaryItemId != tmpRowChanged.DictionaryItemId)
-                                            depasesteLimitaSetata = true;
-                                    }
-                                    else
-                                    {
-                                        #region verificare suma intre limite
-                                        depasesteLimitaSetata = true;
-                                        #endregion
-                                    }
+        //                            if (itmDiurna_1 != null)
+        //                            {
+        //                                if (itmDiurna_1.DictionaryItemId != tmpRowChanged.DictionaryItemId)
+        //                                    depasesteLimitaSetata = true;
+        //                            }
+        //                            else
+        //                            {
+        //                                #region verificare suma intre limite
+        //                                depasesteLimitaSetata = true;
+        //                                #endregion
+        //                            }
                                  
-                                    if (depasesteLimitaSetata)
-                                    {
-                                        Message.InfoMessage("Suma introdusa nu se incadreaza intre limitele setate in aplicatie: " + minValue.ToString() + " - " + maxValue.ToString() + "!");
-                                    }
-                                }                           
+        //                            if (depasesteLimitaSetata)
+        //                            {
+        //                                Message.InfoMessage("Suma introdusa nu se incadreaza intre limitele setate in aplicatie: " + minValue.ToString() + " - " + maxValue.ToString() + "!");
+        //                            }
+        //                        }                           
 
-                            if (e.OldValue == null)
-                            {
-                                /*rand nou*/
-                                valoareCheltuieli = valoareCheltuieli + Convert.ToDecimal(e.Value.ToString());
-                            }
-                            else
-                            {
-                                /*rand vechi pentru care se actualizeaza suma*/
-                                valoareCheltuieli = valoareCheltuieli - Convert.ToDecimal(e.OldValue.ToString()) + Convert.ToDecimal(e.Value.ToString());
-                            }
-                        }
-                        ent.EstimatedAmount = valoareCheltuieli;
-                        break;
-                    case "DictionaryItemId":
-                        /*verificam daca exista acelasi tip de cheltuiala anteriori*/
-                        List<metaAvsXDec_AvansDetailCheltuieli> lstCheltuieliInserate = ddsCheltuieli.DataView.Cast<metaAvsXDec_AvansDetailCheltuieli>().ToList();
-                        List<metaAvsXDec_DictionaryItem> lstCheltuieli = ddsNomenclatorCheltuieli.DataView.Cast<metaAvsXDec_DictionaryItem>().ToList();
-                        metaAvsXDec_DictionaryItem itmDiurna = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
-                        if (itmDiurna != null)
-                        {
-                            if (Convert.ToInt32(e.Value) == itmDiurna.DictionaryItemId && chkIsDiurna.IsChecked == false)
-                            {
-                                grDateCheltuieli.SetCellValue(tvDateCheltuieli.FocusedRowHandle, "DictionaryItemId", null);
-                                Message.InfoMessage("Diurna se adauga automat prin bifarea optiunii de calcul diurna!");
-                                return;
-                            }
-                        }
+        //                    if (e.OldValue == null)
+        //                    {
+        //                        /*rand nou*/
+        //                        valoareCheltuieli = valoareCheltuieli + Convert.ToDecimal(e.Value.ToString());
+        //                    }
+        //                    else
+        //                    {
+        //                        /*rand vechi pentru care se actualizeaza suma*/
+        //                        valoareCheltuieli = valoareCheltuieli - Convert.ToDecimal(e.OldValue.ToString()) + Convert.ToDecimal(e.Value.ToString());
+        //                    }
+        //                }
+        //                ent.EstimatedAmount = valoareCheltuieli;
+        //                break;
+        //            case "DictionaryItemId":
+        //                /*verificam daca exista acelasi tip de cheltuiala anteriori*/
+        //                List<metaAvsXDec_AvansDetailCheltuieli> lstCheltuieliInserate = ddsCheltuieli.DataView.Cast<metaAvsXDec_AvansDetailCheltuieli>().ToList();
+        //                List<metaAvsXDec_DictionaryItem> lstCheltuieli = ddsNomenclatorCheltuieli.DataView.Cast<metaAvsXDec_DictionaryItem>().ToList();
+        //                metaAvsXDec_DictionaryItem itmDiurna = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
+        //                if (itmDiurna != null)
+        //                {
+        //                    if (Convert.ToInt32(e.Value) == itmDiurna.DictionaryItemId && chkIsDiurna.IsChecked == false)
+        //                    {
+        //                        grDateCheltuieli.SetCellValue(tvDateCheltuieli.FocusedRowHandle, "DictionaryItemId", null);
+        //                        Message.InfoMessage("Diurna se adauga automat prin bifarea optiunii de calcul diurna!");
+        //                        return;
+        //                    }
+        //                }
 
-                        /*LeonardM 10.08.2016
-                        * cerinta de la Groupama ca pentru avansul spre decontare sa se poata adauga doar un tip de cheltuiala
-                        * in afara de diurna, deoarece pentru acest tip de document exista circuit definit pentru un singur tip de 
-                        * cheltuiala*/
-                        switch (documentTypeId)
-                        {
-                            case 1001: /*Avans spre deplasare*/
-                                if (lstCheltuieliInserate.Where(p => p.DictionaryItemId == Convert.ToInt32(e.Value) && p.DocumentDetailId != tmpRowChanged.DocumentDetailId).Count() != 0)
-                                {
+        //                /*LeonardM 10.08.2016
+        //                * cerinta de la Groupama ca pentru avansul spre decontare sa se poata adauga doar un tip de cheltuiala
+        //                * in afara de diurna, deoarece pentru acest tip de document exista circuit definit pentru un singur tip de 
+        //                * cheltuiala*/
+        //                switch (documentTypeId)
+        //                {
+        //                    case 1001: /*Avans spre deplasare*/
+        //                        if (lstCheltuieliInserate.Where(p => p.DictionaryItemId == Convert.ToInt32(e.Value) && p.DocumentDetailId != tmpRowChanged.DocumentDetailId).Count() != 0)
+        //                        {
 
-                                    Message.InfoMessage("Acest tip de cheltuiala a mai fost adaugat!");
+        //                            Message.InfoMessage("Acest tip de cheltuiala a mai fost adaugat!");
 
-                                    if (!grDateCheltuieli.View.AllowEditing)
-                                        return;
+        //                            if (!grDateCheltuieli.View.AllowEditing)
+        //                                return;
 
-                                    var rand = grDateCheltuieli.GetFocusedRow();// tvDateCheltuieli.Grid.GetRow(rowHandle);
+        //                            var rand = grDateCheltuieli.GetFocusedRow();// tvDateCheltuieli.Grid.GetRow(rowHandle);
 
-                                    #region actualizare valoare avans
-                                    /*LeonardM 25.08.2016
-                                         * actualizarea sumelor o realizam mai jos cu diurna,
-                                         * deoarece daca dezactivam bifa de diurna se scade de doua ori valoarea diurnei
-                                         * si nu e ok*/
-                                    #endregion
+        //                            #region actualizare valoare avans
+        //                            /*LeonardM 25.08.2016
+        //                                 * actualizarea sumelor o realizam mai jos cu diurna,
+        //                                 * deoarece daca dezactivam bifa de diurna se scade de doua ori valoarea diurnei
+        //                                 * si nu e ok*/
+        //                            #endregion
 
-                                    #region stergere diurna
-                                    /*verificam daca exista cheltuiala de diurna si o stergem*/
-                                    if (itmDiurna != null)
-                                    {
-                                        if (tmpRowChanged.DictionaryItemId == itmDiurna.DictionaryItemId)
-                                        {
-                                            chkIsDiurna.IsChecked = false;
-                                        }
-                                        else
-                                        {
-                                            ent.EstimatedAmount = (ent.EstimatedAmount ?? 0) - (tmpRowChanged.Amount ?? 0);
-                                            tvDateCheltuieli.CommitEditing();
-                                            ddsCheltuieli.DataView.Remove(tmpRowChanged);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        ent.EstimatedAmount = (ent.EstimatedAmount ?? 0) - (tmpRowChanged.Amount ?? 0);
-                                        tvDateCheltuieli.CommitEditing();
-                                        ddsCheltuieli.DataView.Remove(tmpRowChanged);
-                                    }
-                                    #endregion
-                                }
-                                else
-                                {
-                                    #region cheltuiala Cazare
-                                    /*LeonardM 15.08.2016
-                                     * solicitare ca in momentul in care utilizatorul selecteaza cheltuiala cu cazare, sa nu mai poata
-                                     * face rezervare pentru cazare */
-                                    metaAvsXDec_DictionaryItem itmCazare = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "cazare").FirstOrDefault();
-                                    if (itmCazare != null)
-                                    {
-                                        if (Convert.ToInt32(e.Value) == itmCazare.DictionaryItemId)
-                                        {
-                                            LoadAvansReservations(true);
-                                        }
-                                    }
-                                    #endregion
-                                }
-                                break;
-                            case 1002:/*Avans spre decontare*/
-                                if (lstCheltuieliInserate.Where(p => p.DictionaryItemId != Convert.ToInt32(e.Value) && p.DocumentDetailId != tmpRowChanged.DocumentDetailId).Count() != 0)
-                                {
-                                    Message.InfoMessage("Trebuie selectat doar un tip de cheltuiala pentru avansul spre decontare!");
-                                    tmpRowChanged.DictionaryItemId = null;
-                                    return;
-                                }
-                                break;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //                            #region stergere diurna
+        //                            /*verificam daca exista cheltuiala de diurna si o stergem*/
+        //                            if (itmDiurna != null)
+        //                            {
+        //                                if (tmpRowChanged.DictionaryItemId == itmDiurna.DictionaryItemId)
+        //                                {
+        //                                    chkIsDiurna.IsChecked = false;
+        //                                }
+        //                                else
+        //                                {
+        //                                    ent.EstimatedAmount = (ent.EstimatedAmount ?? 0) - (tmpRowChanged.Amount ?? 0);
+        //                                    tvDateCheltuieli.CommitEditing();
+        //                                    ddsCheltuieli.DataView.Remove(tmpRowChanged);
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                ent.EstimatedAmount = (ent.EstimatedAmount ?? 0) - (tmpRowChanged.Amount ?? 0);
+        //                                tvDateCheltuieli.CommitEditing();
+        //                                ddsCheltuieli.DataView.Remove(tmpRowChanged);
+        //                            }
+        //                            #endregion
+        //                        }
+        //                        else
+        //                        {
+        //                            #region cheltuiala Cazare
+        //                            /*LeonardM 15.08.2016
+        //                             * solicitare ca in momentul in care utilizatorul selecteaza cheltuiala cu cazare, sa nu mai poata
+        //                             * face rezervare pentru cazare */
+        //                            metaAvsXDec_DictionaryItem itmCazare = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "cazare").FirstOrDefault();
+        //                            if (itmCazare != null)
+        //                            {
+        //                                if (Convert.ToInt32(e.Value) == itmCazare.DictionaryItemId)
+        //                                {
+        //                                    LoadAvansReservations(true);
+        //                                }
+        //                            }
+        //                            #endregion
+        //                        }
+        //                        break;
+        //                    case 1002:/*Avans spre decontare*/
+        //                        if (lstCheltuieliInserate.Where(p => p.DictionaryItemId != Convert.ToInt32(e.Value) && p.DocumentDetailId != tmpRowChanged.DocumentDetailId).Count() != 0)
+        //                        {
+        //                            Message.InfoMessage("Trebuie selectat doar un tip de cheltuiala pentru avansul spre decontare!");
+        //                            tmpRowChanged.DictionaryItemId = null;
+        //                            return;
+        //                        }
+        //                        break;
+        //                }
+        //                break;
+        //            default:
+        //                break;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
-        private void dds_SubmittedChanges(object sender, SubmittedChangesEventArgs e)
-        {
-            try
-            {       
-				int rez = SetCircuitSettingsDocument(idDocument);	
-				switch (rez)
-				{
-					case -123:
-						Message.InfoMessage("Nu exista circuit definit pentru proprietatile alese!");
+    //    private void dds_SubmittedChanges(object sender, SubmittedChangesEventArgs e)
+    //    {
+    //        try
+    //        {       
+				//int rez = SetCircuitSettingsDocument(idDocument);	
+				//switch (rez)
+				//{
+				//	case -123:
+				//		Message.InfoMessage("Nu exista circuit definit pentru proprietatile alese!");
 						
-						break;
-					case 0:
-						Message.InfoMessage(Dami.TraduCuvant("Date salvate cu succes."));
-						//General.NotificariDocumente(idDocument);
-						apasat = true;
-						btnInapoi_ItemClick(null, null);
-						break;
-				}
+				//		break;
+				//	case 0:
+				//		Message.InfoMessage(Dami.TraduCuvant("Date salvate cu succes."));
+				//		//General.NotificariDocumente(idDocument);
+				//		apasat = true;
+				//		btnInapoi_ItemClick(null, null);
+				//		break;
+				//}
 
-            }
-            catch (Exception ex)
-            {
-                Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }	
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+    //        }
+    //    }	
 
         public int SetCircuitSettingsDocument(int IdDocument)
         {
@@ -2008,7 +2014,222 @@ namespace WizOne.AvansXDecont
                     /*nu se completeaza cu nimic lista*/
                     break;
             }
-        }		
+        }
+
+        private void cmbActionType_EditValueChanged()
+        {
+            /*LeonardM 13.06.2016
+             * in cazul in care se selecteaza id deplasare interna, default sa vina completat
+             * moneda RON*/
+            if (Convert.ToInt32(General.Nz(Session["IdDeplasareInterna"], -99)) != -99 && Convert.ToInt32(General.Nz(Session["IdMonedaRON"], -99)) != -99)
+            {
+                if (Convert.ToInt32(cmbActionType.Value ?? -99) == Convert.ToInt32(General.Nz(Session["IdDeplasareInterna"], -99)))
+                    cmbMonedaAvans.Value = Convert.ToInt32(General.Nz(Session["IdMonedaRON"], -99));
+            }
+            /*end LeonardM 13.06.2016*/
+            SetDiurnaProperty();
+            UpdateCheltuialaDiurna();
+        }
+
+        public void SetDiurnaProperty()
+        {
+            /*daca sunt mai putin de 12 ore pentru deplasare, butonul de diurna nu trebuie sa fie vizibil*/
+            DataTable ent = Session["AvsXDec_SursaDate"] as DataTable;
+            if (ent != null)
+            {
+                if (txtStartDate.Value != null && txtEndDate.Value != null && txtOraPlecare.Value != null && txtOraSosire.Value != null)
+                {
+                    DateTime dtStartDay = string.IsNullOrEmpty(txtStartDate.Value.ToString()) ? Convert.ToDateTime(ent.Rows[0]["StartDate"].ToString()) : Convert.ToDateTime(txtStartDate.Value);
+                    DateTime dtEndDay = string.IsNullOrEmpty(txtEndDate.Value.ToString()) ? Convert.ToDateTime(ent.Rows[0]["EndDate"].ToString()) : Convert.ToDateTime(txtEndDate.Value);
+                    DateTime dtStartHour;
+                    if (!DateTime.TryParseExact(txtOraPlecare.Text, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtStartHour))
+                    {
+                        dtStartHour = Convert.ToDateTime(ent.Rows[0]["StartHour"].ToString());
+                    }
+                    DateTime dtEndHour;
+                    if (!DateTime.TryParseExact(txtOraSosire.Text, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtEndHour))
+                    {
+                        dtEndHour = Convert.ToDateTime(ent.Rows[0]["EndHour"].ToString());
+                    }
+                    DateTime dtStart = new DateTime(dtStartDay.Year, dtStartDay.Month, dtStartDay.Day, dtStartHour.Hour, dtStartHour.Minute, 0);
+                    DateTime dtEnd = new DateTime(dtEndDay.Year, dtEndDay.Month, dtEndDay.Day, dtEndHour.Hour, dtEndHour.Minute, 0);
+
+                    double diffHours = (dtEnd - dtStart).TotalHours;
+                    if (diffHours < 12)
+                    {
+                        chkIsDiurna.ClientEnabled = false;
+                        chkIsDiurna.Checked = false;
+                    }
+                    else
+                    {
+                        if (!(Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0 && (Convert.ToInt32(Session["AvsXDec_PoateModif"].ToString()) == 0 || (Convert.ToInt32(Session["AvsXDec_IdStare"].ToString()) != 1))))
+                            chkIsDiurna.ClientEnabled = true;
+                    }
+                }
+                else
+                {
+                    chkIsDiurna.ClientEnabled = false;
+                }
+            }
+            else
+            {
+                chkIsDiurna.ClientEnabled = false;
+            }
+        }
+
+        private void UpdateCheltuialaDiurna()
+        {
+            if (chkIsDiurna.Checked)
+            {
+                /*verificam daca exista acelasi tip de cheltuiala anteriori*/
+                DataTable lstCheltuieliInserate = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
+                DataTable lstCheltuieli = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+                DataRow[] itmDiurna = lstCheltuieli.Select("LOWER(DictionaryItemName) = 'diurna'");
+                DataRow[] chDiurna = lstCheltuieliInserate.Select("DictionaryItemId = " + itmDiurna[0]["DictionaryItemId"].ToString());
+                if (chDiurna != null)
+                {
+                    decimal valDiurna = 0;
+                    CalculDiurna(out valDiurna);
+                    DataTable ent = Session["AvsXDec_SursaDate"] as DataTable;
+                    /*LeonardM 31.10.2016
+                           * in mommentul in care diurna este modificat in jos,
+                           * se recalculeaza la incarcare si atunci se modifica valoare*/
+                    if (Convert.ToDecimal(General.Nz(chDiurna[0]["Amount"], 0)) > valDiurna)
+                    {
+                        ent.Rows[0]["EstimatedAmount"] = Convert.ToDecimal(General.Nz(ent.Rows[0]["EstimatedAmount"], 0)) - Convert.ToDecimal(General.Nz(chDiurna[0]["Amount"], 0)) + valDiurna;
+                        Session["maxValueDiurna"] = valDiurna;
+
+                        chDiurna[0]["Amount"] = valDiurna;
+                        Session["AvsXDec_SursaDateCheltuieli"] = lstCheltuieliInserate;
+                    }
+                    else
+                        Session["maxValueDiurna"] = valDiurna;
+                    /*end LeonardM 31.10.2016*/
+                }
+            }
+        }
+
+        private void CalculDiurna(out decimal valDiurna)
+        {
+            DataTable ent = Session["AvsXDec_SursaDate"] as DataTable;
+            int KeyField1 = -99, KeyField2 = -99, KeyField3 = -99;
+            AvsXDec_Settings_SetDIMValue(1, out KeyField1);
+            AvsXDec_Settings_SetDIMValue(2, out KeyField2);
+            AvsXDec_Settings_SetDIMValue(3, out KeyField3);
+            DataRow[] entSettingsDiurna;
+            int IdTipDeplasareAles = Convert.ToInt32(General.Nz(ent.Rows[0]["ActionTypeId"], -99));
+
+            DataTable lstVwAvsXDec_Settings = General.IncarcaDT("SELECT * FROM vwAvsXDec_Settings", null);
+            if (lstVwAvsXDec_Settings == null && lstVwAvsXDec_Settings.Rows.Count <= 0)
+            {
+                valDiurna = 0;
+                return;
+            }
+
+            entSettingsDiurna = lstVwAvsXDec_Settings.Select("KeyField1 = " + KeyField1 + " AND KeyField2 = " + KeyField2 + " AND KeyField3 = " + KeyField3 + " AND F71802 = " + General.Nz(Session["IdFunctieAngajat"], "-99").ToString());
+            /*nu am gasit o setare conform celor de mai sus si functiei, incercam
+             * sa gasim o configurare conform celor de mai sus si idfunctie = -99*/
+            if (entSettingsDiurna == null)
+                //entSettingsDiurna = lstVwAvsXDec_Settings.Where(p => p.KeyField1 == KeyField1 && p.KeyField2 == KeyField2 && p.KeyField3 == KeyField3 && (p.F71802 ?? -99) == -99).FirstOrDefault();
+                entSettingsDiurna = lstVwAvsXDec_Settings.Select("KeyField1 = " + KeyField1 + " AND KeyField2 = " + KeyField2 + " AND KeyField3 = " + KeyField3 + " AND F71802 = 0");
+            /*daca tot nu gasim o configurare, atunci in mod default diurna = 0*/
+            if (entSettingsDiurna == null)
+                valDiurna = 0;
+            else
+            {
+                #region calcul diurna conform configurarilor
+                DateTime dtStartHour;
+                if (!DateTime.TryParseExact(txtOraPlecare.Text, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtStartHour))
+                {
+                    dtStartHour = Convert.ToDateTime(ent.Rows[0]["StartHour"].ToString());
+                }
+                DateTime dtEndHour;
+                if (!DateTime.TryParseExact(txtOraSosire.Text, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtEndHour))
+                {
+                    dtEndHour = Convert.ToDateTime(ent.Rows[0]["EndHour"].ToString()); 
+                }
+
+                DateTime dtStart = new DateTime(Convert.ToDateTime(txtStartDate.Value).Year, Convert.ToDateTime(txtStartDate.Value).Month, Convert.ToDateTime(txtStartDate.Value).Day, dtStartHour.Hour, dtStartHour.Minute, 0);
+                DateTime dtEnd = new DateTime(Convert.ToDateTime(txtEndDate.Value).Year, Convert.ToDateTime(txtEndDate.Value).Month, Convert.ToDateTime(txtEndDate.Value).Day, dtEndHour.Hour, dtEndHour.Minute, 0);
+                //DateTime dtEnd = new DateTime(ent.EndDate.Value.Year, ent.EndDate.Value.Month, ent.EndDate.Value.Day, ent.EndHour.Value.Hour, ent.EndHour.Value.Minute, 0);
+                double diffHours = (dtEnd - dtStart).TotalHours;
+
+                if (IdTipDeplasareAles == Convert.ToInt32(General.Nz(Session["IdDeplasareExterna"], "-99").ToString()))
+                {
+                    /*la deplasarea externa, trebuie sa vedem cat din numarul total de ore se imparte la 6
+                     * astfel incat daca am 11 ore => primesc jumatate de diurna, 
+                     * daca am 12 ore primesc diurna intreaga
+                     * daca am 19 ore primesc diurna + 1/2*/
+                    decimal noHoursPer24 = Convert.ToDecimal(diffHours / 24);
+                    decimal decimalNo = noHoursPer24 - Decimal.Truncate(noHoursPer24);
+                    if (decimalNo > 0 && decimalNo < Convert.ToDecimal(0.5))
+                        valDiurna = Decimal.Truncate(noHoursPer24) * Convert.ToDecimal(General.Nz(entSettingsDiurna[0]["MinimumPay"], 0).ToString()) + Convert.ToDecimal(General.Nz(entSettingsDiurna[0]["MinimumPay"], 0).ToString()) / 2;
+                    else
+                        valDiurna = (Decimal.Truncate(noHoursPer24) + Decimal.Ceiling(decimalNo)) * Convert.ToDecimal(General.Nz(entSettingsDiurna[0]["MinimumPay"], 0).ToString());
+                }
+                else
+                {
+                    /*la deplasarea interna, trebuie sa vedem cat din numarul total de ore se imparte la 12
+                     * astfel incat daca am 12 ore => primesc 0
+                     * daca 12 ore primesc diurna pe o zi
+                     * daca am 19 ore primesc diurna pe o zi*/
+                    decimal noHoursPer24 = Convert.ToDecimal(diffHours / 24);
+                    decimal decimalNo = noHoursPer24 - Decimal.Truncate(noHoursPer24);
+                    if (decimalNo >= 0 && decimalNo < Convert.ToDecimal(0.5))
+                        valDiurna = Decimal.Truncate(noHoursPer24) * Convert.ToDecimal(General.Nz(entSettingsDiurna[0]["MinimumPay"], 0).ToString());
+                    else
+                        valDiurna = (Decimal.Truncate(noHoursPer24) + 1) * Convert.ToDecimal(General.Nz(entSettingsDiurna[0]["MinimumPay"], 0).ToString());
+                }
+                #endregion
+            }
+
+        }
+
+        private void AvsXDec_Settings_SetDIMValue(int dim, out int value)
+        {
+            value = -99;
+            DataTable ent = Session["AvsXDec_SursaDate"] as DataTable;
+            DataTable lstCheltuieli = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+            string DIMSetting = string.Empty;
+            DataTable lstVwAvsXDec_Settings_Config = General.IncarcaDT(@"select * from ""vwAvsXDec_Settings_Config""", null);
+            if (lstVwAvsXDec_Settings_Config != null && lstVwAvsXDec_Settings_Config.Rows.Count > 0 && lstCheltuieli != null && lstCheltuieli.Rows.Count > 0)
+            {
+                /*descoperim ce dimensiune verificam*/
+                switch (dim)
+                {
+                    case 1:
+                        DIMSetting = lstVwAvsXDec_Settings_Config.Rows[0]["KeyField1"].ToString();
+                        break;
+                    case 2:
+                        DIMSetting = lstVwAvsXDec_Settings_Config.Rows[0]["KeyField2"].ToString();
+                        break;
+                    case 3:
+                        DIMSetting = lstVwAvsXDec_Settings_Config.Rows[0]["KeyField3"].ToString();
+                        break;
+                    default:
+                        DIMSetting = lstVwAvsXDec_Settings_Config.Rows[0]["KeyField1"].ToString();
+                        break;
+                }
+                /*asignare valori conform setarilor pe dimensiune*/
+                switch (DIMSetting)
+                {
+                    case "ActionTypeId":
+                        value = Convert.ToInt32(ent.Rows[0]["ActionTypeId"].ToString());
+                        break;
+                    case "PaymentTypeId":
+                        value = Convert.ToInt32(ent.Rows[0]["PaymentTypeId"].ToString());
+                        break;
+                    case "ExpenseId":
+                        DataRow[] itmDiurna = lstCheltuieli.Select("LOWER(DictionaryItemName) = 'diurna'");
+                        if (itmDiurna != null)
+                            value = Convert.ToInt32(itmDiurna[0]["DictionaryItemId"].ToString());
+                        break;
+                    default:
+                        value = -99;
+                        break;
+                }
+            }
+        }
 
         private void GolireVariabile()
         {

@@ -56,7 +56,7 @@ namespace WizOne.Pontaj
                             c.ReadOnly = !Convert.ToBoolean(General.Nz(dt.Rows[i]["Editabil"], 0));
 
                             c.PropertiesSpinEdit.MaxLength = 10;
-                            c.PropertiesSpinEdit.NumberFormat = SpinEditNumberFormat.Number;
+                            c.PropertiesSpinEdit.NumberFormat = SpinEditNumberFormat.Custom;
                             c.PropertiesSpinEdit.DisplayFormatString = "N" + General.Nz(dt.Rows[i]["NumarZecimale"], 0);
                             c.PropertiesSpinEdit.DisplayFormatInEditMode = true;
 

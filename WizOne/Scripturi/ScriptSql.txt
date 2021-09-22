@@ -18445,6 +18445,8 @@ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES (
 GO
 
 
+alter table F100Studii add DenLocalitate nvarchar(250)
+GO	
 
 ----  2.2.140  ----
 
@@ -18825,196 +18827,1874 @@ GO
 ) ON [PRIMARY]
 GO
 
+  CREATE TABLE "vwAvsXDec_Banci" 
+   (	"IdBancaBCR"int, 
+	"CodBancaBCR" NVARCHAR(4), 
+	"NumeBancaBCR" NVARCHAR(70), 
+	"IbanBCR" NVARCHAR(35), 
+	"IdBancaBT" int, 
+	"CodBancaBT" NVARCHAR(4), 
+	"NumeBancaBT" NVARCHAR(70), 
+	"IbanBT" NVARCHAR(35), 
+	"IdBancaBRD" int, 
+	"CodBancaBRD" NVARCHAR(4), 
+	"NumeBancaBRD" NVARCHAR(70), 
+	"IbanBRD" NVARCHAR(35)
+) 
+GO
+
+
+create  function "fcnAvsXDec_GetComisionBancar"( @nValPlata decimal, @nCurrencyIdPlata int, @nBankIdPlata int)
+ returns decimal
+ As 
+begin
+
+DECLARE	@ncomisionBancar decimal(18,4),
+		@ncnt int;
+
+/*functie care calculeaza comisionul in functie de suma ce trebuie platita si
+banca care se trimite ca si parametru*/
+select @ncnt  = count(*)  from "vwAvsXDec_BankComission" where "BankId" = @nBankIdPlata;
+
+
+if @ncnt = 0
+/*nu am gasit setari la nivel de banca=> comision = 0*/
+	begin
+		set @ncomisionBancar = 0;
+	end
+else
+	begin
+		select @ncnt = COUNT(*)  from "vwAvsXDec_BankComission" bc where bc."BankId" = @nBankIdPlata and bc."MinimumPay" = -99 and bc."MaximumPay" = -99
+		if @ncnt <> 0
+		begin
+			/*comisionul se acorda per plata*/
+			select @ncomisionBancar = case when @nValPlata <= 0 then 0 else bc."ComissionValue" end  from "vwAvsXDec_BankComission" bc where bc."BankId" = @nBankIdPlata and bc."MinimumPay" = -99 and bc."MaximumPay" = -99
+		end
+		else
+		begin 
+			/*comisionul se acorda per trepte de valori plata*/
+			select @ncomisionBancar = case when @nValPlata <= 0 then 0 else isnull(max(bc."ComissionValue"), 0) end  from "vwAvsXDec_BankComission" bc
+					where bc."BankId" = @nBankIdPlata
+					and @nValPlata between bc."MinimumPay" and bc."MaximumPay"
+		end	
+	end 
+
+
+return @ncomisionBancar
+
+end
+GO
+
+
+
+ALTER PROCEDURE "GetNextId"(@tableName nvarchar, @nrInreg int )
+as 
+
+declare
+@cnt numeric(20,5),
+@idTable int,
+@idAsignat int
+begin 
+
+select @cnt = count(*)  from "TableSYSInfo_NextId" where "TableName" = @tableName
+ if @cnt = 0 
+ begin
+ /*nu mai exista inregistrare pentru numele tabelei trimis ca parametru*/
+ insert into "TableSYSInfo_NextId"("TableName", "NextId")
+ values(@tableName, 1)
+ end
+
+ select @idAsignat = max("NextId") from "TableSYSInfo_NextId" where "TableName" = @tableName
+ if @tableName = 'AvsXDec_Dictionary'
+ BEGIN
+    select @idTable = max(isnull("DictionaryId", 0))  from "AvsXDec_Dictionary"
+ end
+ 
+ if @tableName = 'AvsXDec_DictionaryItem'
+ BEGIN
+    select @idTable = max(isnull("DictionaryItemId", 0))   from "AvsXDec_DictionaryItem"
+ end 
+ 
+ if @tableName = 'AvsXDec_Document'
+ BEGIN
+    select @idTable = max(isnull("DocumentId", 0))  from "AvsXDec_Document"
+ end 
+ 
+  if @tableName = 'AvsXDec_AvansDetail'
+ BEGIN
+    select @idTable = max(isnull("DocumentDetailId", 0))   from "AvsXDec_AvansDetail"
+ end 
+ 
+  if @tableName = 'AvsXDec_DecontDetail'
+ BEGIN
+    select @idTable = max(isnull("DocumentDetailId", 0))  from "AvsXDec_DecontDetail"
+ end 
+ 
+ if @tableName = 'AvsXDec_AccountingPeriod'
+ BEGIN
+    select @idTable = max(isnull("PeriodOfAccountId", 0))  from "AvsXDec_AccountingPeriod"
+ end 
+ 
+ if @tableName = 'AvsXDec_AccountingYear'
+ BEGIN
+    select @idTable = max(isnull("AccPeriodId", 0))  from "AvsXDec_AccountingYear"
+ end 
+ 
+ if @tableName = 'AvsXDec_BankComission'
+ BEGIN
+    select @idTable = max(isnull("ComissionId", 0))  from "AvsXDec_BankComission"
+ end 
+ 
+ if @tableName = 'AvsXDec_BusinessTransaction'
+ BEGIN
+    select @idTable = max(isnull("TransactionId", 0))  from "AvsXDec_BusinessTransaction"
+ end 
+ 
+ if @tableName = 'AvsXDec_Circuit'
+ BEGIN 
+    select @idTable = max(isnull("CircuitId", 0))  from "AvsXDec_Circuit"
+ end 
+ 
+ if @tableName = 'AvsXDec_DocumentStateHistory'
+ BEGIN 
+    select @idTable = max(isnull("Id", 0))  from "AvsXDec_DocumentStateHistory"
+ end 
+ 
+ if @tableName = 'AvsXDec_DocumentType'
+ BEGIN 
+    select @idTable = max(isnull("DocumentTypeId", 0))  from "AvsXDec_DocumentType"
+ end 
+ 
+ if @tableName = 'AvsXDec_relUploadDocumente'
+ BEGIN 
+    select @idTable = max(isnull("IdAuto", 0))  from "AvsXDec_relUploadDocumente"
+ end 
+ 
+ if @tableName = 'AvsXDec_Settings'
+ BEGIN
+    select @idTable = max(isnull("IdAuto", 0))  from "AvsXDec_Settings"
+ end 
+ 
+ if @idAsignat < @idTable
+ BEGIN
+      update "TableSYSInfo_NextId"
+      set "NextId" = @idTable
+      where "TableName" = @tableName
+ end 
+
+update "TableSYSInfo_NextId"
+ set "NextId" = "NextId" + @nrInreg 
+ where "TableName" = @tableName
+
+END
+
+GO
+
+
+
+create procedure "procAvsXDec_CloseAvansAuto"
+As 
+begin
+
+declare
+
+@nDayForClosing int,
+@nUserForClosing int,
+@nDocumentIdAvans int,
+@nCircuitIdAvans int,
+@nNextDocStateHistoryId int,
+@nCuloare nvarchar(400);
+
+/*preluare ultima zi de inchis avansurile administrative automat*/
+with cteDayClosing as (select cast(par."Valoare" as int) as "LastDay"
+                        from "tblParametrii" par
+                        where par."Nume" = 'AvsXDec_Administrativ_LastDayForClosingAvans'
+                        and par."IdModul" = 10)
+select @nDayForClosing = isnull(dayClosing."LastDay", 5)
+from  cteDayClosing dayClosing ;
+
+/*preluare utilizator care inchide avansurile administrative*/
+with cteUserClosing as (select cast(par."Valoare" as int) as "UserClosing"
+                        from "tblParametrii" par
+                        where par."Nume" = 'AvsXDec_Administrativ_UserClosingAvans'
+                        and par."IdModul" = 10)
+select @nUserForClosing = isnull(userClosing."UserClosing", 5) 
+from  cteUserClosing userClosing ;
+
+
+/*prelucrare avansuri administrative**/ 
+declare @crsAvans CURSOR
+      select avAdm."DocumentId", avAdm."CircuitId"
+      from "vwAvsXDec_Avans" avAdm
+      join "AvsXDec_BusinessTransaction" bt on avAdm."DocumentId" = bt."DestDocId"
+      join "vwAvsXDec_Avans" lstAvAdm on bt."SrcDocId" = lstAvAdm."DocumentId"
+      join "vwAvsXDec_PeriodOfAccount" per on lstAvAdm."AccPeriodId"  = per."AccPeriodId"
+                                        and lstAvAdm."PeriodOfAccountId" = per."PeriodOfAccountId"
+      where CONVERT(INT, CONVERT(DATETIME, CONVERT(VARCHAR, per."EndDate", 103),103) - CONVERT(DATE, GETDATE())) =  @nDayForClosing
+      and avAdm."DocumentStateId" <> 8;
+BEGIN
+   OPEN @crsAvans;
+
+   FETCH NEXT FROM @crsAvans INTO @nDocumentIdAvans, @nCircuitIdAvans  
+ WHILE @@FETCH_STATUS = 0  
+BEGIN  
+      --EXIT WHEN @crsAvans%notfound;
+      
+      exec GetNextId 'AvsXDec_DocumentStateHistory', 1;
+      select @nNextDocStateHistoryId = max(id."NextId") 
+      from "TableSYSInfo_NextId" id
+      where id."TableName" = 'AvsXDec_DocumentStateHistory';
+      
+      select @nCuloare = dictItem."Culoare" 
+      from "AvsXDec_DictionaryItem" dictItem
+      where dictItem."DictionaryItemId" = 8;
+      
+      /*salvam in history inchiderea avansului*/
+      insert into "AvsXDec_DocumentStateHistory"("Id", "DocumentId", "CircuitId", "IdSuper", "Pozitie", "Culoare", "Aprobat","DocumentStateId",user_no, time)
+      values(@nNextDocStateHistoryId, @nDocumentIdAvans, @nCircuitIdAvans, 0, 22, @nCuloare, 1, 8, @nUserForClosing, GETDATE());
+      
+      /*actualizam starea documentului*/
+      update "AvsXDec_Document" set "DocumentStateId" = 8, "Culoare" = @nCuloare where "DocumentId" = @nDocumentIdAvans;
+      
+   END 
+   CLOSE @crsAvans
+	DEALLOCATE @crsAvans 
+
+END;
+
+/*prelucrare lista avansuri administrative
+in momentul inchiderii avansurilor administrative 
+se inchide si lista de avansuri administrative**/ 
+declare @crsLstAvansAdm CURSOR 
+
+      select lstAvAdm."DocumentId", lstAvAdm."CircuitId"
+      from "vwAvsXDec_Avans" avAdm
+      join "AvsXDec_BusinessTransaction" bt on avAdm."DocumentId" = bt."DestDocId"
+      join "vwAvsXDec_Avans" lstAvAdm on bt."SrcDocId" = lstAvAdm."DocumentId"
+      join "vwAvsXDec_PeriodOfAccount" per on lstAvAdm."AccPeriodId"  = per."AccPeriodId"
+                                        and lstAvAdm."PeriodOfAccountId" = per."PeriodOfAccountId"
+      where 
+      --to_date(per."EndDate", 'mm/dd/yyyy') - trunc(sysdate) = nDayForClosing	  
+      CONVERT(INT, CONVERT(DATETIME, CONVERT(VARCHAR, per."EndDate", 103),103) - CONVERT(DATE, GETDATE())) = @nDayForClosing
+      and avAdm."DocumentStateId" = 8
+      group by lstAvAdm."DocumentId", lstAvAdm."CircuitId";
+BEGIN
+   OPEN @crsLstAvansAdm;
+
+      FETCH NEXT FROM @crsLstAvansAdm into @nDocumentIdAvans, @nCircuitIdAvans;
+
+ WHILE @@FETCH_STATUS = 0  
+BEGIN 
+      --EXIT WHEN crsLstAvansAdm%notfound;
+      
+      Exec GetNextId 'AvsXDec_DocumentStateHistory', 1;
+      select @nNextDocStateHistoryId= max(id."NextId")
+      from "TableSYSInfo_NextId" id
+      where id."TableName" = 'AvsXDec_DocumentStateHistory';
+      
+      select @nCuloare = dictItem."Culoare" 
+      from "AvsXDec_DictionaryItem" dictItem
+      where dictItem."DictionaryItemId" = 8;
+      
+      /*salvam in history inchiderea avansului*/
+      insert into "AvsXDec_DocumentStateHistory"("Id", "DocumentId", "CircuitId", "IdSuper", "Pozitie", "Culoare", "Aprobat","DocumentStateId",user_no, time)
+      values(@nNextDocStateHistoryId, @nDocumentIdAvans, @nCircuitIdAvans, 0, 22, @nCuloare, 1, 8, @nUserForClosing, GETDATE());
+      
+      /*actualizam starea documentului*/
+      update "AvsXDec_Document" set "DocumentStateId" = 8, "Culoare" = @nCuloare where "DocumentId" = @nDocumentIdAvans;
+      
+   END ;
+   CLOSE @crsLstAvansAdm
+	DEALLOCATE @crsLstAvansAdm
+END;
+
+
+end;
+GO
+
+
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_BudgetOwner
+--------------------------------------------------------
+  CREATE  VIEW "vwAvsXDec_BudgetOwner" ("IdAuto", "DocumentTypeId", "DocumentTypeCode", "DocumentTypeName", "IdSuper", "DenumireSuper") AS 
+  WITH "cteSettingsNomenBudgetOwner" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" LIKE 'AvsXDec_BudgetOwner%'
+  )
+SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS "IdAuto",
+  docType."DocumentTypeId",
+  docType."DocumentTypeCode",
+  docType."DocumentTypeName" ,
+  (-1) * super."Id" AS "IdSuper",
+  super."Denumire"  AS "DenumireSuper"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenBudgetOwner" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId"
+JOIN "tblSupervizori" super
+ON dictItem."DictionaryItemName" = super."Denumire"
+JOIN "AvsXDec_DocumentType" docType
+ON CAST(REPLACE(sett."Nume", 'AvsXDec_BudgetOwner_', '') AS int) = docType."DocumentTypeId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Circuit_DIM1
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Circuit_DIM1" ("IdAuto", "DictionaryId", "DictionaryItemId", "DictionaryItemName", "DocumentTypeId") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Circuit_DIM1'
+  ) ,
+  "cteSettingsDIM1_AvDecontare" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Circuit_DIM1_AvDecontare'
+  ) ,
+  "cteSettingsDIM1_DecAvans" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Circuit_DIM1_DecAvans'
+  ) ,
+  "cteDefault" AS
+  (SELECT 1 AS "DefaultColumn" 
+  ) ,
+  "cteSettings" AS
+  (SELECT dictItem."DictionaryId",
+    dictItem."DictionaryItemId",
+    dictItem."DictionaryItemName",
+    1001 AS "DocumentTypeId"
+  FROM "AvsXDec_Dictionary" dict
+  JOIN "cteSettingsNomenCheltuieli" sett
+  ON dict."DictionaryCode" = sett."Valoare"
+  JOIN "AvsXDec_DictionaryItem" dictItem
+  ON dict."DictionaryId" = dictItem."DictionaryId"
+  UNION ALL
+  SELECT -99 AS "DictionaryId",
+         -99 "DictionaryItemId",
+    ''   AS "DictionaryItemName",
+    1001 AS "DocumentTypeId"
+  FROM "cteDefault"
+  UNION ALL
+  SELECT dictItem."DictionaryId",
+    dictItem."DictionaryItemId",
+    dictItem."DictionaryItemName",
+    1002 AS "DocumentTypeId"
+  FROM "AvsXDec_Dictionary" dict
+  JOIN "cteSettingsDIM1_AvDecontare" sett
+  ON dict."DictionaryCode" = sett."Valoare"
+  JOIN "AvsXDec_DictionaryItem" dictItem
+  ON dict."DictionaryId" = dictItem."DictionaryId"
+  UNION ALL
+  SELECT -99 AS "DictionaryId",
+         -99 "DictionaryItemId",
+    ''   AS "DictionaryItemName",
+    1002 AS "DocumentTypeId"
+  FROM "cteDefault"
+  UNION ALL
+  SELECT dictItem."DictionaryId",
+    dictItem."DictionaryItemId",
+    dictItem."DictionaryItemName",
+    2001 AS "DocumentTypeId"
+  FROM "AvsXDec_Dictionary" dict
+  JOIN "cteSettingsNomenCheltuieli" sett
+  ON dict."DictionaryCode" = sett."Valoare"
+  JOIN "AvsXDec_DictionaryItem" dictItem
+  ON dict."DictionaryId" = dictItem."DictionaryId"
+  UNION ALL
+  SELECT -99 AS "DictionaryId",
+         -99 "DictionaryItemId",
+    ''   AS "DictionaryItemName",
+    2001 AS "DocumentTypeId"
+  FROM "cteDefault"
+  UNION ALL
+  SELECT dictItem."DictionaryId",
+    dictItem."DictionaryItemId",
+    dictItem."DictionaryItemName",
+    2002 AS "DocumentTypeId"
+  FROM "AvsXDec_Dictionary" dict
+  JOIN "cteSettingsDIM1_AvDecontare" sett
+  ON dict."DictionaryCode" = sett."Valoare"
+  JOIN "AvsXDec_DictionaryItem" dictItem
+  ON dict."DictionaryId" = dictItem."DictionaryId"
+  UNION ALL
+  SELECT -99 AS "DictionaryId",
+         -99 "DictionaryItemId",
+    ''   AS "DictionaryItemName",
+    2002 AS "DocumentTypeId"
+  FROM "cteDefault"
+  )
+SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS "IdAuto",
+  a."DictionaryId",
+  a."DictionaryItemId",
+  a."DictionaryItemName",
+  a."DocumentTypeId"
+FROM "cteSettings" a;
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Circuit_DIM2
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Circuit_DIM2" ("IdAuto", "DictionaryId", "DictionaryItemId", "DictionaryItemName", "DocumentTypeId") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Circuit_DIM2'
+  ) ,
+  "cteDefault" AS
+  (SELECT 1 AS "DefaultColumn" 
+  ) ,
+  "cteSettings" AS
+  (SELECT dictItem."DictionaryId",
+    dictItem."DictionaryItemId",
+    dictItem."DictionaryItemName",
+    1001 AS "DocumentTypeId"
+  FROM "AvsXDec_Dictionary" dict
+  JOIN "cteSettingsNomenCheltuieli" sett
+  ON dict."DictionaryCode" = sett."Valoare"
+  JOIN "AvsXDec_DictionaryItem" dictItem
+  ON dict."DictionaryId" = dictItem."DictionaryId"
+  UNION ALL
+  SELECT -99 AS "DictionaryId",
+         -99 AS "DictionaryItemId",
+    '' "DictionaryItemName",
+    1001 AS "DocumentTypeId"
+  
+  UNION ALL
+  SELECT dictItem."DictionaryId",
+    dictItem."DictionaryItemId",
+    dictItem."DictionaryItemName",
+    2001 AS "DocumentTypeId"
+  FROM "AvsXDec_Dictionary" dict
+  JOIN "cteSettingsNomenCheltuieli" sett
+  ON dict."DictionaryCode" = sett."Valoare"
+  JOIN "AvsXDec_DictionaryItem" dictItem
+  ON dict."DictionaryId" = dictItem."DictionaryId"
+  UNION ALL
+  SELECT -99 AS "DictionaryId",
+         -99 AS "DictionaryItemId",
+    '' "DictionaryItemName",
+    2001 AS "DocumentTypeId"
+  
+  )
+SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS "IdAuto",
+  a."DictionaryId",
+  a."DictionaryItemId",
+  a."DictionaryItemName",
+  a."DocumentTypeId"
+FROM "cteSettings" a;
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_CircuitCombinations
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_CircuitCombinations" ("IdAuto", "DocumentTypeId", "DocumentTypeName", "DIM1Id", "DIM1", "DIM2Id", "DIM2") AS 
+  SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS "IdAuto",
+    dt."DocumentTypeId",
+    dt."DocumentTypeName",
+    dim1."DictionaryItemId" "DIM1Id",
+    dim1."DictionaryItemName" AS "DIM1",
+    dim2."DictionaryItemId" "DIM2Id",
+    dim2."DictionaryItemName" AS "DIM2"
+  FROM "AvsXDec_DocumentType" dt
+  LEFT JOIN "vwAvsXDec_Circuit_DIM1" dim1
+  ON dt."DocumentTypeId" = dim1."DocumentTypeId"
+  LEFT JOIN "vwAvsXDec_Circuit_DIM2" dim2
+  ON dt."DocumentTypeId"         = dim2."DocumentTypeId"
+  WHERE dt."DocumentTypeId" NOT IN (1003);
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_CircuitSettings
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_CircuitSettings" ("DocumentTypeId", "DIM1", "DIM2") AS 
+  SELECT
+    /*pentru Avans spre deplasare, prima dimensiune o reprezinta tipul
+    de deplasare, iar a doua dimensiune o reprezinta rezervarile*/
+    1001            AS "DocumentTypeId",
+    'ActionTypeId'  AS "DIM1",
+    'ReservationId' AS "DIM2"
+  
+  UNION ALL
+  
+  /*pentru Avans spre decontare, prima dimensiune va reprezenta cheltuielile
+  specifice pentru avansul spre decontare, iar a doua dimensiune nu se specifica*/
+  SELECT 1002              AS "DocumentTypeId",
+    'ExpenseAvDecontareId' AS "DIM1",
+    '-99'                  AS "DIM2"
+  
+  UNION ALL
+  
+  /*pentru Decontare avans, prima dimensiune o va reprezenta tipurile
+  de documente pentru decontare, iar a doua dimensiune nu se specifica*/
+  SELECT 2001       AS "DocumentTypeId",
+    'ActionTypeId'  AS "DIM1",
+    'ReservationId' AS "DIM2"
+  
+  UNION ALL
+  
+  /*pentru Decontare Avans spre decontare, prima dimensiune va reprezenta cheltuielile
+  specifice pentru avansul spre decontare, iar a doua dimensiune nu se specifica*/
+  SELECT 2002              AS "DocumentTypeId",
+    'ExpenseAvDecontareId' AS "DIM1",
+    '-99'                  AS "DIM2"
+  GO
+
+
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_ChAvDecontare
+--------------------------------------------------------
+
+  CREATE  VIEW "vwAvsXDec_Nomen_ChAvDecontare" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_TipCheltuieliAvDecontare'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_ChDecDecontare
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Nomen_ChDecDecontare" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_TipCheltuieliAvDecontare'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_DocDecont
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Nomen_DocDecont" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_DocDecont'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_DocPlataBanca
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Nomen_DocPlataBanca" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_DocPlataBanca'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_StariDoc
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Nomen_StariDoc" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_StariDoc'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_TipChDecAdmin
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Nomen_TipChDecAdmin" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_TipCheltuieliDecAdministrativ'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_TipCheltuieli
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Nomen_TipCheltuieli" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_TipCheltuieli'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_TipDeplasare
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Nomen_TipDeplasare" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_TipDeplasare'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_TipMoneda
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Nomen_TipMoneda" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_TipMoneda'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_TipPlata
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Nomen_TipPlata" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_TipPlata'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_TipRezervari
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Nomen_TipRezervari" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_TipRezervari'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Nomen_TipTransport
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Nomen_TipTransport" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Nomen_TipTransport'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_OperationSign
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_OperationSign" ("IdAuto", "OperationSign", "OperationSignId") AS 
+  SELECT 1                 AS "IdAuto",
+    'plata catre angajati' AS "OperationSign",
+    +1                     AS "OperationSignId"
+ 
+  UNION ALL
+  SELECT 2               AS "IdAuto",
+    'recuperare datorii' AS "OperationSign",
+    -1                   AS "OperationSignId"
+  
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_PeriodOfAccount
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_PeriodOfAccount" ("IdAuto", "StartDate", "EndDate", "AccPeriodId", "Year", "PeriodOfAccountId", "Ordine") AS 
+  WITH ctePrincipal AS
+  (SELECT CONVERT(DATETIME, (
+	CONVERT(VARCHAR, DAY(per."StartDate"))
+    + '/'
+    + CONVERT(VARCHAR, MONTH(per."StartDate"))
+    + '/'
+    + CONVERT(VARCHAR, an."Year")), 103) AS "StartDate",
+    CONVERT(DATETIME, (
+	CONVERT(VARCHAR, DAY(per."EndDate"))
+    + '/'
+    + CONVERT(VARCHAR, MONTH(per."EndDate"))
+    + '/'
+    + CONVERT(VARCHAR, an."Year")), 103) AS "EndDate",
+    an."AccPeriodId",
+    an."Year",
+    per."PeriodOfAccountId",
+    per."PeriodOfAccountName"
+  FROM "AvsXDec_AccountingYear" an
+  JOIN "AvsXDec_AccountingPeriod" per
+  ON 1= 1
+  ) ,
+  cteCompare AS
+  (SELECT prc."StartDate",
+    prc."EndDate",
+    prc."Year",
+    COUNT(*) AS "NrOrdine"
+  FROM ctePrincipal prc
+  JOIN ctePrincipal ant
+  ON prc."StartDate">ant."EndDate"
+  AND prc."Year"    = ant."Year"
+  GROUP BY prc."StartDate",
+    prc."EndDate",
+    prc."Year"
+  ) ,
+  cteSursa AS
+  (SELECT prc."StartDate",
+    prc."EndDate",
+    prc."AccPeriodId",
+    prc."Year",
+    prc."PeriodOfAccountId",
+    prc."PeriodOfAccountName",
+    ISNULL(comp."NrOrdine", 0) + 1 AS "Ordine"
+  FROM ctePrincipal prc
+  LEFT JOIN cteCompare comp
+  ON prc."StartDate" = comp."StartDate"
+  AND prc."EndDate"  = comp."EndDate"
+  AND prc."Year"     = comp."Year"
+  )
+SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS "IdAuto",
+  "StartDate",
+  "EndDate",
+  "AccPeriodId",
+  "Year",
+  "PeriodOfAccountId",
+  "Ordine"
+FROM cteSursa
+GO
+
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Settings_Config
+--------------------------------------------------------
+
+  CREATE  VIEW "vwAvsXDec_Settings_Config" ("IdConfiguration", "KeyField1", "KeyField2", "KeyField3") AS 
+  SELECT
+    /*LeonardM 25.04.2016
+    view ce aduce tipurile de setari si dimensiuni pentru tabela AvsXDec_Settings
+    se specifica pentru fiecare dimensiune niste indicative care sunt tratate in cod c# conform
+    ActionTypeId = tip deplasare
+    PaymentTypeId = tip modalitate plata
+    ExpenseId = tip cheltuiala*/
+    1               AS "IdConfiguration",
+    'ActionTypeId'  AS "KeyField1",
+    'PaymentTypeId' AS "KeyField2",
+    'ExpenseId'     AS "KeyField3"
+ 
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Settings_KeyField1
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Settings_KeyField1" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Settings_KeyField1'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Settings_KeyField2
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Settings_KeyField2" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Settings_KeyField2'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Settings_KeyField3
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Settings_KeyField3" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  WITH "cteSettingsNomenCheltuieli" AS
+  (SELECT par."Nume",
+    par."Valoare"
+  FROM "tblParametrii" par
+  WHERE par."Nume" = 'AvsXDec_Settings_KeyField3'
+  )
+SELECT dictItem."DictionaryId",
+  dictItem."DictionaryItemId",
+  dictItem."DictionaryItemName"
+FROM "AvsXDec_Dictionary" dict
+JOIN "cteSettingsNomenCheltuieli" sett
+ON dict."DictionaryCode" = sett."Valoare"
+JOIN "AvsXDec_DictionaryItem" dictItem
+ON dict."DictionaryId" = dictItem."DictionaryId";
+GO
+
+
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_AccountancyBill
+--------------------------------------------------------
+
+  CREATE  VIEW "vwAvsXDec_AccountancyBill" ("IdAuto", "DocumentTypeId", "DocumentTypeCode", "DocumentTypeName", "OperationSignId", "OperationSign", "PaymentTypeId", "PaymentType", "CurrencyId", "CurrencyCode", "BankId", "BankName", "AgencyId", "AgencyCode", "Agency", "Prefix", "AccountSymbol") AS 
+  WITH cteBank AS
+  (SELECT f07503 AS "BankId",
+    f07509       AS "BankName"
+  FROM f075
+  GROUP BY f07509,
+    f07503
+  )
+SELECT acc."IdAuto",
+  acc."DocumentTypeId",
+  docType."DocumentTypeCode",
+  docType."DocumentTypeName",
+  acc."OperationSignId",
+  CAST(sig."OperationSignId" AS int) AS "OperationSign",
+  acc."PaymentTypeId",
+  pl."DictionaryItemName" AS "PaymentType",
+  acc."CurrencyId",
+  mon."DictionaryItemName" AS "CurrencyCode",
+  acc."BankId",
+  bnk."BankName",
+  acc."AgencyId",
+  CAST(ag.f00506 AS NVARCHAR(400)) AS "AgencyCode",
+  ag.f00507                        AS "Agency",
+  acc."Prefix",
+  acc."AccountSymbol"
+FROM "AvsXDec_AccountancyBill" acc
+LEFT JOIN "AvsXDec_DocumentType" docType
+ON acc."DocumentTypeId" = docType."DocumentTypeId"
+LEFT JOIN "vwAvsXDec_OperationSign" sig
+ON acc."OperationSignId" = sig."IdAuto"
+LEFT JOIN "vwAvsXDec_Nomen_TipPlata" pl
+ON acc."PaymentTypeId" = pl."DictionaryItemId"
+LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" mon
+ON acc."CurrencyId" = mon."DictionaryItemId"
+LEFT JOIN cteBank bnk
+ON acc."BankId" = bnk."BankId"
+LEFT JOIN f005 ag
+ON acc."AgencyId" = ag.f00506;
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Avans
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Avans" ("DocumentId", "DocumentTypeId", "DocumentTypeCode", "DocumentTypeName", "DocumentStateId", "DocumentState", "F10003", "NumeComplet", "IdDepartament", "Departament", "LocMunca", "DocumentDate", "CircuitId", "TotalCircuit", "Culoare", "Pozitie", "ActionTypeId", "ActionTypeName", "ActionPlace", "ActionReason", "StartDate", "EndDate", "StartHour", "EndHour", "chkDiurna", "TotalAmount", "EstimatedAmount", "CurrencyId", "CurrencyCode", "ContBancar", "BankId", "BankName", "SucursalaId", "SucursalaName", "PaymentTypeId", "PaymentTypeName", "DueDate", "PaymentDate", "TotalPayment", "TotalComissionPayment", "PaymentCurrencyId", "PaymentCurrencyName", "UnconfRestAmount", "IdFunctie", "Functie", "RefuseReason", "AccPeriodId", "PeriodOfAccountId", "TransportTypeId", "TransportTypeName") AS 
+  SELECT
+    /*LeonardM 20.04.2016
+    view ce aduce detaliile referitoare la angajat
+    pentru documentele de tip avans*/
+    doc."DocumentId",
+    doc."DocumentTypeId",
+    docType."DocumentTypeCode",
+    docType."DocumentTypeName",
+    doc."DocumentStateId",
+    stDoc."DictionaryItemName" AS "DocumentState",
+    doc.F10003,
+    fnume.F10008
+    + ' '
+    + fnume.F10009 AS "NumeComplet",
+    fnume.F10007    AS "IdDepartament",
+    dept.F00507     AS "Departament",
+    fnume.F100572   AS "LocMunca",
+    doc."DocumentDate",
+    doc."CircuitId",
+    doc."TotalCircuit",
+    doc."Culoare",
+    doc."Pozitie",
+    docAvans."ActionTypeId",
+    tipDepl."DictionaryItemName" AS "ActionTypeName",
+    docAvans."ActionPlace",
+    docAvans."ActionReason",
+    docAvans."StartDate",
+    docAvans."EndDate",
+    docAvans."StartHour",
+    docAvans."EndHour",
+    docAvans."chkDiurna",
+    docAvans."TotalAmount",
+    docAvans."EstimatedAmount",
+    docAvans."CurrencyId",
+    tipMon."DictionaryItemName" AS "CurrencyCode",
+    fnume.F10020                AS "ContBancar",
+    fnume.F10018                AS "BankId",
+    bank.F07509                 AS "BankName",
+    fnume.F10019                AS "SucursalaId",
+    bank.F07505                 AS "SucursalaName",
+    docAvans."PaymentTypeId",
+    tipPlata."DictionaryItemName" AS "PaymentTypeName",
+    docAvans."DueDate",
+    docAvans."PaymentDate",
+    docAvans."TotalPayment",
+    docAvans."TotalComissionPayment",
+    docAvans."PaymentCurrencyId",
+    tipMonPlata."DictionaryItemName" AS "PaymentCurrencyName",
+    docAvans."UnconfRestAmount",
+    fnume.F10071 AS "IdFunctie",
+    func.F71804  AS "Functie",
+    docAvans."RefuseReason",
+    docAvans."AccPeriodId",
+    docAvans."PeriodOfAccountId",
+    docAvans."TransportTypeId",
+    tipTransp."DictionaryItemName" as "TransportTypeName"
+  FROM "AvsXDec_Document" doc
+  LEFT JOIN "AvsXDec_DocumentType" docType
+  ON doc."DocumentTypeId" = docType."DocumentTypeId"
+  LEFT JOIN "vwAvsXDec_Nomen_StariDoc" stDoc
+  ON doc."DocumentStateId" = stDoc."DictionaryItemId"
+  LEFT JOIN F100 fnume
+  ON doc.F10003 = fnume.F10003
+  LEFT JOIN F005 dept
+  ON fnume.F10006 = dept.F00506
+  LEFT JOIN "AvsXDec_Avans" docAvans
+  ON doc."DocumentId" = docAvans."DocumentId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipDeplasare" tipDepl
+  ON docAvans."ActionTypeId" = tipDepl."DictionaryItemId"
+  left join "vwAvsXDec_Nomen_TipTransport" tipTransp
+  on docAvans."TransportTypeId" = tipTransp."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" tipMon
+  ON docAvans."CurrencyId" = tipMon."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" tipMonPlata
+  ON docAvans."PaymentCurrencyId" = tipMonPlata."DictionaryItemId"
+  LEFT JOIN F075 bank
+  ON fnume.F10018  = bank.F07503
+  AND fnume.F10019 = bank.F07504
+  LEFT JOIN "vwAvsXDec_Nomen_TipPlata" tipPlata
+  ON docAvans."PaymentTypeId" = tipPlata."DictionaryItemId"
+  LEFT JOIN F718 func
+  ON fnume.F10071             = func.F71802
+  WHERE doc."DocumentTypeId" IN (1001, 1002, 1004, 1003);
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_AvDet_Cheltuieli
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_AvDet_Cheltuieli" ("DocumentId", "DocumentDetailId", "DictionaryItemId", "DictionaryItemName", "Amount", "FreeTxt") AS 
+  SELECT
+    /*cheltuieli avans spre deplasare*/
+    det."DocumentId",
+    det."DocumentDetailId" ,
+    det."DictionaryItemId",
+    ch."DictionaryItemName",
+    det."Amount",
+    det."FreeTxt"
+  FROM "AvsXDec_AvansDetail" det
+  JOIN "vwAvsXDec_Nomen_TipCheltuieli" ch
+  ON det."DictionaryItemId" = ch."DictionaryItemId"
+  UNION ALL
+  SELECT
+    /*cheltuieli avas spre decontare*/
+    det."DocumentId",
+    det."DocumentDetailId",
+    det."DictionaryItemId",
+    ch."DictionaryItemName",
+    det."Amount",
+    det."FreeTxt"
+  FROM "AvsXDec_AvansDetail" det
+  JOIN "vwAvsXDec_Nomen_ChAvDecontare" ch
+  ON det."DictionaryItemId" = ch."DictionaryItemId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_AvDet_Rezervari
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_AvDet_Rezervari" ("DocumentId", "DocumentDetailId", "DictionaryItemId", "DictionaryItemName", "FreeTxt") AS 
+  SELECT det."DocumentId",
+    det."DocumentDetailId" ,
+    det."DictionaryItemId",
+    rez."DictionaryItemName",
+    det."FreeTxt"
+  FROM "AvsXDec_AvansDetail" det
+  JOIN "vwAvsXDec_Nomen_TipRezervari" rez
+  ON det."DictionaryItemId" = rez."DictionaryItemId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_BankComission
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_BankComission" ("ComissionId", "BankId", "BankName", "MinimumPay", "MaximumPay", "CurrencyPayId", "CurrencyPay", "ComissionValue", "ComissionCurrencyId", "ComissionCurrency", "TIME", "USER_NO") AS 
+  SELECT comis."ComissionId",
+    comis."BankId",
+    bank.F07509 AS "BankName",
+    comis."MinimumPay",
+    comis."MaximumPay",
+    comis."CurrencyPayId",
+    payMon."DictionaryItemName" AS "CurrencyPay",
+    comis."ComissionValue",
+    comis."ComissionCurrencyId",
+    comisMon."DictionaryItemName" AS "ComissionCurrency",
+    comis."TIME",
+    comis."USER_NO"
+  FROM "AvsXDec_BankComission" comis
+  LEFT JOIN F075 bank
+  ON comis."BankId" = bank.F07503
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" payMon
+  ON comis."CurrencyPayId" = payMon."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" comisMon
+  ON comis."CurrencyPayId" = comisMon."DictionaryItemId"
+  GROUP BY comis."ComissionId",
+    comis."BankId",
+    bank.F07509 ,
+    comis."MinimumPay",
+    comis."MaximumPay",
+    comis."CurrencyPayId",
+    payMon."DictionaryItemName" ,
+    comis."ComissionValue",
+    comis."ComissionCurrencyId",
+    comisMon."DictionaryItemName",
+    comis."TIME",
+    comis."USER_NO";
+GO
+
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_ConfigCurrencyXPay
+--------------------------------------------------------
+
+  CREATE  VIEW "vwAvsXDec_ConfigCurrencyXPay" ("IdAuto", "F10003", "NumeComplet", "CurrencyId", "CurrencyCode", "PaymentTypeId", "PaymentTypeName", "DocumentTypeId", "DocumentTypeCode", "DocumentTypeName") AS 
+  WITH "ctePaymentConfig" AS
+  (SELECT
+    /*LeonardM 19.08.2016
+    view creat pentru a stabili ce reguli se aplica pentru fiecare angajat in parte
+    referitor la tipul de document creat, moneda aleasa si tipul de plata ales*/
+    /*pentru angajatii care au specificat pe campul F10572 Sediul Central Bucuresti
+    pentru moneda RON, pot alege ca modalitate de plata transfer bancar si plata cahs
+    iar pentru celelalte doar plata cash*/
+    fnume.f10003 ,
+    fnume.f10008
+    + ' '
+    + fnume.f10009          AS "NumeComplet",
+    mon."DictionaryItemId"   AS "CurrencyId",
+    mon."DictionaryItemName" AS "CurrencyCode",
+    pl."DictionaryItemId"    AS "PaymentTypeId",
+    pl."DictionaryItemName"  AS "PaymentTypeName",
+    docType."DocumentTypeId",
+    docType."DocumentTypeCode",
+    docType."DocumentTypeName"
+  FROM f100 fnume
+  JOIN "vwAvsXDec_Nomen_TipMoneda" mon
+  ON 1                          = 1
+  AND mon."DictionaryItemName" IN ('USD', 'EUR')
+  JOIN "vwAvsXDec_Nomen_TipPlata" pl
+  ON 1                         = 1
+  AND pl."DictionaryItemName" IN ('Plata Cash')
+  JOIN "AvsXDec_DocumentType" docType
+  ON 1                              =1
+  AND docType."DocumentTypeId" NOT IN (1003)
+    /* avans administrativ*/
+  WHERE ISNULL(fnume.f100572, '-99') IN ('Sediul Central Bucuresti')
+  UNION ALL
+  SELECT fnume.f10003 ,
+    fnume.f10008
+    + ' '
+    + fnume.f10009          AS "NumeComplet",
+    mon."DictionaryItemId"   AS "CurrencyId",
+    mon."DictionaryItemName" AS "CurrencyCode",
+    pl."DictionaryItemId"    AS "PaymentTypeId",
+    pl."DictionaryItemName"  AS "PaymentTypeName",
+    docType."DocumentTypeId",
+    docType."DocumentTypeCode",
+    docType."DocumentTypeName"
+  FROM f100 fnume
+  JOIN "vwAvsXDec_Nomen_TipMoneda" mon
+  ON 1                          = 1
+  AND mon."DictionaryItemName" IN ('RON')
+  JOIN "vwAvsXDec_Nomen_TipPlata" pl
+  ON 1 = 1
+  JOIN "AvsXDec_DocumentType" docType
+  ON 1                              =1
+  AND docType."DocumentTypeId" NOT IN (1003)
+    /* avans administrativ*/
+  WHERE ISNULL(fnume.f100572, '-99') IN ('Sediul Central Bucuresti')
+  UNION ALL
+  
+  /*pentru angajatii care au specificat pe campul F10572 ceva diferit de Sediul Central Bucuresti
+  pentru moneda RON, pot alege ca modalitate de plata transfer bancar
+  iar pentru celelalte doar plata cash*/
+  SELECT fnume.f10003 ,
+    fnume.f10008
+    + ' '
+    + fnume.f10009          AS "NumeComplet",
+    mon."DictionaryItemId"   AS "CurrencyId",
+    mon."DictionaryItemName" AS "CurrencyCode",
+    pl."DictionaryItemId"    AS "PaymentTypeId",
+    pl."DictionaryItemName"  AS "PaymentTypeName",
+    docType."DocumentTypeId",
+    docType."DocumentTypeCode",
+    docType."DocumentTypeName"
+  FROM f100 fnume
+  JOIN "vwAvsXDec_Nomen_TipMoneda" mon
+  ON 1                          = 1
+  AND mon."DictionaryItemName" IN ('RON')
+  JOIN "vwAvsXDec_Nomen_TipPlata" pl
+  ON 1                         = 1
+  AND pl."DictionaryItemName" IN ('Transfer bancar')
+  JOIN "AvsXDec_DocumentType" docType
+  ON 1                              =1
+  AND docType."DocumentTypeId" NOT IN (1003)
+    /* avans administrativ*/
+  WHERE ISNULL(fnume.f100572, '-99') NOT IN ('Sediul Central Bucuresti')
+  UNION ALL
+  SELECT fnume.f10003 ,
+    fnume.f10008
+    + ' '
+    + fnume.f10009          AS "NumeComplet",
+    mon."DictionaryItemId"   AS "CurrencyId",
+    mon."DictionaryItemName" AS "CurrencyCode",
+    pl."DictionaryItemId"    AS "PaymentTypeId",
+    pl."DictionaryItemName"  AS "PaymentTypeName",
+    docType."DocumentTypeId",
+    docType."DocumentTypeCode",
+    docType."DocumentTypeName"
+  FROM f100 fnume
+  JOIN "vwAvsXDec_Nomen_TipMoneda" mon
+  ON 1                          = 1
+  AND mon."DictionaryItemName" IN ('EUR', 'USD')
+  JOIN "vwAvsXDec_Nomen_TipPlata" pl
+  ON 1                         = 1
+  AND pl."DictionaryItemName" IN ('Plata Cash')
+  JOIN "AvsXDec_DocumentType" docType
+  ON 1                              =1
+  AND docType."DocumentTypeId" NOT IN (1003)
+    /* avans administrativ*/
+  WHERE ISNULL(fnume.f100572, '-99') NOT IN ('Sediul Central Bucuresti')
+  UNION ALL
+  
+  /*LeonardM 22.08.2016
+  configurare moneda pentru avansuri administrativ*/
+  SELECT fnume.f10003 ,
+    fnume.f10008
+    + ' '
+    + fnume.f10009          AS "NumeComplet",
+    mon."DictionaryItemId"   AS "CurrencyId",
+    mon."DictionaryItemName" AS "CurrencyCode",
+    pl."DictionaryItemId"    AS "PaymentTypeId",
+    pl."DictionaryItemName"  AS "PaymentTypeName",
+    docType."DocumentTypeId",
+    docType."DocumentTypeCode",
+    docType."DocumentTypeName"
+  FROM f100 fnume
+  JOIN "vwAvsXDec_Nomen_TipMoneda" mon
+  ON 1 = 1
+  JOIN "vwAvsXDec_Nomen_TipPlata" pl
+  ON 1                             = 1
+  AND pl."DictionaryItemName" NOT IN ('Plata Cash')
+  JOIN "AvsXDec_DocumentType" docType
+  ON 1                          =1
+  AND docType."DocumentTypeId" IN (1003)
+    /* avans administrativ*/
+  )
+SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS "IdAuto",
+  conf.F10003,
+  conf."NumeComplet",
+  conf."CurrencyId",
+  conf."CurrencyCode",
+  conf."PaymentTypeId",
+  conf."PaymentTypeName",
+  conf."DocumentTypeId",
+  conf."DocumentTypeCode",
+  conf."DocumentTypeName"
+FROM "ctePaymentConfig" conf
+GO
+
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_DecDet_Cheltuieli
+--------------------------------------------------------
+
+  CREATE  VIEW "vwAvsXDec_DecDet_Cheltuieli" ("DocumentId", "DocumentDetailId", "IdTipCheltuiala", "TipCheltuiala", "Furnizor", "DocNumberDecont", "DocDateDecont", "CurrencyId", "CurrencyName", "TotalPayment", "RefCurrencyId", "RefCurrencyName", "RefCurrencyValue", "BugetLine", "FreeTxt") AS 
+  SELECT
+    /*LeonardM 20.04.2016
+    cheltuieli inregistrate pe decont*/
+    det."DocumentId",
+    det."DocumentDetailId",
+    det."DictionaryItemId"  AS "IdTipCheltuiala",
+    ch."DictionaryItemName" AS "TipCheltuiala",
+    det."Furnizor",
+    det."DocNumberDecont",
+    det."DocDateDecont",
+    det."CurrencyId",
+    mon."DictionaryItemName" AS "CurrencyName",
+    det."TotalPayment",
+    det."RefCurrencyId",
+    refMon."DictionaryItemName" AS "RefCurrencyName",
+    det."RefCurrencyValue",
+    det."BugetLine",
+    det."FreeTxt"
+  FROM "AvsXDec_DecontDetail" det
+  JOIN "vwAvsXDec_Nomen_TipCheltuieli" ch
+  ON det."DictionaryItemId" = ch."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" mon
+  ON det."CurrencyId" = mon."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" refMon
+  ON det."RefCurrencyId" = refMon."DictionaryItemId"
+  UNION ALL
+  SELECT
+    /*LeonardM 20.04.2016
+    cheltuieli inregistrate pe decont*/
+    det."DocumentId",
+    det."DocumentDetailId",
+    det."DictionaryItemId"  AS "IdTipCheltuiala",
+    ch."DictionaryItemName" AS "TipCheltuiala",
+    det."Furnizor",
+    det."DocNumberDecont",
+    det."DocDateDecont",
+    det."CurrencyId",
+    mon."DictionaryItemName" AS "CurrencyName",
+    det."TotalPayment",
+    det."RefCurrencyId",
+    refMon."DictionaryItemName" AS "RefCurrencyName",
+    det."RefCurrencyValue",
+    det."BugetLine",
+    det."FreeTxt"
+  FROM "AvsXDec_DecontDetail" det
+  JOIN "vwAvsXDec_Nomen_ChAvDecontare" ch
+  ON det."DictionaryItemId" = ch."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" mon
+  ON det."CurrencyId" = mon."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" refMon
+  ON det."RefCurrencyId" = refMon."DictionaryItemId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_DecDet_DocDecontare
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_DecDet_DocDecontare" ("DocumentId", "DocumentDetailId", "IdTipDocument", "TipDocument", "Furnizor", "DocNumberDecont", "DocDateDecont", "CurrencyId", "CurrencyName", "TotalPayment", "RefCurrencyId", "RefCurrencyName", "RefCurrencyValue", "BugetLine", "ExpenseTypeId", "ExpenseTypeName", "FreeTxt") AS 
+  SELECT
+    /*LeonardM 20.04.2016
+    documentele folosite la nivel de document pentru decontare*/
+    det."DocumentId",
+    det."DocumentDetailId",
+    det."DictionaryItemId"      AS "IdTipDocument",
+    decont."DictionaryItemName" AS "TipDocument",
+    det."Furnizor",
+    det."DocNumberDecont",
+    det."DocDateDecont",
+    det."CurrencyId",
+    mon."DictionaryItemName" AS "CurrencyName",
+    det."TotalPayment",
+    det."RefCurrencyId",
+    refMon."DictionaryItemName" AS "RefCurrencyName",
+    det."RefCurrencyValue",
+    det."BugetLine",
+    det."ExpenseTypeId",
+    chDec."DictionaryItemName" AS "ExpenseTypeName",
+    det."FreeTxt"
+  FROM "AvsXDec_DecontDetail" det
+  JOIN "vwAvsXDec_Nomen_DocDecont" decont
+  ON det."DictionaryItemId" = decont."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" mon
+  ON det."CurrencyId" = mon."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" refMon
+  ON det."RefCurrencyId" = refMon."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_ChDecDecontare" chDec
+  ON det."ExpenseTypeId" = chDec."DictionaryItemId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_DecDet_DocPlataBanca
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_DecDet_DocPlataBanca" ("DocumentId", "DocumentDetailId", "IdTipDocument", "TipDocument", "Furnizor", "DocNumberDecont", "DocDateDecont", "CurrencyId", "CurrencyName", "TotalPayment", "FreeTxt") AS 
+  SELECT
+    /*LeonardM 20.04.2016
+    documentele folosite justificare plata*/
+    det."DocumentId",
+    det."DocumentDetailId",
+    det."DictionaryItemId"      AS "IdTipDocument",
+    decont."DictionaryItemName" AS "TipDocument",
+    det."Furnizor",
+    det."DocNumberDecont",
+    det."DocDateDecont",
+    det."CurrencyId",
+    mon."DictionaryItemName" AS "CurrencyName",
+    det."TotalPayment",
+    det."FreeTxt"
+  FROM "AvsXDec_DecontDetail" det
+  JOIN "vwAvsXDec_Nomen_DocPlataBanca" decont
+  ON det."DictionaryItemId" = decont."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" mon
+  ON det."CurrencyId" = mon."DictionaryItemId";
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Decont
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_Decont" ("DocumentId", "DocumentTypeId", "DocumentTypeCode", "DocumentTypeName", "DocumentStateId", "DocumentState", "F10003", "NumeComplet", "IdDepartament", "Departament", "LocMunca", "DocumentDate", "CircuitId", "TotalCircuit", "Culoare", "Pozitie", "ActionTypeId", "ActionTypeName", "ActionPlace", "ActionReason", "StartDate", "EndDate", "StartHour", "EndHour", "chkDiurna", "TotalAmount", "EstimatedAmount", "CurrencyId", "CurrencyCode", "ContBancar", "BankId", "BankName", "SucursalaId", "SucursalaName", "PaymentTypeId", "PaymentTypeName", "PaymentDate", "PaymentValueFinance", "ComissionValueFinance", "UnconfRestAmount", "PaymentCurrencyId", "PaymentCurrencyName", "IdFunctie", "Functie", "RefuseReason", "OriginalDoc", "SrcDocId", "SrcDocAmount", "DestDocAmount", "TransportTypeId", "TransportTypeName") AS 
+  SELECT
+    /*LeonardM 20.04.2016
+    view ce aduce detalii referitoare la angajat
+    pentru documentele de tip decont*/
+    doc."DocumentId",
+    doc."DocumentTypeId",
+    docType."DocumentTypeCode",
+    docType."DocumentTypeName",
+    doc."DocumentStateId",
+    stDoc."DictionaryItemName" AS "DocumentState",
+    doc."F10003",
+    fnume."F10008"
+    + ' '
+    + fnume.F10009 AS "NumeComplet",
+    fnume.F10007    AS "IdDepartament",
+    dept.F00608     AS "Departament",
+    fnume.F100572   AS "LocMunca",
+    doc."DocumentDate",
+    doc."CircuitId",
+    doc."TotalCircuit",
+    doc."Culoare",
+    doc."Pozitie",
+    docAvans."ActionTypeId",
+    tipDepl."DictionaryItemName" AS "ActionTypeName",
+    docAvans."ActionPlace",
+    docAvans."ActionReason",
+    docAvans."StartDate",
+    docAvans."EndDate",
+    docAvans."StartHour",
+    docAvans."EndHour",
+    docAvans."chkDiurna",
+    docAvans."TotalAmount",
+    docAvans."EstimatedAmount",
+    docAvans."CurrencyId",
+    tipMon."DictionaryItemName" AS "CurrencyCode",
+    fnume.F10020                AS "ContBancar",
+    fnume.F10018                AS "BankId",
+    bank.F07509                 AS "BankName",
+    fnume.F10019                AS "SucursalaId",
+    bank.F07505                 AS "SucursalaName",
+    docAvans."PaymentTypeId",
+    tipPlata."DictionaryItemName" AS "PaymentTypeName",
+    docAvans."PaymentDate",
+    docAvans."PaymentValueFinance",
+    docAvans."ComissionValueFinance",
+    docAvans."UnconfRestAmount",
+    docAvans."PaymentCurrencyId",
+    tipMonPlata."DictionaryItemName" AS "PaymentCurrencyName",
+    fnume.F10071                     AS "IdFunctie",
+    func.F71804                      AS "Functie",
+    docAvans."RefuseReason",
+    docAvans."OriginalDoc",
+    bt."SrcDocId",
+    bt."SrcDocAmount",
+    bt."DestDocAmount",
+    docAvans."TransportTypeId",
+    tipTransp."DictionaryItemName" as "TransportTypeName"
+  FROM "AvsXDec_Document" doc
+  LEFT JOIN "AvsXDec_DocumentType" docType
+  ON doc."DocumentTypeId" = docType."DocumentTypeId"
+  LEFT JOIN "vwAvsXDec_Nomen_StariDoc" stDoc
+  ON doc."DocumentStateId" = stDoc."DictionaryItemId"
+  LEFT JOIN F100 fnume
+  ON doc.F10003 = fnume.F10003
+  LEFT JOIN F006 dept
+  ON fnume.F10007 = dept.F00607
+  LEFT JOIN "AvsXDec_Decont" docAvans
+  ON doc."DocumentId" = docAvans."DocumentId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipDeplasare" tipDepl
+  ON docAvans."ActionTypeId" = tipDepl."DictionaryItemId"
+  left join "vwAvsXDec_Nomen_TipTransport" tipTransp
+  on docAvans."TransportTypeId" = tipTransp."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" tipMon
+  ON docAvans."CurrencyId" = tipMon."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" tipMonPlata
+  ON docAvans."PaymentCurrencyId" = tipMonPlata."DictionaryItemId"
+  LEFT JOIN F075 bank
+  ON fnume.F10018  = bank.F07503
+  AND fnume.F10019 = bank.F07504
+  LEFT JOIN "vwAvsXDec_Nomen_TipPlata" tipPlata
+  ON docAvans."PaymentTypeId" = tipPlata."DictionaryItemId"
+  LEFT JOIN F718 func
+  ON fnume.F10071 = func.F71802
+  LEFT JOIN "AvsXDec_BusinessTransaction" bt
+  ON doc."DocumentId"         = bt."DestDocId"
+  WHERE doc."DocumentTypeId" IN (2001, 2002, 2003);
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_DocumenteRestPlata
+--------------------------------------------------------
+GO
+  CREATE  VIEW "vwAvsXDec_DocumenteRestPlata" ("DocumentId", "DocumentStateId", "DocumentState", "DocumentTypeId", "DocumentTypeCode", "DocumentTypeName", "DocumentDate", "TotalAmount", "CurrencyId", "CurrencyCode", "UnconfRestAmount", "BankId", "BankName", "SucursalaId", "SucursalaName", "TotalComissionPayment", "PaymentCurrencyId", "PaymentCurrencyCode", "PaymentDate", "PaymentTypeId", "PaymentTypeName", "BankIdPlatitor", "BankCodePlatitor", "BankNamePlatitor", "IBANPlatitor") AS 
+  SELECT av."DocumentId",
+    av."DocumentStateId",
+    av."DocumentState",
+    av."DocumentTypeId",
+    av."DocumentTypeCode",
+    av."DocumentTypeName",
+    av."DocumentDate",
+    av."TotalAmount",
+    av."CurrencyId",
+    av."CurrencyCode",
+    CASE
+      WHEN av."DocumentStateId" > 3
+      THEN av."TotalPayment"
+      ELSE av."UnconfRestAmount"
+    END "UnconfRestAmount",
+    av."BankId",
+    av."BankName",
+    av."SucursalaId",
+    av."SucursalaName",
+    dbo."fcnAvsXDec_GetComisionBancar"(
+    CASE
+      WHEN av."DocumentStateId" > 3
+      THEN av."TotalPayment"
+      ELSE av."UnconfRestAmount"
+    END, av."CurrencyId", av."BankId") AS "TotalComissionPayment",
+    av."CurrencyId"                    AS "PaymentCurrencyId",
+    av."CurrencyCode"                  AS "PaymentCurrencyCode",
+    av."PaymentDate",
+    av."PaymentTypeId",
+    av."PaymentTypeName",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."IdBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."IdBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."IdBancaBRD"
+      ELSE bnk."IdBancaBCR"
+    END "BankIdPlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."CodBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."CodBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."CodBancaBRD"
+      ELSE bnk."CodBancaBCR"
+    END "BankCodePlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."NumeBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."NumeBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."NumeBancaBRD"
+      ELSE bnk."NumeBancaBCR"
+    END "BankNamePlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."IbanBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."IbanBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."IbanBRD"
+      ELSE bnk."IbanBCR"
+    END "IBANPlatitor"
+  FROM "vwAvsXDec_Avans" av
+  JOIN f100 ang
+  ON av.f10003 = ang.f10003
+  JOIN "vwAvsXDec_Banci" bnk
+  ON 1= 1
+    /*LeonardM 22.08.2016
+    nu se tine cont de aceasta conditie pentru avansuri administrative
+    WHERE ISNULL(av."TotalAmount", 0)                                  - ISNULL(av."UnconfRestAmount", 0) <> 0
+    */
+  WHERE av."DocumentStateId" IN ( 3, 4, 5, 6, 7)
+  UNION ALL
+  SELECT dec."DocumentId",
+    dec."DocumentStateId",
+    dec."DocumentState",
+    dec."DocumentTypeId",
+    dec."DocumentTypeCode",
+    dec."DocumentTypeName",
+    dec."DocumentDate",
+    ISNULL(dec."TotalAmount", 0) as "TotalAmount",
+    dec."CurrencyId",
+    dec."CurrencyCode",
+    CASE
+      WHEN dec."DocumentStateId" > 3
+      THEN dec."PaymentValueFinance"
+      ELSE dec."UnconfRestAmount"
+    END AS "UnconfRestAmount",
+    dec."BankId",
+    dec."BankName",
+    dec."SucursalaId",
+    dec."SucursalaName",
+    dbo."fcnAvsXDec_GetComisionBancar"(
+    CASE
+      WHEN dec."DocumentStateId" > 3
+      THEN dec."PaymentValueFinance"
+      ELSE dec."UnconfRestAmount"
+    END, dec."CurrencyId", dec."BankId") AS "TotalComissionPayment",
+    dec."CurrencyId"                     AS "PaymentCurrencyId",
+    dec."CurrencyCode"                   AS "PaymentCurrencyCode",
+    dec."PaymentDate",
+    dec."PaymentTypeId",
+    dec."PaymentTypeName",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."IdBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."IdBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."IdBancaBRD"
+      ELSE bnk."IdBancaBCR"
+    END "BankIdPlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."CodBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."CodBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."CodBancaBRD"
+      ELSE bnk."CodBancaBCR"
+    END "BankCodePlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."NumeBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."NumeBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."NumeBancaBRD"
+      ELSE bnk."NumeBancaBCR"
+    END "BankNamePlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."IbanBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."IbanBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."IbanBRD"
+      ELSE bnk."IbanBCR"
+    END "IBANPlatitor"
+  FROM "vwAvsXDec_Decont" DEC
+  JOIN f100 ang
+  ON dec.f10003 = ang.f10003
+  JOIN "vwAvsXDec_Banci" bnk
+  ON 1= 1
+    /*LeonardM 22.06.2016
+    aducem si deconturile care trebuie restituite,
+    cat si cele care trebuie achitate
+    WHERE ISNULL(dec."UnconfRestAmount", 0) > 0*/
+  WHERE dec."DocumentStateId" IN( 3, 4, 5, 6, 7);
+  GO
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_DocumenteXPayments
+--------------------------------------------------------
+
+  CREATE  VIEW "vwAvsXDec_DocumenteXPayments" ("DocumentId", "DocumentStateId", "DocumentState", "DocumentTypeId", "DocumentTypeCode", "DocumentTypeName", "DocumentDate", "TotalAmount", "CurrencyId", "CurrencyCode", "UnconfRestAmount", "BankId", "BankName", "SucursalaId", "SucursalaName", "TotalComissionPayment", "PaymentCurrencyId", "PaymentCurrencyCode", "PaymentDate", "PaymentTypeId", "PaymentTypeName", "BankIdPlatitor", "BankCodePlatitor", "BankNamePlatitor", "IBANPlatitor") AS 
+  SELECT av."DocumentId",
+    av."DocumentStateId",
+    av."DocumentState",
+    av."DocumentTypeId",
+    av."DocumentTypeCode",
+    av."DocumentTypeName",
+    av."DocumentDate",
+    av."TotalAmount",
+    av."CurrencyId",
+    av."CurrencyCode",
+    CASE
+      WHEN av."DocumentStateId" > 3
+      THEN av."TotalPayment"
+      ELSE av."UnconfRestAmount"
+    END "UnconfRestAmount",
+    av."BankId",
+    av."BankName",
+    av."SucursalaId",
+    av."SucursalaName",
+    dbo."fcnAvsXDec_GetComisionBancar"(
+    CASE
+      WHEN av."DocumentStateId" > 3
+      THEN av."TotalPayment"
+      ELSE av."UnconfRestAmount"
+    END, av."CurrencyId", av."BankId") AS "TotalComissionPayment",
+    av."CurrencyId"                    AS "PaymentCurrencyId",
+    av."CurrencyCode"                  AS "PaymentCurrencyCode",
+    av."PaymentDate",
+    av."PaymentTypeId",
+    av."PaymentTypeName",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."IdBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."IdBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."IdBancaBRD"
+      ELSE bnk."IdBancaBCR"
+    END "BankIdPlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."CodBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."CodBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."CodBancaBRD"
+      ELSE bnk."CodBancaBCR"
+    END "BankCodePlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."NumeBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."NumeBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."NumeBancaBRD"
+      ELSE bnk."NumeBancaBCR"
+    END "BankNamePlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."IbanBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."IbanBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."IbanBRD"
+      ELSE bnk."IbanBCR"
+    END "IBANPlatitor"
+  FROM "vwAvsXDec_Avans" av
+  JOIN f100 ang
+  ON av.f10003 = ang.f10003
+  JOIN "vwAvsXDec_Banci" bnk
+  ON 1                                                            = 1
+  WHERE ISNULL(av."TotalAmount", 0) - ISNULL(av."UnconfRestAmount", 0) <> 0
+  AND av."DocumentStateId"                                       >=4
+  UNION ALL
+  SELECT dec."DocumentId",
+    dec."DocumentStateId",
+    dec."DocumentState",
+    dec."DocumentTypeId",
+    dec."DocumentTypeCode",
+    dec."DocumentTypeName",
+    dec."DocumentDate",
+    dec."TotalAmount",
+    dec."CurrencyId",
+    dec."CurrencyCode",
+    CASE
+      WHEN dec."DocumentStateId" > 3
+      THEN dec."PaymentValueFinance"
+      ELSE dec."UnconfRestAmount"
+    END AS "UnconfRestAmount",
+    dec."BankId",
+    dec."BankName",
+    dec."SucursalaId",
+    dec."SucursalaName",
+    dbo."fcnAvsXDec_GetComisionBancar"(
+    CASE
+      WHEN dec."DocumentStateId" > 3
+      THEN dec."PaymentValueFinance"
+      ELSE dec."UnconfRestAmount"
+    END, dec."CurrencyId", dec."BankId") AS "TotalComissionPayment",
+    dec."CurrencyId"                     AS "PaymentCurrencyId",
+    dec."CurrencyCode"                   AS "PaymentCurrencyCode",
+    dec."PaymentDate",
+    dec."PaymentTypeId",
+    dec."PaymentTypeName",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."IdBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."IdBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."IdBancaBRD"
+      ELSE bnk."IdBancaBCR"
+    END "BankIdPlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."CodBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."CodBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."CodBancaBRD"
+      ELSE bnk."CodBancaBCR"
+    END "BankCodePlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."NumeBancaBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."NumeBancaBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."NumeBancaBRD"
+      ELSE bnk."NumeBancaBCR"
+    END "BankNamePlatitor",
+    CASE SUBSTRING(ang.f10020, 5,4)
+      WHEN bnk."CodBancaBCR"
+      THEN bnk."IbanBCR"
+      WHEN bnk."CodBancaBT"
+      THEN bnk."IbanBT"
+      WHEN bnk."CodBancaBRD"
+      THEN bnk."IbanBRD"
+      ELSE bnk."IbanBCR"
+    END "IBANPlatitor"
+  FROM "vwAvsXDec_Decont" DEC
+  JOIN f100 ang
+  ON dec.f10003 = ang.f10003
+  JOIN "vwAvsXDec_Banci" bnk
+  ON 1= 1
+    /*LeonardM 22.06.2016
+    aducem si deconturile care trebuie restituite,
+    cat si cele care trebuie achitate
+    WHERE ISNULL(dec."UnconfRestAmount", 0) > 0*/
+  WHERE dec."DocumentStateId" >=4;
+
+GO
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_LstAvAdministrativ
+--------------------------------------------------------
+
+  CREATE  VIEW "vwAvsXDec_LstAvAdministrativ" ("DocumentId", "DocumentTypeId", "DocumentTypeCode", "DocumentTypeName", "DocumentStateId", "DocumentState", "DocumentDetailId", "F10003", "NumeComplet", "IdDepartament", "Departament", "LocMunca", "ContBancar", "BankId", "BankName", "SucursalaId", "SucursalaName", "IdFunctie", "Functie", "Amount", "CurrencyId", "CurrencyName", "SoldAmount", "SoldCurrencyId", "SoldCurrencyName") AS 
+  SELECT hed."DocumentId",
+    hed."DocumentTypeId",
+    docType."DocumentTypeCode",
+    docType."DocumentTypeName",
+    hed."DocumentStateId",
+    stDoc."DictionaryItemName" AS "DocumentState",
+    det."DocumentDetailId",
+    det."F10003",
+    fnume.F10008
+    + ' '
+    + fnume.F10009 AS "NumeComplet",
+    fnume.F10007    AS "IdDepartament",
+    dept.F00608     AS "Departament",
+    fnume.F100572   AS "LocMunca",
+    fnume.F10020    AS "ContBancar",
+    fnume.F10018    AS "BankId",
+    bank.F07509     AS "BankName",
+    fnume.F10019    AS "SucursalaId",
+    bank.F07505     AS "SucursalaName",
+    fnume.F10071    AS "IdFunctie",
+    func.F71804     AS "Functie",
+    det."Amount",
+    det."CurrencyId",
+    tipMon."DictionaryItemName" AS "CurrencyName",
+    det."SoldAmount",
+    det."SoldCurrencyId",
+    tipMonSold."DictionaryItemName" AS "SoldCurrencyName"
+  FROM "AvsXDec_Document" hed
+  LEFT JOIN "AvsXDec_DocumentType" docType
+  ON hed."DocumentTypeId" = docType."DocumentTypeId"
+  LEFT JOIN "vwAvsXDec_Nomen_StariDoc" stDoc
+  ON hed."DocumentStateId" = stDoc."DictionaryItemId"
+  JOIN "AvsXDec_AvansDetail" det
+  ON hed."DocumentId" = det."DocumentId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" tipMon
+  ON det."CurrencyId" = tipMon."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" tipMonSold
+  ON det."SoldCurrencyId"= tipMonSold."DictionaryItemId"
+  LEFT JOIN F100 fnume
+  ON det.F10003 = fnume.F10003
+  LEFT JOIN F006 dept
+  ON fnume.F10007 = dept.F00607
+  LEFT JOIN F075 bank
+  ON fnume.F10018  = bank.F07503
+  AND fnume.F10019 = bank.F07504
+  LEFT JOIN F718 func
+  ON fnume.F10071             = func.F71802
+  WHERE hed."DocumentTypeId" IN (1004
+    /*Lista avansuri administrativ*/
+    );
+	GO
+
+--------------------------------------------------------
+--  DDL for View vwAvsXDec_Settings
+--------------------------------------------------------
+
+  CREATE  VIEW "vwAvsXDec_Settings" ("KeyField1", "KeyField1Name", "KeyField2", "KeyField2Name", "KeyField3", "KeyField3Name", "F71802", "Functie", "MinimumPay", "MaximumPay", "CurrencyId", "CurrencyName", "TIME", "USER_NO", "IdAuto") AS 
+  SELECT sett."KeyField1",
+    field1."DictionaryItemName" AS "KeyField1Name",
+    sett."KeyField2",
+    field2."DictionaryItemName" AS "KeyField2Name",
+    sett."KeyField3",
+    field3."DictionaryItemName" AS "KeyField3Name",
+    ISNULL(sett.F71802, -99) as f71802,
+    ISNULL(func.F71804, '-99') AS "Functie",
+    sett."MinimumPay",
+    sett."MaximumPay",
+    sett."CurrencyId",
+    mon."DictionaryItemName" AS "CurrencyName",
+    sett.TIME,
+    sett.USER_NO,
+    sett."IdAuto"
+  FROM "AvsXDec_Settings" sett
+  LEFT JOIN "vwAvsXDec_Settings_KeyField1" field1
+  ON sett."KeyField1" = field1."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Settings_KeyField2" field2
+  ON sett."KeyField2" = field2."DictionaryItemId"
+  LEFT JOIN "vwAvsXDec_Settings_KeyField3" field3
+  ON sett."KeyField3" = field3."DictionaryItemId"
+  LEFT JOIN F718 func
+  ON sett.F71802 = func.F71802
+  LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" mon
+  ON sett."CurrencyId" = mon."DictionaryItemId";
+
 
 
 ---- AvsXDec END ----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Insert into"AvsXDec_BankComission" ("ComissionId","BankId","MinimumPay","MaximumPay","CurrencyPayId","ComissionValue","ComissionCurrencyId",USER_NO,TIME) values ('2','23','-99','-99','12','0','15','22489',GETDATE())
-Go
-Insert into "AvsXDec_BankComission" ("ComissionId","BankId","MinimumPay","MaximumPay","CurrencyPayId","ComissionValue","ComissionCurrencyId",USER_NO,TIME) values ('5','20','-99','-99','12','0','15','22489',GETDATE())
-GO
-Insert into "AvsXDec_BankComission" ("ComissionId","BankId","MinimumPay","MaximumPay","CurrencyPayId","ComissionValue","ComissionCurrencyId",USER_NO,TIME) values ('6','32','-99','-99',null,'0','15','22489',GETDATE())
-GO
-
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('12','18','-99','1001','0','-1','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('13','19','-99','1001','0','-1','-2','-31','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('14','18','-99','2001','0','-1','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'30544',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('16','18','11','1001','0','-1','-2','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'30544',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('17',null,null,'1004','0','-5','-24',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'30544',GETDATE()))
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('25','26',null,'1002','0','-1','-23',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('26','27',null,'1002','0','-1','-24',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('27','25',null,'1002','0','-1','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('28','30',null,'1002','0','-1','-21',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('30','29',null,'1002','0','-1','-26',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('31','28',null,'2002','0','-1','-25',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('19',null,null,'2003','0','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'30544',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('20','28',null,'1002','0','-1','-25',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'30544',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('33','18','11','2001','0','-1','-2','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('34','19','-99','2001','0','-1','-2','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('39','27',null,'2002','0','-1','-24',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('35','26',null,'2002','0','-1','-23',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('36','29',null,'2002','0','-1','-26',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('37','25',null,'2002','0','-1','-28',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Circuit" ("CircuitId",DIM1,DIM2,"DocumentTypeId","Super1","Super2","Super3","Super4","Super5","Super6","Super7","Super8","Super9","Super10","Super11","Super12","Super13","Super14","Super15","Super16","Super17","Super18","Super19","Super20",USER_NO,TIME) values ('38','30',null,'2002','0','-1','-21',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'22489',GETDATE())
-GO
-
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('1','ST','Stari documente','0','-99',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('2','CH','Cheltuieli','0','-99',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('3','REZ','Rezervari','0','-99',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('4','DOCType','Tipuri documente pentru decontare','0','-99',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('5','CURR','Tipuri valute folosite','0','-99',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('6','DOCTypePayments','Tipuri documente cu care se fac plata catre banca','0','-99',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('7','ActionType','Tip deplasare','0','-99',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('8','PayType','Modalitate plata','0','-99',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('9','CH_AvansDecontare','Cheltuieli avans spre decontare','0','-99',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('10','CH_DecontAdministrativ','Tip cheltuieli decont administrativ','0','-99',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('14','BudgetOwner_2003','BudgetOwner decont administativ',null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('12','BudgetOwner_2001','BudgetOwner decont avans deplasare',null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('13','BudgetOwner_2002','BudgetOwner decont cheltuieli',null,'22489',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('17','TransportType','Tip transport','0','-99',GETDATE())
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('15','BudgetOwner_1001','BudgetOwner avans deplasare','0','22489',null)
-GO
-Insert into "AvsXDec_Dictionary" ("DictionaryId","DictionaryCode","DictionaryName","hasProperties",USER_NO,TIME) values ('16','BudgetOwner_1002','BudgetOwner avans cheltuieli','0','22489',null)
-GO
-
-
-
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('-1','Anulat','#FFFF0000','1',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('0','Respins','#FFFF0000','1',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('1','Solicitat','#FFFFFF00','1',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('2','In Curs','#FFFFA500','1',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('3','Aprobat','#FF90EE90','1',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('46','Cheltuiala diurna',null,'4','-99','22489',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('51','Avans Logistica',null,'14','-99','22489',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('9','Cazare',null,'2','1',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('38','Taxe de drum, pod, bac',null,'2','4',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('11','Bilete avion',null,'3','1',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('58','Avion',null,'17',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('13','Factura',null,'4',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('14','Bon fiscal',null,'4',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('15','RON',null,'5','1',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('16','EUR',null,'5','2',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('17','Chitanta',null,'6','-99',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('18','Deplasare interna',null,'7','1',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('19','Deplasare externa',null,'7','2',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('20','Cazare',null,'3','3',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('21','Taxi',null,'3','4',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('22','Plata Cash',null,'8','2',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('23','Transfer bancar',null,'8','1',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('24','Diurna',null,'2','3',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('25','Cheltuieli logistica',null,'9',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('26','Cheltuieli juridice',null,'9',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('27','Cheltuieli HR',null,'9',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('28','Cheltuieli IT',null,'9',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('29','Cheltuieli marketing',null,'9',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('30','Cheltuieli financiare',null,'9',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('31','plata utilitatilor',null,'10',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('32','reparatii si consumabile necesare in unitate',null,'10',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('33','cheltuieli de protocol in conformitate cu gradul agentiei si a sumelor alocate',null,'10',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('34','cheltuieli pentru spalarea autoturismelor din unitate conform politicii auto',null,'10',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('35','cheltuieli pentru montarea demontarea anvelopelor la schimbarea de sezon si reparatii ce tin de anvelope',null,'10',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('39','Benzina',null,'2','5',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('40','Protocol',null,'2','6',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('41','Alte cheltuieli',null,'2','7',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('52','Avans IT',null,'14','-99','22489',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('53','Avans Marketing',null,'14','-99','22489',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('4','Trimis la banca','#FF90EE90','1',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('43','USD',null,'5','3','22489',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('5','Acordat','#FF008000','1',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('6','Restituit','#FF90EE90','1',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('7','Contat','#FF90EE90','1',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('8','Inchis','#FF90EE90','1',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('45','OP',null,'6',null,'22489',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('36','Transport',null,'2','2',null,GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('47','Avans Logistica',null,'12',null,'22489',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('48','Avans IT',null,'13',null,'22489',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('49','Avans Logistica',null,'13',null,'22489',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('50','Avans Marketing',null,'13',null,'22489',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('59','Tren',null,'17',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('60','Auto Groupama',null,'17',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('61','Auto propriu',null,'17',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('62','Altul',null,'17',null,'-99',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('54','Avans IT',null,'16',null,'22489',null);
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('55','Avans Logistica',null,'16',null,'22489',null);
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('56','Avans Marketing',null,'16',null,'22489',null);
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('57','Avans Logistica',null,'15',null,'22489',null);
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('63','Avans Juridic',null,'13','-99','30317',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('64','Avans Juridic',null,'16','-99','30317',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('65','Avans Financiar',null,'13','-99','30317',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('66','Avans HR',null,'13','-99','30317',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('67','Avans Financiar',null,'16','-99','30317',GETDATE());
-Insert into "AvsXDec_DictionaryItem" ("DictionaryItemId","DictionaryItemName","Culoare","DictionaryId","Ordine",USER_NO,TIME) values ('68','Avans HR',null,'16','-99','30317',GETDATE());
-
-
-Insert into "AvsXDec_AccountingPeriod" ("PeriodOfAccountId","PeriodOfAccountName","StartDate","EndDate",USER_NO,TIME) values ('4','Trimestrul 2',CONVERT(DATETIME, '01/04/2016',103),CONVERT(DATETIME,'30/06/2016',103),'22489',GETDATE());
-Insert into "AvsXDec_AccountingPeriod" ("PeriodOfAccountId","PeriodOfAccountName","StartDate","EndDate",USER_NO,TIME) values ('3','Trimestrul 1',CONVERT(DATETIME,'01/01/2016',103),CONVERT(DATETIME,'31/03/2016',103),'22489',GETDATE());
-Insert into "AvsXDec_AccountingPeriod" ("PeriodOfAccountId","PeriodOfAccountName","StartDate","EndDate",USER_NO,TIME) values ('8','Trimestrul 4',CONVERT(DATETIME,'01/10/2016',103),CONVERT(DATETIME,'31/12/2016',103),'30544',GETDATE());
-Insert into "AvsXDec_AccountingPeriod" ("PeriodOfAccountId","PeriodOfAccountName","StartDate","EndDate",USER_NO,TIME) values ('6','Trimestrul 3',CONVERT(DATETIME,'01/07/2016',103),CONVERT(DATETIME,'30/09/2016',103),'22489',GETDATE());
-
-
-
-Insert into "AvsXDec_AccountingYear" ("AccPeriodId","Year",USER_NO,TIME) values ('1','2016','22489',GETDATE());
-Insert into "AvsXDec_AccountingYear" ("AccPeriodId","Year",USER_NO,TIME) values ('2','2017','30317',GETDATE());
-Insert into "AvsXDec_AccountingYear" ("AccPeriodId","Year",USER_NO,TIME) values ('3','2018','30317',GETDATE());
-
-
-Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('1001','AVDPS','Avans spre deplasare','Avans spre deplasare','-99',GETDATE());
-Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('1002','AVDEC','Avans spre decontare','Avans spre decontare','-99',GETDATE());
-Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('1003','AVADM','Avans Administrativ','Avans Administrativ','-99',GETDATE());
-Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('1004','LSTAVADM','Lista Avansuri Administrative','Lista Avansuri Administrative','-99',GETDATE());
-Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('2001','DCDPS','Decont cheltuieli deplasare','Decont cheltuieli deplasare','-99',GETDATE());
-Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('2002','DCCH','Decont cheltuieli','Decont cheltuieli','-99',GETDATE());
-Insert into "AvsXDec_DocumentType" ("DocumentTypeId","DocumentTypeCode","DocumentTypeName","Alias",USER_NO,TIME) values ('2003','DECADM','Decont Administrativ','Decont Administrativ','-99',GETDATE());

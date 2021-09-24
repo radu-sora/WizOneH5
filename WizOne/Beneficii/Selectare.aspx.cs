@@ -399,7 +399,7 @@ namespace WizOne.Beneficii
             {
                 string strSql = "";
 
-                strSql = "SELECT Ben_Cereri.IdAuto, F10003, Ben_Cereri.IdSesiune, IdBeneficiu, Ben_tblSesiuni.DataInceput, Ben_tblSesiuni.DataSfarsit, Ben_Cereri.IdStare, Ben_relSesGrupBen.DataInceput as DataInceputBen, Ben_relSesGrupBen.DataSfarsit as DataSfarsitBen, Motiv, Ben_Cereri.USER_NO, Ben_Cereri.TIME FROM Ben_Cereri "
+                strSql = "SELECT Ben_relSesGrupBen.IdAuto, F10003, Ben_Cereri.IdSesiune, IdBeneficiu, Ben_tblSesiuni.DataInceput, Ben_tblSesiuni.DataSfarsit, Ben_Cereri.IdStare, Ben_relSesGrupBen.DataInceput as DataInceputBen, Ben_relSesGrupBen.DataSfarsit as DataSfarsitBen, Motiv, Ben_Cereri.USER_NO, Ben_Cereri.TIME FROM Ben_Cereri "
                     + " LEFT JOIN Ben_tblSesiuni ON Ben_Cereri.IdSesiune = Ben_tblSesiuni.Id "
                     + " left join Ben_relSesGrupBen on Ben_tblSesiuni.Id = Ben_relSesGrupBen.IdSesiune "
                     + " WHERE convert(date, Ben_tblSesiuni.DataInceput) <= convert(date, GETDATE()) AND convert(date, GETDATE()) <= convert(date, Ben_tblSesiuni.DataSfarsit) AND F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99);

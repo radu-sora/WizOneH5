@@ -443,8 +443,8 @@ namespace WizOne.Personal
                 grDate.CancelEdit();
 
                 DataTable dt = Session["NL_Grid"] as DataTable;
-                int idStare = -99, idNota = -99;
-
+                int idStare = -99, idNota = -99, idStareV = -99;
+                
                 for (int i = 0; i < e.UpdateValues.Count; i++)
                 {
                     ASPxDataUpdateValues upd = e.UpdateValues[i] as ASPxDataUpdateValues;
@@ -470,7 +470,10 @@ namespace WizOne.Personal
                         if (col.ColumnName == "TIME")
                             row[col.ColumnName] = DateTime.Now;
                         if (col.ColumnName == "IdStare")
-                            idStare = Convert.ToInt32(upd.NewValues[col.ColumnName].ToString());               
+                        {
+                            idStareV = Convert.ToInt32(upd.OldValues[col.ColumnName].ToString());
+                            idStare = Convert.ToInt32(upd.NewValues[col.ColumnName].ToString());
+                        }
 
                     }
 
@@ -488,10 +491,13 @@ namespace WizOne.Personal
                 int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
                 int idUser = Convert.ToInt32(Session["UserId"] ?? -99);
 
-                HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                if (idStareV != idStare)
                 {
-                    NotifAsync.TrimiteNotificare("Personal.NotaLichidare", (int)Constante.TipNotificare.Notificare, "SELECT Z.* FROM MP_NotaLichidare Z WHERE Z.IdAuto=" + idNota.ToString(), "MP_NotaLichidare", idNota, idUser, marcaUser, arrParam);
-                });
+                    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                    {
+                        NotifAsync.TrimiteNotificare("Personal.NotaLichidare", (int)Constante.TipNotificare.Notificare, "SELECT Z.* FROM MP_NotaLichidare Z WHERE Z.IdAuto=" + idNota.ToString(), "MP_NotaLichidare", idNota, idUser, marcaUser, arrParam);
+                    });
+                }
 
             }
             catch (Exception ex)
@@ -508,7 +514,7 @@ namespace WizOne.Personal
 
                 DataTable dt = Session["NL_GridDet"] as DataTable;
 
-                int idNota = -99;
+                int idNota = -99, idStare = -99, idStareV = -99;
                 string rol = "";
 
                 for (int i = 0; i < e.UpdateValues.Count; i++)
@@ -537,7 +543,13 @@ namespace WizOne.Personal
                         if (col.ColumnName == "USER_NO")
                             row[col.ColumnName] = Session["UserId"].ToString();
                         if (col.ColumnName == "TIME")
-                            row[col.ColumnName] = DateTime.Now;       
+                            row[col.ColumnName] = DateTime.Now;
+
+                        if (col.ColumnName == "IdStare")
+                        {
+                            idStareV = Convert.ToInt32(upd.OldValues[col.ColumnName].ToString());
+                            idStare = Convert.ToInt32(upd.NewValues[col.ColumnName].ToString());
+                        }
                     }
 
                 }
@@ -552,10 +564,13 @@ namespace WizOne.Personal
                 int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
                 int idUser = Convert.ToInt32(Session["UserId"] ?? -99);
 
-                HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                if (idStareV != idStare)
                 {
-                    NotifAsync.TrimiteNotificare("Personal.NotaLichidare", (int)Constante.TipNotificare.Notificare, "SELECT Z.*, Y.Rol, Y.Valoare, Y.Datorii, Y.Comentarii, Y.Supervizor FROM MP_NotaLichidare Z LEFT JOIN MP_NotaLichidare_Detalii Y ON Z.IdAuto = Y.IdNotaLichidare WHERE Z.IdAuto=" + idNota.ToString() + " AND Y.Rol = '" + rol + "'", "MP_NotaLichidare", idNota, idUser, marcaUser, arrParam);
-                });
+                    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                    {
+                        NotifAsync.TrimiteNotificare("Personal.NotaLichidare", (int)Constante.TipNotificare.Notificare, "SELECT Z.*, Y.Rol, Y.Valoare, Y.Datorii, Y.Comentarii, Y.Supervizor FROM MP_NotaLichidare Z LEFT JOIN MP_NotaLichidare_Detalii Y ON Z.IdAuto = Y.IdNotaLichidare WHERE Z.IdAuto=" + idNota.ToString() + " AND Y.Rol = '" + rol + "'", "MP_NotaLichidare", idNota, idUser, marcaUser, arrParam);
+                    });
+                }
 
             }
             catch (Exception ex)

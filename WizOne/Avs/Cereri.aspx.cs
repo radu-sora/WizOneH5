@@ -2372,19 +2372,21 @@ namespace WizOne.Avs
                         lista[e.Parameter.Split(';')[1]] = e.Parameter.Split(';')[2];
                     else
                         lista.Add(e.Parameter.Split(';')[1], e.Parameter.Split(';')[2]);
-                    foreach (string elem in lista.Keys)
-                    {
-                        dynamic ctl = (dynamic)pnlCtl.Controls[0].FindControl(elem);
-                        if (ctl != null)
-                        {
-                            if (ctl.GetType() == typeof(ASPxTextBox) || ctl.GetType() == typeof(ASPxComboBox))
-                                ctl.Value = lista[elem];
-                            if (ctl.GetType() == typeof(ASPxDateEdit))
-                                ctl.Value = Convert.ToDateTime(lista[elem]);
-                        }
-                    }
                 }
-                Session["AvsLista"] = lista;
+         
+                foreach (string elem in lista.Keys)
+                {
+                    dynamic ctl = (dynamic)pnlCtl.Controls[0].FindControl(elem);
+                    if (ctl != null)
+                    {
+                        if (ctl.GetType() == typeof(ASPxTextBox) || ctl.GetType() == typeof(ASPxComboBox))
+                            ctl.Value = lista[elem];
+                        if (ctl.GetType() == typeof(ASPxDateEdit))
+                            ctl.Value = Convert.ToDateTime(lista[elem]);
+                    }
+                }             
+                
+                
 
                 switch (tip)
                 {
@@ -2457,6 +2459,10 @@ namespace WizOne.Avs
                             string text = "";
                             General.CalcSalariu(1, txt1Nou.Value, Convert.ToInt32(General.Nz(cmbAng.Value, -99)), out venitCalculat, out text);
                             txt2Nou.Value = venitCalculat;
+                            if (lista.ContainsKey("txt2Nou"))
+                                lista["txt2Nou"] = venitCalculat.ToString();
+                            else
+                                lista.Add("txt2Nou", venitCalculat.ToString());
                         }
                         if (e.Parameter.Split(';')[1] == "txt2Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Salariul)
                         {
@@ -2465,6 +2471,10 @@ namespace WizOne.Avs
                             string text = "";
                             General.CalcSalariu(2, txt2Nou.Value, Convert.ToInt32(General.Nz(cmbAng.Value, -99)), out venitCalculat, out text);
                             txt1Nou.Value = venitCalculat;
+                            if (lista.ContainsKey("txt1Nou"))
+                                lista["txt1Nou"] = venitCalculat.ToString();
+                            else
+                                lista.Add("txt1Nou", venitCalculat.ToString());
                         }
 
 
@@ -2478,6 +2488,14 @@ namespace WizOne.Avs
                                 ctr.CalculLuniSiZile(Convert.ToDateTime(de1Nou.Date), Convert.ToDateTime(de2Nou.Date), out nrLuni, out nrZile);
                                 txt1Nou.Value = nrLuni;
                                 txt2Nou.Value = nrZile;
+                                if (lista.ContainsKey("txt1Nou"))
+                                    lista["txt1Nou"] = nrLuni.ToString();
+                                else
+                                    lista.Add("txt1Nou", nrLuni.ToString());
+                                if (lista.ContainsKey("txt2Nou"))
+                                    lista["txt2Nou"] = nrZile.ToString();
+                                else
+                                    lista.Add("txt2Nou", nrZile.ToString());
                             }
                         }
                         if ((e.Parameter.Split(';')[1] == "de1Nou" || e.Parameter.Split(';')[1] == "de2Nou") && (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.TipContract ||
@@ -2490,6 +2508,14 @@ namespace WizOne.Avs
                                 ctr.CalculLuniSiZile(Convert.ToDateTime(de1Nou.Date), Convert.ToDateTime(de2Nou.Date), out nrLuni, out nrZile);
                                 txt3Nou.Value = nrLuni;
                                 txt4Nou.Value = nrZile;
+                                if (lista.ContainsKey("txt3Nou"))
+                                    lista["txt3Nou"] = nrLuni.ToString();
+                                else
+                                    lista.Add("txt3Nou", nrLuni.ToString());
+                                if (lista.ContainsKey("txt4Nou"))
+                                    lista["txt4Nou"] = nrZile.ToString();
+                                else
+                                    lista.Add("txt4Nou", nrZile.ToString());
                             }
                         }
 
@@ -2509,11 +2535,26 @@ namespace WizOne.Avs
                                 de2Nou.Value = new DateTime(2100, 1, 1);
                                 txt1Nou.Value = "";
                                 txt2Nou.Value = "";
+                                if (lista.ContainsKey("de1Nou"))
+                                    lista["de1Nou"] = "01/01/2100";
+                                else
+                                    lista.Add("de1Nou", "01/01/2100");
+                                if (lista.ContainsKey("de2Nou"))
+                                    lista["de2Nou"] = "01/01/2100";
+                                else
+                                    lista.Add("de2Nou", "01/01/2100");
+
                             }
                             if (Convert.ToInt32(e.Parameter.Split(';')[2]) == 2)
                             {
                                 if (de2Act.Value != null && Convert.ToDateTime(de2Act.Value) != new DateTime(2100, 1, 1))
+                                {
                                     de1Nou.Value = Convert.ToDateTime(de2Act.Value).AddDays(1);
+                                    if (lista.ContainsKey("de1Nou"))
+                                        lista["de1Nou"] = Convert.ToDateTime(de1Nou.Value).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de1Nou.Value).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de1Nou.Value).Year.ToString();
+                                    else
+                                        lista.Add("de1Nou", "01/01/2100");
+                                }
                                 else
                                     de1Nou.Value = null;
                                 de2Nou.Value = null;                   
@@ -2528,6 +2569,7 @@ namespace WizOne.Avs
                                 de2Nou.Value = null;
                                 txt3Nou.Value = "";
                                 txt4Nou.Value = "";
+
                             }
                             if (Convert.ToInt32(e.Parameter.Split(';')[2]) == 1)
                             {
@@ -2535,11 +2577,26 @@ namespace WizOne.Avs
                                 de2Nou.Value = new DateTime(2100, 1, 1);
                                 txt3Nou.Value = "";
                                 txt4Nou.Value = "";
+                                if (lista.ContainsKey("de1Nou"))
+                                    lista["de1Nou"] = "01/01/2100";
+                                else
+                                    lista.Add("de1Nou", "01/01/2100");
+                                if (lista.ContainsKey("de2Nou"))
+                                    lista["de2Nou"] = "01/01/2100";
+                                else
+                                    lista.Add("de2Nou", "01/01/2100");
+
                             }
                             if (Convert.ToInt32(e.Parameter.Split(';')[2]) == 2)
                             {
                                 if (de2Act.Value != null && Convert.ToDateTime(de2Act.Value) != new DateTime(2100, 1, 1))
+                                {
                                     de1Nou.Value = Convert.ToDateTime(de2Act.Value).AddDays(1);
+                                    if (lista.ContainsKey("de1Nou"))
+                                        lista["de1Nou"] = Convert.ToDateTime(de1Nou.Value).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de1Nou.Value).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de1Nou.Value).Year.ToString();
+                                    else
+                                        lista.Add("de1Nou", "01/01/2100");
+                                }
                                 else
                                     de1Nou.Value = null;
                                 de2Nou.Value = null;
@@ -2744,7 +2801,7 @@ namespace WizOne.Avs
 
                 }
 
-
+                Session["AvsLista"] = lista;
 
             }
             catch (Exception ex)

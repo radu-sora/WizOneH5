@@ -38,6 +38,12 @@
             window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=9&id=' + Value, '_blank ')
         }
 
+        function OnDateChangedHandler(s) {
+            var data = new Date(s.GetDate());
+            var val = data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
+            pnlCtl.PerformCallback(2 + ";" + s.name + ";" + val);
+        }
+
         function OnValueChangedHandler(s) {
             pnlCtl.PerformCallback(2 + ";" + s.name + ";" + s.GetValue());
         }
@@ -475,13 +481,13 @@
                         <dx:ASPxLabel  ID="lblTxt5Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxDateEdit ID="de1Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
                             <CalendarProperties FirstDayOfWeek="Monday" />
-                            <ClientSideEvents  ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
+                            <ClientSideEvents  ValueChanged="function(s,e){ OnDateChangedHandler(s); }" />
                         </dx:ASPxDateEdit>
                     </td>
                     <td id="lbl11Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt6Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxDateEdit ID="de2Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
-                            <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
+                            <ClientSideEvents ValueChanged="function(s,e){ OnDateChangedHandler(s); }" />
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </td>
@@ -521,7 +527,7 @@
                     <td id="lbl13Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt13Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxDateEdit ID="de3Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
-                            <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
+                            <ClientSideEvents ValueChanged="function(s,e){ OnDateChangedHandler(s); }" />
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </td>

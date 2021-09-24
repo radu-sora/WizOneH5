@@ -679,6 +679,7 @@ namespace WizOne.Avs
             cmb1Nou.Visible = false;
             cmb1Nou.DataSource = null;
             cmb1Nou.Items.Clear();
+            cmb1Nou.Value = null;
 
             lblTxt4Act.Visible = false;
             lblTxt4Act.Text = "";
@@ -728,6 +729,7 @@ namespace WizOne.Avs
             cmb2Nou.Visible = false;
             cmb2Nou.DataSource = null;
             cmb2Nou.Items.Clear();
+            cmb2Nou.Value = null;
 
             de1Act.Visible = false;
             de1Act.Value = null;
@@ -748,6 +750,7 @@ namespace WizOne.Avs
             cmb3Nou.Visible = false;
             cmb3Nou.DataSource = null;
             cmb3Nou.Items.Clear();
+            cmb3Nou.Value = null;
 
             cmb4Act.Enabled = false;
             cmb4Act.Visible = false;
@@ -757,6 +760,7 @@ namespace WizOne.Avs
             cmb4Nou.Visible = false;
             cmb4Nou.DataSource = null;
             cmb4Nou.Items.Clear();
+            cmb4Nou.Value = null;
 
             cmb5Act.Enabled = false;
             cmb5Act.Visible = false;
@@ -766,6 +770,7 @@ namespace WizOne.Avs
             cmb5Nou.Visible = false;
             cmb5Nou.DataSource = null;
             cmb5Nou.Items.Clear();
+            cmb5Nou.Value = null;
 
             cmb6Act.Enabled = false;
             cmb6Act.Visible = false;
@@ -775,6 +780,7 @@ namespace WizOne.Avs
             cmb6Nou.Visible = false;
             cmb6Nou.DataSource = null;
             cmb6Nou.Items.Clear();
+            cmb6Nou.Value = null;
 
             cmb7Act.Enabled = false;
             cmb7Act.Visible = false;
@@ -784,6 +790,7 @@ namespace WizOne.Avs
             cmb7Nou.Visible = false;
             cmb7Nou.DataSource = null;
             cmb7Nou.Items.Clear();
+            cmb7Nou.Value = null;
 
             cmb8Act.Enabled = false;
             cmb8Act.Visible = false;
@@ -793,6 +800,7 @@ namespace WizOne.Avs
             cmb8Nou.Visible = false;
             cmb8Nou.DataSource = null;
             cmb8Nou.Items.Clear();
+            cmb8Nou.Value = null;
 
             cmbStructOrgAct.Enabled = false;
             cmbStructOrgAct.Visible = false;
@@ -802,6 +810,7 @@ namespace WizOne.Avs
             cmbStructOrgNou.Visible = false;
             cmbStructOrgNou.DataSource = null;
             cmbStructOrgNou.Items.Clear();
+            cmbStructOrgNou.Value = null;
 
             lblTxt12Act.Visible = false;
             lblTxt12Act.Text = "";
@@ -838,6 +847,8 @@ namespace WizOne.Avs
             txt1Nou.ClientEnabled = true;
             txt2Nou.ClientEnabled = true;
             de1Nou.ClientEnabled = true;
+
+            Session["AvsLista"] = null;
         }
 
         private void ArataCtl(int nr, string text1, string text2, string text3, string text4, string text5, string text6, string text7, string text8, string text9, string text10, string text11 = "")
@@ -2347,8 +2358,34 @@ namespace WizOne.Avs
         {
             try
             {
-
                 string tip = e.Parameter.Split(';')[0];
+
+                if (tip == "1" || tip == "8" || tip == "9")
+                    Session["AvsLista"] = null;
+
+                Dictionary<String, String> lista = Session["AvsLista"] as Dictionary<String, String>;
+                if (lista == null)
+                    lista = new Dictionary<string, string>();
+                if (e.Parameter.Split(';').Length > 2)
+                {
+                    if (lista.ContainsKey(e.Parameter.Split(';')[1]))
+                        lista[e.Parameter.Split(';')[1]] = e.Parameter.Split(';')[2];
+                    else
+                        lista.Add(e.Parameter.Split(';')[1], e.Parameter.Split(';')[2]);
+                    foreach (string elem in lista.Keys)
+                    {
+                        dynamic ctl = (dynamic)pnlCtl.Controls[0].FindControl(elem);
+                        if (ctl != null)
+                        {
+                            if (ctl.GetType() == typeof(ASPxTextBox) || ctl.GetType() == typeof(ASPxComboBox))
+                                ctl.Value = lista[elem];
+                            if (ctl.GetType() == typeof(ASPxDateEdit))
+                                ctl.Value = Convert.ToDateTime(lista[elem]);
+                        }
+                    }
+                }
+                Session["AvsLista"] = lista;
+
                 switch (tip)
                 {
                     case "1":
@@ -2411,7 +2448,6 @@ namespace WizOne.Avs
                             Session["Valoare9Noua"] = e.Parameter.Split(';')[1] + ";" + e.Parameter.Split(';')[2];
                         if (e.Parameter.Split(';')[1] == "cmbStructOrgNou")
                             Session["Valoare8Noua"] = e.Parameter.Split(';')[1] + ";" + e.Parameter.Split(';')[2];
-
 
                         //Florin 2019.12.19
                         if (e.Parameter.Split(';')[1] == "txt1Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Salariul)
@@ -7033,7 +7069,17 @@ namespace WizOne.Avs
                             break;
                         grup = Convert.ToInt32(dt.Rows[i]["GrupAngajati"].ToString());
                     }
+
+                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                    int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+                    int idUser = Convert.ToInt32(Session["UserId"] ?? -99);
+
+                    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                    {
+                        NotifAsync.TrimiteNotificare("Personal.NotaLichidare", (int)Constante.TipNotificare.Notificare, "SELECT Z.* FROM MP_NotaLichidare Z WHERE Z.IdAuto=" + idAuto.ToString(), "MP_NotaLichidare", idAuto, idUser, marcaUser, arrParam);
+                    });
                 }
+
             }
             catch (Exception ex)
             {

@@ -18452,6 +18452,15 @@ GO
 
 ---- AvsXDec START ----
 
+INSERT INTO MeniuLista(Id, Denumire, Descriere, Activ) VALUES((SELECT MAX(Id) FROM MeniuLista) + 1, 'Avans Decont','Avans Decont', 1)
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Solicitare Avans Decont', 'Completare Formulare', 'AvansXDecont\Document', 1, 'm1.png')
+GO
+
+
+insert into tblModule (Id, Denumire) values (14, 'Avans Decont')
+GO
 
   CREATE TABLE "AvsXDec_BankComission" 
    (	"ComissionId" int, 
@@ -20694,6 +20703,74 @@ GO
   ON sett.F71802 = func.F71802
   LEFT JOIN "vwAvsXDec_Nomen_TipMoneda" mon
   ON sett."CurrencyId" = mon."DictionaryItemId";
+
+
+  GO
+
+  INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Administrativ_LastDayForClosingAvans' , '-5', 'se specifica ziua de dupa terminarea perioadei contabila afiliata avansului administrativ cu care se inchide automat avansul' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Administrativ_UserClosingAvans' , '6334', 'se specifica id-ul utilizatorului cu care se inchide automat avansul' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_BudgetLine_Diurna2001' , '1028', 'se specifica linia de buget ce se doreste a fi completata automat pentru cheltuiala cu diurna document 2001' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_BudgetOwner_1001' , 'BudgetOwner_1001', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a grupurile de utilizatori care sunt budget owneri pentru document 1001' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_BudgetOwner_1002' , 'BudgetOwner_1002', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a grupurile de utilizatori care sunt budget owneri pentru document 1002' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_BudgetOwner_2001' , 'BudgetOwner_2001', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a grupurile de utilizatori care sunt budget owneri pentru document 2001' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_BudgetOwner_2002' , 'BudgetOwner_2002', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a grupurile de utilizatori care sunt budget owneri pentru document 2002' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_BudgetOwner_2003' , 'BudgetOwner_2003', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a grupurile de utilizatori care sunt budget owneri pentru document 2003' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_CaleFisiereBanca' , '/Temp/', 'calea unde se vor genera fisierele de banca pentru modulul avans si decont' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Circuit_DIM1' , 'ActionType', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a seta prima dimensiune, in afara de tipul de document pe circuit' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Circuit_DIM1_AvDecontare' , 'CH_AvansDecontare', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a seta prima dimensiune, in afara de tipul de document pe circuit pentru avansurile spre decontare' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Circuit_DIM1_DecAvans' , 'DOCType', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a seta prima dimensiune, in afara de tipul de document pe circuit pentru decontare avans' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Circuit_DIM2' , 'REZ', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a seta a doua dimensiune, in afara de tipul de document pe circuit' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_CircuitNrSupervizori' , '5', 'numarul de supervizori pe care ii poate lua angajatul pentru modulul avans si decont' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_DreptInregistrareDocument' , '1', '0 - se poate face inregistrarea de documente si aprobarea pentru toti angajatii asignati supervizorului de pe prima coloana de circuit; 1 - se poate face inregistrarea de documente si aprobarea pentru toti angajatii asignati oricarui supervizor de pe circuit' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Modul_ProcentAvansDecontareCheltuieliEstimate' , '0', 'procentul maxim cu care cheltuielile totale de la avans spre decontare pot fi mai mari decat cheltuielile estimate' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Modul_ProcentAvansDeplasareCheltuieliEstimate' , '0,2', 'procentul maxim cu care cheltuielile totale de la avans spre deplasare pot fi mai mari decat cheltuielile estimate' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Nomen_DocDecont' , 'DOCType', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru documentele pentru decontare' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Nomen_DocPlataBanca' , 'DOCTypePayments', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru documentele pentru plata banca' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Nomen_StariDoc' , 'ST', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru starile de documente' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Nomen_TipCheltuieli' , 'CH', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru tipurile de cheltuieli' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Nomen_TipCheltuieliAvDecontare' , 'CH_AvansDecontare', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru tipurile de cheltuieli pentru avans spre decontare' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Nomen_TipCheltuieliDecAdministrativ' , 'CH_DecontAdministrativ', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru tipurile de cheltuieli pentru decont administrativ' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Nomen_TipDeplasare' , 'ActionType', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru tipurile de deplasari' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Nomen_TipMoneda' , 'CURR', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru tipurile de valute folosite' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Nomen_TipPlata' , 'PayType', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru modalitati de plata' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Nomen_TipRezervari' , 'REZ', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru tipurile de rezervari' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Nomen_TipTransport' , 'TransportType', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru tipurile de transport' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Settings_KeyField1' , 'ActionType', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a seta prima dimensiune pentru care se sepcifica setarile in tabela, coloana KeyField1' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Settings_KeyField2' , 'PayType', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a seta a doua dimensiune pentru care se sepcifica setarile in tabela, coloana KeyField2' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_Settings_KeyField3' , 'CH', 'se specifica codul folosit pentru tabela AvsXDec_Dictionary care identifica valorile in AvsXDec_DictionaryItem pentru a seta a treia dimensiune pentru care se sepcifica setarile in tabela, coloana KeyField3' , 14)
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_TipDocument_Diurna' , 'Cheltuiala diurna', 'se specifica denumirea setata in nomenclatorul de tipuri de documente ce se doreste a fi setata automat pentru diurna' , 14)
+GO
 
 
 

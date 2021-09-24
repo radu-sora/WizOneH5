@@ -17,8 +17,7 @@
                 <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aprobare" OnClick="btnAproba_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                 </dx:ASPxButton>				
-                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s,e) { OnStergeClick(); }" />
+                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" OnClick="btnRespins_Click" oncontextMenu="ctx(this,event)" >              
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>				
                 <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static" runat="server" Text="Inapoi" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" >
@@ -42,12 +41,12 @@
 				
 							<label id="lblNrOrdin" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Nr. ordin</label>
 							<div style="float:left; padding-right:15px;">
-								<dx:ASPxTextBox ID="txtNrOrdinDeplasare" ClientInstanceName="txtNrOrdinDeplasare" runat="server" Width="100px">
+								<dx:ASPxTextBox ID="txtNrOrdinDeplasare" ClientInstanceName="txtNrOrdinDeplasare" runat="server" ClientEnabled="false" Width="100px">
 								</dx:ASPxTextBox>
 							</div>        
 							<label id="lblNume" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Nume</label>
 							<div style="float:left; padding-right:15px;">
-								<dx:ASPxTextBox ID="txtNumeComplet" ClientInstanceName="txtNumeComplet" runat="server" Width="300px">
+								<dx:ASPxTextBox ID="txtNumeComplet" ClientInstanceName="txtNumeComplet" ClientEnabled="false" runat="server" Width="300px">
 								</dx:ASPxTextBox>
 							</div> 
 						</div>
@@ -56,12 +55,12 @@
 				
 							<label id="lblDept" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Departament</label>
 							<div style="float:left; padding-right:15px;">
-								<dx:ASPxTextBox ID="txtDepartament" ClientInstanceName="txtDepartament" runat="server" Width="290px">
+								<dx:ASPxTextBox ID="txtDepartament" ClientInstanceName="txtDepartament" ClientEnabled="false" runat="server" Width="290px">
 								</dx:ASPxTextBox>
 							</div>        
 							<label id="lblLocMunca" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Loc munca</label>
 							<div style="float:left; padding-right:15px;">
-								<dx:ASPxTextBox ID="txtLocMunca" ClientInstanceName="txtLocMunca" runat="server" Width="250px">
+								<dx:ASPxTextBox ID="txtLocMunca" ClientInstanceName="txtLocMunca" ClientEnabled="false" runat="server" Width="250px">
 								</dx:ASPxTextBox>
 							</div> 
 						</div>	
@@ -70,7 +69,7 @@
 				
 							<label id="lblIBAN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">IBAN</label>
 							<div style="float:left; padding-right:15px;">
-								<dx:ASPxTextBox ID="txtContIban" ClientInstanceName="txtContIban" runat="server" Width="290px">
+								<dx:ASPxTextBox ID="txtContIban" ClientInstanceName="txtContIban" ClientEnabled="false" runat="server" Width="290px">
 								</dx:ASPxTextBox>
 							</div>   
 						</div>
@@ -178,7 +177,7 @@
 							<div class="Absente_divOuter margin_top15">
 					
 								<div style="float:left; padding-right:15px;">    
-									<dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"  OnDataBinding="grDate_DataBinding"  OnInitNewRow="grDate_InitNewRow" 
+									<dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="30%" AutoGenerateColumns="false"  OnInitNewRow="grDate_InitNewRow" 
 										 OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize">
 										<SettingsBehavior AllowFocusedRow="true" />
 										<Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
@@ -199,9 +198,7 @@
 											</dx:GridViewDataComboBoxColumn>			
 											<dx:GridViewDataTextColumn FieldName="Amount" Name="Amount" Caption="Valoare"/>
 											<dx:GridViewDataTextColumn FieldName="FreeTxt" Name="FreeTxt" Caption="Detalii"/>
-											<!--LeonardM 23.08.2016, coloana care identifica daca am atasat vreun document-->
-											<!--daca e 0, nu are fisier-->
-											<!--daca e 1, are fisier-->											
+										
 											<dx:GridViewDataTextColumn FieldName="areFisier" Name="areFisier" Caption="areFisier" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentId" Name="DocumentId" Caption="DocumentId" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentDetailId" Name="DocumentDetailId" Caption="DocumentDetailId" Visible="false" ShowInCustomizationForm="false"/>
@@ -300,16 +297,22 @@
 								<div style="float:left; padding-right:15px;">
 									<dx:ASPxTextBox ID="txtValEstimata" ClientInstanceName="txtValEstimata" runat="server" Width="200px">
 									</dx:ASPxTextBox>
-								</div>        
+								</div>
+							</div>	
+							<div class="Absente_divOuter margin_top15">	
 								<label id="lblValAvsSol" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Valoare avans solicitat</label>
 								<div style="float:left; padding-right:15px;">
 									<dx:ASPxTextBox ID="txtValAvans" ClientInstanceName="txtValAvans" runat="server" Width="200px">
 									</dx:ASPxTextBox>
-								</div> 					
+								</div> 	
+							</div>	
+							<div class="Absente_divOuter margin_top15">
 								<label id="lblDtScad" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data scadenta</label>
 								<div style="float:left; padding-right:10px;">
 									<dx:ASPxDateEdit ID="dtDueDate" runat="server" Width="95px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" />
 								</div>
+							</div>	
+							<div class="Absente_divOuter margin_top15">
 								<label id="lblRez" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Rezervari</label>
 								<div style="float:left; padding-right:15px;">    
 									<dx:ASPxComboBox ID="cmbTip" ClientInstanceName="cmbTip" ClientIDMode="Static" runat="server" Width="200px"  ValueField="DictionaryItemId" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
@@ -332,23 +335,7 @@
         function EndUpload(s) {
             lblDoc.innerText = s.cpDocUploadName;
             s.cpDocUploadName = null;
-        }
-
-        function NivelHay(s) {
-            txtSalMin.SetValue(s.GetSelectedItem().texts[1]);
-            txtSalMed.SetValue(s.GetSelectedItem().texts[2]);
-            txtSalMax.SetValue(s.GetSelectedItem().texts[3]);
-        }
-
-        function NivelIerarhic(s) {
-            var nvl = s.GetSelectedItem().texts[2].replace('N-', '');
-            if (nvl == 'N') nvl = 0;
-            txtNivelIer.SetValue('N-' + (Number(nvl) + 1));
-            hfNivelIer.Set('val', 'N-' + (Number(nvl) + 1));
-
-            cmbSupFunc.SetValue(s.GetValue());
-            cmbSupFunc.SetText(s.GetText());
-        }
+		}
 
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
@@ -359,85 +346,6 @@
                 s.cpAlertMessage = null;
             }
             pnlLoading.Hide();
-            OnChckSelectedIndexChanged();
-        }
-
-        function ShowDoc() {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tbl=3&id=' + <%=Session["IdAuto"] %>, '_blank ')
-        }
-
-        function OnEndCallbackGridIstoric(s, e) {
-            if (s.cpAlertMessage != null) {
-                swal({
-                    title: "Atentie", text: s.cpAlertMessage,
-                    type: "warning"
-                });
-                s.cpAlertMessage = null;
-            }
-
-            if (s.cpPozitii != null) {
-                txtPozitii.SetValue(s.cpPozitii);
-            }
-            if (s.cpPozitiiAprobate != null) {
-                txtPozitiiAprobate.SetValue(s.cpPozitiiAprobate);
-            }
-        }
-
-        function OnStergeClick() {
-            swal({
-                title: trad_string(limba, 'Sunteti sigur/a ?'), text: trad_string(limba, 'Sigur doriti continuarea procesului de stergere ?'),
-                type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
-            }, function (isConfirm) {
-                if (isConfirm)
-                    pnlCtl.PerformCallback('btnSterge');
-            });
-        }
-
-        var valDen = txtDen.GetValue();
-        function OnDenumireChanged(s, e) {
-            if (txtDenRO.GetValue() == null || txtDenRO.GetValue() == valDen)
-                txtDenRO.SetValue(txtDen.GetValue());
-            if (txtDenEN.GetValue() == null || txtDenEN.GetValue() == valDen)
-                txtDenEN.SetValue(txtDen.GetValue());
-            if (txtGrupRO.GetValue() == null || txtGrupRO.GetValue() == valDen)
-                txtGrupRO.SetValue(txtDen.GetValue());
-            if (txtGrupEN.GetValue() == null || txtGrupEN.GetValue() == valDen)
-                txtGrupEN.SetValue(txtDen.GetValue());
-        }
-
-        function CloseGridLookup() {
-            cmbCampExtra.ConfirmCurrentSelection();
-            cmbCampExtra.HideDropDown();
-            cmbCampExtra.Focus();
-
-            var val = cmbCampExtra.GetValue();
-            if (val != null) {
-                for (var i = 1; i <= 20; i++)
-                {
-                    var div = document.getElementById("divCampExtra" + val[i]);
-                    if (div != null) {
-                        if (val.indexOf(val[i]) > 0)
-                            div.classList.remove("ascuns");
-                        else
-                            div.classList.add("ascuns");
-                    }
-                }
-            }
-        }
-
-        function OnChckSelectedIndexChanged() {
-            var val = chkExtra.GetSelectedValues();
-            if (val != null) {
-                for (var i = 1; i <= 20; i++) {
-                    var div = document.getElementById("divCampExtra" + i);
-                    if (div != null) {
-                        if (val.indexOf(i.toString()) >= 0)
-                            div.classList.remove("ascuns");
-                        else
-                            div.classList.add("ascuns");
-                    }
-                }
-            }
         }
 
     </script>

@@ -18,8 +18,6 @@ namespace WizOne.AvansXDecont
     public partial class DocumentAvans : System.Web.UI.Page
     {
 
-        int nrPost = 0;
-
         public class metaCereriDate
         {
             public object UploadedFile { get; set; }
@@ -31,8 +29,6 @@ namespace WizOne.AvansXDecont
         {
             try
             {
-                Dami.AccesApp(this.Page);
-
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
@@ -160,8 +156,9 @@ namespace WizOne.AvansXDecont
                             cmbMonedaAvans.DataBind();
                             if (lpTipMoneda != null && lpTipMoneda.Rows.Count != 0)
 						    {
-								if (lpTipMoneda.Select("LOWER(DictionaryItemName) LIKE ('%ron%')").Count() != 0)
-                                    Session["IdMonedaRON"] = lpTipMoneda.Select("LOWER(DictionaryItemName) LIKE ('%ron%')")[0]["DictionaryItemId"].ToString();
+                                lpTipMoneda.CaseSensitive = false;
+                                if (lpTipMoneda.Select("DictionaryItemName LIKE ('%ron%')").Count() != 0)
+                                    Session["IdMonedaRON"] = lpTipMoneda.Select("DictionaryItemName LIKE ('%ron%')")[0]["DictionaryItemId"].ToString();
 						    }
 							#region aranjare tip moneda default
 							/*LeonardM 13.06.2016
@@ -192,10 +189,12 @@ namespace WizOne.AvansXDecont
 
                             if (lpTipDeplasare != null && lpTipDeplasare.Rows.Count != 0)
 							{
-								if (lpTipDeplasare.Select("LOWER(DictionaryItemName) LIKE ('%interna%')").Count() != 0)
-                                    Session["IdDeplasareInterna"] = lpTipDeplasare.Select("LOWER(DictionaryItemName) LIKE ('%interna%')")[0]["DictionaryItemId"].ToString();
-								if (lpTipDeplasare.Select("LOWER(DictionaryItemName) LIKE ('%externa%')").Count() != 0)
-                                    Session["IdDeplasareExterna"] = lpTipDeplasare.Select("LOWER(DictionaryItemName) LIKE ('%externa%')")[0]["DictionaryItemId"].ToString();
+                                lpTipDeplasare.CaseSensitive = false;
+                                if (lpTipDeplasare.Select("DictionaryItemName LIKE ('%interna%')").Count() != 0)
+                                    Session["IdDeplasareInterna"] = lpTipDeplasare.Select("DictionaryItemName LIKE ('%interna%')")[0]["DictionaryItemId"].ToString();
+                                lpTipDeplasare.CaseSensitive = false;
+                                if (lpTipDeplasare.Select("DictionaryItemName LIKE ('%externa%')").Count() != 0)
+                                    Session["IdDeplasareExterna"] = lpTipDeplasare.Select("DictionaryItemName LIKE ('%externa%')")[0]["DictionaryItemId"].ToString();
 
 								#region aranjare tip deplasare default
 								/*LeonardM 13.06.2016
@@ -268,12 +267,25 @@ namespace WizOne.AvansXDecont
 
                 #region drept aprobare/refuz document
 
-                btnAproba.ClientEnabled = Convert.ToInt32(Session["AvsXDec_PoateAprobaXRefuzaDoc"].ToString()) == 1 ? true : false;
-                btnRespins.ClientEnabled = Convert.ToInt32(Session["AvsXDec_DocCanBeRefused"].ToString()) == 1 ? true : false; 
+                btnAproba.ClientEnabled = Convert.ToInt32(General.Nz(Session["AvsXDec_PoateAprobaXRefuzaDoc"], 0).ToString()) == 1 ? true : false;
+                btnRespins.ClientEnabled = Convert.ToInt32(General.Nz(Session["AvsXDec_DocCanBeRefused"], 0).ToString()) == 1 ? true : false; 
 
                 #endregion
 
-                PageXDocumentType();  
+                PageXDocumentType();
+
+                DataTable dtCheltuieli = new DataTable();
+                if (!IsPostBack)
+                {
+                    dtCheltuieli = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+                    Session["AvsXDec_SursaDateCheltuieli"] = dtCheltuieli;
+                }
+                else
+                {
+                    dtCheltuieli = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;                    
+                }
+                grDate.DataSource = dtCheltuieli;
+
             }
             catch (Exception ex)
             {
@@ -430,9 +442,136 @@ namespace WizOne.AvansXDecont
             }
         }		
 
-        protected void Page_Unload(object sender, EventArgs e)
+        protected void btnAproba_Click(object sender, EventArgs e)
         {
-            string ert = "";
+            MetodeCereri(1);
+        }
+        protected void btnRespins_Click(object sender, EventArgs e)
+        {
+            MetodeCereri(2);
+        }
+
+        private void MetodeCereri(int tipActiune)
+        {
+            try
+            {
+                //var ent = dds.DataView.Cast<metaVwAvsXDec_Avans>().FirstOrDefault();
+                //int nrSel = 1;
+                //string ids = ent.DocumentId + ",";
+
+
+                #region completare motiv refuz
+                //if (tipActiune == 2)
+                //{
+                //    switch (launchedPagedFrom)
+                //    {
+                //        case LansatDin.Formulare:
+                //            #region document editat din formulare
+                //            RejectDocument dlg = new RejectDocument();
+                //            dlg.Closed += (s, eargs) =>
+                //            {
+                //                if (dlg.DialogResult == true)
+                //                {
+                //                    if (string.IsNullOrEmpty(dlg.txtRefuseReason.Text))
+                //                    {
+                //                        Message.InfoMessage("Nu ati completat motivul refuzului pentru respingere documente!");
+                //                        wiIndicator.DeferedVisibility = false;
+                //                        return;
+                //                    }
+                //                    wiIndicator.DeferedVisibility = true;
+
+                //                    srvAvansXDecont ctxAvansXDecont = new srvAvansXDecont();
+                //                    InvokeOperation opApr = ctxAvansXDecont.AprobaDocumentAvansXDecont(Constante.UserId, ids, nrSel, tipActiune, Constante.User_AngajatId, dlg.txtRefuseReason.Text);
+                //                    opApr.Completed += (s3, args3) =>
+                //                    {
+                //                        if (!opApr.HasError)
+                //                        {
+                //                            if (opApr.Value.ToString() != "")
+                //                            {
+                //                                Message.InfoMessage(Dami.TraduCuvant(opApr.Value.ToString()));
+                //                                apasat = true;
+                //                                wiIndicator.DeferedVisibility = false;
+                //                                btnInapoi_ItemClick(null, null);
+                //                            }
+                //                        }
+                //                        wiIndicator.DeferedVisibility = false;
+                //                    };
+                //                }
+                //            };
+                //            dlg.Show();
+                //            #endregion
+                //            break;
+                //        case LansatDin.PlataFinanciar:
+                //            #region document editat din financiar
+                //            CustomMessage confirmMessage = new CustomMessage(Dami.TraduCuvant("Sigur doriti continuarea procesului de respingere ?"), CustomMessage.MessageType.Confirm, null, Constante.IdLimba);
+                //            confirmMessage.OKButton.Click += (obj, args) =>
+                //            {
+                //                RejectDocument dlgFinanciar = new RejectDocument();
+                //                dlgFinanciar.Closed += (s, eargs) =>
+                //                {
+                //                    if (dlgFinanciar.DialogResult == true)
+                //                    {
+                //                        if (string.IsNullOrEmpty(dlgFinanciar.txtRefuseReason.Text))
+                //                        {
+                //                            Message.InfoMessage("Nu ati completat motivul refuzului pentru respingere documente!");
+                //                            wiIndicator.DeferedVisibility = false;
+                //                            return;
+                //                        }
+                //                        wiIndicator.DeferedVisibility = true;
+
+                //                        srvAvansXDecont ctxAvansXDecont = new srvAvansXDecont();
+                //                        InvokeOperation opApr = ctxAvansXDecont.RefuzaDocument(Constante.UserId, (int)ent.DocumentId, Constante.User_AngajatId, dlgFinanciar.txtRefuseReason.Text);
+                //                        opApr.Completed += (s3, args3) =>
+                //                        {
+                //                            if (!opApr.HasError)
+                //                            {
+                //                                if (opApr.Value.ToString() != "" && opApr.Value.ToString() == "OK")
+                //                                {
+                //                                    wiIndicator.DeferedVisibility = false;
+                //                                    Message.InfoMessage(Dami.TraduCuvant("Proces finalizat cu succes."));
+                //                                    apasat = true;
+                //                                    wiIndicator.DeferedVisibility = false;
+                //                                    btnInapoi_ItemClick(null, null);
+                //                                }
+                //                            }
+                //                        };
+                //                    }
+                //                };
+                //                dlgFinanciar.Show();
+                //            };
+                //            confirmMessage.Show();
+                //            #endregion
+                //            break;
+                //    }
+                //}
+                #endregion
+                //else
+                #region aprobare document
+                {
+
+                    //srvAvansXDecont ctxAvansXDecont = new srvAvansXDecont();
+                    //InvokeOperation opApr = ctxAvansXDecont.AprobaDocumentAvansXDecont(Constante.UserId, ids, nrSel, tipActiune, Constante.User_AngajatId, "");
+                    //opApr.Completed += (s3, args3) =>
+                    //{
+                    //    if (!opApr.HasError)
+                    //    {
+                    //        if (opApr.Value.ToString() != "")
+                    //        {
+                    //            Message.InfoMessage(Dami.TraduCuvant(opApr.Value.ToString()));
+                    //            apasat = true;
+                    //            wiIndicator.DeferedVisibility = false;
+                    //            btnInapoi_ItemClick(null, null);
+                    //        }
+                    //    }
+                    //    wiIndicator.DeferedVisibility = false;
+                    //};
+                }
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
         protected void btnBack_Click(object sender, EventArgs e)
@@ -451,9 +590,9 @@ namespace WizOne.AvansXDecont
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-		
-		
-        private void btnSave_ItemClick(object sender, EventArgs e)
+
+
+        protected void btnSave_Click(object sender, EventArgs e)
         {
             try
             {
@@ -500,13 +639,85 @@ namespace WizOne.AvansXDecont
 						}
 						else
 						{
-							SalvareDoc();
+                            SalvareGrid();
 						}
                         
                         break;
                     case 1002: /*Avans spre decontare*/
-                        SalvareDoc();
+                        SalvareGrid();
                         break;
+                }
+
+                SalvareDate();
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        public void SalvareDate()
+        {
+            try
+            {
+                string sql = "SELECT * FROM AvsXDec_Document WHERE DocumentId = " + Session["AvsXDec_IdDocument"].ToString();
+                DataTable entDocument = General.IncarcaDT(sql, null);
+
+               
+                DateTime dtSt = Convert.ToDateTime(txtStartDate.Value ?? "01/01/2100");
+                string dataStart = dtSt.Day.ToString().PadLeft(2, '0') + "/" + dtSt.Month.ToString().PadLeft(2, '0') + "/" + dtSt.Year.ToString();
+                DateTime dtEnd = Convert.ToDateTime(txtEndDate.Value ?? "01/01/2100");
+                string dataEnd = dtEnd.Day.ToString().PadLeft(2, '0') + "/" + dtEnd.Month.ToString().PadLeft(2, '0') + "/" + dtEnd.Year.ToString();
+                string oraSt = "NULL";
+                if (txtOraPlecare.Text.Length > 0)
+                    oraSt = "CONVERT(DATETIME, '" + DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "-" + DateTime.Now.Day.ToString().PadLeft(2, '0') + " " + txtOraPlecare.Text + ":00', 120)";
+
+                string oraEnd = "NULL";
+                if (txtOraSosire.Text.Length > 0)
+                    oraEnd = "CONVERT(DATETIME, '" + DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "-" + DateTime.Now.Day.ToString().PadLeft(2, '0') + " " + txtOraSosire.Text + ":00', 120)";
+                                
+                DateTime dtD = Convert.ToDateTime(dtDueDate.Value ?? "01/01/2100");
+                string dataDue = dtD.Day.ToString().PadLeft(2, '0') + "/" + dtD.Month.ToString().PadLeft(2, '0') + "/" + dtD.Year.ToString();
+
+                if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0)
+                {
+                    sql = @"UPDATE AvsXDec_Avans SET CurrencyId = {0}, 
+                    RefCurrencyId = null,
+                    RefCurrencyValue = null,
+                    TotalPayment = null,
+                    RefTotalPayment = null,
+                    StartDate = {1},
+                    EndDate = {2},
+                    UnconfRestAmount = null,
+                    TotalAmount = {3},
+                    USER_NO = {4},
+                    TIME = GETDATE(),
+                    StartHour = {5},
+                    EndHour = {6},
+                    EstimatedAmount = {7},
+                    DueDate = {8},
+                    PaymentTypeId = {9},
+                    ActionTypeId = {10},
+                    ActionPlace = '{11}',
+                    ActionReason ='{12}',
+                    chkDiurna = {13},
+                    RefuseReason = '{14}',
+                    AccPeriodId = null,
+                    PeriodOfAccountId = null,
+                    TransportTypeId = {15}
+                    WHERE DocumentId =  {16}";
+                   sql = string.Format(sql, Convert.ToInt32(cmbMonedaAvans.Value ?? 0), dataStart, dataEnd, txtValAvans.Text, entDocument.Rows[0]["USER_NO"].ToString(), oraSt, oraEnd, txtValEstimata.Text, dataDue,
+                        Convert.ToInt32(cmbModPlata.Value ?? 0), Convert.ToInt32(cmbActionType.Value ?? 0), txtLocatie.Text, txtActionReason, (chkIsDiurna.Checked ? "1" : "0"), "", Convert.ToInt32(cmbTransportType.Value ?? 0), Session["AvsXDec_IdDocument"].ToString());
+                    General.ExecutaNonQuery(sql, null); 
+                }
+                else
+                {
+                    sql = @"INSERT INTO AvsXDec_Avans (CurrencyId, RefCurrencyId, RefCurrencyValue, TotalPayment, RefTotalPayment, StartDate, EndDate, UnconfRestAmount, TotalAmount, USER_NO, TIME, StartHour,
+                    EndHour, EstimatedAmount, DueDate, PaymentTypeId, ActionTypeId, ActionPlace, ActionReason, chkDiurna, RefuseReason, AccPeriodId,PeriodOfAccountId, TransportTypeId)
+                    VALUES ({0}, null, null, null, null, {1}, {2}, null, {3}, {4}, GETDATE(), {5}, {6}, {7}, {8}, {9}, {10}, '{11}', '{12}', {13}, '{14}', null, null, {15}) ";
+                    sql = string.Format(sql, Convert.ToInt32(cmbMonedaAvans.Value ?? 0), dataStart, dataEnd, txtValAvans.Text, entDocument.Rows[0]["USER_NO"].ToString(), oraSt, oraEnd, txtValEstimata.Text, dataDue,
+                         Convert.ToInt32(cmbModPlata.Value ?? 0), Convert.ToInt32(cmbActionType.Value ?? 0), txtLocatie.Text, txtActionReason, (chkIsDiurna.Checked ? "1" : "0"), "", Convert.ToInt32(cmbTransportType.Value ?? 0), Session["AvsXDec_IdDocument"].ToString());
+                    General.ExecutaNonQuery(sql, null);
                 }
             }
             catch (Exception ex)
@@ -515,23 +726,11 @@ namespace WizOne.AvansXDecont
             }
         }
 
-		public void SalvareDoc()
-		{
-			string sql = "";
 
-            //if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0)
-            //{
-            //	sql = "UPDATE AvsXDec_AvansDetail SET DictionaryItemId = " + ent.DictionaryItemId + ", DocumentDetailId = " + ent.DocumentDetailId 
-            //		+ ", Amount = " + ent.Amount + ", DocumentId = " + ent.DocumentId + ", FreeTxt = '" + ent.FreeTxt 
-            //		+ "' WHERE DocumentDetailId = " + ent.DocumentDetailId + " AND DocumentId = " + ent.DocumentId;
-            //	General.ExecutaNonQuery(sql, null);	
-            //}
-            //else
-            //{
-            //	sql = "INSERT INTO AvsXDec_AvansDetail(DictionaryItemId, DocumentDetailId, DocumentId, Amount, FreeTxt) "
-            //		+ " VALUES (" + ent.DictionaryItemId + ", " + ent.DocumentDetailId + ", " + ent.DocumentId + ", " + ent.Amount + " '" + ent.FreeTxt + "')";
-            //	General.ExecutaNonQuery(sql, null);					
-            //}
+        public void SalvareGrid()
+		{
+            DataTable ent = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
+            General.SalveazaDate(ent, "AvsXDec_AvansDetail");
         }
 
 
@@ -646,10 +845,11 @@ namespace WizOne.AvansXDecont
         private string ValidareLimiteCheltuieli()
         {    
             string ras = "";
-			DataTable dtCheltuieli = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+            DataTable dtCheltuieli = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;// GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
 			DataTable dtNomenCheltuieli = GetAvsXDec_DictionaryItemCheltuiala(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
-			
-            DataRow[] itmDiurna = dtNomenCheltuieli.Select("LOWER(DictionaryItemName) = 'diurna'");
+
+            dtNomenCheltuieli.CaseSensitive = false;
+            DataRow[] itmDiurna = dtNomenCheltuieli.Select("DictionaryItemName = 'diurna'");
             for (int i = 0; i < dtCheltuieli.Rows.Count; i++)
             {
                 decimal minValue = 0, maxValue =0, valExpenseCorrected = 0;
@@ -873,7 +1073,7 @@ namespace WizOne.AvansXDecont
 
 
                 }
-				DataTable dtCheltuieli = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+				DataTable dtCheltuieli = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;// GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
                 if (dtCheltuieli != null && dtCheltuieli.Rows.Count != 0 && dtCheltuieli.Select("DictionaryItemId IS NULL").Count() != 0)
                     ras += ", cheltuiala completata pe unele randuri";
                 if (ras != "") ras = "Lipseste " + ras.Substring(2) + " !";
@@ -1123,7 +1323,7 @@ namespace WizOne.AvansXDecont
 
         private void IncarcaNomenclatorCheltuieli()
         {
-			DataTable dtCheltuieli = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));	
+			DataTable dtCheltuieli = Session["AvsXDec_SursaDateCheltuieli"] as DataTable; // GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));	
 
             #region verificare limite diurna
             /*LeonardM 11.09.2016
@@ -1131,10 +1331,11 @@ namespace WizOne.AvansXDecont
              * cerinta Groupama: sa poata fi editata in minus */
             if (dtCheltuieli.Rows.Count == 0)
                 return;
-            DataRow[] itmDiurna = dtCheltuieli.Select("LOWER(DictionaryItemName) = 'diurna'");
+            dtCheltuieli.CaseSensitive = false;
+            DataRow[] itmDiurna = dtCheltuieli.Select("DictionaryItemName = 'diurna'");
             if (itmDiurna != null && itmDiurna.Length > 0)
             {
-                DataTable dtCheltuieliAvans = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+                DataTable dtCheltuieliAvans = Session["AvsXDec_SursaDateCheltuieli"] as DataTable; //GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
                 if (dtCheltuieliAvans.Rows.Count != 0)
                 {
                     DataRow[] entCheltuialaDiurna = dtCheltuieliAvans.Select("DictionaryItemId = " + itmDiurna[0]["DictionaryItemId"].ToString());
@@ -1146,10 +1347,10 @@ namespace WizOne.AvansXDecont
 
 
             #region cheltuiala limita cazare
-            DataRow[] itmCazare = dtCheltuieli.Select("LOWER(DictionaryItemName) = 'cazare'");
+            DataRow[] itmCazare = dtCheltuieli.Select("DictionaryItemName = 'cazare'");
             if (itmCazare != null && itmCazare.Length > 0)
             {
-                DataTable dtCheltuieliAvans = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+                DataTable dtCheltuieliAvans = Session["AvsXDec_SursaDateCheltuieli"] as DataTable; //GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
                 DataRow[] entCheltuialaCazare = dtCheltuieliAvans.Select("DictionaryItemId = " + itmCazare[0]["DictionaryItemId"].ToString());
                 if (entCheltuialaCazare != null && entCheltuialaCazare.Length > 0)
                     LoadAvansReservations(true);
@@ -1167,10 +1368,11 @@ namespace WizOne.AvansXDecont
             DataTable dtCheltuieli = GetAvsXDec_DictionaryItemCheltuiala(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
             if (dtCheltuieli.Rows.Count == 0)
                 return;
-            DataRow[] itmDiurna = dtCheltuieli.Select("LOWER(DictionaryItemName = 'diurna'");
+            dtCheltuieli.CaseSensitive = false;
+            DataRow[] itmDiurna = dtCheltuieli.Select("DictionaryItemName = 'diurna'");
             if (itmDiurna != null && itmDiurna.Length > 0)
             {
-                DataTable dtCheltuieliAvans = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+                DataTable dtCheltuieliAvans = Session["AvsXDec_SursaDateCheltuieli"] as DataTable; //GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
                 if (dtCheltuieliAvans.Rows.Count != 0)
                 {
                     DataRow[] entCheltuialaDiurna = dtCheltuieliAvans.Select("DictionaryItemId = " + itmDiurna[0]["DictionaryItemId"].ToString());
@@ -1181,10 +1383,10 @@ namespace WizOne.AvansXDecont
             #endregion
 
             #region cheltuiala cazare
-            DataRow[] itmCazare = dtCheltuieli.Select("LOWER(DictionaryItemName) = 'cazare'");
+            DataRow[] itmCazare = dtCheltuieli.Select("DictionaryItemName = 'cazare'");
             if (itmCazare != null && itmCazare.Length > 0)
             {
-                DataTable dtCheltuieliAvans = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+                DataTable dtCheltuieliAvans = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;  //GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
                 DataRow[] entCheltuialaCazare = dtCheltuieliAvans.Select("DictionaryItemId = " + itmCazare[0]["DictionaryItemId"].ToString());
                 if (entCheltuialaCazare != null && entCheltuialaCazare.Length > 0)
                     LoadAvansReservations(true);
@@ -1265,12 +1467,15 @@ namespace WizOne.AvansXDecont
 				DataTable loRez = GetmetaAvsXDec_AvansDetailRezervari(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));			
 		
 				cmbTip.DataSource = lstRezervari;
-				List<object> lst = new List<object>();
-				for (int i = 0; i < loRez.Rows.Count; i++)
-				{
-					lst.Add(Convert.ToInt32(loRez.Rows[i]["DictionaryItemId"].ToString()));
-				}
-				cmbTip.Value = lst;
+                cmbTip.DataBind();
+
+                List<object> lst = new List<object>();
+                if (loRez != null)
+				    for (int i = 0; i < loRez.Rows.Count; i++)
+				    {
+					    lst.Add(Convert.ToInt32(loRez.Rows[i]["DictionaryItemId"].ToString()));
+				    }
+				//cmbTip.Value = lst;
 			
                
             }
@@ -1300,64 +1505,67 @@ namespace WizOne.AvansXDecont
         {
             try
             {
-                //DataTable dt = Session["Org_PosturiPozitii"] as DataTable;
-                //DataRow found = dt.Rows.Find(e.Keys["IdAuto"]);
-                //found.Delete();            
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                DataTable dt = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
+
+                DataRow row = dt.Rows.Find(keys);                
+
+                #region actualizare valoare avans
+                /*LeonardM 25.08.2016
+                 * actualizarea sumelor o realizam mai jos cu diurna,
+                 * deoarece daca dezactivam bifa de diurna se scade de doua ori valoarea diurnei
+                 * si nu e ok*/
+                DataTable ent = Session["AvsXDec_SursaDate"] as DataTable;
+                #endregion
+
+                #region stergere diurna
+                /*verificam daca exista cheltuiala de diurna si o stergem*/
+                DataTable dtNomenCheltuieli = GetAvsXDec_DictionaryItemCheltuiala(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
+                dtNomenCheltuieli.CaseSensitive = false;
+                DataRow[] itmDiurna = dtNomenCheltuieli.Select("DictionaryItemName= 'diurna'");
+                if (itmDiurna != null)
+                {
+                    if (Convert.ToInt32(row["DictionaryItemId"].ToString()) == Convert.ToInt32(itmDiurna[0]["DictionaryItemId"]))
+                    {
+                        chkIsDiurna.Checked = false;
+                        Session["maxValueDiurna"] = 0;
+                    }
+                    else
+                    {
+                        ent.Rows[0]["EstimatedAmount"] = Convert.ToInt32(General.Nz(ent.Rows[0]["EstimatedAmount"], 0)) - Convert.ToInt32(General.Nz(row["Amount"], 0));
+                        row.Delete();
+                    }
+                }
+                else
+                {
+                    ent.Rows[0]["EstimatedAmount"] = Convert.ToInt32(General.Nz(ent.Rows[0]["EstimatedAmount"], 0)) - Convert.ToInt32(General.Nz(row["Amount"], 0));
+                    row.Delete();
+                }
+                #endregion
 
 
-                //#region actualizare valoare avans
-                ///*LeonardM 25.08.2016
-                // * actualizarea sumelor o realizam mai jos cu diurna,
-                // * deoarece daca dezactivam bifa de diurna se scade de doua ori valoarea diurnei
-                // * si nu e ok*/
-                //metaAvsXDec_AvansDetailCheltuieli tmp = tvDateCheltuieli.Grid.GetRow(rowHandle) as metaAvsXDec_AvansDetailCheltuieli;
-                //var ent = dds.DataView.Cast<metaVwAvsXDec_Avans>().FirstOrDefault();
-                //#endregion
+                #region cheltuiala Cazare
+                /*LeonardM 15.08.2016
+                * solicitare ca in momentul in care utilizatorul selecteaza cheltuiala cu cazare, sa nu mai poata
+                * face rezervare pentru cazare */
+                DataRow[] itmCazare = dtNomenCheltuieli.Select("DictionaryItemName = 'cazare'");
+                if (itmCazare != null)
+                {
+                    if (Convert.ToInt32(row["DictionaryItemId"].ToString()) == Convert.ToInt32(itmCazare[0]["DictionaryItemId"].ToString()))
+                    {
+                        LoadAvansReservations(false);
+                    }
+                }
+                #endregion
+                Session["AvsXDec_SursaDate"] = ent;
 
-                //#region stergere diurna
-                ///*verificam daca exista cheltuiala de diurna si o stergem*/
-                //List<metaAvsXDec_DictionaryItem> lstCheltuieli = ddsNomenclatorCheltuieli.DataView.Cast<metaAvsXDec_DictionaryItem>().ToList();
-                //metaAvsXDec_DictionaryItem itmDiurna = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
-                //if (itmDiurna != null)
-                //{
-                //    if (tmp.DictionaryItemId == itmDiurna.DictionaryItemId)
-                //    {
-                //        chkIsDiurna.Checked = false;
-                //        maxValueDiurna = 0;
-                //    }
-                //    else
-                //    {
-                //        ent.EstimatedAmount = (ent.EstimatedAmount ?? 0) - (tmp.Amount ?? 0);
-                //        ddsCheltuieli.DataView.Remove(rand);
-                //    }
-                //}
-                //else
-                //{
-                //    ent.EstimatedAmount = (ent.EstimatedAmount ?? 0) - (tmp.Amount ?? 0);
-                //    ddsCheltuieli.DataView.Remove(found);
-                //}
-                //#endregion
-
-
-                //#region cheltuiala Cazare
-                ///*LeonardM 15.08.2016
-                //* solicitare ca in momentul in care utilizatorul selecteaza cheltuiala cu cazare, sa nu mai poata
-                //* face rezervare pentru cazare */
-                //metaAvsXDec_DictionaryItem itmCazare = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "cazare").FirstOrDefault();
-                //if (itmCazare != null)
-                //{
-                //    if (tmp.DictionaryItemId == itmCazare.DictionaryItemId)
-                //    {
-                //        LoadAvansReservations(false);
-                //    }
-                //}
-                //#endregion
-
-
-                //e.Cancel = true;
-                //grDateIstoric.CancelEdit();
-                //Session["Org_PosturiPozitii"] = dt;
-                //grDateIstoric.DataSource = dt;
+                e.Cancel = true;
+                grDate.CancelEdit();
+                Session["AvsXDec_SursaDateCheltuieli"] = dt;
+                grDate.DataSource = dt;
             }
             catch (Exception ex)
             {
@@ -1372,30 +1580,43 @@ namespace WizOne.AvansXDecont
         {
             try
             {
-                //DataTable dt = Session["Org_PosturiPozitii"] as DataTable;
-                //DataRow[] arr = dt.Select("DataInceput <= #" + Convert.ToDateTime(e.NewValues["DataSfarsit"]).ToString("yyyy-MM-dd") + "# AND #" + Convert.ToDateTime(e.NewValues["DataInceput"]).ToString("yyyy-MM-dd") + "# <= DataSfarsit");
-                //if (arr.Length == 0)
-                //{
-                //    DataRow dr = dt.NewRow();
+                DataTable dt = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
 
-                //    dr["IdPost"] = txtId.Value ?? -99;
-                //    dr["Pozitii"] = e.NewValues["Pozitii"] ?? 0;
-                //    dr["PozitiiAprobate"] = e.NewValues["PozitiiAprobate"] ?? 0;
-                //    dr["DataInceput"] = e.NewValues["DataInceput"];
-                //    dr["DataSfarsit"] = e.NewValues["DataSfarsit"];
-                //    dr["USER_NO"] = Session["UserId"];
-                //    dr["TIME"] = DateTime.Now;
-                //    dt.Rows.Add(dr);
+                object[] row = new object[dt.Columns.Count];
+                int x = 0;
+                foreach (DataColumn col in dt.Columns)
+                {
+                    if (!col.AutoIncrement)
+                    {
+                        switch (col.ColumnName.ToUpper())
+                        {                    
+                            case "IDAUTO":
+                                if (Constante.tipBD == 1)
+                                    row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                else
+                                    row[x] = Dami.NextId("F100Supervizori2");
+                                break;              
+                            case "USER_NO":
+                                row[x] = Session["UserId"];
+                                break;
+                            case "TIME":
+                                row[x] = DateTime.Now;
+                                break;
+                            default:
+                                row[x] = e.NewValues[col.ColumnName];
+                                break;
+                        }
+                    }
 
-                //    PopuleazaPozitii(dt);
-                //}
-                //else
-                //    grDateIstoric.JSProperties["cpAlertMessage"] = "Acest interval se intersecteaza cu unul deja existent";
+                    x++;
+                }
 
-                //e.Cancel = true;
-                //grDateIstoric.CancelEdit();
-                //Session["Org_PosturiPozitii"] = dt;
-                //grDateIstoric.DataSource = dt;
+                dt.Rows.Add(row);
+                e.Cancel = true;
+                grDate.CancelEdit();
+                grDate.DataSource = dt;
+                grDate.KeyFieldName = "IdAuto";
+                Session["AvsXDec_SursaDateCheltuieli"] = dt;
             }
             catch (Exception ex)
             {
@@ -1407,29 +1628,27 @@ namespace WizOne.AvansXDecont
         protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
             try
-            {
-                //DataTable dt = Session["Org_PosturiPozitii"] as DataTable;
-                //DataRow[] arr = dt.Select("IdAuto <> " + e.Keys["IdAuto"] + " AND DataInceput <= #" + Convert.ToDateTime(e.NewValues["DataSfarsit"]).ToString("yyyy-MM-dd") + "# AND #" + Convert.ToDateTime(e.NewValues["DataInceput"]).ToString("yyyy-MM-dd") + "# <= DataSfarsit");
-                //if (arr.Length == 0)
-                //{
-                //    DataRow dr = dt.Rows.Find(e.Keys["IdAuto"]);
+            {                
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
 
-                //    dr["Pozitii"] = e.NewValues["Pozitii"] ?? 0;
-                //    dr["PozitiiAprobate"] = e.NewValues["PozitiiAprobate"] ?? 0;
-                //    dr["DataInceput"] = e.NewValues["DataInceput"];
-                //    dr["DataSfarsit"] = e.NewValues["DataSfarsit"];
-                //    dr["USER_NO"] = Session["UserId"];
-                //    dr["TIME"] = DateTime.Now;
+                DataTable dt = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
+                DataRow row = dt.Rows.Find(keys);
 
-                //    PopuleazaPozitii(dt);
-                //}
-                //else
-                //    grDateIstoric.JSProperties["cpAlertMessage"] = "Acest interval se intersecteaza cu unul deja existent";
+                foreach (DataColumn col in dt.Columns)
+                {
+                    if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
+                    {
+                        var edc = e.NewValues[col.ColumnName];
+                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                    }
 
-                //e.Cancel = true;
-                //grDateIstoric.CancelEdit();
-                //Session["Org_PosturiPozitii"] = dt;
-                //grDateIstoric.DataSource = dt;
+                }
+                e.Cancel = true;
+                grDate.CancelEdit();
+                Session["InformatiaCurentaPersonal"] = dt;
+                grDate.DataSource = dt;
             }
             catch (Exception ex)
             {
@@ -2083,8 +2302,9 @@ namespace WizOne.AvansXDecont
             {
                 /*verificam daca exista acelasi tip de cheltuiala anteriori*/
                 DataTable lstCheltuieliInserate = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
-                DataTable lstCheltuieli = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
-                DataRow[] itmDiurna = lstCheltuieli.Select("LOWER(DictionaryItemName) = 'diurna'");
+                DataTable lstCheltuieli = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;// GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+                lstCheltuieli.CaseSensitive = false;
+                DataRow[] itmDiurna = lstCheltuieli.Select("DictionaryItemName = 'diurna'");
                 DataRow[] chDiurna = lstCheltuieliInserate.Select("DictionaryItemId = " + itmDiurna[0]["DictionaryItemId"].ToString());
                 if (chDiurna != null)
                 {
@@ -2189,7 +2409,7 @@ namespace WizOne.AvansXDecont
         {
             value = -99;
             DataTable ent = Session["AvsXDec_SursaDate"] as DataTable;
-            DataTable lstCheltuieli = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+            DataTable lstCheltuieli = Session["AvsXDec_SursaDateCheltuieli"] as DataTable; //GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
             string DIMSetting = string.Empty;
             DataTable lstVwAvsXDec_Settings_Config = General.IncarcaDT(@"select * from ""vwAvsXDec_Settings_Config""", null);
             if (lstVwAvsXDec_Settings_Config != null && lstVwAvsXDec_Settings_Config.Rows.Count > 0 && lstCheltuieli != null && lstCheltuieli.Rows.Count > 0)
@@ -2220,7 +2440,8 @@ namespace WizOne.AvansXDecont
                         value = Convert.ToInt32(ent.Rows[0]["PaymentTypeId"].ToString());
                         break;
                     case "ExpenseId":
-                        DataRow[] itmDiurna = lstCheltuieli.Select("LOWER(DictionaryItemName) = 'diurna'");
+                        lstCheltuieli.CaseSensitive = false;
+                        DataRow[] itmDiurna = lstCheltuieli.Select("DictionaryItemName = 'diurna'");
                         if (itmDiurna != null)
                             value = Convert.ToInt32(itmDiurna[0]["DictionaryItemId"].ToString());
                         break;
@@ -2231,22 +2452,44 @@ namespace WizOne.AvansXDecont
             }
         }
 
+        protected void grDate_HtmlEditFormCreated(object sender, ASPxGridViewEditFormEventArgs e)
+        {
+            try
+            {
+                //General.SecuritatePersonal(grDateBeneficii, "Beneficii", Convert.ToInt32(Session["UserId"].ToString()), true);
+
+                //ASPxComboBox cmbCateg = grDateBeneficii.FindEditFormTemplateControl("cmbNumeBen") as ASPxComboBox;
+                //if (cmbCateg != null)
+                //{
+                //    DataTable dtBeneficii = General.GetObiecteDinArie("ArieTabBeneficiiDinPersonal");
+                //    cmbCateg.DataSource = dtBeneficii;
+                //    cmbCateg.DataBindItems();
+                //}
+
+                //HtmlTableCell lblNume = (HtmlTableCell)grDateBeneficii.FindEditFormTemplateControl("lblNume");
+                //lblNume.InnerText = Dami.TraduCuvant("Nume beneficiu");
+                //HtmlTableCell lblDataPrimire = (HtmlTableCell)grDateBeneficii.FindEditFormTemplateControl("lblDataPrimire");
+                //lblDataPrimire.InnerText = Dami.TraduCuvant("Data primire");
+                //HtmlTableCell lblDataExp = (HtmlTableCell)grDateBeneficii.FindEditFormTemplateControl("lblDataExp");
+                //lblDataExp.InnerText = Dami.TraduCuvant("Data expirare");
+                //HtmlTableCell lblCaract = (HtmlTableCell)grDateBeneficii.FindEditFormTemplateControl("lblCaract");
+                //lblCaract.InnerText = Dami.TraduCuvant("Caracteristica echipament");
+
+                //ASPxUploadControl btnDocUploadBen = (ASPxUploadControl)grDateBeneficii.FindEditFormTemplateControl("btnDocUploadBen");
+                //btnDocUploadBen.BrowseButton.Text = Dami.TraduCuvant("Incarca Document");
+                //btnDocUploadBen.ToolTip = Dami.TraduCuvant("Incarca Document");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+        }
+
         private void GolireVariabile()
         {
             try
             {
-                Session["DataVigoare"] = null;
-                Session["IdAuto"] = -97;
-                Session["Org_Duplicare"] = "0";
-                Session["Posturi_Upload"] = null;
-                Session["Org_PosturiPozitii"] = null;
-                Session["Org_CampuriExtra"] = null;
-                Session.Remove("DataVigoare");
-                Session.Remove("IdAuto");
-                Session.Remove("Org_Duplicare");
-                Session.Remove("Posturi_Upload");
-                Session.Remove("Org_PosturiPozitii");
-                Session.Remove("Org_CampuriExtra");
+ 
             }
             catch (Exception ex)
             {

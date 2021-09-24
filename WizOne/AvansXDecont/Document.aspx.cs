@@ -68,9 +68,14 @@ namespace WizOne.AvansXDecont
 				
 				
 				cmbDocumentType.DataSource = General.IncarcaDT("SELECT * FROM AvsXDec_DocumentType WHERE DocumentTypeId IN (1001, 1002, 2001, 2002) ", null);
-				
-                if (!IsPostBack)
-                    Session["AvansXDecont_Grid"] = null;
+				cmbDocumentType.DataBind();
+
+
+				if (!IsPostBack)
+				{
+					Session["AvansXDecont_Grid"] = null;
+					Session["AvsXDec_DataDoc"] = null;
+				}
 
                 IncarcaGrid();
 
@@ -299,7 +304,7 @@ namespace WizOne.AvansXDecont
 									//Session["AvsXDec_DocumentTypeId"]launchedPagedFrom = DocumentAvans.LansatDin.Formulare;
 									//Session["AvsXDec_DocumentTypeId"]titlu = (barTitlu.Content ?? "").ToString();
 									Session["AvsXDec_DocCanBeRefused"] = Convert.ToInt32((dr[0]["CanBeRefused"] == DBNull.Value ? 0 : dr[0]["CanBeRefused"]).ToString());
-									
+
 									string url = "~/AvansXDecont/DocumentAvans";
 									if (Page.IsCallback)
 										ASPxWebControl.RedirectOnCallback(url);
@@ -1923,8 +1928,8 @@ namespace WizOne.AvansXDecont
 						+ " (CASE WHEN av.RefuseReason IS NULL OR LEN(av.RefuseReason) <= 0 THEN dec.RefuseReason ELSE av.RefuseReason END) AS RefuseReason, "
 						+ " (CASE WHEN av.TotalAmount IS NULL THEN dec.TotalAmount ELSE av.TotalAmount END) AS TotalAmountDocument, "
 						+ " (CASE WHEN av.CurrencyId IS NULL THEN dec.CurrencyId ELSE av.CurrencyId END) AS CurrencyIdDocument, "
-						+ " (CASE WHEN avMoneda.DictionaryItemName IS NULL THEN ecMoneda.DictionaryItemName ELSE avMoneda.DictionaryItemName END) AS CurrencyCodeDocument, "
-						+ " (CASE WHEN (CASE WHEN bugOwner.IdSuper IS NULL THEN -99 ELSE bugOwner.IdSuper END) == -99 THEN 0 ELSE 1 END) AS IsBudgetOwnerForDocument, "
+						+ " (CASE WHEN avMoneda.DictionaryItemName IS NULL THEN decMoneda.DictionaryItemName ELSE avMoneda.DictionaryItemName END) AS CurrencyCodeDocument, "
+						+ " (CASE WHEN (CASE WHEN bugOwner.IdSuper IS NULL THEN -99 ELSE bugOwner.IdSuper END) = -99 THEN 0 ELSE 1 END) AS IsBudgetOwnerForDocument, "
 						+ " (CASE WHEN (a.DocumentTypeId IN (1001, 1002, 1003, 1004) AND a.DocumentStateId < 4 AND a.USER_NO != docState.USER_NO) OR " 
 						+ " (a.DocumentTypeId IN (2001, 2002, 2003) AND a.DocumentStateId < 7 AND a.USER_NO != docState.USER_NO)  THEN 1 ELSE 0 END) AS canBeRefused "
 						+ " FROM AvsXDec_Document a "
@@ -1935,12 +1940,12 @@ namespace WizOne.AvansXDecont
 						+ " LEFT JOIN AvsXDec_BusinessTransaction srcDoc on a.DocumentId = srcDoc.DestDocId " 
 						/*LeonardM 13.06.2016
 						 * prleluare avans sau decont in functie de tipul documentului pentru a prelua si suma ce trebuie aprobata*/
-						+ " LEFT JOIN AvsXDec_Avans av on a.DocumentId = f.DocumentId "		
+						+ " LEFT JOIN AvsXDec_Avans av on a.DocumentId = av.DocumentId "		
 						+ " LEFT JOIN vwAvsXDec_Nomen_TipMoneda avMoneda on av.CurrencyId = avMoneda.DictionaryItemId "	
 						+ " LEFT JOIN AvsXDec_Decont dec on a.DocumentId = dec.DocumentId "		
 						+ " LEFT JOIN vwAvsXDec_Nomen_TipMoneda decMoneda on dec.CurrencyId = decMoneda.DictionaryItemId "
 						/*end LeonardM 13.06.2016*/
-						+ " LEFT JOIN vwAvsXDec_BudgetOwner bugOwner on new  a.DocumentTypeId = (CASE WHEN bugOwner.DocumentTypeId IS NULL THEN -99 ELSE bugOwner.DocumentTypeId END ) " 
+						+ " LEFT JOIN vwAvsXDec_BudgetOwner bugOwner on  a.DocumentTypeId = (CASE WHEN bugOwner.DocumentTypeId IS NULL THEN -99 ELSE bugOwner.DocumentTypeId END ) " 
 						+ " AND (CASE WHEN docState.IdSuper IS NULL THEN -99 ELSE docState.IdSuper END) =  (CASE WHEN bugOwner.IdSuper IS NULL THEN -99 ELSE bugOwner.IdSuper END) "
                         /*LeonardM 15.08.2016
                          * filtrare sa fie aduse doar documentele apartinand utilizatorului logat
@@ -1990,7 +1995,13 @@ namespace WizOne.AvansXDecont
                         break;
                 }
 
-            }
+				if (deDataDoc.Value != null)
+					Session["AvsXDec_DataDoc"] = Convert.ToDateTime(deDataDoc.Value);
+				else
+					Session["AvsXDec_DataDoc"] = null;
+
+
+			}
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
@@ -2002,7 +2013,8 @@ namespace WizOne.AvansXDecont
         {
             try 
             {
-				if (deDataDoc.Value == null || cmbDocumentType.Value == null)
+
+				if (Session["AvsXDec_DataDoc"] == null || cmbDocumentType.Value == null)
 				{
 					MessageBox.Show(Dami.TraduCuvant("Lipsesc date !"), MessageBox.icoWarning, "");  
 					return;
@@ -2046,7 +2058,7 @@ namespace WizOne.AvansXDecont
 									Session["AvsXDec_Marca"] = Convert.ToInt32(Session["User_Marca"].ToString());									
 									Session["AvsXDec_PoateModif"] = 1;
 									Session["AvsXDec_EsteNou"] = 1;
-									
+
 									string url = "~/AvansXDecont/DocumentAvans";
 									if (Page.IsCallback)
 										ASPxWebControl.RedirectOnCallback(url);

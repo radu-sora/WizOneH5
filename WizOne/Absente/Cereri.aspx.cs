@@ -156,11 +156,11 @@ namespace WizOne.Absente
                     cmbInloc.DataSource = dtInl;
                     cmbInloc.DataBind();
 
-                    divInloc.Visible = false;
-                    divNrOre.Visible = false;
-                    divOraInc.Visible = false;
-                    divOraSf.Visible = false;
-                    divNrZileViitor.Visible = false;
+                    divInloc.ClientVisible = false;
+                    divNrOre.ClientVisible = false;
+                    divOraInc.ClientVisible = false;
+                    divOraSf.ClientVisible = false;
+                    divNrZileViitor.ClientVisible = false;
 
                     //Populam campurile
                     if (General.VarSession("IstoricExtins_VineDin").ToString() == "2-OK" && Session["Absente_Cereri_Date"] != null)
@@ -1069,7 +1069,7 @@ namespace WizOne.Absente
                     }
                 }
 
-                divInloc.Visible = arataInloc == "2" || arataInloc == "3";                
+                divInloc.ClientVisible = arataInloc == "2" || arataInloc == "3";                
 
                 if (arataAtas == "2" || arataAtas == "3")
                 {
@@ -1085,7 +1085,7 @@ namespace WizOne.Absente
                 if (idOre == "0")
                 {
                     //Florin 2021.09.09
-                    divNrOre.Visible = true;
+                    divNrOre.ClientVisible = true;
 
                     //lblNrOre.Style["display"] = "inline-block";
                     txtNrOre.ClientVisible = true;
@@ -1095,8 +1095,8 @@ namespace WizOne.Absente
                     if (folosesteInterval == 1)
                     {
                         //Florin 2021.09.09
-                        divOraInc.Visible = true;
-                        divOraSf.Visible = true;
+                        divOraInc.ClientVisible = true;
+                        divOraSf.ClientVisible = true;
 
                         List<Module.Dami.metaGeneral2> lst = ListaInterval(perioada);
 
@@ -1117,19 +1117,19 @@ namespace WizOne.Absente
                     }
                     else
                     {
-                        divOraInc.Visible = false;
-                        divOraSf.Visible = false;
+                        divOraInc.ClientVisible = false;
+                        divOraSf.ClientVisible = false;
                     }
                 }
                 else
                 {
-                    divNrOre.Visible = false;
+                    divNrOre.ClientVisible = false;
                     txtNrOre.Value = null;
 
-                    divOraInc.Visible = false;                    
+                    divOraInc.ClientVisible = false;                    
                     cmbOraInc.Value = null;
 
-                    divOraSf.Visible = false;
+                    divOraSf.ClientVisible = false;
                     cmbOraSf.Value = null;
                 }
 

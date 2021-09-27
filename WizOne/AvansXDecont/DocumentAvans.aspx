@@ -117,19 +117,27 @@
 						<div class="Absente_divOuter margin_top15">
 							<label id="lblDtPlec" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data plecare</label>
 							<div style="float:left; padding-right:10px;">
-								<dx:ASPxDateEdit ID="txtStartDate" runat="server" Width="95px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" />
+								<dx:ASPxDateEdit ID="txtStartDate" runat="server" Width="95px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" >
+									<ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtStartDate'); }" />
+								</dx:ASPxDateEdit>
 							</div>
 							<label id="lblOraPlec" runat="server" style="display:inline-block; float:left; padding-right:15px;">Ora plecare</label>
 							<div style="float:left; padding-right:10px;">
-								<dx:ASPxTimeEdit  ID="txtOraPlecare" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false" oncontextMenu="ctx(this,event)"/>
+								<dx:ASPxTimeEdit  ID="txtOraPlecare" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false" oncontextMenu="ctx(this,event)">
+									<ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtOraPlecare'); }" />
+								</dx:ASPxTimeEdit>
 							</div>
 							<label id="lblDtSos" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data sosirii din delegatie</label>
 							<div style="float:left; padding-right:10px;">
-								<dx:ASPxDateEdit ID="txtEndDate" runat="server" Width="95px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" />
+								<dx:ASPxDateEdit ID="txtEndDate" runat="server" Width="95px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" >
+									<ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtEndDate'); }" />
+								</dx:ASPxDateEdit>
 							</div>
 							<label id="lblDtSf" runat="server" style="display:inline-block; float:left; padding-right:15px;">Ora sosire</label>
 							<div style="float:left; padding-right:10px;">
-								<dx:ASPxTimeEdit  ID="txtOraSosire" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false" oncontextMenu="ctx(this,event)"/>
+								<dx:ASPxTimeEdit  ID="txtOraSosire" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false" oncontextMenu="ctx(this,event)">
+									<ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtOraSosire'); }" />
+								</dx:ASPxTimeEdit>
 							</div>					
 								
 						</div>
@@ -177,7 +185,7 @@
 							<div class="Absente_divOuter margin_top15">
 					
 								<div style="float:left; padding-right:15px;">    
-									<dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="30%" AutoGenerateColumns="false"  OnInitNewRow="grDate_InitNewRow" 
+									<dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnInitNewRow="grDate_InitNewRow" 
 										 OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize">
 										<SettingsBehavior AllowFocusedRow="true" />
 										<Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
@@ -242,11 +250,15 @@
 														<tr>
 															<td id="lblChelt" runat="server" style="padding-left:10px !important;">Cheltuiala</td>
 															<td id="lblVal" runat="server" style="padding-left:10px !important;">Valoare</td>
-															<td id="lblDet" runat="server" style="padding-left:10px !important;">Detalii</td>
 														</tr>
 														<tr>
 															<td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbChelt" runat="server" Width="200px" ValueField="DictionaryItemId" DropDownWidth="200" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("DictionaryItemId") %>' />
 															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtVal" runat="server" Width="200px" Value='<%# Bind("Amount") %>' /></td>
+														</tr>
+														<tr>
+															<td id="lblDet" runat="server" style="padding-left:10px !important;">Detalii</td>
+														</tr>
+														<tr>
 															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtDet" runat="server" Width="200px" Value='<%# Bind("FreeTxt") %>' /></td>
 														</tr>
 														<tr>
@@ -296,6 +308,7 @@
 								<label id="lblValEst" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Val. estimata</label>
 								<div style="float:left; padding-right:15px;">
 									<dx:ASPxTextBox ID="txtValEstimata" ClientInstanceName="txtValEstimata" runat="server" Width="200px">
+										<ClientSideEvents TextChanged="function(s, e) { pnlCtl.PerformCallback('txtValEstimata'); }" />
 									</dx:ASPxTextBox>
 								</div>
 							</div>	
@@ -303,6 +316,7 @@
 								<label id="lblValAvsSol" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Valoare avans solicitat</label>
 								<div style="float:left; padding-right:15px;">
 									<dx:ASPxTextBox ID="txtValAvans" ClientInstanceName="txtValAvans" runat="server" Width="200px">
+										<ClientSideEvents TextChanged="function(s, e) { pnlCtl.PerformCallback('txtValAvans'); }" />
 									</dx:ASPxTextBox>
 								</div> 	
 							</div>	
@@ -329,6 +343,38 @@
         </PanelCollection>
     </dx:ASPxCallbackPanel>
 
+    <dx:ASPxPopupControl ID="popUpMotiv" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
+        EnableViewState="False" PopupElementID="popUpMotivArea" PopupHorizontalAlign="WindowCenter"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="650px" Height="200px" HeaderText="Motiv respingere"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpMotiv" EnableHierarchyRecreation="false">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel2" runat="server">
+                    <table>
+                        <tr>
+                            <td align="right">
+                                <dx:ASPxButton ID="btnRespingeMtv" runat="server" Text="Respinge" AutoPostBack="false" >
+                                    <ClientSideEvents Click="function(s, e) {
+                                        OnMotivRespingere(s,e);
+                                    }" />
+                                    <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
+                                </dx:ASPxButton>
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: #666666;font-family: Tahoma; font-size: 10px;">
+                                <dx:ASPxMemo ID="txtMtv" runat="server" ClientIDMode="Static" ClientInstanceName="txtMtv" Width="630px" Height="180px"></dx:ASPxMemo>
+                            </td>
+                        </tr>
+                    </table>
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
+
 
     <script>
         var limba = "<%= Session["IdLimba"] %>";
@@ -346,6 +392,20 @@
                 s.cpAlertMessage = null;
             }
             pnlLoading.Hide();
+		}
+
+        function OnMotivRespingere(s, e) {
+            if (ASPxClientUtils.Trim(txtMtv.GetText()) == '') {
+                swal({
+                    title: trad_string(limba, "Operatie nepermisa"), text: trad_string(limba, "Nu ati completat motivul refuzului pentru respingere documente!"),
+                    type: "warning"
+                });
+            }
+            else {
+                popUpMotiv.Hide();
+                pnlCtl.PerformCallback('btnRespinge;' + txtMtv.GetText());
+                txtMtv.SetText('');
+            }
         }
 
     </script>

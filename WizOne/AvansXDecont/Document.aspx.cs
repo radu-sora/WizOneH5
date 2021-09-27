@@ -62,7 +62,7 @@ namespace WizOne.AvansXDecont
                 txtTitlu.Text = General.VarSession("Titlu").ToString();	
 				
 
-                DataTable dtStari = General.IncarcaDT(@"SELECT b.""DictionaryItemId"" as ""Id"", b.""DictionaryItemName""  as ""Denumire"", b.""Culoare"" FROM ""vwAvsXDec_Nomen_StariDoc"" a LEFT JOIN ""AvsXDec_DictionaryItem"" b ON  a.DictionaryItemId equals b.DictionaryItemId ", null);
+                DataTable dtStari = General.IncarcaDT(@"SELECT b.""DictionaryItemId"" as ""Id"", b.""DictionaryItemName""  as ""Denumire"", b.""Culoare"" FROM ""vwAvsXDec_Nomen_StariDoc"" a LEFT JOIN ""AvsXDec_DictionaryItem"" b ON  a.DictionaryItemId = b.DictionaryItemId ", null);
                 GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 colStari.PropertiesComboBox.DataSource = dtStari;	
 				
@@ -77,7 +77,8 @@ namespace WizOne.AvansXDecont
 					Session["AvsXDec_DataDoc"] = null;
 				}
 
-                IncarcaGrid();
+				grDate.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
+				IncarcaGrid();
 
 
             }
@@ -299,7 +300,7 @@ namespace WizOne.AvansXDecont
 									//pag1.idRol = idRol;
 									Session["AvsXDec_Pozitie"] = pozitie;
 									Session["AvsXDec_PoateModif"] = poateModif;
-									Session["AvsXDec_PoateAprobaXRefuzaDoc"] = poateAprobaXRefuzaDoc;
+									Session["AvsXDec_PoateAprobaXRefuzaDoc"] = poateAprobaXRefuzaDoc ? 1 : 0;
 									Session["AvsXDec_EsteNou"] = 0;
 									//Session["AvsXDec_DocumentTypeId"]launchedPagedFrom = DocumentAvans.LansatDin.Formulare;
 									//Session["AvsXDec_DocumentTypeId"]titlu = (barTitlu.Content ?? "").ToString();
@@ -1931,7 +1932,7 @@ namespace WizOne.AvansXDecont
 						+ " (CASE WHEN avMoneda.DictionaryItemName IS NULL THEN decMoneda.DictionaryItemName ELSE avMoneda.DictionaryItemName END) AS CurrencyCodeDocument, "
 						+ " (CASE WHEN (CASE WHEN bugOwner.IdSuper IS NULL THEN -99 ELSE bugOwner.IdSuper END) = -99 THEN 0 ELSE 1 END) AS IsBudgetOwnerForDocument, "
 						+ " (CASE WHEN (a.DocumentTypeId IN (1001, 1002, 1003, 1004) AND a.DocumentStateId < 4 AND a.USER_NO != docState.USER_NO) OR " 
-						+ " (a.DocumentTypeId IN (2001, 2002, 2003) AND a.DocumentStateId < 7 AND a.USER_NO != docState.USER_NO)  THEN 1 ELSE 0 END) AS canBeRefused "
+						+ " (a.DocumentTypeId IN (2001, 2002, 2003) AND a.DocumentStateId < 7 AND a.USER_NO != docState.USER_NO)  THEN 1 ELSE 0 END) AS canBeRefused, a.Pozitie "
 						+ " FROM AvsXDec_Document a "
 						+ " JOIN AvsXDec_DocumentStateHistory docState ON a.DocumentId = docState.DocumentId "
 						+ " JOIN AvsXDec_DocumentType b on a.DocumentTypeId = b.DocumentTypeId "

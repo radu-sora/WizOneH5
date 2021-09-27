@@ -188,6 +188,18 @@ namespace WizOne.Pagini
                              + " WHERE a.\"IdCerere\" = " + id + " order by a.\"Pozitie\" ";
                         dt = General.IncarcaDT(strSql, null);
                         break;
+                    case 10:    //AvsXDec
+                        strSql = "SELECT a.Id as IdAuto, a.DocumentId as IdCerere, a.CircuitId as IdCircuit, a.USER_NO AS IdSuper,  a.DocumentStateId AS IdStare, a.Aprobat,  a.Culoare, (CASE WHEN a.Pozitie IS NULL THEN 0 ELSE a.Pozitie END) AS Pozitie, "
+                            + " a.DataAprobare, (CASE WHEN c.F10008 IS NULL OR LEN(c.F10008) = 0 THEN b.F70104 ELSE c.F10008 + ' ' + c.F10009 END) AS  Nume, "
+                            + "(CASE WHEN k.F10008 IS NULL OR LEN(k.F10008) = 0 THEN j.F70104 ELSE k.F10008 + ' ' + k.F10009 END) AS Inlocuitor "
+                            + " FROM AvsXDec_DocumentStateHistory a "
+                            + " LEFT JOIN USERS b on a.USER_NO = b.F70102 "
+                            + " LEFT JOIN F100 c on b.F10003 = c.F10003  "
+                            + " LEFT JOIN USERS j on a.IdUserInlocuitor = j.F70102 "
+                            + " LEFT JOIN F100 k on j.F10003 = k.F10003  "
+                            + " WHERE a.DocumentId = " + id + "  order by a.Pozitie";
+                        dt = General.IncarcaDT(strSql, null);
+                        break;
                     default:
                         //tabela = "Ptj_CereriIstoric";
                         break;
@@ -205,7 +217,7 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
-        }
+        }   
 
 
         //private void IncarcaGrid(int idCerere, int tip = 1, int f10003 = -99, int an = -1, int luna = -1)

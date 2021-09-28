@@ -622,7 +622,7 @@ namespace WizOne.Avs
             lbl5Nou.Visible = false;
             lbl6Nou.Visible = false;
             lbl7Nou.Visible = false;
-            lbl8Nou.Visible = false;
+            lbl8Nou.Visible = true;
             lbl9Nou.Visible = false;
             lbl10Nou.Visible = false;
             lbl11Nou.Visible = false;
@@ -676,7 +676,7 @@ namespace WizOne.Avs
             lblTxt3Nou.Visible = false;
             lblTxt3Nou.Text = "";
             cmb1Nou.Enabled = false;
-            cmb1Nou.Attributes["style"] = "display: none";
+            cmb1Nou.ClientVisible = false;
             cmb1Nou.DataSource = null;
             cmb1Nou.Items.Clear();
             cmb1Nou.Value = null;
@@ -897,7 +897,7 @@ namespace WizOne.Avs
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
             }
             if (nr == 4)
@@ -905,7 +905,7 @@ namespace WizOne.Avs
                 lbl1Nou.Visible = true;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text1;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
             }
             if (nr == 5)
@@ -978,7 +978,7 @@ namespace WizOne.Avs
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt4Act.Visible = true;
@@ -1021,7 +1021,7 @@ namespace WizOne.Avs
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt4Act.Visible = true;
@@ -1056,7 +1056,7 @@ namespace WizOne.Avs
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt1Act.Visible = true;
@@ -1093,7 +1093,7 @@ namespace WizOne.Avs
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt1Act.Visible = true;
@@ -1154,7 +1154,7 @@ namespace WizOne.Avs
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt4Act.Visible = true;
@@ -1250,7 +1250,7 @@ namespace WizOne.Avs
                 lbl13Nou.Visible = true;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text1;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
            
                 lblTxt5Nou.Visible = true;
@@ -1276,7 +1276,7 @@ namespace WizOne.Avs
                 lbl13Nou.Visible = true;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt1Nou.Visible = true;
@@ -1327,7 +1327,7 @@ namespace WizOne.Avs
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Functie)
@@ -1411,7 +1411,7 @@ namespace WizOne.Avs
                 cmb2Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
                 cmb2Nou.ClientVisible = true;
                 cmb2Nou.Enabled = true;
@@ -1505,7 +1505,7 @@ namespace WizOne.Avs
                 lbl1Nou.Visible = true;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Attributes["style"] = "display: block";
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lbl8Act.Visible = true;
@@ -1518,7 +1518,7 @@ namespace WizOne.Avs
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text4;
                 txt1Nou.ClientVisible = true;
-                txt1Nou.Enabled = false;
+                txt1Nou.ClientEnabled = false;
 
                 lbl9Act.Visible = true;
                 lblTxt2Act.Visible = true;
@@ -2866,11 +2866,11 @@ namespace WizOne.Avs
                     break;
                 case "cmb7Nou":
                     if (Convert.ToInt32(cmb7Nou.Value) == 2 || Convert.ToInt32(cmb7Nou.Value) == 3)
-                        txt1Nou.Enabled = true;
+                        txt1Nou.ClientEnabled = true;
                     else
                     {
                         txt1Nou.Text = "";
-                        txt1Nou.Enabled = false;
+                        txt1Nou.ClientEnabled = false;
                     }
                     break;
                 case "txt1Nou":

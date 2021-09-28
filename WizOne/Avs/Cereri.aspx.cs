@@ -920,6 +920,8 @@ namespace WizOne.Avs
                 lblTxt1Nou.Text = text2;
                 txt1Nou.ClientVisible = true;
 
+                lbl10Act.Visible = true;
+                lbl10Nou.Visible = true;
                 lblTxt5Act.Visible = true;
                 lblTxt5Act.Text = text3;
                 de1Act.ClientVisible = true;

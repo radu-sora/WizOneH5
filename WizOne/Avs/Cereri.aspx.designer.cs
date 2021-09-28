@@ -66,7 +66,7 @@ namespace WizOne.Avs
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell divRol;
+        protected global::DevExpress.Web.ASPxPanel divRol;
 
         /// <summary>
         /// lblRol control.

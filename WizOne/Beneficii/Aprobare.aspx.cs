@@ -324,7 +324,7 @@ namespace WizOne.Beneficii
                     if (!col.AutoIncrement && !col.ReadOnly && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
                     {
                         var edc = e.NewValues[col.ColumnName];
-                        if (col.ColumnName != "Descriere" && col.ColumnName != "DataInceputBen" && col.ColumnName != "DataSfarsitBen")
+                        if (col.ColumnName != "Descriere" /*&& col.ColumnName != "DataInceputBen" && col.ColumnName != "DataSfarsitBen"*/)
                             row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;                       
 
                         if (col.ColumnName == "IdBeneficiu" && e.NewValues[col.ColumnName] != null)
@@ -692,7 +692,7 @@ namespace WizOne.Beneficii
                 if (Convert.ToInt32(cmbSesiuneFiltru.Value ?? -99) != -99) filtru += " AND \"IdSesiune\" = " + Convert.ToInt32(cmbSesiuneFiltru.Value ?? -99);
                 if (checkComboBoxStare.Value != null) filtru += @" AND ""IdStare"" IN (" + DamiStari() + ")";
 
-                strSql = "SELECT a.IdAuto, a.F10003, a.IdSesiune, a.IdBeneficiu, b.DataInceput, b.DataSfarsit, a.IdStare, b.DataInceputBen, b.DataSfarsitBen, c.Descriere, a.USER_NO, a.TIME FROM Ben_Cereri a "
+                strSql = "SELECT a.IdAuto, a.F10003, a.IdSesiune, a.IdBeneficiu, b.DataInceput, b.DataSfarsit, a.IdStare, c.Descriere, a.USER_NO, a.TIME FROM Ben_Cereri a "   //b.DataInceputBen, b.DataSfarsitBen,
                     + " LEFT JOIN Ben_tblSesiuni b ON a.IdSesiune = b.Id "
                     + " LEFT JOIN Admin_Obiecte c ON c.Id = a.IdBeneficiu "
                     + " inner join Admin_Categorii d on c.IdCategorie = d.Id "
@@ -710,7 +710,16 @@ namespace WizOne.Beneficii
             return q;
         }
 
-
+					    //<dx:GridViewDataDateColumn FieldName = "DataInceputBen" Name="DataInceputBen" Caption="Data inceput beneficiu" ReadOnly="true" Visible="false"  HeaderStyle-Wrap="True" Width="100px" >
+         //                    <PropertiesDateEdit DisplayFormatString = "dd/MM/yyyy" ></ PropertiesDateEdit >
+         //                    < Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+         //                   <SettingsHeaderFilter Mode = "CheckedList" />
+         //               </ dx:GridViewDataDateColumn>
+					    //<dx:GridViewDataDateColumn FieldName = "DataSfarsitBen" Name="DataSfarsitBen" Caption="Data sfarsit beneficiu" ReadOnly="true" Visible="false" HeaderStyle-Wrap="True" Width="100px" >
+         //                    <PropertiesDateEdit DisplayFormatString = "dd/MM/yyyy" ></ PropertiesDateEdit >
+         //                    < Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
+         //                   <SettingsHeaderFilter Mode = "CheckedList" />
+         //               </ dx:GridViewDataDateColumn>	
 
 
     }

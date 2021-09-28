@@ -72,7 +72,7 @@ namespace WizOne.Avs
 
                     txtDataMod.Date = DateTime.Now;
                     lblDataRevisal.Visible = false;
-                    deDataRevisal.Visible = false;
+                    deDataRevisal.ClientVisible = false;
 
                     DataTable dtAng = General.IncarcaDT(SelectAngajati(-44), null, "F10003;Rol");
 
@@ -82,11 +82,11 @@ namespace WizOne.Avs
                     switch (dtRol.Rows.Count)
                     {
                         case 0:
-                            divRol.Visible = false;
+                            divRol.ClientVisible = false;
                             cmbRol.Value = 0;
                             break;
                         case 1:
-                            divRol.Visible = false;
+                            divRol.ClientVisible = false;
                             cmbRol.DataSource = dtRol;
                             cmbRol.DataBind();
                             cmbRol.SelectedIndex = 0;
@@ -98,7 +98,7 @@ namespace WizOne.Avs
                             //}
                             break;
                         default:
-                            divRol.Visible = true;
+                            divRol.ClientVisible = true;
                             cmbRol.DataSource = dtRol;
                             cmbRol.DataBind();
                             cmbRol.SelectedIndex = 0;
@@ -622,7 +622,7 @@ namespace WizOne.Avs
             lbl5Nou.Visible = false;
             lbl6Nou.Visible = false;
             lbl7Nou.Visible = false;
-            lbl8Nou.Visible = false;
+            lbl8Nou.Visible = true;
             lbl9Nou.Visible = false;
             lbl10Nou.Visible = false;
             lbl11Nou.Visible = false;
@@ -644,13 +644,13 @@ namespace WizOne.Avs
             txt2Nou.Text = "";
             txt3Nou.Text = "";
             txt4Nou.Text = "";
-            txt1Act.Visible = false;
+            txt1Act.ClientVisible = false;
             txt1Act.Enabled = false;
-            txt2Act.Visible = false;
+            txt2Act.ClientVisible = false;
             txt2Act.Enabled = false;
-            txt3Act.Visible = false;
+            txt3Act.ClientVisible = false;
             txt3Act.Enabled = false;
-            txt4Act.Visible = false;
+            txt4Act.ClientVisible = false;
             txt4Act.Enabled = false;
 
 
@@ -662,21 +662,21 @@ namespace WizOne.Avs
             lblTxt15Nou.Text = "";
             lblTxt16Nou.Visible = false;
             lblTxt16Nou.Text = "";
-            txt1Nou.Visible = false;
-            txt2Nou.Visible = false;
-            txt3Nou.Visible = false;
-            txt4Nou.Visible = false;
+            txt1Nou.ClientVisible = false;
+            txt2Nou.ClientVisible = false;
+            txt3Nou.ClientVisible = false;
+            txt4Nou.ClientVisible = false;
 
             lblTxt3Act.Visible = false;
             lblTxt3Act.Text = "";
             cmb1Act.Enabled = false;
-            cmb1Act.Visible = false;
+            cmb1Act.ClientVisible = false;
             cmb1Act.DataSource = null;
             cmb1Act.Items.Clear();
             lblTxt3Nou.Visible = false;
             lblTxt3Nou.Text = "";
             cmb1Nou.Enabled = false;
-            cmb1Nou.Visible = false;
+            cmb1Nou.ClientVisible = false;
             cmb1Nou.DataSource = null;
             cmb1Nou.Items.Clear();
             cmb1Nou.Value = null;
@@ -722,92 +722,92 @@ namespace WizOne.Avs
             lblTxt14Nou.Text = "";
 
             cmb2Act.Enabled = false;
-            cmb2Act.Visible = false;
+            cmb2Act.ClientVisible = false;
             cmb2Act.DataSource = null;
             cmb2Act.Items.Clear();
             cmb2Nou.Enabled = false;
-            cmb2Nou.Visible = false;
+            cmb2Nou.ClientVisible = false;
             cmb2Nou.DataSource = null;
             cmb2Nou.Items.Clear();
             cmb2Nou.Value = null;
 
-            de1Act.Visible = false;
+            de1Act.ClientVisible = false;
             de1Act.Value = null;
-            de2Act.Visible = false;
+            de2Act.ClientVisible = false;
             de2Act.Value = null;
-            de1Nou.Visible = false;
+            de1Nou.ClientVisible = false;
             de1Nou.Value = null;
-            de2Nou.Visible = false;
+            de2Nou.ClientVisible = false;
             de2Nou.Value = null;
-            de3Nou.Visible = false;
+            de3Nou.ClientVisible = false;
             de3Nou.Value = null;
 
             cmb3Act.Enabled = false;
-            cmb3Act.Visible = false;
+            cmb3Act.ClientVisible = false;
             cmb3Act.DataSource = null;
             cmb3Act.Items.Clear();
             cmb3Nou.Enabled = false;
-            cmb3Nou.Visible = false;
+            cmb3Nou.ClientVisible = false;
             cmb3Nou.DataSource = null;
             cmb3Nou.Items.Clear();
             cmb3Nou.Value = null;
 
             cmb4Act.Enabled = false;
-            cmb4Act.Visible = false;
+            cmb4Act.ClientVisible = false;
             cmb4Act.DataSource = null;
             cmb4Act.Items.Clear();
             cmb4Nou.Enabled = false;
-            cmb4Nou.Visible = false;
+            cmb4Nou.ClientVisible = false;
             cmb4Nou.DataSource = null;
             cmb4Nou.Items.Clear();
             cmb4Nou.Value = null;
 
             cmb5Act.Enabled = false;
-            cmb5Act.Visible = false;
+            cmb5Act.ClientVisible = false;
             cmb5Act.DataSource = null;
             cmb5Act.Items.Clear();
             cmb5Nou.Enabled = false;
-            cmb5Nou.Visible = false;
+            cmb5Nou.ClientVisible = false;
             cmb5Nou.DataSource = null;
             cmb5Nou.Items.Clear();
             cmb5Nou.Value = null;
 
             cmb6Act.Enabled = false;
-            cmb6Act.Visible = false;
+            cmb6Act.ClientVisible = false;
             cmb6Act.DataSource = null;
             cmb6Act.Items.Clear();
             cmb6Nou.Enabled = false;
-            cmb6Nou.Visible = false;
+            cmb6Nou.ClientVisible = false;
             cmb6Nou.DataSource = null;
             cmb6Nou.Items.Clear();
             cmb6Nou.Value = null;
 
             cmb7Act.Enabled = false;
-            cmb7Act.Visible = false;
+            cmb7Act.ClientVisible = false;
             cmb7Act.DataSource = null;
             cmb7Act.Items.Clear();
             cmb7Nou.Enabled = false;
-            cmb7Nou.Visible = false;
+            cmb7Nou.ClientVisible = false;
             cmb7Nou.DataSource = null;
             cmb7Nou.Items.Clear();
             cmb7Nou.Value = null;
 
             cmb8Act.Enabled = false;
-            cmb8Act.Visible = false;
+            cmb8Act.ClientVisible = false;
             cmb8Act.DataSource = null;
             cmb8Act.Items.Clear();
             cmb8Nou.Enabled = false;
-            cmb8Nou.Visible = false;
+            cmb8Nou.ClientVisible = false;
             cmb8Nou.DataSource = null;
             cmb8Nou.Items.Clear();
             cmb8Nou.Value = null;
 
             cmbStructOrgAct.Enabled = false;
-            cmbStructOrgAct.Visible = false;
+            cmbStructOrgAct.ClientVisible = false;
             cmbStructOrgAct.DataSource = null;
             cmbStructOrgAct.Items.Clear();
             cmbStructOrgNou.Enabled = false;
-            cmbStructOrgNou.Visible = false;
+            cmbStructOrgNou.ClientVisible = false;
             cmbStructOrgNou.DataSource = null;
             cmbStructOrgNou.Items.Clear();
             cmbStructOrgNou.Value = null;
@@ -827,28 +827,28 @@ namespace WizOne.Avs
             Session["Valoare8Noua"] = null;
             Session["Valoare9Noua"] = null;
 
-            grDateComponente.Visible = false;
-            grDateTarife.Visible = false;
-            grDateSporuri1.Visible = false;
-            grDateSporuri2.Visible = false;
-            grDateSporTran.Visible = false;
+            grDateComponente.ClientVisible = false;
+            grDateTarife.ClientVisible = false;
+            grDateSporuri1.ClientVisible = false;
+            grDateSporuri2.ClientVisible = false;
+            grDateSporTran.ClientVisible = false;
 
             lblDoc.Visible = false;
             btnDocUpload.Visible = false;
             btnDocSterge.Visible = false;
 
-            chk1.Visible = false;
-            chk2.Visible = false;
-            chk3.Visible = false;
-            chk4.Visible = false;
-            chk5.Visible = false;
+            chk1.ClientVisible = false;
+            chk2.ClientVisible = false;
+            chk3.ClientVisible = false;
+            chk4.ClientVisible = false;
+            chk5.ClientVisible = false;
 
             cmb1Nou.ClientEnabled = true;
             txt1Nou.ClientEnabled = true;
             txt2Nou.ClientEnabled = true;
             de1Nou.ClientEnabled = true;
 
-            Session["AvsLista"] = null;
+            //Session["AvsLista"] = null;
         }
 
         private void ArataCtl(int nr, string text1, string text2, string text3, string text4, string text5, string text6, string text7, string text8, string text9, string text10, string text11 = "")
@@ -859,11 +859,11 @@ namespace WizOne.Avs
                 lbl8Nou.Visible = true;
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text1;
-                txt1Act.Visible = true;
+                txt1Act.ClientVisible = true;
                 txt1Act.Enabled = false;
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text2;
-                txt1Nou.Visible = true;
+                txt1Nou.ClientVisible = true;
             }
             if (nr == 2)
             {// 2 X TB
@@ -875,17 +875,17 @@ namespace WizOne.Avs
                 lblTxt1Act.Text = text1;
                 lblTxt2Act.Visible = true;
                 lblTxt2Act.Text = text3;
-                txt1Act.Visible = true;
+                txt1Act.ClientVisible = true;
                 txt1Act.Enabled = false;
-                txt2Act.Visible = true;
+                txt2Act.ClientVisible = true;
                 txt2Act.Enabled = false;
 
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text2;
                 lblTxt2Nou.Visible = true;
                 lblTxt2Nou.Text = text4;
-                txt1Nou.Visible = true;
-                txt2Nou.Visible = true;
+                txt1Nou.ClientVisible = true;
+                txt2Nou.ClientVisible = true;
             }
             if (nr == 3)
             {// 1 x CB
@@ -893,11 +893,11 @@ namespace WizOne.Avs
                 lbl1Nou.Visible = true;
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
-                cmb1Act.Visible = true;
+                cmb1Act.ClientVisible = true;
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
             }
             if (nr == 4)
@@ -905,7 +905,7 @@ namespace WizOne.Avs
                 lbl1Nou.Visible = true;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text1;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
             }
             if (nr == 5)
@@ -914,19 +914,19 @@ namespace WizOne.Avs
                 lbl8Nou.Visible = true;
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text1;
-                txt1Act.Visible = true;
+                txt1Act.ClientVisible = true;
                 txt1Act.Enabled = false;
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text2;
-                txt1Nou.Visible = true;
+                txt1Nou.ClientVisible = true;
 
                 lblTxt5Act.Visible = true;
                 lblTxt5Act.Text = text3;
-                de1Act.Visible = true;
+                de1Act.ClientVisible = true;
                 de1Act.Enabled = false;
                 lblTxt5Nou.Visible = true;
                 lblTxt5Nou.Text = text4;
-                de1Nou.Visible = true;
+                de1Nou.ClientVisible = true;
             }
             if (nr == 6)
             {// 1 x DE
@@ -934,11 +934,11 @@ namespace WizOne.Avs
                 lbl10Nou.Visible = true;
                 lblTxt5Act.Visible = true;
                 lblTxt5Act.Text = text1;
-                de1Act.Visible = true;
+                de1Act.ClientVisible = true;
                 de1Act.Enabled = false;
                 lblTxt5Nou.Visible = true;
                 lblTxt5Nou.Text = text2;
-                de1Nou.Visible = true;
+                de1Nou.ClientVisible = true;
             }
             if (nr == 7)
             {// 2 x DE
@@ -948,19 +948,19 @@ namespace WizOne.Avs
                 lbl11Nou.Visible = true;
                 lblTxt5Act.Visible = true;
                 lblTxt5Act.Text = text1;
-                de1Act.Visible = true;
+                de1Act.ClientVisible = true;
                 de1Act.Enabled = false;
                 lblTxt5Nou.Visible = true;
                 lblTxt5Nou.Text = text2;
-                de1Nou.Visible = true;
+                de1Nou.ClientVisible = true;
 
                 lblTxt6Act.Visible = true;
                 lblTxt6Act.Text = text3;
-                de2Act.Visible = true;
+                de2Act.ClientVisible = true;
                 de2Act.Enabled = false;
                 lblTxt6Nou.Visible = true;
                 lblTxt6Nou.Text = text4;
-                de2Nou.Visible = true;
+                de2Nou.ClientVisible = true;
             }
             if (nr == 8)
             {// 2 x CB + 2 x TB
@@ -974,37 +974,37 @@ namespace WizOne.Avs
                 lbl9Nou.Visible = true;
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
-                cmb1Act.Visible = true;
+                cmb1Act.ClientVisible = true;
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt4Act.Visible = true;
                 lblTxt4Act.Text = text3;
-                cmb2Act.Visible = true;
+                cmb2Act.ClientVisible = true;
                 cmb2Act.Enabled = false;
                 lblTxt4Nou.Visible = true;
                 lblTxt4Nou.Text = text4;
-                cmb2Nou.Visible = true;
+                cmb2Nou.ClientVisible = true;
                 cmb2Nou.Enabled = true;
 
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text5;
                 lblTxt2Act.Visible = true;
                 lblTxt2Act.Text = text6;
-                txt1Act.Visible = true;
+                txt1Act.ClientVisible = true;
                 txt1Act.Enabled = false;
-                txt2Act.Visible = true;
+                txt2Act.ClientVisible = true;
                 txt2Act.Enabled = false;
 
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text7;
                 lblTxt2Nou.Visible = true;
                 lblTxt2Nou.Text = text8;
-                txt1Nou.Visible = true;
-                txt2Nou.Visible = true;
+                txt1Nou.ClientVisible = true;
+                txt2Nou.ClientVisible = true;
 
             }
             if (nr == 9)
@@ -1017,30 +1017,30 @@ namespace WizOne.Avs
                 lbl8Nou.Visible = true;
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
-                cmb1Act.Visible = true;
+                cmb1Act.ClientVisible = true;
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt4Act.Visible = true;
                 lblTxt4Act.Text = text3;
-                cmb2Act.Visible = true;
+                cmb2Act.ClientVisible = true;
                 cmb2Act.Enabled = false;
                 lblTxt4Nou.Visible = true;
                 lblTxt4Nou.Text = text4;
-                cmb2Nou.Visible = true;
+                cmb2Nou.ClientVisible = true;
                 cmb2Nou.Enabled = true;
 
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text5;
-                txt1Act.Visible = true;
+                txt1Act.ClientVisible = true;
                 txt1Act.Enabled = false;
 
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text6;
-                txt1Nou.Visible = true;
+                txt1Nou.ClientVisible = true;
             }
             if (nr == 10)
             {// 1 x CB + 2 x TB
@@ -1052,28 +1052,28 @@ namespace WizOne.Avs
                 lbl9Nou.Visible = true;
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
-                cmb1Act.Visible = true;
+                cmb1Act.ClientVisible = true;
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text3;
                 lblTxt2Act.Visible = true;
                 lblTxt2Act.Text = text4;
-                txt1Act.Visible = true;
+                txt1Act.ClientVisible = true;
                 txt1Act.Enabled = false;
-                txt2Act.Visible = true;
+                txt2Act.ClientVisible = true;
                 txt2Act.Enabled = false;
 
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text5;
                 lblTxt2Nou.Visible = true;
                 lblTxt2Nou.Text = text6;
-                txt1Nou.Visible = true;
-                txt2Nou.Visible = true;
+                txt1Nou.ClientVisible = true;
+                txt2Nou.ClientVisible = true;
             }
             if (nr == 11)
             {// 1 x CB + 2 x TB + 2 x DE
@@ -1089,44 +1089,44 @@ namespace WizOne.Avs
                 lbl11Nou.Visible = true;
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
-                cmb1Act.Visible = true;
+                cmb1Act.ClientVisible = true;
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text3;
                 lblTxt2Act.Visible = true;
                 lblTxt2Act.Text = text5;
-                txt1Act.Visible = true;
+                txt1Act.ClientVisible = true;
                 txt1Act.Enabled = false;
-                txt2Act.Visible = true;
+                txt2Act.ClientVisible = true;
                 txt2Act.Enabled = false;
 
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text4;
                 lblTxt2Nou.Visible = true;
                 lblTxt2Nou.Text = text6;
-                txt1Nou.Visible = true;
-                txt2Nou.Visible = true;
+                txt1Nou.ClientVisible = true;
+                txt2Nou.ClientVisible = true;
 
                 lblTxt5Act.Visible = true;
                 lblTxt5Act.Text = text7;
-                de1Act.Visible = true;
+                de1Act.ClientVisible = true;
                 de1Act.Enabled = false;
                 lblTxt5Nou.Visible = true;
                 lblTxt5Nou.Text = text8;
-                de1Nou.Visible = true;
+                de1Nou.ClientVisible = true;
 
                 lblTxt6Act.Visible = true;
                 lblTxt6Act.Text = text9;
-                de2Act.Visible = true;
+                de2Act.ClientVisible = true;
                 de2Act.Enabled = false;
                 lblTxt6Nou.Visible = true;
                 lblTxt6Nou.Text = text10;
-                de2Nou.Visible = true;
+                de2Nou.ClientVisible = true;
             }
             if (nr == 12)
             {// 8 x CB + 1 x TB
@@ -1150,84 +1150,84 @@ namespace WizOne.Avs
                 lbl14Nou.Visible = true;
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
-                cmb1Act.Visible = true;
+                cmb1Act.ClientVisible = true;
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt4Act.Visible = true;
                 lblTxt4Act.Text = text3;
-                cmb2Act.Visible = true;
+                cmb2Act.ClientVisible = true;
                 cmb2Act.Enabled = false;
                 lblTxt4Nou.Visible = true;
                 lblTxt4Nou.Text = text3;
-                cmb2Nou.Visible = true;
+                cmb2Nou.ClientVisible = true;
                 cmb2Nou.Enabled = true;
 
                 lblTxt7Act.Visible = true;
                 lblTxt7Act.Text = text4;
-                cmb3Act.Visible = true;
+                cmb3Act.ClientVisible = true;
                 cmb3Act.Enabled = false;
                 lblTxt7Nou.Visible = true;
                 lblTxt7Nou.Text = text4;
-                cmb3Nou.Visible = true;
+                cmb3Nou.ClientVisible = true;
                 cmb3Nou.Enabled = true;
 
                 lblTxt8Act.Visible = true;
                 lblTxt8Act.Text = text5;
-                cmb4Act.Visible = true;
+                cmb4Act.ClientVisible = true;
                 cmb4Act.Enabled = false;
                 lblTxt8Nou.Visible = true;
                 lblTxt8Nou.Text = text5;
-                cmb4Nou.Visible = true;
+                cmb4Nou.ClientVisible = true;
                 cmb4Nou.Enabled = true;
 
                 lblTxt9Act.Visible = true;
                 lblTxt9Act.Text = text6;
-                cmb5Act.Visible = true;
+                cmb5Act.ClientVisible = true;
                 cmb5Act.Enabled = false;
                 lblTxt9Nou.Visible = true;
                 lblTxt9Nou.Text = text6;
-                cmb5Nou.Visible = true;
+                cmb5Nou.ClientVisible = true;
                 cmb5Nou.Enabled = true;
 
                 lblTxt10Act.Visible = true;
                 lblTxt10Act.Text = text7;
-                cmb6Act.Visible = true;
+                cmb6Act.ClientVisible = true;
                 cmb6Act.Enabled = false;
                 lblTxt10Nou.Visible = true;
                 lblTxt10Nou.Text = text7;
-                cmb6Nou.Visible = true;
+                cmb6Nou.ClientVisible = true;
                 cmb6Nou.Enabled = true;
 
                 lblTxt11Act.Visible = true;
                 lblTxt11Act.Text = text8;
-                cmb7Act.Visible = true;
+                cmb7Act.ClientVisible = true;
                 cmb7Act.Enabled = false;
                 lblTxt11Nou.Visible = true;
                 lblTxt11Nou.Text = text8;
-                cmb7Nou.Visible = true;
+                cmb7Nou.ClientVisible = true;
                 cmb7Nou.Enabled = true;
 
                 lblTxt13Act.Visible = true;
                 lblTxt13Act.Text = text10;
-                cmb8Act.Visible = true;
+                cmb8Act.ClientVisible = true;
                 cmb8Act.Enabled = false;
                 lblTxt14Nou.Visible = true;
                 lblTxt14Nou.Text = text10;
-                cmb8Nou.Visible = true;
+                cmb8Nou.ClientVisible = true;
                 cmb8Nou.Enabled = true;
 
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text9;
-                txt1Act.Visible = true;
+                txt1Act.ClientVisible = true;
                 txt1Act.Enabled = false;
 
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text9;
-                txt1Nou.Visible = true;
+                txt1Nou.ClientVisible = true;
             }
             if (nr == 13)
             {// struct org
@@ -1235,11 +1235,11 @@ namespace WizOne.Avs
                 lbl12Nou.Visible = true;
                 lblTxt12Act.Visible = true;
                 lblTxt12Act.Text = text1;
-                cmbStructOrgAct.Visible = true;
+                cmbStructOrgAct.ClientVisible = true;
                 cmbStructOrgAct.Enabled = false;
                 lblTxt12Nou.Visible = true;
                 lblTxt12Nou.Text = text2;
-                cmbStructOrgNou.Visible = true;
+                cmbStructOrgNou.ClientVisible = true;
                 cmbStructOrgNou.Enabled = true;
             }
             if (nr == 14)
@@ -1250,20 +1250,20 @@ namespace WizOne.Avs
                 lbl13Nou.Visible = true;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text1;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
            
                 lblTxt5Nou.Visible = true;
                 lblTxt5Nou.Text = text8;
-                de1Nou.Visible = true;
+                de1Nou.ClientVisible = true;
         
                 lblTxt6Nou.Visible = true;
                 lblTxt6Nou.Text = text10;
-                de2Nou.Visible = true;
+                de2Nou.ClientVisible = true;
 
                 lblTxt13Nou.Visible = true;
                 lblTxt13Nou.Text = text11;
-                de3Nou.Visible = true;
+                de3Nou.ClientVisible = true;
             }
             if (nr == 15)
             {// 0.5 x CB + 2 x 0.5 x TB + 3 x 0.5 x DE +  5 x bifa
@@ -1276,33 +1276,33 @@ namespace WizOne.Avs
                 lbl13Nou.Visible = true;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text4;
                 lblTxt2Nou.Visible = true;
                 lblTxt2Nou.Text = text6;
-                txt1Nou.Visible = true;
-                txt2Nou.Visible = true;
+                txt1Nou.ClientVisible = true;
+                txt2Nou.ClientVisible = true;
 
                 lblTxt5Nou.Visible = true;
                 lblTxt5Nou.Text = text8;
-                de1Nou.Visible = true;
+                de1Nou.ClientVisible = true;
 
                 lblTxt6Nou.Visible = true;
                 lblTxt6Nou.Text = text10;
-                de2Nou.Visible = true;
+                de2Nou.ClientVisible = true;
 
                 lblTxt13Nou.Visible = true;
                 lblTxt13Nou.Text = text11;
-                de3Nou.Visible = true;
+                de3Nou.ClientVisible = true;
 
-                chk1.Visible = true;
-                chk2.Visible = true;
-                chk3.Visible = true;
-                chk4.Visible = true;
-                chk5.Visible = true;
+                chk1.ClientVisible = true;
+                chk2.ClientVisible = true;
+                chk3.ClientVisible = true;
+                chk4.ClientVisible = true;
+                chk5.ClientVisible = true;
             }
             if (nr == 16)
             {// 2 x CB + 4 x TB
@@ -1323,36 +1323,36 @@ namespace WizOne.Avs
                 lbl16Nou.Visible = true;
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
-                cmb1Act.Visible = true;
+                cmb1Act.ClientVisible = true;
                 cmb1Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Functie)
                 {
                     lblTxt4Act.Visible = true;
                     lblTxt4Act.Text = text3;
-                    cmb2Act.Visible = true;
+                    cmb2Act.ClientVisible = true;
                     cmb2Act.Enabled = false;
                     lblTxt4Nou.Visible = true;
                     lblTxt4Nou.Text = text4;
-                    cmb2Nou.Visible = true;
+                    cmb2Nou.ClientVisible = true;
                     cmb2Nou.Enabled = true;
 
                     //Florin 2020.10.05
                     lbl3Act.Visible = true;
                     lblTxt7Act.Visible = true;
                     lblTxt7Act.Text = "Post";
-                    cmb3Act.Visible = true;
+                    cmb3Act.ClientVisible = true;
                     cmb3Act.Enabled = true;
                     cmb3Act.Width = 250;
 
                     lbl3Nou.Visible = true;
                     lblTxt7Nou.Visible = true;
                     lblTxt7Nou.Text = "Post";
-                    cmb3Nou.Visible = true;
+                    cmb3Nou.ClientVisible = true;
                     cmb3Nou.Enabled = true;
                     cmb3Nou.Width = 250;
                 }
@@ -1365,13 +1365,13 @@ namespace WizOne.Avs
                 lblTxt14Act.Text = text7;
                 lblTxt15Act.Visible = true;
                 lblTxt15Act.Text = text8;
-                txt1Act.Visible = true;
+                txt1Act.ClientVisible = true;
                 txt1Act.Enabled = false;
-                txt2Act.Visible = true;
+                txt2Act.ClientVisible = true;
                 txt2Act.Enabled = false;
-                txt3Act.Visible = true;
+                txt3Act.ClientVisible = true;
                 txt3Act.Enabled = false;
-                txt4Act.Visible = true;
+                txt4Act.ClientVisible = true;
                 txt4Act.Enabled = false;
 
                 lblTxt1Nou.Visible = true;
@@ -1382,10 +1382,10 @@ namespace WizOne.Avs
                 lblTxt15Nou.Text = text7;
                 lblTxt16Nou.Visible = true;
                 lblTxt16Nou.Text = text8;
-                txt1Nou.Visible = true;
-                txt2Nou.Visible = true;
-                txt3Nou.Visible = true;
-                txt4Nou.Visible = true;
+                txt1Nou.ClientVisible = true;
+                txt2Nou.ClientVisible = true;
+                txt3Nou.ClientVisible = true;
+                txt4Nou.ClientVisible = true;
 
             }
             if (nr == 17)
@@ -1405,15 +1405,15 @@ namespace WizOne.Avs
                 lbl11Nou.Visible = true;
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
-                cmb1Act.Visible = true;
+                cmb1Act.ClientVisible = true;
                 cmb1Act.Enabled = false;
-                cmb2Act.Visible = true;
+                cmb2Act.ClientVisible = true;
                 cmb2Act.Enabled = false;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
-                cmb2Nou.Visible = true;
+                cmb2Nou.ClientVisible = true;
                 cmb2Nou.Enabled = true;
                 lblTxt4Act.Visible = true;
                 lblTxt4Act.Text = text3;
@@ -1424,33 +1424,33 @@ namespace WizOne.Avs
                 lblTxt14Act.Text = text5;
                 lblTxt15Act.Visible = true;
                 lblTxt15Act.Text = text6;
-                txt3Act.Visible = true;
+                txt3Act.ClientVisible = true;
                 txt3Act.Enabled = false;
-                txt4Act.Visible = true;
+                txt4Act.ClientVisible = true;
                 txt4Act.Enabled = false;
 
                 lblTxt15Nou.Visible = true;
                 lblTxt15Nou.Text = text5;
                 lblTxt16Nou.Visible = true;
                 lblTxt16Nou.Text = text6;
-                txt3Nou.Visible = true;
-                txt4Nou.Visible = true;
+                txt3Nou.ClientVisible = true;
+                txt4Nou.ClientVisible = true;
 
                 lblTxt5Act.Visible = true;
                 lblTxt5Act.Text = text7;
-                de1Act.Visible = true;
+                de1Act.ClientVisible = true;
                 de1Act.Enabled = false;
                 lblTxt5Nou.Visible = true;
                 lblTxt5Nou.Text = text7;
-                de1Nou.Visible = true;
+                de1Nou.ClientVisible = true;
 
                 lblTxt6Act.Visible = true;
                 lblTxt6Act.Text = text8;
-                de2Act.Visible = true;
+                de2Act.ClientVisible = true;
                 de2Act.Enabled = false;
                 lblTxt6Nou.Visible = true;
                 lblTxt6Nou.Text = text8;
-                de2Nou.Visible = true;
+                de2Nou.ClientVisible = true;
             }
             //if(nr == 37)            //Post = 37 este id-ul de post din Org_tblAtribute
             //{// 4 x CB
@@ -1499,61 +1499,61 @@ namespace WizOne.Avs
                 lbl1Act.Visible = true;
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
-                cmb1Act.Visible = true;
+                cmb1Act.ClientVisible = true;
                 cmb1Act.Enabled = false;
 
                 lbl1Nou.Visible = true;
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
-                cmb1Nou.Visible = true;
+                cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
                 lbl8Act.Visible = true;
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text3;
-                txt1Act.Visible = true;
+                txt1Act.ClientVisible = true;
                 txt1Act.Enabled = false;
 
                 lbl8Nou.Visible = true;
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text4;
-                txt1Nou.Visible = true;
-                txt1Nou.Enabled = false;
+                txt1Nou.ClientVisible = true;
+                txt1Nou.ClientEnabled = false;
 
                 lbl9Act.Visible = true;
                 lblTxt2Act.Visible = true;
                 lblTxt2Act.Text = text5;
-                txt2Act.Visible = true;
+                txt2Act.ClientVisible = true;
                 txt2Act.ClientEnabled = false;
 
                 lbl9Nou.Visible = true;
                 lblTxt2Nou.Visible = true;
                 lblTxt2Nou.Text = text6;
-                txt2Nou.Visible = true;
+                txt2Nou.ClientVisible = true;
                 txt2Nou.ClientEnabled = false;
 
                 lbl14Act.Visible = true;
                 lblTxt14Act.Visible = true;
                 lblTxt14Act.Text = text7;
-                txt3Act.Visible = true;
+                txt3Act.ClientVisible = true;
                 txt3Act.ClientEnabled = false;
 
                 lbl15Nou.Visible = true;
                 lblTxt15Nou.Visible = true;
                 lblTxt15Nou.Text = text8;
-                txt3Nou.Visible = true;
+                txt3Nou.ClientVisible = true;
                 txt3Nou.ClientEnabled = false;
 
                 lbl15Act.Visible = true;
                 lblTxt15Act.Visible = true;
                 lblTxt15Act.Text = text9;
-                txt4Act.Visible = true;
+                txt4Act.ClientVisible = true;
                 txt4Act.ClientEnabled = false;
 
                 lbl16Nou.Visible = true;
                 lblTxt16Nou.Visible = true;
                 lblTxt16Nou.Text = text10;
-                txt4Nou.Visible = true;
+                txt4Nou.ClientVisible = true;
                 txt4Nou.ClientEnabled = false;
             }
 
@@ -1769,9 +1769,9 @@ namespace WizOne.Avs
             {
                 //Session["AvsCereri"] = null;
                 //Session["AvsCereriCalcul"] = null;
-                grDateSporuri1.Visible = true;
+                grDateSporuri1.ClientVisible = true;
                 grDateSporuri1.DataBind();
-                grDateSporuri2.Visible = true;
+                grDateSporuri2.ClientVisible = true;
                 grDateSporuri2.DataBind();
             }
 
@@ -1803,7 +1803,7 @@ namespace WizOne.Avs
             {
                 //Session["AvsCereri"] = null;
                 //Session["AvsCereriCalcul"] = null;
-                grDateSporTran.Visible = true;
+                grDateSporTran.ClientVisible = true;
                 grDateSporTran.DataBind();
             }
 
@@ -1858,35 +1858,35 @@ namespace WizOne.Avs
                 {
                     lblTxt1Act.Visible = false;
                     lblTxt2Act.Visible = false;
-                    txt1Act.Visible = false;
-                    txt2Act.Visible = false;
+                    txt1Act.ClientVisible = false;
+                    txt2Act.ClientVisible = false;
                     lblTxt5Act.Visible = false;
                     lblTxt6Act.Visible = false;
-                    de1Act.Visible = false;
-                    de2Act.Visible = false;
+                    de1Act.ClientVisible = false;
+                    de2Act.ClientVisible = false;
                 }
                 else
                 {
                     lblTxt1Act.Visible = true;
                     lblTxt2Act.Visible = true;
-                    txt1Act.Visible = true;
-                    txt2Act.Visible = true;
+                    txt1Act.ClientVisible = true;
+                    txt2Act.ClientVisible = true;
                     lblTxt5Act.Visible = true;
                     lblTxt6Act.Visible = true;
-                    de1Act.Visible = true;
-                    de2Act.Visible = true;
+                    de1Act.ClientVisible = true;
+                    de2Act.ClientVisible = true;
                 }
 
                 if (cmb1Nou != null && cmb1Nou.Value != null && Convert.ToInt32(cmb1Nou.Value) == 1)
                 {
                     lblTxt1Nou.Visible = false;
                     lblTxt2Nou.Visible = false;
-                    txt1Nou.Visible = false;
-                    txt2Nou.Visible = false;
+                    txt1Nou.ClientVisible = false;
+                    txt2Nou.ClientVisible = false;
                     lblTxt5Nou.Visible = false;
                     lblTxt6Nou.Visible = false;
-                    de1Nou.Visible = false;
-                    de2Nou.Visible = false;
+                    de1Nou.ClientVisible = false;
+                    de2Nou.ClientVisible = false;
                     de1Nou.Value = new DateTime(2100, 1, 1);
                     de2Nou.Value = new DateTime(2100, 1, 1);
                 }
@@ -1894,12 +1894,12 @@ namespace WizOne.Avs
                 {
                     lblTxt1Nou.Visible = true;
                     lblTxt2Nou.Visible = true;
-                    txt1Nou.Visible = true;
-                    txt2Nou.Visible = true;
+                    txt1Nou.ClientVisible = true;
+                    txt2Nou.ClientVisible = true;
                     lblTxt5Nou.Visible = true;
                     lblTxt6Nou.Visible = true;
-                    de1Nou.Visible = true;
-                    de2Nou.Visible = true;
+                    de1Nou.ClientVisible = true;
+                    de2Nou.ClientVisible = true;
                 }
 
             }
@@ -1908,7 +1908,7 @@ namespace WizOne.Avs
             {
                 //Session["AvsCereri"] = null;
                 //Session["AvsCereriCalcul"] = null;
-                grDateComponente.Visible = true;
+                grDateComponente.ClientVisible = true;
                 grDateComponente.DataBind();
             }
 
@@ -1916,7 +1916,7 @@ namespace WizOne.Avs
             {
                 //Session["AvsCereri"] = null;
                 //Session["AvsCereriCalcul"] = null;
-                grDateTarife.Visible = true;
+                grDateTarife.ClientVisible = true;
                 grDateTarife.DataBind();
             }
 
@@ -2360,32 +2360,6 @@ namespace WizOne.Avs
             {
                 string tip = e.Parameter.Split(';')[0];
 
-                if (tip == "1" || tip == "8" || tip == "9")
-                    Session["AvsLista"] = null;
-
-                Dictionary<String, String> lista = Session["AvsLista"] as Dictionary<String, String>;
-                if (lista == null)
-                    lista = new Dictionary<string, string>();
-                if (e.Parameter.Split(';').Length > 2)
-                {
-                    if (lista.ContainsKey(e.Parameter.Split(';')[1]))
-                        lista[e.Parameter.Split(';')[1]] = e.Parameter.Split(';')[2];
-                    else
-                        lista.Add(e.Parameter.Split(';')[1], e.Parameter.Split(';')[2]);
-                    foreach (string elem in lista.Keys)
-                    {
-                        dynamic ctl = (dynamic)pnlCtl.Controls[0].FindControl(elem);
-                        if (ctl != null)
-                        {
-                            if (ctl.GetType() == typeof(ASPxTextBox) || ctl.GetType() == typeof(ASPxComboBox))
-                                ctl.Value = lista[elem];
-                            if (ctl.GetType() == typeof(ASPxDateEdit))
-                                ctl.Value = Convert.ToDateTime(lista[elem]);
-                        }
-                    }
-                }
-                Session["AvsLista"] = lista;
-
                 switch (tip)
                 {
                     case "1":
@@ -2452,7 +2426,6 @@ namespace WizOne.Avs
                         //Florin 2019.12.19
                         if (e.Parameter.Split(';')[1] == "txt1Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Salariul)
                         {
-                            //CalcSalariu(1, txt1Nou, txt2Nou);
                             decimal venitCalculat = 0m;
                             string text = "";
                             General.CalcSalariu(1, txt1Nou.Value, Convert.ToInt32(General.Nz(cmbAng.Value, -99)), out venitCalculat, out text);
@@ -2460,13 +2433,11 @@ namespace WizOne.Avs
                         }
                         if (e.Parameter.Split(';')[1] == "txt2Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Salariul)
                         {
-                            //CalcSalariu(2, txt1Nou, txt2Nou);
                             decimal venitCalculat = 0m;
                             string text = "";
                             General.CalcSalariu(2, txt2Nou.Value, Convert.ToInt32(General.Nz(cmbAng.Value, -99)), out venitCalculat, out text);
                             txt1Nou.Value = venitCalculat;
                         }
-
 
                         if ((e.Parameter.Split(';')[1] == "de1Nou" || e.Parameter.Split(';')[1] == "de2Nou") && (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.PrelungireCIM ||
                             Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.PrelungireCIM_Vanz))
@@ -2513,7 +2484,9 @@ namespace WizOne.Avs
                             if (Convert.ToInt32(e.Parameter.Split(';')[2]) == 2)
                             {
                                 if (de2Act.Value != null && Convert.ToDateTime(de2Act.Value) != new DateTime(2100, 1, 1))
+                                {
                                     de1Nou.Value = Convert.ToDateTime(de2Act.Value).AddDays(1);
+                                }
                                 else
                                     de1Nou.Value = null;
                                 de2Nou.Value = null;                   
@@ -2528,6 +2501,7 @@ namespace WizOne.Avs
                                 de2Nou.Value = null;
                                 txt3Nou.Value = "";
                                 txt4Nou.Value = "";
+
                             }
                             if (Convert.ToInt32(e.Parameter.Split(';')[2]) == 1)
                             {
@@ -2539,7 +2513,9 @@ namespace WizOne.Avs
                             if (Convert.ToInt32(e.Parameter.Split(';')[2]) == 2)
                             {
                                 if (de2Act.Value != null && Convert.ToDateTime(de2Act.Value) != new DateTime(2100, 1, 1))
+                                {
                                     de1Nou.Value = Convert.ToDateTime(de2Act.Value).AddDays(1);
+                                }
                                 else
                                     de1Nou.Value = null;
                                 de2Nou.Value = null;
@@ -2743,14 +2719,9 @@ namespace WizOne.Avs
                         break;
 
                 }
-
-
-
             }
             catch (Exception ex)
             {
-                //ArataMesaj("");
-                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -2895,11 +2866,11 @@ namespace WizOne.Avs
                     break;
                 case "cmb7Nou":
                     if (Convert.ToInt32(cmb7Nou.Value) == 2 || Convert.ToInt32(cmb7Nou.Value) == 3)
-                        txt1Nou.Enabled = true;
+                        txt1Nou.ClientEnabled = true;
                     else
                     {
                         txt1Nou.Text = "";
-                        txt1Nou.Enabled = false;
+                        txt1Nou.ClientEnabled = false;
                     }
                     break;
                 case "txt1Nou":
@@ -2937,7 +2908,7 @@ namespace WizOne.Avs
         {
             data = "";
             lblDataRevisal.Visible = false;
-            deDataRevisal.Visible = false;
+            deDataRevisal.ClientVisible = false;
             if (atribut == (int)Constante.Atribute.Functie || atribut == (int)Constante.Atribute.CodCOR || atribut == (int)Constante.Atribute.Norma || atribut == (int)Constante.Atribute.ProgramLucru || atribut == (int)Constante.Atribute.PrelungireCIM
                 || atribut == (int)Constante.Atribute.PrelungireCIM_Vanz || atribut == (int)Constante.Atribute.ContrITM || atribut == (int)Constante.Atribute.ContrIn ||
                  atribut == (int)Constante.Atribute.Salariul || atribut == (int)Constante.Atribute.Sporuri || atribut == (int)Constante.Atribute.MotivPlecare
@@ -2959,7 +2930,7 @@ namespace WizOne.Avs
                 if (param == 1)
                 {
                     lblDataRevisal.Visible = true;
-                    deDataRevisal.Visible = true;
+                    deDataRevisal.ClientVisible = true;
                 }
                 else
                     data = dataRevisal.Day.ToString().PadLeft(2, '0') + "/" + dataRevisal.Month.ToString().PadLeft(2, '0') + "/" + dataRevisal.Year.ToString();
@@ -2983,7 +2954,7 @@ namespace WizOne.Avs
                 if (param == 1)
                 {
                     lblDataRevisal.Visible = true;
-                    deDataRevisal.Visible = true;
+                    deDataRevisal.ClientVisible = true;
                 }
                 else
                     data = dataRevisal.Day.ToString().PadLeft(2, '0') + "/" + dataRevisal.Month.ToString().PadLeft(2, '0') + "/" + dataRevisal.Year.ToString();
@@ -3008,7 +2979,7 @@ namespace WizOne.Avs
                 if (param == 1)
                 {
                     lblDataRevisal.Visible = true;
-                    deDataRevisal.Visible = true;
+                    deDataRevisal.ClientVisible = true;
                 }
                 else
                     data = dataRevisal.Day.ToString().PadLeft(2, '0') + "/" + dataRevisal.Month.ToString().PadLeft(2, '0') + "/" + dataRevisal.Year.ToString();

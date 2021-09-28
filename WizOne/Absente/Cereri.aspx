@@ -122,13 +122,17 @@
                     <dx:PanelContent meta:resourcekey="PanelContentResource1">
                     
                         <div class="row row-fix">
-                            <div id="divRol" runat="server" class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
-                                <dx:ASPxLabel ID="lblRol" runat="server" AssociatedControlID="cmbRol" Text="Roluri" Font-Bold="true" />
-                                <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="100%" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" meta:resourcekey="cmbRolResource1" >
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
-                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback(7); }" />
-                                </dx:ASPxComboBox>
-                            </div>
+                            <dx:ASPxPanel  ID="divRol" runat="server" CssClass="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                <PanelCollection>
+                                    <dx:PanelContent>                                
+                                        <dx:ASPxLabel ID="lblRol" runat="server" AssociatedControlID="cmbRol" Text="Roluri" Font-Bold="true" />
+                                        <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="100%" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" meta:resourcekey="cmbRolResource1" >
+                                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
+                                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback(7); }" />
+                                        </dx:ASPxComboBox>
+                                    </dx:PanelContent>
+                                </PanelCollection>
+                            </dx:ASPxPanel>
                             <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                                 <dx:ASPxLabel ID="lblAng" runat="server" AssociatedControlID="cmbAng" Text="Angajat" Font-Bold="true" />
                                 <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="100%" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" OnCallback="cmbAng_Callback"
@@ -191,51 +195,71 @@
                             </div>
                         </div>                        
                         <div class="row row-fix">
-                            <div id="divInloc" runat="server" class="col-lg-2 col-md-4 col-sm-4 col-xs-6">                                
-                                <dx:ASPxLabel ID="lblInl" runat="server" AssociatedControlID="cmbInloc" Text="Inlocuitor" Font-Bold="true" />
-                                <dx:ASPxComboBox ID="cmbInloc" runat="server" Width="100%" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
-                                    CallbackPageSize="15" EnableCallbackMode="True" EnableViewState="false" TextFormatString="{0} {1}" AllowNull="true" meta:resourcekey="cmbInlocResource1" >
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
-                                    <Columns>
-                                        <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" meta:resourcekey="ListBoxColumnResource7" />
-                                        <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" meta:resourcekey="ListBoxColumnResource8" />
-                                        <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" meta:resourcekey="ListBoxColumnResource9" />
-                                        <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" meta:resourcekey="ListBoxColumnResource10" />
-                                        <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" meta:resourcekey="ListBoxColumnResource11" />
-                                        <dx:ListBoxColumn FieldName="Functia" Caption="Functia" Width="130px" meta:resourcekey="ListBoxColumnResource12" />
-                                    </Columns>
-                                </dx:ASPxComboBox>
-                            </div>
+                            <dx:ASPxPanel  ID="divInloc" runat="server" CssClass="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                <PanelCollection>
+                                    <dx:PanelContent> 
+                                        <dx:ASPxLabel ID="lblInl" runat="server" AssociatedControlID="cmbInloc" Text="Inlocuitor" Font-Bold="true" />
+                                        <dx:ASPxComboBox ID="cmbInloc" runat="server" Width="100%" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
+                                            CallbackPageSize="15" EnableCallbackMode="True" EnableViewState="false" TextFormatString="{0} {1}" AllowNull="true" meta:resourcekey="cmbInlocResource1" >
+                                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
+                                            <Columns>
+                                                <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" meta:resourcekey="ListBoxColumnResource7" />
+                                                <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" meta:resourcekey="ListBoxColumnResource8" />
+                                                <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" meta:resourcekey="ListBoxColumnResource9" />
+                                                <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" meta:resourcekey="ListBoxColumnResource10" />
+                                                <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" meta:resourcekey="ListBoxColumnResource11" />
+                                                <dx:ListBoxColumn FieldName="Functia" Caption="Functia" Width="130px" meta:resourcekey="ListBoxColumnResource12" />
+                                            </Columns>
+                                        </dx:ASPxComboBox>
+                                    </dx:PanelContent>
+                                </PanelCollection>
+                            </dx:ASPxPanel>
                             <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">                                
                                 <dx:ASPxLabel ID="lblNrZile" runat="server" AssociatedControlID="txtNrZile" Text="Nr. zile" Font-Bold="true" />
                                 <dx:ASPxTextBox ID="txtNrZile" runat="server" Width="100%" ReadOnly="true" meta:resourcekey="txtNrZileResource1" />
                             </div>
-                            <div id="divNrOre" runat="server" class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
-                                <dx:ASPxLabel ID="lblNrOre" runat="server" AssociatedControlID="txtNrOre" Text="Nr. ore" Font-Bold="true" />
-                                <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="100%" ClientVisible="false" MinValue="0" MaxValue="999">
-                                    <SpinButtons ShowIncrementButtons="false" />
-                                </dx:ASPxSpinEdit>
-                                <dx:ASPxTimeEdit ID="txtNrOreTime" ClientInstanceName="txtNrOreTime" runat="server" Width="100%" ClientVisible="false" ClientEnabled="false">
-                                    <SpinButtons ShowIncrementButtons="false" />                                    
-                                </dx:ASPxTimeEdit>
-                            </div>
-                            <div id="divOraInc" runat="server" class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
-                                <dx:ASPxLabel ID="lblOraInc" runat="server" AssociatedControlID="cmbOraInc" Text="Ora Inceput" Font-Bold="true" />
-                                <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="100%" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
-                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); pnlCtl.PerformCallback(8); }" />
-                                </dx:ASPxComboBox>
-                            </div>
-                            <div id="divOraSf" runat="server" class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
-                                <dx:ASPxLabel ID="lblOraSf" runat="server" AssociatedControlID="cmbOraSf" Text="Ora Sfarsit" Font-Bold="true" />
-                                <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="100%" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
-                                    <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
-                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); pnlCtl.PerformCallback(8); }" />
-                                </dx:ASPxComboBox>
-                            </div>
-                            <div id="divNrZileViitor" runat="server" class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
-                                <dx:ASPxTextBox ID="txtNrZileViitor" runat="server" Width="100%" ReadOnly="true" meta:resourcekey="txtNrZileViitorResource1" />
-                            </div>
+                            <dx:ASPxPanel  ID="divNrOre" runat="server" CssClass="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                <PanelCollection>
+                                    <dx:PanelContent> 
+                                        <dx:ASPxLabel ID="lblNrOre" runat="server" AssociatedControlID="txtNrOre" Text="Nr. ore" Font-Bold="true" />
+                                        <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="100%" ClientVisible="false" MinValue="0" MaxValue="999">
+                                            <SpinButtons ShowIncrementButtons="false" />
+                                        </dx:ASPxSpinEdit>
+                                        <dx:ASPxTimeEdit ID="txtNrOreTime" ClientInstanceName="txtNrOreTime" runat="server" Width="100%" ClientVisible="false" ClientEnabled="false">
+                                            <SpinButtons ShowIncrementButtons="false" />                                    
+                                        </dx:ASPxTimeEdit>
+                                    </dx:PanelContent>
+                                </PanelCollection>
+                            </dx:ASPxPanel>
+                            <dx:ASPxPanel  ID="divOraInc" runat="server" CssClass="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                <PanelCollection>
+                                    <dx:PanelContent> 
+                                        <dx:ASPxLabel ID="lblOraInc" runat="server" AssociatedControlID="cmbOraInc" Text="Ora Inceput" Font-Bold="true" />
+                                        <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="100%" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
+                                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
+                                            <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); pnlCtl.PerformCallback(8); }" />
+                                        </dx:ASPxComboBox>
+                                    </dx:PanelContent>
+                                </PanelCollection>
+                            </dx:ASPxPanel>
+                            <dx:ASPxPanel  ID="divOraSf" runat="server" CssClass="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                <PanelCollection>
+                                    <dx:PanelContent> 
+                                        <dx:ASPxLabel ID="lblOraSf" runat="server" AssociatedControlID="cmbOraSf" Text="Ora Sfarsit" Font-Bold="true" />
+                                        <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="100%" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
+                                            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
+                                            <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); pnlCtl.PerformCallback(8); }" />
+                                        </dx:ASPxComboBox>
+                                    </dx:PanelContent>
+                                </PanelCollection>
+                            </dx:ASPxPanel>
+                            <dx:ASPxPanel  ID="divNrZileViitor" runat="server" CssClass="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                <PanelCollection>
+                                    <dx:PanelContent> 
+                                        <dx:ASPxTextBox ID="txtNrZileViitor" runat="server" Width="100%" ReadOnly="true" />
+                                    </dx:PanelContent>
+                                </PanelCollection>
+                            </dx:ASPxPanel>
                         </div>
 
                         <div id="divDateExtra" runat="server" />

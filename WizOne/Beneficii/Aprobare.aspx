@@ -296,19 +296,7 @@
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                              <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
                             <SettingsHeaderFilter Mode="CheckedList" />
-                        </dx:GridViewDataComboBoxColumn>
-					    <dx:GridViewDataDateColumn FieldName="DataInceputBen" Name="DataInceputBen" Caption="Data inceput beneficiu" ReadOnly="true" Visible="false"  HeaderStyle-Wrap="True" Width="100px" >
-                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                            <SettingsHeaderFilter Mode="CheckedList" />
-                        </dx:GridViewDataDateColumn>
-					    <dx:GridViewDataDateColumn FieldName="DataSfarsitBen" Name="DataSfarsitBen" Caption="Data sfarsit beneficiu" ReadOnly="true" Visible="false" HeaderStyle-Wrap="True" Width="100px" >
-                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" FilterMode="DisplayText" />
-                            <SettingsHeaderFilter Mode="CheckedList" />
-                        </dx:GridViewDataDateColumn>				    
-
-
+                        </dx:GridViewDataComboBoxColumn>	
                        
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME" ReadOnly="true" Width="50px" Visible="false"  ShowInCustomizationForm="false"/>

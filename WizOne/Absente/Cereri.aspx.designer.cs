@@ -66,7 +66,7 @@ namespace WizOne.Absente
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divRol;
+        protected global::DevExpress.Web.ASPxPanel divRol;
 
         /// <summary>
         /// lblRol control.
@@ -201,7 +201,7 @@ namespace WizOne.Absente
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divInloc;
+        protected global::DevExpress.Web.ASPxPanel divInloc;
 
         /// <summary>
         /// lblInl control.
@@ -246,7 +246,7 @@ namespace WizOne.Absente
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divNrOre;
+        protected global::DevExpress.Web.ASPxPanel divNrOre;
 
         /// <summary>
         /// lblNrOre control.
@@ -282,7 +282,7 @@ namespace WizOne.Absente
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divOraInc;
+        protected global::DevExpress.Web.ASPxPanel divOraInc;
 
         /// <summary>
         /// lblOraInc control.
@@ -309,7 +309,7 @@ namespace WizOne.Absente
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divOraSf;
+        protected global::DevExpress.Web.ASPxPanel divOraSf;
 
         /// <summary>
         /// lblOraSf control.
@@ -336,7 +336,7 @@ namespace WizOne.Absente
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divNrZileViitor;
+        protected global::DevExpress.Web.ASPxPanel divNrZileViitor;
 
         /// <summary>
         /// txtNrZileViitor control.

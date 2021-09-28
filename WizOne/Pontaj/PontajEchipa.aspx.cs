@@ -1173,7 +1173,7 @@ namespace WizOne.Pontaj
                         strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + an;
                     DataTable dtHolidays = General.IncarcaDT(strSql, null);
 
-                    DataTable dtCol = General.IncarcaDT("SELECT * FROM \"Ptj_tblPrint\" WHERE \"Activ\" = 1 AND \"Id\" NOT IN (2, 3, 4) ORDER BY \"Ordine\"", null);
+                    DataTable dtCol = General.IncarcaDT("SELECT * FROM \"Ptj_tblPrint\" WHERE \"Activ\" = 1 AND \"Id\" NOT IN (2, 3, 4) AND Denumire <> 'TotaluriTactil' ORDER BY \"Ordine\"", null);
                     Dictionary<string, string> lista = new Dictionary<string, string>();
                     Dictionary<string, string> listaLung = new Dictionary<string, string>();
                     Dictionary<string, int> listaId = new Dictionary<string, int>();

@@ -38,41 +38,45 @@ namespace WizOne.AvansXDecont
                 btnAproba.Text = Dami.TraduCuvant("btnAproba", "Aprobare");
                 btnRespins.Text = Dami.TraduCuvant("btnRespins", "Respinge");				
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
-				
-				lblNrOrdin.InnerText = Dami.TraduCuvant("Nr. ordin");
+                btnDocOrig.Text = Dami.TraduCuvant("btnDocOrig", "Documente originale");
+
+                lblNrOrdin.InnerText = Dami.TraduCuvant("Nr. decont");
 				lblNume.InnerText = Dami.TraduCuvant("Nume");
 				lblDept.InnerText = Dami.TraduCuvant("Departament");
 				lblLocMunca.InnerText = Dami.TraduCuvant("Loc munca");
 				lblIBAN.InnerText = Dami.TraduCuvant("IBAN");
-				lblLocDepl.InnerText = Dami.TraduCuvant("Locul deplasarii");
+                lblAvs.InnerText = Dami.TraduCuvant("Avansuri");
+                lblDocAvs.InnerText = Dami.TraduCuvant("Avans");
+                lblLocDepl.InnerText = Dami.TraduCuvant("Loc");
 				lblTipDepl.InnerText = Dami.TraduCuvant("Tip deplasare");
 				lblTipTrans.InnerText = Dami.TraduCuvant("Tip transport");
 				lblMotiv.InnerText = Dami.TraduCuvant("Motiv deplasare");
 				lblDtPlec.InnerText = Dami.TraduCuvant("Data plecare");
 				lblOraPlec.InnerText = Dami.TraduCuvant("Ora plecare");
-				lblDtSos.InnerText = Dami.TraduCuvant("Data sosirii din delegatie");
+				lblDtSos.InnerText = Dami.TraduCuvant("Data sosire");
 				lblDtSf.InnerText = Dami.TraduCuvant("Ora sosire");
-				lblMoneda.InnerText = Dami.TraduCuvant("Moneda avans/decont");
+				lblMoneda.InnerText = Dami.TraduCuvant("Moneda");
 				lblModPlata.InnerText = Dami.TraduCuvant("Modalitate plata");
-				lblDiurna.InnerText = Dami.TraduCuvant("Deplasare cu diurna");
-				lblValEst.InnerText = Dami.TraduCuvant("Val. estimata");
-				lblValAvsSol.InnerText = Dami.TraduCuvant("Valoare avans solicitat");
-				lblDtScad.InnerText = Dami.TraduCuvant("Data scadenta");
-				lblRez.InnerText = Dami.TraduCuvant("Rezervari");				
-				
-				pnlDateGen.HeaderText = Dami.TraduCuvant("Date generale");		
+				lblDiurna.InnerText = Dami.TraduCuvant("Diurna");
+                lblValDec.InnerText = Dami.TraduCuvant("Val. decontata");
+                lblValAvs.InnerText = Dami.TraduCuvant("Val. avans");
+                lblPlRec.InnerText = Dami.TraduCuvant("Val. plata/recuperat");
+
+                pnlDateGen.HeaderText = Dami.TraduCuvant("Date generale");		
 				pnlDateDepl.HeaderText = Dami.TraduCuvant("Date deplasare");	
-				pnlDatePlata.HeaderText = Dami.TraduCuvant("Date plata");	
-				pnlCheltEst.HeaderText = Dami.TraduCuvant("Cheltuieli estimate");	
-				pnlDateAv.HeaderText = Dami.TraduCuvant("Date avans");		
+				pnlDatePlata.HeaderText = Dami.TraduCuvant("Date plata");
+                pnlDocJust.HeaderText = Dami.TraduCuvant("Documente justificative");
+                pnlEstChelt.HeaderText = Dami.TraduCuvant("Estimare cheltuieli");
+                pnlDateDec.HeaderText = Dami.TraduCuvant("Date decont");
+                pnlPlataBanca.HeaderText = Dami.TraduCuvant("Restituire avans neutilizat");
 
                 #endregion
 
-                txtTitlu.Text = General.VarSession("Titlu").ToString() + " / Document Avans"; ;
+                txtTitlu.Text = General.VarSession("Titlu").ToString() + " / Document Decont"; ;
 
                 if (!IsPostBack)
                 {
-                    Session["AvsXDec_SursaDate"] = null;
+                    Session["AvsXDec_SursaDateDec"] = null;
                     Session["AvsXDec_SursaDateCheltuieli"] = null;
 
                     DataTable lstConfigCurrencyXPay_Currency = new DataTable();
@@ -233,11 +237,6 @@ namespace WizOne.AvansXDecont
                 if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0 && (Convert.ToInt32(Session["AvsXDec_PoateModif"].ToString()) == 0 || (Convert.ToInt32(Session["AvsXDec_IdStare"].ToString()) != 1)))          //are doar drepturi de vizualizare
                 {
                     //ctlGeneral.IsEnabled = false;
-                    txtNrOrdinDeplasare.ClientEnabled = false;
-                    txtNumeComplet.ClientEnabled = false;
-                    txtDepartament.ClientEnabled = false;
-                    txtLocMunca.ClientEnabled = false;
-                    txtContIban.ClientEnabled = false;
                     txtLocatie.ClientEnabled = false;
                     cmbActionType.ClientEnabled = false;
 					cmbTransportType.ClientEnabled = false;
@@ -247,13 +246,10 @@ namespace WizOne.AvansXDecont
                     txtEndDate.ClientEnabled = false;
                     txtOraSosire.ClientEnabled = false;
                     cmbMonedaAvans.ClientEnabled = false;
-                    
+                    cmbDocAvans.ClientEnabled = false;
                     cmbModPlata.ClientEnabled = false;
                     chkIsDiurna.ClientEnabled = false;
-                    txtValEstimata.ClientEnabled = false;
-                    txtValAvans.ClientEnabled = false;
-                    dtDueDate.ClientEnabled = false;
-                    cmbTip.ClientEnabled = false;
+                    grDateEstChelt.Enabled = false;
 
                     btnSave.ClientEnabled = false;
                     //dreptUserAccesFormular = tipAccesPagina.formularSalvat;
@@ -272,6 +268,10 @@ namespace WizOne.AvansXDecont
                 #endregion
 
                 PageXDocumentType();
+
+                string AvsXDec_TipDocument_Diurna = Dami.ValoareParam("AvsXDec_TipDocument_Diurna", "");
+                string AvsXDec_BudgetLine_Diurna2001 =Dami.ValoareParam("AvsXDec_BudgetLine_Diurna2001", "");
+
 
                 DataTable dtCh = GetAvsXDec_DictionaryItemCheltuiala(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
                 GridViewDataComboBoxColumn colCh = (grDate.Columns["DictionaryItemId"] as GridViewDataComboBoxColumn);
@@ -301,50 +301,153 @@ namespace WizOne.AvansXDecont
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }      
+        }
+
+        private void DrepturiCtl()
+        {
+            try
+            {
+                /*06.06.2016
+                 * gridul de cheltuieli nu este activ, deoarece acestea vin din avans*/
+                grDateEstChelt.Enabled = false;
+            }
+            catch (Exception)
+            {
+            }
+        }
 
 
         private void PageXDocumentType()
         {
             switch (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()))
             {
-                /*Avans spre deplasare*/
-                case 1001:
-                    /*conform specificatiilor pentru tipul de document avans spre deplasare,
-                     * data scadenta nu se poate edita, ci doar din baza de date se actualizeaza prin procedura
-                     * procAvsXDec_dtPlata1001*/
-                    grDate.Columns["FreeTxt"].Visible = false;
-					lblDtScad.Visible = true;
-					dtDueDate.ClientVisible = true;
-                    dtDueDate.ClientEnabled = false;
-                    LoadAvansReservations(false);
-                    pnlCheltEst.HeaderText = "Cheltuieli estimate";
+                case 2001:/*Decont cheltuieli deplasare*/
+                case 2002:/*Decont cheltuieli*/
+                case 2003: /*Decont Administrativ*/
+                    grDateEstChelt.Enabled = false;
+                    /*LeonardM 15.08.2016
+                     * coloana de currency de pe docuemnte justificative nu se doreste a fi editabila, 
+                     * aceasta intializandu-se cu moneda default aleasa inainte pe avans*/
+
+                    //grDateDocJust.Columns["CurrencyId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+
+                    /*end LeonardM 15.08.2016*/
+
+                    /*LeonardM 12.08.2016
+                     * utilizatorul care creeaza documentul nu are drept de editare pe coloana linie buget,
+                     * ci doar cei de pe circuit (solicitare GroupamA)*/
+
+                    //if (Convert.ToInt32(Session["AvsXDec_PoateModif"].ToString()) == 0 && Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0)
+                    //{
+                    //    #region documente justificative
+
+                    //    if (IsBudgetOwnerEdited && idStare != 0)    //Radu 31.08.2016
+                    //        grDateDocJust.Columns["BugetLine"].AllowEditing = DevExpress.Utils.DefaultBoolean.True;
+                    //    else
+                    //        grDateDocJust.Columns["BugetLine"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    /*colSterge*/
+                    //    grDateDocJust.Columns[1].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    /*colSel*/
+                    //    grDateDocJust.Columns[0].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["DocumentId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["DocumentDetailId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["Furnizor"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["DictionaryItemId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["DocNumberDecont"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["DocDateDecont"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["CurrencyId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["TotalPayment"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["ExpenseTypeId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["ExpenseTypeAdmId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    //grDateDocJustifDecont.Columns["colDocumente"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["IdDocument"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDateDocJust.Columns["FreeTxt"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    /*colDocumente*/
+                    //    grDateDocJust.Columns[13].AllowEditing = DevExpress.Utils.DefaultBoolean.True;
+                    //    #endregion
+
+                    //    #region documente plata banca
+                    //    grDatePlataBanca.Enabled = true;
+                    //    /*colSelPlataBanca*/
+                    //    grDatePlataBanca.Columns[0].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    /*colStergePlataBanca*/
+                    //    grDatePlataBanca.Columns[1].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDatePlataBanca.Columns["DocumentId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDatePlataBanca.Columns["DocumentDetailId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDatePlataBanca.Columns["DictionaryItemId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDatePlataBanca.Columns["DocNumberDecont"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDatePlataBanca.Columns["DocDateDecont"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDatePlataBanca.Columns["CurrencyId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    grDatePlataBanca.Columns["TotalPayment"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    /*colDocumentePlataBanca*/
+                    //    grDatePlataBanca.Columns[9].AllowEditing = DevExpress.Utils.DefaultBoolean.True;
+                    //    grDatePlataBanca.Columns["IdDocument"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    #endregion
+                    //}
+                    //else
+                    //{
+                    //    #region Documente justificative
+                    //    /*LeonardM 15.08.2016
+                    //     * coloana de currency de pe docuemnte justificative nu se doreste a fi editabila, 
+                    //     * aceasta intializandu-se cu moneda default aleasa inainte pe avans*/
+                    //    grDateDocJust.Columns["CurrencyId"].AllowEditing = DevExpress.Utils.DefaultBoolean.True;
+                    //    /*end LeonardM 15.08.2016*/
+                    //    grDateDocJust.Columns["BugetLine"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                    //    /*colDocumente*/
+                    //    grDateDocJust.Columns[13].AllowEditing = DevExpress.Utils.DefaultBoolean.True;
+                    //    #endregion
+
+                    //    #region documente plata banca
+                    //    /*colDocumentePlataBanca*/
+                    //    grDatePlataBanca.Columns[9].AllowEditing = DevExpress.Utils.DefaultBoolean.True;
+                    //    #endregion
+                    //}
+
+                    /*end LeonardM 12.08.2016*/
+                    /*LeonardM 15.08.2016
+                     * in momentul in care am selectat ceva ca avans, se afiseaza gridul aferent cheltuielilor estimate de 
+                     * pe avans; caz contrar, nu se afiseaza*/
+                    if (Convert.ToInt32(cmbDocAvans.Value ?? -99) != -99)
+                        pnlEstChelt.Visible = true;
+                    else
+                        pnlEstChelt.Visible = false;
+
+                    /*detaliu estimare cheltuieli*/
+                    if (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) == 2002)
+                    {
+                        grDateEstChelt.Columns["BugetLine"].Visible = false;
+                        grDateEstChelt.Columns["FreeTxt"].Visible = true;
+                    }
+                    else
+                    {
+                        grDateEstChelt.Columns["BugetLine"].Visible = false;
+                        grDateEstChelt.Columns["FreeTxt"].Visible = true;
+                    }
+
+                    if (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) == 2002)
+                    {
+                        lblDiurna.Visible = false;
+                        chkIsDiurna.ClientVisible = false;
+                        pnlDateDepl.Visible = false;
+                    }
+
+                    if (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) == 2001 || Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) == 2002)
+                        grDateDocJust.Columns["ExpenseTypeAdmId"].Visible = false;
+                    else /*Decont administrativ*/
+                        grDateDocJust.Columns["ExpenseTypeId"].Visible = false;
+
+                    //if (documentTypeId == 2003)/*decont administrativ*/
+                    //{
+                    //    lcDataDeplasare.Visibility = Visibility.Collapsed;
+                    //    liModPlata.Visibility = Visibility.Collapsed;
+                    //    liIsDiurna.Visibility = Visibility.Collapsed;
+                    //}
+                    /*11.08.2016 AdrianDumitrache a zis sa decomentez aceasta parte
+                     * Groupama
+                    lcGridCheltuieli.Visibility = System.Windows.Visibility.Collapsed;
+                     * */
                     break;
-                /*Avans spre decontare*/
-                case 1002:
-                    grDate.Columns["FreeTxt"].Visible = true;
-                    pnlDateDepl.ClientVisible = false;
-					lblDiurna.Visible = false;
-					chkIsDiurna.ClientVisible = false;
-					lblRez.Visible = false;
-					cmbTip.ClientVisible = false;
-                    pnlCheltEst.HeaderText = "Cheltuieli";
-                    break;
-                /*Avans Administrativ*/
-                case 1003:
-                    //grDate.Columns["FreeTxt"].Visible = false;
-					//pnlDateDepl.ClientVisible = false;
-					//lblDiurna.ClientVisible = false;
-					//chkIsDiurna.ClientVisible = false;
-                    //liModPlata.Visibility = Visibility.Collapsed;
-					//pnlCheltEst.ClientVisible = false;
-                    //lcCheltuieli.Visibility = Visibility.Collapsed;
-					//lblDtScad.ClientVisible = false;
-					//dtDueDate.ClientVisible = false;
-					//lblRez.ClientVisible = false;
-					//cmbTip.ClientVisible = false;
-                    break;
-            }   
+            }  
         }
 
         protected void grDate_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)

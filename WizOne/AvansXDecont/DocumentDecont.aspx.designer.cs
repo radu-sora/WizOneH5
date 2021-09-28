@@ -447,13 +447,13 @@ namespace WizOne.AvansXDecont
         protected global::DevExpress.Web.ASPxRoundPanel pnlDocJust;
 
         /// <summary>
-        /// grDate control.
+        /// grDateDocJust control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDate;
+        protected global::DevExpress.Web.ASPxGridView grDateDocJust;
 
         /// <summary>
         /// btnAtasament control.
@@ -463,6 +463,24 @@ namespace WizOne.AvansXDecont
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnAtasament;
+
+        /// <summary>
+        /// pnlEstChelt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxRoundPanel pnlEstChelt;
+
+        /// <summary>
+        /// grDateEstChelt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView grDateEstChelt;
 
         /// <summary>
         /// pnlDateDec control.
@@ -526,6 +544,33 @@ namespace WizOne.AvansXDecont
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtValPlataBanca;
+
+        /// <summary>
+        /// pnlPlataBanca control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxRoundPanel pnlPlataBanca;
+
+        /// <summary>
+        /// grDatePlataBanca control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView grDatePlataBanca;
+
+        /// <summary>
+        /// btnAtas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnAtas;
 
         /// <summary>
         /// popUpMotiv control.

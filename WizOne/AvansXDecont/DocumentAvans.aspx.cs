@@ -233,11 +233,6 @@ namespace WizOne.AvansXDecont
                 if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0 && (Convert.ToInt32(Session["AvsXDec_PoateModif"].ToString()) == 0 || (Convert.ToInt32(Session["AvsXDec_IdStare"].ToString()) != 1)))          //are doar drepturi de vizualizare
                 {
                     //ctlGeneral.IsEnabled = false;
-                    txtNrOrdinDeplasare.ClientEnabled = false;
-                    txtNumeComplet.ClientEnabled = false;
-                    txtDepartament.ClientEnabled = false;
-                    txtLocMunca.ClientEnabled = false;
-                    txtContIban.ClientEnabled = false;
                     txtLocatie.ClientEnabled = false;
                     cmbActionType.ClientEnabled = false;
 					cmbTransportType.ClientEnabled = false;
@@ -344,7 +339,7 @@ namespace WizOne.AvansXDecont
 					//lblRez.ClientVisible = false;
 					//cmbTip.ClientVisible = false;
                     break;
-            }   
+            }
         }
 
         protected void grDate_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
@@ -1610,6 +1605,9 @@ namespace WizOne.AvansXDecont
         {
             try
             {
+                if (Convert.ToInt32(Session["AvsXDec_PoateModif"].ToString()) == 0 && Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0)
+                    return;
+
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
@@ -1685,6 +1683,9 @@ namespace WizOne.AvansXDecont
         {
             try
             {
+                if (Convert.ToInt32(Session["AvsXDec_PoateModif"].ToString()) == 0 && Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0)
+                    return;
+
                 DataTable dt = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
      
                 /*comentam aceasta parte, deoarece in momentul in care adaugam diurna
@@ -2554,6 +2555,7 @@ namespace WizOne.AvansXDecont
                 //txtDet
                 HtmlTableCell lblDet = (HtmlTableCell)grDate.FindEditFormTemplateControl("lblDet");
                 ASPxTextBox txtDet = grDate.FindEditFormTemplateControl("txtDet") as ASPxTextBox;
+                ASPxTextBox txtVal = grDate.FindEditFormTemplateControl("txtVal") as ASPxTextBox;
                 if (lblDet != null && txtDet != null)
                     switch (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()))
                     {
@@ -2576,6 +2578,14 @@ namespace WizOne.AvansXDecont
           
                             break;
                     }
+
+                if (Convert.ToInt32(Session["AvsXDec_PoateModif"].ToString()) == 0 && Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0)
+                {
+
+                    cmbChelt.ReadOnly = true;
+                    txtVal.ReadOnly = true;
+                    txtDet.ReadOnly = true;
+                }
 
                 //HtmlTableCell lblNume = (HtmlTableCell)grDateBeneficii.FindEditFormTemplateControl("lblNume");
                 //lblNume.InnerText = Dami.TraduCuvant("Nume beneficiu");

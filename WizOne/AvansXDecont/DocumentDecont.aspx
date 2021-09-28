@@ -215,11 +215,11 @@
 							<div class="Absente_divOuter margin_top15">
 					
 								<div style="float:left; padding-right:15px;">    
-									<dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnInitNewRow="grDate_InitNewRow" 
-										 OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize">
+									<dx:ASPxGridView ID="grDateDocJust" runat="server" ClientInstanceName="grDateDocJust" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnInitNewRow="grDateDocJust_InitNewRow" 
+										 OnRowInserting="grDateDocJust_RowInserting" OnRowUpdating="grDateDocJust_RowUpdating" OnRowDeleting="grDateDocJust_RowDeleting" OnHtmlEditFormCreated="grDateDocJust_HtmlEditFormCreated" OnCellEditorInitialize="grDateDocJust_CellEditorInitialize">
 										<SettingsBehavior AllowFocusedRow="true" />
 										<Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
-										<ClientSideEvents CustomButtonClick="function(s, e) { grDate_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnEndCallback(s,e); }" ContextMenu="ctx" />    
+										<ClientSideEvents CustomButtonClick="function(s, e) { grDateDocJust_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnEndCallback(s,e); }" ContextMenu="ctx" />    
 										<SettingsEditing Mode="EditFormAndDisplayRow" />
 										<SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
 										<Columns>
@@ -230,15 +230,30 @@
 													</dx:GridViewCommandColumnCustomButton>
 												</CustomButtons>
 											</dx:GridViewCommandColumn>	
-											<dx:GridViewDataComboBoxColumn FieldName="DictionaryItemId" Name="DictionaryItemId" Caption="Cheltuiala" Width="200px" >
+											<dx:GridViewDataTextColumn FieldName="Furnizor" Name="Furnizor" Caption="Furnizor"/>
+											<dx:GridViewDataComboBoxColumn FieldName="DictionaryItemId" Name="DictionaryItemId" Caption="Document" Width="200px" >
 												<Settings SortMode="DisplayText" />
 												<PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown" />
-											</dx:GridViewDataComboBoxColumn>			
-											<dx:GridViewDataTextColumn FieldName="Amount" Name="Amount" Caption="Valoare"/>
+											</dx:GridViewDataComboBoxColumn>		
+											<dx:GridViewDataTextColumn FieldName="DocNumberDecont" Name="DocNumberDecont" Caption="Numar"/>
+											<dx:GridViewDataDateColumn FieldName="DocDateDecont" Name="DocDateDecont" Caption="Data"  Width="100px"  >
+												<PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+											</dx:GridViewDataDateColumn>
+											<dx:GridViewDataComboBoxColumn FieldName="CurrencyId" Name="CurrencyId" Caption="Moneda" Width="100px" >
+												<Settings SortMode="DisplayText" />
+												<PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown" />
+											</dx:GridViewDataComboBoxColumn>
+											<dx:GridViewDataTextColumn FieldName="TotalPayment" Name="TotalPayment" Caption="Valoare"/>
+											<dx:GridViewDataTextColumn FieldName="BugetLine" Name="BugetLine" Caption="Linie buget"/>
+											<dx:GridViewDataComboBoxColumn FieldName="ExpenseTypeId" Name="ExpenseTypeId" Caption="Tip cheltuiala" Width="150px" >
+												<Settings SortMode="DisplayText" />
+												<PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown" />
+											</dx:GridViewDataComboBoxColumn>
 											<dx:GridViewDataTextColumn FieldName="FreeTxt" Name="FreeTxt" Caption="Detalii"/>
 										
 											<dx:GridViewDataTextColumn FieldName="areFisier" Name="areFisier" Caption="areFisier" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentId" Name="DocumentId" Caption="DocumentId" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="IdDocument" Name="IdDocument" Caption="IdDocument" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentDetailId" Name="DocumentDetailId" Caption="DocumentDetailId" Visible="false" ShowInCustomizationForm="false"/>
 											
 											<dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
@@ -278,18 +293,34 @@
 												<div style="padding: 4px 3px 4px">
 													<table>
 														<tr>
-															<td id="lblChelt" runat="server" style="padding-left:10px !important;">Cheltuiala</td>
-															<td id="lblVal" runat="server" style="padding-left:10px !important;">Valoare</td>
+															<td id="lblFurn" runat="server" style="padding-left:10px !important;">Furnizor</td>
+															<td id="lblDocument" runat="server" style="padding-left:10px !important;">Document</td>
+															<td id="lblNr" runat="server" style="padding-left:10px !important;">Numar</td>
+															<td id="lblData" runat="server" style="padding-left:10px !important;">Data</td>
 														</tr>
 														<tr>
-															<td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbChelt" runat="server" Width="200px" ValueField="DictionaryItemId" DropDownWidth="200" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("DictionaryItemId") %>' />
-															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtVal" runat="server" Width="200px" Value='<%# Bind("Amount") %>' /></td>
+															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtFurn" runat="server" Width="200px" Value='<%# Bind("Furnizor") %>' /></td>
+															<td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbDoc" runat="server" Width="200px" ValueField="DictionaryItemId" DropDownWidth="200" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("DictionaryItemId") %>' />
+															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtNr" runat="server" Width="200px" Value='<%# Bind("DocNumberDecont") %>' /></td>
+															<td style="padding:10px !important;"><dx:ASPxDateEdit ID="deData" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DocDateDecont") %>' /></td>
+														</tr>
+														<tr>
+															<td id="lblMoneda" runat="server" style="padding-left:10px !important;">Moneda</td>
+															<td id="lblVal" runat="server" style="padding-left:10px !important;">Valoare</td>
+															<td id="lblLinbug" runat="server" style="padding-left:10px !important;">Linie buget</td>
+															<td id="lblChelt" runat="server" style="padding-left:10px !important;">Tip cheltuiala</td>
+														</tr>
+														<tr>
+															<td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbMoneda" runat="server" Width="200px" ValueField="DictionaryItemId" DropDownWidth="200" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("CurrencyId") %>' />
+															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtVal" runat="server" Width="200px" Value='<%# Bind("TotalPayment") %>' /></td>
+															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtLinBug" runat="server" Width="200px" Value='<%# Bind("BugetLine") %>' /></td>
+															<td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbChelt" runat="server" Width="200px" ValueField="DictionaryItemId" DropDownWidth="200" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("ExpenseTypeId") %>' />
 														</tr>
 														<tr>
 															<td id="lblDet" runat="server" style="padding-left:10px !important;">Detalii</td>
 														</tr>
 														<tr>
-															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtDet" runat="server" Width="200px" Value='<%# Bind("FreeTxt") %>' /></td>
+															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtDet" runat="server" Width="600px" Value='<%# Bind("FreeTxt") %>' /></td>
 														</tr>
 														<tr>
 															<td style="padding:10px !important;" colspan="2">
@@ -319,6 +350,83 @@
 											</EditForm>
 										</Templates>
 
+									</dx:ASPxGridView>
+								</div>							
+							</div>
+							
+						
+                        </dx:PanelContent>
+                    </PanelCollection>
+                </dx:ASPxRoundPanel>
+
+                <dx:ASPxRoundPanel ID="pnlEstChelt" ClientInstanceName="pnlEstChelt" runat="server" ShowHeader="true" ShowCollapseButton="true" Collapsed="false" AllowCollapsingByHeaderClick="true" HeaderText="Estimare cheltuieli" CssClass="pnlAlign indentBottom10" Width="100%">
+                    <HeaderStyle Font-Bold="true" />
+                    <PanelCollection>
+                        <dx:PanelContent>
+
+							<div class="Absente_divOuter margin_top15">
+					
+								<div style="float:left; padding-right:15px;">    
+									<dx:ASPxGridView ID="grDateEstChelt" runat="server" ClientInstanceName="grDateEstChelt" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnInitNewRow="grDateEstChelt_InitNewRow" 
+										 OnRowInserting="grDateEstChelt_RowInserting" OnRowUpdating="grDateEstChelt_RowUpdating" OnRowDeleting="grDateEstChelt_RowDeleting" OnHtmlEditFormCreated="grDateEstChelt_HtmlEditFormCreated" >
+										<SettingsBehavior AllowFocusedRow="true" />
+										<Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
+										<ClientSideEvents EndCallback="function(s,e) { OnEndCallback(s,e); }" ContextMenu="ctx" />    
+										<SettingsEditing Mode="Inline" />
+										<SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
+										<Columns>
+											<dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"  >
+		
+											</dx:GridViewCommandColumn>	
+
+											<dx:GridViewDataComboBoxColumn FieldName="DictionaryItemId" Name="DictionaryItemId" Caption="Tip" Width="200px" >
+												<Settings SortMode="DisplayText" />
+												<PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown" />
+											</dx:GridViewDataComboBoxColumn>		
+
+											<dx:GridViewDataComboBoxColumn FieldName="CurrencyId" Name="CurrencyId" Caption="Moneda" Width="100px" >
+												<Settings SortMode="DisplayText" />
+												<PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown" />
+											</dx:GridViewDataComboBoxColumn>
+											<dx:GridViewDataTextColumn FieldName="TotalPayment" Name="TotalPayment" Caption="Valoare"/>
+											<dx:GridViewDataTextColumn FieldName="BugetLine" Name="BugetLine" Caption="Linie buget"/>
+											<dx:GridViewDataTextColumn FieldName="FreeTxt" Name="FreeTxt" Caption="Detalii"/>
+										
+											<dx:GridViewDataTextColumn FieldName="DocumentId" Name="DocumentId" Caption="DocumentId" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="IdDocument" Name="IdDocument" Caption="IdDocument" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="DocumentDetailId" Name="DocumentDetailId" Caption="DocumentDetailId" Visible="false" ShowInCustomizationForm="false"/>
+											
+											<dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
+											<dx:GridViewDataDateColumn FieldName="TIME" Name="Time" Caption="Time" Visible="false" ShowInCustomizationForm="false" />
+										</Columns>
+
+										<SettingsCommandButton>
+											<UpdateButton ButtonType="Link" Text="Actualizeaza">
+												<Styles>
+													<Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
+													</Style>
+												</Styles>
+											</UpdateButton>
+											<CancelButton ButtonType="Link" Text="Renunta">
+											</CancelButton>
+
+											<EditButton Image-ToolTip="Edit">
+												<Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+												<Styles>
+													<Style Paddings-PaddingRight="5px" />
+												</Styles>
+											</EditButton>
+											<DeleteButton Image-ToolTip="Sterge">
+												<Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" />
+											</DeleteButton>
+											<NewButton Image-ToolTip="Rand nou">
+												<Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+												<Styles>
+													<Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
+												</Styles>
+											</NewButton>
+										</SettingsCommandButton>
 									</dx:ASPxGridView>
 								</div>							
 							</div>
@@ -361,7 +469,141 @@
 						
                         </dx:PanelContent>
                     </PanelCollection>
-                </dx:ASPxRoundPanel>				
+                </dx:ASPxRoundPanel>	
+				
+                <dx:ASPxRoundPanel ID="pnlPlataBanca" ClientInstanceName="pnlPlataBanca" runat="server" ShowHeader="true" ShowCollapseButton="true" Collapsed="false" AllowCollapsingByHeaderClick="true" HeaderText="Restituire avans neutilizat" CssClass="pnlAlign indentBottom10" Width="100%">
+                    <HeaderStyle Font-Bold="true" />
+                    <PanelCollection>
+                        <dx:PanelContent>
+
+							<div class="Absente_divOuter margin_top15">
+					
+								<div style="float:left; padding-right:15px;">    
+									<dx:ASPxGridView ID="grDatePlataBanca" runat="server" ClientInstanceName="grDatePlataBanca" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnInitNewRow="grDatePlataBanca_InitNewRow" 
+										 OnRowInserting="grDatePlataBanca_RowInserting" OnRowUpdating="grDatePlataBanca_RowUpdating" OnRowDeleting="grDatePlataBanca_RowDeleting" OnHtmlEditFormCreated="grDatePlataBanca_HtmlEditFormCreated" OnCellEditorInitialize="grDatePlataBanca_CellEditorInitialize">
+										<SettingsBehavior AllowFocusedRow="true" />
+										<Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
+										<ClientSideEvents CustomButtonClick="function(s, e) { grDatePlataBanca_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnEndCallback(s,e); }" ContextMenu="ctx" />    
+										<SettingsEditing Mode="EditFormAndDisplayRow" />
+										<SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
+										<Columns>
+											<dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"  >
+												<CustomButtons>
+													<dx:GridViewCommandColumnCustomButton ID="btnAtas">
+														<Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/view.png" />
+													</dx:GridViewCommandColumnCustomButton>
+												</CustomButtons>
+											</dx:GridViewCommandColumn>	
+											<dx:GridViewDataComboBoxColumn FieldName="DictionaryItemId" Name="DictionaryItemId" Caption="Document" Width="200px" >
+												<Settings SortMode="DisplayText" />
+												<PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown" />
+											</dx:GridViewDataComboBoxColumn>		
+											<dx:GridViewDataTextColumn FieldName="DocNumberDecont" Name="DocNumberDecont" Caption="Numar"/>
+											<dx:GridViewDataDateColumn FieldName="DocDateDecont" Name="DocDateDecont" Caption="Data"  Width="100px"  >
+												<PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+											</dx:GridViewDataDateColumn>
+											<dx:GridViewDataComboBoxColumn FieldName="CurrencyId" Name="CurrencyId" Caption="Moneda" Width="100px" >
+												<Settings SortMode="DisplayText" />
+												<PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown" />
+											</dx:GridViewDataComboBoxColumn>
+											<dx:GridViewDataTextColumn FieldName="TotalPayment" Name="TotalPayment" Caption="Valoare"/>
+
+										
+											<dx:GridViewDataTextColumn FieldName="areFisierPlataBanca" Name="areFisierPlataBanca" Caption="areFisierPlataBanca" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="DocumentId" Name="DocumentId" Caption="DocumentId" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="IdDocument" Name="IdDocument" Caption="IdDocument" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="DocumentDetailId" Name="DocumentDetailId" Caption="DocumentDetailId" Visible="false" ShowInCustomizationForm="false"/>
+											
+											<dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
+											<dx:GridViewDataDateColumn FieldName="TIME" Name="Time" Caption="Time" Visible="false" ShowInCustomizationForm="false" />
+										</Columns>
+
+										<SettingsCommandButton>
+											<UpdateButton ButtonType="Link" Text="Actualizeaza">
+												<Styles>
+													<Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
+													</Style>
+												</Styles>
+											</UpdateButton>
+											<CancelButton ButtonType="Link" Text="Renunta">
+											</CancelButton>
+
+											<EditButton Image-ToolTip="Edit">
+												<Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+												<Styles>
+													<Style Paddings-PaddingRight="5px" />
+												</Styles>
+											</EditButton>
+											<DeleteButton Image-ToolTip="Sterge">
+												<Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" />
+											</DeleteButton>
+											<NewButton Image-ToolTip="Rand nou">
+												<Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+												<Styles>
+													<Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
+												</Styles>
+											</NewButton>
+										</SettingsCommandButton>
+
+										<Templates>
+											<EditForm>
+												<div style="padding: 4px 3px 4px">
+													<table>
+														<tr>
+															<td id="lblDocument" runat="server" style="padding-left:10px !important;">Document</td>
+															<td id="lblNr" runat="server" style="padding-left:10px !important;">Numar</td>
+															<td id="lblData" runat="server" style="padding-left:10px !important;">Data</td>
+														</tr>
+														<tr>
+															<td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbDoc" runat="server" Width="200px" ValueField="DictionaryItemId" DropDownWidth="200" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("DictionaryItemId") %>' />
+															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtNr" runat="server" Width="200px" Value='<%# Bind("DocNumberDecont") %>' /></td>
+															<td style="padding:10px !important;"><dx:ASPxDateEdit ID="deData" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DocDateDecont") %>' /></td>
+														</tr>
+														<tr>
+															<td id="lblMoneda" runat="server" style="padding-left:10px !important;">Moneda</td>
+															<td id="lblVal" runat="server" style="padding-left:10px !important;">Valoare</td>
+														</tr>
+														<tr>
+															<td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbMoneda" runat="server" Width="200px" ValueField="DictionaryItemId" DropDownWidth="200" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("CurrencyId") %>' />
+															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtVal" runat="server" Width="200px" Value='<%# Bind("TotalPayment") %>' /></td>
+														</tr>
+														<tr>
+															<td style="padding:10px !important;" colspan="2">
+																<label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
+																<dx:ASPxUploadControl ID="btnDocUploadPB" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
+																	BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
+																	ClientInstanceName="btnDocUploadPB" OnFileUploadComplete="btnDocUploadPB_FileUploadComplete" ValidationSettings-ShowErrors="false">
+																	<BrowseButton>
+																		<Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
+																	</BrowseButton>
+																	<ValidationSettings ShowErrors="False"></ValidationSettings>
+
+																	<ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
+																</dx:ASPxUploadControl>
+															</td>
+														</tr>
+														<tr>
+															<td style="padding:10px !important;">
+																<div style="text-align: left; padding: 2px; font-weight:bold; font-size:32px;">
+																	<dx:ASPxGridViewTemplateReplacement ID="UpdateButton" ReplacementType="EditFormUpdateButton" runat="server"></dx:ASPxGridViewTemplateReplacement>
+																	<dx:ASPxGridViewTemplateReplacement ID="CancelButton" ReplacementType="EditFormCancelButton" runat="server"></dx:ASPxGridViewTemplateReplacement>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</div>
+											</EditForm>
+										</Templates>
+
+									</dx:ASPxGridView>
+								</div>							
+							</div>
+							
+						
+                        </dx:PanelContent>
+                    </PanelCollection>
+                </dx:ASPxRoundPanel>
 			
             </dx:PanelContent>
         </PanelCollection>

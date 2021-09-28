@@ -410,6 +410,7 @@
     <Content Include="Adev\ConfigD112.aspx" />
     <Content Include="AvansXDecont\Document.aspx" />
     <Content Include="AvansXDecont\DocumentAvans.aspx" />
+    <Content Include="AvansXDecont\DocumentDecont.aspx" />
     <Content Include="Avs\Aprobare.aspx" />
     <Content Include="Avs\Cereri.aspx" />
     <Content Include="Avs\Detalii.aspx" />
@@ -1336,6 +1337,13 @@
     </Compile>
     <Compile Include="AvansXDecont\DocumentAvans.aspx.designer.cs">
       <DependentUpon>DocumentAvans.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentDecont.aspx.cs">
+      <DependentUpon>DocumentDecont.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentDecont.aspx.designer.cs">
+      <DependentUpon>DocumentDecont.aspx</DependentUpon>
     </Compile>
     <Compile Include="Avs\Aprobare.aspx.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>

@@ -301,7 +301,7 @@
                </tr>
             </table>
 
-            <table width="40%">
+            <table width="100%" class="divAvans">
                 <tr>
                     <td id="lbl1Act" runat="server"  >
                         <dx:ASPxLabel  ID="lblTxt3Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
@@ -357,8 +357,8 @@
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox>
                     </td>
-                    <td id="lbl9Act" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt2Act" runat="server"   Visible="false"></dx:ASPxLabel >
+                    <td id="lbl9Act" runat="server" style="border:solid 1px red;" >
+                        <dx:ASPxLabel  ID="lblTxt2Act" runat="server" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxTextBox ID="txt2Act" runat="server"  ClientVisible="false" >
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox>
@@ -445,21 +445,21 @@
                         </dx:ASPxComboBox>
                     </td>
                     <td id="lbl6Nou" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt10Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxLabel  ID="lblTxt10Nou" runat="server"  Visible="false"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmb6Nou" runat="server" ClientInstanceName="cmb6Nou" ClientIDMode="Static" Width="125px" ValueField="Id" DropDownWidth="125" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
                         </dx:ASPxComboBox>
                     </td>
                     <td id="lbl7Nou" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt11Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxLabel  ID="lblTxt11Nou" runat="server"  Visible="false"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmb7Nou" runat="server" ClientInstanceName="cmb7Nou" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
                         </dx:ASPxComboBox>
                     </td>
                     <td id="lbl14Nou" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt14Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxLabel  ID="lblTxt14Nou" runat="server"  Visible="false"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmb8Nou" runat="server" ClientInstanceName="cmb8Nou" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />

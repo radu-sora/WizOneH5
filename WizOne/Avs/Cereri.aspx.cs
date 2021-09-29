@@ -599,38 +599,38 @@ namespace WizOne.Avs
 
         private void AscundeCtl()
         {
-            lbl1Act.Visible = false;
-            lbl2Act.Visible = false;
-            lbl3Act.Visible = false;
-            lbl4Act.Visible = false;
-            lbl5Act.Visible = false;
-            lbl6Act.Visible = false;
-            lbl7Act.Visible = false;
-            lbl8Act.Visible = false;
-            lbl9Act.Visible = false;
-            lbl10Act.Visible = false;
-            lbl11Act.Visible = false;
-            lbl12Act.Visible = false;
-            lbl13Act.Visible = false;
-            lbl14Act.Visible = false;
-            lbl15Act.Visible = false;
+            lbl1Act.Attributes["style"] = "display: none";
+            lbl2Act.Attributes["style"] = "display: none";
+            lbl3Act.Attributes["style"] = "display: none";
+            lbl4Act.Attributes["style"] = "display: none";
+            lbl5Act.Attributes["style"] = "display: none";
+            lbl6Act.Attributes["style"] = "display: none";
+            lbl7Act.Attributes["style"] = "display: none";
+            lbl8Act.Attributes["style"] = "display: none";
+            lbl9Act.Attributes["style"] = "display: none";
+            lbl10Act.Attributes["style"] = "display: none";
+            lbl11Act.Attributes["style"] = "display: none";
+            lbl12Act.Attributes["style"] = "display: none";
+            lbl13Act.Attributes["style"] = "display: none";
+            lbl14Act.Attributes["style"] = "display: none";
+            lbl15Act.Attributes["style"] = "display: none";
 
-            lbl1Nou.Visible = false;
-            lbl2Nou.Visible = false;
-            lbl3Nou.Visible = false;
-            lbl4Nou.Visible = false;
-            lbl5Nou.Visible = false;
-            lbl6Nou.Visible = false;
-            lbl7Nou.Visible = false;
-            lbl8Nou.Visible = true;
-            lbl9Nou.Visible = false;
-            lbl10Nou.Visible = false;
-            lbl11Nou.Visible = false;
-            lbl12Nou.Visible = false;
-            lbl14Nou.Visible = false;
-            lbl13Nou.Visible = false;
-            lbl15Nou.Visible = false;
-            lbl16Nou.Visible = false;
+            lbl1Nou.Attributes["style"] = "display: none";
+            lbl2Nou.Attributes["style"] = "display: none";
+            lbl3Nou.Attributes["style"] = "display: none";
+            lbl4Nou.Attributes["style"] = "display: none";
+            lbl5Nou.Attributes["style"] = "display: none";
+            lbl6Nou.Attributes["style"] = "display: none";
+            lbl7Nou.Attributes["style"] = "display: none";
+            lbl8Nou.Attributes["style"] = "display: none";
+            lbl9Nou.Attributes["style"] = "display: none";
+            lbl10Nou.Attributes["style"] = "display: none";
+            lbl11Nou.Attributes["style"] = "display: none";
+            lbl12Nou.Attributes["style"] = "display: none";
+            lbl14Nou.Attributes["style"] = "display: none";
+            lbl13Nou.Attributes["style"] = "display: none";
+            lbl15Nou.Attributes["style"] = "display: none";
+            lbl16Nou.Attributes["style"] = "display: none";
 
             lblTxt1Act.Visible = false;
             lblTxt1Act.Text = "";
@@ -855,8 +855,8 @@ namespace WizOne.Avs
         {
             if (nr == 1)
             {// 1 x TB
-                lbl8Act.Visible = true;
-                lbl8Nou.Visible = true;
+                lbl8Act.Attributes["style"] = "display: inline-block";
+                lbl8Nou.Attributes["style"] = "display: inline-block";
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text1;
                 txt1Act.ClientVisible = true;
@@ -867,10 +867,10 @@ namespace WizOne.Avs
             }
             if (nr == 2)
             {// 2 X TB
-                lbl8Act.Visible = true;
-                lbl8Nou.Visible = true;
-                lbl9Act.Visible = true;
-                lbl9Nou.Visible = true;
+                lbl8Act.Attributes["style"] = "display: inline-block";
+                lbl8Nou.Attributes["style"] = "display: inline-block";
+                lbl9Act.Attributes["style"] = "display: inline-block";
+                lbl9Nou.Attributes["style"] = "display: inline-block";
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text1;
                 lblTxt2Act.Visible = true;
@@ -889,8 +889,8 @@ namespace WizOne.Avs
             }
             if (nr == 3)
             {// 1 x CB
-                lbl1Act.Visible = true;
-                lbl1Nou.Visible = true;
+                lbl1Act.Attributes["style"] = "display: inline-block";
+                lbl1Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
                 cmb1Act.ClientVisible = true;
@@ -902,7 +902,7 @@ namespace WizOne.Avs
             }
             if (nr == 4)
             {// 0.5 x CB
-                lbl1Nou.Visible = true;
+                lbl1Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text1;
                 cmb1Nou.ClientVisible = true;
@@ -910,8 +910,8 @@ namespace WizOne.Avs
             }
             if (nr == 5)
             {// 1 x TB + 1 x DE
-                lbl8Act.Visible = true;
-                lbl8Nou.Visible = true;
+                lbl8Act.Attributes["style"] = "display: inline-block";
+                lbl8Nou.Attributes["style"] = "display: inline-block";
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text1;
                 txt1Act.ClientVisible = true;
@@ -932,8 +932,8 @@ namespace WizOne.Avs
             }
             if (nr == 6)
             {// 1 x DE
-                lbl10Act.Visible = true;
-                lbl10Nou.Visible = true;
+                lbl10Act.Attributes["style"] = "display: inline-block";
+                lbl10Nou.Attributes["style"] = "display: inline-block";
                 lblTxt5Act.Visible = true;
                 lblTxt5Act.Text = text1;
                 de1Act.ClientVisible = true;
@@ -944,10 +944,10 @@ namespace WizOne.Avs
             }
             if (nr == 7)
             {// 2 x DE
-                lbl10Act.Visible = true;
-                lbl10Nou.Visible = true;
-                lbl11Act.Visible = true;
-                lbl11Nou.Visible = true;
+                lbl10Act.Attributes["style"] = "display: inline-block";
+                lbl10Nou.Attributes["style"] = "display: inline-block";
+                lbl11Act.Attributes["style"] = "display: inline-block";
+                lbl11Nou.Attributes["style"] = "display: inline-block";
                 lblTxt5Act.Visible = true;
                 lblTxt5Act.Text = text1;
                 de1Act.ClientVisible = true;
@@ -966,14 +966,14 @@ namespace WizOne.Avs
             }
             if (nr == 8)
             {// 2 x CB + 2 x TB
-                lbl1Act.Visible = true;
-                lbl1Nou.Visible = true;
-                lbl2Act.Visible = true;
-                lbl2Nou.Visible = true;
-                lbl8Act.Visible = true;
-                lbl8Nou.Visible = true;
-                lbl9Act.Visible = true;
-                lbl9Nou.Visible = true;
+                lbl1Act.Attributes["style"] = "display: inline-block";
+                lbl1Nou.Attributes["style"] = "display: inline-block";
+                lbl2Act.Attributes["style"] = "display: inline-block";
+                lbl2Nou.Attributes["style"] = "display: inline-block";
+                lbl8Act.Attributes["style"] = "display: inline-block";
+                lbl8Nou.Attributes["style"] = "display: inline-block";
+                lbl9Act.Attributes["style"] = "display: inline-block";
+                lbl9Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
                 cmb1Act.ClientVisible = true;
@@ -1011,12 +1011,12 @@ namespace WizOne.Avs
             }
             if (nr == 9)
             {// 2 x CB + 1 x TB
-                lbl1Act.Visible = true;
-                lbl1Nou.Visible = true;
-                lbl2Act.Visible = true;
-                lbl2Nou.Visible = true;
-                lbl8Act.Visible = true;
-                lbl8Nou.Visible = true;
+                lbl1Act.Attributes["style"] = "display: inline-block";
+                lbl1Nou.Attributes["style"] = "display: inline-block";
+                lbl2Act.Attributes["style"] = "display: inline-block";
+                lbl2Nou.Attributes["style"] = "display: inline-block";
+                lbl8Act.Attributes["style"] = "display: inline-block";
+                lbl8Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
                 cmb1Act.ClientVisible = true;
@@ -1046,12 +1046,12 @@ namespace WizOne.Avs
             }
             if (nr == 10)
             {// 1 x CB + 2 x TB
-                lbl1Act.Visible = true;
-                lbl1Nou.Visible = true;
-                lbl8Act.Visible = true;
-                lbl8Nou.Visible = true;
-                lbl9Act.Visible = true;
-                lbl9Nou.Visible = true;
+                lbl1Act.Attributes["style"] = "display: inline-block";
+                lbl1Nou.Attributes["style"] = "display: inline-block";
+                lbl8Act.Attributes["style"] = "display: inline-block";
+                lbl8Nou.Attributes["style"] = "display: inline-block";
+                lbl9Act.Attributes["style"] = "display: inline-block";
+                lbl9Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
                 cmb1Act.ClientVisible = true;
@@ -1079,16 +1079,16 @@ namespace WizOne.Avs
             }
             if (nr == 11)
             {// 1 x CB + 2 x TB + 2 x DE
-                lbl1Act.Visible = true;
-                lbl1Nou.Visible = true;
-                lbl8Act.Visible = true;
-                lbl8Nou.Visible = true;
-                lbl9Act.Visible = true;
-                lbl9Nou.Visible = true;
-                lbl10Act.Visible = true;
-                lbl10Nou.Visible = true;
-                lbl11Act.Visible = true;
-                lbl11Nou.Visible = true;
+                lbl1Act.Attributes["style"] = "display: inline-block";
+                lbl1Nou.Attributes["style"] = "display: inline-block";
+                lbl8Act.Attributes["style"] = "display: inline-block";
+                lbl8Nou.Attributes["style"] = "display: inline-block";
+                lbl9Act.Attributes["style"] = "display: inline-block";
+                lbl9Nou.Attributes["style"] = "display: inline-block";
+                lbl10Act.Attributes["style"] = "display: inline-block";
+                lbl10Nou.Attributes["style"] = "display: inline-block";
+                lbl11Act.Attributes["style"] = "display: inline-block";
+                lbl11Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
                 cmb1Act.ClientVisible = true;
@@ -1132,24 +1132,24 @@ namespace WizOne.Avs
             }
             if (nr == 12)
             {// 8 x CB + 1 x TB
-                lbl1Act.Visible = true;
-                lbl1Nou.Visible = true;
-                lbl2Act.Visible = true;
-                lbl2Nou.Visible = true;
-                lbl3Act.Visible = true;
-                lbl3Nou.Visible = true;
-                lbl4Act.Visible = true;
-                lbl4Nou.Visible = true;
-                lbl5Act.Visible = true;
-                lbl5Nou.Visible = true;
-                lbl6Act.Visible = true;
-                lbl6Nou.Visible = true;
-                lbl7Act.Visible = true;
-                lbl7Nou.Visible = true;
-                lbl8Act.Visible = true;
-                lbl8Nou.Visible = true;
-                lbl13Act.Visible = true;
-                lbl14Nou.Visible = true;
+                lbl1Act.Attributes["style"] = "display: inline-block";
+                lbl1Nou.Attributes["style"] = "display: inline-block";
+                lbl2Act.Attributes["style"] = "display: inline-block";
+                lbl2Nou.Attributes["style"] = "display: inline-block";
+                lbl3Act.Attributes["style"] = "display: inline-block";
+                lbl3Nou.Attributes["style"] = "display: inline-block";
+                lbl4Act.Attributes["style"] = "display: inline-block";
+                lbl4Nou.Attributes["style"] = "display: inline-block";
+                lbl5Act.Attributes["style"] = "display: inline-block";
+                lbl5Nou.Attributes["style"] = "display: inline-block";
+                lbl6Act.Attributes["style"] = "display: inline-block";
+                lbl6Nou.Attributes["style"] = "display: inline-block";
+                lbl7Act.Attributes["style"] = "display: inline-block";
+                lbl7Nou.Attributes["style"] = "display: inline-block";
+                lbl8Act.Attributes["style"] = "display: inline-block";
+                lbl8Nou.Attributes["style"] = "display: inline-block";
+                lbl13Act.Attributes["style"] = "display: inline-block";
+                lbl14Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
                 cmb1Act.ClientVisible = true;
@@ -1233,8 +1233,8 @@ namespace WizOne.Avs
             }
             if (nr == 13)
             {// struct org
-                lbl12Act.Visible = true;
-                lbl12Nou.Visible = true;
+                lbl12Act.Attributes["style"] = "display: inline-block";
+                lbl12Nou.Attributes["style"] = "display: inline-block";
                 lblTxt12Act.Visible = true;
                 lblTxt12Act.Text = text1;
                 cmbStructOrgAct.ClientVisible = true;
@@ -1246,10 +1246,10 @@ namespace WizOne.Avs
             }
             if (nr == 14)
             {// 0.5 x CB + 3 x 0.5 x DE
-                lbl1Nou.Visible = true;
-                lbl10Nou.Visible = true;
-                lbl11Nou.Visible = true;
-                lbl13Nou.Visible = true;
+                lbl1Nou.Attributes["style"] = "display: inline-block";
+                lbl10Nou.Attributes["style"] = "display: inline-block";
+                lbl11Nou.Attributes["style"] = "display: inline-block";
+                lbl13Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text1;
                 cmb1Nou.ClientVisible = true;
@@ -1270,12 +1270,12 @@ namespace WizOne.Avs
             if (nr == 15)
             {// 0.5 x CB + 2 x 0.5 x TB + 3 x 0.5 x DE +  5 x bifa
             
-                lbl1Nou.Visible = true;        
-                lbl8Nou.Visible = true;        
-                lbl9Nou.Visible = true;      
-                lbl10Nou.Visible = true;     
-                lbl11Nou.Visible = true;
-                lbl13Nou.Visible = true;
+                lbl1Nou.Attributes["style"] = "display: inline-block";        
+                lbl8Nou.Attributes["style"] = "display: inline-block";        
+                lbl9Nou.Attributes["style"] = "display: inline-block";      
+                lbl10Nou.Attributes["style"] = "display: inline-block";     
+                lbl11Nou.Attributes["style"] = "display: inline-block";
+                lbl13Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
                 cmb1Nou.ClientVisible = true;
@@ -1308,21 +1308,21 @@ namespace WizOne.Avs
             }
             if (nr == 16)
             {// 2 x CB + 4 x TB
-                lbl1Act.Visible = true;
-                lbl1Nou.Visible = true;
+                lbl1Act.Attributes["style"] = "display: inline-block";
+                lbl1Nou.Attributes["style"] = "display: inline-block";
                 if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Functie)
                 {
-                    lbl2Act.Visible = true;
-                    lbl2Nou.Visible = true;
+                    lbl2Act.Attributes["style"] = "display: inline-block";
+                    lbl2Nou.Attributes["style"] = "display: inline-block";
                 }
-                lbl8Act.Visible = true;
-                lbl8Nou.Visible = true;
-                lbl9Act.Visible = true;
-                lbl9Nou.Visible = true;
-                lbl14Act.Visible = true;
-                lbl15Nou.Visible = true;
-                lbl15Act.Visible = true;
-                lbl16Nou.Visible = true;
+                lbl8Act.Attributes["style"] = "display: inline-block";
+                lbl8Nou.Attributes["style"] = "display: inline-block";
+                lbl9Act.Attributes["style"] = "display: inline-block";
+                lbl9Nou.Attributes["style"] = "display: inline-block";
+                lbl14Act.Attributes["style"] = "display: inline-block";
+                lbl15Nou.Attributes["style"] = "display: inline-block";
+                lbl15Act.Attributes["style"] = "display: inline-block";
+                lbl16Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
                 cmb1Act.ClientVisible = true;
@@ -1344,14 +1344,14 @@ namespace WizOne.Avs
                     cmb2Nou.Enabled = true;
 
                     //Florin 2020.10.05
-                    lbl3Act.Visible = true;
+                    lbl3Act.Attributes["style"] = "display: inline-block";
                     lblTxt7Act.Visible = true;
                     lblTxt7Act.Text = "Post";
                     cmb3Act.ClientVisible = true;
                     cmb3Act.Enabled = true;
                     cmb3Act.Width = 250;
 
-                    lbl3Nou.Visible = true;
+                    lbl3Nou.Attributes["style"] = "display: inline-block";
                     lblTxt7Nou.Visible = true;
                     lblTxt7Nou.Text = "Post";
                     cmb3Nou.ClientVisible = true;
@@ -1392,19 +1392,19 @@ namespace WizOne.Avs
             }
             if (nr == 17)
             {// 2 x CB + 2 x DE + 2 x TB
-                lbl1Act.Visible = true;
-                lbl1Nou.Visible = true;
-                lbl2Act.Visible = true;
-                lbl2Nou.Visible = true;
-                lbl14Act.Visible = true;
-                lbl15Nou.Visible = true;
-                lbl14Act.Visible = true;
-                lbl15Act.Visible = true;
-                lbl16Nou.Visible = true;
-                lbl10Act.Visible = true;
-                lbl10Nou.Visible = true;
-                lbl11Act.Visible = true;
-                lbl11Nou.Visible = true;
+                lbl1Act.Attributes["style"] = "display: inline-block";
+                lbl1Nou.Attributes["style"] = "display: inline-block";
+                lbl2Act.Attributes["style"] = "display: inline-block";
+                lbl2Nou.Attributes["style"] = "display: inline-block";
+                lbl14Act.Attributes["style"] = "display: inline-block";
+                lbl15Nou.Attributes["style"] = "display: inline-block";
+                lbl14Act.Attributes["style"] = "display: inline-block";
+                lbl15Act.Attributes["style"] = "display: inline-block";
+                lbl16Nou.Attributes["style"] = "display: inline-block";
+                lbl10Act.Attributes["style"] = "display: inline-block";
+                lbl10Nou.Attributes["style"] = "display: inline-block";
+                lbl11Act.Attributes["style"] = "display: inline-block";
+                lbl11Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
                 cmb1Act.ClientVisible = true;
@@ -1457,40 +1457,40 @@ namespace WizOne.Avs
             //if(nr == 37)            //Post = 37 este id-ul de post din Org_tblAtribute
             //{// 4 x CB
 
-            //    lbl1Act.Visible = true;
+            //    lbl1Act.Attributes["style"] = "display: inline-block";
             //    lbl1Act.InnerText = text1;
             //    cmb1Act.Visible = true;
 
-            //    lbl1Nou.Visible = true;
+            //    lbl1Nou.Attributes["style"] = "display: inline-block";
             //    lbl1Nou.InnerText = text2;
             //    cmb1Nou.Visible = true;
 
-            //    lbl2Act.Visible = true;
+            //    lbl2Act.Attributes["style"] = "display: inline-block";
             //    lbl2Act.InnerText = text3;
             //    cmb2Act.Visible = true;
             //    cmb2Act.ClientEnabled = false;
 
-            //    lbl2Nou.Visible = true;
+            //    lbl2Nou.Attributes["style"] = "display: inline-block";
             //    lbl2Nou.InnerText = text4;
             //    cmb2Nou.Visible = true;
             //    cmb2Nou.ClientEnabled = false;
 
-            //    lbl3Act.Visible = true;
+            //    lbl3Act.Attributes["style"] = "display: inline-block";
             //    lbl3Act.InnerText = text5;
             //    cmb3Act.Visible = true;
             //    cmb3Act.ClientEnabled = false;
 
-            //    lbl3Nou.Visible = true;
+            //    lbl3Nou.Attributes["style"] = "display: inline-block";
             //    lbl3Nou.InnerText = text6;
             //    cmb3Nou.Visible = true;
             //    cmb3Nou.ClientEnabled = false;
 
-            //    lbl4Act.Visible = true;
+            //    lbl4Act.Attributes["style"] = "display: inline-block";
             //    lbl4Act.InnerText = text7;
             //    cmb4Act.Visible = true;
             //    cmb4Act.ClientEnabled = false;
 
-            //    lbl4Nou.Visible = true;
+            //    lbl4Nou.Attributes["style"] = "display: inline-block";
             //    lbl4Nou.InnerText = text8;
             //    cmb4Nou.Visible = true;
             //    cmb4Nou.ClientEnabled = false;
@@ -1498,61 +1498,61 @@ namespace WizOne.Avs
 
             if (nr == 37)            //Post = 37 este id-ul de post din Org_tblAtribute
             {// 1 CB + 4 x TB
-                lbl1Act.Visible = true;
+                lbl1Act.Attributes["style"] = "display: inline-block";
                 lblTxt3Act.Visible = true;
                 lblTxt3Act.Text = text1;
                 cmb1Act.ClientVisible = true;
                 cmb1Act.Enabled = false;
 
-                lbl1Nou.Visible = true;
+                lbl1Nou.Attributes["style"] = "display: inline-block";
                 lblTxt3Nou.Visible = true;
                 lblTxt3Nou.Text = text2;
                 cmb1Nou.ClientVisible = true;
                 cmb1Nou.Enabled = true;
 
-                lbl8Act.Visible = true;
+                lbl8Act.Attributes["style"] = "display: inline-block";
                 lblTxt1Act.Visible = true;
                 lblTxt1Act.Text = text3;
                 txt1Act.ClientVisible = true;
                 txt1Act.Enabled = false;
 
-                lbl8Nou.Visible = true;
+                lbl8Nou.Attributes["style"] = "display: inline-block";
                 lblTxt1Nou.Visible = true;
                 lblTxt1Nou.Text = text4;
                 txt1Nou.ClientVisible = true;
                 txt1Nou.ClientEnabled = false;
 
-                lbl9Act.Visible = true;
+                lbl9Act.Attributes["style"] = "display: inline-block";
                 lblTxt2Act.Visible = true;
                 lblTxt2Act.Text = text5;
                 txt2Act.ClientVisible = true;
                 txt2Act.ClientEnabled = false;
 
-                lbl9Nou.Visible = true;
+                lbl9Nou.Attributes["style"] = "display: inline-block";
                 lblTxt2Nou.Visible = true;
                 lblTxt2Nou.Text = text6;
                 txt2Nou.ClientVisible = true;
                 txt2Nou.ClientEnabled = false;
 
-                lbl14Act.Visible = true;
+                lbl14Act.Attributes["style"] = "display: inline-block";
                 lblTxt14Act.Visible = true;
                 lblTxt14Act.Text = text7;
                 txt3Act.ClientVisible = true;
                 txt3Act.ClientEnabled = false;
 
-                lbl15Nou.Visible = true;
+                lbl15Nou.Attributes["style"] = "display: inline-block";
                 lblTxt15Nou.Visible = true;
                 lblTxt15Nou.Text = text8;
                 txt3Nou.ClientVisible = true;
                 txt3Nou.ClientEnabled = false;
 
-                lbl15Act.Visible = true;
+                lbl15Act.Attributes["style"] = "display: inline-block";
                 lblTxt15Act.Visible = true;
                 lblTxt15Act.Text = text9;
                 txt4Act.ClientVisible = true;
                 txt4Act.ClientEnabled = false;
 
-                lbl16Nou.Visible = true;
+                lbl16Nou.Attributes["style"] = "display: inline-block";
                 lblTxt16Nou.Visible = true;
                 lblTxt16Nou.Text = text10;
                 txt4Nou.ClientVisible = true;

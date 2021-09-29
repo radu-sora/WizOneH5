@@ -108,17 +108,32 @@ namespace WizOne.AvansXDecont
                 DataTable lpTipDeplasare = GetAvsXDec_DictionaryItemTipDeplasare();
 				DataTable lpTipMoneda = GetAvsXDec_DictionaryItemValute();
 				DataTable lpModPlata = GetAvsXDec_DictionaryItemModalitatePlata();
-                        
+               
+                DataTable lstAvsXDec_DocTypeXUser = GetAvsXDec_DocTypeXUser(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()), Convert.ToInt32((Session["AvsXDec_Marca"] ?? -99).ToString()));
 
-                 
-				if (lpTipDeplasare != null && lpTipDeplasare.Rows.Count > 0)
+
+                if (lpTipDeplasare != null && lpTipDeplasare.Rows.Count > 0)
 				{
 				   
 					if (lpTipMoneda != null && lpTipMoneda.Rows.Count > 0)
 					{
+                        if (lstAvsXDec_DocTypeXUser.Rows.Count != 0)
+                        {
+                            string avansFolosit = "Nr. {0}; Stare {1}; Valoare: {2} {3}";
+                            avansFolosit = string.Format(avansFolosit, lstAvsXDec_DocTypeXUser.Rows[0]["DocumentId"].ToString(),
+                                                    lstAvsXDec_DocTypeXUser.Rows[0]["DocumentState"].ToString(),
+                                                    lstAvsXDec_DocTypeXUser.Rows[0]["TotalDocument"].ToString(),
+                                                    lstAvsXDec_DocTypeXUser.Rows[0]["CurrencyCode"].ToString());
+                            txtAvansFolosit.Text = avansFolosit;
+                        }
+                        else
+                        {
+                            txtAvansFolosit.Text = "Nu exista avansuri initiate!";
+                        }
 
-						if (lpModPlata != null && lpModPlata.Rows.Count > 0)
+                        if (lpModPlata != null && lpModPlata.Rows.Count > 0)
 						{
+
 							#region ModPlata
 							cmbModPlata.DataSource = lpModPlata;
                             cmbModPlata.DataBind();
@@ -259,12 +274,24 @@ namespace WizOne.AvansXDecont
                 //else
                 //    dreptUserAccesFormular = tipAccesPagina.formularNou;
 
-
                 #region drept aprobare/refuz document
 
-                btnAproba.ClientEnabled = Convert.ToInt32(General.Nz(Session["AvsXDec_PoateAprobaXRefuzaDoc"], 0).ToString()) == 1 ? true : false;
-                btnRespins.ClientEnabled = Convert.ToInt32(General.Nz(Session["AvsXDec_DocCanBeRefused"], 0).ToString()) == 1 ? true : false; 
+                btnAproba.ClientEnabled = Convert.ToInt32(General.Nz(Session["AvsXDec_PoateAprobaXRefuzaDoc"], 0).ToString()) == 1 &&
+                   Convert.ToInt32(General.Nz(Session["AvsXDec_IsBudgetOwnerEdited"], 0).ToString()) == 1 ? false : (Convert.ToInt32(General.Nz(Session["AvsXDec_PoateAprobaXRefuzaDoc"], 0).ToString()) == 1 ? true : false);
+                btnRespins.ClientEnabled = Convert.ToInt32(General.Nz(Session["AvsXDec_DocCanBeRefused"], 0).ToString()) == 1 ? true : false;
 
+                #endregion
+
+                #region bifa documente originale
+                //chkDecontDocPlataBancaoriginale.Visibility = System.Windows.Visibility.Collapsed;
+                btnDocOrig.ClientEnabled = Constante.AreRolContabilitate;
+                if (btnDocOrig.Content == statusDocOriginale)
+                    btnDocOrig.ClientEnabled = false;
+                /*LeonardM 15.08.2016
+                 * avem nevoie de acest buton, deoarece supervizorul trebuie sa poata salva linia de buget*/
+                if (Constante.AreRolContabilitate || IsBudgetOwnerEdited)
+                    btnSave.ClientEnabled = true;
+                /*end LeonardM 15.08.2016*/
                 #endregion
 
                 PageXDocumentType();
@@ -313,6 +340,48 @@ namespace WizOne.AvansXDecont
             }
             catch (Exception)
             {
+            }
+        }
+
+        public DataTable GetAvsXDec_DocTypeXUser(int documentTypeId, int F10003)
+        {
+            try
+            {
+                DataTable q = null;
+                int docTypeId = -99;
+
+                switch (documentTypeId)
+                {
+                    case 2001: /*Avans spre deplasare*/
+                        docTypeId = 1001;
+                        break;
+                    case 2002: /* Avans spre decontare*/
+                        docTypeId = 1002;
+                        break;
+                }
+                string docAcordat = "SELECT COALESCE(a.SrcDocId, -99) AS DocumentId FROM AvsXDec_BusinessTransaction a "
+                            + " JOIN vwAvsXDec_Decont b on a.DestDocId = b.DocumentId "
+                            + " WHERE b.DocumentStateId >= 1 ";               
+
+                string sql = "SELECT a.DocumentId, a.DocumentStateId, a.DocumentState, COALESCE(a.TotalAmount, 0) AS TotalDocument, a.CurrencyCode "
+                    + " FROM vwAvsXDec_Avans a "
+                    + " LEFT JOIN AvsXDec_BusinessTransaction b on a.DocumentId = b.SrcDocId "
+                    + " WHERE a.DocumentTypeId = " + docTypeId + " AND a.DocumentStateId >= 1 AND a.DocumentStateId < 8 AND a.F10003 = " + F10003 + " AND COALESCE(b.SrcDocId, -99) = -99 "
+                    + " UNION "
+                    + "SELECT a.DocumentId, a.DocumentStateId, a.DocumentState, COALESCE(a.TotalAmount, 0) AS TotalDocument, a.CurrencyCode "
+                    + " FROM vwAvsXDec_Avans a "
+                    + " JOIN AvsXDec_BusinessTransaction b on a.DocumentId = b.SrcDocId "
+                    + " JOIN vwAvsXDec_Decont c on b.DestDocId = c.DocumentId "
+                    + " LEFT JOIN (" + docAcordat + ") d on a.DocumentId = d.DocumentId "
+                    + " where c.DocumentStateId < 1 AND a.DocumentTypeId == 1001 AND a.DocumentStateId >= 1 AND a.DocumentStateId < 8 AND a.F10003 = " + F10003 + " AND d.DocumentId IS NULL";
+                q = General.IncarcaDT(sql, null);
+
+                return q;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                return null;
             }
         }
 

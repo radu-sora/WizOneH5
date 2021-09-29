@@ -66,7 +66,7 @@ namespace WizOne.Avs
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell divRol;
+        protected global::DevExpress.Web.ASPxPanel divRol;
 
         /// <summary>
         /// lblRol control.
@@ -1014,6 +1014,15 @@ namespace WizOne.Avs
         protected global::DevExpress.Web.ASPxDateEdit de3Nou;
 
         /// <summary>
+        /// lblchk1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell lblchk1;
+
+        /// <summary>
         /// chk1 control.
         /// </summary>
         /// <remarks>
@@ -1021,6 +1030,15 @@ namespace WizOne.Avs
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chk1;
+
+        /// <summary>
+        /// lblchk2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell lblchk2;
 
         /// <summary>
         /// chk2 control.
@@ -1032,6 +1050,15 @@ namespace WizOne.Avs
         protected global::DevExpress.Web.ASPxCheckBox chk2;
 
         /// <summary>
+        /// lblchk4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell lblchk4;
+
+        /// <summary>
         /// chk4 control.
         /// </summary>
         /// <remarks>
@@ -1041,6 +1068,15 @@ namespace WizOne.Avs
         protected global::DevExpress.Web.ASPxCheckBox chk4;
 
         /// <summary>
+        /// lblchk3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell lblchk3;
+
+        /// <summary>
         /// chk3 control.
         /// </summary>
         /// <remarks>
@@ -1048,6 +1084,15 @@ namespace WizOne.Avs
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chk3;
+
+        /// <summary>
+        /// lblchk5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell lblchk5;
 
         /// <summary>
         /// chk5 control.

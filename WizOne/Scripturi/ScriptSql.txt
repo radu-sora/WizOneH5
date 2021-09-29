@@ -17699,8 +17699,6 @@ CREATE TABLE [dbo].[Ben_tblSesiuni](
 	[Denumire] [nvarchar](50) NULL,	
 	[DataInceput] [datetime] NULL,
 	[DataSfarsit] [datetime] NULL,
-	[DataInceputBen] [datetime] NULL,
-	[DataSfarsitBen] [datetime] NULL,
 	[USER_NO] [int] NULL,
 	[TIME] [datetime] NULL
  CONSTRAINT [Ben_tblSesiuni_PK] PRIMARY KEY CLUSTERED 

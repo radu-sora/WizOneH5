@@ -38,12 +38,6 @@
             window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=9&id=' + Value, '_blank ')
         }
 
-        function OnDateChangedHandler(s) {
-            var data = new Date(s.GetDate());
-            var val = data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
-            pnlCtl.PerformCallback(2 + ";" + s.name + ";" + val);
-        }
-
         function OnValueChangedHandler(s) {
             pnlCtl.PerformCallback(2 + ";" + s.name + ";" + s.GetValue());
         }
@@ -248,11 +242,17 @@
 
               <table width="40%" align="top">	      
                 <tr>
-                    <td id="divRol" runat="server">
-                        <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px;">Roluri</label>
-                        <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="250px" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" >
-                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlLoading.Show(); pnlCtl.PerformCallback(8); }" />
-                        </dx:ASPxComboBox>
+                    <td>
+                        <dx:ASPxPanel  ID="divRol" runat="server">
+                            <PanelCollection>
+                                <dx:PanelContent>                                
+                                    <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px;">Roluri</label>
+                                    <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="250px" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" >
+                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlLoading.Show(); pnlCtl.PerformCallback(8); }" />
+                                    </dx:ASPxComboBox>
+                                </dx:PanelContent>
+                            </PanelCollection>
+                        </dx:ASPxPanel>
                     </td>
 
                     <td>
@@ -301,7 +301,7 @@
                </tr>
             </table>
 
-            <table width="40%">
+            <table width="100%" class="divAvans">
                 <tr>
                     <td id="lbl1Act" runat="server"  >
                         <dx:ASPxLabel  ID="lblTxt3Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
@@ -353,13 +353,13 @@
                     </td>
                     <td id="lbl8Act" runat="server" colspan="2">
                         <dx:ASPxLabel  ID="lblTxt1Act" runat="server"  Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt1Act" runat="server"  Visible="false">
+                        <dx:ASPxTextBox ID="txt1Act" runat="server"  ClientVisible="false">
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox>
                     </td>
-                    <td id="lbl9Act" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt2Act" runat="server"   Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt2Act" runat="server"  Visible="false" >
+                    <td id="lbl9Act" runat="server" style="border:solid 1px red;" >
+                        <dx:ASPxLabel  ID="lblTxt2Act" runat="server" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt2Act" runat="server"  ClientVisible="false" >
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox>
                     </td>
@@ -377,13 +377,13 @@
                     </td>
                     <td id="lbl14Act" runat="server" colspan="2">
                         <dx:ASPxLabel  ID="lblTxt14Act" runat="server"  Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt3Act" runat="server"  Visible="false">
+                        <dx:ASPxTextBox ID="txt3Act" runat="server"  ClientVisible="false">
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox>
                     </td>
                     <td id="lbl15Act" runat="server">
                         <dx:ASPxLabel  ID="lblTxt15Act" runat="server"   Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt4Act" runat="server"  Visible="false" >
+                        <dx:ASPxTextBox ID="txt4Act" runat="server"  ClientVisible="false" >
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox>
                     </td>
@@ -445,35 +445,35 @@
                         </dx:ASPxComboBox>
                     </td>
                     <td id="lbl6Nou" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt10Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxLabel  ID="lblTxt10Nou" runat="server"  Visible="false"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmb6Nou" runat="server" ClientInstanceName="cmb6Nou" ClientIDMode="Static" Width="125px" ValueField="Id" DropDownWidth="125" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
                         </dx:ASPxComboBox>
                     </td>
                     <td id="lbl7Nou" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt11Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxLabel  ID="lblTxt11Nou" runat="server"  Visible="false"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmb7Nou" runat="server" ClientInstanceName="cmb7Nou" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
                         </dx:ASPxComboBox>
                     </td>
                     <td id="lbl14Nou" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt14Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxLabel  ID="lblTxt14Nou" runat="server"  Visible="false"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmb8Nou" runat="server" ClientInstanceName="cmb8Nou" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
                         </dx:ASPxComboBox>
                     </td>
                     <td id="lbl8Nou" runat="server" colspan="2">
-                        <dx:ASPxLabel  ID="lblTxt1Nou" runat="server"   Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt1Nou" runat="server"  Visible="false">
+                        <dx:ASPxLabel  ID="lblTxt1Nou" runat="server" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt1Nou" runat="server"  ClientVisible="false">
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox>
                     </td>
                     <td id="lbl9Nou" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt2Nou" runat="server"   Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt2Nou" runat="server"  Visible="false">
+                        <dx:ASPxLabel  ID="lblTxt2Nou" runat="server" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt2Nou" runat="server"  ClientVisible="false">
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox> 
                     </td>
@@ -481,25 +481,23 @@
                         <dx:ASPxLabel  ID="lblTxt5Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxDateEdit ID="de1Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
                             <CalendarProperties FirstDayOfWeek="Monday" />
-                            <ClientSideEvents  ValueChanged="function(s,e){ OnDateChangedHandler(s); }" />
                         </dx:ASPxDateEdit>
                     </td>
                     <td id="lbl11Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt6Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxDateEdit ID="de2Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
-                            <ClientSideEvents ValueChanged="function(s,e){ OnDateChangedHandler(s); }" />
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </td>
                     <td id="lbl15Nou" runat="server" colspan="2">
-                        <dx:ASPxLabel  ID="lblTxt15Nou" runat="server"   Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt3Nou" runat="server"  Visible="false">
+                        <dx:ASPxLabel  ID="lblTxt15Nou" runat="server" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt3Nou" runat="server"  ClientVisible="false">
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox>
                     </td>
                     <td id="lbl16Nou" runat="server">
-                        <dx:ASPxLabel  ID="lblTxt16Nou" runat="server"   Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxTextBox ID="txt4Nou" runat="server"  Visible="false">
+                        <dx:ASPxLabel  ID="lblTxt16Nou" runat="server" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxTextBox ID="txt4Nou" runat="server"  ClientVisible="false">
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
                         </dx:ASPxTextBox> 
                     </td>
@@ -527,35 +525,34 @@
                     <td id="lbl13Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt13Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxDateEdit ID="de3Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
-                            <ClientSideEvents ValueChanged="function(s,e){ OnDateChangedHandler(s); }" />
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </td>
                   </tr>
                     <tr>
-                        <td colspan="2">
-                            <dx:ASPxCheckBox ID="chk1"  runat="server" Width="200" Text="Platit de angajator actual" TextAlign="Left"   ClientInstanceName="chk1" >                                     
+                        <td id="lblchk1" runat="server">
+                            <dx:ASPxCheckBox ID="chk1"  runat="server" Width="200" Text="Platit de angajator actual" TextAlign="Left" ClientInstanceName="chk1" >                                     
                             </dx:ASPxCheckBox>
                         </td>
-                        <td colspan="3">
+                        <td id="lblchk2" runat="server">
                             <dx:ASPxCheckBox ID="chk2"  runat="server" Width="200" Text="Detasat in Romania din state UE/NON UE" TextAlign="Left"  ClientInstanceName="chk2" >
                                 <ClientSideEvents CheckedChanged="function(s,e){ chkDet_CheckedChanged(s); }" />
                             </dx:ASPxCheckBox>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td id="lblchk4" runat="server">
                             <dx:ASPxCheckBox ID="chk4"  runat="server" Width="200" Text="Formular A1" TextAlign="Left"  ClientInstanceName="chk4" >                         
                             </dx:ASPxCheckBox>
                         </td>
-                        <td colspan="3">
+                        <td id="lblchk3" runat="server">
                             <dx:ASPxCheckBox ID="chk3"  runat="server" Width="200" Text="Detasat din Romania in state UE/NON UE" TextAlign="Left"   ClientInstanceName="chk3" >
                                 <ClientSideEvents CheckedChanged="function(s,e){ chkDet_CheckedChanged(s); }" />
                             </dx:ASPxCheckBox>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td id="lblchk5" runat="server">
                             <dx:ASPxCheckBox ID="chk5"  runat="server" Width="200" Text="Acord de securitate sociala" TextAlign="Left"   ClientInstanceName="chk5" >                                       
                             </dx:ASPxCheckBox>
                         </td>         

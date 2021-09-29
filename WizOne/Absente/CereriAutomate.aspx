@@ -133,20 +133,20 @@
 
                                         <div style="float:left; padding-right:15px;">
                                             <label id="lblOraInc" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:75px; width:90px;">Ora Inceput</label>
-                                            <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="75px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
+                                            <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="75px" ClientVisible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); }" />
                                             </dx:ASPxComboBox>
                                         </div>
 
                                         <div style="float:left; padding-right:15px;">
                                             <label id="lblOraSf" runat="server" style="display:inline-block; float:left; padding-right:15px; width:90px;">Ora Sfarsit</label>
-                                            <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="75px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
+                                            <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="75px" ClientVisible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e);  }" />
                                             </dx:ASPxComboBox>
                                         </div>
 
                                             <div style="float:left; padding-right:15px;">
-                                            <dx:ASPxRadioButton ID="rbPrel" runat="server" Text="Preluare manuala"   ClientInstanceName="rbPrel" RepeatDirection="Horizontal" GroupName="Prel1">                                             
+                                            <dx:ASPxRadioButton ID="rbPrel" runat="server" Text="Preluare manuala" Checked="true"   ClientInstanceName="rbPrel" RepeatDirection="Horizontal" GroupName="Prel1">                                             
                                                 </dx:ASPxRadioButton>
                                         </div>
                                         <div style="float:left; padding-right:15px;">

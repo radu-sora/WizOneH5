@@ -220,13 +220,13 @@ namespace WizOne.Absente
                     return;
                 }
 
-                if (dtDataInc.Value == null || (dtDataSf.Visible == true && dtDataSf.Value == null))
+                if (dtDataInc.Value == null || (dtDataSf.ClientVisible == true && dtDataSf.Value == null))
                 {
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipseste data start/data sfarsit!");
                     return;
                 }
 
-                if (dtDataSf.Visible == true && Convert.ToDateTime(dtDataSf.Value) < Convert.ToDateTime(dtDataInc.Value))
+                if (dtDataSf.ClientVisible == true && Convert.ToDateTime(dtDataSf.Value) < Convert.ToDateTime(dtDataInc.Value))
                 {
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data de sfarsit este anterioara datei de start!");
                     return;
@@ -244,12 +244,12 @@ namespace WizOne.Absente
                     return;
                 }
 
-                if (!rbPrel1.Checked && (cmbOraInc.Visible == true && cmbOraInc.Text == ""))
+                if (!rbPrel1.Checked && (cmbOraInc.ClientVisible == true && cmbOraInc.Text == ""))
                 {
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati specificat ora inceput!");
                     return;              
                 }
-                if (!rbPrel1.Checked && (cmbOraSf.Visible == true && cmbOraSf.Text == ""))
+                if (!rbPrel1.Checked && (cmbOraSf.ClientVisible == true && cmbOraSf.Text == ""))
                 {
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati specificat ora sfarsit!");
                     return;
@@ -398,7 +398,7 @@ namespace WizOne.Absente
                                 SELECT COUNT(*) 
                                 FROM ""Ptj_Cereri"" A
                                 INNER JOIN ""Ptj_tblAbsente"" B ON A.""IdAbsenta"" = B.""Id""
-                                WHERE A.F10003 = {marca} AND A.""DataInceput"" <= {General.ToDataUniv((dtDataSf.Visible ? dtDataSf.Date : dtDataInc.Date))} AND {General.ToDataUniv(dtDataInc.Date)} <= A.""DataSfarsit"" 
+                                WHERE A.F10003 = {marca} AND A.""DataInceput"" <= {General.ToDataUniv((dtDataSf.ClientVisible ? dtDataSf.Date : dtDataInc.Date))} AND {General.ToDataUniv(dtDataInc.Date)} <= A.""DataSfarsit"" 
                                 AND A.""IdStare"" IN (1,2,3,4) AND B.""GrupOre"" IN({General.Nz(drAbs["GrupOreDeVerificat"], -99)})", null));
 
                 if (intersec > 0)
@@ -715,19 +715,21 @@ namespace WizOne.Absente
                         DataRow dr = arr[0];
                         folosesteInterval = Convert.ToInt32(General.Nz(dr["AbsentaTipOraFolosesteInterval"], 0));
                         perioada = Convert.ToInt32(General.Nz(dr["AbsentaTipOraPerioada"], 0));
+                        if (perioada <= 0) perioada = 60;
+                        if (perioada > 60) perioada = 60;
                         if (Convert.ToInt32(dr["IdTipOre"].ToString()) == 1)
                         {//tip zi
                             lblDataInc.InnerText = "Data inceput";
                             lblDataSf.Visible = true;
-                            dtDataSf.Visible = true;
+                            dtDataSf.ClientVisible = true;
                             lblNr.InnerText = "Nr. zile";
                             lblNr.Visible = false;
-                            rbPrel.Visible = false;
-                            rbPrel1.Visible = false;
+                            rbPrel.ClientVisible = false;
+                            rbPrel1.ClientVisible = false;
                             txtNr.ClientEnabled = false;
                             if (Session["CereriAut_NrZile"] != null)                        
                                 txtNr.Text = Session["CereriAut_NrZile"].ToString();
-                            txtNr.Visible = true;
+                            txtNr.ClientVisible = true;
 
                             lblNrOre.Visible = false;
                             txtNrOre.ClientVisible = false;
@@ -736,11 +738,11 @@ namespace WizOne.Absente
                             txtNrOreInMinute.Value = null;
 
                             lblOraInc.Visible = false;
-                            cmbOraInc.Visible = false;
+                            cmbOraInc.ClientVisible = false;
                             cmbOraInc.Value = null;
 
                             lblOraSf.Visible = false;
-                            cmbOraSf.Visible = false;
+                            cmbOraSf.ClientVisible = false;
                             cmbOraSf.Value = null;
 
                         }
@@ -761,13 +763,13 @@ namespace WizOne.Absente
 
                                 //lblOraInc.Style["display"] = "inline-block";
                                 lblOraInc.Visible = true;
-                                cmbOraInc.Visible = true;
+                                cmbOraInc.ClientVisible = true;
                                 cmbOraInc.DataSource = lst;
                                 cmbOraInc.DataBind();
 
                                 //lblOraSf.Style["display"] = "inline-block";
                                 lblOraSf.Visible = true;
-                                cmbOraSf.Visible = true;
+                                cmbOraSf.ClientVisible = true;
                                 cmbOraSf.DataSource = lst;
                                 cmbOraSf.DataBind();
 
@@ -788,13 +790,13 @@ namespace WizOne.Absente
                             //dtDataSf.Visible = false;                     
                             lblDataInc.InnerText = "Data inceput";
                             lblDataSf.Visible = true;
-                            dtDataSf.Visible = true;
+                            dtDataSf.ClientVisible = true;
 
                             txtNr.Visible = true;
                             txtNr.ClientEnabled = false;
-                            rbPrel.Visible = true;
-                            rbPrel1.Visible = true;
-                            rbPrel.Checked = true;
+                            rbPrel.ClientVisible = true;
+                            rbPrel1.ClientVisible = true;
+                            //rbPrel.Checked = true;
                             DataTable dtTemp = General.IncarcaDT((Constante.tipBD == 1 ? "SELECT COUNT(*) FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'GENERARE_AUTOMATA_CERERI'" :
                                 "SELECT COUNT(*) FROM user_views where view_name = 'GENERARE_AUTOMATA_CERERI'"), null);
                             if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtTemp.Rows[0][0].ToString()) > 0)
@@ -809,12 +811,12 @@ namespace WizOne.Absente
                     {
                         lblDataInc.InnerText = "Data inceput";
                         lblDataSf.Visible = true;
-                        dtDataSf.Visible = true;
+                        dtDataSf.ClientVisible = true;
                         lblNr.InnerText = "Nr. zile";
                         lblNr.Visible = false;
-                        txtNr.Visible = false;
-                        rbPrel.Visible = false;
-                        rbPrel1.Visible = false;
+                        txtNr.ClientVisible = false;
+                        rbPrel.ClientVisible = false;
+                        rbPrel1.ClientVisible = false;
 
                         lblNrOre.Visible = false;
                         txtNrOre.ClientVisible = false;
@@ -823,11 +825,11 @@ namespace WizOne.Absente
                         txtNrOreInMinute.Value = null;
 
                         lblOraInc.Visible = false;
-                        cmbOraInc.Visible = false;
+                        cmbOraInc.ClientVisible = false;
                         cmbOraInc.Value = null;
 
                         lblOraSf.Visible = false;
-                        cmbOraSf.Visible = false;
+                        cmbOraSf.ClientVisible = false;
                         cmbOraSf.Value = null;
                     }
                 }
@@ -835,12 +837,12 @@ namespace WizOne.Absente
                 {
                     lblDataInc.InnerText = "Data inceput";
                     lblDataSf.Visible = true;
-                    dtDataSf.Visible = true;
+                    dtDataSf.ClientVisible = true;
                     lblNr.InnerText = "Nr. zile";
                     lblNr.Visible = false;
-                    txtNr.Visible = false;
-                    rbPrel.Visible = false;
-                    rbPrel1.Visible = false;
+                    txtNr.ClientVisible = false;
+                    rbPrel.ClientVisible = false;
+                    rbPrel1.ClientVisible = false;
 
                     lblNrOre.Visible = false;
                     txtNrOre.ClientVisible = false;
@@ -849,11 +851,11 @@ namespace WizOne.Absente
                     txtNrOreInMinute.Value = null;
 
                     lblOraInc.Visible = false;
-                    cmbOraInc.Visible = false;
+                    cmbOraInc.ClientVisible = false;
                     cmbOraInc.Value = null;
 
                     lblOraSf.Visible = false;
-                    cmbOraSf.Visible = false;
+                    cmbOraSf.ClientVisible = false;
                     cmbOraSf.Value = null;
                 }
 

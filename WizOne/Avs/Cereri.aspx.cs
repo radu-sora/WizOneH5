@@ -920,8 +920,8 @@ namespace WizOne.Avs
                 lblTxt1Nou.Text = text2;
                 txt1Nou.ClientVisible = true;
 
-                lbl10Act.Visible = true;
-                lbl10Nou.Visible = true;
+                lbl10Act.Attributes["style"] = "display: inline-block";
+                lbl10Nou.Attributes["style"] = "display: inline-block";
                 lblTxt5Act.Visible = true;
                 lblTxt5Act.Text = text3;
                 de1Act.ClientVisible = true;
@@ -1299,6 +1299,12 @@ namespace WizOne.Avs
                 lblTxt13Nou.Visible = true;
                 lblTxt13Nou.Text = text11;
                 de3Nou.ClientVisible = true;
+
+                lblchk1.Attributes["style"] = "display: inline-block";
+                lblchk2.Attributes["style"] = "display: inline-block";
+                lblchk3.Attributes["style"] = "display: inline-block";
+                lblchk4.Attributes["style"] = "display: inline-block";
+                lblchk5.Attributes["style"] = "display: inline-block";
 
                 chk1.ClientVisible = true;
                 chk2.ClientVisible = true;

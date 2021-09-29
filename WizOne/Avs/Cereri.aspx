@@ -530,29 +530,29 @@
                     </td>
                   </tr>
                     <tr>
-                        <td colspan="2">
+                        <td id="lblchk1" runat="server">
                             <dx:ASPxCheckBox ID="chk1"  runat="server" Width="200" Text="Platit de angajator actual" TextAlign="Left" ClientInstanceName="chk1" >                                     
                             </dx:ASPxCheckBox>
                         </td>
-                        <td colspan="3">
+                        <td id="lblchk2" runat="server">
                             <dx:ASPxCheckBox ID="chk2"  runat="server" Width="200" Text="Detasat in Romania din state UE/NON UE" TextAlign="Left"  ClientInstanceName="chk2" >
                                 <ClientSideEvents CheckedChanged="function(s,e){ chkDet_CheckedChanged(s); }" />
                             </dx:ASPxCheckBox>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td id="lblchk4" runat="server">
                             <dx:ASPxCheckBox ID="chk4"  runat="server" Width="200" Text="Formular A1" TextAlign="Left"  ClientInstanceName="chk4" >                         
                             </dx:ASPxCheckBox>
                         </td>
-                        <td colspan="3">
+                        <td id="lblchk3" runat="server">
                             <dx:ASPxCheckBox ID="chk3"  runat="server" Width="200" Text="Detasat din Romania in state UE/NON UE" TextAlign="Left"   ClientInstanceName="chk3" >
                                 <ClientSideEvents CheckedChanged="function(s,e){ chkDet_CheckedChanged(s); }" />
                             </dx:ASPxCheckBox>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td id="lblchk5" runat="server">
                             <dx:ASPxCheckBox ID="chk5"  runat="server" Width="200" Text="Acord de securitate sociala" TextAlign="Left"   ClientInstanceName="chk5" >                                       
                             </dx:ASPxCheckBox>
                         </td>         

@@ -796,7 +796,7 @@ namespace WizOne.Absente
                             txtNr.ClientEnabled = false;
                             rbPrel.ClientVisible = true;
                             rbPrel1.ClientVisible = true;
-                            rbPrel.Checked = true;
+                            //rbPrel.Checked = true;
                             DataTable dtTemp = General.IncarcaDT((Constante.tipBD == 1 ? "SELECT COUNT(*) FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'GENERARE_AUTOMATA_CERERI'" :
                                 "SELECT COUNT(*) FROM user_views where view_name = 'GENERARE_AUTOMATA_CERERI'"), null);
                             if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtTemp.Rows[0][0].ToString()) > 0)

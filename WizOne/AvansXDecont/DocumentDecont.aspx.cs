@@ -72,6 +72,9 @@ namespace WizOne.AvansXDecont
 
                 #endregion
 
+                Session["statusDocOriginale"] = "Documente originale primite";
+                Session["statusDocNeOriginale"] = "Documente originale neprimite";
+
                 txtTitlu.Text = General.VarSession("Titlu").ToString() + " / Document Decont"; ;
 
                 if (!IsPostBack)
@@ -284,12 +287,14 @@ namespace WizOne.AvansXDecont
 
                 #region bifa documente originale
                 //chkDecontDocPlataBancaoriginale.Visibility = System.Windows.Visibility.Collapsed;
-                btnDocOrig.ClientEnabled = Constante.AreRolContabilitate;
-                if (btnDocOrig.Content == statusDocOriginale)
+                
+                //btnDocOrig.ClientEnabled = Constante.AreRolContabilitate;
+                
+                if (btnDocOrig.Text == Session["statusDocOriginale"].ToString())
                     btnDocOrig.ClientEnabled = false;
                 /*LeonardM 15.08.2016
                  * avem nevoie de acest buton, deoarece supervizorul trebuie sa poata salva linia de buget*/
-                if (Constante.AreRolContabilitate || IsBudgetOwnerEdited)
+                if (/*Constante.AreRolContabilitate ||*/ Convert.ToInt32(General.Nz(Session["AvsXDec_IsBudgetOwnerEdited"], 0).ToString()) == 1)
                     btnSave.ClientEnabled = true;
                 /*end LeonardM 15.08.2016*/
                 #endregion
@@ -300,23 +305,31 @@ namespace WizOne.AvansXDecont
                 string AvsXDec_BudgetLine_Diurna2001 =Dami.ValoareParam("AvsXDec_BudgetLine_Diurna2001", "");
 
 
-                DataTable dtCh = GetAvsXDec_DictionaryItemCheltuiala(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
-                GridViewDataComboBoxColumn colCh = (grDate.Columns["DictionaryItemId"] as GridViewDataComboBoxColumn);
-                colCh.PropertiesComboBox.DataSource = dtCh;
+                DataTable dtDateDocJust = GetAvsXDec_DictionaryItemDocumenteDecont();
+                GridViewDataComboBoxColumn col1 = (grDateDocJust.Columns["DictionaryItemId"] as GridViewDataComboBoxColumn);
+                col1.PropertiesComboBox.DataSource = dtDateDocJust;
 
-                DataTable dtCheltuieli = new DataTable();
+                dtDateDocJust = GetAvsXDec_DictionaryItemValute();
+                GridViewDataComboBoxColumn col2 = (grDateDocJust.Columns["CurrencyId"] as GridViewDataComboBoxColumn);
+                col2.PropertiesComboBox.DataSource = dtDateDocJust;
+
+                dtDateDocJust = GetDecontExpenseType(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
+                GridViewDataComboBoxColumn col3 = (grDateDocJust.Columns["ExpenseTypeId"] as GridViewDataComboBoxColumn);
+                col3.PropertiesComboBox.DataSource = dtDateDocJust;
+
+                DataTable dtDocJust = new DataTable();
                 if (!IsPostBack)
                 {
-                    dtCheltuieli = GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
-                    Session["AvsXDec_SursaDateCheltuieli"] = dtCheltuieli;
+                    dtDocJust = GetmetaAvsXDec_DecontDocumenteJustificative(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+                    Session["AvsXDec_SursaDateDocJust"] = dtDocJust;
                 }
                 else
                 {
-                    dtCheltuieli = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;                    
+                    dtDocJust = Session["AvsXDec_SursaDateDocJust"] as DataTable;                    
                 }
-                grDate.KeyFieldName = "DocumentDetailId;DocumentId";
-                grDate.DataSource = dtCheltuieli;
-                grDate.DataBind();
+                grDateDocJust.KeyFieldName = "DocumentDetailId;DocumentId";
+                grDateDocJust.DataSource = dtDocJust;
+                grDateDocJust.DataBind();
 
 
                 IncarcaCheltuieli();
@@ -340,6 +353,75 @@ namespace WizOne.AvansXDecont
             }
             catch (Exception)
             {
+            }
+        }
+
+
+        public DataTable GetAvsXDec_DictionaryItemDocumenteDecont()
+        {
+            DataTable q = null;
+            try
+            {
+                string sql = "SELECT a.DictionaryId, a.DictionaryItemId, a.DictionaryItemName FROM vwAvsXDec_Nomen_DocDecont a ";
+                q = General.IncarcaDT(sql, null);
+
+                return q;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                return null;
+            }
+        }
+
+        public DataTable GetAvsXDec_DictionaryItemValute()
+        {
+            DataTable q = null;
+            try
+            {
+                string sql = "SELECT a.DictionaryId, a.DictionaryItemId, a.DictionaryItemName, COALESCE(b.Ordine,-99) AS Ordine FROM vwAvsXDec_Nomen_TipMoneda a "
+                            + " JOIN AvsXDec_DictionaryItem b on a.DictionaryItemId = b.DictionaryItemId ORDER BY Ordine";
+                q = General.IncarcaDT(sql, null);
+                return q;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                return null;
+            }
+        }
+
+        public DataTable GetDecontExpenseType(int documentTypeId)
+        {
+            DataTable q = null;
+            string sql = "";
+            try
+            {
+                switch (documentTypeId)
+                {
+                    case 2001: /*Decontare avans*/
+                        sql = "SELECT a.DictionaryId, a.DictionaryItemId, a.DictionaryItemName FROM vwAvsXDec_Nomen_TipCheltuieli a ";
+                        break;
+                    case 2002: /*Decontare avans spre decontare*/
+                        sql = "SELECT a.DictionaryId, a.DictionaryItemId, a.DictionaryItemName FROM vwAvsXDec_Nomen_ChDecDecontare a ";
+                        break;
+                    case 2003: /*Decont Administrativ*/
+                        //q = from a in this.ObjectContext.vwAvsXDec_Nomen_TipChDecAdmin
+                        //    select new metaAvsXDec_DictionaryItem
+                        //    {
+                        //        DictionaryItemId = a.DictionaryItemId,
+                        //        DictionaryId = a.DictionaryId,
+                        //        DictionaryItemName = a.DictionaryItemName
+                        //    };
+                        break;
+                }
+                q = General.IncarcaDT(sql, null);
+                return q;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                return null;
             }
         }
 
@@ -385,6 +467,28 @@ namespace WizOne.AvansXDecont
             }
         }
 
+        public DataTable GetmetaAvsXDec_DecontDocumenteJustificative(int documentId)
+        {
+            DataTable q = null;
+            string sql = "";
+            try
+            {
+                sql = "SELECT a.DocumentId, a.DocumentDetailId, a.CurrencyId, a.IdTipDocument, a.DocDateDecont, a.DocNumberDecont,  a.Furnizor,  b.IdDocument, a.RefCurrencyId, a.RefCurrencyValue, b.RefTotalPayment, "
+                    + "  a.TotalPayment, a.ExpenseTypeId,  b.ExpenseTypeAdmId, b.BugetLine, (CASE WHEN c.DocumentDetailId = 0 THEN 0 ELSE 1 END) as areFisier, a.FreeTxt "
+                    + " FROM vwAvsXDec_DecDet_DocDecontare a "
+                    + " JOIN AvsXDec_DecontDetail b on a.DocumentId = b.DocumentId and a.DocumentDetailId = b.DocumentDetailId "
+                    + " LEFT JOIN AvsXDec_relUploadDocumente c on  a.DocumentId = c.DocumentId and a.DocumentDetailId = c.DocumentDetailId "
+                    + " WHERE a.DocumentId = " + documentId;
+                q = General.IncarcaDT(sql, null);
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return q;
+        }
 
         private void PageXDocumentType()
         {
@@ -573,26 +677,6 @@ namespace WizOne.AvansXDecont
 							+ " FROM vwAvsXDec_Nomen_TipDeplasare a "
 							+ " JOIN AvsXDec_DictionaryItem b ON a.DictionaryItemId = b.DictionaryItemId "
 							+ " ORDER BY Ordine";
-                q = General.IncarcaDT(sql, null);
-                return q;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
-
-        public DataTable GetAvsXDec_DictionaryItemValute()
-        {
-            DataTable q = null;
-            try
-            {
-				string sql = "SELECT a.DictionaryItemId, a.DictionaryId, a.DictionaryItemName, COALESCE(b.Ordine, -99) AS Ordine "
-							+ " FROM vwAvsXDec_Nomen_TipMoneda a "
-							+ " JOIN AvsXDec_DictionaryItem b ON a.DictionaryItemId = b.DictionaryItemId "
-							+ " ORDER BY Ordine";
-				
                 q = General.IncarcaDT(sql, null);
                 return q;
             }

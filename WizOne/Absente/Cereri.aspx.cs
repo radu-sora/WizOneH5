@@ -546,8 +546,8 @@ namespace WizOne.Absente
                 if (txtDataSf.Text == "") strErr += ", " + Dami.TraduCuvant("data sfarsit");
 
                 //Florin 2019.09.25
-                if (cmbOraInc.Visible == true && cmbOraInc.Text == "") strErr += ", " + Dami.TraduCuvant("ora inceput");
-                if (cmbOraSf.Visible == true && cmbOraSf.Text == "") strErr += ", " + Dami.TraduCuvant("ora sfarsit");
+                if (divOraInc.ClientVisible == true && cmbOraInc.Text == "") strErr += ", " + Dami.TraduCuvant("ora inceput");
+                if (divOraSf.ClientVisible == true && cmbOraSf.Text == "") strErr += ", " + Dami.TraduCuvant("ora sfarsit");
 
                 if (strErr != "")
                 {

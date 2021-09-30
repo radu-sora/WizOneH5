@@ -44,7 +44,7 @@ namespace WizOne.BP
 
                 if (!IsPostBack)
                 {
-
+                    Session["BP_RONNet"] = null;
                 }
                 else
                 {
@@ -60,6 +60,7 @@ namespace WizOne.BP
                         cmbAngFiltru.DataSource = Session["BP_Angajati"];
                         cmbAngFiltru.DataBind();
                     }
+                    txtRONNet.Text = (Session["BP_RONNet"] ?? "").ToString();
                 }
             }
             catch (Exception ex)
@@ -250,7 +251,8 @@ namespace WizOne.BP
             try
             {
                 string tip = e.Parameter.Split(';')[0];
-                switch(tip)
+                txtRONNet.Text = (Session["BP_RONNet"] ?? "").ToString();
+                switch (tip)
                 {
                     case "1":
                         
@@ -258,6 +260,7 @@ namespace WizOne.BP
                         break;
                     case "2":
                         txtRONNet.Text = (Convert.ToInt32(txtSumaNeta.Text) * Convert.ToDecimal(txtCurs.Text)).ToString();
+                        Session["BP_RONNet"] = txtRONNet.Text;
                         txtExpl.Focus();
                         //IncarcaDate();
                         break;
@@ -293,7 +296,7 @@ namespace WizOne.BP
 
 
                 string msg = General.AdaugaCerere( Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbAn.Value ?? -99), Convert.ToInt32(cmbLuna.Value ?? -99), Convert.ToInt32(cmbTip.Value ?? -99), 
-                            Convert.ToDecimal(txtSumaNeta.Text), Convert.ToInt32(cmbMoneda.Value ?? -99), Convert.ToDecimal(txtCurs.Text.Length <= 0 ? "0" : txtCurs.Text), Convert.ToDecimal(txtRONNet.Text), Convert.ToInt32(cmbAvsLch.Value ?? -99), txtExpl.Text);
+                            Convert.ToDecimal(txtSumaNeta.Text), Convert.ToInt32(cmbMoneda.Value ?? -99), Convert.ToDecimal(txtCurs.Text.Length <= 0 ? "0" : txtCurs.Text), Convert.ToDecimal((Session["BP_RONNet"] ?? "").ToString()), Convert.ToInt32(cmbAvsLch.Value ?? -99), txtExpl.Text);
 
                 if (msg == "")
                 {

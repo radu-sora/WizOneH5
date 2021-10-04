@@ -1258,34 +1258,77 @@ namespace WizOne.Avs
                     }
                 }
 
-                strSql = $@"select F10003, ""NumeComplet"", ""Functia"", ""Subcompanie"", ""Filiala"", ""Sectie"", ""Departament""
-                        from
-                        (SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"",
-                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
-                        FROM ""Avs_CereriIstoric"" B
-                        INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id""
-                        INNER JOIN F100 A ON A.F10003 = C.F10003
-                        LEFT JOIN F718 X ON A.F10071 = X.F71802
-                        LEFT JOIN F003 F ON A.F10004 = F.F00304
-                        LEFT JOIN F004 G ON A.F10005 = G.F00405
-                        LEFT JOIN F005 H ON A.F10006 = H.F00506
-                        LEFT JOIN F006 I ON A.F10007 = I.F00607
-                        left join ""F100Supervizori"" FF on C.f10003 = FF.f10003 and(-1 * B.""IdSuper"") = FF.IdSuper
-                        WHERE case when B.""IdSuper"" >= 0 then  B.""IdUser"" else FF.IdUser end = {Session["UserId"]}
-                        OR c.F10003 in (select b.f10003 from f100supervizori b where b.iduser = {Session["UserId"]} {filtru})
-                        union
-                        SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"", 
-                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament""
-                        FROM  ""Avs_Cereri"" C 
-                        INNER JOIN F100 A ON A.F10003 = C.F10003
-                        LEFT JOIN F718 X ON A.F10071 = X.F71802
-                        LEFT JOIN F003 F ON A.F10004 = F.F00304
-                        LEFT JOIN F004 G ON A.F10005 = G.F00405
-                        LEFT JOIN F005 H ON A.F10006 = H.F00506
-                        LEFT JOIN F006 I ON A.F10007 = I.F00607
-                        left join ""F100Supervizori"" GG on C.f10003 = GG.f10003 and CHARINDEX(',' + CONVERT(nvarchar(20),GG.""IdSuper"") + ','  ,  ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0                     
-                        WHERE gg.iduser = {Session["UserId"]} ) T order by T.""NumeComplet"" ";
+                //Florin 2021.10.04
 
+                //strSql = $@"select F10003, ""NumeComplet"", ""Functia"", ""Subcompanie"", ""Filiala"", ""Sectie"", ""Departament""
+                //        from
+                //        (SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"",
+                //        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
+                //        FROM ""Avs_CereriIstoric"" B
+                //        INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id""
+                //        INNER JOIN F100 A ON A.F10003 = C.F10003
+                //        LEFT JOIN F718 X ON A.F10071 = X.F71802
+                //        LEFT JOIN F003 F ON A.F10004 = F.F00304
+                //        LEFT JOIN F004 G ON A.F10005 = G.F00405
+                //        LEFT JOIN F005 H ON A.F10006 = H.F00506
+                //        LEFT JOIN F006 I ON A.F10007 = I.F00607
+                //        left join ""F100Supervizori"" FF on C.f10003 = FF.f10003 and(-1 * B.""IdSuper"") = FF.IdSuper
+                //        WHERE case when B.""IdSuper"" >= 0 then  B.""IdUser"" else FF.IdUser end = {Session["UserId"]}
+                //        OR c.F10003 in (select b.f10003 from f100supervizori b where b.iduser = {Session["UserId"]} {filtru})
+                //        union
+                //        SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"", 
+                //        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament""
+                //        FROM  ""Avs_Cereri"" C 
+                //        INNER JOIN F100 A ON A.F10003 = C.F10003
+                //        LEFT JOIN F718 X ON A.F10071 = X.F71802
+                //        LEFT JOIN F003 F ON A.F10004 = F.F00304
+                //        LEFT JOIN F004 G ON A.F10005 = G.F00405
+                //        LEFT JOIN F005 H ON A.F10006 = H.F00506
+                //        LEFT JOIN F006 I ON A.F10007 = I.F00607
+                //        left join ""F100Supervizori"" GG on C.f10003 = GG.f10003 and CHARINDEX(',' + CONVERT(nvarchar(20),GG.""IdSuper"") + ','  ,  ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0                     
+                //        WHERE gg.iduser = {Session["UserId"]} ) T order by T.""NumeComplet"" ";
+
+                strSql = $@"SELECT F10003, ""NumeComplet"", ""Functia"", ""Subcompanie"", ""Filiala"", ""Sectie"", ""Departament""
+                        FROM
+                        (
+                            SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"",
+                            X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
+                            FROM ""Avs_CereriIstoric"" B
+                            INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id""
+                            INNER JOIN F100 A ON A.F10003 = C.F10003
+                            LEFT JOIN F718 X ON A.F10071 = X.F71802
+                            LEFT JOIN F003 F ON A.F10004 = F.F00304
+                            LEFT JOIN F004 G ON A.F10005 = G.F00405
+                            LEFT JOIN F005 H ON A.F10006 = H.F00506
+                            LEFT JOIN F006 I ON A.F10007 = I.F00607
+                            left join ""F100Supervizori"" FF on C.f10003 = FF.f10003 and(-1 * B.""IdSuper"") = FF.IdSuper
+                            WHERE case when B.""IdSuper"" >= 0 then  B.""IdUser"" else FF.IdUser end = {Session["UserId"]}
+                            UNION
+                            SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"",
+                            X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
+                            FROM ""Avs_CereriIstoric"" B
+                            INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id""
+                            INNER JOIN F100 A ON A.F10003 = C.F10003
+                            LEFT JOIN F718 X ON A.F10071 = X.F71802
+                            LEFT JOIN F003 F ON A.F10004 = F.F00304
+                            LEFT JOIN F004 G ON A.F10005 = G.F00405
+                            LEFT JOIN F005 H ON A.F10006 = H.F00506
+                            LEFT JOIN F006 I ON A.F10007 = I.F00607
+                            left join ""F100Supervizori"" FF on C.f10003 = FF.f10003 and(-1 * B.""IdSuper"") = FF.IdSuper
+                            WHERE c.F10003 in (select b.f10003 from f100supervizori b where b.iduser = {Session["UserId"]} {filtru})
+                            UNION
+                            SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"", 
+                            X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament""
+                            FROM  ""Avs_Cereri"" C 
+                            INNER JOIN F100 A ON A.F10003 = C.F10003
+                            LEFT JOIN F718 X ON A.F10071 = X.F71802
+                            LEFT JOIN F003 F ON A.F10004 = F.F00304
+                            LEFT JOIN F004 G ON A.F10005 = G.F00405
+                            LEFT JOIN F005 H ON A.F10006 = H.F00506
+                            LEFT JOIN F006 I ON A.F10007 = I.F00607
+                            left join ""F100Supervizori"" GG on C.f10003 = GG.f10003 and CHARINDEX(',' + CONVERT(nvarchar(20),GG.""IdSuper"") + ','  ,  ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0                     
+                            WHERE gg.iduser = {Session["UserId"]} 
+                        ) T ORDER BY T.""NumeComplet"" ";
             }
             catch (Exception ex)
             {

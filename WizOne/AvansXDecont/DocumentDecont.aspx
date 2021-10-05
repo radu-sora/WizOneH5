@@ -14,14 +14,21 @@
                 <dx:ASPxButton ID="btnDocOrig" ClientInstanceName="btnDocOrig" ClientIDMode="Static" runat="server" Text="Documente originale" OnClick="btnDocOrig_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/chooser.png"></Image>
                 </dx:ASPxButton>	
-                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salvare" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salvare"  AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/Salveaza.png"></Image>
+                    <ClientSideEvents Click="function(s, e) {
+                        pnlLoading.Show();
+                        pnlCtl.PerformCallback('btnSave');
+                    }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aprobare" OnClick="btnAproba_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                 </dx:ASPxButton>				
-                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" OnClick="btnRespins_Click" oncontextMenu="ctx(this,event)" >              
+                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge"  AutoPostBack="false" oncontextMenu="ctx(this,event)" >              
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
+                    <ClientSideEvents Click="function(s, e) {
+                        OnMotivRespingere();
+                    }" />
                 </dx:ASPxButton>				
                 <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static" runat="server" Text="Inapoi" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/sgSt.png"></Image>
@@ -197,7 +204,9 @@
 								</div>			
 								<label id="lblDiurna" runat="server" style="display:inline-block; float:left; padding-right:15px;">Diurna</label>
 								<div style="float:left; padding-right:15px;">
-									<dx:ASPxCheckBox ID="chkIsDiurna" runat="server" Checked="false" />
+									<dx:ASPxCheckBox ID="chkIsDiurna" runat="server" Checked="false" >
+										<ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('chkIsDiurna'); }" />
+									</dx:ASPxCheckBox>
 								</div>								
 							</div>
 							
@@ -215,8 +224,8 @@
 							<div class="Absente_divOuter margin_top15">
 					
 								<div style="float:left; padding-right:15px;">    
-									<dx:ASPxGridView ID="grDateDocJust" runat="server" ClientInstanceName="grDateDocJust" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnInitNewRow="grDateDocJust_InitNewRow" 
-										 OnRowInserting="grDateDocJust_RowInserting" OnRowUpdating="grDateDocJust_RowUpdating" OnRowDeleting="grDateDocJust_RowDeleting" OnHtmlEditFormCreated="grDateDocJust_HtmlEditFormCreated" OnCellEditorInitialize="grDateDocJust_CellEditorInitialize">
+									<dx:ASPxGridView ID="grDateDocJust" runat="server" ClientInstanceName="grDateDocJust" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"   OnInitNewRow="grDateDocJust_InitNewRow" OnCommandButtonInitialize="grDateDocJust_CommandButtonInitialize"
+										 OnRowInserting="grDateDocJust_RowInserting" OnRowUpdating="grDateDocJust_RowUpdating" OnRowDeleting="grDateDocJust_RowDeleting" OnHtmlEditFormCreated="grDateDocJust_HtmlEditFormCreated" >
 										<SettingsBehavior AllowFocusedRow="true" />
 										<Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
 										<ClientSideEvents CustomButtonClick="function(s, e) { grDateDocJust_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnEndCallback(s,e); }" ContextMenu="ctx" />    
@@ -325,9 +334,9 @@
 														<tr>
 															<td style="padding:10px !important;" colspan="2">
 																<label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
-																<dx:ASPxUploadControl ID="btnDocUpload" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
+																<dx:ASPxUploadControl ID="btnDocUploadDJ" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
 																	BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
-																	ClientInstanceName="btnDocUpload" OnFileUploadComplete="btnDocUpload_FileUploadComplete" ValidationSettings-ShowErrors="false">
+																	ClientInstanceName="btnDocUploadDJ" OnFileUploadComplete="btnDocUploadDJ_FileUploadComplete" ValidationSettings-ShowErrors="false">
 																	<BrowseButton>
 																		<Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
 																	</BrowseButton>
@@ -367,8 +376,8 @@
 							<div class="Absente_divOuter margin_top15">
 					
 								<div style="float:left; padding-right:15px;">    
-									<dx:ASPxGridView ID="grDateEstChelt" runat="server" ClientInstanceName="grDateEstChelt" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnInitNewRow="grDateEstChelt_InitNewRow" 
-										 OnRowInserting="grDateEstChelt_RowInserting" OnRowUpdating="grDateEstChelt_RowUpdating" OnRowDeleting="grDateEstChelt_RowDeleting" OnHtmlEditFormCreated="grDateEstChelt_HtmlEditFormCreated" >
+									<dx:ASPxGridView ID="grDateEstChelt" runat="server" ClientInstanceName="grDateEstChelt" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnInitNewRow="grDateEstChelt_InitNewRow"
+										 OnRowInserting="grDateEstChelt_RowInserting" OnRowUpdating="grDateEstChelt_RowUpdating" OnRowDeleting="grDateEstChelt_RowDeleting" >
 										<SettingsBehavior AllowFocusedRow="true" />
 										<Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
 										<ClientSideEvents EndCallback="function(s,e) { OnEndCallback(s,e); }" ContextMenu="ctx" />    
@@ -479,8 +488,8 @@
 							<div class="Absente_divOuter margin_top15">
 					
 								<div style="float:left; padding-right:15px;">    
-									<dx:ASPxGridView ID="grDatePlataBanca" runat="server" ClientInstanceName="grDatePlataBanca" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnInitNewRow="grDatePlataBanca_InitNewRow" 
-										 OnRowInserting="grDatePlataBanca_RowInserting" OnRowUpdating="grDatePlataBanca_RowUpdating" OnRowDeleting="grDatePlataBanca_RowDeleting" OnHtmlEditFormCreated="grDatePlataBanca_HtmlEditFormCreated" OnCellEditorInitialize="grDatePlataBanca_CellEditorInitialize">
+									<dx:ASPxGridView ID="grDatePlataBanca" runat="server" ClientInstanceName="grDatePlataBanca" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnInitNewRow="grDatePlataBanca_InitNewRow" OnCommandButtonInitialize="grDatePlataBanca_CommandButtonInitialize"
+										 OnRowInserting="grDatePlataBanca_RowInserting" OnRowUpdating="grDatePlataBanca_RowUpdating" OnRowDeleting="grDatePlataBanca_RowDeleting" OnHtmlEditFormCreated="grDatePlataBanca_HtmlEditFormCreated" >
 										<SettingsBehavior AllowFocusedRow="true" />
 										<Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
 										<ClientSideEvents CustomButtonClick="function(s, e) { grDatePlataBanca_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnEndCallback(s,e); }" ContextMenu="ctx" />    
@@ -656,8 +665,21 @@
                     type: "warning"
                 });
                 s.cpAlertMessage = null;
+			}
+			pnlLoading.Hide();
+			if (s.cp_InfoMessage != null) {
+                swal({
+                    title: "Avertisment", text: s.cp_InfoMessage,
+                    type: "warning", showCancelButton: true, confirmButtonColor: "#DD6B55", closeOnConfirm: true
+                }, function (isConfirm) {
+						if (isConfirm) {
+                            pnlLoading.Show();
+							pnlCtl.PerformCallback('btnSaveConf');
+                    }
+                });
+                s.cp_InfoMessage = null;
             }
-            pnlLoading.Hide();
+            
 		}
 
         function OnMotivRespingere(s, e) {

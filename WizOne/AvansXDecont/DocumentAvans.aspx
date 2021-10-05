@@ -17,8 +17,11 @@
                 <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aprobare" OnClick="btnAproba_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                 </dx:ASPxButton>				
-                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" OnClick="btnRespins_Click" oncontextMenu="ctx(this,event)" >              
+                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge"  AutoPostBack="false" oncontextMenu="ctx(this,event)" >              
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
+                    <ClientSideEvents Click="function(s, e) {
+                        OnMotivRespingere();
+                    }" />
                 </dx:ASPxButton>				
                 <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static" runat="server" Text="Inapoi" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/sgSt.png"></Image>
@@ -167,7 +170,9 @@
 								</div>			
 								<label id="lblDiurna" runat="server" style="display:inline-block; float:left; padding-right:15px;">Deplasare cu diurna</label>
 								<div style="float:left; padding-right:15px;">
-									<dx:ASPxCheckBox ID="chkIsDiurna" runat="server" Checked="false" />
+									<dx:ASPxCheckBox ID="chkIsDiurna" runat="server" Checked="false" >
+										<ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('chkIsDiurna'); }" />
+									</dx:ASPxCheckBox>
 								</div>								
 							</div>
 							
@@ -394,7 +399,7 @@
             pnlLoading.Hide();
 		}
 
-        function OnMotivRespingere(s, e) {
+        function OnMotivRespingere() {
             if (ASPxClientUtils.Trim(txtMtv.GetText()) == '') {
                 swal({
                     title: trad_string(limba, "Operatie nepermisa"), text: trad_string(limba, "Nu ati completat motivul refuzului pentru respingere documente!"),

@@ -74,6 +74,7 @@ namespace WizOne.AvansXDecont
                 {
                     Session["AvsXDec_SursaDate"] = null;
                     Session["AvsXDec_SursaDateCheltuieli"] = null;
+                    Session["AvsXDec_Apasat"] = null;
 
                     DataTable lstConfigCurrencyXPay_Currency = new DataTable();
                     lstConfigCurrencyXPay_Currency.Columns.Add("DictionaryItemId", typeof(int));
@@ -95,8 +96,7 @@ namespace WizOne.AvansXDecont
                     lstConfigCurrencyXPay_PayCopy.Columns.Add("Culoare", typeof(string));
                     lstConfigCurrencyXPay_PayCopy.Columns.Add("DictionaryId", typeof(int));
                     Session["ConfigCurrencyXPay_PayCopy"] = lstConfigCurrencyXPay_PayCopy;
-                }
-                IncarcaDate();             
+                }                       
 
 
                 DataTable lstConfigCurrencyXPay = GetAvsXDec_ConfigCurrencyXPay(Convert.ToInt32(Session["AvsXDec_Marca"].ToString()), Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
@@ -288,6 +288,7 @@ namespace WizOne.AvansXDecont
 
 
                 IncarcaCheltuieli();
+                IncarcaDate();
 
 
             }
@@ -448,14 +449,10 @@ namespace WizOne.AvansXDecont
 
         protected void btnAproba_Click(object sender, EventArgs e)
         {
-            MetodeCereri(1);
-        }
-        protected void btnRespins_Click(object sender, EventArgs e)
-        {
-            MetodeCereri(2);
+            MetodeCereri(1, "");
         }
 
-        private void MetodeCereri(int tipActiune, string motivRefuz = "")
+        private void MetodeCereri(int tipActiune, string motivRefuz, int tip = 1)
         {
             try
             {
@@ -478,56 +475,45 @@ namespace WizOne.AvansXDecont
 
                             if (msg != "")
                             {
-                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg);
+                                if (tip == 1)
+                                    MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoError, "Atentie !");
+                                else
+                                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg);
+                                Session["AvsXDec_Apasat"] = 1;
                                 System.Threading.Thread.Sleep(5000);
                                 btnBack_Click(null, null);
                             }
-                                    
-                                
-                          
-                            #endregion
-                            //break;
-                        //case LansatDin.PlataFinanciar:
-                            #region document editat din financiar
-                            //CustomMessage confirmMessage = new CustomMessage(Dami.TraduCuvant("Sigur doriti continuarea procesului de respingere ?"), CustomMessage.MessageType.Confirm, null, Constante.IdLimba);
-                            //confirmMessage.OKButton.Click += (obj, args) =>
-                            //{
-                            //    RejectDocument dlgFinanciar = new RejectDocument();
-                            //    dlgFinanciar.Closed += (s, eargs) =>
-                            //    {
-                            //        if (dlgFinanciar.DialogResult == true)
-                            //        {
-                            //            if (string.IsNullOrEmpty(dlgFinanciar.txtRefuseReason.Text))
-                            //            {
-                            //                Message.InfoMessage("Nu ati completat motivul refuzului pentru respingere documente!");
-                            //                wiIndicator.DeferedVisibility = false;
-                            //                return;
-                            //            }
-                            //            wiIndicator.DeferedVisibility = true;
 
-                            //            srvAvansXDecont ctxAvansXDecont = new srvAvansXDecont();
-                            //            InvokeOperation opApr = ctxAvansXDecont.RefuzaDocument(Constante.UserId, (int)ent.DocumentId, Constante.User_AngajatId, dlgFinanciar.txtRefuseReason.Text);
-                            //            opApr.Completed += (s3, args3) =>
-                            //            {
-                            //                if (!opApr.HasError)
-                            //                {
-                            //                    if (opApr.Value.ToString() != "" && opApr.Value.ToString() == "OK")
-                            //                    {
-                            //                        wiIndicator.DeferedVisibility = false;
-                            //                        Message.InfoMessage(Dami.TraduCuvant("Proces finalizat cu succes."));
-                            //                        apasat = true;
-                            //                        wiIndicator.DeferedVisibility = false;
-                            //                        btnInapoi_ItemClick(null, null);
-                            //                    }
-                            //                }
-                            //            };
-                            //        }
-                            //    };
-                            //    dlgFinanciar.Show();
-                            //};
-                            //confirmMessage.Show();
-                            #endregion
-                            //break;
+
+
+                    #endregion
+                    //break;
+                    //case LansatDin.PlataFinanciar:
+                    #region document editat din financiar               
+                     
+                    string ras = RefuzaDocument(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(ent.Rows[0]["DocumentId"].ToString()), Convert.ToInt32(Session["User_Marca"].ToString()), motivRefuz);                
+                       
+                    if (ras != "" && ras == "OK")
+                    {
+                        Session["AvsXDec_Apasat"] = 1;
+                        if (tip == 1)
+                            MessageBox.Show(Dami.TraduCuvant("Proces finalizat cu succes."), MessageBox.icoError, "Atentie !");
+                        else
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg);
+                        Session["AvsXDec_Apasat"] = 1;
+                        System.Threading.Thread.Sleep(5000);
+                        btnBack_Click(null, null);
+                    } 
+                    else
+                    {
+                        if (tip == 1)
+                            MessageBox.Show(Dami.TraduCuvant(ras), MessageBox.icoError, "Atentie !");
+                        else
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg);
+                    }
+                    
+                    #endregion
+                    //break;
                     //}
                 }
                 #endregion
@@ -539,7 +525,11 @@ namespace WizOne.AvansXDecont
                  
                     if (msg != "")
                     {
-                        MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoError, "Atentie !");
+                        if (tip == 1)
+                            MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoError, "Atentie !");
+                        else
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg);
+                        Session["AvsXDec_Apasat"] = 1;
                         System.Threading.Thread.Sleep(5000);
                         btnBack_Click(null, null);
                     }        
@@ -553,11 +543,91 @@ namespace WizOne.AvansXDecont
             }
         }
 
+        public string RefuzaDocument(int idUser, int DocumentId, int f10003, string refuseReason = "")
+        {
+            string msg = "";
+
+            try
+            {
+                if (DocumentId == -99) return msg;
+
+                int documentStateRefuzat = 0;
+
+                DataTable ent = General.IncarcaDT("SELECT * FROM AvsXDec_Document WHERE DocumentId = " + Session["AvsXDec_IdDocument"].ToString(), null);
+
+                if (ent != null && ent.Rows.Count > 0)
+                {
+                    /*LeonardM 26.07.2016
+                     * daca documentul a trecut deja din starea aprobat => nu se mai poate anula
+                     * */
+                    if (Convert.ToInt32(ent.Rows[0]["DocumentStateId"].ToString()) > 3)
+                    {
+                        msg = "Nu se poate anula documentul, deoarece a trecut de starea Aprobat!";
+                        return msg;
+                    }
+                    /*end LeonardM 26.07.2016*/
+                    DataTable entStr = General.IncarcaDT("SELECT * FROM AvsXDec_DictionaryItem Where DictionaryItemId =  " + documentStateRefuzat, null);
+                    string culoare = "FFFFFFFF";
+                    if (entStr != null && entStr.Rows.Count > 0 && entStr.Rows[0]["Culoare"] != null && entStr.Rows[0]["Culoare"].ToString().Length > 0) culoare = entStr.Rows[0]["Culoare"].ToString();
+
+                    //schimbam statusul
+                    General.ExecutaNonQuery("UPDATE AvsXDec_Document SET DocumentStateId = " + documentStateRefuzat + ", Culoare = '" + culoare + "' WHERE DocumentId = " + Session["AvsXDec_IdDocument"].ToString(), null);
+          
+                    //introducem o linie de anulare in AvsXDec_DocumentStateHistory
+                    string sql = "INSERT INTO AvsXDec_DocumentStateHistory (Id, DocumentId, CircuitId, DocumentStateId, Pozitie, Culoare, Aprobat, DataAprobare, USER_NO, TIME, Inlocuitor) "
+                        + " VALUES (" + Dami.NextId("AvsXDec_DocumentStateHistory", 1) + ", " + ent.Rows[0]["DocumentId"].ToString() + ", " + ent.Rows[0]["CircuitId"].ToString() + ", " + documentStateRefuzat 
+                        + ", 22, '" + culoare + "', 1, GETDATE(), " + idUser + ", GETDATE(), 0)";
+                    General.ExecutaNonQuery(sql, null);           
+
+                    #region salvare motiv refuz
+                    switch (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()))
+                    {
+                        case 1001: /* Avans spre deplasare*/
+                        case 1002: /* Avans spre decontare*/
+                        case 1003: /*Avans administrativ*/
+                            General.ExecutaNonQuery("UPDATE AvsXDec_Avans SET RefuseReason = '" + refuseReason + "' WHERE DocumentId = " + ent.Rows[0]["DocumentId"].ToString(), null); 
+                            break;
+                        case 2001: /* Decont spre deplasare*/
+                        case 2002: /*Decont cheltuieli*/
+                        case 2003: /*Decont administrativ*/
+                            General.ExecutaNonQuery("UPDATE AvsXDec_Decont SET RefuseReason = '" + refuseReason + "' WHERE DocumentId = " + ent.Rows[0]["DocumentId"].ToString(), null);
+                            break;
+                    }
+                    #endregion
+
+                    #region  Notificare strat
+
+                    #region  Notificare strat
+
+                    //ctxNtf.TrimiteNotificare("AvansXDecont.Document", "grDate", ent, idUser, f10003);
+
+                    #endregion
+
+                    #endregion
+
+
+                    msg = "OK";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return msg;
+        }
+
         protected void btnBack_Click(object sender, EventArgs e)
         {
             try
             {
                 GolireVariabile();
+                if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 1 && Convert.ToInt32((Session["AvsXDec_Apasat"] ?? 0).ToString()) == 0)
+                {                    
+                    StergeDocument(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+                }
+
                 if (Page.IsCallback)
                     ASPxWebControl.RedirectOnCallback("~/AvansXDecont/Document.aspx");
                 else
@@ -566,6 +636,34 @@ namespace WizOne.AvansXDecont
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        public void StergeDocument(int DocumentId)
+        {
+            try
+            {
+                DataTable ent = Session["AvsXDec_SursaDate"] as DataTable;
+                int DocumentTypeId = 1;
+                if (ent != null &&ent.Rows.Count > 0 && ent.Rows[0]["DocumentTypeId"] != null) DocumentTypeId = Convert.ToInt32(ent.Rows[0]["DocumentTypeId"].ToString());
+
+                string strSql = "BEGIN " +
+                    "delete from \"AvsXDec_DocumentStateHistory\" where \"DocumentId\"=" + DocumentId + "; " +
+                    "delete from \"AvsXDec_BusinessTransaction\" where \"DestDocId\"=" + DocumentId + "; " +
+                    "delete from \"AvsXDec_AvansDetail\" where \"DocumentId\"=" + DocumentId + "; " +
+                    "delete from \"AvsXDec_DecontDetail\" where \"DocumentId\"=" + DocumentId + "; " +
+                    "delete from \"AvsXDec_Avans\" where \"DocumentId\"=" + DocumentId + "; " +
+                    "delete from \"AvsXDec_Decont\" where \"DocumentId\"=" + DocumentId + "; " +
+                    "delete from \"AvsXDec_Document\" where \"DocumentId\"=" + DocumentId + "; " +
+                    "delete from \"tblFisiere\" where \"Id\" in (select \"IdDocument\" from \"AvsXDec_relUploadDocumente\" where \"DocumentId\" = " + DocumentId + "); " +
+                    " delete from \"AvsXDec_relUploadDocumente\" where \"DocumentId\" = " + DocumentId + "; " +
+                    "END;";
+
+                General.ExecutaNonQuery(strSql, null);
+            }
+            catch (Exception ex)
+            {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -721,6 +819,7 @@ namespace WizOne.AvansXDecont
                         Convert.ToInt32(cmbModPlata.Value ?? 0), Convert.ToInt32(cmbActionType.Value ?? 0), txtLocatie.Text, txtActionReason.Text, (chkIsDiurna.Checked ? "1" : "0"), "", Convert.ToInt32(cmbTransportType.Value ?? 0), Session["AvsXDec_IdDocument"].ToString());
                     General.ExecutaNonQuery(sql, null); 
                 }
+                Session["AvsXDec_Apasat"] = 1;
                 //else
                 //{
                 //    sql = @"INSERT INTO AvsXDec_Avans (CurrencyId, RefCurrencyId, RefCurrencyValue, TotalPayment, RefTotalPayment, StartDate, EndDate, UnconfRestAmount, TotalAmount, USER_NO, TIME, StartHour,
@@ -1233,7 +1332,7 @@ namespace WizOne.AvansXDecont
                         cmbActionType_EditValueChanged();
                         break;
                     case "btnRespinge":
-                        MetodeCereri(2, e.Parameter.Split(';')[1]);
+                        MetodeCereri(2, e.Parameter.Split(';')[1], 2);
                         break;
                     case "txtStartDate":
                         ent.Rows[0]["StartDate"] = Convert.ToDateTime(txtStartDate.Value ?? new DateTime(2100, 1, 1));
@@ -1264,6 +1363,11 @@ namespace WizOne.AvansXDecont
                         ent.Rows[0]["TotalAmount"] = Convert.ToInt32(txtValAvans.Value ?? -99);
                         Session["AvsXDec_SursaDate"] = ent;
                         txtValAvans_EditValueChanged();
+                        break;
+                    case "chkIsDiurna":
+                        ent.Rows[0]["chkDiurna"] = chkIsDiurna.Checked ? 1 : 0;
+                        Session["AvsXDec_SursaDate"] = ent;
+                        chkIsDiurna_EditValueChanged();
                         break;
                 }
    
@@ -2435,11 +2539,11 @@ namespace WizOne.AvansXDecont
             entSettingsDiurna = lstVwAvsXDec_Settings.Select("KeyField1 = " + KeyField1 + " AND KeyField2 = " + KeyField2 + " AND KeyField3 = " + KeyField3 + " AND F71802 = " + General.Nz(Session["IdFunctieAngajat"], "-99").ToString());
             /*nu am gasit o setare conform celor de mai sus si functiei, incercam
              * sa gasim o configurare conform celor de mai sus si idfunctie = -99*/
-            if (entSettingsDiurna == null)
+            if (entSettingsDiurna == null || entSettingsDiurna.Count() == 0)
                 //entSettingsDiurna = lstVwAvsXDec_Settings.Where(p => p.KeyField1 == KeyField1 && p.KeyField2 == KeyField2 && p.KeyField3 == KeyField3 && (p.F71802 ?? -99) == -99).FirstOrDefault();
                 entSettingsDiurna = lstVwAvsXDec_Settings.Select("KeyField1 = " + KeyField1 + " AND KeyField2 = " + KeyField2 + " AND KeyField3 = " + KeyField3 + " AND F71802 = 0");
             /*daca tot nu gasim o configurare, atunci in mod default diurna = 0*/
-            if (entSettingsDiurna == null)
+            if (entSettingsDiurna == null || entSettingsDiurna.Count() == 0)
                 valDiurna = 0;
             else
             {
@@ -2748,119 +2852,139 @@ namespace WizOne.AvansXDecont
 
         private void chkIsDiurna_EditValueChanged()
         {
-            //DataTable ent = Session["AvsXDec_SursaDate"] as DataTable;
-            //if (Convert.ToBoolean(chkIsDiurna.Value.ToString()) == true)
-            //{
-            //    /*verificam sa fie completata modalitatea de deplasare, moneda timpul de start si final, numarul de ore, 
-            //     * modalitatea plata si moneda*/
-            //    #region verifDateComplete
-            //    string campuriNecompletate = string.Empty;
-            //    if (ent.Rows[0]["StartDate"] == DBNull.Value)
-            //        campuriNecompletate += "data start;";
-            //    if (string.IsNullOrEmpty(txtOraPlecare.Text) && ent.Rows[0]["StartHour"] == DBNull.Value)
-            //        campuriNecompletate += ", ora inceput";
-            //    else
-            //    {
-            //        if (ent.Rows[0]["StartHour"] == DBNull.Value)
-            //        {
-            //            ent.StartHour = DateTime.ParseExact(txtOraPlecare.Text, "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-            //            if (ent.Rows[0]["StartHour"] == DBNull.Value)
-            //                campuriNecompletate += ", ora inceput";
-            //        }
-            //    }
-            //    if (string.IsNullOrEmpty(txtOraSosire.Text) && ent.EndHour == null)
-            //        campuriNecompletate += ", ora sfarsit";
-            //    else
-            //    {
-            //        if (ent.Rows[0]["EndHour"] == DBNull.Value)
-            //        {
-            //            ent.EndHour = DateTime.ParseExact(txtOraSosire.Text, "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-            //            if (ent.Rows[0]["EndHour"] == DBNull.Value)
-            //                campuriNecompletate += ", ora sfarsit";
-            //        }
-            //    }
-            //    if (ent.Rows[0]["EndHour"] == DBNull.Value)
-            //        campuriNecompletate += "data final;";
-            //    if (ent.PaymentTypeId == null)
-            //        campuriNecompletate += "modalitate plata;";
-            //    if (ent.CurrencyId == null)
-            //        campuriNecompletate += "moneda plata";
-            //    if (ent.ActionTypeId == null)
-            //        campuriNecompletate += "tip deplasare;";
-            //    if (!string.IsNullOrEmpty(campuriNecompletate))
-            //    {
-            //        ent.chkDiurna = false;
-            //        ent.chkDiurnaInt = 0;
-            //        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati completat " + campuriNecompletate.Substring(0, campuriNecompletate.Length - 1) + " pentru a efectua calcul de diurna ok!");
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        decimal valDiurna;
-            //        List<metaAvsXDec_DictionaryItem> lstCheltuieli = ddsNomenclatorCheltuieli.DataView.Cast<metaAvsXDec_DictionaryItem>().ToList();
+            DataTable ent = Session["AvsXDec_SursaDate"] as DataTable;
+            if (Convert.ToBoolean(chkIsDiurna.Value.ToString()) == true)
+            {
+                /*verificam sa fie completata modalitatea de deplasare, moneda timpul de start si final, numarul de ore, 
+                 * modalitatea plata si moneda*/
+                #region verifDateComplete
+                string campuriNecompletate = string.Empty;
+                if (ent.Rows[0]["StartDate"] == DBNull.Value)
+                    campuriNecompletate += "data start;";
+                if (string.IsNullOrEmpty(txtOraPlecare.Text) && ent.Rows[0]["StartHour"] == DBNull.Value)
+                    campuriNecompletate += ", ora inceput";
+                else
+                {
+                    if (ent.Rows[0]["StartHour"] == DBNull.Value)
+                    {                        
+                        ent.Rows[0]["StartHour"] = DateTime.ParseExact(txtOraPlecare.Text, "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                        if (ent.Rows[0]["StartHour"] == DBNull.Value)
+                            campuriNecompletate += ", ora inceput";
+                    }
+                }
+                if (string.IsNullOrEmpty(txtOraSosire.Text) && ent.Rows[0]["EndHour"] == DBNull.Value)
+                    campuriNecompletate += ", ora sfarsit";
+                else
+                {
+                    if (ent.Rows[0]["EndHour"] == DBNull.Value)
+                    {                        
+                        ent.Rows[0]["EndHour"] = DateTime.ParseExact(txtOraSosire.Text, "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                        if (ent.Rows[0]["EndHour"] == DBNull.Value)
+                            campuriNecompletate += ", ora sfarsit";
+                    }
+                }
+                if (ent.Rows[0]["EndHour"] == DBNull.Value)
+                    campuriNecompletate += "data final;";
+                if (ent.Rows[0]["PaymentTypeId"] == DBNull.Value)
+                    campuriNecompletate += "modalitate plata;";
+                if (ent.Rows[0]["CurrencyId"] == DBNull.Value)
+                    campuriNecompletate += "moneda plata";
+                if (ent.Rows[0]["ActionTypeId"] == DBNull.Value)
+                    campuriNecompletate += "tip deplasare;";
+                if (!string.IsNullOrEmpty(campuriNecompletate))
+                {
+                    ent.Rows[0]["chkDiurna"] = 0;
+                    //ent.chkDiurnaInt = 0;
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati completat " + campuriNecompletate.Substring(0, campuriNecompletate.Length - 1) + " pentru a efectua calcul de diurna ok!");
+                    return;
+                }
+                else
+                {
+                    decimal valDiurna;
+                    DataTable lstCheltuieli = GetAvsXDec_DictionaryItemCheltuiala(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
 
-            //        /*verificam mai intai in lista daca exista deja diurna adaugata, pentru a nu o adauga aiurea
-            //         * acest lucru ma ajuta si pentru cazurile in care am diurna completata pe avans si aleg un 
-            //         * avans de acest gen. ca practic nu pun diurna de 2 ori pe avans*/
-            //        metaAvsXDec_DictionaryItem itmDiurna_1 = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
-            //        if (itmDiurna_1 == null)
-            //            return;
+                    /*verificam mai intai in lista daca exista deja diurna adaugata, pentru a nu o adauga aiurea
+                     * acest lucru ma ajuta si pentru cazurile in care am diurna completata pe avans si aleg un 
+                     * avans de acest gen. ca practic nu pun diurna de 2 ori pe avans*/
+                    lstCheltuieli.CaseSensitive = false;
+                    DataRow[] itmDiurna_1 = lstCheltuieli.Select("DictionaryItemName = 'diurna'");
+                    if (itmDiurna_1 == null || itmDiurna_1.Count() == 0)
+                        return;
 
-            //        /*asteptam pana cand se incarca datele cu cheltuieli aferente,
-            //         * pentru a sti sigur daca am sau nu de adaugat diurna*/
-            //        if (ddsCheltuieli.IsLoadingData)
-            //            return;
 
-            //        var entCheltuialaDiurna = ddsCheltuieli.DataView.Cast<metaAvsXDec_AvansDetailCheltuieli>().Where(p => p.DictionaryItemId == itmDiurna_1.DictionaryItemId).FirstOrDefault();
-            //        if (entCheltuialaDiurna != null || lstCheltuieli == null || lstCheltuieli.Count() == 0)
-            //            return;
+                    DataTable entCheltuialaDiurnaTot = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
+                    DataRow[] entCheltuialaDiurna = null;
+                    if (entCheltuialaDiurnaTot != null)
+                        entCheltuialaDiurna = entCheltuialaDiurnaTot.Select("DictionaryItemId = " + itmDiurna_1[0]["DictionaryItemId"].ToString());
+                    if (entCheltuialaDiurna != null || lstCheltuieli == null || lstCheltuieli.Rows.Count == 0)
+                        return;
 
-            //        CalculDiurna(out valDiurna);
-            //        tvDateCheltuieli.AddNewRow();
-            //        try
-            //        {
-            //            InvokeOperation opApr = Constante.ctxAvansXDecont.GetNextId("AvsXDec_AvansDetail", 1);
-            //            opApr.Completed += (s3, args3) =>
-            //            {
-            //                if (!opApr.HasError)
-            //                {
-            //                    if (opApr.Value.ToString() != "")
-            //                    {
-            //                        metaAvsXDec_AvansDetailCheltuieli entDiurna = grDateCheltuieli.GetRow(GridControl.NewItemRowHandle) as metaAvsXDec_AvansDetailCheltuieli;
-            //                        entDiurna.DocumentId = idDocument;
-            //                        entDiurna.DocumentDetailId = Convert.ToInt32(opApr.Value.ToString());
-            //                        metaAvsXDec_DictionaryItem itmDiurna = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
-            //                        entDiurna.DictionaryItemId = itmDiurna.DictionaryItemId;
-            //                        entDiurna.Amount = valDiurna;
-            //                        ent.EstimatedAmount = (ent.EstimatedAmount ?? 0) + valDiurna;
-            //                        maxValueDiurna = valDiurna;
-            //                        tvDateCheltuieli.CommitEditing();
-            //                    }
-            //                }
-            //                grDateCheltuieli.ShowLoadingPanel = false;
-            //            };
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            //        }
-            //    }
-            //    #endregion
-            //}
-            //else
-            //{
-            //    /*verificam daca exista cheltuiala de diurna si o stergem*/
-            //    List<metaAvsXDec_DictionaryItem> lstCheltuieli = ddsNomenclatorCheltuieli.DataView.Cast<metaAvsXDec_DictionaryItem>().ToList();
-            //    metaAvsXDec_DictionaryItem itmDiurna = lstCheltuieli.Where(p => p.DictionaryItemName.ToLower() == "diurna").FirstOrDefault();
-            //    if (itmDiurna == null)
-            //        return;
-            //    var entCheltuialaDiurna = ddsCheltuieli.DataView.Cast<metaAvsXDec_AvansDetailCheltuieli>().Where(p => p.DictionaryItemId == itmDiurna.DictionaryItemId).FirstOrDefault();
-            //    if (entCheltuialaDiurna != null)
-            //    {
-            //        ent.EstimatedAmount -= entCheltuialaDiurna.Amount;
-            //        ddsCheltuieli.DataView.Remove(entCheltuialaDiurna);
-            //    }
-            //}
+                    CalculDiurna(out valDiurna);
+
+                    object[] row = new object[entCheltuialaDiurnaTot.Columns.Count];
+                    int x = 0;
+                    foreach (DataColumn col in entCheltuialaDiurnaTot.Columns)
+                    {
+                        if (!col.AutoIncrement)
+                        {
+                            switch (col.ColumnName.ToUpper())
+                            {
+                                case "IDAUTO":
+                                    row[x] = Convert.ToInt32(General.Nz(entCheltuialaDiurnaTot.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                    break;
+                                case "USER_NO":
+                                    row[x] = Session["UserId"];
+                                    break;
+                                case "TIME":
+                                    row[x] = DateTime.Now;
+                                    break;
+                                case "DOCUMENTID":
+                                    row[x] = Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString());
+                                    break;
+                                case "DOCUMENTDETAILID":
+                                    row[x] = Dami.NextId("AvsXDec_AvansDetail", 1);
+                                    break;
+                                case "DICTIONARYITEMID":
+                                    row[x] = Convert.ToInt32(itmDiurna_1[0]["DictionaryItemId"].ToString());
+                                    break;
+                                case "AMOUNT":
+                                    row[x] = valDiurna;
+                                    break;
+                            }
+                        }
+                        x++;
+                    }
+
+                    entCheltuialaDiurnaTot.Rows.Add(row);
+                    grDate.DataSource = entCheltuialaDiurnaTot;
+                    grDate.KeyFieldName = "IdAuto";
+                    Session["AvsXDec_SursaDateCheltuieli"] = entCheltuialaDiurnaTot;
+
+                }
+                #endregion
+            }
+            else
+            {
+                /*verificam daca exista cheltuiala de diurna si o stergem*/
+                DataTable lstCheltuieli = GetAvsXDec_DictionaryItemCheltuiala(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
+                lstCheltuieli.CaseSensitive = false;
+                DataRow itmDiurna = lstCheltuieli.Select("DictionaryItemName = 'diurna'").FirstOrDefault();
+                if (itmDiurna == null)
+                    return;
+                DataTable entCheltuialaDiurnaTot = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
+                DataRow entCheltuialaDiurna = null;
+                if (entCheltuialaDiurnaTot != null)
+                    entCheltuialaDiurna = entCheltuialaDiurnaTot.Select("DictionaryItemId = " + itmDiurna["DictionaryItemId"].ToString()).FirstOrDefault();
+                if (entCheltuialaDiurna != null)
+                {
+                    ent.Rows[0]["EstimatedAmount"] = Convert.ToInt32(ent.Rows[0]["EstimatedAmount"].ToString()) - Convert.ToInt32(entCheltuialaDiurna["Amount"].ToString());
+                    entCheltuialaDiurna.Delete();
+                }
+                grDate.DataSource = entCheltuialaDiurnaTot;
+                grDate.KeyFieldName = "IdAuto";
+                Session["AvsXDec_SursaDateCheltuieli"] = entCheltuialaDiurnaTot;
+            }
+            Session["AvsXDec_SursaDate"] = ent;
         }
 
         private void ValidateAvansAmount()

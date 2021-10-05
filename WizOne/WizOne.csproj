@@ -412,6 +412,7 @@
     <Content Include="AvansXDecont\Document.aspx" />
     <Content Include="AvansXDecont\DocumentAvans.aspx" />
     <Content Include="AvansXDecont\DocumentDecont.aspx" />
+    <Content Include="AvansXDecont\DocumentPayment.aspx" />
     <Content Include="Avs\Aprobare.aspx" />
     <Content Include="Avs\Cereri.aspx" />
     <Content Include="Avs\Detalii.aspx" />
@@ -1345,6 +1346,13 @@
     </Compile>
     <Compile Include="AvansXDecont\DocumentDecont.aspx.designer.cs">
       <DependentUpon>DocumentDecont.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentPayment.aspx.cs">
+      <DependentUpon>DocumentPayment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentPayment.aspx.designer.cs">
+      <DependentUpon>DocumentPayment.aspx</DependentUpon>
     </Compile>
     <Compile Include="Avs\Aprobare.aspx.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>
@@ -2892,7 +2900,6 @@
       <LastGenOutput>General.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\AdeverintaGenerala.resx">
       <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
     </EmbeddedResource>

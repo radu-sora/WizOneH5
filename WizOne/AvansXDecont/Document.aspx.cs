@@ -326,7 +326,7 @@ namespace WizOne.AvansXDecont
 									Session["AvsXDec_Marca"] = f10003;
 									//pag1.idRol = idRol;
 									Session["AvsXDec_PoateModif"] = poateModif;
-									Session["AvsXDec_PoateAprobaXRefuzaDoc"] = poateAprobaXRefuzaDoc;
+									Session["AvsXDec_PoateAprobaXRefuzaDoc"] = poateAprobaXRefuzaDoc ? 1 : 0;
 									Session["AvsXDec_EsteNou"] = 0;
 									Session["AvsXDec_SrcDocId"] = SrcDocId;
 									Session["AvsXDec_UserId"] = userId;

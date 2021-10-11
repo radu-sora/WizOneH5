@@ -11,16 +11,10 @@
             switch(e.buttonID)
             {
                 case "btnDelete":
-                    grDate.GetRowValues(e.visibleIndex, 'IdStare', GoToDeleteMode);
+                    grDate.GetRowValues(e.visibleIndex, 'DocumentStateId', GoToDeleteMode);
                     break;
                 case "btnIstoric":
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToIstoric);
-                    break;
-                case "btnDetalii":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToDetalii);
-                    break;
-                case "btnArata":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToAtasMode);
                     break;
             }
         }
@@ -37,30 +31,35 @@
                     title: "Sunteti sigur/a ?", text: "Cererea va fi anulata !",
                     type: "warning", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da, anuleaza!", cancelButtonText: "Renunta", closeOnConfirm: true
                 }, function (isConfirm) {
-                    if (isConfirm) {
-                        grDate.PerformCallback("btnDelete;" + Value);
+                        if (isConfirm) {
+                            OnMotivRespingere()
+                        
                     }
                 });
             }
         }
 
+        function OnMotivRespingere() {
+            if (ASPxClientUtils.Trim(txtMtv.GetText()) == '') {
+                swal({
+                    title: trad_string(limba, "Operatie nepermisa"), text: trad_string(limba, "Nu ati completat motivul refuzului pentru respingere documente!"),
+                    type: "warning"
+                });
+            }
+            else {
+                popUpMotiv.Hide();
+                grDate.PerformCallback("btnDelete;" + txtMtv.GetText());
+                txtMtv.SetText('');
+            }
+        }
+
         function GoToIstoric(Value) {
-            strUrl = getAbsoluteUrl + "Pagini/Istoric.aspx?tip=5&qwe=" + Value;
+            strUrl = getAbsoluteUrl + "Pagini/Istoric.aspx?tip=10&qwe=" + Value;
             popGen.SetHeaderText("Istoric");
             popGen.SetContentUrl(strUrl);
             popGen.Show();
-        }
+        } 
 
-        function GoToDetalii(Value) {
-            strUrl = getAbsoluteUrl + "Avs/Detalii.aspx?qwe=" + Value;
-            popGen.SetHeaderText("Detalii");
-            popGen.SetContentUrl(strUrl);
-            popGen.Show();
-        }
-
-        function GoToAtasMode(Value) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=9&id=' + Value, '_blank ')
-        }
 
 
         function CloseDeferedWindow() {
@@ -79,51 +78,6 @@
         }
 
 
-        var textSeparator = ",";
-        function OnListBoxSelectionChanged(listBox, args) {
-            if (args.index == 0)
-                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
-            UpdateSelectAllItemState();
-            UpdateText();
-        }
-        function UpdateSelectAllItemState() {
-            IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
-        }
-        function IsAllSelected() {
-            var selectedDataItemCount = checkListBox.GetItemCount() - (checkListBox.GetItem(0).selected ? 0 : 1);
-            return checkListBox.GetSelectedItems().length == selectedDataItemCount;
-        }
-        function UpdateText() {
-            var selectedItems = checkListBox.GetSelectedItems();
-            checkComboBoxStare.SetText(GetSelectedItemsText(selectedItems));
-        }
-        function SynchronizeListBoxValues(dropDown, args) {
-            checkListBox.UnselectAll();
-            var texts = dropDown.GetText().split(textSeparator);
-            var values = GetValuesByTexts(texts);
-            checkListBox.SelectValues(values);
-            UpdateSelectAllItemState();
-            UpdateText();
-        }
-        function GetSelectedItemsText(items) {
-            var texts = [];
-            for (var i = 0; i < items.length; i++)
-                if (items[i].index != 0)
-                    texts.push(items[i].text);
-            return texts.join(textSeparator);
-        }
-        function GetValuesByTexts(texts) {
-            var actualValues = [];
-            var item;
-            for (var i = 0; i < texts.length; i++) {
-                item = checkListBox.FindItemByText(texts[i]);
-                if (item != null)
-                    actualValues.push(item.value);
-            }
-            return actualValues;
-        }
-
-
     </script>
 
 </asp:Content>
@@ -137,20 +91,6 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
-                <dx:ASPxButton ID="btnRespinge" runat="server" Text="Respinge" OnClick="btnRespinge_Click" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
-                    }" />
-                    <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
-                </dx:ASPxButton>
-                <dx:ASPxButton ID="btnAproba" runat="server" Text="Aproba" OnClick="btnAproba_Click" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
-                    }" />
-                    <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
-                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnSave"  runat="server" Text="Salveaza" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
@@ -168,70 +108,42 @@
     <table width="60%">   
         <tr>
             <td id="divRol" runat="server">
-                <label id="lblRol" runat="server" style="display:inline-block;">Roluri</label>
-                <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="250px" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" />
-            </td>
-            <td align="left">
-                <label id="lblAngFiltru" runat="server" style="display:inline-block;">Angajat</label>
-                <dx:ASPxComboBox ID="cmbAngFiltru" ClientInstanceName="cmbAngFiltru" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
-                            CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >
-                    <Columns>
-                        <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
-                        <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
-                        <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
-                        <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
-                        <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />
-                        <dx:ListBoxColumn FieldName="Functia" Caption="Functia" Width="130px" />
-                    </Columns>                            
+                <label id="lblStatusDoc" runat="server" style="display:inline-block;">Status documente</label>
+                <dx:ASPxComboBox ID="cmbDocState" ClientInstanceName="cmbDocState" ClientIDMode="Static" runat="server" Width="250px" ValueField="DictionaryItemId" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="true" OnSelectedIndexChanged="cmbDocState_SelectedIndexChanged" >
+                       <ClientSideEvents  SelectedIndexChanged="function(s, e) {
+                        pnlLoading.Show();
+                        e.processOnServer = true;
+                    }" />                
                 </dx:ASPxComboBox>
             </td>
             <td align="left">
-                <label id="lblAtrFiltru" runat="server" style="display:inline-block;">Atribut</label>
-                <dx:ASPxComboBox ID="cmbAtributeFiltru" runat="server" ClientInstanceName="cmbAtributeFiltru" ClientIDMode="Static" Width="215px" ValueField="Id" DropDownWidth="200" 
-                    TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >                           
+                <label id="lblActiune" runat="server" style="display:inline-block;">Actiune</label>
+                <dx:ASPxComboBox ID="cmbOperationSign" ClientInstanceName="cmbOperationSign" ClientIDMode="Static" runat="server" Width="250px" ValueField="OperationSignId" TextField="OperationSign" ValueType="System.Int32" AutoPostBack="true" OnSelectedIndexChanged="cmbOperationSign_SelectedIndexChanged" >                            
+                       <ClientSideEvents  SelectedIndexChanged="function(s, e) {
+                        pnlLoading.Show();
+                        e.processOnServer = true;
+                    }" />  
                 </dx:ASPxComboBox>
-            </td>                    								
-
-			<td align="left">		
-                <label id="lblStare" runat="server" style="display:inline-block;">Stare</label>	
-                <dx:ASPxDropDownEdit ClientInstanceName="checkComboBoxStare" ID="checkComboBoxStare" Width="210px" runat="server" AnimationType="None">
-                    <DropDownWindowStyle BackColor="#EDEDED" />
-                    <DropDownWindowTemplate>
-                        <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
-                            <Border BorderStyle="None" />
-                            <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
-                            <Items>
-                                <dx:ListEditItem Text="(Selectie toate)" />
-                                <dx:ListEditItem Text="Solicitat" Value="1" />
-                                <dx:ListEditItem Text="In Curs" Value="2" />
-                                <dx:ListEditItem Text="Aprobat" Value="3" />
-                                <dx:ListEditItem Text="Respins" Value="4" />
-                                <dx:ListEditItem Text="Anulat" Value="5" />
-                            </Items>
-                            <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged" />
-                        </dx:ASPxListBox>
-                        <table style="width: 100%">
-                            <tr>
-                                <td style="padding: 4px">
-                                    <dx:ASPxButton ID="ASPxButton1" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
-                                        <ClientSideEvents Click="function(s, e){ checkComboBoxStare.HideDropDown(); }" />
-                                    </dx:ASPxButton>
-                                </td>
-                            </tr>
-                        </table>
-                    </DropDownWindowTemplate>
-                    <ClientSideEvents TextChanged="SynchronizeListBoxValues" DropDown="SynchronizeListBoxValues" />
-                </dx:ASPxDropDownEdit>
-
             </td>
+            <td align="left">
+                 <label id="lblData" runat="server" style="display:inline-block;">Data platii</label>
+                <dx:ASPxDateEdit ID="txtPaymentDate" runat="server" Width="100%" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto" meta:resourcekey="txtPaymentDate" >
+                    <CalendarProperties FirstDayOfWeek="Monday" />
+                </dx:ASPxDateEdit>            
+            </td>
+            <td align="left">
+                <label id="lblModPlata" runat="server" style="display:inline-block;">Modalitate plata</label>
+                <dx:ASPxComboBox ID="cmbPaymentMethod" runat="server" ClientInstanceName="cmbPaymentMethod" ClientIDMode="Static" Width="215px" ValueField="DictionaryItemId" DropDownWidth="200" 
+                    TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="true" OnSelectedIndexChanged="cmbPaymentMethod_SelectedIndexChanged" >   
+                       <ClientSideEvents  SelectedIndexChanged="function(s, e) {
+                        pnlLoading.Show();
+                        e.processOnServer = true;
+                    }" />                      
+                </dx:ASPxComboBox>
+            </td>   
             <td align="left">
                 <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
-                </dx:ASPxButton>
-            </td>
-            <td align="left">
-                <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltruSterge_Click" >                    
-                    <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
                 </dx:ASPxButton>
             </td>                    	
         </tr>
@@ -240,7 +152,9 @@
      <table width="100%"> 
         <tr>
            <td align="left">
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static"  AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCommandButtonInitialize="grDate_CommandButtonInitialize" >
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static"  AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" 
+                    OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" 
+                    OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCommandButtonInitialize="grDate_CommandButtonInitialize" OnDataBound="grDate_DataBound" >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
                     <Settings ShowFilterRow="False" ShowGroupPanel="True" HorizontalScrollBarMode="Auto"  />
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
@@ -256,37 +170,41 @@
                                 </dx:GridViewCommandColumnCustomButton>
                                 <dx:GridViewCommandColumnCustomButton ID="btnIstoric">
                                     <Image ToolTip="Istoric" Url="~/Fisiere/Imagini/Icoane/motive.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                                <dx:GridViewCommandColumnCustomButton ID="btnDetalii">
-                                    <Image ToolTip="Detalii" Url="~/Fisiere/Imagini/Icoane/arata.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                                <dx:GridViewCommandColumnCustomButton ID="btnArata">
-                                    <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/view.png" />
-                                </dx:GridViewCommandColumnCustomButton>                
+                                </dx:GridViewCommandColumnCustomButton>    
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
-                        <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca" ReadOnly="true" Width="50px" Visible="false" />
-                        <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="50px" Visible="false" />
-                        <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="200px" />
-                        <dx:GridViewDataComboBoxColumn FieldName="IdAtribut" Name="IdAtribut" Caption="Atribut" ReadOnly="true" Width="150px" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                        </dx:GridViewDataComboBoxColumn>				
-					    <dx:GridViewDataDateColumn FieldName="DataModif" Name="DataModif" Caption="Data modificarii" ReadOnly="true"  Width="100px" >
+                        <dx:GridViewDataTextColumn FieldName="DocumentId" Name="DocumentId" Caption="Nr. document" ReadOnly="true" Width="100px" />
+                        <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="NumeComplet" Caption="Angajat" ReadOnly="true" Width="200px"  />
+                        <dx:GridViewDataTextColumn FieldName="DocumentState" Name="DocumentState" Caption="Stare document" ReadOnly="true" Width="100px" />
+				        <dx:GridViewDataTextColumn FieldName="DocumentTypeName" Name="DocumentTypeName" Caption="Tip document" ReadOnly="true"  Width="200px" />
+					    <dx:GridViewDataDateColumn FieldName="DocumentDate" Name="DocumentDate" Caption="Data document" ReadOnly="true"  Width="100px" >
+                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                        </dx:GridViewDataDateColumn>					    	
+                        <dx:GridViewDataTextColumn FieldName="TotalAmount" Name="TotalAmount" Caption="Val. document" ReadOnly="true" Width="100px" />
+                        <dx:GridViewDataTextColumn FieldName="CurrencyCode" Name="CurrencyCode" Caption="CurrencyCode" ReadOnly="true" Width="100px" />
+                        <dx:GridViewDataTextColumn FieldName="UnconfRestAmount" Name="UnconfRestAmount" Caption="Total plata"  Width="100px" />
+                        <dx:GridViewDataTextColumn FieldName="BankName" Name="BankName" Caption="Banca" ReadOnly="true" Width="200px"  />
+                        <dx:GridViewDataTextColumn FieldName="SucursalaName" Name="SucursalaName" Caption="Sucursala" ReadOnly="true" Width="200px"  />
+                        <dx:GridViewDataTextColumn FieldName="TotalComissionPayment" Name="TotalComissionPayment" Caption="Comision bancar" ReadOnly="true" Width="100px"  />
+                        <dx:GridViewDataTextColumn FieldName="PaymentCurrencyCode" Name="PaymentCurrencyCode" Caption="Valuta plata" ReadOnly="true" Width="100px"  />
+                        <dx:GridViewDataTextColumn FieldName="BankNamePlatitor" Name="BankNamePlatitor" Caption="Banca platitor" ReadOnly="true" Width="200px"  />
+					    <dx:GridViewDataDateColumn FieldName="PaymentDate" Name="PaymentDate" Caption="Data plata" ReadOnly="true"  Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-					    <dx:GridViewDataTextColumn FieldName="ValoareNoua" Name="ValoareNoua" Caption="Valoare" ReadOnly="true"  Width="150px" />	
-                        <dx:GridViewDataTextColumn FieldName="SalariulNet" Name="SalariulNet" Caption="Salariul net" ReadOnly="true" Width="100px" />
-                        <dx:GridViewDataTextColumn FieldName="Motiv" Name="Motiv" Caption="Motiv" ReadOnly="true" Width="150px" />
-                        <dx:GridViewDataTextColumn FieldName="Explicatii" Name="Explicatii" Caption="Explicatii"  Width="200px" />
-                        <dx:GridViewDataCheckColumn FieldName="Actualizat" Name="Actualizat" Caption="Actualizat" ReadOnly="true" Width="70px"  />
-                        <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="150px" VisibleIndex="2" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                        </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="Culoare" Name="Culoare" Caption="Culoare" ReadOnly="true" Width="75px" Visible="false" />
-                        <dx:GridViewDataTextColumn FieldName="IdAtribut" Name="IdAtribut" Caption="IdAtribut" ReadOnly="true" Width="75px" Visible="false" />
-                        <dx:GridViewDataTextColumn FieldName="Revisal" Name="Revisal" Caption="Revisal" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="Semnat" Name="Semnat" Caption="Semnat" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="PoateModifica" Name="PoateModifica" Caption="PoateModifica" ReadOnly="true" Width="50px" Visible="false" />
+
+                        <dx:GridViewDataTextColumn FieldName="DocumentStateId" Name="DocumentStateId" Caption="DocumentStateId" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="DocumentTypeId" Name="DocumentTypeId" Caption="DocumentTypeId" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="DocumentTypeCode" Name="DocumentTypeCode" Caption="DocumentTypeCode" ReadOnly="true" Width="50px" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="CurrencyId" Name="CurrencyId" Caption="CurrencyId" ReadOnly="true" Width="50px" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="BankId" Name="BankId" Caption="BankId" ReadOnly="true" Width="50px" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="SucursalaId" Name="SucursalaId" Caption="SucursalaId" ReadOnly="true" Width="50px" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="PaymentCurrencyId" Name="PaymentCurrencyId" Caption="PaymentCurrencyId" ReadOnly="true" Width="50px" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="BankIdPlatitor" Name="BankIdPlatitor" Caption="BankIdPlatitor" ReadOnly="true" Width="50px" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="BankCodePlatitor" Name="BankCodePlatitor" Caption="BankCodePlatitor" ReadOnly="true" Width="50px" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="IBANPlatitor" Name="IBANPlatitor" Caption="IBANPlatitor" ReadOnly="true" Width="50px" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="F10003" ReadOnly="true" Width="50px" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="SrcDocId" Name="SrcDocId" Caption="SrcDocId" ReadOnly="true" Width="50px" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="50px" Visible="false" />
                     </Columns>
                     <SettingsCommandButton>
                         <UpdateButton ButtonType="Link" Text="Actualizeaza">

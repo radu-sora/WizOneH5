@@ -18456,6 +18456,32 @@ GO
 INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Solicitare Avans Decont', 'Completare Formulare', 'AvansXDecont\Document', 1, 'm1.png')
 GO
 
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Financiar Contabilitate', 'Financiar Contabilitate', 'AvansXDecont\DocumentPayment', 1, 'm1.png')
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Trimestre', 'Definire Trimestre', 'Pagini\SablonNomen[AvsXDec_AccountingPeriod]', 1, 'm1.png')
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'An Contabil', 'An Contabil', 'Pagini\SablonNomen[AvsXDec_AccountingYear]', 1, 'm1.png')
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Comisioane Bancare', 'Comisioane Bancare', 'Pagini\SablonNomen[AvsXDec_BankComission]', 1, 'm1.png')
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Circuit Aprobari', 'Setare Circuit Aprobari', 'Pagini\SablonNomen[AvsXDec_Circuit]', 1, 'm1.png')
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Nomenclatoare', 'Setari Nomenclatoare', 'Pagini\SablonNomen[AvsXDec_Dictionary]', 1, 'm1.png')
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Valori Nomenclatoare', 'Setari Valori Nomenclatoare', 'Pagini\SablonNomen[AvsXDec_DictionaryItem]', 1, 'm1.png')
+GO
+
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Setari Cheltuieli', 'Setari Cheltuieli', 'Pagini\SablonNomen[AvsXDec_Settings]', 1, 'm1.png')
+GO
+
+
+
 
 insert into tblModule (Id, Denumire) values (14, 'Avans Decont')
 GO

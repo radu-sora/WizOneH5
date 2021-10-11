@@ -24,24 +24,6 @@ namespace WizOne.AvansXDecont
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
 
         /// <summary>
-        /// btnRespinge control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnRespinge;
-
-        /// <summary>
-        /// btnAproba control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnAproba;
-
-        /// <summary>
         /// btnSave control.
         /// </summary>
         /// <remarks>
@@ -69,76 +51,76 @@ namespace WizOne.AvansXDecont
         protected global::System.Web.UI.HtmlControls.HtmlTableCell divRol;
 
         /// <summary>
-        /// lblRol control.
+        /// lblStatusDoc control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRol;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblStatusDoc;
 
         /// <summary>
-        /// cmbRol control.
+        /// cmbDocState control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbRol;
+        protected global::DevExpress.Web.ASPxComboBox cmbDocState;
 
         /// <summary>
-        /// lblAngFiltru control.
+        /// lblActiune control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAngFiltru;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblActiune;
 
         /// <summary>
-        /// cmbAngFiltru control.
+        /// cmbOperationSign control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbAngFiltru;
+        protected global::DevExpress.Web.ASPxComboBox cmbOperationSign;
 
         /// <summary>
-        /// lblAtrFiltru control.
+        /// lblData control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAtrFiltru;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblData;
 
         /// <summary>
-        /// cmbAtributeFiltru control.
+        /// txtPaymentDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbAtributeFiltru;
+        protected global::DevExpress.Web.ASPxDateEdit txtPaymentDate;
 
         /// <summary>
-        /// lblStare control.
+        /// lblModPlata control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblStare;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblModPlata;
 
         /// <summary>
-        /// checkComboBoxStare control.
+        /// cmbPaymentMethod control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxDropDownEdit checkComboBoxStare;
+        protected global::DevExpress.Web.ASPxComboBox cmbPaymentMethod;
 
         /// <summary>
         /// btnFiltru control.
@@ -148,15 +130,6 @@ namespace WizOne.AvansXDecont
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltru;
-
-        /// <summary>
-        /// btnFiltruSterge control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnFiltruSterge;
 
         /// <summary>
         /// grDate control.
@@ -184,23 +157,5 @@ namespace WizOne.AvansXDecont
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnIstoric;
-
-        /// <summary>
-        /// btnDetalii control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnDetalii;
-
-        /// <summary>
-        /// btnArata control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnArata;
     }
 }

@@ -355,11 +355,11 @@ namespace WizOne.Pontaj
                     cmbAng.DataSource = Session["Pontaj_Angajati"];
                     cmbAng.DataBind();
                 }
-                else if (grDate.IsCallback)
-                {
-                    grDate.DataSource = Session["InformatiaCurenta"];
-                    grDate.DataBind();
-                }
+                //else if (grDate.IsCallback)
+                //{
+                //    grDate.DataSource = Session["InformatiaCurenta"];
+                //    grDate.DataBind();
+                //}
                
             }
             catch (Exception ex)
@@ -2814,6 +2814,20 @@ namespace WizOne.Pontaj
             }
         }
 
-
+        protected void grDate_DataBinding(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Session["InformatiaCurenta"] != null)
+                {
+                    grDate.DataSource = Session["InformatiaCurenta"];
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

@@ -28,8 +28,8 @@
             <dx:ASPxGridView ID="ReportsGridView" ClientInstanceName="reportsGridView" runat="server" Width="100%" 
                 CssClass="dx-grid-adaptive dx-grid-adaptive-hide-desktop-search dx-grid-adaptive-hide-header dx-grid-adaptive-hide-column1 dx-grid-adaptive-hide-column5"
                 DataSourceID="ReportsDataSource" AutoGenerateColumns="False" KeyFieldName="Id"
-                OnDataBinding="ReportsGridView_DataBinding">
-                <Settings ShowFilterRow="True" VerticalScrollBarMode="Auto" />        
+                OnDataBinding="ReportsGridView_DataBinding">     
+                <Settings ShowFilterRow="True" ShowFilterRowMenu="true" ShowGroupPanel="True" VerticalScrollBarMode="Auto" />
                 <SettingsAdaptivity AdaptivityMode="HideDataCellsWindowLimit" AdaptiveDetailColumnCount="1" HideDataCellsAtWindowInnerWidth="1024" />
                 <SettingsSearchPanel Visible="true" />
                 <SettingsEditing Mode="Inline" />        
@@ -57,7 +57,8 @@
                             </ValidationSettings>
                         </PropertiesTextEdit>
                     </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn FieldName="Description" Caption="Descriere" />
+                    <dx:GridViewDataTextColumn FieldName="Description" Caption="Descriere" >
+                    </dx:GridViewDataTextColumn>
                     <dx:GridViewDataComboBoxColumn FieldName="TypeId" Caption="Tip raport" Width="150px">
                         <PropertiesComboBox DataSourceID="ReportTypesDataSource" ValueField="ReportTypeId" TextField="Name">
                             <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />

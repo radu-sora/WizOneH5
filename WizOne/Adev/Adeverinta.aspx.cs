@@ -33,6 +33,7 @@ namespace WizOne.Adev
                     config.Visible = false;
                     Session["AdevConfig"] = "false";
                     rbTipGen1.Checked = true;
+                    Session["Adev_cmbAng"] = null;
                 }
 
                 if (Session["AdevConfig"] != null)
@@ -1081,7 +1082,8 @@ namespace WizOne.Adev
                         cmbDept.DataBind();
                         return;
                 }
-                UpdateControls(lista);
+                UpdateControls(lista);               
+
 
                 switch (param[0])
                 {
@@ -1100,6 +1102,7 @@ namespace WizOne.Adev
                         break;
                     case "cmbAng":
                         Session["MarcaConfigCIC"] = param[1];
+                        Session["Adev_cmbAng"] = param[1];
                         break;
                     case "btnSalvare":
                         btnSalvare_Click();
@@ -1139,7 +1142,8 @@ namespace WizOne.Adev
                         ReloadCombo();
                         break;
                 }
-
+                if (Session["Adev_cmbAng"] != null)
+                    cmbAng.Value = Convert.ToInt32(Session["Adev_cmbAng"].ToString());
 
                 Session["AdevListaParam"] = lista;
            

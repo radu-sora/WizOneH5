@@ -24,6 +24,10 @@ namespace Wizrom.Reports.Pages
             public int IdModul { get; set; }
         }
 
+        //tip = 1       fara Dashboards
+        //tip = 2       cu Dashboards
+        public static int tip = 1;
+
         public class ReportSettingsViewModel
         {            
             public string ExportOptions { get; set; }
@@ -36,7 +40,8 @@ namespace Wizrom.Reports.Pages
                 "SELECT DISTINCT r.[DynReportId] AS [Id], r.[Name], r.[Description], r.[DynReportTypeId] AS [TypeId], det.[IdModul], det.[AreParola] AS Restricted " +
                 "FROM [DynReports] r " +
                 "INNER JOIN [RapoarteGrupuriUtilizatori] rgu ON r.[DynReportId] = rgu.[IdRaport] AND rgu.[IdUser] = @1" +
-                " LEFT JOIN [tblRapoarteDetalii] det on r.[DynReportId] = det.[IdRaport] ", HttpContext.Current.Session["UserId"]);  //Radu 15.07.2020
+                " LEFT JOIN [tblRapoarteDetalii] det on r.[DynReportId] = det.[IdRaport] " + 
+                (tip == 1 ? " WHERE r.[DynReportTypeId] <> 5 " : "  WHERE r.[DynReportTypeId] = 5 "), HttpContext.Current.Session["UserId"]);  //Radu 15.07.2020 && 13.10.2021
 
             return reports;
         }
@@ -108,6 +113,9 @@ namespace Wizrom.Reports.Pages
         {
             Dami.AccesApp(this.Page);
 
+            //Radu 13.10.2021 - #1016
+            tip = Convert.ToInt32(General.Nz(Request["tip"], 1));
+
             if (!IsPostBack)
             {
                 #region Traducere
@@ -146,8 +154,14 @@ namespace Wizrom.Reports.Pages
             DataTable dtModul = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colModul = (ReportsGridView.Columns["IdModul"] as GridViewDataComboBoxColumn);
             colModul.PropertiesComboBox.DataSource = dtModul;
+
+            //Radu 13.10.2021 - #1016           in loc de    DataSourceID="ReportTypesDataSource"
+            //sql = @"SELECT * FROM DynReportTypes " + (tip == 1 ? " WHERE DynReportTypeId <> 5 " : "  WHERE DynReportTypeId = 5 ");
+            //DataTable dtTipRap = General.IncarcaDT(sql, null);
+            //GridViewDataComboBoxColumn colTipRap = (ReportsGridView.Columns["TypeId"] as GridViewDataComboBoxColumn);
+            //colTipRap.PropertiesComboBox.DataSource = dtTipRap;
         }
-        
+
         protected void ReportsGridView_DataBinding(object sender, EventArgs e)
         {
             (sender as ASPxGridView).ForceDataRowType(typeof(ReportViewModel));

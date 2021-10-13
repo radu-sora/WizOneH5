@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Wizrom.Reports.Pages {
-    
-    
-    public partial class Manage {
-        
+namespace Wizrom.Reports.Pages
+{
+
+
+    public partial class Manage
+    {
+
         /// <summary>
         /// TitleLabel control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel TitleLabel;
-        
+
         /// <summary>
         /// ReportNewButton control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton ReportNewButton;
-        
+
         /// <summary>
         /// ReportViewButton control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton ReportViewButton;
-        
+
         /// <summary>
         /// ReportDesignButton control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton ReportDesignButton;
-        
+
         /// <summary>
         /// ExitButton control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton ExitButton;
-        
+
         /// <summary>
         /// ReportsGridView control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView ReportsGridView;
-        
+
         /// <summary>
         /// ReportEditButton control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton ReportEditButton;
-        
+
         /// <summary>
         /// ReportDeleteButton control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton ReportDeleteButton;
-        
+
         /// <summary>
         /// ReportsDataSource control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace Wizrom.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ObjectDataSource ReportsDataSource;
-        
+
         /// <summary>
         /// ReportTypesDataSource control.
         /// </summary>

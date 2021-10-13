@@ -156,13 +156,13 @@ namespace Wizrom.Reports.Pages
             colModul.PropertiesComboBox.DataSource = dtModul;
 
             //Radu 13.10.2021 - #1016           in loc de    DataSourceID="ReportTypesDataSource"
-            sql = @"SELECT * FROM DynReportTypes " + (tip == 1 ? " WHERE DynReportTypeId <> 5 " : "  WHERE DynReportTypeId = 5 ");
-            DataTable dtTipRap = General.IncarcaDT(sql, null);
-            GridViewDataComboBoxColumn colTipRap = (ReportsGridView.Columns["TypeId"] as GridViewDataComboBoxColumn);
-            colTipRap.PropertiesComboBox.DataSource = dtTipRap;
+            //sql = @"SELECT * FROM DynReportTypes " + (tip == 1 ? " WHERE DynReportTypeId <> 5 " : "  WHERE DynReportTypeId = 5 ");
+            //DataTable dtTipRap = General.IncarcaDT(sql, null);
+            //GridViewDataComboBoxColumn colTipRap = (ReportsGridView.Columns["TypeId"] as GridViewDataComboBoxColumn);
+            //colTipRap.PropertiesComboBox.DataSource = dtTipRap;
         }
-        
-         void ReportsGridView_DataBinding(object sender, EventArgs e)
+
+        protected void ReportsGridView_DataBinding(object sender, EventArgs e)
         {
             (sender as ASPxGridView).ForceDataRowType(typeof(ReportViewModel));
             ReportsGridView.FocusedRowIndex = -1;

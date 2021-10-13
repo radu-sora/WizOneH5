@@ -60,7 +60,7 @@
                     <dx:GridViewDataTextColumn FieldName="Description" Caption="Descriere" >
                     </dx:GridViewDataTextColumn>
                     <dx:GridViewDataComboBoxColumn FieldName="TypeId" Caption="Tip raport" Width="150px">
-                        <PropertiesComboBox ValueField="ReportTypeId" TextField="Name">
+                        <PropertiesComboBox DataSourceID="ReportTypesDataSource" ValueField="ReportTypeId" TextField="Name">
                             <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                             <ValidationSettings Display="Dynamic" ErrorDisplayMode="Text" ErrorTextPosition="Bottom" SetFocusOnError="true">
                                 <RequiredField IsRequired="True" ErrorText="Tipul raportului este obligatoriu" />

@@ -1329,10 +1329,13 @@ namespace WizOne.Adev
                 int index = 1;
                 foreach (string key in lista.Keys)
                 {
-                    string templ = "INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) VALUES ({0}, '{1}', '{2}')";
-                    sql = string.Format(templ, index, key, lista[key]);
-                    General.ExecutaNonQuery(sql, null);
-                    index++;
+                    if (key != "AdevDimX" && key != "AdevDimY")
+                    {
+                        string templ = "INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) VALUES ({0}, '{1}', '{2}')";
+                        sql = string.Format(templ, index, key, lista[key]);
+                        General.ExecutaNonQuery(sql, null);
+                        index++;
+                    }
                 }
 
                 sql = "DELETE FROM F800_ADEVERINTE_CONFIG WHERE NRCRT < 0";

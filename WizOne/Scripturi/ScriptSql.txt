@@ -18512,3 +18512,9 @@ Insert into HOLIDAYS (DAY, NAME) Values (CONVERT(DATETIME, '02/01/2023', 103), '
 Insert into HOLIDAYS (DAY, NAME) Values (CONVERT(DATETIME, '24/01/2023', 103), 'Ziua Unirii');
 
 ---- #1023 - Calendar si SL end
+
+
+UPDATE tblMeniuri set Pagina = 'Generatoare\Reports\Pages\Manage?tip=1' where Pagina = 'Generatoare\Reports\Pages\Manage'
+GO
+INSERT INTO tblMeniuri(Id, Nume, Descriere, Pagina, Stare, Icoana) VALUES((SELECT MAX(Id) FROM tblMeniuri) + 1, 'Dashboards', 'Dashboards', 'Generatoare\Reports\Pages\Manage?tip=2', 1, 'm1.png')
+GO

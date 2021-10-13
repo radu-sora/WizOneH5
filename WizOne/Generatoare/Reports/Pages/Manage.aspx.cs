@@ -20,28 +20,24 @@ namespace Wizrom.Reports.Pages
             public string Name { get; set; }
             public string Description { get; set; }
             public short TypeId { get; set; }
-            public bool Restricted { get; set; }
-            public int IdModul { get; set; }
-        }
-
-        //tip = 1       fara Dashboards
-        //tip = 2       cu Dashboards
-        public static int tip = 1;
+            public int ModuleId { get; set; }
+            public bool Restricted { get; set; }            
+        }        
 
         public class ReportSettingsViewModel
         {            
             public string ExportOptions { get; set; }
             public short ToolbarType { get; set; }
         }
-
-        public static List<ReportViewModel> GetReports()
-        {
+        
+        public static List<ReportViewModel> GetReports(short type = 1)
+        {            
             var reports = General.RunSqlQuery<ReportViewModel>(
-                "SELECT DISTINCT r.[DynReportId] AS [Id], r.[Name], r.[Description], r.[DynReportTypeId] AS [TypeId], det.[IdModul], det.[AreParola] AS Restricted " +
+                "SELECT DISTINCT r.[DynReportId] AS [Id], r.[Name], r.[Description], r.[DynReportTypeId] AS [TypeId], det.[IdModul] AS [ModuleId], det.[AreParola] AS Restricted " +
                 "FROM [DynReports] r " +
-                "INNER JOIN [RapoarteGrupuriUtilizatori] rgu ON r.[DynReportId] = rgu.[IdRaport] AND rgu.[IdUser] = @1" +
-                " LEFT JOIN [tblRapoarteDetalii] det on r.[DynReportId] = det.[IdRaport] " + 
-                (tip == 1 ? " WHERE r.[DynReportTypeId] <> 5 " : "  WHERE r.[DynReportTypeId] = 5 "), HttpContext.Current.Session["UserId"]);  //Radu 15.07.2020 && 13.10.2021
+                "INNER JOIN [RapoarteGrupuriUtilizatori] rgu ON r.[DynReportId] = rgu.[IdRaport] AND rgu.[IdUser] = @1 " +
+                "LEFT JOIN [tblRapoarteDetalii] det ON r.[DynReportId] = det.[IdRaport] " + 
+               $"WHERE r.[DynReportTypeId] {(type == 1 ? "<>" : "=")} 5", HttpContext.Current.Session["UserId"]);  //Radu 15.07.2020 && 13.10.2021
 
             return reports;
         }
@@ -54,7 +50,7 @@ namespace Wizrom.Reports.Pages
 
             //Radu 15.07.2020
             General.RunSqlScalar<int>($"INSERT INTO [tblRapoarteDetalii] ([IdRaport], [IdModul], [AreParola], [USER_NO], [TIME]) VALUES (@1, @2, @3, @4, @5)", null,
-                                reportId, report.IdModul, report.Restricted, Session["UserId"], DateTime.Now);
+                                reportId, report.ModuleId, report.Restricted, Session["UserId"], DateTime.Now);
         }
 
         public void SetReport(ReportViewModel report)
@@ -71,9 +67,9 @@ namespace Wizrom.Reports.Pages
                 //if (General.RunSqlScalar<int>($"UPDATE [relGrupRaport2] SET [AreParola] = @1 WHERE [IdGrup] = @2 AND [IdRaport] = @3", null, report.Restricted, groupId, report.Id) == 0)
                 //    General.RunSqlScalar<int>($"INSERT INTO [relGrupRaport2] ([IdGrup], [IdRaport], [AreParola], [USER_NO], [TIME]) VALUES (@1, @2, @3, @4, @5)", null, 
                 //       groupId, report.Id, report.Restricted, Session["UserId"], DateTime.Now);
-                if (General.RunSqlScalar<int>($"UPDATE [tblRapoarteDetalii] SET [IdModul] = @2, [AreParola] = @1 WHERE [IdRaport] = @3", null, report.Restricted, report.IdModul, report.Id) == 0)
+                if (General.RunSqlScalar<int>($"UPDATE [tblRapoarteDetalii] SET [IdModul] = @1, [AreParola] = @2 WHERE [IdRaport] = @3", null, report.ModuleId, report.Restricted, report.Id) == 0)
                     General.RunSqlScalar<int>($"INSERT INTO [tblRapoarteDetalii] ([IdRaport], [IdModul], [AreParola], [USER_NO], [TIME]) VALUES (@1, @2, @3, @4, @5)", null, 
-                       report.Id, report.IdModul, report.Restricted, Session["UserId"], DateTime.Now);
+                       report.Id, report.ModuleId, report.Restricted, Session["UserId"], DateTime.Now);
             });            
         }
 
@@ -111,10 +107,7 @@ namespace Wizrom.Reports.Pages
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Dami.AccesApp(this.Page);
-
-            //Radu 13.10.2021 - #1016
-            tip = Convert.ToInt32(General.Nz(Request["tip"], 1));
+            Dami.AccesApp(this.Page);            
 
             if (!IsPostBack)
             {
@@ -152,14 +145,16 @@ namespace Wizrom.Reports.Pages
             if (Constante.tipBD == 2)
                 sql = General.SelectOracle("tblModule", "Id") + " ORDER BY \"Denumire\"";
             DataTable dtModul = General.IncarcaDT(sql, null);
-            GridViewDataComboBoxColumn colModul = (ReportsGridView.Columns["IdModul"] as GridViewDataComboBoxColumn);
+            GridViewDataComboBoxColumn colModul = (ReportsGridView.Columns["ModuleId"] as GridViewDataComboBoxColumn);
             colModul.PropertiesComboBox.DataSource = dtModul;
 
-            //Radu 13.10.2021 - #1016           in loc de    DataSourceID="ReportTypesDataSource"
-            //sql = @"SELECT * FROM DynReportTypes " + (tip == 1 ? " WHERE DynReportTypeId <> 5 " : "  WHERE DynReportTypeId = 5 ");
-            //DataTable dtTipRap = General.IncarcaDT(sql, null);
-            //GridViewDataComboBoxColumn colTipRap = (ReportsGridView.Columns["TypeId"] as GridViewDataComboBoxColumn);
-            //colTipRap.PropertiesComboBox.DataSource = dtTipRap;
+            //Radu 13.10.2021 - #1016
+            // tip = 1  fara Dashboards
+            // tip = 2  numai Dashboards        
+            var type = Convert.ToInt16(General.Nz(Request["tip"], 1));
+
+            (ReportsGridView.Columns["TypeId"] as GridViewDataComboBoxColumn).PropertiesComboBox.DataSource = General.IncarcaDT(
+                $@"SELECT DynReportTypeId AS Id, Name FROM DynReportTypes WHERE DynReportTypeId {(type == 1 ? "<>" : "=")} 5", null);            
         }
 
         protected void ReportsGridView_DataBinding(object sender, EventArgs e)

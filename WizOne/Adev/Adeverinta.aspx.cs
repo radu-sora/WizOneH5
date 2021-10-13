@@ -34,6 +34,7 @@ namespace WizOne.Adev
                     Session["AdevConfig"] = "false";
                     rbTipGen1.Checked = true;
                     Session["Adev_cmbAng"] = null;
+                    Session["AdevListaParamCfg"] = null;
                 }
 
                 if (Session["AdevConfig"] != null)
@@ -212,6 +213,9 @@ namespace WizOne.Adev
 
                 cmbCtr.DataSource = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte"" ", null);
                 cmbCtr.DataBind();
+
+                if (Session["Adev_cmbAng"] != null)
+                    cmbAng.Value = Convert.ToInt32(Session["Adev_cmbAng"].ToString());
 
             }
             catch (Exception ex)
@@ -572,12 +576,16 @@ namespace WizOne.Adev
         public Dictionary<String, String> LoadParameters()
         {
             Dictionary<String, String> lista = new Dictionary<string, string>();
+            Dictionary<String, String> listaCfg = new Dictionary<string, string>();
 
             string sql = "SELECT NRCRT, ETICHETA, VALOARE FROM F800_ADEVERINTE_CONFIG WHERE NRCRT > 0 ORDER BY NRCRT";
             DataTable dtParam = General.IncarcaDT(sql, null);
             if (dtParam != null && dtParam.Rows.Count > 0)
                 for (int i = 0; i < dtParam.Rows.Count; i++)
+                {
                     lista.Add(dtParam.Rows[i]["ETICHETA"].ToString(), dtParam.Rows[i]["VALOARE"].ToString());
+                    listaCfg.Add(dtParam.Rows[i]["ETICHETA"].ToString(), "");
+                }
 
             sql = "SELECT -1 AS NRCRT, F80002 AS ETICHETA, F80003 AS VALOARE FROM F800";
             dtParam = General.IncarcaDT(sql, null);
@@ -607,6 +615,7 @@ namespace WizOne.Adev
             if (!lista.ContainsKey("AdevDimY"))
                 lista.Add("AdevDimY", "790575");
             Session["AdevListaParam"] = lista;
+            Session["AdevListaParamCfg"] = listaCfg;
             return lista;
         }
 
@@ -1329,13 +1338,15 @@ namespace WizOne.Adev
                 int index = 1;
                 foreach (string key in lista.Keys)
                 {
-                    if (key != "AdevDimX" && key != "AdevDimY")
+                    Dictionary<String, String> listaCfg = Session["AdevListaParamCfg"] as Dictionary<String, String>;
+                    if (listaCfg.ContainsKey(key))
                     {
                         string templ = "INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) VALUES ({0}, '{1}', '{2}')";
                         sql = string.Format(templ, index, key, lista[key]);
                         General.ExecutaNonQuery(sql, null);
                         index++;
                     }
+                    
                 }
 
                 sql = "DELETE FROM F800_ADEVERINTE_CONFIG WHERE NRCRT < 0";

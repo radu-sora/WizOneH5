@@ -213,6 +213,9 @@ namespace WizOne.Adev
                 cmbCtr.DataSource = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte"" ", null);
                 cmbCtr.DataBind();
 
+                if (Session["Adev_cmbAng"] != null)
+                    cmbAng.Value = Convert.ToInt32(Session["Adev_cmbAng"].ToString());
+
             }
             catch (Exception ex)
             {

@@ -294,14 +294,18 @@
                         <ClientSideEvents Init="function(s,e) { SetComboViz(); }" SelectedIndexChanged="function(s, e) { SetComboViz(); SetEnabled(); pageControl.onFilterChange(true); }" />
                     </dx:ASPxComboBox>
                 </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
-                    <dx:ASPxLabel ID="lblRol" runat="server" AssociatedControlID="cmbRol" Text="Rol" Font-Bold="true" />
-                    <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="100%" AutoPostBack="false"
-                        ValueField="Id" TextField="Denumire" ValueType="System.Int32">
-                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
-                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pageControl.onFilterChange(true); }" />
-                    </dx:ASPxComboBox>
-                </div>
+                <dx:ASPxPanel  ID="divRol" runat="server" CssClass="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                    <PanelCollection>
+                        <dx:PanelContent> 
+                            <dx:ASPxLabel ID="lblRol" runat="server" AssociatedControlID="cmbRol" Text="Rol" Font-Bold="true" />
+                            <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="100%" AutoPostBack="false"
+                                ValueField="Id" TextField="Denumire" ValueType="System.Int32">
+                                <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
+                                <ClientSideEvents SelectedIndexChanged="function(s, e) { pageControl.onFilterChange(true); }" />
+                            </dx:ASPxComboBox>
+                        </dx:PanelContent>
+                    </PanelCollection>
+                </dx:ASPxPanel>
                 <div class="col-lg-1 col-md-4 col-sm-4 col-xs-6">                        
                     <dx:ASPxLabel ID="lblStare" runat="server" AssociatedControlID="cmbStare" Text="Stare" Font-Bold="true" />
                     <dx:ASPxDropDownEdit ID="cmbStare" ClientInstanceName="cmbStare" runat="server" Width="100%">

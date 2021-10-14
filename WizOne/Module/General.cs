@@ -5131,16 +5131,27 @@ namespace WizOne.Module
                         if (Convert.ToInt32(valId) < 0)
                         {
                             int idSpr = Convert.ToInt32(valId);
-                            //ne asiguram ca exista user pentru supervizorul din circuit
-                            strSql = "SELECT * FROM \"F100Supervizori\" WHERE F10003 = " + f10003.ToString() + " AND \"IdSuper\" = " + (-1 * idSpr).ToString();
+                            //verif. daca nu cumva user-ul logat este deja un superviozr pt acest angajat;
+                            //astfel se rezolva problema cand, de exemplu, un angajat are mai multi AdminRu
+                            strSql = "SELECT * FROM \"F100Supervizori\" WHERE F10003 = " + f10003.ToString() + " AND \"IdSuper\" = " + (-1 * idSpr).ToString() + " AND \"IdUser\" = " + idUser;
                             DataTable dtTemp = General.IncarcaDT(strSql, null);
-                            if (dtTemp == null || dtTemp.Rows.Count == 0 || dtTemp.Rows[0]["IdUser"] == null || dtTemp.Rows[0]["IdUser"].ToString().Length <= 0)
+                            if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0]["IdUser"] != null && dtTemp.Rows[0]["IdUser"].ToString().Length > 0)
                             {
-                                continue;
+                                idUserCalc = Convert.ToInt32(dtTemp.Rows[0]["IdUser"].ToString());
                             }
                             else
                             {
-                                idUserCalc = Convert.ToInt32(dtTemp.Rows[0]["IdUser"].ToString());
+                                //ne asiguram ca exista user pentru supervizorul din circuit
+                                strSql = "SELECT * FROM \"F100Supervizori\" WHERE F10003 = " + f10003.ToString() + " AND \"IdSuper\" = " + (-1 * idSpr).ToString();
+                                dtTemp = General.IncarcaDT(strSql, null);
+                                if (dtTemp == null || dtTemp.Rows.Count == 0 || dtTemp.Rows[0]["IdUser"] == null || dtTemp.Rows[0]["IdUser"].ToString().Length <= 0)
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    idUserCalc = Convert.ToInt32(dtTemp.Rows[0]["IdUser"].ToString());
+                                }
                             }
                         }
 

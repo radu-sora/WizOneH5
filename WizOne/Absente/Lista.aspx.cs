@@ -144,12 +144,14 @@ namespace WizOne.Absente
                     switch (dt.Rows.Count)
                     {
                         case 0:
-                            lblRol.Visible = false;
-                            cmbRol.Visible = false;
+                            divRol.ClientVisible = false;
+                            //lblRol.ClientVisible = false;
+                            //cmbRol.ClientVisible = false;
                             break;
                         case 1:
-                            lblRol.Visible = false;
-                            cmbRol.Visible = false;
+                            divRol.ClientVisible = false;
+                            //lblRol.ClientVisible = false;
+                            //cmbRol.ClientVisible = false;
                             cmbRol.SelectedIndex = 0;
                             break;
                         case 2:
@@ -207,7 +209,7 @@ namespace WizOne.Absente
                         Session["Filtru_CereriAbs"] = JsonConvert.SerializeObject(new
                         {
                             viz = (int)cmbViz.Value,
-                            rol = cmbRol.Visible ? (int)cmbRol.Value : null as int?,
+                            rol = divRol.ClientVisible ? (int)cmbRol.Value : null as int?,
                             stare = new int[0],
                             dtInc = txtDtInc.Value,
                             dtSf = txtDtSf.Value,

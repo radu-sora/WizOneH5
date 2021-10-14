@@ -722,7 +722,12 @@ namespace WizOne.BP
             bool HR = false;
 
             //Radu 28.11.2019
-            string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");    
+            string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
+            string sql = "SELECT COUNT(*) FROM \"F100Supervizori\" WHERE \"IdUser\" = {0} AND \"IdSuper\" IN ({1})";
+            sql = string.Format(sql, Session["UserId"].ToString(), idHR);
+            DataTable dtHR = General.IncarcaDT(sql, null);       
+            if (dtHR != null && dtHR.Rows.Count > 0 && dtHR.Rows[0][0] != null && dtHR.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtHR.Rows[0][0].ToString()) > 0)
+                HR = true;
 
             try
             {
@@ -874,11 +879,13 @@ namespace WizOne.BP
 
                         #endregion
 
-                        string sql = "UPDATE \"BP_Prime\" SET \"Pozitie\" = {0}, \"IdStare\" = {1}, \"Culoare\" = '{2}', \"Explicatie\" = '{3}', \"SumaNeta\" = {4}, \"SumaBruta\" = {5} WHERE \"Id\" = {6} ";
+                        sql = "UPDATE \"BP_Prime\" SET \"Pozitie\" = {0}, \"IdStare\" = {1}, \"Culoare\" = '{2}', \"Explicatie\" = '{3}', \"SumaNeta\" = {4}, \"SumaBruta\" = {5} WHERE \"Id\" = {6} ";
                         sql = string.Format(sql, pozitie, idStare, culoare, explicatie, sumaNeta.ToString(new CultureInfo("en-US")), sumaBruta.ToString(new CultureInfo("en-US")), id);
                         General.ExecutaNonQuery(sql, null);
 
-                        sql = "UPDATE \"BP_Istoric\" SET \"DataAprobare\" = {0}, \"Aprobat\" = 1, \"IdStare\" = '{1}', \"Culoare\" = '{2}', USER_NO = {3}, TIME = {0}, \"IdUserInlocuitor\" = {4} WHERE \"Id\" = {5} AND \"IdUser\" = {3} AND \"Aprobat\" IS NULL  ";
+                        sql = "UPDATE X  SET \"DataAprobare\" = {0}, \"Aprobat\" = 1, \"IdStare\" = {1}, \"Culoare\" = '{2}', USER_NO = {3}, TIME = {0}, \"IdUserInlocuitor\" = {4} FROM \"BP_Istoric\" X WHERE \"Id\" = {5}  "
+                            + " AND  ((IdSuper >= 0 and IdUser = {3}) or (IdSuper < 0 and {3} in (select sup.IdUser from F100Supervizori sup where sup.F10003 = (select A.F10003 from bp_prime a where A.Id = x.Id) and sup.IdSuper = (-1) * x.IdSuper) )) "
+                            + " AND \"Aprobat\" IS NULL  ";
                         sql = string.Format(sql, (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), idStare, culoare, Session["UserId"].ToString(), (idUserInloc == 0 ? "NULL" : idUserInloc.ToString()), id);
                         General.ExecutaNonQuery(sql, null);
 

@@ -28,8 +28,8 @@
             <dx:ASPxGridView ID="ReportsGridView" ClientInstanceName="reportsGridView" runat="server" Width="100%" 
                 CssClass="dx-grid-adaptive dx-grid-adaptive-hide-desktop-search dx-grid-adaptive-hide-header dx-grid-adaptive-hide-column1 dx-grid-adaptive-hide-column5"
                 DataSourceID="ReportsDataSource" AutoGenerateColumns="False" KeyFieldName="Id"
-                OnDataBinding="ReportsGridView_DataBinding">
-                <Settings ShowFilterRow="True" VerticalScrollBarMode="Auto" />        
+                OnDataBinding="ReportsGridView_DataBinding">     
+                <Settings ShowFilterRow="True" ShowFilterRowMenu="true" ShowGroupPanel="True" VerticalScrollBarMode="Auto" />
                 <SettingsAdaptivity AdaptivityMode="HideDataCellsWindowLimit" AdaptiveDetailColumnCount="1" HideDataCellsAtWindowInnerWidth="1024" />
                 <SettingsSearchPanel Visible="true" />
                 <SettingsEditing Mode="Inline" />        
@@ -57,16 +57,17 @@
                             </ValidationSettings>
                         </PropertiesTextEdit>
                     </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn FieldName="Description" Caption="Descriere" />
+                    <dx:GridViewDataTextColumn FieldName="Description" Caption="Descriere" >
+                    </dx:GridViewDataTextColumn>
                     <dx:GridViewDataComboBoxColumn FieldName="TypeId" Caption="Tip raport" Width="150px">
-                        <PropertiesComboBox DataSourceID="ReportTypesDataSource" ValueField="ReportTypeId" TextField="Name">
+                        <PropertiesComboBox ValueField="Id" TextField="Name">
                             <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                             <ValidationSettings Display="Dynamic" ErrorDisplayMode="Text" ErrorTextPosition="Bottom" SetFocusOnError="true">
                                 <RequiredField IsRequired="True" ErrorText="Tipul raportului este obligatoriu" />
                             </ValidationSettings>
                         </PropertiesComboBox>
                     </dx:GridViewDataComboBoxColumn>
-                    <dx:GridViewDataComboBoxColumn FieldName="IdModul" Caption="Modul" Width="150px">
+                    <dx:GridViewDataComboBoxColumn FieldName="ModuleId" Caption="Modul" Width="150px">
                         <PropertiesComboBox ValueField="Id" TextField="Denumire">
                             <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchToModalAtWindowInnerWidth="1024" />
                         </PropertiesComboBox>
@@ -90,10 +91,11 @@
     </div>
     
     <asp:ObjectDataSource ID="ReportsDataSource" runat="server" TypeName="Wizrom.Reports.Pages.Manage" DataObjectTypeName="Wizrom.Reports.Pages.Manage+ReportViewModel"
-        SelectMethod="GetReports" InsertMethod="AddReport" UpdateMethod="SetReport" DeleteMethod="DelReport">        
-    </asp:ObjectDataSource>
-    <ef:EntityDataSource ID="ReportTypesDataSource" runat="server" ContextTypeName="Wizrom.Reports.Models.ReportsEntities" EntitySetName="ReportTypes">
-    </ef:EntityDataSource>
+        SelectMethod="GetReports" InsertMethod="AddReport" UpdateMethod="SetReport" DeleteMethod="DelReport">
+        <SelectParameters>
+            <asp:QueryStringParameter Name="type" Type="Int16" QueryStringField="tip" DefaultValue="1" />
+        </SelectParameters>
+    </asp:ObjectDataSource>    
            
     <script>   
         /* Page control */

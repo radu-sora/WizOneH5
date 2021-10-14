@@ -227,7 +227,8 @@
             <td colspan="2" style="margin-top:15px;">
                 <br />
                 <dx:ASPxHiddenField ID="txtCol" runat="server" ClientInstanceName="txtCol" ClientIDMode="Static"></dx:ASPxHiddenField>
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" KeyFieldName="F10003" EnableRowsCache="false" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnCustomCallback="grDate_CustomCallback" OnDataBound="grDate_DataBound" >
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" KeyFieldName="F10003" 
+                    OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnCustomCallback="grDate_CustomCallback" OnDataBound="grDate_DataBound" OnDataBinding="grDate_DataBinding">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowStatusBar="Hidden" HorizontalScrollBarMode="Visible" ShowFilterRow="True" VerticalScrollBarMode="Visible" AutoFilterCondition="Contains" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" />

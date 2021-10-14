@@ -1079,7 +1079,14 @@ namespace WizOne.Pagini
                     for (int x = 0; x < lstCampuri.Length; x++)
                     {
                         camp += "," + lstCampuri[x].Split('=')[0];
-                        valoare += "," + lstCampuri[x].Split('=')[1].Replace("#&*", ",");
+                        if (lstCampuri[x].Split('=').Length == 2)
+                            valoare += "," + lstCampuri[x].Split('=')[1].Replace("#&*", ",");
+                        else
+                        {
+                            valoare += ",";
+                            for (int y = 1; y < lstCampuri[x].Split('=').Length; y++)
+                                valoare += lstCampuri[x].Split('=')[y].Replace("#&*", ",") + (y == lstCampuri[x].Split('=').Length - 1 ? "" : "=");
+                        }
                     }
 
                     if (utilizator)

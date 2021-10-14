@@ -146,7 +146,7 @@
                                         </div>
 
                                             <div style="float:left; padding-right:15px;">
-                                            <dx:ASPxRadioButton ID="rbPrel" runat="server" Text="Preluare manuala"   ClientInstanceName="rbPrel" RepeatDirection="Horizontal" GroupName="Prel1">                                             
+                                            <dx:ASPxRadioButton ID="rbPrel" runat="server" Text="Preluare manuala" Checked="true"   ClientInstanceName="rbPrel" RepeatDirection="Horizontal" GroupName="Prel1">                                             
                                                 </dx:ASPxRadioButton>
                                         </div>
                                         <div style="float:left; padding-right:15px;">

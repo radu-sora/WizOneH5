@@ -33,6 +33,8 @@ namespace WizOne.Adev
                     config.Visible = false;
                     Session["AdevConfig"] = "false";
                     rbTipGen1.Checked = true;
+                    Session["Adev_cmbAng"] = null;
+                    Session["AdevListaParamCfg"] = null;
                 }
 
                 if (Session["AdevConfig"] != null)
@@ -211,6 +213,9 @@ namespace WizOne.Adev
 
                 cmbCtr.DataSource = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte"" ", null);
                 cmbCtr.DataBind();
+
+                if (Session["Adev_cmbAng"] != null)
+                    cmbAng.Value = Convert.ToInt32(Session["Adev_cmbAng"].ToString());
 
             }
             catch (Exception ex)
@@ -571,12 +576,16 @@ namespace WizOne.Adev
         public Dictionary<String, String> LoadParameters()
         {
             Dictionary<String, String> lista = new Dictionary<string, string>();
+            Dictionary<String, String> listaCfg = new Dictionary<string, string>();
 
             string sql = "SELECT NRCRT, ETICHETA, VALOARE FROM F800_ADEVERINTE_CONFIG WHERE NRCRT > 0 ORDER BY NRCRT";
             DataTable dtParam = General.IncarcaDT(sql, null);
             if (dtParam != null && dtParam.Rows.Count > 0)
                 for (int i = 0; i < dtParam.Rows.Count; i++)
+                {
                     lista.Add(dtParam.Rows[i]["ETICHETA"].ToString(), dtParam.Rows[i]["VALOARE"].ToString());
+                    listaCfg.Add(dtParam.Rows[i]["ETICHETA"].ToString(), "");
+                }
 
             sql = "SELECT -1 AS NRCRT, F80002 AS ETICHETA, F80003 AS VALOARE FROM F800";
             dtParam = General.IncarcaDT(sql, null);
@@ -606,6 +615,7 @@ namespace WizOne.Adev
             if (!lista.ContainsKey("AdevDimY"))
                 lista.Add("AdevDimY", "790575");
             Session["AdevListaParam"] = lista;
+            Session["AdevListaParamCfg"] = listaCfg;
             return lista;
         }
 
@@ -1081,7 +1091,8 @@ namespace WizOne.Adev
                         cmbDept.DataBind();
                         return;
                 }
-                UpdateControls(lista);
+                UpdateControls(lista);               
+
 
                 switch (param[0])
                 {
@@ -1100,6 +1111,7 @@ namespace WizOne.Adev
                         break;
                     case "cmbAng":
                         Session["MarcaConfigCIC"] = param[1];
+                        Session["Adev_cmbAng"] = param[1];
                         break;
                     case "btnSalvare":
                         btnSalvare_Click();
@@ -1139,7 +1151,8 @@ namespace WizOne.Adev
                         ReloadCombo();
                         break;
                 }
-
+                if (Session["Adev_cmbAng"] != null)
+                    cmbAng.Value = Convert.ToInt32(Session["Adev_cmbAng"].ToString());
 
                 Session["AdevListaParam"] = lista;
            
@@ -1325,10 +1338,15 @@ namespace WizOne.Adev
                 int index = 1;
                 foreach (string key in lista.Keys)
                 {
-                    string templ = "INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) VALUES ({0}, '{1}', '{2}')";
-                    sql = string.Format(templ, index, key, lista[key]);
-                    General.ExecutaNonQuery(sql, null);
-                    index++;
+                    Dictionary<String, String> listaCfg = Session["AdevListaParamCfg"] as Dictionary<String, String>;
+                    if (listaCfg.ContainsKey(key))
+                    {
+                        string templ = "INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) VALUES ({0}, '{1}', '{2}')";
+                        sql = string.Format(templ, index, key, lista[key]);
+                        General.ExecutaNonQuery(sql, null);
+                        index++;
+                    }
+                    
                 }
 
                 sql = "DELETE FROM F800_ADEVERINTE_CONFIG WHERE NRCRT < 0";
@@ -1475,7 +1493,7 @@ namespace WizOne.Adev
                 {
                     case 0:
                         if (lstMarci.Count() == 1)
-                            fisier = "Adev_sanatate_2019_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                            fisier = "Adev_sanatate_2019_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
                         else
                             fisier = "Adev_sanatate_2019_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
@@ -1483,7 +1501,7 @@ namespace WizOne.Adev
                         break;
                     case 1:
                         if (lstMarci.Count() == 1)
-                            fisier = "Adev_sanatate_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                            fisier = "Adev_sanatate_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
                         else
                             fisier = "Adev_sanatate_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
@@ -1492,7 +1510,7 @@ namespace WizOne.Adev
                         break;                        
                     case 2:
                         if (lstMarci.Count() == 1)
-                            fisier = dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + (lista["MAR"] == "1" ? lstMarci[0].ToString() : dtAng.Rows[0]["F10017"].ToString()) + ".xml";
+                            fisier = dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + (lista["MAR"] == "1" ? lstMarci[0].ToString() : dtAng.Rows[0]["F10017"].ToString().Trim()) + ".xml";
                         else
                             fisier = "Adev_venituri_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/VENITURI_" + anul + "/") + fisier;
@@ -1501,7 +1519,7 @@ namespace WizOne.Adev
                         break;
                     case 3:
                         if (lstMarci.Count() == 1)
-                            fisier = "Adev_CIC_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                            fisier = "Adev_CIC_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
                         else
                             fisier = "Adev_CIC_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
@@ -1510,7 +1528,7 @@ namespace WizOne.Adev
                         break;
                     case 4:
                         if (lstMarci.Count() == 1)
-                            fisier = "Adev_SOMAJ_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                            fisier = "Adev_SOMAJ_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
                         else
                             fisier = "Adev_SOMAJ_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
@@ -1519,7 +1537,7 @@ namespace WizOne.Adev
                         break;
                     case 6:
                         if (lstMarci.Count() == 1)
-                            fisier = "Adev_Stagiu_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                            fisier = "Adev_Stagiu_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
                         else
                             fisier = "Adev_Stagiu_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
@@ -1528,7 +1546,7 @@ namespace WizOne.Adev
                         break;
                     case 7:
                         if (lstMarci.Count() == 1)
-                            fisier = "Adev_Vechime_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                            fisier = "Adev_Vechime_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
                         else
                             fisier = "Adev_Vechime_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
@@ -1537,7 +1555,7 @@ namespace WizOne.Adev
                         break;
                     case 11:
                         if (lstMarci.Count() == 1)
-                            fisier = "Adev_Deplasare_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                            fisier = "Adev_Deplasare_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
                         else
                             fisier = "Adev_Deplasare_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
@@ -1546,7 +1564,7 @@ namespace WizOne.Adev
                         break;
                     case 12:
                         if (lstMarci.Count() == 1)
-                            fisier = "Adev_sanatate_2020_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                            fisier = "Adev_sanatate_2020_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
                         else
                             fisier = "Adev_sanatate_2020_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
@@ -1555,7 +1573,7 @@ namespace WizOne.Adev
                         break;
                     case 13:
                         if (lstMarci.Count() == 1)
-                            fisier = "Adev_SOMAJ_TEHNIC_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                            fisier = "Adev_SOMAJ_TEHNIC_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
                         else
                             fisier = "Adev_SOMAJ_TEHNIC_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
@@ -1632,52 +1650,52 @@ namespace WizOne.Adev
                         switch (adev)
                         {
                             case 0:
-                                fisier = "Adev_sanatate_2019_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                                fisier = "Adev_sanatate_2019_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + marca + ".xml";
                                 numeArhiva = "Adev_sanatate_2019_" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                                 break;
                             case 1:
-                                fisier = "Adev_sanatate_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                                fisier = "Adev_sanatate_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + marca + ".xml";
                                 numeArhiva = "Adev_sanatate_" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                                 break;
                             case 2:
-                                fisier = dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + (lista["MAR"] == "1" ? marca.ToString() : dtAng.Rows[0]["F10017"].ToString()) + ".xml";
+                                fisier = dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + (lista["MAR"] == "1" ? marca.ToString() : dtAng.Rows[0]["F10017"].ToString().Trim()) + ".xml";
                                 numeArhiva = "Adev_sanatate_2019_" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/VENITURI_" + anul + "/") + fisier;
                                 break;
                             case 3:
-                                fisier = "Adev_CIC_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                                fisier = "Adev_CIC_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + marca + ".xml";
                                 numeArhiva = "Adev_venituri_" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                                 break;
                             case 4:
-                                fisier = "Adev_SOMAJ_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                                fisier = "Adev_SOMAJ_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + marca + ".xml";
                                 numeArhiva = "Adev_SOMAJ__" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                                 break;
                             case 6:
-                                fisier = "Adev_Stagiu_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                                fisier = "Adev_Stagiu_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + marca + ".xml";
                                 numeArhiva = "Adev_Stagiu_" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                                 break;
                             case 7:
-                                fisier = "Adev_Vechime_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                                fisier = "Adev_Vechime_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + marca + ".xml";
                                 numeArhiva = "Adev_Vechime_" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                                 break;
                             case 11:
-                                fisier = "Adev_Deplasare_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                                fisier = "Adev_Deplasare_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + marca + ".xml";
                                 numeArhiva = "Adev_Deplasare_" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                                 break;
                             case 12:
-                                fisier = "Adev_sanatate_2020_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                                fisier = "Adev_sanatate_2020_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + marca + ".xml";
                                 numeArhiva = "Adev_sanatate_2020_" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                                 break;
                             case 13:
-                                fisier = "Adev_SOMAJ_TEHNIC_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                                fisier = "Adev_SOMAJ_TEHNIC_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + marca + ".xml";
                                 numeArhiva = "Adev_SOMAJ_TEHNIC_" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                                 break;

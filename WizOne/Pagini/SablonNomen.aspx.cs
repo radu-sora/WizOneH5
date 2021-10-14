@@ -776,6 +776,14 @@ namespace WizOne.Pagini
                 }
 
 
+                //Radu 14.10.2021 - #1004
+                if (Session["Sablon_Tabela"].ToString() == "Ptj_tblZileCOSuplimentare")
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                        if (Convert.ToInt32(General.Nz(dt.Rows[i]["AnInceput"], 1900)) <= DateTime.Now.Year && DateTime.Now.Year <= Convert.ToInt32(General.Nz(dt.Rows[i]["AnSfarsit"], 2100)))
+                            General.ExecutaNonQuery("UPDATE F100 SET F100640 = " + General.Nz(dt.Rows[i]["ZileCOSuplimentare"], 0).ToString() + " WHERE F10003 = " + dt.Rows[i]["F10003"].ToString(), null);                    
+                }
+
                 MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
             }
             catch (Exception ex)

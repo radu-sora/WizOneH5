@@ -175,7 +175,6 @@ namespace WizOne.Personal
 
                 if (cmbGradInvalid.Value == null || Convert.ToInt32(cmbGradInvalid.Value) == 1)
                     deDataValabInvalid.ClientEnabled = false;
-
             }
             else
             {

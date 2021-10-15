@@ -29,8 +29,6 @@ namespace WizOne.Personal
             Contract_DataList.DataSource = table;
             Contract_DataList.DataBind();
 
-
-
             ASPxTextBox txtZile = Contract_DataList.Items[0].FindControl("txtNrZile") as ASPxTextBox;
             ASPxTextBox txtLuni = Contract_DataList.Items[0].FindControl("txtNrLuni") as ASPxTextBox;
             ASPxDateEdit deDeLa = Contract_DataList.Items[0].FindControl("deDeLaData") as ASPxDateEdit;
@@ -118,20 +116,21 @@ namespace WizOne.Personal
             ASPxDateEdit deDataValabInvalid = Contract_DataList.Items[0].FindControl("deDataValabInvalid") as ASPxDateEdit;
             if (!IsPostBack)
             {
-                //cmbTimpPartial.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
-                //cmbTimpPartial.DataBind();
-
-                //Radu 18.09.2019
-                ObjectDataSource cmbTimpPartialDataSource = cmbTimpPartial.NamingContainer.FindControl("dsTP") as ObjectDataSource;
-                cmbTimpPartialDataSource.SelectParameters.Clear();
-                cmbTimpPartialDataSource.SelectParameters.Add("tip", ds.Tables[0].Rows[0]["F10010"].ToString());
+                cmbTimpPartial.DataSource = General.GetTimpPartial(ds.Tables[0].Rows[0]["F10010"].ToString());
                 cmbTimpPartial.DataBindItems();
+
+                //Florin 2021.10.15 - #1025 - s-a comentat codul lui Radu si s-a decomentat codul initial
+                ////Radu 18.09.2019
+                //ObjectDataSource cmbTimpPartialDataSource = cmbTimpPartial.NamingContainer.FindControl("dsTP") as ObjectDataSource;
+                //cmbTimpPartialDataSource.SelectParameters.Clear();
+                //cmbTimpPartialDataSource.SelectParameters.Add("tip", ds.Tables[0].Rows[0]["F10010"].ToString());
+                //cmbTimpPartial.DataBindItems();
                 //Florin 2019.09.05
                 //if (General.Nz(ds.Tables[0].Rows[0]["F10043"],"").ToString() != "")
                 //    cmbTimpPartial.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"]);
 
                 cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca(ds.Tables[0].Rows[0]["F100926"].ToString());
-                cmbDurTimpMunca.DataBind();
+                cmbDurTimpMunca.DataBindItems();
                 //Florin 2019.09.05
                 if (General.Nz(ds.Tables[0].Rows[0]["F100927"], "").ToString() != "")
                     cmbDurTimpMunca.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100927"]);
@@ -140,7 +139,7 @@ namespace WizOne.Personal
                 //Florin #715
                 //cmbTipNorma.DataSource = General.GetTipNorma(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0 ? "1" : "2");
                 cmbTipNorma.DataSource = General.GetTipNorma("1 OR 1=1");
-                cmbTipNorma.DataBind();
+                cmbTipNorma.DataBindItems();
                 //Florin 2019.09.05
                 if (General.Nz(ds.Tables[0].Rows[0]["F100926"], "").ToString() != "")
                     cmbTipNorma.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100926"]);
@@ -182,22 +181,24 @@ namespace WizOne.Personal
 
                 int tipAng = Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString());
                 if (hfTipAngajat.Contains("TipAng")) tipAng = Convert.ToInt32(General.Nz(hfTipAngajat["TipAng"], -1));
-                //Radu 18.09.2019
-                ObjectDataSource cmbTimpPartialDataSource = cmbTimpPartial.NamingContainer.FindControl("dsTP") as ObjectDataSource;
-                cmbTimpPartialDataSource.SelectParameters.Clear();
-                cmbTimpPartialDataSource.SelectParameters.Add("tip", tipAng.ToString());
+
+                //Florin 2021.10.15 - #1025 - s-a comentat codul lui Radu si s-a decomentat codul initial
+                ////Radu 18.09.2019
+                //ObjectDataSource cmbTimpPartialDataSource = cmbTimpPartial.NamingContainer.FindControl("dsTP") as ObjectDataSource;
+                //cmbTimpPartialDataSource.SelectParameters.Clear();
+                //cmbTimpPartialDataSource.SelectParameters.Add("tip", tipAng.ToString());
+                //cmbTimpPartial.DataBindItems();
+
+                cmbTimpPartial.DataSource = General.GetTimpPartial(tipAng.ToString());
                 cmbTimpPartial.DataBindItems();
 
-                //cmbTimpPartial.DataSource = General.GetTimpPartial(tipAng);
-                //cmbTimpPartial.DataBind();
-
                 cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca(tipAng == 0 ? "1" : "2");
-                cmbDurTimpMunca.DataBind();
+                cmbDurTimpMunca.DataBindItems();
 
                 //Florin #715
                 //cmbTipNorma.DataSource = General.GetTipNorma(tipAng == 0 ? "1" : "2");
                 cmbTipNorma.DataSource = General.GetTipNorma("1 OR 1=1");
-                cmbTipNorma.DataBind();
+                cmbTipNorma.DataBindItems();
 
                 //Florin #715
                 //if (tipAng == 0)
@@ -224,7 +225,7 @@ namespace WizOne.Personal
 
             ASPxComboBox cmbNivelFunctie = Contract_DataList.Items[0].FindControl("cmbNivelFunctie") as ASPxComboBox;
             cmbNivelFunctie.DataSource = General.IncarcaDT("SELECT * FROM \"tblNivelFunctie\" ORDER BY \"Denumire\"", null);
-            cmbNivelFunctie.DataBind();
+            cmbNivelFunctie.DataBindItems();
 
             if (!IsPostBack)
             {
@@ -401,7 +402,7 @@ namespace WizOne.Personal
                 string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
                 Session["MP_cmbPost"] = General.IncarcaDT(sqlPost);
                 cmbPost.DataSource = Session["MP_cmbPost"];
-                cmbPost.DataBind();
+                cmbPost.DataBindItems();
 
                 General.AflaIdPost();
                 cmbPost.Value = Session["MP_IdPost"];
@@ -409,7 +410,7 @@ namespace WizOne.Personal
             else if (Contract_pnlCtl.IsCallback)
             {
                 cmbPost.DataSource = Session["MP_cmbPost"];
-                cmbPost.DataBind();
+                cmbPost.DataBindItems();
             }
 
             //2020.12.21
@@ -970,7 +971,7 @@ namespace WizOne.Personal
                         string sqlPost = $@"SELECT ""Id"", ""Denumire"", ""SalariuMin"" FROM ""Org_Posturi"" WHERE ""IdFunctie""={General.Nz(cmbFunctie.Value, -99)} AND {General.TruncateDate("DataInceput")} <= {General.CurrentDate(true)} AND {General.CurrentDate(true)} <= {General.TruncateDate("DataSfarsit")}";
                         Session["MP_cmbPost"] = General.IncarcaDT(sqlPost);
                         cmbPost.DataSource = Session["MP_cmbPost"];
-                        cmbPost.DataBind();
+                        cmbPost.DataBindItems();
                         cmbPost.Value = null;
                     }
                     break;
@@ -1037,7 +1038,7 @@ namespace WizOne.Personal
                     if (Convert.ToInt32(General.Nz(cmbTipNorma.Value, -99)) == 3)
                     {
                         cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca("3");
-                        cmbDurTimpMunca.DataBind();
+                        cmbDurTimpMunca.DataBindItems();
                         cmbDurTimpMunca.Value = 6;
                         //cmbDurTimpMunca.ClientEnabled = false;
                     }

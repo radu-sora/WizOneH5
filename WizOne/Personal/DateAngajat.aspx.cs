@@ -17,57 +17,13 @@ namespace WizOne.Personal
 {
     public partial class DateAngajat : System.Web.UI.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
+        protected void Page_Init(object sender, EventArgs e)
         {
             try
             {
-
-                #region Traducere
-
-                string ctlPost = Request.Params["__EVENTTARGET"];
-                btnSave.Text = Dami.TraduCuvant(btnSave.Text);
-                btnExit.Text = Dami.TraduCuvant(btnExit.Text);
-
-                #endregion
-
-                Response.Cache.SetNoStore();
-                Response.AppendHeader("Pragma", "no-cache");
-                Response.Expires = 0;
-
-                Session["PaginaWeb"] = "Personal.DateAngajat";
-
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                string marca = Session["Marca"] as string;
-                if (ds == null && marca == null)
-                {
-                    marca = NextMarca().ToString();
-                    Session["Marca"] = marca;
-                    Session["esteNou"] = "true";
-
-                    Initializare(ref ds);
-                }
-                else              //Florin 2020.10.28
-                {
-                    General.AflaIdPost();
-                }
-
+                //Florin 2021.10.14 - #1025 - codul de mai jos s-a mutat din Page_Load
                 if (!IsPostBack)
                 {
-                    string culoare = (General.ExecutaScalar(@"SELECT COALESCE(""Valoare"",'') FROM ""tblParametrii"" WHERE ""Nume"" = 'MP_CuloareCampObligatoriu' ", null) ?? "").ToString();
-                    if (culoare != null && culoare.Length == 7 && culoare[0] == '#')
-                    {
-                        int r = int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[2].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255 
-                            : int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber);
-                        int g = int.Parse(culoare[3].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[4].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255
-                            : int.Parse(culoare[3].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[4].ToString(), System.Globalization.NumberStyles.HexNumber);
-                        int b = int.Parse(culoare[5].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[6].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255
-                            : int.Parse(culoare[5].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[6].ToString(), System.Globalization.NumberStyles.HexNumber);
-                        List<int> lst = new List<int>();
-                        lst.Add(r); lst.Add(g); lst.Add(b);
-                        Session["MP_CuloareCampOblig"] = lst;
-                    }
-
-                    //Radu 20.02.2020 - citire securitate
                     string sqlSec = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"", X.""IdForm""  FROM (
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat"", A.""IdForm""
                                 FROM ""Securitate"" A
@@ -80,18 +36,8 @@ namespace WizOne.Personal
                                 GROUP BY X.""IdControl"", X.""IdColoana"", X.""IdForm""";
                     sqlSec = string.Format(sqlSec, Session["UserId"].ToString());
                     DataTable dtSec = General.IncarcaDT(sqlSec, null);
-                    Session["SecuritatePersonal"] = dtSec;           
+                    Session["SecuritatePersonal"] = dtSec;
                 }
-
-
-                if (Session["esteNou"] == null || Session["esteNou"].ToString().Length <= 0 || Session["esteNou"].ToString() == "false")
-                {
-                    DataTable dtDept = General.IncarcaDT("SELECT F00608 FROM F006 WHERE F00607 = " + ds.Tables[0].Rows[0]["F10007"].ToString(), null);
-                    lblDateAngajat.Text = ds.Tables[0].Rows[0]["F10008"].ToString() + " " + ds.Tables[0].Rows[0]["F10009"].ToString() + ", " + Dami.TraduCuvant("Marca") + ": " + ds.Tables[0].Rows[0]["F10003"].ToString()
-                                        + ", " + Dami.TraduCuvant("Departament") + ": " + (dtDept != null && dtDept.Rows.Count > 0 ? dtDept.Rows[0]["F00608"].ToString() : "");
-       
-                }
-
 
                 string sql = "SELECT DISTINCT B.\"Denumire\", B.\"Pagina\", B.\"Ordine\" FROM \"MP_tblTaburi\" B ";
 
@@ -142,7 +88,7 @@ namespace WizOne.Personal
                                 if (ctrl.Controls[j].GetType() == typeof(DevExpress.Web.ASPxCallbackPanel))
                                 {
                                     ASPxCallbackPanel cb = ctrl.Controls[j] as ASPxCallbackPanel;
-                                    cb.Enabled = false;
+                                    cb.ClientEnabled = false;
                                 }
                                 if (ctrl.Controls[j].GetType() == typeof(DevExpress.Web.ASPxButton))
                                 {
@@ -185,6 +131,182 @@ namespace WizOne.Personal
                 this.ASPxPageControl2.Attributes.Add("oncontextmenu", "ctx(this,event); return false;");
                 if (tipAfisare == 2)
                     this.ASPxPageControl2.EnableTabScrolling = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            try
+            {
+
+                #region Traducere
+
+                string ctlPost = Request.Params["__EVENTTARGET"];
+                btnSave.Text = Dami.TraduCuvant(btnSave.Text);
+                btnExit.Text = Dami.TraduCuvant(btnExit.Text);
+
+                #endregion
+
+                Response.Cache.SetNoStore();
+                Response.AppendHeader("Pragma", "no-cache");
+                Response.Expires = 0;
+
+                Session["PaginaWeb"] = "Personal.DateAngajat";
+
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                string marca = Session["Marca"] as string;
+                if (ds == null && marca == null)
+                {
+                    marca = NextMarca().ToString();
+                    Session["Marca"] = marca;
+                    Session["esteNou"] = "true";
+
+                    Initializare(ref ds);
+                }
+                else              //Florin 2020.10.28
+                {
+                    General.AflaIdPost();
+                }
+
+                if (!IsPostBack)
+                {
+                    string culoare = (General.ExecutaScalar(@"SELECT COALESCE(""Valoare"",'') FROM ""tblParametrii"" WHERE ""Nume"" = 'MP_CuloareCampObligatoriu' ", null) ?? "").ToString();
+                    if (culoare != null && culoare.Length == 7 && culoare[0] == '#')
+                    {
+                        int r = int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[2].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255 
+                            : int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber);
+                        int g = int.Parse(culoare[3].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[4].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255
+                            : int.Parse(culoare[3].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[4].ToString(), System.Globalization.NumberStyles.HexNumber);
+                        int b = int.Parse(culoare[5].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[6].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255
+                            : int.Parse(culoare[5].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[6].ToString(), System.Globalization.NumberStyles.HexNumber);
+                        List<int> lst = new List<int>();
+                        lst.Add(r); lst.Add(g); lst.Add(b);
+                        Session["MP_CuloareCampOblig"] = lst;
+                    }
+
+                    ////Radu 20.02.2020 - citire securitate
+                    //string sqlSec = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"", X.""IdForm""  FROM (
+                    //            SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat"", A.""IdForm""
+                    //            FROM ""Securitate"" A
+                    //            INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+                    //            WHERE B.""IdUser"" = {0} AND A.""IdForm"" like 'Personal.%' 
+                    //            UNION
+                    //            SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat"", A.""IdForm""
+                    //            FROM ""Securitate"" A
+                    //            WHERE A.""IdGrup"" = -1 AND A.""IdForm"" like 'Personal.%' ) X
+                    //            GROUP BY X.""IdControl"", X.""IdColoana"", X.""IdForm""";
+                    //sqlSec = string.Format(sqlSec, Session["UserId"].ToString());
+                    //DataTable dtSec = General.IncarcaDT(sqlSec, null);
+                    //Session["SecuritatePersonal"] = dtSec;           
+                }
+
+
+                if (Session["esteNou"] == null || Session["esteNou"].ToString().Length <= 0 || Session["esteNou"].ToString() == "false")
+                {
+                    DataTable dtDept = General.IncarcaDT("SELECT F00608 FROM F006 WHERE F00607 = " + ds.Tables[0].Rows[0]["F10007"].ToString(), null);
+                    lblDateAngajat.Text = ds.Tables[0].Rows[0]["F10008"].ToString() + " " + ds.Tables[0].Rows[0]["F10009"].ToString() + ", " + Dami.TraduCuvant("Marca") + ": " + ds.Tables[0].Rows[0]["F10003"].ToString()
+                                        + ", " + Dami.TraduCuvant("Departament") + ": " + (dtDept != null && dtDept.Rows.Count > 0 ? dtDept.Rows[0]["F00608"].ToString() : "");
+       
+                }
+
+
+                //string sql = "SELECT DISTINCT B.\"Denumire\", B.\"Pagina\", B.\"Ordine\" FROM \"MP_tblTaburi\" B ";
+
+                //if (General.VarSession("EsteAdmin").ToString() == "0")
+                //    sql += "JOIN \"relGrupMeniu2\" C ON (-1) * B.\"IdAuto\" = C.\"IdMeniu\" AND  C.\"IdGrup\" IN (SELECT \"IdGrup\" FROM \"relGrupUser\" WHERE \"IdUser\" = " + Session["UserId"].ToString() + ") ";
+
+                //sql += "ORDER BY B.\"Ordine\"";
+
+                //DataTable dt = General.IncarcaDT(sql, null);
+
+                //int tipAfisare = Convert.ToInt32(Dami.ValoareParam("AfisareTaburiPersonal", "1"));
+
+                //int nrTaburi = dt.Rows.Count;
+                //bool multirand = false;
+                //if (nrTaburi > 10 && tipAfisare == 1)
+                //    multirand = true;
+
+                //List<string> lista = ListaSecuritate();
+
+                //for (int i = 0; i < dt.Rows.Count; i++)
+                //{
+                //    TabPage tabPage = new TabPage();
+                //    tabPage.Name = dt.Rows[i]["Pagina"].ToString();
+                //    tabPage.Text = Dami.TraduCuvant(dt.Rows[i]["Denumire"].ToString());
+
+                //    if (multirand && i >= nrTaburi / 2)
+                //    {
+                //        tabPage.NewLine = true;
+                //        multirand = false;
+                //    }
+
+                //    Control ctrl = new Control();
+                //    if (File.Exists(HostingEnvironment.MapPath("~/Personal/" + dt.Rows[i]["Pagina"].ToString() + ".ascx")))
+                //    {
+                //        ctrl = this.LoadControl(dt.Rows[i]["Pagina"].ToString() + ".ascx");
+                //        bool vizibil = true, blocat = false;
+                //        Securitate(dt.Rows[i]["Denumire"].ToString().Replace(" ", ""), out vizibil, out blocat);
+
+                //        if (blocat)
+                //        {
+                //            for (int j = 0; j < ctrl.Controls.Count; j++)
+                //            {
+                //                if (ctrl.Controls[j].GetType() == typeof(DevExpress.Web.ASPxGridView))
+                //                {
+                //                    ASPxGridView gr = ctrl.Controls[j] as ASPxGridView;
+                //                    gr.Enabled = false;
+                //                }
+                //                if (ctrl.Controls[j].GetType() == typeof(DevExpress.Web.ASPxCallbackPanel))
+                //                {
+                //                    ASPxCallbackPanel cb = ctrl.Controls[j] as ASPxCallbackPanel;
+                //                    cb.Enabled = false;
+                //                }
+                //                if (ctrl.Controls[j].GetType() == typeof(DevExpress.Web.ASPxButton))
+                //                {
+                //                    ASPxButton btn = ctrl.Controls[j] as ASPxButton;
+                //                    btn.Enabled = false;
+                //                }
+                //            }
+                //        }
+
+                //        if (lista != null && lista.Count > 0)
+                //        {
+                //            foreach (string elem in lista)
+                //            {
+                //                bool vizibilElem = true, blocatElem = false;
+                //                Securitate(elem, out vizibilElem, out blocatElem);
+                //                string[] param = elem.Split('_');
+                //                WebControl ctl = ctrl.FindControl(param[0]) as WebControl;
+                //                if (ctl != null)
+                //                {
+                //                    ctl.Visible = vizibilElem;
+                //                    ctl.Enabled = !blocatElem;
+                //                }
+                //            }
+                //        }
+
+                //        tabPage.Controls.Add(ctrl);
+                //        tabPage.Visible = vizibil;
+                //    }
+
+                //    if (Dami.ValoareParam("ValidariPersonal") == "1")
+                //    {
+                //        string[] lst = new string[5] { "DateIdentificare", "Contract", "Structura", "Adresa", "Documente" };
+                //        if (lst.Contains(dt.Rows[i]["Pagina"].ToString()))
+                //            tabPage.TabStyle.BackColor = Color.FromArgb(255, 255, 179, 128);
+                //    }
+
+                //    this.ASPxPageControl2.TabPages.Add(tabPage);
+                //}
+
+                //this.ASPxPageControl2.Attributes.Add("oncontextmenu", "ctx(this,event); return false;");
+                //if (tipAfisare == 2)
+                //    this.ASPxPageControl2.EnableTabScrolling = true;
 
                 if (Session["MP_Avans_Tab"] != null)
                 {

@@ -41,7 +41,7 @@
                         <dx:PanelContent>
 
 						<div class="Absente_divOuter margin_top15">
-				
+						
 							<label id="lblNrOrdin" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Nr. ordin</label>
 							<div style="float:left; padding-right:15px;">
 								<dx:ASPxTextBox ID="txtNrOrdinDeplasare" ClientInstanceName="txtNrOrdinDeplasare" runat="server" ClientEnabled="false" Width="100px">

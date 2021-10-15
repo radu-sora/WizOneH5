@@ -78,10 +78,10 @@
 				
     <div>
         <dx:ASPxLabel  ID="lblDateAngajat" runat="server"  Text="" ></dx:ASPxLabel >	
-        <dx:ASPxPageControl ID="ASPxPageControl2" runat="server" Width="100%" TabSpacing="0px" CssClass="pcTemplates" SkinID="None" EnableViewState="false" EnableHierarchyRecreation="false">
+        <dx:ASPxPageControl ID="ASPxPageControl2" runat="server" Width="100%" TabSpacing="0px" CssClass="pcTemplates" SkinID="None" EnableViewState="true" EnableHierarchyRecreation="false">
             <ClientSideEvents TabClick="OnTabClick" ActiveTabChanged="function(s,e) { OnActiveTabChanged(s,e); }" />
                 <TabPages>
-                </TabPages>     
+                </TabPages>
             <Paddings Padding="0px" PaddingLeft="12px" />
             <ContentStyle Font-Names="Tahoma" Font-Overline="False" Font-Size="11px">
                 <Paddings Padding="0px" />

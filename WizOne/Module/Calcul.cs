@@ -509,9 +509,15 @@ namespace WizOne.Module
 
                 if (dt.Rows.Count > 0)
                 {
-
                     entPrg = dt.Rows[0];
-                    if (entPrg["OraIntrare"].ToString() != "" && firstIn != null) startTime = new DateTime(firstIn.Value.Year, firstIn.Value.Month, firstIn.Value.Day, Convert.ToDateTime(entPrg["OraIntrare"]).Hour, Convert.ToDateTime(entPrg["OraIntrare"]).Minute, Convert.ToDateTime(entPrg["OraIntrare"]).Second);
+
+                    if (entPrg["OraIntrare"].ToString() != "" && firstIn != null)
+                    {
+                        if (Convert.ToInt32(General.Nz(entPrg["TipRaportareOreNoapte"], 1)) == 2)
+                            startTime = new DateTime(firstIn.Value.Year, firstIn.Value.Month, firstIn.Value.Day, Convert.ToDateTime(entPrg["OraIntrare"]).Hour, Convert.ToDateTime(entPrg["OraIntrare"]).Minute, Convert.ToDateTime(entPrg["OraIntrare"]).Second);
+                        else
+                            startTime = new DateTime(zi.Value.Year, zi.Value.Month, zi.Value.Day, Convert.ToDateTime(entPrg["OraIntrare"]).Hour, Convert.ToDateTime(entPrg["OraIntrare"]).Minute, Convert.ToDateTime(entPrg["OraIntrare"]).Second);
+                    }
 
                     if (Convert.ToInt32(General.Nz(entPrg["Flexibil"], -99)) == 1)
                     {

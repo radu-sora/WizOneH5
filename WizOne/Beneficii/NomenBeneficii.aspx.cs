@@ -145,8 +145,8 @@ namespace WizOne.Beneficii
                 dr["LaData"] = deLaData.Date;
                 dr["Descriere"] = txtDesc.Text;
 
-                dr["RON"] = txtRON.Text;
-                dr["EURO"] = txtEURO.Text;
+                dr["RON"] = Convert.ToInt32(txtRON.Text.Length > 0 ? txtRON.Text : "0");
+                dr["EURO"] = Convert.ToInt32(txtEURO.Text.Length > 0 ? txtEURO.Text : "0"); ;
                 dr["IdGrup"] = cmbGrup.Value ?? DBNull.Value;
 
 
@@ -200,8 +200,8 @@ namespace WizOne.Beneficii
                 dr["LaData"] = deLaData.Date;
                 dr["Descriere"] = txtDesc.Text;
 
-                dr["RON"] = txtRON.Text;
-                dr["EURO"] = txtEURO.Text;
+                dr["RON"] = Convert.ToInt32(txtRON.Text.Length > 0 ? txtRON.Text : "0");
+                dr["EURO"] = Convert.ToInt32(txtEURO.Text.Length > 0 ? txtEURO.Text : "0"); 
                 dr["IdGrup"] = cmbGrup.Value ?? DBNull.Value;
 
                 metaUploadFile itm = Session["DocUpload_NomenBen"] as metaUploadFile;

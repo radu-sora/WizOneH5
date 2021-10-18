@@ -413,6 +413,7 @@
     <Content Include="AvansXDecont\DocumentAvans.aspx" />
     <Content Include="AvansXDecont\DocumentDecont.aspx" />
     <Content Include="AvansXDecont\DocumentPayment.aspx" />
+    <Content Include="AvansXDecont\relUploadDocumente.aspx" />
     <Content Include="Avs\Aprobare.aspx" />
     <Content Include="Avs\Cereri.aspx" />
     <Content Include="Avs\Detalii.aspx" />
@@ -1353,6 +1354,13 @@
     </Compile>
     <Compile Include="AvansXDecont\DocumentPayment.aspx.designer.cs">
       <DependentUpon>DocumentPayment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AvansXDecont\relUploadDocumente.aspx.cs">
+      <DependentUpon>relUploadDocumente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AvansXDecont\relUploadDocumente.aspx.designer.cs">
+      <DependentUpon>relUploadDocumente.aspx</DependentUpon>
     </Compile>
     <Compile Include="Avs\Aprobare.aspx.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>

@@ -323,11 +323,13 @@ namespace WizOne.AvansXDecont
                 if (!IsPostBack)
                 {
                     dtDocJust = GetmetaAvsXDec_DecontDocumenteJustificative(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
-                    Session["AvsXDec_SursaDateDocJust"] = dtDocJust;
+                    dtDocJust.PrimaryKey = new DataColumn[] { dtDocJust.Columns["DocumentDetailId"], dtDocJust.Columns["DocumentId"] };
+                    Session["AvsXDec_SursaDateDocJust"] = dtDocJust;                   
                 }
                 else
                 {
-                    dtDocJust = Session["AvsXDec_SursaDateDocJust"] as DataTable;                    
+                    dtDocJust = Session["AvsXDec_SursaDateDocJust"] as DataTable;
+                    dtDocJust.PrimaryKey = new DataColumn[] { dtDocJust.Columns["DocumentDetailId"], dtDocJust.Columns["DocumentId"] };
                 }
                 grDateDocJust.KeyFieldName = "DocumentDetailId;DocumentId";
                 grDateDocJust.DataSource = dtDocJust;
@@ -346,11 +348,13 @@ namespace WizOne.AvansXDecont
                 if (!IsPostBack)
                 {
                     dtCheltEst = GetmetaAvsXDec_DecontCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()), Convert.ToInt32(General.Nz(Session["AvsXDec_SrcDocId"], -99).ToString()));
+                    dtCheltEst.PrimaryKey = new DataColumn[] { dtCheltEst.Columns["DocumentDetailId"], dtCheltEst.Columns["DocumentId"] };
                     Session["AvsXDec_SursaDateEstChelt"] = dtCheltEst;
                 }
                 else
                 {
                     dtCheltEst = Session["AvsXDec_SursaDateEstChelt"] as DataTable;
+                    dtCheltEst.PrimaryKey = new DataColumn[] { dtCheltEst.Columns["DocumentDetailId"], dtCheltEst.Columns["DocumentId"] };
                 }
                 grDateEstChelt.KeyFieldName = "DocumentDetailId;DocumentId";
                 grDateEstChelt.DataSource = dtCheltEst;
@@ -369,11 +373,13 @@ namespace WizOne.AvansXDecont
                 if (!IsPostBack)
                 {
                     dtPlataBanca = GetmetaAvsXDec_DecontDocumentePlataBanca(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+                    dtPlataBanca.PrimaryKey = new DataColumn[] { dtPlataBanca.Columns["DocumentDetailId"], dtPlataBanca.Columns["DocumentId"] };
                     Session["AvsXDec_SursaDatePlataBanca"] = dtPlataBanca;
                 }
                 else
                 {
                     dtPlataBanca = Session["AvsXDec_SursaDatePlataBanca"] as DataTable;
+                    dtPlataBanca.PrimaryKey = new DataColumn[] { dtPlataBanca.Columns["DocumentDetailId"], dtPlataBanca.Columns["DocumentId"] };
                 }
                 grDatePlataBanca.KeyFieldName = "DocumentDetailId;DocumentId";
                 grDatePlataBanca.DataSource = dtPlataBanca;
@@ -562,7 +568,7 @@ namespace WizOne.AvansXDecont
             string sql = "";
             try
             {
-                sql = "SELECT a.DocumentId, a.DocumentDetailId, a.CurrencyId, a.IdTipDocument, a.DocDateDecont, a.DocNumberDecont,  a.Furnizor,  b.IdDocument, a.RefCurrencyId, a.RefCurrencyValue, b.RefTotalPayment, "
+                sql = "SELECT a.DocumentId, a.DocumentDetailId, a.CurrencyId, a.IdTipDocument as DictionaryItemId, a.DocDateDecont, a.DocNumberDecont,  a.Furnizor,  b.IdDocument, a.RefCurrencyId, a.RefCurrencyValue, b.RefTotalPayment, "
                     + "  a.TotalPayment, a.ExpenseTypeId,  b.ExpenseTypeAdmId, b.BugetLine, (CASE WHEN c.DocumentDetailId = 0 THEN 0 ELSE 1 END) as areFisier, a.FreeTxt "
                     + " FROM vwAvsXDec_DecDet_DocDecontare a "
                     + " JOIN AvsXDec_DecontDetail b on a.DocumentId = b.DocumentId and a.DocumentDetailId = b.DocumentDetailId "
@@ -1891,9 +1897,11 @@ namespace WizOne.AvansXDecont
                             cmbTransportType.Value = Convert.ToInt32(ent.Rows[0]["TransportTypeId"].ToString());
                             txtActionReason.Text = ent.Rows[0]["ActionReason"].ToString();
                             txtStartDate.Value = Convert.ToDateTime(ent.Rows[0]["StartDate"].ToString());
-                            txtOraPlecare.Value = Convert.ToDateTime(ent.Rows[0]["StartHour"].ToString());
+                            if (ent.Rows[0]["StartHour"] != DBNull.Value)
+                                txtOraPlecare.Value = Convert.ToDateTime(ent.Rows[0]["StartHour"].ToString());
                             txtEndDate.Value = Convert.ToDateTime(ent.Rows[0]["EndDate"].ToString());
-                            txtOraSosire.Value = Convert.ToDateTime(ent.Rows[0]["EndHour"].ToString());
+                            if (ent.Rows[0]["EndHour"] != DBNull.Value)
+                                txtOraSosire.Value = Convert.ToDateTime(ent.Rows[0]["EndHour"].ToString());
                             cmbMonedaAvans.Value = Convert.ToInt32(ent.Rows[0]["CurrencyId"].ToString());
                             cmbModPlata.Value = Convert.ToInt32(ent.Rows[0]["PaymentTypeId"].ToString());
                             chkIsDiurna.Checked = Convert.ToInt32(General.Nz(ent.Rows[0]["chkDiurna"], 0).ToString()) == 1 ? true : false;
@@ -1918,7 +1926,8 @@ namespace WizOne.AvansXDecont
                                 {
                                     if (lstConfigCurrencyXPay_Currency != null)
                                     {
-                                        if (lstConfigCurrencyXPay_Currency.Select("DictionaryItemId = " + lstConfigCurrencyXPay.Rows[i]["CurrencyId"].ToString()).Count() == 0)
+                                        if (lstConfigCurrencyXPay_Currency.Select("DictionaryItemId = " + lstConfigCurrencyXPay.Rows[i]["CurrencyId"].ToString()) == null ||
+                                        lstConfigCurrencyXPay_Currency.Select("DictionaryItemId = " + lstConfigCurrencyXPay.Rows[i]["CurrencyId"].ToString()).Count() == 0)
                                         {
                                             lstConfigCurrencyXPay_Currency.Rows.Add(lstConfigCurrencyXPay.Rows[i]["CurrencyId"].ToString(), lstConfigCurrencyXPay.Rows[i]["CurrencyCode"].ToString(), null, 1);
                                             Session["ConfigCurrencyXPay_Currency"] = lstConfigCurrencyXPay_Currency;
@@ -1926,7 +1935,8 @@ namespace WizOne.AvansXDecont
                                     }
                                     if (lstConfigCurrencyXPay_Pay != null)
                                     {
-                                        if (lstConfigCurrencyXPay_Pay.Select("DictionaryItemId = " + lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString()).Count() == 0)
+                                        if (lstConfigCurrencyXPay_Pay.Select("DictionaryItemId = " + lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString()) == null ||
+                                        lstConfigCurrencyXPay_Pay.Select("DictionaryItemId = " + lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString()).Count() == 0)
                                         {
                                             lstConfigCurrencyXPay_Pay.Rows.Add(lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString(), lstConfigCurrencyXPay.Rows[i]["PaymentTypeName"].ToString(), null, 2);
                                             Session["ConfigCurrencyXPay_Pay"] = lstConfigCurrencyXPay_Pay;
@@ -1943,7 +1953,7 @@ namespace WizOne.AvansXDecont
 								DataRow[] entConfig = lstConfigCurrencyXPay.Select("CurrencyId = " + Convert.ToInt32(cmbMonedaAvans.Value ?? -99));
                                 for (int i = 0; i < entConfig.Length; i++)
                                 {
-                                    if (lstConfigCurrencyXPay_PayCopy != null)
+                                    if (lstConfigCurrencyXPay_PayCopy != null && lstConfigCurrencyXPay_PayCopy.Rows.Count > 0)
                                     {
                                         if (lstConfigCurrencyXPay_PayCopy.Select("DictionaryItemId = " + entConfig[i]["PaymentTypeId"].ToString()).Count() == 0)
                                         {
@@ -1952,7 +1962,7 @@ namespace WizOne.AvansXDecont
                                         }
                                     }
                                 }
-                                if (lstConfigCurrencyXPay_PayCopy.Rows.Count == 1)
+                                if (lstConfigCurrencyXPay_PayCopy != null && lstConfigCurrencyXPay_PayCopy.Rows.Count == 1)
                                 {
                                     ent.Rows[0]["PaymentTypeId"] = lstConfigCurrencyXPay_PayCopy.Rows[0]["DictionaryItemId"];
                                     cmbModPlata.ClientEnabled = false;
@@ -2140,14 +2150,14 @@ namespace WizOne.AvansXDecont
                 {
                     //case tipAccesPagina.formularNou:
                     //case tipAccesPagina.formularSalvatEditUser:
-                        if (lstConfigCurrencyXPay != null)
+                        if (lstConfigCurrencyXPay != null && lstConfigCurrencyXPay.Rows.Count > 0)
                         {
                             cmbModPlata.Value = null;
                             lstConfigCurrencyXPay_PayCopy.Clear();
 							DataRow[] entConfig = lstConfigCurrencyXPay.Select("CurrencyId = " + Convert.ToInt32(cmbMonedaAvans.Value ?? -99));
                             for (int i = 0; i < entConfig.Length; i++)
                             {
-                                if (lstConfigCurrencyXPay_PayCopy != null)
+                                if (lstConfigCurrencyXPay_PayCopy != null && lstConfigCurrencyXPay_PayCopy.Rows.Count > 0)
                                 {
                                     if (lstConfigCurrencyXPay_PayCopy.Select("DictionaryItemId = " + entConfig[i]["PaymentTypeId"].ToString()).Count() == 0)
                                     {
@@ -2156,7 +2166,7 @@ namespace WizOne.AvansXDecont
                                     }
                                 }
                             }
-                            if (lstConfigCurrencyXPay_PayCopy.Rows.Count == 1)
+                            if (lstConfigCurrencyXPay_PayCopy != null && lstConfigCurrencyXPay_PayCopy.Rows.Count == 1)
                             {
                                 cmbModPlata.Value = Convert.ToInt32(lstConfigCurrencyXPay_PayCopy.Rows[0]["DictionaryItemId"].ToString());
                                 cmbModPlata.ClientEnabled = false;
@@ -2207,7 +2217,7 @@ namespace WizOne.AvansXDecont
                 DataTable dtNomenCheltuieli = GetAvsXDec_DictionaryItemCheltuiala(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
                 dtNomenCheltuieli.CaseSensitive = false;
                 DataRow[] itmDiurna = dtNomenCheltuieli.Select("DictionaryItemName= 'diurna'");
-                if (itmDiurna != null)
+                if (itmDiurna != null && itmDiurna.Count() > 0)
                 {
                     if (Convert.ToInt32(row["DictionaryItemId"].ToString()) == Convert.ToInt32(itmDiurna[0]["DictionaryItemId"]))
                     {
@@ -3474,7 +3484,7 @@ namespace WizOne.AvansXDecont
         {
             /*daca sunt mai putin de 12 ore pentru deplasare, butonul de diurna nu trebuie sa fie vizibil*/
             DataTable ent = Session["AvsXDec_SursaDateDec"] as DataTable;
-            if (ent != null)
+            if (ent != null && ent.Rows.Count > 0)
             {
                 if (txtStartDate.Value != null && txtEndDate.Value != null && txtOraPlecare.Value != null && txtOraSosire.Value != null)
                 {
@@ -3526,7 +3536,7 @@ namespace WizOne.AvansXDecont
                 lstCheltuieli.CaseSensitive = false;
                 DataRow[] itmDiurna = lstCheltuieli.Select("DictionaryItemName = 'diurna'");
                 DataRow[] chDiurna = lstCheltuieliInserate.Select("ExpenseTypeId = " + itmDiurna[0]["DictionaryItemId"].ToString());
-                if (chDiurna != null)
+                if (chDiurna != null && chDiurna.Count() > 0)
                 {
                     decimal valDiurna = 0;
                     CalculDiurna(out valDiurna);
@@ -3662,7 +3672,7 @@ namespace WizOne.AvansXDecont
                     case "ExpenseId":
                         lstCheltuieli.CaseSensitive = false;
                         DataRow[] itmDiurna = lstCheltuieli.Select("DictionaryItemName = 'diurna'");
-                        if (itmDiurna != null)
+                        if (itmDiurna != null && itmDiurna.Count() > 0)
                             value = Convert.ToInt32(itmDiurna[0]["DictionaryItemId"].ToString());
                         break;
                     default:
@@ -3747,7 +3757,7 @@ namespace WizOne.AvansXDecont
             DataTable ent = Session["AvsXDec_SursaDateDec"] as DataTable;
             if (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) != 1001)
                 return;
-            if (ent != null)
+            if (ent != null && ent.Rows.Count > 0)
             {
                 if (GetDayDateTime(Convert.ToDateTime(txtEndDate.Value ?? Convert.ToDateTime(ent.Rows[0]["DocumentDate"].ToString()))) < GetDayDateTime(Convert.ToDateTime(ent.Rows[0]["DocumentDate"])) /*&& dreptUserAccesFormular != tipAccesPagina.formularSalvat*/)
                 {
@@ -3878,7 +3888,7 @@ namespace WizOne.AvansXDecont
 
                     DataTable entCheltuialaDiurnaTot = Session["AvsXDec_SursaDateDocJust"] as DataTable;
                     DataRow[] entCheltuialaDiurna = null;
-                    if (entCheltuialaDiurnaTot != null)
+                    if (entCheltuialaDiurnaTot != null && entCheltuialaDiurnaTot.Rows.Count > 0)
                         entCheltuialaDiurna = entCheltuialaDiurnaTot.Select("DictionaryItemId = " + itmDiurna_1[0]["DictionaryItemId"].ToString());
                     if (entCheltuialaDiurna != null || lstCheltuieli == null || lstCheltuieli.Rows.Count == 0)
                         return;
@@ -3957,7 +3967,7 @@ namespace WizOne.AvansXDecont
                     return;
                 DataTable entCheltuialaDiurnaTot = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
                 DataRow entCheltuialaDiurna = null;
-                if (entCheltuialaDiurnaTot != null)
+                if (entCheltuialaDiurnaTot != null && entCheltuialaDiurnaTot.Rows.Count > 0)
                     entCheltuialaDiurna = entCheltuialaDiurnaTot.Select("ExpenseTypeId = " + itmDiurna["DictionaryItemId"].ToString()).FirstOrDefault();
                 if (entCheltuialaDiurna != null)
                 {
@@ -3965,7 +3975,7 @@ namespace WizOne.AvansXDecont
                     entCheltuialaDiurna.Delete();
                 }
                 grDateDocJust.DataSource = entCheltuialaDiurnaTot;
-                grDateDocJust.KeyFieldName = "IdAuto";
+                grDateDocJust.KeyFieldName = "DocumentDetailId;DocumentId";
                 Session["AvsXDec_SursaDateDocJust"] = entCheltuialaDiurnaTot;
             }
             Session["AvsXDec_SursaDateDec"] = ent;

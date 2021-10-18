@@ -201,7 +201,7 @@
 											<dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"  >
 												<CustomButtons>
 													<dx:GridViewCommandColumnCustomButton ID="btnAtasament">
-														<Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/view.png" />
+														<Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/info.png" />
 													</dx:GridViewCommandColumnCustomButton>
 												</CustomButtons>
 											</dx:GridViewCommandColumn>	
@@ -216,9 +216,7 @@
 											<dx:GridViewDataTextColumn FieldName="DocumentId" Name="DocumentId" Caption="DocumentId" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentDetailId" Name="DocumentDetailId" Caption="DocumentDetailId" Visible="false" ShowInCustomizationForm="false"/>
 											
-											<dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
-											<dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
-											<dx:GridViewDataDateColumn FieldName="TIME" Name="Time" Caption="Time" Visible="false" ShowInCustomizationForm="false" />
+								
 										</Columns>
 
 										<SettingsCommandButton>
@@ -265,22 +263,7 @@
 														</tr>
 														<tr>
 															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtDet" runat="server" Width="200px" Value='<%# Bind("FreeTxt") %>' /></td>
-														</tr>
-														<tr>
-															<td style="padding:10px !important;" colspan="2">
-																<label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
-																<dx:ASPxUploadControl ID="btnDocUpload" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
-																	BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
-																	ClientInstanceName="btnDocUpload" OnFileUploadComplete="btnDocUpload_FileUploadComplete" ValidationSettings-ShowErrors="false">
-																	<BrowseButton>
-																		<Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
-																	</BrowseButton>
-																	<ValidationSettings ShowErrors="False"></ValidationSettings>
-
-																	<ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
-																</dx:ASPxUploadControl>
-															</td>
-														</tr>
+														</tr>					
 														<tr>
 															<td style="padding:10px !important;">
 																<div style="text-align: left; padding: 2px; font-weight:bold; font-size:32px;">
@@ -334,9 +317,26 @@
 							<div class="Absente_divOuter margin_top15">
 								<label id="lblRez" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Rezervari</label>
 								<div style="float:left; padding-right:15px;">    
-									<dx:ASPxComboBox ID="cmbTip" ClientInstanceName="cmbTip" ClientIDMode="Static" runat="server" Width="200px"  ValueField="DictionaryItemId" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
-										<ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbTip'); }" />
-									</dx:ASPxComboBox>
+    								<dx:ASPxDropDownEdit ClientInstanceName="cmbTip" ID="cmbTip" Width="210px" runat="server" AnimationType="None">
+        								<DropDownWindowStyle BackColor="#EDEDED" />
+        								<DropDownWindowTemplate>
+            								<dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
+                								<Border BorderStyle="None" />
+                								<BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />             
+                								<ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged" />
+            								</dx:ASPxListBox>
+            								<table style="width: 100%">
+                								<tr>
+                    								<td style="padding: 4px">
+                        								<dx:ASPxButton ID="btnClose" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
+                            								<ClientSideEvents Click="function(s, e){ cmbTip.HideDropDown(); }" />
+                        								</dx:ASPxButton>
+                    								</td>
+                								</tr>
+            								</table>
+        								</DropDownWindowTemplate>
+        								<ClientSideEvents TextChanged="SynchronizeListBoxValues"  />
+    								</dx:ASPxDropDownEdit>
 								</div>					
 							</div>							
 						
@@ -411,8 +411,69 @@
                 pnlCtl.PerformCallback('btnRespinge;' + txtMtv.GetText());
                 txtMtv.SetText('');
             }
+		}
+
+        function grDate_CustomButtonClick(s, e) {
+            switch (e.buttonID) {
+				case "btnAtasament":
+                    grDate.GetRowValues(e.visibleIndex, 'DocumentId;DocumentDetailId', GoToDoc);
+                    break;
+            }
+		}
+        function GoToDoc(Value) {
+            strUrl = getAbsoluteUrl + "AvansXDecont/relUploadDocumente.aspx?tip=1&qwe=" + Value;
+            popGen.SetHeaderText("Documente");
+            popGen.SetContentUrl(strUrl);
+            popGen.Show();
         }
 
+
+
+
+
+        var textSeparator = ";";
+        function OnListBoxSelectionChanged(listBox, args) {
+            if (args.index == 0)
+                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
+            UpdateSelectAllItemState();
+            UpdateText();
+        }
+        function UpdateSelectAllItemState() {
+            IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
+        }
+        function IsAllSelected() {
+            var selectedDataItemCount = checkListBox.GetItemCount() - (checkListBox.GetItem(0).selected ? 0 : 1);
+            return checkListBox.GetSelectedItems().length == selectedDataItemCount;
+        }
+        function UpdateText() {
+            var selectedItems = checkListBox.GetSelectedItems();
+            cmbTip.SetText(GetSelectedItemsText(selectedItems));
+        }
+        function SynchronizeListBoxValues(dropDown, args) {
+            checkListBox.UnselectAll();
+            var texts = dropDown.GetText().split(textSeparator);
+            var values = GetValuesByTexts(texts);
+            checkListBox.SelectValues(values);
+            UpdateSelectAllItemState();
+            UpdateText();
+        }
+        function GetSelectedItemsText(items) {
+            var texts = [];
+            for (var i = 0; i < items.length; i++)
+                if (items[i].index != 0)
+                    texts.push(items[i].text);
+            return texts.join(textSeparator);
+        }
+        function GetValuesByTexts(texts) {
+            var actualValues = [];
+            var item;
+            for (var i = 0; i < texts.length; i++) {
+                item = checkListBox.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+            return actualValues;
+        }
     </script>
 
 </asp:Content>

@@ -498,7 +498,7 @@ namespace WizOne.AvansXDecont
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbTip;
+        protected global::DevExpress.Web.ASPxDropDownEdit cmbTip;
 
         /// <summary>
         /// popUpMotiv control.

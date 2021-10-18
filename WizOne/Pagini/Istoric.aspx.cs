@@ -24,6 +24,9 @@ namespace WizOne.Pagini
                 int tip = Convert.ToInt32(General.Nz(Request["tip"], -99));
                 if (tip == 9)
                     dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""CM_tblStari"" ", null);
+                //Radu 18.10.2021
+                if (tip == 10)
+                    dtStari = General.IncarcaDT(@"SELECT b.DictionaryItemId as Id, b. DictionaryItemName as Denumire, b.Culoare from vwAvsXDec_Nomen_StariDoc a left join AvsXDec_DictionaryItem b on a.DictionaryItemId = b.DictionaryItemId ", null);
                 GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 colStari.PropertiesComboBox.DataSource = dtStari;
             }

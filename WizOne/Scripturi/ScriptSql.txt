@@ -18741,7 +18741,7 @@ GO
    (	"DocumentId" int, 
 	"DocumentDetailId" int, 
 	"IdDocument" int, 
-	"IdAuto" int, 
+	"IdAuto" [int] IDENTITY(1,1) NOT NULL,
 	"USER_NO" int, 
 	"TIME" DATE,
 	 CONSTRAINT [AvsXDec_relUploadDocumente_PK] PRIMARY KEY CLUSTERED 

@@ -224,7 +224,7 @@
 							<div class="Absente_divOuter margin_top15">
 					
 								<div style="float:left; padding-right:15px;">    
-									<dx:ASPxGridView ID="grDateDocJust" runat="server" ClientInstanceName="grDateDocJust" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"   OnInitNewRow="grDateDocJust_InitNewRow" OnCommandButtonInitialize="grDateDocJust_CommandButtonInitialize"
+									<dx:ASPxGridView ID="grDateDocJust" runat="server" ClientInstanceName="grDateDocJust" ClientIDMode="Static" Width="65%" AutoGenerateColumns="false"   OnInitNewRow="grDateDocJust_InitNewRow" OnCommandButtonInitialize="grDateDocJust_CommandButtonInitialize"
 										 OnRowInserting="grDateDocJust_RowInserting" OnRowUpdating="grDateDocJust_RowUpdating" OnRowDeleting="grDateDocJust_RowDeleting" OnHtmlEditFormCreated="grDateDocJust_HtmlEditFormCreated" >
 										<SettingsBehavior AllowFocusedRow="true" />
 										<Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
@@ -235,7 +235,7 @@
 											<dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"  >
 												<CustomButtons>
 													<dx:GridViewCommandColumnCustomButton ID="btnAtasament">
-														<Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/view.png" />
+														<Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/info.png" />
 													</dx:GridViewCommandColumnCustomButton>
 												</CustomButtons>
 											</dx:GridViewCommandColumn>	
@@ -264,10 +264,7 @@
 											<dx:GridViewDataTextColumn FieldName="DocumentId" Name="DocumentId" Caption="DocumentId" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="IdDocument" Name="IdDocument" Caption="IdDocument" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentDetailId" Name="DocumentDetailId" Caption="DocumentDetailId" Visible="false" ShowInCustomizationForm="false"/>
-											
-											<dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
-											<dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
-											<dx:GridViewDataDateColumn FieldName="TIME" Name="Time" Caption="Time" Visible="false" ShowInCustomizationForm="false" />
+									
 										</Columns>
 
 										<SettingsCommandButton>
@@ -329,23 +326,8 @@
 															<td id="lblDet" runat="server" style="padding-left:10px !important;">Detalii</td>
 														</tr>
 														<tr>
-															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtDet" runat="server" Width="600px" Value='<%# Bind("FreeTxt") %>' /></td>
-														</tr>
-														<tr>
-															<td style="padding:10px !important;" colspan="2">
-																<label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
-																<dx:ASPxUploadControl ID="btnDocUploadDJ" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
-																	BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
-																	ClientInstanceName="btnDocUploadDJ" OnFileUploadComplete="btnDocUploadDJ_FileUploadComplete" ValidationSettings-ShowErrors="false">
-																	<BrowseButton>
-																		<Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
-																	</BrowseButton>
-																	<ValidationSettings ShowErrors="False"></ValidationSettings>
-
-																	<ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
-																</dx:ASPxUploadControl>
-															</td>
-														</tr>
+															<td style="padding:10px !important;" colspan="3" ><dx:ASPxTextBox ID="txtDet" runat="server" Width="600px" Value='<%# Bind("FreeTxt") %>' /></td>
+														</tr>		
 														<tr>
 															<td style="padding:10px !important;">
 																<div style="text-align: left; padding: 2px; font-weight:bold; font-size:32px;">
@@ -404,10 +386,7 @@
 											<dx:GridViewDataTextColumn FieldName="DocumentId" Name="DocumentId" Caption="DocumentId" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="IdDocument" Name="IdDocument" Caption="IdDocument" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentDetailId" Name="DocumentDetailId" Caption="DocumentDetailId" Visible="false" ShowInCustomizationForm="false"/>
-											
-											<dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
-											<dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
-											<dx:GridViewDataDateColumn FieldName="TIME" Name="Time" Caption="Time" Visible="false" ShowInCustomizationForm="false" />
+						
 										</Columns>
 
 										<SettingsCommandButton>
@@ -499,7 +478,7 @@
 											<dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"  >
 												<CustomButtons>
 													<dx:GridViewCommandColumnCustomButton ID="btnAtas">
-														<Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/view.png" />
+														<Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/info.png" />
 													</dx:GridViewCommandColumnCustomButton>
 												</CustomButtons>
 											</dx:GridViewCommandColumn>	
@@ -523,9 +502,6 @@
 											<dx:GridViewDataTextColumn FieldName="IdDocument" Name="IdDocument" Caption="IdDocument" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentDetailId" Name="DocumentDetailId" Caption="DocumentDetailId" Visible="false" ShowInCustomizationForm="false"/>
 											
-											<dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
-											<dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
-											<dx:GridViewDataDateColumn FieldName="TIME" Name="Time" Caption="Time" Visible="false" ShowInCustomizationForm="false" />
 										</Columns>
 
 										<SettingsCommandButton>
@@ -576,22 +552,7 @@
 														<tr>
 															<td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbMoneda" runat="server" Width="200px" ValueField="DictionaryItemId" DropDownWidth="200" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("CurrencyId") %>' />
 															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtVal" runat="server" Width="200px" Value='<%# Bind("TotalPayment") %>' /></td>
-														</tr>
-														<tr>
-															<td style="padding:10px !important;" colspan="2">
-																<label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
-																<dx:ASPxUploadControl ID="btnDocUploadPB" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
-																	BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
-																	ClientInstanceName="btnDocUploadPB" OnFileUploadComplete="btnDocUploadPB_FileUploadComplete" ValidationSettings-ShowErrors="false">
-																	<BrowseButton>
-																		<Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
-																	</BrowseButton>
-																	<ValidationSettings ShowErrors="False"></ValidationSettings>
-
-																	<ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
-																</dx:ASPxUploadControl>
-															</td>
-														</tr>
+														</tr>						
 														<tr>
 															<td style="padding:10px !important;">
 																<div style="text-align: left; padding: 2px; font-weight:bold; font-size:32px;">
@@ -696,6 +657,28 @@
             }
         }
 
+        function grDateDocJust_CustomButtonClick(s, e) {
+            switch (e.buttonID) {
+                case "btnAtasament":
+                    grDate.GetRowValues(e.visibleIndex, 'DocumentId;DocumentDetailId', GoToDoc);
+                    break;
+            }
+		}
+
+        function grDatePlataBanca_CustomButtonClick(s, e) {
+            switch (e.buttonID) {
+                case "btnAtasament":
+                    grDate.GetRowValues(e.visibleIndex, 'DocumentId;DocumentDetailId', GoToDoc);
+                    break;
+            }
+        }
+
+        function GoToDoc(Value) {
+            strUrl = getAbsoluteUrl + "AvansXDecont/relUploadDocumente.aspx?tip=1&qwe=" + Value;
+            popGen.SetHeaderText("Documente");
+            popGen.SetContentUrl(strUrl);
+            popGen.Show();
+        }
     </script>
 
 </asp:Content>

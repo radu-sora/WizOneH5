@@ -3730,6 +3730,75 @@ namespace WizOne.Module
             }
         }
 
+        public static void IncarcaFisierAvsXDec(string fileName, object fis, string Tabela, object cheie)
+        {
+            try
+            {
+                if (cheie != null)
+                {
+                    string sql = "SELECT * FROM \"AvsXDec_relUploadDocumente\"";
+                    DataTable dt = new DataTable();
+
+                    dt = General.IncarcaDT(sql, null);
+                    dt.TableName = "AvsXDec_relUploadDocumente";
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
+
+                    DataRow dr = null;
+                    if (dt.Select("Tabela = '" + Tabela + "' AND Id = " + cheie.ToString()).Count() == 0)
+                    {
+                        dr = dt.NewRow();
+                        dr["Tabela"] = Tabela;
+                        dr["Id"] = cheie.ToString();
+                        dr["Fisier"] = fis;
+                        dr["FisierNume"] = System.IO.Path.GetFileName(fileName);
+                        dr["FisierExtensie"] = System.IO.Path.GetExtension(fileName);
+                        dr["USER_NO"] = HttpContext.Current.Session["UserId"];
+                        dr["TIME"] = DateTime.Now;
+                        if (Constante.tipBD == 1)
+                            dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                        else
+                            dr["IdAuto"] = Dami.NextId("tblFisiere");
+                        dr["EsteCerere"] = 0;
+                        dt.Rows.Add(dr);
+                    }
+                    else
+                    {
+                        dr = dt.Select("Tabela = '" + Tabela + "' AND Id = " + cheie.ToString()).FirstOrDefault();
+                        dr["Fisier"] = fis;
+                        dr["FisierNume"] = System.IO.Path.GetFileName(fileName);
+                        dr["FisierExtensie"] = System.IO.Path.GetExtension(fileName);
+                        dr["EsteCerere"] = 0;
+                        dr["USER_NO"] = HttpContext.Current.Session["UserId"];
+                        dr["TIME"] = DateTime.Now;
+                    }
+
+                    if (Constante.tipBD == 1)
+                    {
+                        SqlDataAdapter da = new SqlDataAdapter();
+                        SqlCommandBuilder cb = new SqlCommandBuilder();
+                        da = new SqlDataAdapter();
+                        da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM \"tblFisiere\"", null);
+                        cb = new SqlCommandBuilder(da);
+                        da.Update(dt);
+                        da.Dispose();
+                        da = null;
+                    }
+                    else
+                    {
+                        OracleDataAdapter oledbAdapter = new OracleDataAdapter();
+                        oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"tblFisiere\" WHERE ROWNUM = 0", null);
+                        OracleCommandBuilder cb = new OracleCommandBuilder(oledbAdapter);
+                        oledbAdapter.Update(dt);
+                        oledbAdapter.Dispose();
+                        oledbAdapter = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
         public static void ArataFisier(string Tabela, object cheie)
         {

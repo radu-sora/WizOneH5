@@ -231,6 +231,9 @@ namespace WizOne.Pagini
                             case "21":
                                 tbl = "Beneficii_Ang";
                                 break;
+                            case "22":
+                                tbl = "AvsXDec_relUploadDocumente";
+                                break;
                         }
 
                         if (tbl.Length > 0)

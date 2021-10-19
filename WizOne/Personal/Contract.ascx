@@ -1190,7 +1190,7 @@
 							<dx:ASPxLabel  ID="lblTimpPartial"  Width="100" runat="server"  Text="Timp partial" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox  DataSourceID="dsTP"  ID="cmbTimpPartial" Value='<%#Eval("F10043") %>' Width="100" TabIndex="24" runat="server" ClientInstanceName="cmbTimpPartial" TextField="Denumire" ValueField="Id"   AutoPostBack="false" ValueType="System.Int32" >
+							<dx:ASPxComboBox ID="cmbTimpPartial" Value='<%#Eval("F10043") %>' Width="100" TabIndex="24" runat="server" ClientInstanceName="cmbTimpPartial" TextField="Denumire" ValueField="Id"   AutoPostBack="false" ValueType="System.Int32" >
                                 <ClientSideEvents SelectedIndexChanged="function(s,e){ SetNorma(s); }" />
 							</dx:ASPxComboBox>
 						</td>

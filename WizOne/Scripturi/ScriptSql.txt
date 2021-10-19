@@ -21083,3 +21083,10 @@ GO
 
 
 ---- AvsXDec END ----
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_Locatie', '', 'Locatia unde se salveaza fluturasii (obligatoriu cu / la sfarsit)', 0)
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_Denumire', '', 'Denumirea sub care se salveaza fluturasii, cu etichetele <Anul>, <Luna> si <Marca> ce vor fi inlocuite in cod; ex: PAYSLIP_PRY_RO001_RO_Y<Anul>_P<Luna>_E<Marca>_R01', 0)
+GO

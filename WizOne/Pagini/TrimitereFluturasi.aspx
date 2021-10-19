@@ -50,6 +50,13 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/mail.png"></Image>
                 </dx:ASPxButton>  
+                <dx:ASPxButton ID="btnGenerare" ClientInstanceName="btnGenerare" ClientIDMode="Static" runat="server" Text="Generare fluturasi" AutoPostBack="true" OnClick="btnGenerare_Click" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) {
+                        pnlLoading.Show();
+                        e.processOnServer = true;
+                    }" />
+                    <Image Url="~/Fisiere/Imagini/Icoane/finalizare.png"></Image>
+                </dx:ASPxButton>  
                 <dx:ASPxButton ID="btnSalvare" ClientInstanceName="btnSalvare" ClientIDMode="Static" runat="server" Text="Salvare" AutoPostBack="true" OnClick="btnSalvare_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                 </dx:ASPxButton> 

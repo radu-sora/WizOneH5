@@ -2283,7 +2283,7 @@ namespace WizOne.AvansXDecont
                     int idSuper = -99;
                     idStare = "NULL";
 
-                    if (i == 3 && Convert.ToInt32(txtValAvans.Text.Length <= 0 ? "0" : txtValAvans.Text) <= 1000)
+                    if (i == 3 && Convert.ToDecimal(txtValAvans.Text.Length <= 0 ? "0" : txtValAvans.Text) <= 1000)
                     {
                         total--;
                         continue;

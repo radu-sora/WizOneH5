@@ -29,9 +29,18 @@ namespace WizOne.Adev
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
-                //btnClose.Text = Dami.TraduCuvant("btnClose", "Inchidere luna");
-                //btnSave.Text = Dami.TraduCuvant("btnSave", "Salvare luna");
+                btnGenerare.Text = Dami.TraduCuvant("btnGenerare", "Genereaza");
+                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
 
+                lgAdev.InnerText = Dami.TraduCuvant("Adeverinte");
+
+                lblAdev.InnerText = Dami.TraduCuvant("Tip adeverinta");
+                lblAng.InnerText = Dami.TraduCuvant("Angajat");
+                lblAnul.InnerText = Dami.TraduCuvant("Anul");
+                lblLuna.InnerText = Dami.TraduCuvant("Luna");
+
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
                 #endregion
 
 

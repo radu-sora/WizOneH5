@@ -52,8 +52,17 @@ namespace WizOne.ConcediiMedicale
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnTransfera.Text = Dami.TraduCuvant("btnTransfera", "Transfera");
                 btnAdauga.Text = Dami.TraduCuvant("btnAdauga", "Adauga CM");
-             
-                
+                btnRapCM.Text = Dami.TraduCuvant("btnRapCM", "Rapoarte");
+                btnCalcul.Text = Dami.TraduCuvant("btnCalcul", "Calcul medie CM");
+                btnAproba.Text = Dami.TraduCuvant("btnAproba", "Aprobare");
+                btnAnulare.Text = Dami.TraduCuvant("btnAnulare", "Anulare");
+
+                lblAnLuna.InnerText = Dami.TraduCuvant("Luna/An");
+                lblAngFiltru.InnerText = Dami.TraduCuvant("Angajat");
+
+                foreach (ListBoxColumn col in cmbAngFiltru.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
                 foreach (GridViewColumn c in grDate.Columns)
                 {
                     try

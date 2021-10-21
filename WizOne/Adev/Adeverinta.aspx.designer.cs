@@ -348,6 +348,15 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxRadioButton rbTipGen2;
 
         /// <summary>
+        /// lgAdev control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgAdev;
+
+        /// <summary>
         /// lblAdev control.
         /// </summary>
         /// <remarks>
@@ -427,6 +436,15 @@ namespace WizOne.Adev
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlTableCell config;
+
+        /// <summary>
+        /// lgAdevGen control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgAdevGen;
 
         /// <summary>
         /// chkRep1 control.
@@ -519,6 +537,15 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxTextBox txtFunctieRL2;
 
         /// <summary>
+        /// lgAdevSan control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgAdevSan;
+
+        /// <summary>
         /// lblInterval control.
         /// </summary>
         /// <remarks>
@@ -591,6 +618,15 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxTextBox txtCoduri;
 
         /// <summary>
+        /// lgAdevVen control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgAdevVen;
+
+        /// <summary>
         /// chkSalNet control.
         /// </summary>
         /// <remarks>
@@ -643,6 +679,15 @@ namespace WizOne.Adev
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRadioButton rbSumeContract2;
+
+        /// <summary>
+        /// lgAdevCIC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgAdevCIC;
 
         /// <summary>
         /// lblVarstaCopil control.
@@ -762,6 +807,15 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxButton btnCIC;
 
         /// <summary>
+        /// lgAdevSom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgAdevSom;
+
+        /// <summary>
         /// lblTitlu control.
         /// </summary>
         /// <remarks>
@@ -798,6 +852,24 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxTextBox txtCompartiment;
 
         /// <summary>
+        /// lblNFRL1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblNFRL1;
+
+        /// <summary>
+        /// lblNFRL2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblNFRL2;
+
+        /// <summary>
         /// lblZileSusp control.
         /// </summary>
         /// <remarks>
@@ -825,6 +897,15 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxButton btnD112;
 
         /// <summary>
+        /// lblCodTran control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblCodTran;
+
+        /// <summary>
         /// chkDIS control.
         /// </summary>
         /// <remarks>
@@ -832,6 +913,15 @@ namespace WizOne.Adev
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBox chkDIS;
+
+        /// <summary>
+        /// lgAdevVech control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgAdevVech;
 
         /// <summary>
         /// lblFunctie control.
@@ -897,6 +987,15 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxTextBox txtCFP;
 
         /// <summary>
+        /// lgAdevStag control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgAdevStag;
+
+        /// <summary>
         /// lblIntervalStagiu control.
         /// </summary>
         /// <remarks>
@@ -940,6 +1039,15 @@ namespace WizOne.Adev
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtBCM;
+
+        /// <summary>
+        /// lgAdevDepl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgAdevDepl;
 
         /// <summary>
         /// lblSubsem control.
@@ -1032,13 +1140,13 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxTextBox txtInterval;
 
         /// <summary>
-        /// ASPxLabel2 control.
+        /// lblDataVal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel ASPxLabel2;
+        protected global::DevExpress.Web.ASPxLabel lblDataVal;
 
         /// <summary>
         /// deDataValab control.

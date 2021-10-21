@@ -68,7 +68,7 @@ namespace WizOne.AvansXDecont
 
                 #endregion
 
-                int suma = Convert.ToInt32(General.Nz(Session["AvsXDec_SumaAvans"], 0));
+                decimal suma = Convert.ToDecimal(General.Nz(Session["AvsXDec_SumaAvans"], 0));
                 txtValEstimata.Text = suma.ToString();
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString() + " / Document Avans"; ;
@@ -1398,7 +1398,7 @@ namespace WizOne.AvansXDecont
                         chkIsDiurna_EditValueChanged();
                         break;
                     case "SumaAvans":
-                        int suma = Convert.ToInt32(General.Nz(Session["AvsXDec_SumaAvans"], 0));
+                        decimal suma = Convert.ToDecimal(General.Nz(Session["AvsXDec_SumaAvans"], 0));
                         txtValEstimata.Text = suma.ToString();
                         ent.Rows[0]["EstimatedAmount"] = suma;
                         Session["AvsXDec_SursaDate"] = ent;
@@ -1480,7 +1480,7 @@ namespace WizOne.AvansXDecont
                             cmbModPlata.Value = Convert.ToInt32(ent.Rows[0]["PaymentTypeId"].ToString());
                             chkIsDiurna.Checked = Convert.ToInt32(General.Nz(ent.Rows[0]["chkDiurna"], 0).ToString()) == 1 ? true : false;
                             txtValEstimata.Text = ent.Rows[0]["EstimatedAmount"].ToString();
-                            Session["AvsXDec_SumaAvans"] = Convert.ToInt32(ent.Rows[0]["EstimatedAmount"].ToString());
+                            Session["AvsXDec_SumaAvans"] = Convert.ToDecimal(ent.Rows[0]["EstimatedAmount"].ToString());
                             txtValAvans.Text = ent.Rows[0]["TotalAmount"].ToString();
                             dtDueDate.Value = Convert.ToDateTime(ent.Rows[0]["DueDate"].ToString());
                             //cmbTip.Value = Convert.ToInt32(ent.Rows[0]["???"].ToString());
@@ -1776,8 +1776,8 @@ namespace WizOne.AvansXDecont
 
                 DataRow row = dt.Rows.Find(keys);
 
-                int suma = Convert.ToInt32(General.Nz(Session["AvsXDec_SumaAvans"], 0));
-                suma -= Convert.ToInt32(General.Nz(row["Amount"], 0));
+                decimal suma = Convert.ToDecimal(General.Nz(Session["AvsXDec_SumaAvans"], 0));
+                suma -= Convert.ToDecimal(General.Nz(row["Amount"], 0));
                 Session["AvsXDec_SumaAvans"] = suma;
 
                 #region actualizare valoare avans
@@ -1898,9 +1898,9 @@ namespace WizOne.AvansXDecont
                 grDate.KeyFieldName = "DocumentDetailId;DocumentId";
                 Session["AvsXDec_SursaDateCheltuieli"] = dt;
 
-                int suma = 0;
+                decimal suma = 0;
                 for (int i = 0; i < dt.Rows.Count; i++)
-                    suma += Convert.ToInt32(General.Nz(dt.Rows[i]["Amount"], 0));
+                    suma += Convert.ToDecimal(General.Nz(dt.Rows[i]["Amount"], 0));
                 Session["AvsXDec_SumaAvans"] = suma;
             }
             catch (Exception ex)
@@ -1935,9 +1935,9 @@ namespace WizOne.AvansXDecont
                 Session["AvsXDec_SursaDateCheltuieli"] = dt;
                 grDate.DataSource = dt;
 
-                int suma = 0;
+                decimal suma = 0;
                 for (int i = 0; i < dt.Rows.Count; i++)
-                    suma += Convert.ToInt32(General.Nz(dt.Rows[i]["Amount"], 0));
+                    suma += Convert.ToDecimal(General.Nz(dt.Rows[i]["Amount"], 0));
                 Session["AvsXDec_SumaAvans"] = suma;
 
             }

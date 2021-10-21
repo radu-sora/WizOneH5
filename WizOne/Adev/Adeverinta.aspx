@@ -282,7 +282,7 @@
                 <tr align="left">
                  <td   valign="top">
                    <fieldset  >
-                    <legend class="legend-font-size">Adeverinte</legend>         
+                    <legend id="lgAdev" runat="server" class="legend-font-size">Adeverinte</legend>         
                     <table width="10%" >  
                         <tr>
                             <td>
@@ -348,7 +348,7 @@
                 </td> 
                  <td id="config" runat="server" style="display:none" valign="top">
                    <fieldset >                     
-                    <legend class="legend-font-size">Setari generale</legend> 
+                    <legend id="lgAdevGen" runat="server" class="legend-font-size">Setari generale</legend> 
                     <table width="10%" >
                         <tr>
                             <td align="left">                             
@@ -391,7 +391,7 @@
                     </table>
                   </fieldset >
                    <fieldset >                     
-                    <legend class="legend-font-size">Setari Adeverinta sanatate</legend> 
+                    <legend id="lgAdevSan" runat="server" class="legend-font-size">Setari Adeverinta sanatate</legend> 
                     <table width="10%" >
                         <tr>
                             <td>
@@ -432,7 +432,7 @@
                     </table>
                   </fieldset >
                    <fieldset >                     
-                    <legend class="legend-font-size">Setari Adeverinta venituri anuale</legend> 
+                    <legend id="lgAdevVen" runat="server" class="legend-font-size">Setari Adeverinta venituri anuale</legend> 
                     <table width="10%" >
                         <tr>
                             <td align="left">                             
@@ -472,7 +472,7 @@
                     </table>
                   </fieldset >
                    <fieldset >                     
-                    <legend class="legend-font-size">Setari Adeverinta CIC</legend> 
+                    <legend id="lgAdevCIC" runat="server" class="legend-font-size">Setari Adeverinta CIC</legend> 
                     <table width="10%" >
                         <tr>
 						    <td align="left">
@@ -539,7 +539,7 @@
                     </table>
                   </fieldset >
                    <fieldset >                     
-                    <legend class="legend-font-size">Setari Adeverinta somaj</legend> 
+                    <legend id="lgAdevSom" runat="server" class="legend-font-size">Setari Adeverinta somaj</legend> 
                     <table width="10%" >
                         <tr>
 						    <td align="left">
@@ -564,13 +564,13 @@
 							    <dx:ASPxLabel   Width="100" runat="server"  Text="     " ></dx:ASPxLabel >	
 						    </td>
 						    <td align="left">
-							    <dx:ASPxLabel   Width="275" runat="server"  Text="Nume, Functie (se ia Reprezentant Legal 1)" ></dx:ASPxLabel >	
+							    <dx:ASPxLabel id ="lblNFRL1"  Width="275" runat="server"  Text="Nume, Functie (se ia Reprezentant Legal 1)" ></dx:ASPxLabel >	
 						    </td>	
 						    <td align="left">
 							    <dx:ASPxLabel   Width="100" runat="server"  Text="     " ></dx:ASPxLabel >	
 						    </td>
 						    <td align="left">
-							    <dx:ASPxLabel   Width="275" runat="server"  Text="Nume, Functie (se ia Reprezentant Legal 2)" ></dx:ASPxLabel >	
+							    <dx:ASPxLabel id ="lblNFRL2"    Width="275" runat="server"  Text="Nume, Functie (se ia Reprezentant Legal 2)" ></dx:ASPxLabel>	
 						    </td>	
                         </tr> 
                         <tr>
@@ -597,7 +597,7 @@
 							    <dx:ASPxLabel   Width="100" runat="server"  Text="     " ></dx:ASPxLabel >	
 						    </td>
 						    <td align="left">
-							    <dx:ASPxLabel   Width="275" runat="server"  Text="Coduri tranzactii separate prin + (plus)" ></dx:ASPxLabel >	
+							    <dx:ASPxLabel ID ="lblCodTran"   Width="275" runat="server"  Text="Coduri tranzactii separate prin + (plus)" ></dx:ASPxLabel>	
 						    </td>	
 						    <td align="left">
 							    <dx:ASPxLabel   Width="100" runat="server"  Text="     " ></dx:ASPxLabel >	
@@ -611,7 +611,7 @@
                     </table>
                   </fieldset >
                    <fieldset >                     
-                    <legend class="legend-font-size">Setari Adeverinta vechime</legend> 
+                    <legend id="lgAdevVech" runat="server" class="legend-font-size">Setari Adeverinta vechime</legend> 
                     <table width="10%" >
                         <tr>
                             <td>
@@ -642,7 +642,7 @@
                     </table>
                   </fieldset >
                    <fieldset >                     
-                    <legend class="legend-font-size">Setari Adeverinta stagiu</legend> 
+                    <legend id="lgAdevStag" runat="server" class="legend-font-size">Setari Adeverinta stagiu</legend> 
                     <table width="10%" >
                         <tr>
                             <td>
@@ -669,7 +669,7 @@
                     </table>
                   </fieldset >
                    <fieldset >                     
-                    <legend class="legend-font-size">Setari Adeverinta deplasare</legend> 
+                    <legend id="lgAdevDepl" runat="server" class="legend-font-size">Setari Adeverinta deplasare</legend> 
                     <table width="10%" >   
                         <tr>                 
 						    <td align="left">
@@ -699,7 +699,7 @@
 							    </dx:ASPxTextBox >
                             </td>
                               <td align="left">
-							    <dx:ASPxLabel  ID="lbllLoc" Width="200" runat="server"  Text="Locul de desfasurare al activitatii profesionale" ></dx:ASPxLabel >
+							    <dx:ASPxLabel  ID="lbllLoc" Width="200" runat="server"  Text="Locul de desfasurare a activitatii profesionale" ></dx:ASPxLabel >
 						    </td>
                             <td align="right">
 							    <dx:ASPxTextBox  ID="txtLoc"  Width="200" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">        
@@ -717,7 +717,7 @@
 							    </dx:ASPxTextBox >
                             </td>
                             <td align="left">
-                                <dx:ASPxLabel  ID="ASPxLabel2" Width="100" runat="server"  Text="Data valabilitate" ></dx:ASPxLabel >
+                                <dx:ASPxLabel  ID="lblDataVal" Width="100" runat="server"  Text="Data valabilitate" ></dx:ASPxLabel >
                             </td>
                               <td align="left">
                                  <dx:ASPxDateEdit ID="deDataValab" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)">

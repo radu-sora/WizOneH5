@@ -32,6 +32,25 @@ namespace WizOne.BP
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
+                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+                btnImport.Text = Dami.TraduCuvant("btnImport", "Import");
+                btnExport.Text = Dami.TraduCuvant("btnExport", "Exporta document");
+                btnDocUpload.ToolTip = Dami.TraduCuvant("Incarca document");
+
+                lgImport.InnerText = Dami.TraduCuvant("Import prime");
+                lblAn.Text = Dami.TraduCuvant("An");
+                lblLuna.Text = Dami.TraduCuvant("Luna");
+                lblPrima.Text = Dami.TraduCuvant("Selectati tipul primei");
+                lblAvs.Text = Dami.TraduCuvant("Avans/Lichidare");        
+
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
                 #endregion
 
                 if (IsPostBack)

@@ -14,7 +14,7 @@
                     grDate.GetRowValues(e.visibleIndex, 'DocumentStateId', GoToDeleteMode);
                     break;
                 case "btnIstoric":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToIstoric);
+                    grDate.GetRowValues(e.visibleIndex, 'DocumentId', GoToIstoric);
                     break;
             }
         }
@@ -188,11 +188,12 @@
                         <dx:GridViewDataTextColumn FieldName="TotalComissionPayment" Name="TotalComissionPayment" Caption="Comision bancar" ReadOnly="true" Width="100px"  />
                         <dx:GridViewDataTextColumn FieldName="PaymentCurrencyCode" Name="PaymentCurrencyCode" Caption="Valuta plata" ReadOnly="true" Width="100px"  />
                         <dx:GridViewDataTextColumn FieldName="BankNamePlatitor" Name="BankNamePlatitor" Caption="Banca platitor" ReadOnly="true" Width="200px"  />
-					    <dx:GridViewDataDateColumn FieldName="PaymentDate" Name="PaymentDate" Caption="Data plata" ReadOnly="true"  Width="100px" >
+					    <dx:GridViewDataDateColumn FieldName="PaymentDate" Name="PaymentDate" Caption="Data plata" Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
 
                         <dx:GridViewDataTextColumn FieldName="DocumentStateId" Name="DocumentStateId" Caption="DocumentStateId" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="DocumentStateIdUpdate" Name="DocumentStateIdUpdate" Caption="DocumentStateIdUpdate" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="DocumentTypeId" Name="DocumentTypeId" Caption="DocumentTypeId" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="DocumentTypeCode" Name="DocumentTypeCode" Caption="DocumentTypeCode" ReadOnly="true" Width="50px" Visible="false" />
                         <dx:GridViewDataTextColumn FieldName="CurrencyId" Name="CurrencyId" Caption="CurrencyId" ReadOnly="true" Width="50px" Visible="false" />

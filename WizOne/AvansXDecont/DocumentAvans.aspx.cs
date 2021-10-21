@@ -64,9 +64,12 @@ namespace WizOne.AvansXDecont
 				pnlDateDepl.HeaderText = Dami.TraduCuvant("Date deplasare");	
 				pnlDatePlata.HeaderText = Dami.TraduCuvant("Date plata");	
 				pnlCheltEst.HeaderText = Dami.TraduCuvant("Cheltuieli estimate");	
-				pnlDateAv.HeaderText = Dami.TraduCuvant("Date avans");		
+				pnlDateAv.HeaderText = Dami.TraduCuvant("Date avans");
 
                 #endregion
+
+                int suma = Convert.ToInt32(General.Nz(Session["AvsXDec_SumaAvans"], 0));
+                txtValEstimata.Text = suma.ToString();
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString() + " / Document Avans"; ;
 
@@ -75,6 +78,7 @@ namespace WizOne.AvansXDecont
                     Session["AvsXDec_SursaDate"] = null;
                     Session["AvsXDec_SursaDateCheltuieli"] = null;
                     Session["AvsXDec_Apasat"] = null;
+                    Session["AvsXDec_SumaAvans"] = null;
 
                     DataTable lstConfigCurrencyXPay_Currency = new DataTable();
                     lstConfigCurrencyXPay_Currency.Columns.Add("DictionaryItemId", typeof(int));
@@ -290,7 +294,6 @@ namespace WizOne.AvansXDecont
 
                 IncarcaCheltuieli();
                 IncarcaDate();
-
 
             }
             catch (Exception ex)
@@ -1394,6 +1397,12 @@ namespace WizOne.AvansXDecont
                         Session["AvsXDec_SursaDate"] = ent;
                         chkIsDiurna_EditValueChanged();
                         break;
+                    case "SumaAvans":
+                        int suma = Convert.ToInt32(General.Nz(Session["AvsXDec_SumaAvans"], 0));
+                        txtValEstimata.Text = suma.ToString();
+                        ent.Rows[0]["EstimatedAmount"] = suma;
+                        Session["AvsXDec_SursaDate"] = ent;
+                        break;
                 }
    
             }
@@ -1471,6 +1480,7 @@ namespace WizOne.AvansXDecont
                             cmbModPlata.Value = Convert.ToInt32(ent.Rows[0]["PaymentTypeId"].ToString());
                             chkIsDiurna.Checked = Convert.ToInt32(General.Nz(ent.Rows[0]["chkDiurna"], 0).ToString()) == 1 ? true : false;
                             txtValEstimata.Text = ent.Rows[0]["EstimatedAmount"].ToString();
+                            Session["AvsXDec_SumaAvans"] = Convert.ToInt32(ent.Rows[0]["EstimatedAmount"].ToString());
                             txtValAvans.Text = ent.Rows[0]["TotalAmount"].ToString();
                             dtDueDate.Value = Convert.ToDateTime(ent.Rows[0]["DueDate"].ToString());
                             //cmbTip.Value = Convert.ToInt32(ent.Rows[0]["???"].ToString());
@@ -1717,7 +1727,12 @@ namespace WizOne.AvansXDecont
                             for (int j = 0; j < loRez.Rows.Count; j++)
                             {
                                 if (Convert.ToInt32(nestedListBox1.Items[i].Value) == Convert.ToInt32(loRez.Rows[j]["DictionaryItemId"].ToString()))
+                                {
                                     nestedListBox1.Items[i].Selected = true;
+                                    if (cmbTip.Text.Length > 0)
+                                        cmbTip.Text += ";";
+                                    cmbTip.Text += loRez.Rows[j]["DictionaryItemName"].ToString();
+                                }
                             }
                     }
                 }
@@ -1759,7 +1774,11 @@ namespace WizOne.AvansXDecont
 
                 DataTable dt = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
 
-                DataRow row = dt.Rows.Find(keys);                
+                DataRow row = dt.Rows.Find(keys);
+
+                int suma = Convert.ToInt32(General.Nz(Session["AvsXDec_SumaAvans"], 0));
+                suma -= Convert.ToInt32(General.Nz(row["Amount"], 0));
+                Session["AvsXDec_SumaAvans"] = suma;
 
                 #region actualizare valoare avans
                 /*LeonardM 25.08.2016
@@ -1878,6 +1897,11 @@ namespace WizOne.AvansXDecont
                 grDate.DataSource = dt;
                 grDate.KeyFieldName = "DocumentDetailId;DocumentId";
                 Session["AvsXDec_SursaDateCheltuieli"] = dt;
+
+                int suma = 0;
+                for (int i = 0; i < dt.Rows.Count; i++)
+                    suma += Convert.ToInt32(General.Nz(dt.Rows[i]["Amount"], 0));
+                Session["AvsXDec_SumaAvans"] = suma;
             }
             catch (Exception ex)
             {
@@ -1910,6 +1934,12 @@ namespace WizOne.AvansXDecont
                 grDate.CancelEdit();
                 Session["AvsXDec_SursaDateCheltuieli"] = dt;
                 grDate.DataSource = dt;
+
+                int suma = 0;
+                for (int i = 0; i < dt.Rows.Count; i++)
+                    suma += Convert.ToInt32(General.Nz(dt.Rows[i]["Amount"], 0));
+                Session["AvsXDec_SumaAvans"] = suma;
+
             }
             catch (Exception ex)
             {
@@ -3007,6 +3037,7 @@ namespace WizOne.AvansXDecont
                     entCheltuialaDiurnaTot.Rows.Add(row);
                     grDate.DataSource = entCheltuialaDiurnaTot;
                     grDate.KeyFieldName = "DocumentDetailId;DocumentId";
+                    grDate.DataBind();
                     Session["AvsXDec_SursaDateCheltuieli"] = entCheltuialaDiurnaTot;
 
                 }

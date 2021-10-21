@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../Fisiere/MsgBox/sweetalert.min.js"></script>
 
     <script language="javascript" type="text/javascript">
-
+        var getAbsoluteUrl = window.location.protocol + '//' + window.location.host + '<%# VirtualPathUtility.ToAbsolute("~/")%>';
 
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
@@ -36,7 +36,7 @@
         }
 
         function GoToAtasMode(Value) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=22&id=' + Value, '_blank ')
+            window.open(getAbsoluteUrl + '/Pagini/Fisiere.aspx?tip=0&tbl=22&id=' + Value, '_blank ')
         }
 
         function EndUpload(s) {

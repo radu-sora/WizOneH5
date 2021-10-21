@@ -70,7 +70,6 @@ namespace WizOne.AvansXDecont
             Contat = 7,
             Inchis = 8
         }
-        private StareDocumentForUpdate docStateUpdate;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -122,6 +121,7 @@ namespace WizOne.AvansXDecont
                 if (!IsPostBack)
                 {
                     Session["AvsXDec_PaymentGrid"] = null;
+                    Session["AvsXDec_DocStateUpdate"] = null;
                     cmbOperationSign.SelectedIndex = 0;
                     cmbDocState.SelectedIndex = 0;
                     cmbDocState_SelectedIndexChanged(null, null);
@@ -147,6 +147,7 @@ namespace WizOne.AvansXDecont
 
         private void SetButtonContent()
         {
+            StareDocumentForUpdate docStateUpdate = (StareDocumentForUpdate)Session["AvsXDec_DocStateUpdate"];
             switch (docStateUpdate)
             {
                 case StareDocumentForUpdate.Acordat:
@@ -315,7 +316,7 @@ namespace WizOne.AvansXDecont
         {
             try
             {
-                
+                StareDocumentForUpdate docStateUpdate = (StareDocumentForUpdate)Session["AvsXDec_DocStateUpdate"];
 
                 string ras = ValidareDateObligatorii();
                 if (ras != "")
@@ -360,8 +361,8 @@ namespace WizOne.AvansXDecont
                                     {
                                         object[] arr = lst[i] as object[];
                                         DataRow dr = lstDocumentePlata.Select("DocumentId = " + arr[0].ToString()).FirstOrDefault();
-                                        if (dr != null)
-                                            dr["DocumentStateIdUpdate"] = Convert.ToInt32(docStateUpdate);
+                                        //if (dr != null)
+                                        //    dr["DocumentStateIdUpdate"] = Convert.ToInt32(docStateUpdate);
                                       }
                                 }
                                 Session["AvsXDec_PaymentGrid"] = lstDocumentePlata;
@@ -427,8 +428,8 @@ namespace WizOne.AvansXDecont
                             {
                                 object[] arr = lst[i] as object[];
                                 DataRow dr = lstDocumentePlata.Select("DocumentId = " + arr[0].ToString()).FirstOrDefault();
-                                if (dr != null)
-                                    dr["DocumentStateIdUpdate"] = Convert.ToInt32(docStateUpdate);
+                               // if (dr != null)
+                               //     dr["DocumentStateIdUpdate"] = Convert.ToInt32(docStateUpdate);
                             }
                         }
                         Session["AvsXDec_PaymentGrid"] = lstDocumentePlata;
@@ -665,7 +666,9 @@ namespace WizOne.AvansXDecont
                                         /*LeonardM 10.08.2016
                                         * se sterge si comisionul bancare ca altfel ramane diferenta*/
                                         + ", UnconfRestAmount = UnconfRestAmount - " + (Convert.ToDecimal(dr["UnconfRestAmount"].ToString()) - Convert.ToDecimal(dr["TotalComissionPayment"].ToString())).ToString().Replace(',', '.') + " - " + Convert.ToDecimal(dr["TotalComissionPayment"].ToString()).ToString().Replace(',', '.')
-                                        + ", TotalComissionPayment = " + Convert.ToDecimal(dr["TotalComissionPayment"].ToString()).ToString().Replace(',', '.') + ", PaymentCurrencyId = " + dr["PaymentCurrencyId"].ToString() + ", DocumentStateIdUpdate = " + dr["DocumentStateIdUpdate"].ToString() + " WHERE DocumentId = " + dr["DocumentId"].ToString();
+                                        + ", TotalComissionPayment = " + Convert.ToDecimal(dr["TotalComissionPayment"].ToString()).ToString().Replace(',', '.') + ", PaymentCurrencyId = " + dr["PaymentCurrencyId"].ToString() 
+                                        //+ ", DocumentStateIdUpdate = " + dr["DocumentStateIdUpdate"].ToString() 
+                                        + " WHERE DocumentId = " + dr["DocumentId"].ToString();
                                     General.ExecutaNonQuery(sql, null);
                                 }
                             }
@@ -687,7 +690,9 @@ namespace WizOne.AvansXDecont
                                         + (Convert.ToDecimal(dr["UnconfRestAmount"].ToString()) - Convert.ToDecimal(dr["TotalComissionPayment"].ToString())).ToString().Replace(',', '.')
                                         + ", UnconfRestAmount = " + Convert.ToDecimal(dr["UnconfRestAmount"].ToString()).ToString().Replace(',', '.') + " - "  + (Convert.ToDecimal(dr["UnconfRestAmount"].ToString()) - Convert.ToDecimal(dr["TotalComissionPayment"].ToString())).ToString().Replace(',', '.') 
                                         + " - " + Convert.ToDecimal(dr["TotalComissionPayment"].ToString()).ToString().Replace(',', '.')
-                                        + ", ComissionValueFinance = " + Convert.ToDecimal(dr["TotalComissionPayment"].ToString()).ToString().Replace(',', '.') + ", PaymentCurrencyId = " + dr["PaymentCurrencyId"].ToString() + ", DocumentStateIdUpdate = " + dr["DocumentStateIdUpdate"].ToString() + "  WHERE DocumentId = " + dr["DocumentId"].ToString();
+                                        + ", ComissionValueFinance = " + Convert.ToDecimal(dr["TotalComissionPayment"].ToString()).ToString().Replace(',', '.') + ", PaymentCurrencyId = " + dr["PaymentCurrencyId"].ToString() 
+                                        //+ ", DocumentStateIdUpdate = " + dr["DocumentStateIdUpdate"].ToString() 
+                                        + "  WHERE DocumentId = " + dr["DocumentId"].ToString();
                                     General.ExecutaNonQuery(sql, null);
                                 }
                             }
@@ -708,7 +713,7 @@ namespace WizOne.AvansXDecont
             string resultMethod = string.Empty;
             string verificareDate = string.Empty;
             bool errValidare = false;
-
+            StareDocumentForUpdate docStateUpdate = (StareDocumentForUpdate)Session["AvsXDec_DocStateUpdate"];
             try
             {
                 int docValid = 0;
@@ -1436,7 +1441,7 @@ namespace WizOne.AvansXDecont
                 else
                     dt = Session["AvsXDec_PaymentGrid"] as DataTable;
 
-
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["DocumentId"] };
                 grDate.DataSource = dt;
                 grDate.DataBind();
                 Session["AvsXDec_PaymentGrid"] = dt;
@@ -1649,7 +1654,49 @@ namespace WizOne.AvansXDecont
         {
             try
             {
-  
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                DataTable dt = Session["AvsXDec_PaymentGrid"] as DataTable;
+                DataRow row = dt.Rows.Find(keys);
+                int tip = -1, id = -1;
+                string data = "";
+                foreach (DataColumn col in dt.Columns)
+                {
+                    if (col.ColumnName == "PaymentDate")
+                    {
+                        var edc = e.NewValues[col.ColumnName];
+                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                        data = e.NewValues[col.ColumnName].ToString();
+                    }
+                    if (col.ColumnName == "DocumentTypeId")
+                        tip = Convert.ToInt32(row[col.ColumnName].ToString());
+                    if (col.ColumnName == "DocumentId")
+                        id = Convert.ToInt32(e.NewValues[col.ColumnName].ToString());
+                }
+
+                e.Cancel = true;
+                grDate.CancelEdit();
+                Session["AvsXDec_PaymentGrid"] = dt;
+                grDate.DataSource = dt;
+
+                if (data.Length > 0)
+                    switch (tip)
+                    {
+                        case 1001:
+                        case 1002:
+                            {
+                                General.ExecutaNonQuery("UPDATE AvsXDec_Avans SET PaymentDate = CONVERT(DATETIME, '" + data + "', 103) WHERE DocumentId = " + id, null);
+                                break;
+                            }
+                        case 2001:
+                        case 2002:
+                            {
+                                General.ExecutaNonQuery("UPDATE AvsXDec_Decont SET PaymentDate =  CONVERT(DATETIME, '" + data + "', 103) WHERE DocumentId = " + id, null);
+                                break;
+                            }
+                    }
             }
             catch (Exception ex)
             {
@@ -1690,6 +1737,7 @@ namespace WizOne.AvansXDecont
         {
             try
             {
+                StareDocumentForUpdate docStateUpdate = (StareDocumentForUpdate)Session["AvsXDec_DocStateUpdate"];
                 if (e.VisibleIndex >= 0)
                 {
                     DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
@@ -1704,9 +1752,9 @@ namespace WizOne.AvansXDecont
                             case StareDocumentForUpdate.Contat:
                             case StareDocumentForUpdate.Inchis:
                                 if (e.ButtonType == ColumnCommandButtonType.Delete)
-                                    e.Visible = false;                              
+                                    e.Visible = false;
                                 break;
-                        }  
+                        }
                     }
                 }
             }
@@ -1751,8 +1799,8 @@ namespace WizOne.AvansXDecont
                  * */               
 
                 sql = "SELECT  a.DocumentId, fNume.F10008 + ' ' + fNume.F10009 as NumeComplet, a.DocumentStateId,  a.DocumentState, a.DocumentTypeId, a.DocumentTypeCode, a.DocumentTypeName, a.DocumentDate, a.TotalAmount, "
-                    + " a.CurrencyId, a.CurrencyCode, (CASE WHEN a.UnconfRestAmount is null or a.UnconfRestAmount = 0 THEN a.TotalAmount + a.TotalComissionPayment ELSE a.UnconfRestAmount + a.TotalComissionPayment END) as UnconfRestAmount "
-                    + " a.BankId, a.BankName, a.SucursalaId, a.SucursalaName, a.TotalComissionPayment, a.PaymentCurrencyId, a.PaymentCurrencyCode, " + condData + " as PaymentDate, srcDoc.SrcDocId, COALESCE(srcDoc.SrcDocAmount, -99) AS SrcDocAmount "
+                    + " a.CurrencyId, a.CurrencyCode, (CASE WHEN a.UnconfRestAmount is null or a.UnconfRestAmount = 0 THEN a.TotalAmount + a.TotalComissionPayment ELSE a.UnconfRestAmount + a.TotalComissionPayment END) as UnconfRestAmount, "
+                    + " a.BankId, a.BankName, a.SucursalaId, a.SucursalaName, a.TotalComissionPayment, a.PaymentCurrencyId, a.PaymentCurrencyCode, " + condData + " as PaymentDate, srcDoc.SrcDocId, COALESCE(srcDoc.SrcDocAmount, -99) AS SrcDocAmount, "
                     + " COALESCE(srcDoc.DestDocAmount, -999) AS DestDocAmount, doc.F10003, doc.USER_NO, COALESCE(a.PaymentTypeId, -99) AS PaymentTypeId,  a.PaymentTypeName, a.BankIdPlatitor,  a.BankCodePlatitor, a.BankNamePlatitor, "
                     + " a.IBANPlatitor, CASE WHEN ((a.DocumentTypeId IN (1001, 1002, 1003) AND a.DocumentStateId < 4) OR (a.DocumentTypeId IN (2001, 2002, 2003) AND a.DocumentStateId < 7)) THEN 1 ELSE 0 END as canBeRefused "
                     + " FROM vwAvsXDec_DocumenteRestPlata a "
@@ -1812,6 +1860,7 @@ namespace WizOne.AvansXDecont
 
         protected void cmbDocState_SelectedIndexChanged(object sender, EventArgs e)
         {
+            StareDocumentForUpdate docStateUpdate = new StareDocumentForUpdate();
             switch (Convert.ToInt32(cmbDocState.Value))
             {
                 case 3:/*aprobat*/
@@ -1836,11 +1885,13 @@ namespace WizOne.AvansXDecont
                     docStateUpdate = StareDocumentForUpdate.Inchis;
                     break;
             }
+            Session["AvsXDec_DocStateUpdate"] = docStateUpdate;
             SetButtonContent();
         }
 
         protected void cmbOperationSign_SelectedIndexChanged(object sender, EventArgs e)
         {
+            StareDocumentForUpdate docStateUpdate = new StareDocumentForUpdate();
             switch (Convert.ToInt32(cmbDocState.Value))
             {
                 case 3:/*aprobat*/
@@ -1865,11 +1916,13 @@ namespace WizOne.AvansXDecont
                     docStateUpdate = StareDocumentForUpdate.Inchis;
                     break;
             }
+            Session["AvsXDec_DocStateUpdate"] = docStateUpdate;
             SetButtonContent();
         }
 
         protected void cmbPaymentMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
+            StareDocumentForUpdate docStateUpdate = new StareDocumentForUpdate();
             switch (Convert.ToInt32(cmbDocState.Value))
             {
                 case 3:/*aprobat*/
@@ -1894,6 +1947,7 @@ namespace WizOne.AvansXDecont
                     docStateUpdate = StareDocumentForUpdate.Inchis;
                     break;
             }
+            Session["AvsXDec_DocStateUpdate"] = docStateUpdate;
             SetButtonContent();
         }
 

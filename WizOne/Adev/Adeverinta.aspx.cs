@@ -52,6 +52,7 @@ namespace WizOne.Adev
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                 btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
 
+                lblRol.InnerText = Dami.TraduCuvant("Supervizor");
                 lblAng.InnerText = Dami.TraduCuvant("Angajat");
                 lblAngBulk.InnerText = Dami.TraduCuvant("Angajat");
                 lblSub.InnerText = Dami.TraduCuvant("Subcompanie");
@@ -61,7 +62,64 @@ namespace WizOne.Adev
                 lblSubDept.InnerText = Dami.TraduCuvant("SubDept");
                 lblBirou.InnerText = Dami.TraduCuvant("Birou");
                 lblPL.InnerText = Dami.TraduCuvant("Punct de lucru");
+                lblCtr.InnerText = Dami.TraduCuvant("Contract");
+                lblCateg.InnerText = Dami.TraduCuvant("Categorie");
                 lblDataPlec.InnerText = Dami.TraduCuvant("Data plecarii");
+
+                lblTipGen.Text = Dami.TraduCuvant("Tip generare");
+                rbTipGen1.Text = Dami.TraduCuvant("intr-un singur fisier");
+                rbTipGen2.Text = Dami.TraduCuvant("in fisiere separate");
+
+                lblAdev.InnerText = Dami.TraduCuvant("Tip adeverinta");
+                chkVenit.Text = Dami.TraduCuvant("Angajati cu venituri in ...");
+                chkCIC.Text = Dami.TraduCuvant("CIC");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+
+                btnConfig.Text = Dami.TraduCuvant("btnConfig", "Configurare");
+                chkRep1.Text = Dami.TraduCuvant("Apare reprezentant legal 1?");
+                chkRep2.Text = Dami.TraduCuvant("Apare reprezentant legal 2?");
+                lblNumeRL1.Text = Dami.TraduCuvant("Nume");
+                lblNumeRL2.Text = Dami.TraduCuvant("Nume");
+                lblFunctieRL1.Text = Dami.TraduCuvant("Functie");
+                lblFunctieRL2.Text = Dami.TraduCuvant("Functie");
+                lblInterval.Text = Dami.TraduCuvant("Interval");
+                rbInterval1.Text = Dami.TraduCuvant("12 luni");
+                rbInterval2.Text = Dami.TraduCuvant("24 luni");
+                lblEmitent.Text = Dami.TraduCuvant("Emitent");
+                rbEmitent1.Text = Dami.TraduCuvant("Angajator");
+                rbEmitent2.Text = Dami.TraduCuvant("Casa de sanatate");
+                lblCoduri.Text = Dami.TraduCuvant("Coduri indemnizatii excluse din document");
+                chkSalNet.Text = Dami.TraduCuvant("Include salariul net?");
+                lblAnul.Text = Dami.TraduCuvant("Anul ");
+                lblSumeCtr.Text = Dami.TraduCuvant("Sume contract");
+                rbSumeContract1.Text = Dami.TraduCuvant("pe Marca");
+                rbSumeContract2.Text = Dami.TraduCuvant("pe CNP");
+                lblVarstaCopil.Text = Dami.TraduCuvant("Varsta copil pentru filtrare");
+                lblVenit.Text = Dami.TraduCuvant("Venit net realizat");
+                lblZileLucrate.Text = Dami.TraduCuvant("Zile lucrate");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+
+
+
 
                 foreach (dynamic c in grDate.Columns)
                 {

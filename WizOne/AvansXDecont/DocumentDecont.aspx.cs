@@ -3953,6 +3953,7 @@ namespace WizOne.AvansXDecont
                     entCheltuialaDiurnaTot.Rows.Add(row);
                     grDateDocJust.DataSource = entCheltuialaDiurnaTot;
                     grDateDocJust.KeyFieldName = "DocumentDetailId;DocumentId";
+                    grDateDocJust.DataBind();
                     Session["AvsXDec_SursaDateDocJust"] = entCheltuialaDiurnaTot;         
                 }
                 #endregion

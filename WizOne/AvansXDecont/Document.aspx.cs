@@ -474,9 +474,9 @@ namespace WizOne.AvansXDecont
 					{
 						MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoWarning, "");
 					}
-                      
-                 
-                }
+					Session["AvansXDecont_Grid"] = null;
+					IncarcaGrid();
+				}
                 #endregion
             }
             catch (Exception ex)
@@ -595,11 +595,11 @@ namespace WizOne.AvansXDecont
                             General.IncarcaDT(sql, null);							
 							
 							sql = "UPDATE \"AvsXDec_DocumentStateHistory\" SET \"DataAprobare\" = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", \"Aprobat\" = 1, \"DocumentStateId\" = " + idStare.ToString() + ", \"Culoare\" = '" + culoare
-							+ "' TIME = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate")
+							+ "', TIME = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate")
 							+ (dtIst.Rows[0]["USER_NO"].ToString() != idUser.ToString() ? ", \"IdUserInlocuitor\" = " + idUser.ToString() : "")
 							+ " WHERE \"DocumentId\" = " + DocumentId.ToString() 
-							
-							+ " AND USER_NO IN " + lstId;     
+							+ " AND Aprobat IS NULL "
+							+ " AND USER_NO IN " + (lstId == "-99" ? "(" + idUser.ToString() + ")" : lstId);     
 							//+ " AND \"Pozitie\"=" + dtCerIst.Rows[0]["Pozitie"].ToString();                     
 							General.IncarcaDT(sql, null);
                    

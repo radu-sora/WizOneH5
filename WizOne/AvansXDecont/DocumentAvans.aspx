@@ -2,6 +2,113 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
+    <script>
+        var limba = "<%= Session["IdLimba"] %>";
+        function EndUpload(s) {
+            lblDoc.innerText = s.cpDocUploadName;
+            s.cpDocUploadName = null;
+        }
+
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+            pnlLoading.Hide();
+        }
+
+        function OnGrDateEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+            pnlLoading.Hide();
+            pnlCtl.PerformCallback('SumaAvans');
+        }
+
+        function OnMotivRespingere() {
+            if (ASPxClientUtils.Trim(txtMtv.GetText()) == '') {
+                swal({
+                    title: trad_string(limba, "Operatie nepermisa"), text: trad_string(limba, "Nu ati completat motivul refuzului pentru respingere documente!"),
+                    type: "warning"
+                });
+            }
+            else {
+                popUpMotiv.Hide();
+                pnlCtl.PerformCallback('btnRespinge;' + txtMtv.GetText());
+                txtMtv.SetText('');
+            }
+        }
+
+        function grDate_CustomButtonClick(s, e) {
+            switch (e.buttonID) {
+                case "btnAtasament":
+                    grDate.GetRowValues(e.visibleIndex, 'DocumentId;DocumentDetailId', GoToDoc);
+                    break;
+            }
+        }
+        function GoToDoc(Value) {
+            strUrl = getAbsoluteUrl + "AvansXDecont/relUploadDocumente.aspx?tip=1&qwe=" + Value;
+            popGen.SetHeaderText("Documente");
+            popGen.SetContentUrl(strUrl);
+            popGen.Show();
+        }
+
+
+
+
+
+        var textSeparator = ";";
+        function OnListBoxSelectionChanged(listBox, args) {
+            if (args.index == 0)
+                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
+            UpdateSelectAllItemState();
+            UpdateText();
+        }
+        function UpdateSelectAllItemState() {
+            IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
+        }
+        function IsAllSelected() {
+            var selectedDataItemCount = checkListBox.GetItemCount() - (checkListBox.GetItem(0).selected ? 0 : 1);
+            return checkListBox.GetSelectedItems().length == selectedDataItemCount;
+        }
+        function UpdateText() {
+            var selectedItems = checkListBox.GetSelectedItems();
+            cmbTip.SetText(GetSelectedItemsText(selectedItems));
+        }
+        function SynchronizeListBoxValues(dropDown, args) {
+            checkListBox.UnselectAll();
+            var texts = dropDown.GetText().split(textSeparator);
+            var values = GetValuesByTexts(texts);
+            checkListBox.SelectValues(values);
+            UpdateSelectAllItemState();
+            UpdateText();
+        }
+        function GetSelectedItemsText(items) {
+            var texts = [];
+            for (var i = 0; i < items.length; i++)
+                if (items[i].index != 0)
+                    texts.push(items[i].text);
+            return texts.join(textSeparator);
+        }
+        function GetValuesByTexts(texts) {
+            var actualValues = [];
+            var item;
+            for (var i = 0; i < texts.length; i++) {
+                item = checkListBox.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+            return actualValues;
+        }
+    </script>
+
     <table style="width:100%">
         <tr>
             <td class="pull-left">
@@ -47,9 +154,9 @@
 								<dx:ASPxTextBox ID="txtNrOrdinDeplasare" ClientInstanceName="txtNrOrdinDeplasare" runat="server" ClientEnabled="false" Width="100px">
 								</dx:ASPxTextBox>
 							</div>        
-							<label id="lblNume" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Nume</label>
-							<div style="float:left; padding-right:15px;">
-								<dx:ASPxTextBox ID="txtNumeComplet" ClientInstanceName="txtNumeComplet" ClientEnabled="false" runat="server" Width="300px">
+							<label id="lblNume" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px; padding-left:190px;">Nume</label>
+							<div style="float:left; padding-right:15px; padding-left:85px;">
+								<dx:ASPxTextBox ID="txtNumeComplet" ClientInstanceName="txtNumeComplet" ClientEnabled="false" runat="server" Width="270px">
 								</dx:ASPxTextBox>
 							</div> 
 						</div>
@@ -63,7 +170,7 @@
 							</div>        
 							<label id="lblLocMunca" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Loc munca</label>
 							<div style="float:left; padding-right:15px;">
-								<dx:ASPxTextBox ID="txtLocMunca" ClientInstanceName="txtLocMunca" ClientEnabled="false" runat="server" Width="250px">
+								<dx:ASPxTextBox ID="txtLocMunca" ClientInstanceName="txtLocMunca" ClientEnabled="false" runat="server" Width="270px">
 								</dx:ASPxTextBox>
 							</div> 
 						</div>	
@@ -101,7 +208,7 @@
 							</div>
 							<label id="lblTipTrans" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Tip transport</label>
 							<div style="float:left; padding-right:15px;">    
-								<dx:ASPxComboBox ID="cmbTransportType" ClientInstanceName="cmbTransportType" ClientIDMode="Static" runat="server"  ValueField="DictionaryItemId" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+								<dx:ASPxComboBox ID="cmbTransportType" ClientInstanceName="cmbTransportType" ClientIDMode="Static" runat="server"  Width="100" ValueField="DictionaryItemId" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
 									<ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbTransportType'); }" />
 								</dx:ASPxComboBox>
 							</div>					
@@ -111,7 +218,7 @@
 				
 							<label id="lblMotiv" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Motiv deplasare</label>
 							<div style="float:left; padding-right:15px;">
-								<dx:ASPxTextBox ID="txtActionReason" ClientInstanceName="txtActionReason" runat="server" Width="500px">
+								<dx:ASPxTextBox ID="txtActionReason" ClientInstanceName="txtActionReason" runat="server" Width="670px">
 								</dx:ASPxTextBox>
 							</div>       
 
@@ -130,7 +237,7 @@
 									<ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtOraPlecare'); }" />
 								</dx:ASPxTimeEdit>
 							</div>
-							<label id="lblDtSos" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data sosirii din delegatie</label>
+							<label id="lblDtSos" runat="server" style="display:inline-block; float:left; padding-right:15px; padding-left:35px;">Data sosirii din delegatie</label>
 							<div style="float:left; padding-right:10px;">
 								<dx:ASPxDateEdit ID="txtEndDate" runat="server" Width="95px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" >
 									<ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtEndDate'); }" />
@@ -158,13 +265,13 @@
 					
 								<label id="lblMoneda" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Moneda avans/decont</label>
 								<div style="float:left; padding-right:15px;">    
-									<dx:ASPxComboBox ID="cmbMonedaAvans" ClientInstanceName="cmbMonedaAvans" ClientIDMode="Static" runat="server"  ValueField="DictionaryItemId" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+									<dx:ASPxComboBox ID="cmbMonedaAvans" ClientInstanceName="cmbMonedaAvans" ClientIDMode="Static" runat="server" Width="90"  ValueField="DictionaryItemId" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
 										<ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbMonedaAvans'); }" />
 									</dx:ASPxComboBox>
 								</div>
 								<label id="lblModPlata" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Modalitate plata</label>
 								<div style="float:left; padding-right:15px;">    
-									<dx:ASPxComboBox ID="cmbModPlata" ClientInstanceName="cmbModPlata" ClientIDMode="Static" runat="server"  ValueField="DictionaryItemId" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+									<dx:ASPxComboBox ID="cmbModPlata" ClientInstanceName="cmbModPlata" ClientIDMode="Static" runat="server" Width="120"  ValueField="DictionaryItemId" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
 										<ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbModPlata'); }" />
 									</dx:ASPxComboBox>
 								</div>			
@@ -194,7 +301,7 @@
 										 OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize">
 										<SettingsBehavior AllowFocusedRow="true" />
 										<Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
-										<ClientSideEvents CustomButtonClick="function(s, e) { grDate_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnEndCallback(s,e); }" ContextMenu="ctx" />    
+										<ClientSideEvents CustomButtonClick="function(s, e) { grDate_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnGrDateEndCallback(s,e); }" ContextMenu="ctx" />    
 										<SettingsEditing Mode="EditFormAndDisplayRow" />
 										<SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
 										<Columns>
@@ -209,7 +316,9 @@
 												<Settings SortMode="DisplayText" />
 												<PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown" />
 											</dx:GridViewDataComboBoxColumn>			
-											<dx:GridViewDataTextColumn FieldName="Amount" Name="Amount" Caption="Valoare"/>
+											<dx:GridViewDataTextColumn FieldName="Amount" Name="Amount" Caption="Valoare">
+												   <PropertiesTextEdit DisplayFormatString="n2" />
+											</dx:GridViewDataTextColumn>
 											<dx:GridViewDataTextColumn FieldName="FreeTxt" Name="FreeTxt" Caption="Detalii"/>
 										
 											<dx:GridViewDataTextColumn FieldName="areFisier" Name="areFisier" Caption="areFisier" Visible="false" ShowInCustomizationForm="false"/>
@@ -256,7 +365,7 @@
 														</tr>
 														<tr>
 															<td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbChelt" runat="server" Width="200px" ValueField="DictionaryItemId" DropDownWidth="200" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("DictionaryItemId") %>' />
-															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtVal" runat="server" Width="200px" Value='<%# Bind("Amount") %>' /></td>
+															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtVal" runat="server" Width="200px" DisplayFormatString="N2" Value='<%# Bind("Amount") %>' /></td>
 														</tr>
 														<tr>
 															<td id="lblDet" runat="server" style="padding-left:10px !important;">Detalii</td>
@@ -295,15 +404,15 @@
 							<div class="Absente_divOuter margin_top15">
 								<label id="lblValEst" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Val. estimata</label>
 								<div style="float:left; padding-right:15px;">
-									<dx:ASPxTextBox ID="txtValEstimata" ClientInstanceName="txtValEstimata" runat="server" Width="200px">
-										<ClientSideEvents TextChanged="function(s, e) { pnlCtl.PerformCallback('txtValEstimata'); }" />
+									<dx:ASPxTextBox ID="txtValEstimata" ClientInstanceName="txtValEstimata" runat="server" Width="100px"  DisplayFormatString="N2" ClientEnabled="false">
+										<ClientSideEvents TextChanged="function(s, e) { pnlCtl.PerformCallback('txtValEstimata'); }" />										
 									</dx:ASPxTextBox>
 								</div>
 							</div>	
 							<div class="Absente_divOuter margin_top15">	
 								<label id="lblValAvsSol" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Valoare avans solicitat</label>
 								<div style="float:left; padding-right:15px;">
-									<dx:ASPxTextBox ID="txtValAvans" ClientInstanceName="txtValAvans" runat="server" Width="200px">
+									<dx:ASPxTextBox ID="txtValAvans" ClientInstanceName="txtValAvans" runat="server" Width="100px" DisplayFormatString="N2">
 										<ClientSideEvents TextChanged="function(s, e) { pnlCtl.PerformCallback('txtValAvans'); }" />
 									</dx:ASPxTextBox>
 								</div> 	
@@ -311,7 +420,7 @@
 							<div class="Absente_divOuter margin_top15">
 								<label id="lblDtScad" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data scadenta</label>
 								<div style="float:left; padding-right:10px;">
-									<dx:ASPxDateEdit ID="dtDueDate" runat="server" Width="95px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" />
+									<dx:ASPxDateEdit ID="dtDueDate" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" />
 								</div>
 							</div>	
 							<div class="Absente_divOuter margin_top15">
@@ -380,100 +489,5 @@
         </ContentCollection>
     </dx:ASPxPopupControl>
 
-
-    <script>
-        var limba = "<%= Session["IdLimba"] %>";
-        function EndUpload(s) {
-            lblDoc.innerText = s.cpDocUploadName;
-            s.cpDocUploadName = null;
-		}
-
-        function OnEndCallback(s, e) {
-            if (s.cpAlertMessage != null) {
-                swal({
-                    title: "Atentie", text: s.cpAlertMessage,
-                    type: "warning"
-                });
-                s.cpAlertMessage = null;
-            }
-            pnlLoading.Hide();
-		}
-
-        function OnMotivRespingere() {
-            if (ASPxClientUtils.Trim(txtMtv.GetText()) == '') {
-                swal({
-                    title: trad_string(limba, "Operatie nepermisa"), text: trad_string(limba, "Nu ati completat motivul refuzului pentru respingere documente!"),
-                    type: "warning"
-                });
-            }
-            else {
-                popUpMotiv.Hide();
-                pnlCtl.PerformCallback('btnRespinge;' + txtMtv.GetText());
-                txtMtv.SetText('');
-            }
-		}
-
-        function grDate_CustomButtonClick(s, e) {
-            switch (e.buttonID) {
-				case "btnAtasament":
-                    grDate.GetRowValues(e.visibleIndex, 'DocumentId;DocumentDetailId', GoToDoc);
-                    break;
-            }
-		}
-        function GoToDoc(Value) {
-            strUrl = getAbsoluteUrl + "AvansXDecont/relUploadDocumente.aspx?tip=1&qwe=" + Value;
-            popGen.SetHeaderText("Documente");
-            popGen.SetContentUrl(strUrl);
-            popGen.Show();
-        }
-
-
-
-
-
-        var textSeparator = ";";
-        function OnListBoxSelectionChanged(listBox, args) {
-            if (args.index == 0)
-                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
-            UpdateSelectAllItemState();
-            UpdateText();
-        }
-        function UpdateSelectAllItemState() {
-            IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
-        }
-        function IsAllSelected() {
-            var selectedDataItemCount = checkListBox.GetItemCount() - (checkListBox.GetItem(0).selected ? 0 : 1);
-            return checkListBox.GetSelectedItems().length == selectedDataItemCount;
-        }
-        function UpdateText() {
-            var selectedItems = checkListBox.GetSelectedItems();
-            cmbTip.SetText(GetSelectedItemsText(selectedItems));
-        }
-        function SynchronizeListBoxValues(dropDown, args) {
-            checkListBox.UnselectAll();
-            var texts = dropDown.GetText().split(textSeparator);
-            var values = GetValuesByTexts(texts);
-            checkListBox.SelectValues(values);
-            UpdateSelectAllItemState();
-            UpdateText();
-        }
-        function GetSelectedItemsText(items) {
-            var texts = [];
-            for (var i = 0; i < items.length; i++)
-                if (items[i].index != 0)
-                    texts.push(items[i].text);
-            return texts.join(textSeparator);
-        }
-        function GetValuesByTexts(texts) {
-            var actualValues = [];
-            var item;
-            for (var i = 0; i < texts.length; i++) {
-                item = checkListBox.FindItemByText(texts[i]);
-                if (item != null)
-                    actualValues.push(item.value);
-            }
-            return actualValues;
-        }
-    </script>
 
 </asp:Content>

@@ -41,6 +41,17 @@ namespace WizOne.Beneficii
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
                 btnAproba.Text = Dami.TraduCuvant("btnAproba", "Aproba");
 
+                foreach (ListBoxColumn col in cmbAngFiltru.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
+                lblAngFiltru.InnerText = Dami.TraduCuvant("Angajat");
+                lblSesFiltru.InnerText = Dami.TraduCuvant("Sesiune");
+                lblStare.InnerText = Dami.TraduCuvant("Stare");
+                lblDeLa.InnerText = Dami.TraduCuvant("Data inceput");
+                lblLa.InnerText = Dami.TraduCuvant("Data sfarsit");
+
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
 
                 foreach (GridViewColumn c in grDate.Columns)
                 {
@@ -54,6 +65,9 @@ namespace WizOne.Beneficii
                     }
                     catch (Exception) { }
                 }
+
+                popUpMotiv.HeaderText = Dami.TraduCuvant("Motiv respingere");
+                btnRespingeMtv.Text = Dami.TraduCuvant("btnRespingeMtv", "Respinge");
 
                 #endregion
 

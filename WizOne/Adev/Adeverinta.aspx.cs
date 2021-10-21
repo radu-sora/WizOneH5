@@ -52,6 +52,13 @@ namespace WizOne.Adev
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                 btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
 
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
+                foreach (ListBoxColumn col in cmbAngBulk.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
+                lblRol.InnerText = Dami.TraduCuvant("Supervizor");
                 lblAng.InnerText = Dami.TraduCuvant("Angajat");
                 lblAngBulk.InnerText = Dami.TraduCuvant("Angajat");
                 lblSub.InnerText = Dami.TraduCuvant("Subcompanie");
@@ -61,7 +68,84 @@ namespace WizOne.Adev
                 lblSubDept.InnerText = Dami.TraduCuvant("SubDept");
                 lblBirou.InnerText = Dami.TraduCuvant("Birou");
                 lblPL.InnerText = Dami.TraduCuvant("Punct de lucru");
+                lblCtr.InnerText = Dami.TraduCuvant("Contract");
+                lblCateg.InnerText = Dami.TraduCuvant("Categorie");
                 lblDataPlec.InnerText = Dami.TraduCuvant("Data plecarii");
+
+                lblTipGen.Text = Dami.TraduCuvant("Tip generare");
+                rbTipGen1.Text = Dami.TraduCuvant("intr-un singur fisier");
+                rbTipGen2.Text = Dami.TraduCuvant("in fisiere separate");
+
+                lblAdev.InnerText = Dami.TraduCuvant("Tip adeverinta");
+                chkVenit.Text = Dami.TraduCuvant("Angajati cu venituri in ...");
+                chkCIC.Text = Dami.TraduCuvant("CIC");
+                chkActivi.Text = Dami.TraduCuvant("Activi");
+
+                btnConfig.Text = Dami.TraduCuvant("btnConfig", "Configurare");
+                chkRep1.Text = Dami.TraduCuvant("Apare reprezentant legal 1?");
+                chkRep2.Text = Dami.TraduCuvant("Apare reprezentant legal 2?");
+                lblNumeRL1.Text = Dami.TraduCuvant("Nume");
+                lblNumeRL2.Text = Dami.TraduCuvant("Nume");
+                lblFunctieRL1.Text = Dami.TraduCuvant("Functie");
+                lblFunctieRL2.Text = Dami.TraduCuvant("Functie");
+                lblInterval.Text = Dami.TraduCuvant("Interval");
+                rbInterval1.Text = Dami.TraduCuvant("12 luni");
+                rbInterval2.Text = Dami.TraduCuvant("24 luni");
+                lblEmitent.Text = Dami.TraduCuvant("Emitent");
+                rbEmitent1.Text = Dami.TraduCuvant("Angajator");
+                rbEmitent2.Text = Dami.TraduCuvant("Casa de sanatate");
+                lblCoduri.Text = Dami.TraduCuvant("Coduri indemnizatii excluse din document");
+                chkSalNet.Text = Dami.TraduCuvant("Include salariul net?");
+                lblAnul.Text = Dami.TraduCuvant("Anul ");
+                lblSumeCtr.Text = Dami.TraduCuvant("Sume contract");
+                rbSumeContract1.Text = Dami.TraduCuvant("pe Marca");
+                rbSumeContract2.Text = Dami.TraduCuvant("pe CNP");
+                lblVarstaCopil.Text = Dami.TraduCuvant("Varsta copil pentru filtrare");
+                lblVenit.Text = Dami.TraduCuvant("Venit net realizat");
+                lblZileLucrate.Text = Dami.TraduCuvant("Zile lucrate");
+                lblZileAbsente.Text = Dami.TraduCuvant("Zile absente");
+                btnCIC.Text = Dami.TraduCuvant("btnCIC", "Date Adeverinta CIC");
+                lblZileCO.Text = Dami.TraduCuvant("Zile CO");
+                lblZileCM.Text = Dami.TraduCuvant("Zile CM");
+                lblTitlu.Text = Dami.TraduCuvant("Titlu");
+                lblCompartiment.Text = Dami.TraduCuvant("Compartimentul");
+                lblNFRL1.Text = Dami.TraduCuvant("Nume, Functie (se ia Reprezentant Legal 1)");
+                lblNFRL2.Text = Dami.TraduCuvant("Nume, Functie (se ia Reprezentant Legal 2)");
+                lblZileSusp.Text = Dami.TraduCuvant("Zile suspendare");
+                btnD112.Text = Dami.TraduCuvant("btnD112", "Nr. inreg. D112");
+                lblCodTran.Text = Dami.TraduCuvant("Coduri tranzactii separate prin + (plus)");
+                chkDIS.Text = Dami.TraduCuvant("Doar suspendarile din intervalul raportat");
+                lblFunctie.Text = Dami.TraduCuvant("Functia angajatului");
+                rbFunc1.Text = Dami.TraduCuvant("COR");
+                rbFunc2.Text = Dami.TraduCuvant("Interna");
+                lblNEM.Text = Dami.TraduCuvant("Zile NEM");
+                lblCFP.Text = Dami.TraduCuvant("Zile CFP");
+                lblIntervalStagiu.Text = Dami.TraduCuvant("Interval");
+                rbIntervalStagiu1.Text = Dami.TraduCuvant("6 luni");
+                rbIntervalStagiu2.Text = Dami.TraduCuvant("12 luni");
+                lblBCM.Text = Dami.TraduCuvant("Baza calcul CM");
+                lblSubsem.Text = Dami.TraduCuvant("Subsemnatul");
+                lblDom.Text = Dami.TraduCuvant("Domeniul activitatii profesionale");
+                lblFunc.Text = Dami.TraduCuvant("Functia");
+                lbllLoc.Text = Dami.TraduCuvant("Locul de desfasurare a activitatii profesionale");
+                lblIntOrar.Text = Dami.TraduCuvant("Interval orar");
+                lblDataVal.Text = Dami.TraduCuvant("Data valabilitate");
+
+                btnSalvare.Text = Dami.TraduCuvant("btnSalvare", "Salvare");
+                btnAnulare.Text = Dami.TraduCuvant("btnAnulare", "Anulare");
+
+                lgAdev.InnerText = Dami.TraduCuvant("Adeverinte");
+                lgAdevGen.InnerText = Dami.TraduCuvant("Setari generale");
+                lgAdevSan.InnerText = Dami.TraduCuvant("Setari Adeverinta sanatate");
+                lgAdevVen.InnerText = Dami.TraduCuvant("Setari Adeverinta venituri anuale");
+                lgAdevCIC.InnerText = Dami.TraduCuvant("Setari Adeverinta CIC");
+                lgAdevSom.InnerText = Dami.TraduCuvant("Setari Adeverinta somaj");
+                lgAdevVech.InnerText = Dami.TraduCuvant("Setari Adeverinta vechime");
+                lgAdevStag.InnerText = Dami.TraduCuvant("Setari Adeverinta stagiu");
+                lgAdevDepl.InnerText = Dami.TraduCuvant("Setari Adeverinta deplasare");
+                lgAdev.InnerText = Dami.TraduCuvant("Setari Adeverinta");
+                lgAdev.InnerText = Dami.TraduCuvant("Setari Adeverinta");
+
 
                 foreach (dynamic c in grDate.Columns)
                 {

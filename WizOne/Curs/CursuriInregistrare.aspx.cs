@@ -38,11 +38,16 @@ namespace WizOne.Curs
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
                 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                //btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
 
                 btnDelete.Image.ToolTip = Dami.TraduCuvant("btnDelete", "Sterge");
-                btnIstoric.Image.ToolTip = Dami.TraduCuvant("btnIstoric", "Istoric");  
-                
+                btnIstoric.Image.ToolTip = Dami.TraduCuvant("btnIstoric", "Istoric");
+
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
+                foreach (ListBoxColumn col in cmbAngFiltru.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
                 lblAng.InnerText = Dami.TraduCuvant("Angajat");
                 lblCurs.InnerText = Dami.TraduCuvant("Curs");
                 lblSesiune.InnerText = Dami.TraduCuvant("Sesiune");
@@ -58,6 +63,25 @@ namespace WizOne.Curs
 
                 chkListaAsteptare.Text = Dami.TraduCuvant("Lista asteptare");
 
+                popUpCurs.HeaderText = Dami.TraduCuvant("Detalii curs");
+                btnCloseCurs.Text = Dami.TraduCuvant("btnCloseCurs", "Inchide");
+                lblDenumire.Text = Dami.TraduCuvant("Denumire");
+                lblComen.Text = Dami.TraduCuvant("Comentarii");
+
+                popUpSesiune.HeaderText = Dami.TraduCuvant("Detalii sesiune");
+                btnCloseSesiune.Text = Dami.TraduCuvant("btnCloseSesiune", "Inchide");
+                lblDenumireS.Text = Dami.TraduCuvant("Denumire");
+                lblDataInc.Text = Dami.TraduCuvant("Data inceput");
+                lblOraInc.Text = Dami.TraduCuvant("Ora inceput");
+                lblDataSf.Text = Dami.TraduCuvant("Data sfarsit");
+                lblOraSf.Text = Dami.TraduCuvant("Ora sfarsit");
+                lblTematica.Text = Dami.TraduCuvant("Tematica");
+                lblOrganizator.Text = Dami.TraduCuvant("Organizator");
+                lblTrainer.Text = Dami.TraduCuvant("Trainer");
+                lblLocatie.Text = Dami.TraduCuvant("Locatie");
+                lblObservatii.Text = Dami.TraduCuvant("Observatii");
+
+
                 foreach (GridViewColumn c in grDate.Columns)
                 {
                     try
@@ -70,7 +94,8 @@ namespace WizOne.Curs
                     }
                     catch (Exception) { }
                 }
-
+                grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
+                grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();

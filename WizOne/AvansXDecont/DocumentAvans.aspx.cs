@@ -959,10 +959,10 @@ namespace WizOne.AvansXDecont
 
             try
             {
-				string sql = "SELECT a.DictionaryItemId, a.DocumentDetailId, a.DocumentId, a.Amount, a.FreeTxt, (CASE WHEN c.DocumentDetailId = 0 THEN 0 ELSE 1 END) as areFisier "
-							+ " FROM vwAvsXDec_AvDet_Cheltuieli a "
-							+ " LEFT JOIN AvsXDec_relUploadDocumente c ON a.DocumentId = c.DocumentId AND a.DocumentDetailId = c.DocumentDetailId "
-							+ " where a.DocumentId = " + documentId;
+				string sql = "SELECT a.DictionaryItemId, a.DocumentDetailId, a.DocumentId, max(a.Amount) as Amount, max(a.FreeTxt) as FreeTxt, (CASE WHEN max(c.DocumentDetailId) = 0 THEN 0 ELSE 1 END) as areFisier " 
+                            + " FROM vwAvsXDec_AvDet_Cheltuieli a "
+                            + " LEFT JOIN AvsXDec_relUploadDocumente c ON a.DocumentId = c.DocumentId AND a.DocumentDetailId = c.DocumentDetailId  where a.DocumentId = " + documentId
+                            + " group by a.DictionaryItemId, a.DocumentDetailId, a.DocumentId ";
 				
                 q = General.IncarcaDT(sql, null);
                 return q;		

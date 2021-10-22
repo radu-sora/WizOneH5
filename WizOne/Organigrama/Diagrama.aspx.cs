@@ -25,7 +25,9 @@ namespace WizOne.Organigrama
                     string ctlPost = Request.Params["__EVENTTARGET"];
                     if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
+                    btnOrg.Text = Dami.TraduCuvant("btnOrg", "Organigrama");
                     btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+                    btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
 
                     lblDtVig.InnerText = Dami.TraduCuvant("Data Selectie");
                     lblParinte.InnerText = Dami.TraduCuvant("Superior");
@@ -33,11 +35,11 @@ namespace WizOne.Organigrama
                     lblLimbi.InnerText = Dami.TraduCuvant("Limba");
                     lblNivel.InnerText = Dami.TraduCuvant("Nr niveluri");
                     lblAfis.InnerText = Dami.TraduCuvant("Afisare ultimul nivel");
-                    lblParinte.InnerText = Dami.TraduCuvant("Superior");
 
                     chkPlan.Text = Dami.TraduCuvant("Pozitii");
                     chkAprobat.Text = Dami.TraduCuvant("Pozitii Aprobate");
                     chkEfectiv.Text = Dami.TraduCuvant("Pozitii Efective");
+                    chkAngajati.Text = Dami.TraduCuvant("Angajati");
 
                     btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                     #endregion

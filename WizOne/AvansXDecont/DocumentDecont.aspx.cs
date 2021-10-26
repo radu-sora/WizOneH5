@@ -77,11 +77,16 @@ namespace WizOne.AvansXDecont
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString() + " / Document Decont"; ;
 
+                decimal suma = Convert.ToDecimal(General.Nz(Session["AvsXDec_SumaDecont"], 0));
+                txtValDecont.Text = suma.ToString();
+
                 if (!IsPostBack)
                 {
                     Session["AvsXDec_SursaDateDec"] = null;
+                    Session["AvsXDec_SumaDecont"] = null;
                     Session["AvsXDec_SursaDateCheltuieli"] = null;
                     Session["AvsXDec_Apasat"] = null;
+                    Session["AvsXDec_cpAlertMessage"] = null;
 
                     DataTable lstConfigCurrencyXPay_Currency = new DataTable();
                     lstConfigCurrencyXPay_Currency.Columns.Add("DictionaryItemId", typeof(int));
@@ -122,10 +127,10 @@ namespace WizOne.AvansXDecont
 					{
                         if (lstAvsXDec_DocTypeXUser.Rows.Count != 0)
                         {
-                            string avansFolosit = "Nr. {0}; Stare {1}; Valoare: {2} {3}";
+                            string avansFolosit = "Nr. {0}; Stare {1}; Valoare: {2:0.00} {3}";
                             avansFolosit = string.Format(avansFolosit, lstAvsXDec_DocTypeXUser.Rows[0]["DocumentId"].ToString(),
                                                     lstAvsXDec_DocTypeXUser.Rows[0]["DocumentState"].ToString(),
-                                                    lstAvsXDec_DocTypeXUser.Rows[0]["TotalDocument"].ToString(),
+                                                    Convert.ToDecimal(lstAvsXDec_DocTypeXUser.Rows[0]["TotalDocument"].ToString()),
                                                     lstAvsXDec_DocTypeXUser.Rows[0]["CurrencyCode"].ToString());
                             txtAvansFolosit.Text = avansFolosit;
                         }
@@ -386,7 +391,7 @@ namespace WizOne.AvansXDecont
                 grDatePlataBanca.DataBind();
 
                 IncarcaDate();
-
+                ActualizareSumeDecont();
 
             }
             catch (Exception ex)
@@ -550,7 +555,7 @@ namespace WizOne.AvansXDecont
                     + " JOIN AvsXDec_BusinessTransaction b on a.DocumentId = b.SrcDocId "
                     + " JOIN vwAvsXDec_Decont c on b.DestDocId = c.DocumentId "
                     + " LEFT JOIN (" + docAcordat + ") d on a.DocumentId = d.DocumentId "
-                    + " where c.DocumentStateId < 1 AND a.DocumentTypeId == 1001 AND a.DocumentStateId >= 1 AND a.DocumentStateId < 8 AND a.F10003 = " + F10003 + " AND d.DocumentId IS NULL";
+                    + " where c.DocumentStateId < 1 AND a.DocumentTypeId = 1001 AND a.DocumentStateId >= 1 AND a.DocumentStateId < 8 AND a.F10003 = " + F10003 + " AND d.DocumentId IS NULL";
                 q = General.IncarcaDT(sql, null);
 
                 return q;
@@ -605,10 +610,10 @@ namespace WizOne.AvansXDecont
                 /*0001 - se alege un avans din combo la initializare decont deplasare*/
                 else
                 {
-                    sql = "SELECT " + documentId + " AS DocumentId,  b.DocumentDetailId,  c.CurrencyId, a.DictionaryItemId, c.CurrencyId as RefCurrencyId, b.Amount as RefCurrencyValue, b.Amount as RefTotalPayment, "
+                    sql = "SELECT " + documentId + " AS DocumentId,  b.DocumentDetailId,  c.CurrencyId, a.DictionaryItemId, c.CurrencyId as RefCurrencyId, b.Amount as RefCurrencyValue, b.Amount as RefTotalPayment, b.Amount as TotalPayment, "
                         + " '' as BugetLine, 0 as toBeSaved,  a.FreeTxt "
                         + " FROM vwAvsXDec_AvDet_Cheltuieli a "
-                        + " JOIN AvsXDec_AvansDetail b on a.DocumentDetailId = )b.DocumentDetailId and a.DocumentId = b.DocumentId "
+                        + " JOIN AvsXDec_AvansDetail b on a.DocumentDetailId = b.DocumentDetailId and a.DocumentId = b.DocumentId "
                         + " JOIN AvsXDec_Avans c on b.DocumentId = c.DocumentId "
                         + " WHERE a.DocumentId = " + documentIdAvans;
                     q = General.IncarcaDT(sql, null);
@@ -1182,7 +1187,7 @@ namespace WizOne.AvansXDecont
                         /*LeonardM 15.08.2016
                     * nu mai actualizez restul de plata deoarece acesta se actualizeaza
                     * prin financiar/ conta*/
-                        (Convert.ToInt32(ent.Rows[0]["DocumentStateId"].ToString()) <= 4 ? Convert.ToInt32(txtValDecont.Text.Length <= 0 ? "0" : txtValDecont.Text.Replace(',', '.')) - Convert.ToInt32(txtValAvans.Text.Length <= 0 ? "0" : txtValAvans.Text.Replace(',', '.')) : Convert.ToInt32(ent.Rows[0]["UnconfRestAmount"].ToString())));
+                        ( Convert.ToInt32(ent.Rows[0]["DocumentStateId"].ToString()) <= 4 ? Convert.ToDecimal(txtValDecont.Text.Length <= 0 ? "0" : txtValDecont.Text) - Convert.ToDecimal(txtValAvans.Text.Length <= 0 ? "0" : txtValAvans.Text) : Convert.ToDecimal(ent.Rows[0]["UnconfRestAmount"].ToString()) ).ToString().Replace(',', '.'));
                     General.ExecutaNonQuery(sql, null); 
                 }
 
@@ -1402,7 +1407,7 @@ namespace WizOne.AvansXDecont
                         ras = "Nu aveti completate documente care sa justifice restituirea avansului ramas!";
                     }
                     else
-                        sumDocumentePlataBanca = Convert.ToDecimal(lstDocPlataBanca.Compute("SUM(ISNULL(TotalPayment, 0))", string.Empty));
+                        sumDocumentePlataBanca = Convert.ToDecimal(lstDocPlataBanca.Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"));
 
                     if (Math.Abs(sumDocumentePlataBanca).ToString("F") != Math.Abs(Convert.ToInt32(General.Nz(ent.Rows[0]["UnconfRestAmount"], 0))).ToString("F") && ras == "")
                         ras = "Suma aferenta documentelor pentru restituire avans ramas este diferita de suma de restituit!";
@@ -1500,14 +1505,14 @@ namespace WizOne.AvansXDecont
                 {
                     case 2002: /*Decont cheltuieli*/
                     case 2001: /*Decont avans spre deplasare*/
-                        if (lstCheltuieliInserate.Select("CurrencyId != " + ent.Rows[0]["CurrencyId"].ToString()).Count() != 0)
+                        if (lstCheltuieliInserate.Select("CurrencyId <> " + ent.Rows[0]["CurrencyId"].ToString()).Count() != 0)
                             ras = ", moneda selectata pentru decont trebuie sa fie aceleasi cu documentele justificative";
 
                         #region verificare moneda unica documente justificative
                         if (string.IsNullOrEmpty(ras))
                         {
                             int CurrencyId = Convert.ToInt32(lstCheltuieliInserate.Rows[0]["CurrencyId"].ToString());
-                            if (lstCheltuieliInserate.Select("CurrencyId != " + CurrencyId).Count() != 0)
+                            if (lstCheltuieliInserate.Select("CurrencyId <> " + CurrencyId).Count() != 0)
                                 ras = ",  moneda selectata pentru documentele justificative trebuie sa fie unica";
                             break;
                         }
@@ -1825,11 +1830,31 @@ namespace WizOne.AvansXDecont
                     case "btnSave":
                         SalvareInitiala();
                         break;
-                    case "btnSaveconf":
+                    case "btnSaveConf":
                         SalvareFinala();
                         break;
+                    case "cmbDocAvans":
+                        foreach (DataColumn col in ent.Columns)
+                            col.ReadOnly = false;
+                        ent.Rows[0]["AvansDocumentId"] = Convert.ToInt32(cmbDocAvans.Value ?? -99);
+                        Session["AvsXDec_SursaDateDec"] = ent;
+                        cmbDocAvans_SelectedIndexChanged();
+                        break;
+                    case "SumaDecont":
+                        decimal suma = Convert.ToDecimal(General.Nz(Session["AvsXDec_SumaDecont"], 0));
+                        txtValDecont.Text = suma.ToString();
+                        ent.Rows[0]["EstimatedAmount"] = suma;
+                        Session["AvsXDec_SursaDateDec"] = ent;
+                        ActualizareSumeDecont();
+                        break;
                 }
-   
+                if (Session["AvsXDec_cpAlertMessage"] != null)
+                {
+                    pnlCtl.JSProperties["cpAlertMessage"] = Session["AvsXDec_cpAlertMessage"];
+                    Session["AvsXDec_cpAlertMessage"] = null;
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -1838,18 +1863,79 @@ namespace WizOne.AvansXDecont
             }
         }
 
-		
-		
-        private void IncarcaDate()
+        private void cmbDocAvans_SelectedIndexChanged()
+        {
+            try
+            {
+
+                int documentIdAvans = Convert.ToInt32(cmbDocAvans.Value ?? -99);
+
+                /*in cazul in care a selectat un avans, atunci se modifica datele
+                 * initializam mai intai cheltuielile de decont,
+                 * pentru a sti in momentul in care se pune bifa de diurna, daca am deja diurna sau nu*/
+
+                DataTable dtCheltEst = new DataTable();              
+                dtCheltEst = GetmetaAvsXDec_DecontCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()), documentIdAvans);
+                dtCheltEst.PrimaryKey = new DataColumn[] { dtCheltEst.Columns["DocumentDetailId"], dtCheltEst.Columns["DocumentId"] };
+                Session["AvsXDec_SursaDateEstChelt"] = dtCheltEst;        
+                grDateEstChelt.KeyFieldName = "DocumentDetailId;DocumentId";
+                grDateEstChelt.DataSource = dtCheltEst;
+                grDateEstChelt.DataBind();
+
+                Session["AvsXDec_SursaDateDec"] = null;
+                IncarcaDate(documentIdAvans);           
+
+                /*LeonardM 15.08.2016
+                * in momentul in care am selectat ceva ca avans, se afiseaza gridul aferent cheltuielilor estimate de 
+                * pe avans; caz contrar, nu se afiseaza
+                 LeonardM 22.08.2016
+                 pentru decontul administrativ, nu ma interseaza sa apara estimarea de cheltuieli*/
+                if (Convert.ToInt32(cmbDocAvans.Value ?? -99) != -99 && Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) != 2003)
+                    pnlEstChelt.Visible = true;
+                else
+                    pnlEstChelt.Visible = false;
+
+                //Radu 01.09.2016 - daca se selecteaza un avans, moneda si modalitatea de plata trebuie blocate
+                //if (cmbDocAvans.Value != null)
+                //{
+                //    cmbMonedaAvans.ClientEnabled = false;
+                //    cmbModPlata.ClientEnabled = false;
+                //    grDateDocJust.Columns["CurrencyId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                //    grDateEstChelt.Columns["CurrencyId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                //    grDatePlataBanca.Columns["CurrencyId"].AllowEditing = DevExpress.Utils.DefaultBoolean.False;
+                //}
+                //else
+                //{
+                //    cmbMonedaAvans.ClientEnabled = true;
+                //    cmbModPlata.ClientEnabled = true;
+                //    grDateDocJust.Columns["CurrencyId"].AllowEditing = DevExpress.Utils.DefaultBoolean.True;
+                //    grDateEstChelt.Columns["CurrencyId"].AllowEditing = DevExpress.Utils.DefaultBoolean.True;
+                //    grDatePlataBanca.Columns["CurrencyId"].AllowEditing = DevExpress.Utils.DefaultBoolean.True;
+                //}
+
+       
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void IncarcaDate(int documentIdAvans = -99)
         {
             try
             {
                 DataTable ent = null;
 
+                if (documentIdAvans == -99)
+                    documentIdAvans = Convert.ToInt32(General.Nz(Session["AvsXDec_SrcDocId"], -99).ToString());
+                bool reload = false;
+
                 if (Session["AvsXDec_SursaDateDec"] == null)
                 {
-                    ent = GetmetaVwAvsXDec_Decont();
+                    ent = GetmetaVwAvsXDec_Decont(documentIdAvans);
                     Session["AvsXDec_SursaDateDec"] = ent;
+                    reload = true;
                 }
                 else
                     ent = Session["AvsXDec_SursaDateDec"] as DataTable;
@@ -1889,7 +1975,7 @@ namespace WizOne.AvansXDecont
                     }
                     else
                     {
-                        if (!IsPostBack)
+                        if (!IsPostBack || reload)
                         {
                             cmbDocAvans.Value = Convert.ToInt32(General.Nz(ent.Rows[0]["AvansDocumentId"], -1).ToString());
                             txtLocatie.Text = ent.Rows[0]["ActionPlace"].ToString();
@@ -1906,6 +1992,7 @@ namespace WizOne.AvansXDecont
                             cmbModPlata.Value = Convert.ToInt32(ent.Rows[0]["PaymentTypeId"].ToString());
                             chkIsDiurna.Checked = Convert.ToInt32(General.Nz(ent.Rows[0]["chkDiurna"], 0).ToString()) == 1 ? true : false;
                             txtValDecont.Text = General.Nz(ent.Rows[0]["EstimatedAmount"], "").ToString();
+                            Session["AvsXDec_SumaDecont"] = Convert.ToDecimal(General.Nz(ent.Rows[0]["EstimatedAmount"], 0).ToString());
                             txtValAvans.Text = General.Nz(ent.Rows[0]["TotalAmountAvans"], "").ToString();
                             txtValPlataBanca.Text = General.Nz(ent.Rows[0]["UnconfRestAmount"], "").ToString();
                         }
@@ -2046,7 +2133,7 @@ namespace WizOne.AvansXDecont
             }
         }
 
-        private DataTable GetmetaVwAvsXDec_Decont()
+        private DataTable GetmetaVwAvsXDec_Decont(int documentIdAvans)
         {
             DataTable q = null;
             #region preluare suma utilizata din avans
@@ -2095,7 +2182,7 @@ namespace WizOne.AvansXDecont
                  * inseamna ca initializez un decont si iau proprietatile setate la nivel de decont*/
                 else
                 {
-                    if ((bt == null || bt.Rows.Count == 0) && General.Nz(Session["AvsXDec_SrcDocId"], -99).ToString() == "-99")
+                    if ((bt == null || bt.Rows.Count == 0) && documentIdAvans == -99)
                     {
                         #region decount nou fara avans
                         sql = "SELECT  a.DocumentId, null as AvansDocumentId, COALESCE(a.DocumentTypeId, -99) as DocumentTypeId, a.DocumentTypeCode, a.DocumentTypeName,  COALESCE(a.DocumentStateId, -99) as DocumentStateId, "
@@ -2111,17 +2198,17 @@ namespace WizOne.AvansXDecont
                      * inseamna ca initializez un decont si iau proprietatile de la nivel de avans trimis ca parametru*/
                     else
                     {
-                        if ((bt == null || bt.Rows.Count == 0) && General.Nz(Session["AvsXDec_SrcDocId"], -99).ToString() != "-99")
+                        if ((bt == null || bt.Rows.Count == 0) && documentIdAvans != -99)
                         {
                             #region decount nou cu avans ales
                             sql = "SELECT  a.DocumentId, av.DocumentId as AvansDocumentId, COALESCE(a.DocumentTypeId, -99) as DocumentTypeId, a.DocumentTypeCode, a.DocumentTypeName,  COALESCE(a.DocumentStateId, -99) as DocumentStateId, "
                                 + " a.DocumentState, COALESCE(a.F10003, -99) as F10003, a.NumeComplet, a.IdDepartament, a.Departament,  a.LocMunca, a.DocumentDate, COALESCE(a.CircuitId, -99) as CircuitId, a.TotalCircuit, a.Culoare, a.Pozitie, "
-                                + " av.ActionTypeId, av.ActionTypeName, av.ActionPlace, av.ActionReason, av.StartDate, va.EndDate, av.StartHour, av.EndHour, av.chkDiurna, (av.TotalAmount - (CASE WHEN a.DocumentTypeId = 2003 THEN " + consumedAmountXDoc.ToString().Replace(',', '.') + " ELSE 0 END)) as TotalAmount, " 
+                                + " av.ActionTypeId, av.ActionTypeName, av.ActionPlace, av.ActionReason, av.StartDate, av.EndDate, av.StartHour, av.EndHour, av.chkDiurna, (av.TotalAmount - (CASE WHEN a.DocumentTypeId = 2003 THEN " + consumedAmountXDoc.ToString().Replace(',', '.') + " ELSE 0 END)) as TotalAmount, " 
                                 + " a.EstimatedAmount, (av.TotalAmount - (CASE WHEN a.DocumentTypeId = 2003 THEN " + consumedAmountXDoc.ToString().Replace(',', '.') + " ELSE 0 END)) as TotalAmountAvans, av.CurrencyId, "
                                 + " av.CurrencyCode,  a.ContBancar, a.BankId, a.BankName, a.SucursalaId, a.SucursalaName, av.PaymentTypeId, av.PaymentTypeName, a.PaymentDate, a.IdFunctie, a.Functie,  a.UnconfRestAmount, a.OriginalDoc, av.TransportTypeId, av.TransportTypeName "
                                 + " FROM vwAvsXDec_Decont a "
                                 + " JOIN vwAvsXDec_Avans av on 1 = 1 "
-                                + " where a.DocumentId =" + Session["AvsXDec_IdDocument"].ToString() + " AND av.DocumentId = " + General.Nz(Session["AvsXDec_SrcDocId"], -99).ToString();
+                                + " where a.DocumentId =" + Session["AvsXDec_IdDocument"].ToString() + " AND av.DocumentId = " + documentIdAvans.ToString();
                             q = General.IncarcaDT(sql, null);
                             #endregion
                         }
@@ -2201,7 +2288,11 @@ namespace WizOne.AvansXDecont
 
                 DataTable dt = Session["AvsXDec_SursaDateDocJust"] as DataTable;
 
-                DataRow row = dt.Rows.Find(keys);    
+                DataRow row = dt.Rows.Find(keys);
+
+                decimal suma = Convert.ToDecimal(General.Nz(Session["AvsXDec_SumaDecont"], 0));
+                suma -= Convert.ToDecimal(General.Nz(row["TotalPayment"], 0));
+                Session["AvsXDec_SumaDecont"] = suma;
 
 
                 #region actualizare valoare avans
@@ -2299,19 +2390,21 @@ namespace WizOne.AvansXDecont
                                 {
                                     /*avertizare in cazul in care a depasit valorea estimata pe avans*/
                                     decimal sumaAvansCheltuiala = 0;
-                                    if (lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(row[x], 0).ToString())) != null &&
-                                        lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(row[x], 0).ToString())).Count() != 0)
-                                        sumaAvansCheltuiala = Convert.ToDecimal(General.Nz(lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(row[x], 0).ToString())).CopyToDataTable().Compute("SUM(ISNULL(TotalPayment, 0))", string.Empty), 0));
+                                    if (lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(e.NewValues["ExpenseTypeId"], 0).ToString())) != null &&
+                                        lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(e.NewValues["ExpenseTypeId"], 0).ToString())).Count() != 0)
+                                        sumaAvansCheltuiala = Convert.ToDecimal(General.Nz(lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(e.NewValues["ExpenseTypeId"], 0).ToString())).CopyToDataTable().Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
 
                                     decimal sumaDecontCheltuiala = 0;
-                                    if (dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(row[x], 0).ToString())) != null &&
-                                        dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(row[x], 0).ToString())).Count() != 0)
-                                        sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(row[x], 0).ToString()) + " AND DocumentDetailId != " + Convert.ToInt32(row[x].ToString())).CopyToDataTable().Compute("SUM(ISNULL(TotalPayment, 0))", string.Empty), 0));
+                                    if (dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(e.NewValues["ExpenseTypeId"], 0).ToString())) != null &&
+                                        dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(e.NewValues["ExpenseTypeId"], 0).ToString())).Count() != 0)
+                                        if (dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(e.NewValues["ExpenseTypeId"], 0).ToString()) + " AND DocumentDetailId <> " + Convert.ToInt32(e.NewValues["DocumentDetailId"].ToString())) != null &&
+                                            dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(e.NewValues["ExpenseTypeId"], 0).ToString()) + " AND DocumentDetailId <> " + Convert.ToInt32(e.NewValues["DocumentDetailId"].ToString())).Count() != 0)
+                                            sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(e.NewValues["ExpenseTypeId"], 0).ToString()) + " AND DocumentDetailId <> " + Convert.ToInt32(e.NewValues["DocumentDetailId"].ToString())).CopyToDataTable().Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
 
                                     sumaDecontCheltuiala += Convert.ToDecimal(General.Nz(e.NewValues[col.ColumnName], 0));
-                                    if (sumaDecontCheltuiala > sumaAvansCheltuiala && Convert.ToInt32(General.Nz(row[x], -99).ToString()) != -99)
+                                    if (sumaDecontCheltuiala > sumaAvansCheltuiala && Convert.ToInt32(General.Nz(e.NewValues["ExpenseTypeId"], -99).ToString()) != -99)
                                     {
-                                        MessageBox.Show(Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!"), MessageBox.icoError, "Atentie !");
+                                        Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");
                                         return;
                                     }
                                 }
@@ -2328,7 +2421,7 @@ namespace WizOne.AvansXDecont
                                         lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).Count() == 0))
                                     {
                                         row[x] = null;
-                                        MessageBox.Show(Dami.TraduCuvant("Tipul de cheltuiala ales nu exista pe avansul ales!"), MessageBox.icoError, "Atentie !");
+                                        Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Tipul de cheltuiala ales nu exista pe avansul ales!");
                                         return;
                                     }
 
@@ -2336,16 +2429,16 @@ namespace WizOne.AvansXDecont
                                     decimal sumaAvansCheltuiala = 0;
                                     if (lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(e.NewValues[col.ColumnName])) != null &&
                                         lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).Count() != 0)
-                                        sumaAvansCheltuiala = Convert.ToDecimal(General.Nz(lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).CopyToDataTable().Compute("SUM(ISNULL(TotalPayment, 0))", string.Empty), 0));
+                                        sumaAvansCheltuiala = Convert.ToDecimal(General.Nz(lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).CopyToDataTable().Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
 
                                     decimal sumaDecontCheltuiala = 0;
                                     if (dt.Select("ExpenseTypeId = " + Convert.ToInt32(e.NewValues[col.ColumnName])) != null &&
                                         dt.Select("ExpenseTypeId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).Count() != 0)
-                                        sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Select("ExpenseTypeId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).CopyToDataTable().Compute("SUM(ISNULL(TotalPayment, 0))", string.Empty), 0));
+                                        sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Select("ExpenseTypeId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).CopyToDataTable().Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
 
                                     if (sumaDecontCheltuiala > sumaAvansCheltuiala)
                                     {
-                                        MessageBox.Show(Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!"), MessageBox.icoError, "Atentie !");
+                                        Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");
                                         return;
                                     }
                                 }
@@ -2362,10 +2455,10 @@ namespace WizOne.AvansXDecont
                                 switch (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()))
                                 {
                                     case 2002:/*Decont simplu*/
-                                        if (dt.Select("ExpenseTypeId != " + Convert.ToInt32(e.NewValues[col.ColumnName]) + " AND DocumentDetailId !=  " + row[x].ToString()) != null &&
-                                            dt.Select("ExpenseTypeId != " + Convert.ToInt32(e.NewValues[col.ColumnName]) + " AND DocumentDetailId !=  " + row[x].ToString()).Count() != 0)
+                                        if (dt.Select("ExpenseTypeId <> " + Convert.ToInt32(e.NewValues[col.ColumnName]) + " AND DocumentDetailId <>  " + e.NewValues["DocumentDetailId"].ToString()) != null &&
+                                            dt.Select("ExpenseTypeId <> " + Convert.ToInt32(e.NewValues[col.ColumnName]) + " AND DocumentDetailId <>  " + e.NewValues["DocumentDetailId"].ToString()).Count() != 0)
                                         {
-                                            MessageBox.Show(Dami.TraduCuvant("Trebuie selectat doar un tip de cheltuiala pentru decont!"), MessageBox.icoError, "Atentie !");
+                                            Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Trebuie selectat doar un tip de cheltuiala pentru decont!");
                                             row[x] = null;
                                             return;
                                         }
@@ -2384,7 +2477,7 @@ namespace WizOne.AvansXDecont
                                         #region verificari avans spre deplasare
                                         if (txtStartDate.Value == null || txtEndDate.Value == null)
                                         {
-                                            MessageBox.Show(Dami.TraduCuvant("Nu ati completat datele pentru deplasare!"), MessageBox.icoError, "Atentie !");
+                                            Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Nu ati completat datele pentru deplasare!");
                                             row[x] = null;
                                             return;
                                         }
@@ -2394,7 +2487,7 @@ namespace WizOne.AvansXDecont
                                         DateTime dtEndDeplasare = Convert.ToDateTime(ent.Rows[0]["EndDate"].ToString());
                                         if (!(GetDayDateTime(dtStartDeplasare) <= GetDayDateTime(dtDocument) && GetDayDateTime(dtEndDeplasare) >= GetDayDateTime(dtDocument)))
                                         {
-                                            MessageBox.Show(Dami.TraduCuvant("Data documentului nu este cuprinsa in intervalul de deplasare completat!"), MessageBox.icoError, "Atentie !");
+                                            Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Data documentului nu este cuprinsa in intervalul de deplasare completat!");
                                             row[x] = null;
                                             return;
                                         }
@@ -2412,6 +2505,7 @@ namespace WizOne.AvansXDecont
                             case "DOCUMENTDETAILID":
                                 detailId = Dami.NextId("AvsXDec_DecontDetail", 1);
                                 row[x] = detailId;
+                                e.NewValues["DocumentDetailId"] = detailId;
                                 break;
                             default:
                                 row[x] = e.NewValues[col.ColumnName];
@@ -2442,6 +2536,11 @@ namespace WizOne.AvansXDecont
                 grDateDocJust.DataSource = dt;
                 grDateDocJust.KeyFieldName = "DocumentDetailId;DocumentId";
                 Session["AvsXDec_SursaDateDocJust"] = dt;
+
+                decimal suma = 0;
+                for (int i = 0; i < dt.Rows.Count; i++)
+                    suma += Convert.ToDecimal(General.Nz(dt.Rows[i]["TotalPayment"], 0));
+                Session["AvsXDec_SumaDecont"] = suma;
             }
             catch (Exception ex)
             {
@@ -2504,17 +2603,19 @@ namespace WizOne.AvansXDecont
                             decimal sumaAvansCheltuiala = 0;
                             if (lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(row["ExpenseTypeId"], 0).ToString())) != null &&
                                 lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(row["ExpenseTypeId"], 0).ToString())).Count() != 0)
-                                sumaAvansCheltuiala = Convert.ToDecimal(General.Nz(lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(row["ExpenseTypeId"], 0).ToString())).CopyToDataTable().Compute("SUM(ISNULL(TotalPayment, 0))", string.Empty), 0));
+                                sumaAvansCheltuiala = Convert.ToDecimal(General.Nz(lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(row["ExpenseTypeId"], 0).ToString())).CopyToDataTable().Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
 
                             decimal sumaDecontCheltuiala = 0;
                             if (dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(row["ExpenseTypeId"], 0).ToString())) != null &&
                                 dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(row["ExpenseTypeId"], 0).ToString())).Count() != 0)
-                                sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(row["ExpenseTypeId"], 0).ToString()) + " AND DocumentDetailId != " + Convert.ToInt32(row["DocumentDetailId"].ToString())).CopyToDataTable().Compute("SUM(ISNULL(TotalPayment, 0))", string.Empty), 0));
+                                if (dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(row["ExpenseTypeId"], 0).ToString()) + " AND DocumentDetailId <> " + Convert.ToInt32(row["DocumentDetailId"].ToString())) != null &&
+                                    dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(row["ExpenseTypeId"], 0).ToString()) + " AND DocumentDetailId <> " + Convert.ToInt32(row["DocumentDetailId"].ToString())).Count() != 0)
+                                    sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Select("ExpenseTypeId = " + Convert.ToInt32(General.Nz(row["ExpenseTypeId"], 0).ToString()) + " AND DocumentDetailId <> " + Convert.ToInt32(row["DocumentDetailId"].ToString())).CopyToDataTable().Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
 
                             sumaDecontCheltuiala += Convert.ToDecimal(General.Nz(e.NewValues[col.ColumnName], 0));
                             if (sumaDecontCheltuiala > sumaAvansCheltuiala && Convert.ToInt32(General.Nz(row["ExpenseTypeId"], -99).ToString()) != -99)
                             {
-                                MessageBox.Show(Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!"), MessageBox.icoError, "Atentie !");                               
+                                Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");                               
                                 return;
                             }
                         }
@@ -2539,16 +2640,16 @@ namespace WizOne.AvansXDecont
                             decimal sumaAvansCheltuiala = 0;
                             if (lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(e.NewValues[col.ColumnName])) != null &&
                                 lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).Count() != 0)
-                                sumaAvansCheltuiala = Convert.ToDecimal(General.Nz(lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).CopyToDataTable().Compute("SUM(ISNULL(TotalPayment, 0))", string.Empty), 0));
+                                sumaAvansCheltuiala = Convert.ToDecimal(General.Nz(lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).CopyToDataTable().Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
 
                             decimal sumaDecontCheltuiala = 0;
                             if (dt.Select("ExpenseTypeId = " + Convert.ToInt32(e.NewValues[col.ColumnName])) != null &&
                                 dt.Select("ExpenseTypeId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).Count() != 0)
-                                sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Select("ExpenseTypeId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).CopyToDataTable().Compute("SUM(ISNULL(TotalPayment, 0))", string.Empty), 0));
+                                sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Select("ExpenseTypeId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).CopyToDataTable().Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
 
                             if (sumaDecontCheltuiala > sumaAvansCheltuiala)
                             {
-                                MessageBox.Show(Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!"), MessageBox.icoError, "Atentie !");
+                                Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");
                                 return;
                             }
                         }
@@ -2565,10 +2666,10 @@ namespace WizOne.AvansXDecont
                         switch (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()))
                         {
                             case 2002:/*Decont simplu*/
-                                if (dt.Select("ExpenseTypeId != " + Convert.ToInt32(e.NewValues[col.ColumnName]) + " AND DocumentDetailId !=  " + row["DocumentDetailId"].ToString()) != null &&
-                                    dt.Select("ExpenseTypeId != " + Convert.ToInt32(e.NewValues[col.ColumnName]) + " AND DocumentDetailId !=  " + row["DocumentDetailId"].ToString()).Count() != 0)
+                                if (dt.Select("ExpenseTypeId <> " + Convert.ToInt32(e.NewValues[col.ColumnName]) + " AND DocumentDetailId <>  " + row["DocumentDetailId"].ToString()) != null &&
+                                    dt.Select("ExpenseTypeId <> " + Convert.ToInt32(e.NewValues[col.ColumnName]) + " AND DocumentDetailId <>  " + row["DocumentDetailId"].ToString()).Count() != 0)
                                 {
-                                    MessageBox.Show(Dami.TraduCuvant("Trebuie selectat doar un tip de cheltuiala pentru decont!"), MessageBox.icoError, "Atentie !");
+                                    Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Trebuie selectat doar un tip de cheltuiala pentru decont!");
                                     row["DictionaryItemId"] = null;
                                     return;
                                 }
@@ -2588,7 +2689,7 @@ namespace WizOne.AvansXDecont
                                 #region verificari avans spre deplasare
                                 if (txtStartDate.Value == null || txtEndDate.Value == null)
                                 {
-                                    MessageBox.Show(Dami.TraduCuvant("Nu ati completat datele pentru deplasare!"), MessageBox.icoError, "Atentie !");
+                                    Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Nu ati completat datele pentru deplasare!");
                                     row["DocDateDecont"] = null;
                                     return;
                                 }
@@ -2598,7 +2699,7 @@ namespace WizOne.AvansXDecont
                                 DateTime dtEndDeplasare = Convert.ToDateTime(ent.Rows[0]["EndDate"].ToString());
                                 if (!(GetDayDateTime(dtStartDeplasare) <= GetDayDateTime(dtDocument) && GetDayDateTime(dtEndDeplasare) >= GetDayDateTime(dtDocument)))
                                 {
-                                    MessageBox.Show(Dami.TraduCuvant("Data documentului nu este cuprinsa in intervalul de deplasare completat!"), MessageBox.icoError, "Atentie !");
+                                    Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Data documentului nu este cuprinsa in intervalul de deplasare completat!");
                                     row["DocDateDecont"] = null;
                                     return;
                                 }
@@ -2626,6 +2727,11 @@ namespace WizOne.AvansXDecont
                 grDateDocJust.CancelEdit();
                 Session["AvsXDec_SursaDateDocJust"] = dt;
                 grDateDocJust.DataSource = dt;
+
+                decimal suma = 0;
+                for (int i = 0; i < dt.Rows.Count; i++)
+                    suma += Convert.ToDecimal(General.Nz(dt.Rows[i]["TotalPayment"], 0));
+                Session["AvsXDec_SumaDecont"] = suma;
             }
             catch (Exception ex)
             {
@@ -3204,7 +3310,7 @@ namespace WizOne.AvansXDecont
                 #region salvare istoric
 
                 int total = 0;
-                int idStare = 1;
+                string idStare = "1";
                 int pozUser = 1;
                 int idSpr = -99;
 
@@ -3248,7 +3354,14 @@ namespace WizOne.AvansXDecont
                 {
                     string aprobat = "NULL", dataAprobare = "NULL", inloc ="NULL", idUserInloc = "NULL";
                     int idSuper = -99;
-                    idStare = -99;										
+                    idStare = "NULL";
+
+                    if (i == 3 && Convert.ToDecimal(txtValAvans.Text.Length <= 0 ? "0" : txtValAvans.Text) <= 1000)
+                    {
+                        total--;
+                        continue;
+                    }
+
                     if (entCircuit.Rows[0]["Super" + i] != DBNull.Value)
                     {
                         idSuper = Convert.ToInt32(entCircuit.Rows[0]["Super" + i].ToString());
@@ -3269,7 +3382,7 @@ namespace WizOne.AvansXDecont
                             if (Convert.ToInt32(idSuper) < 0)
                             { 
 								//ne asiguram ca exista user pentru supervizorul din circuit
-								sql = "SELECT * FROM \"F100Supervizori\" WHERE \"IdSuper\" =  -1 * " + idSpr + " AND F10003 = " + entDocument.Rows[0]["F10003"].ToString();
+								sql = "SELECT * FROM \"F100Supervizori\" WHERE \"IdSuper\" =  -1 * " + idSuper + " AND F10003 = " + entDocument.Rows[0]["F10003"].ToString();
 								DataTable dtUser = General.IncarcaDT(sql, null);
 								if (dtUser == null || dtUser.Rows.Count <= 0 || dtUser.Rows[0]["IdUser"] == DBNull.Value)
 								{
@@ -3318,8 +3431,8 @@ namespace WizOne.AvansXDecont
                                 if (idUserCalc == Convert.ToInt32(entDocument.Rows[0]["USER_NO"].ToString()))
                                 {
                                     pozUser = poz;
-                                    if (poz == 1) idStare = 1;
-                                    if (poz == total) idStare = 3;
+                                    if (poz == 1) idStare = "1";
+                                    if (poz == total) idStare = "3";
 
                                     aprobat = "1";
                                     dataAprobare = "GETDATE()";
@@ -4062,6 +4175,8 @@ namespace WizOne.AvansXDecont
                     pnlPlataBanca.Visible = true;
                 else
                     pnlPlataBanca.Visible = false;
+                txtValPlataBanca.Text = ent.Rows[0]["UnconfRestAmount"].ToString();
+                Session["AvsXDec_SursaDateDec"] = ent;
 
             }
             catch (Exception ex)

@@ -13,9 +13,10 @@
     
     <link rel="stylesheet" type="text/css" href="../Fisiere/MsgBox/sweetalert.css" runat="server" />
     <script type="text/javascript" src="../Fisiere/MsgBox/sweetalert.min.js"></script>
-
+    
+</head>
+<body>
     <script language="javascript" type="text/javascript">
-        var getAbsoluteUrl = window.location.protocol + '//' + window.location.host + '<%# VirtualPathUtility.ToAbsolute("~/")%>';
 
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
@@ -27,8 +28,8 @@
             }
         }
 
-        function grDate_CustomButtonClick(s, e) {            
-            switch (e.buttonID) {          
+        function grDate_CustomButtonClick(s, e) {
+            switch (e.buttonID) {
                 case "btnAtasament":
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToAtasMode);
                     break;
@@ -36,7 +37,7 @@
         }
 
         function GoToAtasMode(Value) {
-            window.open(getAbsoluteUrl + '/Pagini/Fisiere.aspx?tip=0&tbl=22&id=' + Value, '_blank ')
+            window.open("<%= Session["AbsoluteUrl"] %>" + '/Fisiere.aspx?tip=0&tbl=22&id=' + Value, '_blank ')
         }
 
         function EndUpload(s) {
@@ -44,8 +45,6 @@
         }
     </script>
 
-</head>
-<body>
     <form id="form1" runat="server">
 
 
@@ -82,6 +81,8 @@
                                           
                             <dx:GridViewDataTextColumn FieldName="FisierNume" Name="FisierNume" Caption="Document"  Width="300px"/>                           
                             <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                            <dx:GridViewDataTextColumn FieldName="Tabela" Name="Tabela" Caption="Tabela" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
+                            <dx:GridViewDataTextColumn FieldName="EsteCerere" Name="EsteCerere" Caption="EsteCerere" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" ReadOnly="true" Width="75px" Visible="false" ShowInCustomizationForm="false" />
                             <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false"/>
                             <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false"/>

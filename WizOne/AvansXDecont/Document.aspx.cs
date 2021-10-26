@@ -622,8 +622,8 @@ namespace WizOne.AvansXDecont
 								 + " LEFT JOIN vwAvsXDec_BudgetOwner bugOwner ON a.DocumentTypeId = (CASE WHEN bugOwner.DocumentTypeId IS NULL THEN -99 ELSE bugOwner.DocumentTypeId END) " 
 								 + " AND (CASE WHEN docState.IdSuper IS NULL THEN -99 ELSE docState.IdSuper END) = (CASE WHEN bugOwner.IdSuper IS NULL THEN -99 ELSE bugOwner.IdSuper END) "
 								 + " WHERE a.DocumentId = " + DocumentId + " AND docState.Pozitie = " + dtIst.Rows[0]["Pozitie"].ToString();
-								
-                
+
+								q = General.IncarcaDT(sql, null);	
                                 if (q != null && q.Rows.Count != 0)
                                 {
                                     if (Convert.ToInt32(q.Rows[0]["IsBudgetOwnerForDocument"].ToString()) == 1)
@@ -1952,7 +1952,11 @@ namespace WizOne.AvansXDecont
                          * filtrare sa fie aduse doar documentele apartinand utilizatorului logat
                          * sau care trebuie sa le aprobe*/						
 						+ " WHERE (docState.USER_NO = " + (loadAllList ? "docState.USER_NO" : Session["UserId"].ToString()) 
-						+ "	OR docState.IdUserInlocuitor = " + (loadAllList ? "docState.IdUserInlocuitor" : Session["UserId"].ToString()) + ")";
+						+ "	OR docState.IdUserInlocuitor = " + (loadAllList ? "docState.IdUserInlocuitor" : Session["UserId"].ToString()) + ") "
+						+ " group by a.DocumentId, b.DocumentTypeName, a.DocumentTypeId, a.F10003, a.DocumentDate, c.F10008 + ' ' + c.F10009,  d.DictionaryItemName, a.DocumentStateId, a.Culoare, a.TIME, "
+						+ " a.CircuitId, a.USER_NO, srcDoc.SrcDocId, av.RefuseReason, dec.RefuseReason,  "
+						+ "	av.TotalAmount, dec.TotalAmount ,  av.CurrencyId, dec.CurrencyId ,  "
+						+ "	avMoneda.DictionaryItemName , decMoneda.DictionaryItemName ,   bugOwner.IdSuper , docState.USER_NO,  a.Pozitie";
 					
 
                 q = General.IncarcaDT(sql, null);

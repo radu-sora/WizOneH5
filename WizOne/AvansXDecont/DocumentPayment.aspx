@@ -92,8 +92,7 @@
             </td>
             <td align="right">
                 <dx:ASPxButton ID="btnSave"  runat="server" Text="Salveaza" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
+                    <ClientSideEvents Click="function(s, e) {                       
                         e.processOnServer = true;
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
@@ -141,7 +140,7 @@
                     }" />                      
                 </dx:ASPxComboBox>
             </td>   
-            <td align="left">
+            <td align="left" valign="bottom">
                 <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                 </dx:ASPxButton>

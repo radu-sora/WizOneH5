@@ -21,13 +21,6 @@
         }
 
         function OnGrDateEndCallback(s, e) {
-            if (s.cpAlertMessage != null) {
-                swal({
-                    title: "Atentie", text: s.cpAlertMessage,
-                    type: "warning"
-                });
-                s.cpAlertMessage = null;
-            }
             pnlLoading.Hide();
             pnlCtl.PerformCallback('SumaAvans');
         }
@@ -127,7 +120,7 @@
                 <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge"  AutoPostBack="false" oncontextMenu="ctx(this,event)" >              
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                     <ClientSideEvents Click="function(s, e) {
-                        OnMotivRespingere();
+                        popUpMotiv.Show();
                     }" />
                 </dx:ASPxButton>				
                 <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static" runat="server" Text="Inapoi" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" >
@@ -177,9 +170,9 @@
 
 						<div class="Absente_divOuter margin_top15">
 				
-							<label id="lblIBAN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">IBAN</label>
+							<label id="lblIBAN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;" oncontextMenu="ctx(this,event)">IBAN</label>
 							<div style="float:left; padding-right:15px;">
-								<dx:ASPxTextBox ID="txtContIban" ClientInstanceName="txtContIban" ClientEnabled="false" runat="server" Width="290px">
+								<dx:ASPxTextBox ID="txtContIban" ClientInstanceName="txtContIban" ClientEnabled="false" runat="server" Width="290px" oncontextMenu="ctx(this,event)">
 								</dx:ASPxTextBox>
 							</div>   
 						</div>

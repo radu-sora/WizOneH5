@@ -9,6 +9,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using System.Diagnostics;
+using System.Web.Hosting;
 
 namespace WizOne.AvansXDecont
 {
@@ -39,7 +40,9 @@ namespace WizOne.AvansXDecont
             try
             {
                 Dami.AccesApp(this.Page);
-       
+
+                Session["AbsoluteUrl"] = HostingEnvironment.MapPath("~/Pagini");
+
                 //btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnIncarca.ToolTip = Dami.TraduCuvant("btnIncarca", "Incarca document");
 
@@ -88,7 +91,7 @@ namespace WizOne.AvansXDecont
                 if (Session["relUploadDocumente_Grid"] == null)
                 {
                     dt = General.IncarcaDT(strSql, null);
-                    grDate.KeyFieldName = "IdAuto";
+                    grDate.KeyFieldName = "Tabela;Id;EsteCerere";
                     grDate.DataSource = dt;
                     grDate.DataBind();
                     Session["relUploadDocumente_Grid"] = dt;
@@ -96,7 +99,7 @@ namespace WizOne.AvansXDecont
                 else
                 {
                     dt = Session["relUploadDocumente_Grid"] as DataTable;
-                    grDate.KeyFieldName = "IdAuto";
+                    grDate.KeyFieldName = "Tabela;Id;EsteCerere";
                     grDate.DataSource = dt;
                     grDate.DataBind();
                 }

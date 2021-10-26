@@ -310,13 +310,13 @@ namespace WizOne.Absente
 
         private void IncarcaGrid()
         {
+ 
             try
             {
                 var strSql = CreeazaSelect() + " ORDER BY A.TIME DESC";
                 var dtTemp = General.IncarcaDT(strSql, null);
-                var dt = new DataTable();
-
-                dt.Columns.Add("CampBifa", typeof(bool));
+                var dt = new DataTable();            
+                dt.Columns.Add("CampBifa", typeof(bool));   
                 dt.Load(dtTemp.CreateDataReader(), LoadOption.OverwriteChanges);
                 dt.Columns["Observatii"].ReadOnly = false;
                 dt.Columns["Comentarii"].ReadOnly = false;

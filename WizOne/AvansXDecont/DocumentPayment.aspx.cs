@@ -105,8 +105,10 @@ namespace WizOne.AvansXDecont
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
+                DataTable dtStari = General.IncarcaDT(@"SELECT b.""DictionaryItemId"" as ""Id"", b.""DictionaryItemName""  as ""Denumire"", b.""Culoare"" FROM ""vwAvsXDec_Nomen_StariDoc"" a LEFT JOIN ""AvsXDec_DictionaryItem"" b ON  a.DictionaryItemId = b.DictionaryItemId ", null);
+                Session["AvsXDec_Stari"] = dtStari;
 
-                DataTable dt = GetAvailableDocStateXUserRol(true, false /*Constante.AreRolFinanciar, Constante.AreRolContabilitate*/);
+                DataTable dt = GetAvailableDocStateXUserRol(true, true /*Constante.AreRolFinanciar, Constante.AreRolContabilitate*/);
                 cmbDocState.DataSource = dt;
                 cmbDocState.DataBind();               
 
@@ -242,7 +244,8 @@ namespace WizOne.AvansXDecont
                 sql = "SELECT b.DictionaryId, b.DictionaryItemId, b.Culoare, b.DictionaryItemName, COALESCE(b.Ordine, -99) AS Ordine "
                     + " FROM vwAvsXDec_Nomen_StariDoc a "
                     + " LEFT JOIN AvsXDec_DictionaryItem b on a.DictionaryItemId = b.DictionaryItemId "
-                    + " WHERE a.DictionaryItemId IN (3, 4, 5, 6, 7)";
+                     //+ " WHERE a.DictionaryItemId IN (3, 4, 5, 6, 7)";    //momentan nu folosim starile Restituit (6) si Contat (7)
+                     + " WHERE a.DictionaryItemId IN (3, 4, 5)";
 
                 q = General.IncarcaDT(sql, null);
                 if (q != null && q.Rows.Count > 0)
@@ -800,7 +803,7 @@ namespace WizOne.AvansXDecont
                 {
                     case "BRDE":
                         codBancaBRD = codVerificareBRD;
-                        DataTable entBRD = General.IncarcaDT("SELECT * FROM F075 Where F07509 = " + ent.Rows[0]["F002511"].ToString());
+                        DataTable entBRD = General.IncarcaDT("SELECT * FROM F075 Where F07509 = '" + ent.Rows[0]["F002511"].ToString() + "'");
                         if (entBRD != null && entBRD.Rows.Count > 0)
                         {
                             numeBancaBRD = ent.Rows[0]["F002511"].ToString();
@@ -810,7 +813,7 @@ namespace WizOne.AvansXDecont
                     case "BTRL":
                         codBancaBT = codVerificareBT;
                         codBancaBRD = codVerificareBRD;
-                        DataTable entBT = General.IncarcaDT("SELECT * FROM F075 Where F07509 = " + ent.Rows[0]["F002511"].ToString());
+                        DataTable entBT = General.IncarcaDT("SELECT * FROM F075 Where F07509 =  '" + ent.Rows[0]["F002511"].ToString() + "'");
                         if (entBT != null && entBT.Rows.Count > 0)
                         {
                             numeBancaBT = ent.Rows[0]["F002511"].ToString();
@@ -819,7 +822,7 @@ namespace WizOne.AvansXDecont
                         break;
                     default: /* BCR */
                         codBancaBCR = codVerificareBCR;
-                        DataTable entBCR = General.IncarcaDT("SELECT * FROM F075 Where F07509 = " + ent.Rows[0]["F002511"].ToString());
+                        DataTable entBCR = General.IncarcaDT("SELECT * FROM F075 Where F07509 =  '" + ent.Rows[0]["F002511"].ToString() + "'");
                         if (entBCR != null && entBCR.Rows.Count > 0)
                         {
                             numeBancaBCR = ent.Rows[0]["F002511"].ToString();
@@ -835,7 +838,7 @@ namespace WizOne.AvansXDecont
                     {
                         case "BRDE":
                             codBancaBRD = codVerificareBRD;
-                            DataTable entBRD = General.IncarcaDT("SELECT * FROM F075 Where F07509 = " + ent.Rows[0]["F002521"].ToString());
+                            DataTable entBRD = General.IncarcaDT("SELECT * FROM F075 Where F07509 = '" + ent.Rows[0]["F002521"].ToString() + "'");
                             if (entBRD != null && entBRD.Rows.Count > 0)
                             {
                                 numeBancaBRD = ent.Rows[0]["F002521"].ToString();
@@ -845,7 +848,7 @@ namespace WizOne.AvansXDecont
                         case "BTRL":
                             codBancaBT = codVerificareBT;
                             codBancaBRD = codVerificareBRD;
-                            DataTable entBT = General.IncarcaDT("SELECT * FROM F075 Where F07509 = " + ent.Rows[0]["F002521"].ToString());
+                            DataTable entBT = General.IncarcaDT("SELECT * FROM F075 Where F07509 = '" + ent.Rows[0]["F002521"].ToString() + "'");
                             if (entBT != null && entBT.Rows.Count > 0)
                             {
                                 numeBancaBT = ent.Rows[0]["F002521"].ToString();
@@ -854,7 +857,7 @@ namespace WizOne.AvansXDecont
                             break;
                         default:/*bcr*/
                             codBancaBCR = codVerificareBCR;
-                            DataTable entBCR = General.IncarcaDT("SELECT * FROM F075 Where F07509 = " + ent.Rows[0]["F002521"].ToString());
+                            DataTable entBCR = General.IncarcaDT("SELECT * FROM F075 Where F07509 = '" + ent.Rows[0]["F002521"].ToString() + "'");
                             if (entBCR != null && entBCR.Rows.Count > 0)
                             {
                                 numeBancaBCR = ent.Rows[0]["F002521"].ToString();
@@ -870,7 +873,7 @@ namespace WizOne.AvansXDecont
                     {
                         case "BRDE":
                             codBancaBRD = codVerificareBRD;
-                            DataTable entBRD = General.IncarcaDT("SELECT * FROM F075 Where F07509 = " + ent.Rows[0]["F002531"].ToString());
+                            DataTable entBRD = General.IncarcaDT("SELECT * FROM F075 Where F07509 = '" + ent.Rows[0]["F002531"].ToString() + "'");
                             if (entBRD != null && entBRD.Rows.Count > 0)
                             {
                                 numeBancaBRD = ent.Rows[0]["F002531"].ToString();
@@ -880,7 +883,7 @@ namespace WizOne.AvansXDecont
                         case "BTRL":
                             codBancaBT = codVerificareBT;
                             codBancaBRD = codVerificareBRD;
-                            DataTable entBT = General.IncarcaDT("SELECT * FROM F075 Where F07509 = " + ent.Rows[0]["F002531"].ToString());
+                            DataTable entBT = General.IncarcaDT("SELECT * FROM F075 Where F07509 = '" + ent.Rows[0]["F002531"].ToString() + "'");
                             if (entBT != null && entBT.Rows.Count > 0)
                             {
                                 numeBancaBT = ent.Rows[0]["F002531"].ToString();
@@ -889,7 +892,7 @@ namespace WizOne.AvansXDecont
                             break;
                         default:/*bcr*/
                             codBancaBCR = codVerificareBCR;
-                            DataTable entBCR = General.IncarcaDT("SELECT * FROM F075 Where F07509 = " + ent.Rows[0]["F002531"].ToString());
+                            DataTable entBCR = General.IncarcaDT("SELECT * FROM F075 Where F07509 = '" + ent.Rows[0]["F002531"].ToString() + "'");
                             if (entBCR != null && entBCR.Rows.Count > 0)
                             {
                                 numeBancaBCR = ent.Rows[0]["F002531"].ToString();
@@ -1104,6 +1107,10 @@ namespace WizOne.AvansXDecont
                     }
                 }
                 #endregion
+
+                var folder = new DirectoryInfo(HostingEnvironment.MapPath("~" + caleFisierBanca));
+                if (!folder.Exists)
+                    folder.Create();
 
                 #region creare fisier BCR
                 if (lstBCR.Count() != 0)
@@ -1628,18 +1635,17 @@ namespace WizOne.AvansXDecont
         {
             try
             {
-                //if (e.DataColumn.FieldName == "IdStare")
-                //{
-                //    GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                //    DataTable dt = colStari.PropertiesComboBox.DataSource as DataTable;
+                if (e.DataColumn.FieldName == "DocumentState")
+                {
+                    DataTable dt = Session["AvsXDec_Stari"] as DataTable;
 
-                //    string idStare = e.GetValue("IdStare").ToString();
-                //    DataRow[] lst = dt.Select("Id=" + idStare);
-                //    if (lst.Count() > 0 && lst[0]["Culoare"] != null)
-                //    {
-                //        e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(lst[0]["Culoare"].ToString());
-                //    }
-                //}
+                    string stare = e.GetValue("DocumentState").ToString();
+                    DataRow[] lst = dt.Select("Denumire='" + stare + "'");
+                    if (lst.Count() > 0 && lst[0]["Culoare"] != null)
+                    {
+                        e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(lst[0]["Culoare"].ToString());
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1740,9 +1746,9 @@ namespace WizOne.AvansXDecont
                 StareDocumentForUpdate docStateUpdate = (StareDocumentForUpdate)Session["AvsXDec_DocStateUpdate"];
                 if (e.VisibleIndex >= 0)
                 {
-                    DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
+                    object[] obj = grDate.GetRowValues(e.VisibleIndex, new string[] { "DocumentId", "PaymentDate" }) as object[];               
 
-                    if (values != null)
+                    if (obj != null)
                     {
                         switch (docStateUpdate)
                         {
@@ -1821,33 +1827,68 @@ namespace WizOne.AvansXDecont
                          avansurile administrative trebuie aduse in lista, chiar daca sunt generate cu aceeasi suma din lista
                          de avansuri administrative*/
                         if (documentStateId == 3 || documentStateId == 4)
-                            q = q.Select("DocumentStateId = " + documentStateId + " AND ((SrcDocAmount != DestDocAmount AND DocumentTypeId != 1003) OR (SrcDocAmount = DestDocAmount AND DocumentTypeId == 1003))").CopyToDataTable();
+                        {
+                            if (q.Select("DocumentStateId = " + documentStateId + " AND ((SrcDocAmount <> DestDocAmount AND DocumentTypeId <> 1003) OR (SrcDocAmount = DestDocAmount AND DocumentTypeId = 1003))") != null &&
+                                q.Select("DocumentStateId = " + documentStateId + " AND ((SrcDocAmount <> DestDocAmount AND DocumentTypeId <> 1003) OR (SrcDocAmount = DestDocAmount AND DocumentTypeId = 1003))").Length > 0)
+                                q = q.Select("DocumentStateId = " + documentStateId + " AND ((SrcDocAmount <> DestDocAmount AND DocumentTypeId <> 1003) OR (SrcDocAmount = DestDocAmount AND DocumentTypeId = 1003))").CopyToDataTable();
+                            else
+                                q.Rows.Clear();
+                        }
                         else
-                            q = q.Select("(DocumentStateId = " + documentStateId + ") OR (DocumentStateId = 3 AND SrcDocAmount = DestDocAmount AND " + documentStateId + " = 5)").CopyToDataTable();
+                        {
+                            if (q.Select("(DocumentStateId = " + documentStateId + ") OR (DocumentStateId = 3 AND SrcDocAmount = DestDocAmount AND " + documentStateId + " = 5)") != null &&
+                                q.Select("(DocumentStateId = " + documentStateId + ") OR (DocumentStateId = 3 AND SrcDocAmount = DestDocAmount AND " + documentStateId + " = 5)").Length > 0)
+                                q = q.Select("(DocumentStateId = " + documentStateId + ") OR (DocumentStateId = 3 AND SrcDocAmount = DestDocAmount AND " + documentStateId + " = 5)").CopyToDataTable();
+                            else
+                                q.Rows.Clear();
+                        }
 
                         /*LeonardM 17.08.2016
                          * in cazul in care se doresc a fi aduse documente in starea inchis atunci, se aduc doar
                          * documentele de tip decont care trebuie inchise prin bifa de documente originale*/
-                        if (documentStateId == 7)
-                            q = q.Select("DocumentTypeId IN (2001, 2002, 2003").CopyToDataTable();
+                        if (q.Rows.Count > 0 && documentStateId == 7)
+                        {
+                            if (q.Select("DocumentTypeId IN (2001, 2002, 2003") != null && q.Select("DocumentTypeId IN (2001, 2002, 2003").Length > 0)
+                                q = q.Select("DocumentTypeId IN (2001, 2002, 2003").CopyToDataTable();
+                            else
+                                q.Rows.Clear();
+                        }
                         /*end LeonardM 10.08.2016*/
                     }
-                    switch (operationSignId)
+                    if (q.Rows.Count > 0)
                     {
-                        /*LeonardM 16.08.2016
-                         * semnul se ia in considerare doar pentru stare diferit pentru contare*/
-                        case -1:
-                            if (documentStateId != 5 && documentStateId != 6 && documentStateId != 7)
-                                q = q.Select("UnconfRestAmount < 0").CopyToDataTable();
-                            break;
-                        case +1:
-                            if (documentStateId != 5 && documentStateId != 6 && documentStateId != 7)
-                                q = q.Select("UnconfRestAmount >= 0").CopyToDataTable();
-                            break;
+                        switch (operationSignId)
+                        {
+                            /*LeonardM 16.08.2016
+                             * semnul se ia in considerare doar pentru stare diferit pentru contare*/
+                            case -1:
+                                if (documentStateId != 5 && documentStateId != 6 && documentStateId != 7)
+                                {
+                                    if (q.Select("UnconfRestAmount < 0") != null && q.Select("UnconfRestAmount < 0").Length > 0)
+                                        q = q.Select("UnconfRestAmount < 0").CopyToDataTable();
+                                    else
+                                        q.Rows.Clear();
+                                }
+                                break;
+                            case +1:
+                                if (documentStateId != 5 && documentStateId != 6 && documentStateId != 7)
+                                {
+                                    if (q.Select("UnconfRestAmount >= 0") != null && q.Select("UnconfRestAmount >= 0").Length > 0)
+                                        q = q.Select("UnconfRestAmount >= 0").CopyToDataTable();
+                                    else
+                                        q.Rows.Clear();
+                                }
+                                break;
+                        }
                     }
 
-                    if (paymentTypeId != -99)
-                        q = q.Select("PaymentTypeId = " + paymentTypeId).CopyToDataTable();
+                    if (q.Rows.Count > 0 && paymentTypeId != -99)
+                    {
+                        if (q.Select("PaymentTypeId = " + paymentTypeId) != null && q.Select("PaymentTypeId = " + paymentTypeId).Length > 0)
+                            q = q.Select("PaymentTypeId = " + paymentTypeId).CopyToDataTable();
+                        else
+                            q.Rows.Clear();
+                    }
                 }
             }
             catch (Exception ex)
@@ -1860,74 +1901,29 @@ namespace WizOne.AvansXDecont
 
         protected void cmbDocState_SelectedIndexChanged(object sender, EventArgs e)
         {
-            StareDocumentForUpdate docStateUpdate = new StareDocumentForUpdate();
-            switch (Convert.ToInt32(cmbDocState.Value))
-            {
-                case 3:/*aprobat*/
-                    if (Convert.ToInt32(cmbOperationSign.Value ?? -99) == -1)
-                        docStateUpdate = StareDocumentForUpdate.Restituit;
-                    else if (Convert.ToInt32(cmbPaymentMethod.Value ?? -99) != Convert.ToInt32(General.Nz(Session["IdModalitatePlataCash"], -99)))
-                        docStateUpdate = StareDocumentForUpdate.TrimisLaBanca;
-                    else
-                        docStateUpdate = StareDocumentForUpdate.Acordat;
-                    break;
-                case 4:/*Trimis la banca*/
-                    docStateUpdate = StareDocumentForUpdate.Acordat;
-                    break;
-                case 6: /*restituit*/
-                case 5:/*acordat*/
-                    /* a fost completat avansul si pus sumele din extras, trebuie generate notele contabile*/
-                    docStateUpdate = StareDocumentForUpdate.Contat;
-                    break;
-                case 7:/*contat*/
-                    /*a fost contate documentele si se doresc a fi inchise,
-                     * Acest caz este valabil doar pentru documentele de tip decont, unde se pun bifele de documente originale*/
-                    docStateUpdate = StareDocumentForUpdate.Inchis;
-                    break;
-            }
-            Session["AvsXDec_DocStateUpdate"] = docStateUpdate;
-            SetButtonContent();
+            SetStare();
         }
 
         protected void cmbOperationSign_SelectedIndexChanged(object sender, EventArgs e)
         {
-            StareDocumentForUpdate docStateUpdate = new StareDocumentForUpdate();
-            switch (Convert.ToInt32(cmbDocState.Value))
-            {
-                case 3:/*aprobat*/
-                    if (Convert.ToInt32(cmbOperationSign.Value ?? -99) == -1)
-                        docStateUpdate = StareDocumentForUpdate.Restituit;
-                    else if (Convert.ToInt32(cmbPaymentMethod.Value ?? -99) != Convert.ToInt32(General.Nz(Session["IdModalitatePlataCash"], -99)))
-                        docStateUpdate = StareDocumentForUpdate.TrimisLaBanca;
-                    else
-                        docStateUpdate = StareDocumentForUpdate.Acordat;
-                    break;
-                case 4:/*Trimis la banca*/
-                    docStateUpdate = StareDocumentForUpdate.Acordat;
-                    break;
-                case 6: /*restituit*/
-                case 5:/*acordat*/
-                    /* a fost completat avansul si pus sumele din extras, trebuie generate notele contabile*/
-                    docStateUpdate = StareDocumentForUpdate.Contat;
-                    break;
-                case 7:/*contat*/
-                    /*a fost contate documentele si se doresc a fi inchise,
-                     * Acest caz este valabil doar pentru documentele de tip decont, unde se pun bifele de documente originale*/
-                    docStateUpdate = StareDocumentForUpdate.Inchis;
-                    break;
-            }
-            Session["AvsXDec_DocStateUpdate"] = docStateUpdate;
-            SetButtonContent();
+            SetStare();
         }
 
         protected void cmbPaymentMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SetStare();
+        }
+
+        protected void SetStare()
+        {
             StareDocumentForUpdate docStateUpdate = new StareDocumentForUpdate();
             switch (Convert.ToInt32(cmbDocState.Value))
             {
+                //momentan nu se folosesc starile Restituit si Contat
                 case 3:/*aprobat*/
                     if (Convert.ToInt32(cmbOperationSign.Value ?? -99) == -1)
-                        docStateUpdate = StareDocumentForUpdate.Restituit;
+                        //docStateUpdate = StareDocumentForUpdate.Restituit;
+                        docStateUpdate = StareDocumentForUpdate.Inchis;
                     else if (Convert.ToInt32(cmbPaymentMethod.Value ?? -99) != Convert.ToInt32(General.Nz(Session["IdModalitatePlataCash"], -99)))
                         docStateUpdate = StareDocumentForUpdate.TrimisLaBanca;
                     else
@@ -1939,7 +1935,8 @@ namespace WizOne.AvansXDecont
                 case 6: /*restituit*/
                 case 5:/*acordat*/
                     /* a fost completat avansul si pus sumele din extras, trebuie generate notele contabile*/
-                    docStateUpdate = StareDocumentForUpdate.Contat;
+                    //docStateUpdate = StareDocumentForUpdate.Contat;
+                    docStateUpdate = StareDocumentForUpdate.Inchis;
                     break;
                 case 7:/*contat*/
                     /*a fost contate documentele si se doresc a fi inchise,

@@ -27,7 +27,7 @@
                 <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge"  AutoPostBack="false" oncontextMenu="ctx(this,event)" >              
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                     <ClientSideEvents Click="function(s, e) {
-                        OnMotivRespingere();
+                        popUpMotiv.Show();
                     }" />
                 </dx:ASPxButton>				
                 <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static" runat="server" Text="Inapoi" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" >
@@ -228,7 +228,7 @@
 										 OnRowInserting="grDateDocJust_RowInserting" OnRowUpdating="grDateDocJust_RowUpdating" OnRowDeleting="grDateDocJust_RowDeleting" OnHtmlEditFormCreated="grDateDocJust_HtmlEditFormCreated" >
 										<SettingsBehavior AllowFocusedRow="true" />
 										<Settings ShowFilterRow="False" ShowColumnHeaders="true" /> 
-										<ClientSideEvents CustomButtonClick="function(s, e) { grDateDocJust_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnEndCallback(s,e); }" ContextMenu="ctx" />    
+										<ClientSideEvents CustomButtonClick="function(s, e) { grDateDocJust_CustomButtonClick(s, e); }" EndCallback="function(s,e) { OnGrDateDocJustEndCallback(s,e); }" ContextMenu="ctx" />    
 										<SettingsEditing Mode="EditFormAndDisplayRow" />
 										<SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
 										<Columns>
@@ -666,7 +666,7 @@
         function grDateDocJust_CustomButtonClick(s, e) {
             switch (e.buttonID) {
                 case "btnAtasament":
-                    grDate.GetRowValues(e.visibleIndex, 'DocumentId;DocumentDetailId', GoToDoc);
+                    grDateDocJust.GetRowValues(e.visibleIndex, 'DocumentId;DocumentDetailId', GoToDoc);
                     break;
             }
 		}
@@ -674,7 +674,7 @@
         function grDatePlataBanca_CustomButtonClick(s, e) {
             switch (e.buttonID) {
                 case "btnAtasament":
-                    grDate.GetRowValues(e.visibleIndex, 'DocumentId;DocumentDetailId', GoToDoc);
+                    grDatePlataBanca.GetRowValues(e.visibleIndex, 'DocumentId;DocumentDetailId', GoToDoc);
                     break;
             }
         }
@@ -684,6 +684,11 @@
             popGen.SetHeaderText("Documente");
             popGen.SetContentUrl(strUrl);
             popGen.Show();
+		}
+
+        function OnGrDateDocJustEndCallback(s, e) {  
+            pnlLoading.Hide();
+            pnlCtl.PerformCallback('SumaDecont');
         }
     </script>
 

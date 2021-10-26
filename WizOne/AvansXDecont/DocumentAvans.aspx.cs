@@ -1702,7 +1702,7 @@ namespace WizOne.AvansXDecont
                 dtRez.CaseSensitive = false;
                 DataRow drRez = dtRez.Select("DictionaryItemName = 'cazare'").FirstOrDefault();
 				if (excludeCheltuialaCazare && drRez != null)
-					lstRezervari = dtRez.Select("DictionaryItemId != " + drRez["DictionaryItemId"].ToString()).CopyToDataTable();
+					lstRezervari = dtRez.Select("DictionaryItemId <> " + drRez["DictionaryItemId"].ToString()).CopyToDataTable();
 				else
 					lstRezervari = dtRez;
 
@@ -1722,6 +1722,7 @@ namespace WizOne.AvansXDecont
                 {
                     if (loRez != null)
                     {
+                        cmbTip.Text = "";
                         ASPxListBox nestedListBox1 = cmbTip.FindControl("listBox") as ASPxListBox;
                         for (int i = 0; i < nestedListBox1.Items.Count; i++)
                             for (int j = 0; j < loRez.Rows.Count; j++)

@@ -37,11 +37,36 @@ namespace WizOne.Revisal
 
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
-                         
+                btnSalvare.Text = Dami.TraduCuvant("btnSalvare", "Salvare parametri");
+                btnPreg.Text = Dami.TraduCuvant("btnPreg", "Pregatire date");
+                btnGenerare.Text = Dami.TraduCuvant("btnGenerare", "Genereaza XML");
+                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+
+                lgConfigAng.InnerText = Dami.TraduCuvant("Configurare angajati inactivi");
+                lgConfigPer.InnerText = Dami.TraduCuvant("Configurare perioada");
+                lgConfigData.InnerText = Dami.TraduCuvant("Configurare Data sf. contract per. determ./Data incetarerbDataSf1");
+                lgConfigSpor.InnerText = Dami.TraduCuvant("Configurare Sporuri");
+                lgConfigModAv.InnerText = Dami.TraduCuvant("Configurare Modificari in avans");
+
+                chkInactivi.Text = Dami.TraduCuvant("Inclusiv inactivi");
+                lblInactivi.Text = Dami.TraduCuvant("Inactivi din data:");
+                lblDeLa.Text = Dami.TraduCuvant("De la");
+                lblLa.Text = Dami.TraduCuvant("La");
+                chkCalc.Text = Dami.TraduCuvant("Calculul e final");
+                lblDataSpor.Text = Dami.TraduCuvant("Data modif. sporului");
+                rbDataSf1.Text = Dami.TraduCuvant("Data sfarsit contract = Data incetare");
+                rbDataSf2.Text = Dami.TraduCuvant("Data sfarsit contract = Data incetare - 1 zi");
+                rbSporuri2.Text = Dami.TraduCuvant("Sporuri cuvenite");
+                rbSporuri1.Text = Dami.TraduCuvant("Sporuri calculate");
+                lblSpor.Text = Dami.TraduCuvant("Angajati noi");
+                rbSporuriAngNoi1.Text = Dami.TraduCuvant("Sporuri cuvenite");
+                rbSporuriAngNoi2.Text = Dami.TraduCuvant("Spor nedeclarat 0");
+                rbModif1.Text = Dami.TraduCuvant("Modificarile in intervalul [DeLa ; La]");
+                rbModif2.Text = Dami.TraduCuvant("Modificarile in intervalul [DeLa ; DeLa + 19 zile]");
 
                 #endregion
 
-                
+
                 Dictionary<String, String> lista = new Dictionary<string, string>();
                 if (!IsPostBack)
                 {

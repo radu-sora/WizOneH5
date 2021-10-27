@@ -42,7 +42,8 @@ namespace WizOne.Personal
                 table = ds.Tables[0];
 
                 DateIdentificare_DataList.DataSource = table;
-                DateIdentificare_DataList.DataBind();
+                if (!IsPostBack)    //#1032
+                    DateIdentificare_DataList.DataBind();
 
                 DateTime dtN = Convert.ToDateTime(table.Rows[0]["F10021"].ToString());
                 if (dtN.Year != 1900)

@@ -37,13 +37,12 @@ namespace WizOne.Pontaj
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
-
+                btnPtjEch.Text = Dami.TraduCuvant("btnPtjEch", "Pontajul echipei");
                 btnInit.Text = Dami.TraduCuvant("btnInit", "Initializare");              
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
 
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
-                btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
-
+                btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");   
 
                 lblRol.InnerText = Dami.TraduCuvant("Rol");
                 lblAng.InnerText = Dami.TraduCuvant("Angajat");
@@ -55,11 +54,32 @@ namespace WizOne.Pontaj
                 lblBirou.InnerText = Dami.TraduCuvant("Birou");
                 lblCtr.InnerText = Dami.TraduCuvant("Contract");
                 lblCateg.InnerText = Dami.TraduCuvant("Categorie");
+                lblDeLa.InnerText = Dami.TraduCuvant("De la");
+                lblLa.InnerText = Dami.TraduCuvant("La");
+                lblSablon.InnerText = Dami.TraduCuvant("Sablon");
+                lblNumeSablon.InnerText = Dami.TraduCuvant("Nume sablon");
+                lblNrZileSablon.InnerText = Dami.TraduCuvant("Nr. zile");
 
+                lblBife.InnerText = Dami.TraduCuvant("Initializarea sa includa");
+                chkS.Text = Dami.TraduCuvant("Sambata");
+                chkD.Text = Dami.TraduCuvant("Duminca");
+                chkSL.Text = Dami.TraduCuvant("Sarbatori legale");
+                chkDecalare.Text = Dami.TraduCuvant("Decalare pontaj");
+                chkModifPrg.Text = Dami.TraduCuvant("Programul sa nu fie modificat in timpul calculului");
+                chkPontare.Text = Dami.TraduCuvant("Pentru pontare");
+                chkPlanif.Text = Dami.TraduCuvant("Pentru planificare");
+
+
+                lblZiStart.InnerText = Dami.TraduCuvant("Initializarea sa inceapa cu ziua");
+
+                popUpModif.HeaderText = Dami.TraduCuvant("Modificare pontaj");
+                btnModif.Text = Dami.TraduCuvant("btnModif", "Salveaza");
                 modifAbsZi.InnerText = Dami.TraduCuvant("Absente de tip zi");
                 modifAbsOra.InnerText = Dami.TraduCuvant("Absente de tip ora");
                 modifPrgLucru.InnerText = Dami.TraduCuvant("Program de lucru");
                 modifCtr.InnerText = Dami.TraduCuvant("Contract");
+                foreach (ListBoxColumn col in cmbTipAbs.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
                 foreach (dynamic c in grDate.Columns)
                 {

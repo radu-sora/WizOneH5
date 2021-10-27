@@ -77,7 +77,7 @@
                 <tr align="left">
                  <td style="display:none" valign="top">
                    <fieldset >                     
-                    <legend class="legend-font-size">Configurare angajati inactivi</legend> 
+                    <legend id="lgConfigAng" runat="server" class="legend-font-size">Configurare angajati inactivi</legend> 
                     <table width="10%" >
                         <tr>
                             <td align="left">                             
@@ -96,7 +96,7 @@
                     </table>
                   </fieldset >
                    <fieldset >                     
-                    <legend class="legend-font-size">Configurare perioada</legend> 
+                    <legend id="lgConfigPer" runat="server" class="legend-font-size">Configurare perioada</legend> 
                     <table width="10%" >
                         <tr>
                             <td>
@@ -134,7 +134,7 @@
                     </table>
                   </fieldset >
                    <fieldset >                     
-                    <legend class="legend-font-size">Configurare Data sf. contract per. determ./Data incetare</legend> 
+                    <legend id="lgConfigData" runat="server" class="legend-font-size">Configurare Data sf. contract per. determ./Data incetare</legend> 
                     <table width="10%" >
                         <tr>
                             <td>                              
@@ -151,7 +151,7 @@
                     </table>
                   </fieldset >
                    <fieldset >                     
-                    <legend class="legend-font-size">Configurare Sporuri</legend> 
+                    <legend id="lgConfigSpor" runat="server" class="legend-font-size">Configurare Sporuri</legend> 
                     <table width="10%" >
                         <tr>
                             <td>             
@@ -191,7 +191,7 @@
                     </table>
                   </fieldset >
                    <fieldset >                     
-                    <legend class="legend-font-size">Configurare Modificari in avans</legend> 
+                    <legend id="lgConfigModAv" runat="server" class="legend-font-size">Configurare Modificari in avans</legend> 
                     <table width="10%" >
                         <tr>
                             <td>                              

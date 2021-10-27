@@ -80,6 +80,8 @@ namespace WizOne.AvansXDecont
                 decimal suma = Convert.ToDecimal(General.Nz(Session["AvsXDec_SumaDecont"], 0));
                 txtValDecont.Text = suma.ToString();
 
+                Session["PaginaWeb"] = "AvansXDecont.DocumentDecont";
+
                 if (!IsPostBack)
                 {
                     Session["AvsXDec_SursaDateDec"] = null;
@@ -1718,6 +1720,7 @@ namespace WizOne.AvansXDecont
                     btnDocOrig.Text = Session["statusDocOriginale"].ToString();
                     btnDocOrig.ClientEnabled = false;
                 }
+                Session["AvsXDec_SursaDateDec"] = ent;
             }
             catch (Exception ex)
             {

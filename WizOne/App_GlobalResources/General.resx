@@ -126,4 +126,11 @@
   <data name="UtilizatorInexistentContactatiAdministratorulDeSistem" xml:space="preserve">
     <value>Eroare la conectare</value>
   </data>
+<data name="Nranivorbit" xml:space="preserve">
+    <value>Numar Ani</value>
+  </data>
+<data name="MedicinamunciiPSI" xml:space="preserve">
+    <value>Categorie</value>
+  </data>
+  
 </root>

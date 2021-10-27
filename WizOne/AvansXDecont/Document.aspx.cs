@@ -700,7 +700,7 @@ namespace WizOne.AvansXDecont
 													culAvans = "#FFFFFFFF";										
 												
                                                 //schimbam statusul
-												General.ExecutaNonQuery("UPDATE AvsXDec_Document SET DocumentStateId = 8, Culoare = " + culAvans + " WHERE DocumentId = " + dtBT.Rows[0]["SrcDocId"].ToString(), null);
+												General.ExecutaNonQuery("UPDATE AvsXDec_Document SET DocumentStateId = 8, Culoare = '" + culAvans + "' WHERE DocumentId = " + dtBT.Rows[0]["SrcDocId"].ToString(), null);
 												
                                                 //introducem o linie de anulare in AvsXDec_DocumentStateHistory
 												int idUrmStateHistory = Dami.NextId("AvsXDec_DocumentStateHistory", 1);

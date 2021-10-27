@@ -68,6 +68,8 @@ namespace WizOne.AvansXDecont
 
                 #endregion
 
+                Session["PaginaWeb"] = "AvansXDecont.DocumentAvans";
+
                 decimal suma = Convert.ToDecimal(General.Nz(Session["AvsXDec_SumaAvans"], 0));
                 txtValEstimata.Text = suma.ToString();
 
@@ -141,11 +143,13 @@ namespace WizOne.AvansXDecont
 								if (Convert.ToInt32(General.Nz(Session["IdModPlataDefault"], -99)) == -99)
 								{
                                     Session["IdModPlataDefault"] = lpModPlata.Select("Ordine = " + minimumOrderModPlata)[0]["DictionaryItemId"].ToString();
-									cmbModPlata.Value = Convert.ToInt32(Session["IdModPlataDefault"].ToString());
+                                    if (!IsPostBack)
+									    cmbModPlata.Value = Convert.ToInt32(Session["IdModPlataDefault"].ToString());
 								}
 								else
 								{
-									cmbModPlata.Value = Convert.ToInt32(Session["IdModPlataDefault"].ToString());
+                                    if (!IsPostBack)
+                                        cmbModPlata.Value = Convert.ToInt32(Session["IdModPlataDefault"].ToString());
                                 }                                                                    
 							}
 							#endregion

@@ -77,9 +77,9 @@
 
 						<div class="Absente_divOuter margin_top15">
 				
-							<label id="lblIBAN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">IBAN</label>
+							<label id="lblIBAN" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;" oncontextMenu="ctx(this,event)">IBAN</label>
 							<div style="float:left; padding-right:15px;">
-								<dx:ASPxTextBox ID="txtContIban" ClientInstanceName="txtContIban" ClientEnabled="false" runat="server" Width="290px">
+								<dx:ASPxTextBox ID="txtContIban" ClientInstanceName="txtContIban" ClientEnabled="false" runat="server" Width="290px" oncontextMenu="ctx(this,event)">
 								</dx:ASPxTextBox>
 							</div>   
 						</div>

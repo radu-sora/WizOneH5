@@ -159,7 +159,10 @@ namespace WizOne.AvansXDecont
                     sql = "UPDATE \"tblFisiere\" SET \"Fisier\" = @1, \"FisierNume\" = '{1}', \"FisierExtensie\" = '{2}', USER_NO = {3}, TIME = {4} WHERE \"Tabela\" = 'AvsXDec_relUploadDocumente' AND \"Id\" = {0} ";
 
                 }
-                sql = string.Format(sql, id, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
+                string extensie = ".txt";
+                if (itm.UploadedFileName.ToString().Split('.').Length > 1)
+                    extensie = "." + itm.UploadedFileName.ToString().Split('.')[itm.UploadedFileName.ToString().Split('.').Length - 1];
+                sql = string.Format(sql, id, itm.UploadedFileName, extensie, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
                 General.ExecutaNonQuery(sql, new object[] { itm.UploadedFile });
                 Session["relUploadDocumente_Grid"] = null;
             }
@@ -213,8 +216,91 @@ namespace WizOne.AvansXDecont
 
         protected void grDate_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
         {
-            string qwe = General.Nz(Request["qwe"], "-99").ToString();
-            IncarcaGrid(qwe);
+            string str = e.Parameters;
+            string tbl = "AvsXDec_relUploadDocumente";
+            if (str != "")
+            {
+                string[] arr = e.Parameters.Split(';');
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""tblFisiere"" WHERE ""Tabela""='AvsXDec_relUploadDocumente' AND ""Id""={arr[1]} AND ""EsteCerere""=0", null);
+
+                if (dt.Rows.Count != 0)
+                {
+                    //Florin 2020.08.18
+                    byte[] fis = (byte[])General.Nz(dt.Rows[0]["Fisier"], null);
+                    string director = tbl.Replace("Admin_", "").Replace("F100", "");
+                    string cale = HostingEnvironment.MapPath("~/FisiereApp/" + director + "/") + General.Nz(dt.Rows[0]["FisierNume"], "").ToString();
+                    if (fis == null && File.Exists(cale))
+                        fis = File.ReadAllBytes(cale);
+
+                    if (fis != null)
+                        scrieDoc(General.Nz(dt.Rows[0]["FisierExtensie"], "").ToString(), fis, General.Nz(dt.Rows[0]["FisierNume"], "").ToString());
+                    else
+                        Response.Write("Nu exista date de afisat !");
+                }
+                else
+                {
+                    Response.Write("Nu exista date de afisat !");
+                }
+                
+            }
+            else
+            {
+                string qwe = General.Nz(Request["qwe"], "-99").ToString();
+                IncarcaGrid(qwe);
+            }
+        }
+
+
+        protected void scrieDoc(string extensie, byte[] fisier, string numeFisier)
+        {
+            MemoryStream stream = new MemoryStream(fisier);
+            Response.Clear();
+            MemoryStream ms = stream;
+            Response.ClearContent();
+
+            if (extensie.EndsWith(".pdf"))
+                Response.ContentType = "application/pdf";
+            else if (extensie.EndsWith(".xlsx"))
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            else if (extensie.EndsWith(".xls"))
+                Response.ContentType = "application/vnd.ms-excel";
+            else if (extensie.EndsWith(".docx"))
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            else if (extensie.EndsWith(".doc"))
+                Response.ContentType = "application/msword";
+            else if (extensie.EndsWith(".zip"))
+                Response.ContentType = "application/zip";
+            else if (extensie.EndsWith(".gif"))
+                Response.ContentType = "image/gif";
+            else if (extensie.EndsWith(".tiff"))
+                Response.ContentType = "image/tiff";
+            else if (extensie.EndsWith(".bmp"))
+                Response.ContentType = "image/bmp";
+            else if (extensie.EndsWith(".png"))
+                Response.ContentType = "image/png";
+            else if (extensie.EndsWith(".htm"))
+                Response.ContentType = "text/html";
+            else if (extensie.EndsWith(".html"))
+                Response.ContentType = "text/html";
+            else if (extensie.EndsWith(".txt"))
+                Response.ContentType = "text/plain";
+            else if (extensie.EndsWith(".xml"))
+                Response.ContentType = "text/xml";
+            else if (extensie.EndsWith(".msg"))
+            {
+                Response.AddHeader("content-disposition", "attachment; filename=test.msg");
+            }
+            else
+                Response.ContentType = "image/jpeg";
+
+            Response.AddHeader("Content-Disposition", "attachment;filename=" + numeFisier);
+            Response.Buffer = true;
+            ms.WriteTo(Response.OutputStream);  
+
+            HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
+            HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
+            HttpContext.Current.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event
+
         }
     }
 }

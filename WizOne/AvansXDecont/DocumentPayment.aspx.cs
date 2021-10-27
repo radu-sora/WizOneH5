@@ -127,7 +127,7 @@ namespace WizOne.AvansXDecont
                     cmbOperationSign.SelectedIndex = 0;
                     cmbDocState.SelectedIndex = 0;
                     cmbDocState_SelectedIndexChanged(null, null);
-                    cmbPaymentMethod.SelectedIndex = 1;
+                    cmbPaymentMethod.SelectedIndex = 0;
                     dt.CaseSensitive = false;
                     DataRow entModalitatePlataCash = dt.Select("DictionaryItemName = 'PLATA CASH'").FirstOrDefault();
                     if (entModalitatePlataCash != null)
@@ -1443,8 +1443,8 @@ namespace WizOne.AvansXDecont
                 grDate.KeyFieldName = "DocumentId";
                         
                 if (Session["AvsXDec_PaymentGrid"] == null)
-                    dt = GetmetaVwAvsXDec_DocumenteRestPlataMetadata(Convert.ToInt32(cmbDocState.Value ?? -99), Convert.ToInt32(cmbOperationSign.Value ?? -99), Convert.ToInt32(txtPaymentDate.Value == null ? 1900 : Convert.ToDateTime(txtPaymentDate.Value).Year),
-                        Convert.ToInt32(txtPaymentDate.Value == null ? 1 : Convert.ToDateTime(txtPaymentDate.Value).Month), Convert.ToInt32(txtPaymentDate.Value == null ? 1 : Convert.ToDateTime(txtPaymentDate.Value).Day), Convert.ToInt32(cmbPaymentMethod.Value ?? -99));
+                    dt = GetmetaVwAvsXDec_DocumenteRestPlataMetadata(Convert.ToInt32(cmbDocState.Value ?? -99), (cmbOperationSign.ClientVisible ? Convert.ToInt32(cmbOperationSign.Value ?? -99) : -99), Convert.ToInt32(txtPaymentDate.Value == null ? 1900 : Convert.ToDateTime(txtPaymentDate.Value).Year),
+                        Convert.ToInt32(txtPaymentDate.Value == null ? 1 : Convert.ToDateTime(txtPaymentDate.Value).Month), Convert.ToInt32(txtPaymentDate.Value == null ? 1 : Convert.ToDateTime(txtPaymentDate.Value).Day), (cmbPaymentMethod.ClientVisible ? Convert.ToInt32(cmbPaymentMethod.Value ?? -99) : -99));
                 else
                     dt = Session["AvsXDec_PaymentGrid"] as DataTable;
 

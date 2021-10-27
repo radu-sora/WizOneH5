@@ -37,7 +37,7 @@
         }
 
         function GoToAtasMode(Value) {
-            window.open("<%= Session["AbsoluteUrl"] %>" + '/Fisiere.aspx?tip=0&tbl=22&id=' + Value, '_blank ')
+            grDate.PerformCallback("btnAtasament;" + Value);   
         }
 
         function EndUpload(s) {

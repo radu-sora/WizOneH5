@@ -611,10 +611,10 @@ namespace WizOne.Absente
                         //    dtDataSf.Value = dtDataInc.Value;
 
                         //Florin 2021.09.10 - #985
-                        //CalcZile();
-                        int nrZile = General.CalcZile(Convert.ToInt32(cmbAng.Value ?? 0), Convert.ToDateTime(dtDataInc.Value), Convert.ToDateTime(dtDataSf.Value), Convert.ToInt32(cmbAbs.Value ?? 0));
-                        txtNr.Text = nrZile.ToString();
-                        Session["CereriAut_NrZile"] = nrZile;
+                        //Radu 27.10.2021 - #1033
+                        CalcZile();                         
+                        //txtNr.Text = nrZile.ToString();
+                        //Session["CereriAut_NrZile"] = nrZile;
                         break;
                     case "EmptyFields":
                         cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
@@ -792,7 +792,7 @@ namespace WizOne.Absente
                             lblDataSf.Visible = true;
                             dtDataSf.ClientVisible = true;
 
-                            txtNr.Visible = true;
+                            txtNr.ClientVisible = true;
                             txtNr.ClientEnabled = false;
                             rbPrel.ClientVisible = true;
                             rbPrel1.ClientVisible = true;
@@ -1211,7 +1211,11 @@ namespace WizOne.Absente
 
                 string nrZile = "1";
                 //if (dtDataSf.Visible != false)
-                    nrZile = txtNr.Text;
+                    //nrZile = txtNr.Text;
+
+                //Radu 27.10.2021 - #1033
+                nrZile = General.CalcZile(marca, Convert.ToDateTime(dtDataInc.Value), Convert.ToDateTime(dtDataSf.Value), Convert.ToInt32(cmbAbs.Value ?? 0)).ToString();
+
                 if (txtNrOre.ClientVisible == true)
                 {
                     //dtDataSf.Value = dtDataInc.Value;
@@ -1372,40 +1376,40 @@ namespace WizOne.Absente
             return sqlCer;
         }
 
-        //protected void CalcZile()
-        //{
-        //    if (dtDataInc.Value == null || dtDataSf.Value == null)
-        //        return;
+        protected void CalcZile()
+        {
+            if (dtDataInc.Value == null || dtDataSf.Value == null)
+                return;
 
-        //    int adunaZL = 0;
-        //    ListEditItem itm = cmbAbs.SelectedItem;
-        //    if (itm != null)
-        //        adunaZL = Convert.ToInt32(General.Nz(itm.GetFieldValue("AdunaZileLibere"), 0));
+            int adunaZL = 0;
+            ListEditItem itm = cmbAbs.SelectedItem;
+            if (itm != null)
+                adunaZL = Convert.ToInt32(General.Nz(itm.GetFieldValue("AdunaZileLibere"), 0));
 
-        //    DateTime dtStart = Convert.ToDateTime(dtDataInc.Value);
-        //    DateTime dtSfarsit = Convert.ToDateTime(dtDataSf.Value);
+            DateTime dtStart = Convert.ToDateTime(dtDataInc.Value);
+            DateTime dtSfarsit = Convert.ToDateTime(dtDataSf.Value);
 
-        //    string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dtStart.Year + " UNION SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dtSfarsit.Year ;
-        //    if (Constante.tipBD == 2)
-        //        strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + dtStart.Year + " UNION SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY)  = " + dtSfarsit.Year ;
-        //    DataTable dtHolidays = General.IncarcaDT(strSql, null);
+            string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dtStart.Year + " UNION SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dtSfarsit.Year;
+            if (Constante.tipBD == 2)
+                strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + dtStart.Year + " UNION SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY)  = " + dtSfarsit.Year;
+            DataTable dtHolidays = General.IncarcaDT(strSql, null);
 
-        //    int i = 0;
-        //    if (adunaZL == 1)
-        //        i = (dtSfarsit - dtStart).Days + 1;
-        //    else
-        //    {
-        //        for (DateTime zi = dtStart; zi <= dtSfarsit; zi = zi.AddDays(1))
-        //        {
-        //            bool ziLibera = EsteZiLibera(zi, dtHolidays);
-        //            if (zi.DayOfWeek.ToString().ToLower() != "saturday" && zi.DayOfWeek.ToString().ToLower() != "sunday" && !ziLibera)
-        //                i++;
-        //        }
-        //    }
-        //    txtNr.Text = i.ToString();
-        //    Session["CereriAut_NrZile"] = i;
+            int i = 0;
+            if (adunaZL == 1)
+                i = (dtSfarsit - dtStart).Days + 1;
+            else
+            {
+                for (DateTime zi = dtStart; zi <= dtSfarsit; zi = zi.AddDays(1))
+                {
+                    bool ziLibera = EsteZiLibera(zi, dtHolidays);
+                    if (zi.DayOfWeek.ToString().ToLower() != "saturday" && zi.DayOfWeek.ToString().ToLower() != "sunday" && !ziLibera)
+                        i++;
+                }
+            }
+            txtNr.Text = i.ToString();
+            Session["CereriAut_NrZile"] = i;
 
-        //}
+        }
 
         private bool EsteZiLibera(DateTime data, DataTable dtHolidays)
         {

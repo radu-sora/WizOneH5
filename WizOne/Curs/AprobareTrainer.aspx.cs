@@ -37,9 +37,12 @@ namespace WizOne.Curs
                 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");                
                 btnFinalizare.Text = Dami.TraduCuvant("btnFinalizare", "Finalizare sesiune");
-        
-             
-                
+
+                lblCurs.InnerText = Dami.TraduCuvant("Curs");
+                lblSesiune.InnerText = Dami.TraduCuvant("Sesiune");
+                grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
+                grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
+
                 foreach (GridViewColumn c in grDate.Columns)
                 {
                     try

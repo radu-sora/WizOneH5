@@ -288,7 +288,7 @@
 							                    <dx:ASPxLabel  ID="lblDataNasterii" Width="100" runat="server"  Text="Data nasterii" ></dx:ASPxLabel>	
 						                    </td>	
 						                    <td>
-							                    <dx:ASPxDateEdit  ID="deDataNasterii" ClientInstanceName="deDataNasterii" TabIndex="4" Enabled="true" Width="100" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" runat="server" Value='<%# Eval("F10021") %>'  AutoPostBack="false" >
+							                    <dx:ASPxDateEdit  ID="deDataNasterii" ClientInstanceName="deDataNasterii" TabIndex="4" ClientEnabled="true" Width="100" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" runat="server" Value='<%# Eval("F10021") %>'  AutoPostBack="false" >
                                                     <CalendarProperties FirstDayOfWeek="Monday" />
                                                     <ClientSideEvents DateChanged="function(s,e){ CalcVarsta(); }" />
 							                    </dx:ASPxDateEdit>

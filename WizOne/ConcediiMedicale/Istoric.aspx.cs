@@ -35,6 +35,22 @@ namespace WizOne.ConcediiMedicale
             {
                 Dami.AccesApp(this.Page);
 
+                btnPreluare.Text = Dami.TraduCuvant("btnPreluare", "Preluare");
+                lblTitlu.Text = Dami.TraduCuvant("Vizualizare CM luna anterioara");
+
+                foreach (GridViewColumn c in grDate.Columns)
+                {
+                    try
+                    {
+                        if (c.GetType() == typeof(GridViewDataColumn))
+                        {
+                            GridViewDataColumn col = c as GridViewDataColumn;
+                            col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+                        }
+                    }
+                    catch (Exception) { }
+                }
+
                 if (Session["CM_HR"] == null || Session["CM_HR"].ToString() != "1")
                 {
                     grDate.Columns["Suma"].Visible = false;

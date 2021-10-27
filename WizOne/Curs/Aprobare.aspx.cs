@@ -42,11 +42,17 @@ namespace WizOne.Curs
                 btnIncludeParticipantsList.Text = Dami.TraduCuvant("btnIncludeParticipantsList", "Include Participanti");
 
                 btnDelete.Image.ToolTip = Dami.TraduCuvant("btnDelete", "Sterge");
-                btnIstoric.Image.ToolTip = Dami.TraduCuvant("btnIstoric", "Istoric");  
-                
+                btnIstoric.Image.ToolTip = Dami.TraduCuvant("btnIstoric", "Istoric");
+
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
                 lblAng.InnerText = Dami.TraduCuvant("Angajat");
                 lblRol.InnerText = Dami.TraduCuvant("Rol");
                 lblStare.InnerText = Dami.TraduCuvant("Stare");
+
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
 
                 foreach (GridViewColumn c in grDate.Columns)
                 {
@@ -60,6 +66,11 @@ namespace WizOne.Curs
                     }
                     catch (Exception) { }
                 }
+                grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
+                grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
+                grDate.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
+                grDate.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
+                grDate.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
 
                 #endregion
 

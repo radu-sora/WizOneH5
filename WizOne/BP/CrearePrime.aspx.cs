@@ -28,12 +28,39 @@ namespace WizOne.BP
 
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
-                //if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Constante.IdLimba = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
-
-                #endregion
-                
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
+
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+                foreach (ListBoxColumn col in cmbAngFiltru.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
+                lblAn.Text = Dami.TraduCuvant("An");
+                lblLuna.Text = Dami.TraduCuvant("Luna");
+                lblAng.InnerText = Dami.TraduCuvant("Angajat");
+                lblTip.Text = Dami.TraduCuvant("Tip");
+                lblAvsLch.Text = Dami.TraduCuvant("Avans/Lichidare");
+                lblMoneda.Text = Dami.TraduCuvant("Moneda");
+                lblCurs.Text = Dami.TraduCuvant("Curs");
+                lblSumaNeta.Text = Dami.TraduCuvant("Suma");
+                lblRONNet.Text = Dami.TraduCuvant("Total");
+                lblExpl.InnerText = Dami.TraduCuvant("Explicatie");
+                lblAngFiltru.InnerText = Dami.TraduCuvant("Angajat");
+                lblAnFil.Text = Dami.TraduCuvant("An");
+                lblLunaFil.Text = Dami.TraduCuvant("Luna");
+                lblStare.InnerText = Dami.TraduCuvant("Stare");
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
+                #endregion
+
+
 
 
                 DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);

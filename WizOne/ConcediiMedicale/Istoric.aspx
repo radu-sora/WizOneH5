@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Vizualizare CM luna anterioara</title>
+    <title id="lblTitlu" runat="server">Vizualizare CM luna anterioara</title>
 
     <script type="text/javascript" src="../Fisiere/js/utils.js" ></script>
     

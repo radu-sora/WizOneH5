@@ -44,7 +44,7 @@
                 <tr align="left">
                  <td   valign="top">
                    <fieldset  >
-                    <legend class="legend-font-size">Adeverinte</legend>         
+                    <legend id="lgAdev" runat="server" class="legend-font-size">Adeverinte</legend>         
                     <table width="10%" >  
                         <tr>
                             <td>

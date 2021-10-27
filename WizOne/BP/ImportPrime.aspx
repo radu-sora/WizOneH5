@@ -43,7 +43,7 @@
                 <tr>
                     <td valign="top">
                         <fieldset>
-                            <legend class="legend-font-size">Import prime</legend>
+                            <legend id="lgImport" runat="server" class="legend-font-size">Import prime</legend>
                             <table width="10%">
                                 <tr>
                                     <td align="center" >

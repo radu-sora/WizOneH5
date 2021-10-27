@@ -18,19 +18,66 @@ namespace WizOne.ConcediiMedicale
     public partial class Introducere : System.Web.UI.Page
     {
         double sumaReducereTimpLucru = 0;
-        //decimal timpPartial = 0;
-        //bool inactiveazaDeLaLa = false;
+   
         protected void Page_Init(object sender, EventArgs e)
-        {
-            //DataList1.DataSource = General.IncarcaDT("SELECT * FROM F300 WHERE F10003 = " + (Session["MarcaCM"] != null ? Session["MarcaCM"].ToString() : "-99"), null);
-            //DataList1.DataBind();
+        {    
 
             txtTitlu.Text = Dami.TraduCuvant("Inregistrare concediu medical");
             if (Session["CM_Id"] != null)
                 txtTitlu.Text = Dami.TraduCuvant("Detalii concediu medical");
 
-            //ASPxComboBox cmbTipConcediu = DataList1.Items[0].FindControl("cmbTipConcediu") as ASPxComboBox;
-            //ASPxRadioButton rbConcInit = DataList1.Items[0].FindControl("rbConcInit") as ASPxRadioButton;
+            btnSave.Text = Dami.TraduCuvant("btnSave", "Salvare");
+            btnBack.Text = Dami.TraduCuvant("btnBack", "Inapoi");
+            btnDocUpload.BrowseButton.Text = Dami.TraduCuvant("Incarca document");
+            btnDocUpload.ToolTip = Dami.TraduCuvant("Incarca document");
+
+            pnlDateGen.HeaderText = Dami.TraduCuvant("Date generale concediu medical");
+            lblAng.InnerText = Dami.TraduCuvant("Angajat");
+
+            foreach (ListBoxColumn col in cmbAng.Columns)
+                col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
+            rbProgrNorm.Text = Dami.TraduCuvant("CM program normal");
+            rbProgrTure.Text = Dami.TraduCuvant("CM program in ture");
+            lblTipConcediu.Text = Dami.TraduCuvant("Tip concediu");
+            lblCodIndemn.Text = Dami.TraduCuvant("Cod indemnizatie");
+            lblLocPresc.Text = Dami.TraduCuvant("Loc prescriere");
+            lblDeLaData.Text = Dami.TraduCuvant("Data inceput");
+            lblLaData.Text = Dami.TraduCuvant("Data sfarsit");
+            lblNrZile.Text = Dami.TraduCuvant("Nr. zile");
+            lblSerie.Text = Dami.TraduCuvant("Serie CM");
+            lblNr.Text = Dami.TraduCuvant("Numar CM");
+            lblData.Text = Dami.TraduCuvant("Data CM");
+            lblCodDiag.Text = Dami.TraduCuvant("Cod diagnostic");
+            lblCodUrgenta.Text = Dami.TraduCuvant("Cod urgenta");
+            lblCodInfCont.Text = Dami.TraduCuvant("Cod infecto-contag.");
+            chkStagiu.Text = Dami.TraduCuvant("Nu are stagiu de cotizare");
+            chkUrgenta.Text = Dami.TraduCuvant("Urgenta - procent 100%");
+            lblCT1.Text = Dami.TraduCuvant("Cod transfer 1");
+            lblCT2.Text = Dami.TraduCuvant("Cod transfer 2");
+            lblCT3.Text = Dami.TraduCuvant("Cod transfer 3");
+            lblCT4.Text = Dami.TraduCuvant("Cod transfer 4");
+            lblCT5.Text = Dami.TraduCuvant("Cod transfer 5");
+            rbConcInit.Text = Dami.TraduCuvant("Initial");
+            rbConcCont.Text = Dami.TraduCuvant("Continuare");
+            btnCMAnt.Text = Dami.TraduCuvant("btnCMAnt", "CM luna anterioara");
+            lblSCMInit.Text = Dami.TraduCuvant("Serie CM initial");
+            lblNrCMInit.Text = Dami.TraduCuvant("Numar CM initial");
+            lblDataCMInit.Text = Dami.TraduCuvant("Data CM initial");
+            lblZCMAnt.Text = Dami.TraduCuvant("Zile CM initial");
+            btnMZ.Text = Dami.TraduCuvant("btnMZ", "Media zilnica");
+            lblBCCM.Text = Dami.TraduCuvant("Baza calcul CM");
+            lblZBC.Text = Dami.TraduCuvant("Zile baza calcul CM");
+            lblMZBC.Text = Dami.TraduCuvant("Medie zile baza calcul");
+            lblMZ.Text = Dami.TraduCuvant("Medie zilnica CM");
+            chkModMan.Text = Dami.TraduCuvant("Modificare manuala");
+            rbOptiune1.Text = Dami.TraduCuvant("Media zilnica pt. CM cf. O 158/2005");
+            rbOptiune2.Text = Dami.TraduCuvant("Media zilnica pt. AMBP cf. L 346/2002");
+            pnlDateAd.HeaderText = Dami.TraduCuvant("Date aditionale concediu medical");
+            lblNrAviz.Text = Dami.TraduCuvant("Nr. aviz medic expert");
+            lblDataAviz.Text = Dami.TraduCuvant("Data aviz Dir. Sanatate Publica");
+            lblMedic.Text = Dami.TraduCuvant("Medic curant");
+            lblCNP.Text = Dami.TraduCuvant("CNP/CIS copil");    
 
             cmbTipConcediu.DataSource = General.GetTipConcediu();
             cmbTipConcediu.DataBind();

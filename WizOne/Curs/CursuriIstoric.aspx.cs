@@ -30,10 +30,18 @@ namespace WizOne.Curs
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
                 
-                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");  
-                
+                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
                 lblAng.InnerText = Dami.TraduCuvant("Angajat");
                 lblCurs.InnerText = Dami.TraduCuvant("Curs");
+                lblSesiune.InnerText = Dami.TraduCuvant("Sesiune");
+                lblCateg_Niv1.InnerText = Dami.TraduCuvant("Categ niv1");
+                lblCateg_Niv2.InnerText = Dami.TraduCuvant("Categ niv2");
+                lblDepartament.InnerText = Dami.TraduCuvant("Departament"); 
+                lblSesiune.InnerText = Dami.TraduCuvant("Sesiune");
                 lblSesiune.InnerText = Dami.TraduCuvant("Sesiune");
 
 

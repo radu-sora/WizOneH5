@@ -35,6 +35,8 @@ namespace WizOne.Curs
                 lblCurs.InnerText = Dami.TraduCuvant("De la");
                 lblCurs2.InnerText = Dami.TraduCuvant("Pana la");
 
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
 
                 foreach (GridViewColumn c in grDate.Columns)
                 {

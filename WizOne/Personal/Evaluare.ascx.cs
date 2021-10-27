@@ -16,7 +16,8 @@ namespace WizOne.Personal
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            grDateEvaluare.DataBind();
+            if (!IsPostBack)
+                grDateEvaluare.DataBind();
             //grDateEvaluare.AddNewRow();
             foreach (dynamic c in grDateEvaluare.Columns)
             {

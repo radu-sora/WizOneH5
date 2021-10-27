@@ -30,6 +30,22 @@ namespace WizOne.Adev
             {
                 Dami.AccesApp(this.Page);
 
+
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
+
+                grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
+                grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
+                grDate.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
+                grDate.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
+                grDate.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
+
                 if (!IsPostBack)
                 {
                     GridViewDataTextColumn colDecl = (grDate.Columns["DECLARATIE"] as GridViewDataTextColumn);

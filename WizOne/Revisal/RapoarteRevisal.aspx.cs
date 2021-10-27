@@ -31,18 +31,35 @@ namespace WizOne.Revisal
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
                 btnRegSal.Text = Dami.TraduCuvant("btnRegSal", "Genereaza registru");
-                ////btnContrSal.Text = Dami.TraduCuvant("btnContrSal", "Contracte per salariat");
                 btnRapSal.Text = Dami.TraduCuvant("btnRapSal", "Genereaza registru salariat");
-                //btnCont.Text = Dami.TraduCuvant("btnCont", "Continua");
-                //btnRen.Text = Dami.TraduCuvant("btnRen", "Renunta");
+                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+
+                for (int i = 0; i < Menu.Items.Count; i++)
+                    Menu.Items[i].Text = Dami.TraduCuvant(Menu.Items[i].Text);
+                lblRol.InnerText = Dami.TraduCuvant("Supervizor");
+
+                foreach (dynamic c in grDateReg.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
+
+                foreach (dynamic c in grDateRap.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
                 #endregion
 
-                string strSql = "";
 
-                //if (Constante.tipBD == 1)
-                //    strSql = @"SELECT CNP, NUME + ' ' + PRENUME + ' (' + CNP + ')' AS ""NumeComplet"", NATIONALIT, as Nationalitate, ADRESA as Adresa FROM SALARIATI ORDER BY ""Salariat""";
-                //else
-                //    strSql = @"SELECT CNP, NUME || ' ' || PRENUME || ' (' || CNP || ')' AS ""Salariat"" FROM SALARIATI ORDER BY ""Salariat""";
+
+                string strSql = "";             
 
 
                 DataTable dtSuper = new DataTable();

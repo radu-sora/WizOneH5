@@ -18,7 +18,7 @@ namespace WizOne.AvansXDecont
     public partial class DocumentDecont : System.Web.UI.Page
     {
 
-        public class metaCereriDate
+        public class metaUploadFile
         {
             public object UploadedFile { get; set; }
             public object UploadedFileName { get; set; }
@@ -1022,12 +1022,12 @@ namespace WizOne.AvansXDecont
                  * la decontul administrativ, nu ma intereseaza acest lucru */
                 if (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) != 2003)
                 {
-                    ras = ValidareAvansRestituit();
-                    if (ras != "")
-                    {
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(ras);
-                        return;
-                    }
+                    //ras = ValidareAvansRestituit();
+                    //if (ras != "")
+                    //{
+                    //    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(ras);
+                    //    return;
+                    //}
                 }
 
                 ras = ValidareDateCompletate();
@@ -1085,6 +1085,15 @@ namespace WizOne.AvansXDecont
             {
                 DataTable ent = Session["AvsXDec_SursaDateDec"] as DataTable;
 
+                DataTable entGrid = Session["AvsXDec_SursaDateDocJust"] as DataTable;
+                SalvareGrid(entGrid);
+                entGrid = Session["AvsXDec_SursaDateEstChelt"] as DataTable;
+                SalvareGrid(entGrid);
+                entGrid = Session["AvsXDec_SursaDatePlataBanca"] as DataTable;
+                SalvareGrid(entGrid);
+
+                SalvareDate();
+
                 /*LeonardM 11.09.2016
                  * in cazul in care documentul este editat de BudgetOwner, si se salveaza, tot in acest moment se si aproba documentul
                  * */
@@ -1103,16 +1112,6 @@ namespace WizOne.AvansXDecont
                     btnBack_Click(null, null);
                     return;
                 }
-                DataTable entGrid = Session["AvsXDec_SursaDateDocJust"] as DataTable;
-                SalvareGrid(entGrid);
-                entGrid = Session["AvsXDec_SursaDateEstChelt"] as DataTable;
-                SalvareGrid(entGrid);
-                entGrid = Session["AvsXDec_SursaDatePlataBanca"] as DataTable;
-                SalvareGrid(entGrid);
-                
-                SalvareDate();
-
-
                 int rez = SetCircuitSettingsDocument(Convert.ToInt32(ent.Rows[0]["DocumentId"].ToString()));
                 switch (rez)
                 {
@@ -1212,14 +1211,14 @@ namespace WizOne.AvansXDecont
                     /*nu exista legatura intre avans si decont, trebuie inserat un rand nou*/
                     sql = "INSERT INTO AvsXDec_BusinessTransaction (TransactionId, SrcDocId, DestDocId, SrcDocAmount, DestDocAmount, USER_NO, TIME) "
                         + " VALUES ({0}, {1}, {2}, {3}, {4}, {5}, GETDATE())";
-                    sql = string.Format(sql, Dami.NextId("AvsXDec_BusinessTransaction", 1), General.Nz(ent.Rows[0]["AvansDocumentId"], -99).ToString(), Session["AvsXDec_IdDocument"].ToString(),
+                    sql = string.Format(sql, Dami.NextId("AvsXDec_BusinessTransaction", 1), General.Nz(ent.Rows[0]["AvansDocumentId"], "NULL").ToString(), Session["AvsXDec_IdDocument"].ToString(),
                          General.Nz(ent.Rows[0]["TotalAmountAvans"], 0).ToString().Replace(',', '.'), General.Nz(ent.Rows[0]["EstimatedAmount"], 0).ToString().Replace(',', '.'), entDocument.Rows[0]["USER_NO"].ToString());
                     General.ExecutaNonQuery(sql, null);
                 }
                 else
                 {
                     sql = "UPDATE AvsXDec_BusinessTransaction SET SrcDocId = {0}, DestDocId = {1}, SrcDocAmount = {2}, DestDocAmount = {3}, USER_NO = {4}, TIME = GETDATE() WHERE TransactionId = {5}";
-                    sql = string.Format(sql, General.Nz(ent.Rows[0]["AvansDocumentId"], -99).ToString(), Session["AvsXDec_IdDocument"].ToString(),
+                    sql = string.Format(sql, General.Nz(ent.Rows[0]["AvansDocumentId"], "NULL").ToString(), Session["AvsXDec_IdDocument"].ToString(),
                             General.Nz(ent.Rows[0]["TotalAmountAvans"], 0).ToString().Replace(',', '.'), General.Nz(ent.Rows[0]["EstimatedAmount"], 0).ToString().Replace(',', '.'), entDocument.Rows[0]["USER_NO"].ToString(),
                             bt.Rows[0]["TransactionId"].ToString());
                     General.ExecutaNonQuery(sql, null);     
@@ -1293,6 +1292,8 @@ namespace WizOne.AvansXDecont
             dt.Columns.Add("ExpenseTypeAdmId", typeof(int));
             dt.Columns.Add("FreeTxt", typeof(string));    
         
+            dt.PrimaryKey = new DataColumn[] { dt.Columns["DocumentDetailId"], dt.Columns["DocumentId"] };
+
             for (int i = 0; i < ent.Rows.Count; i++)
             {
                 DataRow row = dt.NewRow();
@@ -1389,37 +1390,7 @@ namespace WizOne.AvansXDecont
         }     
 
 
-        private string ValidareAvansRestituit()
-        {
-            /*LeonardM 15.08.2016
-             * in momentul in care utilizatorul are de restiuit bani catre Groupama, acesta trebuie sa introduca documente justificatove
-             * + suma documentelor de plata banca trebuie sa fie = suma de restituit catre Groupama
-             * */
-            string ras = "";
-            try
-            {
-                DataTable ent = Session["AvsXDec_SursaDateDec"] as DataTable;
-                DataTable lstDocPlataBanca = Session["AvsXDec_SursaDatePlataBanca"] as DataTable;
-                decimal sumDocumentePlataBanca = 0;
-                if (Convert.ToInt32(General.Nz(ent.Rows[0]["UnconfRestAmount"], 0)) < 0) /*angajatul trebuie sa restituie bani catre firma*/
-                {
-                    if (lstDocPlataBanca == null || lstDocPlataBanca.Rows.Count == 0)
-                    {
-                        sumDocumentePlataBanca = 0;
-                        ras = "Nu aveti completate documente care sa justifice restituirea avansului ramas!";
-                    }
-                    else
-                        sumDocumentePlataBanca = Convert.ToDecimal(lstDocPlataBanca.Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"));
 
-                    if (Math.Abs(sumDocumentePlataBanca).ToString("F") != Math.Abs(Convert.ToInt32(General.Nz(ent.Rows[0]["UnconfRestAmount"], 0))).ToString("F") && ras == "")
-                        ras = "Suma aferenta documentelor pentru restituire avans ramas este diferita de suma de restituit!";
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            return ras;
-        }
         private string ValidareDateCompletate()
         {
             /*LeonardM 15.08.2016
@@ -1679,20 +1650,10 @@ namespace WizOne.AvansXDecont
         protected void btnPrint_Click(object sender, EventArgs e)
         {
             try
-            {
-                //int idRap = Convert.ToInt32(Dami.ValoareParam("IdRaportFisaPost", "-99"));
-                //if (idRap != -99 && Convert.ToInt32(General.Nz(Session["IdAuto"], "-99")) != -99)
-                //{
-                //    var reportParams = new
-                //    {
-                //        IdAutoPost = Convert.ToInt32(General.Nz(Session["IdAuto"], "-99"))
-                //    };
+            {   Session["PrintDocument"] = "AvsXDec_OrdinDeplasare";   
 
-                //    var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(idRap);
-                //    var reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(idRap, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
-
-                //    this.ClientScript.RegisterClientScriptBlock(this.GetType(), "Org_FisaPost", "window.location.href = \"" + ResolveClientUrl(reportUrl) + "\"", true);
-                //}
+                Session["PaginaWeb"] = "AvansXDecont/DocumentDecont";
+                Response.Redirect("~/Reports/Imprima", false);
             }
             catch (Exception ex)
             {
@@ -1729,19 +1690,19 @@ namespace WizOne.AvansXDecont
             }
         }
 
-        protected void btnDocUploadDJ_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        protected void btnDocUpload_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
         {
             try
             {
                 if (!e.IsValid) return;
                 ASPxUploadControl btnDocUpload = (ASPxUploadControl)sender;
 
-                metaCereriDate itm = new metaCereriDate();
+                metaUploadFile itm = new metaUploadFile();
                 itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
                 itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
                 itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
 
-                Session["DocUpload_AvsXDec_DJ"] = itm;
+                Session["DocUpload_AvsXDec_Decont"] = itm;
 
                 btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
             }
@@ -1752,28 +1713,7 @@ namespace WizOne.AvansXDecont
             }
         }
 
-        protected void btnDocUploadPB_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
-        {
-            try
-            {
-                if (!e.IsValid) return;
-                ASPxUploadControl btnDocUpload = (ASPxUploadControl)sender;
 
-                metaCereriDate itm = new metaCereriDate();
-                itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
-                itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
-                itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
-
-                Session["DocUpload_AvsXDec_PB"] = itm;
-
-                btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
 
         protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
         {
@@ -1839,7 +1779,7 @@ namespace WizOne.AvansXDecont
                     case "cmbDocAvans":
                         foreach (DataColumn col in ent.Columns)
                             col.ReadOnly = false;
-                        ent.Rows[0]["AvansDocumentId"] = Convert.ToInt32(cmbDocAvans.Value ?? -99);
+                        ent.Rows[0]["AvansDocumentId"] = Convert.ToInt32(cmbDocAvans.Value ?? DBNull.Value);
                         Session["AvsXDec_SursaDateDec"] = ent;
                         cmbDocAvans_SelectedIndexChanged();
                         break;
@@ -2521,22 +2461,22 @@ namespace WizOne.AvansXDecont
 
                 dt.Rows.Add(row);
 
-                metaCereriDate itm = Session["DocUpload_AvsXDec_DJ"] as metaCereriDate;
+                metaUploadFile itm = Session["DocUpload_AvsXDec_Decont"] as metaUploadFile;
                 if (itm != null)
                 {
-                    string sql = @"SELECT * FROM ""tblFisiere"" WHERE ""Id"" IN (SELECT ""IdDocument"" FROM ""AvsXDec_relUploadDocumente"" WHERE ""DocumentId"" = {0} and ""DocumentDetailId"" = {1} ) AND ""Tabela"" = 'AvsXDec_relUploadDocumente'";
-                    sql = string.Format(sql, Session["AvsXDec_IdDocument"].ToString(), detailId);
-                    DataTable dtDoc = General.IncarcaDT(sql, null);
-                    if (dtDoc != null && dtDoc.Rows.Count > 0)
-                        SalveazaFisier(Convert.ToInt32(dtDoc.Rows[0]["Id"].ToString()), itm);
-                    else
-                        SalveazaFisier(Dami.NextId("AvsXDec_relUploadDocumente", 1), itm);
+                    int id = Dami.NextId("AvsXDec_relUploadDocumente", 1);
+                    string sql = "INSERT INTO \"AvsXDec_relUploadDocumente\" (\"DocumentId\", \"DocumentDetailId\", \"IdDocument\", USER_NO, TIME) "
+                    + " VALUES ({0}, {1}, {2}, {3}, {4})";
+                    sql = string.Format(sql, Session["AvsXDec_IdDocument"].ToString(), detailId, id, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
+                    General.ExecutaNonQuery(sql, null);
+                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "AvsXDec_relUploadDocumente", id);
                 }
-                Session["DocUpload_AvsXDec_DJ"] = null;
+                Session["DocUpload_AvsXDec_Decont"] = null;
 
                 e.Cancel = true;
                 grDateDocJust.CancelEdit();
                 grDateDocJust.DataSource = dt;
+                grDateDocJust.DataBind();
                 grDateDocJust.KeyFieldName = "DocumentDetailId;DocumentId";
                 Session["AvsXDec_SursaDateDocJust"] = dt;
 
@@ -2565,7 +2505,7 @@ namespace WizOne.AvansXDecont
 
                 foreach (DataColumn col in dt.Columns)
                 {
-                    if (!col.AutoIncrement && grDateDocJust.Columns[col.ColumnName] != null && grDateDocJust.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDateDocJust.Columns[col.ColumnName] != null && grDateDocJust.Columns[col.ColumnName].Visible && !col.ReadOnly)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
@@ -2713,23 +2653,33 @@ namespace WizOne.AvansXDecont
                 }
                 Session["AvsXDec_SursaDateDec"] = ent;
 
-                metaCereriDate itm = Session["DocUpload_AvsXDec_DJ"] as metaCereriDate;
+                metaUploadFile itm = Session["DocUpload_AvsXDec_Decont"] as metaUploadFile;
                 if (itm != null)
                 {
-                    string sql = @"SELECT * FROM ""tblFisiere"" WHERE ""Id"" IN (SELECT ""IdDocument"" FROM ""AvsXDec_relUploadDocumente"" WHERE ""DocumentId"" = {0} and ""DocumentDetailId"" = {1} ) AND ""Tabela"" = 'AvsXDec_relUploadDocumente'";
-                    sql = string.Format(sql, Session["AvsXDec_IdDocument"].ToString(), detailId);
-                    DataTable dtDoc = General.IncarcaDT(sql, null);
-                    if (dtDoc != null && dtDoc.Rows.Count > 0)
-                        SalveazaFisier(Convert.ToInt32(dtDoc.Rows[0]["Id"].ToString()), itm);
+                    int id = 1;
+                    string sql = "SELECT * FROM AvsXDec_relUploadDocumente WHERE DocumentId = " + Session["AvsXDec_IdDocument"].ToString() + " AND DocumentDetailId = " + detailId;
+                    DataTable dtFis = General.IncarcaDT(sql, null);
+
+                    if (dtFis != null && dtFis.Rows.Count > 0)
+                        id = Convert.ToInt32(dtFis.Rows[0]["IdDocument"].ToString());
                     else
-                        SalveazaFisier(Dami.NextId("AvsXDec_relUploadDocumente", 1), itm);
+                    {
+                        id = Dami.NextId("AvsXDec_relUploadDocumente", 1);
+                        sql = "INSERT INTO \"AvsXDec_relUploadDocumente\" (\"DocumentId\", \"DocumentDetailId\", \"IdDocument\", USER_NO, TIME) "
+                        + " VALUES ({0}, {1}, {2}, {3}, {4})";
+                        sql = string.Format(sql, Session["AvsXDec_IdDocument"].ToString(), detailId, id, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
+                        General.ExecutaNonQuery(sql, null);
+                    }
+
+                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "AvsXDec_relUploadDocumente", id);
                 }
-                Session["DocUpload_AvsXDec_DJ"] = null;
+                Session["DocUpload_AvsXDec_Decont"] = null;
 
                 e.Cancel = true;
                 grDateDocJust.CancelEdit();
                 Session["AvsXDec_SursaDateDocJust"] = dt;
                 grDateDocJust.DataSource = dt;
+                grDateDocJust.DataBind();
 
                 decimal suma = 0;
                 for (int i = 0; i < dt.Rows.Count; i++)
@@ -2929,6 +2879,7 @@ namespace WizOne.AvansXDecont
                 e.Cancel = true;
                 grDateEstChelt.CancelEdit();
                 grDateEstChelt.DataSource = dt;
+                grDateEstChelt.DataBind();
                 grDateEstChelt.KeyFieldName = "DocumentDetailId;DocumentId";
                 Session["AvsXDec_SursaDateEstChelt"] = dt;
             }
@@ -2962,6 +2913,7 @@ namespace WizOne.AvansXDecont
                 grDateEstChelt.CancelEdit();
                 Session["AvsXDec_SursaDateEstChelt"] = dt;
                 grDateEstChelt.DataSource = dt;
+                grDateEstChelt.DataBind();
             }
             catch (Exception ex)
             {
@@ -3073,22 +3025,22 @@ namespace WizOne.AvansXDecont
 
                 dt.Rows.Add(row);
 
-                metaCereriDate itm = Session["DocUpload_AvsXDec_PB"] as metaCereriDate;
+                metaUploadFile itm = Session["DocUpload_AvsXDec_Decont"] as metaUploadFile;
                 if (itm != null)
                 {
-                    string sql = @"SELECT * FROM ""tblFisiere"" WHERE ""Id"" IN (SELECT ""IdDocument"" FROM ""AvsXDec_relUploadDocumente"" WHERE ""DocumentId"" = {0} and ""DocumentDetailId"" = {1} ) AND ""Tabela"" = 'AvsXDec_relUploadDocumente'";
-                    sql = string.Format(sql, Session["AvsXDec_IdDocument"].ToString(), detailId);
-                    DataTable dtDoc = General.IncarcaDT(sql, null);
-                    if (dtDoc != null && dtDoc.Rows.Count > 0)
-                        SalveazaFisier(Convert.ToInt32(dtDoc.Rows[0]["Id"].ToString()), itm);
-                    else
-                        SalveazaFisier(Dami.NextId("AvsXDec_relUploadDocumente", 1), itm);
+                    int id = Dami.NextId("AvsXDec_relUploadDocumente", 1);
+                    string sql = "INSERT INTO \"AvsXDec_relUploadDocumente\" (\"DocumentId\", \"DocumentDetailId\", \"IdDocument\", USER_NO, TIME) "
+                    + " VALUES ({0}, {1}, {2}, {3}, {4})";
+                    sql = string.Format(sql, Session["AvsXDec_IdDocument"].ToString(), detailId, id, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
+                    General.ExecutaNonQuery(sql, null);
+                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "AvsXDec_relUploadDocumente", id);
                 }
-                Session["DocUpload_AvsXDec_PB"] = null;
+                Session["DocUpload_AvsXDec_Decont"] = null;
 
                 e.Cancel = true;
                 grDatePlataBanca.CancelEdit();
                 grDatePlataBanca.DataSource = dt;
+                grDatePlataBanca.DataBind();
                 grDatePlataBanca.KeyFieldName = "DocumentDetailId;DocumentId";
                 Session["AvsXDec_SursaDatePlataBanca"] = dt;
             }
@@ -3113,7 +3065,7 @@ namespace WizOne.AvansXDecont
 
                 foreach (DataColumn col in dt.Columns)
                 {
-                    if (!col.AutoIncrement && grDatePlataBanca.Columns[col.ColumnName] != null && grDatePlataBanca.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDatePlataBanca.Columns[col.ColumnName] != null && grDatePlataBanca.Columns[col.ColumnName].Visible && !col.ReadOnly)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
@@ -3143,23 +3095,33 @@ namespace WizOne.AvansXDecont
                     }
                 }
 
-                metaCereriDate itm = Session["DocUpload_AvsXDec_PB"] as metaCereriDate;
+                metaUploadFile itm = Session["DocUpload_AvsXDec_Decont"] as metaUploadFile;
                 if (itm != null)
                 {
-                    string sql = @"SELECT * FROM ""tblFisiere"" WHERE ""Id"" IN (SELECT ""IdDocument"" FROM ""AvsXDec_relUploadDocumente"" WHERE ""DocumentId"" = {0} and ""DocumentDetailId"" = {1} ) AND ""Tabela"" = 'AvsXDec_relUploadDocumente'";
-                    sql = string.Format(sql, Session["AvsXDec_IdDocument"].ToString(), detailId);
-                    DataTable dtDoc = General.IncarcaDT(sql, null);
-                    if (dtDoc != null && dtDoc.Rows.Count > 0)
-                        SalveazaFisier(Convert.ToInt32(dtDoc.Rows[0]["Id"].ToString()), itm);
+                    int id = 1;
+                    string sql = "SELECT * FROM AvsXDec_relUploadDocumente WHERE DocumentId = " + Session["AvsXDec_IdDocument"].ToString() + " AND DocumentDetailId = " + detailId;
+                    DataTable dtFis = General.IncarcaDT(sql, null);
+
+                    if (dtFis != null && dtFis.Rows.Count > 0)
+                        id = Convert.ToInt32(dtFis.Rows[0]["IdDocument"].ToString());
                     else
-                        SalveazaFisier(Dami.NextId("AvsXDec_relUploadDocumente", 1), itm);
+                    {
+                        id = Dami.NextId("AvsXDec_relUploadDocumente", 1);
+                        sql = "INSERT INTO \"AvsXDec_relUploadDocumente\" (\"DocumentId\", \"DocumentDetailId\", \"IdDocument\", USER_NO, TIME) "
+                        + " VALUES ({0}, {1}, {2}, {3}, {4})";
+                        sql = string.Format(sql, Session["AvsXDec_IdDocument"].ToString(), detailId, id, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
+                        General.ExecutaNonQuery(sql, null);
+                    }
+
+                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "AvsXDec_relUploadDocumente", id);
                 }
-                Session["DocUpload_AvsXDec_PB"] = null;
+                Session["DocUpload_AvsXDec_Decont"] = null;
 
                 e.Cancel = true;
                 grDatePlataBanca.CancelEdit();
                 Session["AvsXDec_SursaDatePlataBanca"] = dt;
                 grDatePlataBanca.DataSource = dt;
+                grDatePlataBanca.DataBind();
             }
             catch (Exception ex)
             {
@@ -3222,9 +3184,9 @@ namespace WizOne.AvansXDecont
 
                 cmbMoneda.ClientEnabled = false;
                 /*end LeonardM 15.08.2016*/
-                ASPxTextBox txtNr = grDateDocJust.FindEditFormTemplateControl("txtNr") as ASPxTextBox;
-                ASPxDateEdit deData = grDateDocJust.FindEditFormTemplateControl("deData") as ASPxDateEdit;
-                ASPxTextBox txtVal = grDateDocJust.FindEditFormTemplateControl("txtVal") as ASPxTextBox;
+                ASPxTextBox txtNr = grDatePlataBanca.FindEditFormTemplateControl("txtNr") as ASPxTextBox;
+                ASPxDateEdit deData = grDatePlataBanca.FindEditFormTemplateControl("deData") as ASPxDateEdit;
+                ASPxTextBox txtVal = grDatePlataBanca.FindEditFormTemplateControl("txtVal") as ASPxTextBox;
 
                 /*LeonardM 12.08.2016
                  * utilizatorul care creeaza documentul nu are drept de editare pe coloana linie buget,
@@ -3260,7 +3222,9 @@ namespace WizOne.AvansXDecont
                 SetCircuitSettingsDocumentXDim(1, out DIM1Value, q, entDocument);
                 SetCircuitSettingsDocumentXDim(2, out DIM2Value, q, entDocument);
                 DataTable entCircuit;
-				
+
+                DataTable ent = Session["AvsXDec_SursaDateDec"] as DataTable;
+
                 string lstDIM1 = "";
                 for (int j = 0; j < DIM1Value.Count; j++)
                 {
@@ -3352,7 +3316,8 @@ namespace WizOne.AvansXDecont
 
                 int poz = 0;
                 int idUserPrece = -99;
-                int idUserCalc = -99;                
+                int idUserCalc = -99;
+                bool inchis = false;
                 for (int i = 1; i <= 20; i++)
                 {
                     string aprobat = "NULL", dataAprobare = "NULL", inloc ="NULL", idUserInloc = "NULL";
@@ -3430,12 +3395,12 @@ namespace WizOne.AvansXDecont
 									idUserInloc = dtInloc.Rows[0][0].ToString();
 								}		
 
-								string culoareIst = "#FFFFFFFF";	
+								string culoareIst = "#FFFFFFFF";                               
                                 if (idUserCalc == Convert.ToInt32(entDocument.Rows[0]["USER_NO"].ToString()))
                                 {
                                     pozUser = poz;
                                     if (poz == 1) idStare = "1";
-                                    if (poz == total) idStare = "3";
+                                    if (poz == total) idStare = "3"; 
 
                                     aprobat = "1";
                                     dataAprobare = "GETDATE()";
@@ -3444,7 +3409,9 @@ namespace WizOne.AvansXDecont
 									dtCul = General.IncarcaDT(sql, null);
 									if (dtCul != null && dtCul.Rows.Count > 0 && dtCul.Rows[0]["Culoare"] != DBNull.Value && dtCul.Rows[0]["Culoare"].ToString().Length > 0)
 										culoareIst = dtCul.Rows[0]["Culoare"].ToString();								
-                                }								
+                                }                               
+                                if (idStare == "3" && Convert.ToInt32(General.Nz(ent.Rows[0]["OriginalDoc"], 0).ToString()) == 1)
+                                    inchis = true;
 
                                 idUrmIstoric = Dami.NextId("AvsXDec_DocumentStateHistory", 1);
 								sql = "INSERT INTO AvsXDec_DocumentStateHistory (Id, DocumentId, CircuitId, IdSuper, Pozitie, USER_NO, TIME, Inlocuitor, IdUserInlocuitor, " 
@@ -3452,6 +3419,7 @@ namespace WizOne.AvansXDecont
 								+ ", " + idCircuit + ", " + idSuper + ", " + poz + ", " + idUserCalc + ", GETDATE(), " + inloc + ", " + idUserInloc 
 								+ ", " + aprobat + ", " + dataAprobare + ", " + idStare + ", '" + culoareIst + "')";
 								General.ExecutaNonQuery(sql, null);
+
 								
                                 idUserPrece = idUserCalc;
                             }
@@ -3462,11 +3430,21 @@ namespace WizOne.AvansXDecont
                         }
                     }
                 }
+
+                if (inchis)
+                {
+                    General.ExecutaNonQuery("UPDATE AvsXDec_Document SET DocumentStateId= 8, Culoare = (SELECT Culoare FROM AvsXDec_DictionaryItem Where DictionaryItemId = 8) Where DocumentId = " + entDocument.Rows[0]["DocumentId"].ToString(), null);
+
+                    sql = "INSERT INTO AvsXDec_DocumentStateHistory (Id, DocumentId, CircuitId, DocumentStateId, Pozitie, Culoare, Aprobat, DataAprobare, USER_NO, TIME, Inlocuitor) "
+                         + " VALUES ({0}, {1}, {2}, 8, 22, (SELECT Culoare FROM AvsXDec_DictionaryItem Where DictionaryItemId = 8), 1, GETDATE(), {5}, GETDATE(), 0)";
+                    sql = string.Format(sql, Dami.NextId("AvsXDec_DocumentStateHistory", 1), entDocument.Rows[0]["DocumentId"].ToString(), entDocument.Rows[0]["CircuitId"].ToString(), Session["UserId"].ToString());
+                    General.ExecutaNonQuery(sql, null);
+                }
                 #endregion
 
                 //adaugam headerul
                 #region salvare header
-				sql = "UPDATE AvsXDec_Document SET CircuitId = " + idCircuit + ", TotalCircuit = " + total + ", DocumentStateId = 1, Culoare = '" + culoare + "', Pozitie = 1 WHERE  DocumentId = " + IdDocument;
+                sql = "UPDATE AvsXDec_Document SET CircuitId = " + idCircuit + ", TotalCircuit = " + total + ", DocumentStateId = 1, Culoare = '" + culoare + "', Pozitie = 1 WHERE  DocumentId = " + IdDocument;
 				General.ExecutaNonQuery(sql, null);             
                 #endregion
 
@@ -4187,51 +4165,7 @@ namespace WizOne.AvansXDecont
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-
-        protected void SalveazaFisier(int id, metaCereriDate itm)
-        {
-            try
-            {
-                string sql = "SELECT * FROM \"tblFisiere\"";
-                DataTable dt = new DataTable();
-                dt = General.IncarcaDT(sql, null);
-
-                DataRow dr = null;
-                if (dt == null || dt.Select("Tabela = 'AvsXDec_relUploadDocumente' AND Id = " + id).Count() == 0)
-                {
-                    dr = dt.NewRow();
-                    dr["Tabela"] = "AvsXDec_relUploadDocumente";
-                    dr["Id"] = id;       
-                    dr["Fisier"] = itm.UploadedFile;
-                    dr["FisierNume"] = itm.UploadedFileName;
-                    dr["FisierExtensie"] = itm.UploadedFileExtension;
-                    dr["USER_NO"] = Session["UserId"];
-                    dr["TIME"] = DateTime.Now;
-                    if (Constante.tipBD == 1)
-                        dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                    else
-                        dr["IdAuto"] = Dami.NextId("tblFisiere");
-                    dr["EsteCerere"] = 0;
-                    dt.Rows.Add(dr);
-                }
-                else
-                {
-                    dr = dt.Select("Tabela = 'AvsXDec_relUploadDocumente' AND Id = " + id).FirstOrDefault();
-                    dr["Fisier"] = itm.UploadedFile;
-                    dr["FisierNume"] = itm.UploadedFileName;
-                    dr["FisierExtensie"] = itm.UploadedFileExtension;
-                    dr["USER_NO"] = Session["UserId"];
-                    dr["TIME"] = DateTime.Now;
-                }
-                General.SalveazaDate(dt, "tblFisiere");               
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+          
 
         public DataTable GetAvsXDec_AvansXDecont(int userId, int documentTypeId, int documentId)
         {

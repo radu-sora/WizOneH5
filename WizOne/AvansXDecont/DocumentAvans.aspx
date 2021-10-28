@@ -47,14 +47,8 @@
             }
         }
         function GoToDoc(Value) {
-            strUrl = getAbsoluteUrl + "AvansXDecont/relUploadDocumente.aspx?tip=1&qwe=" + Value;
-            popGen.SetHeaderText("Documente");
-            popGen.SetContentUrl(strUrl);
-            popGen.Show();
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=22&id=' + Value, '_blank ')
         }
-
-
-
 
 
         var textSeparator = ";";
@@ -301,7 +295,7 @@
 											<dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"  >
 												<CustomButtons>
 													<dx:GridViewCommandColumnCustomButton ID="btnAtasament">
-														<Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/info.png" />
+														<Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/view.png" />
 													</dx:GridViewCommandColumnCustomButton>
 												</CustomButtons>
 											</dx:GridViewCommandColumn>	
@@ -365,7 +359,22 @@
 														</tr>
 														<tr>
 															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtDet" runat="server" Width="200px" Value='<%# Bind("FreeTxt") %>' /></td>
-														</tr>					
+														</tr>
+														<tr>
+															<td style="padding:10px !important;" colspan="2">
+																<label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
+																<dx:ASPxUploadControl ID="btnDocUpload" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
+																	BrowseButton-Text="Incarca Document" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="incarca document" ShowTextBox="false"
+																	ClientInstanceName="btnDocUpload" OnFileUploadComplete="btnDocUpload_FileUploadComplete" ValidationSettings-ShowErrors="false">
+																	<BrowseButton>
+																		<Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
+																	</BrowseButton>
+																	<ValidationSettings ShowErrors="False"></ValidationSettings>
+
+																	<ClientSideEvents FileUploadComplete="function(s,e) { EndUpload(s); }" />
+																</dx:ASPxUploadControl>
+															</td>
+														</tr>														
 														<tr>
 															<td style="padding:10px !important;">
 																<div style="text-align: left; padding: 2px; font-weight:bold; font-size:32px;">

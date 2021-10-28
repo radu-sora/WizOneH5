@@ -270,7 +270,7 @@ namespace WizOne.AvansXDecont
 							 * */
 							int pozitie = Convert.ToInt32((dr[0]["Pozitie"] == DBNull.Value ? -99 : dr[0]["Pozitie"]).ToString());
 							int idStare = Convert.ToInt32(dr[0]["IdStare"] == DBNull.Value ? "0" : dr[0]["IdStare"].ToString());
-							int poateModif = (idStare != 0 && f10003 == Convert.ToInt32(Session["User_Marca"].ToString()) ? 1 : 0);      
+							int poateModif = (idStare != 0 && idStare != 8 && f10003 == Convert.ToInt32(Session["User_Marca"].ToString()) ? 1 : 0);      
 							
 							bool IsBudgetOwnerForDocument = Convert.ToInt32((dr[0]["IsBudgetOwnerForDocument"] == DBNull.Value ? 0 : dr[0]["IsBudgetOwnerForDocument"]).ToString()) == 0 ? false : true;
 							/*
@@ -564,7 +564,30 @@ namespace WizOne.AvansXDecont
 					
                             }
 
-                            if (dtIst == null || dtIst.Rows.Count == 0) continue;
+							if (dtIst == null || dtIst.Rows.Count == 0)
+							{
+								sql = "SELECT * FROM AvsXDec_DocumentStateHistory WHERE DocumentId = " + DocumentId.ToString() + " AND Pozitie = " + dtDoc.Rows[0]["TotalCircuit"].ToString();
+								DataTable dtIstTemp = General.IncarcaDT(sql, null);
+								if (Session["UserId"].ToString() == dtIstTemp.Rows[0]["USER_NO"].ToString() && (Convert.ToInt32(dtDoc.Rows[0]["DocumentTypeId"].ToString()) == 2001 || Convert.ToInt32(dtDoc.Rows[0]["DocumentTypeId"].ToString()) == 2002))
+                                {
+									sql = "SELECT * FROM AvsXDec_Decont WHERE DocumentId = " + DocumentId;
+									DataTable dtDec = General.IncarcaDT(sql, null);
+									if (Convert.ToInt32(General.Nz(dtDec.Rows[0]["OriginalDoc"], 0).ToString()) == 1)
+									{
+										General.ExecutaNonQuery("UPDATE AvsXDec_Document SET DocumentStateId= 8, Culoare = (SELECT Culoare FROM AvsXDec_DictionaryItem Where DictionaryItemId = 8) Where DocumentId = " + DocumentId, null);
+
+										sql = "INSERT INTO AvsXDec_DocumentStateHistory (Id, DocumentId, CircuitId, DocumentStateId, Pozitie, Culoare, Aprobat, DataAprobare, USER_NO, TIME, Inlocuitor) "
+											 + " VALUES ({0}, {1}, {2}, 8, 22, (SELECT Culoare FROM AvsXDec_DictionaryItem Where DictionaryItemId = 8), 1, GETDATE(), {3}, GETDATE(), 0)";
+										sql = string.Format(sql, Dami.NextId("AvsXDec_DocumentStateHistory", 1), DocumentId, dtDoc.Rows[0]["CircuitId"].ToString(), idUser);
+										General.ExecutaNonQuery(sql, null);
+										return "Decontul a fost inchis!";
+									}
+									else
+										continue;
+								}
+								else
+									continue;
+							}
 
                             //verificam daca sunt eu cel care trebuie sa aprobe
                             if ((dtIst.Rows[0]["Pozitie"] == DBNull.Value ? -99 : Convert.ToInt32(dtIst.Rows[0]["Pozitie"].ToString())) 
@@ -579,7 +602,27 @@ namespace WizOne.AvansXDecont
                             if (idStare == 2 && dtDoc.Rows[0]["TotalCircuit"].ToString() == dtIst.Rows[0]["Pozitie"].ToString()) idStare = 3;
 
                             if (actiune == 2)
-                                idStare = 0;  		
+                                idStare = 0;
+
+							bool inchis = false;
+							if (idStare == 3 && (Convert.ToInt32(dtDoc.Rows[0]["DocumentTypeId"].ToString()) == 2001 || Convert.ToInt32(dtDoc.Rows[0]["DocumentTypeId"].ToString()) == 2002))
+                            {
+								sql = "SELECT * FROM AvsXDec_Decont WHERE DocumentId = " + DocumentId;
+								DataTable dtDec = General.IncarcaDT(sql, null);
+								if (Convert.ToInt32(General.Nz(dtDec.Rows[0]["OriginalDoc"], 0).ToString()) == 1)
+									inchis = true;
+
+								DataTable ent = Session["AvansXDecont_Grid"] as DataTable;
+								DataRow[] dr = ent.Select("DocumentId = " + DocumentId);
+								int SrcDocId = Convert.ToInt32((dr[0]["SrcDocId"] == DBNull.Value ? -99 : dr[0]["SrcDocId"]).ToString());
+								string ras = ValidareAvansRestituit(DocumentId, SrcDocId);
+								if (ras != "")
+								{
+									//pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(ras);
+									return ras;
+								}
+							}
+					
 
                             string culoare = "";
                             sql = "SELECT * FROM \"AvsXDec_DictionaryItem\" WHERE \"DictionaryItemId\" = " + idStare.ToString() + " AND DictionaryId = 1";
@@ -602,6 +645,16 @@ namespace WizOne.AvansXDecont
 							+ " AND USER_NO IN " + (lstId == "-99" ? "(" + idUser.ToString() + ")" : lstId);     
 							//+ " AND \"Pozitie\"=" + dtCerIst.Rows[0]["Pozitie"].ToString();                     
 							General.IncarcaDT(sql, null);
+
+							if (inchis)
+                            {
+								General.ExecutaNonQuery("UPDATE AvsXDec_Document SET DocumentStateId= 8, Culoare = (SELECT Culoare FROM AvsXDec_DictionaryItem Where DictionaryItemId = 8) Where DocumentId = " + DocumentId, null);
+
+								sql = "INSERT INTO AvsXDec_DocumentStateHistory (Id, DocumentId, CircuitId, DocumentStateId, Pozitie, Culoare, Aprobat, DataAprobare, USER_NO, TIME, Inlocuitor) "
+									 + " VALUES ({0}, {1}, {2}, 8, 22, (SELECT Culoare FROM AvsXDec_DictionaryItem Where DictionaryItemId = 8), 1, GETDATE(), {3}, GETDATE(), 0)";
+								sql = string.Format(sql, Dami.NextId("AvsXDec_DocumentStateHistory", 1), DocumentId, dtDoc.Rows[0]["CircuitId"].ToString(), idUser);
+								General.ExecutaNonQuery(sql, null);
+							}
                    
 
                             #region verificare completare budgetOwner
@@ -959,8 +1012,61 @@ namespace WizOne.AvansXDecont
             return msg;
 
         }
-		
-        public string VerificaDocumentAdaugat(int idUser, int DocumentTypeId)
+
+		private string ValidareAvansRestituit(int documentId, int documentIdAvans)
+		{
+			/*LeonardM 15.08.2016
+             * in momentul in care utilizatorul are de restiuit bani catre firma, acesta trebuie sa introduca documente justificative
+             * + suma documentelor de plata banca trebuie sa fie = suma de restituit catre firma
+             * */
+			string ras = "";
+			try
+			{
+				DataTable ent = GetmetaVwAvsXDec_Decont(documentId, documentIdAvans); 
+				DataTable lstDocPlataBanca = GetmetaAvsXDec_DecontDocumentePlataBanca(documentId);
+				decimal sumDocumentePlataBanca = 0;
+				if (Convert.ToInt32(General.Nz(ent.Rows[0]["UnconfRestAmount"], 0)) < 0) /*angajatul trebuie sa restituie bani catre firma*/
+				{
+					if (lstDocPlataBanca == null || lstDocPlataBanca.Rows.Count == 0)
+					{
+						sumDocumentePlataBanca = 0;
+						ras = "Nu aveti completate documente care sa justifice restituirea avansului ramas!";
+					}
+					else
+						sumDocumentePlataBanca = Convert.ToDecimal(lstDocPlataBanca.Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"));
+
+					if (Math.Abs(sumDocumentePlataBanca).ToString("F") != Math.Abs(Convert.ToInt32(General.Nz(ent.Rows[0]["UnconfRestAmount"], 0))).ToString("F") && ras == "")
+						ras = "Suma aferenta documentelor pentru restituire avans ramas este diferita de suma de restituit!";
+				}
+			}
+			catch (Exception ex)
+			{
+			}
+			return ras;
+		}
+
+		public DataTable GetmetaAvsXDec_DecontDocumentePlataBanca(int documentId)
+		{
+			DataTable q = null;
+			string sql = "";
+			try
+			{
+				sql = "SELECT a.DocumentId, a.DocumentDetailId, a.CurrencyId, a.IdTipDocument as DictionaryItemId, a.DocDateDecont, a.DocNumberDecont, a.Furnizor, b.IdDocument, a.TotalPayment,  (CASE WHEN c.DocumentDetailId = 0 THEN 0 ELSE 1 END) as areFisierPlataBanca "
+					+ " FROM vwAvsXDec_DecDet_DocPlataBanca a "
+					+ " JOIN AvsXDec_DecontDetail b on a.DocumentDetailId = b.DocumentDetailId "
+					+ " LEFT JOIN AvsXDec_relUploadDocumente c on a.DocumentId =  c.DocumentId AND a.DocumentDetailId = c.DocumentDetailId "
+					+ "  where a.DocumentId = " + documentId;
+				q = General.IncarcaDT(sql, null);
+			}
+			catch (Exception ex)
+			{
+				General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+			}
+
+			return q;
+		}
+
+		public string VerificaDocumentAdaugat(int idUser, int DocumentTypeId)
         {
             /*metoda ce verifica daca mai exista un document de acelasi tip deschis
              * filtre:

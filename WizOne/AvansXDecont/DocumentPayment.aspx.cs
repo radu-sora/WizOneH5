@@ -82,8 +82,9 @@ namespace WizOne.AvansXDecont
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
                 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");                  
-                
+                btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+
                 foreach (GridViewColumn c in grDate.Columns)
                 {
                     try
@@ -126,8 +127,8 @@ namespace WizOne.AvansXDecont
                     Session["AvsXDec_DocStateUpdate"] = null;
                     cmbOperationSign.SelectedIndex = 0;
                     cmbDocState.SelectedIndex = 0;
-                    cmbDocState_SelectedIndexChanged(null, null);
                     cmbPaymentMethod.SelectedIndex = 0;
+                    cmbDocState_SelectedIndexChanged(null, null);                   
                     dt.CaseSensitive = false;
                     DataRow entModalitatePlataCash = dt.Select("DictionaryItemName = 'PLATA CASH'").FirstOrDefault();
                     if (entModalitatePlataCash != null)
@@ -244,8 +245,8 @@ namespace WizOne.AvansXDecont
                 sql = "SELECT b.DictionaryId, b.DictionaryItemId, b.Culoare, b.DictionaryItemName, COALESCE(b.Ordine, -99) AS Ordine "
                     + " FROM vwAvsXDec_Nomen_StariDoc a "
                     + " LEFT JOIN AvsXDec_DictionaryItem b on a.DictionaryItemId = b.DictionaryItemId "
-                     //+ " WHERE a.DictionaryItemId IN (3, 4, 5, 6, 7)";    //momentan nu folosim starile Restituit (6) si Contat (7)
-                     + " WHERE a.DictionaryItemId IN (3, 4, 5)";
+                     //+ " WHERE a.DictionaryItemId IN (3, 4, 5, 6, 7)";    //momentan nu folosim starea Contat (7)
+                     + " WHERE a.DictionaryItemId IN (3, 4, 5, 6)";
 
                 q = General.IncarcaDT(sql, null);
                 if (q != null && q.Rows.Count > 0)
@@ -584,11 +585,11 @@ namespace WizOne.AvansXDecont
                                                             culoare = "FFFFFFFF";
                                                             if (entStrInchis != null && entStrInchis.Rows.Count > 0 && entStrInchis.Rows[0]["Culoare"] != null) culoare = entStrInchis.Rows[0]["Culoare"].ToString();
 
-                                                            General.ExecutaNonQuery("UPDATE AvsXDec_Document SET DocumentStateId= 8, Culoare = '" + culoare + "' Where DocumentId = " + DocumentId, null);
+                                                            General.ExecutaNonQuery("UPDATE AvsXDec_Document SET DocumentStateId= 8, Culoare = '" + culoare + "' Where DocumentId = " + entAvans.Rows[0]["DocumentId"].ToString(), null);
 
                                                             sql = "INSERT INTO AvsXDec_DocumentStateHistory (Id, DocumentId, CircuitId, DocumentStateId, Pozitie, Culoare, Aprobat, DataAprobare, USER_NO, TIME, Inlocuitor) "
                                                                  + " VALUES ({0}, {1}, {2}, 8, 22, '{3}', 1, GETDATE(), {5}, GETDATE(), 0)";
-                                                            sql = string.Format(sql, Dami.NextId("AvsXDec_DocumentStateHistory", 1), ent.Rows[0]["DocumentId"].ToString(), ent.Rows[0]["CircuitId"].ToString(), culoare, idUser);
+                                                            sql = string.Format(sql, Dami.NextId("AvsXDec_DocumentStateHistory", 1), entAvans.Rows[0]["DocumentId"].ToString(), entAvans.Rows[0]["CircuitId"].ToString(), culoare, idUser);
                                                             General.ExecutaNonQuery(sql, null);                                                        
                                                         }
                                                     }
@@ -1919,11 +1920,10 @@ namespace WizOne.AvansXDecont
             StareDocumentForUpdate docStateUpdate = new StareDocumentForUpdate();
             switch (Convert.ToInt32(cmbDocState.Value))
             {
-                //momentan nu se folosesc starile Restituit si Contat
+                //momentan nu se foloseste starile Contat
                 case 3:/*aprobat*/
                     if (Convert.ToInt32(cmbOperationSign.Value ?? -99) == -1)
-                        //docStateUpdate = StareDocumentForUpdate.Restituit;
-                        docStateUpdate = StareDocumentForUpdate.Inchis;
+                        docStateUpdate = StareDocumentForUpdate.Restituit;
                     else if (Convert.ToInt32(cmbPaymentMethod.Value ?? -99) != Convert.ToInt32(General.Nz(Session["IdModalitatePlataCash"], -99)))
                         docStateUpdate = StareDocumentForUpdate.TrimisLaBanca;
                     else
@@ -1946,6 +1946,8 @@ namespace WizOne.AvansXDecont
             }
             Session["AvsXDec_DocStateUpdate"] = docStateUpdate;
             SetButtonContent();
+            Session["AvsXDec_PaymentGrid"] = null;
+            IncarcaGrid();
         }
 
         protected void grDate_DataBound(object sender, EventArgs e)

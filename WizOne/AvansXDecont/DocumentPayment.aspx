@@ -126,7 +126,7 @@
             </td>
             <td align="left">
                  <label id="lblData" runat="server" style="display:inline-block;">Data platii</label>
-                <dx:ASPxDateEdit ID="txtPaymentDate" runat="server" Width="100%" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto" meta:resourcekey="txtPaymentDate" >
+                <dx:ASPxDateEdit ID="txtPaymentDate" runat="server" Width="100" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" PickerDisplayMode="Auto" meta:resourcekey="txtPaymentDate" >
                     <CalendarProperties FirstDayOfWeek="Monday" />
                 </dx:ASPxDateEdit>            
             </td>
@@ -141,7 +141,7 @@
                 </dx:ASPxComboBox>
             </td>   
             <td align="left" valign="bottom">
-                <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
+                <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" OnClick="btnFiltru_Click">                    
                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                 </dx:ASPxButton>
             </td>                    	

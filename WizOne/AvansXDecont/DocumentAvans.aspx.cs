@@ -18,7 +18,7 @@ namespace WizOne.AvansXDecont
     public partial class DocumentAvans : System.Web.UI.Page
     {
 
-        public class metaCereriDate
+        public class metaUploadFile
         {
             public object UploadedFile { get; set; }
             public object UploadedFileName { get; set; }
@@ -1328,16 +1328,17 @@ namespace WizOne.AvansXDecont
         {
             try
             {
-                //metaCereriDate itm = new metaCereriDate();
-                //if (Session["Posturi_Upload"] != null) itm = Session["Posturi_Upload"] as metaCereriDate;
+                if (!e.IsValid) return;
+                ASPxUploadControl btnDocUpload = (ASPxUploadControl)sender;
 
-                //itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
-                //itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
-                //itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
+                metaUploadFile itm = new metaUploadFile();
+                itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
+                itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
+                itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
 
-                //Session["Posturi_Upload"] = itm;
+                Session["DocUpload_AvsXDec_Avans"] = itm;
 
-                //btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
+                btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
             }
             catch (Exception ex)
             {
@@ -1865,7 +1866,7 @@ namespace WizOne.AvansXDecont
                  * */
 
                 object[] row = new object[dt.Columns.Count];
-                int x = 0;
+                int x = 0,  docDetId = 0;
                 foreach (DataColumn col in dt.Columns)
                 {
                     if (!col.AutoIncrement)
@@ -1873,7 +1874,7 @@ namespace WizOne.AvansXDecont
                         switch (col.ColumnName.ToUpper())
                         {                    
                             case "IDAUTO":
-                                 row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1; 
+                                row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;                            
                                 break;              
                             case "USER_NO":
                                 row[x] = Session["UserId"];
@@ -1885,8 +1886,9 @@ namespace WizOne.AvansXDecont
                                 row[x] = Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()); 
                                 break;
                             case "DOCUMENTDETAILID":
-                                row[x] = Dami.NextId("AvsXDec_AvansDetail", 1);
-                                break;
+                                docDetId = Dami.NextId("AvsXDec_AvansDetail", 1);
+                                row[x] = docDetId;
+                                break;                        
                             default:
                                 row[x] = e.NewValues[col.ColumnName];
                                 break;
@@ -1895,6 +1897,18 @@ namespace WizOne.AvansXDecont
 
                     x++;
                 }
+
+                metaUploadFile itm = Session["DocUpload_AvsXDec_Avans"] as metaUploadFile;
+                if (itm != null)
+                {
+                    int id = Dami.NextId("AvsXDec_relUploadDocumente", 1);
+                    string sql = "INSERT INTO \"AvsXDec_relUploadDocumente\" (\"DocumentId\", \"DocumentDetailId\", \"IdDocument\", USER_NO, TIME) "
+                    + " VALUES ({0}, {1}, {2}, {3}, {4})";
+                    sql = string.Format(sql, Session["AvsXDec_IdDocument"].ToString(), docDetId, id, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
+                    General.ExecutaNonQuery(sql, null);
+                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "AvsXDec_relUploadDocumente", id);
+                }
+                Session["DocUpload_AvsXDec_Avans"] = null;
 
                 dt.Rows.Add(row);
                 e.Cancel = true;
@@ -1925,16 +1939,41 @@ namespace WizOne.AvansXDecont
 
                 DataTable dt = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
                 DataRow row = dt.Rows.Find(keys);
-
+                int docDetId = 0;
                 foreach (DataColumn col in dt.Columns)
                 {
-                    if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible && !col.ReadOnly)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                     }
+                    if (col.ColumnName == "DocumentDetailId")
+                        docDetId = Convert.ToInt32(row[col.ColumnName].ToString());
 
                 }
+
+                metaUploadFile itm = Session["DocUpload_AvsXDec_Avans"] as metaUploadFile;
+                if (itm != null)
+                {
+                    int id = 1;
+                    string sql = "SELECT * FROM AvsXDec_relUploadDocumente WHERE DocumentId = " + Session["AvsXDec_IdDocument"].ToString() + " AND DocumentDetailId = " + docDetId;
+                    DataTable dtFis = General.IncarcaDT(sql, null);
+
+                    if (dtFis != null && dtFis.Rows.Count > 0)                    
+                        id = Convert.ToInt32(dtFis.Rows[0]["IdDocument"].ToString());
+                    else
+                    {
+                        id = Dami.NextId("AvsXDec_relUploadDocumente", 1);
+                        sql = "INSERT INTO \"AvsXDec_relUploadDocumente\" (\"DocumentId\", \"DocumentDetailId\", \"IdDocument\", USER_NO, TIME) "
+                        + " VALUES ({0}, {1}, {2}, {3}, {4})";
+                        sql = string.Format(sql, Session["AvsXDec_IdDocument"].ToString(), docDetId, id, Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"));
+                        General.ExecutaNonQuery(sql, null);
+                    }            
+                    
+                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "AvsXDec_relUploadDocumente", id);
+                }
+                Session["DocUpload_AvsXDec_Avans"] = null;
+
                 e.Cancel = true;
                 grDate.CancelEdit();
                 Session["AvsXDec_SursaDateCheltuieli"] = dt;
@@ -1952,6 +1991,8 @@ namespace WizOne.AvansXDecont
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+
 
         protected void grDate_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
         {

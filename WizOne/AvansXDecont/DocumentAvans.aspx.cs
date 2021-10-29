@@ -75,6 +75,9 @@ namespace WizOne.AvansXDecont
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString() + " / Document Avans"; ;
 
+                btnPrint.ClientVisible = false;
+
+
                 if (!IsPostBack)
                 {
                     Session["AvsXDec_SursaDate"] = null;
@@ -536,10 +539,15 @@ namespace WizOne.AvansXDecont
                         if (tip == 1)
                             MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoError, "Atentie !");
                         else
-                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg);
-                        Session["AvsXDec_Apasat"] = 1;
-                        System.Threading.Thread.Sleep(5000);
-                        btnBack_Click(null, null);
+                        {
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg);                      
+                        }
+                        if (msg.Contains("S-au aprobat") || msg.Contains("S-au respins"))
+                        {
+                            Session["AvsXDec_Apasat"] = 1;
+                            System.Threading.Thread.Sleep(5000);
+                            btnBack_Click(null, null);
+                        }
                     }        
                    
                 }

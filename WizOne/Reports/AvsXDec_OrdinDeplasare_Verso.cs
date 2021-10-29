@@ -22,6 +22,9 @@ namespace WizOne.Reports
             int DocumentId = Convert.ToInt32(HttpContext.Current.Session["AvsXDec_IdDocument"].ToString());
             int F10003 = Convert.ToInt32(HttpContext.Current.Session["AvsXDec_Marca"].ToString());
 
+            for (int i = 0; i < this.Parameters.Count; i++)
+                this.Parameters[i].Visible = false;
+
             #region comentate
             //srvBuiltIn ctxBuiltIn = new srvBuiltIn();
             //var entAvans = (from a in ctxBuiltIn.GetVwAvsXDec_Avans()

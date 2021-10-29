@@ -16,9 +16,11 @@ namespace WizOne.Reports
 
         private void RaportForm8_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)
         {
-
             int DocumentId = Convert.ToInt32(HttpContext.Current.Session["AvsXDec_IdDocument"].ToString()); 
-            int F10003 = Convert.ToInt32(HttpContext.Current.Session["AvsXDec_Marca"].ToString()); 
+            int F10003 = Convert.ToInt32(HttpContext.Current.Session["AvsXDec_Marca"].ToString());
+
+            for (int i = 0; i < this.Parameters.Count; i++)
+                this.Parameters[i].Visible = false;
         }
 
         private void PrintFata_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)

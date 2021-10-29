@@ -12,6 +12,7 @@ using System.Web.UI.WebControls;
 using WizOne.Module;
 using System.Globalization;
 using DevExpress.Web.Data;
+using System.Data.SqlClient;
 
 namespace WizOne.AvansXDecont
 {
@@ -76,6 +77,9 @@ namespace WizOne.AvansXDecont
                 Session["statusDocNeOriginale"] = "Documente originale neprimite";
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString() + " / Document Decont"; ;
+
+                if (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) != 2001)
+                    btnPrint.ClientVisible = false;
 
                 decimal suma = Convert.ToDecimal(General.Nz(Session["AvsXDec_SumaDecont"], 0));
                 txtValDecont.Text = suma.ToString();
@@ -422,7 +426,7 @@ namespace WizOne.AvansXDecont
             string sql = "";
             try
             {
-                sql = "SELECT a.DocumentId, a.DocumentDetailId, a.CurrencyId, a.IdTipDocument as DictionaryItemId, a.DocDateDecont, a.DocNumberDecont, a.Furnizor, b.IdDocument, a.TotalPayment,  (CASE WHEN c.DocumentDetailId = 0 THEN 0 ELSE 1 END) as areFisierPlataBanca "
+                sql = "SELECT a.DocumentId, a.DocumentDetailId, a.CurrencyId, a.IdTipDocument as DictionaryItemId, a.DocDateDecont, a.DocNumberDecont, a.Furnizor, b.IdDocument, a.TotalPayment,  (CASE WHEN c.DocumentDetailId = 0 THEN 0 ELSE 1 END) as areFisierPlataBanca, a.FreeTxt, NULL AS ExpenseTypeId, '' AS BugetLine "
                     + " FROM vwAvsXDec_DecDet_DocPlataBanca a "
                     + " JOIN AvsXDec_DecontDetail b on a.DocumentDetailId = b.DocumentDetailId "
                     + " LEFT JOIN AvsXDec_relUploadDocumente c on a.DocumentId =  c.DocumentId AND a.DocumentDetailId = c.DocumentDetailId "
@@ -603,7 +607,7 @@ namespace WizOne.AvansXDecont
                  sau am ales si salvat un document de avans*/
                 if (documentIdAvans == -99 || (documentIdAvans != -99 && bt != null && bt.Rows.Count > 0))
                 {
-                    sql = "SELECT a.DocumentId, a.DocumentDetailId, a.CurrencyId, a.IdTipCheltuiala as DictionaryItemId, a.RefCurrencyId, a.RefCurrencyValue, b.RefTotalPayment,  a.TotalPayment, a.BugetLine, 0 as toBeSaved,  a.FreeTxt "
+                    sql = "SELECT a.DocumentId, a.DocumentDetailId, a.CurrencyId, a.IdTipCheltuiala as DictionaryItemId, a.RefCurrencyId, a.RefCurrencyValue, b.RefTotalPayment,  a.TotalPayment, a.BugetLine, 0 as toBeSaved,  a.FreeTxt, '' as Furnizor, NULL as DocNumberDecont, NULL AS DocDateDecont, NULL as ExpenseTypeId, NULL AS IdDocument "
                         + " FROM vwAvsXDec_DecDet_Cheltuieli a "
                         + " JOIN AvsXDec_DecontDetail b on a.DocumentDetailId = b.DocumentDetailId "
                         + " WHERE a.DocumentId = " + documentId;
@@ -613,7 +617,7 @@ namespace WizOne.AvansXDecont
                 else
                 {
                     sql = "SELECT " + documentId + " AS DocumentId,  b.DocumentDetailId,  c.CurrencyId, a.DictionaryItemId, c.CurrencyId as RefCurrencyId, b.Amount as RefCurrencyValue, b.Amount as RefTotalPayment, b.Amount as TotalPayment, "
-                        + " '' as BugetLine, 0 as toBeSaved,  a.FreeTxt "
+                        + " '' as BugetLine, 0 as toBeSaved,  a.FreeTxt, '' as Furnizor, NULL as DocNumberDecont, NULL AS DocDateDecont, NULL as ExpenseTypeId, NULL AS IdDocument "
                         + " FROM vwAvsXDec_AvDet_Cheltuieli a "
                         + " JOIN AvsXDec_AvansDetail b on a.DocumentDetailId = b.DocumentDetailId and a.DocumentId = b.DocumentId "
                         + " JOIN AvsXDec_Avans c on b.DocumentId = c.DocumentId "
@@ -846,9 +850,13 @@ namespace WizOne.AvansXDecont
                             MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoError, "Atentie !");
                         else
                             pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg);
-                        Session["AvsXDec_Apasat"] = 1;
-                        System.Threading.Thread.Sleep(5000);
-                        btnBack_Click(null, null);
+
+                        if (msg.Contains("S-au aprobat") || msg.Contains("S-au respins"))
+                        {
+                            Session["AvsXDec_Apasat"] = 1;
+                            System.Threading.Thread.Sleep(5000);
+                            btnBack_Click(null, null);
+                        }                      
                     }        
                    
                 }
@@ -1295,53 +1303,100 @@ namespace WizOne.AvansXDecont
             dt.PrimaryKey = new DataColumn[] { dt.Columns["DocumentDetailId"], dt.Columns["DocumentId"] };
 
             for (int i = 0; i < ent.Rows.Count; i++)
-            {
-                DataRow row = dt.NewRow();
-                foreach (DataColumn col in ent.Columns)
+            {                
+                if (ent.Rows[i].RowState == DataRowState.Deleted)
                 {
-                    switch (col.ColumnName)
+                    General.ExecutaNonQuery("DELETE FROM AvsXDec_DecontDetail WHERE DocumentId = " + ent.Rows[i]["DocumentId", DataRowVersion.Original].ToString() + " AND DocumentDetailId = " + ent.Rows[i]["DocumentDetailId", DataRowVersion.Original].ToString());
+                }
+                else
+                {
+                    DataRow row = dt.NewRow();
+                    foreach (DataColumn col in ent.Columns)
                     {
-                        case "DictionaryItemId":
-                            row["DictionaryItemId"] = ent.Rows[i]["DictionaryItemId"];
-                            break;
-                        case "DocumentDetailId":
-                            row["DocumentDetailId"] = ent.Rows[i]["DocumentDetailId"];
-                            break;
-                        case "DocumentId":
-                            row["DocumentId"] = ent.Rows[i]["DocumentId"];
-                            break;
-                        case "Furnizor":
-                            row["Furnizor"] = ent.Rows[i]["Furnizor"];
-                            break;
-                        case "DocNumberDecont":
-                            row["DocNumberDecont"] = ent.Rows[i]["DocNumberDecont"];
-                            break;
-                        case "DocDateDecont":
-                            row["DocDateDecont"] = ent.Rows[i]["DocDateDecont"];
-                            break;
-                        case "CurrencyId":
-                            row["CurrencyId"] = ent.Rows[i]["CurrencyId"];
-                            break;
-                        case "TotalPayment":
-                            row["TotalPayment"] = ent.Rows[i]["TotalPayment"];
-                            break;
-                        case "BugetLine":
-                            row["BugetLine"] = ent.Rows[i]["BugetLine"];
-                            break;
-                        case "ExpenseTypeId":
-                            row["ExpenseTypeId"] = ent.Rows[i]["ExpenseTypeId"];
-                            break;
-                        case "IdDocument":
-                            row["IdDocument"] = ent.Rows[i]["IdDocument"];
-                            break;   
-                        case "FreeTxt":
-                            row["FreeTxt"] = ent.Rows[i]["FreeTxt"];
-                            break;
-                    }                
-                }                
-                dt.Rows.Add(row);
+                        switch (col.ColumnName)
+                        {
+                            case "DictionaryItemId":
+                                row["DictionaryItemId"] = ent.Rows[i]["DictionaryItemId"];
+                                break;
+                            case "DocumentDetailId":
+                                row["DocumentDetailId"] = ent.Rows[i]["DocumentDetailId"];
+                                break;
+                            case "DocumentId":
+                                row["DocumentId"] = ent.Rows[i]["DocumentId"];
+                                break;
+                            case "Furnizor":
+                                row["Furnizor"] = ent.Rows[i]["Furnizor"];
+                                break;
+                            case "DocNumberDecont":
+                                row["DocNumberDecont"] = ent.Rows[i]["DocNumberDecont"];
+                                break;
+                            case "DocDateDecont":
+                                row["DocDateDecont"] = ent.Rows[i]["DocDateDecont"];
+                                break;
+                            case "CurrencyId":
+                                row["CurrencyId"] = ent.Rows[i]["CurrencyId"];
+                                break;
+                            case "TotalPayment":
+                                row["TotalPayment"] = ent.Rows[i]["TotalPayment"];
+                                break;
+                            case "BugetLine":
+                                row["BugetLine"] = ent.Rows[i]["BugetLine"];
+                                break;
+                            case "ExpenseTypeId":
+                                row["ExpenseTypeId"] = ent.Rows[i]["ExpenseTypeId"];
+                                break;
+                            case "IdDocument":
+                                row["IdDocument"] = ent.Rows[i]["IdDocument"];
+                                break;
+                            case "FreeTxt":
+                                row["FreeTxt"] = ent.Rows[i]["FreeTxt"];
+                                break;
+                        }
+                    }
+                    dt.Rows.Add(row);
+                }
             }
-            General.SalveazaDate(dt, "AvsXDec_DecontDetail");
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                DataTable dtTmp = General.IncarcaDT("SELECT * FROM AvsXDec_DecontDetail WHERE DocumentId = " + dt.Rows[i]["DocumentId"].ToString() + " AND DocumentDetailId = " + dt.Rows[i]["DocumentDetailId"].ToString(), null);
+                if (dtTmp == null || dtTmp.Rows.Count == 0)
+                {//INSERT
+                    string sql = "INSERT INTO AvsXDec_DecontDetail (DictionaryItemId, DocumentDetailId, DocumentId, Furnizor, DocNumberDecont, DocDateDecont, CurrencyId, TotalPayment, BugetLine, ExpenseTypeId, IdDocument, FreeTxt) "
+                        + " VALUES ({0}, {1}, {2}, '{3}', '{4}', {5}, {6}, {7}, '{8}', {9}, {10}, '{11}')";
+                    sql = string.Format(sql, General.Nz(ent.Rows[i]["DictionaryItemId"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["DocumentDetailId"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["DocumentId"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["Furnizor"], "").ToString(),
+                                             General.Nz(ent.Rows[i]["DocNumberDecont"], "").ToString(),
+                                             "CONVERT(DATETIME, '" + General.Nz(ent.Rows[i]["DocDateDecont"], "01/01/2100").ToString() + "', 103)",
+                                             General.Nz(ent.Rows[i]["CurrencyId"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["TotalPayment"], "NULL").ToString().Replace(',', '.'),
+                                             General.Nz(ent.Rows[i]["BugetLine"], "").ToString(),
+                                             General.Nz(ent.Rows[i]["ExpenseTypeId"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["IdDocument"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["FreeTxt"], "").ToString());
+                    General.ExecutaNonQuery(sql, null);
+                }
+                else
+                {//UPDATE
+                    string sql = "UPDATE AvsXDec_DecontDetail SET DictionaryItemId = {0}, Furnizor = '{3}', DocNumberDecont = '{4}', DocDateDecont = {5}, CurrencyId = {6}, TotalPayment = {7}, BugetLine = '{8}', ExpenseTypeId = {9}, IdDocument = {10}, FreeTxt = '{11}' WHERE DocumentDetailId = {1} AND DocumentId = {2} ";
+                    sql = string.Format(sql, General.Nz(ent.Rows[i]["DictionaryItemId"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["DocumentDetailId"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["DocumentId"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["Furnizor"], "").ToString(),
+                                             General.Nz(ent.Rows[i]["DocNumberDecont"], "").ToString(),
+                                             "CONVERT(DATETIME, '" + General.Nz(ent.Rows[i]["DocDateDecont"], "01/01/2100").ToString() + "', 103)",
+                                             General.Nz(ent.Rows[i]["CurrencyId"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["TotalPayment"], "NULL").ToString().Replace(',', '.'),
+                                             General.Nz(ent.Rows[i]["BugetLine"], "").ToString(),
+                                             General.Nz(ent.Rows[i]["ExpenseTypeId"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["IdDocument"], "NULL").ToString(),
+                                             General.Nz(ent.Rows[i]["FreeTxt"], "").ToString());
+                    General.ExecutaNonQuery(sql, null);
+                }
+            }
+   
         }
         		
 		

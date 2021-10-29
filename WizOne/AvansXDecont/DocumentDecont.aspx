@@ -402,9 +402,13 @@
 											<dx:GridViewDataTextColumn FieldName="BugetLine" Name="BugetLine" Caption="Linie buget"/>
 											<dx:GridViewDataTextColumn FieldName="FreeTxt" Name="FreeTxt" Caption="Detalii"/>
 										
+											<dx:GridViewDataTextColumn FieldName="Furnizor" Name="Furnizor" Caption="Furnizor" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentId" Name="DocumentId" Caption="DocumentId" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="IdDocument" Name="IdDocument" Caption="IdDocument" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentDetailId" Name="DocumentDetailId" Caption="DocumentDetailId" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="DocNumberDecont" Name="DocNumberDecont" Caption="Numar" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataDateColumn FieldName="DocDateDecont" Name="DocDateDecont" Caption="Data"  Width="100px"  Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="ExpenseTypeId" Name="ExpenseTypeId" Caption="Numar" Visible="false" ShowInCustomizationForm="false"/>
 						
 										</Columns>
 
@@ -517,11 +521,14 @@
 												<PropertiesTextEdit DisplayFormatString="n2" />
 											</dx:GridViewDataTextColumn>
 
-										
+											<dx:GridViewDataTextColumn FieldName="FreeTxt" Name="FreeTxt" Caption="Detalii"  Visible="false" ShowInCustomizationForm="false"/>										
+											<dx:GridViewDataTextColumn FieldName="Furnizor" Name="Furnizor" Caption="Furnizor" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="areFisierPlataBanca" Name="areFisierPlataBanca" Caption="areFisierPlataBanca" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentId" Name="DocumentId" Caption="DocumentId" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="IdDocument" Name="IdDocument" Caption="IdDocument" Visible="false" ShowInCustomizationForm="false"/>
 											<dx:GridViewDataTextColumn FieldName="DocumentDetailId" Name="DocumentDetailId" Caption="DocumentDetailId" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="ExpenseTypeId" Name="ExpenseTypeId" Caption="Numar" Visible="false" ShowInCustomizationForm="false"/>
+											<dx:GridViewDataTextColumn FieldName="BugetLine" Name="BugetLine" Caption="Linie buget" Visible="false" ShowInCustomizationForm="false"/>
 											
 										</Columns>
 

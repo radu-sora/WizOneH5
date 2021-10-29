@@ -605,6 +605,9 @@ namespace WizOne.Adev
                         else
                             txtCFP.Text = "F20004037";
                         break;
+                    case "DAA": 
+                        //deDataActAditional.Date = Convert.ToDateTime(lista[sufix]); 
+                        break;
                     case "INS":
                         int stagiu = 6;
                         int.TryParse(lista[sufix], out stagiu);
@@ -1416,7 +1419,7 @@ namespace WizOne.Adev
         {
             try
             {
-                string sql = "UPDATE F800_ADEVERINTE_CONFIG SET NRCRT = (-1 * NRCRT)";
+                string sql = "UPDATE F800_ADEVERINTE_CONFIG SET NRCRT = (-1 * NRCRT) where ETICHETA <> 'DAA' AND ETICHETA <> 'ADEV_SANATATE_REG'";
                 General.ExecutaNonQuery(sql, null);
 
                 int index = 1;
@@ -1441,7 +1444,7 @@ namespace WizOne.Adev
                 string sql = "DELETE FROM F800_ADEVERINTE_CONFIG WHERE NRCRT > 0";
                 General.ExecutaNonQuery(sql, null);
 
-                sql = "UPDATE F800_ADEVERINTE_CONFIG SET NRCRT = (-1 * NRCRT)";
+                sql = "UPDATE F800_ADEVERINTE_CONFIG SET NRCRT = (-1 * NRCRT) where ETICHETA <> 'DAA' AND ETICHETA <> 'ADEV_SANATATE_REG'";
                 General.ExecutaNonQuery(sql, null);
 
                 General.MemoreazaEroarea(ex, "Adev", new StackTrace().GetFrame(0).GetMethod().Name);
@@ -1450,6 +1453,18 @@ namespace WizOne.Adev
             {
                 string sql = "DELETE FROM F800_ADEVERINTE_CONFIG WHERE NRCRT < 0";
                 General.ExecutaNonQuery(sql, null);
+
+                sql = "SELECT MAX(NRCRT) AS MN FROM F800_ADEVERINTE_CONFIG";
+                DataTable dn = General.IncarcaDT(sql, null);
+           
+                if (dn != null && dn.Rows.Count > 0)
+                {
+                    int mn = 0;
+                    int.TryParse(dn.Rows[0][0].ToString(), out mn);
+                    sql = string.Format("UPDATE F800_ADEVERINTE_CONFIG SET NRCRT = (CASE WHEN ETICHETA = 'DAA' THEN {0} ELSE {1} END) " +
+                        "WHERE ETICHETA = 'DAA' OR ETICHETA = 'ADEV_SANATATE_REG'", mn + 1, mn + 2);
+                    General.ExecutaNonQuery(sql, null);                  
+                }        
             }
         }
 

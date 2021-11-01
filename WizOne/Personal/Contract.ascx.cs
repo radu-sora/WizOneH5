@@ -313,9 +313,8 @@ namespace WizOne.Personal
             if ((dtComp.Rows[0]["F00287"] != DBNull.Value && dtComp.Rows[0]["F00287"].ToString() == "1") || (dtComp.Rows[0]["F00288"] != DBNull.Value && dtComp.Rows[0]["F00288"].ToString() == "1"))
                 chkConstr.ClientEnabled = true;
 
-            ASPxComboBox cmbCOR = Contract_DataList.Items[0].FindControl("cmbCOR") as ASPxComboBox;
-            if (!IsPostBack)                           
-                cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == DBNull.Value || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
+            ASPxComboBox cmbCOR = Contract_DataList.Items[0].FindControl("cmbCOR") as ASPxComboBox;                                     
+            cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == DBNull.Value || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
             
                         
             ds.Tables[1].Rows[0]["F100935"] = nrLuni;
@@ -1184,9 +1183,9 @@ namespace WizOne.Personal
 
                 if (Convert.ToInt32(cmbDurataContract.SelectedItem.Value) == 1)
                 {
-                    deDeLaData.Enabled = false;
+                    deDeLaData.ClientEnabled = false;
                     deDeLaData.Value = new DateTime(2100, 1, 1);
-                    deLaData.Enabled = false;
+                    deLaData.ClientEnabled = false;
                     deLaData.Value = new DateTime(2100, 1, 1);
 
                     ds.Tables[0].Rows[0]["F100933"] = new DateTime(2100, 1, 1);
@@ -1230,15 +1229,15 @@ namespace WizOne.Personal
 
                     //}
 
-                    deDeLaData.Enabled = true;
-                    deLaData.Enabled = true;
+                    deDeLaData.ClientEnabled = true;
+                    deLaData.ClientEnabled = true;
 
                     if (deDeLaData.Value != null && deLaData.Value != null)
                     {
                         //inactiveazaDeLaLa = true;
 
-                        deDeLaData.Enabled = true;
-                        deLaData.Enabled = true;
+                        deDeLaData.ClientEnabled = true;
+                        deLaData.ClientEnabled = true;
 
                         if (deDeLaData.Value == null)
                             Contract_pnlCtl.JSProperties["cpAlertMessage"] =  Dami.TraduCuvant("Completati perioada pentru contractul pe perioada determinata!");

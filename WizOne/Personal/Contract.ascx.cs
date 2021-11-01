@@ -66,6 +66,18 @@ namespace WizOne.Personal
 
             ASPxComboBox cmbTipAngajat = Contract_DataList.Items[0].FindControl("cmbTipAng") as ASPxComboBox;
 
+            ASPxComboBox cmbDurCtr = Contract_DataList.Items[0].FindControl("cmbDurCtr") as ASPxComboBox;
+            if (cmbDurCtr.Value != null && Convert.ToInt32(cmbDurCtr.Value) == 1)
+            {
+                deDeLaData.ClientEnabled = false;
+                deLaData.ClientEnabled = false;
+            }
+            else
+            {
+                deDeLaData.ClientEnabled = true;
+                deLaData.ClientEnabled = true;
+            }
+
             if (ds.Tables[1].Rows[0]["F100643"] != DBNull.Value && ds.Tables[1].Rows[0]["F100643"].ToString().Length >= 4)
             {
                 txtVechCompAni.Text = ds.Tables[1].Rows[0]["F100643"].ToString().Substring(0, 2);
@@ -644,6 +656,8 @@ namespace WizOne.Personal
                     //    ds.Tables[1].Rows[0]["F100699"] = param[1];
                     //    Session["InformatiaCurentaPersonal"] = ds;
                     Session["MP_Salariu"] = param[1];
+                    ASPxTextBox txtSalariu = Contract_DataList.Items[0].FindControl("txtSalariu") as ASPxTextBox;
+                    txtSalariu.Text = Session["MP_Salariu"].ToString();
                     break;
                 //case "deDataModifSal":
                 //    data = param[1].Split('.');

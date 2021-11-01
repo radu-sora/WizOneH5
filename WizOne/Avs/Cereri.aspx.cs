@@ -4681,7 +4681,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70452, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 1, 'Salariu Tarifar', " + data + ", " + dtCer.Rows[0]["SalariulBrut"].ToString() + ", 'Modificari in avans', '"
-                            + dateDoc + "', " + act.ToString() + ", " + dtCer.Rows[0]["ScutitImpozit"].ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dateDoc + "', " + act.ToString() + ", " + General.Nz(dtCer.Rows[0]["ScutitImpozit"], 0).ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.Functie:

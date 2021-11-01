@@ -640,7 +640,27 @@ namespace WizOne.AvansXDecont
 
                 if (nr > 0)
                 {
-                    msg = "S-a schimbat statusul pentru " + nr.ToString() + " documente din " + total + " !";
+                    string stare = "";
+                    switch (documentStateId)
+                    {
+                        case 4:
+                            stare = "Trimis la banca";
+                            break;
+                        case 5:
+                            stare = "Acordat";
+                            break;
+                        case 6:
+                            stare = "Restituit";
+                            break;
+                        case 7:
+                            stare = "Contat";
+                            break;
+                        case 8:
+                            stare = "Inchis";
+                            break;
+                    }
+
+                    msg = "S-a schimbat statusul pentru " + nr.ToString() + " documente din " + total + " in  " + stare + " !";
                     if (msgValid != "") msg = msg + "/n/r" + msgValid;
                 }
                 else

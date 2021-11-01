@@ -77,7 +77,7 @@ namespace WizOne.AvansXDecont
 					Session["AvsXDec_DataDoc"] = null;
 					Session["AvansXDecont_RolFinanciar"] = null;
 
-					string idFin = Dami.ValoareParam("AvsXDec_RolFinanciar", "-99");
+					string idFin = Dami.ValoareParam("AvansXDecont_RolFinanciar", "-99");
 					string sql = "SELECT COUNT(*) FROM \"F100Supervizori\" WHERE \"IdUser\" = {0} AND \"IdSuper\" IN ({1})";
 					sql = string.Format(sql, Session["UserId"].ToString(), idFin);
 					DataTable dtFin = General.IncarcaDT(sql, null);
@@ -1007,7 +1007,7 @@ namespace WizOne.AvansXDecont
                     if (msgValid != "")
                         msg = msgValid;
                     else
-                        msg = "Nu exista cereri pentru aceasta actiune !";
+                        msg = "Nu aveti drepturi pentru aceasta actiune !";
                 }
             }
             catch (Exception ex)

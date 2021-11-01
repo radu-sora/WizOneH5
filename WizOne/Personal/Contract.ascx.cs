@@ -35,13 +35,17 @@ namespace WizOne.Personal
             ASPxDateEdit deDeLa = Contract_DataList.Items[0].FindControl("deDeLaData") as ASPxDateEdit;
             ASPxDateEdit deLa = Contract_DataList.Items[0].FindControl("deLaData") as ASPxDateEdit;
             ASPxDateEdit deTermenRevisal = Contract_DataList.Items[0].FindControl("deTermenRevisal") as ASPxDateEdit;
-            deTermenRevisal.Value = SetDataRevisal(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()));
+            if (!IsPostBack)
+                deTermenRevisal.Value = SetDataRevisal(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()));
 
             int nrLuni = 0, nrZile = 0;
 
-            CalculLuniSiZile(Convert.ToDateTime(deDeLa.Date), Convert.ToDateTime(deLa.Date), out nrLuni, out nrZile);
-            txtZile.Value = nrZile;
-            txtLuni.Value = nrLuni;
+            if (!IsPostBack)
+            {
+                CalculLuniSiZile(Convert.ToDateTime(deDeLa.Date), Convert.ToDateTime(deLa.Date), out nrLuni, out nrZile);
+                txtZile.Value = nrZile;
+                txtLuni.Value = nrLuni;
+            }
             //txtZile.Text = Convert.ToInt32((Convert.ToDateTime(deLa.Date) - Convert.ToDateTime(deDeLa.Date)).TotalDays).ToString();
             //txtLuni.Text = (((Convert.ToDateTime(deLa.Date).Year - Convert.ToDateTime(deDeLa.Date).Year) * 12) + Convert.ToDateTime(deLa.Date).Month - Convert.ToDateTime(deDeLa.Date).Month).ToString();
             //cmbTipAngajat_SelectedIndexChanged(ds.Tables[1].Rows[0]["F10043"].ToString());
@@ -296,8 +300,9 @@ namespace WizOne.Personal
                 Session["MP_NvlFunc"] = nvlFunc;
 
             }
-            
-            SetDurataTimpMunca();
+
+            if (!IsPostBack)
+                SetDurataTimpMunca();
 
             ASPxRadioButtonList rbCtrRadiat = Contract_DataList.Items[0].FindControl("rbCtrRadiat") as ASPxRadioButtonList;
             rbCtrRadiat.Value = General.Nz(table.Rows[0]["F1001077"], 0).ToString();
@@ -309,7 +314,9 @@ namespace WizOne.Personal
                 chkConstr.ClientEnabled = true;
 
             ASPxComboBox cmbCOR = Contract_DataList.Items[0].FindControl("cmbCOR") as ASPxComboBox;
-            cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == DBNull.Value || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
+            if (!IsPostBack)                           
+                cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == DBNull.Value || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
+            
                         
             ds.Tables[1].Rows[0]["F100935"] = nrLuni;
             ds.Tables[1].Rows[0]["F100936"] = nrZile;
@@ -980,6 +987,14 @@ namespace WizOne.Personal
                     ModifAvans((int)Constante.Atribute.Post);
                     break;
             }
+            ASPxTextBox txtZile = Contract_DataList.Items[0].FindControl("txtNrZile") as ASPxTextBox;
+            ASPxTextBox txtLuni = Contract_DataList.Items[0].FindControl("txtNrLuni") as ASPxTextBox;
+            ASPxDateEdit deDeLa = Contract_DataList.Items[0].FindControl("deDeLaData") as ASPxDateEdit;
+            ASPxDateEdit deLa = Contract_DataList.Items[0].FindControl("deLaData") as ASPxDateEdit;
+            int nrLuni = 0, nrZile = 0;
+            CalculLuniSiZile(Convert.ToDateTime(deDeLa.Date), Convert.ToDateTime(deLa.Date), out nrLuni, out nrZile);
+            txtZile.Value = nrZile;
+            txtLuni.Value = nrLuni;
 
         }
 

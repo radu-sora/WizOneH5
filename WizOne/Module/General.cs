@@ -3103,8 +3103,13 @@ namespace WizOne.Module
         public static DataTable GetCOR()
         {
             DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
-            DataTable table = ds.Tables[0];          
-            return General.IncarcaDT("SELECT F72204, F72202 FROM F722 WHERE F72206 = " + (table.Rows[0]["F1001082"] as string ?? "(SELECT MAX(F72206) FROM F722)") + " ORDER BY F72204", null);     
+            if (ds != null)
+            {
+                DataTable table = ds.Tables[0];
+                return General.IncarcaDT("SELECT F72204, F72202 FROM F722 WHERE F72206 = " + (table.Rows[0]["F1001082"] as string ?? "(SELECT MAX(F72206) FROM F722)") + " ORDER BY F72204", null);
+            }
+            else
+                return null;
         }
 
         public static DataTable GetFunctie()

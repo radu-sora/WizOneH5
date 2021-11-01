@@ -1105,7 +1105,7 @@ namespace WizOne.AvansXDecont
                 /*LeonardM 11.09.2016
                  * in cazul in care documentul este editat de BudgetOwner, si se salveaza, tot in acest moment se si aproba documentul
                  * */
-                if (Convert.ToInt32(Session["AvsXDec_PoateModif"].ToString()) == 0 && Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0 /*&& IsBudgetOwnerEdited*/)
+                if (/*Convert.ToInt32(Session["AvsXDec_PoateModif"].ToString()) == 0 &&*/ Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0 /*&& IsBudgetOwnerEdited*/)
                 {
                     MetodeCereri(1, "", 2);
                     return;

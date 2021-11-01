@@ -8,7 +8,7 @@ namespace WizOne.Personal
 {
     public partial class Diverse : System.Web.UI.UserControl
     {
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
 
             DataTable table = new DataTable();
@@ -16,7 +16,8 @@ namespace WizOne.Personal
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
             table = ds.Tables[0];
             Diverse_DataList.DataSource = table;
-            Diverse_DataList.DataBind();
+            if (!IsPostBack)
+                Diverse_DataList.DataBind();
 
             string[] etichete = new string[13] { "lblData", "lblNr", "lblNorma", "lblLocNastere", "lblStudii", "lblStudiiDet", "lblFunctie", "lblNivel", "lblZileCOFidel", "lblZileCOAnAnt", "lblZileCOCuvAnC", "lblVechimeComp", "lblVechimeCarteMunca" };
             for (int i = 0; i < etichete.Count(); i++)

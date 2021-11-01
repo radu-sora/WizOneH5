@@ -21024,7 +21024,8 @@ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES (
 GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvsXDec_TipDocument_Diurna' , 'Cheltuiala diurna', 'se specifica denumirea setata in nomenclatorul de tipuri de documente ce se doreste a fi setata automat pentru diurna' , 14)
 GO
-
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES ('AvansXDecont_RolFinanciar' , '', 'Id-urile care au rol financiar' , 14)
+GO
 
 CREATE SEQUENCE [dbo].[AvsXDec_DocumentStateHistory_SEQ] 
  AS [bigint]

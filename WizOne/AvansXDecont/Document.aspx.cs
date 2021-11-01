@@ -75,6 +75,14 @@ namespace WizOne.AvansXDecont
 				{
 					Session["AvansXDecont_Grid"] = null;
 					Session["AvsXDec_DataDoc"] = null;
+					Session["AvansXDecont_RolFinanciar"] = null;
+
+					string idFin = Dami.ValoareParam("AvsXDec_RolFinanciar", "-99");
+					string sql = "SELECT COUNT(*) FROM \"F100Supervizori\" WHERE \"IdUser\" = {0} AND \"IdSuper\" IN ({1})";
+					sql = string.Format(sql, Session["UserId"].ToString(), idFin);
+					DataTable dtFin = General.IncarcaDT(sql, null);
+					if (dtFin != null && dtFin.Rows.Count > 0 && dtFin.Rows[0][0] != null && dtFin.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtFin.Rows[0][0].ToString()) > 0)
+						Session["AvansXDecont_RolFinanciar"] = 1;
 				}
 
 				grDate.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
@@ -270,7 +278,7 @@ namespace WizOne.AvansXDecont
 							 * */
 							int pozitie = Convert.ToInt32((dr[0]["Pozitie"] == DBNull.Value ? -99 : dr[0]["Pozitie"]).ToString());
 							int idStare = Convert.ToInt32(dr[0]["IdStare"] == DBNull.Value ? "0" : dr[0]["IdStare"].ToString());
-							int poateModif = (idStare != 0 && idStare != 8 && f10003 == Convert.ToInt32(Session["User_Marca"].ToString()) ? 1 : 0);      
+							int poateModif = (idStare != 0 && idStare != 8 && Convert.ToInt32(General.Nz(Session["AvansXDecont_RolFinanciar"], 0).ToString()) == 1 ? 1 : 0);      
 							
 							bool IsBudgetOwnerForDocument = Convert.ToInt32((dr[0]["IsBudgetOwnerForDocument"] == DBNull.Value ? 0 : dr[0]["IsBudgetOwnerForDocument"]).ToString()) == 0 ? false : true;
 							/*

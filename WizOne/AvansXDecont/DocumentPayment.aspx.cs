@@ -370,7 +370,14 @@ namespace WizOne.AvansXDecont
                                       }
                                 }
                                 Session["AvsXDec_PaymentGrid"] = lstDocumentePlata;
-                                SalvareGrid();
+                                if (lst != null && lst.Count() > 0 && lst[0] != null)
+                                {
+                                    for (int i = 0; i < lst.Count(); i++)
+                                    {
+                                        object[] arr = lst[i] as object[];
+                                        SalvareGrid(arr[0].ToString());
+                                    }
+                                }
                                 #endregion
                             }
                             else
@@ -437,7 +444,14 @@ namespace WizOne.AvansXDecont
                             }
                         }
                         Session["AvsXDec_PaymentGrid"] = lstDocumentePlata;
-                        SalvareGrid();
+                        if (lst != null && lst.Count() > 0 && lst[0] != null)
+                        {
+                            for (int i = 0; i < lst.Count(); i++)
+                            {
+                                object[] arr = lst[i] as object[];
+                                SalvareGrid(arr[0].ToString());
+                            }
+                        }
                         #endregion
                         break;
                 }
@@ -645,27 +659,28 @@ namespace WizOne.AvansXDecont
             return msg;
         }
 
-        public void SalvareGrid()
+        public void SalvareGrid(string documentId)
         {
             string sql = "";
             DataTable ent = Session["AvsXDec_PaymentGrid"] as DataTable;
+            DataRow dr = ent.Select("DocumentId = " + documentId).FirstOrDefault();
             try
             {
-                switch (Convert.ToInt32(ent.Rows[0]["DocumentTypeId"].ToString()))
+                switch (Convert.ToInt32(dr["DocumentTypeId"].ToString()))
                 {
                     case 1001: /*Avans spre deplasare*/
                     case 1002: /*Avans spre decontare*/
                         List<object> lst = grDate.GetSelectedFieldValues(new string[] { "DocumentId", "PaymentDate" });
                         if (lst != null && lst.Count() > 0 && lst[0] != null)
                         {
-                            for (int i = 0; i < lst.Count(); i++)
-                            {
-                                object[] arr = lst[i] as object[];
-                                DataRow dr = ent.Select("DocumentId = " + arr[0].ToString()).FirstOrDefault();
+                            //for (int i = 0; i < lst.Count(); i++)
+                            //{
+                                //object[] arr = lst[i] as object[];
+                                //DataRow dr = ent.Select("DocumentId = " + arr[0].ToString()).FirstOrDefault();
                                 if (dr != null)
                                 {
                                     DateTime data = Convert.ToDateTime(dr["PaymentDate"].ToString());
-                                    sql = "UPDATE AvsXDec_Avans SET PaymentDate = CONVERT(DATEIME, '" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString() + "', 103), TotalPayment = " 
+                                    sql = "UPDATE AvsXDec_Avans SET PaymentDate = CONVERT(DATETIME, '" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString() + "', 103), TotalPayment = " 
                                         + (Convert.ToDecimal(dr["UnconfRestAmount"].ToString()) - Convert.ToDecimal(dr["TotalComissionPayment"].ToString())).ToString().Replace(',', '.')
                                         /*LeonardM 10.08.2016
                                         * se sterge si comisionul bancare ca altfel ramane diferenta*/
@@ -675,7 +690,7 @@ namespace WizOne.AvansXDecont
                                         + " WHERE DocumentId = " + dr["DocumentId"].ToString();
                                     General.ExecutaNonQuery(sql, null);
                                 }
-                            }
+                            //}
                         }
                         break;
                     case 2001: /*Decont cheltuieli deplasare*/
@@ -683,14 +698,14 @@ namespace WizOne.AvansXDecont
                         List<object> lst1 = grDate.GetSelectedFieldValues(new string[] { "DocumentId", "PaymentDate" });
                         if (lst1 != null && lst1.Count() > 0 && lst1[0] != null)
                         {
-                            for (int i = 0; i < lst1.Count(); i++)
-                            {
-                                object[] arr = lst1[i] as object[];
-                                DataRow dr = ent.Select("DocumentId = " + arr[0].ToString()).FirstOrDefault();
+                            //for (int i = 0; i < lst1.Count(); i++)
+                            //{
+                                //object[] arr = lst1[i] as object[];
+                                //DataRow dr = ent.Select("DocumentId = " + arr[0].ToString()).FirstOrDefault();
                                 if (dr != null)
                                 {
                                     DateTime data = Convert.ToDateTime(dr["PaymentDate"].ToString());
-                                    sql = "UPDATE AvsXDec_Decont SET PaymentDate = CONVERT(DATEIME, '" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString() + "', 103), PaymentValueFinance = "
+                                    sql = "UPDATE AvsXDec_Decont SET PaymentDate = CONVERT(DATETIME, '" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString() + "', 103), PaymentValueFinance = "
                                         + (Convert.ToDecimal(dr["UnconfRestAmount"].ToString()) - Convert.ToDecimal(dr["TotalComissionPayment"].ToString())).ToString().Replace(',', '.')
                                         + ", UnconfRestAmount = " + Convert.ToDecimal(dr["UnconfRestAmount"].ToString()).ToString().Replace(',', '.') + " - "  + (Convert.ToDecimal(dr["UnconfRestAmount"].ToString()) - Convert.ToDecimal(dr["TotalComissionPayment"].ToString())).ToString().Replace(',', '.') 
                                         + " - " + Convert.ToDecimal(dr["TotalComissionPayment"].ToString()).ToString().Replace(',', '.')
@@ -699,7 +714,7 @@ namespace WizOne.AvansXDecont
                                         + "  WHERE DocumentId = " + dr["DocumentId"].ToString();
                                     General.ExecutaNonQuery(sql, null);
                                 }
-                            }
+                            //}
                         }
            
                         break;
@@ -1399,7 +1414,7 @@ namespace WizOne.AvansXDecont
                 {
                     esteNou = false;
                     DataTable entAtas = General.IncarcaDT("SELECT * FROM tblAtasamente Where Tabela = 'AvsXDec_FisiereBanca' AND FisierNume = '" +  roi + "'");
-                    if (entAtas == null)
+                    if (entAtas == null || entAtas.Rows.Count == 0)
                     {                       
                         esteNou = true;
                     }

@@ -18,7 +18,7 @@ namespace WizOne.Personal
         //bool inactiveazaDeLaLa = false;
 
 
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
 
             DataTable table = new DataTable();
@@ -27,7 +27,8 @@ namespace WizOne.Personal
             table = ds.Tables[0];
 
             Contract_DataList.DataSource = table;
-            Contract_DataList.DataBind();
+            if (!IsPostBack)
+                Contract_DataList.DataBind();
 
             ASPxTextBox txtZile = Contract_DataList.Items[0].FindControl("txtNrZile") as ASPxTextBox;
             ASPxTextBox txtLuni = Contract_DataList.Items[0].FindControl("txtNrLuni") as ASPxTextBox;

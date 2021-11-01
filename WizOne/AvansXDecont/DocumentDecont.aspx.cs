@@ -78,7 +78,7 @@ namespace WizOne.AvansXDecont
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString() + " / Document Decont"; ;
 
-                if (Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) != 2001)
+                if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 1 || Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) != 2001)
                     btnPrint.ClientVisible = false;
 
                 decimal suma = Convert.ToDecimal(General.Nz(Session["AvsXDec_SumaDecont"], 0));

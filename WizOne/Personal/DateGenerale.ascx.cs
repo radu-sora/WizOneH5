@@ -19,7 +19,7 @@ namespace WizOne.Personal
     public partial class DateGenerale : System.Web.UI.UserControl
     {
 
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
 
             try
@@ -42,7 +42,8 @@ namespace WizOne.Personal
 
                 //bindingSource1.DataSource = table;
                 DateGenListView.DataSource = table;
-                DateGenListView.DataBind();              
+                if (!IsPostBack)
+                    DateGenListView.DataBind();              
 
                 ASPxRadioButton chk1 = DateGenListView.Items[0].FindControl("chkM") as ASPxRadioButton;
                 ASPxRadioButton chk2 = DateGenListView.Items[0].FindControl("chkF") as ASPxRadioButton;

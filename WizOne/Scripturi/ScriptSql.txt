@@ -18680,3 +18680,13 @@ SELECT @ZileCuveniteAn, isnull(@ZileCuvenite,0), @ZileCuveniteZi, isnull((select
 
 RETURN;
 END
+
+
+----  2.2.139.01  ----
+
+
+ALTER TABLE Ptj_Intrari ADD ValModifValStr int
+GO
+
+UPDATE Ptj_Intrari SET ValModifValStr = 4 WHERE CuloareValoare='#e6c8fa'
+GO		

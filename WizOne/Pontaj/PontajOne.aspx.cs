@@ -784,6 +784,12 @@ namespace WizOne.Pontaj
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
 
                 ASPxDataUpdateValues upd = e.UpdateValues[0] as ASPxDataUpdateValues;
+                if (upd.Keys.Count == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
                 object[] keys = new object[] { upd.Keys[0] };
 
                 DataRow row = dt.Rows.Find(keys);
@@ -797,6 +803,15 @@ namespace WizOne.Pontaj
                 string strSql = "";
                 var dic = upd.NewValues.Cast<DictionaryEntry>().OrderBy(r => r.Key).ToDictionary(c => c.Key, d => d.Value);
 
+                //Florin 2020.09.16
+                string modifInOut = General.Nz(row["ModifInOut"], "").ToString();
+
+                //Florin #916 2021.04.28
+                string valStrOld = "";
+
+                //Florin 2021.04.07 - #888 si #983
+                string sqlDel = "";
+
                 foreach (var l in dic)
                 {
                     string numeCol = l.Key.ToString();
@@ -804,11 +819,17 @@ namespace WizOne.Pontaj
                     dynamic newValue = upd.NewValues[numeCol];
                     if (oldValue != null && upd.OldValues[numeCol].GetType() == typeof(System.DBNull))
                         oldValue = null;
+                    if (newValue != null && upd.NewValues[numeCol].GetType() == typeof(System.DBNull))
+                        newValue = null;
+
+                    //Florin #916 2021.04.28
+                    if (numeCol == "ValStr")
+                        valStrOld = General.Nz(oldValue, "").ToString();
 
                     if (oldValue != newValue)
                     {
                         //daca sunt valorile temporare ValTmp
-                        if (numeCol.Length >= 5 && numeCol.Substring(0, 6).ToLower() == "valtmp" && General.IsNumeric(numeCol.Replace("ValTmp", "")))
+                        if (numeCol.Length >= 6 && numeCol.Substring(0, 6).ToLower() == "valtmp" && General.IsNumeric(numeCol.Replace("ValTmp", "")))
                         {
                             string i = numeCol.Replace("ValTmp", "");
                             if (!adaugat)
@@ -835,13 +856,16 @@ namespace WizOne.Pontaj
                                 inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
                             try
                             {
-                                if (i > 1 && row["Out" + (i - 1)] != DBNull.Value && Convert.ToDateTime(row["Out" + (i - 1)]) > inOut)
+                                if (i > 1 && upd.NewValues["Out" + (i - 1)] != DBNull.Value && Convert.ToDateTime(upd.NewValues["Out" + (i - 1)]) > inOut)
                                     row[numeCol] = inOut.AddDays(1);
                                 else
                                     row[numeCol] = inOut;
 
                                 cmp += $@", ""{numeCol}""=" + General.ToDataUniv(Convert.ToDateTime(row[numeCol]), true);
                                 row[numeCol] = inOut;
+
+                                if (!modifInOut.Contains(numeCol + ";"))
+                                    modifInOut += numeCol + ";";
                             }
                             catch (Exception ex)
                             {
@@ -867,6 +891,9 @@ namespace WizOne.Pontaj
                                     row[numeCol] = inOut;
 
                                 cmp += $@", ""{numeCol}""=" + General.ToDataUniv(Convert.ToDateTime(row[numeCol]), true);
+
+                                if (!modifInOut.Contains(numeCol + ";"))
+                                    modifInOut += numeCol + ";";
                             }
                             catch (Exception ex)
                             {
@@ -882,12 +909,38 @@ namespace WizOne.Pontaj
                             VALUES({f10003}, {General.ToDataUniv(ziua)}, '{newValue}', '{oldValue}', {Session["UserID"]}, {General.CurrentDate()}, 'Pontajul Detaliat - modificare pontare', {Session["UserId"]}, {General.CurrentDate()});" + Environment.NewLine;
                         }
 
+                        //Florin 2021.04.07 - #888 si #983 - am modificat sqlDel
                         //daca este ValAbs, stergem pontajul pe centrii de cost
-                        if (newValue != null && numeCol.ToLower() == "valabs")
+                        if (numeCol.ToLower() == "valabs")
                         {
-                            absentaDeTipZi = true;
-                            if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
-                                strSql += $@"DELETE FROM ""Ptj_CC"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
+                            if (newValue != null)
+                            {
+                                absentaDeTipZi = true;
+                                if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
+                                    strSql += $@"DELETE FROM ""Ptj_CC"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
+
+                                //Florin 2021.11.03 - #1041 - am adaugat ValModifValStr
+                                //Radu 30.03.2021
+                                cmp += @", ""ValStr""='" + newValue + "', ValModifValStr = " + (int)Constante.TipModificarePontaj.ModificatManual;
+                                row["ValStr"] = newValue;
+
+                                sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null,""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
+                                    ""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null
+                                    WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+                            }
+                            else
+                                sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+
+                            continue;
+                        }
+
+
+                        //daca sunt F-urile temporare FTmp
+                        if (numeCol.IndexOf("FTmp") >= 0)
+                        {
+                            string i = numeCol.Replace("FTmp", "");
+                            cmp += $@", ""F{i}""=" + (Convert.ToInt32(Convert.ToDateTime(newValue).Minute) + Convert.ToInt32((Convert.ToDateTime(newValue).Hour * 60))).ToString();
+                            row["F" + i] = Convert.ToInt32(Convert.ToDateTime(newValue).Minute) + Convert.ToInt32((Convert.ToDateTime(newValue).Hour * 60));
                             continue;
                         }
 
@@ -917,6 +970,11 @@ namespace WizOne.Pontaj
                     }
                 }
 
+                //Florin 2020.09.16
+                string cmpInOut = "";
+                if (modifInOut != "")
+                    cmpInOut = $@",""ModifInOut""='{modifInOut}'";
+
                 if (cmp != "")
                     strSql += $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
 
@@ -936,6 +994,7 @@ namespace WizOne.Pontaj
                     else
                         General.ExecutaNonQuery(
                             "BEGIN " + Environment.NewLine +
+                            sqlDel + Environment.NewLine +
                             strSql + Environment.NewLine +
                             "END;", null);
                 }
@@ -950,6 +1009,13 @@ namespace WizOne.Pontaj
                     }
 
                     General.CalculFormule(f10003, null, ziua, null);
+
+                    //Florin #916 2021.04.28
+                    General.ExecutaNonQuery(
+                        $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                        SELECT F10003, Ziua , ValStr, '{valStrOld}', {Session["UserID"]}, {General.CurrentDate()}, 
+                        'Pontajul Detaliat - modificare pontare', {Session["UserId"]}, {General.CurrentDate()} 
+                        FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)} AND ValStr <> '{valStrOld}'");
                 }
 
                 IncarcaGrid();
@@ -957,8 +1023,8 @@ namespace WizOne.Pontaj
                 //Florin 2020.02.07
                 if (msg != "" && msg.Substring(0, 1) != "2")
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment") + ": " + Dami.TraduCuvant(msg);
-                else
-                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+                //else
+                //    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
 
                 e.Handled = true;
             }

@@ -1958,7 +1958,11 @@ namespace WizOne.Pontaj
 
                 if (General.Nz(cmbTipAbs.Value, "").ToString() != "")
                 {
-                    sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{cmbTipAbs.Text}', Val0=NULL, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+                    //Florin 2021.11.03 - #1041 - verificam sa fie absente diferita de cea existenta si am adaugat ValModifValStr
+                    if (valStrOld.Trim() == cmbTipAbs.Text.Trim())
+                        return;
+
+                    sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{cmbTipAbs.Text}', Val0=NULL, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()}, ValModifValStr={(int)Constante.TipModificarePontaj.ModificatManual} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                     
                     //Florin 2021.04.02 - #881
                     if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
@@ -2028,7 +2032,7 @@ namespace WizOne.Pontaj
                             dt.Rows[0][colNume] = valCalc;
                         }
 
-                        cmp += ",\"" + colNume.Replace("Val", "ValModif") + "\"=4";
+                        cmp += ",\"" + colNume.Replace("Val", "ValModif") + "\"=" + (int)Constante.TipModificarePontaj.ModificatManual;
                         if (General.Nz(dr["VerificareNrMaxOre"],0).ToString() == "1") nrMin += valCalc;
                     }
 

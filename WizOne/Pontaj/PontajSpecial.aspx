@@ -275,6 +275,20 @@
                                 </tr>
                                 <tr>
                                     <td colspan="12">
+                                        <div style="float:left; padding-right:15px;">                  
+                                            <dx:ASPxRadioButton ID="rbInitNormal" Width="150" runat="server" Text="Initializare normala" style="display:inline-block;"  ClientInstanceName="rbInitNormal"
+                                                 GroupName="Initializare">
+                                                <ClientSideEvents CheckedChanged="function(s,e){  pnlCtl.PerformCallback('rbInitNormal'); }" />
+                                            </dx:ASPxRadioButton>						
+                                            <dx:ASPxRadioButton ID="rbInitCC" Width="250" runat="server" Text="Initializare pe centre de cost" style="display:inline-block;"  ClientInstanceName="rbInitCC"
+                                                 GroupName="Initializare">
+                                                <ClientSideEvents CheckedChanged="function(s,e){  pnlCtl.PerformCallback('rbInitCC'); }" />
+                                            </dx:ASPxRadioButton>						
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">
                                         <div style="float:left; padding-right:150px;padding-bottom:10px;" >
 							                <dx:ASPxTextBox ID="txtZiua1" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                             <dx:ASPxTextBox ID="txtZiua2" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
@@ -400,6 +414,8 @@
                                             </PanelCollection>
                                         </dx:ASPxRoundPanel>
                                     </td>
+                                </tr>
+                                <tr>
                                     <td>
                                         <dx:ASPxRoundPanel ID="pnl4" ClientInstanceName="pnl4" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 4" Width="20%">
                                             <HeaderStyle Font-Bold="true" />   
@@ -427,6 +443,8 @@
                                             </PanelCollection>
                                         </dx:ASPxRoundPanel>
                                     </td>
+                                </tr>
+                                <tr>
                                     <td>
                                         <dx:ASPxRoundPanel ID="pnl7" ClientInstanceName="pnl7" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 7" Width="20%">
                                             <HeaderStyle Font-Bold="true" />   
@@ -454,17 +472,7 @@
                                             </PanelCollection>
                                         </dx:ASPxRoundPanel>
                                     </td>
-                                    <td>
-                                        <dx:ASPxRoundPanel ID="pnl10" ClientInstanceName="pnl10" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 10" Width="20%">
-                                            <HeaderStyle Font-Bold="true" />   
-                                            <PanelCollection>
-                                                <dx:PanelContent>
-                                                </dx:PanelContent>
-                                            </PanelCollection>
-                                        </dx:ASPxRoundPanel>
-                                    </td>
                                 </tr>
-
 
                                 <tr>
                                     <td colspan="12">

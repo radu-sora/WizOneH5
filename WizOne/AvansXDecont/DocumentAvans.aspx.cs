@@ -12,6 +12,7 @@ using System.Web.UI.WebControls;
 using WizOne.Module;
 using System.Globalization;
 using DevExpress.Web.Data;
+using System.Web.Hosting;
 
 namespace WizOne.AvansXDecont
 {
@@ -612,14 +613,18 @@ namespace WizOne.AvansXDecont
                     #endregion
 
                     #region  Notificare strat
+                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
-                    #region  Notificare strat
+                    int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
 
-                    //ctxNtf.TrimiteNotificare("AvansXDecont.Document", "grDate", ent, idUser, f10003);
+                    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                    {
+                        NotifAsync.TrimiteNotificare("AvansXDecont.Document", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM AvsXDec_Document Z WHERE DocumentId=" + DocumentId.ToString(), "AvsXDec_Document", DocumentId, idUser, marcaUser, arrParam);
+                    });
 
                     #endregion
 
-                    #endregion
+
 
 
                     msg = "OK";
@@ -1135,11 +1140,11 @@ namespace WizOne.AvansXDecont
             entSettingsExpense = lstVwAvsXDec_Settings.Select("KeyField1 = " + KeyField1  + " AND KeyField2 = " + KeyField2  + " AND KeyField3 = " + KeyField3 + " AND F71802 = " + General.Nz(Session["IdFunctieAngajat"], "-99").ToString() + " AND CurrencyId = " + ent.Rows[0]["CurrencyId"].ToString());
             /*nu am gasit o setare conform celor de mai sus si functiei, incercam
              * sa gasim o configurare conform celor de mai sus si idfunctie = -99*/
-            if (entSettingsExpense == null)
+            if (entSettingsExpense == null || entSettingsExpense.Count() == 0)
             {
                 entSettingsExpense = lstVwAvsXDec_Settings.Select("KeyField1 = " + KeyField1 + " AND KeyField2 = " + KeyField2 + " AND KeyField3 =  " + KeyField3 + " AND F71802 = -99 AND CurrencyId = " + ent.Rows[0]["CurrencyId"].ToString());
                 /*daca tot nu gasim o configurare, atunci in mod default diurna = 0*/
-                if (entSettingsExpense == null)
+                if (entSettingsExpense == null || entSettingsExpense.Count() == 0)
                 {
                     valExpense = initialValExpense;
                     minValue = 0;
@@ -1149,20 +1154,31 @@ namespace WizOne.AvansXDecont
             }
 
             #region validare cheltuiala conform configurari
-            if (Convert.ToDecimal((entSettingsExpense[0]["MinimumPay"] == DBNull.Value ? 0 : entSettingsExpense[0]["MinimumPay"]).ToString()) <= initialValExpense && Convert.ToDecimal((entSettingsExpense[0]["MaximumPay"] == DBNull.Value ? 0 : entSettingsExpense[0]["MaximumPay"]).ToString()) >= initialValExpense)
+            if (entSettingsExpense.Count() > 0)
+            {
+                if (Convert.ToDecimal((entSettingsExpense[0]["MinimumPay"] == DBNull.Value ? 0 : entSettingsExpense[0]["MinimumPay"]).ToString()) <= initialValExpense && Convert.ToDecimal((entSettingsExpense[0]["MaximumPay"] == DBNull.Value ? 0 : entSettingsExpense[0]["MaximumPay"]).ToString()) >= initialValExpense)
+                {
+                    valExpense = initialValExpense;
+                    minValue = 0;
+                    maxValue = 0;
+                    return true;
+                }
+                else
+                {
+                    valExpense = Convert.ToDecimal((entSettingsExpense[0]["MinimumPay"] == DBNull.Value ? 0 : entSettingsExpense[0]["MinimumPay"]).ToString());
+                    minValue = Convert.ToDecimal((entSettingsExpense[0]["MinimumPay"] == DBNull.Value ? 0 : entSettingsExpense[0]["MinimumPay"]).ToString());
+                    maxValue = Convert.ToDecimal((entSettingsExpense[0]["MaximumPay"] == DBNull.Value ? 0 : entSettingsExpense[0]["MaximumPay"]).ToString());
+                    return false;
+                }
+            }
+            else
             {
                 valExpense = initialValExpense;
                 minValue = 0;
                 maxValue = 0;
                 return true;
             }
-            else
-            {
-                valExpense = Convert.ToDecimal((entSettingsExpense[0]["MinimumPay"] == DBNull.Value ? 0 : entSettingsExpense[0]["MinimumPay"]).ToString());
-                minValue = Convert.ToDecimal((entSettingsExpense[0]["MinimumPay"] == DBNull.Value ? 0 : entSettingsExpense[0]["MinimumPay"]).ToString());
-                maxValue = Convert.ToDecimal((entSettingsExpense[0]["MaximumPay"] == DBNull.Value ? 0 : entSettingsExpense[0]["MaximumPay"]).ToString());
-                return false;
-            }
+
             #endregion
 
         }
@@ -1948,6 +1964,11 @@ namespace WizOne.AvansXDecont
                 DataTable dt = Session["AvsXDec_SursaDateCheltuieli"] as DataTable;
                 DataRow row = dt.Rows.Find(keys);
                 int docDetId = 0;
+
+                foreach (DataColumn col in dt.Columns)
+                    if (col.ColumnName == "DictionaryItemId" || col.ColumnName == "Amount" || col.ColumnName == "FreeTxt")
+                        col.ReadOnly = false;
+
                 foreach (DataColumn col in dt.Columns)
                 {
                     if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible && !col.ReadOnly)
@@ -2452,8 +2473,17 @@ namespace WizOne.AvansXDecont
 
                 try
                 {
-                    //srvNotif ctxNtf = new srvNotif();
-                    //ctxNtf.TrimiteNotificare("AvansXDecont.Document", "grDate", entDocument, (int)entDocument.USER_NO, entDocument.F10003);
+                    #region  Notificare strat
+                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+
+                    int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+                    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                    {
+                        NotifAsync.TrimiteNotificare("AvansXDecont.Document", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM AvsXDec_Document Z WHERE DocumentId=" + IdDocument.ToString(), "AvsXDec_Document", IdDocument, Convert.ToInt32(Session["UserId"].ToString()), marcaUser, arrParam);
+                    });
+
+                    #endregion
                 }
                 catch (Exception) { }
 
@@ -2731,8 +2761,8 @@ namespace WizOne.AvansXDecont
         private void AvsXDec_Settings_SetDIMValue(int dim, out int value)
         {
             value = -99;
-            DataTable ent = Session["AvsXDec_SursaDate"] as DataTable;
-            DataTable lstCheltuieli = Session["AvsXDec_SursaDateCheltuieli"] as DataTable; //GetmetaAvsXDec_AvansDetailCheltuieli(Convert.ToInt32(Session["AvsXDec_IdDocument"].ToString()));
+            DataTable ent = Session["AvsXDec_SursaDate"] as DataTable;  
+            DataTable lstCheltuieli = GetAvsXDec_DictionaryItemCheltuiala(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
             string DIMSetting = string.Empty;
             DataTable lstVwAvsXDec_Settings_Config = General.IncarcaDT(@"select * from ""vwAvsXDec_Settings_Config""", null);
             if (lstVwAvsXDec_Settings_Config != null && lstVwAvsXDec_Settings_Config.Rows.Count > 0 && lstCheltuieli != null && lstCheltuieli.Rows.Count > 0)
@@ -3111,11 +3141,12 @@ namespace WizOne.AvansXDecont
                     entCheltuialaDiurna = entCheltuialaDiurnaTot.Select("DictionaryItemId = " + itmDiurna["DictionaryItemId"].ToString()).FirstOrDefault();
                 if (entCheltuialaDiurna != null)
                 {
-                    ent.Rows[0]["EstimatedAmount"] = Convert.ToInt32(ent.Rows[0]["EstimatedAmount"].ToString()) - Convert.ToInt32(entCheltuialaDiurna["Amount"].ToString());
+                    ent.Rows[0]["EstimatedAmount"] = Convert.ToDecimal(General.Nz(ent.Rows[0]["EstimatedAmount"], 0).ToString()) - Convert.ToDecimal(General.Nz(entCheltuialaDiurna["Amount"], 0).ToString());
                     entCheltuialaDiurna.Delete();
                 }
                 grDate.DataSource = entCheltuialaDiurnaTot;
                 grDate.KeyFieldName = "DocumentDetailId;DocumentId";
+                grDate.DataBind();
                 Session["AvsXDec_SursaDateCheltuieli"] = entCheltuialaDiurnaTot;
             }
             Session["AvsXDec_SursaDate"] = ent;

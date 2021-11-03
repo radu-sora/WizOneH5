@@ -19629,7 +19629,7 @@ ON dict."DictionaryId" = dictItem."DictionaryId";
 --  DDL for View vwAvsXDec_Nomen_ChDecDecontare
 --------------------------------------------------------
 GO
-  CREATE  VIEW "vwAvsXDec_Nomen_ChDecDecontare" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  CREATE  VIEW "vwAvsXDec_Nomen_ChDecDecontare" ("DictionaryId", "DictionaryItemId", "DictionaryItemName", "CodCheltuiala") AS 
   WITH "cteSettingsNomenCheltuieli" AS
   (SELECT par."Nume",
     par."Valoare"
@@ -19638,7 +19638,8 @@ GO
   )
 SELECT dictItem."DictionaryId",
   dictItem."DictionaryItemId",
-  dictItem."DictionaryItemName"
+  dictItem."DictionaryItemName",
+  dictItem."CodCheltuiala"
 FROM "AvsXDec_Dictionary" dict
 JOIN "cteSettingsNomenCheltuieli" sett
 ON dict."DictionaryCode" = sett."Valoare"
@@ -19724,7 +19725,7 @@ ON dict."DictionaryId" = dictItem."DictionaryId";
 --  DDL for View vwAvsXDec_Nomen_TipCheltuieli
 --------------------------------------------------------
 GO
-  CREATE  VIEW "vwAvsXDec_Nomen_TipCheltuieli" ("DictionaryId", "DictionaryItemId", "DictionaryItemName") AS 
+  CREATE  VIEW "vwAvsXDec_Nomen_TipCheltuieli" ("DictionaryId", "DictionaryItemId", "DictionaryItemName", "CodCheltuiala") AS 
   WITH "cteSettingsNomenCheltuieli" AS
   (SELECT par."Nume",
     par."Valoare"
@@ -19733,7 +19734,8 @@ GO
   )
 SELECT dictItem."DictionaryId",
   dictItem."DictionaryItemId",
-  dictItem."DictionaryItemName"
+  dictItem."DictionaryItemName",
+  dictItem."CodCheltuiala"
 FROM "AvsXDec_Dictionary" dict
 JOIN "cteSettingsNomenCheltuieli" sett
 ON dict."DictionaryCode" = sett."Valoare"
@@ -21081,7 +21083,8 @@ CREATE SEQUENCE [dbo].[AvsXDec_BusinessTransaction_SEQ]
  CACHE 
 GO
 
-
+ALTER TABLE AvsXDec_DictionaryItem ADD CodCheltuiala int
+GO
 
 ---- AvsXDec END ----
 
@@ -21090,4 +21093,8 @@ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('
 GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_Denumire', '', 'Denumirea sub care se salveaza fluturasii, cu etichetele <Anul>, <Luna> si <Marca> ce vor fi inlocuite in cod; ex: PAYSLIP_PRY_RO001_RO_Y<Anul>_P<Luna>_E<Marca>_R01', 0)
+GO
+
+
+ALTER TABLE PtjSpecial_Sabloane ADD TipInit int
 GO

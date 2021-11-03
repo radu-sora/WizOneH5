@@ -348,6 +348,24 @@ namespace WizOne.Pontaj
         protected global::DevExpress.Web.ASPxButton btnSterge;
 
         /// <summary>
+        /// rbInitNormal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxRadioButton rbInitNormal;
+
+        /// <summary>
+        /// rbInitCC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxRadioButton rbInitCC;
+
+        /// <summary>
         /// txtZiua1 control.
         /// </summary>
         /// <remarks>
@@ -985,15 +1003,6 @@ namespace WizOne.Pontaj
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRoundPanel pnl9;
-
-        /// <summary>
-        /// pnl10 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxRoundPanel pnl10;
 
         /// <summary>
         /// lblBife control.

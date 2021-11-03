@@ -13,6 +13,7 @@ using WizOne.Module;
 using System.Globalization;
 using DevExpress.Web.Data;
 using System.Data.SqlClient;
+using System.Web.Hosting;
 
 namespace WizOne.AvansXDecont
 {
@@ -506,10 +507,10 @@ namespace WizOne.AvansXDecont
                 switch (documentTypeId)
                 {
                     case 2001: /*Decontare avans*/
-                        sql = "SELECT a.DictionaryId, a.DictionaryItemId, a.DictionaryItemName FROM vwAvsXDec_Nomen_TipCheltuieli a ";
+                        sql = "SELECT a.DictionaryId, a.DictionaryItemId, a.DictionaryItemName, a.CodCheltuiala FROM vwAvsXDec_Nomen_TipCheltuieli a ";
                         break;
                     case 2002: /*Decontare avans spre decontare*/
-                        sql = "SELECT a.DictionaryId, a.DictionaryItemId, a.DictionaryItemName FROM vwAvsXDec_Nomen_ChDecDecontare a ";
+                        sql = "SELECT a.DictionaryId, a.DictionaryItemId, a.DictionaryItemName, a.CodCheltuiala FROM vwAvsXDec_Nomen_ChDecDecontare a ";
                         break;
                     case 2003: /*Decont Administrativ*/
                         //q = from a in this.ObjectContext.vwAvsXDec_Nomen_TipChDecAdmin
@@ -920,15 +921,20 @@ namespace WizOne.AvansXDecont
                     }
                     #endregion
 
-                    #region  Notificare strat
+
 
                     #region  Notificare strat
+                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
-                    //ctxNtf.TrimiteNotificare("AvansXDecont.Document", "grDate", ent, idUser, f10003);
+                    int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+                    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                    {
+                        NotifAsync.TrimiteNotificare("AvansXDecont.Document", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM AvsXDec_Document Z WHERE DocumentId=" + DocumentId.ToString(), "AvsXDec_Document", DocumentId, idUser, marcaUser, arrParam);
+                    });
 
                     #endregion
 
-                    #endregion
 
 
                     msg = "OK";
@@ -2355,7 +2361,7 @@ namespace WizOne.AvansXDecont
                 DataTable lstCheltuieliAvans = Session["AvsXDec_SursaDateEstChelt"] as DataTable;
                 int detailId = -1;
                 object[] row = new object[dt.Columns.Count];
-                int x = 0;
+                int x = 0, idChelt = 0;
                 foreach (DataColumn col in dt.Columns)
                 {
                     if (!col.AutoIncrement)
@@ -2463,7 +2469,8 @@ namespace WizOne.AvansXDecont
                                         break;
                                 }
                                 #endregion
-                                row[x] = e.NewValues[col.ColumnName]; 
+                                row[x] = e.NewValues[col.ColumnName];
+                                idChelt = Convert.ToInt32(e.NewValues[col.ColumnName].ToString());
                                 break;
                             case "DOCDATEDECONT":
                                 /*LeonardM 25.08.2016
@@ -2504,6 +2511,18 @@ namespace WizOne.AvansXDecont
                                 detailId = Dami.NextId("AvsXDec_DecontDetail", 1);
                                 row[x] = detailId;
                                 e.NewValues["DocumentDetailId"] = detailId;
+                                break;
+                            case "BUGETLINE":
+                                if (idChelt != 0)
+                                {
+                                    DataTable dtChelt = GetDecontExpenseType(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
+                                    if (dtChelt != null && dtChelt.Rows.Count > 0 && dtChelt.Select("DictionaryItemId = " + idChelt) != null)
+                                    {
+                                        DataRow drCh = dtChelt.Select("DictionaryItemId = " + idChelt).FirstOrDefault();
+                                        DataTable dtDep = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + Session["AvsXDec_Marca"].ToString(), null);
+                                        row[x] = dtDep.Rows[0]["F10007"].ToString() + General.Nz(drCh["CodCheltuiala"], "").ToString();
+                                    }
+                                }
                                 break;
                             default:
                                 row[x] = e.NewValues[col.ColumnName];
@@ -2557,6 +2576,13 @@ namespace WizOne.AvansXDecont
                 DataTable ent = Session["AvsXDec_SursaDateDec"] as DataTable;
                 DataTable dt = Session["AvsXDec_SursaDateDocJust"] as DataTable;
                 DataRow row = dt.Rows.Find(keys);
+                int idChelt = 0;
+
+                foreach (DataColumn col in dt.Columns)
+                    if (col.ColumnName == "DictionaryItemId" || col.ColumnName == "Furnizor" || col.ColumnName == "DocNumberDecont" ||
+                        col.ColumnName == "DocDateDecont" || col.ColumnName == "CurrencyId" || col.ColumnName == "TotalPayment" ||
+                        col.ColumnName == "BugetLine" || col.ColumnName == "ExpenseTypeId" || col.ColumnName == "FreeTxt")
+                        col.ReadOnly = false;
 
                 foreach (DataColumn col in dt.Columns)
                 {
@@ -2674,6 +2700,7 @@ namespace WizOne.AvansXDecont
                                 break;
                         }
                         #endregion
+                        idChelt = Convert.ToInt32(e.NewValues[col.ColumnName].ToString());
                     }
 
                     if (col.ColumnName == "DocDateDecont")
@@ -2704,7 +2731,20 @@ namespace WizOne.AvansXDecont
                                 #endregion
                                 break;
                         }
-                    }    
+                    }
+                    if (col.ColumnName == "BugetLine")
+                    {
+                        if (idChelt != 0)
+                        {
+                            DataTable dtChelt = GetDecontExpenseType(Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()));
+                            if (dtChelt != null && dtChelt.Rows.Count > 0 && dtChelt.Select("DictionaryItemId = " + idChelt) != null)
+                            {
+                                DataRow drCh = dtChelt.Select("DictionaryItemId = " + idChelt).FirstOrDefault();
+                                DataTable dtDep = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + Session["AvsXDec_Marca"].ToString(), null);
+                                row["BugetLine"] = dtDep.Rows[0]["F10007"].ToString() + General.Nz(drCh["CodCheltuiala"], "").ToString();
+                            }
+                        }
+                    }
                 }
                 Session["AvsXDec_SursaDateDec"] = ent;
 
@@ -2956,6 +2996,11 @@ namespace WizOne.AvansXDecont
                 DataRow row = dt.Rows.Find(keys);
 
                 foreach (DataColumn col in dt.Columns)
+                    if (col.ColumnName == "DictionaryItemId"  || col.ColumnName == "CurrencyId" || col.ColumnName == "TotalPayment" ||
+                        col.ColumnName == "BugetLine" || col.ColumnName == "FreeTxt")
+                        col.ReadOnly = false;
+
+                foreach (DataColumn col in dt.Columns)
                 {
                     if (!col.AutoIncrement && grDateEstChelt.Columns[col.ColumnName] != null && grDateEstChelt.Columns[col.ColumnName].Visible)
                     {
@@ -3117,6 +3162,11 @@ namespace WizOne.AvansXDecont
 
                 DataTable dt = Session["AvsXDec_SursaDatePlataBanca"] as DataTable;
                 DataRow row = dt.Rows.Find(keys);
+
+                foreach (DataColumn col in dt.Columns)
+                    if (col.ColumnName == "DictionaryItemId" || col.ColumnName == "CurrencyId" || col.ColumnName == "TotalPayment" ||
+                        col.ColumnName == "DocNumberDecont" || col.ColumnName == "DocDateDecont")
+                        col.ReadOnly = false;
 
                 foreach (DataColumn col in dt.Columns)
                 {
@@ -3508,8 +3558,17 @@ namespace WizOne.AvansXDecont
 
                 try
                 {
-                    //srvNotif ctxNtf = new srvNotif();
-                    //ctxNtf.TrimiteNotificare("AvansXDecont.Document", "grDate", entDocument, (int)entDocument.USER_NO, entDocument.F10003);
+                    #region  Notificare strat
+                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+
+                    int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+                    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                    {
+                        NotifAsync.TrimiteNotificare("AvansXDecont.Document", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM AvsXDec_Document Z WHERE DocumentId=" + IdDocument.ToString(), "AvsXDec_Document", IdDocument, Convert.ToInt32(Session["UserId"].ToString()), marcaUser, arrParam);
+                    });
+
+                    #endregion
                 }
                 catch (Exception) { }
 

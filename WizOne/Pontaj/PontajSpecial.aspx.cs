@@ -238,12 +238,153 @@ namespace WizOne.Pontaj
                 cmbCtr.DataBind();
 
                 IncarcaPopUp();
+
+                DataTable dtCC = General.IncarcaDT("SELECT * FROM F062");
+                for (int i = 1; i <= 9; i++)
+                    TestAfisare(i, dtCC);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+        private void TestAfisare(int i, DataTable dtCC)
+        {
+            HtmlTable table = new HtmlTable();
+
+            HtmlTableRow row = new HtmlTableRow();
+            HtmlTableCell cell;
+
+            cell = new HtmlTableCell();
+            Label lbl1 = new Label();
+            lbl1.Text = "Ziua";
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            cell = new HtmlTableCell();
+            lbl1 = new Label();
+            lbl1.Text = "Centru cost " + i;
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            cell = new HtmlTableCell();
+            lbl1 = new Label();
+            lbl1.Text = "Ore";
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            cell = new HtmlTableCell();
+            lbl1 = new Label();
+            lbl1.Text = "In";
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            cell = new HtmlTableCell();
+            lbl1 = new Label();
+            lbl1.Text = "Out";
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            cell = new HtmlTableCell();
+            lbl1 = new Label();
+            lbl1.Text = "Pauza";
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            table.Rows.Add(row);
+
+
+            for (int j = 1; j <= 5; j++)
+            {
+                row = new HtmlTableRow();
+
+                cell = new HtmlTableCell();
+                lbl1 = new Label();
+                lbl1.Text = j.ToString();
+                lbl1.Style.Add("margin", "5px 5px !important");
+                cell.Controls.Add(lbl1);
+                row.Cells.Add(cell);
+
+                cell = new HtmlTableCell();
+                ASPxComboBox cmb = new ASPxComboBox();
+                cmb.ID = "cmb" + j + "_CC" + i;
+                cmb.ClientIDMode = ClientIDMode.Static;
+                cmb.ClientInstanceName = "cmb" + j + "_CC" + i;
+                cmb.Width = Unit.Pixel(125);                
+                cmb.Style.Add("margin", "5px 5px !important");                
+                cmb.DataSource = dtCC;
+                cmb.ValueField = "F06204";
+                cmb.TextField = "F06205";
+                cmb.DataBind();
+                cell.Controls.Add(cmb);                
+                row.Cells.Add(cell);
+
+                cell = new HtmlTableCell();
+                ASPxTextBox txt = new ASPxTextBox();
+                txt.ID = "txt" + j + "_CC" + i; 
+                txt.ClientIDMode = ClientIDMode.Static;
+                txt.ClientInstanceName = "txt" + j + "_CC" + i;
+                txt.Width = Unit.Pixel(20);
+                txt.Style.Add("margin", "5px 5px !important");
+                cell.Controls.Add(txt);
+                row.Cells.Add(cell);
+
+                cell = new HtmlTableCell();
+                ASPxTimeEdit te = new ASPxTimeEdit();
+                te.ID = "teIn" + j + "_CC" + i;
+                te.ClientIDMode = ClientIDMode.Static;
+                te.ClientInstanceName = "teIn" + j + "_CC" + i;
+                te.Width = Unit.Pixel(60);
+                te.Style.Add("margin", "5px 5px !important");
+                cell.Controls.Add(te);
+                row.Cells.Add(cell);
+
+                cell = new HtmlTableCell();
+                te = new ASPxTimeEdit();
+                te.ID = "teOut" + j + "_CC" + i;
+                te.ClientIDMode = ClientIDMode.Static;
+                te.ClientInstanceName = "teOut" + j + "_CC" + i;
+                te.Width = Unit.Pixel(60);
+                te.Style.Add("margin", "5px 5px !important");
+                cell.Controls.Add(te);
+                row.Cells.Add(cell);
+
+                cell = new HtmlTableCell();
+                te = new ASPxTimeEdit();
+                te.ID = "teP" + j + "_CC" + i;
+                te.ClientIDMode = ClientIDMode.Static;
+                te.ClientInstanceName = "teP" + j + "_CC" + i;
+                te.Width = Unit.Pixel(60);
+                te.Style.Add("margin", "5px 5px !important");
+                cell.Controls.Add(te);
+                row.Cells.Add(cell);
+
+                cell = new HtmlTableCell();
+                ASPxButton btn = new ASPxButton();
+                btn.ID = "btn" + j + "_CC" + i;
+                btn.Width = Unit.Pixel(5);
+                btn.Height = Unit.Pixel(5);
+                btn.Font.Size = 5;
+                btn.Image.Url = "../Fisiere/Imagini/Icoane/sterge.png";
+                btn.RenderMode = ButtonRenderMode.Link;
+
+                btn.UseSubmitBehavior = false;
+                cell.Controls.Add(btn);
+                row.Cells.Add(cell);
+
+                table.Rows.Add(row);
+            }
+
+            dynamic ctl = pnlCtl.FindControl("pnl" + i);
+            ctl.Controls.Add(table);
         }
 
         private void IncarcaRoluri()
@@ -1030,6 +1171,10 @@ namespace WizOne.Pontaj
                         txtNumeSablon.Text = "";
                         cmbNrZileSablon.SelectedIndex = -1;
                         cmbSablon.SelectedIndex = -1;
+                        break;
+                    case "rbInitNormal":
+                        break;
+                    case "rbInitCC":
                         break;
                 }
 

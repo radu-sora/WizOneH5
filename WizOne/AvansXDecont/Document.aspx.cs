@@ -468,9 +468,11 @@ namespace WizOne.AvansXDecont
 					if (msg != "")
 					{
 						MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoWarning, "");
-					}	                  
-              
-                }
+					}
+					Session["AvansXDecont_Grid"] = null;
+					IncarcaGrid();
+
+				}
                 #endregion
                 else
                 #region aprobare document
@@ -767,16 +769,15 @@ namespace WizOne.AvansXDecont
 												int idUrmStateHistory = Dami.NextId("AvsXDec_DocumentStateHistory", 1);
 												sql = "INSERT INTO AvsXDec_DocumentStateHistory (Id, DocumentId, CircuitId, DocumentStateId, Pozitie, Culoare, Aprobat, DataAprobare, USER_NO, TIME, Inlocuitor) "
 													+ " VALUES (" + idUrmStateHistory + ", " + dtAvans.Rows[0]["DocumentId"].ToString() + ", " + dtAvans.Rows[0]["CircuitId"].ToString() + ", 8, 22, '" + culAvans + "', 1, GETDATE(), " + idUser + ", GETDATE(), 0)";
-												General.ExecutaNonQuery(sql, null);											
-                
+												General.ExecutaNonQuery(sql, null);
+												#endregion
 
-                                                #region  Notificare strat
-                                                //ctxNtf.TrimiteNotificare("Absente.Aprobare", "grDate", entIstAvans, idUser, f10003);
-                                                #endregion
+												#region  Notificare strat
+												//ctxNtf.TrimiteNotificare("Absente.Aprobare", "grDate", entIstAvans, idUser, f10003);
+												#endregion
 
-                                                #endregion
-                                            }
-                                        }
+											}
+										}
                                     }
 									
 									sql = "SELECT * AvsXDec_Decont WHERE DocumentId = " + dtDoc.Rows[0]["DocumentId"].ToString();
@@ -978,16 +979,22 @@ namespace WizOne.AvansXDecont
                                     break;
                             }
 
-                            #endregion
-                            
+							#endregion
 
-                            #region  Notificare strat
 
-                            //ctxNtf.TrimiteNotificare("AvansXDecont.Document", "grDate", entCer, idUser, f10003);
+							#region  Notificare strat
+							string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
-                            #endregion
+							int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
 
-                            nr++;
+							HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+							{
+								NotifAsync.TrimiteNotificare("AvansXDecont.Document", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM AvsXDec_Document Z WHERE DocumentId=" + DocumentId.ToString(), "AvsXDec_Document", DocumentId, idUser, marcaUser, arrParam);
+							});
+
+							#endregion
+
+							nr++;
 
                         }
                     }
@@ -2008,18 +2015,24 @@ namespace WizOne.AvansXDecont
 							General.ExecutaNonQuery(sql, null);		
                             break;
                     }
-                    #endregion
+					#endregion
 
 
-           
 
-                    #region  Notificare strat
 
-                    //ctxNtf.TrimiteNotificare("AvansXDecont.Document", "grDate", ent, idUser, f10003);
+					#region  Notificare strat
+					string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
-                    #endregion
+					int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
 
-                    msg = "OK";
+					HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+					{
+						NotifAsync.TrimiteNotificare("AvansXDecont.Document", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM AvsXDec_Document Z WHERE DocumentId=" + DocumentId.ToString(), "AvsXDec_Document", DocumentId, idUser, marcaUser, arrParam);
+					});
+
+					#endregion
+
+					msg = "OK";
 
                 }
             }

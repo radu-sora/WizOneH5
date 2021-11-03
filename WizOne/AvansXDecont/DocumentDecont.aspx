@@ -254,12 +254,12 @@
 											</dx:GridViewDataComboBoxColumn>
 											<dx:GridViewDataTextColumn FieldName="TotalPayment" Name="TotalPayment" Caption="Valoare">
 												<PropertiesTextEdit DisplayFormatString="n2" />
-											</dx:GridViewDataTextColumn>
-											<dx:GridViewDataTextColumn FieldName="BugetLine" Name="BugetLine" Caption="Linie buget"/>
+											</dx:GridViewDataTextColumn>											
 											<dx:GridViewDataComboBoxColumn FieldName="ExpenseTypeId" Name="ExpenseTypeId" Caption="Tip cheltuiala" Width="150px" >
 												<Settings SortMode="DisplayText" />
 												<PropertiesComboBox TextField="DictionaryItemName" ValueField="DictionaryItemId" ValueType="System.Int32" DropDownStyle="DropDown" />
 											</dx:GridViewDataComboBoxColumn>
+											<dx:GridViewDataTextColumn FieldName="BugetLine" Name="BugetLine" Caption="Linie buget"/>
 											<dx:GridViewDataTextColumn FieldName="FreeTxt" Name="FreeTxt" Caption="Detalii"/>
 										
 											<dx:GridViewDataTextColumn FieldName="areFisier" Name="areFisier" Caption="areFisier" Visible="false" ShowInCustomizationForm="false"/>
@@ -315,14 +315,14 @@
 														<tr>
 															<td id="lblMoneda" runat="server" style="padding-left:10px !important;">Moneda</td>
 															<td id="lblVal" runat="server" style="padding-left:10px !important;">Valoare</td>
-															<td id="lblLinbug" runat="server" style="padding-left:10px !important;">Linie buget</td>
-															<td id="lblChelt" runat="server" style="padding-left:10px !important;">Tip cheltuiala</td>
+															<td id="lblLinbug" runat="server" style="padding-left:10px !important;">Tip cheltuiala</td>
+															<td id="lblChelt" runat="server" style="padding-left:10px !important;">Linie buget</td>
 														</tr>
 														<tr>
 															<td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbMoneda" runat="server" Width="200px" ValueField="DictionaryItemId" DropDownWidth="200" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("CurrencyId") %>' />
-															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtVal" DisplayFormatString="N2" runat="server" Width="200px" Value='<%# Bind("TotalPayment") %>' /></td>
-															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtLinBug" runat="server" Width="200px" Value='<%# Bind("BugetLine") %>' /></td>
+															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtVal" DisplayFormatString="N2" runat="server" Width="200px" Value='<%# Bind("TotalPayment") %>' /></td>															
 															<td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbChelt" runat="server" Width="200px" ValueField="DictionaryItemId" DropDownWidth="200" TextField="DictionaryItemName" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("ExpenseTypeId") %>' />
+															<td style="padding:10px !important;" ><dx:ASPxTextBox ID="txtLinBug" runat="server" Width="200px" Value='<%# Bind("BugetLine") %>' /></td>
 														</tr>
 														<tr>
 															<td id="lblDet" runat="server" style="padding-left:10px !important;">Detalii</td>

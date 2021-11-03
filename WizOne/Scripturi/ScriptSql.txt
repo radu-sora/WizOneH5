@@ -18682,7 +18682,7 @@ RETURN;
 END
 
 
-----  2.2.139.01  ----
+----  2.2.139.03  ----
 
 
 ALTER TABLE Ptj_Intrari ADD ValModifValStr int

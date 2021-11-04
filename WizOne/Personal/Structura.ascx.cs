@@ -258,7 +258,7 @@ namespace WizOne.Personal
                     ds.Tables[0].Rows[0]["F10007"] = itm.GetFieldValue("F00607");
                     ds.Tables[1].Rows[0]["F10007"] = itm.GetFieldValue("F00607");
                     //Radu 26.08.2019
-                    if (General.Nz(itm.GetFieldValue("CC"), "").ToString() != "0")
+                    if (General.Nz(itm.GetFieldValue("CC"), "").ToString() != "0" && General.Nz(itm.GetFieldValue("CC"), "").ToString() != "9999")
                     {
                         cmbCC.Value = itm.GetFieldValue("CC");
                         ds.Tables[0].Rows[0]["F10053"] = itm.GetFieldValue("CC");

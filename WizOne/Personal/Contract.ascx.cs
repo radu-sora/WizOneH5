@@ -35,13 +35,17 @@ namespace WizOne.Personal
             ASPxDateEdit deDeLa = Contract_DataList.Items[0].FindControl("deDeLaData") as ASPxDateEdit;
             ASPxDateEdit deLa = Contract_DataList.Items[0].FindControl("deLaData") as ASPxDateEdit;
             ASPxDateEdit deTermenRevisal = Contract_DataList.Items[0].FindControl("deTermenRevisal") as ASPxDateEdit;
-            deTermenRevisal.Value = SetDataRevisal(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()));
+            if (!IsPostBack)
+                deTermenRevisal.Value = SetDataRevisal(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()));
 
             int nrLuni = 0, nrZile = 0;
 
-            CalculLuniSiZile(Convert.ToDateTime(deDeLa.Date), Convert.ToDateTime(deLa.Date), out nrLuni, out nrZile);
-            txtZile.Value = nrZile;
-            txtLuni.Value = nrLuni;
+            if (!IsPostBack)
+            {
+                CalculLuniSiZile(Convert.ToDateTime(deDeLa.Date), Convert.ToDateTime(deLa.Date), out nrLuni, out nrZile);
+                txtZile.Value = nrZile;
+                txtLuni.Value = nrLuni;
+            }
             //txtZile.Text = Convert.ToInt32((Convert.ToDateTime(deLa.Date) - Convert.ToDateTime(deDeLa.Date)).TotalDays).ToString();
             //txtLuni.Text = (((Convert.ToDateTime(deLa.Date).Year - Convert.ToDateTime(deDeLa.Date).Year) * 12) + Convert.ToDateTime(deLa.Date).Month - Convert.ToDateTime(deDeLa.Date).Month).ToString();
             //cmbTipAngajat_SelectedIndexChanged(ds.Tables[1].Rows[0]["F10043"].ToString());
@@ -61,6 +65,18 @@ namespace WizOne.Personal
             ASPxDateEdit deLaData = Contract_DataList.Items[0].FindControl("deLaData") as ASPxDateEdit;
 
             ASPxComboBox cmbTipAngajat = Contract_DataList.Items[0].FindControl("cmbTipAng") as ASPxComboBox;
+
+            ASPxComboBox cmbDurCtr = Contract_DataList.Items[0].FindControl("cmbDurCtr") as ASPxComboBox;
+            if (cmbDurCtr.Value != null && Convert.ToInt32(cmbDurCtr.Value) == 1)
+            {
+                deDeLaData.ClientEnabled = false;
+                deLaData.ClientEnabled = false;
+            }
+            else
+            {
+                deDeLaData.ClientEnabled = true;
+                deLaData.ClientEnabled = true;
+            }
 
             if (ds.Tables[1].Rows[0]["F100643"] != DBNull.Value && ds.Tables[1].Rows[0]["F100643"].ToString().Length >= 4)
             {
@@ -296,8 +312,9 @@ namespace WizOne.Personal
                 Session["MP_NvlFunc"] = nvlFunc;
 
             }
-            
-            SetDurataTimpMunca();
+
+            if (!IsPostBack)
+                SetDurataTimpMunca();
 
             ASPxRadioButtonList rbCtrRadiat = Contract_DataList.Items[0].FindControl("rbCtrRadiat") as ASPxRadioButtonList;
             rbCtrRadiat.Value = General.Nz(table.Rows[0]["F1001077"], 0).ToString();
@@ -308,8 +325,9 @@ namespace WizOne.Personal
             if ((dtComp.Rows[0]["F00287"] != DBNull.Value && dtComp.Rows[0]["F00287"].ToString() == "1") || (dtComp.Rows[0]["F00288"] != DBNull.Value && dtComp.Rows[0]["F00288"].ToString() == "1"))
                 chkConstr.ClientEnabled = true;
 
-            ASPxComboBox cmbCOR = Contract_DataList.Items[0].FindControl("cmbCOR") as ASPxComboBox;
+            ASPxComboBox cmbCOR = Contract_DataList.Items[0].FindControl("cmbCOR") as ASPxComboBox;                                     
             cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == DBNull.Value || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
+            
                         
             ds.Tables[1].Rows[0]["F100935"] = nrLuni;
             ds.Tables[1].Rows[0]["F100936"] = nrZile;
@@ -638,6 +656,8 @@ namespace WizOne.Personal
                     //    ds.Tables[1].Rows[0]["F100699"] = param[1];
                     //    Session["InformatiaCurentaPersonal"] = ds;
                     Session["MP_Salariu"] = param[1];
+                    ASPxTextBox txtSalariu = Contract_DataList.Items[0].FindControl("txtSalariu") as ASPxTextBox;
+                    txtSalariu.Text = Session["MP_Salariu"].ToString();
                     break;
                 //case "deDataModifSal":
                 //    data = param[1].Split('.');
@@ -980,6 +1000,14 @@ namespace WizOne.Personal
                     ModifAvans((int)Constante.Atribute.Post);
                     break;
             }
+            ASPxTextBox txtZile = Contract_DataList.Items[0].FindControl("txtNrZile") as ASPxTextBox;
+            ASPxTextBox txtLuni = Contract_DataList.Items[0].FindControl("txtNrLuni") as ASPxTextBox;
+            ASPxDateEdit deDeLa = Contract_DataList.Items[0].FindControl("deDeLaData") as ASPxDateEdit;
+            ASPxDateEdit deLa = Contract_DataList.Items[0].FindControl("deLaData") as ASPxDateEdit;
+            int nrLuni = 0, nrZile = 0;
+            CalculLuniSiZile(Convert.ToDateTime(deDeLa.Date), Convert.ToDateTime(deLa.Date), out nrLuni, out nrZile);
+            txtZile.Value = nrZile;
+            txtLuni.Value = nrLuni;
 
         }
 
@@ -1169,9 +1197,9 @@ namespace WizOne.Personal
 
                 if (Convert.ToInt32(cmbDurataContract.SelectedItem.Value) == 1)
                 {
-                    deDeLaData.Enabled = false;
+                    deDeLaData.ClientEnabled = false;
                     deDeLaData.Value = new DateTime(2100, 1, 1);
-                    deLaData.Enabled = false;
+                    deLaData.ClientEnabled = false;
                     deLaData.Value = new DateTime(2100, 1, 1);
 
                     ds.Tables[0].Rows[0]["F100933"] = new DateTime(2100, 1, 1);
@@ -1215,15 +1243,15 @@ namespace WizOne.Personal
 
                     //}
 
-                    deDeLaData.Enabled = true;
-                    deLaData.Enabled = true;
+                    deDeLaData.ClientEnabled = true;
+                    deLaData.ClientEnabled = true;
 
                     if (deDeLaData.Value != null && deLaData.Value != null)
                     {
                         //inactiveazaDeLaLa = true;
 
-                        deDeLaData.Enabled = true;
-                        deLaData.Enabled = true;
+                        deDeLaData.ClientEnabled = true;
+                        deLaData.ClientEnabled = true;
 
                         if (deDeLaData.Value == null)
                             Contract_pnlCtl.JSProperties["cpAlertMessage"] =  Dami.TraduCuvant("Completati perioada pentru contractul pe perioada determinata!");

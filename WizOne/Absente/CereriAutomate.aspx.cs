@@ -321,7 +321,7 @@ namespace WizOne.Absente
                 if (Constante.tipBD == 2) dt = " TO_DATE('" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString() + "', 'dd/MM/yyyy') ";
 
                 string sql = "SELECT * FROM GENERARE_AUTOMATA_CERERI a WHERE  a.\"IdAbsenta\" =  " + idAbsenta + " AND \"Data\" = " + dt + " AND \"NrOre\" > 0 AND "
-                           + " F10003 IN (select b.F10003 from \"F100Supervizori\" b where b.\"IdSuper\" = (select (-1) * \"UserIntrod\" from \"Ptj_Circuit\" where \"IdAuto\" = a.\"IdCircuit\") and b.\"IdUser\" = " + Session["UserId"].ToString() + ") ";
+                           + " F10003 IN (select b.F10003 from \"F100Supervizori\" b where b.\"IdSuper\" = (select (-1) * \"UserIntrod\" from \"Ptj_Circuit\" where \"IdAuto\" = a.\"IdCircuit\") AND B.\"DataInceput\" <= GETDATE() AND GETDATE() <= B.\"DataSfarsit\" and b.\"IdUser\" = " + Session["UserId"].ToString() + ") ";
 
                 DataTable dtPrel = General.IncarcaDT(sql, null);               
                 for (int i = 0; i < dtPrel.Rows.Count; i++)
@@ -387,7 +387,7 @@ namespace WizOne.Absente
                     continue;
                 }
 
-                if (Convert.ToInt32(General.Nz(marca, -98)) == Convert.ToInt32(General.Nz(Session["User_Marca"], -97)) && Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE F10003=@1", new object[] { marca })) == 0)
+                if (Convert.ToInt32(General.Nz(marca, -98)) == Convert.ToInt32(General.Nz(Session["User_Marca"], -97)) && Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE F10003=@1 AND DataInceput <= GETDATE() AND GETDATE() <= DataSfarsit", new object[] { marca })) == 0)
                 {
                     err += "Angajatul cu marca " + marca + " nu are nici un supervizor\n";
                     lstMarciProcesate.Add(marca);
@@ -935,7 +935,7 @@ namespace WizOne.Absente
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""                                
                                 INNER JOIN F100 A ON b.F10003 = a.F10003 
                                 INNER JOIN F1001 X ON A.F10003 = X.F10003                               
-                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")                                
+                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"") AND J.""DataInceput"" <= GETDATE() AND GETDATE() <= J.""DataSfarsit""                               
                                 LEFT JOIN F718 D ON A.F10071 = D.F71802                                
                                 LEFT JOIN F002 E ON A.F10002 = E.F00202                                
                                 LEFT JOIN F003 F ON A.F10004 = F.F00304                                
@@ -1114,7 +1114,7 @@ namespace WizOne.Absente
                                 FROM ""relGrupAngajat"" B
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                 INNER JOIN F100 A ON b.F10003 = a.F10003
-                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")
+                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"") AND J.""DataInceput"" <= GETDATE() AND GETDATE() <= J.""DataSfarsit""  
                                 LEFT JOIN F718 D ON A.F10071 = D.F71802
                                 LEFT JOIN F002 E ON A.F10002 = E.F00202
                                 LEFT JOIN F003 F ON A.F10004 = F.F00304
@@ -1455,7 +1455,7 @@ namespace WizOne.Absente
                         UNION
                         SELECT A.F10003, B.""IdSuper"" AS ""Rol"", CASE WHEN D.""Alias"" IS NOT NULL AND D.""Alias"" <> '' THEN D.""Alias"" ELSE D.""Denumire"" END AS ""RolDenumire""
                         FROM F100 A
-                        INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
+                        INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003 AND B.""DataInceput"" <= GETDATE() AND GETDATE() <= B.""DataSfarsit""  
                         INNER JOIN ""Ptj_Circuit"" C ON B.""IdSuper"" = -1 * c.""UserIntrod"" {inn1}
                         LEFT JOIN ""tblSupervizori"" D ON D.""Id"" = B.""IdSuper""
                         WHERE B.""IdUser""= {General.VarSession("UserId")}

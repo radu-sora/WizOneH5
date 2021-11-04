@@ -539,7 +539,6 @@
         
         if (cmbDurCtr.GetValue() == 1) {
             var dtTmp = new Date(2100, 0, 1, 0, 0, 0, 0)
-
             deDeLaData.SetEnabled(false);
             deLaData.SetEnabled(false);
             deUltimaZiLucr.SetEnabled(false);

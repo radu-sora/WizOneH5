@@ -302,7 +302,7 @@ namespace WizOne.Pontaj
             table.Rows.Add(row);
 
 
-            for (int j = 1; j <= 5; j++)
+            for (int j = 1; j <= 31; j++)
             {
                 row = new HtmlTableRow();
 

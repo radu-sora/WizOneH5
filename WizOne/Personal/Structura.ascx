@@ -14,7 +14,7 @@
             else
                 pnlCtlStruct.PerformCallback(s.name + ";" + s.GetValue());
         }
-        else {                     
+        else {     
             var item = cmbStru.GetSelectedItem();        
             hfCC.Set('CC', item.GetColumnText("CC"));
             cmbCC.ClearItems();

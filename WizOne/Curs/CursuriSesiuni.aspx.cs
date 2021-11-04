@@ -43,6 +43,9 @@ namespace WizOne.Curs
                 btnNomenclatorCosturiEstimat.Image.ToolTip = Dami.TraduCuvant("btnNomenclatorCosturiEstimat", "Cost estimat");
                 btnNomenclatorCosturiEfectiv.Image.ToolTip = Dami.TraduCuvant("btnNomenclatorCosturiEfectiv", "Cost efectiv");
 
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
+
                 lblCurs.InnerText = Dami.TraduCuvant("Curs");
                 
 
@@ -58,7 +61,11 @@ namespace WizOne.Curs
                     }
                     catch (Exception) { }
                 }
-
+                grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
+                grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
+                grDate.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
+                grDate.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
+                grDate.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();

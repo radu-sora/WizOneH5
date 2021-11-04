@@ -30,6 +30,32 @@ namespace WizOne.BP
                 Session["PaginaWeb"] = "BP.Aprobare";
                 //Session["Absente_Cereri_Date"] = null;
 
+                btnRespinge.Text = Dami.TraduCuvant("btnRespinge", "Respinge");
+                btnTranf.Text = Dami.TraduCuvant("btnTranf", "Transfera");
+                btnAproba.Text = Dami.TraduCuvant("btnAproba", "Aproba");
+                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
+
+                lblAnul.InnerText = Dami.TraduCuvant("Anul");
+                lblAng.InnerText = Dami.TraduCuvant("Angajat");
+                lblLuna.InnerText = Dami.TraduCuvant("Luna");
+                lblStare.InnerText = Dami.TraduCuvant("Stare");
+                lblNivel.InnerText = Dami.TraduCuvant("Nivel aprobare");
+                lblUser.InnerText = Dami.TraduCuvant("Utilizator");
+
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
+
                 cmbAnul.DataSource = General.ListaNumere(2010, DateTime.Now.Year + 5);
                 cmbAnul.DataBind();
 

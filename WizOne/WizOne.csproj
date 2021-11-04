@@ -409,6 +409,11 @@
     <Content Include="Adev\AdeverintaAngajat.aspx" />
     <Content Include="Adev\ConfigCIC.aspx" />
     <Content Include="Adev\ConfigD112.aspx" />
+    <Content Include="AvansXDecont\Document.aspx" />
+    <Content Include="AvansXDecont\DocumentAvans.aspx" />
+    <Content Include="AvansXDecont\DocumentDecont.aspx" />
+    <Content Include="AvansXDecont\DocumentPayment.aspx" />
+    <Content Include="AvansXDecont\relUploadDocumente.aspx" />
     <Content Include="Avs\Aprobare.aspx" />
     <Content Include="Avs\Cereri.aspx" />
     <Content Include="Avs\Detalii.aspx" />
@@ -1322,6 +1327,41 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Mesaje.it.resx</DependentUpon>
     </Compile>
+    <Compile Include="AvansXDecont\Document.aspx.cs">
+      <DependentUpon>Document.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AvansXDecont\Document.aspx.designer.cs">
+      <DependentUpon>Document.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentAvans.aspx.cs">
+      <DependentUpon>DocumentAvans.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentAvans.aspx.designer.cs">
+      <DependentUpon>DocumentAvans.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentDecont.aspx.cs">
+      <DependentUpon>DocumentDecont.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentDecont.aspx.designer.cs">
+      <DependentUpon>DocumentDecont.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentPayment.aspx.cs">
+      <DependentUpon>DocumentPayment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AvansXDecont\DocumentPayment.aspx.designer.cs">
+      <DependentUpon>DocumentPayment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AvansXDecont\relUploadDocumente.aspx.cs">
+      <DependentUpon>relUploadDocumente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AvansXDecont\relUploadDocumente.aspx.designer.cs">
+      <DependentUpon>relUploadDocumente.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Avs\Aprobare.aspx.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2171,6 +2211,18 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\AdeverintaSanatate.Designer.cs" />
+    <Compile Include="Reports\AvsXDec_OrdinDeplasare.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\AvsXDec_OrdinDeplasare.designer.cs" />
+    <Compile Include="Reports\AvsXDec_OrdinDeplasare_Fata.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\AvsXDec_OrdinDeplasare_Fata.designer.cs" />
+    <Compile Include="Reports\AvsXDec_OrdinDeplasare_Verso.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\AvsXDec_OrdinDeplasare_Verso.designer.cs" />
     <Compile Include="Reports\EvaluareCristim.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2868,6 +2920,7 @@
       <LastGenOutput>General.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\AdeverintaGenerala.resx">
       <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
     </EmbeddedResource>
@@ -2875,6 +2928,9 @@
       <DependentUpon>AdeverintaMedic.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\AdeverintaSanatate.resx" />
+    <EmbeddedResource Include="Reports\AvsXDec_OrdinDeplasare.resx" />
+    <EmbeddedResource Include="Reports\AvsXDec_OrdinDeplasare_Fata.resx" />
+    <EmbeddedResource Include="Reports\AvsXDec_OrdinDeplasare_Verso.resx" />
     <EmbeddedResource Include="Reports\Evaluare.resx">
       <DependentUpon>Evaluare.cs</DependentUpon>
     </EmbeddedResource>

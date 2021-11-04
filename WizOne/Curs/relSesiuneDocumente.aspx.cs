@@ -40,7 +40,6 @@ namespace WizOne.Curs
             {
                 Dami.AccesApp(this.Page);
        
-                //btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnIncarca.ToolTip = Dami.TraduCuvant("btnIncarca", "Incarca document");
 
                 string qwe = General.Nz(Request["qwe"], "-99").ToString();
@@ -63,6 +62,10 @@ namespace WizOne.Curs
                     }
                     catch (Exception) { }
                 }
+                grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
+                grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
+                grDate.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
+                grDate.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
             }
             catch (Exception ex)
             {

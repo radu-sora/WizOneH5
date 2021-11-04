@@ -12,7 +12,7 @@ namespace WizOne.Personal
 {
     public partial class Detasari : System.Web.UI.UserControl
     {
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
 
             DataTable table = new DataTable();
@@ -45,7 +45,8 @@ namespace WizOne.Personal
 
 
             Mutare_DataList.DataSource = table;
-            Mutare_DataList.DataBind();
+            if (!IsPostBack)
+                Mutare_DataList.DataBind();
 
             grDateDetasari.DataBind();
             foreach (dynamic c in grDateDetasari.Columns)

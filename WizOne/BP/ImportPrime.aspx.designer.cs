@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.BP {
-    
-    
-    public partial class ImportPrime {
-        
+namespace WizOne.BP
+{
+
+
+    public partial class ImportPrime
+    {
+
         /// <summary>
         /// btnImport control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnImport;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -29,7 +31,16 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
+        /// <summary>
+        /// lgImport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgImport;
+
         /// <summary>
         /// btnExport control.
         /// </summary>
@@ -38,7 +49,7 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExport;
-        
+
         /// <summary>
         /// btnDocUpload control.
         /// </summary>
@@ -47,7 +58,7 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxUploadControl btnDocUpload;
-        
+
         /// <summary>
         /// lblAn control.
         /// </summary>
@@ -56,7 +67,7 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblAn;
-        
+
         /// <summary>
         /// cmbAn control.
         /// </summary>
@@ -65,7 +76,7 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbAn;
-        
+
         /// <summary>
         /// lblLuna control.
         /// </summary>
@@ -74,7 +85,7 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblLuna;
-        
+
         /// <summary>
         /// cmbLuna control.
         /// </summary>
@@ -83,7 +94,7 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbLuna;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>
@@ -92,7 +103,7 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate;
-        
+
         /// <summary>
         /// lblPrima control.
         /// </summary>
@@ -101,7 +112,7 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblPrima;
-        
+
         /// <summary>
         /// cmbPrima control.
         /// </summary>
@@ -110,7 +121,7 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbPrima;
-        
+
         /// <summary>
         /// lblAvs control.
         /// </summary>
@@ -119,7 +130,7 @@ namespace WizOne.BP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblAvs;
-        
+
         /// <summary>
         /// cmbAvs control.
         /// </summary>

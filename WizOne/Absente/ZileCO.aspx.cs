@@ -61,13 +61,13 @@ namespace WizOne.Absente
 
                 cmbTip.DataSource = Dami.ListaActivi();
                 cmbTip.DataBind();
-                
+                                             
 
                 if (!IsPostBack)
                 {
                     Session["InformatiaCurenta"] = null;
                     cmbAn.Value = DateTime.Now.Year;
-                    cmbTip.Value = 1;
+                    cmbTip.Value = 2;   //#1039
                 }
                 else
                 { 

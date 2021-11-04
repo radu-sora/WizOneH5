@@ -560,6 +560,7 @@ namespace WizOne.Pontaj
             try
             {
                 Response.Redirect("~/Pontaj/PontajEchipa?tip=1", false);
+                Session["InformatiaCurenta"] = null;
             }
             catch (Exception ex)
             {

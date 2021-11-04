@@ -254,7 +254,6 @@ namespace WizOne.Pontaj
                 }
                 #endregion
 
-                SetColoane();   //Radu 04.02.2021
 
                 //Radu 07.09.2021 - #966
                 grDate.Settings.ShowFooter = true;
@@ -2614,6 +2613,7 @@ namespace WizOne.Pontaj
                     string luna = dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Year.ToString();
                     if (luna != Session["PtjEch_LunaAn"].ToString())
                     {
+                        SetColoane();
                         SetColoaneCuloare();
                         //Radu 12.02.2021 - daca se schimba luna, trebuie resetata sursa de date a grid-ului, deoarece noua luna poate avea zile in plus
                         Session["InformatiaCurenta"] = null;

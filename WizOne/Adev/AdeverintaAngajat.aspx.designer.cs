@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Adev {
-    
-    
-    public partial class AdeverintaAngajat {
-        
+namespace WizOne.Adev
+{
+
+
+    public partial class AdeverintaAngajat
+    {
+
         /// <summary>
         /// btnGenerare control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnGenerare;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// pnlCtl control.
         /// </summary>
@@ -38,7 +40,16 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
-        
+
+        /// <summary>
+        /// lgAdev control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgAdev;
+
         /// <summary>
         /// lblAdev control.
         /// </summary>
@@ -47,7 +58,7 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAdev;
-        
+
         /// <summary>
         /// cmbAdev control.
         /// </summary>
@@ -56,7 +67,7 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbAdev;
-        
+
         /// <summary>
         /// lblAng control.
         /// </summary>
@@ -65,7 +76,7 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAng;
-        
+
         /// <summary>
         /// cmbAng control.
         /// </summary>
@@ -74,7 +85,7 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbAng;
-        
+
         /// <summary>
         /// lblAnul control.
         /// </summary>
@@ -83,7 +94,7 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAnul;
-        
+
         /// <summary>
         /// cmbAnul control.
         /// </summary>
@@ -92,7 +103,7 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbAnul;
-        
+
         /// <summary>
         /// lblLuna control.
         /// </summary>
@@ -101,7 +112,7 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblLuna;
-        
+
         /// <summary>
         /// cmbLuna control.
         /// </summary>

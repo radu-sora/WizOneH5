@@ -148,7 +148,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="3">
                 <br /><br />
 
                 <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
@@ -158,7 +158,7 @@
 
                             <table style="margin-left:15px;">
                                 <tr>
-                                    <td>
+                                    <td colspan="12">
                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
                                             <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Rol</label>
                                             <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdRol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
@@ -190,7 +190,7 @@
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbFil'); }" />
                                             </dx:ASPxComboBox>
                                         </div>
-                                        <div style="float:left; padding-right:15px;">
+                                        <div style="float:left; padding-right:100px;">
                                             <label id="lblSec" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Sectie</label>
                                             <dx:ASPxComboBox ID="cmbSec" ClientInstanceName="cmbSec" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSectie" TextField="Sectie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSec'); }" />
@@ -199,7 +199,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td colspan="12">
                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
                                             <label id="lblDept" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Dept.</label>
                                             <dx:ASPxComboBox ID="cmbDept" ClientInstanceName="cmbDept" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
@@ -219,14 +219,14 @@
                                             <label id="lblCtr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Contract</label>
                                             <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" />
                                         </div>    
-                                        <div style="float:left; padding-right:15px;">
+                                        <div style="float:left; padding-right:100px;">
                                             <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Categorie</label>
                                             <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.String" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />                                
                                         </div>                                        
                                     </td> 
                                  </tr>
                                 <tr>
-                                    <td>
+                                    <td colspan="12">
                                         <div style="float:left; padding-right:15px;  padding-bottom:10px;" >
                                             <label id="lblDeLa" runat="server" style="display:inline-block; float:left;  min-width:54px; width:80px;">De la</label>
 						                    <dx:ASPxDateEdit  ID="dtDataStart" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
@@ -239,7 +239,7 @@
                                                     <CalendarProperties FirstDayOfWeek="Monday" />                                                   
 							                </dx:ASPxDateEdit>
                                          </div>
-                                         <div style="float:left; padding-right:15px;">
+                                         <div style="float:left; padding-right:200px;">
                                             <label id="lblSablon" runat="server" style="display:inline-block; float:left;  min-width:54px; width:60px;">Sablon</label>
                                             <dx:ASPxComboBox ID="cmbSablon" ClientInstanceName="cmbSablon" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSablon'); }" />                                 
@@ -248,7 +248,7 @@
                                      </td>   
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td colspan="12">
                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
                                             <label id="lblNumeSablon" runat="server" style="display:inline-block; float:left;  min-width:75px; width:80px;">Nume sablon</label>
 							                <dx:ASPxTextBox  ID="txtNumeSablon" style="display:inline-block; float:left; width:100px;" runat="server"  AutoPostBack="false" />
@@ -265,7 +265,7 @@
                                                 <ClientSideEvents Click="function(s, e) { pnlCtl.PerformCallback('btnSablon'); }" />
                                             </dx:ASPxButton>
                                         </div>  
-                                        <div style="float:left;padding-right:15px;">
+                                        <div style="float:left;padding-right:300px;">
                                             <dx:ASPxButton ID="btnSterge" runat="server"  RenderMode="Link" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
                                                 <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                                                 <ClientSideEvents Click="function(s, e) { pnlCtl.PerformCallback('btnSterge'); }" />
@@ -274,8 +274,22 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <div style="float:left; padding-right:15px;padding-bottom:10px;" >
+                                    <td colspan="12">
+                                        <div style="float:left; padding-right:15px;">                  
+                                            <dx:ASPxRadioButton ID="rbInitNormal" Width="150" runat="server" Text="Initializare normala" style="display:inline-block;"  ClientInstanceName="rbInitNormal"
+                                                 GroupName="Initializare">
+                                                <ClientSideEvents CheckedChanged="function(s,e){  pnlCtl.PerformCallback('rbInitNormal'); }" />
+                                            </dx:ASPxRadioButton>						
+                                            <dx:ASPxRadioButton ID="rbInitCC" Width="250" runat="server" Text="Initializare pe centre de cost" style="display:inline-block;"  ClientInstanceName="rbInitCC"
+                                                 GroupName="Initializare">
+                                                <ClientSideEvents CheckedChanged="function(s,e){  pnlCtl.PerformCallback('rbInitCC'); }" />
+                                            </dx:ASPxRadioButton>						
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">
+                                        <div style="float:left; padding-right:150px;padding-bottom:10px;" >
 							                <dx:ASPxTextBox ID="txtZiua1" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                             <dx:ASPxTextBox ID="txtZiua2" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                             <dx:ASPxTextBox ID="txtZiua3" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
@@ -290,8 +304,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <div style="float:left; padding-right:15px;" >
+                                    <td colspan="12">
+                                        <div style="float:left; padding-right:150px;" >
 							                <dx:ASPxTextBox ID="lblZiua1" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
 							                <dx:ASPxTextBox ID="lblZiua2" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
 							                <dx:ASPxTextBox ID="lblZiua3" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />                                           
@@ -306,8 +320,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <div style="float:left; padding-right:15px;padding-bottom:10px;" >
+                                    <td colspan="12">
+                                        <div style="float:left; padding-right:150px;padding-bottom:10px;" >
 							                <dx:ASPxTextBox ID="txtZiua11" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                             <dx:ASPxTextBox ID="txtZiua12" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                             <dx:ASPxTextBox ID="txtZiua13" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
@@ -322,8 +336,8 @@
                                     </td>
                                 </tr>
                                <tr>
-                                    <td>
-                                        <div style="float:left; padding-right:15px;" >
+                                    <td colspan="12">
+                                        <div style="float:left; padding-right:150px;" >
 							                <dx:ASPxTextBox ID="lblZiua11" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
 							                <dx:ASPxTextBox ID="lblZiua12" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
 							                <dx:ASPxTextBox ID="lblZiua13" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />                                           
@@ -338,8 +352,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                         <div style="float:left; padding-right:15px;padding-bottom:10px;" >
+                                    <td colspan="12">
+                                         <div style="float:left; padding-right:150px;padding-bottom:10px;" >
 							                <dx:ASPxTextBox ID="txtZiua21" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                             <dx:ASPxTextBox ID="txtZiua22" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                             <dx:ASPxTextBox ID="txtZiua23" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
@@ -355,8 +369,8 @@
                                     </td>
                                 </tr>
                                <tr>
-                                    <td>
-                                        <div style="float:left; padding-right:15px;" >
+                                    <td colspan="12">
+                                        <div style="float:left; padding-right:150px;" >
 							                <dx:ASPxTextBox ID="lblZiua21" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
 							                <dx:ASPxTextBox ID="lblZiua22" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
 							                <dx:ASPxTextBox ID="lblZiua23" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />                                           
@@ -374,14 +388,102 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                        <dx:ASPxRoundPanel ID="pnl1" ClientInstanceName="pnl1" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 1" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                    <td>
+                                        <dx:ASPxRoundPanel ID="pnl2" ClientInstanceName="pnl2" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 2" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                    <td>
+                                        <dx:ASPxRoundPanel ID="pnl3" ClientInstanceName="pnl3" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 3" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <dx:ASPxRoundPanel ID="pnl4" ClientInstanceName="pnl4" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 4" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                    <td>
+                                        <dx:ASPxRoundPanel ID="pnl5" ClientInstanceName="pnl5" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 5" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                    <td>
+                                        <dx:ASPxRoundPanel ID="pnl6" ClientInstanceName="pnl6" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 6" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <dx:ASPxRoundPanel ID="pnl7" ClientInstanceName="pnl7" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 7" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                    <td>
+                                        <dx:ASPxRoundPanel ID="pnl8" ClientInstanceName="pnl8" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 8" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                    <td>
+                                        <dx:ASPxRoundPanel ID="pnl9" ClientInstanceName="pnl9" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 9" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="12">
+                                         <div style="float:left; padding-right:150px; padding-bottom:10px;">
                                             <label id="lblBife" runat="server" style="display:inline-block; float:left;  width:150px; padding-bottom:10px; vertical-align:text-bottom;">Initializarea sa includa:</label>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                    <td colspan="12">
+                                        <div style="float:left; padding-right:150px; padding-bottom:10px;">
                                             <dx:ASPxCheckBox ID="chkS"  runat="server" style="display:inline-block; float:left;   width:100px; padding-bottom:10px; vertical-align:text-bottom;" Text="Sambata"  TextAlign="Left" ClientInstanceName="chkbx1" />                                    
                                             <dx:ASPxCheckBox ID="chkD"  runat="server" style="display:inline-block; float:left;  width:100px; padding-bottom:10px; vertical-align:text-bottom;" Text="Duminca"  TextAlign="Left" ClientInstanceName="chkbx2" />   
                                             <dx:ASPxCheckBox ID="chkSL"  runat="server" style="display:inline-block; float:left;  width:200px; padding-bottom:10px; vertical-align:text-bottom;" Text="Sarbatori legale"  TextAlign="Left" ClientInstanceName="chkbx3" />   
@@ -389,30 +491,30 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                    <td colspan="12">
+                                        <div style="float:left; padding-right:150px; padding-bottom:10px;">
                                             <dx:ASPxCheckBox ID="chkDecalare"  runat="server" style="display:inline-block; float:left; font-weight:bold;   width:150px; padding-bottom:10px; vertical-align:text-bottom;" Text="Decalare pontaj"  TextAlign="Left" ClientInstanceName="chkbx4" />                                    
                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                    <td colspan="12">
+                                        <div style="float:left; padding-right:150px; padding-bottom:10px;">
                                             <dx:ASPxCheckBox ID="chkModifPrg"  runat="server" style="display:inline-block; float:left;   width:300px; padding-bottom:10px; vertical-align:text-bottom;" Text="Programul sa nu fie modificat in timpul calculului"  TextAlign="Left" ClientInstanceName="chkbx7" oncontextMenu="ctx(this,event)"/>                                    
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                    <td colspan="12">
+                                        <div style="float:left; padding-right:150px; padding-bottom:10px;">
                                             <dx:ASPxCheckBox ID="chkPontare"  runat="server" style="display:inline-block; float:left;   width:150px; padding-bottom:10px; vertical-align:text-bottom;" Text="Pentru pontare"  TextAlign="Left" ClientInstanceName="chkbx5" oncontextMenu="ctx(this,event)"/>                                    
                                             <dx:ASPxCheckBox ID="chkPlanif"  runat="server" style="display:inline-block; float:left;  width:150px; padding-bottom:10px; vertical-align:text-bottom;" Text="Pentru planificare"  TextAlign="Left" ClientInstanceName="chkbx6" oncontextMenu="ctx(this,event)"/>   
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                    <td colspan="12">
+                                        <div style="float:left; padding-right:150px; padding-bottom:10px;">
                                             <label id="lblZiStart" runat="server" style="display:inline-block; float:left;   min-width:75px; width:200px;">Initializarea sa inceapa cu ziua</label>
 							                <dx:ASPxTextBox  ID="txtZiStart" style="display:inline-block; float:left; width:50px;" runat="server"  AutoPostBack="false" />
                                         </div>
@@ -443,7 +545,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="12">
 
                 <br />
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" >

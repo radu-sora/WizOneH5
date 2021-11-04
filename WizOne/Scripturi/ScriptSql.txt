@@ -18525,6 +18525,11 @@ CREATE TABLE [dbo].[Ptj_tblZileCOSuplimentare](
 [TIME] [datetime] NULL,
 [IdAuto] [int] IDENTITY(1,1) NOT NULL,
 CONSTRAINT [Ptj_tblZileCOSuplimentare_PK] PRIMARY KEY CLUSTERED
+  (
+[IdAuto] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) 
+
 GO
 
 ALTER FUNCTION [dbo].[CalculCO] (
@@ -18673,6 +18678,14 @@ SELECT @ZileCuveniteAn, isnull(@ZileCuvenite,0), @ZileCuveniteZi, isnull((select
 
 RETURN;
 END
+
+----  2.2.139.03  ----
+
+ALTER TABLE Ptj_Intrari ADD ValModifValStr int
+GO
+
+UPDATE Ptj_Intrari SET ValModifValStr = 4 WHERE CuloareValoare='#e6c8fa'
+GO	
 
 
 ----  2.2.140  ----

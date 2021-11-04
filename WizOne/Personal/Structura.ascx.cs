@@ -164,14 +164,16 @@ namespace WizOne.Personal
                         txtSubdept.Text = General.Nz(drStruc["F00709"], "").ToString();
                     }
 
-                    cmbBir.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F100959"], "0"));
-                    cmbCC.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10053"], "0"));
-                    cmbPL.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10079"], "0"));
-                    cmbLocatie.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001046"], "0"));
-                    cmbCAEN.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001095"], "0"));
-                    cmbUnitStat.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001097"], "0"));
-                    if (!IsPostBack)
+                    if (!IsPostBack)    //Radu 03.11.2021
+                    {
+                        cmbBir.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F100959"], "0"));
+                        cmbCC.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10053"], "0"));
+                        cmbPL.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10079"], "0"));
+                        cmbLocatie.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001046"], "0"));
+                        cmbCAEN.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001095"], "0"));
+                        cmbUnitStat.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001097"], "0"));
                         deDataModifStr.Value = Convert.ToDateTime(General.Nz(table.Rows[0]["F100910"], "01/01/2100"));
+                    }
                 //}
 
                 if (Dami.ValoareParam("ValidariPersonal") == "1")

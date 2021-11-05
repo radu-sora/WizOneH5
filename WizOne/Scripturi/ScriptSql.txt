@@ -21111,3 +21111,14 @@ GO
 
 ALTER TABLE PtjSpecial_Sabloane ADD TipInit int
 GO
+
+
+create table PtjSpecial_SabloaneCC (Id INT NOT NULL, 
+Ziua int NOT NULL, CentruCost int NOT NULL, IdCC int, NrOre int, OraIn DateTime, OraOut DateTime, Pauza DateTime, USER_NO int, TIME DATETIME
+ CONSTRAINT [PK_PtjSpecial_SabloaneCC] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC,
+	[Ziua] ASC,
+	[CentruCost] ASC
+)
+)

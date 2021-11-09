@@ -559,7 +559,7 @@
             this.xrTableCell32.StylePriority.UseFont = false;
             this.xrTableCell32.StylePriority.UsePadding = false;
             this.xrTableCell32.StylePriority.UseTextAlignment = false;
-            this.xrTableCell32.Text = "Salar de incadrare:\r\nSpor vechime:\r\nVal. Concediu eveniment:";
+            this.xrTableCell32.Text = "Salar de incadrare:\r\nSpor vechime:\r\nVal. Concediu eveniment:\r\nSpor weekend:";
             this.xrTableCell32.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             this.xrTableCell32.Weight = 0.31525177050493031D;
             // 
@@ -576,7 +576,7 @@
             this.xrTableCell21.StylePriority.UseFont = false;
             this.xrTableCell21.StylePriority.UsePadding = false;
             this.xrTableCell21.StylePriority.UseTextAlignment = false;
-            this.xrTableCell21.Text = "[Camp11]\r\n[Camp12]\r\n[Camp13]";
+            this.xrTableCell21.Text = "[Camp11]\r\n[Camp12]\r\n[Camp13]\r\n[Camp56]";
             this.xrTableCell21.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
             this.xrTableCell21.Weight = 0.15074894829245228D;
             // 

@@ -602,11 +602,13 @@ a, a:focus, a:hover {
     .dx-scheduler-adaptive > tbody > tr:first-child {
         height: 0;
     }
-    .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > .dxAC {
+    .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > .dxAC,
+    .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > div:nth-child(4) {
         height: 100% !important;
         overflow-y: auto !important;
+        overflow-x: hidden;
     }
-        .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > .dxAC > div:first-child {
+        .dx-scheduler-adaptive > tbody > tr:nth-child(6) > td > .dxAC > div:first-child { /* Fixed by DX? */
             right: 0 !important;
         }
 
@@ -614,6 +616,30 @@ a, a:focus, a:hover {
     .dx-scheduler-adaptive.dx-scheduler-adaptive-info-tooltip .dxsc-detailed-apt-tooltip .dxsc-dat-bottom > .dxsc-dat-buttons-container {
         display: none;
     }
+
+@media all and (max-width:1024px) {
+    /* Fix DX scheduler main container */
+    .dx-scheduler-adaptive {
+        border: none;
+    }
+}
+
+/* DX combobox responsive layout */
+.dx-combobox-adaptive {
+}
+
+@media all and (max-width:1024px) {
+    .dx-combobox-adaptive.dx-combobox-adaptive-hide-column1 + div.dxdd-root .dxpc-content > table .dxeHD td:nth-child(1),
+    .dx-combobox-adaptive.dx-combobox-adaptive-hide-column1 + div.dxdd-root .dxpc-content > table .dxlbd td:nth-child(1),
+    .dx-combobox-adaptive.dx-combobox-adaptive-hide-column2 + div.dxdd-root .dxpc-content > table .dxeHD td:nth-child(2),
+    .dx-combobox-adaptive.dx-combobox-adaptive-hide-column2 + div.dxdd-root .dxpc-content > table .dxlbd td:nth-child(2),
+    .dx-combobox-adaptive.dx-combobox-adaptive-hide-column3 + div.dxdd-root .dxpc-content > table .dxeHD td:nth-child(3),
+    .dx-combobox-adaptive.dx-combobox-adaptive-hide-column3 + div.dxdd-root .dxpc-content > table .dxlbd td:nth-child(3),
+    .dx-combobox-adaptive.dx-combobox-adaptive-hide-column4 + div.dxdd-root .dxpc-content > table .dxeHD td:nth-child(4),
+    .dx-combobox-adaptive.dx-combobox-adaptive-hide-column4 + div.dxdd-root .dxpc-content > table .dxlbd td:nth-child(4) {
+        display: none;
+    }
+}
 
 /* DX dashboard fix for fullscreen popup */
 .dx-designer .dx-popup-wrapper {

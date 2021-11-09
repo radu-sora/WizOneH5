@@ -106,6 +106,53 @@
             pnlCtl.PerformCallback('EmptyFields');
         }
 
+        function CalculOre(s) {
+            if (s.GetValue() != null && s.GetValue() != "") {
+                var tmp = s.name.indexOf('CC');
+                var cc = s.name.substring(parseInt(tmp) + 2);
+                if (s.name.includes('teIn')) {                    
+                    var ziua = s.name.substring(4, parseInt(tmp) - 1);
+                    var te = ASPxClientControl.GetControlCollection().GetByName("teOut" + ziua + "_CC" + cc);
+                    if (te.GetValue() != null && te.GetValue() != "") {
+                        var diff = new Date(te.GetDate()) - new Date(s.GetDate());  
+                        var totalHours = diff / 3600 / 1000;
+                        if (parseInt(totalHours) < 0)
+                            totalHours = 0;
+                        var txt = ASPxClientControl.GetControlCollection().GetByName("txt" + ziua + "_CC" + cc);
+                        txt.SetValue(totalHours);
+                    }
+                }
+                else {
+                    var ziua = s.name.substring(5, parseInt(tmp) - 1);
+                    var te = ASPxClientControl.GetControlCollection().GetByName("teIn" + ziua + "_CC" + cc);
+                    if (te.GetValue() != null && te.GetValue() != "") {                    
+                        var diff = new Date(s.GetDate()) - new Date(te.GetDate()); 
+                        var totalHours = diff / 3600 / 1000;
+                        if (parseInt(totalHours) < 0)
+                            totalHours = 0;
+                        var txt = ASPxClientControl.GetControlCollection().GetByName("txt" + ziua + "_CC" + cc);
+                        txt.SetValue(totalHours);
+                    }
+                }
+            }
+        }
+
+        function StergeLinie(s) {
+            var tmp = s.name.indexOf('CC');
+            var ziua = s.name.substring(3, parseInt(tmp) - 1);
+            var cc = s.name.substring(parseInt(tmp) + 2);
+            var cmb = ASPxClientControl.GetControlCollection().GetByName("cmb" + ziua + "_CC" + cc);
+            var txt = ASPxClientControl.GetControlCollection().GetByName("txt" + ziua + "_CC" + cc);
+            var teIn = ASPxClientControl.GetControlCollection().GetByName("teIn" + ziua + "_CC" + cc);
+            var teOut = ASPxClientControl.GetControlCollection().GetByName("teOut" + ziua + "_CC" + cc);
+            var teP = ASPxClientControl.GetControlCollection().GetByName("teP" + ziua + "_CC" + cc);
+            cmb.SetValue(null);
+            txt.SetValue(null);
+            teIn.SetValue(null);
+            teOut.SetValue(null);
+            teP.SetValue(null);
+        }
+
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
                 swal({
@@ -388,7 +435,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <dx:ASPxRoundPanel ID="pnl1" ClientInstanceName="pnl1" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 1" Width="20%">
+                                        <dx:ASPxRoundPanel ID="pnl1" ClientInstanceName="pnl1" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" ClientVisible="false" HeaderText="Centru cost 1" Width="20%">
                                             <HeaderStyle Font-Bold="true" />   
                                             <PanelCollection>
                                                 <dx:PanelContent>
@@ -397,7 +444,7 @@
                                         </dx:ASPxRoundPanel>
                                     </td>
                                     <td>
-                                        <dx:ASPxRoundPanel ID="pnl2" ClientInstanceName="pnl2" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 2" Width="20%">
+                                        <dx:ASPxRoundPanel ID="pnl2" ClientInstanceName="pnl2" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" ClientVisible="false" HeaderText="Centru cost 2" Width="20%">
                                             <HeaderStyle Font-Bold="true" />   
                                             <PanelCollection>
                                                 <dx:PanelContent>
@@ -406,36 +453,7 @@
                                         </dx:ASPxRoundPanel>
                                     </td>
                                     <td>
-                                        <dx:ASPxRoundPanel ID="pnl3" ClientInstanceName="pnl3" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 3" Width="20%">
-                                            <HeaderStyle Font-Bold="true" />   
-                                            <PanelCollection>
-                                                <dx:PanelContent>
-                                                </dx:PanelContent>
-                                            </PanelCollection>
-                                        </dx:ASPxRoundPanel>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <dx:ASPxRoundPanel ID="pnl4" ClientInstanceName="pnl4" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 4" Width="20%">
-                                            <HeaderStyle Font-Bold="true" />   
-                                            <PanelCollection>
-                                                <dx:PanelContent>
-                                                </dx:PanelContent>
-                                            </PanelCollection>
-                                        </dx:ASPxRoundPanel>
-                                    </td>
-                                    <td>
-                                        <dx:ASPxRoundPanel ID="pnl5" ClientInstanceName="pnl5" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 5" Width="20%">
-                                            <HeaderStyle Font-Bold="true" />   
-                                            <PanelCollection>
-                                                <dx:PanelContent>
-                                                </dx:PanelContent>
-                                            </PanelCollection>
-                                        </dx:ASPxRoundPanel>
-                                    </td>
-                                    <td>
-                                        <dx:ASPxRoundPanel ID="pnl6" ClientInstanceName="pnl6" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 6" Width="20%">
+                                        <dx:ASPxRoundPanel ID="pnl3" ClientInstanceName="pnl3" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" ClientVisible="false" HeaderText="Centru cost 3" Width="20%">
                                             <HeaderStyle Font-Bold="true" />   
                                             <PanelCollection>
                                                 <dx:PanelContent>
@@ -446,7 +464,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <dx:ASPxRoundPanel ID="pnl7" ClientInstanceName="pnl7" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 7" Width="20%">
+                                        <dx:ASPxRoundPanel ID="pnl4" ClientInstanceName="pnl4" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" ClientVisible="false" HeaderText="Centru cost 4" Width="20%">
                                             <HeaderStyle Font-Bold="true" />   
                                             <PanelCollection>
                                                 <dx:PanelContent>
@@ -455,7 +473,7 @@
                                         </dx:ASPxRoundPanel>
                                     </td>
                                     <td>
-                                        <dx:ASPxRoundPanel ID="pnl8" ClientInstanceName="pnl8" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 8" Width="20%">
+                                        <dx:ASPxRoundPanel ID="pnl5" ClientInstanceName="pnl5" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" ClientVisible="false" HeaderText="Centru cost 5" Width="20%">
                                             <HeaderStyle Font-Bold="true" />   
                                             <PanelCollection>
                                                 <dx:PanelContent>
@@ -464,7 +482,36 @@
                                         </dx:ASPxRoundPanel>
                                     </td>
                                     <td>
-                                        <dx:ASPxRoundPanel ID="pnl9" ClientInstanceName="pnl9" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Centru cost 9" Width="20%">
+                                        <dx:ASPxRoundPanel ID="pnl6" ClientInstanceName="pnl6" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" ClientVisible="false" HeaderText="Centru cost 6" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <dx:ASPxRoundPanel ID="pnl7" ClientInstanceName="pnl7" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" ClientVisible="false" HeaderText="Centru cost 7" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                    <td>
+                                        <dx:ASPxRoundPanel ID="pnl8" ClientInstanceName="pnl8" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" ClientVisible="false" HeaderText="Centru cost 8" Width="20%">
+                                            <HeaderStyle Font-Bold="true" />   
+                                            <PanelCollection>
+                                                <dx:PanelContent>
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxRoundPanel>
+                                    </td>
+                                    <td>
+                                        <dx:ASPxRoundPanel ID="pnl9" ClientInstanceName="pnl9" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" ClientVisible="false" HeaderText="Centru cost 9" Width="20%">
                                             <HeaderStyle Font-Bold="true" />   
                                             <PanelCollection>
                                                 <dx:PanelContent>

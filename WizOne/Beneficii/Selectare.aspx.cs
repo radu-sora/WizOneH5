@@ -41,7 +41,7 @@ namespace WizOne.Beneficii
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
-                lblBen.InnerText = Dami.TraduCuvant("In acest moment, urmatoarele Beneficii sunt active:");
+                lblBen.InnerText = Dami.TraduCuvant("In acest moment, urmatoarele Beneficii sunt active/aprobate:");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnValidare.Text = Dami.TraduCuvant("btnValidare", "Validare selectie Beneficii");
                 pnlBen.HeaderText = Dami.TraduCuvant("Beneficii active");

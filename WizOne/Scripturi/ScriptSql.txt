@@ -18680,6 +18680,7 @@ SELECT @ZileCuveniteAn, isnull(@ZileCuvenite,0), @ZileCuveniteZi, isnull((select
 
 RETURN;
 END
+GO
 
 ----  2.2.139.03  ----
 
@@ -21124,3 +21125,4 @@ Ziua int NOT NULL, CentruCost int NOT NULL, IdCC int, NrOre int, OraIn DateTime,
 	[CentruCost] ASC
 )
 )
+GO

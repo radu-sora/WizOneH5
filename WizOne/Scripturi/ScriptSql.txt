@@ -18516,7 +18516,7 @@ CLOSE @cursor_db
 DEALLOCATE @cursor_db 
 
 END
-
+GO
 CREATE TABLE [dbo].[Ptj_tblZileCOSuplimentare](
 [F10003] [int] NULL,
 [AnInceput] [int] NULL,
@@ -18680,7 +18680,7 @@ SELECT @ZileCuveniteAn, isnull(@ZileCuvenite,0), @ZileCuveniteZi, isnull((select
 
 RETURN;
 END
-
+GO
 
 ----  2.2.139.03  ----
 

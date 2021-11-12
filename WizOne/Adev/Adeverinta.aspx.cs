@@ -1426,7 +1426,7 @@ namespace WizOne.Adev
                 foreach (string key in lista.Keys)
                 {
                     Dictionary<String, String> listaCfg = Session["AdevListaParamCfg"] as Dictionary<String, String>;
-                    if (listaCfg.ContainsKey(key))
+                    if (listaCfg.ContainsKey(key) && key != "DAA" && key != "ADEV_SANATATE_REG")
                     {
                         string templ = "INSERT INTO F800_ADEVERINTE_CONFIG (NRCRT, ETICHETA, VALOARE) VALUES ({0}, '{1}', '{2}')";
                         sql = string.Format(templ, index, key, lista[key]);

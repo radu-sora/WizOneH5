@@ -357,13 +357,13 @@ namespace WizOne.Personal
                     string mesaj = "", mesajDI = "", mesajDA = "", mesajStr = "", mesajAdr = "", mesajDoc = "";
                     string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
 
-                    if (ds.Tables[0].Rows[0]["F10017"] == null || ds.Tables[0].Rows[0]["F10017"].ToString().Length <= 0)
+                    if (ds.Tables[0].Rows[0]["F10017"] == DBNull.Value || ds.Tables[0].Rows[0]["F10017"].ToString().Length <= 0)
                         mesaj += " - CNP/CUI" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F10008"] == null || ds.Tables[0].Rows[0]["F10008"].ToString().Length <= 0)
+                    if (ds.Tables[0].Rows[0]["F10008"] == DBNull.Value || ds.Tables[0].Rows[0]["F10008"].ToString().Length <= 0)
                         mesaj += " - nume" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F10009"] == null || ds.Tables[0].Rows[0]["F10009"].ToString().Length <= 0)
+                    if (ds.Tables[0].Rows[0]["F10009"] == DBNull.Value || ds.Tables[0].Rows[0]["F10009"].ToString().Length <= 0)
                         mesaj += " - prenume" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F10003"] == null || ds.Tables[0].Rows[0]["F10003"].ToString().Length <= 0)
+                    if (ds.Tables[0].Rows[0]["F10003"] == DBNull.Value || ds.Tables[0].Rows[0]["F10003"].ToString().Length <= 0)
                         mesaj += " - marca" + Environment.NewLine;
                     if (mesaj.Length > 0)
                     {
@@ -371,61 +371,61 @@ namespace WizOne.Personal
                         mesaj = "";
                     }
 
-                    if (ds.Tables[0].Rows[0]["F100985"] == null || ds.Tables[0].Rows[0]["F100985"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100985"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F100985"] == DBNull.Value || ds.Tables[0].Rows[0]["F100985"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100985"].ToString() == "0")
                         mesaj += " - nr. ctr. intern" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100986"] == null || ds.Tables[0].Rows[0]["F100986"].ToString().Length <= 0
+                    if (ds.Tables[0].Rows[0]["F100986"] == DBNull.Value || ds.Tables[0].Rows[0]["F100986"].ToString().Length <= 0
                         || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100986"].ToString()) == new DateTime(2100, 1, 1) || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100986"].ToString()) == new DateTime(1900, 1, 1))
                         mesaj += " - data ctr. intern" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100984"] == null || ds.Tables[0].Rows[0]["F100984"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100984"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F100984"] == DBNull.Value || ds.Tables[0].Rows[0]["F100984"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100984"].ToString() == "0")
                         mesaj += " - tip contract munca" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F1009741"] == null || ds.Tables[0].Rows[0]["F1009741"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F1009741"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F1009741"] == DBNull.Value || ds.Tables[0].Rows[0]["F1009741"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F1009741"].ToString() == "0")
                         mesaj += " - durata contract" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F1009741"] != null && ds.Tables[0].Rows[0]["F1009741"].ToString().Length > 0 && ds.Tables[0].Rows[0]["F1009741"].ToString() == "2")
+                    if (ds.Tables[0].Rows[0]["F1009741"] != DBNull.Value && ds.Tables[0].Rows[0]["F1009741"].ToString().Length > 0 && ds.Tables[0].Rows[0]["F1009741"].ToString() == "2")
                     {
-                        if (ds.Tables[0].Rows[0]["F100933"] == null || ds.Tables[0].Rows[0]["F100933"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(1900, 1, 1)
+                        if (ds.Tables[0].Rows[0]["F100933"] == DBNull.Value || ds.Tables[0].Rows[0]["F100933"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(1900, 1, 1)
                             || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(2100, 1, 1))
                             mesaj += " - de la data" + Environment.NewLine;
-                        if ((ds.Tables[0].Rows[0]["F100929"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F100929"].ToString()) == 0) && (ds.Tables[0].Rows[0]["F100934"] == null || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()) == new DateTime(2100, 1, 1)))
+                        if ((ds.Tables[0].Rows[0]["F100929"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F100929"].ToString()) == 0) && (ds.Tables[0].Rows[0]["F100934"] == DBNull.Value || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()) == new DateTime(2100, 1, 1)))
                             mesaj += " - la data" + Environment.NewLine;
                     }
-                    if (ds.Tables[0].Rows[0][salariu] == null || ds.Tables[0].Rows[0][salariu].ToString().Length <= 0 || Convert.ToDouble(ds.Tables[0].Rows[0][salariu].ToString()) == 0.0)
+                    if (ds.Tables[0].Rows[0][salariu] == DBNull.Value || ds.Tables[0].Rows[0][salariu].ToString().Length <= 0 || Convert.ToDouble(ds.Tables[0].Rows[0][salariu].ToString()) == 0.0)
                         mesaj += " - salariu" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F10010"] == null || ds.Tables[0].Rows[0]["F10010"].ToString().Length <= 0)
+                    if (ds.Tables[0].Rows[0]["F10010"] == DBNull.Value || ds.Tables[0].Rows[0]["F10010"].ToString().Length <= 0)
                         mesaj += " - tip angajat" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F10043"] == null || ds.Tables[0].Rows[0]["F10043"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10043"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F10043"] == DBNull.Value || ds.Tables[0].Rows[0]["F10043"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10043"].ToString() == "0")
                         mesaj += " - timp partial" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100926"] == null || ds.Tables[0].Rows[0]["F100926"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100926"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F100926"] == DBNull.Value || ds.Tables[0].Rows[0]["F100926"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100926"].ToString() == "0")
                         mesaj += " - tip norma" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100973"] == null || ds.Tables[0].Rows[0]["F100973"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100973"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F100973"] == DBNull.Value || ds.Tables[0].Rows[0]["F100973"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100973"].ToString() == "0")
                         mesaj += " - norma" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100927"] == null || ds.Tables[0].Rows[0]["F100927"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100927"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F100927"] == DBNull.Value || ds.Tables[0].Rows[0]["F100927"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100927"].ToString() == "0")
                         mesaj += " - durata timp munca" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100928"] == null || ds.Tables[0].Rows[0]["F100928"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100928"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F100928"] == DBNull.Value || ds.Tables[0].Rows[0]["F100928"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100928"].ToString() == "0")
                         mesaj += " - repartizare timp munca" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F10010"] != null && ds.Tables[0].Rows[0]["F10010"].ToString() != "0")
+                    if (ds.Tables[0].Rows[0]["F10010"] != DBNull.Value && ds.Tables[0].Rows[0]["F10010"].ToString() != "0")
                     {
-                        if (ds.Tables[0].Rows[0]["F100939"] == null || ds.Tables[0].Rows[0]["F100939"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100939"].ToString() == "0")
+                        if (ds.Tables[0].Rows[0]["F100939"] == DBNull.Value || ds.Tables[0].Rows[0]["F100939"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100939"].ToString() == "0")
                             mesaj += " - interval repartizare timp munca" + Environment.NewLine;
-                        if (ds.Tables[0].Rows[0]["F100939"] != null && Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) > 1)
+                        if (ds.Tables[0].Rows[0]["F100939"] != DBNull.Value && Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) > 1)
                         {
-                            if (ds.Tables[0].Rows[0]["F100964"] == null || ds.Tables[0].Rows[0]["F100964"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100964"].ToString() == "0")
+                            if (ds.Tables[0].Rows[0]["F100964"] == DBNull.Value || ds.Tables[0].Rows[0]["F100964"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100964"].ToString() == "0")
                                 mesaj += " - nr ore pe luna/saptamana" + Environment.NewLine;
                         }
                     }
-                    if (ds.Tables[0].Rows[0]["F10098"] == null || ds.Tables[0].Rows[0]["F10098"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10098"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F10098"] == DBNull.Value || ds.Tables[0].Rows[0]["F10098"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10098"].ToString() == "0")
                         mesaj += " - COR" + Environment.NewLine;
-                    //if (ds.Tables[0].Rows[0]["F10071"] == null || ds.Tables[0].Rows[0]["F10071"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10071"].ToString() == "0")
+                    //if (ds.Tables[0].Rows[0]["F10071"] == DBNull.Value || ds.Tables[0].Rows[0]["F10071"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10071"].ToString() == "0")
                     //    mesaj += " - functie" + Environment.NewLine;
-                    if ((ds.Tables[0].Rows[0]["F1001063"] == null || ds.Tables[0].Rows[0]["F1001063"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F1001063"].ToString() == "0") 
-                        && (ds.Tables[0].Rows[0]["F100975"] == null || ds.Tables[0].Rows[0]["F100975"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100975"].ToString() == "0"))
+                    if ((ds.Tables[0].Rows[0]["F1001063"] == DBNull.Value || ds.Tables[0].Rows[0]["F1001063"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F1001063"].ToString() == "0") 
+                        && (ds.Tables[0].Rows[0]["F100975"] == DBNull.Value || ds.Tables[0].Rows[0]["F100975"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100975"].ToString() == "0"))
                         mesaj += " - perioada de proba (zile lucratoare sau zile calendaristice)" + Environment.NewLine; 
-                    if (ds.Tables[0].Rows[0]["F1009742"] == null || ds.Tables[0].Rows[0]["F1009742"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F1009742"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F1009742"] == DBNull.Value || ds.Tables[0].Rows[0]["F1009742"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F1009742"].ToString() == "0")
                         mesaj += " - nr zile preaviz demisie" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100931"] == null || ds.Tables[0].Rows[0]["F100931"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100931"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F100931"] == DBNull.Value || ds.Tables[0].Rows[0]["F100931"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100931"].ToString() == "0")
                         mesaj += " - nr zile preaviz concediere" + Environment.NewLine;
-                    //if (ds.Tables[0].Rows[0]["F100642"] == null || ds.Tables[0].Rows[0]["F100642"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100642"].ToString() == "0")
+                    //if (ds.Tables[0].Rows[0]["F100642"] == DBNull.Value || ds.Tables[0].Rows[0]["F100642"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100642"].ToString() == "0")
                     //    mesaj += " - zile CO cuvenite cf. grila" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F10022"] == null || ds.Tables[0].Rows[0]["F10022"].ToString().Length <= 0
+                    if (ds.Tables[0].Rows[0]["F10022"] == DBNull.Value || ds.Tables[0].Rows[0]["F10022"].ToString().Length <= 0
                         || Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()) == new DateTime(2100, 1, 1) || Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()) == new DateTime(1900, 1, 1))
                         mesaj += " - data angajarii" + Environment.NewLine;
 
@@ -438,9 +438,9 @@ namespace WizOne.Personal
 
                     
 
-                    //if (ds.Tables[0].Rows[0]["F10079"] == null || ds.Tables[0].Rows[0]["F10079"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10079"].ToString() == "0")
+                    //if (ds.Tables[0].Rows[0]["F10079"] == DBNull.Value || ds.Tables[0].Rows[0]["F10079"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10079"].ToString() == "0")
                     //    mesaj += " - punct de lucru" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F10007"] == null || ds.Tables[0].Rows[0]["F10007"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10007"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F10007"] == DBNull.Value || ds.Tables[0].Rows[0]["F10007"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10007"].ToString() == "0")
                         mesaj += " - structura" + Environment.NewLine;
                     if (mesaj.Length > 0)
                     {
@@ -454,16 +454,16 @@ namespace WizOne.Personal
                         mesaj = "";
                     }
 
-                    if (ds.Tables[0].Rows[0]["F100983"] == null || ds.Tables[0].Rows[0]["F100983"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100983"].ToString() == "0")
+                    if (ds.Tables[0].Rows[0]["F100983"] == DBNull.Value || ds.Tables[0].Rows[0]["F100983"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100983"].ToString() == "0")
                         mesaj += " - tip document (BI/CI)" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F10052"] == null || ds.Tables[0].Rows[0]["F10052"].ToString().Length <= 0)
+                    if (ds.Tables[0].Rows[0]["F10052"] == DBNull.Value || ds.Tables[0].Rows[0]["F10052"].ToString().Length <= 0)
                         mesaj += " - serie si numar" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100521"] == null || ds.Tables[0].Rows[0]["F100521"].ToString().Length <= 0)
+                    if (ds.Tables[0].Rows[0]["F100521"] == DBNull.Value || ds.Tables[0].Rows[0]["F100521"].ToString().Length <= 0)
                         mesaj += " - emis de" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100522"] == null || ds.Tables[0].Rows[0]["F100522"].ToString().Length <= 0
+                    if (ds.Tables[0].Rows[0]["F100522"] == DBNull.Value || ds.Tables[0].Rows[0]["F100522"].ToString().Length <= 0
                         || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100522"].ToString()) == new DateTime(2100, 1, 1) || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100522"].ToString()) == new DateTime(1900, 1, 1))
                         mesaj += " - data eliberarii" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100963"] == null || ds.Tables[0].Rows[0]["F100963"].ToString().Length <= 0)
+                    if (ds.Tables[0].Rows[0]["F100963"] == DBNull.Value || ds.Tables[0].Rows[0]["F100963"].ToString().Length <= 0)
                         mesaj += " - data expirarii BI/CI" + Environment.NewLine;
                     if (mesaj.Length > 0)
                     {
@@ -479,17 +479,17 @@ namespace WizOne.Personal
                 }
                 else
                 {
-                    if (ds.Tables[0].Rows[0]["F1009741"] != null && ds.Tables[0].Rows[0]["F1009741"].ToString().Length > 0 && ds.Tables[0].Rows[0]["F1009741"].ToString() == "2")
+                    if (ds.Tables[0].Rows[0]["F1009741"] != DBNull.Value && ds.Tables[0].Rows[0]["F1009741"].ToString().Length > 0 && ds.Tables[0].Rows[0]["F1009741"].ToString() == "2")
                     {
                         string mesaj = "Date angajare: " + Environment.NewLine;
                         bool err = false;
-                        if (ds.Tables[0].Rows[0]["F100933"] == null || ds.Tables[0].Rows[0]["F100933"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(1900, 1, 1)
+                        if (ds.Tables[0].Rows[0]["F100933"] == DBNull.Value || ds.Tables[0].Rows[0]["F100933"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(1900, 1, 1)
                             || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(2100, 1, 1))
                         {
                             mesaj += " - de la data" + Environment.NewLine;
                             err = true;
                         }
-                        if ((ds.Tables[0].Rows[0]["F100929"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F100929"].ToString()) == 0) && (ds.Tables[0].Rows[0]["F100934"] == null || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()) == new DateTime(2100, 1, 1)))
+                        if ((ds.Tables[0].Rows[0]["F100929"] == DBNull.Value || Convert.ToInt32(ds.Tables[0].Rows[0]["F100929"].ToString()) == 0) && (ds.Tables[0].Rows[0]["F100934"] == DBNull.Value || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()) == new DateTime(2100, 1, 1)))
                         {
                             mesaj += " - la data" + Environment.NewLine;
                             err = true;
@@ -522,7 +522,7 @@ namespace WizOne.Personal
                     }
                 }
 
-                if (ds.Tables[0].Rows[0]["F1009741"] != null && ds.Tables[0].Rows[0]["F1009741"].ToString().Length > 0 && ds.Tables[0].Rows[0]["F1009741"].ToString() == "2")
+                if (ds.Tables[0].Rows[0]["F1009741"] != DBNull.Value && ds.Tables[0].Rows[0]["F1009741"].ToString().Length > 0 && ds.Tables[0].Rows[0]["F1009741"].ToString() == "2")
                 {
                     if (Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()).Date > Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()).Date)
                     {
@@ -538,7 +538,7 @@ namespace WizOne.Personal
 
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Chimpex)
                 {
-                    if (ds.Tables[0].Rows[0]["F100985"] != null && ds.Tables[0].Rows[0]["F100985"].ToString().Length > 0)
+                    if (ds.Tables[0].Rows[0]["F100985"] != DBNull.Value && ds.Tables[0].Rows[0]["F100985"].ToString().Length > 0)
                     {
                         DataTable dtCtrInt = General.IncarcaDT("SELECT COUNT(*) FROM F100 WHERE F100985 = '" + ds.Tables[0].Rows[0]["F100985"].ToString() + "' AND F10003 != " + ds.Tables[0].Rows[0]["F10003"].ToString(), null);
                         if (dtCtrInt != null && dtCtrInt.Rows.Count > 0 && dtCtrInt.Rows[0][0] != null && dtCtrInt.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtCtrInt.Rows[0][0].ToString()) > 0)

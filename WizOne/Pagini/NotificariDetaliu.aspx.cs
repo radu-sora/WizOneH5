@@ -554,12 +554,12 @@ namespace WizOne.Pagini
 
                 if (cmbTip.SelectedIndex == 0)
                 {
-                    txtAdr.Visible = true;
+                    txtAdr.ClientVisible = true;
                     cmbAdr.Visible = false;
                 }
                 else
                 {
-                    txtAdr.Visible = false;
+                    txtAdr.ClientVisible = false;
                     cmbAdr.Visible = true;
 
                     DataTable dt = new DataTable();

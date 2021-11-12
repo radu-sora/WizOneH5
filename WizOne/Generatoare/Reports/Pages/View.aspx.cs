@@ -439,7 +439,8 @@ namespace Wizrom.Reports.Pages
                 var userAgent = Request.ServerVariables["HTTP_USER_AGENT"];
                 var devices = new string[] { "iPhone", "iPad", "Android", "Windows Phone" }; // Add more devices
 
-                return devices.Any(d => userAgent.Contains(d));
+                return Request.Browser.IsMobileDevice; // For test
+                    //devices.Any(d => userAgent.Contains(d));
             }
         }        
 

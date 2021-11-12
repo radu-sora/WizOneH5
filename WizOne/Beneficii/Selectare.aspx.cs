@@ -424,6 +424,7 @@ namespace WizOne.Beneficii
                                  left join Ben_relSesGrupBen d on c.Id = d.IdSesiune and d.IdGrup = a.IdGrup  
                                  where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') 
                                  and convert(date, a.""DeLaData"") <= convert(date, getdate()) and convert(date, getdate()) <= convert(date, a.""LaData"")  
+                                 and   d.DataInceput is not null and d.DataSfarsit is not null
                                  ORDER BY a.""Denumire""";
 
                 strSql = string.Format(strSql, Convert.ToInt32(Session["User_Marca"] ?? -99));

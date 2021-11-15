@@ -2700,17 +2700,17 @@ namespace WizOne.ConcediiMedicale
 
                 string url = "~/ConcediiMedicale/Aprobare.aspx";
 
-                //#region  Notificare start
+                #region  Notificare start
 
-                //string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
-                //int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+                string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
 
-                //HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
-                //{
-                //    NotifAsync.TrimiteNotificare("Beneficii.Aprobare", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 2 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Ben_Cereri Z WHERE IdAuto=" + arrAuto[i], "Ben_Cereri", Convert.ToInt32(arrAuto[i]), idUser, marcaUser, arrParam);
-                //});
+                HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                {
+                    NotifAsync.TrimiteNotificare("ConcediiMedicale.Aprobare", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM CM_Cereri Z WHERE Id=" + Session["CM_Id"].ToString(), "CM_Cereri", Convert.ToInt32(Session["CM_Id"].ToString()), Convert.ToInt32(Session["UserId"].ToString()), marcaUser, arrParam);
+                });
 
-                //#endregion
+                #endregion
 
                 if (msg.Length <= 0)
                 {

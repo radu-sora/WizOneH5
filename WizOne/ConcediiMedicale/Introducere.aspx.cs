@@ -2700,6 +2700,18 @@ namespace WizOne.ConcediiMedicale
 
                 string url = "~/ConcediiMedicale/Aprobare.aspx";
 
+                //#region  Notificare start
+
+                //string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                //int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+                //HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                //{
+                //    NotifAsync.TrimiteNotificare("Beneficii.Aprobare", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 2 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM Ben_Cereri Z WHERE IdAuto=" + arrAuto[i], "Ben_Cereri", Convert.ToInt32(arrAuto[i]), idUser, marcaUser, arrParam);
+                //});
+
+                //#endregion
+
                 if (msg.Length <= 0)
                 {
                     if (Page.IsCallback)

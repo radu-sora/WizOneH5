@@ -129,7 +129,19 @@ namespace WizOne.Beneficii
                                 msg += "\n<b>Optiunea ta privind selectarea Beneficiilor este in curs de aprobare. Vei primi un e-mail in momentul in care solicitarea ta va fi validata</b>.";
                                 Session["SelectareBeneficii"] = 2;
                                 Session["SelectareText"] = msg;
-                                lblSes.Text = Dami.TraduCuvant(msg);   
+                                lblSes.Text = Dami.TraduCuvant(msg);
+
+                                DataTable dtBenAles1 = Session["Select_BenAles"] as DataTable;
+                                if (dtBenAles1 != null && dtBenAles1.Rows.Count > 0)
+                                    for (int i = 0; i < grDateSes.VisibleRowCount; i++)
+                                    {
+                                        DataRowView obj = grDateSes.GetRow(i) as DataRowView;
+                                        if (Convert.ToInt32(obj["Id"].ToString()) == Convert.ToInt32(dtBenAles1.Rows[0]["IdBeneficiu"].ToString()))
+                                        {
+                                            grDateSes.Selection.SelectRow(i);
+                                            break;
+                                        }
+                                    }
                                 break;
                             case 3:
                                 msg += "\n<b>Optiunea ta privind selectarea Beneficiilor a fost aprobata</b>!";
@@ -379,9 +391,11 @@ namespace WizOne.Beneficii
                      LEFT JOIN Admin_Obiecte c ON c.Id = Ben_Cereri.IdBeneficiu 
                      inner join Admin_Categorii d on c.IdCategorie = d.Id 
                     left join Ben_relSesGrupBen e on e.IdSesiune = Ben_Cereri.IdSesiune and e.IdGrup = c.IdGrup 
-                     where d.IdArie = (select Valoare from tblParametrii where Nume = 'ArieTabBeneficiiDinPersonal')                   
-                    AND Ben_Cereri.idstare = 3 and cast(getdate() as date) between e.DataInceput and e.DataSfarsit
+                     where d.IdArie = (select Valoare from tblParametrii where Nume = 'ArieTabBeneficiiDinPersonal')   
+                    and cast(getdate() as date) <= e.DataSfarsit
                     And F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+                //AND Ben_Cereri.idstare = 3  and cast(getdate() as date) between e.DataInceput and e.DataSfarsit
 
                 q = General.IncarcaDT(strSql, null);
                 Session["Select_BenAles"] = q;

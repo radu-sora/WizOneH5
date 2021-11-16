@@ -21126,3 +21126,7 @@ Ziua int NOT NULL, CentruCost int NOT NULL, IdCC int, NrOre int, OraIn DateTime,
 )
 )
 GO
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('AngajatulPoateModificaPontajul', '0', '0 - rolul Angajat nu poate face modificari in Pontaj pe angajat; 1 - poate face', 3)
+GO

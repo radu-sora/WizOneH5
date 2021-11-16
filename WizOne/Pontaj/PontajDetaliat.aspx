@@ -73,7 +73,7 @@
                                             <div class="ptj_filtru">
                                                 <label id="lblRolAng" runat="server">Roluri</label>
                                                 <dx:ASPxComboBox ID="cmbRolAng" ClientInstanceName="cmbRolAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
-                                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRolAng'); }" />
+                                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRolAng'); grDate.PerformCallback('cmbRolAng;' + s.GetValue()); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
                                             <div class="ptj_filtru">

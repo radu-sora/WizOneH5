@@ -1896,6 +1896,16 @@ namespace WizOne.Pontaj
                         case "btnRespins":
                             Actiuni(0);
                             break;
+                        case "cmbRolAng":
+                            //Radu 15.11.2021 - #1054
+                            if (Dami.ValoareParam("AngajatulPoateModificaPontajul", "0") == "0")
+                            {
+                                if (Convert.ToInt32(General.Nz(arr[1], -1)) == 0)
+                                    grDate.Enabled = false;
+                                else
+                                    grDate.Enabled = true;
+                            }
+                            break;
                     }
                 }
             }

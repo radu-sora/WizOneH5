@@ -500,6 +500,14 @@ namespace WizOne.Pontaj
                 }
 
                 IncarcaGrid();
+                //Radu 15.11.2021 - #1054
+                if (Dami.ValoareParam("AngajatulPoateModificaPontajul", "0") == "0")
+                {
+                    if (Convert.ToInt32(General.Nz(cmbRolAng.Value, -1)) == 0)
+                        grDate.Enabled = false;
+                    else
+                        grDate.Enabled = true;
+                }
                 grCC.DataSource = null;
                 grCC.DataBind();
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
@@ -1895,17 +1903,7 @@ namespace WizOne.Pontaj
                             break;
                         case "btnRespins":
                             Actiuni(0);
-                            break;
-                        case "cmbRolAng":
-                            //Radu 15.11.2021 - #1054
-                            if (Dami.ValoareParam("AngajatulPoateModificaPontajul", "0") == "0")
-                            {
-                                if (Convert.ToInt32(General.Nz(arr[1], -1)) == 0)
-                                    grDate.Enabled = false;
-                                else
-                                    grDate.Enabled = true;
-                            }
-                            break;
+                            break;           
                     }
                 }
             }

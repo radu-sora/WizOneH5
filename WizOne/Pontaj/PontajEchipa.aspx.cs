@@ -1293,13 +1293,13 @@ namespace WizOne.Pontaj
                             idZile = 0; colZile = 0;
 
                             int xxx = 0;
-                            if (row == 32)
+                            if (row == 33)
                                 xxx++;
 
                             
                             for (int i = 0; i < dt.Columns.Count; i++)
                             {
-                                if (i == 56)
+                                if (i == 49)
                                     xxx++;
 
                                 if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))

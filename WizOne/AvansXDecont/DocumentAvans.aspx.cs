@@ -1553,7 +1553,7 @@ namespace WizOne.AvansXDecont
                                 cmbMonedaAvans.DataSource = lstConfigCurrencyXPay_Currency;
                                 cmbMonedaAvans.DataBind();
 
-                                ent.Rows[0]["PaymentTypeId"] = null;
+                                ent.Rows[0]["PaymentTypeId"] = DBNull.Value;
                                 lstConfigCurrencyXPay_PayCopy.Clear();
 								DataRow[] entConfig = lstConfigCurrencyXPay.Select("CurrencyId = " + Convert.ToInt32(cmbMonedaAvans.Value ?? -99));
                                 for (int i = 0; i < entConfig.Length; i++)
@@ -2495,7 +2495,7 @@ namespace WizOne.AvansXDecont
                     //Radu 09.08.2017
 					sqlQuery = "\n" + @" exec procAvsXDec_dtPlata1001 @ndocumentId={0}";  
                     sqlQuery = string.Format(sqlQuery, IdDocument);
-                    General.ExecutaNonQuery(sqlQuery, null);
+                    //General.ExecutaNonQuery(sqlQuery, null);
                 }
                 #endregion
             }

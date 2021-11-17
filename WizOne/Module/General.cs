@@ -5965,7 +5965,10 @@ namespace WizOne.Module
                 }
                 else
                 {
-                    return Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("nu aveti drepturi pentru aceasta operatie");
+                    if (idStare == 4 || idStare == 6)
+                        return Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("pontajul este respins");
+                    else
+                        return Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("pontajul este deja aprobat");
                 }
 
                 //Florin 2019.11.18

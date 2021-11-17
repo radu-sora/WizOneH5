@@ -2470,7 +2470,7 @@ namespace WizOne.Module
 
                     try
                     {
-                        DateTime ziDrp = Dami.DataDrepturi(Convert.ToInt32(General.Nz(dr["Drepturi_Valoare"], -99)), Convert.ToInt32(General.Nz(dr["Drepturi_NrZile"], 0)), Convert.ToDateTime(dr["DataInceput"]), Convert.ToInt32(dr["F10003"]));
+                        DateTime ziDrp = Dami.DataDrepturi(Convert.ToInt32(General.Nz(dr["Drepturi_Valoare"], -99)), Convert.ToInt32(General.Nz(dr["Drepturi_NrZile"], 0)), Convert.ToDateTime(dr["DataInceput"]), Convert.ToInt32(dr["F10003"]), 0, idUser);
                         if (Convert.ToDateTime(dr["DataInceput"]).Date < ziDrp)
                         {
                             if (ziDrp.Year == 2111 && ziDrp.Month == 11 && ziDrp.Day == 11)

@@ -57,10 +57,13 @@ namespace WizOne.Module
 
         public static void MemoreazaEroarea(Exception ex, string varPagina = "", string varEvenimentul = "")
         {
-            string varEroarea = ex.Message.ToString();
+            string varEroarea = ex.Message;
             if (ex.InnerException != null) varEroarea += ex.InnerException.ToString();
 
-            StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "wsInfoState.txt", true);
+            var tempPath = HostingEnvironment.MapPath("~/Temp/");
+
+            Directory.CreateDirectory(tempPath);
+            StreamWriter sw = new StreamWriter(tempPath + "wsInfoState.txt", true);
             //
             string mesaj = "";
 
@@ -85,7 +88,10 @@ namespace WizOne.Module
             StackTrace st = new StackTrace();
             if (varEvenimentul == "") varEvenimentul = st.GetFrame(0).GetMethod().Name;
 
-            StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "wsInfoState.txt", true);
+            var tempPath = HostingEnvironment.MapPath("~/Temp/");
+
+            Directory.CreateDirectory(tempPath);
+            StreamWriter sw = new StreamWriter(tempPath + "wsInfoState.txt", true);
             //
             string mesaj = "";
 
@@ -105,8 +111,11 @@ namespace WizOne.Module
 
         public static void CreazaLog(string msg, string strMetoda = "")
         {
+            var tempPath = HostingEnvironment.MapPath("~/Temp/");
+
+            Directory.CreateDirectory(tempPath);
             StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "woLogNtf.txt", true);
+            StreamWriter sw = new StreamWriter(tempPath + "woLogNtf.txt", true);
             //
             string mesaj = "";
 
@@ -122,8 +131,11 @@ namespace WizOne.Module
 
         public static void CreazaLogCereri(string msg, string f10003, string dataInceput)
         {
+            var tempPath = HostingEnvironment.MapPath("~/Temp/");
+
+            Directory.CreateDirectory(tempPath);
             StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "woLogCereri.txt", true);
+            StreamWriter sw = new StreamWriter(tempPath + "woLogCereri.txt", true);
             //
             string mesaj = "";
 
@@ -140,8 +152,11 @@ namespace WizOne.Module
 
         public static void CreazaLogFormuleCumulat(string msg, string strMetoda = "")
         {
+            var tempPath = HostingEnvironment.MapPath("~/Temp/");
+
+            Directory.CreateDirectory(tempPath);
             StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "woLogFormuleCumulat.txt", true);
+            StreamWriter sw = new StreamWriter(tempPath + "woLogFormuleCumulat.txt", true);
             //
             string mesaj = "";
 

@@ -21130,3 +21130,9 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('AngajatulPoateModificaPontajul', '0', '0 - rolul Angajat nu poate face modificari in Pontaj pe angajat; 1 - poate face', 3)
 GO
+
+
+----  2.2.141  ----
+
+ALTER TABLE DynReports ADD Photo VARBINARY(MAX)
+GO

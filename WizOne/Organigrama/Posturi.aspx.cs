@@ -37,12 +37,58 @@ namespace WizOne.Organigrama
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
+                btnPrint.Text = Dami.TraduCuvant("btnPrint", "Imprima");
+                btnSterge.Text = Dami.TraduCuvant("btnSterge", "Sterge");
+                btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
                 btnBack.Text = Dami.TraduCuvant("btnBack", "Inapoi");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
-
+                
                 btnDocUpload.ToolTip = Dami.TraduCuvant("incarca document");
                 btnDocSterge.ToolTip = Dami.TraduCuvant("sterge document");
+                btnDocArata.ToolTip = Dami.TraduCuvant("arata document");
+
+                lblId.InnerText = Dami.TraduCuvant("Id");
+                lblActiv.InnerText = Dami.TraduCuvant("Activ");
+                lblBuget.InnerText = Dami.TraduCuvant("Cod buget");
+                lblDen.InnerText = Dami.TraduCuvant("Denumire");
+                lblDtInc.InnerText = Dami.TraduCuvant("Data Inceput");
+                lblDtSf.InnerText = Dami.TraduCuvant("Data Sfarsit");
+                lblDenRO.InnerText = Dami.TraduCuvant("Denumire post romana");
+                lblDenEN.InnerText = Dami.TraduCuvant("Denumire post engleza");
+                lblGrupRO.InnerText = Dami.TraduCuvant("Nume grup romana");
+                lblGrupEN.InnerText = Dami.TraduCuvant("Nume grup engleza");
+                lblCmp.InnerText = Dami.TraduCuvant("Companie");
+                lblSub.InnerText = Dami.TraduCuvant("Subcomp");
+                lblFil.InnerText = Dami.TraduCuvant("Filiala");
+                lblSec.InnerText = Dami.TraduCuvant("Sectiune");
+                lblDept.InnerText = Dami.TraduCuvant("Dept");
+                lblSubdept.InnerText = Dami.TraduCuvant("Subdept");
+                lblBirou.InnerText = Dami.TraduCuvant("Birou");
+                lblSup.InnerText = Dami.TraduCuvant("Superior administrativ");
+                lblSupFunc.InnerText = Dami.TraduCuvant("Superiro functional");
+                lblFunc.InnerText = Dami.TraduCuvant("Functie");
+                lblStudiiSup.InnerText = Dami.TraduCuvant("Studii Superioare");
+                lblNivelHay.InnerText = Dami.TraduCuvant("Nivel Hay");
+                lblSalMin.InnerText = Dami.TraduCuvant("Salariul min");
+                lblSalMax.InnerText = Dami.TraduCuvant("max");
+                lblNivelIer.InnerText = Dami.TraduCuvant("Nivel ierarhic");
+                lblCor.InnerText = Dami.TraduCuvant("Cod COR");
+                lblPozitii.InnerText = Dami.TraduCuvant("Nr pozitii");
+                lblPozitiiAprobate.InnerText = Dami.TraduCuvant("Nr pozitii aprobate");
+                lblCom.InnerText = Dami.TraduCuvant("Competente");
+
+                pnlDosar.HeaderText = Dami.TraduCuvant("Alege documentele pentru dosarul personal");
+                pnlEchip.HeaderText = Dami.TraduCuvant("Alege echipamentele");
+                pnlBenef.HeaderText = Dami.TraduCuvant("Alege beneficiile");
+                pnlExtra.HeaderText = Dami.TraduCuvant("Alege campurile aditionale");
+
+                popUpIstoric.HeaderText = Dami.TraduCuvant("Istoric numar pozitii aprobate");
+
+                foreach (var col in grDate.Columns.OfType<GridViewDataColumn>())
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
+                foreach (var col in grDateIstoric.Columns.OfType<GridViewDataColumn>())
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
                 #endregion
 

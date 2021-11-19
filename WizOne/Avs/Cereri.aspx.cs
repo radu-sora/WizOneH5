@@ -4990,7 +4990,7 @@ namespace WizOne.Avs
                             {
                                 act = 1;
                                 sql100 = "UPDATE F100 SET F10004 = " + dtCer.Rows[0]["SubcompanieId"].ToString() + ", F10005 = " + dtCer.Rows[0]["FilialaId"].ToString() + ", F10006 = "
-                                    + dtCer.Rows[0]["SectieId"].ToString() + ", F10007 = " + dtCer.Rows[0]["DeptId"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                    + dtCer.Rows[0]["SectieId"].ToString() + ", F10007 = " + dtCer.Rows[0]["DeptId"].ToString() + ", F100910 = " + data + " WHERE F10003 = " + f10003.ToString();
                                 if (dtF1001 != null && dtF1001.Rows.Count > 0)
                                     sql1001 = "UPDATE F1001 SET F100958 = " + General.Nz(dtCer.Rows[0]["SubdeptId"],"NULL").ToString() + ", F100959 = " + General.Nz(dtCer.Rows[0]["BirouId"],"NULL").ToString() + " WHERE F10003 = " + f10003.ToString();
                             }

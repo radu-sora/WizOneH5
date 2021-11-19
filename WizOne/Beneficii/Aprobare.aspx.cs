@@ -475,7 +475,9 @@ namespace WizOne.Beneficii
                     DateTime? dataInc = arr[3] as DateTime?;
                     DateTime? dataSf = arr[4] as DateTime?;
 
-                    if (Convert.ToInt32(General.Nz(arr[2], 0)) != 2 || (dataInc ?? new DateTime(2100, 1, 1)) > DateTime.Now.Date || (dataSf ?? new DateTime(1900, 1, 1)) < DateTime.Now.Date)
+                    if (Convert.ToInt32(General.Nz(arr[2], 0)) < 2 
+                        || (Convert.ToInt32(General.Nz(arr[2], 0).ToString()) == 3 && (Session["BenAprobare_HR"] == null || Convert.ToInt32(Session["BenAprobare_HR"].ToString()) == 0) && tipActiune != 2) 
+                        || (dataInc ?? new DateTime(2100, 1, 1)) > DateTime.Now.Date || (dataSf ?? new DateTime(1900, 1, 1)) < DateTime.Now.Date)
                         continue;        
                  
                     ids += Convert.ToInt32(General.Nz(arr[0], 0)) + ";";

@@ -177,6 +177,24 @@ namespace WizOne.Personal
         protected global::DevExpress.Web.ASPxComboBox cmbBir;
 
         /// <summary>
+        /// lblDataModif control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDataModif;
+
+        /// <summary>
+        /// deDataModifStr control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxDateEdit deDataModifStr;
+
+        /// <summary>
         /// lblCC control.
         /// </summary>
         /// <remarks>

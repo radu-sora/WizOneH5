@@ -294,7 +294,7 @@
                 </div>
                 <br /><br />
 
-                <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" Collapsed="true" AllowCollapsingByHeaderClick="true" HeaderText="Alege documentele pentru dosarul personal" CssClass="pnlAlign indentBottom10" Width="100%">
+                <dx:ASPxRoundPanel ID="pnlDosar" ClientInstanceName="pnlDosar" runat="server" ShowHeader="true" ShowCollapseButton="true" Collapsed="true" AllowCollapsingByHeaderClick="true" HeaderText="Alege documentele pentru dosarul personal" CssClass="pnlAlign indentBottom10" Width="100%">
                     <HeaderStyle Font-Bold="true" />
                     <PanelCollection>
                         <dx:PanelContent>
@@ -310,7 +310,7 @@
                     </PanelCollection>
                 </dx:ASPxRoundPanel>
 
-                <dx:ASPxRoundPanel ID="ASPxRoundPanel2" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" Collapsed="true" AllowCollapsingByHeaderClick="true" HeaderText="Alege echipamentele" CssClass="pnlAlign indentBottom10" Width="100%">
+                <dx:ASPxRoundPanel ID="pnlEchip" ClientInstanceName="pnlEchip" runat="server" ShowHeader="true" ShowCollapseButton="true" Collapsed="true" AllowCollapsingByHeaderClick="true" HeaderText="Alege echipamentele" CssClass="pnlAlign indentBottom10" Width="100%">
                     <HeaderStyle Font-Bold="true" />
                     <PanelCollection>
                         <dx:PanelContent>
@@ -326,7 +326,7 @@
                     </PanelCollection>
                 </dx:ASPxRoundPanel>
 
-                <dx:ASPxRoundPanel ID="ASPxRoundPanel3" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" Collapsed="true" AllowCollapsingByHeaderClick="true" HeaderText="Alege beneficiile" CssClass="pnlAlign indentBottom10" Width="100%">
+                <dx:ASPxRoundPanel ID="pnlBenef" ClientInstanceName="pnlBenef" runat="server" ShowHeader="true" ShowCollapseButton="true" Collapsed="true" AllowCollapsingByHeaderClick="true" HeaderText="Alege beneficiile" CssClass="pnlAlign indentBottom10" Width="100%">
                     <HeaderStyle Font-Bold="true" />
                     <PanelCollection>
                         <dx:PanelContent>
@@ -342,7 +342,7 @@
                     </PanelCollection>
                 </dx:ASPxRoundPanel>
 
-                <dx:ASPxRoundPanel ID="ASPxRoundPanel1" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" Collapsed="true" AllowCollapsingByHeaderClick="true" HeaderText="Alege campurile aditionale" CssClass="pnlAlign indentBottom10" Width="100%">
+                <dx:ASPxRoundPanel ID="pnlExtra" ClientInstanceName="pnlExtra" runat="server" ShowHeader="true" ShowCollapseButton="true" Collapsed="true" AllowCollapsingByHeaderClick="true" HeaderText="Alege campurile aditionale" CssClass="pnlAlign indentBottom10" Width="100%">
                     <HeaderStyle Font-Bold="true" />
                     <PanelCollection>
                         <dx:PanelContent>

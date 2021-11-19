@@ -10,6 +10,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
@@ -244,6 +245,7 @@ namespace WizOne.ConcediiMedicale
                     sql = "UPDATE CM_Cereri SET IdStare = 3 WHERE Id = " + lstIds[i];
                     General.ExecutaNonQuery(sql, null);
 
+                    TrimiteNotificare(Convert.ToInt32(lstIds[i]));
                 }
 
                 Session["CM_Grid"] = null;
@@ -251,6 +253,7 @@ namespace WizOne.ConcediiMedicale
 
                 MessageBox.Show(msg + (msg.Length > 0 ? System.Environment.NewLine : "") + (nrSel == 1 ? Dami.TraduCuvant("S-a aprobat un concediu medical!") : Dami.TraduCuvant("S-au aprobat") + " " + nrSel + " " + Dami.TraduCuvant("concedii medicale") + "!"), MessageBox.icoInfo, "");
 
+             
             }
             catch (Exception ex)
             {
@@ -451,6 +454,8 @@ namespace WizOne.ConcediiMedicale
 
                         sql = "UPDATE CM_CereriIstoric SET IdStare = 2, IdUser = " + Session["UserId"].ToString() + ", Culoare = (SELECT Culoare FROM CM_tblStari WHERE Id = 2)  WHERE IdCerere = " + ids[k].Id + " AND Pozitie = 2 AND IdStare < 2";
                         General.ExecutaNonQuery(sql, null);
+
+                        TrimiteNotificare(ids[k].Id);
                     }
                 }
 
@@ -858,6 +863,8 @@ namespace WizOne.ConcediiMedicale
 
                     sql = "UPDATE CM_CereriIstoric SET IdStare = 4, IdUser = " + Session["UserId"].ToString() + ", Culoare = (SELECT Culoare FROM CM_tblStari WHERE Id = 4)  WHERE IdCerere = " + lstIds[i] + " AND Pozitie = 2";
                     General.ExecutaNonQuery(sql, null);
+
+                    TrimiteNotificare(Convert.ToInt32(lstIds[i]));
                 }
 
 
@@ -1256,6 +1263,8 @@ namespace WizOne.ConcediiMedicale
 
                     sql = "UPDATE CM_Cereri SET IdStare = -1 WHERE Id = " + ids[i].Id;
                     General.ExecutaNonQuery(sql, null);
+
+                    TrimiteNotificare(ids[i].Id);
 
                     //actualizare F300
                     DataTable dtVerif = General.IncarcaDT("SELECT COUNT(*) FROM F300 WHERE F30003 = " + ids[i].F10003 + " AND F30010 <> 4450 AND F30036 <> CONVERT(DATETIME, '" 
@@ -1717,6 +1726,21 @@ namespace WizOne.ConcediiMedicale
             int l = Convert.ToInt32(luna);
             int a = Convert.ToInt32(an);
             return (double)((double)l / 12.0 + (double)a);
+        }
+
+        private void TrimiteNotificare(int id)
+        {
+            #region  Notificare start
+
+            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+            int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+            HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+            {
+                NotifAsync.TrimiteNotificare("ConcediiMedicale.Aprobare", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM CM_Cereri Z WHERE Id=" + id, "CM_Cereri", id, Convert.ToInt32(Session["UserId"].ToString()), marcaUser, arrParam);
+            });
+
+            #endregion
         }
     }
 }

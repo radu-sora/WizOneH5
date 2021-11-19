@@ -667,10 +667,10 @@ namespace WizOne.Module
                 }
 
                 //cautam daca avem de inserat tabel
-                if (str.ToLower().IndexOf("#$select") >= 0)
+                while (str.ToLower().IndexOf("#$select") >= 0)
                 {
                     int start = str.ToLower().IndexOf("#$select");
-                    strSelect = str.Substring(start, str.Substring(start).LastIndexOf("$#")).Replace("#$", "");
+                    strSelect = str.Substring(start, str.Substring(start).IndexOf("$#")).Replace("#$", "");
                     strOriginal = strSelect;
                     strSelect = WebUtility.HtmlDecode(strSelect);
                     strSelect = strSelect.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
@@ -887,12 +887,12 @@ namespace WizOne.Module
 
             try
             {
-                string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority;
-                var virtualDir = VirtualPathUtility.ToAbsolute("~/");
-
                 int poz = corpAtt.IndexOf("UploadFiles/Images");
                 if (poz >= 0)
                 {
+                    string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority;
+                    var virtualDir = VirtualPathUtility.ToAbsolute("~/");
+
                     int poz1 = corpAtt.Substring(0, poz).LastIndexOf('"');
                     if (poz - poz1 > 0)
                     {

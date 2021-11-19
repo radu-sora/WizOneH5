@@ -735,9 +735,154 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-   
+
+        protected void btnGenerare_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Dictionary<int, string> lstMarci = new Dictionary<int, string>();
+
+                txtLog.Text = "";
+
+                if (txtAnLuna.Value == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat luna si anul!"), MessageBox.icoError);
+                    return;
+                }
+
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Email", "F10016", "NumeComplet" });
+                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun angajat!"), MessageBox.icoError);
+                    return;
+                }
+
+                for (int i = 0; i < lst.Count(); i++)
+                {
+                    object[] arr = lst[i] as object[];
+                    lstMarci.Add(Convert.ToInt32(General.Nz(arr[0], -99)), General.Nz(arr[1], "").ToString() + "_#_$_&_" + General.Nz(arr[2], "").ToString() + "_#_$_&_" + General.Nz(arr[3], "").ToString());
+                }
+
+                grDate.Selection.UnselectAll();
 
 
+                if (lstMarci.Count > 0)
+                {
+
+                    string msg = SalvareFluturasi(lstMarci);
+
+                    if (msg.Length > 0)
+                        txtLog.Text = "S-au intalnit urmatoarele erori:\n" + msg;
+                    else
+                        txtLog.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+
+        public string SalvareFluturasi(Dictionary<int, string> lstMarci)
+        {
+            string msg = "";
+
+            try
+            {
+                string cale = Dami.ValoareParam("TrimitereFluturas_Locatie", "");
+                if (cale.Length <= 0)
+                {
+                    msg += "Nu ati precizat locatia in care sa fie salvati fluturasii!\n";
+                    return msg;
+                }
+
+                string numeFis = Dami.ValoareParam("TrimitereFluturas_Denumire", "");
+                if (numeFis.Length <= 0)
+                {
+                    msg += "Nu ati precizat denumirea sub care sa fie salvati fluturasii!\n";
+                    return msg;
+                }
+
+                foreach (int key in lstMarci.Keys)
+                {      
+                    int reportId = Convert.ToInt32(Dami.ValoareParam("IdRaportFluturasMail", "-99"));
+                    int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
+                    int an = Convert.ToDateTime(txtAnLuna.Value).Year;
+
+                    using (var entities = new ReportsEntities())
+                    using (var xtraReport = new XtraReport())
+                    {
+                        var report = entities.Reports.Find(reportId);
+
+                        using (var memStream = new MemoryStream(report.LayoutData))
+                            xtraReport.LoadLayoutFromXml(memStream);
+
+                        var values = new
+                        {
+                            Implicit = new { UserId = Session?["UserId"] },
+                            Explicit = new { Angajat = key.ToString(), Luna = luna, An = an }
+                        };
+                        var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
+                        var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
+                        var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
+                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                            Where(p => p.Type != typeof(Expression));
+
+                        foreach (var param in parameters)
+                        {
+                            var name = param.Name.TrimStart('@');
+                            var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
+                                implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
+
+                            if (value != null)
+                                param.Value = Convert.ChangeType(value, param.Type);
+                        }
+
+                        xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
+                        PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
+                        pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
+
+                        if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
+                        {
+                            msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
+                            continue;
+                        }
+
+                        MemoryStream mem = new MemoryStream();
+                        xtraReport.ExportToPdf(mem, pdfOptions);
+                        mem.Seek(0, System.IO.SeekOrigin.Begin);
+                        string numeFisTmp = numeFis;
+                        string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
+                        string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
+                        numeFisTmp = numeFisTmp.Replace("<Anul>", an.ToString()).Replace("<Luna>", luna.ToString()).Replace("<Marca>", key.ToString()) + ".pdf";
+
+                        using (FileStream file = new FileStream(cale + numeFisTmp, FileMode.Create, System.IO.FileAccess.Write))
+                        {
+                            byte[] bytes = new byte[mem.Length];
+                            mem.Read(bytes, 0, (int)mem.Length);
+                            file.Write(bytes, 0, bytes.Length);
+                        }
+
+                        mem.Close();
+                        mem.Flush();
+                    }
+
+                }
+                if (msg.Length <= 0)
+                    MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes!"), MessageBox.icoSuccess);
+                else
+                    MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes, dar cu unele erori! Verificati log-ul!"), MessageBox.icoWarning);
+            }
+            catch (Exception ex)
+            {
+                msg += "Eroare la salvare!\n";
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return msg;
+
+        }
     }
 }
  

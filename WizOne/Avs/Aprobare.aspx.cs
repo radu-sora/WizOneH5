@@ -953,7 +953,9 @@ namespace WizOne.Avs
                             //Florin 2019.07.29
                             //s-a adaugat si parametrul cu id-uri excluse
                             string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
-                            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + id + ",") >= 0) ))
+                            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" 
+                                //Radu 14.10.2021 - #1007
+                                && (idExcluse.IndexOf("," + dtCer.Rows[0]["IdAtribut"].ToString() + ",") >= 0 || Convert.ToInt32(General.Nz(dtCer.Rows[0]["GenerareDoc"], 0).ToString()) == 0)) ))
                             {
                                 Cereri pag = new Cereri();
                                 pag.TrimiteInF704(id);

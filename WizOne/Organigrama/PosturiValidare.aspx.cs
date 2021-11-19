@@ -1,15 +1,10 @@
 ﻿using DevExpress.Web;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Organigrama
@@ -30,6 +25,13 @@ namespace WizOne.Organigrama
 
                 btnValidare.Text = Dami.TraduCuvant("btnValidare", "Validare");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+
+                lblAng.InnerText = Dami.TraduCuvant("Angajat");
+                lblSup.InnerText = Dami.TraduCuvant("Superior administrativ");
+
+                foreach(var col in grDate.Columns.OfType<GridViewDataColumn>())
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
                 #endregion
 

@@ -231,6 +231,10 @@ namespace WizOne.Pagini
                             case "21":
                                 tbl = "Beneficii_Ang";
                                 break;
+                            case "22":
+                                tbl = "AvsXDec_relUploadDocumente";
+                                id = "(SELECT \"IdDocument\" FROM \"AvsXDec_relUploadDocumente\" WHERE \"DocumentId\" = " + id.Split(',')[0] + " AND \"DocumentDetailId\" = " + id.Split(',')[1] + ")";
+                                break;
                         }
 
                         if (tbl.Length > 0)

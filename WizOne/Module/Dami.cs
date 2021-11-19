@@ -1606,12 +1606,14 @@ namespace WizOne.Module
         //    return id;
         //}
 
-        internal static DateTime DataDrepturi(int tip, int nrZile, DateTime dtInc, int f10003=-99, int idRol = 0)
+        internal static DateTime DataDrepturi(int tip, int nrZile, DateTime dtInc, int f10003=-99, int idRol = 0, int idUser = -99)
         {
             DateTime zi = new DateTime(2111,11,11);
 
             try
             {
+                if (idUser == -99)
+                    idUser = Convert.ToInt32(General.Nz(HttpContext.Current.Session["UserId"],-99));
                 switch (tip)
                 {
                     case 1:                     //zi curenta
@@ -1672,13 +1674,13 @@ namespace WizOne.Module
                                     $@"SELECT COALESCE(C.""IdRol"",0) AS ""IdRol""
                                 FROM ""relGrupAngajat"" B
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
-                                WHERE C.""IdSuper""={HttpContext.Current.Session["UserId"]} AND COALESCE(C.""IdRol"",0) <= 3 AND B.F10003={f10003}
+                                WHERE C.""IdSuper""={idUser} AND COALESCE(C.""IdRol"",0) <= 3 AND B.F10003={f10003}
                                 UNION
                                 SELECT COALESCE(C.""IdRol"",0) AS ""IdRol""
                                 FROM ""relGrupAngajat"" B
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                 INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")
-                                WHERE J.""IdUser""={HttpContext.Current.Session["UserId"]} AND COALESCE(C.""IdRol"",0) <= 3 AND B.F10003={f10003}
+                                WHERE J.""IdUser""={idUser} AND COALESCE(C.""IdRol"",0) <= 3 AND B.F10003={f10003}
                                 ORDER BY ""IdRol"" DESC", null);
 
                                 if (dt != null && dt.Rows.Count > 0) idRol = Convert.ToInt32(General.Nz(dt.Rows[0]["IdRol"], 0));

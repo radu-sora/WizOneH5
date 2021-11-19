@@ -19121,6 +19121,8 @@ GO
 ) 
 GO
 
+ALTER TABLE AvsXDec_DictionaryItem ADD CodCheltuiala int
+GO
 
 create  function "fcnAvsXDec_GetComisionBancar"( @nValPlata decimal, @nCurrencyIdPlata int, @nBankIdPlata int)
  returns decimal
@@ -21099,8 +21101,6 @@ CREATE SEQUENCE [dbo].[AvsXDec_BusinessTransaction_SEQ]
  CACHE 
 GO
 
-ALTER TABLE AvsXDec_DictionaryItem ADD CodCheltuiala int
-GO
 
 ---- AvsXDec END ----
 

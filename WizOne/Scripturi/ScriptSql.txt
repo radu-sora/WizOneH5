@@ -18100,15 +18100,17 @@ CREATE VIEW [dbo].[Schedule]
 AS
 SELECT 'CR' + CAST(ce.IdAuto AS VARCHAR) AS Id, 1 AS Type, ce.Id AS InternalId, ce.F10003 AS EmployeeId, 
 		ab.Denumire AS Name, ce.Observatii AS Remarks, ce.IdAbsenta AS LabelId, ce.IdStare AS StatusId,
-		ce.DataInceput AS StartDate, DATEADD(DD, 1, ce.DataSfarsit) AS EndDate 
+		ce.DataInceput AS StartDate, DATEADD(DD, 1, ce.DataSfarsit) AS EndDate
 FROM Ptj_Cereri AS ce
 INNER JOIN Ptj_tblAbsente AS ab ON ce.IdAbsenta = ab.Id
 INNER JOIN Ptj_tblStari AS st ON ce.IdStare = st.Id
 UNION
 SELECT 'CC' + CAST(cc.IdAuto AS VARCHAR) AS Id, 2 AS Type, cc.IdAuto AS InternalId, cc.F10003 AS EmployeeId, 
 		fcc.F06205 AS Name, cc.Observatii AS Remarks, 0 AS LabelId, cc.IdStare AS StatusId,		
-		ISNULL(cc.De, DATEADD(HH, 9, CAST(cc.Ziua AS DATETIME))) AS StartDate, 
-		ISNULL(cc.La, DATEADD(MI, (9 * 60) + ISNULL(cc.NrOre1, 0) + ISNULL(cc.NrOre2, 0) + ISNULL(cc.NrOre3, 0), CAST(cc.Ziua AS DATETIME))) AS EndDate
+		ISNULL(cc.De, DATEADD(HH, 9, CAST(cc.Ziua AS DATETIME))) AS StartDate,
+		ISNULL(cc.La, IIF(cc.IdStare = 2,			
+			IIF(ISNULL(cc.De, DATEADD(HH, 9, CAST(cc.Ziua AS DATETIME))) > GETDATE(), ISNULL(cc.De, DATEADD(HH, 9, CAST(cc.Ziua AS DATETIME))), GETDATE()),
+			DATEADD(MI, (9 * 60) + ISNULL(cc.NrOre1, 0) + ISNULL(cc.NrOre2, 0) + ISNULL(cc.NrOre3, 0), CAST(cc.Ziua AS DATETIME)))) AS EndDate
 FROM Ptj_CC AS cc
 INNER JOIN F062 AS fcc ON cc.F06204 = fcc.F06204
 INNER JOIN Ptj_tblStari AS st ON cc.IdStare = st.Id;

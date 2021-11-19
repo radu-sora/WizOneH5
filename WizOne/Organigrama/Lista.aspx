@@ -86,11 +86,11 @@
                         </dx:ASPxButton>
                     </div>
                     <div style="float:left; line-height:16px; vertical-align:middle; margin-top:5px;">
-                        <label style="display:inline-block; float:left; padding:0px 15px;">Legenda angajati: Activ</label>
+                        <label id="lgActiv" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Legenda angajati: Activ</label>
                         <div style="width:16px; height:16px; background-color:#c8ffc8;float:left; margin-left:0px; border:solid 2px #e6e6e6;"></div>
-                        <label style="display:inline-block; float:left; padding:0px 15px;">Activ suspendat</label>
+                        <label id="lgSuspendat" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Activ suspendat</label>
                         <div style="width:16px; height:16px; background-color:#ffffc8;float:left; margin-left:0px; border:solid 2px #e6e6e6;"></div>
-                        <label style="display:inline-block; float:left; padding:0px 15px;">Candidat</label>
+                        <label id="lgCandidati" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Candidat</label>
                         <div style="width:16px; height:16px; background-color:#96c8fa;float:left; margin-left:0px; border:solid 2px #e6e6e6;"></div>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><span>Alege Motivul</span></td>
+                            <td><span id="lblMotiv" runat="server">Alege Motivul</span></td>
                             <td>
                                 <dx:ASPxComboBox ID="cmbMotiv" ClientInstanceName="cmbMotiv" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
                             </td>

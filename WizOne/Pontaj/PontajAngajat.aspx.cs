@@ -85,14 +85,20 @@ namespace WizOne.Pontaj
             }
             else
             {
-                // De esalonat pe zile in cazul in care End - Start > o zi! 
-                result = General.RunSqlScalar<int>("UPDATE [Ptj_CC] SET [La] = @1, [IdStare] = @2 WHERE [F10003] = @3 AND [IdStare] = @4", null,
-                    appointment.Start, appointment.StatusKey, Session["User_Marca"], 2);
+                var startDate = General.RunSqlScalar<DateTime>("SELECT [De] FROM [Ptj_CC] WHERE [F10003] = @1 AND [IdStare] = @2", null, 
+                    Session["User_Marca"], 2);
 
-                if (result > 0)
+                if (startDate > DateTime.MinValue && startDate < DateTime.Now)
                 {
-                    //General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), appointment.Start.Year, appointment.Start.Month);
+                    //TODO: De esalonat pe zile in cazul in care End - Start > o zi! 
+                    result = General.RunSqlScalar<int>("UPDATE [Ptj_CC] SET [La] = @1, [NrOre1] = @2, [IdStare] = @3 WHERE [F10003] = @4 AND [IdStare] = @5", null,
+                        appointment.Start, (int)(appointment.Start - startDate).TotalMinutes, appointment.StatusKey, Session["User_Marca"], 2);
 
+                    if (result > 0)
+                    {
+                        //General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), appointment.Start.Year, appointment.Start.Month);
+
+                    }
                 }
             }
 

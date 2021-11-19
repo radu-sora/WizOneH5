@@ -651,14 +651,21 @@ namespace WizOne.Pagini
                     btnNr.Text = Dami.TraduCuvant("btnNr", "Atribuire numar");
                     btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                     btnPrint.Text = Dami.TraduCuvant("btnPrint", "Imprima");
+                    btnPrint.Text = Dami.TraduCuvant("btnTiparit", "Tiparit");
+                    btnPrint.Text = Dami.TraduCuvant("btnSemnat", "Semnat");
+                    btnPrint.Text = Dami.TraduCuvant("btnFinalizat", "Finalizat");
 
+                    lblCmp.InnerText = Dami.TraduCuvant("Companie");
                     lblTip.InnerText = Dami.TraduCuvant("Tip");
                     lblAng.InnerText = Dami.TraduCuvant("Angajat/Candidat");
+                    lblStru.InnerText = Dami.TraduCuvant("Subcompanie");
                     lblStatus.InnerText = Dami.TraduCuvant("Status");
                     lblDataInceput.InnerText = Dami.TraduCuvant("De la data");
                     lblDataSfarsit.InnerText = Dami.TraduCuvant("La data");
+                    lblDepasire.InnerText = Dami.TraduCuvant("Depasire Revisal");
 
                     btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                    btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
 
                     foreach (var col in grDate.Columns.OfType<GridViewDataColumn>())
                         col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);

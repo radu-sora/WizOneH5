@@ -121,29 +121,45 @@ namespace WizOne
                                             int luna = Convert.ToInt32(General.Nz(drCum["Luna"], -99));
                                             int idStare = Convert.ToInt32(General.Nz(drCum["IdStare"], -99));
 
+
+                                            //Florin - #1015 - verificam daca are mai multe roluri si alegem doar rolul care are drepturi
+                                            string strRol = "3";
+                                            switch (idStare)
+                                            {
+                                                case 1:
+                                                case 4:
+                                                    strRol += ",0,1,2";
+                                                    break;
+                                                case 2:
+                                                case 6:
+                                                    strRol += ",2";
+                                                    break;
+                                            }
+
                                             string sqlAdr =
-                                                @"SELECT D.F70102 AS ""IdUser"", MIN(COALESCE(C.""IdRol"",1)) AS ""IdRol"", D.F10003 AS ""MarcaUser""
+                                                $@"SELECT D.F70102 AS ""IdUser"", COALESCE(C.IdRol,1) AS ""IdRol"", D.F10003 AS ""MarcaUser""
                                                 FROM ""relGrupAngajat"" B
                                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                                 INNER JOIN USERS D ON C.""IdSuper"" = D.F70102
-                                                WHERE D.""Mail"" = @1 AND B.F10003 = @2
-                                                GROUP BY D.F70102, D.F10003
+                                                WHERE D.""Mail"" = @1 AND B.F10003 = @2 AND COALESCE(C.IdRol,1) IN ({strRol})
                                                 UNION
-                                                SELECT D.F70102 AS ""IdUser"", MIN(COALESCE(C.""IdRol"", 1)) AS ""IdRol"", D.F10003 AS ""MarcaUser""
+                                                SELECT D.F70102 AS ""IdUser"", COALESCE(C.IdRol,1) AS ""IdRol"", D.F10003 AS ""MarcaUser""
                                                 FROM ""relGrupAngajat"" B
                                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                                 INNER JOIN F100 A ON b.F10003 = a.F10003
                                                 INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")
                                                 INNER JOIN USERS D ON J.""IdUser"" = D.F70102
-                                                WHERE D.""Mail"" = @1 AND B.F10003 = @2
-                                                GROUP BY D.F70102, D.F10003";
+                                                WHERE D.""Mail"" = @1 AND B.F10003 = @2 AND COALESCE(C.IdRol,1) IN ({strRol})
+                                                ORDER BY COALESCE(C.IdRol,1)";
 
-                                            DataRow drAdr = General.IncarcaDR(sqlAdr, new object[] { mail, f10003 });
-                                            if (drAdr == null)
+                                            DataTable dtAdr = General.IncarcaDT(sqlAdr, new object[] { mail, f10003 });
+                                            if (dtAdr.Rows.Count == 0)
                                             {
                                                 divRas.InnerText = Dami.TraduCuvant("Date insuficiente");
                                                 return;
                                             }
+
+                                            DataRow drAdr = dtAdr.Rows[0];
 
                                             int idRol = Convert.ToInt32(General.Nz(drAdr["IdRol"], -99));
                                             int idUser = Convert.ToInt32(General.Nz(drAdr["IdUser"], -99));

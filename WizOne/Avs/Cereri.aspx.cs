@@ -4681,7 +4681,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70452, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 1, 'Salariu Tarifar', " + data + ", " + dtCer.Rows[0]["SalariulBrut"].ToString() + ", 'Modificari in avans', '"
-                            + dateDoc + "', " + act.ToString() + ", " + dtCer.Rows[0]["ScutitImpozit"].ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dateDoc + "', " + act.ToString() + ", " + General.Nz(dtCer.Rows[0]["ScutitImpozit"], 0).ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.Functie:
@@ -4990,7 +4990,7 @@ namespace WizOne.Avs
                             {
                                 act = 1;
                                 sql100 = "UPDATE F100 SET F10004 = " + dtCer.Rows[0]["SubcompanieId"].ToString() + ", F10005 = " + dtCer.Rows[0]["FilialaId"].ToString() + ", F10006 = "
-                                    + dtCer.Rows[0]["SectieId"].ToString() + ", F10007 = " + dtCer.Rows[0]["DeptId"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                                    + dtCer.Rows[0]["SectieId"].ToString() + ", F10007 = " + dtCer.Rows[0]["DeptId"].ToString() + ", F100910 = " + data + " WHERE F10003 = " + f10003.ToString();
                                 if (dtF1001 != null && dtF1001.Rows.Count > 0)
                                     sql1001 = "UPDATE F1001 SET F100958 = " + General.Nz(dtCer.Rows[0]["SubdeptId"],"NULL").ToString() + ", F100959 = " + General.Nz(dtCer.Rows[0]["BirouId"],"NULL").ToString() + " WHERE F10003 = " + f10003.ToString();
                             }

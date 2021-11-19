@@ -102,7 +102,11 @@ namespace WizOne.Pontaj
                 if (!IsPostBack)
                 {
                     Session["InformatiaCurenta_PS"] = null;
+                    Session["PtjSpecial_DetaliiCC"] = null;
                     Session["PtjSpecial_Id"] = "-1";
+                    rbInitNormal.Checked = true;
+                    DataTable dtCC = General.IncarcaDT("SELECT * FROM F062");
+                    Session["PtjSpecial_CC"] = dtCC;
                     IncarcaRoluri();
                     IncarcaAngajati();
            
@@ -119,7 +123,7 @@ namespace WizOne.Pontaj
                         + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
                         + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
                         + " NULL as \"ValZiua11\", NULL as \"ValZiua12\",  NULL as \"ValZiua13\", NULL as \"ValZiua14\", NULL as \"ValZiua15\", NULL as \"ValZiua16\", NULL as \"ValZiua17\", NULL as \"ValZiua18\", NULL as \"ValZiua19\", NULL as \"ValZiua20\", "
-                        + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL, 0 AS \"Decalare\" "
+                        + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL, 0 AS \"Decalare\", 0 AS TipInit "
                         + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
                         + "SELECT  \"Id\",  \"Denumire\", \"IdProgram1\", \"IdProgram2\", \"IdProgram3\",  \"IdProgram4\",  \"IdProgram5\",  \"IdProgram6\",  \"IdProgram7\",  \"IdProgram8\",  \"IdProgram9\",  \"IdProgram10\","
                         + "  \"IdProgram11\",   \"IdProgram12\",  \"IdProgram13\",  \"IdProgram14\",  \"IdProgram15\",  \"IdProgram16\",  \"IdProgram17\",  \"IdProgram18\",  \"IdProgram19\",  \"IdProgram20\","
@@ -132,7 +136,7 @@ namespace WizOne.Pontaj
                         + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
                         + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "
                         + " \"ValZiua11\", \"ValZiua12\",  \"ValZiua13\", \"ValZiua14\", \"ValZiua15\", \"ValZiua16\", \"ValZiua17\", \"ValZiua18\", \"ValZiua19\", \"ValZiua20\", "
-                        + " \"ValZiua21\", \"ValZiua22\",  \"ValZiua23\", \"ValZiua24\", \"ValZiua25\", \"ValZiua26\", \"ValZiua27\", \"ValZiua28\", \"ValZiua29\", \"ValZiua30\", \"ValZiua31\", S, D, SL, \"Decalare\" FROM \"PtjSpecial_Sabloane\" ";
+                        + " \"ValZiua21\", \"ValZiua22\",  \"ValZiua23\", \"ValZiua24\", \"ValZiua25\", \"ValZiua26\", \"ValZiua27\", \"ValZiua28\", \"ValZiua29\", \"ValZiua30\", \"ValZiua31\", S, D, SL, \"Decalare\", TipInit FROM \"PtjSpecial_Sabloane\" ";
                     DataTable dt = General.IncarcaDT(sql, null);
                     cmbSablon.DataSource = dt;
                     cmbSablon.DataBind();
@@ -178,25 +182,40 @@ namespace WizOne.Pontaj
                     
                     if (cmbNrZileSablon.Value != null)
                     {
-                        for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
+                        if (rbInitNormal.Checked)
                         {
-                            ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
-                            ASPxTextBox lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxTextBox;
-                            if (tx != null)                            
-                                tx.Visible = true;
-                            if (lx != null)
-                                lx.Visible = true;
+                            for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
+                            {
+                                ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                                ASPxTextBox lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxTextBox;
+                                if (tx != null)
+                                    tx.Visible = true;
+                                if (lx != null)
+                                    lx.Visible = true;
+                            }
+                            for (int i = Convert.ToInt32(cmbNrZileSablon.Value) + 1; i <= 31; i++)
+                            {
+                                ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                                ASPxTextBox lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxTextBox;
+                                if (tx != null)
+                                    tx.Visible = false;
+                                if (lx != null)
+                                    lx.Visible = false;
+                            }
                         }
-                        for (int i = Convert.ToInt32(cmbNrZileSablon.Value) + 1; i <= 31; i++)
+                        else
                         {
-                            ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
-                            ASPxTextBox lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxTextBox;
-                            if (tx != null)
-                                tx.Visible = false;
-                            if (lx != null)
-                                lx.Visible = false;
-                        }             
-                    }             
+                            for (int i = 1; i <= 9; i++)
+                            {
+                                dynamic ctl = pnlCtl.FindControl("pnl" + i);
+                                ctl.ClientVisible = true;
+                                DataTable dtCC = Session["PtjSpecial_CC"] as DataTable;
+                                DataTable dtDetaliiCC = Session["PtjSpecial_DetaliiCC"] as DataTable;
+                                AfisarePnl(i, dtCC, dtDetaliiCC);
+                            }                          
+                        }
+
+                    }         
                 }
 
                 DataTable table = new DataTable();
@@ -237,12 +256,191 @@ namespace WizOne.Pontaj
                 cmbCtr.DataSource = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte"" ", null);
                 cmbCtr.DataBind();
 
-                IncarcaPopUp();
+                IncarcaPopUp();                
+        
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void AfisarePnl(int i, DataTable dtCC, DataTable dtDetaliiCC)
+        {
+            dynamic ctl = pnlCtl.FindControl("pnl" + i);
+            ctl.Controls.Clear();         
+
+            HtmlTable table = new HtmlTable();
+
+            HtmlTableRow row = new HtmlTableRow();
+            HtmlTableCell cell;
+
+            cell = new HtmlTableCell();
+            Label lbl1 = new Label();
+            lbl1.Text = "Ziua";
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            cell = new HtmlTableCell();
+            lbl1 = new Label();
+            lbl1.Text = "Centru cost " + i;
+            lbl1.Width = Unit.Pixel(100);
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            cell = new HtmlTableCell();
+            lbl1 = new Label();
+            lbl1.Text = "Ore";
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            cell = new HtmlTableCell();
+            lbl1 = new Label();
+            lbl1.Text = "In";
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            cell = new HtmlTableCell();
+            lbl1 = new Label();
+            lbl1.Text = "Out";
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            cell = new HtmlTableCell();
+            lbl1 = new Label();
+            lbl1.Text = "Pauza";
+            lbl1.Style.Add("margin", "5px 5px !important");
+            cell.Controls.Add(lbl1);
+            row.Cells.Add(cell);
+
+            table.Rows.Add(row);
+
+
+            for (int j = 1; j <= Convert.ToInt32(General.Nz(cmbNrZileSablon.Value, 0 ).ToString()); j++)
+            {
+                row = new HtmlTableRow();
+
+                cell = new HtmlTableCell();
+                lbl1 = new Label();
+                lbl1.Text = j.ToString();
+                lbl1.Style.Add("margin", "5px 5px !important");
+                cell.Controls.Add(lbl1);
+                row.Cells.Add(cell);
+
+                cell = new HtmlTableCell();
+                ASPxComboBox cmb = new ASPxComboBox();
+                cmb.ID = "cmb" + j + "_CC" + i;
+                cmb.ClientIDMode = ClientIDMode.Static;
+                cmb.ClientInstanceName = "cmb" + j + "_CC" + i;
+                cmb.Width = Unit.Pixel(125);                
+                cmb.Style.Add("margin", "5px 5px !important");
+                cmb.ValueType = typeof(System.Int32);
+                cmb.ValueField = "F06204";
+                cmb.TextField = "F06205";
+                cmb.DataSource = dtCC;
+                cmb.DataBind();                      
+                if (dtDetaliiCC != null && dtDetaliiCC.Rows.Count > 0)
+                    cmb.Value = (dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i) != null && dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).Length > 0 ?
+                       dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).FirstOrDefault()["IdCC"] : null);
+                cell.Controls.Add(cmb);                
+                row.Cells.Add(cell);
+
+                cell = new HtmlTableCell();
+                ASPxTextBox txt = new ASPxTextBox();
+                txt.ID = "txt" + j + "_CC" + i; 
+                txt.ClientIDMode = ClientIDMode.Static;
+                txt.ClientEnabled = false;
+                txt.ClientInstanceName = "txt" + j + "_CC" + i;
+                txt.Width = Unit.Pixel(30);
+                txt.Style.Add("margin", "5px 5px !important");
+                if (dtDetaliiCC != null && dtDetaliiCC.Rows.Count > 0)
+                    txt.Text = (dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i) != null && dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).Length > 0 ?
+                       dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).FirstOrDefault()["NrOre"].ToString() : "");
+                cell.Controls.Add(txt);
+                row.Cells.Add(cell);
+
+                cell = new HtmlTableCell();
+                ASPxTimeEdit te = new ASPxTimeEdit();
+                te.ID = "teIn" + j + "_CC" + i;
+                te.ClientIDMode = ClientIDMode.Static;
+                te.ClientInstanceName = "teIn" + j + "_CC" + i;
+                te.ClientSideEvents.DateChanged = @"function(s,e){ CalculOre(s); }";
+                te.Width = Unit.Pixel(60);
+                if (dtDetaliiCC != null && dtDetaliiCC.Rows.Count > 0)
+                    te.Value = (dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i) != null && dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).Length > 0 ?
+                       dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).FirstOrDefault()["OraIn"] : null);
+                te.Style.Add("margin", "5px 5px !important");
+                cell.Controls.Add(te);
+                row.Cells.Add(cell);
+
+                DateTime? dtIn = Convert.ToDateTime(te.Value);
+
+                cell = new HtmlTableCell();
+                te = new ASPxTimeEdit();
+                te.ID = "teOut" + j + "_CC" + i;
+                te.ClientIDMode = ClientIDMode.Static;
+                te.ClientInstanceName = "teOut" + j + "_CC" + i;
+                te.ClientSideEvents.DateChanged = @"function(s,e){ CalculOre(s); }";
+                te.Width = Unit.Pixel(60);
+                if (dtDetaliiCC != null && dtDetaliiCC.Rows.Count > 0)
+                    te.Value = (dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i) != null && dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).Length > 0 ?
+                       dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).FirstOrDefault()["OraOut"] : null);
+                te.Style.Add("margin", "5px 5px !important");
+                cell.Controls.Add(te);
+                row.Cells.Add(cell);
+
+                CalculOre(dtIn, (DateTime?)te.Value, txt);
+
+                cell = new HtmlTableCell();
+                te = new ASPxTimeEdit();
+                te.ID = "teP" + j + "_CC" + i;
+                te.ClientIDMode = ClientIDMode.Static;
+                te.ClientInstanceName = "teP" + j + "_CC" + i;
+                te.Width = Unit.Pixel(60);
+                if (dtDetaliiCC != null && dtDetaliiCC.Rows.Count > 0)
+                    te.Value = (dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i) != null && dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).Length > 0 ?
+                       dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).FirstOrDefault()["Pauza"] : null);
+                te.Style.Add("margin", "5px 5px !important");
+                cell.Controls.Add(te);
+                row.Cells.Add(cell);
+
+                cell = new HtmlTableCell();
+                ASPxButton btn = new ASPxButton();
+                btn.ID = "btn" + j + "_CC" + i;
+                btn.Width = Unit.Pixel(5);
+                btn.Height = Unit.Pixel(5);
+                btn.Font.Size = 5;
+                btn.AutoPostBack = false;
+                btn.ClientSideEvents.Click = @"function(s,e){ StergeLinie(s); }";
+                btn.Image.Url = "../Fisiere/Imagini/Icoane/sterge.png";
+                btn.RenderMode = ButtonRenderMode.Link;
+
+                btn.UseSubmitBehavior = false;
+                cell.Controls.Add(btn);
+                row.Cells.Add(cell);
+
+                table.Rows.Add(row);
+            }
+            
+            ctl.Controls.Add(table);
+        }
+
+
+        private void CalculOre(DateTime? oraIn, DateTime? oraOut, ASPxTextBox txt)
+        {
+            if (oraIn != null && oraOut != null)
+            {
+                TimeSpan diff = (DateTime)oraOut - (DateTime)oraIn;
+                double hours = diff.TotalHours;
+                if (hours < 0)
+                    hours = 0;
+                txt.Text = hours.ToString();
             }
         }
 
@@ -413,7 +611,9 @@ namespace WizOne.Pontaj
                     sablonSpecial["Ziua" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "Ziua" + (i + ziStart - 1) : "Ziua" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
                     sablonSpecial["ValZiua" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(cmbNrZileSablon.Value) ? "ValZiua" + (i + ziStart - 1) : "ValZiua" + (i + ziStart - 1 - Convert.ToInt32(cmbNrZileSablon.Value))];
                 }
-               
+                sablonSpecial["TipInit"] = rbInitNormal.Checked ? 0 : 1;
+                sablonSpecial["Id"] = cmbSablon.Value;
+
 
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
@@ -651,6 +851,16 @@ namespace WizOne.Pontaj
                         lastOut = ", \"LastOutPaid\" = NULL ";
                     }
 
+                    string pauza = "";
+                    if (Convert.ToInt32(General.Nz(sablon["TipInit"], 0)) == 1)
+                    {
+                        oraIn = ", \"In1\" = convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select min(OraIn) from PtjSpecial_SabloaneCC where id = " + sablon["Id"].ToString() + " and ziua = " + i + "), 108), 120)";
+                        oraOut = ", \"Out1\" = convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select max(OraOut) from PtjSpecial_SabloaneCC where id = " + sablon["Id"].ToString() + " and ziua = " + i + "), 108), 120)";
+                        firstIn = ", \"FirstInPaid\" = convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select min(OraIn) from PtjSpecial_SabloaneCC where id = " + sablon["Id"].ToString() + " and ziua = " + i + "), 108), 120)";
+                        lastOut = ", \"LastOutPaid\" = convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select max(OraOut) from PtjSpecial_SabloaneCC where id = " + sablon["Id"].ToString() + " and ziua = " + i + "), 108), 120)";
+                        pauza = ", TimpPauzaReal =  (SELECT CAST(FORMAT((SUM((DATEPART(\"ss\", pauza) + DATEPART(\"mi\", pauza) * 60 + DATEPART(\"hh\", pauza) * 3600)) / 3600), '00') as int) * 60 +  CAST(FORMAT((SUM((DATEPART(\"ss\", pauza) + DATEPART(\"mi\", pauza) * 60 + DATEPART(\"hh\", pauza) * 3600)) % 3600 / 60), '00') as int) as SumaPauza FROM PtjSpecial_SabloaneCC where id = " + sablon["Id"].ToString() + " and ziua = " + i + ") ";
+                    }
+
 
                     if (sablon["IdContract" + i] != null && sablon["IdContract" + i].ToString().Length > 0)                    
                         contract = ", IdContract = " + sablon["IdContract" + i].ToString();                    
@@ -704,7 +914,21 @@ namespace WizOne.Pontaj
                         data = data.Substring(1);
 
                         //sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
-                        sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + contract + modifProg + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
+                        sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + contract + modifProg + pauza + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
+
+                        if (Convert.ToInt32(General.Nz(sablon["TipInit"], 0)) == 1)
+                        {
+                            string sqlCC = "DELETE FROM Ptj_CC WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ")";
+                            General.ExecutaNonQuery(sqlCC, null);
+                            for (int k = 0; k < lista.Split(',').Length; k++)
+                            {
+                                for (int l = 0; l < data.Split(',').Length / 3; l++)
+                                {
+                                    sqlCC = "INSERT INTO Ptj_CC (F10003, Ziua, F06204, NrOre1) SELECT " + lista.Split(',')[k] + ", " + (data.Split(',')[3 * l] + "," + data.Split(',')[3 * l + 1] + "," + data.Split(',')[3 * l + 2]) + ", IdCC, NrOre * 60 FROM PtjSpecial_SabloaneCC where id=" + sablon["Id"].ToString() + " and ziua = " + i;
+                                    General.ExecutaNonQuery(sqlCC, null);
+                                }
+                            }
+                        }
 
                     }
                     if (chkPontare.Checked && lstZileGolite != null && lstZileGolite.Count > 0)
@@ -718,13 +942,19 @@ namespace WizOne.Pontaj
                                 dataZileGolite += ", TO_DATE('" + ziGolita.Day.ToString().PadLeft(2, '0') + "/" + ziGolita.Month.ToString().PadLeft(2, '0') + "/" + ziGolita.Year.ToString() + "', 'dd/mm/yyyy') ";
                         }
                         //sqlZileGolite = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL, \"In1\" = NULL, \"Out1\" = NULL, \"FirstInPaid\" = NULL, \"LastOutPaid\" = NULL " + sirValZileGolite + " WHERE \"Ziua\" IN (" + dataZileGolite.Substring(1) + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
-                        sqlZileGolite = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL, \"In1\" = NULL, \"Out1\" = NULL, \"FirstInPaid\" = NULL, \"LastOutPaid\" = NULL " + sirValZileGolite + " WHERE \"Ziua\" IN (" + dataZileGolite.Substring(1) + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
+                        sqlZileGolite = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL, \"In1\" = NULL, \"Out1\" = NULL, \"FirstInPaid\" = NULL, \"LastOutPaid\" = NULL, TimpPauzaReal = NULL " + sirValZileGolite + " WHERE \"Ziua\" IN (" + dataZileGolite.Substring(1) + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
+
+                        if (Convert.ToInt32(General.Nz(sablon["TipInit"], 0)) == 1)
+                        {
+                            string sqlCC = "DELETE FROM Ptj_CC WHERE \"Ziua\" IN (" + dataZileGolite.Substring(1) + ") AND F10003 IN (" + lista + ")";
+                            General.ExecutaNonQuery(sqlCC, null);
+                        }
                     }
                     if (sqlSDSL.Length > 0)
                     {
                         sqlSDSL = sqlSDSL.Substring(2);
                         //sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET  " + (chkPontare.Checked ? "\"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
-                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET  " + (chkPontare.Checked ? "\"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + contract + modifProg + " WHERE (" + sqlSDSL + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1));";
+                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET  " + (chkPontare.Checked ? "\"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + contract + modifProg + pauza + " WHERE (" + sqlSDSL + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1));";
                     }
                     else
                         sqlFin += sql + ";";
@@ -824,70 +1054,110 @@ namespace WizOne.Pontaj
                         return;
                     case "cmbNrZileSablon":
                         AscundeCtl();
-                        for (int i = 1; i <= 10; i++)
-                        {
-                            ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
-                            ASPxTextBox lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxTextBox;
-                            if (tx != null)
-                            {
-                                tx.Visible = false;
-                                tx.Text = "";
-                            }
-                            if (lx != null)
-                            {
-                                lx.Visible = false;
-                                lx.Text = "";
-                                lx.ToolTip = "";
-                            }
-                        }
-                        if (cmbNrZileSablon.Value != null)
-                            for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
+                        if (rbInitNormal.Checked)
+                        {                            
+                            for (int i = 1; i <= 10; i++)
                             {
                                 ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
                                 ASPxTextBox lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxTextBox;
-                                if (tx != null) tx.Visible = true;
-                                if (lx != null) lx.Visible = true;
+                                if (tx != null)
+                                {
+                                    tx.Visible = false;
+                                    tx.Text = "";
+                                }
+                                if (lx != null)
+                                {
+                                    lx.Visible = false;
+                                    lx.Text = "";
+                                    lx.ToolTip = "";
+                                }
                             }
-                        txtValuri.Clear();
+                            if (cmbNrZileSablon.Value != null)
+                                for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
+                                {
+                                    ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                                    ASPxTextBox lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxTextBox;
+                                    if (tx != null) tx.Visible = true;
+                                    if (lx != null) lx.Visible = true;
+                                }
+                            txtValuri.Clear();
+                        }
+                        else
+                        {
+                            for (int i = 1; i <= 9; i++)
+                            {
+                                dynamic ctl = pnlCtl.FindControl("pnl" + i);
+                                ctl.ClientVisible = true;
+                            }
+                            DataTable dtCC = Session["PtjSpecial_CC"] as DataTable;
+                            for (int i = 1; i <= 9; i++)
+                                AfisarePnl(i, dtCC, null);
+                        }
                         break;                
                     case "cmbSablon":
-                        AscundeCtl();                    
+                        AscundeCtl();              
                         if (cmbSablon.Value != null)
                         {
                             if (Convert.ToInt32(cmbSablon.Value) > 0)
                             {//sablon existent
                                 DataTable dt = Session["PtjSpecial_Sabloane"] as DataTable;
                                 DataRow[] dr = dt.Select("Id = " + Convert.ToInt32(cmbSablon.Value));
-                                DataTable dtProgr = Session["PtjSpecial_Programe"]as DataTable;
+                                DataTable dtProgr = Session["PtjSpecial_Programe"] as DataTable;
                                 if (dr != null && dr.Count() > 0)
                                 {
-                                    Session["PtjSpecial_Id"] = dr[0]["Id"].ToString();                                   
+                                    Session["PtjSpecial_Id"] = dr[0]["Id"].ToString();
+                                    if (Convert.ToInt32(General.Nz(dr[0]["TipInit"], 0).ToString()) == 0)
+                                    {
+                                        rbInitNormal.Checked = true;
+                                        rbInitCC.Checked = false;
+                                    }
+                                    else
+                                    {
+                                        rbInitNormal.Checked = false;
+                                        rbInitCC.Checked = true;
+                                    }
                                     txtNumeSablon.Text = dr[0]["Denumire"].ToString();
                                     cmbNrZileSablon.Value = Convert.ToInt32(dr[0]["NrZile"].ToString());
                                     if (cmbNrZileSablon.Value != null)
-                                        for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
+                                        if (Convert.ToInt32(General.Nz(dr[0]["TipInit"], 0).ToString()) == 0)
                                         {
-                                            ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
-                                            ASPxTextBox lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxTextBox;
-                                            if (tx != null)
+                                            for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
                                             {
-                                                tx.Visible = true;
-                                                tx.Text = (dr[0]["Ziua" + i.ToString()] as string ?? "").ToString();
+                                                ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                                                ASPxTextBox lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxTextBox;
+                                                if (tx != null)
+                                                {
+                                                    tx.Visible = true;
+                                                    tx.Text = (dr[0]["Ziua" + i.ToString()] as string ?? "").ToString();
+                                                }
+                                                if (lx != null)
+                                                {
+                                                    lx.Visible = true;
+                                                    int idProgr = dr[0]["IdProgram" + i.ToString()] as int? ?? -1;
+                                                    DataTable dtPr = Session["PtjSpecial_Programe"] as DataTable;
+                                                    DataRow[] drPr = dtPr.Select("Id = " + idProgr);
+                                                    string denScurta = idProgr > 0 ? idProgr.ToString() : "-";
+                                                    if (drPr != null && drPr.Count() > 0)
+                                                        denScurta = drPr[0]["DenumireScurta"].ToString();
+                                                    //lx.Text = (idProgr > 0 ? idProgr.ToString() : "-");
+                                                    lx.Text = denScurta;
+                                                    if (dtProgr != null && dtProgr.Rows.Count > 0 && lx.Text != "-")
+                                                        lx.ToolTip = dtProgr.Select("Id=" + idProgr)[0]["Denumire"] as string ?? "";
+                                                }
                                             }
-                                            if (lx != null)
+                                        }
+                                        else
+                                        {
+                                            DataTable dtDetaliiCC = General.IncarcaDT("SELECT * FROM PtjSpecial_SabloaneCC WHERE Id = " + Convert.ToInt32(cmbSablon.Value), null);
+                                            for (int i = 1; i <= 9; i++)
                                             {
-                                                lx.Visible = true;
-                                                int idProgr = dr[0]["IdProgram" + i.ToString()] as int? ?? -1;
-                                                DataTable dtPr = Session["PtjSpecial_Programe"] as DataTable;
-                                                DataRow[] drPr = dtPr.Select("Id = " + idProgr);
-                                                string denScurta = idProgr > 0 ? idProgr.ToString() : "-";
-                                                if (drPr != null && drPr.Count() > 0)
-                                                    denScurta = drPr[0]["DenumireScurta"].ToString();
-                                                //lx.Text = (idProgr > 0 ? idProgr.ToString() : "-");
-                                                lx.Text = denScurta;
-                                                if (dtProgr != null && dtProgr.Rows.Count > 0 && lx.Text != "-")
-                                                    lx.ToolTip = dtProgr.Select("Id=" + idProgr)[0]["Denumire"] as string ?? "";                                              
+                                                dynamic ctl = pnlCtl.FindControl("pnl" + i);
+                                                ctl.ClientVisible = true;
                                             }
+                                            DataTable dtCC1 = Session["PtjSpecial_CC"] as DataTable;
+                                            for (int i = 1; i <= 9; i++)
+                                                AfisarePnl(i, dtCC1, dtDetaliiCC);
+                                            Session["PtjSpecial_DetaliiCC"] = dtDetaliiCC;
                                         }
                                     chkS.Checked = Convert.ToInt32(dr[0]["S"] == null ? "0" : dr[0]["S"].ToString()) == 1 ? true : false;
                                     chkD.Checked = Convert.ToInt32(dr[0]["D"] == null ? "0" : dr[0]["D"].ToString()) == 1 ? true : false;
@@ -904,46 +1174,46 @@ namespace WizOne.Pontaj
                                     General.ExecutaNonQuery("INSERT INTO \"PtjSpecial_Sabloane\" (\"Id\") SELECT " + cmp + "(MAX(\"Id\"), 0) + 1 FROM \"PtjSpecial_Sabloane\"", null);
                                     sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram1\",  NULL AS \"IdProgram2\", NULL AS \"IdProgram3\", NULL AS \"IdProgram4\", NULL AS \"IdProgram5\", NULL AS \"IdProgram6\", NULL AS \"IdProgram7\", NULL AS \"IdProgram8\", NULL AS \"IdProgram9\", NULL AS \"IdProgram10\","
                         + " NULL AS \"IdProgram11\",  NULL AS \"IdProgram12\", NULL AS \"IdProgram13\", NULL AS \"IdProgram14\", NULL AS \"IdProgram15\", NULL AS \"IdProgram16\", NULL AS \"IdProgram17\", NULL AS \"IdProgram18\", NULL AS \"IdProgram19\", NULL AS \"IdProgram20\","
-                        + " NULL AS \"IdProgram21\",  NULL AS \"IdProgram22\", NULL AS \"IdProgram23\", NULL AS \"IdProgram24\", NULL AS \"IdProgram25\", NULL AS \"IdProgram26\", NULL AS \"IdProgram27\", NULL AS \"IdProgram28\", NULL AS \"IdProgram29\", NULL AS \"IdProgram30\", NULL AS \"IdProgram31\", " 
-                                       + " NULL AS \"IdContract1\",  NULL AS \"IdContract2\", NULL AS \"IdContract3\", NULL AS \"IdContract4\", NULL AS \"IdContract5\", NULL AS \"IdContract6\", NULL AS \"IdContract7\", NULL AS \"IdContract8\", NULL AS \"IdContract9\", NULL AS \"IdContract10\","
+                        + " NULL AS \"IdProgram21\",  NULL AS \"IdProgram22\", NULL AS \"IdProgram23\", NULL AS \"IdProgram24\", NULL AS \"IdProgram25\", NULL AS \"IdProgram26\", NULL AS \"IdProgram27\", NULL AS \"IdProgram28\", NULL AS \"IdProgram29\", NULL AS \"IdProgram30\", NULL AS \"IdProgram31\", "
+                                        + " NULL AS \"IdContract1\",  NULL AS \"IdContract2\", NULL AS \"IdContract3\", NULL AS \"IdContract4\", NULL AS \"IdContract5\", NULL AS \"IdContract6\", NULL AS \"IdContract7\", NULL AS \"IdContract8\", NULL AS \"IdContract9\", NULL AS \"IdContract10\","
                         + " NULL AS \"IdContract11\",  NULL AS \"IdContract12\", NULL AS \"IdContract13\", NULL AS \"IdContract14\", NULL AS \"IdContract15\", NULL AS \"IdContract16\", NULL AS \"IdContract17\", NULL AS \"IdContract18\", NULL AS \"IdContract19\", NULL AS \"IdContract20\","
                         + " NULL AS \"IdContract21\",  NULL AS \"IdContract22\", NULL AS \"IdContract23\", NULL AS \"IdContract24\", NULL AS \"IdContract25\", NULL AS \"IdContract26\", NULL AS \"IdContract27\", NULL AS \"IdContract28\", NULL AS \"IdContract29\", NULL AS \"IdContract30\", NULL AS \"IdContract31\","
                         + " NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
-                                      + " NULL as \"Ziua11\", NULL as \"Ziua12\",  NULL as \"Ziua13\", NULL as \"Ziua14\", NULL as \"Ziua15\", NULL as \"Ziua16\", NULL as \"Ziua17\", NULL as \"Ziua18\", NULL as \"Ziua19\", NULL as \"Ziua20\", "
-                                      + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
-                                      + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
-                                      + " NULL as \"ValZiua11\", NULL as \"ValZiua12\",  NULL as \"ValZiua13\", NULL as \"ValZiua14\", NULL as \"ValZiua15\", NULL as \"ValZiua16\", NULL as \"ValZiua17\", NULL as \"ValZiua18\", NULL as \"ValZiua19\", NULL as \"ValZiua20\", "
-                                      + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL, 0 AS \"Decalare\" "
-                                      + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
-                                      + "SELECT  \"Id\",  \"Denumire\", \"IdProgram1\", \"IdProgram2\", \"IdProgram3\",  \"IdProgram4\",  \"IdProgram5\",  \"IdProgram6\",  \"IdProgram7\",  \"IdProgram8\",  \"IdProgram9\",  \"IdProgram10\","
+                                        + " NULL as \"Ziua11\", NULL as \"Ziua12\",  NULL as \"Ziua13\", NULL as \"Ziua14\", NULL as \"Ziua15\", NULL as \"Ziua16\", NULL as \"Ziua17\", NULL as \"Ziua18\", NULL as \"Ziua19\", NULL as \"Ziua20\", "
+                                        + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
+                                        + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
+                                        + " NULL as \"ValZiua11\", NULL as \"ValZiua12\",  NULL as \"ValZiua13\", NULL as \"ValZiua14\", NULL as \"ValZiua15\", NULL as \"ValZiua16\", NULL as \"ValZiua17\", NULL as \"ValZiua18\", NULL as \"ValZiua19\", NULL as \"ValZiua20\", "
+                                        + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL, 0 AS \"Decalare\", 0 AS TipInit "
+                                        + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
+                                        + "SELECT  \"Id\",  \"Denumire\", \"IdProgram1\", \"IdProgram2\", \"IdProgram3\",  \"IdProgram4\",  \"IdProgram5\",  \"IdProgram6\",  \"IdProgram7\",  \"IdProgram8\",  \"IdProgram9\",  \"IdProgram10\","
                         + "  \"IdProgram11\",   \"IdProgram12\",  \"IdProgram13\",  \"IdProgram14\",  \"IdProgram15\",  \"IdProgram16\",  \"IdProgram17\",  \"IdProgram18\",  \"IdProgram19\",  \"IdProgram20\","
                         + "  \"IdProgram21\",   \"IdProgram22\",  \"IdProgram23\",  \"IdProgram24\",  \"IdProgram25\",  \"IdProgram26\",  \"IdProgram27\",  \"IdProgram28\",  \"IdProgram29\",  \"IdProgram30\",  \"IdProgram31\", "
-                          + " \"IdContract1\", \"IdContract2\", \"IdContract3\",  \"IdContract4\",  \"IdContract5\",  \"IdContract6\",  \"IdContract7\",  \"IdContract8\",  \"IdContract9\",  \"IdContract10\","
+                            + " \"IdContract1\", \"IdContract2\", \"IdContract3\",  \"IdContract4\",  \"IdContract5\",  \"IdContract6\",  \"IdContract7\",  \"IdContract8\",  \"IdContract9\",  \"IdContract10\","
                         + "  \"IdContract11\",   \"IdContract12\",  \"IdContract13\",  \"IdContract14\",  \"IdContract15\",  \"IdContract16\",  \"IdContract17\",  \"IdContract18\",  \"IdContract19\",  \"IdContract20\","
                         + "  \"IdContract21\",   \"IdContract22\",  \"IdContract23\",  \"IdContract24\",  \"IdContract25\",  \"IdContract26\",  \"IdContract27\",  \"IdContract28\",  \"IdContract29\",  \"IdContract30\",  \"IdContract31\", "
                         + " \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
-                                      + " \"Ziua11\", \"Ziua12\",  \"Ziua13\", \"Ziua14\", \"Ziua15\", \"Ziua16\", \"Ziua17\", \"Ziua18\", \"Ziua19\", \"Ziua20\", "
-                                      + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
-                                      + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "
-                                      + " \"ValZiua11\", \"ValZiua12\",  \"ValZiua13\", \"ValZiua14\", \"ValZiua15\", \"ValZiua16\", \"ValZiua17\", \"ValZiua18\", \"ValZiua19\", \"ValZiua20\", "
-                                      + " \"ValZiua21\", \"ValZiua22\",  \"ValZiua23\", \"ValZiua24\", \"ValZiua25\", \"ValZiua26\", \"ValZiua27\", \"ValZiua28\", \"ValZiua29\", \"ValZiua30\", \"ValZiua31\", S, D, SL, \"Decalare\" FROM \"PtjSpecial_Sabloane\" ";
+                                        + " \"Ziua11\", \"Ziua12\",  \"Ziua13\", \"Ziua14\", \"Ziua15\", \"Ziua16\", \"Ziua17\", \"Ziua18\", \"Ziua19\", \"Ziua20\", "
+                                        + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
+                                        + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "
+                                        + " \"ValZiua11\", \"ValZiua12\",  \"ValZiua13\", \"ValZiua14\", \"ValZiua15\", \"ValZiua16\", \"ValZiua17\", \"ValZiua18\", \"ValZiua19\", \"ValZiua20\", "
+                                        + " \"ValZiua21\", \"ValZiua22\",  \"ValZiua23\", \"ValZiua24\", \"ValZiua25\", \"ValZiua26\", \"ValZiua27\", \"ValZiua28\", \"ValZiua29\", \"ValZiua30\", \"ValZiua31\", S, D, SL, \"Decalare\", TipInit FROM \"PtjSpecial_Sabloane\" ";
                                     DataTable tabela = General.IncarcaDT(sql, null);
                                     //cmbSablon.DataSource = tabela;
                                     //cmbSablon.DataBind();
                                     txtNumeSablon.Text = "";
                                     cmbNrZileSablon.SelectedIndex = -1;
                                     Session["PtjSpecial_Sabloane"] = tabela;
-                                    Session["PtjSpecial_Id"] = tabela.Select("Denumire IS NULL OR Denumire = ''", "Id DESC")[0]["Id"].ToString(); 
+                                    Session["PtjSpecial_Id"] = tabela.Select("Denumire IS NULL OR Denumire = ''", "Id DESC")[0]["Id"].ToString();
                                 }
 
                             }
-                        }
+                        }  
                         break;
                     case "btnSablon":
                         DataTable tbl = Session["PtjSpecial_Sabloane"] as DataTable;
                         foreach (DataColumn col in tbl.Columns)
                             col.ReadOnly = false;
-                        DataRow[] linii = tbl.Select("Id = " + Convert.ToInt32(Session["PtjSpecial_Id"].ToString())); 
+                        DataRow[] linii = tbl.Select("Id = " + Session["PtjSpecial_Id"].ToString()); 
                         linii[0]["Denumire"] = txtNumeSablon.Text;
                         if (cmbNrZileSablon.Value != null)
                         {
@@ -953,15 +1223,18 @@ namespace WizOne.Pontaj
                             linii[0]["D"] = chkD.Checked ? 1 : 0;
                             linii[0]["SL"] = chkSL.Checked ? 1 : 0;
                             linii[0]["Decalare"] = chkDecalare.Checked ? 1 : 0;
-                            for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
+                            if (rbInitNormal.Checked)
                             {
-                                ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
-                                ASPxTextBox lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxTextBox;
-                                if (tx != null)
+                                linii[0]["TipInit"] = 0;
+                                for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
                                 {
-                                    tx.Visible = true;
-                                    //if (tx.Text.Length > 0)
-                                    //{
+                                    ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                                    ASPxTextBox lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxTextBox;
+                                    if (tx != null)
+                                    {
+                                        tx.Visible = true;
+                                        //if (tx.Text.Length > 0)
+                                        //{
                                         //linii[0]["Ziua" + i.ToString()] = tx.Text;
                                         if (tx.Text.Length <= 0)
                                         {
@@ -971,7 +1244,7 @@ namespace WizOne.Pontaj
                                         }
 
                                         foreach (var item in txtValuri)
-                                        {                                          
+                                        {
                                             if (item.Key == "txtZiua" + i.ToString())
                                                 linii[0]["ValZiua" + i.ToString()] = item.Value;
                                             if (item.Key == "IdProgram_" + "txtZiua" + i.ToString())
@@ -980,15 +1253,81 @@ namespace WizOne.Pontaj
                                                 linii[0]["IdContract" + i.ToString()] = item.Value ?? DBNull.Value;
                                             if (item.Key == "ValStr_" + "txtZiua" + i.ToString())
                                                 linii[0]["Ziua" + i.ToString()] = item.Value ?? DBNull.Value;
-                                    }                         
-                                      
-                                    //}
+                                        }
+
+                                        //}
+                                    }
+                                    if (lx != null)
+                                        lx.Visible = true;
                                 }
-                                if (lx != null)
-                                    lx.Visible = true;
+                            }
+                            else
+                            {
+                                linii[0]["TipInit"] = 1;
+                                DataTable dtDetaliiCC = General.IncarcaDT("SELECT * FROM PtjSpecial_SabloaneCC WHERE Id = " + Session["PtjSpecial_Id"].ToString(), null);
+                                for (int j = 1; j <= Convert.ToInt32(cmbNrZileSablon.Value); j++)
+                                {
+                                    int nrOre = 0;
+                                    for (int i = 1; i <= 9; i++)
+                                    {
+                                        dynamic ctl = pnlCtl.FindControl("pnl" + i);
+
+                                        bool esteNou = false;
+                                        DataRow dr = dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i) != null && dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).Length > 0 ?
+                                            dtDetaliiCC.Select("Ziua = " + j + " AND CentruCost = " + i).FirstOrDefault() : null;
+                                        if (dr == null)
+                                        {
+                                            dr = dtDetaliiCC.NewRow();
+                                            esteNou = true;
+                                            dr["Id"] = Convert.ToInt32(Session["PtjSpecial_Id"].ToString());
+                                            dr["Ziua"] = j;
+                                            dr["CentruCost"] = i;
+                                        }
+
+                                        ASPxComboBox cmb = ctl.FindControl("cmb" + j + "_CC" + i);
+                                        dr["IdCC"] = cmb.Value ?? DBNull.Value;
+                                        ASPxTextBox txt = ctl.FindControl("txt" + j + "_CC" + i);
+                                        if (txt.Text.Length > 0)
+                                        {
+                                            dr["NrOre"] = Convert.ToInt32(txt.Text);
+                                            nrOre += Convert.ToInt32(txt.Text);
+                                        }
+                                        else
+                                            dr["NrOre"] = DBNull.Value;
+                                        ASPxTimeEdit teIn = ctl.FindControl("teIn" + j + "_CC" + i);
+                                        if (teIn.Value != null)
+                                            dr["OraIn"] = new DateTime(2100, 1, 1, Convert.ToDateTime(teIn.Value).Hour, Convert.ToDateTime(teIn.Value).Minute, 0);
+                                        else
+                                            dr["OraIn"] = DBNull.Value;
+                                        ASPxTimeEdit teOut = ctl.FindControl("teOut" + j + "_CC" + i);
+                                        if (teOut.Value != null)
+                                            dr["OraOut"] = new DateTime(2100, 1, 1, Convert.ToDateTime(teOut.Value).Hour, Convert.ToDateTime(teOut.Value).Minute, 0);
+                                        else
+                                            dr["OraOut"] = DBNull.Value;
+                                        ASPxTimeEdit teP = ctl.FindControl("teP" + j + "_CC" + i);
+                                        if (teP.Value != null)
+                                            dr["Pauza"] = new DateTime(2100, 1, 1, Convert.ToDateTime(teP.Value).Hour, Convert.ToDateTime(teP.Value).Minute, 0);
+                                        else
+                                            dr["Pauza"] = DBNull.Value;
+
+                                        dr["USER_NO"] = Convert.ToInt32(Session["UserId"].ToString());
+                                        dr["TIME"] = DateTime.Now;
+
+                                        if (esteNou && cmb.Value != null)
+                                            dtDetaliiCC.Rows.Add(dr);
+
+                                    }
+                                    if (nrOre != 0)
+                                    {
+                                        linii[0]["Ziua" + j.ToString()] = nrOre;
+                                        linii[0]["ValZiua" + j.ToString()] = "Val0=" + nrOre;
+                                    }
+                                }
+                                General.SalveazaDate(dtDetaliiCC, "PtjSpecial_SabloaneCC");
                             }
                         }
                         General.SalveazaDate(tbl, "PtjSpecial_Sabloane");
+                        General.ExecutaNonQuery("DELETE FROM PtjSpecial_SabloaneCC WHERE IdCC IS NULL", null);
 
                         cmbSablon.DataSource = tbl;
                         cmbSablon.DataBind();
@@ -1008,7 +1347,7 @@ namespace WizOne.Pontaj
                           + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
                           + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
                           + " NULL as \"ValZiua11\", NULL as \"ValZiua12\",  NULL as \"ValZiua13\", NULL as \"ValZiua14\", NULL as \"ValZiua15\", NULL as \"ValZiua16\", NULL as \"ValZiua17\", NULL as \"ValZiua18\", NULL as \"ValZiua19\", NULL as \"ValZiua20\", "
-                          + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL, 0 AS \"Decalare\" "
+                          + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL, 0 AS \"Decalare\", 0 AS TipInit "
                           + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
                           + "SELECT  \"Id\",  \"Denumire\", \"IdProgram1\", \"IdProgram2\", \"IdProgram3\",  \"IdProgram4\",  \"IdProgram5\",  \"IdProgram6\",  \"IdProgram7\",  \"IdProgram8\",  \"IdProgram9\",  \"IdProgram10\","
                         + "  \"IdProgram11\",   \"IdProgram12\",  \"IdProgram13\",  \"IdProgram14\",  \"IdProgram15\",  \"IdProgram16\",  \"IdProgram17\",  \"IdProgram18\",  \"IdProgram19\",  \"IdProgram20\","
@@ -1021,7 +1360,7 @@ namespace WizOne.Pontaj
                           + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
                           + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "
                           + " \"ValZiua11\", \"ValZiua12\",  \"ValZiua13\", \"ValZiua14\", \"ValZiua15\", \"ValZiua16\", \"ValZiua17\", \"ValZiua18\", \"ValZiua19\", \"ValZiua20\", "
-                          + " \"ValZiua21\", \"ValZiua22\",  \"ValZiua23\", \"ValZiua24\", \"ValZiua25\", \"ValZiua26\", \"ValZiua27\", \"ValZiua28\", \"ValZiua29\", \"ValZiua30\", \"ValZiua31\", S, D, SL, \"Decalare\" FROM \"PtjSpecial_Sabloane\" ";
+                          + " \"ValZiua21\", \"ValZiua22\",  \"ValZiua23\", \"ValZiua24\", \"ValZiua25\", \"ValZiua26\", \"ValZiua27\", \"ValZiua28\", \"ValZiua29\", \"ValZiua30\", \"ValZiua31\", S, D, SL, \"Decalare\", TipInit FROM \"PtjSpecial_Sabloane\" ";
                         DataTable table = General.IncarcaDT(sql, null);
                         cmbSablon.DataSource = table;
                         cmbSablon.DataBind();
@@ -1031,7 +1370,24 @@ namespace WizOne.Pontaj
                         cmbNrZileSablon.SelectedIndex = -1;
                         cmbSablon.SelectedIndex = -1;
                         break;
-                }
+                    case "rbInitNormal":
+                        for (int i = 1; i <= 9; i++)
+                        {
+                            dynamic ctl = pnlCtl.FindControl("pnl" + i);
+                            ctl.ClientVisible = false;
+                        }                
+                        break;
+                    case "rbInitCC":
+                        for (int i = 1; i <= 9; i++)
+                        {
+                            dynamic ctl = pnlCtl.FindControl("pnl" + i);
+                            ctl.ClientVisible = true;
+                        }
+                        DataTable dtCC2 = Session["PtjSpecial_CC"] as DataTable;
+                        for (int i = 1; i <= 9; i++)
+                            AfisarePnl(i, dtCC2, null);
+                        break;
+                }  
 
                 if (esteStruc)
                 {
@@ -1396,6 +1752,12 @@ namespace WizOne.Pontaj
                     lx.Text = "";
                     lx.ToolTip = "";
                 }
+            }
+
+            for (int i = 1; i <= 9; i++)
+            {
+                dynamic ctl = pnlCtl.FindControl("pnl" + i);
+                ctl.ClientVisible = false;
             }
         }
 

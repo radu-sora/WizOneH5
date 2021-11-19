@@ -6,9 +6,15 @@
 
 
     function OnValueChangedHandlerStruct(s) {    
-        if (s.name != "cmbStru")
-            pnlCtlStruct.PerformCallback(s.name + ";" + s.GetValue());
-        else {                     
+        if (s.name != "cmbStru") {
+            if (s.name == "deDataModifStr") {
+                var DataModif = new Date(deDataModifStr.GetDate());
+                pnlCtlStruct.PerformCallback(s.name + ";" + DataModif.getDate() + "/" + (DataModif.getMonth() + 1) + "/" + DataModif.getFullYear());
+            }
+            else
+                pnlCtlStruct.PerformCallback(s.name + ";" + s.GetValue());
+        }
+        else {     
             var item = cmbStru.GetSelectedItem();        
             hfCC.Set('CC', item.GetColumnText("CC"));
             cmbCC.ClearItems();
@@ -109,13 +115,26 @@
                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
 				    </dx:ASPxComboBox>
                 </div>
-            			
+
+                 <div style="width:100%; margin-bottom:10px;">
+                    <label id="lblDataModif" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Data modificarii</label>
+                    <table>
+                        <tr>
+                            <td>
+							    <dx:ASPxDateEdit  ID="deDataModifStr" ClientInstanceName="deDataModifStr" Width="100" TabIndex="9"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
+                                    <CalendarProperties FirstDayOfWeek="Monday" />
+                                    <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
+							    </dx:ASPxDateEdit>					        
+                            </td>    
+                        </tr>
+                    </table>
+                </div>           			
                 <div style="width:100%; margin-bottom:10px;">
                     <label id="lblCC" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Centru cost</label>
                     <table>
                         <tr>
                             <td>
-				                <dx:ASPxComboBox ID="cmbCC" runat="server" DropDownStyle="DropDown" TabIndex="9" TextField="F06205" ValueField="F06204" ValueType="System.Int32" Width="200">
+				                <dx:ASPxComboBox ID="cmbCC" runat="server" DropDownStyle="DropDown" TabIndex="10" TextField="F06205" ValueField="F06204" ValueType="System.Int32" Width="200">
                                     <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
 				                </dx:ASPxComboBox>
                             </td>
@@ -142,7 +161,7 @@
                     <table>
                         <tr>
                             <td>
-				                <dx:ASPxComboBox ID="cmbPL" runat="server" DropDownStyle="DropDown" TabIndex="10" TextField="F08003" ValueField="F08002" ValueType="System.Int32" Width="200">
+				                <dx:ASPxComboBox ID="cmbPL" runat="server" DropDownStyle="DropDown" TabIndex="11" TextField="F08003" ValueField="F08002" ValueType="System.Int32" Width="200">
                                     <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
 				                </dx:ASPxComboBox>
                             </td>
@@ -169,7 +188,7 @@
                     <table>
                         <tr>
                             <td>
-				                <dx:ASPxComboBox ID="cmbLocatie" runat="server" DropDownStyle="DropDown" TabIndex="10" TextField="LOCATIE_MUNCA" ValueField="ID_LOCATIE" ValueType="System.Int32" Width="200">
+				                <dx:ASPxComboBox ID="cmbLocatie" runat="server" DropDownStyle="DropDown" TabIndex="12" TextField="LOCATIE_MUNCA" ValueField="ID_LOCATIE" ValueType="System.Int32" Width="200">
                                     <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
 				                </dx:ASPxComboBox>
                             </td>               
@@ -182,7 +201,7 @@
                     <table>
                         <tr>
                             <td>
-				                <dx:ASPxComboBox ID="cmbCAEN" runat="server" DropDownStyle="DropDown" TabIndex="11" TextField="F80104" ValueField="F80103" ValueType="System.Int32" Width="200">
+				                <dx:ASPxComboBox ID="cmbCAEN" runat="server" DropDownStyle="DropDown" TabIndex="13" TextField="F80104" ValueField="F80103" ValueType="System.Int32" Width="200">
                                     <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
 				                </dx:ASPxComboBox>
                             </td>    
@@ -194,7 +213,7 @@
                     <table>
                         <tr>
                             <td>
-				                <dx:ASPxComboBox ID="cmbUnitStat" runat="server" DropDownStyle="DropDown" TabIndex="12" TextField="F80304" ValueField="F80303" ValueType="System.Int32" Width="200">
+				                <dx:ASPxComboBox ID="cmbUnitStat" runat="server" DropDownStyle="DropDown" TabIndex="14" TextField="F80304" ValueField="F80303" ValueType="System.Int32" Width="200">
                                     <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
 				                </dx:ASPxComboBox>
                             </td>    

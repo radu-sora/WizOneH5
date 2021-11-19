@@ -61,11 +61,12 @@ namespace WizOne.Personal
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 table = ds.Tables[0];
 
-                Documente_DataList.DataSource = null;
-                Documente_DataList.DataBind();
+                //Documente_DataList.DataSource = null;
+                //Documente_DataList.DataBind();
 
                 Documente_DataList.DataSource = table;
-                Documente_DataList.DataBind();
+                if (!IsPostBack)
+                    Documente_DataList.DataBind();
 
                 ASPxComboBox cmbTara = Documente_DataList.Items[0].FindControl("cmbTara") as ASPxComboBox;
                 ASPxComboBox cmbTipDoc = Documente_DataList.Items[0].FindControl("cmbTipDoc") as ASPxComboBox;

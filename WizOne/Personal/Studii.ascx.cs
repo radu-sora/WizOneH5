@@ -12,7 +12,7 @@ namespace WizOne.Personal
 {
     public partial class Studii : System.Web.UI.UserControl
     {
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
 
             DataTable table = new DataTable();
@@ -21,7 +21,8 @@ namespace WizOne.Personal
             table = ds.Tables[0];
 
             Studii_DataList.DataSource = table;
-            Studii_DataList.DataBind();
+            if (!IsPostBack)
+                Studii_DataList.DataBind();
 
             string[] etichete = new string[7] { "lblStudii", "lblInstit", "lblSpec", "lblDataInceputSt", "lblDataSfarsitSt", "lblDataDiploma", "lblObs"};
             for (int i = 0; i < etichete.Count(); i++)

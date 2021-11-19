@@ -663,13 +663,13 @@ namespace WizOne.Organigrama
         protected global::DevExpress.Web.ASPxButton btnPozitii;
 
         /// <summary>
-        /// pnlFiltrare control.
+        /// pnlDosar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxRoundPanel pnlFiltrare;
+        protected global::DevExpress.Web.ASPxRoundPanel pnlDosar;
 
         /// <summary>
         /// chkDosar control.
@@ -690,13 +690,13 @@ namespace WizOne.Organigrama
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDosar;
 
         /// <summary>
-        /// ASPxRoundPanel2 control.
+        /// pnlEchip control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxRoundPanel ASPxRoundPanel2;
+        protected global::DevExpress.Web.ASPxRoundPanel pnlEchip;
 
         /// <summary>
         /// chkEchip control.
@@ -717,13 +717,13 @@ namespace WizOne.Organigrama
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divEchip;
 
         /// <summary>
-        /// ASPxRoundPanel3 control.
+        /// pnlBenef control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxRoundPanel ASPxRoundPanel3;
+        protected global::DevExpress.Web.ASPxRoundPanel pnlBenef;
 
         /// <summary>
         /// chkBenef control.
@@ -744,13 +744,13 @@ namespace WizOne.Organigrama
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divBenef;
 
         /// <summary>
-        /// ASPxRoundPanel1 control.
+        /// pnlExtra control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxRoundPanel ASPxRoundPanel1;
+        protected global::DevExpress.Web.ASPxRoundPanel pnlExtra;
 
         /// <summary>
         /// chkExtra control.

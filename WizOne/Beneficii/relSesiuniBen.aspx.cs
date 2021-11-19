@@ -76,6 +76,7 @@ namespace WizOne.Beneficii
                         c = new GridViewDataDateColumn();
                         c.Name = "DataInceput";
                         c.FieldName = "DataInceput";
+                        c.PropertiesDateEdit.DisplayFormatString = "dd/MM/yyyy";
                         c.Caption = Dami.TraduCuvant("Data inceput");
                         if (!IsPostBack)
                             grDate.Columns.Add(c);
@@ -83,6 +84,7 @@ namespace WizOne.Beneficii
                         c = new GridViewDataDateColumn();
                         c.Name = "DataSfarsit";
                         c.FieldName = "DataSfarsit";
+                        c.PropertiesDateEdit.DisplayFormatString = "dd/MM/yyyy";
                         c.Caption = Dami.TraduCuvant("Data sfarsit");
                         if (!IsPostBack)
                             grDate.Columns.Add(c);

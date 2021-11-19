@@ -335,6 +335,10 @@ namespace WizOne.Pagini
 
                             divPanel.Controls.Add(pnl);
 
+                            int xxx = 0;
+                            if (pag.Contains("AvsXDec"))
+                                xxx++;
+
                             if ((bool?)layoutData["wdgMnu" + i]?[0] ?? false)
                                 Session["tmpMeniu3"] += ";" + pag;
                         }

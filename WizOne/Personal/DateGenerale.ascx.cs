@@ -19,7 +19,7 @@ namespace WizOne.Personal
     public partial class DateGenerale : System.Web.UI.UserControl
     {
 
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
 
             try
@@ -42,7 +42,8 @@ namespace WizOne.Personal
 
                 //bindingSource1.DataSource = table;
                 DateGenListView.DataSource = table;
-                DateGenListView.DataBind();              
+                if (!IsPostBack)
+                    DateGenListView.DataBind();              
 
                 ASPxRadioButton chk1 = DateGenListView.Items[0].FindControl("chkM") as ASPxRadioButton;
                 ASPxRadioButton chk2 = DateGenListView.Items[0].FindControl("chkF") as ASPxRadioButton;
@@ -69,6 +70,22 @@ namespace WizOne.Personal
                     cmbTimpPartialDGDataSource.SelectParameters.Clear();
                     cmbTimpPartialDGDataSource.SelectParameters.Add("tip", ds.Tables[0].Rows[0]["F10010"].ToString());
                     cmbTimpPartialDG.DataBindItems();
+
+                    //Radu 09.11.2021 - #1049                    
+                    ASPxComboBox cmbCompanie = DateGenListView.Items[0].FindControl("cmbCompanie") as ASPxComboBox;
+                    ASPxComboBox cmbSubcompanie = DateGenListView.Items[0].FindControl("cmbSubcompanie") as ASPxComboBox;
+                    ASPxComboBox cmbFiliala = DateGenListView.Items[0].FindControl("cmbFiliala") as ASPxComboBox;
+                    ASPxComboBox cmbSectie = DateGenListView.Items[0].FindControl("cmbSectie") as ASPxComboBox;
+                    ASPxComboBox cmbDepartament = DateGenListView.Items[0].FindControl("cmbDepartament") as ASPxComboBox;
+                    ASPxComboBox cmbSubdept = DateGenListView.Items[0].FindControl("cmbSubdept") as ASPxComboBox;
+                    ASPxComboBox cmbBirouEchipa = DateGenListView.Items[0].FindControl("cmbBirouEchipa") as ASPxComboBox;
+                    cmbCompanie.Value = Convert.ToInt32(table.Rows[0]["F10002"].ToString());
+                    cmbSubcompanie.Value = Convert.ToInt32(table.Rows[0]["F10004"].ToString());
+                    cmbFiliala.Value = Convert.ToInt32(table.Rows[0]["F10005"].ToString());
+                    cmbSectie.Value = Convert.ToInt32(table.Rows[0]["F10006"].ToString());
+                    cmbDepartament.Value = Convert.ToInt32(table.Rows[0]["F10007"].ToString());
+                    cmbSubdept.Value = Convert.ToInt32(table.Rows[0]["F100958"].ToString());
+                    cmbBirouEchipa.Value = Convert.ToInt32(table.Rows[0]["F100959"].ToString());
                 }
 
                 ASPxTextBox txtMarca = DateGenListView.Items[0].FindControl("txtMarca") as ASPxTextBox;
@@ -82,7 +99,7 @@ namespace WizOne.Personal
                 for (int i = 0; i < etichete.Count(); i++)
                 {
                     ASPxLabel lbl = DateGenListView.Items[0].FindControl(etichete[i]) as ASPxLabel;
-                    lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
+                    lbl.Text = Dami.TraduCuvant(lbl.Text);
                 }
 
                 string[] butoaneRadio = new string[2] { "chkM", "chkF" };

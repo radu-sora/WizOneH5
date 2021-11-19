@@ -126,7 +126,7 @@
     <table width="60%">   
         <tr>
             <td>
-                <label id="lblBen" runat="server" style="display:inline-block;">In acest moment, urmatoarele Beneficii sunt active:</label>                  
+                <label id="lblBen" runat="server" style="display:inline-block;">In acest moment, urmatoarele Beneficii sunt active/aprobate:</label>                  
             </td>                    	
         </tr>
     </table>
@@ -153,6 +153,9 @@
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn> 
                         <dx:GridViewDataTextColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" ReadOnly="true"  Width="500px" />	
+					    <dx:GridViewDataDateColumn FieldName="DataInceputBen" Name="DataInceputBen" Caption="Data inceput" ReadOnly="true"   Width="100px" >
+                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+                        </dx:GridViewDataDateColumn>
 					    <dx:GridViewDataDateColumn FieldName="DataSfarsitBen" Name="DataSfarsitBen" Caption="Valabilitate" ReadOnly="true"   Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>

@@ -45,11 +45,14 @@ namespace WizOne.Personal
                 if (!IsPostBack)    //#1032
                     DateIdentificare_DataList.DataBind();
 
-                DateTime dtN = Convert.ToDateTime(table.Rows[0]["F10021"].ToString());
-                if (dtN.Year != 1900)
+                if (!IsPostBack)
                 {
-                    ASPxTextBox txtVarsta = DateIdentificare_DataList.Items[0].FindControl("txtVarsta") as ASPxTextBox;
-                    txtVarsta.Text = Dami.Varsta(dtN).ToString();  //((DateTime.Now - dtN).TotalDays/365).ToString();
+                    DateTime dtN = Convert.ToDateTime(table.Rows[0]["F10021"].ToString());
+                    if (dtN.Year != 1900)
+                    {
+                        ASPxTextBox txtVarsta = DateIdentificare_DataList.Items[0].FindControl("txtVarsta") as ASPxTextBox;
+                        txtVarsta.Text = Dami.Varsta(dtN).ToString();  //((DateTime.Now - dtN).TotalDays/365).ToString();
+                    }
                 }
 
                 btnIncarca_Click();

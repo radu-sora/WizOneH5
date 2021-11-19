@@ -41,7 +41,7 @@ namespace WizOne.Beneficii
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
-                lblBen.InnerText = Dami.TraduCuvant("In acest moment, urmatoarele Beneficii sunt active:");
+                lblBen.InnerText = Dami.TraduCuvant("In acest moment, urmatoarele Beneficii sunt active/aprobate:");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnValidare.Text = Dami.TraduCuvant("btnValidare", "Validare selectie Beneficii");
                 pnlBen.HeaderText = Dami.TraduCuvant("Beneficii active");
@@ -129,7 +129,19 @@ namespace WizOne.Beneficii
                                 msg += "\n<b>Optiunea ta privind selectarea Beneficiilor este in curs de aprobare. Vei primi un e-mail in momentul in care solicitarea ta va fi validata</b>.";
                                 Session["SelectareBeneficii"] = 2;
                                 Session["SelectareText"] = msg;
-                                lblSes.Text = Dami.TraduCuvant(msg);   
+                                lblSes.Text = Dami.TraduCuvant(msg);
+
+                                DataTable dtBenAles1 = Session["Select_BenAles"] as DataTable;
+                                if (dtBenAles1 != null && dtBenAles1.Rows.Count > 0)
+                                    for (int i = 0; i < grDateSes.VisibleRowCount; i++)
+                                    {
+                                        DataRowView obj = grDateSes.GetRow(i) as DataRowView;
+                                        if (Convert.ToInt32(obj["Id"].ToString()) == Convert.ToInt32(dtBenAles1.Rows[0]["IdBeneficiu"].ToString()))
+                                        {
+                                            grDateSes.Selection.SelectRow(i);
+                                            break;
+                                        }
+                                    }
                                 break;
                             case 3:
                                 msg += "\n<b>Optiunea ta privind selectarea Beneficiilor a fost aprobata</b>!";
@@ -342,14 +354,17 @@ namespace WizOne.Beneficii
                 //                 where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal')
                 //                 AND a.""DeLaData"" <= getdate() and getdate() <= a.""LaData""
                 //                 ORDER BY a.""Denumire""";
-                strSql = @"Select Ben_Cereri.*, e.DataSfarsit as DataSfarsitBen, c.Descriere from Ben_Cereri
+                strSql = @"Select Ben_Cereri.*,  e.DataInceput as DataInceputBen, e.DataSfarsit as DataSfarsitBen, c.Descriere from Ben_Cereri
                     Join Ben_tblSesiuni on Ben_Cereri.IdSesiune = Ben_tblSesiuni.Id
                      LEFT JOIN Admin_Obiecte c ON c.Id = Ben_Cereri.IdBeneficiu 
                      inner join Admin_Categorii d on c.IdCategorie = d.Id 
                      left join Ben_relSesGrupBen e on e.IdSesiune = Ben_Cereri.IdSesiune and e.IdGrup = c.IdGrup   
                      where d.IdArie = (select Valoare from tblParametrii where Nume = 'ArieTabBeneficiiDinPersonal')                   
-                    AND Ben_Cereri.idstare = 3 and cast(getdate() as date) between e.DataInceput and e.DataSfarsit
+                    AND Ben_Cereri.idstare = 3 
+                    and cast(getdate() as date) <= e.DataSfarsit
                     And F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+                //Radu 09.11.2021 - #1047 - sa vada toate beneficiile active/aprobate       and cast(getdate() as date) between e.DataInceput and e.DataSfarsit
 
                 q = General.IncarcaDT(strSql, null);
             }
@@ -376,9 +391,11 @@ namespace WizOne.Beneficii
                      LEFT JOIN Admin_Obiecte c ON c.Id = Ben_Cereri.IdBeneficiu 
                      inner join Admin_Categorii d on c.IdCategorie = d.Id 
                     left join Ben_relSesGrupBen e on e.IdSesiune = Ben_Cereri.IdSesiune and e.IdGrup = c.IdGrup 
-                     where d.IdArie = (select Valoare from tblParametrii where Nume = 'ArieTabBeneficiiDinPersonal')                   
-                    AND Ben_Cereri.idstare = 3 and cast(getdate() as date) between e.DataInceput and e.DataSfarsit
+                     where d.IdArie = (select Valoare from tblParametrii where Nume = 'ArieTabBeneficiiDinPersonal')   
+                    and cast(getdate() as date) <= e.DataSfarsit
                     And F10003 = " + Convert.ToInt32(Session["User_Marca"] ?? -99);
+
+                //AND Ben_Cereri.idstare = 3  and cast(getdate() as date) between e.DataInceput and e.DataSfarsit
 
                 q = General.IncarcaDT(strSql, null);
                 Session["Select_BenAles"] = q;
@@ -421,6 +438,7 @@ namespace WizOne.Beneficii
                                  left join Ben_relSesGrupBen d on c.Id = d.IdSesiune and d.IdGrup = a.IdGrup  
                                  where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') 
                                  and convert(date, a.""DeLaData"") <= convert(date, getdate()) and convert(date, getdate()) <= convert(date, a.""LaData"")  
+                                 and   d.DataInceput is not null and d.DataSfarsit is not null
                                  ORDER BY a.""Denumire""";
 
                 strSql = string.Format(strSql, Convert.ToInt32(Session["User_Marca"] ?? -99));

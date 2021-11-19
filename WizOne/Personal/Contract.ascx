@@ -539,7 +539,6 @@
         
         if (cmbDurCtr.GetValue() == 1) {
             var dtTmp = new Date(2100, 0, 1, 0, 0, 0, 0)
-
             deDeLaData.SetEnabled(false);
             deLaData.SetEnabled(false);
             deUltimaZiLucr.SetEnabled(false);
@@ -1285,7 +1284,7 @@
 							<dx:ASPxLabel  ID="lblCOR" runat="server"  Text="COR" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsCOR"  ID="cmbCOR"   Enabled="false" Width="130"  runat="server" DropDownStyle="DropDown" DropDownWidth ="700"  TextField="F72204" ValueField="F72202" ValueType="System.Int32" >
+							<dx:ASPxComboBox DataSourceID="dsCOR"  ID="cmbCOR"   ClientEnabled="false" Width="130"  runat="server" DropDownStyle="DropDown" DropDownWidth ="700"  TextField="F72204" ValueField="F72202" ValueType="System.Int32" >
                                 <Columns>
                                     <dx:ListBoxColumn FieldName="F72202" Caption="Cod COR" Width="100px" />
                                     <dx:ListBoxColumn FieldName="F72204" Caption="Descriere" Width="600px" />

@@ -57,10 +57,13 @@ namespace WizOne.Module
 
         public static void MemoreazaEroarea(Exception ex, string varPagina = "", string varEvenimentul = "")
         {
-            string varEroarea = ex.Message.ToString();
+            string varEroarea = ex.Message;
             if (ex.InnerException != null) varEroarea += ex.InnerException.ToString();
 
-            StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "wsInfoState.txt", true);
+            var tempPath = HostingEnvironment.MapPath("~/Temp/");
+
+            Directory.CreateDirectory(tempPath);
+            StreamWriter sw = new StreamWriter(tempPath + "wsInfoState.txt", true);
             //
             string mesaj = "";
 
@@ -85,7 +88,10 @@ namespace WizOne.Module
             StackTrace st = new StackTrace();
             if (varEvenimentul == "") varEvenimentul = st.GetFrame(0).GetMethod().Name;
 
-            StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "wsInfoState.txt", true);
+            var tempPath = HostingEnvironment.MapPath("~/Temp/");
+
+            Directory.CreateDirectory(tempPath);
+            StreamWriter sw = new StreamWriter(tempPath + "wsInfoState.txt", true);
             //
             string mesaj = "";
 
@@ -105,8 +111,11 @@ namespace WizOne.Module
 
         public static void CreazaLog(string msg, string strMetoda = "")
         {
+            var tempPath = HostingEnvironment.MapPath("~/Temp/");
+
+            Directory.CreateDirectory(tempPath);
             StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "woLogNtf.txt", true);
+            StreamWriter sw = new StreamWriter(tempPath + "woLogNtf.txt", true);
             //
             string mesaj = "";
 
@@ -122,8 +131,11 @@ namespace WizOne.Module
 
         public static void CreazaLogCereri(string msg, string f10003, string dataInceput)
         {
+            var tempPath = HostingEnvironment.MapPath("~/Temp/");
+
+            Directory.CreateDirectory(tempPath);
             StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "woLogCereri.txt", true);
+            StreamWriter sw = new StreamWriter(tempPath + "woLogCereri.txt", true);
             //
             string mesaj = "";
 
@@ -140,8 +152,11 @@ namespace WizOne.Module
 
         public static void CreazaLogFormuleCumulat(string msg, string strMetoda = "")
         {
+            var tempPath = HostingEnvironment.MapPath("~/Temp/");
+
+            Directory.CreateDirectory(tempPath);
             StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "woLogFormuleCumulat.txt", true);
+            StreamWriter sw = new StreamWriter(tempPath + "woLogFormuleCumulat.txt", true);
             //
             string mesaj = "";
 
@@ -2470,7 +2485,7 @@ namespace WizOne.Module
 
                     try
                     {
-                        DateTime ziDrp = Dami.DataDrepturi(Convert.ToInt32(General.Nz(dr["Drepturi_Valoare"], -99)), Convert.ToInt32(General.Nz(dr["Drepturi_NrZile"], 0)), Convert.ToDateTime(dr["DataInceput"]), Convert.ToInt32(dr["F10003"]));
+                        DateTime ziDrp = Dami.DataDrepturi(Convert.ToInt32(General.Nz(dr["Drepturi_Valoare"], -99)), Convert.ToInt32(General.Nz(dr["Drepturi_NrZile"], 0)), Convert.ToDateTime(dr["DataInceput"]), Convert.ToInt32(dr["F10003"]), 0, idUser);
                         if (Convert.ToDateTime(dr["DataInceput"]).Date < ziDrp)
                         {
                             if (ziDrp.Year == 2111 && ziDrp.Month == 11 && ziDrp.Day == 11)
@@ -3103,8 +3118,13 @@ namespace WizOne.Module
         public static DataTable GetCOR()
         {
             DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
-            DataTable table = ds.Tables[0];          
-            return General.IncarcaDT("SELECT F72204, F72202 FROM F722 WHERE F72206 = " + (table.Rows[0]["F1001082"] as string ?? "(SELECT MAX(F72206) FROM F722)") + " ORDER BY F72204", null);     
+            if (ds != null)
+            {
+                DataTable table = ds.Tables[0];
+                return General.IncarcaDT("SELECT F72204, F72202 FROM F722 WHERE F72206 = " + (table.Rows[0]["F1001082"] as string ?? "(SELECT MAX(F72206) FROM F722)") + " ORDER BY F72204", null);
+            }
+            else
+                return null;
         }
 
         public static DataTable GetFunctie()
@@ -3730,6 +3750,75 @@ namespace WizOne.Module
             }
         }
 
+        public static void IncarcaFisierAvsXDec(string fileName, object fis, string Tabela, object cheie)
+        {
+            try
+            {
+                if (cheie != null)
+                {
+                    string sql = "SELECT * FROM \"AvsXDec_relUploadDocumente\"";
+                    DataTable dt = new DataTable();
+
+                    dt = General.IncarcaDT(sql, null);
+                    dt.TableName = "AvsXDec_relUploadDocumente";
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
+
+                    DataRow dr = null;
+                    if (dt.Select("Tabela = '" + Tabela + "' AND Id = " + cheie.ToString()).Count() == 0)
+                    {
+                        dr = dt.NewRow();
+                        dr["Tabela"] = Tabela;
+                        dr["Id"] = cheie.ToString();
+                        dr["Fisier"] = fis;
+                        dr["FisierNume"] = System.IO.Path.GetFileName(fileName);
+                        dr["FisierExtensie"] = System.IO.Path.GetExtension(fileName);
+                        dr["USER_NO"] = HttpContext.Current.Session["UserId"];
+                        dr["TIME"] = DateTime.Now;
+                        if (Constante.tipBD == 1)
+                            dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                        else
+                            dr["IdAuto"] = Dami.NextId("tblFisiere");
+                        dr["EsteCerere"] = 0;
+                        dt.Rows.Add(dr);
+                    }
+                    else
+                    {
+                        dr = dt.Select("Tabela = '" + Tabela + "' AND Id = " + cheie.ToString()).FirstOrDefault();
+                        dr["Fisier"] = fis;
+                        dr["FisierNume"] = System.IO.Path.GetFileName(fileName);
+                        dr["FisierExtensie"] = System.IO.Path.GetExtension(fileName);
+                        dr["EsteCerere"] = 0;
+                        dr["USER_NO"] = HttpContext.Current.Session["UserId"];
+                        dr["TIME"] = DateTime.Now;
+                    }
+
+                    if (Constante.tipBD == 1)
+                    {
+                        SqlDataAdapter da = new SqlDataAdapter();
+                        SqlCommandBuilder cb = new SqlCommandBuilder();
+                        da = new SqlDataAdapter();
+                        da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM \"tblFisiere\"", null);
+                        cb = new SqlCommandBuilder(da);
+                        da.Update(dt);
+                        da.Dispose();
+                        da = null;
+                    }
+                    else
+                    {
+                        OracleDataAdapter oledbAdapter = new OracleDataAdapter();
+                        oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"tblFisiere\" WHERE ROWNUM = 0", null);
+                        OracleCommandBuilder cb = new OracleCommandBuilder(oledbAdapter);
+                        oledbAdapter.Update(dt);
+                        oledbAdapter.Dispose();
+                        oledbAdapter = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
         public static void ArataFisier(string Tabela, object cheie)
         {
@@ -5891,7 +5980,10 @@ namespace WizOne.Module
                 }
                 else
                 {
-                    return Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("nu aveti drepturi pentru aceasta operatie");
+                    if (idStare == 4 || idStare == 6)
+                        return Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("pontajul este respins");
+                    else
+                        return Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("pontajul este deja aprobat");
                 }
 
                 //Florin 2019.11.18
@@ -9494,5 +9586,197 @@ namespace WizOne.Module
                 General.MemoreazaEroarea(ex, "AdaugaDiferentePost", new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+
+        public static DataTable rapOrdinDeplasare(decimal F10003, int DocumentID)
+        {
+            try
+            {
+                string sql = "SELECT a.DocumentId FROM vwAvsXDec_Avans a WHERE a.DocumentId = " + DocumentID + " AND a.F10003 = " + F10003;                    
+                DataTable entAvans = IncarcaDT(sql, null);
+
+                string strSQL = string.Empty;
+                if (entAvans != null && entAvans.Rows.Count != 0)
+                {
+                    #region avans
+                    strSQL = @"with ""cteUser"" as (select gr.""IdUser""
+                                                          from ""relGrupUser"" gr
+                                                        where gr.""IdGrup"" in (23)
+                                                        group by gr.""IdUser"")
+                                 , ""cteManager"" as (select max(hist.""Pozitie"") as ""Pozitie"", hist.""DocumentId""
+                                                        from ""AvsXDec_DocumentStateHistory"" hist
+                                                        left join ""cteUser"" us on hist.USER_NO = us.""IdUser""
+                                                        where hist.""DocumentId"" = {0}
+                                                        and hist.""DocumentStateId"" <= 3
+                                                        and us.""IdUser"" is null
+                                                        group by hist.""DocumentId"")
+                                    select doc.""DocumentId"", {1}(manNume.F10008, '') {2} ' ' {2} {1}(manNume.F10009, '') as ""SefCompartiment"",
+                                          comp.F00104 as ""CompanyFreeTxt"",
+                                          cast(doc.""DocumentId"" as varchar(10)) {2} ' / ' {2} {3}doc.""DocumentDate""{4} as ""OrdinDeplasareFreeTxt"",
+                                          cast(doc.""DocumentId"" as varchar(10)) as ""DocumentNumber"",
+                                          doc.""NumeComplet"", doc.""Functie"",
+                                          doc.""ActionReason"", doc.""ActionPlace"", doc.""ActionTypeName"",
+                                          {1}({3}doc.""StartDate""{4}, '') {2} ' ' {2} {1}({5}doc.""StartHour""{6}, '') as ""StartTime"",
+                                          {1}({3}doc.""EndDate""{4}, '') {2} ' ' {2} {1}({5}doc.""EndHour""{6}, '') as ""EndTime"",
+                                          {1}({3}hist.""DataAprobare""{4}, '') {2} ' ' {2} {1}({5}hist.""DataAprobare""{6}, '') as ""DataAprobareManager""
+                                    from ""vwAvsXDec_Avans"" doc
+                                    join ""AvsXDec_DocumentStateHistory"" hist on doc.""DocumentId"" = hist.""DocumentId""
+                                    join ""cteManager"" man on hist.""DocumentId"" = man.""DocumentId""
+                                                        and hist.""Pozitie"" = man.""Pozitie""
+                                    join USERS usMan on hist.USER_NO = usMan.F70102
+                                    join F100 manNume on usMan.F10003 = manNume.F10003
+                                    join F001 comp on 1 = 1";
+                    #endregion
+                }
+                else
+                {
+                    #region decont
+                    strSQL = @"with ""cteUser"" as (select gr.""IdUser""
+                                                          from ""relGrupUser"" gr
+                                                        where gr.""IdGrup"" in (23)
+                                                        group by gr.""IdUser"")
+                                 , ""cteManager"" as (select max(hist.""Pozitie"") as ""Pozitie"", hist.""DocumentId""
+                                                        from ""AvsXDec_DocumentStateHistory"" hist
+                                                        left join ""cteUser"" us on hist.USER_NO = us.""IdUser""
+                                                        where hist.""DocumentId"" = {0}
+                                                        and hist.""DocumentStateId"" <= 3
+                                                        and us.""IdUser"" is null
+                                                        group by hist.""DocumentId"")
+                                    select doc.""DocumentId"", {1}(manNume.F10008, '') {2} ' ' {2} {1}(manNume.F10009, '') as ""SefCompartiment"",
+                                          comp.F00104 as ""CompanyFreeTxt"",
+                                          cast(doc.""DocumentId"" as varchar(10)) {2} ' / ' {2} {3}doc.""DocumentDate""{4} as ""OrdinDeplasareFreeTxt"",
+                                          cast(doc.""DocumentId"" as varchar(10)) as ""DocumentNumber"",
+                                          doc.""NumeComplet"", doc.""Functie"",
+                                          doc.""ActionReason"", doc.""ActionPlace"", doc.""ActionTypeName"",
+                                          {1}({3}doc.""StartDate""{4}, '') {2} ' ' {2} {1}({5}doc.""StartHour""{6}, '') as ""StartTime"",
+                                          {1}({3}doc.""EndDate""{4}, '') {2} ' ' {2} {1}({5}doc.""EndHour""{6}, '') as ""EndTime"",
+                                          {1}({3}hist.""DataAprobare""{4}, '') {2} ' ' {2} {1}({5}hist.""DataAprobare""{6}, '') as ""DataAprobareManager""
+                                    from ""vwAvsXDec_Decont"" doc
+                                    join ""AvsXDec_Decont"" dec on doc.""DocumentId"" = dec.""DocumentId""
+                                    join ""AvsXDec_DocumentStateHistory"" hist on doc.""DocumentId"" = hist.""DocumentId""
+                                    join ""cteManager"" man on hist.""DocumentId"" = man.""DocumentId""
+                                                        and hist.""Pozitie"" = man.""Pozitie""
+                                    join USERS usMan on hist.USER_NO = usMan.F70102
+                                    join F100 manNume on usMan.F10003 = manNume.F10003
+                                    join F001 comp on 1 = 1";
+                    #endregion
+                }
+                if (Constante.tipBD == 1) //SQL
+                {
+                    strSQL = string.Format(strSQL, DocumentID, "isnull", "+", "convert(varchar(100),", ",103)", "convert(varchar(5),", ",114)");
+                }
+                else //Oracle
+                {
+                    strSQL = string.Format(strSQL, DocumentID, "nvl", "||", "to_char(", ",'dd-MM-yyyy')", "to_char(", ", 'HH24:MI')");
+                }
+
+                DataTable rap = IncarcaDT(strSQL, null);
+
+                return rap;
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "rapOrdinDeplasare", new StackTrace().GetFrame(0).GetMethod().Name);
+                return null;
+            }
+        }
+
+
+        public static DataTable rapOrdinDeplasareDetail(decimal F10003, int DocumentID)
+        {
+            try
+            {
+
+                string strSQL = @"with ""cteUser"" as (select gr.""IdUser""
+                                                          from ""relGrupUser"" gr
+                                                        where gr.""IdGrup"" in (23)
+                                                        group by gr.""IdUser"")
+                                 , ""cteManager"" as (select max(hist.""Pozitie"") as ""Pozitie"", hist.""DocumentId""
+                                                        from ""AvsXDec_DocumentStateHistory"" hist
+                                                        left join ""cteUser"" us on hist.USER_NO = us.""IdUser""
+                                                        where hist.""DocumentId"" = {0}
+                                                        and hist.""DocumentStateId"" <= 3
+                                                        and us.""IdUser"" is null
+                                                        group by hist.""DocumentId"")
+                                , ""cteBudgetOwner"" as (select av.""DocumentId"", max({1}(bugName.F10008, '') {2} ' ' {2} {1}(bugName.F10009, '')) as ""BudgetOwner""
+                                                                   , max({1}({3}bug.""DataAprobare""{4}, '') {2} ' ' {2} {1}({5}bug.""DataAprobare""{6}, '')) ""DtAprobareBudgetOwner""
+                                                      from ""AvsXDec_Document"" av
+                                                      left join ""vwAvsXDec_BudgetOwner"" sett on av.""DocumentTypeId"" = sett.""DocumentTypeId""
+                                                      left join ""AvsXDec_DocumentStateHistory"" bug on av.""DocumentId"" = bug.""DocumentId""
+                                                                                                and sett.""IdSuper"" = bug.""IdSuper""
+                                                      left join USERS usBug on bug.USER_NO = usBug.F70102
+                                                      left join F100 bugName on usBug.F10003 = bugName.F10003
+                                                      where av.""DocumentId"" = {0}
+                                                      group by av.""DocumentId"")
+                                    select doc.""DocumentId"", 
+                                           {1}({3}doc.""StartDate""{4}, '') {2} ' ' {2} {1}({5}doc.""StartHour""{6}, '') as ""StartTime"",
+                                          {1}({3}doc.""EndDate""{4}, '') {2} ' ' {2} {1}({5}doc.""EndHour""{6}, '') as ""EndTime"",
+                                          {3}doc.""DocumentDate""{4} as ""DecontDate"",
+                                          {1}(cast(av.""DocumentId"" as varchar(10)), '') as ""AvansDocNumber"",
+                                          case 
+                                            when doc.""DocumentTypeId"" = 2003 then dec.""TotalPayment""
+                                            else {1}(av.""TotalAmount"", 0)
+                                          end as ""AvansAmount"",
+                                          {1}(decDet.""TipDocument"", '') {2} ', ' {2} {1}(decDet.""Furnizor"", '') as ""DocumentDecont"",
+                                          case 
+                                            when {1}(decDet.""DocNumberDecont"", '-99') = '-99' then ''
+                                            else decDet.""DocNumberDecont"" {2} '/ '
+                                          end {2} {3}decDet.""DocDateDecont""{4} as ""DocumentDecontNumber"",
+                                          cast(decDet.""TotalPayment"" as varchar(100)) {2} ' ' {2} decDet.""CurrencyName"" as ""DocumentDecontValue"",
+                                          case 
+                                            when doc.""DocumentTypeId"" = 2003 then dec.""TotalPayment""
+                                            else case 
+                                                    when {1}(av.""TotalAmount"", 0) = 0 then doc.""TotalAmount""
+                                                    else {1}(av.""TotalAmount"", 0) - doc.""TotalAmount""
+                                                 end
+                                          end as ""UnconfRestAmount"",
+                                          abs(case 
+                                                when doc.""DocumentTypeId"" = 2003 then dec.""TotalPayment""
+                                                else case 
+                                                        when {1}(av.""TotalAmount"", 0) = 0 then doc.""TotalAmount""
+                                                        else {1}(av.""TotalAmount"", 0) - doc.""TotalAmount""
+                                                     end
+                                              end) as ""UnconfRestAmountAbs"",
+                                          doc.""TotalAmount"" as ""TotalDecontValue"",
+                                          {1}(doc.""NumeComplet"", '') as ""TitularAvans"",
+                                          {1}(manNume.F10008, '') {2} ' ' {2} {1}(manNume.F10009, '') as ""SefCompartiment"",
+                                          {1}({3}hist.""DataAprobare""{4}, '') {2} ' ' {2} {1}({5}hist.""DataAprobare""{6}, '') as ""DtAprobareManager"",
+                                          bug.""BudgetOwner"", bug.""DtAprobareBudgetOwner"",
+                                          {1}({3}doc.""DocumentDate""{4}, '') {2} ' ' {2} {1}({5}doc.""DocumentDate""{6}, '') as ""DtAprobareUser""
+                                    from ""vwAvsXDec_Decont"" doc
+                                    join ""AvsXDec_Decont"" dec on doc.""DocumentId"" = dec.""DocumentId""
+                                    join ""AvsXDec_DocumentStateHistory"" hist on doc.""DocumentId"" = hist.""DocumentId""
+                                    join ""cteManager"" man on hist.""DocumentId"" = man.""DocumentId""
+                                                        and hist.""Pozitie"" = man.""Pozitie""
+                                    join USERS usMan on hist.USER_NO = usMan.F70102
+                                    join F100 manNume on usMan.F10003 = manNume.F10003
+                                    join F001 comp on 1 = 1
+                                    join ""vwAvsXDec_DecDet_DocDecontare"" decDet on doc.""DocumentId"" = decDet.""DocumentId""
+                                    left join ""AvsXDec_BusinessTransaction"" bt on doc.""DocumentId"" = bt.""DestDocId""
+                                    left join ""vwAvsXDec_Avans"" av on bt.""SrcDocId"" = av.""DocumentId""
+                                    left join ""cteBudgetOwner"" bug on doc.""DocumentId"" = bug.""DocumentId""";
+                string rezervare = string.Empty;
+                if (Constante.tipBD == 1) //SQL
+                {
+                    strSQL = string.Format(strSQL, DocumentID, "isnull", "+", "convert(varchar(100),", ",103)", "convert(varchar(5),", ",114)");
+                }
+                else //Oracle
+                {
+                    strSQL = string.Format(strSQL, DocumentID, "nvl", "||", "to_char(", ",'dd-MM-yyyy')", "to_char(", ", 'HH24:MI')");
+                }
+
+               DataTable rap = IncarcaDT(strSQL, null);
+
+                return rap;
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "rapOrdinDeplasareDetail", new StackTrace().GetFrame(0).GetMethod().Name);
+                return null;
+            }
+        }
+
     }
 }

@@ -1,10 +1,12 @@
 ﻿using DevExpress.Spreadsheet;
+using DevExpress.Web.ASPxTreeList;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.UI;
@@ -18,6 +20,8 @@ namespace WizOne.Organigrama
         {
             try
             {
+                Dami.AccesApp();
+
                 DataTable dtMtv = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Org_MotiveModif"" ", null);
                 cmbMotiv.DataSource = dtMtv;
                 cmbMotiv.DataBind();
@@ -28,6 +32,38 @@ namespace WizOne.Organigrama
                 
                 if (!IsPostBack)
                 {
+                    txtTitlu.Text = General.VarSession("Titlu").ToString();
+
+                    #region Traducere
+                    string ctlPost = Request.Params["__EVENTTARGET"];
+                    if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
+
+                    btnExport.Text = Dami.TraduCuvant("btnExport", "Diagrama");
+                    btnDuplicare.Text = Dami.TraduCuvant("btnDuplicare", "Duplicare");
+                    btnModifStruc.Text = Dami.TraduCuvant("btnModifStruc", "Modifica");
+                    btnNou.Text = Dami.TraduCuvant("btnNou", "Adauga");
+                    btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+                    btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                    btnExpand.Text = Dami.TraduCuvant("btnExpand", "Expand");
+                    btnInchide.Text = Dami.TraduCuvant("btnInchide", "Inchide");
+                    btnOkModif.Text = Dami.TraduCuvant("btnOkModif", "Modifica");
+
+                    lblDtVig.InnerText = Dami.TraduCuvant("Data Selectie");
+                    lblActiv.InnerText = Dami.TraduCuvant("Post activ");
+                    lblAng.InnerText = Dami.TraduCuvant("Angajati");
+                    lblParinte.InnerText = Dami.TraduCuvant("Superior");
+                    lgActiv.InnerText = Dami.TraduCuvant("Legenda angajati: Activ");
+                    lgSuspendat.InnerText = Dami.TraduCuvant("Activ suspendat");
+                    lgCandidati.InnerText = Dami.TraduCuvant("Candidat");
+
+                    lblMotiv.InnerText = Dami.TraduCuvant("Alege Motivul");
+                    chkStruc.Text = Dami.TraduCuvant("Doriti modificarea structurii organizatorice cu cea a noului post superior");
+
+                    foreach (var col in grDate.Columns.OfType<TreeListDataColumn>())
+                        col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
+                    #endregion
+
                     int idPost = 0;
                     Session["InformatiaCurenta"] = null;
 

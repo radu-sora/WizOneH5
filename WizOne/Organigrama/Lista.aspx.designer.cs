@@ -168,6 +168,33 @@ namespace WizOne.Organigrama
         protected global::DevExpress.Web.ASPxButton btnExpand;
 
         /// <summary>
+        /// lgActiv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgActiv;
+
+        /// <summary>
+        /// lgSuspendat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgSuspendat;
+
+        /// <summary>
+        /// lgCandidati control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgCandidati;
+
+        /// <summary>
         /// grDate control.
         /// </summary>
         /// <remarks>
@@ -211,6 +238,15 @@ namespace WizOne.Organigrama
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnInchide;
+
+        /// <summary>
+        /// lblMotiv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblMotiv;
 
         /// <summary>
         /// cmbMotiv control.

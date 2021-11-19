@@ -17,6 +17,7 @@
     height: 100%;
 }
     .report-view-template > tbody > tr:first-child > td:first-child {
+        height: 100%; /* For Firefox */
         padding-right: 7px;
         vertical-align: top;
     }
@@ -103,6 +104,9 @@
                 height: 40%;
                 vertical-align: top;
             }
+    .report-design-template > tbody > tr:first-child > td:last-child {
+        height: 100%; /* For Firefox */
+    }
 
     .report-view-template .dxrd-image-run-wizard,
     .report-design-template .dxrd-image-run-wizard {

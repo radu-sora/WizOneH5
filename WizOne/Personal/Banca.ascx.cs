@@ -13,7 +13,7 @@ namespace WizOne.Personal
 {
     public partial class Banca : System.Web.UI.UserControl
     {
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
 
             DataTable table = new DataTable();
@@ -22,7 +22,8 @@ namespace WizOne.Personal
             table = ds.Tables[0];
 
             Banca_DataList.DataSource = table;
-            Banca_DataList.DataBind();
+            if (!IsPostBack)
+                Banca_DataList.DataBind();
 
             ASPxComboBox cmbBancaSal = Banca_DataList.Items[0].FindControl("cmbBancaSal") as ASPxComboBox;
             ASPxComboBox cmbSucSal = Banca_DataList.Items[0].FindControl("cmbSucSal") as ASPxComboBox;

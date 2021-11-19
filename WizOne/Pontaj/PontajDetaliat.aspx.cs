@@ -500,6 +500,14 @@ namespace WizOne.Pontaj
                 }
 
                 IncarcaGrid();
+                //Radu 15.11.2021 - #1054
+                if (Dami.ValoareParam("AngajatulPoateModificaPontajul", "0") == "0")
+                {
+                    if (Convert.ToInt32(General.Nz(cmbRolAng.Value, -1)) == 0)
+                        grDate.Enabled = false;
+                    else
+                        grDate.Enabled = true;
+                }
                 grCC.DataSource = null;
                 grCC.DataBind();
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
@@ -560,6 +568,7 @@ namespace WizOne.Pontaj
             try
             {
                 Response.Redirect("~/Pontaj/PontajEchipa?tip=1", false);
+                Session["InformatiaCurenta"] = null;
             }
             catch (Exception ex)
             {
@@ -1704,8 +1713,9 @@ namespace WizOne.Pontaj
                                 if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
                                     strSql += $@"DELETE FROM ""Ptj_CC"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
 
+                                //Florin 2021.11.03 - #1041 - am adaugat ValModifValStr
                                 //Radu 30.03.2021
-                                cmp += @", ""ValStr""='" + newValue + "'";
+                                cmp += @", ""ValStr""='" + newValue + "', ValModifValStr = " + (int)Constante.TipModificarePontaj.ModificatManual;
                                 row["ValStr"] = newValue;
 
                                 sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null,""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
@@ -1893,7 +1903,7 @@ namespace WizOne.Pontaj
                             break;
                         case "btnRespins":
                             Actiuni(0);
-                            break;
+                            break;           
                     }
                 }
             }

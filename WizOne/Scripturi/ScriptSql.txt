@@ -18749,7 +18749,7 @@ GO
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
---drop table AvsXDec_AvansDetail
+drop table AvsXDec_AvansDetail
 go
   CREATE TABLE "AvsXDec_AvansDetail" 
    (	"DocumentId" int, 
@@ -18770,7 +18770,7 @@ go
 
 GO
 
---drop table AvsXDec_Document
+drop table AvsXDec_Document
 GO
   CREATE TABLE "AvsXDec_Document" 
    (	"DocumentId" int, 
@@ -18792,7 +18792,7 @@ GO
 GO
 
 
---drop table AvsXDec_Circuit
+drop table AvsXDec_Circuit
 go
   CREATE TABLE "AvsXDec_Circuit" 
    (	"CircuitId" int, 
@@ -18829,9 +18829,9 @@ go
 GO
 
 
---drop table AvsXDec_DictItemProperty
+drop table AvsXDec_DictItemProperty
 GO
---drop table AvsXDec_DictionaryItem
+drop table AvsXDec_DictionaryItem
 GO
   CREATE TABLE "AvsXDec_DictionaryItem" 
    (	"DictionaryItemId"int, 
@@ -18848,7 +18848,7 @@ GO
 ) ON [PRIMARY]
 GO
 
---drop table AvsXDec_Dictionary
+drop table AvsXDec_Dictionary
 GO
   CREATE TABLE "AvsXDec_Dictionary" 
    (	"DictionaryId" int, 
@@ -18866,7 +18866,7 @@ GO
 
 
 
---drop table AvsXDec_Decont
+drop table AvsXDec_Decont
 GO
   CREATE TABLE "AvsXDec_Decont" 
    (	"DocumentId" int, 
@@ -18931,7 +18931,7 @@ CREATE TABLE "AvsXDec_AccountingPeriod"
 ) ON [PRIMARY]
 GO
 
---drop table AvsXDec_BusinessTransaction
+drop table AvsXDec_BusinessTransaction
 GO
 
   CREATE TABLE "AvsXDec_BusinessTransaction" 
@@ -18969,7 +18969,7 @@ GO
 GO
 
 
---drop table AvsXDec_DecontDetail
+drop table AvsXDec_DecontDetail
 GO
   CREATE TABLE "AvsXDec_DecontDetail" 
    (	"DocumentId" int, 
@@ -18996,7 +18996,7 @@ GO
 ) ON [PRIMARY]
 GO
 
---drop table AvsXDec_DocumentStateHistory
+drop table AvsXDec_DocumentStateHistory
 GO
   CREATE TABLE "AvsXDec_DocumentStateHistory" 
    (	"Id" int, 
@@ -19033,7 +19033,7 @@ GO
 GO
 
 
---drop table AvsXDec_Avans
+drop table AvsXDec_Avans
 GO
   CREATE TABLE "AvsXDec_Avans" 
    (	"DocumentId" int, 
@@ -19072,7 +19072,7 @@ GO
 GO
 
 
---drop table AvsXDec_DocumentType
+drop table AvsXDec_DocumentType
 GO
 
   CREATE TABLE "AvsXDec_DocumentType" 

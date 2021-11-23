@@ -2413,7 +2413,7 @@ namespace WizOne.Eval
                     return null;
 
                 #region Grid Properties
-                grDateObiective.Width = new Unit(100, UnitType.Percentage);
+                grDateObiective.Width = 1500; //new Unit(100, UnitType.Percentage);
                 grDateObiective.ID = "grDateObiective" + "_WXY_" + id.ToString();
 
                 //Florin 2019.06.26

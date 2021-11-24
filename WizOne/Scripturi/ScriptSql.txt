@@ -18770,6 +18770,94 @@ go
 
 GO
 
+
+drop table AvsXDec_DecontDetail
+GO
+  CREATE TABLE "AvsXDec_DecontDetail" 
+   (	"DocumentId" int, 
+	"DocumentDetailId" int, 
+	"Furnizor" NVARCHAR(400), 
+	"DictionaryItemId" int, 
+	"DocNumberDecont" NVARCHAR(200), 
+	"DocDateDecont" DATETIME, 
+	"CurrencyId" int, 
+	"RefCurrencyId" int, 
+	"RefCurrencyValue" NUMERIC(18,4), 
+	"TotalPayment" NUMERIC(18,4), 
+	"RefTotalPayment" NUMERIC(18,4), 
+	"IdDocument" NUMERIC(18,4), 
+	"BugetLine" NVARCHAR(800), 
+	"ExpenseTypeId" int, 
+	"ExpenseTypeAdmId" int, 
+	"FreeTxt" NVARCHAR(400),
+	 CONSTRAINT [AvsXDec_DecontDetail_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentId] ASC,
+	[DocumentDetailId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+drop table AvsXDec_DocumentStateHistory
+GO
+  CREATE TABLE "AvsXDec_DocumentStateHistory" 
+   (	"Id" int, 
+	"DocumentId" int, 
+	"CircuitId" int, 
+	"IdSuper" int, 
+	"Pozitie" int, 
+	"Culoare" NVARCHAR(200), 
+	"Inlocuitor" int, 
+	"IdUserInlocuitor" int, 
+	"Aprobat" int, 
+	"DataAprobare" DATETIME, 
+	"DocumentStateId" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_DocumentStateHistory_PK] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+drop table AvsXDec_Decont
+GO
+  CREATE TABLE "AvsXDec_Decont" 
+   (	"DocumentId" int, 
+	"CurrencyId" int, 
+	"RefCurrencyId" int, 
+	"RefCurrencyValue" NUMERIC(18,4), 
+	"TotalPayment" NUMERIC(18,4), 
+	"RefTotalPayment" NUMERIC(18,4), 
+	"StartDate" DATETIME, 
+	"EndDate" DATETIME, 
+	"StartHour" DATETIME, 
+	"EndHour" DATETIME, 
+	"UnconfRestAmount" NUMERIC(18,4), 
+	"TotalAmount" NUMERIC(18,4), 
+	"EstimatedAmount" NUMERIC(18,4), 
+	"PaymentDate" DATETIME, 
+	"PaymentTypeId" int, 
+	"ActionTypeId" int, 
+	"ActionPlace" NVARCHAR(800), 
+	"ActionReason" NVARCHAR(800), 
+	"chkDiurna" int, 
+	"PaymentValueFinance" NUMERIC(18,4), 
+	"ComissionValueFinance" NUMERIC(18,4), 
+	"PaymentCurrencyId" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME, 
+	"RefuseReason" NVARCHAR(400), 
+	"OriginalDoc" int, 
+	"TransportTypeId" int,
+	 CONSTRAINT [AvsXDec_Decont_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
 drop table AvsXDec_Document
 GO
   CREATE TABLE "AvsXDec_Document" 
@@ -18865,44 +18953,6 @@ GO
 GO
 
 
-
-drop table AvsXDec_Decont
-GO
-  CREATE TABLE "AvsXDec_Decont" 
-   (	"DocumentId" int, 
-	"CurrencyId" int, 
-	"RefCurrencyId" int, 
-	"RefCurrencyValue" NUMERIC(18,4), 
-	"TotalPayment" NUMERIC(18,4), 
-	"RefTotalPayment" NUMERIC(18,4), 
-	"StartDate" DATETIME, 
-	"EndDate" DATETIME, 
-	"StartHour" DATETIME, 
-	"EndHour" DATETIME, 
-	"UnconfRestAmount" NUMERIC(18,4), 
-	"TotalAmount" NUMERIC(18,4), 
-	"EstimatedAmount" NUMERIC(18,4), 
-	"PaymentDate" DATETIME, 
-	"PaymentTypeId" int, 
-	"ActionTypeId" int, 
-	"ActionPlace" NVARCHAR(800), 
-	"ActionReason" NVARCHAR(800), 
-	"chkDiurna" int, 
-	"PaymentValueFinance" NUMERIC(18,4), 
-	"ComissionValueFinance" NUMERIC(18,4), 
-	"PaymentCurrencyId" int, 
-	"USER_NO" int, 
-	"TIME" DATETIME, 
-	"RefuseReason" NVARCHAR(400), 
-	"OriginalDoc" int, 
-	"TransportTypeId" int,
-	 CONSTRAINT [AvsXDec_Decont_PK] PRIMARY KEY CLUSTERED 
-(
-	[DocumentId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
   CREATE TABLE "AvsXDec_relUploadDocumente" 
    (	"DocumentId" int, 
 	"DocumentDetailId" int, 
@@ -18964,57 +19014,6 @@ GO
 	 CONSTRAINT [AvsXDec_Settings_PK] PRIMARY KEY CLUSTERED 
 (
 	[IdAuto] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
-drop table AvsXDec_DecontDetail
-GO
-  CREATE TABLE "AvsXDec_DecontDetail" 
-   (	"DocumentId" int, 
-	"DocumentDetailId" int, 
-	"Furnizor" NVARCHAR(400), 
-	"DictionaryItemId" int, 
-	"DocNumberDecont" NVARCHAR(200), 
-	"DocDateDecont" DATETIME, 
-	"CurrencyId" int, 
-	"RefCurrencyId" int, 
-	"RefCurrencyValue" NUMERIC(18,4), 
-	"TotalPayment" NUMERIC(18,4), 
-	"RefTotalPayment" NUMERIC(18,4), 
-	"IdDocument" NUMERIC(18,4), 
-	"BugetLine" NVARCHAR(800), 
-	"ExpenseTypeId" int, 
-	"ExpenseTypeAdmId" int, 
-	"FreeTxt" NVARCHAR(400),
-	 CONSTRAINT [AvsXDec_DecontDetail_PK] PRIMARY KEY CLUSTERED 
-(
-	[DocumentId] ASC,
-	[DocumentDetailId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-drop table AvsXDec_DocumentStateHistory
-GO
-  CREATE TABLE "AvsXDec_DocumentStateHistory" 
-   (	"Id" int, 
-	"DocumentId" int, 
-	"CircuitId" int, 
-	"IdSuper" int, 
-	"Pozitie" int, 
-	"Culoare" NVARCHAR(200), 
-	"Inlocuitor" int, 
-	"IdUserInlocuitor" int, 
-	"Aprobat" int, 
-	"DataAprobare" DATETIME, 
-	"DocumentStateId" int, 
-	"USER_NO" int, 
-	"TIME" DATETIME,
-	 CONSTRAINT [AvsXDec_DocumentStateHistory_PK] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO

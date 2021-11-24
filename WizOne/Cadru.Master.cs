@@ -58,7 +58,19 @@ namespace WizOne
                 try
                 {
                     if (Session["tblParam"] == null || ((DataTable)Session["tblParam"]).Rows.Count == 0)
-                        Response.Redirect("~/Default", false);
+                    {
+                        string ti = "nvarchar";
+                        if (Constante.tipBD == 2) ti = "varchar2";
+
+                        string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
+                                UNION
+                                SELECT 'AnLucru', CAST(F01011 AS {0}(10)), '', 1, 0 FROM F010
+                                UNION
+                                SELECT 'LunaLucru', CAST(F01012 AS {0}(10)), '', 1, 0 FROM F010";
+                        strSql = string.Format(strSql, ti);
+
+                        Session["tblParam"] = General.IncarcaDT(strSql, null);
+                    }
                 }
                 catch (Exception)
                 {

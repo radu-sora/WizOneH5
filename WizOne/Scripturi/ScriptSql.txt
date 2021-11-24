@@ -21139,31 +21139,46 @@ GO
 ALTER TABLE DynReports ADD Photo VARBINARY(MAX)
 GO
 
-DELETE F069 WHERE F06904 =2022;
-DELETE F069 WHERE F06904 =2023;
+DELETE F069 WHERE F06904 =2022
+GO
+DELETE F069 WHERE F06904 =2023
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 1, 'Ianuarie', 20, 160, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 1, 'Ianuarie', 20, 160, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 2, 'Februarie', 20, 160, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 2, 'Februarie', 20, 160, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 3, 'Martie', 23, 184, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 3, 'Martie', 23, 184, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 4, 'Aprilie', 19, 152, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 4, 'Aprilie', 19, 152, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 5, 'Mai', 22, 176, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 5, 'Mai', 22, 176, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 6, 'Iunie',  20, 160, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 6, 'Iunie',  20, 160, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 7, 'Iulie',  21, 168, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 7, 'Iulie',  21, 168, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 8, 'August',  22, 176, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 8, 'August',  22, 176, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 9, 'Septembrie', 22, 176, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 9, 'Septembrie', 22, 176, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 10, 'Octombrie', 21, 168, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 10, 'Octombrie', 21, 168, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 11, 'Noiembrie',  21, 168, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 11, 'Noiembrie',  21, 168, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2022, 12, 'Decembrie',  20, 160, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2022, 12, 'Decembrie',  20, 160, 2550, 5380, 1, getdate() from F002
+GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
-select 69, F00202, 2023, 1, 'Ianuarie', 21, 168, 2550, 5380, 1, getdate() from F002;
+select 69, F00202, 2023, 1, 'Ianuarie', 21, 168, 2550, 5380, 1, getdate() from F002
+GO

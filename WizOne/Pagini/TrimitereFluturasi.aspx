@@ -50,7 +50,7 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/mail.png"></Image>
                 </dx:ASPxButton>  
-                <dx:ASPxButton ID="btnGenerare" ClientInstanceName="btnGenerare" ClientIDMode="Static" runat="server" Text="Generare fluturasi" AutoPostBack="true" OnClick="btnGenerare_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnGenerare" ClientInstanceName="btnGenerare" ClientIDMode="Static" runat="server" Text="Generare documente" AutoPostBack="true" OnClick="btnGenerare_Click" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
                         e.processOnServer = true;
@@ -219,6 +219,31 @@
 
                 <br />
     
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <dx:ASPxCardView ID="crView" ClientInstanceName="crView" runat="server" Width="50%"
+                    AutoGenerateColumns="False" KeyFieldName="Id" >           
+                    <Columns>
+                        <dx:CardViewColumn FieldName="Id" />
+                        <dx:CardViewColumn FieldName="Denumire" />  
+                    </Columns>
+                    <CardLayoutProperties>
+                        <Items>                            
+                            <dx:CardViewColumnLayoutItem ColumnName="Id" Visible="false"/>
+                            <dx:CardViewColumnLayoutItem ColumnName="Denumire" ShowCaption="False" />              
+                        </Items>
+                    </CardLayoutProperties>        
+                    <SettingsBehavior AllowSelectByCardClick="true" />
+                    <SettingsPager>  
+                        <SettingsTableLayout RowsPerPage="8" />  
+                    </SettingsPager>
+                    <Styles>
+                        <FlowCard CssClass="flowCardStyle"></FlowCard>
+                        <Card Width="100" Height="10px" />
+                    </Styles>
+                </dx:ASPxCardView>
             </td>
         </tr>
 

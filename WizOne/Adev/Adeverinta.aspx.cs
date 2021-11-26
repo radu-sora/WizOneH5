@@ -6169,7 +6169,7 @@ namespace WizOne.Adev
 
 
 
-        static void FlatToOpc(XDocument doc, string docxPath)
+        public static void FlatToOpc(XDocument doc, string docxPath)
         {
             XNamespace pkg =
                 "http://schemas.microsoft.com/office/2006/xmlPackage";

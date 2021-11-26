@@ -864,6 +864,9 @@ namespace WizOne.ConcediiMedicale
                     sql = "UPDATE CM_CereriIstoric SET IdStare = 4, IdUser = " + Session["UserId"].ToString() + ", Culoare = (SELECT Culoare FROM CM_tblStari WHERE Id = 4)  WHERE IdCerere = " + lstIds[i] + " AND Pozitie = 2";
                     General.ExecutaNonQuery(sql, null);
 
+                    //#1062
+                    TransferPontaj(dt.Rows[0]["F10003"].ToString(), dataInc, dataSf, "CM");
+
                     TrimiteNotificare(Convert.ToInt32(lstIds[i]));
                 }
 
@@ -1741,6 +1744,112 @@ namespace WizOne.ConcediiMedicale
             });
 
             #endregion
+        }
+
+        public static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, string denScurta)
+        {
+            try
+            {
+                DateTime dtSf = dataSfarsit;
+
+                string strSql = "";
+                int idAbs = -99;
+                DataTable dtAbsNomen = General.IncarcaDT("SELECT * FROM \"Ptj_tblAbsente\" WHERE \"DenumireScurta\" = '" + denScurta + "'", null);
+                if (dtAbsNomen != null && dtAbsNomen.Rows.Count > 0)
+                    idAbs = Convert.ToInt32(dtAbsNomen.Rows[0]["Id"].ToString());
+                else
+                    return;
+
+                string sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataInceput.Date) + " AND " + General.ToDataUniv(dtSf.Date);
+                General.ExecutaNonQuery(sql, null);
+
+              
+                string sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
+                                        SELECT {marca}, ""Zi"", ""DenumireScurta"", (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003 = {marca} AND ""Ziua"" = ""Zi""), 
+                                {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, 'Transfer din Aprobare CM'
+                                    FROM 
+                                    (select case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = a.""Zi"") = 0 then 0 else 1 end as prezenta, 
+                                    b.* from  ""tblZile"" a
+                                    left join 
+                                    (SELECT P.""Zi"",
+                                    CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE
+                                    CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) <> 1 THEN 1 ELSE 
+                                    CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
+                                    CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 
+                                    END
+                                    END
+                                    END
+                                    END AS ""AreDrepturi"", ""DenumireScurta""
+                                    FROM ""tblZile"" P
+                                    INNER JOIN ""Ptj_tblAbsente"" A ON 1=1
+                                    INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta""
+                                    LEFT JOIN HOLIDAYS D on P.""Zi""=D.DAY
+                                    WHERE { General.ToDataUniv(dataInceput.Date)} <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <=  {General.ToDataUniv(dtSf.Date)}
+                                    AND A.""Id"" = {idAbs}
+                                    AND COALESCE(A.""DenumireScurta"", '~') <> '~'
+                                    AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 = {marca} AND ""DataInceput"" <= { General.ToDataUniv(dataInceput.Date)} AND {General.ToDataUniv(dtSf.Date)} <= ""DataSfarsit"") 
+                                    ) b
+                                    on a.""Zi"" = b.""Zi""
+
+                                    where a.""Zi"" between  { General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} and aredrepturi = 1) x   ";
+
+                General.ExecutaNonQuery(sqlIst, null);
+
+                string campuri = "";
+                for (int i = 0; i <= 20; i++)
+                    campuri += ", \"Val" + i.ToString() + "\" = NULL";
+                for (int i = 1; i <= 60; i++)
+                    campuri += ", F" + i.ToString() + " = NULL";
+
+                strSql = $@"MERGE INTO ""Ptj_intrari"" USING 
+                            (Select  case when ""AreDrepturi"" = 1 then ""DenumireScurta"" else null end  as ""Denumire"", x.* from                                
+                            (select {marca} as F10003, case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = a.""Zi"") = 0 then 0 else 1 end as prezenta, 
+                            b.* from  ""tblZile"" a
+                            left join 
+
+                            (SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
+                            CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
+                            CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE
+                            CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) <> 1 THEN 1 ELSE 
+                            CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
+                            CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 
+                            END
+                            END
+                            END
+                            END AS ""AreDrepturi"", ""DenumireScurta""
+                            FROM ""tblZile"" P
+                            INNER JOIN ""Ptj_tblAbsente"" A ON 1=1
+                            INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta""
+                            LEFT JOIN HOLIDAYS D on P.""Zi""=D.DAY
+                            WHERE {General.ToDataUniv(dataInceput.Date)} <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <= {General.ToDataUniv(dtSf.Date)}
+                            AND A.""Id"" = {idAbs}
+                            AND COALESCE(A.""DenumireScurta"", '~') <> '~'
+                            AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 =  {marca} AND ""DataInceput"" <= {General.ToDataUniv(dataInceput.Date)} AND {General.ToDataUniv(dtSf.Date)} <= ""DataSfarsit"") 
+                            ) b
+                            on a.""Zi"" = b.""Zi""
+
+                            where a.""Zi"" between  {General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} ) x
+
+                            ) Tmp 
+                            ON (""Ptj_Intrari"".""Ziua"" = ""Zi"" AND ""Ptj_Intrari"".F10003 = Tmp.F10003 and prezenta = 1) 
+                            WHEN MATCHED THEN UPDATE SET ""ValStr"" = ""Denumire"" {campuri} , USER_NO ={HttpContext.Current.Session["UserId"].ToString()}, TIME = {General.CurrentDate()}
+                            WHEN NOT MATCHED THEN INSERT (F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""IdContract"", ""Norma"", F10002, F10004, F10005, F10006, F10007, F06204, ""ValStr"", USER_NO, TIME)
+                             VALUES ({marca}, ""Zi"", ""ZiSapt"" ,""ZiLibera"" , ""ZiLiberaLegala"", 
+                            (SELECT X.""IdContract"" FROM ""F100Contracte"" X WHERE X.F10003 = {marca} AND X.""DataInceput"" <= ""Zi"" AND ""Zi"" <= X.""DataSfarsit""), 
+                            (SELECT F10043 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10002 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10004 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10005 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10006 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10007 FROM F100 WHERE F10003 = {marca}), 
+                             -1,  ""Denumire"", {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()});";
+                General.ExecutaNonQuery(strSql, null);  
+               
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex.ToString(), "Aprobare", "TransferPontaj");
+            }
         }
     }
 }

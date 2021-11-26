@@ -14308,7 +14308,7 @@ GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportFluturasMail', '-99', 'Id Raport pentru trimitere fluturasi pe mail', 0)
 GO
 
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(84, 'Trimitere fluturas', 'Trimitere fluturas', 'Pagini\TrimitereFluturasi', 1, 'm1.png')
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(84, 'Trimitere document', 'Trimitere document', 'Pagini\TrimitereFluturasi', 1, 'm1.png')
 GO
 
 insert into Avs_tblAtribute (id, Denumire, Activ) values (34, 'Program de lucru', 1)
@@ -21181,4 +21181,7 @@ select 69, F00202, 2022, 12, 'Decembrie',  20, 160, 2550, 5380, 1, getdate() fro
 GO
 Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
 select 69, F00202, 2023, 1, 'Ianuarie', 21, 168, 2550, 5380, 1, getdate() from F002
+GO
+
+UPDATE tblMeniuri set Nume = 'Trimitere document', Descriere = 'Trimitere document' where Pagina = 'Pagini\TrimitereFluturasi'
 GO

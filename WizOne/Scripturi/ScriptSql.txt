@@ -18749,7 +18749,7 @@ GO
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
---drop table AvsXDec_AvansDetail
+drop table AvsXDec_AvansDetail
 go
   CREATE TABLE "AvsXDec_AvansDetail" 
    (	"DocumentId" int, 
@@ -18770,103 +18770,58 @@ go
 
 GO
 
---drop table AvsXDec_Document
+
+drop table AvsXDec_DecontDetail
 GO
-  CREATE TABLE "AvsXDec_Document" 
+  CREATE TABLE "AvsXDec_DecontDetail" 
    (	"DocumentId" int, 
-	"DocumentTypeId" int, 
-	"DocumentStateId" int, 
-	"F10003" int, 
-	"DocumentDate" DATETIME, 
+	"DocumentDetailId" int, 
+	"Furnizor" NVARCHAR(400), 
+	"DictionaryItemId" int, 
+	"DocNumberDecont" NVARCHAR(200), 
+	"DocDateDecont" DATETIME, 
+	"CurrencyId" int, 
+	"RefCurrencyId" int, 
+	"RefCurrencyValue" NUMERIC(18,4), 
+	"TotalPayment" NUMERIC(18,4), 
+	"RefTotalPayment" NUMERIC(18,4), 
+	"IdDocument" NUMERIC(18,4), 
+	"BugetLine" NVARCHAR(800), 
+	"ExpenseTypeId" int, 
+	"ExpenseTypeAdmId" int, 
+	"FreeTxt" NVARCHAR(400),
+	 CONSTRAINT [AvsXDec_DecontDetail_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentId] ASC,
+	[DocumentDetailId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+drop table AvsXDec_DocumentStateHistory
+GO
+  CREATE TABLE "AvsXDec_DocumentStateHistory" 
+   (	"Id" int, 
+	"DocumentId" int, 
 	"CircuitId" int, 
-	"TotalCircuit" int, 
-	"Culoare" NVARCHAR(200), 
+	"IdSuper" int, 
 	"Pozitie" int, 
-	"USER_NO" int, 
-	"TIME" DATETIME,
-	 CONSTRAINT [AvsXDec_Document_PK] PRIMARY KEY CLUSTERED 
-(
-	[DocumentId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
---drop table AvsXDec_Circuit
-go
-  CREATE TABLE "AvsXDec_Circuit" 
-   (	"CircuitId" int, 
-	"DIM1" int, 
-	"DIM2" int, 
-	"DocumentTypeId" int, 
-	"Super1" int, 
-	"Super2" int, 
-	"Super3" int, 
-	"Super4" int, 
-	"Super5" int, 
-	"Super6" int, 
-	"Super7" int, 
-	"Super8" int, 
-	"Super9" int, 
-	"Super10" int, 
-	"Super11" int, 
-	"Super12" int, 
-	"Super13" int, 
-	"Super14" int, 
-	"Super15" int, 
-	"Super16" int, 
-	"Super17" int, 
-	"Super18" int, 
-	"Super19" int, 
-	"Super20" int, 
-	"USER_NO" int, 
-	"TIME" DATETIME,
-	 CONSTRAINT [AvsXDec_Circuit_PK] PRIMARY KEY CLUSTERED 
-(
-	[CircuitId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
---drop table AvsXDec_DictItemProperty
-GO
---drop table AvsXDec_DictionaryItem
-GO
-  CREATE TABLE "AvsXDec_DictionaryItem" 
-   (	"DictionaryItemId"int, 
-	"DictionaryItemName" NVARCHAR(200), 
 	"Culoare" NVARCHAR(200), 
-	"DictionaryId" int, 
-	"Ordine" int, 
+	"Inlocuitor" int, 
+	"IdUserInlocuitor" int, 
+	"Aprobat" int, 
+	"DataAprobare" DATETIME, 
+	"DocumentStateId" int, 
 	"USER_NO" int, 
 	"TIME" DATETIME,
-	 CONSTRAINT [AvsXDec_DictionaryItem_PK] PRIMARY KEY CLUSTERED 
+	 CONSTRAINT [AvsXDec_DocumentStateHistory_PK] PRIMARY KEY CLUSTERED 
 (
-	[DictionaryItemId] ASC
+	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 
---drop table AvsXDec_Dictionary
-GO
-  CREATE TABLE "AvsXDec_Dictionary" 
-   (	"DictionaryId" int, 
-	"DictionaryCode" NVARCHAR(50), 
-	"DictionaryName" NVARCHAR(200), 
-	"hasProperties" int DEFAULT (0), 
-	"USER_NO" int, 
-	"TIME" DATETIME,
-	 CONSTRAINT [AvsXDec_Dictionary_PK] PRIMARY KEY CLUSTERED 
-(
-	[DictionaryId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
-
---drop table AvsXDec_Decont
+drop table AvsXDec_Decont
 GO
   CREATE TABLE "AvsXDec_Decont" 
    (	"DocumentId" int, 
@@ -18903,6 +18858,101 @@ GO
 ) ON [PRIMARY]
 GO
 
+drop table AvsXDec_Document
+GO
+  CREATE TABLE "AvsXDec_Document" 
+   (	"DocumentId" int, 
+	"DocumentTypeId" int, 
+	"DocumentStateId" int, 
+	"F10003" int, 
+	"DocumentDate" DATETIME, 
+	"CircuitId" int, 
+	"TotalCircuit" int, 
+	"Culoare" NVARCHAR(200), 
+	"Pozitie" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_Document_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+drop table AvsXDec_Circuit
+go
+  CREATE TABLE "AvsXDec_Circuit" 
+   (	"CircuitId" int, 
+	"DIM1" int, 
+	"DIM2" int, 
+	"DocumentTypeId" int, 
+	"Super1" int, 
+	"Super2" int, 
+	"Super3" int, 
+	"Super4" int, 
+	"Super5" int, 
+	"Super6" int, 
+	"Super7" int, 
+	"Super8" int, 
+	"Super9" int, 
+	"Super10" int, 
+	"Super11" int, 
+	"Super12" int, 
+	"Super13" int, 
+	"Super14" int, 
+	"Super15" int, 
+	"Super16" int, 
+	"Super17" int, 
+	"Super18" int, 
+	"Super19" int, 
+	"Super20" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_Circuit_PK] PRIMARY KEY CLUSTERED 
+(
+	[CircuitId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+drop table AvsXDec_DictItemProperty
+GO
+drop table AvsXDec_DictionaryItem
+GO
+  CREATE TABLE "AvsXDec_DictionaryItem" 
+   (	"DictionaryItemId"int, 
+	"DictionaryItemName" NVARCHAR(200), 
+	"Culoare" NVARCHAR(200), 
+	"DictionaryId" int, 
+	"Ordine" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_DictionaryItem_PK] PRIMARY KEY CLUSTERED 
+(
+	[DictionaryItemId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+drop table AvsXDec_Dictionary
+GO
+  CREATE TABLE "AvsXDec_Dictionary" 
+   (	"DictionaryId" int, 
+	"DictionaryCode" NVARCHAR(50), 
+	"DictionaryName" NVARCHAR(200), 
+	"hasProperties" int DEFAULT (0), 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_Dictionary_PK] PRIMARY KEY CLUSTERED 
+(
+	[DictionaryId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
   CREATE TABLE "AvsXDec_relUploadDocumente" 
    (	"DocumentId" int, 
 	"DocumentDetailId" int, 
@@ -18931,7 +18981,7 @@ CREATE TABLE "AvsXDec_AccountingPeriod"
 ) ON [PRIMARY]
 GO
 
---drop table AvsXDec_BusinessTransaction
+drop table AvsXDec_BusinessTransaction
 GO
 
   CREATE TABLE "AvsXDec_BusinessTransaction" 
@@ -18969,57 +19019,6 @@ GO
 GO
 
 
---drop table AvsXDec_DecontDetail
-GO
-  CREATE TABLE "AvsXDec_DecontDetail" 
-   (	"DocumentId" int, 
-	"DocumentDetailId" int, 
-	"Furnizor" NVARCHAR(400), 
-	"DictionaryItemId" int, 
-	"DocNumberDecont" NVARCHAR(200), 
-	"DocDateDecont" DATETIME, 
-	"CurrencyId" int, 
-	"RefCurrencyId" int, 
-	"RefCurrencyValue" NUMERIC(18,4), 
-	"TotalPayment" NUMERIC(18,4), 
-	"RefTotalPayment" NUMERIC(18,4), 
-	"IdDocument" NUMERIC(18,4), 
-	"BugetLine" NVARCHAR(800), 
-	"ExpenseTypeId" int, 
-	"ExpenseTypeAdmId" int, 
-	"FreeTxt" NVARCHAR(400),
-	 CONSTRAINT [AvsXDec_DecontDetail_PK] PRIMARY KEY CLUSTERED 
-(
-	[DocumentId] ASC,
-	[DocumentDetailId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
---drop table AvsXDec_DocumentStateHistory
-GO
-  CREATE TABLE "AvsXDec_DocumentStateHistory" 
-   (	"Id" int, 
-	"DocumentId" int, 
-	"CircuitId" int, 
-	"IdSuper" int, 
-	"Pozitie" int, 
-	"Culoare" NVARCHAR(200), 
-	"Inlocuitor" int, 
-	"IdUserInlocuitor" int, 
-	"Aprobat" int, 
-	"DataAprobare" DATETIME, 
-	"DocumentStateId" int, 
-	"USER_NO" int, 
-	"TIME" DATETIME,
-	 CONSTRAINT [AvsXDec_DocumentStateHistory_PK] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
   CREATE TABLE "AvsXDec_AccountingYear" 
    (	"AccPeriodId" int, 
 	"Year" int, 
@@ -19033,7 +19032,7 @@ GO
 GO
 
 
---drop table AvsXDec_Avans
+drop table AvsXDec_Avans
 GO
   CREATE TABLE "AvsXDec_Avans" 
    (	"DocumentId" int, 
@@ -19072,7 +19071,7 @@ GO
 GO
 
 
---drop table AvsXDec_DocumentType
+drop table AvsXDec_DocumentType
 GO
 
   CREATE TABLE "AvsXDec_DocumentType" 

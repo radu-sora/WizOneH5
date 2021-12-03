@@ -18,7 +18,7 @@ namespace WizOne
 
         protected void Page_Init(object sender, EventArgs e)
         {
-            SetFocus(txtPan1);
+            //SetFocus(txtPan1);
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -27,8 +27,8 @@ namespace WizOne
             {             
                 if (!IsPostBack)
                 {
-                    Session.Clear();
-                    General.InitSessionVariables();
+                    //Session.Clear();
+                    //General.InitSessionVariables();
 
                     AscundeButoane();
                 }
@@ -46,9 +46,11 @@ namespace WizOne
                 if (General.VarSession("IdLimba").ToString() == "") Session["IdLimba"] = "RO";
 
                 //txtPan1.Attributes.Add("autofocus", "autofocus");
-                txtPan1.Focus();
-            
-                
+                //txtPan1.Focus();
+
+                if (!IsPostBack)
+                    txtPan1_TextChanged(null, null);
+
             }
             catch (Exception ex)
             {
@@ -57,71 +59,71 @@ namespace WizOne
             }
         }
 
-        public string PermisiuneConectare()
-        {
-            string rez = "";
+        //public string PermisiuneConectare()
+        //{
+        //    string rez = "";
 
-            try
-            {
-                string txt = "In aceasta zi conectarea nu este permisa. Va rugam sa luati legatura cu administratorul de sistem.";
-                string msg = Dami.ValoareParam("MesajConectareNepermisa", txt);
+        //    try
+        //    {
+        //        string txt = "In aceasta zi conectarea nu este permisa. Va rugam sa luati legatura cu administratorul de sistem.";
+        //        string msg = Dami.ValoareParam("MesajConectareNepermisa", txt);
 
-                string interval = "," + Dami.ValoareParam("IntervalConectareNepermisa", "") + ",";
-                if (interval != ",," && interval.IndexOf("," + DateTime.Now.Day + ",") >= 0)
-                    return msg;
+        //        string interval = "," + Dami.ValoareParam("IntervalConectareNepermisa", "") + ",";
+        //        if (interval != ",," && interval.IndexOf("," + DateTime.Now.Day + ",") >= 0)
+        //            return msg;
 
-                string blocat = General.Nz(General.ExecutaScalar("SELECT F002541 FROM F002", null),"").ToString();
-                if (blocat.ToUpper() == "BLOCAT")
-                    return msg;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
+        //        string blocat = General.Nz(General.ExecutaScalar("SELECT F002541 FROM F002", null),"").ToString();
+        //        if (blocat.ToUpper() == "BLOCAT")
+        //            return msg;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
 
-            return rez;
-        }
+        //    return rez;
+        //}
 
         protected void txtPan1_TextChanged(object sender, EventArgs e)
         {
             try
             {
                 //Radu 20.03.2019
-                string valMax = Dami.ValoareParam("LungimeMaximaCodCartela","10");
-                int max = 10;
-                if (valMax.Length > 0)
-                    max = Convert.ToInt32(valMax);
+                //string valMax = Dami.ValoareParam("LungimeMaximaCodCartela","10");
+                //int max = 10;
+                //if (valMax.Length > 0)
+                //    max = Convert.ToInt32(valMax);
 
-                //Radu 20.05.2019 - anumite cititoare returneaza un numar variabil de caractere
-                //if (txtPan1.Value.Trim().Length >= max)
+                ////Radu 20.05.2019 - anumite cititoare returneaza un numar variabil de caractere
+                ////if (txtPan1.Value.Trim().Length >= max)
+                ////{
+                //if (txtPan1.Value.Trim().Length > max)            
                 //{
-                if (txtPan1.Value.Trim().Length > max)            
+                //    MessageBox.Show("Cod invalid! Va rugam apropiati din nou cardul de cititor", MessageBox.icoWarning, "");
+                //    txtPan1.Value = null;
+                //    txtPan1.Focus();
+                //}
+                //else
                 {
-                    MessageBox.Show("Cod invalid! Va rugam apropiati din nou cardul de cititor", MessageBox.icoWarning, "");
-                    txtPan1.Value = null;
-                    txtPan1.Focus();
-                }
-                else
-                {
-                    string msg = PermisiuneConectare();
-                    if (msg != "")
+                    //string msg = PermisiuneConectare();
+                    //if (msg != "")
+                    //{
+                    //    MessageBox.Show(msg, MessageBox.icoWarning, "");
+                    //    txtPan1.Focus();
+                    //}
+                    //else
                     {
-                        MessageBox.Show(msg, MessageBox.icoWarning, "");
-                        txtPan1.Focus();
-                    }
-                    else
-                    {
-                        //Florin 2021.02.18
-                        //Radu 18.05.2020
-                        //if (Session["TipInfoChiosc"] == null)
-                        //{
-                        //    MessageBox.Show("Nu s-a putut realiza conexiunea cu baza de date!", MessageBox.icoError, "");
-                        //    return;
-                        //}
+                        ////Florin 2021.02.18
+                        ////Radu 18.05.2020
+                        ////if (Session["TipInfoChiosc"] == null)
+                        ////{
+                        ////    MessageBox.Show("Nu s-a putut realiza conexiunea cu baza de date!", MessageBox.icoError, "");
+                        ////    return;
+                        ////}
 
-                        //string tip = Session["TipInfoChiosc"].ToString();
-                        //if (tip == "3")
+                        ////string tip = Session["TipInfoChiosc"].ToString();
+                        ////if (tip == "3")
                         if (tipInfoChiosc == 3)
                         {
                             btn0.ClientVisible = true;
@@ -135,7 +137,7 @@ namespace WizOne
                             btn8.ClientVisible = true;
                             btn9.ClientVisible = true;
                             btnLog.ClientVisible = true;
-                            panouExt.Visible = false;
+                            //panouExt.Visible = false;
 
                         }
                         else
@@ -164,7 +166,7 @@ namespace WizOne
                 if (valMax.Length > 0)
                     max = Convert.ToInt32(valMax);
 
-                string cartela = txtPan1.Value; 
+                string cartela = Session["Tactil_Cartela"].ToString(); //txtPan1.Value; 
 
                 int lung = Convert.ToInt32(General.Nz(Dami.ValoareParam("LungimeCartela","0"),"0"));
                 if (lung > 0 && cartela.Length >= lung) cartela = cartela.Substring(cartela.Length - lung);
@@ -204,8 +206,10 @@ namespace WizOne
                 if (drUsr == null)
                 {
                     MessageBox.Show("Utilizator inexistent!", MessageBox.icoError, "Atentie !");
+                    System.Threading.Thread.Sleep(2000);
                     AscundeButoane();
-                    return;
+                    //return;
+                    Response.Redirect("~/DefaultTactil", false);
                 }
 
                 //Florin 2021.02.18
@@ -218,8 +222,10 @@ namespace WizOne
                     if (pinBD != pin)
                     {
                         MessageBox.Show("PIN incorect!", MessageBox.icoError, "Atentie !");
+                        System.Threading.Thread.Sleep(2000);
                         AscundeButoane();
-                        return;
+                        //return;
+                        Response.Redirect("~/DefaultTactil", false);
                     }
                     AscundeButoane();
                 }
@@ -239,10 +245,13 @@ namespace WizOne
 
                         if (inactiv == "1")
                         {
-                            General.InregistreazaLogarea(0, txtPan1.Value, "Angajatul asociat acestui utilizator este inactiv!");
-                            MessageBox.Show("Angajatul asociat acestui utilizator este inactiv! Contactati administratorul de sistem!", MessageBox.icoWarning);                            
-                            txtPan1.Focus();
+                            General.InregistreazaLogarea(0, Session["Tactil_Cartela"].ToString() /*txtPan1.Value*/, "Angajatul asociat acestui utilizator este inactiv!");
+                            MessageBox.Show("Angajatul asociat acestui utilizator este inactiv! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                            System.Threading.Thread.Sleep(2000);
+                            //txtPan1.Focus();
                             err = true;
+
+                            Response.Redirect("~/DefaultTactil", false);
                         }
                         break;
                     case "2":
@@ -250,10 +259,13 @@ namespace WizOne
 
                         if (suspendatinactiv == "1")
                         {
-                            General.InregistreazaLogarea(0, txtPan1.Value, "Angajatul asociat acestui utilizator este suspendat!");
-                            MessageBox.Show("Angajatul asociat acestui utilizator este suspendat! Contactati administratorul de sistem!", MessageBox.icoWarning);                           
-                            txtPan1.Focus();
+                            General.InregistreazaLogarea(0, Session["Tactil_Cartela"].ToString() /*txtPan1.Value*/, "Angajatul asociat acestui utilizator este suspendat!");
+                            MessageBox.Show("Angajatul asociat acestui utilizator este suspendat! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                            System.Threading.Thread.Sleep(2000);
+                            //txtPan1.Focus();
                             err = true;
+
+                            Response.Redirect("~/DefaultTactil", false);
                         }
                         break;
                 }
@@ -277,7 +289,7 @@ namespace WizOne
                         Session["ParolaComplexa"] = Convert.ToInt32(General.Nz(drUsr["ParolaComplexa"], 0));
 
                         General.SetTheme();
-                        General.InregistreazaLogarea(1, txtPan1.Value);
+                        General.InregistreazaLogarea(1, Session["Tactil_Cartela"].ToString() /*txtPan1.Value*/);
                         Session["SecApp"] = "OK_Tactil";
 
                         Session["TimeOutSecunde"] = 99999;
@@ -289,13 +301,16 @@ namespace WizOne
                     }
                     else
                     {
-                        General.InregistreazaLogarea(0, txtPan1.Value, "Utilizator inexistent in aplicatie");
+                        General.InregistreazaLogarea(0, Session["Tactil_Cartela"].ToString() /*txtPan1.Value*/, "Utilizator inexistent in aplicatie");
                         MessageBox.Show("Utilizator inexistent in aplicatie! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                        System.Threading.Thread.Sleep(2000);
                         AscundeButoane();
+
+                        Response.Redirect("~/DefaultTactil", false);
                     }
                 }
 
-                txtPan1.Value = null;
+                //txtPan1.Value = null;
 
             }
             catch (Exception ex)
@@ -320,7 +335,9 @@ namespace WizOne
             else
             {
                 MessageBox.Show(Dami.TraduCuvant("Nu ati introdus PIN-ul!"), MessageBox.icoError, "Atentie !");
-                return;
+                System.Threading.Thread.Sleep(2000);
+                //return;
+                Response.Redirect("~/DefaultTactil", false);
             }
         }
 
@@ -337,9 +354,9 @@ namespace WizOne
             btn8.ClientVisible = false;
             btn9.ClientVisible = false;
             btnLog.ClientVisible = false;
-            panouExt.Visible = true;
-            txtPan1.Value = null;
-            txtPan1.Focus();
+            //panouExt.Visible = true;
+            //txtPan1.Value = null;
+            //txtPan1.Focus();
         }
 
         protected void Resetare(object sender, EventArgs e)

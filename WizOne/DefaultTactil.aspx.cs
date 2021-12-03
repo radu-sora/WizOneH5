@@ -10,6 +10,7 @@ namespace WizOne
     public partial class DefaultTactil : System.Web.UI.Page
     {
         //static string arrIncercari = "";
+        int tipInfoChiosc = 0;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -22,6 +23,8 @@ namespace WizOne
                     Session.Clear();
                     General.InitSessionVariables();
                 }
+
+                tipInfoChiosc = Convert.ToInt32(Dami.ValoareParam("TipInfoChiosc", "0"));                
 
                 Session["IdLimba"] = Dami.ValoareParam("LimbaStart");
                 if (General.VarSession("IdLimba").ToString() == "") Session["IdLimba"] = "RO";
@@ -90,7 +93,15 @@ namespace WizOne
                         txtPan1.Focus();
                     }
                     else
-                        VerificaCartela();
+                    {//Radu 03.12.2021 - #914
+                        if (tipInfoChiosc == 3)
+                        {
+                            Session["Tactil_Cartela"] = txtPan1.Value;
+                            Response.Redirect("~/DefaultTactilExtra", false);
+                        }
+                        else
+                            VerificaCartela();
+                    }
                 }
                 //}
             }

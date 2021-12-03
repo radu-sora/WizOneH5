@@ -460,9 +460,7 @@
 
                 if (tipInfoChiosc == 1 || tipInfoChiosc == 2) {
                     pagina = '<%: ResolveClientUrl("~/DefaultTactilFaraCard.aspx") %>';
-                } else if (tipInfoChiosc == 3) {
-                    pagina = '<%: ResolveClientUrl("~/DefaultTactilExtra.aspx") %>';
-                }
+                } 
 
                 timerControl.init(timeOutSecunde, function (timeLeft) {
                     if (timeLeft < 10) {

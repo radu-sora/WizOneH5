@@ -837,6 +837,10 @@ namespace WizOne
                 General.MemoreazaEroarea(ex, Path.GetFileName(this.Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+        //else if (tipInfoChiosc == 3) {
+        //            pagina = '<%: ResolveClientUrl("~/DefaultTactilExtra.aspx") %>';
+        //        }
     }
 }
 

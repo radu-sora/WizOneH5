@@ -791,6 +791,7 @@ namespace WizOne.Pagini
             try
             {
                 string cale = Dami.ValoareParam("TrimitereFluturas_Locatie", "");
+                string paramParola = Dami.ValoareParam("TrimitereFluturas_LipsaParola", "0");
                 if (cale.Length <= 0)
                 {
                     msg += "Nu ati precizat locatia in care sa fie salvati fluturasii!\n";
@@ -841,12 +842,15 @@ namespace WizOne.Pagini
 
                         xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
                         PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
-                        pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
-
-                        if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
+                        if (paramParola != "1")
                         {
-                            msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
-                            continue;
+                            pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
+
+                            if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
+                            {
+                                msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
+                                continue;
+                            }
                         }
 
                         MemoryStream mem = new MemoryStream();

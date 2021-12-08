@@ -23,11 +23,15 @@ using Wizrom.Reports.Code;
 using Wizrom.Reports.Models;
 using DevExpress.Pdf;
 using DevExpress.XtraRichEdit;
+using System.Net.Http;
+using System.Net;
+using System.Collections.Specialized;
 
 namespace WizOne.Pagini
 {
     public partial class TrimitereFluturasi : System.Web.UI.Page
     {
+        private static readonly HttpClient client = new HttpClient();
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -238,6 +242,157 @@ namespace WizOne.Pagini
                     else
                         txtLog.Text = "";
                 }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void btnWA_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Dictionary<int, string> lstMarci = new Dictionary<int, string>();
+                //string[] sablon = new string[11];
+
+                txtLog.Text = "";
+
+                if (txtAnLuna.Value == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat luna si anul!"), MessageBox.icoError);
+                    return;
+                }
+
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Email", "F10016", "NumeComplet" });
+                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun angajat!"), MessageBox.icoError);
+                    return;
+                }
+
+                //#1014
+                var selectedValues = crView.GetSelectedFieldValues(new string[] { "Id" });
+                if (selectedValues.Count <= 0)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun document!"), MessageBox.icoError);
+                    return;
+                }
+
+                for (int i = 0; i < lst.Count(); i++)
+                {
+                    object[] arr = lst[i] as object[];
+                    lstMarci.Add(Convert.ToInt32(General.Nz(arr[0], -99)), General.Nz(arr[1], "").ToString() + "_#_$_&_" + General.Nz(arr[2], "").ToString() + "_#_$_&_" + General.Nz(arr[3], "").ToString());
+                }
+
+                grDate.Selection.UnselectAll();
+
+
+                if (lstMarci.Count > 0)
+                {
+
+                    //string msg = TrimitereFluturasiMail(lstMarci, (int)selectedValues[0]);
+
+                    ////if (msg.Length <= 0)                        
+                    ////    MessageBox.Show(Dami.TraduCuvant("Trimitere reusita!"), MessageBox.icoSuccess);
+
+                    //if (msg.Length > 0)
+                    //    txtLog.Text = "S-au intalnit urmatoarele erori:\n" + msg;
+                    //else
+                    //    txtLog.Text = "";
+
+
+                    //HttpClient client = new SystemNetHttpClient();
+                    //Request request = new Request(HttpMethod.Get, "https://api.twilio.com:8443");
+                    //Response response = client.MakeRequest(request);
+                    //Console.Write(response.Content);
+
+
+                    //TwilioClient.Init(
+                    //    Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID"),
+                    //    Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN"));
+
+                    //var message = MessageResource.Create(
+                    //    from: new PhoneNumber("whatsapp:+14155238886"),
+                    //    to: new PhoneNumber("whatsapp:+40723899574"),
+                    //    body: "Test");
+
+                    //string msg = message.Sid;
+
+                    //string status = "";
+                    //WhatsApp wa = new WhatsApp("40723899574", "", "Radu", false, false);
+                    //wa.OnConnectSuccess += () =>
+                    //{
+                    //    wa.OnLoginSuccess += (phoneNumber, data) =>
+                    //    {
+                    //        wa.SendMessage("40723899574", "Test");
+                    //    };
+                    //    wa.OnLoginFailed += (data) =>
+                    //    {
+                    //        status = data;
+                    //    };
+                    //    wa.Login();
+                    //};
+                    //wa.OnConnectFailed += (ex) =>
+                    //{
+                    //    status = ex.StackTrace;
+                    //};
+                    //wa.Connect();
+
+                    TrimitereWA();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void TrimitereWA()
+        {
+            try
+            {
+
+                using (var wb = new WebClient())
+                {
+                    var data = new NameValueCollection();                    
+                    data["url"] = "https://99deb2cc6165910debbfaa5ccafa4d21.m.pipedream.net";
+
+                    var antet = new NameValueCollection();
+                    antet["D360-API-KEY"] = "tMhush_sandbox";
+
+                    wb.Headers.Add(antet);
+
+                    var response = wb.UploadValues("https://waba-sandbox.360dialog.io/v1/configs/webhook", "POST", data);
+                    string responseInString = Encoding.UTF8.GetString(response);
+                }
+
+
+
+
+
+                //var client = new RestClient("https://waba-sandbox.360dialog.io/v1/configs/webhook");
+                //// client.Authenticator = new HttpBasicAuthenticator(username, password);
+                //var request = new RestRequest("resource/{id}");
+                //request.AddParameter("D360-API-KEY", "1234567_sandbox");
+                //request.AddParameter("url", "https://enjgn0xpx1j6afb.m.pipedream.net");
+                //request.AddHeader("header", "value");
+                ////request.AddFile("file", path);
+                //var response = client.Post(request);
+                //var content = response.Content; // Raw content as string     
+
+                //var values = new Dictionary<string, string>
+                //    {
+                //        { "D360-API-KEY", "1234567_sandbox" },
+                //        { "url", "https://pipedream.com/@radusora/p_ljCnnbB/edit?e=21xLhi0udZMfUn5qYXRbSn8BMN8" }
+                //    };
+
+                //var content = new FormUrlEncodedContent(values);
+
+                //var response = await client.PostAsync("https://waba-sandbox.360dialog.io/v1/configs/webhook", content);
+
+                //var responseString = await response.Content.ReadAsStringAsync();
             }
             catch (Exception ex)
             {
@@ -844,6 +999,7 @@ namespace WizOne.Pagini
             try
             {
                 string cale = Dami.ValoareParam("TrimitereFluturas_Locatie", "");
+                string paramParola = Dami.ValoareParam("TrimitereFluturas_LipsaParola", "0");
                 if (cale.Length <= 0)
                 {
                     msg += "Nu ati precizat locatia in care sa fie salvati fluturasii!\n";
@@ -902,8 +1058,16 @@ namespace WizOne.Pagini
 
                             xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
                             PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
-                            pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
+                            if (paramParola != "1")
+                            {
+                                pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
 
+                                if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
+                                {
+                                    msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
+                                    continue;
+                                }
+                            }
                             MemoryStream mem = new MemoryStream();
                             xtraReport.ExportToPdf(mem, pdfOptions);
                             mem.Seek(0, System.IO.SeekOrigin.Begin);

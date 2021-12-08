@@ -21132,6 +21132,10 @@ GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('AngajatulPoateModificaPontajul', '0', '0 - rolul Angajat nu poate face modificari in Pontaj pe angajat; 1 - poate face', 3)
 GO
 
+----  2.2.140.01  ----
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_LipsaParola', '0', '0 - (sau absent) este obligatorie parola PDF; 1 - Parola PDF nu este obligatorie', 0)
+GO
 
 ----  2.2.141  ----
 

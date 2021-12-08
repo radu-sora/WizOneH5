@@ -513,12 +513,12 @@ namespace WizOne.Module
                 {
                     //Radu 24.04.2020
                     string tip = Dami.ValoareParam("TipInfoChiosc", "0");
-                    if (tip == "0")
+                    if (tip == "0" || tip == "3")   //Radu 03.12.2021 - #914
                         HttpContext.Current.Response.Redirect("~/DefaultTactil");
                     else if (tip == "1" || tip == "2")
                         HttpContext.Current.Response.Redirect("~/DefaultTactilFaraCard");
-                    else if (tip == "3")
-                        HttpContext.Current.Response.Redirect("~/DefaultTactilExtra");
+                    //else if (tip == "3")
+                    //    HttpContext.Current.Response.Redirect("~/DefaultTactilExtra");
 
                 }
             }

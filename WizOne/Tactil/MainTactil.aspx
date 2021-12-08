@@ -35,8 +35,7 @@
                         var pagina = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
                         if (tipInfoChiosc == 1 || tipInfoChiosc == 2)
                             pagina = '<%: ResolveClientUrl("~/DefaultTactilFaraCard.aspx") %>';
-                        if (tipInfoChiosc == 3)
-                        pagina = '<%: ResolveClientUrl("~/DefaultTactilExtra.aspx") %>';
+
                     window.location = pagina;
                 }
             });

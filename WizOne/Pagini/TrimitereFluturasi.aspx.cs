@@ -3,6 +3,7 @@ using DevExpress.Web;
 using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -12,17 +13,25 @@ using System.Linq.Expressions;
 using System.Net.Mail;
 using System.Reflection;
 using System.Text;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.Xml.Linq;
 using WizOne.Module;
 using Wizrom.Reports.Code;
 using Wizrom.Reports.Models;
+using DevExpress.Pdf;
+using DevExpress.XtraRichEdit;
+using System.Net.Http;
+using System.Net;
+using System.Collections.Specialized;
 
 namespace WizOne.Pagini
 {
     public partial class TrimitereFluturasi : System.Web.UI.Page
     {
+        private static readonly HttpClient client = new HttpClient();
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -157,6 +166,22 @@ namespace WizOne.Pagini
                 cmbParola.DataSource = dt;
                 cmbParola.DataBind();
 
+                //#1014
+                string lstIds = Dami.ValoareParam("IdRaportFluturasMail", "-99");
+                DataTable dtDoc = General.IncarcaDT("select DynReportId as Id, Name as Denumire from DynReports where DynReportId in (" + lstIds + ")", null);
+                dtDoc.Rows.Add(1000000 + 0, "Adev. Sănătate 2019");
+                dtDoc.Rows.Add(1000000 + 1, "Adev. Sănătate");
+                dtDoc.Rows.Add(1000000 + 2, "Adev. Venituri anuale");
+                dtDoc.Rows.Add(1000000 + 3, "Adev. CIC");
+                dtDoc.Rows.Add(1000000 + 4, "Adev. Șomaj");
+                dtDoc.Rows.Add(1000000 + 6, "Adev. Stagiu");
+                dtDoc.Rows.Add(1000000 + 7, "Adev. Vechime");
+                dtDoc.Rows.Add(1000000 + 11, "Adev. Deplasare");
+                dtDoc.Rows.Add(1000000 + 12, "Adev. Sănătate 2020");
+                dtDoc.Rows.Add(1000000 + 13, "Adev. Șomaj tehnic 2020");
+                crView.DataSource = dtDoc;
+                crView.DataBind();
+
             }
             catch (Exception ex)
             {
@@ -187,6 +212,14 @@ namespace WizOne.Pagini
                     return;
                 }
 
+                //#1014
+                var selectedValues = crView.GetSelectedFieldValues(new string[] { "Id" });
+                if (selectedValues.Count <= 0)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun document!"), MessageBox.icoError);
+                    return;
+                }
+
                 for (int i = 0; i < lst.Count(); i++)
                 {
                     object[] arr = lst[i] as object[];
@@ -199,7 +232,7 @@ namespace WizOne.Pagini
                 if (lstMarci.Count > 0)
                 {
 
-                    string msg = TrimitereFluturasiMail(lstMarci);
+                    string msg = TrimitereFluturasiMail(lstMarci, (int)selectedValues[0]);
                   
                     //if (msg.Length <= 0)                        
                     //    MessageBox.Show(Dami.TraduCuvant("Trimitere reusita!"), MessageBox.icoSuccess);
@@ -216,7 +249,158 @@ namespace WizOne.Pagini
             }
         }
 
-        public string TrimitereFluturasiMail(Dictionary<int, string> lstMarci)
+        protected void btnWA_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Dictionary<int, string> lstMarci = new Dictionary<int, string>();
+                //string[] sablon = new string[11];
+
+                txtLog.Text = "";
+
+                if (txtAnLuna.Value == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat luna si anul!"), MessageBox.icoError);
+                    return;
+                }
+
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Email", "F10016", "NumeComplet" });
+                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun angajat!"), MessageBox.icoError);
+                    return;
+                }
+
+                //#1014
+                var selectedValues = crView.GetSelectedFieldValues(new string[] { "Id" });
+                if (selectedValues.Count <= 0)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun document!"), MessageBox.icoError);
+                    return;
+                }
+
+                for (int i = 0; i < lst.Count(); i++)
+                {
+                    object[] arr = lst[i] as object[];
+                    lstMarci.Add(Convert.ToInt32(General.Nz(arr[0], -99)), General.Nz(arr[1], "").ToString() + "_#_$_&_" + General.Nz(arr[2], "").ToString() + "_#_$_&_" + General.Nz(arr[3], "").ToString());
+                }
+
+                grDate.Selection.UnselectAll();
+
+
+                if (lstMarci.Count > 0)
+                {
+
+                    //string msg = TrimitereFluturasiMail(lstMarci, (int)selectedValues[0]);
+
+                    ////if (msg.Length <= 0)                        
+                    ////    MessageBox.Show(Dami.TraduCuvant("Trimitere reusita!"), MessageBox.icoSuccess);
+
+                    //if (msg.Length > 0)
+                    //    txtLog.Text = "S-au intalnit urmatoarele erori:\n" + msg;
+                    //else
+                    //    txtLog.Text = "";
+
+
+                    //HttpClient client = new SystemNetHttpClient();
+                    //Request request = new Request(HttpMethod.Get, "https://api.twilio.com:8443");
+                    //Response response = client.MakeRequest(request);
+                    //Console.Write(response.Content);
+
+
+                    //TwilioClient.Init(
+                    //    Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID"),
+                    //    Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN"));
+
+                    //var message = MessageResource.Create(
+                    //    from: new PhoneNumber("whatsapp:+14155238886"),
+                    //    to: new PhoneNumber("whatsapp:+40723899574"),
+                    //    body: "Test");
+
+                    //string msg = message.Sid;
+
+                    //string status = "";
+                    //WhatsApp wa = new WhatsApp("40723899574", "", "Radu", false, false);
+                    //wa.OnConnectSuccess += () =>
+                    //{
+                    //    wa.OnLoginSuccess += (phoneNumber, data) =>
+                    //    {
+                    //        wa.SendMessage("40723899574", "Test");
+                    //    };
+                    //    wa.OnLoginFailed += (data) =>
+                    //    {
+                    //        status = data;
+                    //    };
+                    //    wa.Login();
+                    //};
+                    //wa.OnConnectFailed += (ex) =>
+                    //{
+                    //    status = ex.StackTrace;
+                    //};
+                    //wa.Connect();
+
+                    TrimitereWA();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void TrimitereWA()
+        {
+            try
+            {
+
+                using (var wb = new WebClient())
+                {
+                    var data = new NameValueCollection();                    
+                    data["url"] = "https://99deb2cc6165910debbfaa5ccafa4d21.m.pipedream.net";
+
+                    var antet = new NameValueCollection();
+                    antet["D360-API-KEY"] = "tMhush_sandbox";
+
+                    wb.Headers.Add(antet);
+
+                    var response = wb.UploadValues("https://waba-sandbox.360dialog.io/v1/configs/webhook", "POST", data);
+                    string responseInString = Encoding.UTF8.GetString(response);
+                }
+
+
+
+
+
+                //var client = new RestClient("https://waba-sandbox.360dialog.io/v1/configs/webhook");
+                //// client.Authenticator = new HttpBasicAuthenticator(username, password);
+                //var request = new RestRequest("resource/{id}");
+                //request.AddParameter("D360-API-KEY", "1234567_sandbox");
+                //request.AddParameter("url", "https://enjgn0xpx1j6afb.m.pipedream.net");
+                //request.AddHeader("header", "value");
+                ////request.AddFile("file", path);
+                //var response = client.Post(request);
+                //var content = response.Content; // Raw content as string     
+
+                //var values = new Dictionary<string, string>
+                //    {
+                //        { "D360-API-KEY", "1234567_sandbox" },
+                //        { "url", "https://pipedream.com/@radusora/p_ljCnnbB/edit?e=21xLhi0udZMfUn5qYXRbSn8BMN8" }
+                //    };
+
+                //var content = new FormUrlEncodedContent(values);
+
+                //var response = await client.PostAsync("https://waba-sandbox.360dialog.io/v1/configs/webhook", content);
+
+                //var responseString = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        public string TrimitereFluturasiMail(Dictionary<int, string> lstMarci, int reportId)
         {
             string msg = "";
 
@@ -231,67 +415,83 @@ namespace WizOne.Pagini
                         msg += "Angajatul cu marca " + key + " nu are completat e-mail-ul!\n";
                         continue;
                     }
+
+                    if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
+                    {
+                        msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
+                        continue;
+                    }
+
                     lstOne.Add(new Notif.metaAdreseMail { Mail = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0], Destinatie = "TO", IncludeLinkAprobare = 0 });
-                    int reportId = Convert.ToInt32(Dami.ValoareParam("IdRaportFluturasMail", "-99"));
+                    //int reportId = Convert.ToInt32(Dami.ValoareParam("IdRaportFluturasMail", "-99"));
                     int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
                     int an = Convert.ToDateTime(txtAnLuna.Value).Year;
 
-                    using (var entities = new ReportsEntities())
-                    using (var xtraReport = new XtraReport())
+                    if (reportId < 1000000)
                     {
-                        var report = entities.Reports.Find(reportId);
-
-                        using (var memStream = new MemoryStream(report.LayoutData))
-                            xtraReport.LoadLayoutFromXml(memStream);
-
-                        var values = new
+                        using (var entities = new ReportsEntities())
+                        using (var xtraReport = new XtraReport())
                         {
-                            Implicit = new { UserId = Session?["UserId"] },
-                            Explicit = new { Angajat = key.ToString(), Luna = luna, An = an }
-                        };
-                        var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
-                        var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
-                        var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
-                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                            Where(p => p.Type != typeof(Expression));
+                            var report = entities.Reports.Find(reportId);
 
-                        foreach (var param in parameters)
-                        {
-                            var name = param.Name.TrimStart('@');
-                            var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
-                                implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
+                            using (var memStream = new MemoryStream(report.LayoutData))
+                                xtraReport.LoadLayoutFromXml(memStream);
 
-                            if (value != null)
-                                param.Value = Convert.ChangeType(value, param.Type);
+                            var values = new
+                            {
+                                Implicit = new { UserId = Session?["UserId"] },
+                                Explicit = new { Angajat = key.ToString(), Luna = luna, An = an }
+                            };
+                            var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
+                            var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
+                            var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
+                                SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                                Where(p => p.Type != typeof(Expression));
+
+                            foreach (var param in parameters)
+                            {
+                                var name = param.Name.TrimStart('@');
+                                var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
+                                    implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
+
+                                if (value != null)
+                                    param.Value = Convert.ChangeType(value, param.Type);
+                            }
+
+                            xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
+                            PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
+                            pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];                
+
+                            MemoryStream mem = new MemoryStream();
+                            xtraReport.ExportToPdf(mem, pdfOptions);
+                            mem.Seek(0, System.IO.SeekOrigin.Begin);
+
+                            string numeFis = "Fluturaș_" + key + ".pdf";
+                            if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Elanor)
+                            {
+                                string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
+                                string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
+
+                                numeFis = "P_SLP_02344_" + dataInc + "_" + dataSf + "_00_V2_0000_00000_FILE_" + key + "_" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[2].Replace(' ', '_') + ".pdf";
+                            }
+
+                            Notif.TrimiteMail(lstOne, txtSubiect.Text, (txtContinut.Html ?? "").ToString(), 0, numeFis, "", 0, "", "", Convert.ToInt32(Session["IdClient"]), mem);
+                            mem.Close();
+                            mem.Flush();
+
+                            System.Threading.Thread.Sleep(Convert.ToInt32(interval) * 1000);
                         }
-
-                        xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
-                        PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
-                        pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
-
-                        if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
-                        {
-                            msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
-                            continue;
-                        }
-
-                        MemoryStream mem = new MemoryStream();
-                        xtraReport.ExportToPdf(mem, pdfOptions);
-                        mem.Seek(0, System.IO.SeekOrigin.Begin);
-
-                        string numeFis = "Fluturaș_" + key + ".pdf";
-                        if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Elanor)
-                        {
-                            string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
-                            string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
-
-                            numeFis = "P_SLP_02344_" + dataInc + "_" + dataSf + "_00_V2_0000_00000_FILE_" + key + "_" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[2].Replace(' ', '_') + ".pdf";
-                        }
-
-                        Notif.TrimiteMail(lstOne, txtSubiect.Text, (txtContinut.Html ?? "").ToString(), 0, numeFis, "", 0, "", "", Convert.ToInt32(Session["IdClient"]), mem);     
+                    }
+                    else
+                    {//#1014 - Adeverinta
+                        List<int> lst = new List<int>();
+                        lst.Add(key);
+                        string numeFisier = "";
+                        byte[] fisier = GenerareAdeverinta(lst, reportId - 1000000, Convert.ToDateTime(txtAnLuna.Value).Year, lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1],out numeFisier);
+                        MemoryStream mem = new MemoryStream(fisier);
+                        Notif.TrimiteMail(lstOne, txtSubiect.Text, (txtContinut.Html ?? "").ToString(), 0, numeFisier.Split('.')[0] + ".pdf", "", 0, "", "", Convert.ToInt32(Session["IdClient"]), mem);
                         mem.Close();
                         mem.Flush();
-
                         System.Threading.Thread.Sleep(Convert.ToInt32(interval) * 1000);
                     }
 
@@ -757,6 +957,14 @@ namespace WizOne.Pagini
                     return;
                 }
 
+                //#1014
+                var selectedValues = crView.GetSelectedFieldValues(new string[] { "Id" });
+                if (selectedValues.Count <= 0)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun document!"), MessageBox.icoError);
+                    return;
+                }
+
                 for (int i = 0; i < lst.Count(); i++)
                 {
                     object[] arr = lst[i] as object[];
@@ -769,7 +977,7 @@ namespace WizOne.Pagini
                 if (lstMarci.Count > 0)
                 {
 
-                    string msg = SalvareFluturasi(lstMarci);
+                    string msg = SalvareFluturasi(lstMarci, (int)selectedValues[0]);
 
                     if (msg.Length > 0)
                         txtLog.Text = "S-au intalnit urmatoarele erori:\n" + msg;
@@ -784,13 +992,14 @@ namespace WizOne.Pagini
         }
 
 
-        public string SalvareFluturasi(Dictionary<int, string> lstMarci)
+        public string SalvareFluturasi(Dictionary<int, string> lstMarci, int reportId)
         {
             string msg = "";
 
             try
             {
                 string cale = Dami.ValoareParam("TrimitereFluturas_Locatie", "");
+                string paramParola = Dami.ValoareParam("TrimitereFluturas_LipsaParola", "0");
                 if (cale.Length <= 0)
                 {
                     msg += "Nu ati precizat locatia in care sa fie salvati fluturasii!\n";
@@ -806,68 +1015,94 @@ namespace WizOne.Pagini
 
                 foreach (int key in lstMarci.Keys)
                 {      
-                    int reportId = Convert.ToInt32(Dami.ValoareParam("IdRaportFluturasMail", "-99"));
+                    //int reportId = Convert.ToInt32(Dami.ValoareParam("IdRaportFluturasMail", "-99"));
                     int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
                     int an = Convert.ToDateTime(txtAnLuna.Value).Year;
 
-                    using (var entities = new ReportsEntities())
-                    using (var xtraReport = new XtraReport())
+                    if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
                     {
-                        var report = entities.Reports.Find(reportId);
+                        msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
+                        continue;
+                    }
 
-                        using (var memStream = new MemoryStream(report.LayoutData))
-                            xtraReport.LoadLayoutFromXml(memStream);
-
-                        var values = new
+                    if (reportId < 1000000)
+                    {
+                        using (var entities = new ReportsEntities())
+                        using (var xtraReport = new XtraReport())
                         {
-                            Implicit = new { UserId = Session?["UserId"] },
-                            Explicit = new { Angajat = key.ToString(), Luna = luna, An = an }
-                        };
-                        var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
-                        var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
-                        var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
-                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                            Where(p => p.Type != typeof(Expression));
+                            var report = entities.Reports.Find(reportId);
 
-                        foreach (var param in parameters)
-                        {
-                            var name = param.Name.TrimStart('@');
-                            var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
-                                implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
+                            using (var memStream = new MemoryStream(report.LayoutData))
+                                xtraReport.LoadLayoutFromXml(memStream);
 
-                            if (value != null)
-                                param.Value = Convert.ChangeType(value, param.Type);
+                            var values = new
+                            {
+                                Implicit = new { UserId = Session?["UserId"] },
+                                Explicit = new { Angajat = key.ToString(), Luna = luna, An = an }
+                            };
+                            var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
+                            var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
+                            var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
+                                SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                                Where(p => p.Type != typeof(Expression));
+
+                            foreach (var param in parameters)
+                            {
+                                var name = param.Name.TrimStart('@');
+                                var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
+                                    implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
+
+                                if (value != null)
+                                    param.Value = Convert.ChangeType(value, param.Type);
+                            }
+
+                            xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
+                            PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
+                            if (paramParola != "1")
+                            {
+                                pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
+
+                                if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
+                                {
+                                    msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
+                                    continue;
+                                }
+                            }
+                            MemoryStream mem = new MemoryStream();
+                            xtraReport.ExportToPdf(mem, pdfOptions);
+                            mem.Seek(0, System.IO.SeekOrigin.Begin);
+                            string numeFisTmp = numeFis;
+                            string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
+                            string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
+                            numeFisTmp = numeFisTmp.Replace("<Anul>", an.ToString()).Replace("<Luna>", luna.ToString()).Replace("<Marca>", key.ToString()) + ".pdf";
+
+                            using (FileStream file = new FileStream(cale + numeFisTmp, FileMode.Create, System.IO.FileAccess.Write))
+                            {
+                                byte[] bytes = new byte[mem.Length];
+                                mem.Read(bytes, 0, (int)mem.Length);
+                                file.Write(bytes, 0, bytes.Length);
+                            }
+
+                            mem.Close();
+                            mem.Flush();
                         }
-
-                        xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
-                        PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
-                        pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
-
-                        if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
-                        {
-                            msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
-                            continue;
-                        }
-
-                        MemoryStream mem = new MemoryStream();
-                        xtraReport.ExportToPdf(mem, pdfOptions);
-                        mem.Seek(0, System.IO.SeekOrigin.Begin);
-                        string numeFisTmp = numeFis;
-                        string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
-                        string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
-                        numeFisTmp = numeFisTmp.Replace("<Anul>", an.ToString()).Replace("<Luna>", luna.ToString()).Replace("<Marca>", key.ToString()) + ".pdf";
-
-                        using (FileStream file = new FileStream(cale + numeFisTmp, FileMode.Create, System.IO.FileAccess.Write))
+                    }
+                    else
+                    {//#1014 - Adeverinta
+                        List<int> lst = new List<int>();
+                        lst.Add(key);
+                        string numeFisier = "";
+                        byte[] fisier = GenerareAdeverinta(lst, reportId - 1000000, Convert.ToDateTime(txtAnLuna.Value).Year, lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1], out numeFisier);
+                        MemoryStream mem = new MemoryStream(fisier);
+                        using (FileStream file = new FileStream(cale + numeFisier.Split('.')[0] + ".pdf", FileMode.Create, System.IO.FileAccess.Write))
                         {
                             byte[] bytes = new byte[mem.Length];
                             mem.Read(bytes, 0, (int)mem.Length);
                             file.Write(bytes, 0, bytes.Length);
                         }
-
                         mem.Close();
-                        mem.Flush();
+                        mem.Flush();                
                     }
-
                 }
                 if (msg.Length <= 0)
                     MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes!"), MessageBox.icoSuccess);
@@ -882,6 +1117,211 @@ namespace WizOne.Pagini
 
             return msg;
 
+        }
+
+        private byte[] GenerareAdeverinta(List<int> lstMarci, int adev, int anul, string parola, out string fisier)
+        {
+            fisier = "";
+            try
+            {
+                string msg = "";                
+                Dictionary<String, String> lista = new Dictionary<string, string>();
+                Adev.Adeverinta pagAdev = new Adev.Adeverinta();
+                lista = pagAdev.LoadParameters();           
+
+                string cnApp = Constante.cnnWeb;
+                string tmp = cnApp.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
+                string pwd = tmp.Split(';')[0];
+
+                tmp = cnApp.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
+                string conn = tmp.Split(';')[0];
+                tmp = cnApp.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
+                string user = tmp.Split(';')[0];
+                string DB = "";
+                if (Constante.tipBD == 1)
+                {
+                    tmp = cnApp.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
+                    DB = tmp.Split(';')[0];
+                }
+                else
+                    DB = user;
+
+                string cale = HostingEnvironment.MapPath("~/Adeverinta");
+
+                Hashtable Config = new Hashtable();
+
+                Config.Add("DATABASE", (Constante.tipBD == 2 ? "ORACLE" : "SQLSVR"));
+                Config.Add("ORAUSER", DB);
+                Config.Add("ORAPWD", pwd);
+                Config.Add("ORALOGIN", user);
+
+                string host = "", port = "";
+
+                if (Constante.tipBD == 2)
+                {
+                    host = conn.Split('/')[0];
+                    conn = conn.Split('/')[1];
+                }
+                Config.Add("ORACONN", conn);
+                Config.Add("HOST_ADEV", host);
+                Config.Add("PORT_ADEV", port);
+
+                var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE"));
+                if (!folder.Exists)
+                    folder.Create();
+
+                string sql = "SELECT * FROM F100 WHERE F10003 = " + lstMarci[0];
+                DataTable dtAng = General.IncarcaDT(sql, null);
+
+                string listaM = "";
+                foreach (int elem in lstMarci)
+                    listaM += ";" + elem;
+
+                listaM = listaM.Substring(1);
+
+                int tipGen = 1;
+                string data = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
+
+
+                String FileName = "";
+                switch (adev)
+                {
+                    case 0:
+                        if (lstMarci.Count() == 1)
+                            fisier = "Adev_sanatate_2019_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                        else
+                            fisier = "Adev_sanatate_2019_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 0, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
+                    case 1:
+                        if (lstMarci.Count() == 1)
+                            fisier = "Adev_sanatate_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                        else
+                            fisier = "Adev_sanatate_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 1, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
+                    case 2:
+                        if (lstMarci.Count() == 1)
+                            fisier = dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + (lista["MAR"] == "1" ? lstMarci[0].ToString() : dtAng.Rows[0]["F10017"].ToString().Trim()) + ".xml";
+                        else
+                            fisier = "Adev_venituri_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/VENITURI_" + anul + "/") + fisier;
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 2, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
+                    case 3:
+                        if (lstMarci.Count() == 1)
+                            fisier = "Adev_CIC_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                        else
+                            fisier = "Adev_CIC_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 3, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
+                    case 4:
+                        if (lstMarci.Count() == 1)
+                            fisier = "Adev_SOMAJ_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                        else
+                            fisier = "Adev_SOMAJ_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 4, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
+                    case 6:
+                        if (lstMarci.Count() == 1)
+                            fisier = "Adev_Stagiu_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                        else
+                            fisier = "Adev_Stagiu_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 6, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
+                    case 7:
+                        if (lstMarci.Count() == 1)
+                            fisier = "Adev_Vechime_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                        else
+                            fisier = "Adev_Vechime_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 7, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
+                    case 11:
+                        if (lstMarci.Count() == 1)
+                            fisier = "Adev_Deplasare_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                        else
+                            fisier = "Adev_Deplasare_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 11, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
+                    case 12:
+                        if (lstMarci.Count() == 1)
+                            fisier = "Adev_sanatate_2020_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                        else
+                            fisier = "Adev_sanatate_2020_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 12, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
+                    case 13:
+                        if (lstMarci.Count() == 1)
+                            fisier = "Adev_SOMAJ_TEHNIC_" + dtAng.Rows[0]["F10008"].ToString().Trim().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Trim().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                        else
+                            fisier = "Adev_SOMAJ_TEHNIC_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 13, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
+                }
+
+                XDocument doc;
+                doc = XDocument.Load(FileName);
+                Adev.Adeverinta.FlatToOpc(doc, FileName.Split('.')[0] + ".docx");
+                File.Delete(FileName);
+
+                using (RichEditDocumentServer wordProcessor = new RichEditDocumentServer())
+                {
+                    // Load a DOCX document.
+                    wordProcessor.LoadDocument(FileName.Split('.')[0] + ".docx", DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
+
+                    // Specify export options.
+                    PdfExportOptions options = new PdfExportOptions();
+                    options.Compressed = false;
+                    options.ImageQuality = PdfJpegImageQuality.Highest;
+
+                    // Export the document to a stream.
+                    using (FileStream pdfFileStream = new FileStream(FileName.Split('.')[0] + ".pdf", FileMode.Create))
+                    {
+                        wordProcessor.ExportToPdf(pdfFileStream, options);
+                    }
+                }
+                File.Delete(FileName.Split('.')[0] + ".docx");  
+                using (PdfDocumentProcessor pdfDocumentProcessor = new PdfDocumentProcessor())
+                {
+                    // Load a PDF document.
+                    pdfDocumentProcessor.LoadDocument(FileName.Split('.')[0] + ".pdf");                    
+                    // Specify printing, data extraction, modification, and interactivity permissions. 
+                    PdfEncryptionOptions encryptionOptions = new PdfEncryptionOptions();
+                    encryptionOptions.PrintingPermissions = PdfDocumentPrintingPermissions.Allowed;
+                    encryptionOptions.DataExtractionPermissions = PdfDocumentDataExtractionPermissions.NotAllowed;
+                    encryptionOptions.ModificationPermissions = PdfDocumentModificationPermissions.DocumentAssembling;
+                    encryptionOptions.InteractivityPermissions = PdfDocumentInteractivityPermissions.Allowed;
+
+                    // Specify the owner and user passwords for the document.  
+                    encryptionOptions.OwnerPasswordString = parola;
+                    encryptionOptions.UserPasswordString = parola;
+
+                    // Specify the 256-bit AES encryption algorithm.
+                    encryptionOptions.Algorithm = PdfEncryptionAlgorithm.AES256;
+
+                    // Save the protected document with encryption settings.  
+                    pdfDocumentProcessor.SaveDocument(FileName.Split('.')[0] + "_protected.pdf", new PdfSaveOptions() { EncryptionOptions = encryptionOptions });
+                }
+
+                byte[] fisierGen = File.ReadAllBytes(FileName.Split('.')[0] + "_protected.pdf");
+                File.Delete(FileName.Split('.')[0] + ".pdf");
+                File.Delete(FileName.Split('.')[0] + "_protected.pdf");
+                return fisierGen;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex.ToString(), "Adev", new StackTrace().GetFrame(0).GetMethod().Name);
+                return null;
+            }
         }
     }
 }

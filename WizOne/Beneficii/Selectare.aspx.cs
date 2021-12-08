@@ -434,7 +434,7 @@ namespace WizOne.Beneficii
                 strSql = @"select a.""IdCategorie"", a.""Id"", a.""Denumire"", d.DataInceput as DataInceputBen, d.DataSfarsit as DataSfarsitBen, a.""Descriere"", a.USER_NO, a.TIME, a.ValoareEstimata, {0} AS F10003
                                  from ""Admin_Obiecte"" a
                                  inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
-                                 LEFT JOIN Ben_tblSesiuni c on c.""DataInceput"" <= getdate() and getdate() <= c.""DataSfarsit""
+                                 LEFT JOIN Ben_tblSesiuni c on convert(date, c.""DataInceput"") <= Convert(date, getdate()) and Convert(date, getdate()) <= convert(date, c.""DataSfarsit"")
                                  left join Ben_relSesGrupBen d on c.Id = d.IdSesiune and d.IdGrup = a.IdGrup  
                                  where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = 'ArieTabBeneficiiDinPersonal') 
                                  and convert(date, a.""DeLaData"") <= convert(date, getdate()) and convert(date, getdate()) <= convert(date, a.""LaData"")  

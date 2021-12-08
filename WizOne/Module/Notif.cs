@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProceseSec;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -815,6 +816,14 @@ namespace WizOne.Module
                     mm.Attachments.Add(new Attachment(mem, numeAtt, "application/pdf"));
                 }
                 //
+
+                //Radu 02.12.2021 - SmtpServer si SmtpParola sunt criptate pt. Asirom
+                if (idClient == (int)IdClienti.Clienti.Asirom)
+                {
+                    CriptDecript prc = new CriptDecript();
+                    smtpServer = prc.EncryptString("WizOne2016", smtpServer, 2);
+                    smtpParola = prc.EncryptString("WizOne2016", smtpParola, 2);
+                }
                 SmtpClient smtp = new SmtpClient(smtpServer);
                 smtp.Port = Convert.ToInt32(smtpPort);
                 smtp.Host = smtpServer;

@@ -21,7 +21,8 @@ namespace Wizrom.Reports.Pages
             public string Description { get; set; }
             public short TypeId { get; set; }
             public int ModuleId { get; set; }
-            public bool Restricted { get; set; }            
+            public bool Restricted { get; set; }
+            public byte[] Photo { get; set; }
         }        
 
         public class ReportSettingsViewModel
@@ -33,7 +34,7 @@ namespace Wizrom.Reports.Pages
         public static List<ReportViewModel> GetReports(short type = 1)
         {            
             var reports = General.RunSqlQuery<ReportViewModel>(
-                "SELECT DISTINCT r.[DynReportId] AS [Id], r.[Name], r.[Description], r.[DynReportTypeId] AS [TypeId], det.[IdModul] AS [ModuleId], det.[AreParola] AS Restricted " +
+                "SELECT DISTINCT r.[DynReportId] AS [Id], r.[Name], r.[Description], r.[DynReportTypeId] AS [TypeId], det.[IdModul] AS [ModuleId], det.[AreParola] AS Restricted, r.[Photo] AS Photo " +
                 "FROM [DynReports] r " +
                 "INNER JOIN [RapoarteGrupuriUtilizatori] rgu ON r.[DynReportId] = rgu.[IdRaport] AND rgu.[IdUser] = @1 " +
                 "LEFT JOIN [tblRapoarteDetalii] det ON r.[DynReportId] = det.[IdRaport] " + 
@@ -43,10 +44,10 @@ namespace Wizrom.Reports.Pages
         }
 
         public void AddReport(ReportViewModel report)
-        {  
+        {           
             //Florin 2020.04.09 - #329 - GitHub
-            var reportId = General.RunSqlScalar<int>("INSERT INTO [DynReports]([Name], [Description], [DynReportTypeId], [RegUserId]) VALUES (@1, @2, @3, @4)", "DynReportId",
-                report.Name, report.Description, report.TypeId, Session["UserId"].ToString());
+            var reportId = General.RunSqlScalar<int>("INSERT INTO [DynReports]([Name], [Description], [DynReportTypeId], [RegUserId], [Photo]) VALUES (@1, @2, @3, @4, @5)", "DynReportId",
+                report.Name, report.Description, (report.TypeId != 0 ? report.TypeId : 5), Session["UserId"].ToString(), report.Photo); 
 
             //Radu 15.07.2020
             General.RunSqlScalar<int>($"INSERT INTO [tblRapoarteDetalii] ([IdRaport], [IdModul], [AreParola], [USER_NO], [TIME]) VALUES (@1, @2, @3, @4, @5)", null,
@@ -54,9 +55,9 @@ namespace Wizrom.Reports.Pages
         }
 
         public void SetReport(ReportViewModel report)
-        {
-            General.RunSqlScalar<int>("UPDATE [DynReports] SET [Name] = @1, [Description] = @2, [DynReportTypeId] = @3 WHERE [DynReportId] = @4", null,
-                report.Name, report.Description, report.TypeId, report.Id);            
+        {            
+            General.RunSqlScalar<int>("UPDATE [DynReports] SET [Name] = @1, [Description] = @2, [DynReportTypeId] = @3, [Photo] = @5 WHERE [DynReportId] = @4", null,
+                report.Name, report.Description, (report.TypeId != 0 ? report.TypeId : 5), report.Id, report.Photo);            
             // For updating existing reports from user groups if necessary.
             General.RunSqlColumn<int>(
                 "SELECT DISTINCT [IdGrup] FROM [relGrupUser] WHERE [IdUser] = @1 " +
@@ -148,13 +149,32 @@ namespace Wizrom.Reports.Pages
             GridViewDataComboBoxColumn colModul = (ReportsGridView.Columns["ModuleId"] as GridViewDataComboBoxColumn);
             colModul.PropertiesComboBox.DataSource = dtModul;
 
+            CardViewComboBoxColumn colModul2 = (ReportsCardView.Columns["ModuleId"] as CardViewComboBoxColumn);
+            colModul2.PropertiesComboBox.DataSource = dtModul;
+
             //Radu 13.10.2021 - #1016
             // tip = 1  fara Dashboards
             // tip = 2  numai Dashboards        
             var type = Convert.ToInt16(General.Nz(Request["tip"], 1));
 
-            (ReportsGridView.Columns["TypeId"] as GridViewDataComboBoxColumn).PropertiesComboBox.DataSource = General.IncarcaDT(
-                $@"SELECT DynReportTypeId AS Id, Name FROM DynReportTypes WHERE DynReportTypeId {(type == 1 ? "<>" : "=")} 5", null);            
+            //Radu 19.11.2021 - #1053
+            if (type == 2)
+            {
+                //ReportsGridView.ClientVisible = false;
+                Panel1.Visible = false;
+                ReportsCardView.SettingsEditing.Mode = CardViewEditingMode.EditForm;
+                CardViewColumn colModulCV = (ReportsCardView.Columns["ModuleId"] as CardViewColumn);
+                ReportsCardView.GroupBy(colModulCV);
+                ReportNewButton.ClientVisible = false;
+            }
+            else
+            {
+                //ReportsCardView.ClientVisible = false;
+                Panel2.Visible = false;
+                CardNewButton.ClientVisible = false;
+                (ReportsGridView.Columns["TypeId"] as GridViewDataComboBoxColumn).PropertiesComboBox.DataSource = General.IncarcaDT(
+                    $@"SELECT DynReportTypeId AS Id, Name FROM DynReportTypes WHERE DynReportTypeId <> 5", null);
+            }
         }
 
         protected void ReportsGridView_DataBinding(object sender, EventArgs e)
@@ -163,9 +183,17 @@ namespace Wizrom.Reports.Pages
             ReportsGridView.FocusedRowIndex = -1;
         }
 
+        //Radu 19.11.2021 - #1053
+        protected void ReportsCardView_DataBinding(object sender, EventArgs e)
+        {
+            (sender as ASPxCardView).ForceDataRowType(typeof(ReportViewModel));           
+        }
+
         protected void ReportViewButton_Click(object sender, EventArgs e)
         {
-            var selectedValues = ReportsGridView.GetSelectedFieldValues(new string[] { "Id" });
+            var type = Convert.ToInt16(General.Nz(Request["tip"], 1));
+
+            var selectedValues = (type == 1 ? ReportsGridView.GetSelectedFieldValues(new string[] { "Id" }) : ReportsCardView.GetSelectedFieldValues(new string[] { "Id" }));
 
             if (selectedValues.Count > 0)
             {
@@ -185,7 +213,9 @@ namespace Wizrom.Reports.Pages
 
         protected void ReportDesignButton_Click(object sender, EventArgs e)
         {
-            var selectedValues = ReportsGridView.GetSelectedFieldValues(new string[] { "Id" });
+            var type = Convert.ToInt16(General.Nz(Request["tip"], 1));
+
+            var selectedValues = (type == 1 ? ReportsGridView.GetSelectedFieldValues(new string[] { "Id" }) : ReportsCardView.GetSelectedFieldValues(new string[] { "Id" }));
 
             if (selectedValues.Count > 0)
             {

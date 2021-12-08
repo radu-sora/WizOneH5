@@ -1283,6 +1283,10 @@ namespace WizOne.Eval
                         case 19: //Post Manager
                         case 20: //Nume Manager N + 2  
                         case 21: // Post Manager N + 2
+                        case 33: //Functia
+                        case 34: //Directia
+                        case 35: //DeptDinF1001
+                        case 38: //Categorie OMN
                         case 60: //Supervizor3 Nume
                         case 61: //Supervizor3 Post
                         case 62: //Supervizor4 Nume
@@ -2409,7 +2413,7 @@ namespace WizOne.Eval
                     return null;
 
                 #region Grid Properties
-                grDateObiective.Width = new Unit(100, UnitType.Percentage);
+                grDateObiective.Width = 1500; //new Unit(100, UnitType.Percentage);
                 grDateObiective.ID = "grDateObiective" + "_WXY_" + id.ToString();
 
                 //Florin 2019.06.26

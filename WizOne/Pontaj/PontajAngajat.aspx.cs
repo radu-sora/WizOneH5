@@ -88,7 +88,7 @@ namespace WizOne.Pontaj
                 var startDate = General.RunSqlScalar<DateTime>("SELECT [De] FROM [Ptj_CC] WHERE [F10003] = @1 AND [IdStare] = @2", null, 
                     Session["User_Marca"], 2);
 
-                if (startDate > DateTime.MinValue && startDate < DateTime.Now)
+                if (startDate > DateTime.MinValue)
                 {
                     //TODO: De esalonat pe zile in cazul in care End - Start > o zi! 
                     result = General.RunSqlScalar<int>("UPDATE [Ptj_CC] SET [La] = @1, [NrOre1] = @2, [IdStare] = @3 WHERE [F10003] = @4 AND [IdStare] = @5", null,

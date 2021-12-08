@@ -181,7 +181,8 @@ namespace WizOne.Module
                 //NU FUNCTIONEAZA ????????????????
                 rez = txt.Trim(new Char[] { ' ','/','-','(',')','*','&','%','$','#','"','=' });
 
-                rez = txt.Replace(" ", "").Replace("/", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("*", "").Replace("&", "").Replace("%", "").Replace("$", "").Replace("#", "").Replace("\"", "").Replace("'", "").Replace("=","");
+                //Radu 26.11.2021 - #1063 - am scos - (minus) din lista         .Replace("-", "")
+                rez = txt.Replace(" ", "").Replace("/", "").Replace("(", "").Replace(")", "").Replace("*", "").Replace("&", "").Replace("%", "").Replace("$", "").Replace("#", "").Replace("\"", "").Replace("'", "").Replace("=","");
             }
 	        catch (Exception ex)
 	        {

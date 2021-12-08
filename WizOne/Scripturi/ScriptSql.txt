@@ -14308,7 +14308,7 @@ GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportFluturasMail', '-99', 'Id Raport pentru trimitere fluturasi pe mail', 0)
 GO
 
-INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(84, 'Trimitere fluturas', 'Trimitere fluturas', 'Pagini\TrimitereFluturasi', 1, 'm1.png')
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(84, 'Trimitere document', 'Trimitere document', 'Pagini\TrimitereFluturasi', 1, 'm1.png')
 GO
 
 insert into Avs_tblAtribute (id, Denumire, Activ) values (34, 'Program de lucru', 1)
@@ -18100,15 +18100,17 @@ CREATE VIEW [dbo].[Schedule]
 AS
 SELECT 'CR' + CAST(ce.IdAuto AS VARCHAR) AS Id, 1 AS Type, ce.Id AS InternalId, ce.F10003 AS EmployeeId, 
 		ab.Denumire AS Name, ce.Observatii AS Remarks, ce.IdAbsenta AS LabelId, ce.IdStare AS StatusId,
-		ce.DataInceput AS StartDate, DATEADD(DD, 1, ce.DataSfarsit) AS EndDate 
+		ce.DataInceput AS StartDate, DATEADD(DD, 1, ce.DataSfarsit) AS EndDate
 FROM Ptj_Cereri AS ce
 INNER JOIN Ptj_tblAbsente AS ab ON ce.IdAbsenta = ab.Id
 INNER JOIN Ptj_tblStari AS st ON ce.IdStare = st.Id
 UNION
 SELECT 'CC' + CAST(cc.IdAuto AS VARCHAR) AS Id, 2 AS Type, cc.IdAuto AS InternalId, cc.F10003 AS EmployeeId, 
 		fcc.F06205 AS Name, cc.Observatii AS Remarks, 0 AS LabelId, cc.IdStare AS StatusId,		
-		ISNULL(cc.De, DATEADD(HH, 9, CAST(cc.Ziua AS DATETIME))) AS StartDate, 
-		ISNULL(cc.La, DATEADD(MI, (9 * 60) + ISNULL(cc.NrOre1, 0) + ISNULL(cc.NrOre2, 0) + ISNULL(cc.NrOre3, 0), CAST(cc.Ziua AS DATETIME))) AS EndDate
+		ISNULL(cc.De, DATEADD(HH, 9, CAST(cc.Ziua AS DATETIME))) AS StartDate,
+		ISNULL(cc.La, IIF(cc.IdStare = 2,			
+			IIF(ISNULL(cc.De, DATEADD(HH, 9, CAST(cc.Ziua AS DATETIME))) > GETDATE(), ISNULL(cc.De, DATEADD(HH, 9, CAST(cc.Ziua AS DATETIME))), GETDATE()),
+			DATEADD(MI, (9 * 60) + ISNULL(cc.NrOre1, 0) + ISNULL(cc.NrOre2, 0) + ISNULL(cc.NrOre3, 0), CAST(cc.Ziua AS DATETIME)))) AS EndDate
 FROM Ptj_CC AS cc
 INNER JOIN F062 AS fcc ON cc.F06204 = fcc.F06204
 INNER JOIN Ptj_tblStari AS st ON cc.IdStare = st.Id;
@@ -18747,7 +18749,7 @@ GO
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
---drop table AvsXDec_AvansDetail
+drop table AvsXDec_AvansDetail
 go
   CREATE TABLE "AvsXDec_AvansDetail" 
    (	"DocumentId" int, 
@@ -18768,103 +18770,58 @@ go
 
 GO
 
---drop table AvsXDec_Document
+
+drop table AvsXDec_DecontDetail
 GO
-  CREATE TABLE "AvsXDec_Document" 
+  CREATE TABLE "AvsXDec_DecontDetail" 
    (	"DocumentId" int, 
-	"DocumentTypeId" int, 
-	"DocumentStateId" int, 
-	"F10003" int, 
-	"DocumentDate" DATETIME, 
+	"DocumentDetailId" int, 
+	"Furnizor" NVARCHAR(400), 
+	"DictionaryItemId" int, 
+	"DocNumberDecont" NVARCHAR(200), 
+	"DocDateDecont" DATETIME, 
+	"CurrencyId" int, 
+	"RefCurrencyId" int, 
+	"RefCurrencyValue" NUMERIC(18,4), 
+	"TotalPayment" NUMERIC(18,4), 
+	"RefTotalPayment" NUMERIC(18,4), 
+	"IdDocument" NUMERIC(18,4), 
+	"BugetLine" NVARCHAR(800), 
+	"ExpenseTypeId" int, 
+	"ExpenseTypeAdmId" int, 
+	"FreeTxt" NVARCHAR(400),
+	 CONSTRAINT [AvsXDec_DecontDetail_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentId] ASC,
+	[DocumentDetailId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+drop table AvsXDec_DocumentStateHistory
+GO
+  CREATE TABLE "AvsXDec_DocumentStateHistory" 
+   (	"Id" int, 
+	"DocumentId" int, 
 	"CircuitId" int, 
-	"TotalCircuit" int, 
-	"Culoare" NVARCHAR(200), 
+	"IdSuper" int, 
 	"Pozitie" int, 
-	"USER_NO" int, 
-	"TIME" DATETIME,
-	 CONSTRAINT [AvsXDec_Document_PK] PRIMARY KEY CLUSTERED 
-(
-	[DocumentId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
---drop table AvsXDec_Circuit
-go
-  CREATE TABLE "AvsXDec_Circuit" 
-   (	"CircuitId" int, 
-	"DIM1" int, 
-	"DIM2" int, 
-	"DocumentTypeId" int, 
-	"Super1" int, 
-	"Super2" int, 
-	"Super3" int, 
-	"Super4" int, 
-	"Super5" int, 
-	"Super6" int, 
-	"Super7" int, 
-	"Super8" int, 
-	"Super9" int, 
-	"Super10" int, 
-	"Super11" int, 
-	"Super12" int, 
-	"Super13" int, 
-	"Super14" int, 
-	"Super15" int, 
-	"Super16" int, 
-	"Super17" int, 
-	"Super18" int, 
-	"Super19" int, 
-	"Super20" int, 
-	"USER_NO" int, 
-	"TIME" DATETIME,
-	 CONSTRAINT [AvsXDec_Circuit_PK] PRIMARY KEY CLUSTERED 
-(
-	[CircuitId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
---drop table AvsXDec_DictItemProperty
-GO
---drop table AvsXDec_DictionaryItem
-GO
-  CREATE TABLE "AvsXDec_DictionaryItem" 
-   (	"DictionaryItemId"int, 
-	"DictionaryItemName" NVARCHAR(200), 
 	"Culoare" NVARCHAR(200), 
-	"DictionaryId" int, 
-	"Ordine" int, 
+	"Inlocuitor" int, 
+	"IdUserInlocuitor" int, 
+	"Aprobat" int, 
+	"DataAprobare" DATETIME, 
+	"DocumentStateId" int, 
 	"USER_NO" int, 
 	"TIME" DATETIME,
-	 CONSTRAINT [AvsXDec_DictionaryItem_PK] PRIMARY KEY CLUSTERED 
+	 CONSTRAINT [AvsXDec_DocumentStateHistory_PK] PRIMARY KEY CLUSTERED 
 (
-	[DictionaryItemId] ASC
+	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 
---drop table AvsXDec_Dictionary
-GO
-  CREATE TABLE "AvsXDec_Dictionary" 
-   (	"DictionaryId" int, 
-	"DictionaryCode" NVARCHAR(50), 
-	"DictionaryName" NVARCHAR(200), 
-	"hasProperties" int DEFAULT (0), 
-	"USER_NO" int, 
-	"TIME" DATETIME,
-	 CONSTRAINT [AvsXDec_Dictionary_PK] PRIMARY KEY CLUSTERED 
-(
-	[DictionaryId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
-
---drop table AvsXDec_Decont
+drop table AvsXDec_Decont
 GO
   CREATE TABLE "AvsXDec_Decont" 
    (	"DocumentId" int, 
@@ -18901,6 +18858,101 @@ GO
 ) ON [PRIMARY]
 GO
 
+drop table AvsXDec_Document
+GO
+  CREATE TABLE "AvsXDec_Document" 
+   (	"DocumentId" int, 
+	"DocumentTypeId" int, 
+	"DocumentStateId" int, 
+	"F10003" int, 
+	"DocumentDate" DATETIME, 
+	"CircuitId" int, 
+	"TotalCircuit" int, 
+	"Culoare" NVARCHAR(200), 
+	"Pozitie" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_Document_PK] PRIMARY KEY CLUSTERED 
+(
+	[DocumentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+drop table AvsXDec_Circuit
+go
+  CREATE TABLE "AvsXDec_Circuit" 
+   (	"CircuitId" int, 
+	"DIM1" int, 
+	"DIM2" int, 
+	"DocumentTypeId" int, 
+	"Super1" int, 
+	"Super2" int, 
+	"Super3" int, 
+	"Super4" int, 
+	"Super5" int, 
+	"Super6" int, 
+	"Super7" int, 
+	"Super8" int, 
+	"Super9" int, 
+	"Super10" int, 
+	"Super11" int, 
+	"Super12" int, 
+	"Super13" int, 
+	"Super14" int, 
+	"Super15" int, 
+	"Super16" int, 
+	"Super17" int, 
+	"Super18" int, 
+	"Super19" int, 
+	"Super20" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_Circuit_PK] PRIMARY KEY CLUSTERED 
+(
+	[CircuitId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+drop table AvsXDec_DictItemProperty
+GO
+drop table AvsXDec_DictionaryItem
+GO
+  CREATE TABLE "AvsXDec_DictionaryItem" 
+   (	"DictionaryItemId"int, 
+	"DictionaryItemName" NVARCHAR(200), 
+	"Culoare" NVARCHAR(200), 
+	"DictionaryId" int, 
+	"Ordine" int, 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_DictionaryItem_PK] PRIMARY KEY CLUSTERED 
+(
+	[DictionaryItemId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+drop table AvsXDec_Dictionary
+GO
+  CREATE TABLE "AvsXDec_Dictionary" 
+   (	"DictionaryId" int, 
+	"DictionaryCode" NVARCHAR(50), 
+	"DictionaryName" NVARCHAR(200), 
+	"hasProperties" int DEFAULT (0), 
+	"USER_NO" int, 
+	"TIME" DATETIME,
+	 CONSTRAINT [AvsXDec_Dictionary_PK] PRIMARY KEY CLUSTERED 
+(
+	[DictionaryId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
   CREATE TABLE "AvsXDec_relUploadDocumente" 
    (	"DocumentId" int, 
 	"DocumentDetailId" int, 
@@ -18929,7 +18981,7 @@ CREATE TABLE "AvsXDec_AccountingPeriod"
 ) ON [PRIMARY]
 GO
 
---drop table AvsXDec_BusinessTransaction
+drop table AvsXDec_BusinessTransaction
 GO
 
   CREATE TABLE "AvsXDec_BusinessTransaction" 
@@ -18967,57 +19019,6 @@ GO
 GO
 
 
---drop table AvsXDec_DecontDetail
-GO
-  CREATE TABLE "AvsXDec_DecontDetail" 
-   (	"DocumentId" int, 
-	"DocumentDetailId" int, 
-	"Furnizor" NVARCHAR(400), 
-	"DictionaryItemId" int, 
-	"DocNumberDecont" NVARCHAR(200), 
-	"DocDateDecont" DATETIME, 
-	"CurrencyId" int, 
-	"RefCurrencyId" int, 
-	"RefCurrencyValue" NUMERIC(18,4), 
-	"TotalPayment" NUMERIC(18,4), 
-	"RefTotalPayment" NUMERIC(18,4), 
-	"IdDocument" NUMERIC(18,4), 
-	"BugetLine" NVARCHAR(800), 
-	"ExpenseTypeId" int, 
-	"ExpenseTypeAdmId" int, 
-	"FreeTxt" NVARCHAR(400),
-	 CONSTRAINT [AvsXDec_DecontDetail_PK] PRIMARY KEY CLUSTERED 
-(
-	[DocumentId] ASC,
-	[DocumentDetailId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
---drop table AvsXDec_DocumentStateHistory
-GO
-  CREATE TABLE "AvsXDec_DocumentStateHistory" 
-   (	"Id" int, 
-	"DocumentId" int, 
-	"CircuitId" int, 
-	"IdSuper" int, 
-	"Pozitie" int, 
-	"Culoare" NVARCHAR(200), 
-	"Inlocuitor" int, 
-	"IdUserInlocuitor" int, 
-	"Aprobat" int, 
-	"DataAprobare" DATETIME, 
-	"DocumentStateId" int, 
-	"USER_NO" int, 
-	"TIME" DATETIME,
-	 CONSTRAINT [AvsXDec_DocumentStateHistory_PK] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
   CREATE TABLE "AvsXDec_AccountingYear" 
    (	"AccPeriodId" int, 
 	"Year" int, 
@@ -19031,7 +19032,7 @@ GO
 GO
 
 
---drop table AvsXDec_Avans
+drop table AvsXDec_Avans
 GO
   CREATE TABLE "AvsXDec_Avans" 
    (	"DocumentId" int, 
@@ -19070,7 +19071,7 @@ GO
 GO
 
 
---drop table AvsXDec_DocumentType
+drop table AvsXDec_DocumentType
 GO
 
   CREATE TABLE "AvsXDec_DocumentType" 
@@ -19121,6 +19122,8 @@ GO
 ) 
 GO
 
+ALTER TABLE AvsXDec_DictionaryItem ADD CodCheltuiala int
+GO
 
 create  function "fcnAvsXDec_GetComisionBancar"( @nValPlata decimal, @nCurrencyIdPlata int, @nBankIdPlata int)
  returns decimal
@@ -21099,8 +21102,6 @@ CREATE SEQUENCE [dbo].[AvsXDec_BusinessTransaction_SEQ]
  CACHE 
 GO
 
-ALTER TABLE AvsXDec_DictionaryItem ADD CodCheltuiala int
-GO
 
 ---- AvsXDec END ----
 
@@ -21129,4 +21130,61 @@ GO
 
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('AngajatulPoateModificaPontajul', '0', '0 - rolul Angajat nu poate face modificari in Pontaj pe angajat; 1 - poate face', 3)
+GO
+
+----  2.2.140.01  ----
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_LipsaParola', '0', '0 - (sau absent) este obligatorie parola PDF; 1 - Parola PDF nu este obligatorie', 0)
+GO
+
+----  2.2.141  ----
+
+ALTER TABLE DynReports ADD Photo VARBINARY(MAX)
+GO
+
+DELETE F069 WHERE F06904 =2022
+GO
+DELETE F069 WHERE F06904 =2023
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 1, 'Ianuarie', 20, 160, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 2, 'Februarie', 20, 160, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 3, 'Martie', 23, 184, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 4, 'Aprilie', 19, 152, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 5, 'Mai', 22, 176, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 6, 'Iunie',  20, 160, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 7, 'Iulie',  21, 168, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 8, 'August',  22, 176, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 9, 'Septembrie', 22, 176, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 10, 'Octombrie', 21, 168, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 11, 'Noiembrie',  21, 168, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2022, 12, 'Decembrie',  20, 160, 2550, 5380, 1, getdate() from F002
+GO
+Insert into F069 (F06901, F06902, F06904, F06905, F06906, F06907, F06908, F06911, F06912, USER_NO, TIME)
+select 69, F00202, 2023, 1, 'Ianuarie', 21, 168, 2550, 5380, 1, getdate() from F002
+GO
+
+UPDATE tblMeniuri set Nume = 'Trimitere document', Descriere = 'Trimitere document' where Pagina = 'Pagini\TrimitereFluturasi'
 GO

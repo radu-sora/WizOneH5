@@ -33,6 +33,15 @@ namespace Wizrom.Reports.Pages
         protected global::DevExpress.Web.ASPxButton ReportNewButton;
 
         /// <summary>
+        /// CardNewButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton CardNewButton;
+
+        /// <summary>
         /// ReportViewButton control.
         /// </summary>
         /// <remarks>
@@ -60,6 +69,15 @@ namespace Wizrom.Reports.Pages
         protected global::DevExpress.Web.ASPxButton ExitButton;
 
         /// <summary>
+        /// Panel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Panel1;
+
+        /// <summary>
         /// ReportsGridView control.
         /// </summary>
         /// <remarks>
@@ -85,6 +103,24 @@ namespace Wizrom.Reports.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton ReportDeleteButton;
+
+        /// <summary>
+        /// Panel2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Panel2;
+
+        /// <summary>
+        /// ReportsCardView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCardView ReportsCardView;
 
         /// <summary>
         /// ReportsDataSource control.

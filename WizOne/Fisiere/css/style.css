@@ -1304,4 +1304,8 @@ table label {
     margin: 10px;
 }
 
+.flowCardStyle {
+    height: inherit;
+}
+
     

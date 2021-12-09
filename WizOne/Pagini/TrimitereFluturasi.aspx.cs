@@ -253,7 +253,10 @@ namespace WizOne.Pagini
                         var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
                         var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
                             SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                            Where(p => p.Type != typeof(Expression));
+                            Where(p => p.Type != typeof(Expression)).
+                            Union(xtraReport.ComponentStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
+                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                            Where(p => p.Type != typeof(Expression)));
 
                         foreach (var param in parameters)
                         {
@@ -825,10 +828,15 @@ namespace WizOne.Pagini
                             Explicit = new { Angajat = key.ToString(), Luna = luna, An = an }
                         };
                         var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
-                        var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
+                        var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];                                         
+
                         var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
                             SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                            Where(p => p.Type != typeof(Expression));
+                            Where(p => p.Type != typeof(Expression)).
+                            Union(xtraReport.ComponentStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
+                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                            Where(p => p.Type != typeof(Expression)));
+
 
                         foreach (var param in parameters)
                         {

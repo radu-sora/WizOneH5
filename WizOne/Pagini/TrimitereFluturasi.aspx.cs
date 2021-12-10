@@ -26,12 +26,17 @@ using DevExpress.XtraRichEdit;
 using System.Net.Http;
 using System.Net;
 using System.Collections.Specialized;
+using Twilio.Http;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
+
+
 
 namespace WizOne.Pagini
 {
     public partial class TrimitereFluturasi : System.Web.UI.Page
     {
-        private static readonly HttpClient client = new HttpClient();
+        //private static readonly HttpClient client = new HttpClient();
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -302,10 +307,31 @@ namespace WizOne.Pagini
                     //    txtLog.Text = "";
 
 
-                    //HttpClient client = new SystemNetHttpClient();
-                    //Request request = new Request(HttpMethod.Get, "https://api.twilio.com:8443");
+                    //Twilio.Http.HttpClient client = new SystemNetHttpClient();
+                    //Request request = new Request(Twilio.Http.HttpMethod.Get, "https://api.twilio.com:8443");
+                    ////ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
                     //Response response = client.MakeRequest(request);
                     //Console.Write(response.Content);
+
+
+                    var twilioRestClient = ProxiedTwilioClientCreator.GetClient();
+
+                    // Now that we have our custom built TwilioRestClient,
+                    // we can pass it to any REST API resource action.
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                                                | SecurityProtocolType.Tls11
+                                                | SecurityProtocolType.Tls12
+                                                | SecurityProtocolType.Ssl3;
+
+                    var message = MessageResource.Create(
+                        to: new PhoneNumber("+40723899574"),
+                        from: new PhoneNumber("+15005550006"),
+                        body: "Hey there!",
+                        // Here's where you inject the custom client
+                        client: twilioRestClient
+                    );
+
+                    Console.WriteLine($"Message SID: {message.Sid}");
 
 
                     //TwilioClient.Init(

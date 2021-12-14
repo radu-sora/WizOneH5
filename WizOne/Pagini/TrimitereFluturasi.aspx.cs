@@ -29,8 +29,8 @@ using System.Collections.Specialized;
 using Twilio.Http;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
-
-
+using Twilio;
+using System.Web.Script.Serialization;
 
 namespace WizOne.Pagini
 {
@@ -313,59 +313,19 @@ namespace WizOne.Pagini
                     //Response response = client.MakeRequest(request);
                     //Console.Write(response.Content);
 
-
-                    var twilioRestClient = ProxiedTwilioClientCreator.GetClient();
-
-                    // Now that we have our custom built TwilioRestClient,
-                    // we can pass it to any REST API resource action.
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
-                                                | SecurityProtocolType.Tls11
-                                                | SecurityProtocolType.Tls12
-                                                | SecurityProtocolType.Ssl3;
-
-                    var message = MessageResource.Create(
-                        to: new PhoneNumber("+40723899574"),
-                        from: new PhoneNumber("+15005550006"),
-                        body: "Hey there!",
-                        // Here's where you inject the custom client
-                        client: twilioRestClient
-                    );
-
-                    Console.WriteLine($"Message SID: {message.Sid}");
-
-
                     //TwilioClient.Init(
                     //    Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID"),
                     //    Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN"));
 
                     //var message = MessageResource.Create(
-                    //    from: new PhoneNumber("whatsapp:+14155238886"),
+                    //    from: new PhoneNumber("whatsapp:+15005550006"),
                     //    to: new PhoneNumber("whatsapp:+40723899574"),
                     //    body: "Test");
-
+                    ////14155238886
                     //string msg = message.Sid;
+           
 
-                    //string status = "";
-                    //WhatsApp wa = new WhatsApp("40723899574", "", "Radu", false, false);
-                    //wa.OnConnectSuccess += () =>
-                    //{
-                    //    wa.OnLoginSuccess += (phoneNumber, data) =>
-                    //    {
-                    //        wa.SendMessage("40723899574", "Test");
-                    //    };
-                    //    wa.OnLoginFailed += (data) =>
-                    //    {
-                    //        status = data;
-                    //    };
-                    //    wa.Login();
-                    //};
-                    //wa.OnConnectFailed += (ex) =>
-                    //{
-                    //    status = ex.StackTrace;
-                    //};
-                    //wa.Connect();
-
-                    TrimitereWA();
+                    TrimitereWA(lstMarci, (int)selectedValues[0]);
 
                 }
             }
@@ -375,55 +335,109 @@ namespace WizOne.Pagini
             }
         }
 
-        private void TrimitereWA()
+        private void TrimitereWA(Dictionary<int, string> lstMarci, int reportId)
         {
             try
             {
-
-                using (var wb = new WebClient())
+                foreach (int key in lstMarci.Keys)
                 {
-                    var data = new NameValueCollection();                    
-                    data["url"] = "https://99deb2cc6165910debbfaa5ccafa4d21.m.pipedream.net";
+                    int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
+                    int an = Convert.ToDateTime(txtAnLuna.Value).Year;
 
-                    var antet = new NameValueCollection();
-                    antet["D360-API-KEY"] = "tMhush_sandbox";
+                    using (var entities = new ReportsEntities())
+                    using (var xtraReport = new XtraReport())
+                    {
+                        var report = entities.Reports.Find(reportId);
 
-                    wb.Headers.Add(antet);
+                        using (var memStream = new MemoryStream(report.LayoutData))
+                            xtraReport.LoadLayoutFromXml(memStream);
 
-                    var response = wb.UploadValues("https://waba-sandbox.360dialog.io/v1/configs/webhook", "POST", data);
-                    string responseInString = Encoding.UTF8.GetString(response);
+                        var values = new
+                        {
+                            Implicit = new { UserId = Session?["UserId"] },
+                            Explicit = new { Angajat = key.ToString(), Luna = luna, An = an }
+                        };
+                        var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
+                        var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
+                        var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
+                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                            Where(p => p.Type != typeof(Expression));
+
+                        foreach (var param in parameters)
+                        {
+                            var name = param.Name.TrimStart('@');
+                            var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
+                                implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
+
+                            if (value != null)
+                                param.Value = Convert.ChangeType(value, param.Type);
+                        }
+
+                        xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
+                        PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
+                        pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
+
+                        MemoryStream mem = new MemoryStream();
+                        xtraReport.ExportToPdf(mem, pdfOptions);
+                        mem.Seek(0, System.IO.SeekOrigin.Begin);
+
+                        string numeFis = "Fluturaș_" + key + ".pdf";
+                        if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Elanor)
+                        {
+                            string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
+                            string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
+
+                            numeFis = "P_SLP_02344_" + dataInc + "_" + dataSf + "_00_V2_0000_00000_FILE_" + key + "_" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[2].Replace(' ', '_') + ".pdf";
+                        }
+                        mem.Close();
+                        mem.Flush();
+                    }
+
+                    //using (WebClient client = new WebClient())
+                    //{
+                    //    client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    //    client.Headers["X-WM-CLIENT-ID"] = CLIENT_ID;
+                    //    client.Headers["X-WM-CLIENT-SECRET"] = CLIENT_SECRET;
+
+                    //    SingleDocPayload payloadObj = new SingleDocPayload() { number = number, document = base64Content, filename = fn };
+                    //    string postData = (new JavaScriptSerializer()).Serialize(payloadObj);
+
+                    //    client.Encoding = Encoding.UTF8;
+                    //    string response = client.UploadString(DOCUMENT_SINGLE_API_URL, postData);
+                    //    Console.WriteLine(response);
+                    //}
+
+                    var twilioRestClient = ProxiedTwilioClientCreator.GetClient();
+
+                    //// Now that we have our custom built TwilioRestClient,
+                    //// we can pass it to any REST API resource action.
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                                                | SecurityProtocolType.Tls11
+                                                | SecurityProtocolType.Tls12
+                                                | SecurityProtocolType.Ssl3;
+
+                    var message = MessageResource.Create(
+                        to: new PhoneNumber("whatsapp:+40723899574"),
+                        from: new PhoneNumber("whatsapp:+14155238886"),
+                        body: "Hey there!",
+                        // Here's where you inject the custom client
+                        client: twilioRestClient
+                    );
                 }
 
-
-
-
-
-                //var client = new RestClient("https://waba-sandbox.360dialog.io/v1/configs/webhook");
-                //// client.Authenticator = new HttpBasicAuthenticator(username, password);
-                //var request = new RestRequest("resource/{id}");
-                //request.AddParameter("D360-API-KEY", "1234567_sandbox");
-                //request.AddParameter("url", "https://enjgn0xpx1j6afb.m.pipedream.net");
-                //request.AddHeader("header", "value");
-                ////request.AddFile("file", path);
-                //var response = client.Post(request);
-                //var content = response.Content; // Raw content as string     
-
-                //var values = new Dictionary<string, string>
-                //    {
-                //        { "D360-API-KEY", "1234567_sandbox" },
-                //        { "url", "https://pipedream.com/@radusora/p_ljCnnbB/edit?e=21xLhi0udZMfUn5qYXRbSn8BMN8" }
-                //    };
-
-                //var content = new FormUrlEncodedContent(values);
-
-                //var response = await client.PostAsync("https://waba-sandbox.360dialog.io/v1/configs/webhook", content);
-
-                //var responseString = await response.Content.ReadAsStringAsync();
+                //Console.WriteLine($"Message SID: {message.Sid}");
             }
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+        public class SingleDocPayload
+        {
+            public string number { get; set; }
+            public string document { get; set; }
+            public string filename { get; set; }
         }
 
         public string TrimitereFluturasiMail(Dictionary<int, string> lstMarci, int reportId)

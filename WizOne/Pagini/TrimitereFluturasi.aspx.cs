@@ -254,6 +254,53 @@ namespace WizOne.Pagini
             }
         }
 
+        protected void btnNotifWA_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Dictionary<int, string> lstMarci = new Dictionary<int, string>();
+                //string[] sablon = new string[11];
+
+                txtLog.Text = "";
+
+                if (txtAnLuna.Value == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat luna si anul!"), MessageBox.icoError);
+                    return;
+                }
+
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Telefon", "F10016", "NumeComplet" });
+                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun angajat!"), MessageBox.icoError);
+                    return;
+                }       
+
+                for (int i = 0; i < lst.Count(); i++)
+                {
+                    object[] arr = lst[i] as object[];
+                    lstMarci.Add(Convert.ToInt32(General.Nz(arr[0], -99)), General.Nz(arr[1], "").ToString() + "_#_$_&_" + General.Nz(arr[2], "").ToString());
+                }
+
+                grDate.Selection.UnselectAll();
+
+
+                if (lstMarci.Count > 0)
+                {       
+                    string msg = TrimitereNotifWA(lstMarci);
+
+                    if (msg.Length > 0)
+                        txtLog.Text = "S-au intalnit urmatoarele erori:\n" + msg;
+                    else
+                        txtLog.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
         protected void btnWA_Click(object sender, EventArgs e)
         {
             try
@@ -269,7 +316,7 @@ namespace WizOne.Pagini
                     return;
                 }
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Email", "F10016", "NumeComplet" });
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Telefon", "F10016", "NumeComplet" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun angajat!"), MessageBox.icoError);
@@ -294,38 +341,13 @@ namespace WizOne.Pagini
 
 
                 if (lstMarci.Count > 0)
-                {
-
-                    //string msg = TrimitereFluturasiMail(lstMarci, (int)selectedValues[0]);
-
-                    ////if (msg.Length <= 0)                        
-                    ////    MessageBox.Show(Dami.TraduCuvant("Trimitere reusita!"), MessageBox.icoSuccess);
+                { 
+                    TrimitereWAAsync(lstMarci, (int)selectedValues[0]);
 
                     //if (msg.Length > 0)
                     //    txtLog.Text = "S-au intalnit urmatoarele erori:\n" + msg;
                     //else
                     //    txtLog.Text = "";
-
-
-                    //Twilio.Http.HttpClient client = new SystemNetHttpClient();
-                    //Request request = new Request(Twilio.Http.HttpMethod.Get, "https://api.twilio.com:8443");
-                    ////ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
-                    //Response response = client.MakeRequest(request);
-                    //Console.Write(response.Content);
-
-                    //TwilioClient.Init(
-                    //    Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID"),
-                    //    Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN"));
-
-                    //var message = MessageResource.Create(
-                    //    from: new PhoneNumber("whatsapp:+15005550006"),
-                    //    to: new PhoneNumber("whatsapp:+40723899574"),
-                    //    body: "Test");
-                    ////14155238886
-                    //string msg = message.Sid;
-           
-
-                    TrimitereWA(lstMarci, (int)selectedValues[0]);
 
                 }
             }
@@ -335,12 +357,70 @@ namespace WizOne.Pagini
             }
         }
 
-        private void TrimitereWA(Dictionary<int, string> lstMarci, int reportId)
+        private string TrimitereNotifWA(Dictionary<int, string> lstMarci)
         {
+            string msg = "";
             try
             {
                 foreach (int key in lstMarci.Keys)
                 {
+                    if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0].Length <= 0)
+                    {
+                        msg += "Angajatul cu marca " + key + " nu are completat telefonul!\n";
+                        continue;
+                    }
+
+                    var twilioRestClient = ProxiedTwilioClientCreator.GetClient();
+
+                    //// Now that we have our custom built TwilioRestClient,
+                    //// we can pass it to any REST API resource action.
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                                                | SecurityProtocolType.Tls11
+                                                | SecurityProtocolType.Tls12
+                                                | SecurityProtocolType.Ssl3;
+
+                    var message = MessageResource.Create(
+                        to: new PhoneNumber("whatsapp:+4" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0]),
+                        from: new PhoneNumber("whatsapp:+14155238886"),
+                        body: "Fluturașul de salariu este gata! Dacă doriți să-l primiți pe WhatsApp, răspundeți cu Da la acest număr.",
+                        // Here's where you inject the custom client
+                        client: twilioRestClient
+                    );
+                }
+
+                if (msg.Length <= 0)
+                    MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes!"), MessageBox.icoSuccess);
+                else
+                    MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes, dar cu unele erori! Verificati log-ul!"), MessageBox.icoWarning);
+            }
+            catch (Exception ex)
+            {
+                msg += "Eroare la trimitere!\n";
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return msg;
+        }
+
+        private async System.Threading.Tasks.Task<string> TrimitereWAAsync(Dictionary<int, string> lstMarci, int reportId)
+        {
+            string msg = "";
+            try
+            {
+                foreach (int key in lstMarci.Keys)
+                {
+                    if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0].Length <= 0)
+                    {
+                        msg += "Angajatul cu marca " + key + " nu are completat telefonul!\n";
+                        continue;
+                    }
+
+                    if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
+                    {
+                        msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
+                        continue;
+                    }
+
                     int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
                     int an = Convert.ToDateTime(txtAnLuna.Value).Year;
 
@@ -389,24 +469,31 @@ namespace WizOne.Pagini
 
                             numeFis = "P_SLP_02344_" + dataInc + "_" + dataSf + "_00_V2_0000_00000_FILE_" + key + "_" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[2].Replace(' ', '_') + ".pdf";
                         }
+
+                        //incarcare document
+                        byte[] bytes = new byte[mem.Length];
+                        mem.Read(bytes, 0, (int)mem.Length);
+
+                        System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient();
+                        MultipartFormDataContent form = new MultipartFormDataContent();
+
+                        //form.Add(new StringContent(username), "username");
+                        //form.Add(new StringContent(useremail), "email");
+                        //form.Add(new StringContent(password), "password");
+                        form.Add(new ByteArrayContent(bytes, 0, bytes.Length), "Fluturas", numeFis);
+                        HttpResponseMessage response = await httpClient.PostAsync("PostUrl", form);
+
+                        response.EnsureSuccessStatusCode();
+                        httpClient.Dispose();
+                        string sd = response.Content.ReadAsStringAsync().Result;
+
+
+
                         mem.Close();
                         mem.Flush();
-                    }
+                    }     
 
-                    //using (WebClient client = new WebClient())
-                    //{
-                    //    client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                    //    client.Headers["X-WM-CLIENT-ID"] = CLIENT_ID;
-                    //    client.Headers["X-WM-CLIENT-SECRET"] = CLIENT_SECRET;
-
-                    //    SingleDocPayload payloadObj = new SingleDocPayload() { number = number, document = base64Content, filename = fn };
-                    //    string postData = (new JavaScriptSerializer()).Serialize(payloadObj);
-
-                    //    client.Encoding = Encoding.UTF8;
-                    //    string response = client.UploadString(DOCUMENT_SINGLE_API_URL, postData);
-                    //    Console.WriteLine(response);
-                    //}
-
+                    //trimitere mesaj cu document
                     var twilioRestClient = ProxiedTwilioClientCreator.GetClient();
 
                     //// Now that we have our custom built TwilioRestClient,
@@ -417,27 +504,28 @@ namespace WizOne.Pagini
                                                 | SecurityProtocolType.Ssl3;
 
                     var message = MessageResource.Create(
-                        to: new PhoneNumber("whatsapp:+40723899574"),
+                        to: new PhoneNumber("whatsapp:+4" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0]),
                         from: new PhoneNumber("whatsapp:+14155238886"),
-                        body: "Hey there!",
+                        mediaUrl: new List<Uri> { new Uri("https://www.wizrom.ro/specs/PAYSLIP_PRY_RO001_RO_Y2021_P7_E2550_R01.pdf") },
+                        body: "",
                         // Here's where you inject the custom client
                         client: twilioRestClient
                     );
                 }
 
+                if (msg.Length <= 0)
+                    MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes!"), MessageBox.icoSuccess);
+                else
+                    MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes, dar cu unele erori! Verificati log-ul!"), MessageBox.icoWarning);               
                 //Console.WriteLine($"Message SID: {message.Sid}");
             }
             catch (Exception ex)
             {
+                msg += "Eroare la trimitere!\n";
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                return "";
             }
-        }
-
-        public class SingleDocPayload
-        {
-            public string number { get; set; }
-            public string document { get; set; }
-            public string filename { get; set; }
+            return "1";
         }
 
         public string TrimitereFluturasiMail(Dictionary<int, string> lstMarci, int reportId)
@@ -706,7 +794,9 @@ namespace WizOne.Pagini
                                 F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
                                 CASE WHEN (F100894 IS NULL OR {6}(F100894) = 0) THEN ""Mail"" ELSE F100894 END AS ""Email"",
                                 CASE WHEN (F100894 IS NULL OR {6}(F100894) = 0) AND (""Mail"" IS NULL OR {6}(""Mail"") = 0) THEN 0 ELSE 1 END AS ""AreMail"",
-                                CASE WHEN F10016 IS NULL OR {6}(F10016) = 0 THEN 0 ELSE 1 END AS ""AreParola""
+                                CASE WHEN F10016 IS NULL OR {6}(F10016) = 0 THEN 0 ELSE 1 END AS ""AreParola"",
+                                F10088 AS ""Telefon"",
+                                CASE WHEN (F10088 IS NULL OR {6}(F10088) = 0) THEN 0 ELSE 1 END AS ""AreTelefon""
                                 {3}
 
                                 FROM ""relGrupAngajat"" B                                
@@ -732,7 +822,9 @@ namespace WizOne.Pagini
                                 F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
                                 CASE WHEN (F100894 IS NULL OR {6}(F100894) = 0) THEN ""Mail"" ELSE F100894 END AS ""Email"",
                                 CASE WHEN (F100894 IS NULL OR {6}(F100894) = 0) AND (""Mail"" IS NULL OR {6}(""Mail"") = 0) THEN 0 ELSE 1 END AS ""AreMail"",
-                                CASE WHEN F10016 IS NULL OR {6}(F10016) = 0 THEN 0 ELSE 1 END AS ""AreParola""
+                                CASE WHEN F10016 IS NULL OR {6}(F10016) = 0 THEN 0 ELSE 1 END AS ""AreParola"",
+                                F10088 AS ""Telefon"",
+                                CASE WHEN (F10088 IS NULL OR {6}(F10088) = 0) THEN 0 ELSE 1 END AS ""AreTelefon""
                                 {3}
 
                                 FROM ""relGrupAngajat"" B                                

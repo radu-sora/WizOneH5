@@ -1286,6 +1286,7 @@ namespace WizOne.Eval
                         case 33: //Functia
                         case 34: //Directia
                         case 35: //DeptDinF1001
+                        case 36: //Data finalizare
                         case 38: //Categorie OMN
                         case 60: //Supervizor3 Nume
                         case 61: //Supervizor3 Post
@@ -5325,19 +5326,19 @@ namespace WizOne.Eval
                 #endregion
 
                 //daca in chestionar exista tipul de camp 36 - Data Finalizare
-                //DataTable entDtFin = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsLinii"" WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""TipData"" = 36", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
-                //if (entDtFin != null && entDtFin.Rows.Count > 0)
-                //{
-                //    string sql = @"UPDATE ""Eval_RaspunsLinii"" SET ";
-                //    for (int i = 1; i <= 20; i++)
-                //    {                        
-                //        sql += " \"Super" + i + "\" = " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
-                //        if (i < 20)
-                //            sql += ", ";
-                //    }
-                //    sql += "WHERE \"IdQuiz\" = @1 AND F10003 = @2 AND \"TipData\" = 36";
-                //    General.IncarcaDT(sql, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
-                //}
+                DataTable entDtFin = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsLinii"" WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""TipData"" = 36", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                if (entDtFin != null && entDtFin.Rows.Count > 0)
+                {
+                    string sql = @"UPDATE ""Eval_RaspunsLinii"" SET ";
+                    for (int i = 1; i <= 20; i++)
+                    {
+                        sql += " \"Super" + i + "\" = " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
+                        if (i < 20)
+                            sql += ", ";
+                    }
+                    sql += "WHERE \"IdQuiz\" = @1 AND F10003 = @2 AND \"TipData\" = 36";
+                    General.IncarcaDT(sql, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                }
 
 
                 //General.IncarcaDT(

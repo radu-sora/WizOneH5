@@ -123,6 +123,24 @@ namespace Wizrom.Reports.Pages
         protected global::DevExpress.Web.ASPxCardView ReportsCardView;
 
         /// <summary>
+        /// CardViewEditButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.CardViewCustomCommandButton CardViewEditButton;
+
+        /// <summary>
+        /// CardViewDeleteButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.CardViewCustomCommandButton CardViewDeleteButton;
+
+        /// <summary>
         /// ReportsDataSource control.
         /// </summary>
         /// <remarks>

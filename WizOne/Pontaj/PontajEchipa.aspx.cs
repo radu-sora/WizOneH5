@@ -409,7 +409,10 @@ namespace WizOne.Pontaj
         {
             try
             {
-                if (!General.EstePontajulInitializat(txtAnLuna.Date, General.Nz(cmbCtr.Value, "").ToString()))
+                //Florin #1070
+                string filtruAngajati = General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), txtAnLuna.Date.Year, txtAnLuna.Date.Month, 0, -99, Convert.ToInt32(General.Nz(cmbRol.Value, -99)));
+
+                if (!General.EstePontajulInitializat(txtAnLuna.Date, General.Nz(cmbCtr.Value, "").ToString(), filtruAngajati))
                 {
                     grDate.DataSource = null;
                     grDate.DataBind();

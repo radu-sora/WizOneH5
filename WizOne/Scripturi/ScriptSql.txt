@@ -21136,3 +21136,12 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TrimitereFluturas_LipsaParola', '0', '0 - (sau absent) este obligatorie parola PDF; 1 - Parola PDF nu este obligatorie', 0)
 GO
+
+ALTER TABLE F100CentreCost2 DROP CONSTRAINT PK_F100CentreCost2
+GO
+ALTER TABLE F100CentreCost2 DROP COLUMN IdAuto
+GO
+ALTER TABLE F100CentreCost2 ADD IdAuto int IDENTITY(1,1)
+GO
+ALTER TABLE F100CentreCost2 ADD CONSTRAINT PK_F100CentreCost2 PRIMARY KEY (IdAuto)
+GO

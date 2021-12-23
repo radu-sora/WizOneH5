@@ -2082,6 +2082,8 @@ namespace WizOne.Module
 
                 string cteF100 = @", cteF100 as (select fnume.F10003, fnume.F10008 {0} ' ' {0} fnume.F10009 as ""NumeComplet"",
                                                         {1}(c.F00305, '') {0} '/' {0} {1}(d.F00406, '') {0} '/' {0} {1}(e.F00507, '') {0} '/' {0} {1}(f.F00608, '') as ""Structura"",
+                                                        func.F71804 as  ""Functia"", e.F00507 as ""Directia"", g.F00709 as ""DeptDinF1001"",
+                                                        (case when fnume.F100571 = 'Executie' then fnume.F100571 + ' ' + ctg.F71304 else fnume.F100571 + ' ' + fnume.F100572 + ' ' + ctg.F71304 end) as ""CategorieOMN"",
                                                         post.""Denumire"" as ""Post"",
                                                         {1}(fnumeMan1.F10008, '') {0} ' ' {0} {1}(fnumeMan1.F10009, '') as ""NumeSupervizor1"",
                                                         postMan1.""Denumire"" as ""PostSupervizor1"", 
@@ -2102,11 +2104,15 @@ namespace WizOne.Module
                                                 from F100 fnume
                                                 join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
                                                                         and ( {2} )
+                                                left join F1001 fnume1 on fnume.F10003 = fnume1.F10003
                                                 left join F002 b on fnume.F10002 = b.F00202
                                                 left join F003 c on fnume.F10004 = c.F00304
                                                 left join F004 d on fnume.F10005 = d.F00405
                                                 left join F005 e on fnume.F10006 = e.F00506
                                                 left join F006 f on fnume.F10007 = f.F00607
+                                                left join F007 g on fnume1.F100958 = g.F00708
+                                                left join F718 func on fnume.F10071 = func.F71802
+                                                left join F713 ctg on fnume.F10051 = ctg.F71302
                                                 left join ""Org_relPostAngajat"" relPost on fnume.F10003 = relPost.F10003
                                                                                 and {3} between relPost.""DataInceput"" and relPost.""DataSfarsit""
                                                 left join ""Org_Posturi"" post on relPost.""IdPost"" = post.""Id""
@@ -2170,6 +2176,11 @@ namespace WizOne.Module
                                             when 19 then fnume.""PostSupervizor1""
                                             when 20 then fnume.""NumeSupervizor2""
                                             when 21 then fnume.""PostSupervizor2""
+
+                                            when 33 then fnume.""Functia""
+                                            when 34 then fnume.""Directia""
+                                            when 35 then fnume.""DeptDinF1001""
+                                            when 38 then fnume.""CategorieOMN""
 
                                             when 60 then fnume.""NumeSupervizor3""
                                             when 61 then fnume.""PostSupervizor3""

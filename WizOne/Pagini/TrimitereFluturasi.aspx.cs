@@ -253,7 +253,10 @@ namespace WizOne.Pagini
                         var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
                         var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
                             SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                            Where(p => p.Type != typeof(Expression));
+                            Where(p => p.Type != typeof(Expression)).
+                            Union(xtraReport.ComponentStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
+                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                            Where(p => p.Type != typeof(Expression)));
 
                         foreach (var param in parameters)
                         {
@@ -791,6 +794,7 @@ namespace WizOne.Pagini
             try
             {
                 string cale = Dami.ValoareParam("TrimitereFluturas_Locatie", "");
+                string paramParola = Dami.ValoareParam("TrimitereFluturas_LipsaParola", "0");
                 if (cale.Length <= 0)
                 {
                     msg += "Nu ati precizat locatia in care sa fie salvati fluturasii!\n";
@@ -824,10 +828,15 @@ namespace WizOne.Pagini
                             Explicit = new { Angajat = key.ToString(), Luna = luna, An = an }
                         };
                         var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
-                        var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
+                        var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];                                         
+
                         var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
                             SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                            Where(p => p.Type != typeof(Expression));
+                            Where(p => p.Type != typeof(Expression)).
+                            Union(xtraReport.ComponentStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
+                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                            Where(p => p.Type != typeof(Expression)));
+
 
                         foreach (var param in parameters)
                         {
@@ -841,12 +850,15 @@ namespace WizOne.Pagini
 
                         xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
                         PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
-                        pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
-
-                        if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
+                        if (paramParola != "1")
                         {
-                            msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
-                            continue;
+                            pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
+
+                            if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
+                            {
+                                msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
+                                continue;
+                            }
                         }
 
                         MemoryStream mem = new MemoryStream();

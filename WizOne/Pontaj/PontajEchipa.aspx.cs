@@ -254,19 +254,6 @@ namespace WizOne.Pontaj
                 }
                 #endregion
 
-
-                //Radu 07.09.2021 - #966
-                grDate.Settings.ShowFooter = true;
-                grDate.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
-                ASPxSummaryItem totalSummary = new ASPxSummaryItem();
-                totalSummary.FieldName = "IdStare";
-                totalSummary.ShowInColumn = "IdStare";
-                totalSummary.SummaryType = SummaryItemType.Count;
-                totalSummary.DisplayFormat = "Nr. ang. {0}";
-                if (grDate.TotalSummary.Count > 0)
-                    grDate.TotalSummary.RemoveAt(0);
-                grDate.TotalSummary.Add(totalSummary);
-
                 if (!IsPostBack)
                 {
                     Session["InformatiaCurenta"] = null;                  
@@ -354,12 +341,25 @@ namespace WizOne.Pontaj
                     cmbAng.DataSource = Session["Pontaj_Angajati"];
                     cmbAng.DataBind();
                 }
+
+                //Radu 07.09.2021 - #966
+                grDate.Settings.ShowFooter = true;
+                grDate.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                ASPxSummaryItem totalSummary = new ASPxSummaryItem();
+                totalSummary.FieldName = "IdStare";
+                totalSummary.ShowInColumn = "IdStare";
+                totalSummary.SummaryType = SummaryItemType.Count;
+                totalSummary.DisplayFormat = "Nr. ang. {0}";
+                if (grDate.TotalSummary.Count > 0)
+                    grDate.TotalSummary.RemoveAt(0);
+                grDate.TotalSummary.Add(totalSummary);
+
                 //else if (grDate.IsCallback)
                 //{
                 //    grDate.DataSource = Session["InformatiaCurenta"];
                 //    grDate.DataBind();
                 //}
-               
+
             }
             catch (Exception ex)
             {

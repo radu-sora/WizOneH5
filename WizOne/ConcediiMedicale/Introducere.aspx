@@ -439,7 +439,7 @@
 						</td>
 						<td>
 							<dx:ASPxTextBox  ID="txtZCMAnt" Width="75"  runat="server"  AutoPostBack="false" >
-                                <ClientSideEvents  />
+                                 <ClientSideEvents />
 							</dx:ASPxTextBox>
 						</td>
 					</tr>

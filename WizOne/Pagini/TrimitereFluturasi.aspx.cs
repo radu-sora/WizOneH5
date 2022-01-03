@@ -471,21 +471,21 @@ namespace WizOne.Pagini
                         }
 
                         //incarcare document
-                        byte[] bytes = new byte[mem.Length];
-                        mem.Read(bytes, 0, (int)mem.Length);
+                        //byte[] bytes = new byte[mem.Length];
+                        //mem.Read(bytes, 0, (int)mem.Length);
 
-                        System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient();
-                        MultipartFormDataContent form = new MultipartFormDataContent();
+                        //System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient();
+                        //MultipartFormDataContent form = new MultipartFormDataContent();
 
-                        //form.Add(new StringContent(username), "username");
-                        //form.Add(new StringContent(useremail), "email");
-                        //form.Add(new StringContent(password), "password");
-                        form.Add(new ByteArrayContent(bytes, 0, bytes.Length), "Fluturas", numeFis);
-                        HttpResponseMessage response = await httpClient.PostAsync("PostUrl", form);
+                        ////form.Add(new StringContent(username), "username");
+                        ////form.Add(new StringContent(useremail), "email");
+                        ////form.Add(new StringContent(password), "password");
+                        //form.Add(new ByteArrayContent(bytes, 0, bytes.Length), "Fluturas", numeFis);
+                        //HttpResponseMessage response = await httpClient.PostAsync("PostUrl", form);
 
-                        response.EnsureSuccessStatusCode();
-                        httpClient.Dispose();
-                        string sd = response.Content.ReadAsStringAsync().Result;
+                        //response.EnsureSuccessStatusCode();
+                        //httpClient.Dispose();
+                        //string sd = response.Content.ReadAsStringAsync().Result;
 
 
 

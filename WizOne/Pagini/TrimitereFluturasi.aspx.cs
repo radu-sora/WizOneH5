@@ -530,8 +530,8 @@ namespace WizOne.Pagini
 
         public string TrimitereFluturasiMail(Dictionary<int, string> lstMarci, int reportId)
         {
-            string msg = "";
-
+            string msg = "", msgErr = "";
+            bool err = false;
             try
             {
                 string interval = Dami.ValoareParam("IntervalTrimitereEmailuri", "15");
@@ -603,9 +603,18 @@ namespace WizOne.Pagini
                                 numeFis = "P_SLP_02344_" + dataInc + "_" + dataSf + "_00_V2_0000_00000_FILE_" + key + "_" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[2].Replace(' ', '_') + ".pdf";
                             }
 
-                            Notif.TrimiteMail(lstOne, txtSubiect.Text, (txtContinut.Html ?? "").ToString(), 0, numeFis, "", 0, "", "", Convert.ToInt32(Session["IdClient"]), mem);
+                           
+                            Notif.TrimiteMail(lstOne, txtSubiect.Text, (txtContinut.Html ?? "").ToString(), 0, numeFis, "", 0, "", "", Convert.ToInt32(Session["IdClient"]), out msgErr, mem);
+                            if (msgErr.Length > 0)
+                            {
+                                ScrieLog(msgErr, key);
+                                err = true;
+                            }
                             mem.Close();
-                            mem.Flush();
+                            mem.Flush();                           
+
+                            if (err)
+                                return "Eroare la trimitere!";
 
                             System.Threading.Thread.Sleep(Convert.ToInt32(interval) * 1000);
                         }
@@ -617,9 +626,20 @@ namespace WizOne.Pagini
                         string numeFisier = "";
                         byte[] fisier = GenerareAdeverinta(lst, reportId - 1000000, Convert.ToDateTime(txtAnLuna.Value).Year, lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1],out numeFisier);
                         MemoryStream mem = new MemoryStream(fisier);
-                        Notif.TrimiteMail(lstOne, txtSubiect.Text, (txtContinut.Html ?? "").ToString(), 0, numeFisier.Split('.')[0] + ".pdf", "", 0, "", "", Convert.ToInt32(Session["IdClient"]), mem);
+                       
+                        Notif.TrimiteMail(lstOne, txtSubiect.Text, (txtContinut.Html ?? "").ToString(), 0, numeFisier.Split('.')[0] + ".pdf", "", 0, "", "", Convert.ToInt32(Session["IdClient"]), out msgErr, mem);
+                        if (msgErr.Length > 0)
+                        {
+                            ScrieLog(msgErr, key);
+                            err = true;
+                        }
+                       
                         mem.Close();
-                        mem.Flush();
+                        mem.Flush();                        
+
+                        if (err)
+                            return "Eroare la trimitere!";
+
                         System.Threading.Thread.Sleep(Convert.ToInt32(interval) * 1000);
                     }
 
@@ -637,6 +657,26 @@ namespace WizOne.Pagini
 
             return msg;
 
+        }
+
+
+        public void ScrieLog(string err, int key)
+        {  
+            var tempPath = HostingEnvironment.MapPath("~/Temp/");
+
+            Directory.CreateDirectory(tempPath);
+            StreamWriter sw = new StreamWriter(tempPath + "wsMailLog.txt", true);
+            //
+            string mesaj = "";
+
+            mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
+            mesaj += "Marca:    " + key + "\r\n";
+            mesaj += "Eroarea:   " + err + "\r\n";
+            //
+            sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
+            //
+            sw.Close();
+            sw.Dispose();
         }
 
         protected void btnFiltru_Click(object sender, EventArgs e)

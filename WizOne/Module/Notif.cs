@@ -852,6 +852,143 @@ namespace WizOne.Module
             }
 
         }
+        //#904
+        public static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel, int idClient, out string err, MemoryStream mem = null) //Radu 29.06.2020 - am adaugat mem
+        {
+            err = "";
+            try
+            {
+                string folosesteCred = Dami.ValoareParam("TrimiteMailCuCredentiale");
+                string cuSSL = Dami.ValoareParam("TrimiteMailCuSSL", "false");
+
+                string smtpMailFrom = Dami.ValoareParam("SmtpMailFrom");
+                string smtpServer = Dami.ValoareParam("SmtpServer");
+                string smtpPort = Dami.ValoareParam("SmtpPort");
+                string smtpMail = Dami.ValoareParam("SmtpMail");
+                string smtpParola = Dami.ValoareParam("SmtpParola");
+
+
+                string strMsg = "";
+                if (smtpMailFrom == "") strMsg += ", mail from";
+
+                if (smtpServer == "") strMsg += ", serverul de smtp";
+                if (smtpPort == "") strMsg += ", smtp port";
+                if (folosesteCred == "1" || folosesteCred == "2")
+                {
+                    if (smtpMail == "") strMsg += ", smtp mail";
+                    if (smtpParola == "") strMsg += ", smtp parola";
+                }
+
+                if (strMsg != "")
+                {
+                    General.MemoreazaEroarea("Nu exista date despre " + strMsg.Substring(2), "Notif", "TrimiteMail");
+                    err = "Nu exista date despre " + strMsg.Substring(2);
+                    return;
+                }
+
+                MailMessage mm = new MailMessage();
+                mm.From = new MailAddress(smtpMailFrom);
+
+                if (lstAdr == null || lstAdr.Count() == 0)
+                {
+                    General.MemoreazaEroarea(Dami.TraduCuvant("Nu exista destinatar"), "Dami", "TrimiteMail");
+                    err = Dami.TraduCuvant("Nu exista destinatar");
+                    return;
+                }
+                else
+                {
+                    foreach (var mail in lstAdr)
+                    {
+                        string mailPt = mail.Mail;
+                        if (idClient == Convert.ToInt32(IdClienti.Clienti.Honeywell))
+                            mailPt = "<" + mail.Mail + ">";
+
+                        switch (mail.Destinatie.ToUpper())
+                        {
+                            case "TO":
+                                mm.To.Add(new MailAddress(mail.Mail));
+                                break;
+                            case "CC":
+                                mm.CC.Add(new MailAddress(mail.Mail));
+                                break;
+                            case "BCC":
+                                mm.Bcc.Add(new MailAddress(mail.Mail));
+                                break;
+                        }
+                    }
+                }
+
+
+                mm.Subject = subiect;
+                mm.Body = corpMail;
+                mm.IsBodyHtml = true;
+
+                //
+                if (trimiteAtt == 1)
+                {
+                    byte[] arrByte = Encoding.UTF8.GetBytes(corpAtt);
+                    MemoryStream stream = new MemoryStream(arrByte);
+                    mm.Attachments.Add(new Attachment(stream, numeAtt, "text/html"));
+
+                }
+
+                //
+                if (trimiteXls == 1)
+                {
+                    if (selectXls != "")
+                    {
+                        MemoryStream stream = new MemoryStream(General.CreazaExcel(selectXls));
+                        mm.Attachments.Add(new Attachment(stream, numeExcel, "application/vnd.ms-excel"));
+                    }
+                    else
+                    {
+                        if (Dami.ValoareParam("LogNotificari") == "1") General.CreazaLog("Sursa de date pentru excel nu este setata", "TrimiteMail");
+                    }
+                }
+
+                //Radu 29.06.2020
+                if (mem != null)
+                {
+                    mm.Attachments.Add(new Attachment(mem, numeAtt, "application/pdf"));
+                }
+                //
+
+                //Radu 02.12.2021 - SmtpServer si SmtpParola sunt criptate pt. Asirom
+                if (idClient == (int)IdClienti.Clienti.Asirom)
+                {
+                    CriptDecript prc = new CriptDecript();
+                    smtpServer = prc.EncryptString("WizOne2016", smtpServer, 2);
+                    smtpParola = prc.EncryptString("WizOne2016", smtpParola, 2);
+                }
+                SmtpClient smtp = new SmtpClient(smtpServer);
+                smtp.Port = Convert.ToInt32(smtpPort);
+                smtp.Host = smtpServer;
+
+                if (folosesteCred == "1" || folosesteCred == "2")
+                {
+                    NetworkCredential basicCred = new NetworkCredential(smtpMail, smtpParola);
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = basicCred;
+                }
+                else
+                {
+                    smtp.UseDefaultCredentials = true;
+                }
+
+                smtp.EnableSsl = cuSSL == "1" ? true : false;
+
+                ServicePointManager.ServerCertificateValidationCallback += (o, c, ch, er) => true;
+
+                smtp.Send(mm);
+                smtp.Dispose();
+            }
+            catch (Exception ex)
+            {
+                err = ex.Message + (ex.InnerException != null ? " / " + ex.InnerException.ToString() : "");
+                General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+        }
 
         private static void SalveazaInBaza(string nume, string corp, string tblAtasamente_Tabela, int tblAtasamente_Id, int userId)
         {

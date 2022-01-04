@@ -1,10 +1,13 @@
-﻿using DevExpress.XtraReports.UI;
+﻿using DevExpress.XtraPrinting.Drawing;
+using DevExpress.XtraReports.UI;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Web;
+using System.Web.Hosting;
 using WizOne.Module;
 
 namespace WizOne.Reports
@@ -36,7 +39,16 @@ namespace WizOne.Reports
                 //DefaultPrinterSettingsUsing.UseLandscape = false;
                 //this.Landscape = true;
 
-                
+                if (Directory.Exists(HostingEnvironment.MapPath("~/Fisiere/Imagini/Clienti/" + HttpContext.Current.Session["IdClient"].ToString())))
+                {
+                    DirectoryInfo root = new DirectoryInfo(HostingEnvironment.MapPath("~/Fisiere/Imagini/Clienti/" + HttpContext.Current.Session["IdClient"].ToString()));
+                    FileInfo[] listfiles = root.GetFiles("Logo.*");
+                    if (listfiles.Length > 0)
+                    {
+                        string path = root.FullName + "/" + listfiles[0].Name;
+                        xrPictureBox1.Image = Image.FromFile(path);
+                    }
+                }
                 string str = (HttpContext.Current.Session["PrintParametrii"] ?? "").ToString();
                 if (str != "")
                 {
@@ -47,7 +59,7 @@ namespace WizOne.Reports
                     if (arr.Length > 3 && arr[3] != "") super = arr[3];
                     if (arr.Length > 4 && arr[4] != "") finalizat = Convert.ToInt32(arr[4]);
                 }
-                                             
+
                 string sql = "SELECT MAX(\"Pozitie\") FROM \"Eval_RaspunsIstoric\" WHERE \"IdQuiz\" = " + idQuiz + " AND F10003 = " + f10003;
                 DataTable dtSuper = General.IncarcaDT(sql, null);
                 if (finalizat == 1)
@@ -152,7 +164,7 @@ namespace WizOne.Reports
                                             DataRow[] dtColComp = dtTemplateComp.Select("Id = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0"));
                                             if (dtColComp != null && dtColComp.Length > 0)
                                             {
-                                                List<string> cols = new List<string>();                                         
+                                                List<string> cols = new List<string>();
                                                 List<int> rat = new List<int>();
                                                 List<int> latime = new List<int>();
                                                 List<int> note = new List<int>();
@@ -220,7 +232,7 @@ namespace WizOne.Reports
 
                                                 ctl = CreeazaTabel(12, dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)), cols.ToArray(), cols.ToArray(), rat.ToArray(), latime.ToArray(), note.ToArray());
                                             }
-                                       }
+                                        }
                                         break;
                                     case 7:                     //Obiective firma
                                         break;
@@ -458,7 +470,7 @@ namespace WizOne.Reports
                     }
 
                 //Florin 2020.05.05
-                if (dtTit != null && dtTit.Rows.Count > 0 && General.Nz(dtTit.Rows[0]["LuatLaCunostinta"],"0").ToString() == "1")
+                if (dtTit != null && dtTit.Rows.Count > 0 && General.Nz(dtTit.Rows[0]["LuatLaCunostinta"], "0").ToString() == "1")
                 {
                     //data luarii la cunostinta
                     string luat = "Angajatul nu a luat la cunostinta evaluarea.";
@@ -468,7 +480,7 @@ namespace WizOne.Reports
                         if (General.Nz(dtLuat.Rows[0]["LuatLaCunostinta"], "0").ToString() == "1")
                             luat = "Angajatul a luat la cunostinta evaluarea in data de " + General.Nz(dtLuat.Rows[0]["LuatData"], "");
                         else if (General.Nz(dtLuat.Rows[0]["LuatLaCunostinta"], "0").ToString() == "2")
-                            luat = "Angajatul a contestat evaluarea in data de " + General.Nz(dtLuat.Rows[0]["LuatData"],"");
+                            luat = "Angajatul a contestat evaluarea in data de " + General.Nz(dtLuat.Rows[0]["LuatData"], "");
                         else if (General.Nz(dtLuat.Rows[0]["LuatAutomat"], "0").ToString() == "1") luat = "Proces automat de luare la cunostinta.";
                     }
 
@@ -493,7 +505,7 @@ namespace WizOne.Reports
             {
                 lbl.Text = desc;
 
-                lbl.Font = new Font("Times New Roman", 12F,FontStyle.Underline);
+                lbl.Font = new Font("Times New Roman", 12F, FontStyle.Underline);
                 lbl.WordWrap = true;
                 lbl.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 20, 20, 100F);
                 lbl.CanGrow = true;
@@ -536,7 +548,7 @@ namespace WizOne.Reports
         private XRTable CreeazaTabel(int tipData, DataRow[] lst, string[] cols, string[] arr, int[] rat, int[] latime, int[] note = null)
         {
             XRTable tbl = new XRTable();
-            
+
             try
             {
                 float rowHeight = 25f;
@@ -562,7 +574,7 @@ namespace WizOne.Reports
                 tbl.Rows.Add(rowH);
 
                 //adauga corpul tabelului
-                if (lst != null && lst.Length  > 0)
+                if (lst != null && lst.Length > 0)
                     for (int i = 0; i < lst.Length; i++)
                     {
                         XRTableRow row = new XRTableRow();
@@ -710,10 +722,10 @@ namespace WizOne.Reports
                     for (int i = 0; i < lst.Length; i++)
                     {
                         decimal nota = 0;
-                        nota = Convert.ToDecimal((lst[i][super] != DBNull.Value ? lst[i][super].ToString() : "0")); 
+                        nota = Convert.ToDecimal((lst[i][super] != DBNull.Value ? lst[i][super].ToString() : "0"));
 
                         decimal pondere = 0;
-                        if (lst[i]["Tinta"]  != null && lst[i]["Tinta"].ToString().Length > 0) pondere = Convert.ToDecimal(lst[i]["Tinta"].ToString());
+                        if (lst[i]["Tinta"] != null && lst[i]["Tinta"].ToString().Length > 0) pondere = Convert.ToDecimal(lst[i]["Tinta"].ToString());
 
                         if (tipCalcul == 1)
                         {
@@ -750,7 +762,7 @@ namespace WizOne.Reports
                 if (entRas != null)
                 {
                     descText = (entRas[super] != DBNull.Value ? entRas[super].ToString() : "");
-                }           
+                }
 
                 if (descText.ToLower() == "true") descText = "Da";
                 if (descText.ToLower() == "false") descText = "Nu";
@@ -763,7 +775,7 @@ namespace WizOne.Reports
                     if (dt != null && dt.Rows.Count > 0)
                     {
                         descText = (dt.Rows[0]["Valoare"] != DBNull.Value ? dt.Rows[0]["Valoare"].ToString() : descText).ToString();
-                    }                    
+                    }
                 }
 
                 ras = descText;

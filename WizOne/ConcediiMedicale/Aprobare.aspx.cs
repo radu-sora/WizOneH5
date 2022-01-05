@@ -1423,14 +1423,14 @@ namespace WizOne.ConcediiMedicale
                 dtAviz = new DateTime(2100, 1, 1);
             //                                                                                                                               0              1       2       3       4                               5       5       6       7
             string sql = "INSERT INTO " + (avans ? "F300_CM_AVANS" : "F300") + " (F30001, F30002, F30003, F30004, F30005, F30006, F30007, F30010, F30011, F30012, F30013, F30014, F30015, F30021, F30022, F30023, F30036, F30037, F30038, F30050, " +
-                //    8        9       10       11      12                       13      5        14       15       16      17       18       19        20      21      22         23       24      25        26       31       27      30               29
-                " F300601, F300602, F300603,  F30053, F300618, F30039, F30040, F30042, F30035, F300606, F300607, F300619, F300608, F300609, F300610, F300611, F300612, F300613, F300614, F300615, F300616, F300617, F300620, F300621, USER_NO " + (avans ? cmpAvans : "") + ") ";
+                //    8        9       10       11      12                       13      5        14       15       16      17       18       19        20      21      22         23       24      25        26       31       27      30        32        33               29
+                " F300601, F300602, F300603,  F30053, F300618, F30039, F30040, F30042, F30035, F300606, F300607, F300619, F300608, F300609, F300610, F300611, F300612, F300613, F300614, F300615, F300616, F300617, F300620, F300621, USER_NO, F3006061, F3006081 " + (avans ? cmpAvans : "") + ") ";
 
             //string sql = "INSERT INTO CM_Cereri (Id, F10003, TipProgram, TipConcediu, CodIndemnizatie, SerieCM, NumarCM, DataCM, LocPrescriere, DataInceput, DataSfarsit, NrZile, CodDiagnostic, CodUrgenta, CodInfectoContag, Initial, ZileCMInitial, SerieCMInitial, NumarCMInitial, DataCMInitial, " +
             //         " CodTransfer1, CodTransfer2, CodTransfer3,  CodTransfer4, CodTransfer5, NrZileCT1, NrZileCT2, NrZileCT3, NrZileCT4, NrZileCT5, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, NrAvizMedicExpert, DataAvizDSP, MedicCurant, CNPCopil, IdStare, Document, Urgenta, Suma, Tarif, Cod, ModifManuala, Optiune, USER_NO, TIME) ";
 
             sql += " SELECT 300, F10002, F10003, F10004, F10005, F10006, F10007, {0},  1, {1}, {2}, {3}, "
-                + " {4}, 0, 0, 0, {5}, {5}, {6}, {7}, '{8}', '{9}', {10}, {11}, {12}, 0, 0, '{13}', {5}, '{14}', '{15}', '{16}', '{17}', '{18}', '{19}', {20}, {21}, {22}, {23}, '{24}', '{25}', '{26}', {31}, {27}, {30}  {29}"
+                + " {4}, 0, 0, 0, {5}, {5}, {6}, {7}, '{8}', '{9}', {10}, {11}, {12}, 0, 0, '{13}', {5}, '{14}', '{15}', '{16}', '{17}', '{18}', '{19}', {20}, {21}, {22}, {23}, '{24}', '{25}', '{26}', {31}, {27}, {30}, '{32}', '{33}'  {29}"
 
                 + " FROM F100 WHERE F10003 = {28}";
 
@@ -1496,8 +1496,8 @@ namespace WizOne.ConcediiMedicale
              //21    22         23                                  24                                      25                                                  26                                                          
              BCCM.Replace(',', '.'), ZileBCCM, MZCM.Replace(',', '.'), dt.Rows[0]["NrAvizMedicExpert"].ToString(), dt.Rows[0]["MedicCurant"].ToString(), (dt.Rows[0]["CNPCopil"] == DBNull.Value ? "" : dt.Rows[0]["CNPCopil"].ToString()), 
              "CONVERT(DATETIME, '" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Year.ToString() + "', 103)" //27
-            //          28                                29                              30                31
-            , dt.Rows[0]["F10003"].ToString(), (avans ? valAvans : ""), Session["UserId"].ToString(), MNTZ.Replace(',', '.'));
+            //          28                                29                              30                31                              32                                          33
+            , dt.Rows[0]["F10003"].ToString(), (avans ? valAvans : ""), Session["UserId"].ToString(), MNTZ.Replace(',', '.'), dt.Rows[0]["SerieCMInitial"].ToString(), dt.Rows[0]["NumarCMInitial"].ToString());
 
             //verificare existenta linie cu 4450 in F300 pe marca actuala; daca exista, se actualizeaza, nu se insereaza alta noua
             if (cod == 4450)

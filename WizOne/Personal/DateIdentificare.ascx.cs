@@ -58,7 +58,8 @@ namespace WizOne.Personal
                 btnIncarca_Click();
 
                 ASPxRadioButtonList rbSex = DateIdentificare_DataList.Items[0].FindControl("rbSex") as ASPxRadioButtonList;
-                rbSex.Value = General.Nz(table.Rows[0]["F10047"],1).ToString();
+                if (!IsPostBack)
+                    rbSex.Value = General.Nz(table.Rows[0]["F10047"],1).ToString();
                 rbSex.Items[0].Text = Dami.TraduCuvant(rbSex.Items[0].Text);
                 rbSex.Items[1].Text = Dami.TraduCuvant(rbSex.Items[1].Text);
 

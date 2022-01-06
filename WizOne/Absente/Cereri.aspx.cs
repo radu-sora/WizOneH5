@@ -1051,6 +1051,8 @@ namespace WizOne.Absente
                 string idOre = "1";
                 int folosesteInterval = 0;
                 int perioada = 0;
+                int nuTrimiteInPontaj = 0;
+                int absentaTipOraFolosesteInterval = 0;
 
                 if (dtAbs != null && dtAbs.Rows.Count > 0)
                 {
@@ -1066,6 +1068,8 @@ namespace WizOne.Absente
                         perioada = Convert.ToInt32(General.Nz(dr["AbsentaTipOraPerioada"], 0));
                         if (perioada <= 0) perioada = 60;
                         if (perioada > 60) perioada = 60;
+                        nuTrimiteInPontaj = Convert.ToInt32(General.Nz(dr["NuTrimiteInPontaj"], 0));
+                        absentaTipOraFolosesteInterval = Convert.ToInt32(General.Nz(dr["AbsentaTipOraFolosesteInterval"], 0));
                     }
                 }
 
@@ -1091,6 +1095,11 @@ namespace WizOne.Absente
                     txtNrOre.ClientVisible = true;
                     txtNrOre.DecimalPlaces = 0;
                     txtNrOre.NumberType = SpinEditNumberType.Integer;
+
+                    //Florin 2022.01.06 - #1072
+                    txtNrOre.MinValue = 0;
+                    if (nuTrimiteInPontaj == 1 && absentaTipOraFolosesteInterval == 0)
+                        txtNrOre.MinValue = -999;
 
                     if (folosesteInterval == 1)
                     {

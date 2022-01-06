@@ -21188,3 +21188,7 @@ GO
 
 UPDATE tblMeniuri set Nume = 'Trimitere document', Descriere = 'Trimitere document' where Pagina = 'Pagini\TrimitereFluturasi'
 GO
+
+IF ((SELECT COUNT(*) FROM tblParametrii WHERE Nume='TimeOutSecundePrint') = 0)
+	INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul) VALUES('TimeOutSecundePrint','9999','Se foloseste in InfoKiosc',10)
+GO

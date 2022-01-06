@@ -5794,6 +5794,9 @@ namespace WizOne.Module
                 //Florin 2021.06.04 #909
                 HttpContext.Current.Session["UniqueId"] = -99;
 
+                //Florin 2022.01.06         #1065
+                HttpContext.Current.Session["TimeOutSecundePrint"] = 9999;
+
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
 

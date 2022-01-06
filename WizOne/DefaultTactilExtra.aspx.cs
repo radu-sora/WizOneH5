@@ -292,12 +292,10 @@ namespace WizOne
                         General.InregistreazaLogarea(1, Session["Tactil_Cartela"].ToString() /*txtPan1.Value*/);
                         Session["SecApp"] = "OK_Tactil";
 
-                        Session["TimeOutSecunde"] = 99999;
-                        DataTable dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TimeoutSecunde'", null);
-                        if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
-                            Session["TimeOutSecunde"] = Convert.ToInt32(dt.Rows[0][0].ToString());
+                        //Florin 2022.01.06     #1065
+                        Session["TimeOutSecundePrint"] = Dami.TimeOutSecundePrint();
+
                         Response.Redirect("~/Tactil/Main", false);
-         
                     }
                     else
                     {

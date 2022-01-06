@@ -883,6 +883,8 @@ namespace WizOne
                 //Florin 2021.06.04
                 Session["UniqueId"] = -99;
 
+                //Florin 2022.01.06         #1065
+                HttpContext.Current.Session["TimeOutSecundePrint"] = 9999;
 
                 string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
                                 UNION

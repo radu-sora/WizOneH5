@@ -175,7 +175,7 @@ namespace WizOne.ConcediiMedicale
 
                 else
                 {
-                    szT = "SELECT ROW_NUMBER() OVER (ORDER BY F94036) as \"IdAuto\", f94003, max(F94010) as F94010, max(F02105) AS \"TipCM\", CONVERT(VARCHAR,F94038,103) AS \"DataSfarsit\", CONVERT(VARCHAR,F94037,103) AS \"DataStart\", CONVERT(VARCHAR,SUM(DATEDIFF(day, F94037, F94038)+1),103) AS \"ZileCalendaristice\","
+                    szT = "SELECT ROW_NUMBER() OVER (ORDER BY F94036) as \"IdAuto\", f94003, max(F94010) as F94010, max(F02105) AS \"TipCM\", CONVERT(VARCHAR,F94038,103) AS \"DataSfarsit\", CONVERT(VARCHAR,F94037,103) AS \"DataStart\", CONVERT(VARCHAR,DATEDIFF(day, F94037, F94038)+1,103) AS \"ZileCalendaristice\","
                         + " SUM(F94013) as \"ZileLucratoare\", SUM(F94015) AS \"Suma\", F940601 + ' ' + F940602 as \"SerieNrCM\", F940606 + ' ' + F940608 AS \"SerieNrCMInit\" ";
 
                     szT += ", F940612 as BCCM, F940613 AS ZBCCM, F940614 as \"MediaZilnica\", F940620 AS MedieZileBazaCalcul, F94036 ";
@@ -192,7 +192,7 @@ namespace WizOne.ConcediiMedicale
 
                     szT += "F94003 = {0} AND F01002 = (SELECT F10002 FROM F100 WHERE F10003 = {0}) AND ";
                     szT += "(F94010 IN (select CODE1 from mardef) OR F94010 IN (select CODE2 from mardef) OR F94010 IN (select CODE3 from mardef) OR F94010 IN (select CODE4 from mardef)) ";
-                    szT += "group by f94003, F94036, CONVERT(VARCHAR,F94037,103), CONVERT(VARCHAR,F94038,103), F940601 + ' ' + F940602, F940606 + ' ' + F940608 , F940612, F940613, F940614, F940620 ";
+                    szT += "group by f94003, F94036, CONVERT(VARCHAR,F94037,103), CONVERT(VARCHAR,F94038,103), F940601 + ' ' + F940602, F940606 + ' ' + F940608 , F940612, F940613, F940614, F940620 , F94037, F94038";
 
                     szT += " UNION ";
                     szT += "SELECT 100 + ROW_NUMBER() OVER (ORDER BY F30036) as \"IdAuto\", F30003 AS f94003, F30010 AS F94010, F02105 as TipCM, CONVERT(VARCHAR,F30038,103) AS DataSfarsit, CONVERT(VARCHAR,F30037,103) AS DataStart, CONVERT(VARCHAR,DATEDIFF(day, F30037, F30038)+1,103) AS ZileCalendaristice, F30013 AS ZileLucratoare, F30015 AS Suma, F300601 + ' ' + F300602 AS SerieNrCM, F300606  + ' ' +  F300608 AS SerieNrCMInit ";
@@ -232,6 +232,7 @@ namespace WizOne.ConcediiMedicale
                     odtDate = new DateTime(anLucru, lunaLucru, 1);
 
                 int nrZileConcPrec = 0;
+                string concPrec = "";
                 if (dtCM != null && dtCM.Rows.Count > 0)
                     for (int i = 0; i < dtCM.Rows.Count; i++)
                     {
@@ -240,29 +241,36 @@ namespace WizOne.ConcediiMedicale
 
                         if (dtCM.Rows[i]["DataSfarsit"] != null && dtCM.Rows[i]["DataSfarsit"].ToString().Length >= 8)
                         {
-                            if (dtCM.Rows[i]["SerieNrCMInit"] != null && dtCM.Rows[i]["SerieNrCMInit"].ToString().Trim().Length > 0)   //concediul curent e legat de precedentul; se aduna zilele
-                                nrZileConcPrec += Convert.ToInt32(dtCM.Rows[i]["ZileCalendaristice"].ToString());
-                            else                                                //concediul curent nu e legat de precedentul
-                                nrZileConcPrec = Convert.ToInt32(dtCM.Rows[i]["ZileCalendaristice"].ToString());
-
-                            DateTime odtBackDate = new DateTime(Convert.ToInt32(dtCM.Rows[i]["DataSfarsit"].ToString().Substring(6, 4)), Convert.ToInt32(dtCM.Rows[i]["DataSfarsit"].ToString().Substring(3, 2)), Convert.ToInt32(dtCM.Rows[i]["DataSfarsit"].ToString().Substring(0, 2)));
-
-
-                            if (odtDate == odtBackDate.AddDays(1))
+                            if (dtCM.Rows[i]["SerieNrCMInit"] != null && dtCM.Rows[i]["SerieNrCMInit"].ToString().Trim().Length > 0
+                                || dtCM.Rows[i]["SerieNrCM"].ToString() == concPrec)   //concediul curent e legat de precedentul; se aduna zilele
                             {
-                                Session["ZileCMAnterior"] = nrZileConcPrec;
-                                //Session["BazaCalculCM"] = Convert.ToDouble(dtCM.Rows[i]["BCCM"].ToString());
-                                //Session["ZileBazCalcul"] = Convert.ToDouble(dtCM.Rows[i]["ZBCCM"].ToString());
-                                //Session["MediaZilnica"] = Convert.ToDouble(dtCM.Rows[i]["MediaZilnica"].ToString());
+                                nrZileConcPrec += Convert.ToInt32(dtCM.Rows[i]["ZileCalendaristice"].ToString());
+                                concPrec = dtCM.Rows[i]["SerieNrCMInit"].ToString();
+                                DateTime odtBackDate = new DateTime(Convert.ToInt32(dtCM.Rows[i]["DataSfarsit"].ToString().Substring(6, 4)), Convert.ToInt32(dtCM.Rows[i]["DataSfarsit"].ToString().Substring(3, 2)), Convert.ToInt32(dtCM.Rows[i]["DataSfarsit"].ToString().Substring(0, 2)));
+                                DateTime odtStartDate = new DateTime(Convert.ToInt32(dtCM.Rows[i]["DataStart"].ToString().Substring(6, 4)), Convert.ToInt32(dtCM.Rows[i]["DataStart"].ToString().Substring(3, 2)), Convert.ToInt32(dtCM.Rows[i]["DataStart"].ToString().Substring(0, 2)));
 
-                                //if (dtCM.Rows[i]["SerieNrCMInit"] != null && dtCM.Rows[i]["SerieNrCMInit"].ToString().Trim().Length > 0)
-                                //{
-                                //    Session["SerieNrCMInitial"] = dtCM.Rows[i]["SerieNrCMInit"].ToString();
-                                //}
-                                //else
-                                //{
-                                //    Session["SerieNrCMInitial"] = dtCM.Rows[i]["SerieNrCM"].ToString();
-                                //}
+                                if (odtDate == odtBackDate.AddDays(1))
+                                {
+                                    Session["ZileCMAnterior"] = nrZileConcPrec;
+                                    //Session["BazaCalculCM"] = Convert.ToDouble(dtCM.Rows[i]["BCCM"].ToString());
+                                    //Session["ZileBazCalcul"] = Convert.ToDouble(dtCM.Rows[i]["ZBCCM"].ToString());
+                                    //Session["MediaZilnica"] = Convert.ToDouble(dtCM.Rows[i]["MediaZilnica"].ToString());
+
+                                    //if (dtCM.Rows[i]["SerieNrCMInit"] != null && dtCM.Rows[i]["SerieNrCMInit"].ToString().Trim().Length > 0)
+                                    //{
+                                    //    Session["SerieNrCMInitial"] = dtCM.Rows[i]["SerieNrCMInit"].ToString();
+                                    //}
+                                    //else
+                                    //{
+                                    //    Session["SerieNrCMInitial"] = dtCM.Rows[i]["SerieNrCM"].ToString();
+                                    //}
+                                    odtDate = odtStartDate;
+                                }
+                            }
+                            else if (nrZileConcPrec == 0)                                               //concediul curent nu e legat de precedentul
+                            {
+                                nrZileConcPrec = Convert.ToInt32(dtCM.Rows[i]["ZileCalendaristice"].ToString());
+                                break;
                             }
 
                         }

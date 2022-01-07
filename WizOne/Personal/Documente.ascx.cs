@@ -115,7 +115,7 @@ namespace WizOne.Personal
                 for (int i = 0; i < etichete.Count(); i++)
                 {
                     ASPxLabel lbl = Documente_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
-                    lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
+                    lbl.Text = Dami.TraduCuvant(lbl.Text);
                 }
 
                 string[] butoane = new string[8] { "btnDocId", "btnDocIdIst", "btnPermis", "btnPermisIst", "btnStudii", "btnStudiiIst", "btnTitluAcad", "btnTitluAcadIst" };
@@ -176,7 +176,7 @@ namespace WizOne.Personal
                     for (int i = 1; i <= 6; i++)
                     {
                         ASPxLabel lbl = Documente_DataList.Items[0].FindControl("lblCampAd" + i) as ASPxLabel;
-                        lbl.Text = Dami.TraduCuvant((dt2 != null && dt2.Rows.Count > 0 && dt2.Rows[0]["DENUMIRECAMP" + i] != null ? dt2.Rows[0]["DENUMIRECAMP" + i].ToString() : "Camp " + i)) + ": ";
+                        lbl.Text = Dami.TraduCuvant((dt2 != null && dt2.Rows.Count > 0 && dt2.Rows[0]["DENUMIRECAMP" + i] != null ? dt2.Rows[0]["DENUMIRECAMP" + i].ToString() : "Camp " + i));
                     }
                     if (!IsPostBack)
                     {

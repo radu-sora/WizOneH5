@@ -74,7 +74,7 @@ namespace WizOne.Personal
                 for (int i = 0; i < etichete.Count(); i++)
                 {
                     ASPxLabel lbl = DateIdentificare_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
-                    lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
+                    lbl.Text = Dami.TraduCuvant(lbl.Text);
                 }
 
                 string[] butoane = new string[4] { "btnNume", "btnNumeIst", "btnPrenume", "btnPrenumeIst" };
@@ -188,6 +188,10 @@ namespace WizOne.Personal
                             ds.Tables[2].Rows[0]["F10003"] = param[1];
                             ds.Tables[0].Rows[0]["F100985"] = param[1];
                             ds.Tables[1].Rows[0]["F100985"] = param[1];
+
+                            DateAngajat pagDA = new DateAngajat();
+                            pagDA.SchimbaMarca(ds, Convert.ToInt32(param[1]), Convert.ToInt32(Session["Marca"].ToString()));
+
                             Session["Marca"] = param[1];
                             Session["InformatiaCurentaPersonal"] = ds;
 

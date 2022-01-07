@@ -222,7 +222,7 @@ namespace WizOne
                         Session["SecApp"] = "OK_Tactil";
 
                         //Florin 2022.01.06     #1065
-                        Session["TimeOutSecundePrint"] = Dami.TimeOutSecundePrint();
+                        Session["TimeOutSecundePrint"] = Dami.TimeOutSecunde("TimeOutSecundePrint");
 
                         Response.RedirectLocation = System.Web.VirtualPathUtility.ToAbsolute("~/Tactil/Main");
                     }

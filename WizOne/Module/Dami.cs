@@ -1844,13 +1844,13 @@ namespace WizOne.Module
             return id;
         }
 
-        internal static int TimeOutSecundePrint()
+        internal static int TimeOutSecunde(string numeParametru)
         {
             int rez = 9999;
 
             try
             {
-                string param = Dami.ValoareParam("TimeOutSecundePrint", "9999");
+                string param = Dami.ValoareParam(numeParametru, "9999");
                 if (param.Trim() != "" && General.IsNumeric(param))
                     rez = Convert.ToInt32(param);
             }

@@ -21192,3 +21192,7 @@ GO
 IF ((SELECT COUNT(*) FROM tblParametrii WHERE Nume='TimeOutSecundePrint') = 0)
 	INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul) VALUES('TimeOutSecundePrint','9999','Se foloseste in InfoKiosc',10)
 GO
+
+IF ((SELECT COUNT(*) FROM tblParametrii WHERE Nume='TimeOutSecundeDashboards') = 0)
+	INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul) VALUES('TimeOutSecundeDashboards','9999','Se foloseste in dashboards',0)
+GO

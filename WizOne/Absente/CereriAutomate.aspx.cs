@@ -729,7 +729,8 @@ namespace WizOne.Absente
                             txtNr.ClientEnabled = false;
                             if (Session["CereriAut_NrZile"] != null)                        
                                 txtNr.Text = Session["CereriAut_NrZile"].ToString();
-                            txtNr.ClientVisible = true;
+                            //txtNr.ClientVisible = true;
+                            txtNr.ClientVisible = false;
 
                             lblNrOre.Visible = false;
                             txtNrOre.ClientVisible = false;

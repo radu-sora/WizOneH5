@@ -162,7 +162,7 @@ namespace Wizrom.Reports.Pages
             {
                 //ReportsGridView.ClientVisible = false;
                 Panel1.Visible = false;
-                ReportsCardView.SettingsEditing.Mode = CardViewEditingMode.EditForm;
+                ReportsCardView.SettingsEditing.Mode = CardViewEditingMode.EditForm;               
                 CardViewColumn colModulCV = (ReportsCardView.Columns["ModuleId"] as CardViewColumn);
                 ReportsCardView.GroupBy(colModulCV);
                 ReportNewButton.ClientVisible = false;

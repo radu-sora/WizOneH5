@@ -119,9 +119,22 @@
                         </PropertiesBinaryImage>                        
                     </dx:CardViewBinaryImageColumn>
                 </Columns>
+                <ClientSideEvents
+                    CustomButtonClick="function(s, e) {
+                        if (e.buttonID == 'CardViewEditButton') {
+                            pageControl.onCardViewEditButtonClick(e.visibleIndex);
+                        } else if (e.buttonID == 'CardViewDeleteButton') {
+                            pageControl.onCardViewDeleteButtonClick(e.visibleIndex);
+                        }
+                    }" />              
                 <CardLayoutProperties ColCount="3">
                     <Items>
-                        <dx:CardViewCommandLayoutItem ShowEditButton="true" ShowDeleteButton="true" ColSpan="3" HorizontalAlign="Right" />
+                        <dx:CardViewCommandLayoutItem ShowEditButton="false" ShowDeleteButton="false" ColSpan="3" HorizontalAlign="Right" >
+                             <CustomButtons>
+                                <dx:CardViewCustomCommandButton ID="CardViewEditButton" Image-Url="~/Fisiere/Imagini/Icoane/edit.png" Image-ToolTip="Editare" Text=" " />
+                                <dx:CardViewCustomCommandButton ID="CardViewDeleteButton" Image-Url="~/Fisiere/Imagini/Icoane/sterge.png" Image-ToolTip="Stergere" Text=" " />
+                            </CustomButtons>
+                        </dx:CardViewCommandLayoutItem>
                         <dx:CardViewColumnLayoutItem ColumnName="Photo" ShowCaption="False" RowSpan="6" VerticalAlign="Top" Width="175" />
                         <dx:CardViewColumnLayoutItem ColumnName="Name" ShowCaption="False" ColumnSpan="2"/>
                         <dx:CardViewColumnLayoutItem ColumnName="Description" ShowCaption="False" ColumnSpan="2"/>
@@ -142,8 +155,7 @@
                         </Breakpoints>
                     </BreakpointsLayoutSettings>
                 </SettingsAdaptivity>
-                <Settings LayoutMode="Breakpoints" ShowHeaderPanel="false" ShowGroupSelector="false" />
-                <SettingsPager SettingsTableLayout-ColumnCount="2" EnableAdaptivity="true" />
+                <Settings LayoutMode="Breakpoints" ShowHeaderPanel="false" ShowGroupSelector="false" />           
                 <SettingsBehavior AllowSelectByCardClick="true" />
                 <Styles>
                     <FlowCard CssClass="flowCardStyle"></FlowCard>
@@ -197,6 +209,21 @@
                     }, function (isConfirm) {
                         if (isConfirm) {
                             reportsGridView.DeleteRow(rowIndex);
+                        }
+                    });
+                });
+            },
+            onCardViewEditButtonClick: function (cardIndex) {
+                reportsCardView.StartEditCard(cardIndex);
+            },
+            onCardViewDeleteButtonClick: function (cardIndex) {
+                reportsCardView.GetCardValues(cardIndex, 'Name', function (value) {
+                    swal({
+                        title: 'Sunteti sigur/a ?', text: 'Dashboard-ul "' + value + '" va fi sters si nu va putea fi recuperat!',
+                        type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: 'Da, sterge!', cancelButtonText: 'Renunta', closeOnConfirm: true
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            reportsCardView.DeleteCard(cardIndex);
                         }
                     });
                 });

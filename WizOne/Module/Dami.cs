@@ -644,11 +644,12 @@ namespace WizOne.Module
                         idRol = Dami.ValoareParam("Cereri_IDuriRoluriVizualizare", "-99");
 
                     //Radu 09.02.2021 - conditie pentru eliminarea dublurilor
-                    string sqlElimDubluri = " and b.idsuper = (select max(idsuper) from F100Supervizori where iduser = " + HttpContext.Current.Session["UserId"] + " and f10003 = a.f10003 and IdSuper in (" + idRol + ")) ";
+                    string sqlElimDubluri = " and b.idsuper = (select max(idsuper) from F100Supervizori where iduser = " + HttpContext.Current.Session["UserId"] + " and f10003 = a.f10003 and IdSuper in (" + idRol 
+                        + ") AND CONVERT(date,DataInceput) <= CONVERT(date,GetDate()) AND CONVERT(date,GetDate()) <= CONVERT(date,DataSfarsit)) ";
 
                     strSql = $@"SELECT DISTINCT A.*, B.""IdSuper"" AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
                                FROM ""Ptj_Cereri"" A
-                               INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idRol}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}  {sqlElimDubluri}" ;
+                               INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idRol}) AND CONVERT(date,B.DataInceput) <= CONVERT(date,GetDate()) AND CONVERT(date,GetDate()) <= CONVERT(date,B.DataSfarsit) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}  {sqlElimDubluri}" ;
                 }
 
                 //Florin 2019.09.25 - optimizare

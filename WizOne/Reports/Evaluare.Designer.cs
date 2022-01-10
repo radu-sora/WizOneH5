@@ -35,11 +35,11 @@
             this.xrPageInfo2 = new DevExpress.XtraReports.UI.XRPageInfo();
             this.xrPageInfo1 = new DevExpress.XtraReports.UI.XRPageInfo();
             this.formattingRule1 = new DevExpress.XtraReports.UI.FormattingRule();
+            this.xrPictureBox1 = new DevExpress.XtraReports.UI.XRPictureBox();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // Detail
             // 
-            this.Detail.Dpi = 100F;
             this.Detail.HeightF = 19.79167F;
             this.Detail.Name = "Detail";
             this.Detail.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
@@ -48,8 +48,8 @@
             // TopMargin
             // 
             this.TopMargin.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
-            this.lblTitlu});
-            this.TopMargin.Dpi = 100F;
+            this.lblTitlu,
+            this.xrPictureBox1});
             this.TopMargin.HeightF = 96.875F;
             this.TopMargin.Name = "TopMargin";
             this.TopMargin.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
@@ -58,12 +58,11 @@
             // lblTitlu
             // 
             this.lblTitlu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(154)))), ((int)(((byte)(99)))));
-            this.lblTitlu.Dpi = 100F;
             this.lblTitlu.Font = new System.Drawing.Font("Times New Roman", 16F);
             this.lblTitlu.LocationFloat = new DevExpress.Utils.PointFloat(0F, 27.16667F);
             this.lblTitlu.Name = "lblTitlu";
             this.lblTitlu.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lblTitlu.SizeF = new System.Drawing.SizeF(750F, 46F);
+            this.lblTitlu.SizeF = new System.Drawing.SizeF(503.125F, 59.70832F);
             this.lblTitlu.StylePriority.UseBackColor = false;
             this.lblTitlu.StylePriority.UseFont = false;
             this.lblTitlu.StylePriority.UsePadding = false;
@@ -76,7 +75,6 @@
             this.BottomMargin.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
             this.xrPageInfo2,
             this.xrPageInfo1});
-            this.BottomMargin.Dpi = 100F;
             this.BottomMargin.HeightF = 47F;
             this.BottomMargin.Name = "BottomMargin";
             this.BottomMargin.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
@@ -84,7 +82,6 @@
             // 
             // xrPageInfo2
             // 
-            this.xrPageInfo2.Dpi = 100F;
             this.xrPageInfo2.Format = "{0:dd.MM.yyyy}";
             this.xrPageInfo2.LocationFloat = new DevExpress.Utils.PointFloat(0F, 15.99998F);
             this.xrPageInfo2.Name = "xrPageInfo2";
@@ -94,7 +91,6 @@
             // 
             // xrPageInfo1
             // 
-            this.xrPageInfo1.Dpi = 100F;
             this.xrPageInfo1.Format = "Pagina {0} din {1}";
             this.xrPageInfo1.LocationFloat = new DevExpress.Utils.PointFloat(593.7495F, 15.99998F);
             this.xrPageInfo1.Name = "xrPageInfo1";
@@ -106,6 +102,13 @@
             // formattingRule1
             // 
             this.formattingRule1.Name = "formattingRule1";
+            // 
+            // xrPictureBox1
+            // 
+            this.xrPictureBox1.LocationFloat = new DevExpress.Utils.PointFloat(503.125F, 27.16667F);
+            this.xrPictureBox1.Name = "xrPictureBox1";
+            this.xrPictureBox1.SizeF = new System.Drawing.SizeF(246.875F, 59.70832F);
+            this.xrPictureBox1.Sizing = DevExpress.XtraPrinting.ImageSizeMode.StretchImage;
             // 
             // Evaluare
             // 
@@ -121,7 +124,7 @@
             this.PageWidth = 827;
             this.PaperKind = System.Drawing.Printing.PaperKind.A4;
             this.RequestParameters = false;
-            this.Version = "16.1";
+            this.Version = "17.1";
             this.BeforePrint += new System.Drawing.Printing.PrintEventHandler(this.Evaluare_BeforePrint);
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
@@ -136,5 +139,6 @@
         private DevExpress.XtraReports.UI.XRPageInfo xrPageInfo2;
         private DevExpress.XtraReports.UI.XRPageInfo xrPageInfo1;
         private DevExpress.XtraReports.UI.FormattingRule formattingRule1;
+        private DevExpress.XtraReports.UI.XRPictureBox xrPictureBox1;
     }
 }

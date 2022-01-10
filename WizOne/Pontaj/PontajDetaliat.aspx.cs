@@ -2265,7 +2265,7 @@ namespace WizOne.Pontaj
                                     GridViewDataSpinEditColumn colNumerica = new GridViewDataSpinEditColumn();
                                     colNumerica.PropertiesSpinEdit.DecimalPlaces = 0;
                                     colNumerica.PropertiesSpinEdit.NumberType = SpinEditNumberType.Integer;
-                                    colNumerica.PropertiesSpinEdit.MinValue = 0;
+                                    colNumerica.PropertiesSpinEdit.MinValue = -1000;    //Radu 10.12.2021 - sunt cazuri când pe F-uri sunt valori negative
                                     colNumerica.PropertiesSpinEdit.MaxValue = 2000;
                                     colNumerica.PropertiesSpinEdit.DisplayFormatString = "N0";
                                     colNumerica.PropertiesSpinEdit.DisplayFormatInEditMode = true;

@@ -28,7 +28,7 @@ namespace WizOne.Personal
             for (int i = 0; i < etichete.Count(); i++)
             {
                 ASPxLabel lbl = Studii_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
-                lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
+                lbl.Text = Dami.TraduCuvant(lbl.Text);
             }
 
             string[] butoane = new string[2] { "btnStudii", "btnStudiiIst" };

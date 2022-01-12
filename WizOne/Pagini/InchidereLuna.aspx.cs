@@ -112,9 +112,9 @@ namespace WizOne.Pagini
                     return mesaj;
                 }
 
-                string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
+                string tmp = Constante.cnnWeb.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                 string conn = tmp.Split(';')[0];
-                tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
+                tmp = Constante.cnnWeb.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];   //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                 string user = tmp.Split(';')[0];
                 string DB = Constante.BD;    
                 tmp = Constante.cnnWeb.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
@@ -256,12 +256,12 @@ namespace WizOne.Pagini
 
             try
             {
-                string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
+                string tmp = Constante.cnnWeb.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                 string conn = tmp.Split(';')[0];
                 string DB = Constante.BD;
-                tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
+                tmp = Constante.cnnWeb.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];   //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                 string user = tmp.Split(';')[0];
-                tmp = Constante.cnnWeb.ToUpper().Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                tmp = Constante.cnnWeb.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                 string pwd = tmp.Split(';')[0];
 
                 string cale = Dami.ValoareParam("CaleBackUp").Trim();

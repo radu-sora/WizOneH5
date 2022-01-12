@@ -1520,14 +1520,14 @@ namespace WizOne.Adev
                 string tmp = cnApp.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
                 string pwd = tmp.Split(';')[0];
 
-                tmp = cnApp.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
+                tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                 string conn = tmp.Split(';')[0];
-                tmp = cnApp.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
+                tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                 string user = tmp.Split(';')[0];
                 string DB = "";
                 if (Constante.tipBD == 1)
                 {
-                    tmp = cnApp.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
+                    tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                     DB = tmp.Split(';')[0];
                 }
                 else

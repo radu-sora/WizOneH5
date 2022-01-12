@@ -129,7 +129,7 @@ namespace WizOne.Pagini
 
                         CriptDecript prc = new CriptDecript();
                         Constante.cnnWeb = prc.EncryptString(Constante.cheieCriptare, ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString, 2);
-                        string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
+                        string tmp = Constante.cnnWeb.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                         numeBaza = tmp.Split(';')[0];
 
 

@@ -57,12 +57,12 @@ namespace WizOne
                 if (str.ToUpper().IndexOf("INITIAL CATALOG") >=0)
                 {
                     Constante.tipBD = 1;
-                    int poz = str.ToUpper().IndexOf("INITIAL CATALOG");
+                    int poz = str.ToUpper().IndexOf("INITIAL CATALOG");     
                     int pozEnd = str.IndexOf(";", poz);
                     if (pozEnd > 0)
-                        Constante.BD = str.ToUpper().Substring(poz, pozEnd - poz).Replace(" ", "").Replace("INITIALCATALOG=", "");
+                        Constante.BD = str.Substring(poz, pozEnd - poz).Replace(" ", "").Replace("INITIALCATALOG=", "");  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                     else
-                        Constante.BD = str.ToUpper().Substring(poz).Replace(" ", "").Replace("INITIALCATALOG=", "");
+                        Constante.BD = str.Substring(poz).Replace(" ", "").Replace("INITIALCATALOG=", "");    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                 }
                 else
                 {
@@ -70,9 +70,9 @@ namespace WizOne
                     int poz = str.ToUpper().IndexOf("USER ID");
                     int pozEnd = str.IndexOf(";", poz);
                     if (pozEnd > 0)
-                        Constante.BD = str.ToUpper().Substring(poz, pozEnd - poz).Replace(" ","").Replace("USERID=", "");
+                        Constante.BD = str.Substring(poz, pozEnd - poz).Replace(" ","").Replace("USERID=", "");   //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                     else
-                        Constante.BD = str.ToUpper().Substring(poz).Replace(" ", "").Replace("USERID=", "");
+                        Constante.BD = str.Substring(poz).Replace(" ", "").Replace("USERID=", "");    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                 }
 
                 //determinam versiunea

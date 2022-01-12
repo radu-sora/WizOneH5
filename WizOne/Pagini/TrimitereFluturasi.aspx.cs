@@ -31,6 +31,7 @@ using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
 using Twilio;
 using System.Web.Script.Serialization;
+using EASendMail;
 
 namespace WizOne.Pagini
 {
@@ -1501,6 +1502,208 @@ namespace WizOne.Pagini
                 return null;
             }
         }
+
+        protected void btnMail_Click(object sender, EventArgs e)
+        {
+            SendMail();
+        }
+
+
+        static string _postString_EWS(string uri, string requestData)
+        {
+            HttpWebRequest httpRequest = WebRequest.Create(uri) as HttpWebRequest;
+            httpRequest.Method = "POST";
+            httpRequest.ContentType = "application/x-www-form-urlencoded";
+
+            using (Stream requestStream = httpRequest.GetRequestStream())
+            {
+                byte[] requestBuffer = Encoding.UTF8.GetBytes(requestData);
+                requestStream.Write(requestBuffer, 0, requestBuffer.Length);
+                requestStream.Close();
+            }
+
+            try
+            {
+                HttpWebResponse httpResponse = httpRequest.GetResponse() as HttpWebResponse;
+                using (StreamReader reader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    // reads response body
+                    string responseText = reader.ReadToEnd();
+                    Console.WriteLine(responseText);
+                    return responseText;
+                }
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    var response = ex.Response as HttpWebResponse;
+                    if (response != null)
+                    {
+                        //Console.WriteLine("HTTP: " + response.StatusCode);
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            // reads response body
+                            string responseText = reader.ReadToEnd();
+                            //Console.WriteLine(responseText);
+                        }
+                    }
+                }
+
+                throw ex;
+            }
+        }
+
+        public void SendMail()
+        {
+            try
+            {
+                string client_id = "6aff4cbc-bb88-427a-805a-e9eea06731f8";
+                string client_secret = "qXA7Q~xUrnlkfWwLpJmAFa7t2tg.SC_NM~c0z";
+
+                // If your application is not created by Office365 administrator,
+                // please use Office365 directory tenant id, you should ask Offic365 administrator to send it to you.
+                // Office365 administrator can query tenant id in https://portal.azure.com/ - Azure Active Directory.
+                string tenant = "f8cdef31-a31e-4b4a-93e4-5f571e91255a";
+
+                string requestData =
+                    string.Format("client_id={0}&client_secret={1}&scope=https://outlook.office365.com/.default&grant_type=client_credentials",
+                        client_id, client_secret);
+
+                string tokenUri = string.Format("https://login.microsoftonline.com/{0}/oauth2/v2.0/token", tenant);
+                string responseText = _postString_EWS(tokenUri, requestData);
+
+                OAuthResponseParser parser = new OAuthResponseParser();
+                parser.Load(responseText);
+
+                string officeUser = "zemy.apfelbaum@wizromsoftwaresrl.onmicrosoft.com";
+                var server = new EASendMail.SmtpServer("outlook.office365.com");
+                server.Protocol = EASendMail.ServerProtocol.ExchangeEWS;
+                server.User = officeUser;
+
+                server.Password = parser.AccessToken;
+                server.AuthType = SmtpAuthType.XOAUTH2;
+                server.ConnectType = SmtpConnectType.ConnectSSLAuto;
+
+                var mail = new EASendMail.SmtpMail("TryIt");
+
+                mail.From = officeUser;
+                mail.To = "zemy.apfelbaum@wizromsoftwaresrl.onmicrosoft.com";
+
+                mail.Subject = "Office 365 background service oauth test";
+                mail.TextBody = "this is a test, don't reply";
+
+                var smtp = new EASendMail.SmtpClient();
+                smtp.SendMail(server, mail);
+
+                //Console.WriteLine("Message delivered!");
+            }
+            catch (Exception ep)
+            {
+                //Console.WriteLine(ep.ToString());
+            }
+        }
+
+
+        static string _postString(string uri, string requestData)
+        {
+            HttpWebRequest httpRequest = WebRequest.Create(uri) as HttpWebRequest;
+            httpRequest.Method = "POST";
+            httpRequest.ContentType = "application/x-www-form-urlencoded";
+
+            using (Stream requestStream = httpRequest.GetRequestStream())
+            {
+                byte[] requestBuffer = Encoding.UTF8.GetBytes(requestData);
+                requestStream.Write(requestBuffer, 0, requestBuffer.Length);
+                requestStream.Close();
+            }
+
+            try
+            {
+                HttpWebResponse httpResponse = httpRequest.GetResponse() as HttpWebResponse;
+                using (StreamReader reader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    // reads response body
+                    string responseText = reader.ReadToEnd();
+                    Console.WriteLine(responseText);
+                    return responseText;
+                }
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    var response = ex.Response as HttpWebResponse;
+                    if (response != null)
+                    {
+                        Console.WriteLine("HTTP: " + response.StatusCode);
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            // reads response body
+                            string responseText = reader.ReadToEnd();
+                            Console.WriteLine(responseText);
+                        }
+                    }
+                }
+
+                throw ex;
+            }
+        }
+
+        public void SendMail_G()
+        {
+            try
+            {
+                string client_id = "6aff4cbc-bb88-427a-805a-e9eea06731f8";
+                string client_secret = "qXA7Q~xUrnlkfWwLpJmAFa7t2tg.SC_NM~c0z";
+
+                // If your application is not created by Office365 administrator,
+                // please use Office365 directory tenant id, you should ask Offic365 administrator to send it to you.
+                // Office365 administrator can query tenant id in https://portal.azure.com/ - Azure Active Directory.
+                string tenant = "f8cdef31-a31e-4b4a-93e4-5f571e91255a";
+
+                string requestData =
+                    string.Format("client_id={0}&client_secret={1}&scope=https://graph.microsoft.com/Mail.Send&grant_type=client_credentials",
+                        client_id, client_secret);
+
+                string tokenUri = string.Format("https://login.microsoftonline.com/{0}/oauth2/v2.0/token", tenant);
+                string responseText = _postString(tokenUri, requestData);
+
+                OAuthResponseParser parser = new OAuthResponseParser();
+                parser.Load(responseText);
+
+                string officeUser = "zemy.apfelbaum@wizromsoftwaresrl.onmicrosoft.com";
+
+                // Set Ms Graph API server and protocol
+                var server = new SmtpServer("https://graph.microsoft.com/v1.0/me/sendMail");
+                server.Protocol = ServerProtocol.MsGraphApi;
+
+                server.User = officeUser;
+                server.Password = parser.AccessToken;
+                server.AuthType = SmtpAuthType.XOAUTH2;
+
+                server.ConnectType = SmtpConnectType.ConnectSSLAuto;
+
+                var mail = new SmtpMail("TryIt");
+
+                mail.From = officeUser;
+                mail.To = "support@emailarchitect.net";
+
+                mail.Subject = "Office 365 background service oauth test";
+                mail.TextBody = "this is a test, don't reply";
+
+                var smtp = new EASendMail.SmtpClient();
+                smtp.SendMail(server, mail);
+
+                Console.WriteLine("Message delivered!");
+            }
+            catch (Exception ep)
+            {
+                Console.WriteLine(ep.ToString());
+            }
+        }
+
+
     }
 }
  

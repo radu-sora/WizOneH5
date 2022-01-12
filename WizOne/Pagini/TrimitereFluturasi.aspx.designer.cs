@@ -33,6 +33,15 @@ namespace WizOne.Pagini
         protected global::DevExpress.Web.ASPxButton btnTrimitere;
 
         /// <summary>
+        /// btnMail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnMail;
+
+        /// <summary>
         /// btnNotifWA control.
         /// </summary>
         /// <remarks>

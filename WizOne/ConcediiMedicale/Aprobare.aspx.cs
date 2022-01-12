@@ -32,8 +32,10 @@ namespace WizOne.ConcediiMedicale
             public int Optiune { get; set; }
             public int Stagiu { get; set; }
             public DateTime DataInceput { get; set; }
+            public DateTime DataSfarsit { get; set; }
             public string SerieCMInitial { get; set; }
             public string NumarCMInitial { get; set; }
+            public int NrZile { get; set; }
 
         }     
 
@@ -1200,7 +1202,7 @@ namespace WizOne.ConcediiMedicale
                 List<metaCereriCM> ids = new List<metaCereriCM>();
                 string msg = "";
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare", "DataInceput" });
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare", "DataInceput", "DataSfarsit", "NrZile" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate"), MessageBox.icoWarning, "");
@@ -1214,6 +1216,7 @@ namespace WizOne.ConcediiMedicale
                 {
                     object[] arr = lst[i] as object[];
                     DateTime? data = arr[7] as DateTime?;
+                    DateTime? dataSf = arr[8] as DateTime?;
 
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) < 0)
                     {
@@ -1245,7 +1248,9 @@ namespace WizOne.ConcediiMedicale
                         ZileBazaCalculCM = Convert.ToInt32(General.Nz(arr[2], 0)),
                         MedieZileBazaCalcul = Convert.ToDouble(General.Nz(arr[3], 0)),
                         MedieZilnicaCM = Convert.ToDouble(General.Nz(arr[4], 0)),
-                        DataInceput = (data ?? new DateTime(2100, 1, 1))
+                        DataInceput = (data ?? new DateTime(2100, 1, 1)),
+                        DataSfarsit = (dataSf ?? new DateTime(2100, 1, 1)),
+                        NrZile = Convert.ToInt32(General.Nz(arr[9], 0))
                     });
                     nrSel++;
                 }
@@ -1290,6 +1295,23 @@ namespace WizOne.ConcediiMedicale
                     {
                         General.ExecutaNonQuery("DELETE FROM F300 WHERE F30003 = " + +ids[i].F10003 + " AND F30010 BETWEEN 4400 AND 4499", null);
                     }
+
+                    //stergem din pontaj   
+                    StergeInPontaj(ids[i].Id, ids[i].F10003, Convert.ToInt32(General.Nz(Session["UserId"], -99)));
+
+                    DataTable dtPtj = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= ""Ziua"" AND ""Ziua"" <= @3", new object[] { ids[i].F10003, ids[i].DataInceput, ids[i].DataSfarsit });
+
+                    if (dtPtj != null && dtPtj.Rows.Count > 0)
+                    {
+                        for (int j = 0; j < dtPtj.Rows.Count; j++)
+                        {
+                            Calcul.AlocaContract(Convert.ToInt32(dtPtj.Rows[j]["F10003"].ToString()), Convert.ToDateTime(dtPtj.Rows[j]["Ziua"]));
+                            Calcul.CalculInOut(dtPtj.Rows[j], true, true);
+                        }
+                    }
+
+                    General.CalculFormule(ids[i].F10003, null, ids[i].DataInceput, ids[i].DataSfarsit);
+                    General.SituatieZLOperatii(ids[i].F10003, ids[i].DataInceput, 3, ids[i].NrZile);
                 }
 
                 Session["CM_Grid"] = null;
@@ -1305,6 +1327,33 @@ namespace WizOne.ConcediiMedicale
             }
         }
 
+
+        public static void StergeInPontaj(int id, int f10003, int idUser)
+        {
+            try
+            {
+                string sqlStr =
+                    $@"BEGIN
+                        INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                        SELECT F10003, ""Ziua"", NULL, ""ValStr"", {idUser}, {General.CurrentDate()}, 'Anulare concediu medical', {idUser}, {General.CurrentDate()}
+                        FROM ""Ptj_Intrari"" 
+                        WHERE F10003 = (SELECT F10003 FROM ""CM_Cereri"" WHERE ""Id"" = {id})
+                        AND(SELECT ""DataInceput"" FROM ""CM_Cereri"" WHERE ""Id"" = {id}) <= ""Ziua""
+                        AND ""Ziua"" <= (SELECT ""DataSfarsit"" FROM ""CM_Cereri"" WHERE ""Id"" = {id});
+
+                        UPDATE ""Ptj_Intrari"" SET ""ValStr"" = NULL 
+                        WHERE F10003 = (SELECT F10003 FROM ""CM_Cereri"" WHERE ""Id"" = {id})
+                        AND (SELECT ""DataInceput"" FROM ""CM_Cereri"" WHERE ""Id"" = {id}) <= ""Ziua""
+                        AND ""Ziua"" <= (SELECT ""DataSfarsit"" FROM ""CM_Cereri"" WHERE ""Id"" = {id});
+                    END;";
+                General.ExecutaNonQuery(sqlStr, null);
+                
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "ConcediiMedicale", "StergeInPontaj");
+            }
+        }
 
 
         bool AddConcediu(int cod, int zile, int cc, double proc, double suma_4450_subplafon, bool bFTarif, int marca, bool avans)

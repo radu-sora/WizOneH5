@@ -168,7 +168,8 @@ namespace WizOne.Tactil
 
                     // New report access interface
                     //MessageBox.Show("Fluturasul se printeaza!", MessageBox.icoSuccess, "");
-                    Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
+                    //Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
+                    Wizrom.Reports.Code.ReportProxy.Print(reportId, paramList: reportParams);
                 }
                 else
                 {

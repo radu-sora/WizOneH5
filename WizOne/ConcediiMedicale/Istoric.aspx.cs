@@ -270,6 +270,7 @@ namespace WizOne.ConcediiMedicale
                             else if (nrZileConcPrec == 0)                                               //concediul curent nu e legat de precedentul
                             {
                                 nrZileConcPrec = Convert.ToInt32(dtCM.Rows[i]["ZileCalendaristice"].ToString());
+                                Session["ZileCMAnterior"] = nrZileConcPrec;
                                 break;
                             }
 

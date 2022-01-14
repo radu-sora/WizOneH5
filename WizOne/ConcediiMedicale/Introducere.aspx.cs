@@ -2241,7 +2241,11 @@ namespace WizOne.ConcediiMedicale
                     OnUpdateZL();
                     break;
                 case "txtZCMAnt":
-                    OnUpdateZLP();
+                    //OnUpdateZLP();
+                    Session["CM_NrZileCT1"] = null;
+                    Session["ZileCMAnterior"] = param[1];
+                    On93Prel();
+                    InitWorkingDays();
                     break;
                 //case "rbZileCal":
                 //    OnZileAng();

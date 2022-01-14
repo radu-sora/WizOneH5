@@ -1299,7 +1299,7 @@ namespace WizOne.Eval
                         case 66: //Supervizor6 Nume
                         case 67: //Supervizor6 Post
                             //Radu 30.10.2020 - am grupat toate optiunile de mai sus
-                            ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));
+                            ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));    
                             break;
                         case 23: //Obiective individuale
                             ctl = CreeazaObiectiveIndividuale(ent.Id, 1, super);
@@ -5537,7 +5537,7 @@ namespace WizOne.Eval
                     string sql = @"UPDATE ""Eval_RaspunsLinii"" SET ";
                     for (int i = 1; i <= 20; i++)
                     {
-                        sql += " \"Super" + i + "\" = " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
+                        sql += " \"Super" + i + "\" = FORMAT(day(getdate()), '00') + '/' + FORMAT(month(getdate()), '00') + '/' + convert(varchar ,year(getdate()))";     //Radu 14.01.2022 - #1067   in loc de (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE")
                         if (i < 20)
                             sql += ", ";
                     }

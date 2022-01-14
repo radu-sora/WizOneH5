@@ -2008,9 +2008,13 @@ namespace WizOne.ConcediiMedicale
             //ASPxTextBox txtNrCMInit = DataList1.Items[0].FindControl("txtNrCMInit") as ASPxTextBox;
 
             txtZCMAnt.Enabled = false;
+            txtZCMAnt.Text = "";
             txtSCMInit.Enabled = false;
+            txtSCMInit.Text = "";
             txtNrCMInit.Enabled = false;
+            txtNrCMInit.Text = "";
             deDataCMInit.Enabled = false;
+            deDataCMInit.Value = null;
         }
 
 
@@ -2213,10 +2217,17 @@ namespace WizOne.ConcediiMedicale
                     OnSelEndDate(param[1]);
                     break;
                 case "rbConcInit":
-                    On93Initial();
+                    if (param[1] == "true")
+                    {
+                        Session["CM_NrZileCT1"] = null;
+                        Session["ZileCMAnterior"] = null;
+                        InitWorkingDays();
+                        On93Initial();
+                    }
                     break;
                 case "rbConcCont":
-                    On93Prel();
+                    if (param[1] == "true")
+                        On93Prel();
                     break;
                 case "cmbCC":
                     OnSelChangeCostCenter();

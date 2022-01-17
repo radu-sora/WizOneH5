@@ -2687,7 +2687,7 @@ namespace WizOne.Module
                         if (tipActiune == 2) General.SituatieZLOperatii(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]), 2, Convert.ToInt32(General.Nz(dr["NrZile"], 1)));
 
                         //Florin 2020.09.16
-                        string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(HttpContext.Current.Session["IdClient"], "1").ToString(), General.Nz(HttpContext.Current.Session["IdLimba"], "RO").ToString() };
+                        string[] arrParam = new string[] { General.UrlHost(), General.Nz(HttpContext.Current.Session["IdClient"], "1").ToString(), General.Nz(HttpContext.Current.Session["IdLimba"], "RO").ToString() };
 
                         HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                         {
@@ -9835,5 +9835,21 @@ namespace WizOne.Module
             }
         }
 
+        internal static string UrlHost()
+        {
+            string urlHost = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
+
+            try
+            {
+                string paramHost = Dami.ValoareParam("URLAprobareCereriDinMail").Trim();
+                if (paramHost != "") urlHost = paramHost;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "UrlHost", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return urlHost;
+        }
     }
 }

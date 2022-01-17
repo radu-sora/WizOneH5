@@ -4244,7 +4244,7 @@ namespace WizOne.Avs
                 //    General.ModificaFunctieAngajat(F10003, Convert.ToInt32(General.Nz(cmb1Nou.Value,-99)), Convert.ToDateTime(txtDataMod.Value), new DateTime(2100,1,1));
             }
 
-            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+            string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
             HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
             {
@@ -7055,7 +7055,7 @@ namespace WizOne.Avs
                         grup = Convert.ToInt32(dt.Rows[i]["GrupAngajati"].ToString());
                     }
 
-                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                    string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
                     int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
                     int idUser = Convert.ToInt32(Session["UserId"] ?? -99);
 

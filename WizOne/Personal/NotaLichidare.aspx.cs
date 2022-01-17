@@ -487,7 +487,7 @@ namespace WizOne.Personal
                 General.ExecutaNonQuery("UPDATE \"MP_NotaLichidare_Detalii\" SET \"IdStare\" = " + idStare + " WHERE \"IdNotaLichidare\" = " + idNota, null);
                 grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes!");
 
-                string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };                
+                string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };                
                 int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
                 int idUser = Convert.ToInt32(Session["UserId"] ?? -99);
 
@@ -560,7 +560,7 @@ namespace WizOne.Personal
                 General.SalveazaDate(dt, "MP_NotaLichidare_Detalii");
                 grDateDet.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes!");
 
-                string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
                 int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
                 int idUser = Convert.ToInt32(Session["UserId"] ?? -99);
 

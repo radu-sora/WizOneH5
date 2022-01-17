@@ -627,8 +627,7 @@ namespace WizOne.Module
                             string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/1/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
 
                             string rsp = General.Encrypt_QueryString(arg);
-                            string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
-                            string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
+                            string lnk = "<a href='" + General.UrlHost() + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
                             str = str.Replace(cuvOriginal + "$#", lnk).ToString();
                         }
                         else
@@ -655,8 +654,7 @@ namespace WizOne.Module
                             string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/2/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
 
                             string rsp = General.Encrypt_QueryString(arg);
-                            string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
-                            string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
+                            string lnk = "<a href='" + General.UrlHost() + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
                             str = str.Replace(cuvOriginal + "$#", lnk).ToString();
                         }
                         else
@@ -1036,14 +1034,11 @@ namespace WizOne.Module
                 int poz = corpAtt.IndexOf("UploadFiles/Images");
                 if (poz >= 0)
                 {
-                    string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority;
-                    var virtualDir = VirtualPathUtility.ToAbsolute("~/");
-
                     int poz1 = corpAtt.Substring(0, poz).LastIndexOf('"');
                     if (poz - poz1 > 0)
                     {
                         string txtReplace = corpAtt.Substring(poz1, poz - poz1) + "UploadFiles/Images";
-                        corpAtt = corpAtt.Replace(txtReplace, "\"" + hostUrl + virtualDir + "UploadFiles/Images");
+                        corpAtt = corpAtt.Replace(txtReplace, "\"" + General.UrlHost() + "UploadFiles/Images");
                     }
                 }
 

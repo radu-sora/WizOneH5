@@ -981,7 +981,7 @@ namespace WizOne.Absente
                     #endregion
                     
 
-                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                    string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
                     HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                     {

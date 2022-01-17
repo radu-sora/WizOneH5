@@ -21399,3 +21399,9 @@ SELECT @ZileCuveniteAn, isnull(@ZileCuvenite,0), @ZileCuveniteZi, isnull((select
  RETURN;
 END
 GO
+
+--https://github.com/wizromRD/WizOne/issues/1075
+--Verificare Link Aproba/Respinge #1075
+IF ((SELECT COUNT(*) FROM tblParametrii WHERE Nume='URLAprobareCereriDinMail') = 0)
+	INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul) VALUES('URLAprobareCereriDinMail','','Se foloseste pentru crearea linkului de la care se aproba cererile de pe mail',0)
+GO

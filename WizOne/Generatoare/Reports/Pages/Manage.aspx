@@ -136,9 +136,9 @@
                             </CustomButtons>
                         </dx:CardViewCommandLayoutItem>
                         <dx:CardViewColumnLayoutItem ColumnName="Photo" ShowCaption="False" RowSpan="6" VerticalAlign="Top" Width="175" />
-                        <dx:CardViewColumnLayoutItem ColumnName="Name" ShowCaption="False" ColumnSpan="2"/>
-                        <dx:CardViewColumnLayoutItem ColumnName="Description" ShowCaption="False" ColumnSpan="2"/>
-                         <dx:CardViewColumnLayoutItem ColumnName="ModuleId"  ShowCaption="False" ColumnSpan="2"/>
+                        <dx:CardViewColumnLayoutItem ColumnName="Name" ShowCaption="False" ColumnSpan="2" HorizontalAlign="Right"/>
+                        <dx:CardViewColumnLayoutItem ColumnName="Description" ShowCaption="False" ColumnSpan="2" HorizontalAlign="Right"/>
+                         <dx:CardViewColumnLayoutItem ColumnName="ModuleId"  ShowCaption="False" ColumnSpan="2" HorizontalAlign="Right"/>
                          <dx:CardViewColumnLayoutItem ColumnName="TypeId" Visible="false"/>
                          <dx:CardViewColumnLayoutItem ColumnName="Id" Visible="false"/>
                         <dx:EditModeCommandLayoutItem HorizontalAlign="Right" ColSpan="3" />
@@ -149,7 +149,7 @@
                     <dx:CardViewFormatConditionTopBottom Rule="TopItems"  FieldName="Description" Format="ItalicText" />
                 </FormatConditions>
                 <SettingsAdaptivity>
-                    <BreakpointsLayoutSettings CardsPerRow="2">
+                    <BreakpointsLayoutSettings CardsPerRow="3">
                         <Breakpoints>                     
                             <dx:CardViewBreakpoint DeviceSize="Custom" MaxWidth="500" CardsPerRow="1" />
                         </Breakpoints>

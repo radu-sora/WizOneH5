@@ -38,7 +38,7 @@ namespace Wizrom.Reports.Pages
                 "FROM [DynReports] r " +
                 "INNER JOIN [RapoarteGrupuriUtilizatori] rgu ON r.[DynReportId] = rgu.[IdRaport] AND rgu.[IdUser] = @1 " +
                 "LEFT JOIN [tblRapoarteDetalii] det ON r.[DynReportId] = det.[IdRaport] " + 
-               $"WHERE r.[DynReportTypeId] {(type == 1 ? "<>" : "=")} 5", HttpContext.Current.Session["UserId"]);  //Radu 15.07.2020 && 13.10.2021
+               $"WHERE r.[DynReportTypeId] {(type == 1 ? "<>" : "=")} 5 ORDER BY Id", HttpContext.Current.Session["UserId"]);  //Radu 15.07.2020 && 13.10.2021
 
             return reports;
         }

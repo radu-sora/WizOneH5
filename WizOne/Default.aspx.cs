@@ -102,7 +102,7 @@ namespace WizOne
 
                     //este necesar sa golim variabilele de sesiune pt cazul cand apasa Log Out
                     Session.Clear();
-                    InitSessionVariables();
+                    General.InitSessionVariables();
                 }
 
                 Session["IdLimba"] = Dami.ValoareParam("LimbaStart");
@@ -789,136 +789,136 @@ namespace WizOne
             return stare;
         }
 
-        public void InitSessionVariables()
-        {
-            try
-            {
-                //Lista cu toate variabilele de sesiune din aplicatie
-                Session["SecApp"] = "NO";
-                Session["tblParam"] = "";
-                Session["tmpMeniu"] = "";
-                Session["Titlu"] = "";
-                Session["Sablon_Tabela"] = "";
-                Session["Sablon_CheiePrimara"] = "";
-                Session["Sablon_TipActiune"] = "";
-                Session["InformatiaCurenta"] = "";
-                Session["SecuritateCamp"] = "";
-                Session["SecuritateDate"] = "";
-                Session["PaginaWeb"] = "";
-                Session["TipNotificare"] = "";
-                Session["Date_Profile"] = "";
-                Session["ProfilId"] = "";
-                Session["Profil_Original"] = "";
-                Session["AbsDescValues"] = "";
+        //public void InitSessionVariables()
+        //{
+        //    try
+        //    {
+        //        //Lista cu toate variabilele de sesiune din aplicatie
+        //        Session["SecApp"] = "NO";
+        //        Session["tblParam"] = "";
+        //        Session["tmpMeniu"] = "";
+        //        Session["Titlu"] = "";
+        //        Session["Sablon_Tabela"] = "";
+        //        Session["Sablon_CheiePrimara"] = "";
+        //        Session["Sablon_TipActiune"] = "";
+        //        Session["InformatiaCurenta"] = "";
+        //        Session["SecuritateCamp"] = "";
+        //        Session["SecuritateDate"] = "";
+        //        Session["PaginaWeb"] = "";
+        //        Session["TipNotificare"] = "";
+        //        Session["Date_Profile"] = "";
+        //        Session["ProfilId"] = "";
+        //        Session["Profil_Original"] = "";
+        //        Session["AbsDescValues"] = "";
 
-                Session["Cereri_Absente_Absente"] = "";
-                Session["Cereri_Absente_Angajati"] = "";
-
-
-                Session["formatDataSistem"] = CultureInfo.CurrentCulture;
-
-                Session["IdLimba"] = "RO";
-                Session["IdLimba_Veche"] = "RO";
-
-                Session["User"] = "";
-                Session["UserId"] = -99;
-                Session["User_NumeComplet"] = "";
-                Session["User_Marca"] = -99;
-                Session["User_IdDept"] = -99;
-                Session["User_Dept"] = "";
-                Session["User_CNP"] = "";
-
-                Session["EsteAdmin"] = 0;
-                Session["SchimbaParola"] = 0;
-                Session["EsteInGrup99"] = 0;
-                Session["ParolaComplexa"] = 0;
-
-                Session["PrimaIntrare"] = 0;
-
-                Session["IdMaxValue"] = 1;
-
-                Session["Ptj_IstoricVal"] = "";
-
-                Session["Filtru_PontajulEchipei"] = "";
-
-                Session["IdClient"] = "1";
-
-                Session["PontajulAreCC"] = "0";
-
-                //nu se initializeaza; este pusa aici pentru documentare
-                //Session["NrIncercari"] = 0;
-
-                Session["SecAuditSelect"] = "0";
-                Session["SecCriptare"] = "0";
-
-                //Florin 2019.06.04
-                Session["MP_NuPermiteCNPInvalid"] = "1";
-                Session["MP_AreContract"] = "0";
-                Session["MP_DataSfarsit36"] = "01/01/2100";
+        //        Session["Cereri_Absente_Absente"] = "";
+        //        Session["Cereri_Absente_Angajati"] = "";
 
 
-                //Florin 2019.06.21
-                Session["EsteTactil"] = "0";
-                Session["TimeOutSecunde"] = 0;
+        //        Session["formatDataSistem"] = CultureInfo.CurrentCulture;
 
-                //Florin 2019.07.15
-                Session["Filtru_ActeAditionale"] = "{}";
+        //        Session["IdLimba"] = "RO";
+        //        Session["IdLimba_Veche"] = "RO";
 
-                //Florin 2019.07.17
-                Session["Filtru_CereriAbs"] = "";
+        //        Session["User"] = "";
+        //        Session["UserId"] = -99;
+        //        Session["User_NumeComplet"] = "";
+        //        Session["User_Marca"] = -99;
+        //        Session["User_IdDept"] = -99;
+        //        Session["User_Dept"] = "";
+        //        Session["User_CNP"] = "";
 
-                //Florin 2019.07.19
-                Session["Ptj_DataBlocare"] = "22001231";
+        //        Session["EsteAdmin"] = 0;
+        //        Session["SchimbaParola"] = 0;
+        //        Session["EsteInGrup99"] = 0;
+        //        Session["ParolaComplexa"] = 0;
 
-                //Florin 2019.10.16
-                Session["Json_Programe"] = "[]";
+        //        Session["PrimaIntrare"] = 0;
 
-                //Florin 2020.01.03
-                Session["Eval_tblCategorieObiective"] = null;
+        //        Session["IdMaxValue"] = 1;
 
-                //Florin 2021.06.02  #909
-                Session["tmpMeniu2"] = "";
-                Session["tmpMeniu3"] = "";
+        //        Session["Ptj_IstoricVal"] = "";
 
-                //Florin 2021.06.04
-                Session["UniqueId"] = -99;
+        //        Session["Filtru_PontajulEchipei"] = "";
 
-                //Florin 2022.01.06         #1065
-                HttpContext.Current.Session["TimeOutSecundePrint"] = 9999;
+        //        Session["IdClient"] = "1";
 
-                string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
-                                UNION
-                                SELECT 'AnLucru', CAST(F01011 AS varchar(10)), '', 1, 0 FROM F010
-                                UNION
-                                SELECT 'LunaLucru', CAST(F01012 AS varchar(10)), '', 1, 0 FROM F010";
+        //        Session["PontajulAreCC"] = "0";
 
-                Session["tblParam"] = General.IncarcaDT(strSql, null);
-                Session["IdClient"] = Convert.ToInt32(Dami.ValoareParam("IdClient", "1"));
-                Session["PontajulAreCC"] = General.Nz(Dami.ValoareParam("PontajulAreCC"),"0");
+        //        //nu se initializeaza; este pusa aici pentru documentare
+        //        //Session["NrIncercari"] = 0;
+
+        //        Session["SecAuditSelect"] = "0";
+        //        Session["SecCriptare"] = "0";
+
+        //        //Florin 2019.06.04
+        //        Session["MP_NuPermiteCNPInvalid"] = "1";
+        //        Session["MP_AreContract"] = "0";
+        //        Session["MP_DataSfarsit36"] = "01/01/2100";
 
 
-                //Florin 2018.11.13
-                if (HttpContext.Current != null && Session["tblParam"] != null)
-                {
-                    DataTable dt = Session["tblParam"] as DataTable;
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        DataRow[] arr1 = dt.Select("Nume='SecAuditSelect'");
-                        if (arr1.Count() > 0)
-                            Session["SecAuditSelect"] = arr1[0];
+        //        //Florin 2019.06.21
+        //        Session["EsteTactil"] = "0";
+        //        Session["TimeOutSecunde"] = 0;
 
-                        DataRow[] arr2 = dt.Select("Nume='SecCriptare'");
-                        if (arr2.Count() > 0)
-                            Session["SecCriptare"] = arr2[0];
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        //Florin 2019.07.15
+        //        Session["Filtru_ActeAditionale"] = "{}";
+
+        //        //Florin 2019.07.17
+        //        Session["Filtru_CereriAbs"] = "";
+
+        //        //Florin 2019.07.19
+        //        Session["Ptj_DataBlocare"] = "22001231";
+
+        //        //Florin 2019.10.16
+        //        Session["Json_Programe"] = "[]";
+
+        //        //Florin 2020.01.03
+        //        Session["Eval_tblCategorieObiective"] = null;
+
+        //        //Florin 2021.06.02  #909
+        //        Session["tmpMeniu2"] = "";
+        //        Session["tmpMeniu3"] = "";
+
+        //        //Florin 2021.06.04
+        //        Session["UniqueId"] = -99;
+
+        //        //Florin 2022.01.06         #1065
+        //        HttpContext.Current.Session["TimeOutSecundePrint"] = 9999;
+
+        //        string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
+        //                        UNION
+        //                        SELECT 'AnLucru', CAST(F01011 AS varchar(10)), '', 1, 0 FROM F010
+        //                        UNION
+        //                        SELECT 'LunaLucru', CAST(F01012 AS varchar(10)), '', 1, 0 FROM F010";
+
+        //        Session["tblParam"] = General.IncarcaDT(strSql, null);
+        //        Session["IdClient"] = Convert.ToInt32(Dami.ValoareParam("IdClient", "1"));
+        //        Session["PontajulAreCC"] = General.Nz(Dami.ValoareParam("PontajulAreCC"),"0");
+
+
+        //        //Florin 2018.11.13
+        //        if (HttpContext.Current != null && Session["tblParam"] != null)
+        //        {
+        //            DataTable dt = Session["tblParam"] as DataTable;
+        //            if (dt != null && dt.Rows.Count > 0)
+        //            {
+        //                DataRow[] arr1 = dt.Select("Nume='SecAuditSelect'");
+        //                if (arr1.Count() > 0)
+        //                    Session["SecAuditSelect"] = arr1[0];
+
+        //                DataRow[] arr2 = dt.Select("Nume='SecCriptare'");
+        //                if (arr2.Count() > 0)
+        //                    Session["SecCriptare"] = arr2[0];
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         public bool IsReCaptchValid()
         {

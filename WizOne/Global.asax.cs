@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.FriendlyUrls;
+using Microsoft.Web.Administration;
 using System;
 using System.Configuration;
 using System.IO;
@@ -47,7 +48,14 @@ namespace WizOne
         protected void Application_Start(object sender, EventArgs e)
         {
             try
-            {                
+            {
+                //ServerManager serverManager = new ServerManager();
+                //ApplicationPoolCollection applicationPoolCollection = serverManager.ApplicationPools;
+                //foreach (ApplicationPool applicationPool in applicationPoolCollection)
+                //{
+                //    applicationPool.ProcessModel.IdleTimeout = TimeSpan.FromMinutes(5);
+                //}
+
                 RouteTable.Routes.EnableFriendlyUrls(new FriendlyUrlSettings()
                 {
                     AutoRedirectMode = RedirectMode.Permanent

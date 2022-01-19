@@ -47,37 +47,9 @@ namespace WizOne
                 else
                     Dami.AccesApp(this.Page);
 
-                //if (!HttpContext.Current.User.Identity.IsAuthenticated)
-                //    Response.Redirect("~/Default", false);
-
                 if (General.Nz(Session["UserId"],"").ToString() == "" || !General.IsNumeric(Session["UserId"]))
                     Response.Redirect("~/Default", false);
 
-
-                //Florin 2019.08.19
-                try
-                {
-                    if (Session["tblParam"] == null || ((DataTable)Session["tblParam"]).Rows.Count == 0)
-                    {
-                        string ti = "nvarchar";
-                        if (Constante.tipBD == 2) ti = "varchar2";
-
-                        string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
-                                UNION
-                                SELECT 'AnLucru', CAST(F01011 AS {0}(10)), '', 1, 0 FROM F010
-                                UNION
-                                SELECT 'LunaLucru', CAST(F01012 AS {0}(10)), '', 1, 0 FROM F010";
-                        strSql = string.Format(strSql, ti);
-
-                        Session["tblParam"] = General.IncarcaDT(strSql, null);
-                    }
-                }
-                catch (Exception)
-                {
-                    Response.Redirect("~/Default", false);
-                }
-
-                //Radu 26.10.2020
                 string limbi = Dami.ValoareParam("LimbiTraduse", "");
                 string[] sirLimbi = limbi.Split(',');
                 for (int i = 0; i < sirLimbi.Length; i++)
@@ -85,22 +57,6 @@ namespace WizOne
                     LinkButton lnk = (LinkButton)pnlHeader.FindControl("a" + sirLimbi[i]);
                     if (lnk != null)
                         lnk.Visible = true;
-                }
-
-
-                if (!IsPostBack)
-                {
-                    //Session["InformatiaCurenta"] = null;
-
-                    object tipGrid = ContentPlaceHolder1.FindControl("grDate");
-                    if (tipGrid != null && tipGrid.GetType() == typeof(ASPxGridView))
-                    {
-                        ASPxGridView grDate = (ASPxGridView)ContentPlaceHolder1.FindControl("grDate");
-                        Session["Profil_Original"] = grDate.SaveClientLayout();
-
-                        string sFont = Dami.ValoareParam("GridFontSize", "0");
-                        if (sFont != "0" && General.IsNumeric(sFont)) grDate.Font.Size = FontUnit.Point(Convert.ToInt32(sFont));
-                    }                    
                 }
 
 
@@ -134,6 +90,16 @@ namespace WizOne
 
                 if (!IsPostBack)
                 {
+                    object tipGrid = ContentPlaceHolder1.FindControl("grDate");
+                    if (tipGrid != null && tipGrid.GetType() == typeof(ASPxGridView))
+                    {
+                        ASPxGridView grDate = (ASPxGridView)ContentPlaceHolder1.FindControl("grDate");
+                        Session["Profil_Original"] = grDate.SaveClientLayout();
+
+                        string sFont = Dami.ValoareParam("GridFontSize", "0");
+                        if (sFont != "0" && General.IsNumeric(sFont)) grDate.Font.Size = FontUnit.Point(Convert.ToInt32(sFont));
+                    }
+
                     //Florin 2020.02.20 - sa se faca diferentiere intre ptj pe ang si pe zi
                     string filtruSup = "";
                     if (General.Nz(Request.QueryString["tip"], "").ToString() != "" && General.Nz(Session["PaginaWeb"], "").ToString().ToLower().IndexOf("pontajdetaliat")>=0)
@@ -142,8 +108,6 @@ namespace WizOne
                             filtruSup = @" AND A.""Grid"" IN ('1','10')";
                         else
                             filtruSup = @" AND A.""Grid"" IN ('2','20')";
-
-                        //filtruSup = @" AND A.""Grid""='" + Request.QueryString["tip"].ToString() + "'";
                     }
                         
                     //incarcam lista de profile disponibile
@@ -234,24 +198,9 @@ namespace WizOne
                                                             cmbProfile.Value = dtPro.Rows[i]["Id"];
                                                         }
 
-
-                                                        //adugam profilul original al gridului
-
-                                                        //DataRow dr = dtPro.NewRow();
-                                                        //dr["Id"] = -1;
-                                                        //dr["Denumire"] = "Original";
-                                                        //dr["Continut"] = "";
-                                                        //dr["Implicit"] = 0;
-                                                        //dr["Activ"] = 1;
-                                                        //dr["Grid"] = dtPro.Rows[i]["Grid"].ToString();
-                                                        //if (dtPro.Select("Id = -1").Count() == 0)
-                                                        //    dtPro.Rows.Add(dr);
-
                                                         //incarcam profilul implicit
                                                         ctl.LoadClientLayout(prof);
-                                                        
-
-                                                        
+                                                                                                             
                                                         gasit = true;
                                                         break;
                                                     }
@@ -294,27 +243,28 @@ namespace WizOne
                 txtVers.InnerText = Constante.versiune;
                 txtVers1.Text = Constante.versiune;
 
-                if (Dami.ValoareParam("ArataLunaCurentaInSubsolApp", "0") == "1") txtLunaLucru.InnerText = Dami.TraduCuvant("Luna de lucru") + ": " + Dami.ValoareParam("LunaLucru") + " " + Dami.ValoareParam("AnLucru");
+                if (Dami.ValoareParam("ArataLunaCurentaInSubsolApp", "0") == "1") 
+                    txtLunaLucru.InnerText = Dami.TraduCuvant("Luna de lucru") + ": " + Dami.ValoareParam("LunaLucru") + " " + Dami.ValoareParam("AnLucru");
 
                 //Radu 11.07.2018 - la PeliFilip, pentru anumiti utilizatori, sa nu se mai afiseze cuvantul Angajat si nici data angajarii
                 int idDept = (Session["User_IdDept"] != null && Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 20 ? Convert.ToInt32(Session["User_IdDept"].ToString()) : -1);
                 
                 txtUsr.InnerText = Dami.TraduCuvant("Utilizator") + " " + Session["User"] + ", " + (idDept != 8 ? Dami.TraduCuvant("Angajat") : "") + " " + Session["User_NumeComplet"];
+
                 SetLang();
-                if (!Constante.esteTactil)
-                    CreazaMeniu();
                 SetAccount();
+
                 if (Constante.esteTactil)
                 {
                     pnlHeader.Visible = false;
                     pnlMeniu.Visible = false;
-                }
 
-                if (Constante.esteTactil)
-                {
                     txtLunaLucru.Visible = false;
                     txtUsr.Visible = false;
                 }
+                else
+                    CreazaMeniu();
+
             }
             catch (Exception ex)
             {

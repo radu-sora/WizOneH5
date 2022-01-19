@@ -1176,7 +1176,7 @@ namespace WizOne.Module
                 if (command.CommandText.IndexOf("SELECT", StringComparison.OrdinalIgnoreCase) > -1)
                 {
                     if ((result = command.ExecuteScalar()) != DBNull.Value)
-                        result = (T)Convert.ChangeType(result, typeof(T));                    
+                        result = (T)Convert.ChangeType(result, typeof(T));
                     else
                         result = default(T);
                 }
@@ -5847,39 +5847,38 @@ namespace WizOne.Module
                 //Florin 2021.06.04 #909
                 HttpContext.Current.Session["UniqueId"] = -99;
 
+                HttpContext.Current.Session["Avs_MarcaFiltru"] = null;
+                HttpContext.Current.Session["Avs_AtributFiltru"] = null;
+
                 //Florin 2022.01.06         #1065
                 HttpContext.Current.Session["TimeOutSecundePrint"] = 9999;
 
-                string ti = "nvarchar";
-                if (Constante.tipBD == 2) ti = "varchar2";
-
-                string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
-                                UNION
-                                SELECT 'AnLucru', CAST(F01011 AS {0}(10)), '', 1, 0 FROM F010
-                                UNION
-                                SELECT 'LunaLucru', CAST(F01012 AS {0}(10)), '', 1, 0 FROM F010";
-                strSql = string.Format(strSql, ti);
-
-                HttpContext.Current.Session["tblParam"] = General.IncarcaDT(strSql, null);
+                //HttpContext.Current.Session["tblParam"] = General.IncarcaDT(@"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
+                //                UNION
+                //                SELECT 'AnLucru', CAST(F01011 AS nvarchar(10)), '', 1, 0 FROM F010
+                //                UNION
+                //                SELECT 'LunaLucru', CAST(F01012 AS nvarchar(10)), '', 1, 0 FROM F010", null);
                 HttpContext.Current.Session["IdClient"] = Convert.ToInt32(Dami.ValoareParam("IdClient", "1"));
                 HttpContext.Current.Session["PontajulAreCC"] = General.Nz(Dami.ValoareParam("PontajulAreCC"),"0");
 
-
                 //Florin 2018.11.13
-                if (HttpContext.Current != null && HttpContext.Current.Session["tblParam"] != null)
-                {
-                    DataTable dt = HttpContext.Current.Session["tblParam"] as DataTable;
-                    if (dt != null)
-                    {
-                        DataRow[] arr1 = dt.Select("Nume='SecAuditSelect'");
-                        if (arr1.Count() > 0)
-                            HttpContext.Current.Session["SecAuditSelect"] = arr1[0];
+                //if (HttpContext.Current != null && HttpContext.Current.Session["tblParam"] != null)
+                //{
+                //    DataTable dt = HttpContext.Current.Session["tblParam"] as DataTable;
+                //    if (dt != null)
+                //    {
+                //        DataRow[] arr1 = dt.Select("Nume='SecAuditSelect'");
+                //        if (arr1.Count() > 0)
+                //            HttpContext.Current.Session["SecAuditSelect"] = arr1[0];
 
-                        DataRow[] arr2 = dt.Select("Nume='SecCriptare'");
-                        if (arr2.Count() > 0)
-                            HttpContext.Current.Session["SecCriptare"] = arr2[0];
-                    }
-                }
+                //        DataRow[] arr2 = dt.Select("Nume='SecCriptare'");
+                //        if (arr2.Count() > 0)
+                //            HttpContext.Current.Session["SecCriptare"] = arr2[0];
+                //    }
+                //}
+
+                HttpContext.Current.Session["SecAuditSelect"] = Dami.ValoareParam("SecAuditSelect");
+                HttpContext.Current.Session["SecCriptare"] = Dami.ValoareParam("SecCriptare");
             }
             catch (Exception ex)
             {

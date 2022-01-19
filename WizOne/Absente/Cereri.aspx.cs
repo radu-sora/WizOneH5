@@ -1100,9 +1100,10 @@ namespace WizOne.Absente
                     txtNrOre.NumberType = SpinEditNumberType.Integer;
 
                     //Florin 2022.01.06 - #1072
-                    txtNrOre.MinValue = 0;
                     if (nuTrimiteInPontaj == 1 && absentaTipOraFolosesteInterval == 0)
                         txtNrOre.MinValue = -999;
+                    else
+                        txtNrOre.MinValue = 0;
 
                     if (folosesteInterval == 1)
                     {

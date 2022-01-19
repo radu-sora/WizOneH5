@@ -424,9 +424,9 @@ namespace WizOne.Absente
 
                 if (cmbAng.Value != null) ang = " AND A.F10003=" + cmbAng.Value;
                 if (Constante.tipBD == 1)
-                    strSql += @"UPDATE A SET A.""SoldAnterior""=B.""Ramase"" FROM ""Ptj_tblZileCO"" A INNER JOIN ""SituatieZileAbsente"" B ON  A.F10003=B.F10003 AND B.""An""=({0}-1) AND B.""IdAbsenta""=1 WHERE A.""An""={0} {4};";
+                    strSql += @"UPDATE A SET A.""SoldAnterior""=B.""Ramase"" FROM ""Ptj_tblZileCO"" A INNER JOIN ""SituatieZileAbsente"" B ON  A.F10003=B.F10003 AND B.""An""=({0}-1) AND B.""IdAbsenta""=(SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='IdAbsentaCO') WHERE A.""An""={0} {4};";
                 else
-                    strSql += @"UPDATE ""Ptj_tblZileCO"" A SET A.""SoldAnterior""=(SELECT B.""Ramase"" FROM ""SituatieZileAbsente"" B where A.F10003=B.F10003 AND B.""An""=({0}-1) AND B.""IdAbsenta""=1) WHERE A.""An""={0} {4};";
+                    strSql += @"UPDATE ""Ptj_tblZileCO"" A SET A.""SoldAnterior""=(SELECT B.""Ramase"" FROM ""SituatieZileAbsente"" B where A.F10003=B.F10003 AND B.""An""=({0}-1) AND B.""IdAbsenta""=(SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='IdAbsentaCO')) WHERE A.""An""={0} {4};";
 
 
                 strSql = string.Format(strSql, cmbAn.Value, Session["UserId"], dt, General.ToDataUniv(DateTime.Now) , ang);

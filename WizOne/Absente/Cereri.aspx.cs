@@ -975,6 +975,9 @@ namespace WizOne.Absente
                             SELECT @1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()} " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
 
                             General.ExecutaNonQuery(sqlFis, new object[] { "Ptj_Cereri", idCerere, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
+
+                            //Radu 18.01.2022 - #1084
+                            Session["Absente_Cereri_Date"] = null;
                         }
                     }
 

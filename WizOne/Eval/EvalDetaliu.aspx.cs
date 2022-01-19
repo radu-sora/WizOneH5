@@ -5561,15 +5561,19 @@ namespace WizOne.Eval
                 //    (""IdSuper"" < 0 AND @7 IN (SELECT ""IdUser"" FROM ""F100Supervizori"" b where F10003 = @6 AND b.""IdSuper"" = (-1) * ""Eval_RaspunsIstoric"".""IdSuper"" ))) AND (""Aprobat"" IS NULL OR ""Aprobat"" = 0)", new object[] { (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), culoare, Session["UserId"], (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), Session["UserId"] });
 
 
-                string tmpSql = $@"
-                    BEGIN
+                //Radu 18.01.2022 - am scos aceste actualizari, deoarece se efectueaza mai sus
+                /*
                     UPDATE ""Eval_RaspunsLinii""
                     SET ""Super1""=CAST({General.CurrentDate()} AS varchar(30)),""Super2""=CAST({General.CurrentDate()} AS varchar(30)),""Super3""=CAST({General.CurrentDate()} AS varchar(30)),""Super4""=CAST({General.CurrentDate()} AS varchar(30)),
                     ""Super5""=CAST({General.CurrentDate()} AS varchar(30)),""Super6""=CAST({General.CurrentDate()} AS varchar(30)),""Super7""=CAST({General.CurrentDate()} AS varchar(30)),""Super8""=CAST({General.CurrentDate()} AS varchar(30)),
                     ""Super9""=CAST({General.CurrentDate()} AS varchar(30)),""Super10""=CAST({General.CurrentDate()} AS varchar(30)),""Super11""=CAST({General.CurrentDate()} AS varchar(30)),""Super12""=CAST({General.CurrentDate()} AS varchar(30)),
                     ""Super13""=CAST({General.CurrentDate()} AS varchar(30)),""Super14""=CAST({General.CurrentDate()} AS varchar(30)),""Super15""=CAST({General.CurrentDate()} AS varchar(30)),""Super16""=CAST({General.CurrentDate()} AS varchar(30)),
                     ""Super17""=CAST({General.CurrentDate()} AS varchar(30)),""Super18""=CAST({General.CurrentDate()} AS varchar(30)),""Super19""=CAST({General.CurrentDate()} AS varchar(30)),""Super20""=CAST({General.CurrentDate()} AS varchar(30))
-                    WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""TipData""=36;
+                    WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""TipData""=36;                 
+                 */
+                string tmpSql = $@"
+                    BEGIN
+
                     
                     UPDATE ""Eval_Raspuns"" SET ""Pozitie"" = @3, ""Culoare"" = @4, ""Finalizat"" = @5 WHERE ""IdQuiz"" = @1 AND F10003 = @2;
 

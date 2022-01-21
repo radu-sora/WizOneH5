@@ -21405,3 +21405,14 @@ GO
 IF ((SELECT COUNT(*) FROM tblParametrii WHERE Nume='URLAprobareCereriDinMail') = 0)
 	INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul) VALUES('URLAprobareCereriDinMail','','Se foloseste pentru crearea linkului de la care se aproba cererile de pe mail',0)
 GO
+
+
+--https://github.com/wizromRD/WizOne/issues/988
+--Optimizare viteza aplicatie #988
+CREATE NONCLUSTERED INDEX [idx_F910_Marca]
+ON [dbo].[F910] ([F91003])
+GO
+CREATE NONCLUSTERED INDEX [idx_Ptj_Intrari_Ziua]
+ON [dbo].[Ptj_Intrari] ([Ziua])
+INCLUDE ([ValStr])
+GO

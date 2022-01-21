@@ -38,12 +38,6 @@ namespace WizOne.Pagini
                     if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0)
                         Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
-                    if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Pelifilip && General.Nz(Session["PrimaIntrare"], "0").ToString() == "1")
-                    {
-                        pnlMsgWelcome.Style["display"] = "inline-block";
-                        General.ExecutaNonQuery("UPDATE USERS SET F70105=0 WHERE F70102=@1", new object[] { Session["UserId"] });
-                    }
-
                     string layoutSql = $@"SELECT TOP 1 A.""Continut"" FROM ""Intro"" A
                                     INNER JOIN ""relGrupIntro"" B ON A.""Id""=B.""IdIntro""
                                     INNER JOIN ""relGrupUser"" C ON B.""IdGrup""=C.""IdGrup""

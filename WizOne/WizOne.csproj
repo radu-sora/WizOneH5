@@ -810,6 +810,7 @@
     <Content Include="Fisiere\Imagini\Icoane\m6.png" />
     <Content Include="Fisiere\Imagini\Icoane\m7.png" />
     <Content Include="Fisiere\Imagini\Icoane\mail.png" />
+    <Content Include="Fisiere\Imagini\Icoane\meniu.png" />
     <Content Include="Fisiere\Imagini\Icoane\modifica.png" />
     <Content Include="Fisiere\Imagini\Icoane\motive.png" />
     <Content Include="Fisiere\Imagini\Icoane\n2.png" />
@@ -835,10 +836,13 @@
     <Content Include="Fisiere\Imagini\Icoane\sepa2.gif" />
     <Content Include="Fisiere\Imagini\Icoane\sepa3.gif" />
     <Content Include="Fisiere\Imagini\Icoane\sgCls.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgDr.jpg" />
     <Content Include="Fisiere\Imagini\Icoane\sgDr.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgDr1.png" />
     <Content Include="Fisiere\Imagini\Icoane\sgExp.png" />
     <Content Include="Fisiere\Imagini\Icoane\sgJos.png" />
     <Content Include="Fisiere\Imagini\Icoane\sgJosOver.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgSt.jpg" />
     <Content Include="Fisiere\Imagini\Icoane\sgSt.png" />
     <Content Include="Fisiere\Imagini\Icoane\sgSus.png" />
     <Content Include="Fisiere\Imagini\Icoane\sgSusOver.png" />
@@ -897,6 +901,7 @@
     <Content Include="Fisiere\MsgBox\sweetalert.css" />
     <Content Include="Fisiere\MsgBox\sweetalert.min.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Generatoare\Reports\Models\ReportsModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ReportsModel.edmx</DependentUpon>
@@ -989,7 +994,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
     <Content Include="Scripts\jquery-3.6.0.min.js" />

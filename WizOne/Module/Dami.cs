@@ -1395,13 +1395,16 @@ namespace WizOne.Module
                 }
                 else
                 {
-                    if (HttpContext.Current.Session["tblParam"]== null)
-                        HttpContext.Current.Session["tblParam"] = General.IncarcaDT(@"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
+                    if (HttpContext.Current.Session["tblParam"] == null || HttpContext.Current.Session["tblParam"].GetType() != typeof(DataTable))
+                    {
+                        DataTable dtParam = General.IncarcaDT(@"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
                                 UNION
                                 SELECT 'AnLucru', CAST(F01011 AS nvarchar(10)), '', 1, 0 FROM F010
                                 UNION
                                 SELECT 'LunaLucru', CAST(F01012 AS nvarchar(10)), '', 1, 0 FROM F010", null);
 
+                        HttpContext.Current.Session["tblParam"] = dtParam;
+                    }
 
                     dt = HttpContext.Current.Session["tblParam"] as DataTable;
                     if (dt != null && dt.Rows.Count > 0)

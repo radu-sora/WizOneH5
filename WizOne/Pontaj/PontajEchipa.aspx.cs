@@ -422,7 +422,9 @@ namespace WizOne.Pontaj
 
                 RetineFiltru("1");
                 SetColoane();
+
                 IncarcaGrid();
+
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
                     divHovercard.Visible = false;
 
@@ -439,7 +441,8 @@ namespace WizOne.Pontaj
         {
             try
             {
-                General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, cmbCtr.Value == null ? "" : cmbCtr.Value.ToString().Replace("\\\\", "', '"), cmbDept.Value == null ? "" : cmbDept.Value.ToString().Replace("\\\\", "', '"), Convert.ToInt32(General.Nz(cmbAng.Value,-99)));
+                //Florin 2022.01.20 #988
+                //General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, cmbCtr.Value == null ? "" : cmbCtr.Value.ToString().Replace("\\\\", "', '"), cmbDept.Value == null ? "" : cmbDept.Value.ToString().Replace("\\\\", "', '"), Convert.ToInt32(General.Nz(cmbAng.Value, -99)));
 
                 string strSql = DamiSelect();
 

@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Pagini {
-    
-    
-    public partial class MainPage {
-        
+namespace WizOne.Pagini
+{
+
+
+    public partial class MainPage
+    {
+
         /// <summary>
         /// dockManager control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDockManager dockManager;
-        
+
         /// <summary>
         /// divPanel control.
         /// </summary>
@@ -29,16 +31,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPanel;
-        
-        /// <summary>
-        /// pnlMsgWelcome control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlMsgWelcome;
-        
+
         /// <summary>
         /// popUpPass control.
         /// </summary>
@@ -47,7 +40,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxPopupControl popUpPass;
-        
+
         /// <summary>
         /// Panel1 control.
         /// </summary>
@@ -56,7 +49,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel Panel1;
-        
+
         /// <summary>
         /// btnRapPass control.
         /// </summary>
@@ -65,7 +58,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnRapPass;
-        
+
         /// <summary>
         /// lblRap control.
         /// </summary>
@@ -74,7 +67,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblRap;
-        
+
         /// <summary>
         /// txtRapPass control.
         /// </summary>
@@ -83,7 +76,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtRapPass;
-        
+
         /// <summary>
         /// glob control.
         /// </summary>

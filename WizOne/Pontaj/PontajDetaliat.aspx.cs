@@ -611,7 +611,8 @@ namespace WizOne.Pontaj
                     idRol = Convert.ToInt32(cmbRolZi.Value);
                 }
 
-                General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dtData.Year, dtData.Month);
+                //Florin 2022.01.20 #988
+                //General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dtData.Year, dtData.Month);
 
                 grDate.KeyFieldName = "Cheia";
                 DataTable dt = PontajCuInOut();

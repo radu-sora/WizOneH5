@@ -110,7 +110,8 @@ namespace WizOne.Personal
             if (cmbMotivScutit.Value == null || Convert.ToInt32(cmbMotivScutit.Value.ToString()) == 0)
             {
                 //cmbMotivScutit.SelectedIndex = 0;
-                cmbMotivScutit.ClientEnabled = false;
+                //cmbMotivScutit.ClientEnabled = false;
+                cmbMotivScutit.ClientReadOnly = true;
             }
             if (cmbMotivScutitCAS.Value == null ||Convert.ToInt32(cmbMotivScutitCAS.Value.ToString()) == 0)
             {
@@ -864,17 +865,17 @@ namespace WizOne.Personal
                 //    ds.Tables[1].Rows[0]["F100271"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
                 //    Session["InformatiaCurentaPersonal"] = ds;
                 //    break;
-                case "chkScutitImp":
-                    ASPxComboBox cmbMotivScutit = Contract_DataList.Items[0].FindControl("cmbMotivScutit") as ASPxComboBox;                   
-                    cmbMotivScutit.Value = 0;
-                    ds.Tables[0].Rows[0]["F1001098"] = 0;
-                    ds.Tables[2].Rows[0]["F1001098"] = 0;
-                    //Contract_DataList.DataBind();
-                    cmbMotivScutit.ClientEnabled = false;
-                    //    ds.Tables[0].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
-                    //    ds.Tables[1].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
-                    //    Session["InformatiaCurentaPersonal"] = ds;                        
-                    break;
+                //case "chkScutitImp":
+                //    ASPxComboBox cmbMotivScutit = Contract_DataList.Items[0].FindControl("cmbMotivScutit") as ASPxComboBox;                   
+                //    cmbMotivScutit.Value = 0;
+                //    ds.Tables[0].Rows[0]["F1001098"] = 0;
+                //    ds.Tables[2].Rows[0]["F1001098"] = 0;
+                //    //Contract_DataList.DataBind();
+                //    cmbMotivScutit.ClientEnabled = false;
+                //    //    ds.Tables[0].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
+                //    //    ds.Tables[1].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
+                //    //    Session["InformatiaCurentaPersonal"] = ds;                        
+                //    break;
                 //case "chkBifaPensionar":
                 //    ds.Tables[0].Rows[0]["F10037"] = (param[1] == "true" ? 1 : 0);
                 //    ds.Tables[1].Rows[0]["F10037"] = (param[1] == "true" ? 1 : 0);

@@ -173,7 +173,7 @@
                     Init="function(s, e) { LoadCtl(s); }" 
                     SelectedIndexChanged="function(s, e) { 
                     pnlLoading.Show();
-                    LoadCtl(s); 
+                    LoadCtl(s);          
                 }" />
             </dx:ASPxComboBox>
         </div>

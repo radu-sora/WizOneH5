@@ -117,7 +117,7 @@ namespace WizOne.Pagini
                 tmp = Constante.cnnWeb.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];   //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
                 string user = tmp.Split(';')[0];
                 string DB = Constante.BD;    
-                tmp = Constante.cnnWeb.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
+                tmp = Constante.cnnWeb.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
                 string pwd = tmp.Split(';')[0];
 
                 bool rez = MonthClosing.MthClsgFunc.MthCls(Constante.tipBD, AdunaComp, szSOMA, szSOMB, conn, DB, user, pwd, out mesaj);

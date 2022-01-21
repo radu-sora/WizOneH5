@@ -605,12 +605,14 @@
     function chkScutitImp_CheckedChanged() {
         
         if (chkbx1.GetValue() == 0) {
-            cmbMotivScutit.SetEnabled(false);
-            cmbMotivScutit.SetValue(0);
+            //cmbMtvSct.SetEnabled(false);
+            //cmbMtvSct.SetValue(0);
+            pnlLoading.Show();
+            pnlCtlContract.PerformCallback("chkScutitImp;0");
         }
         else {
             if (chkbx5.GetValue() == 0)
-                cmbMotivScutit.SetEnabled(true);
+                cmbMtvSct.SetEnabled(true);
             else {
                 chkbx1.SetValue(0);
                 swal({ title: "", text: "Mai intai debifati Calcul deduceri FB!", type: "warning" });
@@ -1445,7 +1447,7 @@
 							    <dx:ASPxLabel  ID="lblMotivScutit" Width="100" runat="server"  Text="Motiv scutire impozit" ></dx:ASPxLabel >	
 						    </td>	
 						    <td>
-							    <dx:ASPxComboBox DataSourceID="dsMSI"  Value='<%#Eval("F1001098") %>' ID="cmbMotivScutit"  ClientInstanceName="cmbMotivScutit" TabIndex="41" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F80404" ValueField="F80403" AutoPostBack="false"  ValueType="System.Int32" >
+							    <dx:ASPxComboBox DataSourceID="dsMSI"  Value='<%#Eval("F1001098") %>' ID="cmbMotivScutit"  ClientInstanceName="cmbMtvSct" TabIndex="41" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F80404" ValueField="F80403" AutoPostBack="false"  ValueType="System.Int32" >
                                         
 							    </dx:ASPxComboBox>
 						    </td>               

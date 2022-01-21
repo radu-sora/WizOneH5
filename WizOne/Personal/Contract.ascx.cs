@@ -606,7 +606,7 @@ namespace WizOne.Personal
                     }
                     else
                         Contract_pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu a fost gasit tarif corespunzator normei selectate! Setati tariful manual!");
-                    break;
+                    break; 
                 //case "cmbNivelFunctie":
                 //    CompletareZile(Convert.ToInt32(param[1]));
                 //    break;
@@ -864,11 +864,17 @@ namespace WizOne.Personal
                 //    ds.Tables[1].Rows[0]["F100271"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
                 //    Session["InformatiaCurentaPersonal"] = ds;
                 //    break;
-                //case "chkScutitImp":
-                //    ds.Tables[0].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
-                //    ds.Tables[1].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
-                //    Session["InformatiaCurentaPersonal"] = ds;
-                //    break;
+                case "chkScutitImp":
+                    ASPxComboBox cmbMotivScutit = Contract_DataList.Items[0].FindControl("cmbMotivScutit") as ASPxComboBox;                   
+                    cmbMotivScutit.Value = 0;
+                    ds.Tables[0].Rows[0]["F1001098"] = 0;
+                    ds.Tables[2].Rows[0]["F1001098"] = 0;
+                    //Contract_DataList.DataBind();
+                    cmbMotivScutit.ClientEnabled = false;
+                    //    ds.Tables[0].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
+                    //    ds.Tables[1].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
+                    //    Session["InformatiaCurentaPersonal"] = ds;                        
+                    break;
                 //case "chkBifaPensionar":
                 //    ds.Tables[0].Rows[0]["F10037"] = (param[1] == "true" ? 1 : 0);
                 //    ds.Tables[1].Rows[0]["F10037"] = (param[1] == "true" ? 1 : 0);
@@ -1008,7 +1014,7 @@ namespace WizOne.Personal
             CalculLuniSiZile(Convert.ToDateTime(deDeLa.Date), Convert.ToDateTime(deLa.Date), out nrLuni, out nrZile);
             txtZile.Value = nrZile;
             txtLuni.Value = nrLuni;
-
+            Session["InformatiaCurentaPersonal"] = ds;
         }
 
         protected void CalcGrila(string grila)

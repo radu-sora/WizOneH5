@@ -956,7 +956,7 @@ namespace WizOne.Absente
                             grLeg.DataSource = dt;
                             grLeg.KeyFieldName = "Id";
                             grLeg.DataBind();
-                            //grLeg.Selection.SelectAll();
+                            grLeg.Selection.SelectAll();
                         }
                         break;
                 }

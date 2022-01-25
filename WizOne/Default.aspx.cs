@@ -650,12 +650,28 @@ namespace WizOne
                             string ADuser = Dami.ValoareParam("ADUser");
                             string ADpass = Dami.ValoareParam("ADPass");
 
-                            if (ADDom == "" || ADuser == "" || ADpass == "")
+                            if (ADDom == "")
                                 stare = "-1";
                             else
                             {
-                                PrincipalContext context = new PrincipalContext(ContextType.Domain, ADDom, ADuser, ADpass);
-                                UserPrincipal usr = UserPrincipal.FindByIdentity(context, utilizator);
+                                string userAD = utilizator;
+                                if (utilizator.IndexOf("\\") >= 0)
+                                {
+                                    ADDom = utilizator.Substring(0, utilizator.IndexOf("\\")) + "." + ADDom;
+                                    userAD = utilizator.Substring(utilizator.IndexOf("\\") + 1) + "@" + ADDom;
+                                }
+
+                                if (utilizator.IndexOf("@") >= 0)
+                                {
+                                    userAD = utilizator + "." + ADDom;
+                                    ADDom = utilizator.Substring(utilizator.IndexOf("@") + 1) + "." + ADDom;
+                                }
+
+                                PrincipalContext context = new PrincipalContext(ContextType.Domain, ADDom);
+                                if (ADuser != "" && ADpass != "")
+                                    context = new PrincipalContext(ContextType.Domain, ADDom, ADuser, ADpass);
+
+                                UserPrincipal usr = UserPrincipal.FindByIdentity(context, userAD);
 
                                 if (usr == null)
                                     stare = "0";
@@ -682,7 +698,7 @@ namespace WizOne
                                             }
                                             else
                                             {
-                                                if (!(context.ValidateCredentials(utilizator, parola)))
+                                                if (!(context.ValidateCredentials(userAD, parola)))
                                                     stare = "1";
                                                 else
                                                     stare = "3";

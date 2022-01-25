@@ -234,6 +234,7 @@ namespace WizOne.ConcediiMedicale
                 int nrZileConcPrec = 0;
                 string concPrec = "";
                 if (dtCM != null && dtCM.Rows.Count > 0)
+                {
                     for (int i = 0; i < dtCM.Rows.Count; i++)
                     {
                         //if (dtCM.Rows[i]["TipCM"].ToString().Contains("CM"))
@@ -266,6 +267,11 @@ namespace WizOne.ConcediiMedicale
                                     //}
                                     odtDate = odtStartDate;
                                 }
+                                else
+                                {
+                                    int xxx = 0;
+                                    xxx++;
+                                }
                             }
                             else if (nrZileConcPrec == 0)                                               //concediul curent nu e legat de precedentul
                             {
@@ -275,8 +281,19 @@ namespace WizOne.ConcediiMedicale
                             }
 
                         }
+                        else
+                        {
+                            int xxx = 0;
+                            xxx++;
+                        }
 
                     }
+                }
+                else
+                {
+                    int xxx = 0;
+                    xxx++;
+                }
                 //Session["CM_Preluare"] = 1;
 
             }

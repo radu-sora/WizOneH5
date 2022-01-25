@@ -1517,7 +1517,7 @@ namespace WizOne.Adev
                     lista = Session["AdevListaParam"] as Dictionary<string, string>;
 
                 string cnApp = Constante.cnnWeb;
-                string tmp = cnApp.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
+                string tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
                 string pwd = tmp.Split(';')[0];
 
                 tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()

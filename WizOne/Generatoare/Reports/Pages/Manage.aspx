@@ -114,7 +114,7 @@
                     </dx:CardViewComboBoxColumn>
                     <dx:CardViewColumn FieldName="Id" /> 
                     <dx:CardViewBinaryImageColumn FieldName="Photo">
-                        <PropertiesBinaryImage ImageHeight="125px" ImageWidth="400px">
+                        <PropertiesBinaryImage ImageHeight="125px" >
                             <EditingSettings Enabled="true" UploadSettings-UploadValidationSettings-MaxFileSize="4194304" />                            
                         </PropertiesBinaryImage>                        
                     </dx:CardViewBinaryImageColumn>
@@ -149,13 +149,13 @@
                     <dx:CardViewFormatConditionTopBottom Rule="TopItems"  FieldName="Description" Format="ItalicText" />
                 </FormatConditions>
                 <SettingsAdaptivity>
-                    <BreakpointsLayoutSettings CardsPerRow="3">
+                    <BreakpointsLayoutSettings CardsPerRow="4">
                         <Breakpoints>                     
                             <dx:CardViewBreakpoint DeviceSize="Custom" MaxWidth="500" CardsPerRow="1" />
                         </Breakpoints>
                     </BreakpointsLayoutSettings>
                 </SettingsAdaptivity>
-                <Settings LayoutMode="Breakpoints" ShowHeaderPanel="false" ShowGroupSelector="false" />           
+                <Settings LayoutMode="Breakpoints" ShowHeaderPanel="false" ShowGroupSelector="false" VerticalScrollBarMode="Auto" VerticalScrollableHeight="600" />           
                 <SettingsBehavior AllowSelectByCardClick="true" />
                 <Styles>
                     <FlowCard CssClass="flowCardStyle"></FlowCard>

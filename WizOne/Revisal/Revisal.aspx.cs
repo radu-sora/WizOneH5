@@ -266,9 +266,9 @@ namespace WizOne.Revisal
             try
             {
                 string cnApp = Constante.cnnWeb;
-                string tmp = cnApp.Split(new[] { "Data source=" }, StringSplitOptions.None)[1];
+                string tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
                 string conn = tmp.Split(';')[0];
-                tmp = cnApp.Split(new[] { "User Id=" }, StringSplitOptions.None)[1];
+                tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
                 string user = tmp.Split(';')[0];
                 //tmp = cnApp.Split(new[] { "Initial catalog=" }, StringSplitOptions.None)[1];
                 //string DB = tmp.Split(';')[0];
@@ -276,13 +276,13 @@ namespace WizOne.Revisal
                 string DB = "";
                 if (Constante.tipBD == 1)
                 {
-                    tmp = cnApp.Split(new[] { "Initial catalog=" }, StringSplitOptions.None)[1];
+                    tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
                     DB = tmp.Split(';')[0];
                 }
                 else
                     DB = user;
        
-                tmp = cnApp.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
+                tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
                 string pwd = tmp.Split(';')[0];
 
                 string sql = "SELECT \"Valoare\", \"Criptat\"  FROM \"tblParametrii\" WHERE \"Nume\" = 'ORAPWD'";
@@ -356,13 +356,13 @@ namespace WizOne.Revisal
             try
             {
                 string cnApp = Constante.cnnWeb;
-                string tmp = cnApp.Split(new[] { "Data source=" }, StringSplitOptions.None)[1];
+                string tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
                 string conn = tmp.Split(';')[0];
-                tmp = cnApp.Split(new[] { "Initial catalog=" }, StringSplitOptions.None)[1];
+                tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
                 string DB = tmp.Split(';')[0];
-                tmp = cnApp.Split(new[] { "User Id=" }, StringSplitOptions.None)[1];
+                tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
                 string user = tmp.Split(';')[0];
-                tmp = cnApp.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
+                tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
                 string pwd = tmp.Split(';')[0];
 
                 string sql = "SELECT \"Valoare\", \"Criptat\"  FROM \"tblParametrii\" WHERE \"Nume\" = 'ORAPWD'";

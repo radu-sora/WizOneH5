@@ -32,6 +32,7 @@ using Twilio.Types;
 using Twilio;
 using System.Web.Script.Serialization;
 using EASendMail;
+using Microsoft.Exchange.WebServices.Data;
 
 namespace WizOne.Pagini
 {
@@ -1505,7 +1506,10 @@ namespace WizOne.Pagini
 
         protected void btnMail_Click(object sender, EventArgs e)
         {
-            SendMail();
+            //SendMail();
+            List<Notif.metaAdreseMail> lstOne = new List<Notif.metaAdreseMail>(); 
+            lstOne.Add(new Notif.metaAdreseMail { Mail = "radu.sora@wizrom.ro", Destinatie = "TO", IncludeLinkAprobare = 0 });
+            Notif.TrimiteMail365(lstOne, "Office 365 background service oauth test", "this is a test, don't reply", 0, "", "", 0, "", "", Convert.ToInt32(Session["IdClient"]), null);
         }
 
 
@@ -1558,13 +1562,13 @@ namespace WizOne.Pagini
         {
             try
             {
-                string client_id = "6aff4cbc-bb88-427a-805a-e9eea06731f8";
-                string client_secret = "qXA7Q~xUrnlkfWwLpJmAFa7t2tg.SC_NM~c0z";
+                string client_id = "e5157c9f-41ef-4da5-933a-981540008e98";
+                string client_secret = "hCS7Q~TGmpyPT.k6zpwn2Nb_C2yUA7yUE.eor";
 
                 // If your application is not created by Office365 administrator,
                 // please use Office365 directory tenant id, you should ask Offic365 administrator to send it to you.
                 // Office365 administrator can query tenant id in https://portal.azure.com/ - Azure Active Directory.
-                string tenant = "f8cdef31-a31e-4b4a-93e4-5f571e91255a";
+                string tenant = "f5623fbc-c540-41ce-97bf-6a4043d20e91";
 
                 string requestData =
                     string.Format("client_id={0}&client_secret={1}&scope=https://outlook.office365.com/.default&grant_type=client_credentials",
@@ -1586,12 +1590,15 @@ namespace WizOne.Pagini
                 server.ConnectType = SmtpConnectType.ConnectSSLAuto;
 
                 var mail = new EASendMail.SmtpMail("TryIt");
-
+                
                 mail.From = officeUser;
-                mail.To = "zemy.apfelbaum@wizromsoftwaresrl.onmicrosoft.com";
+                mail.To = "radu.sora@wizrom.ro";
 
                 mail.Subject = "Office 365 background service oauth test";
                 mail.TextBody = "this is a test, don't reply";
+
+                server.EWSImpersonatedUser = officeUser;
+                //_exchangeService.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, userEmailAddress);
 
                 var smtp = new EASendMail.SmtpClient();
                 smtp.SendMail(server, mail);

@@ -1,4 +1,5 @@
-﻿using ProceseSec;
+﻿using EASendMail;
+using ProceseSec;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -718,7 +719,13 @@ namespace WizOne.Module
         }
 
         public static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel, int idClient, MemoryStream mem  = null) //Radu 29.06.2020 - am adaugat mem
-        {        
+        {
+            //Radu 25.01.2022 - #1050
+            if (Dami.ValoareParam("Office365_ClientId", "").Length > 0)
+            {
+                TrimiteMail365(lstAdr, subiect, corpMail, trimiteAtt, numeAtt, corpAtt, trimiteXls, selectXls, numeExcel, idClient, mem);
+                return;
+            }
 
             try
             {
@@ -750,7 +757,7 @@ namespace WizOne.Module
                 }
 
                 MailMessage mm = new MailMessage();
-                mm.From = new MailAddress(smtpMailFrom);
+                mm.From = new System.Net.Mail.MailAddress(smtpMailFrom);
 
                 if (lstAdr == null || lstAdr.Count() == 0)
                 {
@@ -768,13 +775,13 @@ namespace WizOne.Module
                         switch (mail.Destinatie.ToUpper())
                         {
                             case "TO":
-                                mm.To.Add(new MailAddress(mail.Mail));
+                                mm.To.Add(new System.Net.Mail.MailAddress(mail.Mail));
                                 break;
                             case "CC":
-                                mm.CC.Add(new MailAddress(mail.Mail));
+                                mm.CC.Add(new System.Net.Mail.MailAddress(mail.Mail));
                                 break;
                             case "BCC":
-                                mm.Bcc.Add(new MailAddress(mail.Mail));
+                                mm.Bcc.Add(new System.Net.Mail.MailAddress(mail.Mail));
                                 break;
                         }
                     }
@@ -790,7 +797,7 @@ namespace WizOne.Module
                 {
                     byte[] arrByte = Encoding.UTF8.GetBytes(corpAtt);
                     MemoryStream stream = new MemoryStream(arrByte);                   
-                    mm.Attachments.Add(new Attachment(stream, numeAtt, "text/html"));
+                    mm.Attachments.Add(new System.Net.Mail.Attachment(stream, numeAtt, "text/html"));
              
                 }
 
@@ -800,7 +807,7 @@ namespace WizOne.Module
                     if (selectXls != "")
                     {
                         MemoryStream stream = new MemoryStream(General.CreazaExcel(selectXls));
-                        mm.Attachments.Add(new Attachment(stream, numeExcel, "application/vnd.ms-excel"));
+                        mm.Attachments.Add(new System.Net.Mail.Attachment(stream, numeExcel, "application/vnd.ms-excel"));
                     }
                     else
                     {
@@ -811,7 +818,7 @@ namespace WizOne.Module
                 //Radu 29.06.2020
                 if (mem != null)
                 {
-                    mm.Attachments.Add(new Attachment(mem, numeAtt, "application/pdf"));
+                    mm.Attachments.Add(new System.Net.Mail.Attachment(mem, numeAtt, "application/pdf"));
                 }
                 //
 
@@ -822,7 +829,7 @@ namespace WizOne.Module
                     smtpServer = prc.EncryptString("WizOne2016", smtpServer, 2);
                     smtpParola = prc.EncryptString("WizOne2016", smtpParola, 2);
                 }
-                SmtpClient smtp = new SmtpClient(smtpServer);
+                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient(smtpServer);
                 smtp.Port = Convert.ToInt32(smtpPort);
                 smtp.Host = smtpServer;
 
@@ -854,6 +861,13 @@ namespace WizOne.Module
         public static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel, int idClient, out string err, MemoryStream mem = null) //Radu 29.06.2020 - am adaugat mem
         {
             err = "";
+            //Radu 25.01.2022 - #1050
+            if (Dami.ValoareParam("Office365_ClientId", "").Length > 0)
+            {
+                TrimiteMail365(lstAdr, subiect, corpMail, trimiteAtt, numeAtt, corpAtt, trimiteXls, selectXls, numeExcel, idClient, mem);
+                return;
+            }
+          
             try
             {
                 string folosesteCred = Dami.ValoareParam("TrimiteMailCuCredentiale");
@@ -885,7 +899,7 @@ namespace WizOne.Module
                 }
 
                 MailMessage mm = new MailMessage();
-                mm.From = new MailAddress(smtpMailFrom);
+                mm.From = new System.Net.Mail.MailAddress(smtpMailFrom);
 
                 if (lstAdr == null || lstAdr.Count() == 0)
                 {
@@ -904,13 +918,13 @@ namespace WizOne.Module
                         switch (mail.Destinatie.ToUpper())
                         {
                             case "TO":
-                                mm.To.Add(new MailAddress(mail.Mail));
+                                mm.To.Add(new System.Net.Mail.MailAddress(mail.Mail));
                                 break;
                             case "CC":
-                                mm.CC.Add(new MailAddress(mail.Mail));
+                                mm.CC.Add(new System.Net.Mail.MailAddress(mail.Mail));
                                 break;
                             case "BCC":
-                                mm.Bcc.Add(new MailAddress(mail.Mail));
+                                mm.Bcc.Add(new System.Net.Mail.MailAddress(mail.Mail));
                                 break;
                         }
                     }
@@ -926,7 +940,7 @@ namespace WizOne.Module
                 {
                     byte[] arrByte = Encoding.UTF8.GetBytes(corpAtt);
                     MemoryStream stream = new MemoryStream(arrByte);
-                    mm.Attachments.Add(new Attachment(stream, numeAtt, "text/html"));
+                    mm.Attachments.Add(new System.Net.Mail.Attachment(stream, numeAtt, "text/html"));
 
                 }
 
@@ -936,7 +950,7 @@ namespace WizOne.Module
                     if (selectXls != "")
                     {
                         MemoryStream stream = new MemoryStream(General.CreazaExcel(selectXls));
-                        mm.Attachments.Add(new Attachment(stream, numeExcel, "application/vnd.ms-excel"));
+                        mm.Attachments.Add(new System.Net.Mail.Attachment(stream, numeExcel, "application/vnd.ms-excel"));
                     }
                     else
                     {
@@ -947,7 +961,7 @@ namespace WizOne.Module
                 //Radu 29.06.2020
                 if (mem != null)
                 {
-                    mm.Attachments.Add(new Attachment(mem, numeAtt, "application/pdf"));
+                    mm.Attachments.Add(new System.Net.Mail.Attachment(mem, numeAtt, "application/pdf"));
                 }
                 //
 
@@ -958,7 +972,7 @@ namespace WizOne.Module
                     smtpServer = prc.EncryptString("WizOne2016", smtpServer, 2);
                     smtpParola = prc.EncryptString("WizOne2016", smtpParola, 2);
                 }
-                SmtpClient smtp = new SmtpClient(smtpServer);
+                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient(smtpServer);
                 smtp.Port = Convert.ToInt32(smtpPort);
                 smtp.Host = smtpServer;
 
@@ -1237,8 +1251,18 @@ namespace WizOne.Module
 
         private static string TrimiteMail(string mailTO, string subiect, string corpMail, string numeAtt)
         {
+            //Radu 25.01.2022 - #1050
+            if (Dami.ValoareParam("Office365_ClientId", "").Length > 0)
+            {
+                List<Notif.metaAdreseMail> lstAdr = new List<Notif.metaAdreseMail>();
+                lstAdr.Add(new Notif.metaAdreseMail { Mail = mailTO, Destinatie = "TO", IncludeLinkAprobare = 0 });
+                TrimiteMail365(lstAdr, subiect, corpMail, 0, numeAtt, "", 0, "", "", 1, null);
+                return "";
+            }
+
+
             string strErr = "";
-            SmtpClient smtp = new SmtpClient();
+            System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient();
 
             try
             {
@@ -1270,12 +1294,12 @@ namespace WizOne.Module
                 }
 
                 MailMessage mm = new MailMessage();
-                mm.To.Add(new MailAddress(mailTO));
-                mm.From = new MailAddress(smtpMailFrom);
+                mm.To.Add(new System.Net.Mail.MailAddress(mailTO));
+                mm.From = new System.Net.Mail.MailAddress(smtpMailFrom);
                 mm.Subject = subiect;
                 mm.Body = corpMail;
                 mm.IsBodyHtml = true;
-                smtp = new SmtpClient(smtpServer);
+                smtp = new System.Net.Mail.SmtpClient(smtpServer);
                 smtp.Port = Convert.ToInt32(smtpPort);
                 smtp.Host = smtpServer;
 
@@ -1293,7 +1317,7 @@ namespace WizOne.Module
                     smtp.UseDefaultCredentials = true;
                 }
 
-                Attachment mailAttachment = new Attachment(HostingEnvironment.MapPath("~/Temp/Calendar/" + numeAtt));
+                System.Net.Mail.Attachment mailAttachment = new System.Net.Mail.Attachment(HostingEnvironment.MapPath("~/Temp/Calendar/" + numeAtt));
                 mm.Attachments.Add(mailAttachment);
                 smtp.Send(mm);
 
@@ -1308,6 +1332,157 @@ namespace WizOne.Module
             }
 
             return strErr;
+        }
+
+        //Radu 25.01.2022 - #1050
+        public static string TrimiteMail365(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel, int idClient, MemoryStream mem = null)
+        {
+            string strErr = "";
+            try
+            {
+                string mailFrom = Dami.ValoareParam("Office365_MailFrom", "");
+                string client_id = Dami.ValoareParam("Office365_ClientId", "");
+                string client_secret = Dami.ValoareParam("Office365_ClientSecret", "");
+                string tenant = Dami.ValoareParam("Office365_Tenant", "");
+
+                string strMsg = "";
+                if (mailFrom == "") strMsg += ", Mail From";
+
+                if (client_secret == "") strMsg += ", ClientSecret";
+                if (tenant == "") strMsg += ", Tenant";          
+
+                if (strMsg != "")
+                {
+                    General.MemoreazaEroarea("Nu exista date despre " + strMsg.Substring(2), "Notif", "TrimiteMail365");
+                    return "Nu exista date despre " + strMsg.Substring(2);
+                }
+
+                string requestData =
+                    string.Format("client_id={0}&client_secret={1}&scope=https://outlook.office365.com/.default&grant_type=client_credentials",
+                        client_id, client_secret);
+
+                string tokenUri = string.Format("https://login.microsoftonline.com/{0}/oauth2/v2.0/token", tenant);
+                string responseText = _postString_EWS(tokenUri, requestData);
+
+                OAuthResponseParser parser = new OAuthResponseParser();
+                parser.Load(responseText);
+
+                string officeUser = mailFrom; 
+                var server = new EASendMail.SmtpServer("outlook.office365.com");
+                server.Protocol = EASendMail.ServerProtocol.ExchangeEWS;
+                server.User = officeUser;
+
+                server.Password = parser.AccessToken;
+                server.AuthType = SmtpAuthType.XOAUTH2;
+                server.ConnectType = SmtpConnectType.ConnectSSLAuto;
+
+                var mail = new EASendMail.SmtpMail("TryIt");
+
+                mail.From = officeUser;
+
+                if (lstAdr == null || lstAdr.Count() == 0)
+                {
+                    General.MemoreazaEroarea(Dami.TraduCuvant("Nu exista destinatar"), "Notif", "TrimiteMail365");
+                    return "Nu exista destinatar";
+                }
+                else
+                {
+                    foreach (var email in lstAdr)
+                    {          
+                        switch (email.Destinatie.ToUpper())
+                        {
+                            case "TO":
+                                mail.To.Add(new EASendMail.MailAddress(email.Mail));
+                                break;
+                            case "CC":
+                                mail.Cc.Add(new EASendMail.MailAddress(email.Mail));
+                                break;
+                            case "BCC":
+                                mail.Bcc.Add(new EASendMail.MailAddress(email.Mail));
+                                break;
+                        }
+                    }
+                }
+
+                mail.Subject = subiect;
+                mail.HtmlBody = corpMail;
+
+                if (trimiteAtt == 1)
+                {
+                    byte[] arrByte = Encoding.UTF8.GetBytes(corpAtt);
+                    mail.AddAttachment(numeAtt, arrByte);
+                }
+
+                if (trimiteXls == 1)
+                {
+                    if (selectXls != "")
+                    {
+                        MemoryStream stream = new MemoryStream(General.CreazaExcel(selectXls));
+                        mail.AddAttachment(numeExcel, stream.ToArray());
+                    }
+                    else
+                    {
+                        if (Dami.ValoareParam("LogNotificari") == "1") General.CreazaLog("Sursa de date pentru excel nu este setata", "TrimiteMail365");
+                    }
+                }
+
+                if (mem != null)
+                    mail.AddAttachment(numeAtt, mem.ToArray());
+
+                server.EWSImpersonatedUser = officeUser;             
+
+                var smtp = new EASendMail.SmtpClient();
+                smtp.SendMail(server, mail);
+              
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strErr;
+        }
+
+        static string _postString_EWS(string uri, string requestData)
+        {
+            HttpWebRequest httpRequest = WebRequest.Create(uri) as HttpWebRequest;
+            httpRequest.Method = "POST";
+            httpRequest.ContentType = "application/x-www-form-urlencoded";
+
+            using (Stream requestStream = httpRequest.GetRequestStream())
+            {
+                byte[] requestBuffer = Encoding.UTF8.GetBytes(requestData);
+                requestStream.Write(requestBuffer, 0, requestBuffer.Length);
+                requestStream.Close();
+            }
+
+            try
+            {
+                HttpWebResponse httpResponse = httpRequest.GetResponse() as HttpWebResponse;
+                using (StreamReader reader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    // reads response body
+                    string responseText = reader.ReadToEnd();
+                    return responseText;
+                }
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    var response = ex.Response as HttpWebResponse;
+                    if (response != null)
+                    {
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            // reads response body
+                            string responseText = reader.ReadToEnd();
+                        }
+                    }
+                }
+
+                throw ex;
+            }
         }
 
     }

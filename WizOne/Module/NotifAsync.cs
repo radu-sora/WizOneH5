@@ -1356,12 +1356,14 @@ namespace WizOne.Module
                 string client_id = Dami.ValoareParam("Office365_ClientId", "");
                 string client_secret = Dami.ValoareParam("Office365_ClientSecret", "");
                 string tenant = Dami.ValoareParam("Office365_Tenant", "");
+                string licenseCode = Dami.ValoareParam("Office365_LicenseCode", "");
 
                 string strMsg = "";
                 if (mailFrom == "") strMsg += ", Mail From";
 
                 if (client_secret == "") strMsg += ", ClientSecret";
                 if (tenant == "") strMsg += ", Tenant";
+                if (licenseCode == "") strMsg += ", License Code";
 
                 if (strMsg != "")
                 {
@@ -1388,7 +1390,8 @@ namespace WizOne.Module
                 server.AuthType = SmtpAuthType.XOAUTH2;
                 server.ConnectType = SmtpConnectType.ConnectSSLAuto;
 
-                var mail = new EASendMail.SmtpMail("TryIt");
+                //var mail = new EASendMail.SmtpMail("TryIt");
+                var mail = new EASendMail.SmtpMail(licenseCode);
 
                 mail.From = officeUser;
 

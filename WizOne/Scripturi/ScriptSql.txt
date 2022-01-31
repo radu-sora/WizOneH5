@@ -21426,3 +21426,5 @@ INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('O
 GO
 INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('Office365_Tenant','','Tenant pentru Office365',0, 1)
 GO
+INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('Office365_LicenseCode','','License Code pentru Office365',0, 1)
+GO

@@ -154,12 +154,12 @@
                             <dx:CardViewBreakpoint DeviceSize="Custom" MaxWidth="500" CardsPerRow="1" />
                         </Breakpoints>
                     </BreakpointsLayoutSettings>
-                </SettingsAdaptivity>
+                </SettingsAdaptivity>                
                 <Settings LayoutMode="Breakpoints" ShowHeaderPanel="false" ShowGroupSelector="false" VerticalScrollBarMode="Auto" VerticalScrollableHeight="600" />           
                 <SettingsBehavior AllowSelectByCardClick="true" />
                 <Styles>
                     <FlowCard CssClass="flowCardStyle"></FlowCard>
-                    <Card Width="450" />
+                    <Card Width="450" BackColor="White" />
                 </Styles>
             </dx:ASPxCardView>
         </div>

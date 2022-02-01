@@ -558,6 +558,11 @@ namespace WizOne.ConcediiMedicale
 
             int tip = Convert.ToInt32(cmbTipConcediu.Value);
 
+            if (rbConcCont.Checked && txtZCMAnt.Text.Length <= 0)
+            {
+                return Dami.TraduCuvant("Pentru concediul in continuare trebuie sa completati numarul zilelor CM anterior!");
+            }
+
             bool bErr = false;
             string szErrMsg = "In urma validarilor efectuate au rezultat urmatoarele avertizari:" + System.Environment.NewLine;
 

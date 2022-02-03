@@ -3,6 +3,7 @@ using Microsoft.Web.Administration;
 using System;
 using System.Configuration;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Routing;
 using WizOne.Module;
@@ -65,22 +66,26 @@ namespace WizOne
                 if (str.ToUpper().IndexOf("INITIAL CATALOG") >=0)
                 {
                     Constante.tipBD = 1;
-                    int poz = str.ToUpper().IndexOf("INITIAL CATALOG");     
+                    int poz = str.ToUpper().IndexOf("INITIAL CATALOG", StringComparison.OrdinalIgnoreCase);     
                     int pozEnd = str.IndexOf(";", poz);
                     if (pozEnd > 0)
-                        Constante.BD = str.Substring(poz, pozEnd - poz).Replace(" ", "").Replace("INITIALCATALOG=", "");  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                        //Constante.BD = str.Substring(poz, pozEnd - poz).Replace(" ", "").Replace("INITIALCATALOG=", "");  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                        Constante.BD = Regex.Replace(str.Substring(poz, pozEnd - poz).Replace(" ", ""), "INITIALCATALOG=", "", RegexOptions.IgnoreCase);
                     else
-                        Constante.BD = str.Substring(poz).Replace(" ", "").Replace("INITIALCATALOG=", "");    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                        //Constante.BD = str.Substring(poz).Replace(" ", "").Replace("INITIALCATALOG=", "");    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                        Constante.BD = Regex.Replace(str.Substring(poz).Replace(" ", ""), "INITIALCATALOG=", "", RegexOptions.IgnoreCase);
                 }
                 else
                 {
                     Constante.tipBD = 2;
-                    int poz = str.ToUpper().IndexOf("USER ID");
+                    int poz = str.ToUpper().IndexOf("USER ID", StringComparison.OrdinalIgnoreCase);
                     int pozEnd = str.IndexOf(";", poz);
                     if (pozEnd > 0)
-                        Constante.BD = str.Substring(poz, pozEnd - poz).Replace(" ","").Replace("USERID=", "");   //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                        //Constante.BD = str.Substring(poz, pozEnd - poz).Replace(" ","").Replace("USERID=", "");   //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                        Constante.BD = Regex.Replace(str.Substring(poz, pozEnd - poz).Replace(" ", ""), "USERID=", "", RegexOptions.IgnoreCase);
                     else
-                        Constante.BD = str.Substring(poz).Replace(" ", "").Replace("USERID=", "");    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                        //Constante.BD = str.Substring(poz).Replace(" ", "").Replace("USERID=", "");    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                        Constante.BD = Regex.Replace(str.Substring(poz).Replace(" ", ""), "USERID=", "", RegexOptions.IgnoreCase);
                 }
 
                 //determinam versiunea

@@ -64,7 +64,7 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/notif.png"></Image>
                 </dx:ASPxButton> 
-                <dx:ASPxButton ID="btnWA" ClientInstanceName="btnWA" ClientIDMode="Static" runat="server" Visible="true" Text="Trimitere prin WhatsApp" AutoPostBack="true"  OnClick="btnWA_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnWA" ClientInstanceName="btnWA" ClientIDMode="Static" runat="server" Visible="false" Text="Trimitere prin WhatsApp" AutoPostBack="true"  OnClick="btnWA_Click" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
                         e.processOnServer = true;

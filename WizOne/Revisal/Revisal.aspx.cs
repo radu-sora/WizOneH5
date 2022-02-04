@@ -21,6 +21,7 @@ using System.IO.Packaging;
 using System.Xml;
 using WizOne.Module;
 using DevExpress.XtraReports.UI;
+using System.Text.RegularExpressions;
 
 namespace WizOne.Revisal
 {
@@ -266,24 +267,28 @@ namespace WizOne.Revisal
             try
             {
                 string cnApp = Constante.cnnWeb;
-                string tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
-                string conn = tmp.Split(';')[0];
-                tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
-                string user = tmp.Split(';')[0];
-                //tmp = cnApp.Split(new[] { "Initial catalog=" }, StringSplitOptions.None)[1];
-                //string DB = tmp.Split(';')[0];
+                //string tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                string tmp = Regex.Split(cnApp, "PASSWORD=", RegexOptions.IgnoreCase)[1];
+                string pwd = tmp.Split(';')[0];
 
+                //tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                tmp = Regex.Split(cnApp, "DATA SOURCE=", RegexOptions.IgnoreCase)[1];
+                string conn = tmp.Split(';')[0];
+                //tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                tmp = Regex.Split(cnApp, "USER ID=", RegexOptions.IgnoreCase)[1];
+                string user = tmp.Split(';')[0];
                 string DB = "";
                 if (Constante.tipBD == 1)
                 {
-                    tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
+                    //tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                    tmp = Regex.Split(cnApp, "INITIAL CATALOG=", RegexOptions.IgnoreCase)[1];
                     DB = tmp.Split(';')[0];
                 }
                 else
                     DB = user;
-       
+
                 tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
-                string pwd = tmp.Split(';')[0];
+                pwd = tmp.Split(';')[0];
 
                 string sql = "SELECT \"Valoare\", \"Criptat\"  FROM \"tblParametrii\" WHERE \"Nume\" = 'ORAPWD'";
                 DataTable dtParam = General.IncarcaDT(sql, null);
@@ -356,27 +361,25 @@ namespace WizOne.Revisal
             try
             {
                 string cnApp = Constante.cnnWeb;
-                string tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
-                string conn = tmp.Split(';')[0];
-                tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
-                string DB = tmp.Split(';')[0];
-                tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
-                string user = tmp.Split(';')[0];
-                tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                //string tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                string tmp = Regex.Split(cnApp, "PASSWORD=", RegexOptions.IgnoreCase)[1];
                 string pwd = tmp.Split(';')[0];
 
-                string sql = "SELECT \"Valoare\", \"Criptat\"  FROM \"tblParametrii\" WHERE \"Nume\" = 'ORAPWD'";
-                DataTable dtParam = General.IncarcaDT(sql, null);
-                if (dtParam != null && dtParam.Rows.Count > 0)
+                //tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                tmp = Regex.Split(cnApp, "DATA SOURCE=", RegexOptions.IgnoreCase)[1];
+                string conn = tmp.Split(';')[0];
+                //tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                tmp = Regex.Split(cnApp, "USER ID=", RegexOptions.IgnoreCase)[1];
+                string user = tmp.Split(';')[0];
+                string DB = "";
+                if (Constante.tipBD == 1)
                 {
-                    if (dtParam.Rows[0][1] == null || dtParam.Rows[0][1].ToString().Length <= 0 || dtParam.Rows[0][1].ToString() == "0")
-                        pwd = dtParam.Rows[0][0].ToString();
-                    else
-                    {
-                        CriptDecript prc = new CriptDecript();
-                        pwd = prc.EncryptString("WizOne2016", (dtParam.Rows[0][0] as string ?? "").ToString(), 2);
-                    }
+                    //tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                    tmp = Regex.Split(cnApp, "INITIAL CATALOG=", RegexOptions.IgnoreCase)[1];
+                    DB = tmp.Split(';')[0];
                 }
+                else
+                    DB = user;
 
                 Dictionary<String, String> lista = Session["ListaParamRevisal"] as Dictionary<String, String>;
                 Hashtable config = new Hashtable();

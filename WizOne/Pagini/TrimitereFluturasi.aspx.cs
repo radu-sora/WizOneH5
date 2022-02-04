@@ -34,6 +34,8 @@ using System.Web.Script.Serialization;
 using EASendMail;
 using Twilio.Rest.Conversations.V1;
 using Twilio.Rest.Conversations.V1.Conversation;
+using Twilio.Rest.Conversations.V1.Configuration;
+using System.Text.RegularExpressions;
 
 namespace WizOne.Pagini
 {
@@ -527,13 +529,59 @@ namespace WizOne.Pagini
                         friendlyName: "My First Conversation"
                     );
 
-                    //Console.WriteLine(conversation.Sid);
+                    ////Console.WriteLine(conversation.Sid);
 
-                    var participant = ParticipantResource.Create(
-                        messagingBindingAddress: "whatsapp:+40723899574",
-                        messagingBindingProxyAddress: "whatsapp:+17752563255",
+                    //var participant = ParticipantResource.Create(
+                    //    messagingBindingAddress: "whatsapp:+40723899574",
+                    //    messagingBindingProxyAddress: "whatsapp:+17752563255",
+                    //    pathConversationSid: conversation.Sid
+                    //);
+
+                    var webhook1 = Twilio.Rest.Conversations.V1.Configuration.WebhookResource.Fetch();
+
+                    var filters = new List<string> {
+                        "onMessageAdd",
+                        "onMessageUpdate",
+                        "onMessageRemove"
+                    };
+
+                    var webhook2 = Twilio.Rest.Conversations.V1.Configuration.WebhookResource.Update(
+                        filters: filters,
+                        target: Twilio.Rest.Conversations.V1.Configuration.WebhookResource.TargetEnum.Webhook,
+                        preWebhookUrl: "https://3f092138041540aaf40283df5346de74.m.pipedream.net",
+                        postWebhookUrl: "https://3f092138041540aaf40283df5346de74.m.pipedream.net",
+                        method: "POST"
+                    );
+
+                    var webhooks = Twilio.Rest.Conversations.V1.Conversation.WebhookResource.Read(
+                        pathConversationSid: conversation.Sid,
+                        limit: 20
+                    );
+
+                    foreach (var record in webhooks)
+                    {
+                        Console.WriteLine(record.Sid);
+                    }
+
+
+                    //var webhook3 = Twilio.Rest.Conversations.V1.Conversation.WebhookResource.Fetch(
+                    //    pathConversationSid: conversation.Sid,
+                    //    pathSid: "WHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                    //);
+
+                    var configurationFilters = new List<string> {
+                        "onMessageAdded",
+                        "onMessageUpdated"
+                    };
+
+                    var webhook = Twilio.Rest.Conversations.V1.Conversation.WebhookResource.Create(
+                        configurationFilters: configurationFilters,
+                        configurationUrl: "https://3f092138041540aaf40283df5346de74.m.pipedream.net",
+                        target: Twilio.Rest.Conversations.V1.Conversation.WebhookResource.TargetEnum.Webhook,
                         pathConversationSid: conversation.Sid
                     );
+
+                    //Console.WriteLine(webhook.Method);
 
                 }
 
@@ -1326,20 +1374,24 @@ namespace WizOne.Pagini
                 string msg = "";                
                 Dictionary<String, String> lista = new Dictionary<string, string>();
                 Adev.Adeverinta pagAdev = new Adev.Adeverinta();
-                lista = pagAdev.LoadParameters();           
+                lista = pagAdev.LoadParameters();
 
                 string cnApp = Constante.cnnWeb;
-                string tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                //string tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                string tmp = Regex.Split(cnApp, "PASSWORD=", RegexOptions.IgnoreCase)[1];
                 string pwd = tmp.Split(';')[0];
 
-                tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                //tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                tmp = Regex.Split(cnApp, "DATA SOURCE=", RegexOptions.IgnoreCase)[1];
                 string conn = tmp.Split(';')[0];
-                tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                //tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                tmp = Regex.Split(cnApp, "USER ID=", RegexOptions.IgnoreCase)[1];
                 string user = tmp.Split(';')[0];
                 string DB = "";
                 if (Constante.tipBD == 1)
                 {
-                    tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                    //tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                    tmp = Regex.Split(cnApp, "INITIAL CATALOG=", RegexOptions.IgnoreCase)[1];
                     DB = tmp.Split(';')[0];
                 }
                 else

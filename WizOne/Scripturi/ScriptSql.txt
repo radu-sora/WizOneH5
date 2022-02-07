@@ -21416,3 +21416,15 @@ CREATE NONCLUSTERED INDEX [idx_Ptj_Intrari_Ziua]
 ON [dbo].[Ptj_Intrari] ([Ziua])
 INCLUDE ([ValStr])
 GO
+
+
+INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('Office365_MailFrom','','Adresa de pe care se trimit e-mail-uri pentru Office365',0, 0)
+GO
+INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('Office365_ClientId','','Client Id pentru Office365',0, 1)
+GO
+INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('Office365_ClientSecret','','Client secret pentru Office365',0, 1)
+GO
+INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('Office365_Tenant','','Tenant pentru Office365',0, 1)
+GO
+INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('Office365_LicenseCode','','License Code pentru Office365',0, 1)
+GO

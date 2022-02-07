@@ -32,6 +32,10 @@ using Twilio.Types;
 using Twilio;
 using System.Web.Script.Serialization;
 using EASendMail;
+using Twilio.Rest.Conversations.V1;
+using Twilio.Rest.Conversations.V1.Conversation;
+using Twilio.Rest.Conversations.V1.Configuration;
+using System.Text.RegularExpressions;
 
 namespace WizOne.Pagini
 {
@@ -371,22 +375,22 @@ namespace WizOne.Pagini
                         continue;
                     }
 
-                    var twilioRestClient = ProxiedTwilioClientCreator.GetClient();
+                    //var twilioRestClient = ProxiedTwilioClientCreator.GetClient();
 
-                    //// Now that we have our custom built TwilioRestClient,
-                    //// we can pass it to any REST API resource action.
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
-                                                | SecurityProtocolType.Tls11
-                                                | SecurityProtocolType.Tls12
-                                                | SecurityProtocolType.Ssl3;
+                    ////// Now that we have our custom built TwilioRestClient,
+                    ////// we can pass it to any REST API resource action.
+                    //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                    //                            | SecurityProtocolType.Tls11
+                    //                            | SecurityProtocolType.Tls12
+                    //                            | SecurityProtocolType.Ssl3;
 
-                    var message = MessageResource.Create(
-                        to: new PhoneNumber("whatsapp:+4" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0]),
-                        from: new PhoneNumber("whatsapp:+14155238886"),
-                        body: "Fluturașul de salariu este gata! Dacă doriți să-l primiți pe WhatsApp, răspundeți cu Da la acest număr.",
-                        // Here's where you inject the custom client
-                        client: twilioRestClient
-                    );
+                    //var message = MessageResource.Create(
+                    //    to: new PhoneNumber("whatsapp:+4" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0]),
+                    //    from: new PhoneNumber("whatsapp:+14155238886"),
+                    //    body: "Fluturașul de salariu este gata! Dacă doriți să-l primiți pe WhatsApp, răspundeți cu Da la acest număr.",
+                    //    // Here's where you inject the custom client
+                    //    client: twilioRestClient
+                    //);
                 }
 
                 if (msg.Length <= 0)
@@ -410,111 +414,175 @@ namespace WizOne.Pagini
             {
                 foreach (int key in lstMarci.Keys)
                 {
-                    if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0].Length <= 0)
-                    {
-                        msg += "Angajatul cu marca " + key + " nu are completat telefonul!\n";
-                        continue;
-                    }
+                    //if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0].Length <= 0)
+                    //{
+                    //    msg += "Angajatul cu marca " + key + " nu are completat telefonul!\n";
+                    //    continue;
+                    //}
 
-                    if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
-                    {
-                        msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
-                        continue;
-                    }
+                    //if (lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1].Length <= 0)
+                    //{
+                    //    msg += "Angajatul cu marca " + key + " nu are completata parola pentru PDF!\n";
+                    //    continue;
+                    //}
 
-                    int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
-                    int an = Convert.ToDateTime(txtAnLuna.Value).Year;
+                    //int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
+                    //int an = Convert.ToDateTime(txtAnLuna.Value).Year;
 
-                    using (var entities = new ReportsEntities())
-                    using (var xtraReport = new XtraReport())
-                    {
-                        var report = entities.Reports.Find(reportId);
+                    //using (var entities = new ReportsEntities())
+                    //using (var xtraReport = new XtraReport())
+                    //{
+                    //    var report = entities.Reports.Find(reportId);
 
-                        using (var memStream = new MemoryStream(report.LayoutData))
-                            xtraReport.LoadLayoutFromXml(memStream);
+                    //    using (var memStream = new MemoryStream(report.LayoutData))
+                    //        xtraReport.LoadLayoutFromXml(memStream);
 
-                        var values = new
-                        {
-                            Implicit = new { UserId = Session?["UserId"] },
-                            Explicit = new { Angajat = key.ToString(), Luna = luna, An = an }
-                        };
-                        var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
-                        var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
-                        var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
-                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                            Where(p => p.Type != typeof(Expression)).
-                            Union(xtraReport.ComponentStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
-                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                            Where(p => p.Type != typeof(Expression)));
+                    //    var values = new
+                    //    {
+                    //        Implicit = new { UserId = Session?["UserId"] },
+                    //        Explicit = new { Angajat = key.ToString(), Luna = luna, An = an }
+                    //    };
+                    //    var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
+                    //    var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
+                    //    var parameters = xtraReport.ObjectStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
+                    //        SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                    //        Where(p => p.Type != typeof(Expression)).
+                    //        Union(xtraReport.ComponentStorage.OfType<DevExpress.DataAccess.Sql.SqlDataSource>().
+                    //        SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                    //        Where(p => p.Type != typeof(Expression)));
 
-                        foreach (var param in parameters)
-                        {
-                            var name = param.Name.TrimStart('@');
-                            var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
-                                implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
+                    //    foreach (var param in parameters)
+                    //    {
+                    //        var name = param.Name.TrimStart('@');
+                    //        var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
+                    //            implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
 
-                            if (value != null)
-                                param.Value = Convert.ChangeType(value, param.Type);
-                        }
+                    //        if (value != null)
+                    //            param.Value = Convert.ChangeType(value, param.Type);
+                    //    }
 
-                        xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
-                        PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
-                        pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
+                    //    xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
+                    //    PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
+                    //    pdfOptions.PasswordSecurityOptions.OpenPassword = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[1];
 
-                        MemoryStream mem = new MemoryStream();
-                        xtraReport.ExportToPdf(mem, pdfOptions);
-                        mem.Seek(0, System.IO.SeekOrigin.Begin);
+                    //    MemoryStream mem = new MemoryStream();
+                    //    xtraReport.ExportToPdf(mem, pdfOptions);
+                    //    mem.Seek(0, System.IO.SeekOrigin.Begin);
 
-                        string numeFis = "Fluturaș_" + key + ".pdf";
-                        if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Elanor)
-                        {
-                            string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
-                            string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
+                    //    string numeFis = "Fluturaș_" + key + ".pdf";
+                    //    if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Elanor)
+                    //    {
+                    //        string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
+                    //        string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
 
-                            numeFis = "P_SLP_02344_" + dataInc + "_" + dataSf + "_00_V2_0000_00000_FILE_" + key + "_" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[2].Replace(' ', '_') + ".pdf";
-                        }
+                    //        numeFis = "P_SLP_02344_" + dataInc + "_" + dataSf + "_00_V2_0000_00000_FILE_" + key + "_" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[2].Replace(' ', '_') + ".pdf";
+                    //    }
 
-                        //incarcare document
-                        //byte[] bytes = new byte[mem.Length];
-                        //mem.Read(bytes, 0, (int)mem.Length);
+                    //    //incarcare document
+                    //    //byte[] bytes = new byte[mem.Length];
+                    //    //mem.Read(bytes, 0, (int)mem.Length);
 
-                        //System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient();
-                        //MultipartFormDataContent form = new MultipartFormDataContent();
+                    //    //System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient();
+                    //    //MultipartFormDataContent form = new MultipartFormDataContent();
 
-                        ////form.Add(new StringContent(username), "username");
-                        ////form.Add(new StringContent(useremail), "email");
-                        ////form.Add(new StringContent(password), "password");
-                        //form.Add(new ByteArrayContent(bytes, 0, bytes.Length), "Fluturas", numeFis);
-                        //HttpResponseMessage response = await httpClient.PostAsync("PostUrl", form);
+                    //    ////form.Add(new StringContent(username), "username");
+                    //    ////form.Add(new StringContent(useremail), "email");
+                    //    ////form.Add(new StringContent(password), "password");
+                    //    //form.Add(new ByteArrayContent(bytes, 0, bytes.Length), "Fluturas", numeFis);
+                    //    //HttpResponseMessage response = await httpClient.PostAsync("PostUrl", form);
 
-                        //response.EnsureSuccessStatusCode();
-                        //httpClient.Dispose();
-                        //string sd = response.Content.ReadAsStringAsync().Result;
+                    //    //response.EnsureSuccessStatusCode();
+                    //    //httpClient.Dispose();
+                    //    //string sd = response.Content.ReadAsStringAsync().Result;
 
 
 
-                        mem.Close();
-                        mem.Flush();
-                    }     
+                    //    mem.Close();
+                    //    mem.Flush();
+                    //}
 
                     //trimitere mesaj cu document
-                    var twilioRestClient = ProxiedTwilioClientCreator.GetClient();
+                    //var twilioRestClient = ProxiedTwilioClientCreator.GetClient();
 
-                    //// Now that we have our custom built TwilioRestClient,
-                    //// we can pass it to any REST API resource action.
+                    ////// Now that we have our custom built TwilioRestClient,
+                    ////// we can pass it to any REST API resource action.
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
                                                 | SecurityProtocolType.Tls11
                                                 | SecurityProtocolType.Tls12
                                                 | SecurityProtocolType.Ssl3;
 
-                    var message = MessageResource.Create(
-                        to: new PhoneNumber("whatsapp:+4" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0]),
-                        from: new PhoneNumber("whatsapp:+14155238886"),
-                        mediaUrl: new List<Uri> { new Uri("https://www.wizrom.ro/specs/PAYSLIP_PRY_RO001_RO_Y2021_P7_E2550_R01.pdf") },
-                        body: "",
-                        // Here's where you inject the custom client
-                        client: twilioRestClient
+                    //var message = MessageResource.Create(
+                    //    to: new PhoneNumber("whatsapp:+4" + lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0]),
+                    //    from: new PhoneNumber("whatsapp:+14155238886"),
+                    //    mediaUrl: new List<Uri> { new Uri("https://www.wizrom.ro/specs/PAYSLIP_PRY_RO001_RO_Y2021_P7_E2550_R01.pdf") },
+                    //    body: "",
+                    //    // Here's where you inject the custom client
+                    //    client: twilioRestClient
+                    //);
+
+                    var accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
+                    var authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN");
+
+                    TwilioClient.Init(accountSid, authToken);
+
+                    var conversation = ConversationResource.Create(
+                        friendlyName: "My First Conversation"
                     );
+
+                    ////Console.WriteLine(conversation.Sid);
+
+                    //var participant = ParticipantResource.Create(
+                    //    messagingBindingAddress: "whatsapp:+40723899574",
+                    //    messagingBindingProxyAddress: "whatsapp:+17752563255",
+                    //    pathConversationSid: conversation.Sid
+                    //);
+
+                    var webhook1 = Twilio.Rest.Conversations.V1.Configuration.WebhookResource.Fetch();
+
+                    var filters = new List<string> {
+                        "onMessageAdd",
+                        "onMessageUpdate",
+                        "onMessageRemove"
+                    };
+
+                    var webhook2 = Twilio.Rest.Conversations.V1.Configuration.WebhookResource.Update(
+                        filters: filters,
+                        target: Twilio.Rest.Conversations.V1.Configuration.WebhookResource.TargetEnum.Webhook,
+                        preWebhookUrl: "https://3f092138041540aaf40283df5346de74.m.pipedream.net",
+                        postWebhookUrl: "https://3f092138041540aaf40283df5346de74.m.pipedream.net",
+                        method: "POST"
+                    );
+
+                    var webhooks = Twilio.Rest.Conversations.V1.Conversation.WebhookResource.Read(
+                        pathConversationSid: conversation.Sid,
+                        limit: 20
+                    );
+
+                    foreach (var record in webhooks)
+                    {
+                        Console.WriteLine(record.Sid);
+                    }
+
+
+                    //var webhook3 = Twilio.Rest.Conversations.V1.Conversation.WebhookResource.Fetch(
+                    //    pathConversationSid: conversation.Sid,
+                    //    pathSid: "WHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                    //);
+
+                    var configurationFilters = new List<string> {
+                        "onMessageAdded",
+                        "onMessageUpdated"
+                    };
+
+                    var webhook = Twilio.Rest.Conversations.V1.Conversation.WebhookResource.Create(
+                        configurationFilters: configurationFilters,
+                        configurationUrl: "https://3f092138041540aaf40283df5346de74.m.pipedream.net",
+                        target: Twilio.Rest.Conversations.V1.Conversation.WebhookResource.TargetEnum.Webhook,
+                        pathConversationSid: conversation.Sid
+                    );
+
+                    //Console.WriteLine(webhook.Method);
+
                 }
 
                 if (msg.Length <= 0)
@@ -1306,20 +1374,24 @@ namespace WizOne.Pagini
                 string msg = "";                
                 Dictionary<String, String> lista = new Dictionary<string, string>();
                 Adev.Adeverinta pagAdev = new Adev.Adeverinta();
-                lista = pagAdev.LoadParameters();           
+                lista = pagAdev.LoadParameters();
 
                 string cnApp = Constante.cnnWeb;
-                string tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                //string tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                string tmp = Regex.Split(cnApp, "PASSWORD=", RegexOptions.IgnoreCase)[1];
                 string pwd = tmp.Split(';')[0];
 
-                tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                //tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                tmp = Regex.Split(cnApp, "DATA SOURCE=", RegexOptions.IgnoreCase)[1];
                 string conn = tmp.Split(';')[0];
-                tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                //tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                tmp = Regex.Split(cnApp, "USER ID=", RegexOptions.IgnoreCase)[1];
                 string user = tmp.Split(';')[0];
                 string DB = "";
                 if (Constante.tipBD == 1)
                 {
-                    tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                    //tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                    tmp = Regex.Split(cnApp, "INITIAL CATALOG=", RegexOptions.IgnoreCase)[1];
                     DB = tmp.Split(';')[0];
                 }
                 else
@@ -1505,7 +1577,10 @@ namespace WizOne.Pagini
 
         protected void btnMail_Click(object sender, EventArgs e)
         {
-            SendMail();
+            //SendMail();
+            List<Notif.metaAdreseMail> lstOne = new List<Notif.metaAdreseMail>(); 
+            lstOne.Add(new Notif.metaAdreseMail { Mail = "radu.sora@wizrom.ro", Destinatie = "TO", IncludeLinkAprobare = 0 });
+            Notif.TrimiteMail365(lstOne, "Office 365 background service oauth test", "this is a test, don't reply", 0, "", "", 0, "", "", Convert.ToInt32(Session["IdClient"]), null);
         }
 
 
@@ -1558,13 +1633,13 @@ namespace WizOne.Pagini
         {
             try
             {
-                string client_id = "6aff4cbc-bb88-427a-805a-e9eea06731f8";
-                string client_secret = "qXA7Q~xUrnlkfWwLpJmAFa7t2tg.SC_NM~c0z";
+                string client_id = "e5157c9f-41ef-4da5-933a-981540008e98";
+                string client_secret = "hCS7Q~TGmpyPT.k6zpwn2Nb_C2yUA7yUE.eor";
 
                 // If your application is not created by Office365 administrator,
                 // please use Office365 directory tenant id, you should ask Offic365 administrator to send it to you.
                 // Office365 administrator can query tenant id in https://portal.azure.com/ - Azure Active Directory.
-                string tenant = "f8cdef31-a31e-4b4a-93e4-5f571e91255a";
+                string tenant = "f5623fbc-c540-41ce-97bf-6a4043d20e91";
 
                 string requestData =
                     string.Format("client_id={0}&client_secret={1}&scope=https://outlook.office365.com/.default&grant_type=client_credentials",
@@ -1586,12 +1661,15 @@ namespace WizOne.Pagini
                 server.ConnectType = SmtpConnectType.ConnectSSLAuto;
 
                 var mail = new EASendMail.SmtpMail("TryIt");
-
+                
                 mail.From = officeUser;
-                mail.To = "zemy.apfelbaum@wizromsoftwaresrl.onmicrosoft.com";
+                mail.To = "radu.sora@wizrom.ro";
 
                 mail.Subject = "Office 365 background service oauth test";
                 mail.TextBody = "this is a test, don't reply";
+
+                server.EWSImpersonatedUser = officeUser;
+                //_exchangeService.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, userEmailAddress);
 
                 var smtp = new EASendMail.SmtpClient();
                 smtp.SendMail(server, mail);

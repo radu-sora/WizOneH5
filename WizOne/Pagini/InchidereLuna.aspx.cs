@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.UI;
@@ -112,13 +113,31 @@ namespace WizOne.Pagini
                     return mesaj;
                 }
 
-                string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
-                string conn = tmp.Split(';')[0];
-                tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
-                string user = tmp.Split(';')[0];
-                string DB = Constante.BD;    
-                tmp = Constante.cnnWeb.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
+                //string tmp = Constante.cnnWeb.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                //string conn = tmp.Split(';')[0];
+                //tmp = Constante.cnnWeb.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];   //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                //string user = tmp.Split(';')[0];
+                //string DB = Constante.BD;    
+                //tmp = Constante.cnnWeb.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                //string pwd = tmp.Split(';')[0];
+
+
+                string cnApp = Constante.cnnWeb;
+                string tmp = Regex.Split(cnApp, "PASSWORD=", RegexOptions.IgnoreCase)[1];
                 string pwd = tmp.Split(';')[0];
+
+                tmp = Regex.Split(cnApp, "DATA SOURCE=", RegexOptions.IgnoreCase)[1];
+                string conn = tmp.Split(';')[0];
+                tmp = Regex.Split(cnApp, "USER ID=", RegexOptions.IgnoreCase)[1];
+                string user = tmp.Split(';')[0];
+                string DB = "";
+                if (Constante.tipBD == 1)
+                {
+                    tmp = Regex.Split(cnApp, "INITIAL CATALOG=", RegexOptions.IgnoreCase)[1];
+                    DB = tmp.Split(';')[0];
+                }
+                else
+                    DB = user;
 
                 bool rez = MonthClosing.MthClsgFunc.MthCls(Constante.tipBD, AdunaComp, szSOMA, szSOMB, conn, DB, user, pwd, out mesaj);
                 if (rez)
@@ -256,13 +275,30 @@ namespace WizOne.Pagini
 
             try
             {
-                string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
-                string conn = tmp.Split(';')[0];
-                string DB = Constante.BD;
-                tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
-                string user = tmp.Split(';')[0];
-                tmp = Constante.cnnWeb.ToUpper().Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                //string tmp = Constante.cnnWeb.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                //string conn = tmp.Split(';')[0];
+                //string DB = Constante.BD;
+                //tmp = Constante.cnnWeb.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];   //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                //string user = tmp.Split(';')[0];
+                //tmp = Constante.cnnWeb.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                //string pwd = tmp.Split(';')[0];
+
+                string cnApp = Constante.cnnWeb;
+                string tmp = Regex.Split(cnApp, "PASSWORD=", RegexOptions.IgnoreCase)[1];
                 string pwd = tmp.Split(';')[0];
+
+                tmp = Regex.Split(cnApp, "DATA SOURCE=", RegexOptions.IgnoreCase)[1];
+                string conn = tmp.Split(';')[0];
+                tmp = Regex.Split(cnApp, "USER ID=", RegexOptions.IgnoreCase)[1];
+                string user = tmp.Split(';')[0];
+                string DB = "";
+                if (Constante.tipBD == 1)
+                {
+                    tmp = Regex.Split(cnApp, "INITIAL CATALOG=", RegexOptions.IgnoreCase)[1];
+                    DB = tmp.Split(';')[0];
+                }
+                else
+                    DB = user;
 
                 string cale = Dami.ValoareParam("CaleBackUp").Trim();
                 if (cale == "")

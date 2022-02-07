@@ -168,7 +168,8 @@ namespace WizOne.Tactil
 
                     // New report access interface
                     //MessageBox.Show("Fluturasul se printeaza!", MessageBox.icoSuccess, "");
-                    Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
+                    //Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
+                    Wizrom.Reports.Code.ReportProxy.Print(reportId, paramList: reportParams);
                 }
                 else
                 {
@@ -220,12 +221,12 @@ namespace WizOne.Tactil
             {
                 //Radu 24.04.2020
                 string tip = Dami.ValoareParam("TipInfoChiosc", "0");
-                if (tip == "0")
+                if (tip == "0" || tip == "3")    //Radu 03.12.2021 - #914
                     Response.Redirect("../DefaultTactil", false);
                 else if (tip == "1" || tip == "2")
                     Response.Redirect("../DefaultTactilFaraCard", false);
-                else if (tip == "3")
-                    Response.Redirect("../DefaultTactilExtra", false);
+                //else if (tip == "3")
+                //    Response.Redirect("../DefaultTactilExtra", false);
             }
             catch (Exception ex)
             {
@@ -307,7 +308,10 @@ namespace WizOne.Tactil
         protected void pnlCtl_Callback(object sender, CallbackEventArgsBase e)
         {
             lnlPri_Click();
-            
+
         }
+
+                        //        if (tipInfoChiosc == 3)
+                        //pagina = '<%: ResolveClientUrl("~/DefaultTactilExtra.aspx") %>';
     }
 }

@@ -32,8 +32,10 @@ namespace WizOne.ConcediiMedicale
             public int Optiune { get; set; }
             public int Stagiu { get; set; }
             public DateTime DataInceput { get; set; }
+            public DateTime DataSfarsit { get; set; }
             public string SerieCMInitial { get; set; }
             public string NumarCMInitial { get; set; }
+            public int NrZile { get; set; }
 
         }     
 
@@ -864,6 +866,9 @@ namespace WizOne.ConcediiMedicale
                     sql = "UPDATE CM_CereriIstoric SET IdStare = 4, IdUser = " + Session["UserId"].ToString() + ", Culoare = (SELECT Culoare FROM CM_tblStari WHERE Id = 4)  WHERE IdCerere = " + lstIds[i] + " AND Pozitie = 2";
                     General.ExecutaNonQuery(sql, null);
 
+                    //#1062
+                    TransferPontaj(dt.Rows[0]["F10003"].ToString(), dataInc, dataSf, "CM");
+
                     TrimiteNotificare(Convert.ToInt32(lstIds[i]));
                 }
 
@@ -1197,7 +1202,7 @@ namespace WizOne.ConcediiMedicale
                 List<metaCereriCM> ids = new List<metaCereriCM>();
                 string msg = "";
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare", "DataInceput" });
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "BazaCalculCM", "ZileBazaCalculCM", "MedieZileBazaCalcul", "MedieZilnicaCM", "F10003", "IdStare", "DataInceput", "DataSfarsit", "NrZile" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate"), MessageBox.icoWarning, "");
@@ -1211,6 +1216,7 @@ namespace WizOne.ConcediiMedicale
                 {
                     object[] arr = lst[i] as object[];
                     DateTime? data = arr[7] as DateTime?;
+                    DateTime? dataSf = arr[8] as DateTime?;
 
                     if (Convert.ToInt32(General.Nz(arr[6], 0)) < 0)
                     {
@@ -1242,7 +1248,9 @@ namespace WizOne.ConcediiMedicale
                         ZileBazaCalculCM = Convert.ToInt32(General.Nz(arr[2], 0)),
                         MedieZileBazaCalcul = Convert.ToDouble(General.Nz(arr[3], 0)),
                         MedieZilnicaCM = Convert.ToDouble(General.Nz(arr[4], 0)),
-                        DataInceput = (data ?? new DateTime(2100, 1, 1))
+                        DataInceput = (data ?? new DateTime(2100, 1, 1)),
+                        DataSfarsit = (dataSf ?? new DateTime(2100, 1, 1)),
+                        NrZile = Convert.ToInt32(General.Nz(arr[9], 0))
                     });
                     nrSel++;
                 }
@@ -1287,6 +1295,23 @@ namespace WizOne.ConcediiMedicale
                     {
                         General.ExecutaNonQuery("DELETE FROM F300 WHERE F30003 = " + +ids[i].F10003 + " AND F30010 BETWEEN 4400 AND 4499", null);
                     }
+
+                    //stergem din pontaj   
+                    StergeInPontaj(ids[i].Id, ids[i].F10003, Convert.ToInt32(General.Nz(Session["UserId"], -99)));
+
+                    DataTable dtPtj = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= ""Ziua"" AND ""Ziua"" <= @3", new object[] { ids[i].F10003, ids[i].DataInceput, ids[i].DataSfarsit });
+
+                    if (dtPtj != null && dtPtj.Rows.Count > 0)
+                    {
+                        for (int j = 0; j < dtPtj.Rows.Count; j++)
+                        {
+                            Calcul.AlocaContract(Convert.ToInt32(dtPtj.Rows[j]["F10003"].ToString()), Convert.ToDateTime(dtPtj.Rows[j]["Ziua"]));
+                            Calcul.CalculInOut(dtPtj.Rows[j], true, true);
+                        }
+                    }
+
+                    General.CalculFormule(ids[i].F10003, null, ids[i].DataInceput, ids[i].DataSfarsit);
+                    General.SituatieZLOperatii(ids[i].F10003, ids[i].DataInceput, 3, ids[i].NrZile);
                 }
 
                 Session["CM_Grid"] = null;
@@ -1302,6 +1327,33 @@ namespace WizOne.ConcediiMedicale
             }
         }
 
+
+        public static void StergeInPontaj(int id, int f10003, int idUser)
+        {
+            try
+            {
+                string sqlStr =
+                    $@"BEGIN
+                        INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                        SELECT F10003, ""Ziua"", NULL, ""ValStr"", {idUser}, {General.CurrentDate()}, 'Anulare concediu medical', {idUser}, {General.CurrentDate()}
+                        FROM ""Ptj_Intrari"" 
+                        WHERE F10003 = (SELECT F10003 FROM ""CM_Cereri"" WHERE ""Id"" = {id})
+                        AND(SELECT ""DataInceput"" FROM ""CM_Cereri"" WHERE ""Id"" = {id}) <= ""Ziua""
+                        AND ""Ziua"" <= (SELECT ""DataSfarsit"" FROM ""CM_Cereri"" WHERE ""Id"" = {id});
+
+                        UPDATE ""Ptj_Intrari"" SET ""ValStr"" = NULL 
+                        WHERE F10003 = (SELECT F10003 FROM ""CM_Cereri"" WHERE ""Id"" = {id})
+                        AND (SELECT ""DataInceput"" FROM ""CM_Cereri"" WHERE ""Id"" = {id}) <= ""Ziua""
+                        AND ""Ziua"" <= (SELECT ""DataSfarsit"" FROM ""CM_Cereri"" WHERE ""Id"" = {id});
+                    END;";
+                General.ExecutaNonQuery(sqlStr, null);
+                
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "ConcediiMedicale", "StergeInPontaj");
+            }
+        }
 
 
         bool AddConcediu(int cod, int zile, int cc, double proc, double suma_4450_subplafon, bool bFTarif, int marca, bool avans)
@@ -1420,14 +1472,14 @@ namespace WizOne.ConcediiMedicale
                 dtAviz = new DateTime(2100, 1, 1);
             //                                                                                                                               0              1       2       3       4                               5       5       6       7
             string sql = "INSERT INTO " + (avans ? "F300_CM_AVANS" : "F300") + " (F30001, F30002, F30003, F30004, F30005, F30006, F30007, F30010, F30011, F30012, F30013, F30014, F30015, F30021, F30022, F30023, F30036, F30037, F30038, F30050, " +
-                //    8        9       10       11      12                       13      5        14       15       16      17       18       19        20      21      22         23       24      25        26       31       27      30               29
-                " F300601, F300602, F300603,  F30053, F300618, F30039, F30040, F30042, F30035, F300606, F300607, F300619, F300608, F300609, F300610, F300611, F300612, F300613, F300614, F300615, F300616, F300617, F300620, F300621, USER_NO " + (avans ? cmpAvans : "") + ") ";
+                //    8        9       10       11      12                       13      5        14       15       16      17       18       19        20      21      22         23       24      25        26       31       27      30        32        33               29
+                " F300601, F300602, F300603,  F30053, F300618, F30039, F30040, F30042, F30035, F300606, F300607, F300619, F300608, F300609, F300610, F300611, F300612, F300613, F300614, F300615, F300616, F300617, F300620, F300621, USER_NO, F3006061, F3006081 " + (avans ? cmpAvans : "") + ") ";
 
             //string sql = "INSERT INTO CM_Cereri (Id, F10003, TipProgram, TipConcediu, CodIndemnizatie, SerieCM, NumarCM, DataCM, LocPrescriere, DataInceput, DataSfarsit, NrZile, CodDiagnostic, CodUrgenta, CodInfectoContag, Initial, ZileCMInitial, SerieCMInitial, NumarCMInitial, DataCMInitial, " +
             //         " CodTransfer1, CodTransfer2, CodTransfer3,  CodTransfer4, CodTransfer5, NrZileCT1, NrZileCT2, NrZileCT3, NrZileCT4, NrZileCT5, BazaCalculCM, ZileBazaCalculCM, MedieZileBazaCalcul, MedieZilnicaCM, NrAvizMedicExpert, DataAvizDSP, MedicCurant, CNPCopil, IdStare, Document, Urgenta, Suma, Tarif, Cod, ModifManuala, Optiune, USER_NO, TIME) ";
 
             sql += " SELECT 300, F10002, F10003, F10004, F10005, F10006, F10007, {0},  1, {1}, {2}, {3}, "
-                + " {4}, 0, 0, 0, {5}, {5}, {6}, {7}, '{8}', '{9}', {10}, {11}, {12}, 0, 0, '{13}', {5}, '{14}', '{15}', '{16}', '{17}', '{18}', '{19}', {20}, {21}, {22}, {23}, '{24}', '{25}', '{26}', {31}, {27}, {30}  {29}"
+                + " {4}, 0, 0, 0, {5}, {5}, {6}, {7}, '{8}', '{9}', {10}, {11}, {12}, 0, 0, '{13}', {5}, '{14}', '{15}', '{16}', '{17}', '{18}', '{19}', {20}, {21}, {22}, {23}, '{24}', '{25}', '{26}', {31}, {27}, {30}, '{32}', '{33}'  {29}"
 
                 + " FROM F100 WHERE F10003 = {28}";
 
@@ -1493,8 +1545,8 @@ namespace WizOne.ConcediiMedicale
              //21    22         23                                  24                                      25                                                  26                                                          
              BCCM.Replace(',', '.'), ZileBCCM, MZCM.Replace(',', '.'), dt.Rows[0]["NrAvizMedicExpert"].ToString(), dt.Rows[0]["MedicCurant"].ToString(), (dt.Rows[0]["CNPCopil"] == DBNull.Value ? "" : dt.Rows[0]["CNPCopil"].ToString()), 
              "CONVERT(DATETIME, '" + dtDataCMInit.Day.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Month.ToString().PadLeft(2, '0') + "/" + dtDataCMInit.Year.ToString() + "', 103)" //27
-            //          28                                29                              30                31
-            , dt.Rows[0]["F10003"].ToString(), (avans ? valAvans : ""), Session["UserId"].ToString(), MNTZ.Replace(',', '.'));
+            //          28                                29                              30                31                              32                                          33
+            , dt.Rows[0]["F10003"].ToString(), (avans ? valAvans : ""), Session["UserId"].ToString(), MNTZ.Replace(',', '.'), dt.Rows[0]["SerieCMInitial"].ToString(), dt.Rows[0]["NumarCMInitial"].ToString());
 
             //verificare existenta linie cu 4450 in F300 pe marca actuala; daca exista, se actualizeaza, nu se insereaza alta noua
             if (cod == 4450)
@@ -1732,7 +1784,7 @@ namespace WizOne.ConcediiMedicale
         {
             #region  Notificare start
 
-            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+            string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
             int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
 
             HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
@@ -1741,6 +1793,112 @@ namespace WizOne.ConcediiMedicale
             });
 
             #endregion
+        }
+
+        public static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, string denScurta)
+        {
+            try
+            {
+                DateTime dtSf = dataSfarsit;
+
+                string strSql = "";
+                int idAbs = -99;
+                DataTable dtAbsNomen = General.IncarcaDT("SELECT * FROM \"Ptj_tblAbsente\" WHERE \"DenumireScurta\" = '" + denScurta + "'", null);
+                if (dtAbsNomen != null && dtAbsNomen.Rows.Count > 0)
+                    idAbs = Convert.ToInt32(dtAbsNomen.Rows[0]["Id"].ToString());
+                else
+                    return;
+
+                string sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataInceput.Date) + " AND " + General.ToDataUniv(dtSf.Date);
+                General.ExecutaNonQuery(sql, null);
+
+              
+                string sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
+                                        SELECT {marca}, ""Zi"", ""DenumireScurta"", (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003 = {marca} AND ""Ziua"" = ""Zi""), 
+                                {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, 'Transfer din Aprobare CM'
+                                    FROM 
+                                    (select case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = a.""Zi"") = 0 then 0 else 1 end as prezenta, 
+                                    b.* from  ""tblZile"" a
+                                    left join 
+                                    (SELECT P.""Zi"",
+                                    CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE
+                                    CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) <> 1 THEN 1 ELSE 
+                                    CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
+                                    CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 
+                                    END
+                                    END
+                                    END
+                                    END AS ""AreDrepturi"", ""DenumireScurta""
+                                    FROM ""tblZile"" P
+                                    INNER JOIN ""Ptj_tblAbsente"" A ON 1=1
+                                    INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta""
+                                    LEFT JOIN HOLIDAYS D on P.""Zi""=D.DAY
+                                    WHERE { General.ToDataUniv(dataInceput.Date)} <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <=  {General.ToDataUniv(dtSf.Date)}
+                                    AND A.""Id"" = {idAbs}
+                                    AND COALESCE(A.""DenumireScurta"", '~') <> '~'
+                                    AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 = {marca} AND ""DataInceput"" <= { General.ToDataUniv(dataInceput.Date)} AND {General.ToDataUniv(dtSf.Date)} <= ""DataSfarsit"") 
+                                    ) b
+                                    on a.""Zi"" = b.""Zi""
+
+                                    where a.""Zi"" between  { General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} and aredrepturi = 1) x   ";
+
+                General.ExecutaNonQuery(sqlIst, null);
+
+                string campuri = "";
+                for (int i = 0; i <= 20; i++)
+                    campuri += ", \"Val" + i.ToString() + "\" = NULL";
+                for (int i = 1; i <= 60; i++)
+                    campuri += ", F" + i.ToString() + " = NULL";
+
+                strSql = $@"MERGE INTO ""Ptj_intrari"" USING 
+                            (Select  case when ""AreDrepturi"" = 1 then ""DenumireScurta"" else null end  as ""Denumire"", x.* from                                
+                            (select {marca} as F10003, case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = a.""Zi"") = 0 then 0 else 1 end as prezenta, 
+                            b.* from  ""tblZile"" a
+                            left join 
+
+                            (SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
+                            CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
+                            CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE
+                            CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) <> 1 THEN 1 ELSE 
+                            CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
+                            CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 
+                            END
+                            END
+                            END
+                            END AS ""AreDrepturi"", ""DenumireScurta""
+                            FROM ""tblZile"" P
+                            INNER JOIN ""Ptj_tblAbsente"" A ON 1=1
+                            INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta""
+                            LEFT JOIN HOLIDAYS D on P.""Zi""=D.DAY
+                            WHERE {General.ToDataUniv(dataInceput.Date)} <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <= {General.ToDataUniv(dtSf.Date)}
+                            AND A.""Id"" = {idAbs}
+                            AND COALESCE(A.""DenumireScurta"", '~') <> '~'
+                            AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 =  {marca} AND ""DataInceput"" <= {General.ToDataUniv(dataInceput.Date)} AND {General.ToDataUniv(dtSf.Date)} <= ""DataSfarsit"") 
+                            ) b
+                            on a.""Zi"" = b.""Zi""
+
+                            where a.""Zi"" between  {General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} ) x
+
+                            ) Tmp 
+                            ON (""Ptj_Intrari"".""Ziua"" = ""Zi"" AND ""Ptj_Intrari"".F10003 = Tmp.F10003 and prezenta = 1) 
+                            WHEN MATCHED THEN UPDATE SET ""ValStr"" = ""Denumire"" {campuri} , USER_NO ={HttpContext.Current.Session["UserId"].ToString()}, TIME = {General.CurrentDate()}
+                            WHEN NOT MATCHED THEN INSERT (F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""IdContract"", ""Norma"", F10002, F10004, F10005, F10006, F10007, F06204, ""ValStr"", USER_NO, TIME)
+                             VALUES ({marca}, ""Zi"", ""ZiSapt"" ,""ZiLibera"" , ""ZiLiberaLegala"", 
+                            (SELECT X.""IdContract"" FROM ""F100Contracte"" X WHERE X.F10003 = {marca} AND X.""DataInceput"" <= ""Zi"" AND ""Zi"" <= X.""DataSfarsit""), 
+                            (SELECT F10043 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10002 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10004 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10005 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10006 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10007 FROM F100 WHERE F10003 = {marca}), 
+                             -1,  ""Denumire"", {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()});";
+                General.ExecutaNonQuery(strSql, null);  
+               
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex.ToString(), "Aprobare", "TransferPontaj");
+            }
         }
     }
 }

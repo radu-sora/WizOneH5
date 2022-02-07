@@ -29,8 +29,61 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
+using System.Configuration;
+using System.Net.Http;
+using Twilio.Clients;
+
 namespace WizOne.Module
 {
+
+    public static class ProxiedTwilioClientCreator
+    {
+        private static HttpClient _httpClient;
+
+        private static void CreateHttpClient()
+        {
+            var proxyUrl = ConfigurationManager.AppSettings["ProxyServerUrl"];
+            var handler = new HttpClientHandler()
+            {
+                Proxy = new WebProxy(proxyUrl),
+                UseProxy = true
+            };
+
+            _httpClient = new HttpClient(handler);
+            var byteArray = Encoding.Unicode.GetBytes(
+                ConfigurationManager.AppSettings["ProxyUsername"] + ":" +
+                ConfigurationManager.AppSettings["ProxyPassword"]
+            );
+
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue(
+                    "Basic", Convert.ToBase64String(byteArray));
+        }
+
+        public static TwilioRestClient GetClient()
+        {
+            var accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
+            var authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN");
+
+            if (_httpClient == null)
+            {
+                // It's best* to create a single HttpClient and reuse it
+                // * See: https://goo.gl/FShAAe
+                CreateHttpClient();
+            }
+
+            var twilioRestClient = new TwilioRestClient(
+                accountSid,
+                authToken,
+                httpClient: new Twilio.Http.SystemNetHttpClient(_httpClient)
+            );
+
+            return twilioRestClient;
+        }
+    }
+
+
+
     public class General
     {
 
@@ -113,61 +166,73 @@ namespace WizOne.Module
         {
             var tempPath = HostingEnvironment.MapPath("~/Temp/");
 
-            Directory.CreateDirectory(tempPath);
-            StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(tempPath + "woLogNtf.txt", true);
-            //
-            string mesaj = "";
+            //Florin 2022.02.07 - in procese ceasuri da eroare - #1093
+            if (!string.IsNullOrEmpty(tempPath))
+            {
+                Directory.CreateDirectory(tempPath);
+                StackTrace st = new StackTrace();
+                StreamWriter sw = new StreamWriter(tempPath + "woLogNtf.txt", true);
+                //
+                string mesaj = "";
 
-            mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
-            if (!string.IsNullOrEmpty(strMetoda)) mesaj += "Metoda:    " + strMetoda + "\r\n";
-            if (!string.IsNullOrEmpty(msg)) mesaj += "Eroarea:   " + msg + "\r\n";
-            //
-            sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
-            //
-            sw.Close();
-            sw.Dispose();
+                mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
+                if (!string.IsNullOrEmpty(strMetoda)) mesaj += "Metoda:    " + strMetoda + "\r\n";
+                if (!string.IsNullOrEmpty(msg)) mesaj += "Eroarea:   " + msg + "\r\n";
+                //
+                sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
+                //
+                sw.Close();
+                sw.Dispose();
+            }
         }
 
         public static void CreazaLogCereri(string msg, string f10003, string dataInceput)
         {
             var tempPath = HostingEnvironment.MapPath("~/Temp/");
 
-            Directory.CreateDirectory(tempPath);
-            StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(tempPath + "woLogCereri.txt", true);
-            //
-            string mesaj = "";
+            //Florin 2022.02.07 - in procese ceasuri da eroare - #1093
+            if (!string.IsNullOrEmpty(tempPath))
+            {
+                Directory.CreateDirectory(tempPath);
+                StackTrace st = new StackTrace();
+                StreamWriter sw = new StreamWriter(tempPath + "woLogCereri.txt", true);
+                //
+                string mesaj = "";
 
-            mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
-            if (!string.IsNullOrEmpty(f10003)) mesaj += "Marca:    " + f10003 + "\r\n";
-            if (!string.IsNullOrEmpty(dataInceput)) mesaj += "Data Inceput:    " + dataInceput + "\r\n";
-            if (!string.IsNullOrEmpty(msg)) mesaj += "Select:   " + msg + "\r\n";
-            //
-            sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
-            //
-            sw.Close();
-            sw.Dispose();
+                mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
+                if (!string.IsNullOrEmpty(f10003)) mesaj += "Marca:    " + f10003 + "\r\n";
+                if (!string.IsNullOrEmpty(dataInceput)) mesaj += "Data Inceput:    " + dataInceput + "\r\n";
+                if (!string.IsNullOrEmpty(msg)) mesaj += "Select:   " + msg + "\r\n";
+                //
+                sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
+                //
+                sw.Close();
+                sw.Dispose();
+            }
         }
 
         public static void CreazaLogFormuleCumulat(string msg, string strMetoda = "")
         {
             var tempPath = HostingEnvironment.MapPath("~/Temp/");
 
-            Directory.CreateDirectory(tempPath);
-            StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(tempPath + "woLogFormuleCumulat.txt", true);
-            //
-            string mesaj = "";
+            //Florin 2022.02.07 - in procese ceasuri da eroare - #1093
+            if (!string.IsNullOrEmpty(tempPath))
+            {
+                Directory.CreateDirectory(tempPath);
+                StackTrace st = new StackTrace();
+                StreamWriter sw = new StreamWriter(tempPath + "woLogFormuleCumulat.txt", true);
+                //
+                string mesaj = "";
 
-            mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
-            if (!string.IsNullOrEmpty(strMetoda)) mesaj += "Metoda:    " + strMetoda + "\r\n";
-            if (!string.IsNullOrEmpty(msg)) mesaj += "Eroarea:   " + msg + "\r\n";
-            //
-            sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
-            //
-            sw.Close();
-            sw.Dispose();
+                mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
+                if (!string.IsNullOrEmpty(strMetoda)) mesaj += "Metoda:    " + strMetoda + "\r\n";
+                if (!string.IsNullOrEmpty(msg)) mesaj += "Eroarea:   " + msg + "\r\n";
+                //
+                sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
+                //
+                sw.Close();
+                sw.Dispose();
+            }
         }
 
         public static string Strip(string txt)
@@ -181,7 +246,8 @@ namespace WizOne.Module
                 //NU FUNCTIONEAZA ????????????????
                 rez = txt.Trim(new Char[] { ' ','/','-','(',')','*','&','%','$','#','"','=' });
 
-                rez = txt.Replace(" ", "").Replace("/", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("*", "").Replace("&", "").Replace("%", "").Replace("$", "").Replace("#", "").Replace("\"", "").Replace("'", "").Replace("=","");
+                //Radu 26.11.2021 - #1063 - am scos - (minus) din lista         .Replace("-", "")
+                rez = txt.Replace(" ", "").Replace("/", "").Replace("(", "").Replace(")", "").Replace("*", "").Replace("&", "").Replace("%", "").Replace("$", "").Replace("#", "").Replace("\"", "").Replace("'", "").Replace("=","");
             }
 	        catch (Exception ex)
 	        {
@@ -1122,7 +1188,7 @@ namespace WizOne.Module
                 if (command.CommandText.IndexOf("SELECT", StringComparison.OrdinalIgnoreCase) > -1)
                 {
                     if ((result = command.ExecuteScalar()) != DBNull.Value)
-                        result = (T)Convert.ChangeType(result, typeof(T));                    
+                        result = (T)Convert.ChangeType(result, typeof(T));
                     else
                         result = default(T);
                 }
@@ -2633,7 +2699,7 @@ namespace WizOne.Module
                         if (tipActiune == 2) General.SituatieZLOperatii(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]), 2, Convert.ToInt32(General.Nz(dr["NrZile"], 1)));
 
                         //Florin 2020.09.16
-                        string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(HttpContext.Current.Session["IdClient"], "1").ToString(), General.Nz(HttpContext.Current.Session["IdLimba"], "RO").ToString() };
+                        string[] arrParam = new string[] { General.UrlHost(), General.Nz(HttpContext.Current.Session["IdClient"], "1").ToString(), General.Nz(HttpContext.Current.Session["IdLimba"], "RO").ToString() };
 
                         HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                         {
@@ -5793,36 +5859,38 @@ namespace WizOne.Module
                 //Florin 2021.06.04 #909
                 HttpContext.Current.Session["UniqueId"] = -99;
 
-                string ti = "nvarchar";
-                if (Constante.tipBD == 2) ti = "varchar2";
+                HttpContext.Current.Session["Avs_MarcaFiltru"] = null;
+                HttpContext.Current.Session["Avs_AtributFiltru"] = null;
 
-                string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
-                                UNION
-                                SELECT 'AnLucru', CAST(F01011 AS {0}(10)), '', 1, 0 FROM F010
-                                UNION
-                                SELECT 'LunaLucru', CAST(F01012 AS {0}(10)), '', 1, 0 FROM F010";
-                strSql = string.Format(strSql, ti);
+                //Florin 2022.01.06         #1065
+                HttpContext.Current.Session["TimeOutSecundePrint"] = 9999;
 
-                HttpContext.Current.Session["tblParam"] = General.IncarcaDT(strSql, null);
+                //HttpContext.Current.Session["tblParam"] = General.IncarcaDT(@"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
+                //                UNION
+                //                SELECT 'AnLucru', CAST(F01011 AS nvarchar(10)), '', 1, 0 FROM F010
+                //                UNION
+                //                SELECT 'LunaLucru', CAST(F01012 AS nvarchar(10)), '', 1, 0 FROM F010", null);
                 HttpContext.Current.Session["IdClient"] = Convert.ToInt32(Dami.ValoareParam("IdClient", "1"));
                 HttpContext.Current.Session["PontajulAreCC"] = General.Nz(Dami.ValoareParam("PontajulAreCC"),"0");
 
-
                 //Florin 2018.11.13
-                if (HttpContext.Current != null && HttpContext.Current.Session["tblParam"] != null)
-                {
-                    DataTable dt = HttpContext.Current.Session["tblParam"] as DataTable;
-                    if (dt != null)
-                    {
-                        DataRow[] arr1 = dt.Select("Nume='SecAuditSelect'");
-                        if (arr1.Count() > 0)
-                            HttpContext.Current.Session["SecAuditSelect"] = arr1[0];
+                //if (HttpContext.Current != null && HttpContext.Current.Session["tblParam"] != null)
+                //{
+                //    DataTable dt = HttpContext.Current.Session["tblParam"] as DataTable;
+                //    if (dt != null)
+                //    {
+                //        DataRow[] arr1 = dt.Select("Nume='SecAuditSelect'");
+                //        if (arr1.Count() > 0)
+                //            HttpContext.Current.Session["SecAuditSelect"] = arr1[0];
 
-                        DataRow[] arr2 = dt.Select("Nume='SecCriptare'");
-                        if (arr2.Count() > 0)
-                            HttpContext.Current.Session["SecCriptare"] = arr2[0];
-                    }
-                }
+                //        DataRow[] arr2 = dt.Select("Nume='SecCriptare'");
+                //        if (arr2.Count() > 0)
+                //            HttpContext.Current.Session["SecCriptare"] = arr2[0];
+                //    }
+                //}
+
+                HttpContext.Current.Session["SecAuditSelect"] = Dami.ValoareParam("SecAuditSelect");
+                HttpContext.Current.Session["SecCriptare"] = Dami.ValoareParam("SecCriptare");
             }
             catch (Exception ex)
             {
@@ -8950,7 +9018,7 @@ namespace WizOne.Module
 
         }
 
-        public static bool EstePontajulInitializat(DateTime dt, string contracte = "")
+        public static bool EstePontajulInitializat(DateTime dt, string contracte = "", string filtruAngajati = "")
         {
             bool ras = false;
 
@@ -8959,8 +9027,8 @@ namespace WizOne.Module
                 //Florin 2021.03.24 - am adaugat filtrul  -  AND F10023 >= {General.ToDataUniv(dt)}
                 string sqlCnt = $@"
                     SELECT
-                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999) AND F10023 >= {General.ToDataUniv(dt)}) AS ""NrAng"",
-                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(dt.Year, dt.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(dt.Year, dt.Month, 99)}) AS ""NrPtj"" {General.FromDual()}";
+                    (SELECT COUNT(*) FROM F100 A WHERE F10025 IN (0,999) AND F10023 >= {General.ToDataUniv(dt)} {filtruAngajati}) AS ""NrAng"",
+                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" A WHERE {General.ToDataUniv(dt.Year, dt.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(dt.Year, dt.Month, 99)} {filtruAngajati}) AS ""NrPtj"" {General.FromDual()}";
 
                 if (contracte != "")
                 {
@@ -8969,10 +9037,10 @@ namespace WizOne.Module
                     (SELECT COUNT(*) FROM F100 A
                     INNER JOIN ""F100Contracte"" B ON A.F10003=B.F10003 AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit""
                     INNER JOIN ""Ptj_Contracte"" C ON B.""IdContract""=C.""Id"" AND C.""Denumire"" IN ('{contracte.Replace("\\\\", "','")}')
-                    WHERE A.F10025 IN (0,999)) AS ""NrAng"",
+                    WHERE A.F10025 IN (0,999) {filtruAngajati}) AS ""NrAng"",
                     (SELECT COUNT(DISTINCT A.F10003) FROM ""Ptj_Intrari"" A
                     INNER JOIN ""Ptj_Contracte"" C ON A.""IdContract"" = C.""Id"" AND C.""Denumire"" IN ('{contracte.Replace("\\\\", "', '")}')
-                    WHERE {General.ToDataUniv(dt.Year, dt.Month)} <= A.""Ziua"" AND A.""Ziua"" <=  {General.ToDataUniv(dt.Year, dt.Month, 99)}) AS ""NrPtj"" {General.FromDual()}";
+                    WHERE {General.ToDataUniv(dt.Year, dt.Month)} <= A.""Ziua"" AND A.""Ziua"" <=  {General.ToDataUniv(dt.Year, dt.Month, 99)} {filtruAngajati}) AS ""NrPtj"" {General.FromDual()}";
                 }
 
                 DataRow drCnt = General.IncarcaDR(sqlCnt);
@@ -8991,7 +9059,7 @@ namespace WizOne.Module
             }
             catch (Exception ex)
             {
-                General.MemoreazaEroarea(ex, "BatchUpdate", new StackTrace().GetFrame(0).GetMethod().Name);
+                General.MemoreazaEroarea(ex, "EstePontajulInitializat", new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             return ras;
@@ -9778,5 +9846,21 @@ namespace WizOne.Module
             }
         }
 
+        internal static string UrlHost()
+        {
+            string urlHost = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
+
+            try
+            {
+                string paramHost = Dami.ValoareParam("URLAprobareCereriDinMail").Trim();
+                if (paramHost != "") urlHost = paramHost;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "UrlHost", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return urlHost;
+        }
     }
 }

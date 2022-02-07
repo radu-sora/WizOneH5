@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Eval {
-    
-    
-    public partial class QuizInit {
-        
+namespace WizOne.Eval
+{
+
+
+    public partial class QuizInit
+    {
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -20,7 +22,16 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
+
+        /// <summary>
+        /// btnModifEval control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnModifEval;
+
         /// <summary>
         /// btnInit control.
         /// </summary>
@@ -29,7 +40,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnInit;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -38,7 +49,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// lblQuiz control.
         /// </summary>
@@ -47,7 +58,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblQuiz;
-        
+
         /// <summary>
         /// cmbQuiz control.
         /// </summary>
@@ -56,7 +67,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbQuiz;
-        
+
         /// <summary>
         /// lblAngajat control.
         /// </summary>
@@ -65,7 +76,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblAngajat;
-        
+
         /// <summary>
         /// cmbAngajat control.
         /// </summary>
@@ -74,7 +85,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbAngajat;
-        
+
         /// <summary>
         /// btnFiltru control.
         /// </summary>
@@ -83,16 +94,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltru;
-        
-        /// <summary>
-        /// lblIntre control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblIntre;
-        
+
         /// <summary>
         /// btnFiltruSterge control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltruSterge;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>
@@ -110,5 +112,86 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate;
+
+        /// <summary>
+        /// popUpModif control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxPopupControl popUpModif;
+
+        /// <summary>
+        /// Panel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel1;
+
+        /// <summary>
+        /// btnModif control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnModif;
+
+        /// <summary>
+        /// lblQuizModif control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblQuizModif;
+
+        /// <summary>
+        /// cmbQuizModif control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbQuizModif;
+
+        /// <summary>
+        /// lblUserOld control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblUserOld;
+
+        /// <summary>
+        /// cmbUserOld control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbUserOld;
+
+        /// <summary>
+        /// lblUserNew control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblUserNew;
+
+        /// <summary>
+        /// cmbUserNew control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbUserNew;
     }
 }

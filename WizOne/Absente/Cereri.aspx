@@ -213,7 +213,7 @@
                                 <PanelCollection>
                                     <dx:PanelContent> 
                                         <dx:ASPxLabel ID="lblNrOre" runat="server" AssociatedControlID="txtNrOre" Text="Nr. ore" Font-Bold="true" />
-                                        <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="100%" ClientVisible="false" MinValue="0" MaxValue="999">
+                                        <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="100%" ClientVisible="false" MinValue="-999" MaxValue="999">
                                             <SpinButtons ShowIncrementButtons="false" />
                                         </dx:ASPxSpinEdit>
                                         <dx:ASPxTimeEdit ID="txtNrOreTime" ClientInstanceName="txtNrOreTime" runat="server" Width="100%" ClientVisible="false" ClientEnabled="false">

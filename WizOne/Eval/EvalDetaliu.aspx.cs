@@ -1,4 +1,5 @@
 ﻿using DevExpress.PivotGrid.OLAP.Mdx;
+using DevExpress.Utils.Layout;
 using DevExpress.Web;
 using DevExpress.Web.ASPxHtmlEditor.Internal;
 using DevExpress.Web.Data;
@@ -7,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -1286,6 +1288,7 @@ namespace WizOne.Eval
                         case 33: //Functia
                         case 34: //Directia
                         case 35: //DeptDinF1001
+                        case 36: //Data finalizare
                         case 38: //Categorie OMN
                         case 60: //Supervizor3 Nume
                         case 61: //Supervizor3 Post
@@ -1296,10 +1299,28 @@ namespace WizOne.Eval
                         case 66: //Supervizor6 Nume
                         case 67: //Supervizor6 Post
                             //Radu 30.10.2020 - am grupat toate optiunile de mai sus
-                            ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));
+                            ctl = CreeazaTextEdit(ent.Id, 1, super, Convert.ToInt32(ent.TipData));    
                             break;
                         case 23: //Obiective individuale
                             ctl = CreeazaObiectiveIndividuale(ent.Id, 1, super);
+                            //#1057 - Radu 06.01.2022
+                            //dynamic ctl1 = CreeazaObiectiveIndividuale(ent.Id, 1, super);
+                            //HtmlTable table = CreeazaCampTotal(ctl1.ID, ent.Id, -99, super, 2, (int)ent.TipValoare, 2) as HtmlTable;
+
+                            //HtmlTable tbl = new HtmlTable();
+                            //HtmlTableRow row = new HtmlTableRow();
+                            //HtmlTableCell cell = new HtmlTableCell();
+                            //cell.Controls.Add(ctl1);
+                            //row.Cells.Add(cell);
+                            //tbl.Rows.Add(row);
+
+                            //row = new HtmlTableRow();
+                            //cell = new HtmlTableCell();
+                            //cell.Controls.Add(table);
+                            //row.Cells.Add(cell);
+                            //tbl.Rows.Add(row);
+
+                            //ctl = tbl;
 
                             //Florin 2020.01.05
                             int idCateg = lstEval_QuizIntrebari.Where(p => p.Id == ent.Id).FirstOrDefault().IdCategObiective ?? -99;
@@ -1307,6 +1328,24 @@ namespace WizOne.Eval
                             break;
                         case 5: //Competente angajat
                             ctl = CreeazaCompetenteAngajat(ent.Id, 1, super);
+                            //#1057 - Radu 06.01.2022
+                            //ctl1 = CreeazaCompetenteAngajat(ent.Id, 1, super);
+                            //table = CreeazaCampTotal(ctl1.ID, ent.Id, -99, super, 2, (int)ent.TipValoare, 1) as HtmlTable;
+                            
+                            //tbl = new HtmlTable();
+                            //row = new HtmlTableRow();
+                            //cell = new HtmlTableCell();
+                            //cell.Controls.Add(ctl1);
+                            //row.Cells.Add(cell);
+                            //tbl.Rows.Add(row);
+
+                            //row = new HtmlTableRow();
+                            //cell = new HtmlTableCell();
+                            //cell.Controls.Add(table);
+                            //row.Cells.Add(cell);
+                            //tbl.Rows.Add(row);
+
+                            //ctl = tbl;
                             break;
                         case 53: //tabel din view
                             ctl = CreazaTabel(ent.Id, ent.Parinte, "viewEvaluare360");
@@ -1341,11 +1380,65 @@ namespace WizOne.Eval
 
                         //Florin 2020.01.23 - daca utilizatorul conectat este cel de pe circuit si a terminat evaluarea
                         if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Aprobat"], 1)) == 1)
+                        {
                             ctl.Enabled = false;
+                            //#1057 - Radu 06.01.2022
+                            //if (IsPropertyExist(ctl, "Enabled"))
+                            //    ctl.Enabled = false;
+                            //else
+                            //{
+                            //    foreach (HtmlTableRow row in ctl.Controls)
+                            //    {
+                            //        foreach (HtmlTableCell cell in row.Controls)
+                            //        {
+                            //            for (int x = 0; x < cell.Controls.Count; x++)
+                            //            {
+                            //                if (cell.Controls[x].GetType() == typeof(ASPxGridView))
+                            //                {
+                            //                    dynamic c = cell.Controls[x] as ASPxGridView;
+                            //                    c.Enabled = false;
+                            //                }
+                            //                if (cell.Controls[x].GetType() == typeof(ASPxComboBox))
+                            //                {
+                            //                    dynamic c = cell.Controls[x] as ASPxComboBox;
+                            //                    c.Enabled = false;
+                            //                }
+                            //            }
+                            //        }
+                            //    }
+                            //}
+                        }
 
                         //Florin 2020.01.23 - daca utilizatorul conectat intra pe alt tab decat cel care nu este al lui
                         if (Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)))
+                        {
                             ctl.Enabled = false;
+                            //#1057 - Radu 06.01.2022
+                            //if (IsPropertyExist(ctl, "Enabled"))
+                            //    ctl.Enabled = false;
+                            //else
+                            //{
+                            //    foreach (HtmlTableRow row in ctl.Controls)
+                            //    {
+                            //        foreach (HtmlTableCell cell in row.Controls)
+                            //        {
+                            //            for (int x = 0; x < cell.Controls.Count; x++)
+                            //            {
+                            //                if (cell.Controls[x].GetType() == typeof(ASPxGridView))
+                            //                {
+                            //                    dynamic c = cell.Controls[x] as ASPxGridView;
+                            //                    c.Enabled = false;
+                            //                }
+                            //                if (cell.Controls[x].GetType() == typeof(ASPxComboBox))
+                            //                {
+                            //                    dynamic c = cell.Controls[x] as ASPxComboBox;
+                            //                    c.Enabled = false;
+                            //                }
+                            //            }
+                            //        }
+                            //    }
+                            //}
+                        }
 
                         ////Radu 11.02.2019 - am adaugat conditia idCateg = 0
                         //if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
@@ -1355,7 +1448,34 @@ namespace WizOne.Eval
 
                         //Florin 2019.10.23 - s-a rescris functia de mai sus pentru a tine cont si de respecta ordinea
                         if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1)
+                        {
                             ctl.Enabled = false;
+                            //#1057 - Radu 06.01.2022
+                            //if (IsPropertyExist(ctl, "Enabled"))
+                            //    ctl.Enabled = false;
+                            //else
+                            //{
+                            //    foreach (HtmlTableRow row in ctl.Controls)
+                            //    {
+                            //        foreach (HtmlTableCell cell in row.Controls)
+                            //        {
+                            //            for (int x = 0; x < cell.Controls.Count; x++)
+                            //            {
+                            //                if (cell.Controls[x].GetType() == typeof(ASPxGridView))
+                            //                {
+                            //                    dynamic c = cell.Controls[x] as ASPxGridView;
+                            //                    c.Enabled = false;
+                            //                }
+                            //                if (cell.Controls[x].GetType() == typeof(ASPxComboBox))
+                            //                {
+                            //                    dynamic c = cell.Controls[x] as ASPxComboBox;
+                            //                    c.Enabled = false;
+                            //                }
+                            //            }
+                            //        }
+                            //    }
+                            //}
+                        }
 
                         int respectaOrdinea = 0;
                         DataTable entCir = General.IncarcaDT(@"SELECT * FROM ""Eval_Circuit"" WHERE ""IdQuiz"" = @1", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) });
@@ -1364,7 +1484,34 @@ namespace WizOne.Eval
                         if (respectaOrdinea == 1)
                         {
                             if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
+                            {
                                 ctl.Enabled = false;
+                                //#1057 - Radu 06.01.2022
+                                //if (IsPropertyExist(ctl, "Enabled"))
+                                //    ctl.Enabled = false;
+                                //else
+                                //{
+                                //    foreach (HtmlTableRow row in ctl.Controls)
+                                //    {
+                                //        foreach (HtmlTableCell cell in row.Controls)
+                                //        {
+                                //            for (int x = 0; x < cell.Controls.Count; x++)
+                                //            {
+                                //                if (cell.Controls[x].GetType() == typeof(ASPxGridView))
+                                //                {
+                                //                    dynamic c = cell.Controls[x] as ASPxGridView;
+                                //                    c.Enabled = false;
+                                //                }
+                                //                if (cell.Controls[x].GetType() == typeof(ASPxComboBox))
+                                //                {
+                                //                    dynamic c = cell.Controls[x] as ASPxComboBox;
+                                //                    c.Enabled = false;
+                                //                }
+                                //            }
+                                //        }
+                                //    }
+                                //}
+                            }
                         }
                         else
                         {
@@ -1389,7 +1536,58 @@ namespace WizOne.Eval
 
                             //Florin 2020.12.15 - pt Euroins
                             if (lbl.Text.IndexOf("TOTAL INTERMEDIAR 3A") >=0)
-                            {
+                            { 
+                                //#1057 - Radu 06.01.2022
+                                //if (IsPropertyExist(ctl, "ClientEnabled"))
+                                //    ctl.ClientEnabled = false;
+                                //else
+                                //{
+                                //    foreach (HtmlTableRow row in ctl.Controls)
+                                //    {
+                                //        foreach (HtmlTableCell cell in row.Controls)
+                                //        {
+                                //            for (int x = 0; x < cell.Controls.Count; x++)
+                                //            {
+                                //                if (cell.Controls[x].GetType() == typeof(ASPxGridView))
+                                //                {
+                                //                    dynamic c = cell.Controls[x] as ASPxGridView;
+                                //                    c.ClientEnabled = false;
+                                //                }
+                                //                if (cell.Controls[x].GetType() == typeof(ASPxComboBox))
+                                //                {
+                                //                    dynamic c = cell.Controls[x] as ASPxComboBox;
+                                //                    c.ClientEnabled = false;
+                                //                }
+                                //            }
+                                //        }
+                                //    }
+                                //}
+
+                                //if (IsPropertyExist(ctl, "ClientReadOnly"))
+                                //    ctl.ClientReadOnly = true;
+                                //else
+                                //{
+                                //    foreach (HtmlTableRow row in ctl.Controls)
+                                //    {
+                                //        foreach (HtmlTableCell cell in row.Controls)
+                                //        {
+                                //            for (int x = 0; x < cell.Controls.Count; x++)
+                                //            {
+                                //                if (cell.Controls[x].GetType() == typeof(ASPxGridView))
+                                //                {
+                                //                    dynamic c = cell.Controls[x] as ASPxGridView;
+                                //                    c.ClientReadOnly = true;
+                                //                }
+                                //                if (cell.Controls[x].GetType() == typeof(ASPxComboBox))
+                                //                {
+                                //                    dynamic c = cell.Controls[x] as ASPxComboBox;
+                                //                    c.ClientReadOnly = true;
+                                //                }
+                                //            }
+                                //        }
+                                //    }
+                                //}
+
                                 ctl.ClientEnabled = false;
                                 ctl.ClientReadOnly = true;
                             }
@@ -1434,6 +1632,14 @@ namespace WizOne.Eval
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+        public static bool IsPropertyExist(dynamic settings, string name)
+        {
+            if (settings is ExpandoObject)
+                return ((IDictionary<string, object>)settings).ContainsKey(name);
+
+            return settings.GetType().GetProperty(name) != null;
         }
 
         #region Controls
@@ -5325,19 +5531,19 @@ namespace WizOne.Eval
                 #endregion
 
                 //daca in chestionar exista tipul de camp 36 - Data Finalizare
-                //DataTable entDtFin = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsLinii"" WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""TipData"" = 36", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
-                //if (entDtFin != null && entDtFin.Rows.Count > 0)
-                //{
-                //    string sql = @"UPDATE ""Eval_RaspunsLinii"" SET ";
-                //    for (int i = 1; i <= 20; i++)
-                //    {                        
-                //        sql += " \"Super" + i + "\" = " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
-                //        if (i < 20)
-                //            sql += ", ";
-                //    }
-                //    sql += "WHERE \"IdQuiz\" = @1 AND F10003 = @2 AND \"TipData\" = 36";
-                //    General.IncarcaDT(sql, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
-                //}
+                DataTable entDtFin = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsLinii"" WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""TipData"" = 36", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                if (entDtFin != null && entDtFin.Rows.Count > 0)
+                {
+                    string sql = @"UPDATE ""Eval_RaspunsLinii"" SET ";
+                    for (int i = 1; i <= 20; i++)
+                    {
+                        sql += " \"Super" + i + "\" = FORMAT(day(getdate()), '00') + '/' + FORMAT(month(getdate()), '00') + '/' + convert(varchar ,year(getdate()))";     //Radu 14.01.2022 - #1067   in loc de (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE")
+                        if (i < 20)
+                            sql += ", ";
+                    }
+                    sql += "WHERE \"IdQuiz\" = @1 AND F10003 = @2 AND \"TipData\" = 36";
+                    General.IncarcaDT(sql, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                }
 
 
                 //General.IncarcaDT(
@@ -5355,15 +5561,19 @@ namespace WizOne.Eval
                 //    (""IdSuper"" < 0 AND @7 IN (SELECT ""IdUser"" FROM ""F100Supervizori"" b where F10003 = @6 AND b.""IdSuper"" = (-1) * ""Eval_RaspunsIstoric"".""IdSuper"" ))) AND (""Aprobat"" IS NULL OR ""Aprobat"" = 0)", new object[] { (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), culoare, Session["UserId"], (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), Session["UserId"] });
 
 
-                string tmpSql = $@"
-                    BEGIN
+                //Radu 18.01.2022 - am scos aceste actualizari, deoarece se efectueaza mai sus
+                /*
                     UPDATE ""Eval_RaspunsLinii""
                     SET ""Super1""=CAST({General.CurrentDate()} AS varchar(30)),""Super2""=CAST({General.CurrentDate()} AS varchar(30)),""Super3""=CAST({General.CurrentDate()} AS varchar(30)),""Super4""=CAST({General.CurrentDate()} AS varchar(30)),
                     ""Super5""=CAST({General.CurrentDate()} AS varchar(30)),""Super6""=CAST({General.CurrentDate()} AS varchar(30)),""Super7""=CAST({General.CurrentDate()} AS varchar(30)),""Super8""=CAST({General.CurrentDate()} AS varchar(30)),
                     ""Super9""=CAST({General.CurrentDate()} AS varchar(30)),""Super10""=CAST({General.CurrentDate()} AS varchar(30)),""Super11""=CAST({General.CurrentDate()} AS varchar(30)),""Super12""=CAST({General.CurrentDate()} AS varchar(30)),
                     ""Super13""=CAST({General.CurrentDate()} AS varchar(30)),""Super14""=CAST({General.CurrentDate()} AS varchar(30)),""Super15""=CAST({General.CurrentDate()} AS varchar(30)),""Super16""=CAST({General.CurrentDate()} AS varchar(30)),
                     ""Super17""=CAST({General.CurrentDate()} AS varchar(30)),""Super18""=CAST({General.CurrentDate()} AS varchar(30)),""Super19""=CAST({General.CurrentDate()} AS varchar(30)),""Super20""=CAST({General.CurrentDate()} AS varchar(30))
-                    WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""TipData""=36;
+                    WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""TipData""=36;                 
+                 */
+                string tmpSql = $@"
+                    BEGIN
+
                     
                     UPDATE ""Eval_Raspuns"" SET ""Pozitie"" = @3, ""Culoare"" = @4, ""Finalizat"" = @5 WHERE ""IdQuiz"" = @1 AND F10003 = @2;
 
@@ -6001,6 +6211,229 @@ namespace WizOne.Eval
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+
+
+        private HtmlTable CreeazaCampTotal(string numeGrid, int id, int idGrup, string super, int tipCalcul, int idGrupValori = -99, int tip = 1)
+        {
+            HtmlTable table = new HtmlTable();
+
+            try
+            {               
+                HtmlTableRow row = new HtmlTableRow();
+                HtmlTableCell cell = new HtmlTableCell();
+
+                ASPxLabel lbl = CreeazaEticheta(Dami.TraduCuvant("Rating total") + ": ", id);            
+                lbl.Style.Add("margin", "15px 15px !important");
+                cell.Controls.Add(lbl);                
+
+                ASPxComboBox cmb = new ASPxComboBox();
+                cmb.ID = "txtTotal" + numeGrid;
+                //cmb.Margin = new Thickness(10, 0, 0, 0);
+                cmb.Height = 21;
+                cmb.Width = 150;
+                cmb.Enabled = false;
+                //cmb.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                cmb.Items.Clear();
+                if (idGrupValori == -99)
+                {
+                    cmb.ValueField = "Nota";
+                    cmb.TextField = "Denumire";
+                    DataTable dtNote = General.IncarcaDT("SELECT * FROM Eval_tblRating WHERE Anul = (SELECT Anul FROM Eval_Quiz WHERE Id = " + Session["CompletareChestionar_IdQuiz"].ToString() + ")", null);
+                    cmb.DataSource = dtNote;
+                }
+                else
+                {
+                    cmb.ValueField = "Valoare";
+                    cmb.TextField = "Valoare";
+
+                    var lstLin = lstEval_tblTipValoriLinii.Where(p => p.Id == idGrupValori);
+                    if (lstLin.Count() > 0 && lstLin.FirstOrDefault() != null && lstLin.FirstOrDefault().Nota != null) cmb.ValueField = "Nota";
+
+                    cmb.DataSource = lstEval_tblTipValoriLinii.Where(p => p.Id == idGrupValori);
+                }
+
+                cmb.Value = CalculRating(id, idGrup, super, tipCalcul, -99, 1).ToString();
+
+                cell.Controls.Add(cmb);
+                row.Cells.Add(cell);
+                table.Rows.Add(row);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return table;
+        }
+
+        private decimal CalculRating(int id, int idGrup, string super, int tipCalcul, int tipData = -99, int tip = 1)
+        {
+            //tip calcul
+            //1 - se aplica pt obiective si foloseste pondere pe care userul o introduce
+            //2 - se aplica pt competente si se face media aritmetica
+            //3 - se aplica pt obiectivele angajatului; asemanator cu pct. 1 + se inmulteste cu ponderea grupului
+            //4 - se aplica pt obiectivele angajatului, caz special pt OMN
+            //5 - se aplica pt competente, caz special pt OMN
+
+            decimal calc = 0;
+            decimal rasp = 1;
+            int nr = 0;
+            int cnt = 6;
+
+            try
+            {
+                IEnumerable<Eval_RaspunsLinii> lst = null;
+                IEnumerable<Eval_CompetenteAngajatTemp> lstComp = null;
+                IEnumerable<Eval_ObiIndividualeTemp> lstOb = null;
+
+                if (tipData != -99)
+                {
+                    lst = lstEval_RaspunsLinii.Where(p => p.TipData == tipData);
+                }
+                else
+                {
+                    lst = lstEval_RaspunsLinii.Where(p => p.Id == id);
+                    if (idGrup != -99) lstEval_RaspunsLinii.Where(p => p.Id == id && p.IdGrup == idGrup);
+                }
+
+                if (tip == 1)
+                {
+                    lstComp = lstEval_CompetenteAngajatTemp.Where(p => p.Pozitie == Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)));
+                }
+                else
+                {
+                    lstOb = lstEval_ObiIndividualeTemp.Where(p => p.Pozitie == Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)));
+                }
+
+                foreach (var ent in lst)
+                {
+                    if (tip == 1)
+                    {
+                        foreach (var entComp in lstComp)
+                        {
+                            decimal pondereGrup = ent.PondereRatingGlobal;
+
+                            decimal nota = 0;
+                            //PropertyInfo piDes = ent.GetType().GetProperty(super);
+                            //if (piDes != null) nota = Convert.ToDecimal((piDes.GetValue(ent, null) ?? 0).ToString().Length <= 0 ? 0 : (piDes.GetValue(ent, null) ?? 0));
+                            nota = Convert.ToDecimal(entComp.IdCalificativ ?? 0);
+
+                            if (nota == -1) continue;
+
+                            decimal pondere = 0;
+                            //if (entComp.Pondere != null && entComp.Pondere != "") 
+                            pondere = Convert.ToDecimal(entComp.Pondere);
+
+                            switch (tipCalcul)
+                            {
+                                case 1:
+                                    calc += (nota * pondere / 100);
+                                    break;
+                                case 2:
+                                    nr += 1;
+                                    calc += nota;
+                                    break;
+                                case 3:
+                                    calc += (nota * pondere / 100) * pondereGrup / 100;
+                                    break;
+                                case 4:
+                                case 5:
+                                    calc += nota * pondere;
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var entOb in lstOb)
+                        {
+                            decimal pondereGrup = ent.PondereRatingGlobal;
+
+                            decimal nota = 0;
+                            //PropertyInfo piDes = ent.GetType().GetProperty(super);
+                            //if (piDes != null) nota = Convert.ToDecimal((piDes.GetValue(ent, null) ?? 0).ToString().Length <= 0 ? 0 : (piDes.GetValue(ent, null) ?? 0));
+                            nota = Convert.ToDecimal(entOb.IdCalificativ ?? 0);
+
+                            if (nota == -1) continue;
+
+                            decimal pondere = 0;
+                            //if (entComp.Pondere != null && entComp.Pondere != "") 
+                            pondere = Convert.ToDecimal(entOb.Pondere);
+
+                            switch (tipCalcul)
+                            {
+                                case 1:
+                                    calc += (nota * pondere / 100);
+                                    break;
+                                case 2:
+                                    nr += 1;
+                                    calc += nota;
+                                    break;
+                                case 3:
+                                    calc += (nota * pondere / 100) * pondereGrup / 100;
+                                    break;
+                                case 4:
+                                case 5:
+                                    calc += nota * pondere;
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                switch (tipCalcul)
+                {
+                    case 1:
+                        rasp = Convert.ToInt32(MathExt.Round(calc, MidpointRounding.AwayFromZero));
+                        break;
+                    case 2:
+                        if (nr != 0)
+                            rasp = Convert.ToInt32(MathExt.Round(calc / nr, MidpointRounding.AwayFromZero));
+                        else
+                            rasp = -1;
+                        break;
+                    case 3:
+                        rasp = Convert.ToDecimal(MathExt.Round(calc, 2, MidpointRounding.ToEven));
+                        break;
+                    case 4:
+                        {
+                            decimal pro = 100;
+
+                            if (Session["CompletareChestionar_IdQuiz"].ToString() == "3")
+                            {
+
+                                string categ = "Management L1";
+                                var entCateg = lstEval_RaspunsLinii.Where(p => p.TipData == 38).FirstOrDefault();
+                                if (entCateg != null && entCateg.Super1 != null) categ = entCateg.Super1;
+
+                                if (categ.ToUpper().IndexOf("MANAGEMENT L1") >= 0) pro = 60;
+                                if (categ.ToUpper().IndexOf("MANAGEMENT L2") >= 0) pro = 70;
+                                if ((categ.ToUpper().IndexOf("EXPERT") >= 0 || categ.ToUpper().IndexOf("EXECUTIE") >= 0)) pro = 80;
+                            }
+
+                            DataTable dtNote = General.IncarcaDT("SELECT * FROM Eval_tblRating WHERE Anul = (SELECT Anul FROM Eval_Quiz WHERE Id = " + Session["CompletareChestionar_IdQuiz"].ToString() + ")", null);
+                            if (dtNote != null && dtNote.Rows.Count != 0) cnt = dtNote.Rows.Count;
+                            rasp = Convert.ToDecimal(MathExt.Round((calc / cnt) * (100 / pro), 2, MidpointRounding.ToEven));
+                        }
+                        break;
+                    case 5:
+                        {
+                            int idVal = -99;
+                            if (lst != null && lst.Count() > 0) idVal = lst.FirstOrDefault().TipValoare;
+                            cnt = lstEval_tblTipValoriLinii.Where(p => p.Id == idVal).Count();
+                            if (cnt == 0) cnt = 1;
+                            rasp = Convert.ToDecimal(MathExt.Round(calc / cnt, 2, MidpointRounding.ToEven));
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return rasp;
         }
 
 

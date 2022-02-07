@@ -558,6 +558,11 @@ namespace WizOne.ConcediiMedicale
 
             int tip = Convert.ToInt32(cmbTipConcediu.Value);
 
+            if (rbConcCont.Checked && txtZCMAnt.Text.Length <= 0)
+            {
+                return Dami.TraduCuvant("Pentru concediul in continuare trebuie sa completati numarul zilelor CM anterior!");
+            }
+
             bool bErr = false;
             string szErrMsg = "In urma validarilor efectuate au rezultat urmatoarele avertizari:" + System.Environment.NewLine;
 
@@ -2008,9 +2013,13 @@ namespace WizOne.ConcediiMedicale
             //ASPxTextBox txtNrCMInit = DataList1.Items[0].FindControl("txtNrCMInit") as ASPxTextBox;
 
             txtZCMAnt.Enabled = false;
+            txtZCMAnt.Text = "";
             txtSCMInit.Enabled = false;
+            txtSCMInit.Text = "";
             txtNrCMInit.Enabled = false;
+            txtNrCMInit.Text = "";
             deDataCMInit.Enabled = false;
+            deDataCMInit.Value = null;
         }
 
 
@@ -2213,10 +2222,17 @@ namespace WizOne.ConcediiMedicale
                     OnSelEndDate(param[1]);
                     break;
                 case "rbConcInit":
-                    On93Initial();
+                    if (param[1] == "true")
+                    {
+                        Session["CM_NrZileCT1"] = null;
+                        Session["ZileCMAnterior"] = null;
+                        InitWorkingDays();
+                        On93Initial();
+                    }
                     break;
                 case "rbConcCont":
-                    On93Prel();
+                    if (param[1] == "true")
+                        On93Prel();
                     break;
                 case "cmbCC":
                     OnSelChangeCostCenter();
@@ -2241,7 +2257,11 @@ namespace WizOne.ConcediiMedicale
                     OnUpdateZL();
                     break;
                 case "txtZCMAnt":
-                    OnUpdateZLP();
+                    //OnUpdateZLP();
+                    Session["CM_NrZileCT1"] = null;
+                    Session["ZileCMAnterior"] = param[1];
+                    On93Prel();
+                    InitWorkingDays();
                     break;
                 //case "rbZileCal":
                 //    OnZileAng();
@@ -2702,7 +2722,7 @@ namespace WizOne.ConcediiMedicale
 
                 #region  Notificare start
 
-                string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
                 int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
 
                 HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>

@@ -254,6 +254,9 @@
     <Reference Include="DocumentFormat.OpenXml, Version=2.13.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.13.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
+    <Reference Include="EASendMail, Version=7.8.0.2, Culture=neutral, PublicKeyToken=88adb80ecd66540b, processorArchitecture=MSIL">
+      <HintPath>..\packages\EASendMail.7.8.0.2\lib\net461\EASendMail.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -276,6 +279,13 @@
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=1.1.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.1.1.2\lib\net451\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.1.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.1.2\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
@@ -315,6 +325,9 @@
     </Reference>
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IdentityModel.Services" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.1.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.1.2\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.4.5.1\lib\net45\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.dll</HintPath>
     </Reference>
@@ -330,6 +343,7 @@
     <Reference Include="System.Management">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization">
@@ -380,6 +394,9 @@
     </Reference>
     <Reference Include="System.Xml.Linq">
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Twilio, Version=5.68.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Twilio.5.68.2\lib\net451\Twilio.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase">
       <Private>True</Private>
@@ -793,6 +810,7 @@
     <Content Include="Fisiere\Imagini\Icoane\m6.png" />
     <Content Include="Fisiere\Imagini\Icoane\m7.png" />
     <Content Include="Fisiere\Imagini\Icoane\mail.png" />
+    <Content Include="Fisiere\Imagini\Icoane\meniu.png" />
     <Content Include="Fisiere\Imagini\Icoane\modifica.png" />
     <Content Include="Fisiere\Imagini\Icoane\motive.png" />
     <Content Include="Fisiere\Imagini\Icoane\n2.png" />
@@ -818,10 +836,13 @@
     <Content Include="Fisiere\Imagini\Icoane\sepa2.gif" />
     <Content Include="Fisiere\Imagini\Icoane\sepa3.gif" />
     <Content Include="Fisiere\Imagini\Icoane\sgCls.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgDr.jpg" />
     <Content Include="Fisiere\Imagini\Icoane\sgDr.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgDr1.png" />
     <Content Include="Fisiere\Imagini\Icoane\sgExp.png" />
     <Content Include="Fisiere\Imagini\Icoane\sgJos.png" />
     <Content Include="Fisiere\Imagini\Icoane\sgJosOver.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgSt.jpg" />
     <Content Include="Fisiere\Imagini\Icoane\sgSt.png" />
     <Content Include="Fisiere\Imagini\Icoane\sgSus.png" />
     <Content Include="Fisiere\Imagini\Icoane\sgSusOver.png" />
@@ -880,6 +901,7 @@
     <Content Include="Fisiere\MsgBox\sweetalert.css" />
     <Content Include="Fisiere\MsgBox\sweetalert.min.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Generatoare\Reports\Models\ReportsModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ReportsModel.edmx</DependentUpon>
@@ -972,7 +994,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
     <Content Include="Scripts\jquery-3.6.0.min.js" />
@@ -2920,6 +2941,7 @@
       <LastGenOutput>General.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\AdeverintaGenerala.resx">
       <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
     </EmbeddedResource>

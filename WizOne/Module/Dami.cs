@@ -481,9 +481,6 @@ namespace WizOne.Module
                 {
                     DataTable dt = HttpContext.Current.Session["tmpMeniu2"] as DataTable;
                     string strPag = pag.ToString().ToLower().Replace("_aspx", "").Replace("asp.", "").Replace("_", "\\");
-                    //if (dt.Select($"Pagina = '{strPag}'").Count() == 0 && strPag.ToLower().IndexOf("mainpage") < 0)
-                    var ert = General.Nz(HttpContext.Current.Session["tmpMeniu3"], "").ToString().ToLower().Replace("/", "\\");
-                    var edc = General.Nz(HttpContext.Current.Session["tmpMeniu3"], "").ToString().ToLower().Replace("/", "\\").IndexOf(strPag);
                     if (dt != null && dt.Select($"Pagina = '{strPag}'").Count() > 0 && General.Nz(HttpContext.Current.Session["tmpMeniu3"],"").ToString().ToLower().Replace("/","\\").IndexOf(strPag) < 0)
                         HttpContext.Current.Response.Redirect("~/Pagini/MainPage");
                 }
@@ -513,12 +510,12 @@ namespace WizOne.Module
                 {
                     //Radu 24.04.2020
                     string tip = Dami.ValoareParam("TipInfoChiosc", "0");
-                    if (tip == "0")
+                    if (tip == "0" || tip == "3")   //Radu 03.12.2021 - #914
                         HttpContext.Current.Response.Redirect("~/DefaultTactil");
                     else if (tip == "1" || tip == "2")
                         HttpContext.Current.Response.Redirect("~/DefaultTactilFaraCard");
-                    else if (tip == "3")
-                        HttpContext.Current.Response.Redirect("~/DefaultTactilExtra");
+                    //else if (tip == "3")
+                    //    HttpContext.Current.Response.Redirect("~/DefaultTactilExtra");
 
                 }
             }
@@ -644,11 +641,12 @@ namespace WizOne.Module
                         idRol = Dami.ValoareParam("Cereri_IDuriRoluriVizualizare", "-99");
 
                     //Radu 09.02.2021 - conditie pentru eliminarea dublurilor
-                    string sqlElimDubluri = " and b.idsuper = (select max(idsuper) from F100Supervizori where iduser = " + HttpContext.Current.Session["UserId"] + " and f10003 = a.f10003 and IdSuper in (" + idRol + ")) ";
+                    string sqlElimDubluri = " and b.idsuper = (select max(idsuper) from F100Supervizori where iduser = " + HttpContext.Current.Session["UserId"] + " and f10003 = a.f10003 and IdSuper in (" + idRol 
+                        + ") AND CONVERT(date,DataInceput) <= CONVERT(date,GetDate()) AND CONVERT(date,GetDate()) <= CONVERT(date,DataSfarsit)) ";
 
                     strSql = $@"SELECT DISTINCT A.*, B.""IdSuper"" AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
                                FROM ""Ptj_Cereri"" A
-                               INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idRol}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}  {sqlElimDubluri}" ;
+                               INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idRol}) AND CONVERT(date,B.DataInceput) <= CONVERT(date,GetDate()) AND CONVERT(date,GetDate()) <= CONVERT(date,B.DataSfarsit) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}  {sqlElimDubluri}" ;
                 }
 
                 //Florin 2019.09.25 - optimizare
@@ -1300,74 +1298,133 @@ namespace WizOne.Module
             return rez;
         }
 
+        //public static string ValoareParam(string strParam, string replaceValue = "")
+        //{
+        //    string rez = "";
+
+        //    try
+        //    {
+        //        DataTable dt = new DataTable();
+        //        DataRow dr = null;
+
+        //        if (HttpContext.Current != null && HttpContext.Current.Session["tblParam"] != null)
+        //        {
+        //            dt = HttpContext.Current.Session["tblParam"] as DataTable;
+        //            if (dt != null && dt.Rows.Count > 0)
+        //            {
+        //                DataRow[] arr = dt.Select("Nume='" + strParam + "'");
+        //                if (arr.Count() == 0)
+        //                    return replaceValue;
+        //                else
+        //                    dr = arr[0];
+        //            }
+        //            else
+        //            {
+        //                dt = General.IncarcaDT(@"SELECT ""Valoare"", ""Criptat"" FROM ""tblParametrii"" WHERE ""Nume""=@1", new object[] { strParam });
+        //                if (dt.Rows.Count == 0)
+        //                    return replaceValue;
+        //                else
+        //                    dr = dt.Rows[0];
+        //            }
+        //        }
+        //        else
+        //        {
+        //            dt = General.IncarcaDT(@"SELECT ""Valoare"", ""Criptat"" FROM ""tblParametrii"" WHERE ""Nume""=@1", new object[] { strParam });
+        //            if (dt.Rows.Count == 0)
+        //                return replaceValue;
+        //            else
+        //                dr = dt.Rows[0];
+        //        }
+
+        //        //DataRow dr = dt.Rows[0];
+
+        //        if (dr["Criptat"].ToString() != "" && Convert.ToInt32(dr["Criptat"] ?? 0) == 1)
+        //        {
+        //            CriptDecript prc = new CriptDecript();
+        //            rez = prc.EncryptString("WizOne2016", (dr["Valoare"] ?? "").ToString(), 2);
+        //        }
+        //        else
+        //            rez = (dr["Valoare"] ?? "").ToString();
+
+        //        if (rez.Trim() == "" && replaceValue != "") rez = replaceValue;
+
+
+        //    //if (dt != null)
+        //    //{
+        //    //    DataRow[] dr = dt.Select("Nume='" + strParam + "'");
+        //    //    if (dr.Count() > 0)
+        //    //    {
+        //    //        if (dr[0]["Criptat"].ToString() != "" && Convert.ToInt32(dr[0]["Criptat"] ?? 0) == 1)
+        //    //        {
+        //    //            CriptDecript prc = new CriptDecript();
+        //    //            rez = prc.EncryptString("WizOne2016", (dr[0]["Valoare"] ?? "").ToString(), 2);
+        //    //        }
+        //    //        else
+        //    //            rez = (dr[0]["Valoare"] ?? "").ToString();
+        //    //    }
+
+        //    //    if (rez.Trim() == "" && replaceValue != "") rez = replaceValue;
+        //    //}
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return rez;
+        //}
+
         public static string ValoareParam(string strParam, string replaceValue = "")
         {
             string rez = "";
 
             try
             {
+                string criptat = "0";
                 DataTable dt = new DataTable();
-                DataRow dr = null;
 
-                if (HttpContext.Current != null && HttpContext.Current.Session["tblParam"] != null)
+                if (HttpContext.Current == null)
                 {
+                    dt = General.IncarcaDT(@"SELECT ""Valoare"", ""Criptat"" FROM ""tblParametrii"" WHERE ""Nume""=@1", new object[] { strParam });
+                    if (dt.Rows.Count > 0)
+                    {
+                        rez = General.Nz(dt.Rows[0][0],"").ToString();
+                        criptat = General.Nz(dt.Rows[0][1], "").ToString();
+                    }
+                }
+                else
+                {
+                    if (HttpContext.Current.Session["tblParam"] == null || HttpContext.Current.Session["tblParam"].GetType() != typeof(DataTable))
+                    {
+                        DataTable dtParam = General.IncarcaDT(@"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
+                                UNION
+                                SELECT 'AnLucru', CAST(F01011 AS nvarchar(10)), '', 1, 0 FROM F010
+                                UNION
+                                SELECT 'LunaLucru', CAST(F01012 AS nvarchar(10)), '', 1, 0 FROM F010", null);
+
+                        HttpContext.Current.Session["tblParam"] = dtParam;
+                    }
+
                     dt = HttpContext.Current.Session["tblParam"] as DataTable;
                     if (dt != null && dt.Rows.Count > 0)
                     {
                         DataRow[] arr = dt.Select("Nume='" + strParam + "'");
-                        if (arr.Count() == 0)
-                            return replaceValue;
-                        else
-                            dr = arr[0];
-                    }
-                    else
-                    {
-                        dt = General.IncarcaDT(@"SELECT ""Valoare"", ""Criptat"" FROM ""tblParametrii"" WHERE ""Nume""=@1", new object[] { strParam });
-                        if (dt.Rows.Count == 0)
-                            return replaceValue;
-                        else
-                            dr = dt.Rows[0];
+                        if (arr.Count() > 0)
+                        {
+                            rez = General.Nz(arr[0]["Valoare"], "").ToString();
+                            criptat = General.Nz(arr[0]["Criptat"], "").ToString();
+                        }
                     }
                 }
-                else
-                {
-                    dt = General.IncarcaDT(@"SELECT ""Valoare"", ""Criptat"" FROM ""tblParametrii"" WHERE ""Nume""=@1", new object[] { strParam });
-                    if (dt.Rows.Count == 0)
-                        return replaceValue;
-                    else
-                        dr = dt.Rows[0];
-                }
 
-                //DataRow dr = dt.Rows[0];
-
-                if (dr["Criptat"].ToString() != "" && Convert.ToInt32(dr["Criptat"] ?? 0) == 1)
+                if (criptat == "1" && rez != "")
                 {
                     CriptDecript prc = new CriptDecript();
-                    rez = prc.EncryptString("WizOne2016", (dr["Valoare"] ?? "").ToString(), 2);
+                    rez = prc.EncryptString(Constante.cheieCriptare, rez, 2);
                 }
-                else
-                    rez = (dr["Valoare"] ?? "").ToString();
 
                 if (rez.Trim() == "" && replaceValue != "") rez = replaceValue;
-
-
-            //if (dt != null)
-            //{
-            //    DataRow[] dr = dt.Select("Nume='" + strParam + "'");
-            //    if (dr.Count() > 0)
-            //    {
-            //        if (dr[0]["Criptat"].ToString() != "" && Convert.ToInt32(dr[0]["Criptat"] ?? 0) == 1)
-            //        {
-            //            CriptDecript prc = new CriptDecript();
-            //            rez = prc.EncryptString("WizOne2016", (dr[0]["Valoare"] ?? "").ToString(), 2);
-            //        }
-            //        else
-            //            rez = (dr[0]["Valoare"] ?? "").ToString();
-            //    }
-
-            //    if (rez.Trim() == "" && replaceValue != "") rez = replaceValue;
-            //}
-
             }
             catch (Exception ex)
             {
@@ -1376,6 +1433,7 @@ namespace WizOne.Module
 
             return rez;
         }
+
 
         internal static int NextId(string tabela, int nrInreg = 1)
         {
@@ -1842,6 +1900,23 @@ namespace WizOne.Module
             }
 
             return id;
+        }
+
+        internal static int TimeOutSecunde(string numeParametru)
+        {
+            int rez = 9999;
+
+            try
+            {
+                string param = Dami.ValoareParam(numeParametru, "9999");
+                if (param.Trim() != "" && General.IsNumeric(param))
+                    rez = Convert.ToInt32(param);
+            }
+            catch (Exception)
+            {
+            }
+
+            return rez;
         }
 
     }

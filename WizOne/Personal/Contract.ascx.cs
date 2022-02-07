@@ -110,7 +110,8 @@ namespace WizOne.Personal
             if (cmbMotivScutit.Value == null || Convert.ToInt32(cmbMotivScutit.Value.ToString()) == 0)
             {
                 //cmbMotivScutit.SelectedIndex = 0;
-                cmbMotivScutit.ClientEnabled = false;
+                //cmbMotivScutit.ClientEnabled = false;
+                cmbMotivScutit.ClientReadOnly = true;
             }
             if (cmbMotivScutitCAS.Value == null ||Convert.ToInt32(cmbMotivScutitCAS.Value.ToString()) == 0)
             {
@@ -342,7 +343,7 @@ namespace WizOne.Personal
             for (int i = 0; i < etichete.Count(); i++)
             {
                 ASPxLabel lbl = Contract_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
-                lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
+                lbl.Text = Dami.TraduCuvant(lbl.Text);
             }
             
             string[] bife = new string[9] { "chkFunctieBaza",  "chkScutitImp", "chkBifaPensionar", "chkBifaDetasat", "chkCalcDed", "chkScutitCAS", "chkSalMin", "chkConstr", "chkCotaForfetara"};
@@ -606,7 +607,7 @@ namespace WizOne.Personal
                     }
                     else
                         Contract_pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu a fost gasit tarif corespunzator normei selectate! Setati tariful manual!");
-                    break;
+                    break; 
                 //case "cmbNivelFunctie":
                 //    CompletareZile(Convert.ToInt32(param[1]));
                 //    break;
@@ -865,9 +866,15 @@ namespace WizOne.Personal
                 //    Session["InformatiaCurentaPersonal"] = ds;
                 //    break;
                 //case "chkScutitImp":
-                //    ds.Tables[0].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
-                //    ds.Tables[1].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
-                //    Session["InformatiaCurentaPersonal"] = ds;
+                //    ASPxComboBox cmbMotivScutit = Contract_DataList.Items[0].FindControl("cmbMotivScutit") as ASPxComboBox;                   
+                //    cmbMotivScutit.Value = 0;
+                //    ds.Tables[0].Rows[0]["F1001098"] = 0;
+                //    ds.Tables[2].Rows[0]["F1001098"] = 0;
+                //    //Contract_DataList.DataBind();
+                //    cmbMotivScutit.ClientEnabled = false;
+                //    //    ds.Tables[0].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
+                //    //    ds.Tables[1].Rows[0]["F10026"] = (param[1] == "true" ? 1 : 0);
+                //    //    Session["InformatiaCurentaPersonal"] = ds;                        
                 //    break;
                 //case "chkBifaPensionar":
                 //    ds.Tables[0].Rows[0]["F10037"] = (param[1] == "true" ? 1 : 0);
@@ -1008,7 +1015,7 @@ namespace WizOne.Personal
             CalculLuniSiZile(Convert.ToDateTime(deDeLa.Date), Convert.ToDateTime(deLa.Date), out nrLuni, out nrZile);
             txtZile.Value = nrZile;
             txtLuni.Value = nrLuni;
-
+            Session["InformatiaCurentaPersonal"] = ds;
         }
 
         protected void CalcGrila(string grila)

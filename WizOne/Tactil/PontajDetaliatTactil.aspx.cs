@@ -281,7 +281,8 @@ namespace WizOne.Tactil
                 //    idRol = Convert.ToInt32(cmbRolZi.Value);
                 //}
 
-                General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dtData.Year, dtData.Month);
+                //Florin 2022.01.20 #988
+                //General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dtData.Year, dtData.Month);
 
                 grDate.KeyFieldName = "Cheia";
                 //DataTable dt = PontajCuInOut(Convert.ToInt32(cmbAng.Value ?? -99), dtData, Convert.ToInt32(Session["UserId"] ?? -99), idRol, Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99), Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbSubDept.Value ?? -99), Convert.ToInt32(cmbBirou.Value ?? -99), tip);
@@ -1061,12 +1062,12 @@ namespace WizOne.Tactil
             {
                 //Radu 24.04.2020
                 string tip = Dami.ValoareParam("TipInfoChiosc", "0");
-                if (tip == "0")
+                if (tip == "0" || tip == "3")  //Radu 03.12.2021 - #914
                     Response.Redirect("../DefaultTactil", false);
                 else if (tip == "1" || tip == "2")
                     Response.Redirect("../DefaultTactilFaraCard", false);
-                else if (tip == "3")
-                    Response.Redirect("../DefaultTactilExtra", false);
+                //else if (tip == "3")
+                //    Response.Redirect("../DefaultTactilExtra", false);
             }
             catch (Exception ex)
             {

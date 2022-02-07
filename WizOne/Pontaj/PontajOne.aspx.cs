@@ -275,7 +275,8 @@ namespace WizOne.Pontaj
                 DateTime dtData = Convert.ToDateTime(txtAnLuna.Value);
                 int idRol = Convert.ToInt32(cmbRolAng.Value);
 
-                General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dtData.Year, dtData.Month);
+                //Florin 2022.01.20 #988
+                //General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dtData.Year, dtData.Month);
 
                 grDate.KeyFieldName = "Cheia";
                 DataTable dt = PontajCuInOut();

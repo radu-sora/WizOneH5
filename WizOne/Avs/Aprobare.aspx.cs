@@ -986,7 +986,7 @@ namespace WizOne.Avs
 
                             #region  Notificare start
 
-                            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(HttpContext.Current.Session["IdClient"], "1").ToString(), General.Nz(HttpContext.Current.Session["IdLimba"], "RO").ToString() };
+                            string[] arrParam = new string[] { General.UrlHost(), General.Nz(HttpContext.Current.Session["IdClient"], "1").ToString(), General.Nz(HttpContext.Current.Session["IdLimba"], "RO").ToString() };
 
                             HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                             {

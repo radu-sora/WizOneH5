@@ -13,30 +13,6 @@
 
     <div id="divPanel" class="divPanel faraZIndex" runat="server"></div>
 
-    <div id="pnlMsgWelcome" runat="server" style="display:none;">
-        <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Bine Ai Venit !</h4>
-                    </div>
-                    <div class="modal-body center-block text-center">
-                        <img src="../Fisiere/Imagini/Logo_Filip.png" alt="Filip" /><br /><br /><br />
-                        <p>Filip & Company va informeaza ca datele dumneavoastra cu caracter personal sunt prelucrate in contextul utilizarii acestei aplicatii. </p>
-                        <p>Mai multe informatii despre cum prelucram datele dumneavoastra, precum si despre drepturile de care beneficiati in legatura cu prelucrarea puteti gasi in Nota de informare accesibila in <a href="../Fisiere/DocumentFilip.txt" target="_blank" style="text-decoration:underline; color:#0026ff;">UCM</a></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Inchide</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
     <dx:ASPxPopupControl ID="popUpPass" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static" Modal="true"
         CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top" OnWindowCallback="popUpPass_WindowCallback"
         EnableViewState="False" PopupElementID="popUpPassArea" PopupHorizontalAlign="WindowCenter" SettingsLoadingPanel-Enabled="true"

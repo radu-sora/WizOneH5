@@ -19,17 +19,7 @@ namespace WizOne.Eval
             public int Id { get; set; }
             public string Denumire { get; set; }
         }
-        protected void Page_Init(object sender, EventArgs e)
-        {
-            try
-            {
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -62,15 +52,13 @@ namespace WizOne.Eval
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
                 grDate.DataBind();
 
-                string strSQL = "select * from \"Eval_Quiz\" ";
-                DataTable dtQuiz = General.IncarcaDT(strSQL, null);
-                if (dtQuiz != null)
-                {
-                    cmbQuiz.DataSource = dtQuiz;
-                    cmbQuiz.DataBind();
-                }
+                DataTable dtQuiz = General.IncarcaDT("SELECT Id, Denumire FROM Eval_Quiz WHERE COALESCE(Activ,0) = 1 ORDER BY Denumire");
+                DataTable dtUsers = General.IncarcaDT("SELECT F70104, F70102 FROM USERS ORDER BY NumeComplet");
 
-                strSQL = $@"select fnume.F10003, fnume.F10008 {Dami.Operator()} ' ' {Dami.Operator()} fnume.F10009 as ""NumeComplet"",
+                cmbQuiz.DataSource = dtQuiz;
+                cmbQuiz.DataBind();
+
+                string strSqL = $@"select fnume.F10003, fnume.F10008 {Dami.Operator()} ' ' {Dami.Operator()} fnume.F10009 as ""NumeComplet"",
 		                            fil.F00406 as ""Filiala"", sec.F00507 as ""Sectie"", dep.F00608 as ""Departament""
                             from F100 fnume
                             left join F002 comp on fnume.F10002 = comp.F00202
@@ -78,14 +66,19 @@ namespace WizOne.Eval
                             left join F004 fil on fnume.F10005 = fil.F00405
                             left join F005 sec on fnume.F10006 = sec.F00506
                             left join F006 dep on fnume.F10007 = dep.F00607 WHERE fnume.F10025 IN (0, 999)";
-                //if (Constante.tipBD == 1) //SQL
-                //    strSQL = string.Format(strSQL, "+");
-                //else
-                //    strSQL = string.Format(strSQL, "||");
-                DataTable dtAngajat = General.IncarcaDT(strSQL, null);
+
+                DataTable dtAngajat = General.IncarcaDT(strSqL, null);
                 cmbAngajat.DataSource = dtAngajat;
                 cmbAngajat.DataBind();
 
+                cmbQuizModif.DataSource = dtQuiz;
+                cmbQuizModif.DataBind();
+
+                cmbUserOld.DataSource = dtUsers;
+                cmbUserOld.DataBind();
+
+                cmbUserNew.DataSource = dtUsers;
+                cmbUserNew.DataBind();
             }
             catch (Exception ex)
             {
@@ -178,7 +171,6 @@ namespace WizOne.Eval
                     if (arr.Length != 2 || arr[0] == "" || arr[1] == "")
                     {
                         grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Insuficienti parametrii");
-                        //MessageBox.Show("Insuficienti parametrii", MessageBox.icoError, "Eroare !");
                         return;
                     }
 
@@ -193,7 +185,6 @@ namespace WizOne.Eval
             catch (Exception ex)
             {
                 grDate.JSProperties["cpAlertMessage"] = ex.Message;
-                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -209,29 +200,12 @@ namespace WizOne.Eval
                 for (int i = 0; i < lst.Count(); i++)
                 {
                     object[] arr = lst[i] as object[];
-                    //switch (Convert.ToInt32(General.Nz(arr[1], 0)))
-                    //{
-                    //    case -1:
-                    //        msg += "Cererea pt " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("este anulata") + System.Environment.NewLine;
-                    //        continue;
-                    //    case 0:
-                    //        msg += "Cererea pt " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("este respinsa") + System.Environment.NewLine;
-                    //        continue;
-                    //    case 3:
-                    //        msg += "Cererea pt " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("este deja aprobata") + System.Environment.NewLine;
-                    //        continue;
-                    //    case 4:
-                    //        msg += "Cererea pt " + arr[3] + "-" + Convert.ToDateTime(arr[4]).ToShortDateString() + " - " + Dami.TraduCuvant("Nu puteti aproba o cerere planificata. Trebuie trecuta in starea solicitat.") + System.Environment.NewLine;
-                    //        continue;
-                    //}
-
                     ids.Add(new metaQuizAngajat { IdQuiz = Convert.ToInt32(General.Nz(arr[0], 0)), F10003 = Convert.ToInt32(General.Nz(arr[1], 0)) });
                 }
 
                 if (ids.Count != 0) msg += Evaluare.InitializareChestionar(ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                                 
                 grDate.JSProperties["cpAlertMessage"] = msg;
-                //MessageBox.Show(msg, MessageBox.icoInfo);
                 grDate.DataBind();
                 grDate.Selection.UnselectAll();                
             }
@@ -272,7 +246,34 @@ namespace WizOne.Eval
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }       
-        
+        }
+
+        protected void btnModif_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cmbQuizModif.Value == null || cmbUserOld.Value == null || cmbUserNew.Value == null)
+                    MessageBox.Show("Lipsesc date", MessageBox.icoError);
+                else
+                {
+                    int nr = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"
+                        BEGIN
+                            UPDATE Eval_RaspunsIstoric SET IdUser = @3 WHERE IdQuiz = @1 AND IdUser = @2;
+                            SELECT @@ROWCOUNT;
+                        END", new object[] { cmbQuizModif.Value, cmbUserOld.Value, cmbUserNew.Value }),0));
+
+                    if (nr == 0)
+                        MessageBox.Show("Nu a fost actualizata nici o inregistrare", MessageBox.icoError);
+                    else
+                        MessageBox.Show("Au fost actualizate " + nr + " inregistrari", MessageBox.icoSuccess);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
     }
 }

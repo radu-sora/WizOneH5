@@ -2180,6 +2180,7 @@ namespace WizOne.Module
                                             when 33 then fnume.""Functia""
                                             when 34 then fnume.""Directia""
                                             when 35 then fnume.""DeptDinF1001""
+                                            when 36 then CONVERT(VARCHAR, FORMAT(DAY(GETDATE()), '00')) + '/' + CONVERT(VARCHAR, FORMAT(MONTH(GETDATE()), '00')) + '/' + CONVERT(VARCHAR, YEAR(GETDATE()))
                                             when 38 then fnume.""CategorieOMN""
 
                                             when 60 then fnume.""NumeSupervizor3""

@@ -160,6 +160,7 @@
         </tr>
     </table>
     
+
     <div style="width:100%; float:left; margin:20px 0px 0px 10px;">
         <dx:ASPxLabel ID="lblAngajat" runat="server" Font-Size="14px" Font-Bold="true" Font-Underline="false" Font-Italic="true" />    
     </div>
@@ -173,7 +174,7 @@
                     Init="function(s, e) { LoadCtl(s); }" 
                     SelectedIndexChanged="function(s, e) { 
                     pnlLoading.Show();
-                    LoadCtl(s); 
+                    LoadCtl(s);          
                 }" />
             </dx:ASPxComboBox>
         </div>
@@ -437,7 +438,6 @@
 
 
     <dx:ASPxGridViewExporter GridViewID="grLunar" ID="ExportGrid" runat="server" />
-
 
 
 </asp:Content>

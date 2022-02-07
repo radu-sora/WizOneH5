@@ -23,7 +23,7 @@ namespace WizOne.Personal
             for (int i = 0; i < etichete.Count(); i++)
             {
                 ASPxLabel lbl = Diverse_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
-                lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
+                lbl.Text = Dami.TraduCuvant(lbl.Text);
             }
 
             General.SecuritatePersonal(Diverse_DataList, Convert.ToInt32(Session["UserId"].ToString()));

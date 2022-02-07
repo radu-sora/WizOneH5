@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
+using WizOne.Module;
 using Wizrom.Reports.Models;
 
 namespace Wizrom.Reports.Code
@@ -63,6 +64,13 @@ namespace Wizrom.Reports.Code
 
                             if (value != null)
                                 param.Value = Convert.ChangeType(value, param.Type);
+                        }
+
+                        //Florin 2022.01.07         #1074
+                        foreach (var ds in dashboard.DataSources.OfType<DashboardSqlDataSource>())
+                        {
+                            ds.DataProcessingMode = DataProcessingMode.Client;
+                            ds.ConnectionOptions.CommandTimeout = Dami.TimeOutSecunde("TimeOutSecundeDashboards");
                         }
 
                         dashboardXDoc = dashboard.SaveToXDocument();

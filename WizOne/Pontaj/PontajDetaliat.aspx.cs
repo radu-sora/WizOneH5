@@ -72,7 +72,7 @@ namespace WizOne.Pontaj
 
                     CreeazaGrid();
 
-                    DataTable dtVal = General.IncarcaDT(Constante.tipBD == 1 ? @"SELECT TOP 0 * FROM ""Ptj_IstoricVal"" " : @"SELECT * FROM ""Ptj_IstoricVal"" WHERE ROWNUM = 0 ", null);
+                    DataTable dtVal = General.IncarcaDT(@"SELECT * FROM ""Ptj_IstoricVal"" WHERE 1 = 2 ", null);
                     Session["Ptj_IstoricVal"] = dtVal;
                 }
 
@@ -486,11 +486,18 @@ namespace WizOne.Pontaj
             try
             {
                 DateTime dataSelectie = txtAnLuna.Date;
+                int idRol = Convert.ToInt32(General.Nz(cmbRolAng.Value, -99));
                 if (tip == 2 || tip == 20)
+                {
                     dataSelectie = txtZiua.Date;
+                    idRol = Convert.ToInt32(General.Nz(cmbRolZi.Value, -99));
+                }
+
+                //Florin  #1070
+                string filtruAngajati = General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), dataSelectie.Year, dataSelectie.Month, 0, -99, idRol);
 
                 //Florin #740
-                if (!General.EstePontajulInitializat(dataSelectie, General.Nz(cmbCtr.Text, "").ToString()))
+                if (!General.EstePontajulInitializat(dataSelectie, General.Nz(cmbCtr.Text, "").ToString(), filtruAngajati))
                 {
                     grDate.DataSource = null;
                     grDate.DataBind();
@@ -516,9 +523,10 @@ namespace WizOne.Pontaj
                     divHovercardZi.Visible = false;
                 }
 
-                int idRol = Convert.ToInt32(cmbRolAng.Value);
-                if (Convert.ToInt32(General.Nz(Request["tip"], 1)) == 2)
-                    idRol = Convert.ToInt32(cmbRolZi.Value);
+                //Florin #1070 - codul s-a mutat la inceputul metodei
+                //int idRol = Convert.ToInt32(cmbRolAng.Value);
+                //if (Convert.ToInt32(General.Nz(Request["tip"], 1)) == 2)
+                //    idRol = Convert.ToInt32(cmbRolZi.Value);
 
                 string dataBlocare = "22001231";
                 string strSql = $@"SELECT COALESCE(Ziua,'2200-12-31') FROM Ptj_tblBlocarePontaj WHERE IdRol=@1";
@@ -603,7 +611,8 @@ namespace WizOne.Pontaj
                     idRol = Convert.ToInt32(cmbRolZi.Value);
                 }
 
-                General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dtData.Year, dtData.Month);
+                //Florin 2022.01.20 #988
+                //General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dtData.Year, dtData.Month);
 
                 grDate.KeyFieldName = "Cheia";
                 DataTable dt = PontajCuInOut();

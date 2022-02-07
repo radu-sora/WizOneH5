@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.UI;
@@ -128,8 +129,9 @@ namespace WizOne.Pagini
                         string numeBaza = "";
 
                         CriptDecript prc = new CriptDecript();
-                        Constante.cnnWeb = prc.EncryptString(Constante.cheieCriptare, ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString, 2);
-                        string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
+                        //Constante.cnnWeb = prc.EncryptString(Constante.cheieCriptare, ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString, 2);
+                        //string tmp = Constante.cnnWeb.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];    //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                        string tmp = Regex.Split(Constante.cnnWeb, "USER ID=", RegexOptions.IgnoreCase)[1];
                         numeBaza = tmp.Split(';')[0];
 
 

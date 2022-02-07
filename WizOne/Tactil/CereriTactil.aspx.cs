@@ -308,12 +308,12 @@ namespace WizOne.Tactil
             {
                 //Radu 24.04.2020
                 string tip = Dami.ValoareParam("TipInfoChiosc", "0");
-                if (tip == "0")
+                if (tip == "0") //Radu 03.12.2021 - #914
                     Response.Redirect("../DefaultTactil", false);
                 else if (tip == "1" || tip == "2")
                     Response.Redirect("../DefaultTactilFaraCard", false);
-                else if (tip == "3")
-                    Response.Redirect("../DefaultTactilExtra", false);
+                //else if (tip == "3")
+                //    Response.Redirect("../DefaultTactilExtra", false);
             }
             catch (Exception ex)
             {
@@ -1351,7 +1351,7 @@ namespace WizOne.Tactil
                     }
 
 
-                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                    string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
                     HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                     {

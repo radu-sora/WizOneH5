@@ -316,7 +316,7 @@ namespace WizOne.Beneficii
                             DataTable dtBen = General.IncarcaDT("INSERT INTO Ben_Cereri(IdSesiune, F10003, IdStare, USER_NO, TIME) OUTPUT Inserted.IdAuto VALUES(" + arr[i].Id.ToString() + ", " + dtAng.Rows[j]["F10003"].ToString() + ", 1, " 
                                 + idUser + ", GETDATE()) ", null);
 
-                            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                            string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
                             int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
                             int idAuto = -99;
                             if (dtBen.Rows.Count > 0)

@@ -4244,7 +4244,7 @@ namespace WizOne.Avs
                 //    General.ModificaFunctieAngajat(F10003, Convert.ToInt32(General.Nz(cmb1Nou.Value,-99)), Convert.ToDateTime(txtDataMod.Value), new DateTime(2100,1,1));
             }
 
-            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+            string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
             HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
             {
@@ -5228,6 +5228,9 @@ namespace WizOne.Avs
                                {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";
                         General.IncarcaDT(sql111, null);
                         ActualizareSusp(f10003, ref sql100, ref sql1001);
+
+                        //#1069                        
+                        General.CalculCO(dtIncSusp.Year, f10003);                                        
                         break;
                     case (int)Constante.Atribute.RevenireSuspendare:
                         dtSuspNomen = General.IncarcaDT("SELECT * FROM F090 WHERE F09002 = " + dtCer.Rows[0]["MotivSuspId"].ToString(), null);
@@ -5237,6 +5240,9 @@ namespace WizOne.Avs
                         sql111 = "UPDATE F111 SET F11107 = " + data13 + " WHERE F11103 = " + f10003 + " AND F11104 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " AND F11105 = " + data11;
                         General.IncarcaDT(sql111, null);
                         ActualizareSusp(f10003, ref sql100, ref sql1001, Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()), Convert.ToDateTime(dtCer.Rows[0]["DataInceputSusp"].ToString()), Convert.ToDateTime(dtCer.Rows[0]["DataSfEstimSusp"].ToString()), Convert.ToDateTime(dtCer.Rows[0]["DataIncetareSusp"].ToString()), true);
+
+                        //#1069                        
+                        General.CalculCO(dtIncSusp.Year, f10003);
                         break;
                     case (int)Constante.Atribute.Detasare:
                         dtLuc = General.DamiDataLucru();                      
@@ -7049,7 +7055,7 @@ namespace WizOne.Avs
                         grup = Convert.ToInt32(dt.Rows[i]["GrupAngajati"].ToString());
                     }
 
-                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                    string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
                     int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
                     int idUser = Convert.ToInt32(Session["UserId"] ?? -99);
 

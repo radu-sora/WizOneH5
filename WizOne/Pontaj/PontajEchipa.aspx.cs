@@ -254,19 +254,6 @@ namespace WizOne.Pontaj
                 }
                 #endregion
 
-
-                //Radu 07.09.2021 - #966
-                grDate.Settings.ShowFooter = true;
-                grDate.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
-                ASPxSummaryItem totalSummary = new ASPxSummaryItem();
-                totalSummary.FieldName = "IdStare";
-                totalSummary.ShowInColumn = "IdStare";
-                totalSummary.SummaryType = SummaryItemType.Count;
-                totalSummary.DisplayFormat = "Nr. ang. {0}";
-                if (grDate.TotalSummary.Count > 0)
-                    grDate.TotalSummary.RemoveAt(0);
-                grDate.TotalSummary.Add(totalSummary);
-
                 if (!IsPostBack)
                 {
                     Session["InformatiaCurenta"] = null;                  
@@ -354,12 +341,25 @@ namespace WizOne.Pontaj
                     cmbAng.DataSource = Session["Pontaj_Angajati"];
                     cmbAng.DataBind();
                 }
+
+                //Radu 07.09.2021 - #966
+                grDate.Settings.ShowFooter = true;
+                grDate.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+                ASPxSummaryItem totalSummary = new ASPxSummaryItem();
+                totalSummary.FieldName = "IdStare";
+                totalSummary.ShowInColumn = "IdStare";
+                totalSummary.SummaryType = SummaryItemType.Count;
+                totalSummary.DisplayFormat = "Nr. ang. {0}";
+                if (grDate.TotalSummary.Count > 0)
+                    grDate.TotalSummary.RemoveAt(0);
+                grDate.TotalSummary.Add(totalSummary);
+
                 //else if (grDate.IsCallback)
                 //{
                 //    grDate.DataSource = Session["InformatiaCurenta"];
                 //    grDate.DataBind();
                 //}
-               
+
             }
             catch (Exception ex)
             {
@@ -409,7 +409,10 @@ namespace WizOne.Pontaj
         {
             try
             {
-                if (!General.EstePontajulInitializat(txtAnLuna.Date, General.Nz(cmbCtr.Value, "").ToString()))
+                //Florin #1070
+                string filtruAngajati = General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), txtAnLuna.Date.Year, txtAnLuna.Date.Month, 0, -99, Convert.ToInt32(General.Nz(cmbRol.Value, -99)));
+
+                if (!General.EstePontajulInitializat(txtAnLuna.Date, General.Nz(cmbCtr.Value, "").ToString(), filtruAngajati))
                 {
                     grDate.DataSource = null;
                     grDate.DataBind();
@@ -419,7 +422,9 @@ namespace WizOne.Pontaj
 
                 RetineFiltru("1");
                 SetColoane();
+
                 IncarcaGrid();
+
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
                     divHovercard.Visible = false;
 
@@ -436,7 +441,8 @@ namespace WizOne.Pontaj
         {
             try
             {
-                General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, cmbCtr.Value == null ? "" : cmbCtr.Value.ToString().Replace("\\\\", "', '"), cmbDept.Value == null ? "" : cmbDept.Value.ToString().Replace("\\\\", "', '"), Convert.ToInt32(General.Nz(cmbAng.Value,-99)));
+                //Florin 2022.01.20 #988
+                //General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, cmbCtr.Value == null ? "" : cmbCtr.Value.ToString().Replace("\\\\", "', '"), cmbDept.Value == null ? "" : cmbDept.Value.ToString().Replace("\\\\", "', '"), Convert.ToInt32(General.Nz(cmbAng.Value, -99)));
 
                 string strSql = DamiSelect();
 

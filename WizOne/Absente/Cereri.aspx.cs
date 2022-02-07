@@ -975,13 +975,16 @@ namespace WizOne.Absente
                             SELECT @1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()} " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
 
                             General.ExecutaNonQuery(sqlFis, new object[] { "Ptj_Cereri", idCerere, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
+
+                            //Radu 18.01.2022 - #1084
+                            Session["Absente_Cereri_Date"] = null;
                         }
                     }
 
                     #endregion
                     
 
-                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                    string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
                     HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                     {
@@ -1051,6 +1054,8 @@ namespace WizOne.Absente
                 string idOre = "1";
                 int folosesteInterval = 0;
                 int perioada = 0;
+                int nuTrimiteInPontaj = 0;
+                int absentaTipOraFolosesteInterval = 0;
 
                 if (dtAbs != null && dtAbs.Rows.Count > 0)
                 {
@@ -1066,6 +1071,8 @@ namespace WizOne.Absente
                         perioada = Convert.ToInt32(General.Nz(dr["AbsentaTipOraPerioada"], 0));
                         if (perioada <= 0) perioada = 60;
                         if (perioada > 60) perioada = 60;
+                        nuTrimiteInPontaj = Convert.ToInt32(General.Nz(dr["NuTrimiteInPontaj"], 0));
+                        absentaTipOraFolosesteInterval = Convert.ToInt32(General.Nz(dr["AbsentaTipOraFolosesteInterval"], 0));
                     }
                 }
 
@@ -1091,6 +1098,12 @@ namespace WizOne.Absente
                     txtNrOre.ClientVisible = true;
                     txtNrOre.DecimalPlaces = 0;
                     txtNrOre.NumberType = SpinEditNumberType.Integer;
+
+                    //Florin 2022.01.06 - #1072
+                    if (nuTrimiteInPontaj == 1 && absentaTipOraFolosesteInterval == 0)
+                        txtNrOre.MinValue = -999;
+                    else
+                        txtNrOre.MinValue = 0;
 
                     if (folosesteInterval == 1)
                     {

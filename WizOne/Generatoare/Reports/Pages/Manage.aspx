@@ -15,6 +15,11 @@
                         pageControl.onReportNewButtonClick();
                     }" />
                 </dx:ASPxButton>
+                <dx:ASPxButton ID="CardNewButton" ClientIDMode="Static" ClientInstanceName="btnNewCard" runat="server" Text="Dashboard nou" Image-Url="~/Fisiere/Imagini/Icoane/adauga.png" AutoPostBack="false" CssClass="hidden-xs hidden-sm" oncontextMenu="ctx(this,event)">
+                    <ClientSideEvents Click="function(s, e) {
+                        pageControl.onCardNewButtonClick();
+                    }" />
+                </dx:ASPxButton>
                 <dx:ASPxButton ID="ReportViewButton" runat="server" Text="Afisare" Image-Url="~/Fisiere/Imagini/Icoane/arata.png" OnClick="ReportViewButton_Click" oncontextMenu="ctx(this,event)" />
                 <dx:ASPxButton ID="ReportDesignButton" ClientIDMode="Static" ClientInstanceName="btnDesign" runat="server" Text="Design" Image-Url="~/Fisiere/Imagini/Icoane/schimba.png" CssClass="hidden-xs hidden-sm" OnClick="ReportDesignButton_Click" oncontextMenu="ctx(this,event)" />
                 <dx:ASPxButton ID="ExitButton" runat="server" Text="Iesire" Image-Url="~/Fisiere/Imagini/Icoane/iesire.png" PostBackUrl="~/Pagini/MainPage.aspx" CssClass="hidden-xs hidden-sm" oncontextMenu="ctx(this,event)">
@@ -24,7 +29,7 @@
                 </dx:ASPxButton>
             </div>        
         </div>        
-        <div class="page-content-data invisible">
+        <div id="Panel1" runat="server" class="page-content-data invisible">
             <dx:ASPxGridView ID="ReportsGridView" ClientInstanceName="reportsGridView" runat="server" Width="100%" 
                 CssClass="dx-grid-adaptive dx-grid-adaptive-hide-desktop-search dx-grid-adaptive-hide-group dx-grid-adaptive-hide-header dx-grid-adaptive-hide-column1 dx-grid-adaptive-hide-column3 dx-grid-adaptive-hide-column5 dx-grid-adaptive-hide-column6"
                 DataSourceID="ReportsDataSource" AutoGenerateColumns="False" KeyFieldName="Id"
@@ -86,7 +91,78 @@
                         }
                     }" />                
             </dx:ASPxGridView>    
-        </div>        
+        </div>  
+        <div id="Panel2" runat="server" class="page-content-data invisible">
+            <dx:ASPxCardView ID="ReportsCardView" ClientInstanceName="reportsCardView" runat="server" Width="100%"
+                DataSourceID="ReportsDataSource" AutoGenerateColumns="False" KeyFieldName="Id"
+                OnDataBinding="ReportsCardView_DataBinding">
+                <SettingsPopup>
+                    <EditForm>
+                        <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchAtWindowInnerWidth="768" />
+                    </EditForm>
+                </SettingsPopup>
+                <Columns>
+                    <dx:CardViewColumn FieldName="Name" />
+                    <dx:CardViewColumn FieldName="Description" />       
+                    <dx:CardViewComboBoxColumn FieldName="ModuleId" Caption="Modul">
+                        <PropertiesComboBox ValueField="Id" TextField="Denumire">
+                        </PropertiesComboBox>
+                    </dx:CardViewComboBoxColumn>
+                    <dx:CardViewComboBoxColumn FieldName="TypeId" Caption="Tip raport">
+                        <PropertiesComboBox ValueField="Id" TextField="Name">   
+                        </PropertiesComboBox>
+                    </dx:CardViewComboBoxColumn>
+                    <dx:CardViewColumn FieldName="Id" /> 
+                    <dx:CardViewBinaryImageColumn FieldName="Photo">
+                        <PropertiesBinaryImage ImageHeight="125px" >
+                            <EditingSettings Enabled="true" UploadSettings-UploadValidationSettings-MaxFileSize="4194304" />                            
+                        </PropertiesBinaryImage>                        
+                    </dx:CardViewBinaryImageColumn>
+                </Columns>
+                <ClientSideEvents
+                    CustomButtonClick="function(s, e) {
+                        if (e.buttonID == 'CardViewEditButton') {
+                            pageControl.onCardViewEditButtonClick(e.visibleIndex);
+                        } else if (e.buttonID == 'CardViewDeleteButton') {
+                            pageControl.onCardViewDeleteButtonClick(e.visibleIndex);
+                        }
+                    }" />              
+                <CardLayoutProperties ColCount="3">
+                    <Items>
+                        <dx:CardViewCommandLayoutItem ShowEditButton="false" ShowDeleteButton="false" ColSpan="3" HorizontalAlign="Right" >
+                             <CustomButtons>
+                                <dx:CardViewCustomCommandButton ID="CardViewEditButton" Image-Url="~/Fisiere/Imagini/Icoane/edit.png" Image-ToolTip="Editare" Text=" " />
+                                <dx:CardViewCustomCommandButton ID="CardViewDeleteButton" Image-Url="~/Fisiere/Imagini/Icoane/sterge.png" Image-ToolTip="Stergere" Text=" " />
+                            </CustomButtons>
+                        </dx:CardViewCommandLayoutItem>
+                        <dx:CardViewColumnLayoutItem ColumnName="Photo" ShowCaption="False" RowSpan="6" VerticalAlign="Top" Width="175" />
+                        <dx:CardViewColumnLayoutItem ColumnName="Name" ShowCaption="False" ColumnSpan="2" HorizontalAlign="Right"/>
+                        <dx:CardViewColumnLayoutItem ColumnName="Description" ShowCaption="False" ColumnSpan="2" HorizontalAlign="Right"/>
+                         <dx:CardViewColumnLayoutItem ColumnName="ModuleId"  ShowCaption="False" ColumnSpan="2" HorizontalAlign="Right"/>
+                         <dx:CardViewColumnLayoutItem ColumnName="TypeId" Visible="false"/>
+                         <dx:CardViewColumnLayoutItem ColumnName="Id" Visible="false"/>
+                        <dx:EditModeCommandLayoutItem HorizontalAlign="Right" ColSpan="3" />
+                    </Items>
+                </CardLayoutProperties>
+                <FormatConditions>
+                    <dx:CardViewFormatConditionTopBottom Rule="TopItems"  FieldName="Name" Format="BoldText" />
+                    <dx:CardViewFormatConditionTopBottom Rule="TopItems"  FieldName="Description" Format="ItalicText" />
+                </FormatConditions>
+                <SettingsAdaptivity>
+                    <BreakpointsLayoutSettings CardsPerRow="4">
+                        <Breakpoints>                     
+                            <dx:CardViewBreakpoint DeviceSize="Custom" MaxWidth="500" CardsPerRow="1" />
+                        </Breakpoints>
+                    </BreakpointsLayoutSettings>
+                </SettingsAdaptivity>                
+                <Settings LayoutMode="Breakpoints" ShowHeaderPanel="false" ShowGroupSelector="false" VerticalScrollBarMode="Auto" VerticalScrollableHeight="600" />           
+                <SettingsBehavior AllowSelectByCardClick="true" />
+                <Styles>
+                    <FlowCard CssClass="flowCardStyle"></FlowCard>
+                    <Card Width="450" BackColor="White" />
+                </Styles>
+            </dx:ASPxCardView>
+        </div>
     </div>
     
     <asp:ObjectDataSource ID="ReportsDataSource" runat="server" TypeName="Wizrom.Reports.Pages.Manage" DataObjectTypeName="Wizrom.Reports.Pages.Manage+ReportViewModel"
@@ -119,6 +195,9 @@
             onReportNewButtonClick: function () {
                 reportsGridView.AddNewRow();
             },
+            onCardNewButtonClick: function () {
+                reportsCardView.AddNewCard();
+            },
             onReportEditButtonClick: function (rowIndex) {
                 reportsGridView.StartEditRow(rowIndex);
             },
@@ -130,6 +209,21 @@
                     }, function (isConfirm) {
                         if (isConfirm) {
                             reportsGridView.DeleteRow(rowIndex);
+                        }
+                    });
+                });
+            },
+            onCardViewEditButtonClick: function (cardIndex) {
+                reportsCardView.StartEditCard(cardIndex);
+            },
+            onCardViewDeleteButtonClick: function (cardIndex) {
+                reportsCardView.GetCardValues(cardIndex, 'Name', function (value) {
+                    swal({
+                        title: 'Sunteti sigur/a ?', text: 'Dashboard-ul "' + value + '" va fi sters si nu va putea fi recuperat!',
+                        type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: 'Da, sterge!', cancelButtonText: 'Renunta', closeOnConfirm: true
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            reportsCardView.DeleteCard(cardIndex);
                         }
                     });
                 });

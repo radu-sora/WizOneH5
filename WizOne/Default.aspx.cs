@@ -23,6 +23,7 @@ namespace WizOne
     public partial class Default : System.Web.UI.Page
     {
         static string arrIncercari = "";
+        string tipVerif = "1";
 
         private bool IsMobileDevice
         {
@@ -39,7 +40,7 @@ namespace WizOne
         {
             try
             {
-                string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
+                tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
                 if (tipVerif == "6")
                 {
                     string samlLink = General.Nz(Dami.ValoareParam("SAML_Link"), "").ToString();
@@ -66,9 +67,29 @@ namespace WizOne
         {
             try
             {
+                if (!IsPostBack)
+                {
+                    arrIncercari = "";
+
+                    //este necesar sa golim variabilele de sesiune pt cazul cand apasa Log Out
+                    Session.Clear();
+                    General.InitSessionVariables();
+                }
+
+                if (Constante.esteTactil)
+                {
+                    string tip = Dami.ValoareParam("TipInfoChiosc", "0");
+                    if (tip == "0" || tip == "3")
+                        Response.Redirect("~/DefaultTactil", false);
+                    else if (tip == "1" || tip == "2")
+                        Response.Redirect("~/DefaultTactilFaraCard", false);
+
+                    return;
+                }
+
+                Session["IdLimba"] = Dami.ValoareParam("LimbaStart", "RO");
+
                 #region Traducere
-                string ctlPost = Request.Params["__EVENTTARGET"];
-                if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
                 lblPan1.InnerText = Dami.TraduCuvant("Utilizator");
                 lblPan2.InnerText = Dami.TraduCuvant("Parola");
@@ -76,49 +97,15 @@ namespace WizOne
 
                 #endregion
 
-                //Florin 2021.06.03 - #909 - pct 25
-                ////Florin 2018.09.10
-                //txtVers.Text = Constante.versiune;
+                if (General.Nz(Dami.ValoareParam("LinkParolaUitata"), "").ToString() == "0") lnkUitat.Visible = false;
 
-                if (Constante.esteTactil)
-                {
-                    //Radu 23.04.2020
-                    string tip = Dami.ValoareParam("TipInfoChiosc", "0");
-                    if (tip == "0")
-                        Response.Redirect("~/DefaultTactil", false);
-                    else if (tip == "1" || tip == "2")
-                        Response.Redirect("~/DefaultTactilFaraCard", false);
-                    else if (tip == "3")
-                        Response.Redirect("~/DefaultTactilExtra", false);
-                    return;
-                }
-
-                //Florin 2021.03.03 #818
-                int delogat = Convert.ToInt32(General.Nz(Session["VineDinDelogare"], 0));
-
-                if (!IsPostBack)
-                {
-                    arrIncercari = "";
-
-                    //este necesar sa golim variabilele de sesiune pt cazul cand apasa Log Out
-                    Session.Clear();
-                    InitSessionVariables();
-                }
-
-                Session["IdLimba"] = Dami.ValoareParam("LimbaStart");
-                if (General.VarSession("IdLimba").ToString() == "") Session["IdLimba"] = "RO";
-                if (Dami.ValoareParam("LinkParolaUitata") != "" && Dami.ValoareParam("LinkParolaUitata") == "0") lnkUitat.Visible = false;
-
-
-                //Florin 2019.07.23
-                string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
                 switch (tipVerif)
                 {
                     case "3":
                     case "4":
                         {
                             //Florin 2021.03.03 #818
-                            if (delogat == 0)
+                            if (Convert.ToInt32(General.Nz(Session["VineDinDelogare"], 0)) == 0)
                             {
                                 string usrTMP = System.Web.HttpContext.Current.User.Identity.Name.ToString();
                                 int poz = usrTMP.IndexOf(@"\");
@@ -139,7 +126,7 @@ namespace WizOne
                                     string usrTMP = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Upn).Select(c => c.Value).SingleOrDefault();
                                     int poz = usrTMP.IndexOf("@");
                                     if (poz > 0) usrTMP = usrTMP.Remove(poz);
-                                    //General.MemoreazaEroarea(usrTMP);
+
                                     string txtRas = Verifica(usrTMP, "", false, false);
 
                                     if (General.Nz(Session["SecApp"], "").ToString() != "OK")
@@ -181,20 +168,14 @@ namespace WizOne
                     divCap.Attributes["data-sitekey"] = Dami.ValoareParam("Captcha_Site");
 
                     divOuter.Controls.Add(divCap);
+
+                    divText.Attributes["class"] = "innerlogarecaptcha";
                 }
 
                 Session["TipInfoChiosc"] = "0";
 
-                //Radu 02.02.2021
                 string txtLogare = Dami.ValoareParam("TextLogare", "");
-                //if (txtLogare.Length > 0)
-                {
-                    lblTxt.Text = txtLogare;
-                    //lblTxt.Border.BorderStyle = System.Web.UI.WebControls.BorderStyle.Solid;
-                    //lblTxt.Border.BorderWidth = Unit.Pixel(1); 
-                    if (Dami.ValoareParam("Captcha") == "1")
-                        divText.Attributes["class"] = "innerlogarecaptcha";
-                }
+                lblTxt.Text = txtLogare;                    
             }
             catch (Exception ex)
             {
@@ -241,7 +222,6 @@ namespace WizOne
         {
             try
             {
-
                 DataRow dr = General.IncarcaDR("SELECT F70103, \"Mail\" FROM USERS WHERE UPPER(F70104)=@1", new string[] { utilizator.ToUpper() });
                 if (dr != null)
                 {
@@ -324,9 +304,6 @@ namespace WizOne
 
             try
             {
-                string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
-                if (tipVerif == "") tipVerif = "1";
-
                 if (tipVerif == "2")
                 {
                     string ADDom = Dami.ValoareParam("ADNumeDomeniu");
@@ -377,12 +354,6 @@ namespace WizOne
             try
             {
                 string rasp = VerificaUser(utilizator, parola, dinButon);
-                if (rasp.Length > 1)
-                {
-                    Session["IdLimba"] = rasp.Substring(rasp.Length - 2, 2);
-                    rasp = rasp.ToUpper().Replace(General.Nz(Session["IdLimba"], "RO").ToString(), "");
-                }
-
                 switch (Convert.ToInt32(rasp))
                 {
                     case -1:                     //nume Domeniu nu este configurat
@@ -468,9 +439,6 @@ namespace WizOne
                             Session["PrimaIntrare"] = General.Nz(drUsr["F70105"], 0);
 
                             General.SetTheme();
-
-                            string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
-                            if (tipVerif == "") tipVerif = "1";
 
                             //Florin 2021.06.04 #909
                             int idUnic = Dami.SetIdUnic((int)Session["UserId"]);
@@ -587,11 +555,6 @@ namespace WizOne
 
             try
             {
-                //Florin 2019.07.23
-                //s-a adaugat conditia cu tip 5
-                string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
-                if (tipVerif == "") tipVerif = "1";
-
                 //Radu 09.10.2019 - daca VerificaUser este apelata de la butonul de logare, se ignora SSO (cazul 3 devine 1, cazul 4 devine 2)
                 if (dinButon)
                 {
@@ -648,12 +611,13 @@ namespace WizOne
                                 marca = (dr["F10003"] as int? ?? -99).ToString();
 
                             if (dr == null)
-                                stare = "0" + idLimba;
+                                stare = "0";
                             else
                             {
-                                if (dr != null && dr["IdLimba"] != null && dr["IdLimba"].ToString() != "") idLimba = dr["IdLimba"].ToString();
+                                if (dr != null && dr["IdLimba"] != null && dr["IdLimba"].ToString() != "") 
+                                    idLimba = dr["IdLimba"].ToString();
                                 if (dr["F70114"].ToString() == "1" && dr["DEBLOCARE"].ToString() == "0")
-                                    stare = "2" + idLimba;
+                                    stare = "2";
                                 else
                                 {
                                     if(dr["F70114"].ToString() == "1" && dr["DEBLOCARE"].ToString() == "1")
@@ -663,7 +627,7 @@ namespace WizOne
 
                                     if (tipVerif == "3" || tipVerif == "5")
                                     {
-                                        stare = "3" + idLimba;
+                                        stare = "3";
                                     }
                                     else
                                     {
@@ -671,9 +635,9 @@ namespace WizOne
                                         string parolaDinBaza = prc.EncryptString(Constante.cheieCriptare, dr["F70103"].ToString(), 2);
 
                                         if (parolaDinBaza != parola)
-                                            stare = "1" + idLimba;
+                                            stare = "1";
                                         else
-                                            stare = "3" + idLimba;
+                                            stare = "3";
                                     }
                                 }
                             }
@@ -686,15 +650,31 @@ namespace WizOne
                             string ADuser = Dami.ValoareParam("ADUser");
                             string ADpass = Dami.ValoareParam("ADPass");
 
-                            if (ADDom == "" || ADuser == "" || ADpass == "")
-                                stare = "-1" + idLimba;
+                            if (ADDom == "")
+                                stare = "-1";
                             else
                             {
-                                PrincipalContext context = new PrincipalContext(ContextType.Domain, ADDom, ADuser, ADpass);
-                                UserPrincipal usr = UserPrincipal.FindByIdentity(context, utilizator);
+                                string userAD = utilizator;
+                                if (utilizator.IndexOf("\\") >= 0)
+                                {
+                                    ADDom = utilizator.Substring(0, utilizator.IndexOf("\\")) + "." + ADDom;
+                                    userAD = utilizator.Substring(utilizator.IndexOf("\\") + 1) + "@" + ADDom;
+                                }
+
+                                if (utilizator.IndexOf("@") >= 0)
+                                {
+                                    userAD = utilizator + "." + ADDom;
+                                    ADDom = utilizator.Substring(utilizator.IndexOf("@") + 1) + "." + ADDom;
+                                }
+
+                                PrincipalContext context = new PrincipalContext(ContextType.Domain, ADDom);
+                                if (ADuser != "" && ADpass != "")
+                                    context = new PrincipalContext(ContextType.Domain, ADDom, ADuser, ADpass);
+
+                                UserPrincipal usr = UserPrincipal.FindByIdentity(context, userAD);
 
                                 if (usr == null)
-                                    stare = "0" + idLimba;
+                                    stare = "0";
                                 else
                                 {
                                     DataRow dr = General.IncarcaDR("SELECT \"IdLimba\", F10003 FROM USERS WHERE UPPER(F70104)=@1", new string[] { General.Strip(utilizator.ToUpper()) });
@@ -705,23 +685,23 @@ namespace WizOne
                                     }
 
                                     if (usr.Enabled == false)
-                                        stare = "4" + idLimba;
+                                        stare = "4";
                                     else
                                     {
                                         if (usr.IsAccountLockedOut() == true)
-                                            stare = "2" + idLimba;
+                                            stare = "2";
                                         else
                                         {
                                             if (tipVerif == "4")
                                             {
-                                                stare = "3" + idLimba;
+                                                stare = "3";
                                             }
                                             else
                                             {
-                                                if (!(context.ValidateCredentials(utilizator, parola)))
-                                                    stare = "1" + idLimba;
+                                                if (!(context.ValidateCredentials(userAD, parola)))
+                                                    stare = "1";
                                                 else
-                                                    stare = "3" + idLimba;
+                                                    stare = "3";
                                             }
                                         }
                                     }
@@ -738,7 +718,7 @@ namespace WizOne
                                 idLimba = dr["IdLimba"].ToString();
                                 marca = (dr["F10003"] as int? ?? -99).ToString();
                             }
-                            stare = "3" + idLimba;
+                            stare = "3";
                         }
                         break;
                 }
@@ -758,7 +738,7 @@ namespace WizOne
 
                         if (inactiv == "1")
                         {
-                            stare = "5" + idLimba;
+                            stare = "5";
                         }
                         break;
                     case "2":
@@ -766,7 +746,7 @@ namespace WizOne
 
                         if (suspendatinactiv == "1")
                         {
-                            stare = "5" + idLimba;
+                            stare = "5";
                         }
                         break;               
                 }
@@ -775,10 +755,8 @@ namespace WizOne
                 DataTable dtMultiUser = General.IncarcaDT("SELECT COUNT(*) FROM USERS WHERE UPPER(F70104) = '" + utilizator.ToUpper() + "'", null);
                 if (dtMultiUser != null && dtMultiUser.Rows.Count > 0 && dtMultiUser.Rows[0][0] != null && dtMultiUser.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtMultiUser.Rows[0][0].ToString()) > 1)
                 {
-                    stare = "6" + idLimba;
+                    stare = "6";
                 }
-
- 
             }
             catch (Exception ex)
             {
@@ -786,137 +764,140 @@ namespace WizOne
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
+            Session["IdLimba"] = idLimba;
             return stare;
         }
 
-        public void InitSessionVariables()
-        {
-            try
-            {
-                //Lista cu toate variabilele de sesiune din aplicatie
-                Session["SecApp"] = "NO";
-                Session["tblParam"] = "";
-                Session["tmpMeniu"] = "";
-                Session["Titlu"] = "";
-                Session["Sablon_Tabela"] = "";
-                Session["Sablon_CheiePrimara"] = "";
-                Session["Sablon_TipActiune"] = "";
-                Session["InformatiaCurenta"] = "";
-                Session["SecuritateCamp"] = "";
-                Session["SecuritateDate"] = "";
-                Session["PaginaWeb"] = "";
-                Session["TipNotificare"] = "";
-                Session["Date_Profile"] = "";
-                Session["ProfilId"] = "";
-                Session["Profil_Original"] = "";
-                Session["AbsDescValues"] = "";
+        //public void InitSessionVariables()
+        //{
+        //    try
+        //    {
+        //        //Lista cu toate variabilele de sesiune din aplicatie
+        //        Session["SecApp"] = "NO";
+        //        Session["tblParam"] = "";
+        //        Session["tmpMeniu"] = "";
+        //        Session["Titlu"] = "";
+        //        Session["Sablon_Tabela"] = "";
+        //        Session["Sablon_CheiePrimara"] = "";
+        //        Session["Sablon_TipActiune"] = "";
+        //        Session["InformatiaCurenta"] = "";
+        //        Session["SecuritateCamp"] = "";
+        //        Session["SecuritateDate"] = "";
+        //        Session["PaginaWeb"] = "";
+        //        Session["TipNotificare"] = "";
+        //        Session["Date_Profile"] = "";
+        //        Session["ProfilId"] = "";
+        //        Session["Profil_Original"] = "";
+        //        Session["AbsDescValues"] = "";
 
-                Session["Cereri_Absente_Absente"] = "";
-                Session["Cereri_Absente_Angajati"] = "";
-
-
-                Session["formatDataSistem"] = CultureInfo.CurrentCulture;
-
-                Session["IdLimba"] = "RO";
-                Session["IdLimba_Veche"] = "RO";
-
-                Session["User"] = "";
-                Session["UserId"] = -99;
-                Session["User_NumeComplet"] = "";
-                Session["User_Marca"] = -99;
-                Session["User_IdDept"] = -99;
-                Session["User_Dept"] = "";
-                Session["User_CNP"] = "";
-
-                Session["EsteAdmin"] = 0;
-                Session["SchimbaParola"] = 0;
-                Session["EsteInGrup99"] = 0;
-                Session["ParolaComplexa"] = 0;
-
-                Session["PrimaIntrare"] = 0;
-
-                Session["IdMaxValue"] = 1;
-
-                Session["Ptj_IstoricVal"] = "";
-
-                Session["Filtru_PontajulEchipei"] = "";
-
-                Session["IdClient"] = "1";
-
-                Session["PontajulAreCC"] = "0";
-
-                //nu se initializeaza; este pusa aici pentru documentare
-                //Session["NrIncercari"] = 0;
-
-                Session["SecAuditSelect"] = "0";
-                Session["SecCriptare"] = "0";
-
-                //Florin 2019.06.04
-                Session["MP_NuPermiteCNPInvalid"] = "1";
-                Session["MP_AreContract"] = "0";
-                Session["MP_DataSfarsit36"] = "01/01/2100";
+        //        Session["Cereri_Absente_Absente"] = "";
+        //        Session["Cereri_Absente_Angajati"] = "";
 
 
-                //Florin 2019.06.21
-                Session["EsteTactil"] = "0";
-                Session["TimeOutSecunde"] = 0;
+        //        Session["formatDataSistem"] = CultureInfo.CurrentCulture;
 
-                //Florin 2019.07.15
-                Session["Filtru_ActeAditionale"] = "{}";
+        //        Session["IdLimba"] = "RO";
+        //        Session["IdLimba_Veche"] = "RO";
 
-                //Florin 2019.07.17
-                Session["Filtru_CereriAbs"] = "";
+        //        Session["User"] = "";
+        //        Session["UserId"] = -99;
+        //        Session["User_NumeComplet"] = "";
+        //        Session["User_Marca"] = -99;
+        //        Session["User_IdDept"] = -99;
+        //        Session["User_Dept"] = "";
+        //        Session["User_CNP"] = "";
 
-                //Florin 2019.07.19
-                Session["Ptj_DataBlocare"] = "22001231";
+        //        Session["EsteAdmin"] = 0;
+        //        Session["SchimbaParola"] = 0;
+        //        Session["EsteInGrup99"] = 0;
+        //        Session["ParolaComplexa"] = 0;
 
-                //Florin 2019.10.16
-                Session["Json_Programe"] = "[]";
+        //        Session["PrimaIntrare"] = 0;
 
-                //Florin 2020.01.03
-                Session["Eval_tblCategorieObiective"] = null;
+        //        Session["IdMaxValue"] = 1;
 
-                //Florin 2021.06.02  #909
-                Session["tmpMeniu2"] = "";
-                Session["tmpMeniu3"] = "";
+        //        Session["Ptj_IstoricVal"] = "";
 
-                //Florin 2021.06.04
-                Session["UniqueId"] = -99;
+        //        Session["Filtru_PontajulEchipei"] = "";
+
+        //        Session["IdClient"] = "1";
+
+        //        Session["PontajulAreCC"] = "0";
+
+        //        //nu se initializeaza; este pusa aici pentru documentare
+        //        //Session["NrIncercari"] = 0;
+
+        //        Session["SecAuditSelect"] = "0";
+        //        Session["SecCriptare"] = "0";
+
+        //        //Florin 2019.06.04
+        //        Session["MP_NuPermiteCNPInvalid"] = "1";
+        //        Session["MP_AreContract"] = "0";
+        //        Session["MP_DataSfarsit36"] = "01/01/2100";
 
 
-                string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
-                                UNION
-                                SELECT 'AnLucru', CAST(F01011 AS varchar(10)), '', 1, 0 FROM F010
-                                UNION
-                                SELECT 'LunaLucru', CAST(F01012 AS varchar(10)), '', 1, 0 FROM F010";
+        //        //Florin 2019.06.21
+        //        Session["EsteTactil"] = "0";
+        //        Session["TimeOutSecunde"] = 0;
 
-                Session["tblParam"] = General.IncarcaDT(strSql, null);
-                Session["IdClient"] = Convert.ToInt32(Dami.ValoareParam("IdClient", "1"));
-                Session["PontajulAreCC"] = General.Nz(Dami.ValoareParam("PontajulAreCC"),"0");
+        //        //Florin 2019.07.15
+        //        Session["Filtru_ActeAditionale"] = "{}";
+
+        //        //Florin 2019.07.17
+        //        Session["Filtru_CereriAbs"] = "";
+
+        //        //Florin 2019.07.19
+        //        Session["Ptj_DataBlocare"] = "22001231";
+
+        //        //Florin 2019.10.16
+        //        Session["Json_Programe"] = "[]";
+
+        //        //Florin 2020.01.03
+        //        Session["Eval_tblCategorieObiective"] = null;
+
+        //        //Florin 2021.06.02  #909
+        //        Session["tmpMeniu2"] = "";
+        //        Session["tmpMeniu3"] = "";
+
+        //        //Florin 2021.06.04
+        //        Session["UniqueId"] = -99;
+
+        //        //Florin 2022.01.06         #1065
+        //        HttpContext.Current.Session["TimeOutSecundePrint"] = 9999;
+
+        //        string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
+        //                        UNION
+        //                        SELECT 'AnLucru', CAST(F01011 AS varchar(10)), '', 1, 0 FROM F010
+        //                        UNION
+        //                        SELECT 'LunaLucru', CAST(F01012 AS varchar(10)), '', 1, 0 FROM F010";
+
+        //        Session["tblParam"] = General.IncarcaDT(strSql, null);
+        //        Session["IdClient"] = Convert.ToInt32(Dami.ValoareParam("IdClient", "1"));
+        //        Session["PontajulAreCC"] = General.Nz(Dami.ValoareParam("PontajulAreCC"),"0");
 
 
-                //Florin 2018.11.13
-                if (HttpContext.Current != null && Session["tblParam"] != null)
-                {
-                    DataTable dt = Session["tblParam"] as DataTable;
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        DataRow[] arr1 = dt.Select("Nume='SecAuditSelect'");
-                        if (arr1.Count() > 0)
-                            Session["SecAuditSelect"] = arr1[0];
+        //        //Florin 2018.11.13
+        //        if (HttpContext.Current != null && Session["tblParam"] != null)
+        //        {
+        //            DataTable dt = Session["tblParam"] as DataTable;
+        //            if (dt != null && dt.Rows.Count > 0)
+        //            {
+        //                DataRow[] arr1 = dt.Select("Nume='SecAuditSelect'");
+        //                if (arr1.Count() > 0)
+        //                    Session["SecAuditSelect"] = arr1[0];
 
-                        DataRow[] arr2 = dt.Select("Nume='SecCriptare'");
-                        if (arr2.Count() > 0)
-                            Session["SecCriptare"] = arr2[0];
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //                DataRow[] arr2 = dt.Select("Nume='SecCriptare'");
+        //                if (arr2.Count() > 0)
+        //                    Session["SecCriptare"] = arr2[0];
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         public bool IsReCaptchValid()
         {

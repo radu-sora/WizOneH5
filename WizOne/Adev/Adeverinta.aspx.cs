@@ -15,6 +15,7 @@ using System.Web.UI;
 using System.Xml;
 using System.Xml.Linq;
 using WizOne.Module;
+using System.Text.RegularExpressions;
 
 namespace WizOne.Adev
 {
@@ -1517,17 +1518,21 @@ namespace WizOne.Adev
                     lista = Session["AdevListaParam"] as Dictionary<string, string>;
 
                 string cnApp = Constante.cnnWeb;
-                string tmp = cnApp.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
+                //string tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                string tmp = Regex.Split(cnApp, "PASSWORD=", RegexOptions.IgnoreCase)[1];
                 string pwd = tmp.Split(';')[0];
 
-                tmp = cnApp.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
+                //tmp = cnApp.Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                tmp = Regex.Split(cnApp, "DATA SOURCE=", RegexOptions.IgnoreCase)[1];
                 string conn = tmp.Split(';')[0];
-                tmp = cnApp.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
+                //tmp = cnApp.Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];  //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                tmp = Regex.Split(cnApp, "USER ID=", RegexOptions.IgnoreCase)[1];
                 string user = tmp.Split(';')[0];
                 string DB = "";
                 if (Constante.tipBD == 1)
                 {
-                    tmp = cnApp.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
+                    //tmp = cnApp.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];      //#1079 - Radu 12.01.2022 - am eliminat ToUpper()
+                    tmp = Regex.Split(cnApp, "INITIAL CATALOG=", RegexOptions.IgnoreCase)[1];
                     DB = tmp.Split(';')[0];
                 }
                 else
@@ -6169,7 +6174,7 @@ namespace WizOne.Adev
 
 
 
-        static void FlatToOpc(XDocument doc, string docxPath)
+        public static void FlatToOpc(XDocument doc, string docxPath)
         {
             XNamespace pkg =
                 "http://schemas.microsoft.com/office/2006/xmlPackage";

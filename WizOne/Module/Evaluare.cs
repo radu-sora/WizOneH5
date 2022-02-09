@@ -2426,9 +2426,9 @@ namespace WizOne.Module
                                         JOIN ""Eval_SetAngajati"" setAng ON setAng.""IdSetAng"" = compDetAng.""IdSetAng""
                                         JOIN ""Eval_SetAngajatiDetail"" setAngDet ON   setAng.""IdSetAng"" = setAngDet.""IdSetAng""
                                         JOIN ""Eval_ConfigCompTemplateDetail"" tmpl ON  1=1
-                                        WHERE setAngDet.""Id"" = @1 AND comp.""IdCategorie"" = tmpl.""IdNomenclator"" and tmpl.""TemplateId"" = @2
+                                        WHERE setAngDet.""Id"" = @1 AND (comp.IdCategorie = tmpl.IdNomenclator or tmpl.IdNomenclator=-99) and tmpl.""TemplateId"" = @2  
                                         AND tmpl.""ColumnName"" = 'Competenta'
-                                        group by comp.""IdCategorie"", comp.""DenCategorie"", compDet.""IdCompetenta"", compDet.""DenCompetenta"" ";
+                                        group by comp.""IdCategorie"", comp.""DenCategorie"", compDet.""IdCompetenta"", compDet.""DenCompetenta"" ";                                                                    
 
                                     //inseram pt pozitia 1 si pentru id linie tip camp
                                     General.ExecutaNonQuery(@"DELETE FROM ""Eval_CompetenteAngajatTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtCompetente.Rows[i]["IdQuiz"].ToString(), dtCompetente.Rows[i]["Id"].ToString() });

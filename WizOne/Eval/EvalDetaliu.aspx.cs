@@ -4855,22 +4855,36 @@ namespace WizOne.Eval
                             #region getDS
                             if (Session["feedEval_Competenta"] == null)
                             {
-                                string strSQLCompetenta = @"
-                                                            select categDet.""IdCompetenta"" as ""Id"", categDet.""DenCompetenta"" as ""Denumire""
-                                                            from ""Eval_CategCompetente"" categ
-                                                            join ""Eval_CategCompetenteDet"" categDet on categ.""IdCategorie"" = categDet.""IdCategorie""
-                                                            join ""Eval_CompXSetAng"" setAng on categ.""IdCategorie"" = setAng.""IdCategorie""
-                                                            join ""Eval_SetAngajatiDetail"" setAngDetail on setAng.""IdSetAng"" = setAngDetail.""IdSetAng""
-                                                            where categ.""IdCategorie"" = @1
-                                                            and setAngDetail.""Id"" = @2
-                                                            group by categDet.""IdCompetenta"", categDet.""DenCompetenta""";
+                                //Radu 09.02.2022
+                                string filtru ="";
+                                if (clsConfigDetail.IdNomenclator != -99)
+                                    filtru = " categ.IdCategorie = " + clsConfigDetail.IdNomenclator + " and ";
+
+                                //string strSQLCompetenta = @"
+                                //                            select categDet.""IdCompetenta"" as ""Id"", categDet.""DenCompetenta"" as ""Denumire""
+                                //                            from ""Eval_CategCompetente"" categ
+                                //                            join ""Eval_CategCompetenteDet"" categDet on categ.""IdCategorie"" = categDet.""IdCategorie""
+                                //                            join ""Eval_CompXSetAng"" setAng on categ.""IdCategorie"" = setAng.""IdCategorie""
+                                //                            join ""Eval_SetAngajatiDetail"" setAngDetail on setAng.""IdSetAng"" = setAngDetail.""IdSetAng""
+                                //                            where @1
+                                //                            setAngDetail.""Id"" = @2
+                                //                            group by categDet.""IdCompetenta"", categDet.""DenCompetenta""";
+                                string strSQLCompetenta = "select categDet.IdCompetenta as Id, categDet.DenCompetenta as Denumire "
+                                                            + " from Eval_CategCompetente categ "
+                                                            + " join Eval_CategCompetenteDet categDet on categ.IdCategorie = categDet.IdCategorie "
+                                                            + " join Eval_CompXSetAng setAng on categ.IdCategorie = setAng.IdCategorie "
+                                                            + " join Eval_SetAngajatiDetail setAngDetail on setAng.IdSetAng = setAngDetail.IdSetAng "
+                                                            + "where " + filtru
+                                                            + " setAngDetail.Id = " + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1))
+                                                            + " group by categDet.IdCompetenta, categDet.DenCompetenta";
 
                                 if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1)
                                     strSQLCompetenta = @"select categDet.""IdCompetenta"" as ""Id"", categDet.""DenCompetenta"" as ""Denumire""
                                                             from ""Eval_CategCompetente"" categ
                                                             join ""Eval_CategCompetenteDet"" categDet on categ.""IdCategorie"" = categDet.""IdCategorie""";
 
-                                DataTable dtCompetenta = General.IncarcaDT(strSQLCompetenta, new object[] { clsConfigDetail.IdNomenclator, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                                //DataTable dtCompetenta = General.IncarcaDT(strSQLCompetenta, new object[] { filtru, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                                DataTable dtCompetenta = General.IncarcaDT(strSQLCompetenta, null);
                                 foreach (DataRow rwCompetenta in dtCompetenta.Rows)
                                 {
                                     metaDate clsCompetenta = new metaDate();

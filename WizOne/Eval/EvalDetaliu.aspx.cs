@@ -815,9 +815,9 @@ namespace WizOne.Eval
                     return;
                 }
 
-                if (e.Parameter.Contains(";"))
+                if (e.Parameter.Contains("#$"))
                 {
-                    string[] param = e.Parameter.Split(';');
+                    string[] param = e.Parameter.Split(new string[] { "#$" }, StringSplitOptions.None);
                     string nameControl = param[0];
                     string valueControl = param[1].Replace("'"," ").Replace("\""," ").Replace("\\"," ").Replace("/"," ");
 

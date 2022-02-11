@@ -50,7 +50,7 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/mail.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnMail" ClientInstanceName="btnMail" ClientIDMode="Static" runat="server"  Text="Mail 365" Visible="false"  AutoPostBack="true"  OnClick="btnMail_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnMail" ClientInstanceName="btnMail" ClientIDMode="Static" runat="server"  Text="Test" Visible="false"  AutoPostBack="true"  OnClick="btnMail_Click" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
                         e.processOnServer = true;

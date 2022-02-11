@@ -357,6 +357,15 @@ namespace WizOne.Eval
         protected global::DevExpress.Web.ASPxRadioButton chkCompetente;
 
         /// <summary>
+        /// chkSalvareOb control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkSalvareOb;
+
+        /// <summary>
         /// lblSecPart8 control.
         /// </summary>
         /// <remarks>

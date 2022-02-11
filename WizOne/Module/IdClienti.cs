@@ -26,7 +26,6 @@
             Euroins = 27,
             ALKA_CO = 28,
             ALKA_Trading = 29,
-            Ro_Automotive = 30,
             Groupama = 34,
             Zitec = 45,
             BancaCarpatica = 65,

@@ -21428,3 +21428,9 @@ INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('O
 GO
 INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('Office365_LicenseCode','','License Code pentru Office365',0, 1)
 GO
+
+
+----  2.2.142  ----
+
+ALTER TABLE Eval_QuizIntrebari ADD SalvareObiective int
+GO

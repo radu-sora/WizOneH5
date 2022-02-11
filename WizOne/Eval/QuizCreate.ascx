@@ -662,7 +662,13 @@
                                                                             <ClientSideEvents CheckedChanged="function(s, e){ 
                                                                                                                     OnCHKChanged(s); }" />
                                                                         </dx:ASPxRadioButton>
-                                                                    </td>              
+                                                                    </td>                                                                    
+
+                                                                    <td>
+                                                                        <dx:ASPxCheckBox ID="chkSalvareOb" runat="server" Text="Salvare obiective" TextAlign="Left" ClientInstanceName="chkSalvareOb" AutoPostBack="false" Width="120px" CssClass="margin_rightt15">
+                                                                            <ClientSideEvents ValueChanged="function(s, e){ OnCHKChanged(s); }" />
+                                                                        </dx:ASPxCheckBox>
+                                                                    </td>
 
                                                                 </tr>
                                                             </table>

@@ -5420,12 +5420,14 @@ namespace WizOne.Eval
                     return;
                 }
 
-                string ras = "";
-                if (ras != "")
-                {                  
-                    pnlSectiune.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(ras);
-                    return;
-                }
+                //#1095
+                //string ras = Notif.TrimiteNotificare("Eval.EvalLista", (int)Constante.TipNotificare.Validare, sqlEval + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                //if (ras != "" && ras.Substring(0, 1) == "2")
+                //{
+                //    pnlSectiune.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(ras.Substring(2)); 
+                //    return;
+                //}
+
 
                 //Florin 2020.01.27
                 btnSave_Click(sender,e);
@@ -5657,9 +5659,10 @@ namespace WizOne.Eval
                             DELETE FROM ""Eval_ObiIndividuale"" WHERE F10003 =@2 AND ""IdPeriod"" = {idPerioada};
 
                             INSERT INTO ""Eval_ObiIndividuale"" (""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"")
-                            SELECT ""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4""
-                            FROM ""Eval_ObiIndividualeTemp"" 
-                            WHERE ""IdQuiz"" =@1 AND F10003 =@2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1))};
+                            SELECT a.""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", a.""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4""
+                            FROM ""Eval_ObiIndividualeTemp"" a
+                            left join Eval_QuizIntrebari b on a.IdQuiz = b.IdQuiz and a.IdLinieQuiz = b.Id 
+                            WHERE a.""IdQuiz"" =@1 AND F10003 =@2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1))} and b.SalvareObiective = 1;
 
                             DELETE FROM ""Eval_CompetenteAngajat"" WHERE F10003 =@2 AND ""IdPeriod"" = {idPerioada};
 

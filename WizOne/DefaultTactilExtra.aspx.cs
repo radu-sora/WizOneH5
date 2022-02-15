@@ -203,13 +203,13 @@ namespace WizOne
                 DataRow drUsr = General.IncarcaDR(strSql, null);
                 //DataRow drUsr = General.IncarcaDR(strSql, new object[] { cartela });
 
-                if (drUsr == null)
+                if (drUsr == null || drUsr.ItemArray.Length == 0)
                 {
                     MessageBox.Show("Utilizator inexistent!", MessageBox.icoError, "Atentie !");
                     System.Threading.Thread.Sleep(2000);
-                    AscundeButoane();
-                    //return;
+                    AscundeButoane();                    
                     Response.Redirect("~/DefaultTactil", false);
+                    return;
                 }
 
                 //Florin 2021.02.18
@@ -223,9 +223,9 @@ namespace WizOne
                     {
                         MessageBox.Show("PIN incorect!", MessageBox.icoError, "Atentie !");
                         System.Threading.Thread.Sleep(2000);
-                        AscundeButoane();
-                        //return;
+                        AscundeButoane();                        
                         Response.Redirect("~/DefaultTactil", false);
+                        return;
                     }
                     AscundeButoane();
                 }
@@ -252,6 +252,7 @@ namespace WizOne
                             err = true;
 
                             Response.Redirect("~/DefaultTactil", false);
+                            return;
                         }
                         break;
                     case "2":
@@ -266,6 +267,7 @@ namespace WizOne
                             err = true;
 
                             Response.Redirect("~/DefaultTactil", false);
+                            return;
                         }
                         break;
                 }

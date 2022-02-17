@@ -50,6 +50,8 @@ namespace WizOne
 
                 if (!IsPostBack)
                     txtPan1_TextChanged(null, null);
+                else
+                    Response.Redirect("~/DefaultTactil", false);
 
             }
             catch (Exception ex)

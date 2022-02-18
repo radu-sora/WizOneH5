@@ -21428,3 +21428,28 @@ INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('O
 GO
 INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('Office365_LicenseCode','','License Code pentru Office365',0, 1)
 GO
+
+
+----  2.2.142  ----
+
+
+ALTER TABLE "Ptj_Cereri" ADD CampExtra21 nvarchar(500)
+GO
+ALTER TABLE "Ptj_Cereri" ADD CampExtra22 nvarchar(500)
+GO
+ALTER TABLE "Ptj_Cereri" ADD CampExtra23 nvarchar(500)
+GO
+ALTER TABLE "Ptj_Cereri" ADD CampExtra24 nvarchar(500)
+GO
+ALTER TABLE "Ptj_Cereri" ADD CampExtra25 nvarchar(500)
+GO
+ALTER TABLE "Ptj_Cereri" ADD CampExtra26 nvarchar(500)
+GO
+ALTER TABLE "Ptj_Cereri" ADD CampExtra27 nvarchar(500)
+GO
+ALTER TABLE "Ptj_Cereri" ADD CampExtra28 nvarchar(500)
+GO
+ALTER TABLE "Ptj_Cereri" ADD CampExtra29 nvarchar(500)
+GO
+ALTER TABLE "Ptj_Cereri" ADD CampExtra30 nvarchar(500)
+GO

@@ -125,7 +125,7 @@ namespace WizOne.Reports
                         if (arrIntre != null && arrIntre.Length > 0)
                             for (int j = 0; j < arrIntre.Length; j++)
                             {
-                                XRControl ctl = null;
+                                XRControl ctl = null, ctl2 = null;
 
                                 switch (Convert.ToInt32((arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0")))
                                 {
@@ -181,6 +181,51 @@ namespace WizOne.Reports
                                                 }
                                                 ctl = CreeazaTabel(5, dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)), cols.ToArray(), cols.ToArray(), rat.ToArray(), latime.ToArray(), note.ToArray());
 
+                                                //Radu 15.02.2022
+                                                int TemplateIdCompetenta = Convert.ToInt32(arrIntre[j]["TemplateIdCompetenta"] != DBNull.Value ? arrIntre[j]["TemplateIdCompetenta"].ToString() : "0");
+                                                sql = "SELECT * FROM Eval_ConfigCompTemplateDetail WHERE TemplateId = " + TemplateIdCompetenta + " AND TotalColoana IS NOT NULL";
+                                                DataTable dtTemplComp = General.IncarcaDT(sql, null);
+                                                if (dtTemplComp != null && dtTemplComp.Rows.Count > 0 && dtTemplComp.Rows[0]["TotalColoana"] != DBNull.Value && dtTemplComp.Rows[0]["TotalColoana"].ToString().Length > 0 &&
+                                                    dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)) != null &&
+                                                    dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Rows.Count > 0)
+                                                {
+                                                    string eticheta = "";
+                                                    switch (Convert.ToInt32(dtTemplComp.Rows[0]["TotalColoana"].ToString()))
+                                                    {
+                                                        case 1:
+                                                            int suma1 = Convert.ToInt32(dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("SUM(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Suma {0:N0}";
+                                                            eticheta = string.Format(eticheta, suma1);
+                                                            break;
+                                                        case 2:
+                                                            decimal suma2 = Convert.ToDecimal(dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("SUM(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Suma {0:N2}";
+                                                            eticheta = string.Format(eticheta, suma2);
+                                                            break;
+                                                        case 3:
+                                                            int media1 = Convert.ToInt32(dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("AVG(Total1)", string.Empty));
+                                                            eticheta = "Media {0:N0}";
+                                                            eticheta = string.Format(eticheta, media1);
+                                                            break;
+                                                        case 4:
+                                                            decimal media2 = Convert.ToDecimal(dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("AVG(Total1)", string.Empty));
+                                                            eticheta = "Media {0:N2}";
+                                                            eticheta = string.Format(eticheta, media2);
+                                                            break;
+                                                        case 5:
+                                                            decimal valMin = Convert.ToDecimal(dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("MIN(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Val. min. {0}";
+                                                            eticheta = string.Format(eticheta, valMin);
+                                                            break;
+                                                        case 6:
+                                                            decimal valMax = Convert.ToDecimal(dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("MIN(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Val. max. {0}";
+                                                            eticheta = string.Format(eticheta, valMax);
+                                                            break;
+                                                    }
+
+                                                    ctl2 = CreeazaEticheta(eticheta);
+                                                }
                                             }
                                         }
                                         break;
@@ -275,6 +320,52 @@ namespace WizOne.Reports
                                                 }
 
                                                 ctl = CreeazaTabel(23, dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)), cols.ToArray(), cols.ToArray(), rat.ToArray(), latime.ToArray(), note.ToArray());
+
+                                                //Radu 15.02.2022
+                                                int TemplateIdOb = Convert.ToInt32(arrIntre[j]["TemplateIdObiectiv"] != DBNull.Value ? arrIntre[j]["TemplateIdObiectiv"].ToString() : "0");
+                                                sql = "SELECT * FROM Eval_ConfigObTemplateDetail WHERE TemplateId = " + TemplateIdOb + " AND TotalColoana IS NOT NULL";
+                                                DataTable dtTemplOb = General.IncarcaDT(sql, null);
+                                                if (dtTemplOb != null && dtTemplOb.Rows.Count > 0 && dtTemplOb.Rows[0]["TotalColoana"] != DBNull.Value && dtTemplOb.Rows[0]["TotalColoana"].ToString().Length > 0 &&
+                                                    dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)) != null &&
+                                                    dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Rows.Count > 0)
+                                                {
+                                                    string eticheta = "";
+                                                    switch (Convert.ToInt32(dtTemplOb.Rows[0]["TotalColoana"].ToString()))
+                                                    {
+                                                        case 1:
+                                                            int suma1 = Convert.ToInt32(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("SUM(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Suma {0:N0}";
+                                                            eticheta = string.Format(eticheta, suma1);
+                                                            break;
+                                                        case 2:
+                                                            decimal suma2 = Convert.ToDecimal(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("SUM(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Suma {0:N2}";
+                                                            eticheta = string.Format(eticheta, suma2);
+                                                            break;
+                                                        case 3:
+                                                            int media1 = Convert.ToInt32(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("AVG(Total1)", string.Empty));
+                                                            eticheta = "Media {0:N0}";
+                                                            eticheta = string.Format(eticheta, media1);
+                                                            break;
+                                                        case 4:
+                                                            decimal media2 = Convert.ToDecimal(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("AVG(Total1)", string.Empty));
+                                                            eticheta = "Media {0:N2}";
+                                                            eticheta = string.Format(eticheta, media2);
+                                                            break;
+                                                        case 5:
+                                                            decimal valMin = Convert.ToDecimal(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("MIN(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Val. min. {0}";
+                                                            eticheta = string.Format(eticheta, valMin);
+                                                            break;
+                                                        case 6:
+                                                            decimal valMax = Convert.ToDecimal(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("MIN(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Val. max. {0}";
+                                                            eticheta = string.Format(eticheta, valMax);
+                                                            break;
+                                                    }
+
+                                                    ctl2 = CreeazaEticheta(eticheta);
+                                                }
                                             }
                                         }
                                         break;
@@ -410,6 +501,9 @@ namespace WizOne.Reports
                                 }
 
                                 if (ctl != null) AdaugaControl(ctl, Convert.ToInt32(arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0"), (arrIntre[j]["Descriere"] != DBNull.Value ? arrIntre[j]["Descriere"].ToString() : ""), Convert.ToInt32(arrIntre[j]["Orientare"] != DBNull.Value ? arrIntre[j]["Orientare"].ToString() : "0"));
+
+                                if (ctl2 != null) AdaugaControl(ctl2, 999, "", 0); //Radu 15.02.2022
+
 
                                 if (Convert.ToInt32(arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0") == 16)
                                 {
@@ -628,12 +722,22 @@ namespace WizOne.Reports
         {
             try
             {
-                if (tipData == 9)
+                if (tipData == 9 || tipData == 999)
                 {
-                    ctl.SizeF = new System.Drawing.SizeF(720F, 20F);
-                    ctl.LocationF = new PointF(10, pozY);
-                    Detail.Controls.Add(ctl);
-                    pozY += (int)ctl.HeightF + spatiuVert;
+                    if (tipData == 9)
+                    {
+                        ctl.SizeF = new System.Drawing.SizeF(720F, 20F);
+                        ctl.LocationF = new PointF(10, pozY);
+                        Detail.Controls.Add(ctl);
+                        pozY += (int)ctl.HeightF + spatiuVert;
+                    }
+                    else
+                    {//Radu 15.02.2022
+                        ctl.SizeF = new System.Drawing.SizeF(720F, 20F);
+                        ctl.LocationF = new PointF(660, pozY);
+                        Detail.Controls.Add(ctl);
+                        pozY += (int)ctl.HeightF + spatiuVert;
+                    }
                 }
                 else
                 {

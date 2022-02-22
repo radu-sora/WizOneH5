@@ -3627,8 +3627,11 @@ namespace WizOne.Module
                             LEFT JOIN F1001 adr ON adr.F10003 = a.F10003
                             {2} {7}
                             WHERE 1=1  {3}
-                            ) X WHERE 1=1 {0}
+                            ) X WHERE 
+                            CASE WHEN A.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN A.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN A.F10025 = 0 THEN (CASE WHEN (A.F100925 <> 0 AND F100922 IS NOT NULL AND F100923 IS NOT NULL AND F100923 IS NOT NULL AND F100922 <= cast(getdate() as date) AND cast(getdate() as date) <= F100923 AND cast(getdate() as date) <= F100924) THEN 'Activ suspendat' ELSE CASE WHEN (A.F100915 <= cast(getdate() as date) AND cast(getdate() as date) <= A.F100916) THEN 'Activ detasat' ELSE 'Activ' END END) ELSE 'Inactiv' END) END END = 'Activ' 
+                            {0}
                             ORDER BY ""NumeComplet"" ";
+                            //Radu 22.02.2022 - am adaugat conditia sa aduca numai angajati Activi
 
                 if (tip == 2)
                 {

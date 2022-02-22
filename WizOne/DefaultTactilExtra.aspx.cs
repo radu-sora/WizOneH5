@@ -205,7 +205,7 @@ namespace WizOne
                 DataRow drUsr = General.IncarcaDR(strSql, null);
                 //DataRow drUsr = General.IncarcaDR(strSql, new object[] { cartela });
 
-                if (drUsr == null)
+                if (drUsr == null || drUsr.ItemArray.Length == 0)
                 {
                     MessageBox.Show("Utilizator inexistent!", MessageBox.icoError, "Atentie !");
                     System.Threading.Thread.Sleep(2000);

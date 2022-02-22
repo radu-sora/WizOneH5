@@ -215,7 +215,7 @@ namespace WizOne.Reports
                                                         case 5:
                                                             decimal valMin = Convert.ToDecimal(dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("MIN(Total1)", "[Total1] IS NOT NULL"));
                                                             eticheta = "Val. min. {0}";
-                                                            eticheta = string.Format(eticheta, valMin);                                                            
+                                                            eticheta = string.Format(eticheta, valMin);
                                                             break;
                                                         case 6:
                                                             decimal valMax = Convert.ToDecimal(dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("MIN(Total1)", "[Total1] IS NOT NULL"));
@@ -320,6 +320,52 @@ namespace WizOne.Reports
                                                 }
 
                                                 ctl = CreeazaTabel(23, dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)), cols.ToArray(), cols.ToArray(), rat.ToArray(), latime.ToArray(), note.ToArray());
+
+                                                //Radu 15.02.2022
+                                                int TemplateIdOb = Convert.ToInt32(arrIntre[j]["TemplateIdObiectiv"] != DBNull.Value ? arrIntre[j]["TemplateIdObiectiv"].ToString() : "0");
+                                                sql = "SELECT * FROM Eval_ConfigObTemplateDetail WHERE TemplateId = " + TemplateIdOb + " AND TotalColoana IS NOT NULL";
+                                                DataTable dtTemplOb = General.IncarcaDT(sql, null);
+                                                if (dtTemplOb != null && dtTemplOb.Rows.Count > 0 && dtTemplOb.Rows[0]["TotalColoana"] != DBNull.Value && dtTemplOb.Rows[0]["TotalColoana"].ToString().Length > 0 &&
+                                                    dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)) != null &&
+                                                    dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Rows.Count > 0)
+                                                {
+                                                    string eticheta = "";
+                                                    switch (Convert.ToInt32(dtTemplOb.Rows[0]["TotalColoana"].ToString()))
+                                                    {
+                                                        case 1:
+                                                            int suma1 = Convert.ToInt32(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("SUM(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Suma {0:N0}";
+                                                            eticheta = string.Format(eticheta, suma1);
+                                                            break;
+                                                        case 2:
+                                                            decimal suma2 = Convert.ToDecimal(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("SUM(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Suma {0:N2}";
+                                                            eticheta = string.Format(eticheta, suma2);
+                                                            break;
+                                                        case 3:
+                                                            int media1 = Convert.ToInt32(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("AVG(Total1)", string.Empty));
+                                                            eticheta = "Media {0:N0}";
+                                                            eticheta = string.Format(eticheta, media1);
+                                                            break;
+                                                        case 4:
+                                                            decimal media2 = Convert.ToDecimal(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("AVG(Total1)", string.Empty));
+                                                            eticheta = "Media {0:N2}";
+                                                            eticheta = string.Format(eticheta, media2);
+                                                            break;
+                                                        case 5:
+                                                            decimal valMin = Convert.ToDecimal(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("MIN(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Val. min. {0}";
+                                                            eticheta = string.Format(eticheta, valMin);
+                                                            break;
+                                                        case 6:
+                                                            decimal valMax = Convert.ToDecimal(dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("MIN(Total1)", "[Total1] IS NOT NULL"));
+                                                            eticheta = "Val. max. {0}";
+                                                            eticheta = string.Format(eticheta, valMax);
+                                                            break;
+                                                    }
+
+                                                    ctl2 = CreeazaEticheta(eticheta);
+                                                }
                                             }
                                         }
                                         break;

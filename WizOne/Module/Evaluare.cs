@@ -944,7 +944,7 @@ namespace WizOne.Module
         {
             DataColumnCollection columns = dr.Table.Columns;
 
-            IdSet = columns.Contains("IdSet ") == true ? Convert.ToInt32(dr["IdSet "].ToString() == string.Empty ? "-99" : dr["IdSet "].ToString()) : -99;
+            IdSet = columns.Contains("IdSet") == true ? Convert.ToInt32(dr["IdSet"].ToString() == string.Empty ? "-99" : dr["IdSet"].ToString()) : -99;
             IdCalificativ = columns.Contains("IdCalificativ") == true ? Convert.ToInt32(dr["IdCalificativ"].ToString() == string.Empty ? "-99" : dr["IdCalificativ"].ToString()) : -99;
             Denumire = columns.Contains("Denumire") == true ? dr["Denumire"].ToString() : "";
             Nota = columns.Contains("Nota") == true ? Convert.ToInt32(dr["Nota"].ToString() == string.Empty ? "-99" : dr["Nota"].ToString()) : -99;

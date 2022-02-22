@@ -72,7 +72,7 @@ namespace WizOne.Pontaj
 
                     CreeazaGrid();
 
-                    DataTable dtVal = General.IncarcaDT(Constante.tipBD == 1 ? @"SELECT TOP 0 * FROM ""Ptj_IstoricVal"" " : @"SELECT * FROM ""Ptj_IstoricVal"" WHERE ROWNUM = 0 ", null);
+                    DataTable dtVal = General.IncarcaDT(@"SELECT * FROM ""Ptj_IstoricVal"" WHERE 1 = 2 ", null);
                     Session["Ptj_IstoricVal"] = dtVal;
                 }
 

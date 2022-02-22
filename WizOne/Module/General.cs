@@ -166,61 +166,73 @@ namespace WizOne.Module
         {
             var tempPath = HostingEnvironment.MapPath("~/Temp/");
 
-            Directory.CreateDirectory(tempPath);
-            StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(tempPath + "woLogNtf.txt", true);
-            //
-            string mesaj = "";
+            //Florin 2022.02.07 - in procese ceasuri da eroare - #1093
+            if (!string.IsNullOrEmpty(tempPath))
+            {
+                Directory.CreateDirectory(tempPath);
+                StackTrace st = new StackTrace();
+                StreamWriter sw = new StreamWriter(tempPath + "woLogNtf.txt", true);
+                //
+                string mesaj = "";
 
-            mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
-            if (!string.IsNullOrEmpty(strMetoda)) mesaj += "Metoda:    " + strMetoda + "\r\n";
-            if (!string.IsNullOrEmpty(msg)) mesaj += "Eroarea:   " + msg + "\r\n";
-            //
-            sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
-            //
-            sw.Close();
-            sw.Dispose();
+                mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
+                if (!string.IsNullOrEmpty(strMetoda)) mesaj += "Metoda:    " + strMetoda + "\r\n";
+                if (!string.IsNullOrEmpty(msg)) mesaj += "Eroarea:   " + msg + "\r\n";
+                //
+                sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
+                //
+                sw.Close();
+                sw.Dispose();
+            }
         }
 
         public static void CreazaLogCereri(string msg, string f10003, string dataInceput)
         {
             var tempPath = HostingEnvironment.MapPath("~/Temp/");
 
-            Directory.CreateDirectory(tempPath);
-            StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(tempPath + "woLogCereri.txt", true);
-            //
-            string mesaj = "";
+            //Florin 2022.02.07 - in procese ceasuri da eroare - #1093
+            if (!string.IsNullOrEmpty(tempPath))
+            {
+                Directory.CreateDirectory(tempPath);
+                StackTrace st = new StackTrace();
+                StreamWriter sw = new StreamWriter(tempPath + "woLogCereri.txt", true);
+                //
+                string mesaj = "";
 
-            mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
-            if (!string.IsNullOrEmpty(f10003)) mesaj += "Marca:    " + f10003 + "\r\n";
-            if (!string.IsNullOrEmpty(dataInceput)) mesaj += "Data Inceput:    " + dataInceput + "\r\n";
-            if (!string.IsNullOrEmpty(msg)) mesaj += "Select:   " + msg + "\r\n";
-            //
-            sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
-            //
-            sw.Close();
-            sw.Dispose();
+                mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
+                if (!string.IsNullOrEmpty(f10003)) mesaj += "Marca:    " + f10003 + "\r\n";
+                if (!string.IsNullOrEmpty(dataInceput)) mesaj += "Data Inceput:    " + dataInceput + "\r\n";
+                if (!string.IsNullOrEmpty(msg)) mesaj += "Select:   " + msg + "\r\n";
+                //
+                sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
+                //
+                sw.Close();
+                sw.Dispose();
+            }
         }
 
         public static void CreazaLogFormuleCumulat(string msg, string strMetoda = "")
         {
             var tempPath = HostingEnvironment.MapPath("~/Temp/");
 
-            Directory.CreateDirectory(tempPath);
-            StackTrace st = new StackTrace();
-            StreamWriter sw = new StreamWriter(tempPath + "woLogFormuleCumulat.txt", true);
-            //
-            string mesaj = "";
+            //Florin 2022.02.07 - in procese ceasuri da eroare - #1093
+            if (!string.IsNullOrEmpty(tempPath))
+            {
+                Directory.CreateDirectory(tempPath);
+                StackTrace st = new StackTrace();
+                StreamWriter sw = new StreamWriter(tempPath + "woLogFormuleCumulat.txt", true);
+                //
+                string mesaj = "";
 
-            mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
-            if (!string.IsNullOrEmpty(strMetoda)) mesaj += "Metoda:    " + strMetoda + "\r\n";
-            if (!string.IsNullOrEmpty(msg)) mesaj += "Eroarea:   " + msg + "\r\n";
-            //
-            sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
-            //
-            sw.Close();
-            sw.Dispose();
+                mesaj += "Data:    " + DateTime.Now.ToString() + "\r\n";
+                if (!string.IsNullOrEmpty(strMetoda)) mesaj += "Metoda:    " + strMetoda + "\r\n";
+                if (!string.IsNullOrEmpty(msg)) mesaj += "Eroarea:   " + msg + "\r\n";
+                //
+                sw.Write(mesaj + "-----------------------------------------------------" + "\r\n");
+                //
+                sw.Close();
+                sw.Dispose();
+            }
         }
 
         public static string Strip(string txt)

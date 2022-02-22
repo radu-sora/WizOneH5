@@ -308,7 +308,10 @@ namespace Wizrom.Reports.Code
                 xtraReport.PrintingSystem.ShowMarginsWarning = false;
                 xtraReport.ShowPrintMarginsWarning = false;
 
-                string numeImprimanta = Dami.ValoareParam("TactilImprimanta").Trim();
+                //Radu 22.02.2022
+                string numeImprimanta = Dami.ValoareParam("TactilImprimantaFluturas").Trim();
+                if (numeImprimanta == "")
+                    numeImprimanta = Dami.ValoareParam("TactilImprimanta").Trim();
                 if (numeImprimanta != "")
                     xtraReport.PrinterName = numeImprimanta;
 

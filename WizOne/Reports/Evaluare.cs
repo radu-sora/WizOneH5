@@ -97,10 +97,10 @@ namespace WizOne.Reports
                 string sqlEval_CompetenteAngajat = @"select * from ""Eval_CompetenteAngajatTemp"" where ""IdQuiz"" = " + idQuiz;
                 DataTable dtCompetenteAngajat = General.IncarcaDT(sqlEval_CompetenteAngajat, null);
 
-                sql = "select \"ColumnName\", \"Width\", \"Eval_QuizIntrebari\".\"Id\" AS \"Id\", \"IdNomenclator\" from \"Eval_ConfigObTemplateDetail\" left join \"Eval_QuizIntrebari\" on \"TemplateId\" = \"TemplateIdObiectiv\"  where \"IdQuiz\" = " + idQuiz + " and \"Vizibil\" = 1";
+                sql = "select Alias, \"ColumnName\", \"Width\", \"Eval_QuizIntrebari\".\"Id\" AS \"Id\", \"IdNomenclator\" from \"Eval_ConfigObTemplateDetail\" left join \"Eval_QuizIntrebari\" on \"TemplateId\" = \"TemplateIdObiectiv\"  where \"IdQuiz\" = " + idQuiz + " and \"Vizibil\" = 1 ORDER BY Eval_ConfigObTemplateDetail.Ordine";
                 DataTable dtTemplateOb = General.IncarcaDT(sql, null);
 
-                sql = "select \"ColumnName\", \"Width\", \"Eval_QuizIntrebari\".\"Id\" AS \"Id\", \"IdNomenclator\" from \"Eval_ConfigCompTemplateDetail\" left join \"Eval_QuizIntrebari\" on \"TemplateId\" = \"TemplateIdCompetenta\"  where \"IdQuiz\" = " + idQuiz + " and \"Vizibil\" = 1";
+                sql = "select Alias, \"ColumnName\", \"Width\", \"Eval_QuizIntrebari\".\"Id\" AS \"Id\", \"IdNomenclator\" from \"Eval_ConfigCompTemplateDetail\" left join \"Eval_QuizIntrebari\" on \"TemplateId\" = \"TemplateIdCompetenta\"  where \"IdQuiz\" = " + idQuiz + " and \"Vizibil\" = 1 ORDER BY Eval_ConfigCompTemplateDetail.Ordine";
                 DataTable dtTemplateComp = General.IncarcaDT(sql, null);
 
                 int idRoot = -99;
@@ -171,7 +171,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColComp.Length; k++)
                                                 {
-                                                    cols.Add(dtColComp[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColComp[k]["Alias"] == DBNull.Value ? dtColComp[k]["ColumnName"].ToString() : dtColComp[k]["Alias"].ToString());
                                                     if (dtColComp[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -241,7 +241,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColOb.Length; k++)
                                                 {
-                                                    cols.Add(dtColOb[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColOb[k]["Alias"] == DBNull.Value ? dtColOb[k]["ColumnName"].ToString() : dtColOb[k]["Alias"].ToString());
                                                     if (dtColOb[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -266,7 +266,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColOb.Length; k++)
                                                 {
-                                                    cols.Add(dtColOb[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColOb[k]["Alias"] == DBNull.Value ? dtColOb[k]["ColumnName"].ToString() : dtColOb[k]["Alias"].ToString());
                                                     if (dtColOb[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -310,7 +310,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColOb.Length; k++)
                                                 {
-                                                    cols.Add(dtColOb[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColOb[k]["Alias"] == DBNull.Value ? dtColOb[k]["ColumnName"].ToString() : dtColOb[k]["Alias"].ToString());
                                                     if (idClient != 25 && dtColOb[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -335,7 +335,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColOb.Length; k++)
                                                 {
-                                                    cols.Add(dtColOb[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColOb[k]["Alias"] == DBNull.Value ? dtColOb[k]["ColumnName"].ToString() : dtColOb[k]["Alias"].ToString());
                                                     if (dtColOb[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -360,7 +360,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColComp.Length; k++)
                                                 {
-                                                    cols.Add(dtColComp[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColComp[k]["Alias"] == DBNull.Value ? dtColComp[k]["ColumnName"].ToString() : dtColComp[k]["Alias"].ToString());
                                                     if (dtColComp[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -385,7 +385,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColOb.Length; k++)
                                                 {
-                                                    cols.Add(dtColOb[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColOb[k]["Alias"] == DBNull.Value ? dtColOb[k]["ColumnName"].ToString() : dtColOb[k]["Alias"].ToString());
                                                     if (dtColOb[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -410,7 +410,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColComp.Length; k++)
                                                 {
-                                                    cols.Add(dtColComp[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColComp[k]["Alias"] == DBNull.Value ? dtColComp[k]["ColumnName"].ToString() : dtColComp[k]["Alias"].ToString());
                                                     if (dtColComp[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else

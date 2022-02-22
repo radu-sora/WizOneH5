@@ -3067,7 +3067,8 @@ namespace WizOne.Eval
                             if (clsConfigDetail.TipValoare == 1)
                             {
                                 #region getDS
-                                if (Session["feedEval_Calificativ"] == null)
+                                if (Session["feedEval_Calificativ"] == null || (Session["feedEval_Calificativ"] as List<Eval_SetCalificativDet>).Where(x => x.IdSet == clsConfigDetail.IdNomenclator) == null
+                                    || (Session["feedEval_Calificativ"] as List<Eval_SetCalificativDet>).Where(x => x.IdSet == clsConfigDetail.IdNomenclator).Count() <= 0)    //Radu 22.02.2022 - pot fi mai multe seturi de calificative pe tab-uri diferite de obiective
                                 {
                                     string sqlCalificativ = @"select det.""IdSet"", det.""IdCalificativ"", det.""Denumire"", det.""Nota"", det.""RatingMin"", det.""RatingMax"", det.""Ordine"",
                                                                     det.""Explicatii""
@@ -3102,7 +3103,7 @@ namespace WizOne.Eval
                                 colCalificativ.PropertiesComboBox.TextField = "Denumire";
                                 colCalificativ.PropertiesComboBox.ValueField = "IdCalificativ";
                                 colCalificativ.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDownList;
-                                colCalificativ.PropertiesComboBox.DataSource = lstEval_SetCalificativDet;
+                                colCalificativ.PropertiesComboBox.DataSource = lstEval_SetCalificativDet.Where(x => x.IdSet == clsConfigDetail.IdNomenclator); //Radu 22.02.2022
                                 colCalificativ.Visible = false;
                                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) != 20 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)) >= 2 || tab >= 2)   //Radu 03.07.2018 - calificativul nu trebuie sa fie afisat pe tab-ul angajatului decat dupa ce acesta finalizeaza
                                     colCalificativ.Visible = true;

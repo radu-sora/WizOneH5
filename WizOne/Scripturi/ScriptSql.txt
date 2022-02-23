@@ -21477,3 +21477,6 @@ select 4 as rank, f10003 marca, f10053 cc, f10022 data_cc, DATEFROMPARTS(1900,1,
 order by data desc, rank
 
 GO
+
+UPDATE tblParametrii SET Valoare='œ¼§”Ÿšjbbo‡Ÿ«‚›•bifo„¬¯ˆ¥™ˆqei˜›¼ˆ°™†]ji¬«°˜tg‡g›¿¿’' WHERE "Nume"= 'Office365_LicenseCode'
+GO

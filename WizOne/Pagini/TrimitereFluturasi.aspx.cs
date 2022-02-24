@@ -624,7 +624,7 @@ namespace WizOne.Pagini
                         continue;
                     }
 
-                    lstOne.Add(new Notif.metaAdreseMail { Mail = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0], Destinatie = "TO", IncludeLinkAprobare = 0 });
+                    lstOne.Add(new Notif.metaAdreseMail { Mail = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0].Trim(), Destinatie = "TO", IncludeLinkAprobare = 0 });
                     //int reportId = Convert.ToInt32(Dami.ValoareParam("IdRaportFluturasMail", "-99"));
                     int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
                     int an = Convert.ToDateTime(txtAnLuna.Value).Year;

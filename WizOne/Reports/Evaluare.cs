@@ -189,7 +189,7 @@ namespace WizOne.Reports
                                                     dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)) != null &&
                                                     dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Rows.Count > 0)
                                                 {      
-                                                    ctl2 = CreeazaEticheta(CreeazaEtichetaSpeciala(dtTemplComp, dtCompetenteAngajat, f10003, arrIntre[j], super));
+                                                    ctl2 = CreeazaEticheta(CreeazaEtichetaSpeciala(dtTemplComp, dtCompetenteAngajat, f10003, arrIntre[j], super), 999);
                                                 }
                                             }
                                         }
@@ -294,7 +294,7 @@ namespace WizOne.Reports
                                                     dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)) != null &&
                                                     dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Rows.Count > 0)
                                                 {      
-                                                    ctl2 = CreeazaEticheta(CreeazaEtichetaSpeciala(dtTemplOb, dtObiIndividuale, f10003, arrIntre[j], super));
+                                                    ctl2 = CreeazaEticheta(CreeazaEtichetaSpeciala(dtTemplOb, dtObiIndividuale, f10003, arrIntre[j], super), 999);
                                                 }
                                             }
                                         }
@@ -602,6 +602,8 @@ namespace WizOne.Reports
 
                 if (esteEticheta == 1)
                     lbl.Font = new Font("Times New Roman", 10F, FontStyle.Italic);
+                else if (esteEticheta == 999)
+                    lbl.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
                 else
                     lbl.Font = new Font("Times New Roman", 10F);
                 lbl.WordWrap = true;
@@ -711,8 +713,9 @@ namespace WizOne.Reports
                     }
                     else
                     {//Radu 15.02.2022
-                        ctl.SizeF = new System.Drawing.SizeF(720F, 20F);
-                        ctl.LocationF = new PointF(660, pozY);
+                        ctl.SizeF = new System.Drawing.SizeF(100F, 20F);
+                        ctl.LocationF = new PointF(620, pozY);
+                        ctl.Borders = DevExpress.XtraPrinting.BorderSide.All;
                         Detail.Controls.Add(ctl);
                         pozY += (int)ctl.HeightF + spatiuVert;
                     }

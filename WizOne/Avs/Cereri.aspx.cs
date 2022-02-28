@@ -4677,7 +4677,8 @@ namespace WizOne.Avs
                             {
                                 string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
                                 act = 1;
-                                sql100 = "UPDATE F100 SET F10026 = " + dtCer.Rows[0]["ScutitImpozit"].ToString() + ", " + salariu + " = " + dtCer.Rows[0]["SalariulBrut"].ToString() + ", F100991 = " + data + " WHERE F10003 = " + f10003.ToString();
+                                //#1110 -  s-a scos actualizarea F10026:     F10026 = " + dtCer.Rows[0]["ScutitImpozit"].ToString() + ",
+                                sql100 = "UPDATE F100 SET " + salariu + " = " + dtCer.Rows[0]["SalariulBrut"].ToString() + ", F100991 = " + data + " WHERE F10003 = " + f10003.ToString();
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70452, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 1, 'Salariu Tarifar', " + data + ", " + dtCer.Rows[0]["SalariulBrut"].ToString() + ", 'Modificari in avans', '"
@@ -5345,8 +5346,13 @@ namespace WizOne.Avs
                 //Radu 09.09.2020 - actualizare data consemnare
                 //if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month)
                 //{
+                //#1109
+                int[] lstAtribute = new int[16] { 1, 3, 4, 6, 8, 9, 10, 11, 15, 25, 30, 31, 32, 33, 35, 36};
+                if (lstAtribute.Contains(Convert.ToInt32(dtCer.Rows[0]["IdAtribut"].ToString())))
+                {
                     DateTime dtConsemn = General.FindDataConsemnare(f10003);
                     General.ExecutaNonQuery("UPDATE F1001 SET F1001109 = " + General.ToDataUniv(dtConsemn) + " WHERE F10003 = " + f10003, null);
+                }
                 //}
 
 

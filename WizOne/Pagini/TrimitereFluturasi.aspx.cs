@@ -1368,7 +1368,7 @@ namespace WizOne.Pagini
 
         }
 
-        private byte[] GenerareAdeverinta(List<int> lstMarci, int adev, int anul, string parola, out string fisier)
+        public byte[] GenerareAdeverinta(List<int> lstMarci, int adev, int anul, string parola, out string fisier)
         {
             fisier = "";
             try

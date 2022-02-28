@@ -1911,6 +1911,7 @@
     <Compile Include="Module\Notif.cs" />
     <Compile Include="Module\NotifAsync.cs" />
     <Compile Include="Module\Saml.cs" />
+    <Compile Include="Module\TrimitereWhatsApp.cs" />
     <Compile Include="Organigrama\Diagrama.aspx.cs">
       <DependentUpon>Diagrama.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

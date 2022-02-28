@@ -5345,8 +5345,13 @@ namespace WizOne.Avs
                 //Radu 09.09.2020 - actualizare data consemnare
                 //if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month)
                 //{
+                //#1109
+                int[] lstAtribute = new int[16] { 1, 3, 4, 6, 8, 9, 10, 11, 15, 25, 30, 31, 32, 33, 35, 36};
+                if (lstAtribute.Contains(Convert.ToInt32(dtCer.Rows[0]["IdAtribut"].ToString())))
+                {
                     DateTime dtConsemn = General.FindDataConsemnare(f10003);
                     General.ExecutaNonQuery("UPDATE F1001 SET F1001109 = " + General.ToDataUniv(dtConsemn) + " WHERE F10003 = " + f10003, null);
+                }
                 //}
 
 

@@ -500,7 +500,7 @@ namespace WizOne.Absente
                                     break;
                             }
 
-                            General.ExecutaNonQuery(" EXEC CalculCOProc2 '" + marci + "', " + dtCalcul + ", 1, 0 ", null);
+                            General.ExecutaNonQuery(" EXEC CalculCOProc '" + marci + "', " + dtCalcul + ", 1, 0 ", null);
                         }
                     }
                     if (e.Parameters == "btnSI") CalculSI();

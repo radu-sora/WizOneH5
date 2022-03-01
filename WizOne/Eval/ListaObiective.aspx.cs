@@ -329,7 +329,8 @@ namespace WizOne.Eval
         protected void IncarcaActivitati(ASPxComboBox cmb, int idObi)
         {
             DataTable dt = Session["EvalLista_DSObiectiveXActivitate"] as DataTable;
-            DataTable dtFiltru = dt.Select("IdObiectiv = " + idObi).CopyToDataTable();
+            //#1111
+            DataTable dtFiltru = dt.Select("IdObiectiv = " + idObi) != null && dt.Select("IdObiectiv = " + idObi).Count() > 0 ? dt.Select("IdObiectiv = " + idObi).CopyToDataTable() : null;
             cmb.DataSource = dtFiltru;
             cmb.DataBind();
         }

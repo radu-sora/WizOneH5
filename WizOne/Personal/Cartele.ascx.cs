@@ -301,7 +301,7 @@ namespace WizOne.Personal
                         }
                     }
 
-                    DataTable dtCartele = General.IncarcaDT("SELECT * FROM F100Cartele WHERE Cartela = '" + e.NewValues["Cartela"].ToString() + "'", null);
+                    DataTable dtCartele = General.IncarcaDT("SELECT * FROM F100Cartele WHERE Cartela = '" + e.NewValues["Cartela"].ToString() + "' AND IdAuto <> " + keys[0], null);    //#1114
                     if (dtCartele != null && dtCartele.Rows.Count > 0)
                     {
                         for (int i = 0; i < dtCartele.Rows.Count; i++)

@@ -1167,7 +1167,7 @@ namespace WizOne.Module
                     if (Constante.tipBD != 1)
                         command.Parameters.Add(new OracleParameter("pk", OracleDbType.Int64, ParameterDirection.Output));
                 }
-
+               
                 if (paramList != null)
                 {
                     for (int param = 0; param < paramList.Length; param++)

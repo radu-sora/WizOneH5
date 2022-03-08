@@ -696,6 +696,7 @@ namespace WizOne.ConcediiMedicale
                 bErr = true;
                 szErrMsg += System.Environment.NewLine + "- pentru codul de indemnizatie 05 CM selectat este incorect, valori admise CM infecto-contagioase!";
             }
+
             if (cod != "05" && 10 == tip)
             {
                 bErr = true;
@@ -756,6 +757,16 @@ namespace WizOne.ConcediiMedicale
                 {
                     bErr = true;
                     szErrMsg += System.Environment.NewLine + "- pentru cod indemnizatie " + cod + " nu ati completat CNP copil!";
+                }
+            }
+
+            //#1112
+            if (cod == "51")
+            {
+                if (txtCodInfCont.Text.Trim().Length <= 0)
+                {
+                    bErr = true;
+                    szErrMsg += System.Environment.NewLine + "- pentru CM izolare nu ati completat codul de infecto-contagioase aferent!";
                 }
             }
 

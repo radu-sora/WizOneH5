@@ -1525,8 +1525,8 @@ namespace WizOne.AvansXDecont
                     {
                         //case tipAccesPagina.formularNou:
                         //case tipAccesPagina.formularSalvatEditUser:
-                            if (lstConfigCurrencyXPay != null && lstConfigCurrencyXPay.Rows.Count != 0)
-                            {
+                        if (lstConfigCurrencyXPay != null && lstConfigCurrencyXPay.Rows.Count != 0)
+                        {
                             for (int i = 0; i < lstConfigCurrencyXPay.Rows.Count; i++)
                             {
                                 if (lstConfigCurrencyXPay_Currency != null)
@@ -1537,55 +1537,64 @@ namespace WizOne.AvansXDecont
                                             lstConfigCurrencyXPay_Currency.Rows.Add(lstConfigCurrencyXPay.Rows[i]["CurrencyId"].ToString(), lstConfigCurrencyXPay.Rows[i]["CurrencyCode"].ToString(), null, 1);
                                             Session["ConfigCurrencyXPay_Currency"] = lstConfigCurrencyXPay_Currency;
                                         }
-                                    }
-                                    if (lstConfigCurrencyXPay_Pay != null)
+                                }
+                                if (lstConfigCurrencyXPay_Pay != null)
+                                {
+                                    if (lstConfigCurrencyXPay_Pay.Select("DictionaryItemId = " + lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString()) == null ||
+                                    lstConfigCurrencyXPay_Pay.Select("DictionaryItemId = " + lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString()).Count() == 0)
                                     {
-                                        if (lstConfigCurrencyXPay_Pay.Select("DictionaryItemId = " + lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString()) == null ||
-                                        lstConfigCurrencyXPay_Pay.Select("DictionaryItemId = " + lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString()).Count() == 0)
-                                        {
-                                            lstConfigCurrencyXPay_Pay.Rows.Add(lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString(), lstConfigCurrencyXPay.Rows[i]["PaymentTypeName"].ToString(), null, 2);
-                                            Session["ConfigCurrencyXPay_Pay"] = lstConfigCurrencyXPay_Pay;
-                                        }
+                                        lstConfigCurrencyXPay_Pay.Rows.Add(lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString(), lstConfigCurrencyXPay.Rows[i]["PaymentTypeName"].ToString(), null, 2);
+                                        Session["ConfigCurrencyXPay_Pay"] = lstConfigCurrencyXPay_Pay;
+                                        lstConfigCurrencyXPay_PayCopy.Rows.Add(lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString(), lstConfigCurrencyXPay.Rows[i]["PaymentTypeName"].ToString(), null, 2);
+                                        Session["ConfigCurrencyXPay_PayCopy"] = lstConfigCurrencyXPay_PayCopy;
                                     }
                                 }
-                                cmbModPlata.DataSource = lstConfigCurrencyXPay_Pay;
-                                cmbModPlata.DataBind();
-                                cmbMonedaAvans.DataSource = lstConfigCurrencyXPay_Currency;
-                                cmbMonedaAvans.DataBind();
+                            }
+                            cmbModPlata.DataSource = lstConfigCurrencyXPay_Pay;
+                            cmbModPlata.DataBind();
+                            cmbMonedaAvans.DataSource = lstConfigCurrencyXPay_Currency;
+                            cmbMonedaAvans.DataBind();
 
-                                ent.Rows[0]["PaymentTypeId"] = DBNull.Value;
-                                lstConfigCurrencyXPay_PayCopy.Clear();
-								DataRow[] entConfig = lstConfigCurrencyXPay.Select("CurrencyId = " + Convert.ToInt32(cmbMonedaAvans.Value ?? -99));
-                                for (int i = 0; i < entConfig.Length; i++)
+                            ent.Rows[0]["PaymentTypeId"] = DBNull.Value;
+                            lstConfigCurrencyXPay_PayCopy.Clear();
+							DataRow[] entConfig = lstConfigCurrencyXPay.Select("CurrencyId = " + Convert.ToInt32(cmbMonedaAvans.Value ?? -99));
+                            for (int i = 0; i < entConfig.Length; i++)
+                            {
+                                if (lstConfigCurrencyXPay_PayCopy != null && lstConfigCurrencyXPay_PayCopy.Rows.Count > 0)
                                 {
-                                    if (lstConfigCurrencyXPay_PayCopy != null && lstConfigCurrencyXPay_PayCopy.Rows.Count > 0)
+                                    if (lstConfigCurrencyXPay_PayCopy.Select("DictionaryItemId = " + entConfig[i]["PaymentTypeId"].ToString()).Count() == 0)
                                     {
-                                        if (lstConfigCurrencyXPay_PayCopy.Select("DictionaryItemId = " + entConfig[i]["PaymentTypeId"].ToString()).Count() == 0)
-                                        {
-                                            lstConfigCurrencyXPay_PayCopy.Rows.Add(lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString(), lstConfigCurrencyXPay.Rows[i]["PaymentTypeName"].ToString(), null, 2);
-                                            Session["ConfigCurrencyXPay_PayCopy"] = lstConfigCurrencyXPay_PayCopy;
-                                        }
+                                        lstConfigCurrencyXPay_PayCopy.Rows.Add(lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString(), lstConfigCurrencyXPay.Rows[i]["PaymentTypeName"].ToString(), null, 2);
+                                        Session["ConfigCurrencyXPay_PayCopy"] = lstConfigCurrencyXPay_PayCopy;
                                     }
-                                }
-                                if (lstConfigCurrencyXPay_PayCopy != null && lstConfigCurrencyXPay_PayCopy.Rows.Count == 1)
-                                {
-                                    ent.Rows[0]["PaymentTypeId"] = lstConfigCurrencyXPay_PayCopy.Rows[0]["DictionaryItemId"];
-                                    cmbModPlata.ClientEnabled = false;
-                                    cmbModPlata.DataBind();
                                 }
                                 else
                                 {
-                                    ent.Rows[0]["PaymentTypeId"] = lstConfigCurrencyXPay_PayCopy.Rows[0]["DictionaryItemId"];
-                                    cmbModPlata.ClientEnabled = true;
-                                    cmbModPlata.DataBind();
-                                }
+                                    lstConfigCurrencyXPay_PayCopy.Rows.Add(lstConfigCurrencyXPay.Rows[i]["PaymentTypeId"].ToString(), lstConfigCurrencyXPay.Rows[i]["PaymentTypeName"].ToString(), null, 2);
+                                    Session["ConfigCurrencyXPay_PayCopy"] = lstConfigCurrencyXPay_PayCopy;
+                                }    
                             }
+                            if (lstConfigCurrencyXPay_PayCopy != null && lstConfigCurrencyXPay_PayCopy.Rows.Count == 1)
+                            {
+                                ent.Rows[0]["PaymentTypeId"] = lstConfigCurrencyXPay_PayCopy.Rows[0]["DictionaryItemId"];
+                                cmbModPlata.ClientEnabled = false;
+                                cmbModPlata.DataBind();
+                            }
+                            else
+                            {
+                                ent.Rows[0]["PaymentTypeId"] = lstConfigCurrencyXPay_PayCopy.Rows[0]["DictionaryItemId"];
+                                cmbModPlata.ClientEnabled = true;
+                                cmbModPlata.DataBind();
+                            }
+                        }
                             //break;
                         //case tipAccesPagina.formularSalvat:
                             //break;
                     }
                     #endregion
                 }
+
+                Session["AvsXDec_SursaDate"] = ent;
             }
             catch (Exception ex)
             {

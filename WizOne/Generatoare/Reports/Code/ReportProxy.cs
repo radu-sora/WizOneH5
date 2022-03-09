@@ -72,7 +72,7 @@ namespace Wizrom.Reports.Code
             }
         }
 
-        private static readonly string[] SESSION_PAGE_NAMES = new string[] { "Reports/Pages/View", "Reports/Pages/Design", "Reports/Pages/Print.ashx", "DXDD.axd" };
+        private static readonly string[] SESSION_PAGE_NAMES = new string[] { "Reports/Pages/View", "Reports/Pages/Design", "Reports/Pages/Print", "DXDD.axd" };
 
         private static string _pagesPath;
         
@@ -172,7 +172,7 @@ namespace Wizrom.Reports.Code
 
             HttpContext.Current.Session["ReportsSessionsGroups"] = reportsSessionsGroups;
 
-            return $"{_pagesPath}Print.ashx?id={id}";
+            return $"{_pagesPath}Print?id={id}";
         }
         private static string GetUrl(int reportId, bool oncePerGroup)
         {

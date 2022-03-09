@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.FriendlyUrls;
+using Microsoft.AspNet.FriendlyUrls.Resolvers;
 using Microsoft.Web.Administration;
 using System;
 using System.Configuration;
@@ -60,7 +61,7 @@ namespace WizOne
                 RouteTable.Routes.EnableFriendlyUrls(new FriendlyUrlSettings()
                 {
                     AutoRedirectMode = RedirectMode.Permanent
-                });                                                               
+                }, new WebFormsFriendlyUrlResolver(), new GenericHandlerFriendlyUrlResolver()/*, new FriendlyUrlResolver(".axd")*/);
 
                 string str = Constante.cnnWeb;
                 if (str.ToUpper().IndexOf("INITIAL CATALOG") >=0)

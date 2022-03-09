@@ -1039,6 +1039,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Reports\Export.ashx" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
     <Content Include="Scripts\jquery-3.6.0.min.js" />
@@ -2302,6 +2303,9 @@
     </Compile>
     <Compile Include="Reports\ImprimaTactil.aspx.designer.cs">
       <DependentUpon>ImprimaTactil.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Export.ashx.cs">
+      <DependentUpon>Export.ashx</DependentUpon>
     </Compile>
     <Compile Include="Reports\PrintCereri.cs">
       <SubType>Component</SubType>

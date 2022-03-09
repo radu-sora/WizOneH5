@@ -1,32 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Configuration;
-using ProceseSec;
-using System.Data;
-using System.Globalization;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using DevExpress.Web;
-using System.Web.UI.WebControls;
-using System.Diagnostics;
-using Wizrom.Reports.Models;
+﻿using DevExpress.DataAccess.Wizard.Services;
 using DevExpress.XtraReports.UI;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
-using DevExpress.DataAccess.Wizard.Services;
-using Wizrom.Reports.Code;
-using DevExpress.XtraPrinting;
 using System.Reflection;
+using System.Web;
+using Wizrom.Reports.Code;
+using Wizrom.Reports.Models;
 
 namespace WizOne.Module
 {
- 
+
     public class TrimitereWhatsApp
     {
-        internal static void GenerareDocument(string telefon, int parametru)
+        private class ReportExportException : Exception
         {
+            public ReportExportException(string message) : base(message)
+            { }
+        }
+
+        internal static (string, string, string) GenerareDocument(string telefon, int parametru)
+        {
+            string fileName = string.Empty, fileContent = string.Empty, errorMessage = string.Empty;
+
             try
             {
                 string msg = "";
@@ -37,32 +36,44 @@ namespace WizOne.Module
                     if (dtAng.Rows[0]["F10016"] == DBNull.Value || dtAng.Rows[0]["F10016"].ToString().Length <= 0)
                     {
                         msg = "Angajatul cu marca " + dtAng.Rows[0]["F10003"].ToString() + " nu are completata parola pentru PDF!";
-                        return;
+
+                        throw new ReportExportException(msg);
                     }
 
                     string sirParam = Dami.ValoareParam("ListaIDuriRapoarteWA", "");
                     if (sirParam.Length <= 0)
                     {
                         msg = "Nu este definita lista cu ID-urile rapoartelor";
-                        return;
+                        
+                        throw new ReportExportException(msg);
                     }
-                    string[] lstRap = sirParam.Split(';');
 
+                    string[] lstRap = sirParam.Split(';');
                     if (lstRap.Length < parametru)
                     {
                         msg = "Nu este specificat ID-ul pentru parametrul " + parametru;
-                        return;
+                        
+                        throw new ReportExportException(msg);
                     }
 
                     int luna = DateTime.Now.Month;
                     int an = DateTime.Now.Year;
 
                     if (lstRap[parametru - 1].StartsWith("G"))
-                    {
-                        using (var entities = new ReportsEntities())
+                    {                        
                         using (var xtraReport = new XtraReport())
                         {
-                            var report = entities.Reports.Find(Convert.ToInt32(lstRap[parametru - 1].Substring(1)));
+                            var report = null as Report;
+                            var reportId = Convert.ToInt32(lstRap[parametru - 1].Substring(1));
+
+                            using (var entities = new ReportsEntities())
+                                report = entities.Reports.Find(reportId);
+
+                            if (report == null)
+                                throw new Exception($"Nici un raport gasit cu ID-ul {reportId}");
+
+                            if (report.LayoutData == null)
+                                throw new Exception($"Nu exista un layout definit pentru raportul cu ID-ul {reportId}");
 
                             using (var memStream = new MemoryStream(report.LayoutData))
                                 xtraReport.LoadLayoutFromXml(memStream);
@@ -92,58 +103,55 @@ namespace WizOne.Module
                             }
 
                             xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
-                            PdfExportOptions pdfOptions = xtraReport.ExportOptions.Pdf;
-                            pdfOptions.PasswordSecurityOptions.OpenPassword = dtAng.Rows[0]["F10016"].ToString();
+                            xtraReport.ExportOptions.Pdf.PasswordSecurityOptions.OpenPassword = dtAng.Rows[0]["F10016"].ToString();
 
-                            MemoryStream mem = new MemoryStream();
-                            xtraReport.ExportToPdf(mem, pdfOptions);
-                            mem.Seek(0, System.IO.SeekOrigin.Begin);
-
-                            string numeFis = "Fluturaș_" + dtAng.Rows[0]["F10003"].ToString() + ".pdf";
-                            if (Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) == (int)IdClienti.Clienti.Elanor)
+                            using (MemoryStream mem = new MemoryStream())
                             {
-                                string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
-                                string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
-
-                                numeFis = "P_SLP_02344_" + dataInc + "_" + dataSf + "_00_V2_0000_00000_FILE_" + dtAng.Rows[0]["F10003"].ToString() + "_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + ".pdf";
+                                xtraReport.ExportToPdf(mem, xtraReport.ExportOptions.Pdf);
+                                mem.Position = 0;
+                                fileContent = Convert.ToBase64String(mem.ToArray());
                             }
+                        }    
+                        
+                        string numeFis = "Fluturaș_" + dtAng.Rows[0]["F10003"].ToString() + ".pdf";
+                        if (Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) == (int)IdClienti.Clienti.Elanor)
+                        {
+                            string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
+                            string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
 
-                            //Trimitere
-                   
-                            mem.Close();
-                            mem.Flush();                  
-
+                            numeFis = "P_SLP_02344_" + dataInc + "_" + dataSf + "_00_V2_0000_00000_FILE_" + dtAng.Rows[0]["F10003"].ToString() + "_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + ".pdf";
                         }
+
+                        fileName = numeFis;
                     }
-                    else
-                    {//#1014 - Adeverinta
+                    else //#1014 - Adeverinta
+                    {
                         List<int> lst = new List<int>();
                         lst.Add(Convert.ToInt32(dtAng.Rows[0]["F10003"].ToString()));
                         string numeFisier = "";
                         Pagini.TrimitereFluturasi pag = new Pagini.TrimitereFluturasi();
                         byte[] fisier = pag.GenerareAdeverinta(lst, Convert.ToInt32(lstRap[parametru - 1].Substring(1)), DateTime.Now.Year, dtAng.Rows[0]["F10016"].ToString(), out numeFisier);
-                        MemoryStream mem = new MemoryStream(fisier);
-
-                        //Trimitere
-
-                        mem.Close();
-                        mem.Flush();
-                    
+                     
+                        fileContent = Convert.ToBase64String(fisier);
+                        fileName = numeFisier;
                     }
-
                 }
                 else
                 {
                     msg = "Numarul " + telefon  + " nu a fost gasit in baza de date!";
-                }
-     
+
+                    throw new ReportExportException(msg);
+                }     
             }
             catch (Exception ex)
             {
-                General.MemoreazaEroarea(ex, "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
+                if (ex.GetType() == typeof(ReportExportException))
+                    errorMessage = ex.Message;
+                else                    
+                    throw;
             }
+
+            return (fileName, fileContent, errorMessage);
         }
-
-
     }
 }

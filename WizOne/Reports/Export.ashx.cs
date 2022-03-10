@@ -12,10 +12,7 @@ namespace WizOne.Reports
     /// Request example:
     /// GET: https://servername/appname/reports/export?phone=value1&serial=value2
     /// Response example (200):
-    /// {
-    ///     FileName: 'filename',
-    ///     FileContent: 'base64string...'
-    /// }
+    /// Empty response
     /// Response example (400 & 500):
     /// {
     ///     ErrorMessage: 'validation or server error'
@@ -35,27 +32,8 @@ namespace WizOne.Reports
 
                 int.TryParse(context.Request.QueryString["serial"], out serial);
 
-                if (phone != null && serial > 0)
-                {
-                    (string fileName, string fileContent, string errorMessage) = TrimitereWhatsApp.GenerareDocument(phone, serial);
-                    
-                    if (errorMessage.Length == 0)
-                    {
-                        context.Response.Write(JsonConvert.SerializeObject(new
-                        {
-                            FileName = fileName,
-                            FileContent = fileContent
-                        }));
-                    }
-                    else
-                    {
-                        context.Response.StatusCode = 400; // Bad request
-                        context.Response.Write(JsonConvert.SerializeObject(new
-                        {
-                            ErrorMessage = errorMessage
-                        }));
-                    }
-                }
+                if (phone != null && serial > 0)                
+                    TrimitereWhatsApp.SendAsync(phone, serial);                                                       
                 else
                 {
                     context.Response.StatusCode = 400; // Bad request
@@ -72,7 +50,7 @@ namespace WizOne.Reports
                 context.Response.StatusCode = 500; // Internal server error
                 context.Response.Write(JsonConvert.SerializeObject(new 
                 {
-                    ErrorMessage = "Report export error. Check server log."
+                    ErrorMessage = "Export service error. Check server log."
                 }));
             }
             finally

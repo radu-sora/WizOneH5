@@ -3,11 +3,13 @@ using DevExpress.XtraReports.UI;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
+using System.Web.Hosting;
 using Wizrom.Reports.Code;
 using Wizrom.Reports.Models;
 
@@ -22,9 +24,52 @@ namespace WizOne.Module
             { }
         }
 
-        internal static (string, string, string) GenerareDocument(string telefon, int parametru)
+        internal static bool UploadFile(string name, Stream content)
         {
-            string fileName = string.Empty, fileContent = string.Empty, errorMessage = string.Empty;
+            // Get SFTP address, user & password from config and upload the file in blocking mode (same thread)
+            // ...
+            var result = true;
+
+            try
+            {
+                //Renci.SshNet.SftpClient client = new Renci.SshNet.SftpClient(...);
+                //client.UploadFile(...)
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                General.MemoreazaEroarea(ex, "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return result;
+        }
+
+        internal static void SendNotification(string message, string fileName)
+        {
+            // Get message template and base download file url from config
+            // Call Twilio API and send the message with a download file url in blocking mode (same thread)
+            try
+            {
+                if (fileName != null)
+                {
+                    // OK message with download file url
+                }
+                else
+                {
+                    // End user error message with no download file url
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        internal static (string, Stream, string) GenerareDocument(string telefon, int parametru)
+        {
+            var fileName = null as string;
+            var fileContent = null as Stream;
+            var errorMessage = null as string;           
 
             try
             {
@@ -105,12 +150,9 @@ namespace WizOne.Module
                             xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService());
                             xtraReport.ExportOptions.Pdf.PasswordSecurityOptions.OpenPassword = dtAng.Rows[0]["F10016"].ToString();
 
-                            using (MemoryStream mem = new MemoryStream())
-                            {
-                                xtraReport.ExportToPdf(mem, xtraReport.ExportOptions.Pdf);
-                                mem.Position = 0;
-                                fileContent = Convert.ToBase64String(mem.ToArray());
-                            }
+                            fileContent = new MemoryStream();
+                            xtraReport.ExportToPdf(fileContent, xtraReport.ExportOptions.Pdf);
+                            fileContent.Position = 0;                            
                         }    
                         
                         string numeFis = "Fluturaș_" + dtAng.Rows[0]["F10003"].ToString() + ".pdf";
@@ -131,8 +173,8 @@ namespace WizOne.Module
                         string numeFisier = "";
                         Pagini.TrimitereFluturasi pag = new Pagini.TrimitereFluturasi();
                         byte[] fisier = pag.GenerareAdeverinta(lst, Convert.ToInt32(lstRap[parametru - 1].Substring(1)), DateTime.Now.Year, dtAng.Rows[0]["F10016"].ToString(), out numeFisier);
-                     
-                        fileContent = Convert.ToBase64String(fisier);
+
+                        fileContent = new MemoryStream(fisier);                        
                         fileName = numeFisier;
                     }
                 }
@@ -145,6 +187,8 @@ namespace WizOne.Module
             }
             catch (Exception ex)
             {
+                fileContent?.Dispose();
+
                 if (ex.GetType() == typeof(ReportExportException))
                     errorMessage = ex.Message;
                 else                    
@@ -152,6 +196,33 @@ namespace WizOne.Module
             }
 
             return (fileName, fileContent, errorMessage);
+        }
+
+        public static void SendAsync(string phone, int serial)
+        {
+            HostingEnvironment.QueueBackgroundWorkItem(_ => 
+            {
+                try
+                {
+                    (string fileName, Stream fileContent, string errorMessage) = GenerareDocument(phone, serial);
+
+                    if (errorMessage == null)
+                    {
+                        if (UploadFile(fileName, fileContent))
+                            SendNotification("[OK message]", fileName);
+                        /*else
+                            SendNotification("[File not available message]", null);*/
+
+                        fileContent?.Dispose();
+                    }
+                    else
+                        SendNotification(errorMessage, null);                    
+                }
+                catch (Exception ex)
+                {
+                    General.MemoreazaEroarea(ex, "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
+                }
+            });
         }
     }
 }

@@ -7397,7 +7397,7 @@ namespace WizOne.Module
             }
         }
 
-        public static void CalculCO(int an, int marca = -99, bool cuActualizareInF100 = true)
+        public static void CalculCO(int an, int marca = -99, bool cuActualizareInF100 = true, bool doarZLP = false)
         {
             try
             {
@@ -7436,11 +7436,18 @@ namespace WizOne.Module
                 //Radu 21.04.2020
                 //string strSql = SelectCalculCO(an, f10003, filtruIns);
                 //string strSql = "select * from calculCO(" + f10003 + ", CONVERT(date,'" + an + "-12-31'), 1, (SELECT F10072 FROM f100 where f10003=" + f10003 + "))";
-                string strSql = "select * from calculCO(" + f10003 + ", CONVERT(date," + dtCalcul + "), 1, (SELECT F10072 FROM f100 where f10003=" + f10003 + "))";
+                string strSql = "";
+                if (!doarZLP)
+                {
+                    strSql = "select * from calculCO(" + f10003 + ", CONVERT(date," + dtCalcul + "), 1, (SELECT F10072 FROM f100 where f10003=" + f10003 + "))";
+                    General.ExecutaNonQuery(strSql, null);
+                }
+
+                //#1113
+                strSql = "select * from calculZLP(" + f10003 + ", CONVERT(date," + dtCalcul + "), 1, (SELECT F1001143 FROM f1001 where f10003=" + f10003 + "))";
                 General.ExecutaNonQuery(strSql, null);
 
-
-                if (cuActualizareInF100)
+                if (cuActualizareInF100 && !doarZLP)
                 {
                     //Radu 21.04.2020
                     //string strUpd = $@"UPDATE A 
@@ -7509,6 +7516,32 @@ namespace WizOne.Module
                                     General.ExecutaNonQuery("exec \"CalculCOProc\" (" + dtAng.Rows[i][0].ToString() + ", " + dtCalcul + ", 1, " + dtAngajat.Rows[0][0].ToString() + ");", null);
                                 }
                             }
+                        }
+                    }
+                }
+
+                //#1113
+                DataTable dtZLP = new DataTable();
+                if (marca != -99)
+                {
+                    dtZLP = IncarcaDT("SELECT F1001143 FROM F1001 WHERE F10003 = " + marca, null);
+                    if (dtZLP != null && dtZLP.Rows.Count > 0 && dtZLP.Rows[0][0] != DBNull.Value && Convert.ToInt32(dtZLP.Rows[0][0].ToString()) > 0)
+                    {
+                        General.ExecutaNonQuery("DECLARE   @f10003 NVARCHAR(4000),  @zi datetime,  @mod int,   @grila int "
+                        + " SELECT TOP 1 @f10003 = '" + f10003 + "', @zi = " + dtCalcul + ", @mod = 1, @grila = F1001143 FROM F1001 WHERE F10003 =  " + f10003
+                        + " EXEC CalculZLPProc @f10003, @zi, @mod, @grila ", null);
+                    }
+                }
+                else
+                {
+                    dtZLP = IncarcaDT("SELECT F100.F10003 FROM F100 JOIN F1001 ON F100.F10003 = F1001.F10003 WHERE CONVERT(DATE, F10022) <= '" + dtSf + "' AND '" + dtInc + "' <= CONVERT(DATE, F10023) AND F1001143 IS NOT NULL AND F1001143 <> 0", null);
+                    if (dtZLP != null && dtZLP.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dtZLP.Rows.Count; i++)
+                        {
+                            General.ExecutaNonQuery("DECLARE   @f10003 NVARCHAR(4000),  @zi datetime,  @mod int,   @grila int "
+                            + " SELECT TOP 1 @f10003 = '" + dtZLP.Rows[i][0].ToString() + "', @zi = " + dtCalcul + ", @mod = 1, @grila = F1001143 FROM F1001 WHERE F10003 =  " + dtZLP.Rows[i][0].ToString()
+                            + " EXEC CalculZLPProc @f10003, @zi, @mod, @grila ", null);
                         }
                     }
                 }

@@ -1779,11 +1779,21 @@
 					    </tr>
 					    <tr>				
 						    <td >
+							    <dx:ASPxLabel  ID="lblGrilaZLP" runat="server"  Text="Grila ZLP" ></dx:ASPxLabel >	
+						    </td>
+                            <td></td>		
+						    <td>
+							    <dx:ASPxTextBox  ID="txtGrilaZLP" Width="75"  runat="server" Text='<%# Eval("F1001143") %>' TabIndex="67" AutoPostBack="false" >                                       
+							    </dx:ASPxTextBox>
+						    </td>
+					    </tr>
+					    <tr>				
+						    <td >
 							    <dx:ASPxLabel  ID="lblZLP" runat="server"  Text="Zile libere platite" ></dx:ASPxLabel >	
 						    </td>
                             <td></td>		
 						    <td>
-							    <dx:ASPxTextBox  ID="txtZLP" Width="75"  runat="server" ReadOnly="true" AutoPostBack="false" TabIndex="67" >                                
+							    <dx:ASPxTextBox  ID="txtZLP" Width="75"  runat="server" ReadOnly="true" AutoPostBack="false" TabIndex="68" >                                
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -1793,7 +1803,7 @@
 						    </td>
                             <td></td>		
 						    <td>
-							    <dx:ASPxTextBox  ID="txtZLPCuv" Width="75"  runat="server" ReadOnly="true" AutoPostBack="false" TabIndex="68">                                   
+							    <dx:ASPxTextBox  ID="txtZLPCuv" Width="75"  runat="server" ReadOnly="true" AutoPostBack="false" TabIndex="69">                                   
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -1803,7 +1813,7 @@
 						    </td>
                             <td></td>	
 						    <td>	
-							    <dx:ASPxDateEdit  ID="deDataPrimeiAng" ClientInstanceName="deDataPrimeiAng" Width="85" TabIndex="69" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001049") %>' AutoPostBack="false"  >
+							    <dx:ASPxDateEdit  ID="deDataPrimeiAng" ClientInstanceName="deDataPrimeiAng" Width="85" TabIndex="70" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001049") %>' AutoPostBack="false"  >
                                     <CalendarProperties FirstDayOfWeek="Monday" />
                                     <ClientSideEvents DateChanged="function(s,e){ CalcVechime(s); }" />
 							    </dx:ASPxDateEdit>										

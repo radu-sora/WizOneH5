@@ -7,9 +7,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Reflection;
 using System.Web;
 using System.Web.Hosting;
+using Twilio;
+using Twilio.Rest.Conversations.V1;
+using Twilio.Rest.Conversations.V1.Conversation;
+//using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 using Wizrom.Reports.Code;
 using Wizrom.Reports.Models;
 
@@ -44,19 +50,72 @@ namespace WizOne.Module
             return result;
         }
 
-        internal static void SendNotification(string message, string fileName)
+        internal static void SendNotification(string message, string fileName, string telefon)
         {
             // Get message template and base download file url from config
             // Call Twilio API and send the message with a download file url in blocking mode (same thread)
             try
             {
+                var twilioRestClient = ProxiedTwilioClientCreator.GetClient();
+
+                // Now that we have our custom built TwilioRestClient,
+                // we can pass it to any REST API resource action.
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                                            | SecurityProtocolType.Tls11
+                                            | SecurityProtocolType.Tls12
+                                            | SecurityProtocolType.Ssl3;
+
+                var accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
+                var authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN");
+
+                TwilioClient.Init(accountSid, authToken);
+
+                var conversation = ConversationResource.Create();
+
+                var participant = ParticipantResource.Create(
+                    messagingBindingAddress: "whatsapp:+4" + telefon,
+                    messagingBindingProxyAddress: "whatsapp:+40373806412",
+                    pathConversationSid: conversation.Sid
+                );
+
+
                 if (fileName != null)
                 {
                     // OK message with download file url
+
+                    //trimitere mesaj cu document
+                    var mesaj = MessageResource.Create(
+                        author: "whatsapp:+40373806412",
+                        body: "Fluturaș",
+                        pathConversationSid: conversation.Sid
+                    );
+
+                    //var mesaj = MessageResource.Create(
+                    //    to: new PhoneNumber("whatsapp:+4" + telefon),
+                    //    from: new PhoneNumber("whatsapp:+40373806412"),
+                    //    mediaUrl: new List<Uri> { new Uri("https://www.wizrom.ro/specs/PAYSLIP_PRY_RO001_RO_Y2021_P7_E2550_R01.pdf") }, //+ fileName
+                    //    body: "",
+                    //    // Here's where you inject the custom client
+                    //    client: twilioRestClient
+                    //);
                 }
                 else
                 {
                     // End user error message with no download file url
+                    var mesaj = MessageResource.Create(
+                        author: "whatsapp:+40373806412",
+                        body: message,
+                        pathConversationSid: conversation.Sid
+                    );
+
+                    //var mesaj = MessageResource.Create(
+                    //    to: new PhoneNumber("whatsapp:+4" + telefon),
+                    //    from: new PhoneNumber("whatsapp:+40373806412"),                        
+                    //    body: message,
+                    //    // Here's where you inject the custom client
+                    //    client: twilioRestClient
+                    //);
+
                 }
             }
             catch (Exception ex)
@@ -81,7 +140,7 @@ namespace WizOne.Module
                     if (dtAng.Rows[0]["F10016"] == DBNull.Value || dtAng.Rows[0]["F10016"].ToString().Length <= 0)
                     {
                         msg = "Angajatul cu marca " + dtAng.Rows[0]["F10003"].ToString() + " nu are completata parola pentru PDF!";
-
+                        General.MemoreazaEroarea(msg, "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
                         throw new ReportExportException(msg);
                     }
 
@@ -89,15 +148,17 @@ namespace WizOne.Module
                     if (sirParam.Length <= 0)
                     {
                         msg = "Nu este definita lista cu ID-urile rapoartelor";
-                        
+                        General.MemoreazaEroarea(msg, "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
                         throw new ReportExportException(msg);
                     }
+
+                    string userId = Dami.ValoareParam("UserIdImplicitWA", "-99");
 
                     string[] lstRap = sirParam.Split(';');
                     if (lstRap.Length < parametru)
                     {
                         msg = "Nu este specificat ID-ul pentru parametrul " + parametru;
-                        
+                        General.MemoreazaEroarea(msg, "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
                         throw new ReportExportException(msg);
                     }
 
@@ -125,7 +186,7 @@ namespace WizOne.Module
 
                             var values = new
                             {
-                                Implicit = new { UserId = HttpContext.Current.Session?["UserId"] },
+                                Implicit = new { UserId = userId },
                                 Explicit = new { Angajat = dtAng.Rows[0]["F10003"].ToString(), Luna = luna, An = an }
                             };
                             var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
@@ -156,7 +217,7 @@ namespace WizOne.Module
                         }    
                         
                         string numeFis = "Fluturaș_" + dtAng.Rows[0]["F10003"].ToString() + ".pdf";
-                        if (Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], -99)) == (int)IdClienti.Clienti.Elanor)
+                        if (Convert.ToInt32(Dami.ValoareParam("IdClient", "1")) == (int)IdClienti.Clienti.Elanor)
                         {
                             string dataInc = an.ToString() + luna.ToString().PadLeft(2, '0') + "01";
                             string dataSf = an.ToString() + luna.ToString().PadLeft(2, '0') + DateTime.DaysInMonth(an, luna).ToString();
@@ -181,7 +242,7 @@ namespace WizOne.Module
                 else
                 {
                     msg = "Numarul " + telefon  + " nu a fost gasit in baza de date!";
-
+                    General.MemoreazaEroarea(msg, "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
                     throw new ReportExportException(msg);
                 }     
             }
@@ -209,14 +270,14 @@ namespace WizOne.Module
                     if (errorMessage == null)
                     {
                         if (UploadFile(fileName, fileContent))
-                            SendNotification("[OK message]", fileName);
+                            SendNotification("[OK message]", fileName, phone);
                         /*else
                             SendNotification("[File not available message]", null);*/
 
                         fileContent?.Dispose();
                     }
                     else
-                        SendNotification(errorMessage, null);                    
+                        SendNotification(errorMessage, null, phone);                    
                 }
                 catch (Exception ex)
                 {

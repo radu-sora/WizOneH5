@@ -287,7 +287,8 @@ namespace WizOne.Revisal
                 else
                     DB = user;
 
-                tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                //tmp = cnApp.Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+                tmp = Regex.Split(cnApp, "PASSWORD=", RegexOptions.IgnoreCase)[1];
                 pwd = tmp.Split(';')[0];
 
                 string sql = "SELECT \"Valoare\", \"Criptat\"  FROM \"tblParametrii\" WHERE \"Nume\" = 'ORAPWD'";

@@ -65,6 +65,9 @@ namespace WizOne.Module
             var accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
             var authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN");
 
+            accountSid = "AC4bf2c138de45e3e4b041a2b7fb007a81";
+            authToken = "6a856be34cda961f62683fef17a6bca2";
+
             if (_httpClient == null)
             {
                 // It's best* to create a single HttpClient and reuse it

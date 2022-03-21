@@ -12,9 +12,9 @@ using System.Reflection;
 using System.Web;
 using System.Web.Hosting;
 using Twilio;
-using Twilio.Rest.Conversations.V1;
-using Twilio.Rest.Conversations.V1.Conversation;
-//using Twilio.Rest.Api.V2010.Account;
+//using Twilio.Rest.Conversations.V1;
+//using Twilio.Rest.Conversations.V1.Conversation;
+using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
 using Wizrom.Reports.Code;
 using Wizrom.Reports.Models;
@@ -58,6 +58,8 @@ namespace WizOne.Module
             {
                 var twilioRestClient = ProxiedTwilioClientCreator.GetClient();
 
+                General.MemoreazaEroarea("ProxiedTwilioClientCreator.GetClient()", "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
+
                 // Now that we have our custom built TwilioRestClient,
                 // we can pass it to any REST API resource action.
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
@@ -68,53 +70,66 @@ namespace WizOne.Module
                 var accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
                 var authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN");
 
-                TwilioClient.Init(accountSid, authToken);
+                accountSid = "AC4bf2c138de45e3e4b041a2b7fb007a81";
+                authToken = "6a856be34cda961f62683fef17a6bca2";
 
-                var conversation = ConversationResource.Create();
+                General.MemoreazaEroarea(accountSid.ToString() + " " + authToken.ToString(), "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
 
-                var participant = ParticipantResource.Create(
-                    messagingBindingAddress: "whatsapp:+4" + telefon,
-                    messagingBindingProxyAddress: "whatsapp:+40373806412",
-                    pathConversationSid: conversation.Sid
-                );
+                //TwilioClient.Init(accountSid, authToken);
+                //General.MemoreazaEroarea("TwilioClient.Init(accountSid, authToken)", "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
+                //var conversation = ConversationResource.Create();
+                //General.MemoreazaEroarea("ConversationResource.Create()", "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);             
 
+                //try
+                //{
+                //    var participant = ParticipantResource.Create(
+                //    messagingBindingAddress: "whatsapp:+4" + telefon,
+                //    messagingBindingProxyAddress: "whatsapp:+40373806412",
+                //    pathConversationSid: conversation.Sid
+                //    );
+                //}
+                //catch(Exception ex)
+                //{
+
+                //}
+                //General.MemoreazaEroarea("conversation.Sid: " + conversation.Sid, "TrimitereWhatsApp", new StackTrace().GetFrame(0).GetMethod().Name);
 
                 if (fileName != null)
                 {
                     // OK message with download file url
 
                     //trimitere mesaj cu document
-                    var mesaj = MessageResource.Create(
-                        author: "whatsapp:+40373806412",
-                        body: "Fluturaș",
-                        pathConversationSid: conversation.Sid
-                    );
-
                     //var mesaj = MessageResource.Create(
-                    //    to: new PhoneNumber("whatsapp:+4" + telefon),
-                    //    from: new PhoneNumber("whatsapp:+40373806412"),
-                    //    mediaUrl: new List<Uri> { new Uri("https://www.wizrom.ro/specs/PAYSLIP_PRY_RO001_RO_Y2021_P7_E2550_R01.pdf") }, //+ fileName
-                    //    body: "",
-                    //    // Here's where you inject the custom client
-                    //    client: twilioRestClient
+                    //    author: "whatsapp:+40373806412",
+                    //    body: "Fluturaș",
+                    //    pathConversationSid: conversation.Sid
                     //);
+
+                    var mesaj = MessageResource.Create(
+                        to: new PhoneNumber("whatsapp:+4" + telefon),
+                        from: new PhoneNumber("whatsapp:+40373806412"),
+                        mediaUrl: new List<Uri> { new Uri("https://www.wizrom.ro/specs/PAYSLIP_PRY_RO001_RO_Y2021_P7_E2550_R01.pdf") }, //+ fileName
+                        body: "",
+                        // Here's where you inject the custom client
+                        client: twilioRestClient
+                    );
                 }
                 else
                 {
                     // End user error message with no download file url
-                    var mesaj = MessageResource.Create(
-                        author: "whatsapp:+40373806412",
-                        body: message,
-                        pathConversationSid: conversation.Sid
-                    );
-
                     //var mesaj = MessageResource.Create(
-                    //    to: new PhoneNumber("whatsapp:+4" + telefon),
-                    //    from: new PhoneNumber("whatsapp:+40373806412"),                        
+                    //    author: "whatsapp:+40373806412",
                     //    body: message,
-                    //    // Here's where you inject the custom client
-                    //    client: twilioRestClient
+                    //    pathConversationSid: conversation.Sid
                     //);
+
+                    var mesaj = MessageResource.Create(
+                        to: new PhoneNumber("whatsapp:+4" + telefon),
+                        from: new PhoneNumber("whatsapp:+40373806412"),
+                        body: message,
+                        // Here's where you inject the custom client
+                        client: twilioRestClient
+                    );
 
                 }
             }

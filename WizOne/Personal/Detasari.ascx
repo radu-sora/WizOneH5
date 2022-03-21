@@ -80,13 +80,13 @@
     }
 
     function OnChangedChk2(s, e) {
-        var chk4 = grDateDetasari.GetEditor("F11213");
+        var chk3 = grDateDetasari.GetEditor("F11212");
         if (s.GetValue() == 1)
-            chk4.SetValue(0);
+            chk3.SetValue(0);
         
     }
 
-    function OnChangedChk4(s, e) {
+    function OnChangedChk3(s, e) {
         var chk2 = grDateDetasari.GetEditor("F11211");
         if (s.GetValue() == 1)
             chk2.SetValue(0);

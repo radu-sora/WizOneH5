@@ -138,6 +138,7 @@
 								<Columns>
 									<dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
 									<dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
+									<dx:ListBoxColumn FieldName="CNP" Caption="CNP" Width="130px" />
 									<dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
 									<dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
 									<dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />

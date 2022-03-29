@@ -2666,7 +2666,7 @@ namespace WizOne.ConcediiMedicale
                 string op = "+";
                 if (Constante.tipBD == 2) op = "||";
 
-                strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
+                strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", A.F10017 AS CNP,
                         X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
                         FROM (
                         SELECT A.F10003

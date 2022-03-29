@@ -21578,7 +21578,6 @@ GO
 DROP PROCEDURE [dbo].[CalculCOProc2]
 GO
 
-
 ----  2.2.142.01  ----
 
 
@@ -21671,8 +21670,6 @@ DEALLOCATE @cursor_db
 
 END
 GO
-
-
 
 ----  2.2.143  ----
 
@@ -21914,4 +21911,25 @@ DEALLOCATE @cursor_db
 
 END
 
+GO
+
+
+CREATE TABLE [dbo].[PtjSpecial_RelSablonAng](
+	[F10003] [int] NOT NULL,
+	[IdSablon] [int] NOT NULL,
+	[DataInceput] [date] NULL,
+	[DataSfarsit] [date] NULL,
+	[IdAuto] [int] IDENTITY(1,1) NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [date] NULL
+ CONSTRAINT [PK_PtjSpecial_RelSablonAng] PRIMARY KEY CLUSTERED 
+(
+	IdAuto ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('MP_ModificareMarcaUnica','0','0 (sau absent) - marca unica nu se poate modifica; 1 - se poate modifica',3, 0)
 GO

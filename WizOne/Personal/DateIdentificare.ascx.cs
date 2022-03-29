@@ -55,6 +55,11 @@ namespace WizOne.Personal
                     }
                 }
 
+                string marcaUnica = Dami.ValoareParam("MP_ModificareMarcaUnica", "0");
+                ASPxTextBox txtMarcaUnica = DateIdentificare_DataList.Items[0].FindControl("txtMarcaUnica") as ASPxTextBox;
+                if (marcaUnica == "1")
+                    txtMarcaUnica.ClientEnabled = true;
+
                 btnIncarca_Click();
 
                 ASPxRadioButtonList rbSex = DateIdentificare_DataList.Items[0].FindControl("rbSex") as ASPxRadioButtonList;
@@ -377,7 +382,7 @@ namespace WizOne.Personal
                     ASPxTextBox txtMarcaUnica = DateIdentificare_DataList.Items[0].FindControl("txtMarcaUnica") as ASPxTextBox;
 
                     txtMarcaUnica.Text = marcaUnica.ToString();
-                    txtMarcaUnica.ReadOnly = true;
+                    //txtMarcaUnica.ReadOnly = true;
 
                     ds.Tables[0].Rows[0]["F1001036"] = marcaUnica;
                     ds.Tables[2].Rows[0]["F1001036"] = marcaUnica;

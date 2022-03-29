@@ -21929,3 +21929,7 @@ CREATE TABLE [dbo].[PtjSpecial_RelSablonAng](
 ) ON [PRIMARY]
 
 GO
+
+
+INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('MP_ModificareMarcaUnica','0','0 (sau absent) - marca unica nu se poate modifica; 1 - se poate modifica',3, 0)
+GO

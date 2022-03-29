@@ -264,7 +264,7 @@
 							                    <dx:ASPxLabel  ID="lblMarcaUnica" runat="server"  Text="Marca unica"></dx:ASPxLabel >	
 						                    </td>
 						                    <td>	
-							                    <dx:ASPxTextBox  ID="txtMarcaUnica" runat="server" Text='<%# Eval("F1001036") %>' ReadOnly="true" AutoPostBack="false"  ></dx:ASPxTextBox>										
+							                    <dx:ASPxTextBox  ID="txtMarcaUnica" runat="server" Text='<%# Eval("F1001036") %>' ClientEnabled="false" AutoPostBack="false"  ></dx:ASPxTextBox>										
 						                    </td>
 					                    </tr>
 					                    <tr>				

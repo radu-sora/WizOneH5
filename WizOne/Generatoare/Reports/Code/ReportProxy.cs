@@ -249,7 +249,7 @@ namespace Wizrom.Reports.Code
             return GetUrl(reportId, paramList, oncePerGroup: true);
         }
 
-        public static void Print(int reportId, object paramList = null)
+        public static void Print(int reportId, string numeImprimanta = "", object paramList = null) //Radu 29.03.2022 - am adaugat numeImprimanta pentru cazurile cand trebuie folosita imprimanta pentru fluturasi
         {
             if (reportId == 0)
                 throw new ArgumentException("Invalid report id value");            
@@ -308,7 +308,8 @@ namespace Wizrom.Reports.Code
                 xtraReport.PrintingSystem.ShowMarginsWarning = false;
                 xtraReport.ShowPrintMarginsWarning = false;
 
-                string numeImprimanta = Dami.ValoareParam("TactilImprimanta").Trim();
+                if (numeImprimanta == "")   //Radu 29.03.2022
+                    numeImprimanta = Dami.ValoareParam("TactilImprimanta").Trim();
                 if (numeImprimanta != "")
                     xtraReport.PrinterName = numeImprimanta;
 

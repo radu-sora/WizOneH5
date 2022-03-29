@@ -207,7 +207,7 @@ namespace WizOne.Tactil
                                     Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
                                 }
                                 else
-                                    Wizrom.Reports.Code.ReportProxy.Print(reportId, paramList: reportParams); // TODO: FIX03                                
+                                    Wizrom.Reports.Code.ReportProxy.Print(reportId, "", paramList: reportParams); // TODO: FIX03                                
                             }
                         }
                         break;

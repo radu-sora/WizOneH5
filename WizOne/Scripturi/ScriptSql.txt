@@ -21877,7 +21877,7 @@ IF @marci not like 'P%'
 		SET @cursor_db = CURSOR FOR 
 		SELECT f10003 
 		FROM f100 
-		WHERE convert(date, getdate()) < f10022 
+		WHERE F10003 = convert(int, @marci)
 	END
 
 OPEN @cursor_db  

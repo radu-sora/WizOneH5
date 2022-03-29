@@ -152,7 +152,7 @@ namespace WizOne.Tactil
                         Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
                     }
                     else
-                        Wizrom.Reports.Code.ReportProxy.Print(reportId, paramList: reportParams); // TODO: FIX03 - Use async method for non blocking UI.
+                        Wizrom.Reports.Code.ReportProxy.Print(reportId, "", paramList: reportParams); // TODO: FIX03 - Use async method for non blocking UI.
                 }  
                 else
                 {

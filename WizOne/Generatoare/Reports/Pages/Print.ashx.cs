@@ -16,7 +16,7 @@ namespace Wizrom.Reports.Pages
             {
                 var session = ReportProxy.GetSession() as dynamic;
 
-                ReportProxy.Print(session.ReportId, session.ParamList);
+                ReportProxy.Print(session.ReportId, "", session.ParamList);
                 ReportProxy.RemoveSession();
             }
             catch (Exception ex)

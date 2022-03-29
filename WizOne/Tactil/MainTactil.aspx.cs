@@ -169,7 +169,10 @@ namespace WizOne.Tactil
                     // New report access interface
                     //MessageBox.Show("Fluturasul se printeaza!", MessageBox.icoSuccess, "");
                     //Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
-                    Wizrom.Reports.Code.ReportProxy.Print(reportId, paramList: reportParams);
+
+                    //Radu 29.03.2022
+                    string numeImprimanta = Dami.ValoareParam("TactilImprimantaFluturas").Trim();
+                    Wizrom.Reports.Code.ReportProxy.Print(reportId, numeImprimanta, paramList: reportParams);
                 }
                 else
                 {

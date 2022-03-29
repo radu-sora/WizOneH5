@@ -26,9 +26,9 @@ namespace WizOne.Personal
         {
             try
             {
-                grDateMedicina.DataBind();
+                grDateMed.DataBind();
 
-                foreach (dynamic c in grDateMedicina.Columns)
+                foreach (dynamic c in grDateMed.Columns)
                 {
                     try
                     {
@@ -36,42 +36,42 @@ namespace WizOne.Personal
                     }
                     catch (Exception) { }
                 }
-                grDateMedicina.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
-                grDateMedicina.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
-                grDateMedicina.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
-                grDateMedicina.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
-                grDateMedicina.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
+                grDateMed.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
+                grDateMed.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
+                grDateMed.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
+                grDateMed.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
+                grDateMed.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
 
                 if (!IsPostBack)                
                     Session["DocUpload_MP_Medicina"] = null;                
 
-                if (General.VarSession("EsteAdmin").ToString() == "0") General.SecuritatePersonal(grDateMedicina);
+                if (General.VarSession("EsteAdmin").ToString() == "0") General.SecuritatePersonal(grDateMed);
 
-                GridViewDataDateColumn colData = (grDateMedicina.Columns["DataElibControlMed"] as GridViewDataDateColumn);
+                GridViewDataDateColumn colData = (grDateMed.Columns["DataElibControlMed"] as GridViewDataDateColumn);
                 colData.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
 
-                colData = (grDateMedicina.Columns["DataUrmControl"] as GridViewDataDateColumn);
+                colData = (grDateMed.Columns["DataUrmControl"] as GridViewDataDateColumn);
                 colData.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
 
-                GridViewDataTextColumn colText = (grDateMedicina.Columns["PerioadaValab"] as GridViewDataTextColumn);
+                GridViewDataTextColumn colText = (grDateMed.Columns["PerioadaValab"] as GridViewDataTextColumn);
                 colText.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
 
-                GridViewDataCheckColumn colChk = (grDateMedicina.Columns["Risc1"] as GridViewDataCheckColumn);
+                GridViewDataCheckColumn colChk = (grDateMed.Columns["Risc1"] as GridViewDataCheckColumn);
                 colChk.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
 
-                colChk = (grDateMedicina.Columns["Risc2"] as GridViewDataCheckColumn);
+                colChk = (grDateMed.Columns["Risc2"] as GridViewDataCheckColumn);
                 colChk.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
 
-                colChk = (grDateMedicina.Columns["Risc3"] as GridViewDataCheckColumn);
+                colChk = (grDateMed.Columns["Risc3"] as GridViewDataCheckColumn);
                 colChk.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
 
-                colChk = (grDateMedicina.Columns["Risc4"] as GridViewDataCheckColumn);
+                colChk = (grDateMed.Columns["Risc4"] as GridViewDataCheckColumn);
                 colChk.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
 
-                colChk = (grDateMedicina.Columns["Risc5"] as GridViewDataCheckColumn);
+                colChk = (grDateMed.Columns["Risc5"] as GridViewDataCheckColumn);
                 colChk.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
 
-                GridViewDataComboBoxColumn colCmb = (grDateMedicina.Columns["Manager"] as GridViewDataComboBoxColumn);
+                GridViewDataComboBoxColumn colCmb = (grDateMed.Columns["Manager"] as GridViewDataComboBoxColumn);
                 colCmb.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
             }
             catch (Exception ex)
@@ -80,7 +80,7 @@ namespace WizOne.Personal
             }
         }
 
-        protected void grDateMedicina_DataBinding(object sender, EventArgs e)
+        protected void grDateMed_DataBinding(object sender, EventArgs e)
         {
             try
             {
@@ -109,27 +109,27 @@ namespace WizOne.Personal
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                     ds.Tables.Add(dt);
                 }
-                grDateMedicina.KeyFieldName = "IdAuto";
-                grDateMedicina.DataSource = dt;
+                grDateMed.KeyFieldName = "IdAuto";
+                grDateMed.DataSource = dt;
 
                 DataTable dtMedicina = General.GetObiecteDinArie("ArieTabMedicinaDinPersonal");
-                GridViewDataComboBoxColumn colMedicina = (grDateMedicina.Columns["IdObiect"] as GridViewDataComboBoxColumn);
+                GridViewDataComboBoxColumn colMedicina = (grDateMed.Columns["IdObiect"] as GridViewDataComboBoxColumn);
                 colMedicina.PropertiesComboBox.DataSource = dtMedicina;
 
                 DataTable dtLocatie = General.IncarcaDT("SELECT * FROM \"tblLocatieMedMuncii\" ORDER BY\"Denumire\"", null);
-                GridViewDataComboBoxColumn colLocatie = (grDateMedicina.Columns["IdLocatie"] as GridViewDataComboBoxColumn);
+                GridViewDataComboBoxColumn colLocatie = (grDateMed.Columns["IdLocatie"] as GridViewDataComboBoxColumn);
                 colLocatie.PropertiesComboBox.DataSource = dtLocatie;
 
                 DataTable dtManager = General.IncarcaDT("SELECT * FROM \"tblManagerMedMuncii\" ORDER BY\"Denumire\"", null);
-                GridViewDataComboBoxColumn colManager = (grDateMedicina.Columns["Manager"] as GridViewDataComboBoxColumn);
+                GridViewDataComboBoxColumn colManager = (grDateMed.Columns["Manager"] as GridViewDataComboBoxColumn);
                 colManager.PropertiesComboBox.DataSource = dtManager;
 
                 DataTable dtSectAlim = General.GetPrelungireContract();
-                GridViewDataComboBoxColumn colSectAlim = (grDateMedicina.Columns["SectorAlim"] as GridViewDataComboBoxColumn);
+                GridViewDataComboBoxColumn colSectAlim = (grDateMed.Columns["SectorAlim"] as GridViewDataComboBoxColumn);
                 colSectAlim.PropertiesComboBox.DataSource = dtSectAlim;
 
                 DataTable dtRez = General.ListaRezultatExamen();
-                GridViewDataComboBoxColumn colRez = (grDateMedicina.Columns["RezultatExamen"] as GridViewDataComboBoxColumn);
+                GridViewDataComboBoxColumn colRez = (grDateMed.Columns["RezultatExamen"] as GridViewDataComboBoxColumn);
                 colRez.PropertiesComboBox.DataSource = dtRez;
 
                 HttpContext.Current.Session["InformatiaCurentaPersonal"] = ds;
@@ -140,7 +140,7 @@ namespace WizOne.Personal
             }
         }
 
-        protected void grDateMedicina_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
+        protected void grDateMed_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
         {
             try
             {
@@ -173,7 +173,7 @@ namespace WizOne.Personal
             }
         }
 
-        protected void grDateMedicina_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        protected void grDateMed_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
         {
             try
             {
@@ -183,27 +183,27 @@ namespace WizOne.Personal
                 //DataTable dtGen = Session["Admin_Medicina_General"] as DataTable;
                 DataRow dr = dt.NewRow();
 
-                ASPxMemo txtObs = grDateMedicina.FindEditFormTemplateControl("txtObs") as ASPxMemo;
-                ASPxDateEdit txtDataElib = grDateMedicina.FindEditFormTemplateControl("txtDataElib") as ASPxDateEdit;
-                ASPxDateEdit txtDataExp = grDateMedicina.FindEditFormTemplateControl("txtDataExp") as ASPxDateEdit;
-                ASPxComboBox cmbObi = grDateMedicina.FindEditFormTemplateControl("cmbObi") as ASPxComboBox;
-                ASPxTextBox txtSerie =  grDateMedicina.FindEditFormTemplateControl("txtSerie") as ASPxTextBox;
-                ASPxTextBox txtEmi = grDateMedicina.FindEditFormTemplateControl("txtEmi") as ASPxTextBox;
+                ASPxMemo txtObs = grDateMed.FindEditFormTemplateControl("txtObs") as ASPxMemo;
+                ASPxDateEdit txtDataElib = grDateMed.FindEditFormTemplateControl("txtDataElib") as ASPxDateEdit;
+                ASPxDateEdit txtDataExp = grDateMed.FindEditFormTemplateControl("txtDataExp") as ASPxDateEdit;
+                ASPxComboBox cmbObi = grDateMed.FindEditFormTemplateControl("cmbObi") as ASPxComboBox;
+                ASPxTextBox txtSerie =  grDateMed.FindEditFormTemplateControl("txtSerie") as ASPxTextBox;
+                ASPxTextBox txtEmi = grDateMed.FindEditFormTemplateControl("txtEmi") as ASPxTextBox;
 
-                ASPxDateEdit txtDataElibCtrlMed = grDateMedicina.FindEditFormTemplateControl("txtDataElibCtrlMed") as ASPxDateEdit;
-                ASPxTextBox txtValab = grDateMedicina.FindEditFormTemplateControl("txtValab") as ASPxTextBox;
-                ASPxDateEdit txtDataUrmCtrl = grDateMedicina.FindEditFormTemplateControl("txtDataUrmCtrl") as ASPxDateEdit;
-                ASPxComboBox cmbLocatie = grDateMedicina.FindEditFormTemplateControl("cmbLocatie") as ASPxComboBox;
-                ASPxComboBox cmbManager = grDateMedicina.FindEditFormTemplateControl("cmbManager") as ASPxComboBox;
-                ASPxComboBox cmbSectAlim = grDateMedicina.FindEditFormTemplateControl("cmbSectAlim") as ASPxComboBox;
-                //ASPxComboBox cmbRiscuri = grDateMedicina.FindEditFormTemplateControl("cmbRiscuri") as ASPxComboBox;
-                ASPxTextBox txtAlteRiscuri = grDateMedicina.FindEditFormTemplateControl("txtAlteRiscuri") as ASPxTextBox;
-                ASPxComboBox cmbRez = grDateMedicina.FindEditFormTemplateControl("cmbRez") as ASPxComboBox;
-                ASPxCheckBox chk1 = grDateMedicina.FindEditFormTemplateControl("chk1") as ASPxCheckBox;
-                ASPxCheckBox chk2 = grDateMedicina.FindEditFormTemplateControl("chk2") as ASPxCheckBox;
-                ASPxCheckBox chk3 = grDateMedicina.FindEditFormTemplateControl("chk3") as ASPxCheckBox;
-                ASPxCheckBox chk4 = grDateMedicina.FindEditFormTemplateControl("chk4") as ASPxCheckBox;
-                ASPxCheckBox chk5 = grDateMedicina.FindEditFormTemplateControl("chk5") as ASPxCheckBox;
+                ASPxDateEdit txtDataElibCtrlMed = grDateMed.FindEditFormTemplateControl("txtDataElibCtrlMed") as ASPxDateEdit;
+                ASPxTextBox txtValab = grDateMed.FindEditFormTemplateControl("txtValab") as ASPxTextBox;
+                ASPxDateEdit txtDataUrmCtrl = grDateMed.FindEditFormTemplateControl("txtDataUrmCtrl") as ASPxDateEdit;
+                ASPxComboBox cmbLocatie = grDateMed.FindEditFormTemplateControl("cmbLocatie") as ASPxComboBox;
+                ASPxComboBox cmbManager = grDateMed.FindEditFormTemplateControl("cmbManager") as ASPxComboBox;
+                ASPxComboBox cmbSectAlim = grDateMed.FindEditFormTemplateControl("cmbSectAlim") as ASPxComboBox;
+                //ASPxComboBox cmbRiscuri = grDateMed.FindEditFormTemplateControl("cmbRiscuri") as ASPxComboBox;
+                ASPxTextBox txtAlteRiscuri = grDateMed.FindEditFormTemplateControl("txtAlteRiscuri") as ASPxTextBox;
+                ASPxComboBox cmbRez = grDateMed.FindEditFormTemplateControl("cmbRez") as ASPxComboBox;
+                ASPxCheckBox chk1 = grDateMed.FindEditFormTemplateControl("chk1") as ASPxCheckBox;
+                ASPxCheckBox chk2 = grDateMed.FindEditFormTemplateControl("chk2") as ASPxCheckBox;
+                ASPxCheckBox chk3 = grDateMed.FindEditFormTemplateControl("chk3") as ASPxCheckBox;
+                ASPxCheckBox chk4 = grDateMed.FindEditFormTemplateControl("chk4") as ASPxCheckBox;
+                ASPxCheckBox chk5 = grDateMed.FindEditFormTemplateControl("chk5") as ASPxCheckBox;
 
                 if (Constante.tipBD == 1)
                     dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
@@ -258,9 +258,9 @@ namespace WizOne.Personal
                 Session["DocUpload_MP_Medicina"] = null;
 
                 e.Cancel = true;
-                grDateMedicina.CancelEdit();
-                grDateMedicina.DataSource = ds.Tables["Admin_Medicina"];
-                grDateMedicina.KeyFieldName = "IdAuto";
+                grDateMed.CancelEdit();
+                grDateMed.DataSource = ds.Tables["Admin_Medicina"];
+                grDateMed.KeyFieldName = "IdAuto";
                 Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
@@ -269,7 +269,7 @@ namespace WizOne.Personal
             }
         }
 
-        protected void grDateMedicina_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        protected void grDateMed_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
             try
             {
@@ -279,27 +279,27 @@ namespace WizOne.Personal
 
                 DataRow dr = ds.Tables["Admin_Medicina"].Rows.Find(idAuto);
 
-                ASPxMemo txtObs = grDateMedicina.FindEditFormTemplateControl("txtObs") as ASPxMemo;
-                ASPxDateEdit txtDataElib = grDateMedicina.FindEditFormTemplateControl("txtDataElib") as ASPxDateEdit;
-                ASPxDateEdit txtDataExp = grDateMedicina.FindEditFormTemplateControl("txtDataExp") as ASPxDateEdit;
-                ASPxComboBox cmbObi = grDateMedicina.FindEditFormTemplateControl("cmbObi") as ASPxComboBox;
-                ASPxTextBox txtSerie = grDateMedicina.FindEditFormTemplateControl("txtSerie") as ASPxTextBox;
-                ASPxTextBox txtEmi = grDateMedicina.FindEditFormTemplateControl("txtEmi") as ASPxTextBox;
+                ASPxMemo txtObs = grDateMed.FindEditFormTemplateControl("txtObs") as ASPxMemo;
+                ASPxDateEdit txtDataElib = grDateMed.FindEditFormTemplateControl("txtDataElib") as ASPxDateEdit;
+                ASPxDateEdit txtDataExp = grDateMed.FindEditFormTemplateControl("txtDataExp") as ASPxDateEdit;
+                ASPxComboBox cmbObi = grDateMed.FindEditFormTemplateControl("cmbObi") as ASPxComboBox;
+                ASPxTextBox txtSerie = grDateMed.FindEditFormTemplateControl("txtSerie") as ASPxTextBox;
+                ASPxTextBox txtEmi = grDateMed.FindEditFormTemplateControl("txtEmi") as ASPxTextBox;
 
-                ASPxDateEdit txtDataElibCtrlMed = grDateMedicina.FindEditFormTemplateControl("txtDataElibCtrlMed") as ASPxDateEdit;
-                ASPxTextBox txtValab = grDateMedicina.FindEditFormTemplateControl("txtValab") as ASPxTextBox;
-                ASPxDateEdit txtDataUrmCtrl = grDateMedicina.FindEditFormTemplateControl("txtDataUrmCtrl") as ASPxDateEdit;
-                ASPxComboBox cmbLocatie = grDateMedicina.FindEditFormTemplateControl("cmbLocatie") as ASPxComboBox;
-                ASPxComboBox cmbManager = grDateMedicina.FindEditFormTemplateControl("cmbManager") as ASPxComboBox;
-                ASPxComboBox cmbSectAlim = grDateMedicina.FindEditFormTemplateControl("cmbSectAlim") as ASPxComboBox;
-                //ASPxComboBox cmbRiscuri = grDateMedicina.FindEditFormTemplateControl("cmbRiscuri") as ASPxComboBox;
-                ASPxTextBox txtAlteRiscuri = grDateMedicina.FindEditFormTemplateControl("txtAlteRiscuri") as ASPxTextBox;
-                ASPxComboBox cmbRez = grDateMedicina.FindEditFormTemplateControl("cmbRez") as ASPxComboBox;
-                ASPxCheckBox chk1 = grDateMedicina.FindEditFormTemplateControl("chk1") as ASPxCheckBox;
-                ASPxCheckBox chk2 = grDateMedicina.FindEditFormTemplateControl("chk2") as ASPxCheckBox;
-                ASPxCheckBox chk3 = grDateMedicina.FindEditFormTemplateControl("chk3") as ASPxCheckBox;
-                ASPxCheckBox chk4 = grDateMedicina.FindEditFormTemplateControl("chk4") as ASPxCheckBox;
-                ASPxCheckBox chk5 = grDateMedicina.FindEditFormTemplateControl("chk5") as ASPxCheckBox;
+                ASPxDateEdit txtDataElibCtrlMed = grDateMed.FindEditFormTemplateControl("txtDataElibCtrlMed") as ASPxDateEdit;
+                ASPxTextBox txtValab = grDateMed.FindEditFormTemplateControl("txtValab") as ASPxTextBox;
+                ASPxDateEdit txtDataUrmCtrl = grDateMed.FindEditFormTemplateControl("txtDataUrmCtrl") as ASPxDateEdit;
+                ASPxComboBox cmbLocatie = grDateMed.FindEditFormTemplateControl("cmbLocatie") as ASPxComboBox;
+                ASPxComboBox cmbManager = grDateMed.FindEditFormTemplateControl("cmbManager") as ASPxComboBox;
+                ASPxComboBox cmbSectAlim = grDateMed.FindEditFormTemplateControl("cmbSectAlim") as ASPxComboBox;
+                //ASPxComboBox cmbRiscuri = grDateMed.FindEditFormTemplateControl("cmbRiscuri") as ASPxComboBox;
+                ASPxTextBox txtAlteRiscuri = grDateMed.FindEditFormTemplateControl("txtAlteRiscuri") as ASPxTextBox;
+                ASPxComboBox cmbRez = grDateMed.FindEditFormTemplateControl("cmbRez") as ASPxComboBox;
+                ASPxCheckBox chk1 = grDateMed.FindEditFormTemplateControl("chk1") as ASPxCheckBox;
+                ASPxCheckBox chk2 = grDateMed.FindEditFormTemplateControl("chk2") as ASPxCheckBox;
+                ASPxCheckBox chk3 = grDateMed.FindEditFormTemplateControl("chk3") as ASPxCheckBox;
+                ASPxCheckBox chk4 = grDateMed.FindEditFormTemplateControl("chk4") as ASPxCheckBox;
+                ASPxCheckBox chk5 = grDateMed.FindEditFormTemplateControl("chk5") as ASPxCheckBox;
 
                 dr["IdObiect"] = cmbObi.Value ?? DBNull.Value;
                 dr["DataElib"] = txtDataElib.Value ?? DBNull.Value;
@@ -344,9 +344,9 @@ namespace WizOne.Personal
                 Session["DocUpload_MP_Medicina"] = null;
 
                 e.Cancel = true;
-                grDateMedicina.CancelEdit();
-                grDateMedicina.DataSource = ds.Tables["Admin_Medicina"];
-                grDateMedicina.KeyFieldName = "IdAuto";
+                grDateMed.CancelEdit();
+                grDateMed.DataSource = ds.Tables["Admin_Medicina"];
+                grDateMed.KeyFieldName = "IdAuto";
                 Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
@@ -355,7 +355,7 @@ namespace WizOne.Personal
             }
         }
 
-        protected void grDateMedicina_RowDeleting(object sender, DevExpress.Web.Data.ASPxDataDeletingEventArgs e)
+        protected void grDateMed_RowDeleting(object sender, DevExpress.Web.Data.ASPxDataDeletingEventArgs e)
         {
             try
             {
@@ -379,9 +379,9 @@ namespace WizOne.Personal
                 Session["FisiereDeSters"] = General.Nz(Session["FisiereDeSters"],"").ToString() + ";" + General.Nz(General.ExecutaScalar($@"SELECT '{Constante.fisiereApp}/Medicina/' {Dami.Operator()} ""FisierNume"" FROM ""tblFisiere"" WHERE ""Tabela""='Admin_Medicina' AND ""Id""={keys[0]}"),"").ToString();
 
                 e.Cancel = true;
-                grDateMedicina.CancelEdit();
+                grDateMed.CancelEdit();
                 Session["InformatiaCurentaPersonal"] = ds;
-                grDateMedicina.DataSource = ds.Tables["Admin_Medicina"];
+                grDateMed.DataSource = ds.Tables["Admin_Medicina"];
             }
             catch (Exception ex)
             {
@@ -412,13 +412,13 @@ namespace WizOne.Personal
             }
         }
 
-        protected void grDateMedicina_HtmlEditFormCreated(object sender, ASPxGridViewEditFormEventArgs e)
+        protected void grDateMed_HtmlEditFormCreated(object sender, ASPxGridViewEditFormEventArgs e)
         {
             try
             {
-                General.SecuritatePersonal(grDateMedicina, "Medicina", Convert.ToInt32(Session["UserId"].ToString()), true);
+                General.SecuritatePersonal(grDateMed, "Medicina", Convert.ToInt32(Session["UserId"].ToString()), true);
 
-                ASPxComboBox cmbCateg = grDateMedicina.FindEditFormTemplateControl("cmbObi") as ASPxComboBox;
+                ASPxComboBox cmbCateg = grDateMed.FindEditFormTemplateControl("cmbObi") as ASPxComboBox;
                 if (cmbCateg != null)
                 {
                     DataTable dtMedicina = General.GetObiecteDinArie("ArieTabMedicinaDinPersonal");
@@ -426,7 +426,7 @@ namespace WizOne.Personal
                     cmbCateg.DataBindItems();
                 }
 
-                ASPxComboBox cmbLocatie = grDateMedicina.FindEditFormTemplateControl("cmbLocatie") as ASPxComboBox;
+                ASPxComboBox cmbLocatie = grDateMed.FindEditFormTemplateControl("cmbLocatie") as ASPxComboBox;
                 if (cmbLocatie != null)
                 {
                     DataTable dtLocatie = General.IncarcaDT("SELECT * FROM \"tblLocatieMedMuncii\" ORDER BY\"Denumire\"", null);
@@ -434,7 +434,7 @@ namespace WizOne.Personal
                     cmbLocatie.DataBindItems();
                 }
 
-                ASPxComboBox cmbManager = grDateMedicina.FindEditFormTemplateControl("cmbManager") as ASPxComboBox;
+                ASPxComboBox cmbManager = grDateMed.FindEditFormTemplateControl("cmbManager") as ASPxComboBox;
                 if (cmbManager != null)
                 {
                     DataTable dtManager = General.IncarcaDT("SELECT * FROM \"tblManagerMedMuncii\" ORDER BY\"Denumire\"", null);
@@ -442,7 +442,7 @@ namespace WizOne.Personal
                     cmbManager.DataBindItems();
                 }
 
-                ASPxComboBox cmbSectAlim = grDateMedicina.FindEditFormTemplateControl("cmbSectAlim") as ASPxComboBox;
+                ASPxComboBox cmbSectAlim = grDateMed.FindEditFormTemplateControl("cmbSectAlim") as ASPxComboBox;
                 if (cmbSectAlim != null)
                 {
                     DataTable dtSectAlim = General.GetPrelungireContract();
@@ -450,7 +450,7 @@ namespace WizOne.Personal
                     cmbSectAlim.DataBindItems();
                 }
 
-                ASPxComboBox cmbRez = grDateMedicina.FindEditFormTemplateControl("cmbRez") as ASPxComboBox;
+                ASPxComboBox cmbRez = grDateMed.FindEditFormTemplateControl("cmbRez") as ASPxComboBox;
                 if (cmbRez != null)
                 {
                     DataTable dtRez = General.ListaRezultatExamen();
@@ -458,50 +458,50 @@ namespace WizOne.Personal
                     cmbRez.DataBindItems();
                 }
 
-                HtmlTableCell lblObs = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblObs");
+                HtmlTableCell lblObs = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblObs");
                 lblObs.InnerText = Dami.TraduCuvant("Observatii");
-                HtmlTableCell lblMedMunc = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblMedMunc");
+                HtmlTableCell lblMedMunc = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblMedMunc");
                 lblMedMunc.InnerText = Dami.TraduCuvant("Medicina muncii/PSI");
-                HtmlTableCell lblDataElib = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblDataElib");
+                HtmlTableCell lblDataElib = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblDataElib");
                 lblDataElib.InnerText = Dami.TraduCuvant("Data eliberarii");
-                HtmlTableCell lblDataExp = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblDataExp");
+                HtmlTableCell lblDataExp = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblDataExp");
                 lblDataExp.InnerText = Dami.TraduCuvant("Data expirarii");
-                HtmlTableCell lblSerieNr = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblSerieNr");
+                HtmlTableCell lblSerieNr = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblSerieNr");
                 lblSerieNr.InnerText = Dami.TraduCuvant("Serie si nr. doc.");
-                HtmlTableCell lblEmitent = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblEmitent");
+                HtmlTableCell lblEmitent = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblEmitent");
                 lblEmitent.InnerText = Dami.TraduCuvant("Emitent");
-                HtmlTableCell lblDataElibCtrlMed = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblDataElibCtrlMed");
+                HtmlTableCell lblDataElibCtrlMed = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblDataElibCtrlMed");
                 lblDataElibCtrlMed.InnerText = Dami.TraduCuvant("Data eliberare control medical");
-                HtmlTableCell lblPerValab = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblPerValab");
+                HtmlTableCell lblPerValab = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblPerValab");
                 lblPerValab.InnerText = Dami.TraduCuvant("Perioada valabilitate");
-                HtmlTableCell lblDataUrmCtrl = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblDataUrmCtrl");
+                HtmlTableCell lblDataUrmCtrl = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblDataUrmCtrl");
                 lblDataUrmCtrl.InnerText = Dami.TraduCuvant("Data urmatorului control");
-                HtmlTableCell lblLocatie = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblLocatie");
+                HtmlTableCell lblLocatie = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblLocatie");
                 lblLocatie.InnerText = Dami.TraduCuvant("Locatie");
-                HtmlTableCell lblManagerDir = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblManagerDir");
+                HtmlTableCell lblManagerDir = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblManagerDir");
                 lblManagerDir.InnerText = Dami.TraduCuvant("Manager direct");
-                HtmlTableCell lblSectAlim = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblSectAlim");
+                HtmlTableCell lblSectAlim = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblSectAlim");
                 lblSectAlim.InnerText = Dami.TraduCuvant("Sector alimentar");
-                HtmlTableCell lblRezExamen = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblRezExamen");
+                HtmlTableCell lblRezExamen = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblRezExamen");
                 lblRezExamen.InnerText = Dami.TraduCuvant("Rezultat examen");
-                HtmlTableCell lblAlteRisc = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblAlteRisc");
+                HtmlTableCell lblAlteRisc = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblAlteRisc");
                 lblAlteRisc.InnerText = Dami.TraduCuvant("Alte riscuri");
-                HtmlTableCell lblRiscuri = (HtmlTableCell)grDateMedicina.FindEditFormTemplateControl("lblRiscuri");
+                HtmlTableCell lblRiscuri = (HtmlTableCell)grDateMed.FindEditFormTemplateControl("lblRiscuri");
                 lblRiscuri.InnerText = Dami.TraduCuvant("Riscuri");
 
-                ASPxUploadControl btnDocUploadAtas = (ASPxUploadControl)grDateMedicina.FindEditFormTemplateControl("btnDocUploadAtas");
+                ASPxUploadControl btnDocUploadAtas = (ASPxUploadControl)grDateMed.FindEditFormTemplateControl("btnDocUploadAtas");
                 btnDocUploadAtas.BrowseButton.Text = Dami.TraduCuvant("Incarca Document");
                 btnDocUploadAtas.ToolTip = Dami.TraduCuvant("Incarca Document");
 
-                ASPxCheckBox chk1 = grDateMedicina.FindEditFormTemplateControl("chk1") as ASPxCheckBox;
+                ASPxCheckBox chk1 = grDateMed.FindEditFormTemplateControl("chk1") as ASPxCheckBox;
                 chk1.Text = Dami.TraduCuvant("Auto/ Categoria ...");
-                ASPxCheckBox chk2 = grDateMedicina.FindEditFormTemplateControl("chk2") as ASPxCheckBox;
+                ASPxCheckBox chk2 = grDateMed.FindEditFormTemplateControl("chk2") as ASPxCheckBox;
                 chk2.Text = Dami.TraduCuvant("Lucrul la inaltime");
-                ASPxCheckBox chk3 = grDateMedicina.FindEditFormTemplateControl("chk3") as ASPxCheckBox;
+                ASPxCheckBox chk3 = grDateMed.FindEditFormTemplateControl("chk3") as ASPxCheckBox;
                 chk3.Text = Dami.TraduCuvant("Lucrul in ture de noapte");
-                ASPxCheckBox chk4 = grDateMedicina.FindEditFormTemplateControl("chk4") as ASPxCheckBox;
+                ASPxCheckBox chk4 = grDateMed.FindEditFormTemplateControl("chk4") as ASPxCheckBox;
                 chk4.Text = Dami.TraduCuvant("Lucrul la casca");
-                ASPxCheckBox chk5 = grDateMedicina.FindEditFormTemplateControl("chk5") as ASPxCheckBox;
+                ASPxCheckBox chk5 = grDateMed.FindEditFormTemplateControl("chk5") as ASPxCheckBox;
                 chk5.Text = Dami.TraduCuvant("Zgomot");
             }
             catch (Exception ex)
@@ -511,12 +511,12 @@ namespace WizOne.Personal
             }
         }
 
-        protected void grDateMedicina_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        protected void grDateMed_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
         {
 
         }
 
-        protected void grDateMedicina_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
+        protected void grDateMed_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
         {
             try
             {
@@ -525,9 +525,9 @@ namespace WizOne.Personal
                 switch (str)
                 {
                     case "valab":
-                        ASPxDateEdit txtDataElibCtrlMed = grDateMedicina.FindEditFormTemplateControl("txtDataElibCtrlMed") as ASPxDateEdit;
-                        ASPxTextBox txtValab = grDateMedicina.FindEditFormTemplateControl("txtValab") as ASPxTextBox;
-                        ASPxDateEdit txtDataUrmCtrl = grDateMedicina.FindEditFormTemplateControl("txtDataUrmCtrl") as ASPxDateEdit;
+                        ASPxDateEdit txtDataElibCtrlMed = grDateMed.FindEditFormTemplateControl("txtDataElibCtrlMed") as ASPxDateEdit;
+                        ASPxTextBox txtValab = grDateMed.FindEditFormTemplateControl("txtValab") as ASPxTextBox;
+                        ASPxDateEdit txtDataUrmCtrl = grDateMed.FindEditFormTemplateControl("txtDataUrmCtrl") as ASPxDateEdit;
                         int rez = 0;
                         if (txtDataElibCtrlMed.Value != null && txtValab.Text.Length > 0 && int.TryParse(txtValab.Text, out rez))
                             txtDataUrmCtrl.Value = Convert.ToDateTime(txtDataElibCtrlMed.Value).AddDays(rez);

@@ -52,9 +52,7 @@ namespace WizOne.Absente
 
                 txtDtInc.Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                 txtDtSf.Date = new DateTime(2100,1, 1);
-
-                //#1125
-                //AdaugareColoaneExtra();                
+               
             }
             catch (Exception ex)
             {
@@ -74,6 +72,9 @@ namespace WizOne.Absente
                 DataTable dtHr = General.IncarcaDT(sqlHr, null);
 
                 if (dtHr != null && dtHr.Rows.Count > 0) esteHr = true;
+
+                //#1125
+                //AdaugareColoaneExtra(); 
 
                 if (!IsPostBack)
                 {
@@ -1298,9 +1299,10 @@ namespace WizOne.Absente
 
 
                 //#1125
-                //AdaugareCampuriExtra();
+                // AdaugareCampuriExtra();
                 //#1125
-                //AfisareCampuriExtra(Convert.ToInt32(General.Nz(obj[7], "0").ToString()));
+                //if (Convert.ToInt32(Session["IdClient"]) == (int)Module.IdClienti.Clienti.Harting)
+                //    AfisareCampuriExtra(Convert.ToInt32(General.Nz(obj[7], "0").ToString()));
             }
             catch (Exception ex)
             {
@@ -1361,130 +1363,18 @@ namespace WizOne.Absente
         {
             try
             {
-                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND AfisareSolicitareModificare IN (2,3)", new object[] { idAbs });
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND IdCampExtra = X", new object[] { idAbs });
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow dr = dt.Rows[i];
-                    grDate.FindEditFormTemplateControl("CampExtra" + dr["IdCampExtra"].ToString() + "EditContainer").Visible = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void AdaugareCampuriExtra()
-        {
-            try
-            {                
-                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE AfisareSolicitareModificare IN (2,3)", null);
-                HtmlGenericControl divCampExtra = (HtmlGenericControl)grDate.FindEditFormTemplateControl("campuriExtra");
-
-                HtmlGenericControl ctlCol;
-
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    DataRow dr = dt.Rows[i];
-                    ctlCol = new HtmlGenericControl("div");
-                    ctlCol.Attributes["class"] = "col-sm-6 col-xs-12";
-                    ctlCol.ID = "CampExtra" + dr["IdCampExtra"].ToString() + "EditContainer";
-                    divCampExtra.Controls.Add(ctlCol);
-
-                    string ctlId = "CampExtra" + dr["IdCampExtra"].ToString() + "Template";
-                    ASPxLabel lbl = new ASPxLabel();
-
-                    lbl.ID = ctlId + "Label";
-                    lbl.AssociatedControlID = ctlId;
-                    lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
-                    lbl.Font.Bold = true;
-                    lbl.CssClass = "label-inline";                  
-                    ctlCol.Controls.Add(lbl);
-
-                    ASPxGridViewTemplateReplacement obiect = new ASPxGridViewTemplateReplacement();
-                    obiect.ID = ctlId;
-                    obiect.ReplacementType = GridViewTemplateReplacementType.EditFormCellEditor;
-                    obiect.ColumnID = "CampExtra" + dr["IdCampExtra"].ToString();
-                    ctlCol.Controls.Add(obiect);
-
-                    ctlCol.Visible = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void AdaugareColoaneExtra()
-        {
-            try
-            {
-                Absente.Cereri pag = new Absente.Cereri();
-                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE AfisareSolicitareModificare IN (2,3)", null);
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    DataRow dr = dt.Rows[i];
-
-                    switch (General.Nz(dr["TipCamp"], "").ToString())
+                    var campExtra = grDate.FindEditFormTemplateControl("CampExtraXEditContainer");
+                    if (campExtra != null)
                     {
-                        case "0":                   //text    
-                            GridViewDataTextColumn colTxt = new GridViewDataTextColumn();
-                            colTxt.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
-                            colTxt.Name = "CampExtra" + dr["IdCampExtra"].ToString();
-                            colTxt.ShowInCustomizationForm = false;
-                            colTxt.Visible = false;
-                            colTxt.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
-                            grDate.Columns.Add(colTxt);
-                            break;
-                        case "1":                   //checkBox  
-                            GridViewDataCheckColumn colChk = new GridViewDataCheckColumn();
-                            colChk.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
-                            colChk.Name = "CampExtra" + dr["IdCampExtra"].ToString();
-                            colChk.ShowInCustomizationForm = false;
-                            colChk.Visible = false;
-                            colChk.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
-                            grDate.Columns.Add(colChk);
-                            break;
-                        case "2":                   //combobox
-                            GridViewDataComboBoxColumn colCombo = new GridViewDataComboBoxColumn();
-                            colCombo.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
-                            colCombo.Name = "CampExtra" + dr["IdCampExtra"].ToString();
-                            colCombo.ShowInCustomizationForm = false;
-                            colCombo.Visible = false;
-                            colCombo.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
-                            try
-                            {
-                                if (General.Nz(dr["Sursa"], "").ToString() != "")
-                                {
-                                    string sel = pag.InlocuiesteCampuri(dr["Sursa"].ToString());
-                                    if (sel != "")
-                                    {
-                                        DataTable dtCmb = General.IncarcaDT(sel, null);
-                                        colCombo.PropertiesComboBox.ValueField = dtCmb.Columns[0].ColumnName;
-                                        colCombo.PropertiesComboBox.TextField = dtCmb.Columns[1].ColumnName;
-                                        colCombo.PropertiesComboBox.DataSource = dtCmb;
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), "Incarcare combobox camp extra");
-                            }
-                            grDate.Columns.Add(colCombo);
-                            break;
-                        case "3":                   //dateTime
-                            GridViewDataDateColumn colData = new GridViewDataDateColumn();
-                            colData.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
-                            colData.Name = "CampExtra" + dr["IdCampExtra"].ToString();
-                            colData.ShowInCustomizationForm = false;
-                            colData.Visible = false;
-                            colData.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
-                            grDate.Columns.Add(colData);
-                            break;
-                    }
+                        campExtra.Visible = true;
+                        ASPxLabel lbl = campExtra.Controls[0] as ASPxLabel;
+                        if (lbl != null)
+                            lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
+                    }                      
                 }
             }
             catch (Exception ex)
@@ -1493,5 +1383,141 @@ namespace WizOne.Absente
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+        //protected void AdaugareCampuriExtra()
+        //{
+        //    try
+        //    {                
+        //        DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE AfisareSolicitareModificare IN (2,3)", null);
+        //        HtmlGenericControl divCampExtra = (HtmlGenericControl)grDate.FindEditFormTemplateControl("campuriExtra");
+
+        //        HtmlGenericControl ctlCol;
+
+        //        for (int i = 0; i < dt.Rows.Count; i++)
+        //        {
+        //            DataRow dr = dt.Rows[i];
+        //            ctlCol = new HtmlGenericControl("div");
+        //            ctlCol.Attributes["class"] = "col-sm-6 col-xs-12";
+        //            ctlCol.ID = "CampExtra" + dr["IdCampExtra"].ToString() + "EditContainer";
+                    
+
+        //            string ctlId = "CampExtra" + dr["IdCampExtra"].ToString() + "Template";
+        //            ASPxLabel lbl = new ASPxLabel();
+
+        //            lbl.ID = ctlId + "Label";
+        //            lbl.AssociatedControlID = ctlId;
+        //            lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
+        //            lbl.Font.Bold = true;
+        //            lbl.CssClass = "label-inline";                  
+        //            ctlCol.Controls.Add(lbl);
+
+        //            ASPxGridViewTemplateReplacement obiect = new ASPxGridViewTemplateReplacement();
+        //            obiect.ID = ctlId;
+        //            obiect.ReplacementType = GridViewTemplateReplacementType.EditFormCellEditor;
+        //            obiect.ColumnID = "CampExtra" + dr["IdCampExtra"].ToString();
+        //            ctlCol.Controls.Add(obiect);
+
+        //            //ctlCol.Visible = false;
+        //            divCampExtra.Controls.Add(ctlCol);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+        //protected void AdaugareColoaneExtra()
+        //{
+        //    try
+        //    {
+        //        Absente.Cereri pag = new Absente.Cereri();
+        //        DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE AfisareSolicitareModificare IN (2,3)", null);
+        //        for (int i = 0; i < dt.Rows.Count; i++)
+        //        {
+        //            DataRow dr = dt.Rows[i];
+
+        //            switch (General.Nz(dr["TipCamp"], "").ToString())
+        //            {
+        //                case "0":                   //text    
+        //                    GridViewDataTextColumn colTxt = new GridViewDataTextColumn();
+        //                    colTxt.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colTxt.Name = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colTxt.ShowInCustomizationForm = false;
+        //                    colTxt.Visible = false;
+        //                    colTxt.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
+        //                    grDate.Columns.Add(colTxt);
+        //                    break;
+        //                case "1":                   //checkBox  
+        //                    GridViewDataCheckColumn colChk = new GridViewDataCheckColumn();
+        //                    colChk.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colChk.Name = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colChk.ShowInCustomizationForm = false;
+        //                    colChk.Visible = false;
+        //                    colChk.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
+        //                    grDate.Columns.Add(colChk);
+        //                    break;
+        //                case "2":                   //combobox
+        //                    GridViewDataComboBoxColumn colCombo = new GridViewDataComboBoxColumn();
+        //                    colCombo.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colCombo.Name = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colCombo.ShowInCustomizationForm = false;
+        //                    colCombo.Visible = false;
+        //                    colCombo.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
+        //                    try
+        //                    {
+        //                        if (General.Nz(dr["Sursa"], "").ToString() != "")
+        //                        {
+        //                            string sel = pag.InlocuiesteCampuri(dr["Sursa"].ToString());
+        //                            if (sel != "")
+        //                            {
+        //                                DataTable dtCmb = General.IncarcaDT(sel, null);
+        //                                colCombo.PropertiesComboBox.ValueField = dtCmb.Columns[0].ColumnName;
+        //                                colCombo.PropertiesComboBox.TextField = dtCmb.Columns[1].ColumnName;
+        //                                colCombo.PropertiesComboBox.DataSource = dtCmb;
+        //                            }
+        //                        }
+        //                    }
+        //                    catch (Exception ex)
+        //                    {
+        //                        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), "Incarcare combobox camp extra");
+        //                    }
+        //                    grDate.Columns.Add(colCombo);
+        //                    break;
+        //                case "3":                   //dateTime
+        //                    GridViewDataDateColumn colData = new GridViewDataDateColumn();
+        //                    colData.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colData.Name = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colData.ShowInCustomizationForm = false;
+        //                    colData.Visible = false;
+        //                    colData.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
+        //                    grDate.Columns.Add(colData);
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+
+
+
+                    //<dx:GridViewDataCheckColumn FieldName = "CampExtraX" Name="CampExtraX" Caption="CampExtraX" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="28">
+                    //    <EditFormSettings Visible = "true" />
+                    //</ dx:GridViewDataCheckColumn> 
+
+                            // <div class="row row-fix">
+                            //    <div id = "CampExtraXEditContainer" runat="server" class="col-xs-6" visible="false">
+                            //        <dx:ASPxLabel ID = "CampExtraXTemplateLabel" runat="server" AssociatedControlID="CampExtraXTemplate" Text="Camp extra X" Font-Bold="true" CssClass="label-inline" />                                    
+                            //        <dx:ASPxGridViewTemplateReplacement ID = "CampExtraXTemplate" runat="server" ReplacementType="EditFormCellEditor" ColumnID="CampExtraX" />
+                            //    </div>
+                            //</div>
+
+
     }
 }

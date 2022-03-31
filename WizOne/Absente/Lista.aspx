@@ -486,7 +486,7 @@
 
                     <dx:GridViewDataCheckColumn FieldName="CampBifa" Name="CampBifa" Caption="CampBifa" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="28">
                         <EditFormSettings Visible="true" />
-                    </dx:GridViewDataCheckColumn>         
+                    </dx:GridViewDataCheckColumn>                       
                 </Columns>                
                 <Templates>
                     <EditForm>      
@@ -528,8 +528,6 @@
                                     <dx:ASPxGridViewTemplateReplacement ID="CampBifaTemplate" runat="server" ReplacementType="EditFormCellEditor" ColumnID="CampBifa" />
                                 </div>
                             </div> 
-                             <div class="row row-fix" id="campuriExtra" runat="server">
-                            </div>
                           </div>                      
                           <div class="panel-footer panel-footer-commandbox">
                               <dx:ASPxGridViewTemplateReplacement ID="UpdateButton" runat="server" ReplacementType="EditFormUpdateButton" />

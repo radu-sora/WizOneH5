@@ -486,12 +486,11 @@
 
                     <dx:GridViewDataCheckColumn FieldName="CampBifa" Name="CampBifa" Caption="CampBifa" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="28">
                         <EditFormSettings Visible="true" />
-                    </dx:GridViewDataCheckColumn>
-
+                    </dx:GridViewDataCheckColumn>         
                 </Columns>                
                 <Templates>
                     <EditForm>      
-                        <div class="panel panel-slim panel-adaptive-fullscreen">
+                        <div  class="panel panel-slim panel-adaptive-fullscreen">
                           <div class="panel-body">
                             <div class="row row-fix">
                                 <div class="col-sm-6 col-xs-12">
@@ -528,8 +527,10 @@
                                     <dx:ASPxLabel ID="CampBifaTemplateLabel" runat="server" AssociatedControlID="CampBifaTemplate" Text="Camp bifa" Font-Bold="true" CssClass="label-inline" />                                    
                                     <dx:ASPxGridViewTemplateReplacement ID="CampBifaTemplate" runat="server" ReplacementType="EditFormCellEditor" ColumnID="CampBifa" />
                                 </div>
-                            </div>                            
-                          </div>
+                            </div> 
+                             <div class="row row-fix" id="campuriExtra" runat="server">
+                            </div>
+                          </div>                      
                           <div class="panel-footer panel-footer-commandbox">
                               <dx:ASPxGridViewTemplateReplacement ID="UpdateButton" runat="server" ReplacementType="EditFormUpdateButton" />
                               <dx:ASPxGridViewTemplateReplacement ID="CancelButton" runat="server" ReplacementType="EditFormCancelButton" />

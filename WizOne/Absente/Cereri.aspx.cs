@@ -618,8 +618,8 @@ namespace WizOne.Absente
                 #region Verificare Campuri Extra
 
                 string[] lstExtra = new string[20] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
-
-                DataTable dtEx = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { cmbAbs.Value });
+                                                                                                                                //#1125
+                DataTable dtEx = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND (AfisareSolicitareModificare IS NULL OR AfisareSolicitareModificare IN (1,2))", new object[] { cmbAbs.Value });
                 for (int i = 0; i < dtEx.Rows.Count; i++)
                 {
                     DataRow dr = dtEx.Rows[i];
@@ -1161,8 +1161,8 @@ namespace WizOne.Absente
             {
                 divDateExtra.Controls.Clear();
 
-                string ids = "";
-                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { General.Nz(cmbAbs.Value,"-99") });
+                string ids = "";                                                                                                    //#1125
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND (AfisareSolicitareModificare IS NULL OR AfisareSolicitareModificare IN (1,2))", new object[] { General.Nz(cmbAbs.Value,"-99") });
                 HtmlGenericControl ctlRow = null, ctlCol;
 
                 for (int i = 0; i < dt.Rows.Count; i++)
@@ -1296,7 +1296,7 @@ namespace WizOne.Absente
             }
         }
 
-        private string InlocuiesteCampuri(string strSelect)
+        public string InlocuiesteCampuri(string strSelect)
         {
             string str = strSelect;
 
@@ -1346,8 +1346,8 @@ namespace WizOne.Absente
                 }
 
                 string[] lstExtra = new string[30] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
-
-                DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { cmbAbs.Value });
+                                                                                                                                //#1125
+                DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND (AfisareSolicitareModificare IS NULL OR AfisareSolicitareModificare IN (1,2))", new object[] { cmbAbs.Value });
                 for (int i = 0; i < dtEx.Rows.Count; i++)
                 {
                     DataRow dr = dtEx.Rows[i];

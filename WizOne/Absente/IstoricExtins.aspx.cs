@@ -11,6 +11,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using System.Drawing;
+using System.Threading;
 
 namespace WizOne.Absente
 {
@@ -1059,9 +1060,6 @@ namespace WizOne.Absente
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }
-
-
-        
+        }  
     }
 }

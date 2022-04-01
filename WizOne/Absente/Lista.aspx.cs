@@ -329,6 +329,8 @@ namespace WizOne.Absente
                 dt.Columns["Comentarii"].ReadOnly = false;
                 dt.Columns["NumeInlocuitor"].ReadOnly = false;
                 dt.Columns["TrimiteLa"].ReadOnly = false;
+                dt.Columns["CampExtra19"].ReadOnly = false;
+                dt.Columns["CampExtra20"].ReadOnly = false;
 
                 grDate.KeyFieldName = "Id; Rol";
                 grDate.DataSource = dt;
@@ -1195,8 +1197,8 @@ namespace WizOne.Absente
                 object cps = (grDate.FindEditFormTemplateControl("SolicitareTemplate").Controls[0] as ASPxComboBox).SelectedItem?.GetFieldValue("Id");
                 object inl = (grDate.FindEditFormTemplateControl("InlocuitorTemplate").Controls[0] as ASPxComboBox).SelectedItem?.GetFieldValue("F10003");                
                 
-                General.ExecutaNonQuery($@"UPDATE ""Ptj_Cereri"" SET ""Observatii""=@1, ""Comentarii""=@2, ""TrimiteLa""=@3, ""Inlocuitor""=@4, ""CampBifa""=@6 WHERE ""Id""=@5", 
-                    new object[] { e.NewValues["Observatii"], e.NewValues["Comentarii"], cps, inl, id, ((bool?)e.NewValues["CampBifa"] ?? false) ? 1 : 0 });
+                General.ExecutaNonQuery($@"UPDATE ""Ptj_Cereri"" SET ""Observatii""=@1, ""Comentarii""=@2, ""TrimiteLa""=@3, ""Inlocuitor""=@4, ""CampBifa""=@6, ""CampExtra19""= @7, ""CampExtra20""=@8 WHERE ""Id""=@5", 
+                    new object[] { e.NewValues["Observatii"], e.NewValues["Comentarii"], cps, inl, id, ((bool?)e.NewValues["CampBifa"] ?? false) ? 1 : 0, Convert.ToInt32(e.NewValues["CampExtra19"] ?? "0") == 1  ? "1" : "0", e.NewValues["CampExtra20"] });
 
                 e.Cancel = true;
                 grDate.CancelEdit();
@@ -1301,8 +1303,17 @@ namespace WizOne.Absente
                 //#1125
                 // AdaugareCampuriExtra();
                 //#1125
-                //if (Convert.ToInt32(Session["IdClient"]) == (int)Module.IdClienti.Clienti.Harting)
-                //    AfisareCampuriExtra(Convert.ToInt32(General.Nz(obj[7], "0").ToString()));
+                if (Convert.ToInt32(Session["IdClient"]) == (int)Module.IdClienti.Clienti.Harting)
+                    AfisareCampuriExtra(Convert.ToInt32(General.Nz(obj[7], "0").ToString()));
+                else
+                {
+                    for (int i = 0; i <= 1; i++)
+                    {
+                        var campExtra = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "EditContainer");
+                        if (campExtra != null)                        
+                            campExtra.Visible = false;                        
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1363,17 +1374,20 @@ namespace WizOne.Absente
         {
             try
             {
-                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND IdCampExtra = X", new object[] { idAbs });
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND IdCampExtra IN (19, 20) ORDER BY IdCampExtra", new object[] { idAbs });
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow dr = dt.Rows[i];
-                    var campExtra = grDate.FindEditFormTemplateControl("CampExtraXEditContainer");
+                    var campExtra = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "EditContainer");
                     if (campExtra != null)
                     {
                         campExtra.Visible = true;
-                        ASPxLabel lbl = campExtra.Controls[0] as ASPxLabel;
+                        ASPxLabel lbl = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "TemplateLabel") as ASPxLabel;
                         if (lbl != null)
+                        {
                             lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
+                            lbl.ToolTip = Dami.TraduCuvant(dr["ToolTip"].ToString());
+                        }
                     }                      
                 }
             }
@@ -1503,21 +1517,6 @@ namespace WizOne.Absente
         //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
         //    }
         //}
-
-
-
-
-                    //<dx:GridViewDataCheckColumn FieldName = "CampExtraX" Name="CampExtraX" Caption="CampExtraX" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="28">
-                    //    <EditFormSettings Visible = "true" />
-                    //</ dx:GridViewDataCheckColumn> 
-
-                            // <div class="row row-fix">
-                            //    <div id = "CampExtraXEditContainer" runat="server" class="col-xs-6" visible="false">
-                            //        <dx:ASPxLabel ID = "CampExtraXTemplateLabel" runat="server" AssociatedControlID="CampExtraXTemplate" Text="Camp extra X" Font-Bold="true" CssClass="label-inline" />                                    
-                            //        <dx:ASPxGridViewTemplateReplacement ID = "CampExtraXTemplate" runat="server" ReplacementType="EditFormCellEditor" ColumnID="CampExtraX" />
-                            //    </div>
-                            //</div>
-
 
     }
 }

@@ -6141,7 +6141,7 @@ namespace WizOne.Module
                 }
 
                 drCum["IdStare"] = idStare;
-                drCum["Comentarii"] = motiv;
+                drCum["Comentarii"] = drCum["Comentarii"] + (motiv.Length > 0 ? " / " + motiv : "");  //Radu 24.03.2022
 
                 #endregion
 

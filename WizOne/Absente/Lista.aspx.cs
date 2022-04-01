@@ -1375,21 +1375,29 @@ namespace WizOne.Absente
             try
             {
                 DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND IdCampExtra IN (19, 20) ORDER BY IdCampExtra", new object[] { idAbs });
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    DataRow dr = dt.Rows[i];
-                    var campExtra = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "EditContainer");
-                    if (campExtra != null)
+                if (dt != null && dt.Rows.Count > 0)
+                    for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        campExtra.Visible = true;
-                        ASPxLabel lbl = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "TemplateLabel") as ASPxLabel;
-                        if (lbl != null)
+                        DataRow dr = dt.Rows[i];
+                        var campExtra = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "EditContainer");
+                        if (campExtra != null)
                         {
-                            lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
-                            lbl.ToolTip = Dami.TraduCuvant(dr["ToolTip"].ToString());
-                        }
-                    }                      
-                }
+                            campExtra.Visible = true;
+                            ASPxLabel lbl = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "TemplateLabel") as ASPxLabel;
+                            if (lbl != null)
+                            {
+                                lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
+                                lbl.ToolTip = Dami.TraduCuvant(dr["ToolTip"].ToString());
+                            }
+                        }                      
+                    }
+                else                
+                    for (int i = 0; i <= 1; i++)
+                    {
+                        var campExtra = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "EditContainer");
+                        if (campExtra != null)
+                            campExtra.Visible = false;
+                    }                
             }
             catch (Exception ex)
             {

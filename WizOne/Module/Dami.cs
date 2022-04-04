@@ -719,7 +719,7 @@ namespace WizOne.Module
                                 CASE WHEN ""CampExtra29"" IS NOT NULL {General.FiltrulCuNull("CampExtra29")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=A.""IdAbsenta"" AND ""IdCampExtra""=29) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra29"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
                                 CASE WHEN ""CampExtra30"" IS NOT NULL {General.FiltrulCuNull("CampExtra30")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=A.""IdAbsenta"" AND ""IdCampExtra""=30) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra30"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()} 
                                 {campIntervalOrar}
-                                AS ""DateConcatenate"", COALESCE(A.""CampBifa"",0) AS ""CampBifa"", COALESCE(A.""CampExtra19"",0) AS ""CampExtra19"",  ""CampExtra20"", {strDrepturi}
+                                AS ""DateConcatenate"", COALESCE(A.""CampBifa"",0) AS ""CampBifa"", A.""CampExtra19"",  ""CampExtra20"", {strDrepturi}
                                 FROM ({strSql}) A
                                 INNER JOIN F100 B ON A.F10003 = B.F10003
                                 INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""

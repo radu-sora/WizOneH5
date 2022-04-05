@@ -1195,10 +1195,16 @@ namespace WizOne.Absente
                 var id = e.Keys["Id"];
 
                 object cps = (grDate.FindEditFormTemplateControl("SolicitareTemplate").Controls[0] as ASPxComboBox).SelectedItem?.GetFieldValue("Id");
-                object inl = (grDate.FindEditFormTemplateControl("InlocuitorTemplate").Controls[0] as ASPxComboBox).SelectedItem?.GetFieldValue("F10003");                
+                object inl = (grDate.FindEditFormTemplateControl("InlocuitorTemplate").Controls[0] as ASPxComboBox).SelectedItem?.GetFieldValue("F10003");
+
+                string campExtra19 = "";
+                if (e.NewValues["CampExtra19"] != null && e.NewValues["CampExtra19"].ToString() == "1")
+                    campExtra19 = "Da";
+                else
+                    campExtra19 = "Nu";
                 
                 General.ExecutaNonQuery($@"UPDATE ""Ptj_Cereri"" SET ""Observatii""=@1, ""Comentarii""=@2, ""TrimiteLa""=@3, ""Inlocuitor""=@4, ""CampBifa""=@6, ""CampExtra19""= @7, ""CampExtra20""=@8 WHERE ""Id""=@5", 
-                    new object[] { e.NewValues["Observatii"], e.NewValues["Comentarii"], cps, inl, id, ((bool?)e.NewValues["CampBifa"] ?? false) ? 1 : 0, Convert.ToInt32(e.NewValues["CampExtra19"] ?? "0") == 1  ? "1" : "0", e.NewValues["CampExtra20"] });
+                    new object[] { e.NewValues["Observatii"], e.NewValues["Comentarii"], cps, inl, id, ((bool?)e.NewValues["CampBifa"] ?? false) ? 1 : 0, campExtra19, e.NewValues["CampExtra20"] });
 
                 e.Cancel = true;
                 grDate.CancelEdit();
@@ -1285,7 +1291,7 @@ namespace WizOne.Absente
 
                 grDate.FindEditFormTemplateControl("InlocuitorEditContainer").Visible = Dami.ValoareParam("InlocuitorEditabilInAprobare", "0") == "1";
 
-                if (obj[2] != null && (int)obj[2] == 1)
+                if (obj[2] != null && obj[2].ToString().Length > 0 && (int)obj[2] == 1)
                 {
                     var solicitareCombo = grDate.FindEditFormTemplateControl("SolicitareTemplate").Controls[0] as ASPxComboBox;
 

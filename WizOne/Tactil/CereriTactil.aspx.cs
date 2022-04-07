@@ -119,8 +119,8 @@ namespace WizOne.Tactil
                             tdDataSf.Width = "1200";
                             break;
                     }
-
-                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23 || Session["CereriTactil"].ToString() == "AbsenteOra")
+                    //Radu 07.04.2022 - s-a modificat IdClient din 23 in 18
+                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 18 || Session["CereriTactil"].ToString() == "AbsenteOra")
                     {
                         tdSelAbs.Visible = true;
                         cmbSelAbs.Visible = true;
@@ -212,7 +212,7 @@ namespace WizOne.Tactil
                     {
                         dtAbsSpn = dtRowAbs.CopyToDataTable();
 
-                        if (dtAbsSpn != null && dtAbsSpn.Rows.Count > 0 && Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
+                        if (dtAbsSpn != null && dtAbsSpn.Rows.Count > 0 && Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 18)
                         {
                             cmbSelAbs.DataSource = dtAbsSpn;
                             cmbSelAbs.DataBind();
@@ -430,7 +430,7 @@ namespace WizOne.Tactil
                 if (dtAbs.Rows.Count > 0)
                 {
                     object id = General.Nz(cmbSelAbs.Visible == true ? cmbSelAbs.Value : cmbAbs.Value, -99);
-                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
+                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 18)
                         id = General.Nz(cmbSelAbs.Value, -99);
 
                     DataRow[] arr = dtAbs.Select("Id=" + id);
@@ -788,7 +788,7 @@ namespace WizOne.Tactil
                         }
 
                         object id = General.Nz(cmbSelAbs.Visible == true ? cmbSelAbs.Value : cmbAbs.Value, -99);
-                        if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
+                        if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 18)
                             id = General.Nz(cmbSelAbs.Value, -99);
 
                         DataRow[] lst = dtAbs.Select("Id=" + id);
@@ -1813,7 +1813,7 @@ namespace WizOne.Tactil
                 if (dtRowAbs != null && dtRowAbs.Count() > 0)
                 {
                     dtAbs = dtRowAbs.CopyToDataTable();                    
-                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
+                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 18)
                         id = General.Nz(cmbSelAbs.Value, -99);
 
                     DataRow[] lstAbs = dtAbs.Select("Id=" + id);
@@ -1825,7 +1825,7 @@ namespace WizOne.Tactil
                     return "";
 
                 id = General.Nz(cmbSelAbs.Visible == true ? cmbSelAbs.Value : cmbAbs.Value, -99);
-                if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
+                if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 18)
                     id = General.Nz(cmbSelAbs.Value, -99);
 
                 DataRow[] lst = dtAbs.Select("Id=" + id);
@@ -1921,7 +1921,7 @@ namespace WizOne.Tactil
                 }
 
                 id = General.Nz(cmbSelAbs.Visible == true ? cmbSelAbs.Value : cmbAbs.Value, -99);
-                if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
+                if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 18)
                     id = General.Nz(cmbSelAbs.Value, -99);
 
                 sqlCer = @"SELECT " +

@@ -6716,13 +6716,11 @@ namespace WizOne.Module
                         strFIN += strDel + "\n\r";
                     }
 
+                    //Florin 2022.04.07
                     string strFiltruZile = "";
-                    if (cuNormaZL) strFiltruZile += @"OR (CASE WHEN datepart(dw,X.Ziua) in (2,3,4,5,6) AND B.DAY is null THEN 1 ELSE 0 END) = 1";
-                    if (cuNormaSD) strFiltruZile += @"OR (CASE WHEN datepart(dw,X.Ziua) in (1,7) AND B.DAY is null THEN 1 ELSE 0 END) = 1";
-                    if (cuNormaSL) strFiltruZile += @"OR B.DAY is not null";
-
-                    if (strFiltruZile != "") strFiltruZile = "AND (" + strFiltruZile.Substring(2) + ")";
-
+                    strFiltruZile += "(CASE WHEN " + (cuNormaZL ? 1 : 0) + "=1 AND datepart(dw,X.Ziua) in (2,3,4,5,6) AND B.DAY is null THEN 1 ELSE 0 END) + ";
+                    strFiltruZile += "(CASE WHEN " + (cuNormaSD ? 1 : 0) + "=1 AND datepart(dw,X.Ziua) in (1,7) AND B.DAY is null THEN 1 ELSE 0 END) + ";
+                    strFiltruZile += "(CASE WHEN " + (cuNormaSL ? 1 : 0) + "=1 AND B.DAY is not null THEN 1 ELSE 0 END)";
 
                     string strFiltru = "";
                     //Florin 2019.12.27
@@ -6744,10 +6742,11 @@ namespace WizOne.Module
                     if (cuInOut == 1)
                         strLast = @", ""FirstIn"", ""LastOut""";
 
-                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, F100958, F100959, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"" " + strLast + ") {0} {1} {2} {3} ";
+                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, F100958, F100959, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"" " + strLast + ") {0} {1} {2} ";
 
+                    //Florin 2022.04.07
                     //Florin 2020.06.30 am modificat 1 cu cuNormaZL
-                    strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, cuNormaZL, cuInOut), strFiltru, strFiltruZile, usr);
+                    strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, cuNormaZL, cuInOut, strFiltruZile), strFiltru, usr);
 
                     strFIN += strIns + ";";
 
@@ -6814,6 +6813,15 @@ namespace WizOne.Module
                     //2015-12-07  s-a adaugat inner join f100 pt a elimina zilele in care angajatii s-au angajat sau au plecat in luna
                     if (cuNormaZL)
                     {
+
+                        //Florin 2022.04.07
+                        string filtruSup = "";
+                        if (cuNormaZL) filtruSup += @"OR (CASE WHEN datepart(dw,A.Ziua) in (2,3,4,5,6) AND B.DAY is null THEN 1 ELSE 0 END) = 1";
+                        if (cuNormaSD) filtruSup += @"OR (CASE WHEN datepart(dw,A.Ziua) in (1,7) AND B.DAY is null THEN 1 ELSE 0 END) = 1";
+                        if (cuNormaSL) filtruSup += @"OR B.DAY is not null";
+
+                        if (filtruSup != "") filtruSup = "AND (" + filtruSup.Substring(2) + ")";
+
                         string strUp = @"UPDATE A SET 
                                         A.""ValStr"" = dn.Norma , 
                                         A.""Val0""   = dn.Norma * 60,
@@ -6827,8 +6835,7 @@ namespace WizOne.Module
                                         AND CONVERT(date, A.Ziua) <= COALESCE(CONVERT(date, ddp.DataPlecare),C.F10023)
                                         {2} {3} {4}";
 
-                        strUp = string.Format(strUp, an, luna, usr, strFiltru, strFiltruZile.Replace("X.", "A."), strInner);
-                        //strUp = strUp.Replace("X.", "A.");
+                        strUp = string.Format(strUp, an, luna, usr, strFiltru, filtruSup, strInner);
 
                         strFIN += strUp + ";" + "\n\r";
                     }
@@ -7016,7 +7023,7 @@ namespace WizOne.Module
             return ras;
         }
 
-        private static string DamiSelectPontajInit(int idUser, int an, int luna, bool cuNorma = false, int cuInOut = 0)
+        private static string DamiSelectPontajInit(int idUser, int an, int luna, bool cuNorma = false, int cuInOut = 0, string strFiltruZile = "")
         {
             //cuNorma
             //0 - PontajInitGlobal
@@ -7047,10 +7054,23 @@ namespace WizOne.Module
 
                 if (Constante.tipBD == 1)
                 {
+                    //Florin 2022.04.07
                     //#969 - s-a adaugat denumirea scurta la norma
                     if (cuNorma)
-                        nrm = @" ,CONVERT(nvarchar(50),(CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR CONVERT(date, X.Ziua) > CONVERT(date, ddp.DataPlecare) THEN CONVERT(int,NULL) ELSE dn.Norma END)) + COALESCE((SELECT RTRIM(LTRIM(COALESCE(DenumireScurta,''))) FROM Ptj_tblAbsente WHERE OreInVal='Val0'),'') AS ValStr
-                                 ,CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR CONVERT(date, X.Ziua) > CONVERT(date, ddp.DataPlecare) THEN CONVERT(int,NULL) ELSE dn.Norma * 60 END AS Val0";
+                        nrm = $@" ,
+                                    CASE WHEN 
+                                    {strFiltruZile}
+                                    > 0 
+                                    THEN
+                                    CONVERT(nvarchar(50),(CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR CONVERT(date, X.Ziua) > CONVERT(date, ddp.DataPlecare) THEN CONVERT(int,NULL) ELSE dn.Norma END)) + COALESCE((SELECT RTRIM(LTRIM(COALESCE(DenumireScurta,''))) FROM Ptj_tblAbsente WHERE OreInVal='Val0'),'') 
+                                    ELSE NULL END AS ValStr
+                                 ,
+                                    CASE WHEN 
+                                    {strFiltruZile}
+                                    > 0 
+                                    THEN
+                                    CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR CONVERT(date, X.Ziua) > CONVERT(date, ddp.DataPlecare) THEN CONVERT(int,NULL) ELSE dn.Norma * 60 END 
+                                    ELSE NULL END AS Val0";
                     if (cuInOut == 1)
                     {
                         //Florin #773 - am adaugat FirstIn si LastOut

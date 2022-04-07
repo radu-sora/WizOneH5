@@ -726,10 +726,12 @@ namespace WizOne.AvansXDecont
                                 //}
                             }
 
-                            #endregion
+							#endregion
 
-                            #region schimbare status document in functie de legaturi cu alte documente
-                            switch (Convert.ToInt32(dtDoc.Rows[0]["DocumentTypeId"].ToString()))
+							#region schimbare status document in functie de legaturi cu alte documente
+							sql = "SELECT  * FROM AvsXDec_Avans WHERE DocumentId = " + dtDoc.Rows[0]["DocumentId"].ToString();
+							DataTable dtAvansUpdate = General.IncarcaDT(sql, null);
+							switch (Convert.ToInt32(dtDoc.Rows[0]["DocumentTypeId"].ToString()))
                             {
                                 case 2002:/*Decont avans spre decontare*/
                                 case 2001: /*Decont cheltuieli deplasare*/
@@ -968,10 +970,7 @@ namespace WizOne.AvansXDecont
                                     #endregion
                                     break;
                                 case 1001:/*Avans spre deplasare*/
-                                case 1002:/*Avans spre decontare*/
-									sql = "SELECT  * FROM AvsXDec_Avans WHERE DocumentId = " + dtDoc.Rows[0]["DocumentId"].ToString();
-									DataTable dtAvansUpdate = General.IncarcaDT(sql, null);
-									
+                                case 1002:/*Avans spre decontare*/									
                                     if (actiune == 2 && dtAvansUpdate != null && dtAvansUpdate.Rows.Count > 0)
                                     {
 										General.ExecutaNonQuery("UPDATE AvsXDec_Avans SET RefuseReason = '" + RefuseReason + "' WHERE DocumentId = " + dtDoc.Rows[0]["DocumentId"].ToString(), null);	                           
@@ -981,6 +980,36 @@ namespace WizOne.AvansXDecont
 
 							#endregion
 
+							//generare cerere delegatie si trimitere in pontaj
+							string errCerere = "";
+							if (actiune == 1)
+                            {
+								#region Verificare validitate angajat
+								try
+								{
+									int esteActiv = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM F100 WHERE F10003={dtDoc.Rows[0]["F10003"].ToString()} AND F10022 <= {General.ToDataUniv(Convert.ToDateTime(dtAvansUpdate.Rows[0]["StartDate"].ToString()))} AND {General.ToDataUniv(Convert.ToDateTime(dtAvansUpdate.Rows[0]["EndDate"].ToString()))} <= F10023", null), 0));
+									if (esteActiv == 0)									
+										errCerere += Dami.TraduCuvant("In perioada solicitata, angajatul este inactiv") + System.Environment.NewLine;									
+								}
+								catch (Exception) { }
+								#endregion
+								//verificam daca se intersecteaza cu alte intervale
+								//modificare facute pt Honeywell; pt a putea face mai multe cereri cu x ore in aceeasi zi
+								int intersec = Convert.ToInt32(General.ExecutaScalar($@"
+                                SELECT COUNT(*) 
+                                FROM ""Ptj_Cereri"" A
+                                INNER JOIN ""Ptj_tblAbsente"" B ON A.""IdAbsenta"" = B.""Id""
+                                WHERE A.F10003 = {dtDoc.Rows[0]["F10003"].ToString()} AND A.""DataInceput"" <= {General.ToDataUniv(Convert.ToDateTime(dtAvansUpdate.Rows[0]["EndDate"].ToString()))} AND {General.ToDataUniv(Convert.ToDateTime(dtAvansUpdate.Rows[0]["StartDate"].ToString()))} <= A.""DataSfarsit"" 
+                                AND A.""IdStare"" IN (1,2,3,4) ", null));   //AND B.""GrupOre"" IN({General.Nz(drAbs["GrupOreDeVerificat"], -99)})
+
+								if (intersec > 0)
+									errCerere += Dami.TraduCuvant("Intervalul se intersecteaza cu altul deja existent") + System.Environment.NewLine;
+
+								if (errCerere.Length <= 0)
+                                {
+
+                                }
+							}
 
 							#region  Notificare strat
 							string[] arrParam = new string[] { General.UrlHost(), General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };

@@ -957,6 +957,13 @@ namespace WizOne.AvansXDecont
 
                     bool docAllocatedOnDefaultBank = false;
 
+                    DataTable entComp = null;
+                    //verificam daca, pe document, a fost salvata alta companie decat cea pe care o are angajatul in F100
+                    if (doc.Rows[0]["IdCompanie"] != DBNull.Value && Convert.ToInt32(doc.Rows[0]["IdCompanie"].ToString()) > 0 && Convert.ToInt32(doc.Rows[0]["IdCompanie"].ToString()) != Convert.ToInt32(angajat.Rows[0]["F10002"].ToString()))
+                    {
+                        entComp = General.IncarcaDT("SELECT * FROM AvsXDec_Companie WHERE Id = " + doc.Rows[0]["IdCompanie"].ToString(), null);
+                    }
+
 
                     if (angajat.Rows[0]["F10020"].ToString().Substring(4, 4) == codVerificareBRD)
                     {
@@ -968,9 +975,9 @@ namespace WizOne.AvansXDecont
                         entBCR.CodBancaPlatitoare = codBancaBRD;
                         entBCR.NumePlatitor = numeBancaBRD;
                         entBCR.IBANPlatitor = codIbanBRD;
-                        entBCR.CodFiscalPlatitor = ent.Rows[0]["F00207"].ToString();
-                        entBCR.StradaPlatitor = ent.Rows[0]["F00233"].ToString() + " NR " + ent.Rows[0]["F00234"].ToString();
-                        entBCR.OrasPlatitor = ent.Rows[0]["F00231"].ToString().ToUpper();
+                        entBCR.CodFiscalPlatitor = entComp != null ? entComp.Rows[0]["CodFiscal"].ToString() : ent.Rows[0]["F00207"].ToString();
+                        entBCR.StradaPlatitor = entComp != null ? entComp.Rows[0]["Artera"].ToString() + " NR " + entComp.Rows[0]["Numar"].ToString() : ent.Rows[0]["F00233"].ToString() + " NR " + ent.Rows[0]["F00234"].ToString();
+                        entBCR.OrasPlatitor = entComp != null ? entComp.Rows[0]["Localitate"].ToString().ToUpper() : ent.Rows[0]["F00231"].ToString().ToUpper();
                         entBCR.CodUtilizator = string.Empty;
                         entBCR.NumeFisier = string.Empty;
                         entBCR.ReferintaUnicaPlata = (lstBCR.Count + 1).ToString();
@@ -980,7 +987,7 @@ namespace WizOne.AvansXDecont
                         entBCR.CurrencyCode = arr[3].ToString();
                         entBCR.CodBancaBeneficiara = angajat.Rows[0]["F10020"].ToString().Substring(4, 4);
                         entBCR.NumeBancaBeneficiara = bancaProprie.Rows[0]["F07509"].ToString();
-                        entBCR.NumeCompanie = ent.Rows[0]["F00204"].ToString();
+                        entBCR.NumeCompanie = entComp != null ? entComp.Rows[0]["Denumire"].ToString() : ent.Rows[0]["F00204"].ToString();
                         entBCR.NumeSucursalaBancaBeneficiara = bancaProprie.Rows[0]["F07505"].ToString();
                         entBCR.IBANBeneficiar = angajat.Rows[0]["F10020"].ToString();
                         entBCR.EmailBeneficiar = angajat.Rows[0]["F100894"].ToString();
@@ -1029,9 +1036,9 @@ namespace WizOne.AvansXDecont
                         entBCR.CodBancaPlatitoare = codBancaBT;
                         entBCR.NumePlatitor = numeBancaBT;
                         entBCR.IBANPlatitor = codIbanBT;
-                        entBCR.CodFiscalPlatitor = ent.Rows[0]["F00207"].ToString();
-                        entBCR.StradaPlatitor = ent.Rows[0]["F00233"].ToString() + " NR " + ent.Rows[0]["F00234"].ToString();
-                        entBCR.OrasPlatitor = ent.Rows[0]["F00231"].ToString().ToUpper();
+                        entBCR.CodFiscalPlatitor = entComp != null ? entComp.Rows[0]["CodFiscal"].ToString() : ent.Rows[0]["F00207"].ToString();
+                        entBCR.StradaPlatitor = entComp != null ? entComp.Rows[0]["Artera"].ToString() + " NR " + entComp.Rows[0]["Numar"].ToString() : ent.Rows[0]["F00233"].ToString() + " NR " + ent.Rows[0]["F00234"].ToString();
+                        entBCR.OrasPlatitor = entComp != null ? entComp.Rows[0]["Localitate"].ToString().ToUpper() : ent.Rows[0]["F00231"].ToString().ToUpper();
                         entBCR.CodUtilizator = string.Empty;
                         entBCR.NumeFisier = string.Empty;
                         entBCR.ReferintaUnicaPlata = (lstBCR.Count + 1).ToString();
@@ -1041,7 +1048,7 @@ namespace WizOne.AvansXDecont
                         entBCR.CurrencyCode = arr[3].ToString();
                         entBCR.CodBancaBeneficiara = angajat.Rows[0]["F10020"].ToString().Substring(4, 4);
                         entBCR.NumeBancaBeneficiara = bancaProprie.Rows[0]["F07509"].ToString();
-                        entBCR.NumeCompanie = ent.Rows[0]["F00204"].ToString();
+                        entBCR.NumeCompanie = entComp != null ? entComp.Rows[0]["Denumire"].ToString() : ent.Rows[0]["F00204"].ToString();
                         entBCR.NumeSucursalaBancaBeneficiara = bancaProprie.Rows[0]["F07505"].ToString();
                         entBCR.IBANBeneficiar = angajat.Rows[0]["F10020"].ToString();
                         entBCR.EmailBeneficiar = angajat.Rows[0]["F100894"].ToString();
@@ -1090,9 +1097,9 @@ namespace WizOne.AvansXDecont
                         entBCR.CodBancaPlatitoare = codBancaBCR;
                         entBCR.NumePlatitor = numeBancaBCR;
                         entBCR.IBANPlatitor = codIbanBCR;
-                        entBCR.CodFiscalPlatitor = ent.Rows[0]["F00207"].ToString();
-                        entBCR.StradaPlatitor = ent.Rows[0]["F00233"].ToString() + " NR " + ent.Rows[0]["F00234"].ToString();
-                        entBCR.OrasPlatitor = ent.Rows[0]["F00231"].ToString().ToUpper();
+                        entBCR.CodFiscalPlatitor = entComp != null ? entComp.Rows[0]["CodFiscal"].ToString() : ent.Rows[0]["F00207"].ToString();
+                        entBCR.StradaPlatitor = entComp != null ? entComp.Rows[0]["Artera"].ToString() + " NR " + entComp.Rows[0]["Numar"].ToString() : ent.Rows[0]["F00233"].ToString() + " NR " + ent.Rows[0]["F00234"].ToString();
+                        entBCR.OrasPlatitor = entComp != null ? entComp.Rows[0]["Localitate"].ToString().ToUpper() : ent.Rows[0]["F00231"].ToString().ToUpper();
                         entBCR.CodUtilizator = string.Empty;
                         entBCR.NumeFisier = string.Empty;
                         entBCR.ReferintaUnicaPlata = (lstBCR.Count + 1).ToString();
@@ -1102,7 +1109,7 @@ namespace WizOne.AvansXDecont
                         entBCR.CurrencyCode = arr[3].ToString();
                         entBCR.CodBancaBeneficiara = angajat.Rows[0]["F10020"].ToString().Substring(4, 4);
                         entBCR.NumeBancaBeneficiara = bancaProprie.Rows[0]["F07509"].ToString();
-                        entBCR.NumeCompanie = ent.Rows[0]["F00204"].ToString();
+                        entBCR.NumeCompanie = entComp != null ? entComp.Rows[0]["Denumire"].ToString() : ent.Rows[0]["F00204"].ToString();
                         entBCR.NumeSucursalaBancaBeneficiara = bancaProprie.Rows[0]["F07505"].ToString();
                         entBCR.IBANBeneficiar = angajat.Rows[0]["F10020"].ToString();
                         entBCR.EmailBeneficiar = angajat.Rows[0]["F100894"].ToString();

@@ -125,7 +125,7 @@ namespace WizOne
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            Exception ex = Server.GetLastError();
+         Exception ex = Server.GetLastError();
             if (ex is HttpUnhandledException) General.MemoreazaEroarea(ex, "AppError");
         }
 

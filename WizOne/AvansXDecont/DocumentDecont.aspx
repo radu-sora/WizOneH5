@@ -48,6 +48,12 @@
                         <dx:PanelContent>
 
 						<div class="Absente_divOuter margin_top15">
+							<label id="lblComp" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Companie</label>
+							<div style="float:left; padding-right:15px;">    
+								<dx:ASPxComboBox ID="cmbComp" ClientInstanceName="cmbComp" ClientIDMode="Static" runat="server" Width="290" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+									<ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbComp'); }" />
+								</dx:ASPxComboBox>
+							</div>
 							<label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Angajat</label>
 							<div style="float:left; padding-right:15px;">    
 								<dx:ASPxComboBox ID="cmbAngajat" ClientInstanceName="cmbAngajat" ClientIDMode="Static" runat="server" Width="290" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >

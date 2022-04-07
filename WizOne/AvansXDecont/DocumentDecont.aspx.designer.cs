@@ -96,6 +96,24 @@ namespace WizOne.AvansXDecont
         protected global::DevExpress.Web.ASPxRoundPanel pnlDateGen;
 
         /// <summary>
+        /// lblComp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblComp;
+
+        /// <summary>
+        /// cmbComp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbComp;
+
+        /// <summary>
         /// lblAng control.
         /// </summary>
         /// <remarks>

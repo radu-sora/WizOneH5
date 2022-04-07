@@ -6854,6 +6854,7 @@ namespace WizOne.Module
                     strIst = string.Format(strIst, an, luna, General.ToDataUniv(an, luna, 1), General.ToDataUniv(an, luna, 99), idUser, "GetDate()", strFiltru);
                     strFIN += strIst + ";" + "\n\r";
 
+                    
                     ras = General.ExecutaNonQuery("BEGIN " + strFIN + " END;", null);
 
                     #endregion

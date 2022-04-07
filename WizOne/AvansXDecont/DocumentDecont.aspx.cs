@@ -128,8 +128,22 @@ namespace WizOne.AvansXDecont
 
                 cmbAngajat.DataSource = General.IncarcaDT("select * from f100supervizori where iduser=" + Session["UserId"].ToString() + "  and convert(date, DataInceput) <= convert(date, GETDATE()) and convert(date, GETDATE()) <= convert(date, DataSfarsit) order by idSuper", null);
                 cmbAngajat.DataBind();
-                if (!IsPostBack)
+                if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 1 && !IsPostBack)
                     cmbAngajat.SelectedIndex = 0;
+                else if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0)
+                {
+                    cmbAngajat.Value = Convert.ToInt32(Session["AvsXDec_Marca"].ToString());
+                    cmbAngajat.ClientEnabled = false;
+                }
+
+                cmbComp.DataSource = General.IncarcaDT("select * from AvsXDec_Companie order by id", null);
+                cmbComp.DataBind();
+                if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 1 && !IsPostBack && cmbComp.DataSource != null)
+                    cmbComp.SelectedIndex = 0;
+                else if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 0)
+                {
+                    cmbComp.ClientEnabled = false;
+                }
 
                 if (lpTipDeplasare != null && lpTipDeplasare.Rows.Count > 0)
 				{
@@ -1863,6 +1877,10 @@ namespace WizOne.AvansXDecont
                             IncarcaDate();
                         }
                         break;
+                    case "cmbComp":
+                        ent.Rows[0]["IdCompanie"] = Convert.ToInt32(cmbComp.Value ?? -99);
+                        Session["AvsXDec_SursaDateDec"] = ent;
+                        break;
                 }
                 if (Session["AvsXDec_cpAlertMessage"] != null)
                 {
@@ -2011,6 +2029,8 @@ namespace WizOne.AvansXDecont
                             Session["AvsXDec_SumaDecont"] = Convert.ToDecimal(General.Nz(ent.Rows[0]["EstimatedAmount"], 0).ToString());
                             txtValAvans.Text = General.Nz(ent.Rows[0]["TotalAmountAvans"], "").ToString();
                             txtValPlataBanca.Text = General.Nz(ent.Rows[0]["UnconfRestAmount"], "").ToString();
+                            if (ent.Rows[0]["IdCompanie"] != DBNull.Value)
+                                cmbComp.Value = Convert.ToInt32(ent.Rows[0]["IdCompanie"].ToString());
                         }
                     }
 

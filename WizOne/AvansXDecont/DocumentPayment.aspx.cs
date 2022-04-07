@@ -225,7 +225,7 @@ namespace WizOne.AvansXDecont
         public DataTable GetAvailableDocStateXUserRol(bool AreRolFinanciar, bool AreRolContabilitate)
         {
             /*LeonardM 21.06.2016
-             * metoda ce returnewza statusul documentelor valabile
+             * metoda ce returneaza statusul documentelor valabile
              * in functie de rolul utilizatorului
              * si cei de la financiar, cat si cei de la contabilitate acceseaza acelasi ecran
              * pentru cei de la financiar ajung documentele in starea
@@ -1955,7 +1955,7 @@ namespace WizOne.AvansXDecont
             StareDocumentForUpdate docStateUpdate = new StareDocumentForUpdate();
             switch (Convert.ToInt32(cmbDocState.Value))
             {
-                //momentan nu se foloseste starile Contat
+                //momentan nu se foloseste starea Contat
                 case 3:/*aprobat*/
                     if (Convert.ToInt32(cmbOperationSign.Value ?? -99) == -1)
                         docStateUpdate = StareDocumentForUpdate.Restituit;

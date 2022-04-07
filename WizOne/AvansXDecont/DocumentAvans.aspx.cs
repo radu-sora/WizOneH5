@@ -113,10 +113,14 @@ namespace WizOne.AvansXDecont
                 DataTable lpTipDeplasare = GetAvsXDec_DictionaryItemTipDeplasare();
 				DataTable lpTipMoneda = GetAvsXDec_DictionaryItemValute();
 				DataTable lpModPlata = GetAvsXDec_DictionaryItemModalitatePlata();
-                        
 
-                 
-				if (lpTipDeplasare != null && lpTipDeplasare.Rows.Count > 0)
+
+                cmbAngajat.DataSource = General.IncarcaDT("select * from f100supervizori where iduser=" + Session["UserId"].ToString() + "  and convert(date, DataInceput) <= convert(date, GETDATE()) and convert(date, GETDATE()) <= convert(date, DataSfarsit) order by idSuper", null);
+                cmbAngajat.DataBind();
+                if (!IsPostBack)
+                    cmbAngajat.SelectedIndex = 0;
+
+                if (lpTipDeplasare != null && lpTipDeplasare.Rows.Count > 0)
 				{
 				   
 					if (lpTipMoneda != null && lpTipMoneda.Rows.Count > 0)
@@ -324,7 +328,7 @@ namespace WizOne.AvansXDecont
                     grDate.Columns["FreeTxt"].Visible = false;
 					lblDtScad.Visible = true;
 					dtDueDate.ClientVisible = true;
-                    dtDueDate.ClientEnabled = false;
+                    //dtDueDate.ClientEnabled = false;
                     LoadAvansReservations(false);
                     pnlCheltEst.HeaderText = "Cheltuieli estimate";
                     break;
@@ -1432,6 +1436,14 @@ namespace WizOne.AvansXDecont
                         ent.Rows[0]["EstimatedAmount"] = suma;
                         Session["AvsXDec_SursaDate"] = ent;
                         break;
+                    case "cmbAngajat":
+                        if (cmbAngajat.Value != null)
+                        {
+                            Session["AvsXDec_SursaDate"] = null;
+                            General.ExecutaNonQuery("UPDATE AvsXDec_Document SET F10003 = " + Convert.ToInt32(cmbAngajat.Value) + " WHERE DocumentId = " + Session["AvsXDec_IdDocument"].ToString(), null);
+                            IncarcaDate();
+                        }
+                        break;
                 }
    
             }
@@ -1485,7 +1497,7 @@ namespace WizOne.AvansXDecont
                         }
                         /*conform specificatiilor, pentru tipul de document avans spre decontyare,
                         * data scadenta se popate edita, iar initial se completeaza cu data curenta*/
-                        if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 1 && Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) == 1002)
+                        if (Convert.ToInt32(Session["AvsXDec_EsteNou"].ToString()) == 1 /*&& Convert.ToInt32(Session["AvsXDec_DocumentTypeId"].ToString()) == 1002*/)
                         {
                             ent.Rows[0]["DueDate"] = DateTime.Now;
                             dtDueDate.Value = DateTime.Now;

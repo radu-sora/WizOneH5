@@ -1096,9 +1096,9 @@ namespace WizOne.AvansXDecont
 				string sql = "SELECT a.* FROM AvsXDec_Document a WHERE a.DocumentTypeId = " + DocumentTypeId + " AND a.USER_NO = " + idUser + " AND a.DocumentStateId >= 1 AND a.DocumentStateId != 8";		
 				DataTable q = General.IncarcaDT(sql, null);	
 
-                if (q != null && q.Rows.Count != 0)
+                if (q != null && q.Rows.Count > 1)
                 {
-                    result = "Mai exista un document de acelasi tip neinchis!";
+                    result = "Exista deja doua documente de acelasi tip neinchise!";
                 }
             }
             catch (Exception ex)

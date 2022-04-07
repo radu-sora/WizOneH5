@@ -39,7 +39,8 @@ namespace WizOne.Tactil
 
                     dt.Rows.Add("AdeverintaMedic", "Adeverinta medic/spital", null, null);
                     dt.Rows.Add("AdeverintaAngajat", "Adeverinta de angajat", null, null);
-                    if (HttpContext.Current.Session["IdClient"] == null || Convert.ToInt32(HttpContext.Current.Session["IdClient"]) != 23)
+                    //Radu 07.04.2022 - s-a modificat IdClient din 23 in 18
+                    if (HttpContext.Current.Session["IdClient"] == null || Convert.ToInt32(HttpContext.Current.Session["IdClient"]) != 18)
                     {
                         dt.Rows.Add("AdeverintaPractica", "Adeverinta de practica", null, null);
                         dt.Rows.Add("AdeverintaCresa", "Adeverinta cresa/gradinita", null, null);

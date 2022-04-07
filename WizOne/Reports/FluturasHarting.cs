@@ -14,7 +14,8 @@ namespace WizOne.Reports
             InitializeComponent();
 
             //#1068
-            if (Convert.ToInt32(General.Nz(HttpContext.Current.Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Ro_Automotive))
+            int marca = Convert.ToInt32(HttpContext.Current.Session["User_Marca"].ToString());
+            if (300000 <= marca && marca <= 399999)
             {
                 xrTableCell3.Text = "pentru informatii si intrebari sunati la d-na Izabela Boldor - Resurse Umane tel 0369/102607; 0369/102803; 0369/102847";
             }

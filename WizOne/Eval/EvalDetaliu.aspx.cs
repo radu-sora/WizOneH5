@@ -815,9 +815,9 @@ namespace WizOne.Eval
                     return;
                 }
 
-                if (e.Parameter.Contains(";"))
+                if (e.Parameter.Contains("#$"))
                 {
-                    string[] param = e.Parameter.Split(';');
+                    string[] param = e.Parameter.Split(new string[] { "#$" }, StringSplitOptions.None);
                     string nameControl = param[0];
                     string valueControl = param[1].Replace("'"," ").Replace("\""," ").Replace("\\"," ").Replace("/"," ");
 
@@ -3067,7 +3067,8 @@ namespace WizOne.Eval
                             if (clsConfigDetail.TipValoare == 1)
                             {
                                 #region getDS
-                                if (Session["feedEval_Calificativ"] == null)
+                                if (Session["feedEval_Calificativ"] == null || (Session["feedEval_Calificativ"] as List<Eval_SetCalificativDet>).Where(x => x.IdSet == clsConfigDetail.IdNomenclator) == null
+                                    || (Session["feedEval_Calificativ"] as List<Eval_SetCalificativDet>).Where(x => x.IdSet == clsConfigDetail.IdNomenclator).Count() <= 0)    //Radu 22.02.2022 - pot fi mai multe seturi de calificative pe tab-uri diferite de obiective
                                 {
                                     string sqlCalificativ = @"select det.""IdSet"", det.""IdCalificativ"", det.""Denumire"", det.""Nota"", det.""RatingMin"", det.""RatingMax"", det.""Ordine"",
                                                                     det.""Explicatii""
@@ -3102,7 +3103,7 @@ namespace WizOne.Eval
                                 colCalificativ.PropertiesComboBox.TextField = "Denumire";
                                 colCalificativ.PropertiesComboBox.ValueField = "IdCalificativ";
                                 colCalificativ.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDownList;
-                                colCalificativ.PropertiesComboBox.DataSource = lstEval_SetCalificativDet;
+                                colCalificativ.PropertiesComboBox.DataSource = lstEval_SetCalificativDet.Where(x => x.IdSet == clsConfigDetail.IdNomenclator); //Radu 22.02.2022
                                 colCalificativ.Visible = false;
                                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) != 20 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)) >= 2 || tab >= 2)   //Radu 03.07.2018 - calificativul nu trebuie sa fie afisat pe tab-ul angajatului decat dupa ce acesta finalizeaza
                                     colCalificativ.Visible = true;
@@ -4855,22 +4856,36 @@ namespace WizOne.Eval
                             #region getDS
                             if (Session["feedEval_Competenta"] == null)
                             {
-                                string strSQLCompetenta = @"
-                                                            select categDet.""IdCompetenta"" as ""Id"", categDet.""DenCompetenta"" as ""Denumire""
-                                                            from ""Eval_CategCompetente"" categ
-                                                            join ""Eval_CategCompetenteDet"" categDet on categ.""IdCategorie"" = categDet.""IdCategorie""
-                                                            join ""Eval_CompXSetAng"" setAng on categ.""IdCategorie"" = setAng.""IdCategorie""
-                                                            join ""Eval_SetAngajatiDetail"" setAngDetail on setAng.""IdSetAng"" = setAngDetail.""IdSetAng""
-                                                            where categ.""IdCategorie"" = @1
-                                                            and setAngDetail.""Id"" = @2
-                                                            group by categDet.""IdCompetenta"", categDet.""DenCompetenta""";
+                                //Radu 09.02.2022
+                                string filtru ="";
+                                if (clsConfigDetail.IdNomenclator != -99)
+                                    filtru = " categ.IdCategorie = " + clsConfigDetail.IdNomenclator + " and ";
+
+                                //string strSQLCompetenta = @"
+                                //                            select categDet.""IdCompetenta"" as ""Id"", categDet.""DenCompetenta"" as ""Denumire""
+                                //                            from ""Eval_CategCompetente"" categ
+                                //                            join ""Eval_CategCompetenteDet"" categDet on categ.""IdCategorie"" = categDet.""IdCategorie""
+                                //                            join ""Eval_CompXSetAng"" setAng on categ.""IdCategorie"" = setAng.""IdCategorie""
+                                //                            join ""Eval_SetAngajatiDetail"" setAngDetail on setAng.""IdSetAng"" = setAngDetail.""IdSetAng""
+                                //                            where @1
+                                //                            setAngDetail.""Id"" = @2
+                                //                            group by categDet.""IdCompetenta"", categDet.""DenCompetenta""";
+                                string strSQLCompetenta = "select categDet.IdCompetenta as Id, categDet.DenCompetenta as Denumire "
+                                                            + " from Eval_CategCompetente categ "
+                                                            + " join Eval_CategCompetenteDet categDet on categ.IdCategorie = categDet.IdCategorie "
+                                                            + " join Eval_CompXSetAng setAng on categ.IdCategorie = setAng.IdCategorie "
+                                                            + " join Eval_SetAngajatiDetail setAngDetail on setAng.IdSetAng = setAngDetail.IdSetAng "
+                                                            + "where " + filtru
+                                                            + " setAngDetail.Id = " + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1))
+                                                            + " group by categDet.IdCompetenta, categDet.DenCompetenta";
 
                                 if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1)
                                     strSQLCompetenta = @"select categDet.""IdCompetenta"" as ""Id"", categDet.""DenCompetenta"" as ""Denumire""
                                                             from ""Eval_CategCompetente"" categ
                                                             join ""Eval_CategCompetenteDet"" categDet on categ.""IdCategorie"" = categDet.""IdCategorie""";
 
-                                DataTable dtCompetenta = General.IncarcaDT(strSQLCompetenta, new object[] { clsConfigDetail.IdNomenclator, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                                //DataTable dtCompetenta = General.IncarcaDT(strSQLCompetenta, new object[] { filtru, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                                DataTable dtCompetenta = General.IncarcaDT(strSQLCompetenta, null);
                                 foreach (DataRow rwCompetenta in dtCompetenta.Rows)
                                 {
                                     metaDate clsCompetenta = new metaDate();
@@ -5406,12 +5421,14 @@ namespace WizOne.Eval
                     return;
                 }
 
-                string ras = "";
-                if (ras != "")
-                {                  
-                    pnlSectiune.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(ras);
-                    return;
-                }
+                //#1095
+                //string ras = Notif.TrimiteNotificare("Eval.EvalLista", (int)Constante.TipNotificare.Validare, sqlEval + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                //if (ras != "" && ras.Substring(0, 1) == "2")
+                //{
+                //    pnlSectiune.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(ras.Substring(2)); 
+                //    return;
+                //}
+
 
                 //Florin 2020.01.27
                 btnSave_Click(sender,e);
@@ -5643,9 +5660,10 @@ namespace WizOne.Eval
                             DELETE FROM ""Eval_ObiIndividuale"" WHERE F10003 =@2 AND ""IdPeriod"" = {idPerioada};
 
                             INSERT INTO ""Eval_ObiIndividuale"" (""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"")
-                            SELECT ""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4""
-                            FROM ""Eval_ObiIndividualeTemp"" 
-                            WHERE ""IdQuiz"" =@1 AND F10003 =@2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1))};
+                            SELECT a.""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", a.""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4""
+                            FROM ""Eval_ObiIndividualeTemp"" a
+                            left join Eval_QuizIntrebari b on a.IdQuiz = b.IdQuiz and a.IdLinieQuiz = b.Id 
+                            WHERE a.""IdQuiz"" =@1 AND F10003 =@2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1))} and b.SalvareObiective = 1;
 
                             DELETE FROM ""Eval_CompetenteAngajat"" WHERE F10003 =@2 AND ""IdPeriod"" = {idPerioada};
 
@@ -6103,10 +6121,11 @@ namespace WizOne.Eval
                                                 $@"SELECT SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END))/COUNT(*) AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3",
                                                 new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));
                                     else
+                                        //#1103 - Radu 17.02.2022 - am pus UNION ALL, deoarece, daca cele 2 note sunt egale, se returneaza doar o linie cu UNION
                                         val = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
                                             $@"SELECT ROUND(SUM(Total)/2,1) FROM (
                                             (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_ObiIndividualeTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
-                                            UNION
+                                            UNION ALL
                                             (SELECT CASE WHEN SUM(COALESCE(Pondere,0)) = 0 THEN 0 ELSE SUM(CONVERT(decimal(18,2),CASE WHEN COALESCE(Calificativ,'') = '' THEN 0 ELSE Calificativ END) * COALESCE(Pondere,0))/SUM(COALESCE(Pondere,0)) END AS Total FROM Eval_CompetenteAngajatTemp WHERE F10003=@1 AND IdQuiz=@2 AND Pozitie=@3)
                                             ) X",
                                             new object[] { Session["CompletareChestionar_F10003"], Session["CompletareChestionar_IdQuiz"], Session["Eval_ActiveTab"] }), 0));

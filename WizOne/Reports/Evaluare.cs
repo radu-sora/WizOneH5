@@ -97,10 +97,10 @@ namespace WizOne.Reports
                 string sqlEval_CompetenteAngajat = @"select * from ""Eval_CompetenteAngajatTemp"" where ""IdQuiz"" = " + idQuiz;
                 DataTable dtCompetenteAngajat = General.IncarcaDT(sqlEval_CompetenteAngajat, null);
 
-                sql = "select \"ColumnName\", \"Width\", \"Eval_QuizIntrebari\".\"Id\" AS \"Id\", \"IdNomenclator\" from \"Eval_ConfigObTemplateDetail\" left join \"Eval_QuizIntrebari\" on \"TemplateId\" = \"TemplateIdObiectiv\"  where \"IdQuiz\" = " + idQuiz + " and \"Vizibil\" = 1";
+                sql = "select Alias, \"ColumnName\", \"Width\", \"Eval_QuizIntrebari\".\"Id\" AS \"Id\", \"IdNomenclator\" from \"Eval_ConfigObTemplateDetail\" left join \"Eval_QuizIntrebari\" on \"TemplateId\" = \"TemplateIdObiectiv\"  where \"IdQuiz\" = " + idQuiz + " and \"Vizibil\" = 1 ORDER BY Eval_ConfigObTemplateDetail.Ordine";
                 DataTable dtTemplateOb = General.IncarcaDT(sql, null);
 
-                sql = "select \"ColumnName\", \"Width\", \"Eval_QuizIntrebari\".\"Id\" AS \"Id\", \"IdNomenclator\" from \"Eval_ConfigCompTemplateDetail\" left join \"Eval_QuizIntrebari\" on \"TemplateId\" = \"TemplateIdCompetenta\"  where \"IdQuiz\" = " + idQuiz + " and \"Vizibil\" = 1";
+                sql = "select Alias, \"ColumnName\", \"Width\", \"Eval_QuizIntrebari\".\"Id\" AS \"Id\", \"IdNomenclator\" from \"Eval_ConfigCompTemplateDetail\" left join \"Eval_QuizIntrebari\" on \"TemplateId\" = \"TemplateIdCompetenta\"  where \"IdQuiz\" = " + idQuiz + " and \"Vizibil\" = 1 ORDER BY Eval_ConfigCompTemplateDetail.Ordine";
                 DataTable dtTemplateComp = General.IncarcaDT(sql, null);
 
                 int idRoot = -99;
@@ -125,7 +125,7 @@ namespace WizOne.Reports
                         if (arrIntre != null && arrIntre.Length > 0)
                             for (int j = 0; j < arrIntre.Length; j++)
                             {
-                                XRControl ctl = null;
+                                XRControl ctl = null, ctl2 = null;
 
                                 switch (Convert.ToInt32((arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0")))
                                 {
@@ -171,7 +171,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColComp.Length; k++)
                                                 {
-                                                    cols.Add(dtColComp[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColComp[k]["Alias"] == DBNull.Value ? dtColComp[k]["ColumnName"].ToString() : dtColComp[k]["Alias"].ToString());
                                                     if (dtColComp[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -181,6 +181,16 @@ namespace WizOne.Reports
                                                 }
                                                 ctl = CreeazaTabel(5, dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)), cols.ToArray(), cols.ToArray(), rat.ToArray(), latime.ToArray(), note.ToArray());
 
+                                                //Radu 15.02.2022
+                                                int TemplateIdCompetenta = Convert.ToInt32(arrIntre[j]["TemplateIdCompetenta"] != DBNull.Value ? arrIntre[j]["TemplateIdCompetenta"].ToString() : "0");
+                                                sql = "SELECT * FROM Eval_ConfigCompTemplateDetail WHERE TemplateId = " + TemplateIdCompetenta + " AND TotalColoana IS NOT NULL";
+                                                DataTable dtTemplComp = General.IncarcaDT(sql, null);
+                                                if (dtTemplComp != null && dtTemplComp.Rows.Count > 0 && dtTemplComp.Rows[0]["TotalColoana"] != DBNull.Value && dtTemplComp.Rows[0]["TotalColoana"].ToString().Length > 0 &&
+                                                    dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)) != null &&
+                                                    dtCompetenteAngajat.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Rows.Count > 0)
+                                                {      
+                                                    ctl2 = CreeazaEticheta(CreeazaEtichetaSpeciala(dtTemplComp, dtCompetenteAngajat, f10003, arrIntre[j], super), 999);
+                                                }
                                             }
                                         }
                                         break;
@@ -196,7 +206,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColOb.Length; k++)
                                                 {
-                                                    cols.Add(dtColOb[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColOb[k]["Alias"] == DBNull.Value ? dtColOb[k]["ColumnName"].ToString() : dtColOb[k]["Alias"].ToString());
                                                     if (dtColOb[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -221,7 +231,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColOb.Length; k++)
                                                 {
-                                                    cols.Add(dtColOb[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColOb[k]["Alias"] == DBNull.Value ? dtColOb[k]["ColumnName"].ToString() : dtColOb[k]["Alias"].ToString());
                                                     if (dtColOb[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -265,7 +275,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColOb.Length; k++)
                                                 {
-                                                    cols.Add(dtColOb[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColOb[k]["Alias"] == DBNull.Value ? dtColOb[k]["ColumnName"].ToString() : dtColOb[k]["Alias"].ToString());
                                                     if (idClient != 25 && dtColOb[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -275,6 +285,17 @@ namespace WizOne.Reports
                                                 }
 
                                                 ctl = CreeazaTabel(23, dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)), cols.ToArray(), cols.ToArray(), rat.ToArray(), latime.ToArray(), note.ToArray());
+
+                                                //Radu 15.02.2022
+                                                int TemplateIdOb = Convert.ToInt32(arrIntre[j]["TemplateIdObiectiv"] != DBNull.Value ? arrIntre[j]["TemplateIdObiectiv"].ToString() : "0");
+                                                sql = "SELECT * FROM Eval_ConfigObTemplateDetail WHERE TemplateId = " + TemplateIdOb + " AND TotalColoana IS NOT NULL";
+                                                DataTable dtTemplOb = General.IncarcaDT(sql, null);
+                                                if (dtTemplOb != null && dtTemplOb.Rows.Count > 0 && dtTemplOb.Rows[0]["TotalColoana"] != DBNull.Value && dtTemplOb.Rows[0]["TotalColoana"].ToString().Length > 0 &&
+                                                    dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)) != null &&
+                                                    dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Rows.Count > 0)
+                                                {      
+                                                    ctl2 = CreeazaEticheta(CreeazaEtichetaSpeciala(dtTemplOb, dtObiIndividuale, f10003, arrIntre[j], super), 999);
+                                                }
                                             }
                                         }
                                         break;
@@ -290,7 +311,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColOb.Length; k++)
                                                 {
-                                                    cols.Add(dtColOb[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColOb[k]["Alias"] == DBNull.Value ? dtColOb[k]["ColumnName"].ToString() : dtColOb[k]["Alias"].ToString());
                                                     if (dtColOb[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -315,7 +336,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColComp.Length; k++)
                                                 {
-                                                    cols.Add(dtColComp[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColComp[k]["Alias"] == DBNull.Value ? dtColComp[k]["ColumnName"].ToString() : dtColComp[k]["Alias"].ToString());
                                                     if (dtColComp[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -340,7 +361,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColOb.Length; k++)
                                                 {
-                                                    cols.Add(dtColOb[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColOb[k]["Alias"] == DBNull.Value ? dtColOb[k]["ColumnName"].ToString() : dtColOb[k]["Alias"].ToString());
                                                     if (dtColOb[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -365,7 +386,7 @@ namespace WizOne.Reports
 
                                                 for (int k = 0; k < dtColComp.Length; k++)
                                                 {
-                                                    cols.Add(dtColComp[k]["ColumnName"].ToString());
+                                                    cols.Add(dtColComp[k]["Alias"] == DBNull.Value ? dtColComp[k]["ColumnName"].ToString() : dtColComp[k]["Alias"].ToString());
                                                     if (dtColComp[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
@@ -410,6 +431,9 @@ namespace WizOne.Reports
                                 }
 
                                 if (ctl != null) AdaugaControl(ctl, Convert.ToInt32(arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0"), (arrIntre[j]["Descriere"] != DBNull.Value ? arrIntre[j]["Descriere"].ToString() : ""), Convert.ToInt32(arrIntre[j]["Orientare"] != DBNull.Value ? arrIntre[j]["Orientare"].ToString() : "0"));
+
+                                if (ctl2 != null) AdaugaControl(ctl2, 999, "", 0); //Radu 15.02.2022
+
 
                                 if (Convert.ToInt32(arrIntre[j]["TipData"] != DBNull.Value ? arrIntre[j]["TipData"].ToString() : "0") == 16)
                                 {
@@ -497,6 +521,54 @@ namespace WizOne.Reports
             }
         }
 
+
+        private string CreeazaEtichetaSpeciala(DataTable dtTempl, DataTable dt, int f10003, DataRow arr, string super)
+        {
+            try
+            {
+                string eticheta = "";
+                switch (Convert.ToInt32(dtTempl.Rows[0]["TotalColoana"].ToString()))
+                {
+                    case 1:
+                        int suma1 = Convert.ToInt32(dt.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arr["Id"] != DBNull.Value ? arr["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("SUM(Total1)", "[Total1] IS NOT NULL"));
+                        eticheta = "Suma {0:N0}";
+                        eticheta = string.Format(eticheta, suma1);
+                        break;
+                    case 2:
+                        decimal suma2 = Convert.ToDecimal(dt.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arr["Id"] != DBNull.Value ? arr["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("SUM(Total1)", "[Total1] IS NOT NULL"));
+                        eticheta = "Suma {0:N2}";
+                        eticheta = string.Format(eticheta, suma2);
+                        break;
+                    case 3:
+                        int media1 = Convert.ToInt32(dt.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arr["Id"] != DBNull.Value ? arr["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("AVG(Total1)", string.Empty));
+                        eticheta = "Media {0:N0}";
+                        eticheta = string.Format(eticheta, media1);
+                        break;
+                    case 4:
+                        decimal media2 = Convert.ToDecimal(dt.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arr["Id"] != DBNull.Value ? arr["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("AVG(Total1)", string.Empty));
+                        eticheta = "Media {0:N2}";
+                        eticheta = string.Format(eticheta, media2);
+                        break;
+                    case 5:
+                        decimal valMin = Convert.ToDecimal(dt.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arr["Id"] != DBNull.Value ? arr["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("MIN(Total1)", "[Total1] IS NOT NULL"));
+                        eticheta = "Val. min. {0}";
+                        eticheta = string.Format(eticheta, valMin);
+                        break;
+                    case 6:
+                        decimal valMax = Convert.ToDecimal(dt.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arr["Id"] != DBNull.Value ? arr["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)).CopyToDataTable().Compute("MIN(Total1)", "[Total1] IS NOT NULL"));
+                        eticheta = "Val. max. {0}";
+                        eticheta = string.Format(eticheta, valMax);
+                        break;
+                }
+                return eticheta;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
+                return "";
+            }
+        }   
+        
         private XRLabel CreeazaTitlu(string desc)
         {
             XRLabel lbl = new XRLabel();
@@ -530,6 +602,8 @@ namespace WizOne.Reports
 
                 if (esteEticheta == 1)
                     lbl.Font = new Font("Times New Roman", 10F, FontStyle.Italic);
+                else if (esteEticheta == 999)
+                    lbl.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
                 else
                     lbl.Font = new Font("Times New Roman", 10F);
                 lbl.WordWrap = true;
@@ -628,12 +702,23 @@ namespace WizOne.Reports
         {
             try
             {
-                if (tipData == 9)
+                if (tipData == 9 || tipData == 999)
                 {
-                    ctl.SizeF = new System.Drawing.SizeF(720F, 20F);
-                    ctl.LocationF = new PointF(10, pozY);
-                    Detail.Controls.Add(ctl);
-                    pozY += (int)ctl.HeightF + spatiuVert;
+                    if (tipData == 9)
+                    {
+                        ctl.SizeF = new System.Drawing.SizeF(720F, 20F);
+                        ctl.LocationF = new PointF(10, pozY);
+                        Detail.Controls.Add(ctl);
+                        pozY += (int)ctl.HeightF + spatiuVert;
+                    }
+                    else
+                    {//Radu 15.02.2022
+                        ctl.SizeF = new System.Drawing.SizeF(100F, 20F);
+                        ctl.LocationF = new PointF(620, pozY);
+                        ctl.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                        Detail.Controls.Add(ctl);
+                        pozY += (int)ctl.HeightF + spatiuVert;
+                    }
                 }
                 else
                 {

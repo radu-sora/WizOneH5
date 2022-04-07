@@ -422,7 +422,7 @@ namespace WizOne.Absente
                 {
                     sqlCer = CreazaSelectCuValori(marca, 1, lstOre.ContainsKey(marca) ? lstOre[marca] : -99, idCerere);
 
-                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"",""IdCerereDivizata"", USER_NO, TIME, ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
+                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"",""IdCerereDivizata"", USER_NO, TIME, ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"", ""CampExtra21"", ""CampExtra22"", ""CampExtra23"", ""CampExtra24"", ""CampExtra25"", ""CampExtra26"", ""CampExtra27"", ""CampExtra28"", ""CampExtra29"", ""CampExtra30"") 
                                 OUTPUT Inserted.Id, Inserted.IdStare ";
 
                     strGen = "BEGIN TRAN " +
@@ -907,7 +907,7 @@ namespace WizOne.Absente
 
                 string strSql = @"SELECT Y.* FROM(
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
-                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025,
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025, A.F100915, A.F100916, A.F100922, A.F100923, A.F100924, A.F100925,
                                 F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
                                 A.F10061, A.F10062
 
@@ -928,7 +928,7 @@ namespace WizOne.Absente
                                 UNION
 
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
-                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  ,
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  , A.F100915, A.F100916, A.F100922, A.F100923, A.F100924, A.F100925,
                                 F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
                                 A.F10061, A.F10062
 
@@ -1036,10 +1036,15 @@ namespace WizOne.Absente
                         cond += " AND " + tmp;
                 }
 
+                //if (cond.Length <= 0)
+                //    cond = " WHERE (Y.F10025 = 0 OR Y.F10025 = 999) ";
+                //else
+                //    cond += " AND (Y.F10025 = 0 OR Y.F10025 = 999) ";
+                //Radu 22.02.2022 - am adaugat conditia sa aduca numai angajati Activi
                 if (cond.Length <= 0)
-                    cond = " WHERE (Y.F10025 = 0 OR Y.F10025 = 999) ";
+                    cond = " WHERE CASE WHEN Y.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN Y.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN Y.F10025 = 0 THEN (CASE WHEN (Y.F100925 <> 0 AND Y.F100922 IS NOT NULL AND Y.F100923 IS NOT NULL AND Y.F100923 IS NOT NULL AND Y.F100922 <= cast(getdate() as date) AND cast(getdate() as date) <= Y.F100923 AND cast(getdate() as date) <= Y.F100924) THEN 'Activ suspendat' ELSE CASE WHEN (Y.F100915 <= cast(getdate() as date) AND cast(getdate() as date) <= Y.F100916) THEN 'Activ detasat' ELSE 'Activ' END END) ELSE 'Inactiv' END) END END = 'Activ' ";
                 else
-                    cond += " AND (Y.F10025 = 0 OR Y.F10025 = 999) ";
+                    cond += " AND CASE WHEN Y.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN Y.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN Y.F10025 = 0 THEN (CASE WHEN (Y.F100925 <> 0 AND Y.F100922 IS NOT NULL AND Y.F100923 IS NOT NULL AND Y.F100923 IS NOT NULL AND Y.F100922 <= cast(getdate() as date) AND cast(getdate() as date) <= Y.F100923 AND cast(getdate() as date) <= Y.F100924) THEN 'Activ suspendat' ELSE CASE WHEN (Y.F100915 <= cast(getdate() as date) AND cast(getdate() as date) <= Y.F100916) THEN 'Activ detasat' ELSE 'Activ' END END) ELSE 'Inactiv' END) END END = 'Activ' ";    
 
                 strSql += cond;
 
@@ -1293,7 +1298,7 @@ namespace WizOne.Absente
 
                 #region Campuri Extra
 
-                string[] lstExtra = new string[20] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
+                string[] lstExtra = new string[30] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
 
                 DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { cmbAbs.Value });
                 for (int i = 0; i < dtEx.Rows.Count; i++)

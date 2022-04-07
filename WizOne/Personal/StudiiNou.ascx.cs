@@ -143,6 +143,10 @@ namespace WizOne.Personal
                 else
                     e.NewValues["IdAuto"] = Dami.NextId("F100Studii");
 
+                //#1101
+                e.NewValues["DeLaData"] = new DateTime(2100, 1, 1);
+                e.NewValues["LaData"] = new DateTime(2100, 1, 1);
+
             }
             catch (Exception ex)
             {

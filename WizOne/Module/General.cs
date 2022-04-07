@@ -3627,7 +3627,8 @@ namespace WizOne.Module
                             LEFT JOIN F1001 adr ON adr.F10003 = a.F10003
                             {2} {7}
                             WHERE 1=1  {3}
-                            ) X WHERE 1=1 {0}
+                            ) X WHERE 1=1
+                             {0}
                             ORDER BY ""NumeComplet"" ";
 
                 if (tip == 2)
@@ -7462,8 +7463,8 @@ namespace WizOne.Module
                             //General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
                             //                    + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
                             //                    + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
-                            General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
-                                + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = " + dtCalcul + ", @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
+                            General.ExecutaNonQuery("DECLARE   @f10003 NVARCHAR(4000),  @zi datetime,  @mod int,     @grila int "
+                                + " SELECT TOP 1 @f10003 = '" + f10003 + "', @zi = " + dtCalcul + ", @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
                                 + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
                         }
                         else
@@ -7497,8 +7498,8 @@ namespace WizOne.Module
                                     //General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
                                     //                    + " SELECT TOP 1 @f10003 = " + dtAng.Rows[i][0].ToString() + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + dtAng.Rows[i][0].ToString()
                                     //                    + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
-                                    General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
-                                                        + " SELECT TOP 1 @f10003 = " + dtAng.Rows[i][0].ToString() + ", @zi = " + dtCalcul + ", @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + dtAng.Rows[i][0].ToString()
+                                    General.ExecutaNonQuery("DECLARE   @f10003 NVARCHAR(4000),  @zi datetime,  @mod int,     @grila int "
+                                                        + " SELECT TOP 1 @f10003 = '" + dtAng.Rows[i][0].ToString() + "', @zi = " + dtCalcul + ", @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + dtAng.Rows[i][0].ToString()
                                                         + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
                                 }
                                 else

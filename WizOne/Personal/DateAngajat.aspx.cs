@@ -654,8 +654,9 @@ namespace WizOne.Personal
                 }
 
                 //Radu 09.09.2020 - completare data consemnare
-                ds.Tables[0].Rows[0]["F1001109"] = General.FindDataConsemnare(Convert.ToInt32(ds.Tables[1].Rows[0]["F10003"].ToString()));
-                ds.Tables[2].Rows[0]["F1001109"] = General.FindDataConsemnare(Convert.ToInt32(ds.Tables[1].Rows[0]["F10003"].ToString()));
+                //#1120 - trebuie comentate
+                //ds.Tables[0].Rows[0]["F1001109"] = General.FindDataConsemnare(Convert.ToInt32(ds.Tables[1].Rows[0]["F10003"].ToString()));
+                //ds.Tables[2].Rows[0]["F1001109"] = General.FindDataConsemnare(Convert.ToInt32(ds.Tables[1].Rows[0]["F10003"].ToString()));
 
                 //Florin 2018-10-30
                 //calculam CO daca se insereaza un angajat

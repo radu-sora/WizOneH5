@@ -19,18 +19,18 @@
         }
 
         function OnTextChangedHandlerCtr(s, e) {
-            pnlSectiune.PerformCallback(s.name + ";" + s.GetText());
+            pnlSectiune.PerformCallback(s.name + "#$" + s.GetText());
         }
 
         function OnCMBTipChanged(s, e) {
-            pnlSectiune.PerformCallback(s.name + ";" + s.GetText());
+            pnlSectiune.PerformCallback(s.name + "#$" + s.GetText());
         }
         function OnCHKChanged(s, e) {
-            pnlSectiune.PerformCallback(s.name + ";" + s.GetValue());
+            pnlSectiune.PerformCallback(s.name + "#$" + s.GetValue());
         }
         
         function OnDateChangedHandlerCtr(s, e) {
-            pnlSectiune.PerformCallback(s.name + ";" + s.GetText());
+            pnlSectiune.PerformCallback(s.name + "#$" + s.GetText());
         }
 
         var currentEditingIndex;
@@ -90,11 +90,11 @@
                 type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: 'Da', cancelButtonText: 'Nu', closeOnConfirm: true
             }, function (isConfirm) {
                 if (isConfirm) {
-                    pnlSectiune.PerformCallback("btnLuatCunostinta;1");
+                    pnlSectiune.PerformCallback("btnLuatCunostinta#$1");
                 }
                 else
                 {
-                    pnlSectiune.PerformCallback("btnLuatCunostinta;0");
+                    pnlSectiune.PerformCallback("btnLuatCunostinta#$0");
                 }                
             });
         }

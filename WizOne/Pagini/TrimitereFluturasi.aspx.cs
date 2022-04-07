@@ -36,6 +36,8 @@ using Twilio.Rest.Conversations.V1;
 using Twilio.Rest.Conversations.V1.Conversation;
 using Twilio.Rest.Conversations.V1.Configuration;
 using System.Text.RegularExpressions;
+using Google.Cloud.Vision.V1;
+using Image = Google.Cloud.Vision.V1.Image;
 
 namespace WizOne.Pagini
 {
@@ -622,7 +624,7 @@ namespace WizOne.Pagini
                         continue;
                     }
 
-                    lstOne.Add(new Notif.metaAdreseMail { Mail = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0], Destinatie = "TO", IncludeLinkAprobare = 0 });
+                    lstOne.Add(new Notif.metaAdreseMail { Mail = lstMarci[key].Split(new string[] { "_#_$_&_" }, StringSplitOptions.None)[0].Trim(), Destinatie = "TO", IncludeLinkAprobare = 0 });
                     //int reportId = Convert.ToInt32(Dami.ValoareParam("IdRaportFluturasMail", "-99"));
                     int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
                     int an = Convert.ToDateTime(txtAnLuna.Value).Year;
@@ -1578,9 +1580,36 @@ namespace WizOne.Pagini
         protected void btnMail_Click(object sender, EventArgs e)
         {
             //SendMail();
-            List<Notif.metaAdreseMail> lstOne = new List<Notif.metaAdreseMail>(); 
-            lstOne.Add(new Notif.metaAdreseMail { Mail = "radu.sora@wizrom.ro", Destinatie = "TO", IncludeLinkAprobare = 0 });
-            Notif.TrimiteMail365(lstOne, "Office 365 background service oauth test", "this is a test, don't reply", 0, "", "", 0, "", "", Convert.ToInt32(Session["IdClient"]), null);
+
+            //List<Notif.metaAdreseMail> lstOne = new List<Notif.metaAdreseMail>(); 
+            //lstOne.Add(new Notif.metaAdreseMail { Mail = "radu.sora@wizrom.ro", Destinatie = "TO", IncludeLinkAprobare = 0 });
+            //Notif.TrimiteMail365(lstOne, "Office 365 background service oauth test", "this is a test, don't reply", 0, "", "", 0, "", "", Convert.ToInt32(Session["IdClient"]), null);
+
+            GetText();
+        }
+
+        protected void GetText()
+        {
+            try
+            {
+                var value = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
+
+                var client = ImageAnnotatorClient.Create();
+                var image = Image.FromFile("D:\\Recuperare\\Radu\\Securitate.png");
+                var response = client.DetectText(image);
+                foreach (var annotation in response)
+                {
+                    if (annotation.Description != null)
+                    {
+                        Console.WriteLine(annotation.Description);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex.ToString(), "Adev", new StackTrace().GetFrame(0).GetMethod().Name);
+                return;
+            }
         }
 
 

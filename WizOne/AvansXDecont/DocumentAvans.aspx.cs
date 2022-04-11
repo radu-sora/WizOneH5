@@ -1483,7 +1483,7 @@ namespace WizOne.AvansXDecont
 
                 if (Session["AvsXDec_SursaDate"] == null)
                 {
-                    ent = General.IncarcaDT("SELECT * FROM vwAvsXDec_Avans WHERE DocumentId = " + Session["AvsXDec_IdDocument"].ToString(), null);
+                    ent = General.IncarcaDT("SELECT a.*, c.IdCompanie FROM vwAvsXDec_Avans a  LEFT JOIN AvsXDec_Document c on a.DocumentId = c.DocumentId  WHERE a.DocumentId = " + Session["AvsXDec_IdDocument"].ToString(), null);
                     Session["AvsXDec_SursaDate"] = ent;
                 }
                 else

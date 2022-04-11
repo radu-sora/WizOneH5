@@ -1596,17 +1596,17 @@ namespace WizOne.AvansXDecont
                 {
                     case 2001: /*Decont avans spre deplasare*/
                         #region verificare tip cheltuieli conform avans
-                        if (Convert.ToInt32(cmbDocAvans.Value ?? -99) != -99)
-                        {
-                            for (int i = 0; i < lstCheltuieliInserate.Rows.Count; i++)
-                            {
-                                if (lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(lstCheltuieliInserate.Rows[i]["ExpenseTypeId"].ToString())).Count() == 0)
-                                {
-                                    ras += ", tipurile de cheltuieli alese nu exista pe avans";
-                                    break;
-                                }
-                            }
-                        }
+                        //if (Convert.ToInt32(cmbDocAvans.Value ?? -99) != -99)
+                        //{
+                        //    for (int i = 0; i < lstCheltuieliInserate.Rows.Count; i++)
+                        //    {
+                        //        if (lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(lstCheltuieliInserate.Rows[i]["ExpenseTypeId"].ToString())).Count() == 0)
+                        //        {
+                        //            ras += ", tipurile de cheltuieli alese nu exista pe avans";
+                        //            break;
+                        //        }
+                        //    }
+                        //}
                         #endregion
                         break;
                     case 2002: /*Decont avans spre decontare*/
@@ -1626,17 +1626,17 @@ namespace WizOne.AvansXDecont
                             //}
                         }
                         #region verificare tip cheltuieli conform avans
-                        if (Convert.ToInt32(cmbDocAvans.Value ?? -99) != -99)
-                        {
-                            for (int i = 0; i < lstCheltuieliInserate.Rows.Count; i++)
-                            {
-                                if (lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(lstCheltuieliInserate.Rows[i]["ExpenseTypeId"], -99))).Count() == 0)
-                                {
-                                    ras += ", tipurile de cheltuieli alese nu exista pe avans";
-                                    break;
-                                }
-                            }
-                        }
+                        //if (Convert.ToInt32(cmbDocAvans.Value ?? -99) != -99)
+                        //{
+                            //for (int i = 0; i < lstCheltuieliInserate.Rows.Count; i++)
+                            //{
+                            //    if (lstCheltuieliAvans.Select("DictionaryItemId = " + Convert.ToInt32(General.Nz(lstCheltuieliInserate.Rows[i]["ExpenseTypeId"], -99))).Count() == 0)
+                            //    {
+                            //        ras += ", tipurile de cheltuieli alese nu exista pe avans";
+                            //        break;
+                            //    }
+                            //}
+                        //}
                         #endregion
                         break;
                 }
@@ -2071,7 +2071,7 @@ namespace WizOne.AvansXDecont
                                 cmbMonedaAvans.DataSource = lstConfigCurrencyXPay_Currency;
                                 cmbMonedaAvans.DataBind();
 
-                                ent.Rows[0]["PaymentTypeId"] = null;
+                                ent.Rows[0]["PaymentTypeId"] = DBNull.Value;
                                 lstConfigCurrencyXPay_PayCopy.Clear();
 								DataRow[] entConfig = lstConfigCurrencyXPay.Select("CurrencyId = " + Convert.ToInt32(cmbMonedaAvans.Value ?? -99));
                                 for (int i = 0; i < entConfig.Length; i++)
@@ -2091,7 +2091,7 @@ namespace WizOne.AvansXDecont
                                     cmbModPlata.ClientEnabled = false;
                                     cmbModPlata.DataBind();
                                 }
-                                else
+                                else if (lstConfigCurrencyXPay_PayCopy != null && lstConfigCurrencyXPay_PayCopy.Rows.Count > 1)
                                 {
                                     ent.Rows[0]["PaymentTypeId"] = lstConfigCurrencyXPay_PayCopy.Rows[0]["DictionaryItemId"];
                                     cmbModPlata.ClientEnabled = true;
@@ -2129,7 +2129,7 @@ namespace WizOne.AvansXDecont
                     DataTable lstDoc = GetAvsXDec_DictionaryItemDocumenteDecont();
                     if (lstDoc != null && lstDoc.Rows.Count != 0)
                     {
-                        DataRow[] entAvsXDec_TipDocument_Diurna = lstDoc.Select("DictionaryItemName = " + AvsXDec_TipDocument_Diurna);
+                        DataRow[] entAvsXDec_TipDocument_Diurna = lstDoc.Select("DictionaryItemName = '" + AvsXDec_TipDocument_Diurna + "'");
                         if (entAvsXDec_TipDocument_Diurna != null && entAvsXDec_TipDocument_Diurna.Count() > 0)
                             Session["AvsXDec_TipDocument_DiurnaId"] = entAvsXDec_TipDocument_Diurna[0]["DictionaryItemId"];
                     }
@@ -2157,6 +2157,7 @@ namespace WizOne.AvansXDecont
                     }
 
                     DataTable dtCheltuieliDecont = Session["AvsXDec_SursaDateEstChelt"] as DataTable;
+                    dtCheltuieliDecont.Columns["toBeSaved"].ReadOnly = false;
                     for (int i = 0; i < dtCheltuieliDecont.Rows.Count; i++)                                            
                         dtCheltuieliDecont.Rows[i]["toBeSaved"] = 1;                    
                     Session["AvsXDec_SursaDateEstChelt"] = dtCheltuieliDecont;
@@ -2207,9 +2208,10 @@ namespace WizOne.AvansXDecont
                     sql = "SELECT  a.DocumentId, COALESCE(b.SrcDocId, -99) as AvansDocumentId, COALESCE(a.DocumentTypeId, -99) as DocumentTypeId, a.DocumentTypeCode, a.DocumentTypeName,  COALESCE(a.DocumentStateId, -99) as DocumentStateId, "
                         + " a.DocumentState, COALESCE(a.F10003, -99) as F10003, a.NumeComplet, a.IdDepartament, a.Departament,  a.LocMunca, a.DocumentDate, COALESCE(a.CircuitId, -99) as CircuitId, a.TotalCircuit, a.Culoare, a.Pozitie, "
                         + " a.ActionTypeId, a.ActionTypeName, a.ActionPlace, a.ActionReason, a.StartDate, a.EndDate, a.StartHour, a.EndHour, a.chkDiurna, a.TotalAmount, a.EstimatedAmount, b.SrcDocAmount as TotalAmountAvans, a.CurrencyId, "
-                        + " a.CurrencyCode,  a.ContBancar, a.BankId, a.BankName, a.SucursalaId, a.SucursalaName, a.PaymentTypeId, a.PaymentTypeName, a.PaymentDate, a.IdFunctie, a.Functie,  a.UnconfRestAmount, a.OriginalDoc, a.TransportTypeId, a.TransportTypeName "
+                        + " a.CurrencyCode,  a.ContBancar, a.BankId, a.BankName, a.SucursalaId, a.SucursalaName, a.PaymentTypeId, a.PaymentTypeName, a.PaymentDate, a.IdFunctie, a.Functie,  a.UnconfRestAmount, a.OriginalDoc, a.TransportTypeId, a.TransportTypeName, c.IdCompanie "
                         + " FROM vwAvsXDec_Decont a "
                         + " JOIN AvsXDec_BusinessTransaction b on a.DocumentId = b.DestDocId "
+                        + " LEFT JOIN AvsXDec_Document c on a.DocumentId  = c.DocumentId "
                         + " where a.DocumentId =" + Session["AvsXDec_IdDocument"].ToString();
                     q = General.IncarcaDT(sql, null);                    
                     #endregion
@@ -2224,8 +2226,9 @@ namespace WizOne.AvansXDecont
                         sql = "SELECT  a.DocumentId, null as AvansDocumentId, COALESCE(a.DocumentTypeId, -99) as DocumentTypeId, a.DocumentTypeCode, a.DocumentTypeName,  COALESCE(a.DocumentStateId, -99) as DocumentStateId, "
                             + " a.DocumentState, COALESCE(a.F10003, -99) as F10003, a.NumeComplet, a.IdDepartament, a.Departament,  a.LocMunca, a.DocumentDate, COALESCE(a.CircuitId, -99) as CircuitId, a.TotalCircuit, a.Culoare, a.Pozitie, "
                             + " a.ActionTypeId, a.ActionTypeName, a.ActionPlace, a.ActionReason, a.StartDate, a.EndDate, a.StartHour, a.EndHour, a.chkDiurna, a.TotalAmount, a.EstimatedAmount, 0 as TotalAmountAvans, a.CurrencyId, "
-                            + " a.CurrencyCode,  a.ContBancar, a.BankId, a.BankName, a.SucursalaId, a.SucursalaName, a.PaymentTypeId, a.PaymentTypeName, a.PaymentDate, a.IdFunctie, a.Functie,  a.UnconfRestAmount, a.OriginalDoc, a.TransportTypeId, a.TransportTypeName "
+                            + " a.CurrencyCode,  a.ContBancar, a.BankId, a.BankName, a.SucursalaId, a.SucursalaName, a.PaymentTypeId, a.PaymentTypeName, a.PaymentDate, a.IdFunctie, a.Functie,  a.UnconfRestAmount, a.OriginalDoc, a.TransportTypeId, a.TransportTypeName, c.IdCompanie "
                             + " FROM vwAvsXDec_Decont a "
+                            + " LEFT JOIN AvsXDec_Document c on a.DocumentId  = c.DocumentId "
                             + " where a.DocumentId =" + Session["AvsXDec_IdDocument"].ToString();
                         q = General.IncarcaDT(sql, null);                       
                         #endregion
@@ -2241,9 +2244,10 @@ namespace WizOne.AvansXDecont
                                 + " a.DocumentState, COALESCE(a.F10003, -99) as F10003, a.NumeComplet, a.IdDepartament, a.Departament,  a.LocMunca, a.DocumentDate, COALESCE(a.CircuitId, -99) as CircuitId, a.TotalCircuit, a.Culoare, a.Pozitie, "
                                 + " av.ActionTypeId, av.ActionTypeName, av.ActionPlace, av.ActionReason, av.StartDate, av.EndDate, av.StartHour, av.EndHour, av.chkDiurna, (av.TotalAmount - (CASE WHEN a.DocumentTypeId = 2003 THEN " + consumedAmountXDoc.ToString().Replace(',', '.') + " ELSE 0 END)) as TotalAmount, " 
                                 + " a.EstimatedAmount, (av.TotalAmount - (CASE WHEN a.DocumentTypeId = 2003 THEN " + consumedAmountXDoc.ToString().Replace(',', '.') + " ELSE 0 END)) as TotalAmountAvans, av.CurrencyId, "
-                                + " av.CurrencyCode,  a.ContBancar, a.BankId, a.BankName, a.SucursalaId, a.SucursalaName, av.PaymentTypeId, av.PaymentTypeName, a.PaymentDate, a.IdFunctie, a.Functie,  a.UnconfRestAmount, a.OriginalDoc, av.TransportTypeId, av.TransportTypeName "
+                                + " av.CurrencyCode,  a.ContBancar, a.BankId, a.BankName, a.SucursalaId, a.SucursalaName, av.PaymentTypeId, av.PaymentTypeName, a.PaymentDate, a.IdFunctie, a.Functie,  a.UnconfRestAmount, a.OriginalDoc, av.TransportTypeId, av.TransportTypeName, c.IdCompanie "
                                 + " FROM vwAvsXDec_Decont a "
                                 + " JOIN vwAvsXDec_Avans av on 1 = 1 "
+                                + " LEFT JOIN AvsXDec_Document c on a.DocumentId  = c.DocumentId "
                                 + " where a.DocumentId =" + Session["AvsXDec_IdDocument"].ToString() + " AND av.DocumentId = " + documentIdAvans.ToString();
                             q = General.IncarcaDT(sql, null);
                             #endregion
@@ -2442,12 +2446,12 @@ namespace WizOne.AvansXDecont
 
                                     sumaDecontCheltuiala += Convert.ToDecimal(General.Nz(e.NewValues[col.ColumnName], 0));
                                     //if (sumaDecontCheltuiala > sumaAvansCheltuiala && Convert.ToInt32(General.Nz(e.NewValues["ExpenseTypeId"], -99).ToString()) != -99)
-                                    if (sumaDecontCheltuiala > sumaAvansCheltuiala)
-                                    {
-                                        //Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");
-                                        Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma o depaseste pe cea inregistrata pe avans!");
-                                        return;
-                                    }
+                                    //if (sumaDecontCheltuiala > sumaAvansCheltuiala)
+                                    //{
+                                    //    //Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");
+                                    //    Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma o depaseste pe cea inregistrata pe avans!");
+                                    //    return;
+                                    //}
                                 }
                                 row[x] = e.NewValues[col.ColumnName];
                                 break;
@@ -2479,12 +2483,12 @@ namespace WizOne.AvansXDecont
                                     //    sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Select("ExpenseTypeId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).CopyToDataTable().Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
                                     sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
 
-                                    if (sumaDecontCheltuiala > sumaAvansCheltuiala)
-                                    {
-                                        //Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");
-                                        Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma o depaseste pe cea inregistrata pe avans!");
-                                        return;
-                                    }
+                                    //if (sumaDecontCheltuiala > sumaAvansCheltuiala)
+                                    //{
+                                    //    //Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");
+                                    //    Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma o depaseste pe cea inregistrata pe avans!");
+                                    //    return;
+                                    //}
                                 }
 
                                 #region verificare cheltuieli
@@ -2679,12 +2683,12 @@ namespace WizOne.AvansXDecont
                             sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
 
                             sumaDecontCheltuiala += Convert.ToDecimal(General.Nz(e.NewValues[col.ColumnName], 0));
-                            if (sumaDecontCheltuiala > sumaAvansCheltuiala && Convert.ToInt32(General.Nz(row["ExpenseTypeId"], -99).ToString()) != -99)
-                            {
-                                //Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");
-                                Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma o depaseste pe cea inregistrata pe avans!");
-                                return;
-                            }
+                            //if (sumaDecontCheltuiala > sumaAvansCheltuiala && Convert.ToInt32(General.Nz(row["ExpenseTypeId"], -99).ToString()) != -99)
+                            //{
+                            //    //Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");
+                            //    Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma o depaseste pe cea inregistrata pe avans!");
+                            //    return;
+                            //}
                         }
                     }
                     if (col.ColumnName == "ExpenseTypeId")
@@ -2716,12 +2720,12 @@ namespace WizOne.AvansXDecont
                             //    sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Select("ExpenseTypeId = " + Convert.ToInt32(e.NewValues[col.ColumnName])).CopyToDataTable().Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
                             sumaDecontCheltuiala = Convert.ToDecimal(General.Nz(dt.Compute("SUM(TotalPayment)", "[TotalPayment] IS NOT NULL"), 0));
 
-                            if (sumaDecontCheltuiala > sumaAvansCheltuiala)
-                            {
-                                //Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");
-                                Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma o depaseste pe cea inregistrata pe avans!");
-                                return;
-                            }
+                            //if (sumaDecontCheltuiala > sumaAvansCheltuiala)
+                            //{
+                            //    //Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma pentru acest tip de cheltuiala depaseste suma inregistrata pe avans!");
+                            //    Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Suma o depaseste pe cea inregistrata pe avans!");
+                            //    return;
+                            //}
                         }
 
                         #region verificare cheltuieli
@@ -2761,7 +2765,7 @@ namespace WizOne.AvansXDecont
                                 if (txtStartDate.Value == null || txtEndDate.Value == null)
                                 {
                                     Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Nu ati completat datele pentru deplasare!");
-                                    row["DocDateDecont"] = null;
+                                    row["DocDateDecont"] = DBNull.Value;
                                     return;
                                 }
 
@@ -2771,7 +2775,7 @@ namespace WizOne.AvansXDecont
                                 if (!(GetDayDateTime(dtStartDeplasare) <= GetDayDateTime(dtDocument) && GetDayDateTime(dtEndDeplasare) >= GetDayDateTime(dtDocument)))
                                 {
                                     Session["AvsXDec_cpAlertMessage"] = Dami.TraduCuvant("Data documentului nu este cuprinsa in intervalul de deplasare completat!");
-                                    row["DocDateDecont"] = null;
+                                    row["DocDateDecont"] = DBNull.Value;
                                     return;
                                 }
                                 #endregion

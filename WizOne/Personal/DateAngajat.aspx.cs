@@ -1783,6 +1783,8 @@ namespace WizOne.Personal
                 lstCtr.Add("deDataModDurCtr", "F1001138");
                 lstCtr.Add("deDataConsemn", "F1001109");
 
+                lstCtr.Add("txtGrilaZLP", "F1001143");
+
                 #endregion
 
                 //DateGenerale

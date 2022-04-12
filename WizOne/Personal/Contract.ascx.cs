@@ -334,12 +334,12 @@ namespace WizOne.Personal
             ds.Tables[1].Rows[0]["F100936"] = nrZile;
             Session["InformatiaCurentaPersonal"] = ds;
 
-            string[] etichete = new string[64] { "lblNrCtrInt", "lblDataCtrInt", "lblDataAng", "lblTipCtrMunca", "lblDurCtr", "lblDeLaData", "lblLaData", "lblNrLuni", "lblNrZile", "lblPrel", "lblExcIncet","lblCASSAngajat",
+            string[] etichete = new string[65] { "lblNrCtrInt", "lblDataCtrInt", "lblDataAng", "lblTipCtrMunca", "lblDurCtr", "lblDeLaData", "lblLaData", "lblNrLuni", "lblNrZile", "lblPrel", "lblExcIncet","lblCASSAngajat",
                                                  "lblCASSAngajator", "lblSalariu", "lblDataModifSal", "lblCategAng1", "lblCategAng2", "lblLocAnt", "lblLocatieInt", "lblTipAng", "lblTimpPartial", "lblNorma", "lblDataModifNorma",
                                                  "lblTipNorma", "lblDurTimpMunca", "lblRepTimpMunca", "lblIntervRepTimpMunca", "lblNrOre", "lblCOR", "lblDataModifCOR", "lblFunctie", "lblDataModifFunctie", "lblMeserie",
                                                  "lblPerioadaProba", "lblZL", "lblZC", "lblNrZilePreavizDemisie", "lblNrZilePreavizConc", "lblUltimaZiLucr", "lblMotivPlecare", "lblDataPlecarii", "lblDataReintegr", "lblGradInvalid",
                                                  "lblDataValabInvalid", "lblVechimeComp", "lblVechCompAni", "lblVechCompLuni", "lblVechimeCarteMunca", "lblVechCarteMuncaAni", "lblVechCarteMuncaLuni", "lblGrila", "lblZileCOFidel",
-                                                 "lblZileCOAnAnt", "lblZileCOCuvAnCrt", "lblZLP", "lblZLPCuv", "lblDataPrimeiAng", "lblMotivScutit", "lblMotivScutitCAS", "lblCtrRadiat", "lblTermenRevisal", "lblNivelFunctie", "lblZileCOAnCrt", "lblGrilaSal"};
+                                                 "lblZileCOAnAnt", "lblZileCOCuvAnCrt", "lblZLP", "lblZLPCuv", "lblDataPrimeiAng", "lblMotivScutit", "lblMotivScutitCAS", "lblCtrRadiat", "lblTermenRevisal", "lblNivelFunctie", "lblZileCOAnCrt", "lblGrilaSal", "lblGrilaZLP"};
             for (int i = 0; i < etichete.Count(); i++)
             {
                 ASPxLabel lbl = Contract_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
@@ -1850,24 +1850,47 @@ namespace WizOne.Personal
             try
             {
                 ASPxDateEdit deDataAng = Contract_DataList.Items[0].FindControl("deDataAng") as ASPxDateEdit;
-                if (deDataAng == null) return;           
+                if (deDataAng == null) return;
+
+                ASPxTextBox txtGrilaZLP = Contract_DataList.Items[0].FindControl("txtGrilaZLP") as ASPxTextBox;
+                if (txtGrilaZLP == null) return;
 
                 int an = DateTime.Now.Year;
-                DateTime f10022 = deDataAng.Date; 
-             
+                int luna = DateTime.Now.Month;
+                int zi = DateTime.Now.Day;
+                string f1001143 = txtGrilaZLP.Text;
+
                 string dtInc = an.ToString() + "-01-01";
                 string dtSf = an.ToString() + "-12-31";
 
                 string filtruIns = " AND F10003=" + Session["Marca"].ToString();
                 string f10003 = Session["Marca"].ToString();
 
-                bool esteNou = false;
-                if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
-                    esteNou = true;
+                //bool esteNou = false;
+                //if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                //      esteNou = true;
 
-                Absente.ZLP pagZLP = new Absente.ZLP();
+                //Absente.ZLP pagZLP = new Absente.ZLP();
 
-                pagZLP.CalculZLP(an, f10003, filtruIns, f10022, esteNou);
+                //pagZLP.CalculZLP(an, f10003, filtruIns, f10022, esteNou);
+
+                int param = Convert.ToInt32(Dami.ValoareParam("ModCalculZileCOCuveniteDataReferinta", "1"));
+                string dtCalcul = "'" + dtSf + "'";
+                switch (param)
+                {
+                    case 1:
+                        dtCalcul = "'" + dtSf + "'";
+                        break;
+                    case 2:
+                        dtCalcul = "'" + dtInc + "'";
+                        break;
+                    case 3:
+                        dtCalcul = General.CurrentDate();
+                        break;
+                }
+
+                string strSql = "select * from calculZLP(" + f10003 + ", CONVERT(date," + dtCalcul + "), 1, " + f1001143 + ")";
+                DataTable dtZLP = General.IncarcaDT(strSql, null);
 
                 int nrZLP = 0;
                 DataTable dtParam = General.IncarcaDT(Constante.tipBD == 1 ? "SELECT ISNULL((SELECT CONVERT(int, Valoare) FROM tblParametrii WHERE Nume = 'NumarZileLiberePlatite'), 0)" 
@@ -1875,16 +1898,18 @@ namespace WizOne.Personal
                 if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
                     nrZLP = Convert.ToInt32(dtParam.Rows[0][0].ToString());
 
-                DataRow dtZLP = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZLP"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });
+                //DataRow dtZLP = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZLP"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });
                 if (dtZLP != null)
                 {                    
                     ASPxTextBox txtZLP = Contract_DataList.Items[0].FindControl("txtZLP") as ASPxTextBox;
                     if (txtZLP != null)
-                        txtZLP.Value = General.Nz(dtZLP["Cuvenite"], nrZLP).ToString();
-               
+                        //txtZLP.Value = General.Nz(dtZLP["Cuvenite"], nrZLP).ToString();
+                        txtZLP.Value = General.Nz(dtZLP.Rows[0]["Cuvenite"], nrZLP).ToString();
+
                     ASPxTextBox txtZLPCuv = Contract_DataList.Items[0].FindControl("txtZLPCuv") as ASPxTextBox;
                     if (txtZLPCuv != null)
-                        txtZLPCuv.Value = General.Nz(dtZLP["CuveniteAn"], "").ToString();          
+                        //txtZLPCuv.Value = General.Nz(dtZLP["CuveniteAn"], "").ToString();          
+                        txtZLP.Value = General.Nz(dtZLP.Rows[0]["CuveniteAn"], nrZLP).ToString();
                 }
                 else
                 {

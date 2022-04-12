@@ -696,6 +696,7 @@ namespace WizOne.ConcediiMedicale
                 bErr = true;
                 szErrMsg += System.Environment.NewLine + "- pentru codul de indemnizatie 05 CM selectat este incorect, valori admise CM infecto-contagioase!";
             }
+
             if (cod != "05" && 10 == tip)
             {
                 bErr = true;
@@ -756,6 +757,16 @@ namespace WizOne.ConcediiMedicale
                 {
                     bErr = true;
                     szErrMsg += System.Environment.NewLine + "- pentru cod indemnizatie " + cod + " nu ati completat CNP copil!";
+                }
+            }
+
+            //#1112
+            if (cod == "51")
+            {
+                if (txtCodInfCont.Text.Trim().Length <= 0)
+                {
+                    bErr = true;
+                    szErrMsg += System.Environment.NewLine + "- pentru CM izolare nu ati completat codul de infecto-contagioase aferent!";
                 }
             }
 
@@ -2655,7 +2666,7 @@ namespace WizOne.ConcediiMedicale
                 string op = "+";
                 if (Constante.tipBD == 2) op = "||";
 
-                strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
+                strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", A.F10017 AS CNP,
                         X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
                         FROM (
                         SELECT A.F10003

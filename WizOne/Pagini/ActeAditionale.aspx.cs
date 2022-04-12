@@ -651,9 +651,9 @@ namespace WizOne.Pagini
                     btnNr.Text = Dami.TraduCuvant("btnNr", "Atribuire numar");
                     btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                     btnPrint.Text = Dami.TraduCuvant("btnPrint", "Imprima");
-                    btnPrint.Text = Dami.TraduCuvant("btnTiparit", "Tiparit");
-                    btnPrint.Text = Dami.TraduCuvant("btnSemnat", "Semnat");
-                    btnPrint.Text = Dami.TraduCuvant("btnFinalizat", "Finalizat");
+                    btnTiparit.Text = Dami.TraduCuvant("btnTiparit", "Tiparit");
+                    btnSemnat.Text = Dami.TraduCuvant("btnSemnat", "Semnat");
+                    btnFinalizat.Text = Dami.TraduCuvant("btnFinalizat", "Finalizat");
 
                     lblCmp.InnerText = Dami.TraduCuvant("Companie");
                     lblTip.InnerText = Dami.TraduCuvant("Tip");

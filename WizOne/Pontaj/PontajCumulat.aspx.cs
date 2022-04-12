@@ -235,14 +235,14 @@ namespace WizOne.Pontaj
                     {
                         if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >= 0)
                         {
-                            if (upd.NewValues[de.Key.ToString()] != null)
+                            if (upd.NewValues[de.Key.ToString()] != null && upd.NewValues[de.Key.ToString()] != DBNull.Value)   //#1092
                                 cmp += "," + Convert.ToDecimal(upd.NewValues[de.Key.ToString()]).ToString().Replace(",",".") + " AS \"" + de.Key.ToString() + "\"";
                             else
                                 cmp += ", NULL AS \"" + de.Key.ToString() + "\"";
                         }
                         else
                         {//Radu 06.04.2020
-                            if (upd.NewValues[de.Key.ToString()] != null)
+                            if (upd.NewValues[de.Key.ToString()] != null && upd.NewValues[de.Key.ToString()] != DBNull.Value)   //#1092
                                 cmp += ",'" + upd.NewValues[de.Key.ToString()].ToString() + "' AS \"" + de.Key.ToString() + "\"";
                             else
                                 cmp += ", NULL AS \"" + de.Key.ToString() + "\"";
@@ -277,14 +277,14 @@ namespace WizOne.Pontaj
                         var ert = de.Key.ToString();
                         if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >= 0)
                         {
-                            if (upd.NewValues[de.Key.ToString()] != null)
+                            if (upd.NewValues[de.Key.ToString()] != null && upd.NewValues[de.Key.ToString()] != DBNull.Value) //#1092
                                 row[de.Key.ToString()] = Convert.ToDecimal(upd.NewValues[de.Key.ToString()]);
                             else
                                 row[de.Key.ToString()] = DBNull.Value;
                         }
                         else
                         {//Radu 06.04.2020
-                            if (upd.NewValues[de.Key.ToString()] != null)
+                            if (upd.NewValues[de.Key.ToString()] != null && upd.NewValues[de.Key.ToString()] != DBNull.Value) //#1092
                                 row[de.Key.ToString()] = upd.NewValues[de.Key.ToString()].ToString();
                             else
                                 row[de.Key.ToString()] = DBNull.Value;

@@ -46,7 +46,7 @@ namespace Wizrom.Reports.Pages
         public void AddReport(ReportViewModel report)
         {           
             //Florin 2020.04.09 - #329 - GitHub
-            var reportId = General.RunSqlScalar<int>("INSERT INTO [DynReports]([Name], [Description], [DynReportTypeId], [RegUserId], [Photo]) VALUES (@1, @2, @3, @4, @5)", "DynReportId",
+            var reportId = General.RunSqlScalar<int>("INSERT INTO [DynReports]([Name], [Description], [DynReportTypeId], [RegUserId], [Photo]) VALUES (@1, @2, @3, @4, CONVERT(VARBINARY(MAX), @5))", "DynReportId",
                 report.Name, report.Description, (report.TypeId != 0 ? report.TypeId : 5), Session["UserId"].ToString(), report.Photo); 
 
             //Radu 15.07.2020

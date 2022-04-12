@@ -249,4 +249,3 @@ D:\WizOneH5\WizOne\obj\Debug\WizOne.pdb
 D:\WizOneH5\WizOne\bin\System.Threading.Tasks.Extensions.dll
 D:\WizOneH5\WizOne\obj\Debug\WizOne.csproj.AssemblyReference.cache
 D:\WizOneH5\WizOne\bin\System.Runtime.CompilerServices.Unsafe.dll
-D:\WizOneH5\WizOne\obj\Debug\WizOne.dll.licenses

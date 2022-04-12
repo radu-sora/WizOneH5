@@ -1,0 +1,11 @@
+S-a calculat media pentru 16 concedii medicale!
+Data:    26.08.2021 09:19:03
+CM deja transferat: 513, 45, 45
+CM anulat: 77, 199, 273
+CM modificat manual: 395, 512, 513
+CM in avans: 273
+Urmatorii angajati nu au stagiu: 942
+-----------------------------------------------------
+S-a calculat media pentru un concediu medical!
+Data:    26.08.2021 10:49:33
+-----------------------------------------------------

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XmlReport xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/RevisalDLL.Entities">
+  <Header>
+    <ClientApplication>WizSalary</ClientApplication>
+    <XmlVersion>0</XmlVersion>
+    <UploadId i:nil="true" />
+    <UploadDescription i:nil="true" />
+    <Angajator>
+      <Adresa>Ilfov  str. CAL. BUCURESTILOR nr. 224R</Adresa>
+      <AuditEntries i:nil="true" />
+      <Contact>
+        <Email i:nil="true" />
+        <Fax>0213521354</Fax>
+        <ReprezentantLegal>SAADEH HARDAN</ReprezentantLegal>
+        <Telefon>0213505033</Telefon>
+      </Contact>
+      <Detalii i:type="DetaliiAngajatorPersoanaJuridica">
+        <DomeniuActivitate>
+          <Cod>5629</Cod>
+          <Versiune>2</Versiune>
+        </DomeniuActivitate>
+        <Nume>S.C. DNATA CATERING  SRL</Nume>
+        <Cui>4339914</Cui>
+        <CuiParinte i:nil="true" />
+        <FormaJuridicaPJ>SocietateComerciala</FormaJuridicaPJ>
+        <FormaOrganizarePJ>SocietateCuRaspundereLimitata</FormaOrganizarePJ>
+        <FormaProprietate>Privata</FormaProprietate>
+        <NivelInfiintare>SediuSocial</NivelInfiintare>
+        <NumeParinte i:nil="true" />
+      </Detalii>
+      <Localitate>
+        <CodSiruta>179490</CodSiruta>
+      </Localitate>
+    </Angajator>
+    <PiecesCount i:nil="true" />
+  </Header>
+  <Salariati>
+    <Salariat>
+      <Adresa> sector</Adresa>
+      <Apatrid i:nil="true" />
+      <AuditEntries i:nil="true" />
+      <Cnp>11,1900-01-01T00:00:00</Cnp>
+      <CnpVechi>11</CnpVechi>
+    </Salariat>
+  </Salariati>
+</XmlReport>

@@ -1,0 +1,61 @@
+﻿.align-center {
+    padding-top:8%;
+}
+
+#txtPan1{
+    z-index:10000;
+    position:relative;
+}
+
+.outer .inner{
+    text-align:center;
+    margin-top:40px;
+}
+
+.hide, .hide:focus, .hide:active, .hide:hover, .hide:visited, .hide::selection
+{
+    margin-left:-99999px; 
+    position:absolute;
+    color:#fff;
+    cursor:none;
+    border: none;
+    border-color: transparent;
+    background: transparent;
+    outline: none;
+}
+
+           
+/* Badge widget */
+.badgeTactil {
+    /*margin:20px 20px 20px 20px;*/
+    width:300px; 
+    height:324px; 
+    display:inline-block; 
+    text-align:center;
+}
+
+    .badgeTactil h3 {
+         padding:0; margin:0; font-size:16px; font-weight:bold;
+    }
+
+    .badgeTactil div {
+        position:relative;
+        display:inline-block;
+        cursor:pointer;
+        
+        width:180px;
+        height:185px;
+        background:url('../Imagini/bdgBg.png') no-repeat center center;
+        background-size:cover;
+        color:#f15922;
+    }
+
+        .badgeTactil div img {
+            margin:0 auto;
+            margin-top:30px;
+            width:120px;
+        }
+
+
+
+

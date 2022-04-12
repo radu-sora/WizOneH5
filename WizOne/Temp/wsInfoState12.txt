@@ -1,0 +1,624 @@
+Data:    25.02.2020 11:02:13
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    25.02.2020 11:02:28
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    25.02.2020 11:02:36
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    25.02.2020 11:02:58
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    25.02.2020 11:02:58
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT * FROM "Ptj_Filtru" 
+-----------------------------------------------------
+Data:    25.02.2020 11:02:59
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00904: "OrdineAfisarePontajDetaliat": invalid identifier
+-----------------------------------------------------
+Data:    25.02.2020 11:02:59
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT * FROM "Ptj_tblFormuleCumulat" WHERE COALESCE("OrdineAfisarePontajDetaliat",0) > 0 ORDER BY "OrdineAfisarePontajDetaliat" 
+-----------------------------------------------------
+Data:    25.02.2020 11:48:01
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    25.02.2020 11:48:01
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT * FROM "Ptj_Filtru" 
+-----------------------------------------------------
+Data:    25.02.2020 11:48:02
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00904: "OrdineAfisarePontajDetaliat": invalid identifier
+-----------------------------------------------------
+Data:    25.02.2020 11:48:02
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT * FROM "Ptj_tblFormuleCumulat" WHERE COALESCE("OrdineAfisarePontajDetaliat",0) > 0 ORDER BY "OrdineAfisarePontajDetaliat" 
+-----------------------------------------------------
+Data:    26.02.2020 14:40:17
+Pagina:    Adev
+Eveni:     GenerareAdeverinta
+Eroarea:   Could not find file 'D:\WizOneH5\WizOne\Adeverinta\ADEVERINTE\Adev_sanatate_TOMA_MIHAELA_106.xml'.
+-----------------------------------------------------
+Data:    26.02.2020 15:00:48
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   Invalid object name 'relRapGrupModul'.
+-----------------------------------------------------
+Data:    26.02.2020 15:00:48
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   select a."DynReportId" as "Id", a."Name" as "Denumire" 
+                          from "DynReports" a                          
+                          join "relRapGrupModul" b on b."IdRaport" = a."DynReportId"
+                           inner join "relGrupUser" c on b."IdGrup" = c."IdGrup"                           
+                          where 1=1  AND b."IdModul"= 1 and c."IdUser" = 3
+                          order by "Denumire"
+-----------------------------------------------------
+Data:    27.02.2020 09:16:27
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:25:28
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:25:32
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:25:45
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:25:45
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:29:27
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:29:27
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:29:38
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00904: "PVTCULOARE"."CuloareValoare29": invalid identifier
+-----------------------------------------------------
+Data:    27.02.2020 09:29:38
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   with "Ptj_Intrari_2" as (select A.* from "Ptj_Intrari" A 
+                                LEFT JOIN "Ptj_Contracte" C ON A."IdContract"=C."Id"
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
+                                
+                                WHERE 1=1 AND TO_DATE('01-02-2020','DD-MM-YYYY') <= A."Ziua" AND A."Ziua" <= TO_DATE('29-02-2020','DD-MM-YYYY') )
+                                SELECT  *                                
+                                FROM (
+                                SELECT X.F10003, TO_CHAR(A.F10022, 'dd/mm/yyyy') AS "DataInceput", TO_CHAR("DamiDataPlecare"(X.F10003, TO_DATE('29-02-2020','DD-MM-YYYY')), 'dd/mm/yyyy') AS "DataSfarsit", A.F10008 || ' ' || A.F10009 AS "AngajatNume", st."Denumire" AS "StarePontaj", COALESCE(zabs."Ramase", 0) as "ZileCONeefectuate", COALESCE(zlp."Ramase", 0) as "ZLPNeefectuate",
+                                H.F00507 AS "Sectie",I.F00608 AS "Dept", S2.F00204 AS "Companie", S3.F00305 AS "Subcompanie", S4.F00406 AS "Filiala", S7.F00709 AS "Subdept", S8.F00810 AS "Birou", F10061, F10062, 
+                                B.F100958, B.F100959, Y."IdContract", A.F100901 AS EID, X."IdStare" , Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, C."Denumire" AS "DescContract"
+                                ,COALESCE(pvt."Ziua1",'') AS "Ziua1", pvtCuloare."CuloareValoare1" AS "CuloareValoare1",COALESCE(pvt."Ziua2",'') AS "Ziua2", pvtCuloare."CuloareValoare2" AS "CuloareValoare2",COALESCE(pvt."Ziua3",'') AS "Ziua3", pvtCuloare."CuloareValoare3" AS "CuloareValoare3",COALESCE(pvt."Ziua4",'') AS "Ziua4", pvtCuloare."CuloareValoare4" AS "CuloareValoare4",COALESCE(pvt."Ziua5",'') AS "Ziua5", pvtCuloare."CuloareValoare5" AS "CuloareValoare5",COALESCE(pvt."Ziua6",'') AS "Ziua6", pvtCuloare."CuloareValoare6" AS "CuloareValoare6",COALESCE(pvt."Ziua7",'') AS "Ziua7", pvtCuloare."CuloareValoare7" AS "CuloareValoare7",COALESCE(pvt."Ziua8",'') AS "Ziua8", pvtCuloare."CuloareValoare8" AS "CuloareValoare8",COALESCE(pvt."Ziua9",'') AS "Ziua9", pvtCuloare."CuloareValoare9" AS "CuloareValoare9",COALESCE(pvt."Ziua10",'') AS "Ziua10", pvtCuloare."CuloareValoare10" AS "CuloareValoare10",COALESCE(pvt."Ziua11",'') AS "Ziua11", pvtCuloare."CuloareValoare11" AS "CuloareValoare11",COALESCE(pvt."Ziua12",'') AS "Ziua12", pvtCuloare."CuloareValoare12" AS "CuloareValoare12",COALESCE(pvt."Ziua13",'') AS "Ziua13", pvtCuloare."CuloareValoare13" AS "CuloareValoare13",COALESCE(pvt."Ziua14",'') AS "Ziua14", pvtCuloare."CuloareValoare14" AS "CuloareValoare14",COALESCE(pvt."Ziua15",'') AS "Ziua15", pvtCuloare."CuloareValoare15" AS "CuloareValoare15",COALESCE(pvt."Ziua16",'') AS "Ziua16", pvtCuloare."CuloareValoare16" AS "CuloareValoare16",COALESCE(pvt."Ziua17",'') AS "Ziua17", pvtCuloare."CuloareValoare17" AS "CuloareValoare17",COALESCE(pvt."Ziua18",'') AS "Ziua18", pvtCuloare."CuloareValoare18" AS "CuloareValoare18",COALESCE(pvt."Ziua19",'') AS "Ziua19", pvtCuloare."CuloareValoare19" AS "CuloareValoare19",COALESCE(pvt."Ziua20",'') AS "Ziua20", pvtCuloare."CuloareValoare20" AS "CuloareValoare20",COALESCE(pvt."Ziua21",'') AS "Ziua21", pvtCuloare."CuloareValoare21" AS "CuloareValoare21",COALESCE(pvt."Ziua22",'') AS "Ziua22", pvtCuloare."CuloareValoare22" AS "CuloareValoare22",COALESCE(pvt."Ziua23",'') AS "Ziua23", pvtCuloare."CuloareValoare23" AS "CuloareValoare23",COALESCE(pvt."Ziua24",'') AS "Ziua24", pvtCuloare."CuloareValoare24" AS "CuloareValoare24",COALESCE(pvt."Ziua25",'') AS "Ziua25", pvtCuloare."CuloareValoare25" AS "CuloareValoare25",COALESCE(pvt."Ziua26",'') AS "Ziua26", pvtCuloare."CuloareValoare26" AS "CuloareValoare26",COALESCE(pvt."Ziua27",'') AS "Ziua27", pvtCuloare."CuloareValoare27" AS "CuloareValoare27",COALESCE(pvt."Ziua28",'') AS "Ziua28", pvtCuloare."CuloareValoare28" AS "CuloareValoare28",COALESCE(pvt."Ziua29",'') AS "Ziua29", pvtCuloare."CuloareValoare29" AS "CuloareValoare29" ,CAST(COALESCE(X."F1",0) AS numeric(10)) AS "F1",CAST(COALESCE(X."F2",0) AS numeric(10)) AS "F2",CAST(COALESCE(X."F3",0) AS numeric(10)) AS "F3",CAST(COALESCE(X."F4",0) AS numeric(10)) AS "F4",CAST(COALESCE(X."F5",0) AS numeric(10)) AS "F5",CAST(COALESCE(X."F6",0) AS numeric(10)) AS "F6",CAST(COALESCE(X."F7",0) AS numeric(10)) AS "F7",CAST(COALESCE(X."F8",0) AS numeric(10)) AS "F8",CAST(COALESCE(X."F9",0) AS numeric(10)) AS "F9",CAST(COALESCE(X."F10",0) AS numeric(10)) AS "F10",CAST(COALESCE(X."F11",0) AS numeric(10)) AS "F11",CAST(COALESCE(X."F12",0) AS numeric(10)) AS "F12",CAST(COALESCE(X."F13",0) AS numeric(10)) AS "F13",CAST(COALESCE(X."F14",0) AS numeric(10)) AS "F14",CAST(COALESCE(X."F15",0) AS numeric(10)) AS "F15",CAST(COALESCE(X."F16",0) AS numeric(10)) AS "F16",CAST(COALESCE(X."F17",0) AS numeric(10)) AS "F17",CAST(COALESCE(X."F18",0) AS numeric(10)) AS "F18",CAST(COALESCE(X."F19",0) AS numeric(10)) AS "F19",CAST(COALESCE(X."F20",0) AS numeric(10)) AS "F20",CAST(COALESCE(X."F21",0) AS numeric(10)) AS "F21",CAST(COALESCE(X."F22",0) AS numeric(10)) AS "F22",CAST(COALESCE(X."F23",0) AS numeric(10)) AS "F23",CAST(COALESCE(X."F24",0) AS numeric(10)) AS "F24",CAST(COALESCE(X."F25",0) AS numeric(10)) AS "F25",CAST(COALESCE(X."F26",0) AS numeric(10)) AS "F26",CAST(COALESCE(X."F27",0) AS numeric(10)) AS "F27",CAST(COALESCE(X."F28",0) AS numeric(10)) AS "F28",CAST(COALESCE(X."F29",0) AS numeric(10)) AS "F29",CAST(COALESCE(X."F30",0) AS numeric(10)) AS "F30",CAST(COALESCE(X."F31",0) AS numeric(10)) AS "F31",CAST(COALESCE(X."F32",0) AS numeric(10)) AS "F32",CAST(COALESCE(X."F33",0) AS numeric(10)) AS "F33",CAST(COALESCE(X."F34",0) AS numeric(10)) AS "F34",CAST(COALESCE(X."F35",0) AS numeric(10)) AS "F35",CAST(COALESCE(X."F36",0) AS numeric(10)) AS "F36",CAST(COALESCE(X."F37",0) AS numeric(10)) AS "F37",CAST(COALESCE(X."F38",0) AS numeric(10)) AS "F38",CAST(COALESCE(X."F39",0) AS numeric(10)) AS "F39",CAST(COALESCE(X."F40",0) AS numeric(10)) AS "F40",CAST(COALESCE(X."F41",0) AS numeric(10)) AS "F41",CAST(COALESCE(X."F42",0) AS numeric(10)) AS "F42",CAST(COALESCE(X."F43",0) AS numeric(10)) AS "F43",CAST(COALESCE(X."F44",0) AS numeric(10)) AS "F44",CAST(COALESCE(X."F45",0) AS numeric(10)) AS "F45",CAST(COALESCE(X."F46",0) AS numeric(10)) AS "F46",CAST(COALESCE(X."F47",0) AS numeric(10)) AS "F47",CAST(COALESCE(X."F48",0) AS numeric(10)) AS "F48",CAST(COALESCE(X."F49",0) AS numeric(10)) AS "F49",CAST(COALESCE(X."F50",0) AS numeric(10)) AS "F50",CAST(COALESCE(X."F51",0) AS numeric(10)) AS "F51",CAST(COALESCE(X."F52",0) AS numeric(10)) AS "F52",CAST(COALESCE(X."F53",0) AS numeric(10)) AS "F53",CAST(COALESCE(X."F54",0) AS numeric(10)) AS "F54",CAST(COALESCE(X."F55",0) AS numeric(10)) AS "F55",CAST(COALESCE(X."F56",0) AS numeric(10)) AS "F56",CAST(COALESCE(X."F57",0) AS numeric(10)) AS "F57",CAST(COALESCE(X."F58",0) AS numeric(10)) AS "F58",CAST(COALESCE(X."F59",0) AS numeric(10)) AS "F59",CAST(COALESCE(X."F60",0) AS numeric(10)) AS "F60"
+                                FROM "Ptj_Cumulat" X 
+		                        LEFT JOIN "Ptj_tblStari" st on st."Id" = x."IdStare"
+		                        left join (SELECT * FROM "SituatieZileAbsente" WHERE "IdAbsenta" = (select "Id" from "Ptj_tblAbsente" where "DenumireScurta" = 'CO')) zabs on zabs.F10003 = x.F10003 and zabs."An" = x."An"
+                                left join "SituatieZLP" zlp on zlp.F10003 = x.F10003 and zlp."An" = x."An"
+                                INNER JOIN (SELECT * FROM 
+                                (SELECT F10003, "ValStr", "Ziua" FROM "Ptj_Intrari_2" WHERE TO_DATE('01-02-2020','DD-MM-YYYY') <= CAST("Ziua" AS date) AND CAST("Ziua" AS date) <= TO_DATE('29-02-2020','DD-MM-YYYY')) source  
+                                PIVOT  (MAX("ValStr") FOR "Ziua" IN (  '01-02-2020' AS "Ziua1", '02-02-2020' AS "Ziua2", '03-02-2020' AS "Ziua3", '04-02-2020' AS "Ziua4", '05-02-2020' AS "Ziua5", '06-02-2020' AS "Ziua6", '07-02-2020' AS "Ziua7", '08-02-2020' AS "Ziua8", '09-02-2020' AS "Ziua9", '10-02-2020' AS "Ziua10", '11-02-2020' AS "Ziua11", '12-02-2020' AS "Ziua12", '13-02-2020' AS "Ziua13", '14-02-2020' AS "Ziua14", '15-02-2020' AS "Ziua15", '16-02-2020' AS "Ziua16", '17-02-2020' AS "Ziua17", '18-02-2020' AS "Ziua18", '19-02-2020' AS "Ziua19", '20-02-2020' AS "Ziua20", '21-02-2020' AS "Ziua21", '22-02-2020' AS "Ziua22", '23-02-2020' AS "Ziua23", '24-02-2020' AS "Ziua24", '25-02-2020' AS "Ziua25", '26-02-2020' AS "Ziua26", '27-02-2020' AS "Ziua27", '28-02-2020' AS "Ziua28", '29-02-2020' AS "Ziua29" )) pvt
+                                ) pvt ON X.F10003=pvt.F10003
+                                
+                                
+                                
+                                INNER JOIN (SELECT * FROM 
+                                (SELECT F10003, "CuloareValoare", "Ziua" From "Ptj_Intrari_2" WHERE TO_DATE('01-02-2020','DD-MM-YYYY') <= CAST("Ziua" AS date) AND CAST("Ziua" AS date) <= TO_DATE('29-02-2020','DD-MM-YYYY')) source  
+                                PIVOT (MAX("CuloareValoare") FOR "Ziua" IN (  '01-02-2020' AS "Ziua1", '02-02-2020' AS "Ziua2", '03-02-2020' AS "Ziua3", '04-02-2020' AS "Ziua4", '05-02-2020' AS "Ziua5", '06-02-2020' AS "Ziua6", '07-02-2020' AS "Ziua7", '08-02-2020' AS "Ziua8", '09-02-2020' AS "Ziua9", '10-02-2020' AS "Ziua10", '11-02-2020' AS "Ziua11", '12-02-2020' AS "Ziua12", '13-02-2020' AS "Ziua13", '14-02-2020' AS "Ziua14", '15-02-2020' AS "Ziua15", '16-02-2020' AS "Ziua16", '17-02-2020' AS "Ziua17", '18-02-2020' AS "Ziua18", '19-02-2020' AS "Ziua19", '20-02-2020' AS "Ziua20", '21-02-2020' AS "Ziua21", '22-02-2020' AS "Ziua22", '23-02-2020' AS "Ziua23", '24-02-2020' AS "Ziua24", '25-02-2020' AS "Ziua25", '26-02-2020' AS "Ziua26", '27-02-2020' AS "Ziua27", '28-02-2020' AS "Ziua28", '29-02-2020' AS "Ziua29" )) pvt
+                                ) pvtCuloare ON X.F10003=pvtCuloare.F10003
+                                LEFT JOIN F100 A ON A.F10003=X.F10003 
+                                LEFT JOIN F1001 B ON A.F10003=B.F10003 
+                                LEFT JOIN (SELECT R.F10003, MIN(R."Ziua") AS "ZiuaMin" FROM "Ptj_Intrari" R WHERE EXTRACT(YEAR FROM R."Ziua")= 2020 AND EXTRACT(MONTH FROM R."Ziua")= 2 GROUP BY R.F10003) Q ON Q.F10003=A.F10003
+                                LEFT JOIN "Ptj_Intrari" Y ON A.F10003=Y.F10003 AND Y."Ziua"=Q."ZiuaMin"
+                                LEFT JOIN "Ptj_tblStariPontaj" K ON K."Id" = NVL(X."IdStare",1) 
+                                LEFT JOIN "Ptj_Contracte" C on C."Id" = Y."IdContract"
+                                LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
+                                
+
+							    LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
+							    LEFT JOIN F003 S3 ON Y.F10004 = S3.F00304
+							    LEFT JOIN F004 S4 ON Y.F10005 = S4.F00405
+
+							    LEFT JOIN F005 H ON Y.F10006 = H.F00506
+							    LEFT JOIN F006 I ON Y.F10007 = I.F00607
+
+							    LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
+                                LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
+
+                                LEFT JOIN F062 L ON Y."F06204Default"=L.F06204
+
+                                LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
+
+                                WHERE X."An"= 2020 AND X."Luna" = 2 
+                                ORDER BY "NumeComplet") A
+                                WHERE 1=1  AND A.F10003 IN (SELECT X.F10003 FROM (  SELECT B.f10003 FROM "relGrupAngajat" B  INNER JOIN "Ptj_relGrupSuper" C ON B."IdGrup" = C."IdGrup"  WHERE C."IdSuper" =99 AND C."IdRol"=-99 GROUP BY B.F10003  UNION  SELECT B.F10003 FROM "relGrupAngajat" B  INNER JOIN "Ptj_relGrupSuper" C ON B."IdGrup" = C."IdGrup"  INNER JOIN "F100Supervizori" D ON D.F10003 = B.F10003 AND D."IdSuper" = (-1 * C."IdSuper") AND D."DataInceput" <= TO_DATE('29-02-2020','DD-MM-YYYY') AND TO_DATE('01-02-2020','DD-MM-YYYY') <= D."DataSfarsit"  WHERE D."IdUser" =99 AND C."IdRol"=-99 GROUP BY B.F10003) X   INNER JOIN F100 A ON A.F10003=X.F10003   WHERE 1=1 AND A.F10025 <> 900 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY')))  AND TRUNC(to_date('29-02-2020','DD-MM-RRRR') - F10022)>=0 AND TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY')) - to_date('01-02-20','DD-MM-RRRR'))>=0 GROUP BY X.F10003)
+-----------------------------------------------------
+Data:    27.02.2020 09:34:52
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:35:42
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:35:42
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:35:49
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:35:49
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:38:13
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:38:27
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:38:27
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:44:51
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:44:51
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:46:42
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:46:55
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:46:55
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:47:01
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:47:01
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:50:52
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:51:01
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:51:01
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:51:08
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:51:08
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:57:17
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:57:30
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:57:30
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:57:35
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:57:35
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:57:41
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:57:41
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:57:55
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:57:55
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 09:57:58
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    27.02.2020 09:57:58
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT "Denumire" AS "Id", "Denumire" FROM "viewCategoriePontaj" GROUP BY "Denumire" 
+-----------------------------------------------------
+Data:    27.02.2020 13:27:32
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:27:32
+Pagina:    Cereri.aspx
+Eveni:     pnlCtl_Callback
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:27:35
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:28:04
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:28:04
+Pagina:    Cereri.aspx
+Eveni:     pnlCtl_Callback
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:28:18
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:28:18
+Pagina:    Cereri.aspx
+Eveni:     pnlCtl_Callback
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:28:19
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:35:12
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:35:12
+Pagina:    Cereri.aspx
+Eveni:     pnlCtl_Callback
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:35:25
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:35:44
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:35:47
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:35:47
+Pagina:    Cereri.aspx
+Eveni:     pnlCtl_Callback
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:35:50
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:36:01
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:36:01
+Pagina:    Cereri.aspx
+Eveni:     pnlCtl_Callback
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    27.02.2020 13:36:04
+Pagina:    Cereri.aspx
+Eveni:     Page_Load
+Eroarea:   Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+-----------------------------------------------------
+Data:    28.02.2020 11:06:05
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   Invalid column name 'Marca'.
+Invalid column name 'CO_An'.
+Invalid column name 'RamaseDeEf'.
+Invalid column name 'CM_An'.
+Could not use view or function 'IntroView' because of binding errors.
+-----------------------------------------------------
+Data:    28.02.2020 11:06:05
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT * FROM "IntroView" WHERE "IdUser"=@1
+-----------------------------------------------------
+Data:    28.02.2020 11:06:08
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   Invalid column name 'AreParola'.
+-----------------------------------------------------
+Data:    28.02.2020 11:13:30
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   Invalid column name 'Marca'.
+Invalid column name 'CO_An'.
+Invalid column name 'RamaseDeEf'.
+Invalid column name 'CM_An'.
+Could not use view or function 'IntroView' because of binding errors.
+-----------------------------------------------------
+Data:    28.02.2020 11:13:30
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT * FROM "IntroView" WHERE "IdUser"=@1
+-----------------------------------------------------
+Data:    28.02.2020 11:13:31
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   Invalid column name 'AreParola'.
+-----------------------------------------------------
+Data:    28.02.2020 11:13:54
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   Invalid column name 'Marca'.
+Invalid column name 'CO_An'.
+Invalid column name 'RamaseDeEf'.
+Invalid column name 'CM_An'.
+Could not use view or function 'IntroView' because of binding errors.
+-----------------------------------------------------
+Data:    28.02.2020 11:13:54
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT * FROM "IntroView" WHERE "IdUser"=@1
+-----------------------------------------------------
+Data:    28.02.2020 11:13:54
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   Invalid column name 'AreParola'.
+-----------------------------------------------------
+Data:    28.02.2020 11:13:57
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   Invalid column name 'Marca'.
+Invalid column name 'CO_An'.
+Invalid column name 'RamaseDeEf'.
+Invalid column name 'CM_An'.
+Could not use view or function 'IntroView' because of binding errors.
+-----------------------------------------------------
+Data:    28.02.2020 11:13:57
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT * FROM "IntroView" WHERE "IdUser"=@1
+-----------------------------------------------------
+Data:    28.02.2020 11:13:58
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   Invalid column name 'AreParola'.
+-----------------------------------------------------
+Data:    28.02.2020 11:14:25
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   Invalid column name 'Marca'.
+Invalid column name 'CO_An'.
+Invalid column name 'RamaseDeEf'.
+Invalid column name 'CM_An'.
+Could not use view or function 'IntroView' because of binding errors.
+-----------------------------------------------------
+Data:    28.02.2020 11:14:25
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT * FROM "IntroView" WHERE "IdUser"=@1
+-----------------------------------------------------
+Data:    28.02.2020 11:14:25
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   Invalid column name 'AreParola'.
+-----------------------------------------------------
+Data:    28.02.2020 11:24:26
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    28.02.2020 11:29:53
+Pagina:    MeniuSecuritate.aspx
+Eveni:     cmbGr_SelectedIndexChanged
+Eroarea:   Duplicate node key
+-----------------------------------------------------
+Data:    28.02.2020 11:29:57
+Pagina:    MeniuSecuritate.aspx
+Eveni:     Page_Load
+Eroarea:   Duplicate node key
+-----------------------------------------------------
+Data:    28.02.2020 11:29:57
+Pagina:    MeniuSecuritate.aspx
+Eveni:     cmbGr_SelectedIndexChanged
+Eroarea:   Duplicate node key
+-----------------------------------------------------
+Data:    28.02.2020 11:30:01
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    28.02.2020 11:35:43
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    28.02.2020 11:36:55
+Pagina:    SablonNomen.aspx
+Eveni:     grDate_RowInserting
+Eroarea:   Column 'Id' does not allow nulls.
+-----------------------------------------------------
+Data:    28.02.2020 11:37:41
+Pagina:    MeniuDetaliu.aspx
+Eveni:     grDate_InitNewNode
+Eroarea:   Specified cast is not valid.
+-----------------------------------------------------
+Data:    28.02.2020 11:38:09
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    28.02.2020 11:38:18
+Pagina:    MeniuSecuritate.aspx
+Eveni:     cmbGr_SelectedIndexChanged
+Eroarea:   Duplicate node key
+-----------------------------------------------------
+Data:    28.02.2020 11:38:23
+Pagina:    MeniuSecuritate.aspx
+Eveni:     Page_Load
+Eroarea:   Duplicate node key
+-----------------------------------------------------
+Data:    28.02.2020 11:38:23
+Pagina:    MeniuSecuritate.aspx
+Eveni:     cmbGr_SelectedIndexChanged
+Eroarea:   Duplicate node key
+-----------------------------------------------------
+Data:    28.02.2020 11:38:25
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    28.02.2020 11:38:46
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    28.02.2020 11:39:11
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    28.02.2020 11:39:18
+Pagina:    MeniuSecuritate.aspx
+Eveni:     cmbGr_SelectedIndexChanged
+Eroarea:   Duplicate node key
+-----------------------------------------------------
+Data:    28.02.2020 11:39:20
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------
+Data:    28.02.2020 11:39:44
+Pagina:    MeniuSecuritate.aspx
+Eveni:     Page_Load
+Eroarea:   Duplicate node key
+-----------------------------------------------------
+Data:    28.02.2020 11:39:56
+Pagina:    General
+Eveni:     RunSqlQuery
+Eroarea:   ORA-00942: table or view does not exist
+-----------------------------------------------------

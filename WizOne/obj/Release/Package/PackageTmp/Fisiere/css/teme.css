@@ -1,0 +1,227 @@
+﻿.ThemeSelectorPopup
+{
+    background-color: transparent!important;
+    border: 0!important;
+}
+
+    .ThemeSelectorPopup .ContainerWrapper
+    {
+        padding: 0 10px 20px 10px;
+        overflow: hidden;
+        width: 380px;
+        display: inline-block;
+        margin-top: -1px;
+    }
+
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer
+        {
+            background-color: white;
+            border: 1px solid #b0b0b0;
+            -webkit-box-shadow: 0 10px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.2); 
+            padding: 17px 25px;
+            clear: both;
+            height: 350px; /* for IE7 */
+        }
+
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer .ThemeColumnLeft
+        {
+            width: 170px;
+            float:left;
+        }
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer .ThemeColumnRight  
+        {
+            float: right;
+            width: 140px;
+        }
+        
+
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer .ThemeGroup 
+        {
+            color: #999999;
+            font-size: 14px;
+            margin: 10px 0 5px 0;
+        }
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer .ThemeGroupMenu
+        {
+            background-color: transparent!important;
+            border: 0!important;
+            padding: 0!important;
+        }
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer .ThemeGroupMenu .dxm-item,
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer .ThemeGroupMenu .dxm-hover,
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer .ThemeGroupMenu .dxm-selected,
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer .ThemeGroupMenu .dxm-content
+        {
+            background-color: transparent!important;
+            border: 0!important;
+            padding: 0!important;
+            font: 13px 'Segoe UI', 'Helvetica Neue', Helvetica, 'Droid Sans', Tahoma, Geneva, sans-serif;
+            color: #3c3c3c;
+        }
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer .ThemeGroupMenu .ThemeIco
+        {
+            vertical-align: middle;
+            margin: 1px 7px 3px 2px;
+            display: inline-block;
+            width: 40px;
+            height: 19px;
+            padding: 1px;
+            zoom: 1;
+            *display: inline;
+        }
+
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer .ThemeGroupMenu .dxm-selected .ThemeIco
+        {
+            border: #ff8400 solid 2px;
+            margin: -1px 4px 1px 0;
+        }
+
+        .ThemeGroupItem ul
+        {
+            list-style: none;
+            padding:0;
+            margin:0;
+        }
+
+        .ThemeGroupItem ul li
+        {
+            margin-bottom:4px;
+            display:inline-block;
+        }
+         
+        .ThemeGroupItem ul li span
+        {
+            margin-right:10px;
+        }
+        
+        .ThemeGroupItem ul li a
+        {
+            margin:0;
+            padding:0;
+            display:inline-block;
+            vertical-align:top;
+            line-height:19px;
+            height:19px;
+        }
+
+        .ThemeSelectorPopup .ContainerWrapper .ThemeContainer .ThemeGroupItem .selected
+        {
+            border: #ff8400 solid 2px;
+            margin-left:-2px;
+            /*margin: -1px 4px 1px 0;*/
+        }
+
+
+        
+/* Themes*/
+.ThemeDefault,
+.ThemeDevEx,
+.ThemeMetropolis,
+.ThemeMetropolisBlue,
+.ThemeModerno,
+.ThemeOffice2010Blue,
+.ThemeOffice2010Black,
+.ThemeOffice2010Silver,
+.ThemeOffice2003Blue,
+.ThemeOffice2003Olive,
+.ThemeOffice2003Silver,
+.ThemeAqua,
+.ThemeMulberry,
+.ThemeGlass,
+.ThemeBlackGlass,
+.ThemePlasticBlue,
+.ThemeRedWine,
+.ThemeSoftOrange,
+.ThemeYouthful 
+{
+    width: 40px;
+    height: 19px;
+    display: inline-block;
+}
+.ThemeDefault
+{
+    background-color: #DCDCDC;
+}
+.ThemeDevEx
+{
+    background-color: #CDCCF5;
+}
+.ThemeMetropolis
+{
+    background-color: #7F7F7F;
+}
+.ThemeMetropolisBlue
+{
+    background-color: #0072C6;
+}
+.ThemeModerno
+{
+    background-color: #1279c0;
+}
+.ThemeOffice2010Blue
+{
+    background-color: #B5CCE5;
+}
+.ThemeOffice2010Black
+{
+    background-color: #474747;
+}
+.ThemeOffice2010Silver
+{
+    background-color: #E7EAEF;
+}
+.ThemeOffice2003Blue
+{
+    background-color: #B5CEF2;
+}
+.ThemeOffice2003Olive
+{
+    background-color: #D4DEB6;
+}
+.ThemeOffice2003Silver
+{
+    background-color: #D1D1E0;
+}
+.ThemeAqua
+{
+    background-color: #96B9EC;
+}
+.ThemeMulberry
+{
+    background-color: #BF4E6A;
+}
+.ThemeGlass
+{
+    background-color: #C8DDE8;
+}
+.ThemeBlackGlass
+{
+    background-color: #4D5A63;
+}
+.ThemePlasticBlue
+{
+    background-color: #5066B3;
+}
+.ThemeRedWine
+{
+    background-color: #8A0E3C;
+}
+.ThemeSoftOrange
+{
+    background-color: #F06F30;
+}
+.ThemeYouthful
+{
+    background-color: #9CC524;
+}
+
+
+.Clear
+{
+    display: block;
+    clear: both;
+    overflow: hidden;
+    width: 1px;
+    height: 0;
+}

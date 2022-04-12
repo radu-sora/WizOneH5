@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WIZONE_H5Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="DynReports">
+    <Key>
+      <PropertyRef Name="DynReportId" />
+    </Key>
+    <Property Name="DynReportId" Type="number" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar2" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="varchar2" MaxLength="250" />
+    <Property Name="DynReportTypeId" Type="number" Precision="4" Scale="0" Nullable="false" />
+    <Property Name="LayoutData" Type="blob" />
+    <Property Name="RegUserId" Type="varchar2" MaxLength="128" />
+    <Property Name="UpdUserId" Type="varchar2" MaxLength="128" />
+    <Property Name="RegDate" Type="date" Nullable="false" StoreGeneratedPattern="Computed" />
+    <Property Name="UpdDate" Type="date" />
+  </EntityType>
+  <EntityType Name="DynReportsUsers">
+    <Key>
+      <PropertyRef Name="DynReportUserId" />
+    </Key>
+    <Property Name="DynReportUserId" Type="number" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DynReportId" Type="number" Precision="10" Scale="0" Nullable="false" />
+    <Property Name="Name" Type="varchar2" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="varchar2" MaxLength="250" />
+    <Property Name="LayoutData" Type="blob" />
+    <Property Name="RegUserId" Type="varchar2" MaxLength="128" />
+    <Property Name="UpdUserId" Type="varchar2" MaxLength="128" />
+    <Property Name="RegDate" Type="date" Nullable="false" StoreGeneratedPattern="Computed" />
+    <Property Name="UpdDate" Type="date" />
+  </EntityType>
+  <EntityType Name="DynReportTypes">
+    <Key>
+      <PropertyRef Name="DynReportTypeId" />
+    </Key>
+    <Property Name="DynReportTypeId" Type="number" Precision="4" Scale="0" Nullable="false" />
+    <Property Name="Name" Type="varchar2" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_DynReports_DynReportTypes">
+    <End Role="DynReportTypes" Type="Self.DynReportTypes" Multiplicity="1" />
+    <End Role="DynReports" Type="Self.DynReports" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DynReportTypes">
+        <PropertyRef Name="DynReportTypeId" />
+      </Principal>
+      <Dependent Role="DynReports">
+        <PropertyRef Name="DynReportTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DynReportsUsers_DynReports">
+    <End Role="DynReports" Type="Self.DynReports" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DynReportsUsers" Type="Self.DynReportsUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DynReports">
+        <PropertyRef Name="DynReportId" />
+      </Principal>
+      <Dependent Role="DynReportsUsers">
+        <PropertyRef Name="DynReportId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="WIZONE_H5ModelStoreContainer">
+    <EntitySet Name="DynReports" EntityType="Self.DynReports" store:Type="Tables" />
+    <EntitySet Name="DynReportsUsers" EntityType="Self.DynReportsUsers" store:Type="Tables" />
+    <EntitySet Name="DynReportTypes" EntityType="Self.DynReportTypes" store:Type="Tables" />
+    <AssociationSet Name="FK_DynReports_DynReportTypes" Association="Self.FK_DynReports_DynReportTypes">
+      <End Role="DynReportTypes" EntitySet="DynReportTypes" />
+      <End Role="DynReports" EntitySet="DynReports" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DynReportsUsers_DynReports" Association="Self.FK_DynReportsUsers_DynReports">
+      <End Role="DynReports" EntitySet="DynReports" />
+      <End Role="DynReportsUsers" EntitySet="DynReportsUsers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

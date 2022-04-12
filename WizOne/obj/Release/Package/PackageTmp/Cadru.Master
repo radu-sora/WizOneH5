@@ -1,0 +1,481 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Cadru.master.cs" Inherits="WizOne.Cadru" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+
+    <title id="txtVers1" runat="server">WizOne versiunea 1.1.001</title>
+
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" runat="server" />        
+    <link rel="stylesheet" type="text/css" href="Fisiere/css/style.css" runat="server" />    
+    <link rel="stylesheet" type="text/css" href="Fisiere/css/widgets.css" runat="server" />
+    <link rel="stylesheet" type="text/css" href="Fisiere/MsgBox/sweetalert.css" runat="server" />
+
+    <asp:ContentPlaceHolder ID="head" runat="server" />
+
+</head>
+<body>
+    <form id="form1" runat="server" class="dx-popup-adaptive-fullscreen">
+        <asp:ScriptManager ID="ScriptManager1" runat="server" >
+            <Scripts>
+                <asp:ScriptReference Path="~/Scripts/jquery-3.6.0.min.js" />
+                <asp:ScriptReference Path="~/Scripts/bootstrap.min.js" />
+                <asp:ScriptReference Path="~/Fisiere/js/utils.js" />
+                <asp:ScriptReference Path="~/Fisiere/MsgBox/sweetalert.min.js" />
+                <asp:ScriptReference Path="~/Fisiere/js/StringResources.js" />
+                <asp:ScriptReference Path="~/Fisiere/js/iban.js" />
+            </Scripts>
+        </asp:ScriptManager>     
+             
+        <dx:ASPxLoadingPanel ID="pnlLoading" ClientInstanceName="pnlLoading" runat="server" Modal="true" HorizontalAlign="Center" ImageSpacing="10" VerticalAlign="Middle">
+            <Image Url="~/Fisiere/Imagini/loading.gif" Height="40px" Width="40px"></Image>
+        </dx:ASPxLoadingPanel>
+
+        <dx:ASPxPanel ID="pnlHeader" runat="server" FixedPosition="WindowTop" BackColor="#FFFFFF" Collapsible="true">
+            <SettingsAdaptivity CollapseAtWindowInnerWidth="1024" />
+            <BorderBottom BorderColor="#CCCCCC" BorderStyle="Solid" BorderWidth="1px" />
+            <Styles>
+                <ExpandButton Paddings-PaddingRight="10px" />
+            </Styles>
+            <ExpandBarTemplate>
+                <a href="~/Pagini/MainPage.aspx" runat="server" oninit="HeaderBrandExpand_Init"><img src="~/Fisiere/Imagini/WizOne.png" alt="WizOne" class="header-brand" runat="server" /></a>
+            </ExpandBarTemplate>
+            <PanelCollection>
+                <dx:PanelContent runat="server">
+                    <a href="~/Pagini/MainPage.aspx" runat="server" oninit="HeaderBrand_Init"><img src="~/Fisiere/Imagini/WizOne.png" alt="WizOne" class="header-brand header-brand-row" runat="server" /></a>
+                    <div class="header-menu">
+
+                        <div id="divCmbProfile" runat="server">
+                            <span id="etiProfile" runat="server"></span>
+                            <dx:ASPxComboBox ID="cmbProfile" runat="server" AutoPostBack="true" Width="120px" DropDownWidth="200px" ValueField="Id" ValueType="System.Int32" TextField="Denumire" OnSelectedIndexChanged="cmbProfile_SelectedIndexChanged" />
+                        </div>
+
+                        <div class="dropdown">
+                            <a href="#" id="LangButton" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <img src="~/Fisiere/Imagini/Icoane/lang.png" alt="" runat="server" /><span id="etiLimbi" runat="server"></span>
+                            </a>
+                            <ul class="dropdown-menu fade" aria-labelledby="LangButton">
+                                <li>
+                                    <div class="clearfix" title="Salveaza">
+                                        <button type="button" class="btn btn-default btn-xs" runat="server" onserverclick="btnSaveLang_Click">
+                                            <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
+                                        </button>
+                                    </div>            
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li><asp:LinkButton ID="aRo" runat="server" Visible="false" OnClick="btnLang_Click" title="RO"><img src="~/Fisiere/Imagini/Drapele/ro.png" alt="" runat="server" />Română</asp:LinkButton></li>
+                                <li><asp:LinkButton ID="aEn" runat="server" Visible="false" OnClick="btnLang_Click" title="EN"><img src="~/Fisiere/Imagini/Drapele/gb.png" alt="" runat="server" />English</asp:LinkButton></li>
+                                <li><asp:LinkButton ID="aFr" runat="server" Visible="false" OnClick="btnLang_Click" title="FR"><img src="~/Fisiere/Imagini/Drapele/fr.png" alt="" runat="server" />Français</asp:LinkButton></li>        
+                                <li><asp:LinkButton ID="aEs" runat="server" Visible="false" OnClick="btnLang_Click" title="ES"><img src="~/Fisiere/Imagini/Drapele/es.png" alt="" runat="server" />Español</asp:LinkButton></li>
+                                <li><asp:LinkButton ID="aDe" runat="server" Visible="false" OnClick="btnLang_Click" title="DE"><img src="~/Fisiere/Imagini/Drapele/de.png" alt="" runat="server" />Deutsch</asp:LinkButton></li>        
+                                <li><asp:LinkButton ID="aIt" runat="server" Visible="false" OnClick="btnLang_Click" title="IT"><img src="~/Fisiere/Imagini/Drapele/it.png" alt="" runat="server" />Italiano</asp:LinkButton></li>        
+                                <li><asp:LinkButton ID="aBg" runat="server" Visible="false" OnClick="btnLang_Click" title="BG"><img src="~/Fisiere/Imagini/Drapele/bg.png" alt="" runat="server" />български</asp:LinkButton></li>                                        
+                                <li><asp:LinkButton ID="aRu" runat="server" Visible="false" OnClick="btnLang_Click" title="RU"><img src="~/Fisiere/Imagini/Drapele/ru.png" alt="" runat="server" />русский</asp:LinkButton></li>    
+                            </ul>
+                            <div class="modal-backdrop fade"></div>
+                        </div>
+
+                        <div class="dropdown">
+                            <a href="#" id="ThemeButton" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <img src="~/Fisiere/Imagini/Icoane/paleta.png" alt="" runat="server" /><span id="etiTeme" runat="server"></span> 
+                            </a>
+                            <ul class="dropdown-menu fade" aria-labelledby="ThemeButton">
+                                <li>
+                                    <div class="clearfix" title="Salveaza">
+                                        <button type="button" class="btn btn-default btn-xs" runat="server" onserverclick="btnSaveTheme_Click">
+                                            <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
+                                        </button>
+                                    </div>            
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    <table class="theme-selector">
+                                        <tr>
+                                            <td>
+								                <ul>
+                                                    <li class="theme-selector-group-heder">DEFAULTS</li>
+									                <li><span class="ThemeDefault"></span><a href="#">Default</a></li>
+									                <li><span class="ThemeDevEx"></span><a href="#">DevEx</a></li>
+									                <li><span class="ThemeMetropolis"></span><a href="#">Metropolis</a></li>
+									                <li><span class="ThemeMetropolisBlue"></span><a href="#">Metro Blue</a></li>
+                                                    <li class="theme-selector-group-heder">OFFICE 2010</li>
+                                                    <li><span class="ThemeOffice2010Blue"></span><a href="#">Blue</a></li>
+									                <li><span class="ThemeOffice2010Black"></span><a href="#">Black</a></li>
+									                <li><span class="ThemeOffice2010Silver"></span><a href="#">Silver</a></li>
+                                                    <li class="theme-selector-group-heder">OFFICE 2003</li>
+                                                    <li><span class="ThemeOffice2003Blue"></span><a href="#">Blue</a></li>
+									                <li><span class="ThemeOffice2003Olive"></span><a href="#">Olive</a></li>
+									                <li><span class="ThemeOffice2003Silver"></span><a href="#">Silver</a></li>
+								                </ul>                                                
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li class="theme-selector-group-heder">MOBILE</li>
+									                <li><span class="ThemeModerno"></span><a href="#">Moderno</a></li>
+                                                    <li class="theme-selector-group-heder">MISC</li>
+                                                    <li><span class="ThemeAqua"></span><a href="#">Aqua</a></li>
+									                <li><span class="ThemeBlackGlass"></span><a href="#">Black Glass</a></li>
+									                <li><span class="ThemeGlass"></span><a href="#">Glass</a></li>
+									                <li><span class="ThemeMulberry"></span><a href="#">Mulberry</a></li>
+									                <li><span class="ThemePlasticBlue"></span><a href="#">Plastic Blue</a></li>
+									                <li><span class="ThemeRedWine"></span><a href="#">Red Wine</a></li>
+									                <li><span class="ThemeSoftOrange"></span><a href="#">Soft Orange</a></li>
+									                <li><span class="ThemeYouthful"></span><a href="#">Youthful</a></li>
+								                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                            </ul>
+                            <div class="modal-backdrop fade"></div>
+                        </div>
+
+                        <div class="dropdown">
+                            <a href="#" id="AccButton" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <img src="~/Fisiere/Imagini/Icoane/user.png" alt="" runat="server" /><span id="etiCont" runat="server"></span>
+                            </a>
+                            <ul class="dropdown-menu fade" aria-labelledby="AccButton">
+                                <li>
+                                    <div class="clearfix" title="Salveaza">
+                                        <button type="button" class="btn btn-default btn-xs" runat="server" onserverclick="btnSaveAcco_Click">
+                                            <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
+                                        </button>
+                                    </div>            
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    <div class="account-form">
+                                        <dx:ASPxLabel ID="lblNume" AssociatedControlID="txtNume" runat="server" Text="Utilizator" />
+                                        <dx:ASPxTextBox ID="txtNume" runat="server" Width="150px" Enabled="false" >
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
+                                        </dx:ASPxTextBox>
+                                        <dx:ASPxLabel ID="lblAng" AssociatedControlID="txtAng" runat="server" Text="Angajat" />
+                                        <dx:ASPxTextBox ID="txtAng" runat="server" Width="150px" Enabled="false" >
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
+                                        </dx:ASPxTextBox>
+                                        <dx:ASPxLabel ID="lblLimbi" AssociatedControlID="txtLimba" runat="server" Text="Limba" />
+                                        <dx:ASPxTextBox ID="txtLimba" runat="server" Width="150px" Enabled="false" >
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
+                                        </dx:ASPxTextBox>
+                                        <dx:ASPxLabel ID="lblParola" AssociatedControlID="txtParola" runat="server" Text="Parola" />
+                                        <dx:ASPxTextBox ID="txtParola" runat="server" Width="150px" Password="true" >
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
+                                        </dx:ASPxTextBox>
+                                        <dx:ASPxLabel ID="lblConfirma" AssociatedControlID="txtConfirma" runat="server" Text="Confirma parola" />
+                                        <dx:ASPxTextBox ID="txtConfirma" runat="server" Width="150px" Password="true" >
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
+                                        </dx:ASPxTextBox>
+                                        <dx:ASPxLabel ID="lblParolaRap" AssociatedControlID="txtParolaRap" runat="server" Text="Parola rapoarte" />
+                                        <dx:ASPxTextBox ID="txtParolaRap" runat="server" Width="150px" Password="true" >
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
+                                        </dx:ASPxTextBox>
+                                        <dx:ASPxLabel ID="lblConfirmaRap" AssociatedControlID="txtConfirmaRap" runat="server" Text="Confirma parola rapoarte" />
+                                        <dx:ASPxTextBox ID="txtConfirmaRap" runat="server" Width="150px" Password="true" >
+                                            <ClientSideEvents KeyPress="function(s, e) { accountForm.onKeyPress(e); }" />
+                                        </dx:ASPxTextBox>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="modal-backdrop fade"></div>
+                        </div>
+
+                        <div>
+                            <asp:LinkButton ID="lnkOut" runat="server" OnClick="lnkOut_Click">
+                                <img src="~/Fisiere/Imagini/Icoane/logout.png" alt="" runat="server" /><span id="etiLog" runat="server"></span>
+                            </asp:LinkButton>
+                        </div>
+                    </div>
+                </dx:PanelContent>
+            </PanelCollection>            
+        </dx:ASPxPanel>
+
+        <dx:ASPxPanel ID="pnlMeniu" runat="server" FixedPosition="WindowLeft" Width="260px" BackColor="#FFFFFF" Collapsible="true" ScrollBars="Auto" CssClass="side-menu">
+            <PanelCollection>
+                <dx:PanelContent ID="PanelContent2" runat="server">
+                    <dx:ASPxNavBar ID="mnuSide" runat="server" AutoCollapse="False" AllowSelectItem="True" EnableViewState="false"
+                        EnableAnimation="True" Width="240px">
+                        <GroupHeaderStyle Font-Bold="true" Font-Italic="true" Font-Size="14px" Wrap="True" />
+                        <Border BorderWidth="0px" />
+                        <Paddings Padding="0px" />
+                    </dx:ASPxNavBar>
+                </dx:PanelContent>
+            </PanelCollection>
+        </dx:ASPxPanel>
+
+        <dx:ASPxPanel ID="pnlFooter" runat="server" FixedPosition="WindowBottom" Width="100%" BackColor="#FFFFFF" CssClass="footer">
+            <PanelCollection>
+                <dx:PanelContent ID="PanelContent1" runat="server">
+                    <div class="footer-menu">
+                        <asp:Repeater ID="FooterMenu" runat="server">
+                            <ItemTemplate>
+                                <a href="<%# Eval("Url") %>" class="<%# (Eval("Selected") as bool? ?? false ? "selected" : "") + (Eval("Running") as bool? ?? false ? "running" : "") %>">
+                                    <img src="<%# Eval("ImageUrl") %>" />
+                                    <p><%# Eval("Name") %></p>
+                                </a>                        
+                            </ItemTemplate>
+                        </asp:Repeater>
+                    </div>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:40%; text-align:left;"><span id="txtVers" runat="server"></span></td>
+                            <td style="width:20%; text-align:center;"><span id="txtLunaLucru" runat="server"></span></td>
+                            <td style="width:40%; text-align:right;"><span id="txtUsr" runat="server"></span></td>
+                        </tr>
+                    </table>
+                </dx:PanelContent>
+            </PanelCollection>
+            <BorderTop BorderColor="#CCCCCC" BorderStyle="Solid" BorderWidth="1px" />
+        </dx:ASPxPanel>
+
+        <dx:ASPxPanel ID="pnlContent1" runat="server" CssClass="content">
+            <PanelCollection>
+                <dx:PanelContent runat="server">
+               
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server" />
+                    
+                </dx:PanelContent>
+            </PanelCollection>
+        </dx:ASPxPanel>
+
+        <dx:ASPxPopupMenu runat="server" ID="mnuCtx" ClientInstanceName="mnuCtx" AutoPostBack="false" EnableCallBacks="true" >
+            <ItemSubMenuOffset X="10" />
+            <Items>
+                <dx:MenuItem Text="Notificari" Name="notificari">
+                    <Image Url="~/Fisiere/Imagini/Icoane/notif.png" AlternateText="notificari" runat="server"></Image>
+                </dx:MenuItem>
+                <dx:MenuItem Text="Validari" Name="validari">
+                    <Image Url="~/Fisiere/Imagini/Icoane/validare.png" AlternateText="validari" runat="server"></Image>
+                </dx:MenuItem>
+                <dx:MenuItem Text="Alerte" Name="alerte">
+                    <Image Url="~/Fisiere/Imagini/Icoane/alerta.png" AlternateText="alerte" runat="server"></Image>
+                </dx:MenuItem>
+                <dx:MenuItem Text="Securitate" Name="securitate" BeginGroup="true">
+                    <Image Url="~/Fisiere/Imagini/Icoane/securitate.png" AlternateText="securitate" runat="server"></Image>
+                </dx:MenuItem>
+                <dx:MenuItem Text="Profile" Name="profile" BeginGroup="true">
+                    <Image Url="~/Fisiere/Imagini/Icoane/intre.png" AlternateText="profile" runat="server"></Image>
+                </dx:MenuItem>
+                <dx:MenuItem Text="Column Chooser" Name="colChooser">
+                    <Image Url="~/Fisiere/Imagini/Icoane/chooser.png" AlternateText="column chooser" runat="server"></Image>
+                </dx:MenuItem>
+                <dx:MenuItem Text="Hide Column" Name="colHide">
+                    <Image Url="~/Fisiere/Imagini/Icoane/chooser.png" AlternateText="hide column" runat="server"></Image>
+                </dx:MenuItem>
+            </Items>                
+            <ClientSideEvents ItemClick="function(s, e) { OnItemPressed(s,e); }" />
+        </dx:ASPxPopupMenu>
+
+        <dx:ASPxPopupControl ID="popGen" runat="server" AllowDragging="True" AllowResize="True"
+            CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Middle"
+            EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
+            PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="900px" MinHeight="600px"
+            Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGen" EnableHierarchyRecreation="True">
+            <SettingsAdaptivity Mode="OnWindowInnerWidth" SwitchAtWindowInnerWidth="1024" MinWidth="100%" MinHeight="100%" />
+            <ClientSideEvents CloseUp="function(s, e) { s.PerformCallback(); }" />
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>            
+        </dx:ASPxPopupControl>
+
+        <dx:ASPxPopupControl ID="popGenIst" runat="server" AllowDragging="True" AllowResize="True"
+            CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Middle"
+            EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
+            PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="850px" MinHeight="500px"
+            Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGenIst" EnableHierarchyRecreation="True">                
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>
+        </dx:ASPxPopupControl>
+
+        <dx:ASPxPopupControl ID="popGenD112" runat="server" AllowDragging="True" AllowResize="True"
+            CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Middle"
+            EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
+            PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="500px" MinHeight="400px"
+            Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGenD112" EnableHierarchyRecreation="True">                
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>
+        </dx:ASPxPopupControl>
+
+        <dx:ASPxPopupControl ID="popGenDetalii" runat="server" AllowDragging="True" AllowResize="True"
+            CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Middle"
+            EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
+            PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="1500px" MinHeight="600px"
+            Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGenDetalii" EnableHierarchyRecreation="True">                
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>
+        </dx:ASPxPopupControl>
+
+        <dx:ASPxCallback ID="callBackProfile" runat="server" ClientInstanceName="callBackProfile" OnCallback="callBackProfile_Callback" />
+
+        <input type="hidden" runat="server" name="__TEME" id="__TEME" value="" />        
+    </form>
+
+    <script>
+        /* Theme selector control */
+        var themeSelector = {
+            currentThemeCookieKey: 'DXCurrentTheme',
+            init: function () {
+                var themeSelector = this;
+                var currentThemeName = ASPxClientUtils.GetCookie(themeSelector.currentThemeCookieKey);
+                var themes = $('.theme-selector li:not(.theme-selector-group-heder)');
+
+                themes.on('click', function () {
+                    var self = $(this);
+                    var selectedThemeName = self.find('span').attr('class').slice(5);
+
+                    //themeSelector.selectTheme(themes, self, null); // If AJAX is used to set the DX theme.
+                    themeSelector.setTheme(selectedThemeName);
+                });
+
+                themeSelector.selectTheme(themes, null, currentThemeName);
+            },
+            selectTheme: function (themes, item, name) {
+                themes.removeClass('selected');
+
+                if (item) {
+                    item.addClass('selected');
+                    // Send selected theme name via AJAX.
+                } else {
+                    themes.find('span.Theme' + name).parent().addClass('selected');
+                    $('#__TEME').val(name);
+                }
+            },
+            setTheme: function (name) {
+                ASPxClientUtils.SetCookie(this.currentThemeCookieKey, name);
+
+                if (document.forms[0] && !document.forms[0].onsubmit) {
+                    document.forms[0].submit();
+                }
+                else {
+                    location.href = location.href
+                }
+            }
+        };
+
+        
+
+        /* Account form control */
+        var accountForm = {
+            init: function () {
+                $('.account-form').parent().on('click', function (e) {
+                    e.stopPropagation();
+                });
+            },
+            onKeyPress: function (e) {
+                e.htmlEvent.keyCode === 13 && e.htmlEvent.preventDefault();
+            }
+        };
+
+        
+
+        /* Timer control */
+        var timerControl = {
+            timerId: null,
+            idleTime: 0,
+            /* Interface */
+            endTime: 0, // In seconds
+            onTime: null,
+            onEndTime: null,
+            init: function (endTime, onTime, onEndTime) {
+                var self = this;
+
+                self.endTime = endTime || self.endTime || 30; // Default to 30 seconds
+                self.onTime = onTime || self.onTime;
+                self.onEndTime = onEndTime || self.onEndTime;
+                $(document).on('click.timercontrol mousemove.timercontrol keypress.timercontrol', function () {
+                    self.onResetIdleTime(self);
+                });
+            },
+            start: function () {
+                var self = this;
+
+                self.timerId = setInterval(function () {
+                    self.onCheckIdleTime(self);
+                }, 1000);
+            },
+            stop: function () {
+                var self = this;
+
+                clearInterval(self.timerId);
+            },
+            reset: function () {
+                var self = this;
+
+                self.onResetIdleTime(self);
+            },
+            release: function () {
+                var self = this;
+
+                self.stop();
+                $(document).off('click.timercontrol mousemove.timercontrol keypress.timercontrol');
+            },
+            /* End interface */
+            onResetIdleTime: function (timer) {
+                timer.idleTime = 0;
+            },
+            onCheckIdleTime: function (timer) {                
+                timer.idleTime++;
+
+                if (timer.endTime && timer.onTime) {
+                    timer.onTime(timer.endTime - timer.idleTime);
+                }
+
+                if (timer.endTime && timer.onEndTime && timer.idleTime >= timer.endTime) {
+                    timer.onResetIdleTime(timer);
+                    timer.onEndTime();
+                }
+            }
+        };
+
+
+
+        /* Globals */
+        var getAbsoluteUrl = window.location.protocol + '//' + window.location.host + '<%=VirtualPathUtility.ToAbsolute("~/")%>';
+
+        /* Main functions */
+        $(window).on('load', function () {
+            var timeOutSecunde = <%= Session["TimeOutSecundePrint"] %>;           
+            var firstLoad = <%= Session["PrimaIntrare"] %> === 1;
+            var myModal = $("#myModal");
+            var anunt = $('#anunt');
+
+            themeSelector.init();
+            accountForm.init();
+            
+            if (timeOutSecunde) {
+                var timeLeftInfo = $("#spanTimeLeft");
+                var tipInfoChiosc = <%= Session["TipInfoChiosc"] %>;
+                var pagina = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
+                if (tipInfoChiosc == 1 || tipInfoChiosc == 2) {
+                    pagina = '<%: ResolveClientUrl("~/DefaultTactilFaraCard.aspx") %>';
+                } 
+
+                timerControl.init(timeOutSecunde, function (timeLeft) {
+                    if (timeLeft < 10) {
+                        timeLeftInfo.text(timeLeft).parent().addClass('text-danger');
+                    } else {
+                        timeLeftInfo.text(timeLeft).parent().removeClass('text-danger');
+                    }
+                }, function () {
+                    window.location = pagina;
+                });
+                timerControl.start();
+            }
+
+            firstLoad && myModal.length && myModal.modal('show');
+            anunt.length && anunt.modal('show');
+        });        
+    </script>    
+</body>
+</html>

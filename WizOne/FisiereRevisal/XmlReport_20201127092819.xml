@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XmlReport xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Revisal.Entities">
+  <Header>
+    <ClientApplication>WizSalary</ClientApplication>
+    <XmlVersion>0</XmlVersion>
+    <UploadId i:nil="true" />
+    <UploadDescription i:nil="true" />
+    <Angajator>
+      <Adresa>Brasov  str. SOSEAUA CRISTIANULUI nr. 12</Adresa>
+      <AuditEntries i:nil="true" />
+      <Contact>
+        <Email>office@temad.ro</Email>
+        <Fax>0268419340</Fax>
+        <ReprezentantLegal>MADAR FLORIN HOREA</ReprezentantLegal>
+        <Telefon>0268506108</Telefon>
+      </Contact>
+      <Detalii i:type="DetaliiAngajatorPersoanaJuridica">
+        <DomeniuActivitate>
+          <Cod>4690</Cod>
+          <Versiune>2</Versiune>
+        </DomeniuActivitate>
+        <Nume>TEMAD CO SRL</Nume>
+        <Cui>6620400</Cui>
+        <CuiParinte i:nil="true" />
+        <FormaJuridicaPJ>SocietateComerciala</FormaJuridicaPJ>
+        <FormaOrganizarePJ>SocietateCuRaspundereLimitata</FormaOrganizarePJ>
+        <FormaProprietate>Privata</FormaProprietate>
+        <NivelInfiintare>SediuSocial</NivelInfiintare>
+        <NumeParinte i:nil="true" />
+      </Detalii>
+      <Localitate>
+        <CodSiruta>40205</CodSiruta>
+      </Localitate>
+    </Angajator>
+    <PiecesCount i:nil="true" />
+  </Header>
+  <Salariati>
+    <Salariat>
+      <Adresa>str.  Octavian Goga nr. 34 bl. - ap. 14 scara - et. - sector  localitatea BRASOV judetul BRASOV</Adresa>
+      <Apatrid i:nil="true" />
+      <AuditEntries i:nil="true" />
+      <Cnp>1580802080096,1900-01-01T00:00:00</Cnp>
+      <CnpVechi>1580802080096</CnpVechi>
+    </Salariat>
+  </Salariati>
+</XmlReport>

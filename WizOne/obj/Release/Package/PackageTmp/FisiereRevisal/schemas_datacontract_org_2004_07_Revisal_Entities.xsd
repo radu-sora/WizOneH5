@@ -1,0 +1,1286 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Revisal.Entities" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Revisal.Entities" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/uNhAddIns.Entities" />
+  <xs:complexType name="XmlReport">
+    <xs:sequence>
+      <xs:element name="Header" nillable="true" type="tns:Header" />
+      <xs:element minOccurs="1" name="Salariati" type="tns:ArrayOfSalariat" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="XmlReport" nillable="true" type="tns:XmlReport" />
+  <xs:complexType name="Header">
+    <xs:sequence>
+      <xs:element name="ClientApplication" nillable="true">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="256" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="1" name="XmlVersion" type="xs:int" />
+      <xs:element minOccurs="0" name="UploadId" nillable="true" type="ser:guid" />
+      <xs:element minOccurs="0" name="UploadDescription" nillable="true">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="256" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="Angajator" nillable="true" type="tns:Angajator" />
+      <xs:element minOccurs="0" name="PiecesCount" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Header" nillable="true" type="tns:Header" />
+  <xs:complexType name="Angajator">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditableEntity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Adresa">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="AuditEntries" nillable="true" type="tns:ArrayOfAngajatorAudit" />
+          <xs:element minOccurs="0" name="Contact" nillable="true" type="tns:Contact" />
+          <xs:element minOccurs="1" name="Detalii" type="tns:DetaliiAngajator" />
+          <xs:element minOccurs="1" name="Localitate" type="tns:Localitate" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Angajator" nillable="true" type="tns:Angajator" />
+  <xs:complexType name="AuditableEntity">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/uNhAddIns.Entities" base="q1:Entity">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AuditableEntity" nillable="true" type="tns:AuditableEntity" />
+  <xs:complexType name="ArrayOfAngajatorAudit">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="AngajatorAudit" type="tns:AngajatorAudit" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAngajatorAudit" nillable="true" type="tns:ArrayOfAngajatorAudit" />
+  <xs:complexType name="AngajatorAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditEntity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Adresa">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="AuditTimestamp" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Contact" nillable="true" type="tns:Contact" />
+          <xs:element minOccurs="1" name="Detalii" type="tns:DetaliiAngajatorAudit" />
+          <xs:element minOccurs="1" name="Localitate" type="tns:Localitate" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AngajatorAudit" nillable="true" type="tns:AngajatorAudit" />
+  <xs:complexType name="AuditEntity">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditableEntity">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AuditEntity" nillable="true" type="tns:AuditEntity" />
+  <xs:complexType name="Contact">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Email" nillable="true">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="256" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="Fax" nillable="true">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="256" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="ReprezentantLegal" nillable="true">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="256" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="Telefon" nillable="true">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="256" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Contact" nillable="true" type="tns:Contact" />
+  <xs:complexType name="DetaliiAngajatorAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DomeniuActivitate" nillable="true" type="tns:DomeniuActivitate" />
+          <xs:element minOccurs="1" name="Nume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DetaliiAngajatorAudit" nillable="true" type="tns:DetaliiAngajatorAudit" />
+  <xs:complexType name="DomeniuActivitate">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/uNhAddIns.Entities" base="q2:Entity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Cod">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="Versiune" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DomeniuActivitate" nillable="true" type="tns:DomeniuActivitate" />
+  <xs:complexType name="DetaliiAngajatorPersoanaJuridicaAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DetaliiAngajatorAudit">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Cui">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="CuiParinte" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="FormaJuridicaPJ" type="tns:FormaJuridicaPJ" />
+          <xs:element minOccurs="0" name="FormaOrganizarePJ" nillable="true" type="tns:FormaOrganizarePJ" />
+          <xs:element minOccurs="0" name="FormaProprietate" nillable="true" type="tns:FormaProprietate" />
+          <xs:element minOccurs="0" name="NivelInfiintare" nillable="true" type="tns:NivelInfiintare" />
+          <xs:element minOccurs="0" name="NumeParinte" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DetaliiAngajatorPersoanaJuridicaAudit" nillable="true" type="tns:DetaliiAngajatorPersoanaJuridicaAudit" />
+  <xs:simpleType name="FormaJuridicaPJ">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SocietateComerciala" />
+      <xs:enumeration value="RegieAutonoma" />
+      <xs:enumeration value="CompanieNationala" />
+      <xs:enumeration value="SocietateNationala" />
+      <xs:enumeration value="AutoritateInstitutiePublica" />
+      <xs:enumeration value="InstitutieDeCredit" />
+      <xs:enumeration value="SocietateCooperativa" />
+      <xs:enumeration value="OrganizatieSindicala" />
+      <xs:enumeration value="Fundatie" />
+      <xs:enumeration value="AltePersoaneJuridice" />
+      <xs:enumeration value="OrganizatiePatronala" />
+      <xs:enumeration value="OrganizatieAsociatieCuPersonalitateJuridica" />
+      <xs:enumeration value="ReprezentantaDinRomaniaPentruPJStraina" />
+      <xs:enumeration value="InstitutCulturalAlUnuiStat" />
+      <xs:enumeration value="ReprezentantaComercialaSiEconomicaAleAltuiStat" />
+      <xs:enumeration value="MisiuneDiplomatica" />
+      <xs:enumeration value="OficiuConsular" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FormaJuridicaPJ" nillable="true" type="tns:FormaJuridicaPJ" />
+  <xs:simpleType name="FormaOrganizarePJ">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Agricola" />
+      <xs:enumeration value="AlteInstitutiiDeCredit" />
+      <xs:enumeration value="AlteOrganizatiiPatronale" />
+      <xs:enumeration value="AlteOrganizatiiSauAsociatiiCuPersonalitateJuridica" />
+      <xs:enumeration value="AsociatieDeProprietari" />
+      <xs:enumeration value="Banca" />
+      <xs:enumeration value="CaseDeEconomiiPentruDomeniulLocativ" />
+      <xs:enumeration value="ConfederatieSindicala" />
+      <xs:enumeration value="DeConsum" />
+      <xs:enumeration value="DeLocuinte" />
+      <xs:enumeration value="DeTransporturi" />
+      <xs:enumeration value="DeValorificare" />
+      <xs:enumeration value="Federatiepatronala" />
+      <xs:enumeration value="Federatiesindicala" />
+      <xs:enumeration value="Forestiere" />
+      <xs:enumeration value="InstitutiiEmitenteDeMonedaElectronica" />
+      <xs:enumeration value="Mestesugareasca" />
+      <xs:enumeration value="OrganizatieCooperatistaDeCredit" />
+      <xs:enumeration value="OrganizatieSauAsociatieProfesionala" />
+      <xs:enumeration value="Patronat" />
+      <xs:enumeration value="Pescaresti" />
+      <xs:enumeration value="Sindicat" />
+      <xs:enumeration value="SocietateCuRaspundereLimitata" />
+      <xs:enumeration value="SocietateCuRaspundereLimitataDebutant" />
+      <xs:enumeration value="SocietateInComanditaPeActiuni" />
+      <xs:enumeration value="SocietateInComanditaSimpla" />
+      <xs:enumeration value="SocietateInNumeColectiv" />
+      <xs:enumeration value="SocietatePeActiuni" />
+      <xs:enumeration value="Sucursalaauneiinstitutiidecreditstraina" />
+      <xs:enumeration value="UniunePatronala" />
+      <xs:enumeration value="UniuneSindicala" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FormaOrganizarePJ" nillable="true" type="tns:FormaOrganizarePJ" />
+  <xs:simpleType name="FormaProprietate">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Stat" />
+      <xs:enumeration value="Privata" />
+      <xs:enumeration value="Mixta" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FormaProprietate" nillable="true" type="tns:FormaProprietate" />
+  <xs:simpleType name="NivelInfiintare">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SediuSocial" />
+      <xs:enumeration value="Filiala" />
+      <xs:enumeration value="Sucursala" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="NivelInfiintare" nillable="true" type="tns:NivelInfiintare" />
+  <xs:complexType name="DetaliiAngajatorPersoanaFizicaAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DetaliiAngajatorAudit">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="ActIdentitatePF" type="tns:ActIdentitatePF" />
+          <xs:element minOccurs="1" name="Cnp">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="FormaJuridicaPF" type="tns:FormaJuridicaPF" />
+          <xs:element minOccurs="0" name="FormaOrganizarePF" nillable="true" type="tns:FormaOrganizarePF" />
+          <xs:element minOccurs="1" name="Nationalitate" type="tns:Nationalitate" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DetaliiAngajatorPersoanaFizicaAudit" nillable="true" type="tns:DetaliiAngajatorPersoanaFizicaAudit" />
+  <xs:simpleType name="ActIdentitatePF">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Cnp" />
+      <xs:enumeration value="CnpCif" />
+      <xs:enumeration value="Pasaport" />
+      <xs:enumeration value="PasaportCif" />
+      <xs:enumeration value="PasaportActIdentitate" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ActIdentitatePF" nillable="true" type="tns:ActIdentitatePF" />
+  <xs:simpleType name="FormaJuridicaPF">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PF" />
+      <xs:enumeration value="PFA" />
+      <xs:enumeration value="IF" />
+      <xs:enumeration value="ProfesieSpeciala" />
+      <xs:enumeration value="IPF" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FormaJuridicaPF" nillable="true" type="tns:FormaJuridicaPF" />
+  <xs:simpleType name="FormaOrganizarePF">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Arhitect" />
+      <xs:enumeration value="AsistentMedical" />
+      <xs:enumeration value="AuditorFinanciar" />
+      <xs:enumeration value="Avocat" />
+      <xs:enumeration value="ConsilierProprietateIndustriala" />
+      <xs:enumeration value="ConsultantFiscal" />
+      <xs:enumeration value="ExecutorJudecatoresc" />
+      <xs:enumeration value="ExpertContabil" />
+      <xs:enumeration value="ExpertVamal" />
+      <xs:enumeration value="Farmacist" />
+      <xs:enumeration value="Medic" />
+      <xs:enumeration value="MedicVeterinar" />
+      <xs:enumeration value="NotarPublic" />
+      <xs:enumeration value="Psiholog" />
+      <xs:enumeration value="TraducatorAutorizat" />
+      <xs:enumeration value="LichidatorJudiciar" />
+      <xs:enumeration value="AltePersoaneFizice" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FormaOrganizarePF" nillable="true" type="tns:FormaOrganizarePF" />
+  <xs:complexType name="Nationalitate">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/uNhAddIns.Entities" base="q3:Entity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Nume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Nationalitate" nillable="true" type="tns:Nationalitate" />
+  <xs:complexType name="Localitate">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q4="http://schemas.datacontract.org/2004/07/uNhAddIns.Entities" base="q4:Entity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="CodSiruta" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Localitate" nillable="true" type="tns:Localitate" />
+  <xs:complexType name="DetaliiAngajator">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditableEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DomeniuActivitate" nillable="true" type="tns:DomeniuActivitate" />
+          <xs:element minOccurs="1" name="Nume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DetaliiAngajator" nillable="true" type="tns:DetaliiAngajator" />
+  <xs:complexType name="DetaliiAngajatorPersoanaJuridica">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DetaliiAngajator">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Cui">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="CuiParinte" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="FormaJuridicaPJ" type="tns:FormaJuridicaPJ" />
+          <xs:element minOccurs="0" name="FormaOrganizarePJ" nillable="true" type="tns:FormaOrganizarePJ" />
+          <xs:element minOccurs="0" name="FormaProprietate" nillable="true" type="tns:FormaProprietate" />
+          <xs:element minOccurs="0" name="NivelInfiintare" nillable="true" type="tns:NivelInfiintare" />
+          <xs:element minOccurs="0" name="NumeParinte" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DetaliiAngajatorPersoanaJuridica" nillable="true" type="tns:DetaliiAngajatorPersoanaJuridica" />
+  <xs:complexType name="DetaliiAngajatorPersoanaFizica">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DetaliiAngajator">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="ActIdentitatePF" type="tns:ActIdentitatePF" />
+          <xs:element minOccurs="1" name="Cnp">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="FormaJuridicaPF" type="tns:FormaJuridicaPF" />
+          <xs:element minOccurs="0" name="FormaOrganizarePF" nillable="true" type="tns:FormaOrganizarePF" />
+          <xs:element minOccurs="1" name="Nationalitate" type="tns:Nationalitate" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DetaliiAngajatorPersoanaFizica" nillable="true" type="tns:DetaliiAngajatorPersoanaFizica" />
+  <xs:complexType name="ArrayOfSalariat">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="Salariat" type="tns:Salariat" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSalariat" nillable="true" type="tns:ArrayOfSalariat" />
+  <xs:complexType name="Salariat">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditableEntity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Adresa">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="Apatrid" nillable="true" type="tns:Apatrid" />
+          <xs:element minOccurs="0" name="AuditEntries" nillable="true" type="tns:ArrayOfSalariatAudit" />
+          <xs:element minOccurs="1" name="Cnp">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="CnpVechi" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="Contracte" type="tns:ArrayOfContract" />
+          <xs:element minOccurs="0" name="DetaliiSalariatStrain" nillable="true" type="tns:DetaliiSalariatStrain" />
+          <xs:element minOccurs="0" name="Localitate" nillable="true" type="tns:Localitate" />
+          <xs:element minOccurs="0" name="Mentiuni" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="Nationalitate" nillable="true" type="tns:Nationalitate" />
+          <xs:element minOccurs="1" name="Nume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="Prenume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="TaraDomiciliu" type="tns:Nationalitate" />
+          <xs:element minOccurs="1" name="TipActIdentitate" type="tns:TipActIdentitate" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Salariat" nillable="true" type="tns:Salariat" />
+  <xs:simpleType name="Apatrid">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FaraDreptDeSedereInUe" />
+      <xs:enumeration value="CuDreptDeSedereInUe" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Apatrid" nillable="true" type="tns:Apatrid" />
+  <xs:complexType name="ArrayOfSalariatAudit">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="SalariatAudit" type="tns:SalariatAudit" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSalariatAudit" nillable="true" type="tns:ArrayOfSalariatAudit" />
+  <xs:complexType name="SalariatAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditEntity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Adresa">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="Apatrid" nillable="true" type="tns:Apatrid" />
+          <xs:element minOccurs="1" name="AuditTimestamp" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="Cnp">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="CnpVechi" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="DetaliiSalariatStrain" nillable="true" type="tns:DetaliiSalariatStrainAudit" />
+          <xs:element minOccurs="0" name="Localitate" nillable="true" type="tns:Localitate" />
+          <xs:element minOccurs="0" name="Mentiuni" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="Nationalitate" nillable="true" type="tns:Nationalitate" />
+          <xs:element minOccurs="1" name="Nume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="Prenume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="Radiat" type="xs:boolean" />
+          <xs:element minOccurs="1" name="TaraDomiciliu" type="tns:Nationalitate" />
+          <xs:element minOccurs="1" name="TipActIdentitate" type="tns:TipActIdentitate" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SalariatAudit" nillable="true" type="tns:SalariatAudit" />
+  <xs:complexType name="DetaliiSalariatStrainAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DataInceputAutorizatie" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataSfarsitAutorizatie" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="TipAutorizatie" type="tns:TipAutorizatie" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DetaliiSalariatStrainAudit" nillable="true" type="tns:DetaliiSalariatStrainAudit" />
+  <xs:simpleType name="TipAutorizatie">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LucratoriPermanenti" />
+      <xs:enumeration value="Exceptie" />
+      <xs:enumeration value="LucratoriSezonieri" />
+      <xs:enumeration value="LucratoriStagiari" />
+      <xs:enumeration value="Sportivi" />
+      <xs:enumeration value="Nominala" />
+      <xs:enumeration value="LucratoriTransfrontalieri" />
+      <xs:enumeration value="LucratorInaltCalificat" />
+      <xs:enumeration value="LucratoriAuPair" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TipAutorizatie" nillable="true" type="tns:TipAutorizatie" />
+  <xs:simpleType name="TipActIdentitate">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CarteIdentitate" />
+      <xs:enumeration value="Pasaport" />
+      <xs:enumeration value="BuletinIdentitate" />
+      <xs:enumeration value="Alt" />
+      <xs:enumeration value="CarteDeRezidenta" />
+      <xs:enumeration value="PermisDeSedere" />
+      <xs:enumeration value="AltActIdentitateRomanesc" />
+      <xs:enumeration value="AltApatridTolerat" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TipActIdentitate" nillable="true" type="tns:TipActIdentitate" />
+  <xs:complexType name="ArrayOfContract">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="Contract" type="tns:Contract" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfContract" nillable="true" type="tns:ArrayOfContract" />
+  <xs:complexType name="Contract">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditableEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AuditEntries" nillable="true" type="tns:ArrayOfContractAudit" />
+          <xs:element minOccurs="1" name="Cor" type="tns:Cor" />
+          <xs:element minOccurs="1" name="DataConsemnare" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="DataContract" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="DataInceputContract" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataSfarsitContract" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DateContractVechi" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="Detalii" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="DetaliiMutare" nillable="true" type="tns:ContractMutareDetalii" />
+          <xs:element minOccurs="0" name="ExceptieDataSfarsit" nillable="true" type="tns:ExceptieDataSfarsit" />
+          <xs:element minOccurs="1" name="NumarContract">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="NumereContractVechi" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="Radiat" type="xs:boolean" />
+          <xs:element minOccurs="1" name="Salariu" type="xs:int" />
+          <xs:element minOccurs="0" name="SporuriSalariu" nillable="true" type="tns:ArrayOfSpor" />
+          <xs:element minOccurs="1" name="StareCurenta" type="tns:ContractStare" />
+          <xs:element minOccurs="1" name="TimpMunca" type="tns:TimpMunca" />
+          <xs:element minOccurs="1" name="TipContract" type="tns:TipContract" />
+          <xs:element minOccurs="1" name="TipDurata" type="tns:TipDurata" />
+          <xs:element minOccurs="1" name="TipNorma" type="tns:TipNorma" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Contract" nillable="true" type="tns:Contract" />
+  <xs:complexType name="ArrayOfContractAudit">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="ContractAudit" type="tns:ContractAudit" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfContractAudit" nillable="true" type="tns:ArrayOfContractAudit" />
+  <xs:complexType name="ContractAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditEntity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="AuditTimestamp" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="Cor" type="tns:Cor" />
+          <xs:element minOccurs="1" name="DataConsemnare" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="DataContract" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="DataInceputContract" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataSfarsitContract" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DateContractVechi" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="Detalii" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="DetaliiMutare" nillable="true" type="tns:ContractMutareDetaliiAudit" />
+          <xs:element minOccurs="0" name="ExceptieDataSfarsit" nillable="true" type="tns:ExceptieDataSfarsit" />
+          <xs:element minOccurs="1" name="NumarContract">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="0" name="NumereContractVechi" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="Radiat" type="xs:boolean" />
+          <xs:element minOccurs="1" name="Salariu" type="xs:int" />
+          <xs:element minOccurs="0" name="SporuriSalariu" nillable="true" type="tns:ArrayOfSporAudit" />
+          <xs:element minOccurs="1" name="StareCurenta" type="tns:ContractStareAudit" />
+          <xs:element minOccurs="1" name="TimpMunca" type="tns:TimpMunca" />
+          <xs:element minOccurs="1" name="TipContract" type="tns:TipContract" />
+          <xs:element minOccurs="1" name="TipDurata" type="tns:TipDurata" />
+          <xs:element minOccurs="1" name="TipNorma" type="tns:TipNorma" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractAudit" nillable="true" type="tns:ContractAudit" />
+  <xs:complexType name="Cor">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/uNhAddIns.Entities" base="q5:Entity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Cod" type="xs:int" />
+          <xs:element minOccurs="1" name="Versiune" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Cor" nillable="true" type="tns:Cor" />
+  <xs:complexType name="ContractMutareDetaliiAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditEntity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="AngajatorSursaCui">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="AngajatorSursaDenumire">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="DataImport" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="TipMutare" type="tns:TipMutare" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractMutareDetaliiAudit" nillable="true" type="tns:ContractMutareDetaliiAudit" />
+  <xs:simpleType name="TipMutare">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Transfer" />
+      <xs:enumeration value="SchimbareLocMunca" />
+      <xs:enumeration value="SchimbareGestiuneRegistru" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TipMutare" nillable="true" type="tns:TipMutare" />
+  <xs:simpleType name="ExceptieDataSfarsit">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Art83LitA" />
+      <xs:enumeration value="Art83LitE" />
+      <xs:enumeration value="Art83LitH" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ExceptieDataSfarsit" nillable="true" type="tns:ExceptieDataSfarsit" />
+  <xs:complexType name="ArrayOfSporAudit">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="SporAudit" type="tns:SporAudit" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSporAudit" nillable="true" type="tns:ArrayOfSporAudit" />
+  <xs:complexType name="SporAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IsProcent" type="xs:boolean" />
+          <xs:element minOccurs="1" name="Tip" type="tns:TipSpor" />
+          <xs:element minOccurs="1" name="Valoare" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SporAudit" nillable="true" type="tns:SporAudit" />
+  <xs:complexType name="TipSpor">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q6="http://schemas.datacontract.org/2004/07/uNhAddIns.Entities" base="q6:Entity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Nume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TipSpor" nillable="true" type="tns:TipSpor" />
+  <xs:complexType name="TipSporAngajator">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:TipSpor">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TipSporAngajator" nillable="true" type="tns:TipSporAngajator" />
+  <xs:complexType name="TipSporPredefinit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:TipSpor">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="Versiune" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TipSporPredefinit" nillable="true" type="tns:TipSporPredefinit" />
+  <xs:complexType name="ContractStareAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DataIncetareDetasare" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataIncetareSuspendare" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StarePrecedenta" nillable="true" type="tns:ContractStareAudit" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareAudit" nillable="true" type="tns:ContractStareAudit" />
+  <xs:complexType name="ContractStareMutareAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStareAudit">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="AngajatorCui">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="AngajatorNume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="DataMutare" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="TemeiLegal" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="TipMutare" type="tns:TipMutare" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareMutareAudit" nillable="true" type="tns:ContractStareMutareAudit" />
+  <xs:complexType name="ContractStareDetasareAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStareAudit">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="AngajatorCui">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="AngajatorNume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="DataInceput" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataIncetare" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="DataSfarsit" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="Nationalitate" type="tns:Nationalitate" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareDetasareAudit" nillable="true" type="tns:ContractStareDetasareAudit" />
+  <xs:complexType name="ContractStareIncetareAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStareAudit">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="DataIncetare" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Explicatie" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="TemeiLegal" type="tns:TemeiIncetare" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareIncetareAudit" nillable="true" type="tns:ContractStareIncetareAudit" />
+  <xs:simpleType name="TemeiIncetare">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Art55LitB" />
+      <xs:enumeration value="Art56Alin1LitA" />
+      <xs:enumeration value="Art56Alin1LitB" />
+      <xs:enumeration value="Art56Alin1LitC" />
+      <xs:enumeration value="Art56Alin1LitD" />
+      <xs:enumeration value="Art56Alin1LitE" />
+      <xs:enumeration value="Art56Alin1LitF" />
+      <xs:enumeration value="Art56Alin1LitG" />
+      <xs:enumeration value="Art56Alin1LitH" />
+      <xs:enumeration value="Art56Alin1LitI" />
+      <xs:enumeration value="Art56Alin1LitJ" />
+      <xs:enumeration value="Art61LitA" />
+      <xs:enumeration value="Art61LitB" />
+      <xs:enumeration value="Art61LitC" />
+      <xs:enumeration value="Art61LitD" />
+      <xs:enumeration value="Art65Alin1" />
+      <xs:enumeration value="Art68" />
+      <xs:enumeration value="Art81Alin1" />
+      <xs:enumeration value="Art81Alin7" />
+      <xs:enumeration value="Art81Alin8" />
+      <xs:enumeration value="Art31Alin3" />
+      <xs:enumeration value="HJ" />
+      <xs:enumeration value="NulitateContract" />
+      <xs:enumeration value="AltTemei" />
+      <xs:enumeration value="Art50LitH" />
+      <xs:enumeration value="Art95Alin4" />
+      <xs:enumeration value="L448Art39Alin4" />
+      <xs:enumeration value="Art80Alin3" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TemeiIncetare" nillable="true" type="tns:TemeiIncetare" />
+  <xs:complexType name="ContractStareReactivareAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStareActivAudit">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="DataReactivare" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Explicatie" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="TemeiLegal" type="tns:TemeiReactivare" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareReactivareAudit" nillable="true" type="tns:ContractStareReactivareAudit" />
+  <xs:complexType name="ContractStareActivAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStareAudit">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareActivAudit" nillable="true" type="tns:ContractStareActivAudit" />
+  <xs:complexType name="ContractStareSuspendareAudit">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStareAudit">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="DataInceput" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataIncetare" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataSfarsit" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Explicatie" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="TemeiLegal" type="tns:TemeiSuspendare" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareSuspendareAudit" nillable="true" type="tns:ContractStareSuspendareAudit" />
+  <xs:simpleType name="TemeiSuspendare">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Art54" />
+      <xs:enumeration value="Art50LiteraD" />
+      <xs:enumeration value="Art50LiteraE" />
+      <xs:enumeration value="Art50LiteraF" />
+      <xs:enumeration value="Art50LiteraG" />
+      <xs:enumeration value="Art50LiteraH" />
+      <xs:enumeration value="Art50LiteraI" />
+      <xs:enumeration value="Art51Alin1LiteraA" />
+      <xs:enumeration value="Art51Alin1LiteraB" />
+      <xs:enumeration value="Art51Alin1LiteraC" />
+      <xs:enumeration value="Art51Alin1LiteraD" />
+      <xs:enumeration value="Art51Alin1LiteraE" />
+      <xs:enumeration value="Art51Alin1LiteraF" />
+      <xs:enumeration value="Art51Alin2" />
+      <xs:enumeration value="Art52Alin1LiteraA" />
+      <xs:enumeration value="Art52Alin1LiteraB" />
+      <xs:enumeration value="Art52Alin1LiteraC" />
+      <xs:enumeration value="Art52Alin1LiteraD" />
+      <xs:enumeration value="Art52Alin1LiteraE" />
+      <xs:enumeration value="Art52Alin3" />
+      <xs:enumeration value="Art6Alin1" />
+      <xs:enumeration value="Art52Alin1LiteraC1" />
+      <xs:enumeration value="Art50LiteraC" />
+      <xs:enumeration value="Art51Alin1LiteraG" />
+      <xs:enumeration value="Art11Alin2" />
+      <xs:enumeration value="Art31Alin1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TemeiSuspendare" nillable="true" type="tns:TemeiSuspendare" />
+  <xs:simpleType name="TemeiReactivare">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Reintegrare" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TemeiReactivare" nillable="true" type="tns:TemeiReactivare" />
+  <xs:complexType name="TimpMunca">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Durata" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="IntervalTimp" nillable="true" type="tns:RepartizareIntervalTimp" />
+      <xs:element minOccurs="1" name="Norma" type="tns:NormaTimpMunca" />
+      <xs:element minOccurs="1" name="Repartizare" type="tns:RepartizareTimpMunca" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TimpMunca" nillable="true" type="tns:TimpMunca" />
+  <xs:simpleType name="RepartizareIntervalTimp">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OrePeZi" />
+      <xs:enumeration value="OrePeSaptamana" />
+      <xs:enumeration value="OrePeLuna" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RepartizareIntervalTimp" nillable="true" type="tns:RepartizareIntervalTimp" />
+  <xs:simpleType name="NormaTimpMunca">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NormaIntreaga840" />
+      <xs:enumeration value="NormaIntreaga630" />
+      <xs:enumeration value="NormaIntreagaLegiSpeciale" />
+      <xs:enumeration value="TimpPartial" />
+      <xs:enumeration value="TimpOUG132" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="NormaTimpMunca" nillable="true" type="tns:NormaTimpMunca" />
+  <xs:simpleType name="RepartizareTimpMunca">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OreDeZi" />
+      <xs:enumeration value="OreDeNoapte" />
+      <xs:enumeration value="Inegal" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RepartizareTimpMunca" nillable="true" type="tns:RepartizareTimpMunca" />
+  <xs:simpleType name="TipContract">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ContractIndividualMunca" />
+      <xs:enumeration value="ContractUcenicie" />
+      <xs:enumeration value="ContractMuncaLaDomiciliu" />
+      <xs:enumeration value="ContractMuncaTemporara" />
+      <xs:enumeration value="ContractIndividualMuncaTineriDezavantajati" />
+      <xs:enumeration value="ContractIndividualMuncaClauzaTelemunca" />
+      <xs:enumeration value="ContractMuncaTemporaraClauzaTelemunca" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TipContract" nillable="true" type="tns:TipContract" />
+  <xs:simpleType name="TipDurata">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Nedeterminata" />
+      <xs:enumeration value="Determinata" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TipDurata" nillable="true" type="tns:TipDurata" />
+  <xs:simpleType name="TipNorma">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NormaIntreaga" />
+      <xs:enumeration value="TimpPartial" />
+      <xs:enumeration value="NormaOUG132" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TipNorma" nillable="true" type="tns:TipNorma" />
+  <xs:complexType name="ContractMutareDetalii">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditableEntity">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="AngajatorSursaCui">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="AngajatorSursaDenumire">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="DataImport" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="TipMutare" type="tns:TipMutare" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractMutareDetalii" nillable="true" type="tns:ContractMutareDetalii" />
+  <xs:complexType name="ArrayOfSpor">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="Spor" type="tns:Spor" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSpor" nillable="true" type="tns:ArrayOfSpor" />
+  <xs:complexType name="Spor">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditableEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IsProcent" type="xs:boolean" />
+          <xs:element minOccurs="1" name="Tip" type="tns:TipSpor" />
+          <xs:element minOccurs="1" name="Valoare" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Spor" nillable="true" type="tns:Spor" />
+  <xs:complexType name="ContractStare">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditableEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DataIncetareDetasare" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataIncetareSuspendare" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StarePrecedenta" nillable="true" type="tns:ContractStare" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStare" nillable="true" type="tns:ContractStare" />
+  <xs:complexType name="ContractStareMutare">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStare">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="AngajatorCui">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="AngajatorNume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="DataMutare" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="TemeiLegal" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="TipMutare" type="tns:TipMutare" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareMutare" nillable="true" type="tns:ContractStareMutare" />
+  <xs:complexType name="ContractStareReactivare">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStareActiv">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="DataReactivare" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Explicatie" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="TemeiLegal" type="tns:TemeiReactivare" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareReactivare" nillable="true" type="tns:ContractStareReactivare" />
+  <xs:complexType name="ContractStareActiv">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStare">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareActiv" nillable="true" type="tns:ContractStareActiv" />
+  <xs:complexType name="ContractStareSuspendare">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStare">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="DataInceput" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataIncetare" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataSfarsit" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Explicatie" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="TemeiLegal" type="tns:TemeiSuspendare" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareSuspendare" nillable="true" type="tns:ContractStareSuspendare" />
+  <xs:complexType name="ContractStareIncetare">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStare">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="DataIncetare" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Explicatie" nillable="true">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="TemeiLegal" type="tns:TemeiIncetare" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareIncetare" nillable="true" type="tns:ContractStareIncetare" />
+  <xs:complexType name="ContractStareDetasare">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ContractStare">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="AngajatorCui">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="AngajatorNume">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="256" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="DataInceput" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataIncetare" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="DataSfarsit" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="Nationalitate" type="tns:Nationalitate" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContractStareDetasare" nillable="true" type="tns:ContractStareDetasare" />
+  <xs:complexType name="DetaliiSalariatStrain">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuditableEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DataInceputAutorizatie" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DataSfarsitAutorizatie" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="1" name="TipAutorizatie" type="tns:TipAutorizatie" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DetaliiSalariatStrain" nillable="true" type="tns:DetaliiSalariatStrain" />
+</xs:schema>

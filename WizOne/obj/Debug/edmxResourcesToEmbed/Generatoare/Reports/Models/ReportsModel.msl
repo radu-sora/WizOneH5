@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="WIZONE_H5ModelStoreContainer" CdmEntityContainer="ReportsEntities">
+    <EntitySetMapping Name="Reports">
+      <EntityTypeMapping TypeName="ReportsModel.Report">
+        <MappingFragment StoreEntitySet="DynReports">
+          <ScalarProperty Name="ReportId" ColumnName="DynReportId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ReportTypeId" ColumnName="DynReportTypeId" />
+          <ScalarProperty Name="LayoutData" ColumnName="LayoutData" />
+          <ScalarProperty Name="RegUserId" ColumnName="RegUserId" />
+          <ScalarProperty Name="UpdUserId" ColumnName="UpdUserId" />
+          <ScalarProperty Name="RegDate" ColumnName="RegDate" />
+          <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReportsUsers">
+      <EntityTypeMapping TypeName="ReportsModel.ReportUser">
+        <MappingFragment StoreEntitySet="DynReportsUsers">
+          <ScalarProperty Name="ReportUserId" ColumnName="DynReportUserId" />
+          <ScalarProperty Name="ReportId" ColumnName="DynReportId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="LayoutData" ColumnName="LayoutData" />
+          <ScalarProperty Name="RegUserId" ColumnName="RegUserId" />
+          <ScalarProperty Name="UpdUserId" ColumnName="UpdUserId" />
+          <ScalarProperty Name="RegDate" ColumnName="RegDate" />
+          <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReportTypes">
+      <EntityTypeMapping TypeName="ReportsModel.ReportType">
+        <MappingFragment StoreEntitySet="DynReportTypes">
+          <ScalarProperty Name="ReportTypeId" ColumnName="DynReportTypeId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

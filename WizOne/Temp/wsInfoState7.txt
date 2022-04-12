@@ -1,0 +1,562 @@
+Data:    10.01.2020 14:19:51
+Pagina:    Rollback
+Eveni:     DamiSqlCommand
+Eroarea:   This SqlTransaction has completed; it is no longer usable.
+-----------------------------------------------------
+Data:    10.01.2020 14:19:51
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   This SqlTransaction has completed; it is no longer usable.
+-----------------------------------------------------
+Data:    10.01.2020 14:19:51
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   ROLLBACK TRAN
+-----------------------------------------------------
+Data:    10.01.2020 14:19:51
+Pagina:    Cereri.aspx
+Eveni:     SalveazaDate
+Eroarea:   Object cannot be cast from DBNull to other types.
+-----------------------------------------------------
+Data:    10.01.2020 14:20:59
+Pagina:    Rollback
+Eveni:     DamiSqlCommand
+Eroarea:   This SqlTransaction has completed; it is no longer usable.
+-----------------------------------------------------
+Data:    10.01.2020 14:20:59
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   This SqlTransaction has completed; it is no longer usable.
+-----------------------------------------------------
+Data:    10.01.2020 14:20:59
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   ROLLBACK TRAN
+-----------------------------------------------------
+Data:    10.01.2020 14:20:59
+Pagina:    Cereri.aspx
+Eveni:     SalveazaDate
+Eroarea:   Object cannot be cast from DBNull to other types.
+-----------------------------------------------------
+Data:    10.01.2020 14:21:55
+Pagina:    Rollback
+Eveni:     DamiSqlCommand
+Eroarea:   This SqlTransaction has completed; it is no longer usable.
+-----------------------------------------------------
+Data:    10.01.2020 14:21:55
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   This SqlTransaction has completed; it is no longer usable.
+-----------------------------------------------------
+Data:    10.01.2020 14:21:55
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   ROLLBACK TRAN
+-----------------------------------------------------
+Data:    10.01.2020 14:21:55
+Pagina:    Cereri.aspx
+Eveni:     SalveazaDate
+Eroarea:   Object cannot be cast from DBNull to other types.
+-----------------------------------------------------
+Data:    13.01.2020 08:00:20
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   Invalid object name 'WIZ_COMPANYSAL_ANDE.dbo.F910'.
+-----------------------------------------------------
+Data:    13.01.2020 08:00:20
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   IF((SELECT COUNT(*) FROM "Ptj_Intrari" WHERE F10003 = 10023 AND "Ziua" = CONVERT(date,'2020-01-13')) = 0) 
+INSERT INTO "Ptj_Intrari"(F10003, "Ziua", "ZiSapt", "ZiLibera", "ZiLiberaLegala", "IdContract", "Norma", F10002, F10004, F10005, F10006, F10007, F06204, "ValStr", USER_NO, TIME) 
+SELECT 10023, CONVERT(date,'2020-01-13'), 1, 0, 0, (SELECT X."IdContract" FROM "F100Contracte" X WHERE X.F10003 = 10023 AND X."DataInceput" <= CONVERT(date,'2020-01-13') AND CONVERT(date,'2020-01-13') <= X."DataSfarsit"), 8, 1, 1111, 1, 112, 114, -1, 'CO', 2, GetDate()
+ELSE 
+UPDATE "Ptj_Intrari" SET "ValStr"='CO', "Val0"=null, "Val1"=null, "Val2"=null, "Val3"=null, "Val4"=null, "Val5"=null, "Val6"=null, "Val7"=null, "Val8"=null, "Val9"=null, "Val10"=null, "Val11"=null, "Val12"=null, "Val13"=null, "Val14"=null, "Val15"=null, "Val16"=null, "Val17"=null, "Val18"=null, "Val19"=null, "Val20"=null WHERE F10003 = 10023 AND "Ziua" = CONVERT(date,'2020-01-13'); 
+; 
+INSERT INTO "Ptj_IstoricVal"(F10003, "Ziua", "ValStr", "ValStrOld", "IdUser", "DataModif", USER_NO, TIME, "Observatii") 
+                                                VALUES(10023, CONVERT(date,'2020-01-13'), 'CO', '', 2, GetDate(), 2, GetDate(), 'Din Cereri'); 
+
+-----------------------------------------------------
+Data:    13.01.2020 08:00:20
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   Invalid object name 'WIZ_COMPANYSAL_ANDE.dbo.F910'.
+-----------------------------------------------------
+Data:    13.01.2020 08:00:20
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   BEGIN
+UPDATE ent
+                        SET ent.Val0=(case when IdContract between 1 and 12 then isnull(F1,0) else isnull(Val0,0) end)
+                        FROM Ptj_Intrari ent
+                        WHERE ent.F10003=10023 AND Ziua=CONVERT(date,'2020-01-13');
+UPDATE ent
+                        SET ent.Val2=(case when IdContract between 1 and 12 then isnull(F2,0) else isnull(Val2,0) end)
+                        FROM Ptj_Intrari ent
+                        WHERE ent.F10003=10023 AND Ziua=CONVERT(date,'2020-01-13');
+UPDATE ent
+                        SET ent.Val3=(case when IdContract between 1 and 12 then isnull(F3,0) else isnull(Val3,0) end)
+                        FROM Ptj_Intrari ent
+                        WHERE ent.F10003=10023 AND Ziua=CONVERT(date,'2020-01-13');
+UPDATE ent
+                        SET ent.Val5=(case when IdContract between 1 and 12 then isnull(F5,0) else isnull(Val5,0) end)
+                        FROM Ptj_Intrari ent
+                        WHERE ent.F10003=10023 AND Ziua=CONVERT(date,'2020-01-13');
+
+END;
+-----------------------------------------------------
+Data:    13.01.2020 08:00:23
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   Invalid object name 'WIZ_COMPANYSAL_ANDE.dbo.F910'.
+-----------------------------------------------------
+Data:    13.01.2020 08:00:23
+Pagina:    General
+Eveni:     DamiSqlCommand
+Eroarea:   BEGIN
+UPDATE ent
+                        SET ent.Val0=(case when IdContract between 1 and 12 then isnull(F1,0) else isnull(Val0,0) end)
+                        FROM Ptj_Intrari ent
+                        WHERE ent.F10003=10023 AND Ziua=CONVERT(date,'2020-01-13');
+UPDATE ent
+                        SET ent.Val2=(case when IdContract between 1 and 12 then isnull(F2,0) else isnull(Val2,0) end)
+                        FROM Ptj_Intrari ent
+                        WHERE ent.F10003=10023 AND Ziua=CONVERT(date,'2020-01-13');
+UPDATE ent
+                        SET ent.Val3=(case when IdContract between 1 and 12 then isnull(F3,0) else isnull(Val3,0) end)
+                        FROM Ptj_Intrari ent
+                        WHERE ent.F10003=10023 AND Ziua=CONVERT(date,'2020-01-13');
+UPDATE ent
+                        SET ent.Val5=(case when IdContract between 1 and 12 then isnull(F5,0) else isnull(Val5,0) end)
+                        FROM Ptj_Intrari ent
+                        WHERE ent.F10003=10023 AND Ziua=CONVERT(date,'2020-01-13');
+
+END;
+-----------------------------------------------------
+Data:    13.01.2020 13:51:39
+Pagina:    MainPage.aspx
+Eveni:     Page_Load
+Eroarea:   Column 'HasPassword' does not belong to table DynReports.
+-----------------------------------------------------
+Data:    13.01.2020 13:51:56
+Pagina:    MainPage.aspx
+Eveni:     Page_Load
+Eroarea:   Column 'HasPassword' does not belong to table DynReports.
+-----------------------------------------------------
+Data:    15.01.2020 12:33:21
+Pagina:    General
+Eveni:     SalveazaDate
+Eroarea:   Concurrency violation: the UpdateCommand affected 0 of the expected 1 records.
+-----------------------------------------------------
+Data:    15.01.2020 12:38:02
+Pagina:    General
+Eveni:     SalveazaDate
+Eroarea:   Concurrency violation: the UpdateCommand affected 0 of the expected 1 records.
+-----------------------------------------------------
+Data:    15.01.2020 13:30:07
+Pagina:    DateAngajat.aspx
+Eveni:     Initializare
+Eroarea:   There is no row at position 0.
+-----------------------------------------------------
+Data:    15.01.2020 13:30:08
+Pagina:    DateAngajat.aspx
+Eveni:     Page_Load
+Eroarea:   Cannot find table 1.
+-----------------------------------------------------
+Data:    15.01.2020 13:30:08
+Pagina:    DateAngajat.aspx
+Eveni:     Page_Load
+Eroarea:   Object reference not set to an instance of an object.
+-----------------------------------------------------
+Data:    15.01.2020 13:32:53
+Pagina:    DateAngajat.aspx
+Eveni:     Initializare
+Eroarea:   There is no row at position 0.
+-----------------------------------------------------
+Data:    15.01.2020 13:32:54
+Pagina:    DateAngajat.aspx
+Eveni:     Page_Load
+Eroarea:   Cannot find table 1.
+-----------------------------------------------------
+Data:    15.01.2020 13:32:54
+Pagina:    DateAngajat.aspx
+Eveni:     Page_Load
+Eroarea:   Object reference not set to an instance of an object.
+-----------------------------------------------------
+Data:    15.01.2020 13:32:56
+Pagina:    AppError
+Eroarea:   Exception of type 'System.Web.HttpUnhandledException' was thrown.System.NullReferenceException: Object reference not set to an instance of an object.
+   at WizOne.Personal.Contract.Page_Init(Object sender, EventArgs e) in D:\WizOneH5\WizOne\Personal\Contract.ascx.cs:line 26
+   at System.Web.Util.CalliEventHandlerDelegateProxy.Callback(Object sender, EventArgs e)
+   at System.Web.UI.Control.OnInit(EventArgs e)
+   at System.Web.UI.UserControl.OnInit(EventArgs e)
+   at System.Web.UI.Control.InitRecursive(Control namingContainer)
+   at System.Web.UI.Control.InitRecursive(Control namingContainer)
+   at System.Web.UI.Control.InitRecursive(Control namingContainer)
+   at System.Web.UI.Control.AddedControl(Control control, Int32 index)
+   at System.Web.UI.ControlCollection.Add(Control child)
+   at DevExpress.Web.Internal.ContentControlLite.CreateControlHierarchy()
+   at DevExpress.Web.ASPxWebControlBase.CreateChildControls()
+   at System.Web.UI.Control.EnsureChildControls()
+   at DevExpress.Web.ASPxWebControlBase.EnsureChildControls()
+   at DevExpress.Web.ASPxWebControlBase.DevExpress.Web.Internal.IWebControl.EnsureChildControls()
+   at DevExpress.Web.Internal.RenderUtils.EnsureChildControlsRecursive(Control control, Predicate`1 skipControlCondition)
+   at DevExpress.Web.Internal.RenderUtils.EnsureChildControlsRecursive(Control control, Predicate`1 skipControlCondition)
+   at DevExpress.Web.Internal.RenderUtils.EnsureChildControlsRecursive(Control control, Predicate`1 skipControlCondition)
+   at DevExpress.Web.Internal.RenderUtils.EnsureChildControlsRecursive(Control control, Boolean skipContentContainers)
+   at DevExpress.Web.ASPxWebControlBase.EnsureChildControlsRecursive(Control control, Boolean skipContentContainers)
+   at DevExpress.Web.ASPxWebControlBase.EnsureChildControlsRecursive(Control control)
+   at DevExpress.Web.ASPxWebControlBase.CreateChildControls()
+   at System.Web.UI.Control.EnsureChildControls()
+   at DevExpress.Web.ASPxWebControlBase.EnsureChildControls()
+   at DevExpress.Web.ASPxWebControlBase.DevExpress.Web.Internal.IWebControl.EnsureChildControls()
+   at DevExpress.Web.Internal.RenderUtils.EnsureChildControlsRecursive(Control control, Predicate`1 skipControlCondition)
+   at DevExpress.Web.Internal.RenderUtils.EnsureChildControlsRecursive(Control control, Predicate`1 skipControlCondition)
+   at DevExpress.Web.Internal.RenderUtils.EnsureChildControlsRecursive(Control control, Boolean skipContentContainers)
+   at DevExpress.Web.ASPxWebControlBase.EnsureChildControlsRecursive(Control control, Boolean skipContentContainers)
+   at DevExpress.Web.ASPxWebControlBase.EnsureChildControlsRecursive(Control control)
+   at DevExpress.Web.ASPxWebControlBase.CreateChildControls()
+   at DevExpress.Web.ASPxWebControl.CreateChildControls()
+   at System.Web.UI.Control.EnsureChildControls()
+   at DevExpress.Web.ASPxWebControlBase.EnsureChildControls()
+   at System.Web.UI.Control.PreRenderRecursiveInternal()
+   at System.Web.UI.Control.PreRenderRecursiveInternal()
+   at System.Web.UI.Control.PreRenderRecursiveInternal()
+   at System.Web.UI.Control.PreRenderRecursiveInternal()
+   at System.Web.UI.Control.PreRenderRecursiveInternal()
+   at System.Web.UI.Control.PreRenderRecursiveInternal()
+   at System.Web.UI.Control.PreRenderRecursiveInternal()
+   at System.Web.UI.Control.PreRenderRecursiveInternal()
+   at System.Web.UI.Control.PreRenderRecursiveInternal()
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+-----------------------------------------------------
+Data:    1/16/2020 9:38:55 AM
+Pagina:    Default.aspx
+Eveni:     VerificaUser
+Eroarea:   Object reference not set to an instance of an object.
+-----------------------------------------------------
+Data:    1/16/2020 9:39:00 AM
+Pagina:    Default.aspx
+Eveni:     VerificaUser
+Eroarea:   Object reference not set to an instance of an object.
+-----------------------------------------------------
+Data:    1/16/2020 9:39:13 AM
+Pagina:    Default.aspx
+Eveni:     VerificaUser
+Eroarea:   Object reference not set to an instance of an object.
+-----------------------------------------------------
+Data:    16.01.2020 12:17:19
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00904: "OraSfarsit": invalid identifier
+-----------------------------------------------------
+Data:    16.01.2020 12:17:19
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT COUNT(*) FROM (SELECT A."Id", B.F10003, B.F10008 || ' ' || B.F10009 AS "NumeAngajat", A."IdAbsenta", A."DataInceput", A."DataSfarsit", B.F100901 AS EID,
+                                CASE WHEN E."Alias" IS NULL OR E."Alias"='' THEN E."Denumire" ELSE E."Alias" END AS "RolDenumire",
+                                A."Rol", A."Actiune", A."Inlocuitor", COALESCE(C."AdaugaAtasament",0) AS "AdaugaAtasament",
+                                CASE WHEN C."IdTipOre" = 1 THEN A."NrZile" ELSE null END AS "NrZile", 
+                                CASE WHEN C."IdTipOre" = 0 THEN A."NrOre" ELSE NULL END AS "NrOre", 
+                                A."Observatii", D.F10008 || ' ' || D.F10009 AS "NumeInlocuitor", A."IdStare", 
+                                CASE WHEN A."TrimiteLa" = -13 THEN 'Banca' ELSE CASE WHEN A."TrimiteLa"= -14 THEN 'Plata' ELSE Q."Denumire" END END AS "TrimiteLa", 
+                                A."Comentarii", C."Compensare", C."CompensareBanca", C."CompensarePlata",
+                                M."Denumire" AS "CompensareBancaDenumire", N."Denumire" AS "CompensarePlataDenumire",
+                                CASE WHEN "CampExtra1" IS NOT NULL  AND "CampExtra1" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=1) || '=' || "CampExtra1" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra2" IS NOT NULL  AND "CampExtra2" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=2) || '=' || "CampExtra2" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra3" IS NOT NULL  AND "CampExtra3" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=3) || '=' || "CampExtra3" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra4" IS NOT NULL  AND "CampExtra4" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=4) || '=' || "CampExtra4" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra5" IS NOT NULL  AND "CampExtra5" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=5) || '=' || "CampExtra5" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra6" IS NOT NULL  AND "CampExtra6" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=6) || '=' || "CampExtra6" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra7" IS NOT NULL  AND "CampExtra7" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=7) || '=' || "CampExtra7" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra8" IS NOT NULL  AND "CampExtra8" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=8) || '=' || "CampExtra8" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra9" IS NOT NULL  AND "CampExtra9" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=9) || '=' || "CampExtra9" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra10" IS NOT NULL  AND "CampExtra10" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=10) || '=' || "CampExtra10" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra11" IS NOT NULL  AND "CampExtra11" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=11) || '=' || "CampExtra11" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra12" IS NOT NULL  AND "CampExtra12" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=12) || '=' || "CampExtra12" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra13" IS NOT NULL  AND "CampExtra13" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=13) || '=' || "CampExtra13" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra14" IS NOT NULL  AND "CampExtra14" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=14) || '=' || "CampExtra14" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra15" IS NOT NULL  AND "CampExtra15" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=15) || '=' || "CampExtra15" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra16" IS NOT NULL  AND "CampExtra16" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=16) || '=' || "CampExtra16" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra17" IS NOT NULL  AND "CampExtra17" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=17) || '=' || "CampExtra17" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra18" IS NOT NULL  AND "CampExtra18" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=18) || '=' || "CampExtra18" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra19" IS NOT NULL  AND "CampExtra19" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=19) || '=' || "CampExtra19" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra20" IS NOT NULL  AND "CampExtra20" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=20) || '=' || "CampExtra20" || '; ' ELSE '' END || 
+                                
+                                CASE WHEN "OraInceput" IS NOT NULL AND "OraSfarsit" IS NOT NULL THEN 
+                                TO_CHAR("OraInceput", 'HH24') || ':' || TO_CHAR("OraInceput", 'MM') || ' - ' || TO_CHAR("OraSfarsit", 'HH24') || ':' || TO_CHAR("OraSfarsit", 'MM') || '; ' ELSE '' END
+                                AS "DateConcatenate", COALESCE(A."CampBifa",0) AS "CampBifa", 
+                        (SELECT "Valoare" FROM "Ptj_CereriDrepturi" DR WHERE DR."IdAbs" IN (A."IdAbsenta",-13) AND DR."IdStare" IN (A."IdStare", -13) AND DR."IdRol" IN (A."Rol", -13) AND DR."IdActiune" IN (3, -13) AND ROWNUM <=1) AS "Anulare_Valoare",
+                        (SELECT "NrZile"  FROM "Ptj_CereriDrepturi" DR WHERE DR."IdAbs" IN (A."IdAbsenta",-13) AND DR."IdStare" IN (A."IdStare", -13) AND DR."IdRol" IN (A."Rol", -13) AND DR."IdActiune" IN (3, -13) AND ROWNUM <=1) AS "Anulare_NrZile" 
+                                FROM (SELECT A.*, 0 AS "Rol",
+                                CASE WHEN (A."IdStare" IN (-1, 0, 3) OR B."IdCerere" IS NULL) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                LEFT JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."Pozitie" <> 0 AND B."IdUser" = 99 AND B."IdStare" IN (1, 2, 3, 4)
+                                WHERE A.F10003 = -99
+                                UNION
+                                SELECT A.*, CASE WHEN C."Id" IS NOT NULL THEN C."Id" ELSE (CASE WHEN B."IdSuper" > 0 THEN 76 ELSE C."Id" END) END AS "Rol",
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN (A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."Pozitie" <> 0 AND B."IdStare" <> -1 AND B."IdUser" = 99
+                                LEFT JOIN "tblSupervizori" C ON (-1 * B."IdSuper")= C."Id"     --AND COALESCE(C."ModululCereriAbsente", 0) = 1
+                                WHERE A.F10003 <> -99 
+                                UNION
+                                SELECT A.*, 78 AS "Rol",
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."IdSuper" <> 0 AND B."IdStare" <> -1 AND B."Pozitie" <> 0 AND B."IdUser" IN 
+                                (
+                                -99
+                                )
+                                WHERE 1 = 1  
+                                UNION
+                                SELECT A.*, 78 AS Rol,
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."IdSuper" <> 0 AND B."IdStare" <> -1 AND B."Pozitie" <> 0 AND B."IdUser" IN 
+                                (SELECT "IdUser" FROM "tblDelegari" WHERE COALESCE("IdModul",-99)=1 AND "IdDelegat"=99 AND "DataInceput" <= SYSDATE AND SYSDATE <= "DataSfarsit") ) A
+                                INNER JOIN F100 B ON A.F10003 = B.F10003
+                                INNER JOIN "Ptj_tblAbsente" C ON A."IdAbsenta" = C."Id"
+                                LEFT JOIN "Ptj_tblAbsente" M ON C."CompensareBanca" = M."Id"
+                                LEFT JOIN "Ptj_tblAbsente" N ON C."CompensarePlata" = N."Id"
+                                LEFT JOIN "Ptj_tblAbsente" Q ON A."TrimiteLa" = Q."Id"
+                                LEFT JOIN F100 D ON A."Inlocuitor" = D.F10003
+                                LEFT JOIN "tblSupervizori" E ON A."Rol" = E."Id"
+                                WHERE 1=1  AND A."Actiune" = 1 AND A."IdStare" IN (1,2) ) X
+-----------------------------------------------------
+Data:    16.01.2020 12:17:50
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00904: "OraSfarsit": invalid identifier
+-----------------------------------------------------
+Data:    16.01.2020 12:17:50
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT COUNT(*) FROM (SELECT A."Id", B.F10003, B.F10008 || ' ' || B.F10009 AS "NumeAngajat", A."IdAbsenta", A."DataInceput", A."DataSfarsit", B.F100901 AS EID,
+                                CASE WHEN E."Alias" IS NULL OR E."Alias"='' THEN E."Denumire" ELSE E."Alias" END AS "RolDenumire",
+                                A."Rol", A."Actiune", A."Inlocuitor", COALESCE(C."AdaugaAtasament",0) AS "AdaugaAtasament",
+                                CASE WHEN C."IdTipOre" = 1 THEN A."NrZile" ELSE null END AS "NrZile", 
+                                CASE WHEN C."IdTipOre" = 0 THEN A."NrOre" ELSE NULL END AS "NrOre", 
+                                A."Observatii", D.F10008 || ' ' || D.F10009 AS "NumeInlocuitor", A."IdStare", 
+                                CASE WHEN A."TrimiteLa" = -13 THEN 'Banca' ELSE CASE WHEN A."TrimiteLa"= -14 THEN 'Plata' ELSE Q."Denumire" END END AS "TrimiteLa", 
+                                A."Comentarii", C."Compensare", C."CompensareBanca", C."CompensarePlata",
+                                M."Denumire" AS "CompensareBancaDenumire", N."Denumire" AS "CompensarePlataDenumire",
+                                CASE WHEN "CampExtra1" IS NOT NULL  AND "CampExtra1" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=1) || '=' || "CampExtra1" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra2" IS NOT NULL  AND "CampExtra2" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=2) || '=' || "CampExtra2" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra3" IS NOT NULL  AND "CampExtra3" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=3) || '=' || "CampExtra3" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra4" IS NOT NULL  AND "CampExtra4" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=4) || '=' || "CampExtra4" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra5" IS NOT NULL  AND "CampExtra5" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=5) || '=' || "CampExtra5" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra6" IS NOT NULL  AND "CampExtra6" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=6) || '=' || "CampExtra6" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra7" IS NOT NULL  AND "CampExtra7" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=7) || '=' || "CampExtra7" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra8" IS NOT NULL  AND "CampExtra8" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=8) || '=' || "CampExtra8" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra9" IS NOT NULL  AND "CampExtra9" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=9) || '=' || "CampExtra9" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra10" IS NOT NULL  AND "CampExtra10" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=10) || '=' || "CampExtra10" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra11" IS NOT NULL  AND "CampExtra11" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=11) || '=' || "CampExtra11" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra12" IS NOT NULL  AND "CampExtra12" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=12) || '=' || "CampExtra12" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra13" IS NOT NULL  AND "CampExtra13" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=13) || '=' || "CampExtra13" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra14" IS NOT NULL  AND "CampExtra14" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=14) || '=' || "CampExtra14" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra15" IS NOT NULL  AND "CampExtra15" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=15) || '=' || "CampExtra15" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra16" IS NOT NULL  AND "CampExtra16" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=16) || '=' || "CampExtra16" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra17" IS NOT NULL  AND "CampExtra17" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=17) || '=' || "CampExtra17" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra18" IS NOT NULL  AND "CampExtra18" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=18) || '=' || "CampExtra18" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra19" IS NOT NULL  AND "CampExtra19" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=19) || '=' || "CampExtra19" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra20" IS NOT NULL  AND "CampExtra20" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=20) || '=' || "CampExtra20" || '; ' ELSE '' END || 
+                                
+                                CASE WHEN "OraInceput" IS NOT NULL AND "OraSfarsit" IS NOT NULL THEN 
+                                TO_CHAR("OraInceput", 'HH24') || ':' || TO_CHAR("OraInceput", 'MM') || ' - ' || TO_CHAR("OraSfarsit", 'HH24') || ':' || TO_CHAR("OraSfarsit", 'MM') || '; ' ELSE '' END
+                                AS "DateConcatenate", COALESCE(A."CampBifa",0) AS "CampBifa", 
+                        (SELECT "Valoare" FROM "Ptj_CereriDrepturi" DR WHERE DR."IdAbs" IN (A."IdAbsenta",-13) AND DR."IdStare" IN (A."IdStare", -13) AND DR."IdRol" IN (A."Rol", -13) AND DR."IdActiune" IN (3, -13) AND ROWNUM <=1) AS "Anulare_Valoare",
+                        (SELECT "NrZile"  FROM "Ptj_CereriDrepturi" DR WHERE DR."IdAbs" IN (A."IdAbsenta",-13) AND DR."IdStare" IN (A."IdStare", -13) AND DR."IdRol" IN (A."Rol", -13) AND DR."IdActiune" IN (3, -13) AND ROWNUM <=1) AS "Anulare_NrZile" 
+                                FROM (SELECT A.*, 0 AS "Rol",
+                                CASE WHEN (A."IdStare" IN (-1, 0, 3) OR B."IdCerere" IS NULL) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                LEFT JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."Pozitie" <> 0 AND B."IdUser" = 99 AND B."IdStare" IN (1, 2, 3, 4)
+                                WHERE A.F10003 = -99
+                                UNION
+                                SELECT A.*, CASE WHEN C."Id" IS NOT NULL THEN C."Id" ELSE (CASE WHEN B."IdSuper" > 0 THEN 76 ELSE C."Id" END) END AS "Rol",
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN (A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."Pozitie" <> 0 AND B."IdStare" <> -1 AND B."IdUser" = 99
+                                LEFT JOIN "tblSupervizori" C ON (-1 * B."IdSuper")= C."Id"     --AND COALESCE(C."ModululCereriAbsente", 0) = 1
+                                WHERE A.F10003 <> -99 
+                                UNION
+                                SELECT A.*, 78 AS "Rol",
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."IdSuper" <> 0 AND B."IdStare" <> -1 AND B."Pozitie" <> 0 AND B."IdUser" IN 
+                                (
+                                -99
+                                )
+                                WHERE 1 = 1  
+                                UNION
+                                SELECT A.*, 78 AS Rol,
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."IdSuper" <> 0 AND B."IdStare" <> -1 AND B."Pozitie" <> 0 AND B."IdUser" IN 
+                                (SELECT "IdUser" FROM "tblDelegari" WHERE COALESCE("IdModul",-99)=1 AND "IdDelegat"=99 AND "DataInceput" <= SYSDATE AND SYSDATE <= "DataSfarsit") ) A
+                                INNER JOIN F100 B ON A.F10003 = B.F10003
+                                INNER JOIN "Ptj_tblAbsente" C ON A."IdAbsenta" = C."Id"
+                                LEFT JOIN "Ptj_tblAbsente" M ON C."CompensareBanca" = M."Id"
+                                LEFT JOIN "Ptj_tblAbsente" N ON C."CompensarePlata" = N."Id"
+                                LEFT JOIN "Ptj_tblAbsente" Q ON A."TrimiteLa" = Q."Id"
+                                LEFT JOIN F100 D ON A."Inlocuitor" = D.F10003
+                                LEFT JOIN "tblSupervizori" E ON A."Rol" = E."Id"
+                                WHERE 1=1  AND A."Actiune" = 1 AND A."IdStare" IN (1,2) ) X
+-----------------------------------------------------
+Data:    16.01.2020 12:17:54
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00904: "OraSfarsit": invalid identifier
+-----------------------------------------------------
+Data:    16.01.2020 12:17:54
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT COUNT(*) FROM (SELECT A."Id", B.F10003, B.F10008 || ' ' || B.F10009 AS "NumeAngajat", A."IdAbsenta", A."DataInceput", A."DataSfarsit", B.F100901 AS EID,
+                                CASE WHEN E."Alias" IS NULL OR E."Alias"='' THEN E."Denumire" ELSE E."Alias" END AS "RolDenumire",
+                                A."Rol", A."Actiune", A."Inlocuitor", COALESCE(C."AdaugaAtasament",0) AS "AdaugaAtasament",
+                                CASE WHEN C."IdTipOre" = 1 THEN A."NrZile" ELSE null END AS "NrZile", 
+                                CASE WHEN C."IdTipOre" = 0 THEN A."NrOre" ELSE NULL END AS "NrOre", 
+                                A."Observatii", D.F10008 || ' ' || D.F10009 AS "NumeInlocuitor", A."IdStare", 
+                                CASE WHEN A."TrimiteLa" = -13 THEN 'Banca' ELSE CASE WHEN A."TrimiteLa"= -14 THEN 'Plata' ELSE Q."Denumire" END END AS "TrimiteLa", 
+                                A."Comentarii", C."Compensare", C."CompensareBanca", C."CompensarePlata",
+                                M."Denumire" AS "CompensareBancaDenumire", N."Denumire" AS "CompensarePlataDenumire",
+                                CASE WHEN "CampExtra1" IS NOT NULL  AND "CampExtra1" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=1) || '=' || "CampExtra1" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra2" IS NOT NULL  AND "CampExtra2" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=2) || '=' || "CampExtra2" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra3" IS NOT NULL  AND "CampExtra3" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=3) || '=' || "CampExtra3" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra4" IS NOT NULL  AND "CampExtra4" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=4) || '=' || "CampExtra4" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra5" IS NOT NULL  AND "CampExtra5" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=5) || '=' || "CampExtra5" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra6" IS NOT NULL  AND "CampExtra6" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=6) || '=' || "CampExtra6" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra7" IS NOT NULL  AND "CampExtra7" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=7) || '=' || "CampExtra7" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra8" IS NOT NULL  AND "CampExtra8" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=8) || '=' || "CampExtra8" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra9" IS NOT NULL  AND "CampExtra9" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=9) || '=' || "CampExtra9" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra10" IS NOT NULL  AND "CampExtra10" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=10) || '=' || "CampExtra10" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra11" IS NOT NULL  AND "CampExtra11" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=11) || '=' || "CampExtra11" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra12" IS NOT NULL  AND "CampExtra12" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=12) || '=' || "CampExtra12" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra13" IS NOT NULL  AND "CampExtra13" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=13) || '=' || "CampExtra13" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra14" IS NOT NULL  AND "CampExtra14" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=14) || '=' || "CampExtra14" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra15" IS NOT NULL  AND "CampExtra15" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=15) || '=' || "CampExtra15" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra16" IS NOT NULL  AND "CampExtra16" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=16) || '=' || "CampExtra16" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra17" IS NOT NULL  AND "CampExtra17" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=17) || '=' || "CampExtra17" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra18" IS NOT NULL  AND "CampExtra18" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=18) || '=' || "CampExtra18" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra19" IS NOT NULL  AND "CampExtra19" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=19) || '=' || "CampExtra19" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra20" IS NOT NULL  AND "CampExtra20" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=20) || '=' || "CampExtra20" || '; ' ELSE '' END || 
+                                
+                                CASE WHEN "OraInceput" IS NOT NULL AND "OraSfarsit" IS NOT NULL THEN 
+                                TO_CHAR("OraInceput", 'HH24') || ':' || TO_CHAR("OraInceput", 'MM') || ' - ' || TO_CHAR("OraSfarsit", 'HH24') || ':' || TO_CHAR("OraSfarsit", 'MM') || '; ' ELSE '' END
+                                AS "DateConcatenate", COALESCE(A."CampBifa",0) AS "CampBifa", 
+                        (SELECT "Valoare" FROM "Ptj_CereriDrepturi" DR WHERE DR."IdAbs" IN (A."IdAbsenta",-13) AND DR."IdStare" IN (A."IdStare", -13) AND DR."IdRol" IN (A."Rol", -13) AND DR."IdActiune" IN (3, -13) AND ROWNUM <=1) AS "Anulare_Valoare",
+                        (SELECT "NrZile"  FROM "Ptj_CereriDrepturi" DR WHERE DR."IdAbs" IN (A."IdAbsenta",-13) AND DR."IdStare" IN (A."IdStare", -13) AND DR."IdRol" IN (A."Rol", -13) AND DR."IdActiune" IN (3, -13) AND ROWNUM <=1) AS "Anulare_NrZile" 
+                                FROM (SELECT A.*, 0 AS "Rol",
+                                CASE WHEN (A."IdStare" IN (-1, 0, 3) OR B."IdCerere" IS NULL) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                LEFT JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."Pozitie" <> 0 AND B."IdUser" = 100 AND B."IdStare" IN (1, 2, 3, 4)
+                                WHERE A.F10003 = -99
+                                UNION
+                                SELECT A.*, CASE WHEN C."Id" IS NOT NULL THEN C."Id" ELSE (CASE WHEN B."IdSuper" > 0 THEN 76 ELSE C."Id" END) END AS "Rol",
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN (A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."Pozitie" <> 0 AND B."IdStare" <> -1 AND B."IdUser" = 100
+                                LEFT JOIN "tblSupervizori" C ON (-1 * B."IdSuper")= C."Id"     --AND COALESCE(C."ModululCereriAbsente", 0) = 1
+                                WHERE A.F10003 <> -99 
+                                UNION
+                                SELECT A.*, 78 AS "Rol",
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."IdSuper" <> 0 AND B."IdStare" <> -1 AND B."Pozitie" <> 0 AND B."IdUser" IN 
+                                (
+                                -99
+                                )
+                                WHERE 1 = 1  
+                                UNION
+                                SELECT A.*, 78 AS Rol,
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."IdSuper" <> 0 AND B."IdStare" <> -1 AND B."Pozitie" <> 0 AND B."IdUser" IN 
+                                (SELECT "IdUser" FROM "tblDelegari" WHERE COALESCE("IdModul",-99)=1 AND "IdDelegat"=100 AND "DataInceput" <= SYSDATE AND SYSDATE <= "DataSfarsit") ) A
+                                INNER JOIN F100 B ON A.F10003 = B.F10003
+                                INNER JOIN "Ptj_tblAbsente" C ON A."IdAbsenta" = C."Id"
+                                LEFT JOIN "Ptj_tblAbsente" M ON C."CompensareBanca" = M."Id"
+                                LEFT JOIN "Ptj_tblAbsente" N ON C."CompensarePlata" = N."Id"
+                                LEFT JOIN "Ptj_tblAbsente" Q ON A."TrimiteLa" = Q."Id"
+                                LEFT JOIN F100 D ON A."Inlocuitor" = D.F10003
+                                LEFT JOIN "tblSupervizori" E ON A."Rol" = E."Id"
+                                WHERE 1=1  AND A."Actiune" = 1 AND A."IdStare" IN (1,2) ) X
+-----------------------------------------------------
+Data:    16.01.2020 12:17:59
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   ORA-00904: "OraSfarsit": invalid identifier
+-----------------------------------------------------
+Data:    16.01.2020 12:17:59
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT COUNT(*) FROM (SELECT A."Id", B.F10003, B.F10008 || ' ' || B.F10009 AS "NumeAngajat", A."IdAbsenta", A."DataInceput", A."DataSfarsit", B.F100901 AS EID,
+                                CASE WHEN E."Alias" IS NULL OR E."Alias"='' THEN E."Denumire" ELSE E."Alias" END AS "RolDenumire",
+                                A."Rol", A."Actiune", A."Inlocuitor", COALESCE(C."AdaugaAtasament",0) AS "AdaugaAtasament",
+                                CASE WHEN C."IdTipOre" = 1 THEN A."NrZile" ELSE null END AS "NrZile", 
+                                CASE WHEN C."IdTipOre" = 0 THEN A."NrOre" ELSE NULL END AS "NrOre", 
+                                A."Observatii", D.F10008 || ' ' || D.F10009 AS "NumeInlocuitor", A."IdStare", 
+                                CASE WHEN A."TrimiteLa" = -13 THEN 'Banca' ELSE CASE WHEN A."TrimiteLa"= -14 THEN 'Plata' ELSE Q."Denumire" END END AS "TrimiteLa", 
+                                A."Comentarii", C."Compensare", C."CompensareBanca", C."CompensarePlata",
+                                M."Denumire" AS "CompensareBancaDenumire", N."Denumire" AS "CompensarePlataDenumire",
+                                CASE WHEN "CampExtra1" IS NOT NULL  AND "CampExtra1" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=1) || '=' || "CampExtra1" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra2" IS NOT NULL  AND "CampExtra2" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=2) || '=' || "CampExtra2" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra3" IS NOT NULL  AND "CampExtra3" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=3) || '=' || "CampExtra3" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra4" IS NOT NULL  AND "CampExtra4" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=4) || '=' || "CampExtra4" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra5" IS NOT NULL  AND "CampExtra5" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=5) || '=' || "CampExtra5" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra6" IS NOT NULL  AND "CampExtra6" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=6) || '=' || "CampExtra6" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra7" IS NOT NULL  AND "CampExtra7" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=7) || '=' || "CampExtra7" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra8" IS NOT NULL  AND "CampExtra8" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=8) || '=' || "CampExtra8" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra9" IS NOT NULL  AND "CampExtra9" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=9) || '=' || "CampExtra9" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra10" IS NOT NULL  AND "CampExtra10" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=10) || '=' || "CampExtra10" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra11" IS NOT NULL  AND "CampExtra11" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=11) || '=' || "CampExtra11" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra12" IS NOT NULL  AND "CampExtra12" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=12) || '=' || "CampExtra12" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra13" IS NOT NULL  AND "CampExtra13" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=13) || '=' || "CampExtra13" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra14" IS NOT NULL  AND "CampExtra14" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=14) || '=' || "CampExtra14" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra15" IS NOT NULL  AND "CampExtra15" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=15) || '=' || "CampExtra15" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra16" IS NOT NULL  AND "CampExtra16" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=16) || '=' || "CampExtra16" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra17" IS NOT NULL  AND "CampExtra17" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=17) || '=' || "CampExtra17" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra18" IS NOT NULL  AND "CampExtra18" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=18) || '=' || "CampExtra18" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra19" IS NOT NULL  AND "CampExtra19" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=19) || '=' || "CampExtra19" || '; ' ELSE '' END ||
+                                CASE WHEN "CampExtra20" IS NOT NULL  AND "CampExtra20" IS NOT NULL  THEN (SELECT "Denumire" FROM "Ptj_tblAbsenteConfig" WHERE "IdAbsenta"=1 AND "IdCampExtra"=20) || '=' || "CampExtra20" || '; ' ELSE '' END || 
+                                
+                                CASE WHEN "OraInceput" IS NOT NULL AND "OraSfarsit" IS NOT NULL THEN 
+                                TO_CHAR("OraInceput", 'HH24') || ':' || TO_CHAR("OraInceput", 'MM') || ' - ' || TO_CHAR("OraSfarsit", 'HH24') || ':' || TO_CHAR("OraSfarsit", 'MM') || '; ' ELSE '' END
+                                AS "DateConcatenate", COALESCE(A."CampBifa",0) AS "CampBifa", 
+                        (SELECT "Valoare" FROM "Ptj_CereriDrepturi" DR WHERE DR."IdAbs" IN (A."IdAbsenta",-13) AND DR."IdStare" IN (A."IdStare", -13) AND DR."IdRol" IN (A."Rol", -13) AND DR."IdActiune" IN (3, -13) AND ROWNUM <=1) AS "Anulare_Valoare",
+                        (SELECT "NrZile"  FROM "Ptj_CereriDrepturi" DR WHERE DR."IdAbs" IN (A."IdAbsenta",-13) AND DR."IdStare" IN (A."IdStare", -13) AND DR."IdRol" IN (A."Rol", -13) AND DR."IdActiune" IN (3, -13) AND ROWNUM <=1) AS "Anulare_NrZile" 
+                                FROM (SELECT A.*, 0 AS "Rol",
+                                CASE WHEN (A."IdStare" IN (-1, 0, 3) OR B."IdCerere" IS NULL) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                LEFT JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."Pozitie" <> 0 AND B."IdUser" = 100 AND B."IdStare" IN (1, 2, 3, 4)
+                                WHERE A.F10003 = -99
+                                UNION
+                                SELECT A.*, CASE WHEN C."Id" IS NOT NULL THEN C."Id" ELSE (CASE WHEN B."IdSuper" > 0 THEN 76 ELSE C."Id" END) END AS "Rol",
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN (A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."Pozitie" <> 0 AND B."IdStare" <> -1 AND B."IdUser" = 100
+                                LEFT JOIN "tblSupervizori" C ON (-1 * B."IdSuper")= C."Id"     --AND COALESCE(C."ModululCereriAbsente", 0) = 1
+                                WHERE A.F10003 <> -99 
+                                UNION
+                                SELECT A.*, 78 AS "Rol",
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."IdSuper" <> 0 AND B."IdStare" <> -1 AND B."Pozitie" <> 0 AND B."IdUser" IN 
+                                (
+                                -99
+                                )
+                                WHERE 1 = 1  
+                                UNION
+                                SELECT A.*, 78 AS Rol,
+                                CASE WHEN A."IdStare" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A."Pozitie" + 1) = B."Pozitie" THEN 1 ELSE 0 END) END AS "Actiune"
+                                FROM "Ptj_Cereri" A
+                                INNER JOIN "Ptj_CereriIstoric" B ON A."Id" = B."IdCerere" AND B."IdSuper" <> 0 AND B."IdStare" <> -1 AND B."Pozitie" <> 0 AND B."IdUser" IN 
+                                (SELECT "IdUser" FROM "tblDelegari" WHERE COALESCE("IdModul",-99)=1 AND "IdDelegat"=100 AND "DataInceput" <= SYSDATE AND SYSDATE <= "DataSfarsit") ) A
+                                INNER JOIN F100 B ON A.F10003 = B.F10003
+                                INNER JOIN "Ptj_tblAbsente" C ON A."IdAbsenta" = C."Id"
+                                LEFT JOIN "Ptj_tblAbsente" M ON C."CompensareBanca" = M."Id"
+                                LEFT JOIN "Ptj_tblAbsente" N ON C."CompensarePlata" = N."Id"
+                                LEFT JOIN "Ptj_tblAbsente" Q ON A."TrimiteLa" = Q."Id"
+                                LEFT JOIN F100 D ON A."Inlocuitor" = D.F10003
+                                LEFT JOIN "tblSupervizori" E ON A."Rol" = E."Id"
+                                WHERE 1=1  AND A."Actiune" = 1 AND A."IdStare" IN (1,2) ) X
+-----------------------------------------------------

@@ -186,7 +186,18 @@
                 <dx:ASPxButton ID="btnPtjEch" ClientInstanceName="btnPtjEch" ClientIDMode="Static" runat="server" Text="Pontajul echipei" AutoPostBack="true" PostBackUrl="../Pontaj/PontajEchipa.aspx" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/preluare.png"></Image>
                 </dx:ASPxButton>  
-                <dx:ASPxButton ID="btnInit" ClientInstanceName="btnInit" ClientIDMode="Static" runat="server" Text="Initializare" AutoPostBack="true" OnClick="btnInit_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnInitGlobal" ClientInstanceName="btnInitGlobal" ClientIDMode="Static" runat="server" Text="Initializare globala" OnClick="btnInitGlobal_Click" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) {
+                        pnlLoading.Show();
+                        e.processOnServer = true;
+                    }" />
+                    <Image Url="~/Fisiere/Imagini/Icoane/schimba.png"></Image>
+                </dx:ASPxButton> 
+                <dx:ASPxButton ID="btnInit" ClientInstanceName="btnInit" ClientIDMode="Static" runat="server" Text="Initializare" OnClick="btnInit_Click" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) {
+                        pnlLoading.Show();
+                        e.processOnServer = true;
+                    }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                 </dx:ASPxButton>  
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="../Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >

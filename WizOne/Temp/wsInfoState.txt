@@ -1265,19 +1265,19 @@ Pagina:    Cereri.aspx
 Eveni:     Page_Load
 Eroarea:   Object reference not set to an instance of an object.
 -----------------------------------------------------
-Data:    04/12/2022 15:06:47
+Data:    04/12/2022 15:30:19
 Pagina:    Dami
 Eveni:     AccesApp
 Eroarea:   Object reference not set to an instance of an object.
 -----------------------------------------------------
-Data:    04/12/2022 15:06:47
+Data:    04/12/2022 15:30:19
 Pagina:    General
 Eveni:     IncarcaDT
 Eroarea:   Incorrect syntax near the keyword 'UNION'.
 Incorrect syntax near the keyword 'UNION'.
 Incorrect syntax near ')'.
 -----------------------------------------------------
-Data:    04/12/2022 15:06:47
+Data:    04/12/2022 15:30:19
 Pagina:    General
 Eveni:     IncarcaDT
 Eroarea:   SELECT B."Rol", B.F10003, A.F10008 + ' ' + A.F10009 AS "NumeComplet", A.F10017 AS CNP, A.F10022 AS "DataAngajarii", A.F10023 AS "DataPlecarii",
@@ -1306,17 +1306,17 @@ Eroarea:   SELECT B."Rol", B.F10003, A.F10008 + ' ' + A.F10009 AS "NumeComplet",
                         LEFT JOIN F006 I ON A.F10007 = I.F00607
                         WHERE 1=1 
 -----------------------------------------------------
-Data:    04/12/2022 15:06:47
+Data:    04/12/2022 15:30:19
 Pagina:    Cereri.aspx
 Eveni:     Page_Load
 Eroarea:   Column 'Rol' does not belong to underlying table ''.
 -----------------------------------------------------
-Data:    04/12/2022 15:06:47
+Data:    04/12/2022 15:30:19
 Pagina:    Dami
 Eveni:     AccesApp
 Eroarea:   Object reference not set to an instance of an object.
 -----------------------------------------------------
-Data:    04/12/2022 15:06:47
+Data:    04/12/2022 15:30:19
 Pagina:    Cereri.aspx
 Eveni:     Page_Load
 Eroarea:   Object reference not set to an instance of an object.

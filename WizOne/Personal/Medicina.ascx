@@ -5,11 +5,11 @@
     <table width="100%">
         <tr>
             <td>
-                <dx:ASPxGridView ID="grDateMedicina" runat="server" ClientInstanceName="grDateMedicina" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false" OnDataBinding="grDateMedicina_DataBinding" OnInitNewRow="grDateMedicina_InitNewRow"  OnCustomCallback="grDateMedicina_CustomCallback"
-                    OnRowInserting="grDateMedicina_RowInserting" OnRowUpdating="grDateMedicina_RowUpdating" OnRowDeleting="grDateMedicina_RowDeleting" OnHtmlEditFormCreated="grDateMedicina_HtmlEditFormCreated" OnCellEditorInitialize="grDateMedicina_CellEditorInitialize">        
+                <dx:ASPxGridView ID="grDateMed" runat="server" ClientInstanceName="grDateMed" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false" OnDataBinding="grDateMed_DataBinding" OnInitNewRow="grDateMed_InitNewRow"  OnCustomCallback="grDateMed_CustomCallback"
+                    OnRowInserting="grDateMed_RowInserting" OnRowUpdating="grDateMed_RowUpdating" OnRowDeleting="grDateMed_RowDeleting" OnHtmlEditFormCreated="grDateMed_HtmlEditFormCreated" OnCellEditorInitialize="grDateMed_CellEditorInitialize">        
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  /> 
-                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateMedicina_CustomButtonClick(s, e); }" ContextMenu="ctx" />    
+                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateMed_CustomButtonClick(s, e); }" ContextMenu="ctx" />    
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
@@ -122,10 +122,10 @@
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataElibCtrlMed" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DataElibControlMed") %>' >
-                                                                                 <ClientSideEvents  DateChanged="function(s,e) { grDateMedicina.PerformCallback('valab'); }"/>
+                                                                                 <ClientSideEvents  DateChanged="function(s,e) { grDateMed.PerformCallback('valab'); }"/>
                                                                              </dx:ASPxDateEdit></td>
                                         <td style="padding:10px !important;"><dx:ASPxTextBox ID="txtValab" runat="server" Width="100" Value='<%# Bind("PerioadaValab") %>' >
-                                                                                <ClientSideEvents TextChanged="function(s,e) { grDateMedicina.PerformCallback('valab'); }"/>
+                                                                                <ClientSideEvents TextChanged="function(s,e) { grDateMed.PerformCallback('valab'); }"/>
                                                                              </dx:ASPxTextBox></td>
                                         <td style="padding:10px !important;"><dx:ASPxDateEdit ID="txtDataUrmCtrl" runat="server" EditFormatString="dd/MM/yyyy" EditFormat="Date" Width="110" Value='<%# Bind("DataUrmControl") %>' ReadOnly="true" /></td>
                                     </tr>
@@ -188,7 +188,7 @@
     </table> 
 
     <script>
-        function grDateMedicina_CustomButtonClick(s, e) {
+        function grDateMed_CustomButtonClick(s, e) {
             window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=5&id=' + s.GetRowKey(s.GetFocusedRowIndex()), '_blank ');
         }
 

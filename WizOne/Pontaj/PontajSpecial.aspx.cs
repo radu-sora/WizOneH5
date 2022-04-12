@@ -38,7 +38,8 @@ namespace WizOne.Pontaj
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
                 btnPtjEch.Text = Dami.TraduCuvant("btnPtjEch", "Pontajul echipei");
-                btnInit.Text = Dami.TraduCuvant("btnInit", "Initializare");              
+                btnInit.Text = Dami.TraduCuvant("btnInit", "Initializare");
+                btnInitGlobal.Text = Dami.TraduCuvant("btnInitGlobal", "Initializare globala");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
 
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
@@ -528,6 +529,113 @@ namespace WizOne.Pontaj
             }
 
             return strSql;
+        }
+
+        protected void btnInitGlobal_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string msg = "";
+
+                if (dtDataStart.Value == null || dtDataSfarsit.Value == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Lipseste data start/data sfarsit!"), MessageBox.icoError);
+                    return;
+                }
+
+                if (Convert.ToDateTime(dtDataSfarsit.Value) < Convert.ToDateTime(dtDataStart.Value))
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Data de sfarsit este anterioara datei de start!"), MessageBox.icoError);
+                    return;
+                }
+
+                if (!chkPontare.Checked && !chkPlanif.Checked)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat pentru pontare si/sau planificare!"), MessageBox.icoError);
+                    return;
+                }
+
+                if (txtZiStart.Text.Length <= 0)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati precizat ziua de start!"), MessageBox.icoError);
+                    return;
+                }
+
+                int ziStart = 1;
+                if (!int.TryParse(txtZiStart.Text, out ziStart))
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Ziua de start este invalida!"), MessageBox.icoError);
+                    return;
+                }
+
+
+                DataTable dtSabloane = General.IncarcaDT("SELECT DISTINCT IdSablon FROM PtjSpecial_RelSablonAng ORDER BY IdSablon");
+                if (dtSabloane != null && dtSabloane.Rows.Count > 0)
+                {
+                    for (int k = 0; k < dtSabloane.Rows.Count; k++)
+                    {
+                        List<int> lstMarci = new List<int>();
+
+                        DataTable table = Session["PtjSpecial_Sabloane"] as DataTable;
+                        foreach (DataColumn col in table.Columns)
+                            col.ReadOnly = false;
+
+                        DataRow sablon = table.Select("Id=" + dtSabloane.Rows[k][0].ToString())[0];
+
+                        DataRow sablonSpecial = table.NewRow();
+
+                        for (int i = 1; i <= Convert.ToInt32(sablon["NrZile"].ToString()); i++)
+                        {
+                            sablonSpecial["IdContract" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(sablon["NrZile"].ToString()) ? "IdContract" + (i + ziStart - 1) : "IdContract" + (i + ziStart - 1 - Convert.ToInt32(sablon["NrZile"].ToString()))];
+
+                            sablonSpecial["IdProgram" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(sablon["NrZile"].ToString()) ? "IdProgram" + (i + ziStart - 1) : "IdProgram" + (i + ziStart - 1 - Convert.ToInt32(sablon["NrZile"].ToString()))];
+                            sablonSpecial["Ziua" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(sablon["NrZile"].ToString()) ? "Ziua" + (i + ziStart - 1) : "Ziua" + (i + ziStart - 1 - Convert.ToInt32(sablon["NrZile"].ToString()))];
+                            sablonSpecial["ValZiua" + i] = sablon[(i + ziStart - 1) <= Convert.ToInt32(sablon["NrZile"].ToString()) ? "ValZiua" + (i + ziStart - 1) : "ValZiua" + (i + ziStart - 1 - Convert.ToInt32(sablon["NrZile"].ToString()))];
+                        }
+                        sablonSpecial["TipInit"] = sablon["TipInit"];
+                        sablonSpecial["Id"] = sablon["Id"];
+
+                        DateTime dtStart = Convert.ToDateTime(dtDataStart.Value);
+                        DateTime dtSfarsit = Convert.ToDateTime(dtDataSfarsit.Value);
+
+                        DataTable dtAng = General.IncarcaDT("SELECT F10003 FROM PtjSpecial_RelSablonAng WHERE IdSablon = " + dtSabloane.Rows[k][0].ToString() 
+                            + " AND COALESCE(DataInceput, CONVERT(DATE, '01/01/1900', 103)) <= CONVERT(DATE, '" + dtStart.Day.ToString().PadLeft(2, '0') + "/" + dtStart.Month.ToString().PadLeft(2, '0') + "/" + dtStart.Year.ToString() 
+                            + "', 103) AND CONVERT(DATE, '" + dtSfarsit.Day.ToString().PadLeft(2, '0') + "/" + dtSfarsit.Month.ToString().PadLeft(2, '0') + "/" + dtSfarsit.Year.ToString() + "', 103) <= COALESCE(DataSfarsit, CONVERT(DATE, '01/01/2100', 103))", null) ;
+              
+                        if (dtAng != null)
+                            for (int i = 0; i < dtAng.Rows.Count; i++)
+                            {
+                                lstMarci.Add(Convert.ToInt32(General.Nz(dtAng.Rows[i][0], -99)));
+                            }
+
+                        if (lstMarci.Count > 0)
+                        {
+                            DateTime dt = Convert.ToDateTime(dtDataStart.Value);
+                            while (dt.Year < Convert.ToDateTime(dtDataSfarsit.Value).Year || (dt.Year == Convert.ToDateTime(dtDataSfarsit.Value).Year && dt.Month <= Convert.ToDateTime(dtDataSfarsit.Value).Month))
+                            {
+                                General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month);
+                                dt = dt.AddMonths(1);
+                            }
+                            msg += InitializarePontajSpecial(Convert.ToDateTime(dtDataStart.Value), Convert.ToDateTime(dtDataSfarsit.Value), Convert.ToInt32(sablon["NrZile"].ToString()), sablonSpecial, lstMarci);                            
+                        }
+                    }
+
+                    if (msg.Length > 0)
+                        MessageBox.Show(Dami.TraduCuvant("Eroare la initializare!"), MessageBox.icoError);
+                    else
+                        MessageBox.Show(Dami.TraduCuvant("Initializare reusita!"), MessageBox.icoSuccess);
+                }
+                else
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu este definita corespondenta dintre angajati si sabloane!"), MessageBox.icoError);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
         protected void btnInit_Click(object sender, EventArgs e)

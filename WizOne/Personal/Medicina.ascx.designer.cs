@@ -13,13 +13,13 @@ namespace WizOne.Personal {
     public partial class Medicina {
         
         /// <summary>
-        /// grDateMedicina control.
+        /// grDateMed control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDateMedicina;
+        protected global::DevExpress.Web.ASPxGridView grDateMed;
         
         /// <summary>
         /// btnAtasament control.

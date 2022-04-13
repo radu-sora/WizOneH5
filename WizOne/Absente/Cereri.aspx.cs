@@ -618,7 +618,7 @@ namespace WizOne.Absente
                 #region Verificare Campuri Extra
 
                 string[] lstExtra = new string[20] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
-
+                                                                                                                               
                 DataTable dtEx = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { cmbAbs.Value });
                 for (int i = 0; i < dtEx.Rows.Count; i++)
                 {
@@ -1161,7 +1161,7 @@ namespace WizOne.Absente
             {
                 divDateExtra.Controls.Clear();
 
-                string ids = "";
+                string ids = "";                                                                                                   
                 DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { General.Nz(cmbAbs.Value,"-99") });
                 HtmlGenericControl ctlRow = null, ctlCol;
 
@@ -1296,7 +1296,7 @@ namespace WizOne.Absente
             }
         }
 
-        private string InlocuiesteCampuri(string strSelect)
+        public string InlocuiesteCampuri(string strSelect)
         {
             string str = strSelect;
 
@@ -1346,7 +1346,7 @@ namespace WizOne.Absente
                 }
 
                 string[] lstExtra = new string[30] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
-
+                                                                                                                               
                 DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { cmbAbs.Value });
                 for (int i = 0; i < dtEx.Rows.Count; i++)
                 {

@@ -9,6 +9,8 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 using WizOne.Module;
 
 namespace WizOne.Absente
@@ -50,6 +52,7 @@ namespace WizOne.Absente
 
                 txtDtInc.Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                 txtDtSf.Date = new DateTime(2100,1, 1);
+               
             }
             catch (Exception ex)
             {
@@ -70,8 +73,12 @@ namespace WizOne.Absente
 
                 if (dtHr != null && dtHr.Rows.Count > 0) esteHr = true;
 
+                //#1125
+                //AdaugareColoaneExtra(); 
+
                 if (!IsPostBack)
                 {
+
                     if (Session["PaginaWeb"] as string != "Absente.Lista")
                     {
                         Session["PaginaWeb"] = "Absente.Lista";
@@ -322,6 +329,8 @@ namespace WizOne.Absente
                 dt.Columns["Comentarii"].ReadOnly = false;
                 dt.Columns["NumeInlocuitor"].ReadOnly = false;
                 dt.Columns["TrimiteLa"].ReadOnly = false;
+                dt.Columns["CampExtra19"].ReadOnly = false;
+                dt.Columns["CampExtra20"].ReadOnly = false;
 
                 grDate.KeyFieldName = "Id; Rol";
                 grDate.DataSource = dt;
@@ -1186,10 +1195,16 @@ namespace WizOne.Absente
                 var id = e.Keys["Id"];
 
                 object cps = (grDate.FindEditFormTemplateControl("SolicitareTemplate").Controls[0] as ASPxComboBox).SelectedItem?.GetFieldValue("Id");
-                object inl = (grDate.FindEditFormTemplateControl("InlocuitorTemplate").Controls[0] as ASPxComboBox).SelectedItem?.GetFieldValue("F10003");                
+                object inl = (grDate.FindEditFormTemplateControl("InlocuitorTemplate").Controls[0] as ASPxComboBox).SelectedItem?.GetFieldValue("F10003");
+
+                string campExtra19 = "";
+                if (e.NewValues["CampExtra19"] != null && e.NewValues["CampExtra19"].ToString() == "1")
+                    campExtra19 = "Da";
+                else
+                    campExtra19 = "Nu";
                 
-                General.ExecutaNonQuery($@"UPDATE ""Ptj_Cereri"" SET ""Observatii""=@1, ""Comentarii""=@2, ""TrimiteLa""=@3, ""Inlocuitor""=@4, ""CampBifa""=@6 WHERE ""Id""=@5", 
-                    new object[] { e.NewValues["Observatii"], e.NewValues["Comentarii"], cps, inl, id, ((bool?)e.NewValues["CampBifa"] ?? false) ? 1 : 0 });
+                General.ExecutaNonQuery($@"UPDATE ""Ptj_Cereri"" SET ""Observatii""=@1, ""Comentarii""=@2, ""TrimiteLa""=@3, ""Inlocuitor""=@4, ""CampBifa""=@6, ""CampExtra19""= @7, ""CampExtra20""=@8 WHERE ""Id""=@5", 
+                    new object[] { e.NewValues["Observatii"], e.NewValues["Comentarii"], cps, inl, id, ((bool?)e.NewValues["CampBifa"] ?? false) ? 1 : 0, campExtra19, e.NewValues["CampExtra20"] });
 
                 e.Cancel = true;
                 grDate.CancelEdit();
@@ -1251,7 +1266,7 @@ namespace WizOne.Absente
             try
             {
                 var editForm = ((e.EditForm as DevExpress.Web.Rendering.GridHtmlEditFormPopupContainer).NamingContainer as ASPxPopupControl);
-                var obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "NumeAngajat", "DataInceput", "Compensare", "CompensareBanca", "CompensarePlata", "AdaugaAtasament", "IdStare" }) as object[];
+                var obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "NumeAngajat", "DataInceput", "Compensare", "CompensareBanca", "CompensarePlata", "AdaugaAtasament", "IdStare", "IdAbsenta" }) as object[];
 
                 if (grDate.Columns["NumeAngajat"].Visible)
                     editForm.HeaderText = $"{Dami.TraduCuvant("Modificare cerere")} {obj[0]}, {Dami.TraduCuvant("data")} {obj[1]:dd/MM/yyyy}";
@@ -1276,7 +1291,7 @@ namespace WizOne.Absente
 
                 grDate.FindEditFormTemplateControl("InlocuitorEditContainer").Visible = Dami.ValoareParam("InlocuitorEditabilInAprobare", "0") == "1";
 
-                if (obj[2] != null && (int)obj[2] == 1)
+                if (obj[2] != null && obj[2].ToString().Length > 0 && (int)obj[2] == 1)
                 {
                     var solicitareCombo = grDate.FindEditFormTemplateControl("SolicitareTemplate").Controls[0] as ASPxComboBox;
 
@@ -1288,7 +1303,23 @@ namespace WizOne.Absente
                 grDate.FindEditFormTemplateControl("UploadEditContainer").Visible = General.Nz(obj[5], "0").ToString() == "1";
                 grDate.FindEditFormTemplateControl("CampBifaEditContainer").Visible = //daca starea cererii este aprobata si rolul este cel de hr afisam campul bifa                    
                     General.Nz(obj[6], "0").ToString() == "3" && (esteHr || rolCmp.IndexOf(selRol.ToString()) >= 0);
-                    //General.Nz(obj[6], "0").ToString() == "3" && (esteHr || rolCmp.IndexOf((cmbRol.Value ?? "qwerty").ToString()) >= 0);
+                //General.Nz(obj[6], "0").ToString() == "3" && (esteHr || rolCmp.IndexOf((cmbRol.Value ?? "qwerty").ToString()) >= 0);
+
+
+                //#1125
+                // AdaugareCampuriExtra();
+                //#1125
+                if (Convert.ToInt32(Session["IdClient"]) == (int)Module.IdClienti.Clienti.Harting)
+                    AfisareCampuriExtra(Convert.ToInt32(General.Nz(obj[7], "0").ToString()));
+                else
+                {
+                    for (int i = 0; i <= 1; i++)
+                    {
+                        var campExtra = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "EditContainer");
+                        if (campExtra != null)                        
+                            campExtra.Visible = false;                        
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1342,6 +1373,164 @@ namespace WizOne.Absente
                     e.Value = ore;
                 }
             }
-        }        
+        }
+        
+        //#1125
+        protected void AfisareCampuriExtra(int idAbs)
+        {
+            try
+            {
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND IdCampExtra IN (19, 20) ORDER BY IdCampExtra", new object[] { idAbs });
+                if (dt != null && dt.Rows.Count > 0)
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        DataRow dr = dt.Rows[i];
+                        var campExtra = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "EditContainer");
+                        if (campExtra != null)
+                        {
+                            campExtra.Visible = true;
+                            ASPxLabel lbl = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "TemplateLabel") as ASPxLabel;
+                            if (lbl != null)
+                            {
+                                lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
+                                lbl.ToolTip = Dami.TraduCuvant(dr["ToolTip"].ToString());
+                            }
+                        }                      
+                    }
+                else                
+                    for (int i = 0; i <= 1; i++)
+                    {
+                        var campExtra = grDate.FindEditFormTemplateControl("CampExtra" + (i == 0 ? "19" : "20") + "EditContainer");
+                        if (campExtra != null)
+                            campExtra.Visible = false;
+                    }                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        //protected void AdaugareCampuriExtra()
+        //{
+        //    try
+        //    {                
+        //        DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE AfisareSolicitareModificare IN (2,3)", null);
+        //        HtmlGenericControl divCampExtra = (HtmlGenericControl)grDate.FindEditFormTemplateControl("campuriExtra");
+
+        //        HtmlGenericControl ctlCol;
+
+        //        for (int i = 0; i < dt.Rows.Count; i++)
+        //        {
+        //            DataRow dr = dt.Rows[i];
+        //            ctlCol = new HtmlGenericControl("div");
+        //            ctlCol.Attributes["class"] = "col-sm-6 col-xs-12";
+        //            ctlCol.ID = "CampExtra" + dr["IdCampExtra"].ToString() + "EditContainer";
+                    
+
+        //            string ctlId = "CampExtra" + dr["IdCampExtra"].ToString() + "Template";
+        //            ASPxLabel lbl = new ASPxLabel();
+
+        //            lbl.ID = ctlId + "Label";
+        //            lbl.AssociatedControlID = ctlId;
+        //            lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
+        //            lbl.Font.Bold = true;
+        //            lbl.CssClass = "label-inline";                  
+        //            ctlCol.Controls.Add(lbl);
+
+        //            ASPxGridViewTemplateReplacement obiect = new ASPxGridViewTemplateReplacement();
+        //            obiect.ID = ctlId;
+        //            obiect.ReplacementType = GridViewTemplateReplacementType.EditFormCellEditor;
+        //            obiect.ColumnID = "CampExtra" + dr["IdCampExtra"].ToString();
+        //            ctlCol.Controls.Add(obiect);
+
+        //            //ctlCol.Visible = false;
+        //            divCampExtra.Controls.Add(ctlCol);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+        //protected void AdaugareColoaneExtra()
+        //{
+        //    try
+        //    {
+        //        Absente.Cereri pag = new Absente.Cereri();
+        //        DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE AfisareSolicitareModificare IN (2,3)", null);
+        //        for (int i = 0; i < dt.Rows.Count; i++)
+        //        {
+        //            DataRow dr = dt.Rows[i];
+
+        //            switch (General.Nz(dr["TipCamp"], "").ToString())
+        //            {
+        //                case "0":                   //text    
+        //                    GridViewDataTextColumn colTxt = new GridViewDataTextColumn();
+        //                    colTxt.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colTxt.Name = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colTxt.ShowInCustomizationForm = false;
+        //                    colTxt.Visible = false;
+        //                    colTxt.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
+        //                    grDate.Columns.Add(colTxt);
+        //                    break;
+        //                case "1":                   //checkBox  
+        //                    GridViewDataCheckColumn colChk = new GridViewDataCheckColumn();
+        //                    colChk.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colChk.Name = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colChk.ShowInCustomizationForm = false;
+        //                    colChk.Visible = false;
+        //                    colChk.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
+        //                    grDate.Columns.Add(colChk);
+        //                    break;
+        //                case "2":                   //combobox
+        //                    GridViewDataComboBoxColumn colCombo = new GridViewDataComboBoxColumn();
+        //                    colCombo.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colCombo.Name = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colCombo.ShowInCustomizationForm = false;
+        //                    colCombo.Visible = false;
+        //                    colCombo.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
+        //                    try
+        //                    {
+        //                        if (General.Nz(dr["Sursa"], "").ToString() != "")
+        //                        {
+        //                            string sel = pag.InlocuiesteCampuri(dr["Sursa"].ToString());
+        //                            if (sel != "")
+        //                            {
+        //                                DataTable dtCmb = General.IncarcaDT(sel, null);
+        //                                colCombo.PropertiesComboBox.ValueField = dtCmb.Columns[0].ColumnName;
+        //                                colCombo.PropertiesComboBox.TextField = dtCmb.Columns[1].ColumnName;
+        //                                colCombo.PropertiesComboBox.DataSource = dtCmb;
+        //                            }
+        //                        }
+        //                    }
+        //                    catch (Exception ex)
+        //                    {
+        //                        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), "Incarcare combobox camp extra");
+        //                    }
+        //                    grDate.Columns.Add(colCombo);
+        //                    break;
+        //                case "3":                   //dateTime
+        //                    GridViewDataDateColumn colData = new GridViewDataDateColumn();
+        //                    colData.FieldName = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colData.Name = "CampExtra" + dr["IdCampExtra"].ToString();
+        //                    colData.ShowInCustomizationForm = false;
+        //                    colData.Visible = false;
+        //                    colData.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.True;
+        //                    grDate.Columns.Add(colData);
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
     }
 }

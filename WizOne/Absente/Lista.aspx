@@ -486,12 +486,18 @@
 
                     <dx:GridViewDataCheckColumn FieldName="CampBifa" Name="CampBifa" Caption="CampBifa" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="28">
                         <EditFormSettings Visible="true" />
-                    </dx:GridViewDataCheckColumn>
-
+                    </dx:GridViewDataCheckColumn>  
+                    <dx:GridViewDataCheckColumn FieldName = "CampExtra19" Name="CampExtra19" Caption="CampExtra19" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="29">
+                        <EditFormSettings Visible = "true" />
+                    </dx:GridViewDataCheckColumn>    
+                    <dx:GridViewDataMemoColumn FieldName = "CampExtra20" Name="CampExtra20" Caption="CampExtra20" Width="250px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="30">
+                        <EditFormSettings Visible = "true" />
+                        <PropertiesMemoEdit Width="100%" Height="60px" />
+                    </dx:GridViewDataMemoColumn>                     
                 </Columns>                
                 <Templates>
                     <EditForm>      
-                        <div class="panel panel-slim panel-adaptive-fullscreen">
+                        <div  class="panel panel-slim panel-adaptive-fullscreen">
                           <div class="panel-body">
                             <div class="row row-fix">
                                 <div class="col-sm-6 col-xs-12">
@@ -528,8 +534,20 @@
                                     <dx:ASPxLabel ID="CampBifaTemplateLabel" runat="server" AssociatedControlID="CampBifaTemplate" Text="Camp bifa" Font-Bold="true" CssClass="label-inline" />                                    
                                     <dx:ASPxGridViewTemplateReplacement ID="CampBifaTemplate" runat="server" ReplacementType="EditFormCellEditor" ColumnID="CampBifa" />
                                 </div>
-                            </div>                            
-                          </div>
+                            </div> 
+                             <div class="row row-fix">
+                                <div id = "CampExtra19EditContainer" runat="server" class="col-xs-6">
+                                    <dx:ASPxLabel ID = "CampExtra19TemplateLabel" runat="server" AssociatedControlID="CampExtra19Template" Text="CampExtra19" Font-Bold="true" CssClass="label-inline" />                                    
+                                    <dx:ASPxGridViewTemplateReplacement ID = "CampExtra19Template" runat="server" ReplacementType="EditFormCellEditor" ColumnID="CampExtra19" />
+                                </div>
+                            </div>
+                             <div class="row row-fix">
+                                <div id = "CampExtra20EditContainer" runat="server" class="col-xs-6">
+                                    <dx:ASPxLabel ID = "CampExtra20TemplateLabel" runat="server" AssociatedControlID="CampExtra20Template" Text="CampExtra20" Font-Bold="true" CssClass="label-inline" />                                    
+                                    <dx:ASPxGridViewTemplateReplacement ID = "CampExtra20Template" runat="server" ReplacementType="EditFormCellEditor" ColumnID="CampExtra20" />
+                                </div>
+                            </div>
+                          </div>                      
                           <div class="panel-footer panel-footer-commandbox">
                               <dx:ASPxGridViewTemplateReplacement ID="UpdateButton" runat="server" ReplacementType="EditFormUpdateButton" />
                               <dx:ASPxGridViewTemplateReplacement ID="CancelButton" runat="server" ReplacementType="EditFormCancelButton" />

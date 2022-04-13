@@ -22075,3 +22075,28 @@ RETURN;
 END
 
 GO
+
+
+----  2.2.144  ----
+
+
+CREATE TABLE [dbo].[AvsXDec_Companie](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Denumire] [nvarchar](100) NULL,
+	[CodFiscal] [nvarchar](13) NULL,
+	[Localitate] [nvarchar](50) NULL,
+	[Artera] [nvarchar](50) NULL,
+	[Numar] [nvarchar](20) NULL,
+	[ContBancar] [nvarchar](35) NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [date] NULL
+ CONSTRAINT [PK_AvsXDec_Companie] PRIMARY KEY CLUSTERED 
+(
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE AvsXDec_Document ADD IdCompanie int
+GO

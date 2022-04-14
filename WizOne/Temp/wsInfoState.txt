@@ -1345,3 +1345,27 @@ Eroarea:   SELECT A.F08502 AS "Id", A.F08503 AS "Denumire", F73302, F73306
                     INNER JOIN F086 B ON b.F08602 = c.F73202
                     INNER JOIN F085 A ON a.F08502 = b.F08603 ORDER BY "Denumire"
 -----------------------------------------------------
+Data:    14.04.2022 10:44:00
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   Failed to enable constraints. One or more rows contain values violating non-null, unique, or foreign-key constraints.
+-----------------------------------------------------
+Data:    14.04.2022 10:44:00
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   SELECT A.F08502 AS "Id", A.F08503 AS "Denumire", F73302, F73306 
+                    FROM F733 D
+                    INNER JOIN F732 C ON c.F73202 = d.F73306
+                    INNER JOIN F086 B ON b.F08602 = c.F73202
+                    INNER JOIN F085 A ON a.F08502 = b.F08603 ORDER BY "Denumire"
+-----------------------------------------------------
+Data:    14.04.2022 10:44:18
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   Incorrect syntax near ')'.
+-----------------------------------------------------
+Data:    14.04.2022 10:44:18
+Pagina:    General
+Eveni:     IncarcaDT
+Eroarea:   select * from calculZLP(4550, CONVERT(date,'2022-12-31'), 1, )
+-----------------------------------------------------

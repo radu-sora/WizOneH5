@@ -595,14 +595,14 @@
             if (reportType == 3) { // Cube
                 customCubePivotGrid.PerformCallback(commandName + JSON.stringify(commandParams), function () {
                     if (customCubePivotGrid.cpLayoutExportedTo) {
-                        window.open('Download?FileName=' + customCubePivotGrid.cpLayoutExportedTo);
+                        window.open('Download.ashx?FileName=' + customCubePivotGrid.cpLayoutExportedTo);
                         delete customCubePivotGrid.cpLayoutExportedTo;
                     }
                 });
             } else if (reportType == 4) { // Table
                 customTableGridView.PerformCallback(commandName + JSON.stringify(commandParams), function () {
                     if (customTableGridView.cpLayoutExportedTo) {
-                        window.open('Download?FileName=' + customTableGridView.cpLayoutExportedTo);
+                        window.open('Download.ashx?FileName=' + customTableGridView.cpLayoutExportedTo);
                         delete customTableGridView.cpLayoutExportedTo;
                     }
                 });

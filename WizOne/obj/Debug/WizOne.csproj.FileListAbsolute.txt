@@ -133,9 +133,11 @@ D:\WizOneH5\WizOne\bin\Twilio.dll
 D:\WizOneH5\WizOne\bin\WindowsBase.dll
 D:\WizOneH5\WizOne\bin\wizone_exchange.dll
 D:\WizOneH5\WizOne\bin\Microsoft.Bcl.AsyncInterfaces.dll
+D:\WizOneH5\WizOne\bin\System.Threading.Tasks.Extensions.dll
 D:\WizOneH5\WizOne\bin\System.Memory.dll
-D:\WizOneH5\WizOne\bin\System.Buffers.dll
+D:\WizOneH5\WizOne\bin\System.Runtime.CompilerServices.Unsafe.dll
 D:\WizOneH5\WizOne\bin\System.Numerics.Vectors.dll
+D:\WizOneH5\WizOne\bin\System.Buffers.dll
 D:\WizOneH5\WizOne\bin\DevExpress.Dashboard.v21.1.Core.xml
 D:\WizOneH5\WizOne\bin\DevExpress.Dashboard.v21.1.Web.xml
 D:\WizOneH5\WizOne\bin\DevExpress.Dashboard.v21.1.Web.WebForms.xml
@@ -226,6 +228,7 @@ D:\WizOneH5\WizOne\bin\Newtonsoft.Json.xml
 D:\WizOneH5\WizOne\bin\System.IdentityModel.Tokens.Jwt.xml
 D:\WizOneH5\WizOne\bin\System.IO.Packaging.xml
 D:\WizOneH5\WizOne\bin\Twilio.xml
+D:\WizOneH5\WizOne\obj\Debug\WizOne.csproj.AssemblyReference.cache
 D:\WizOneH5\WizOne\obj\Debug\WizOne.Reports.AdeverintaGenerala.resources
 D:\WizOneH5\WizOne\obj\Debug\WizOne.Reports.AdeverintaMedic.resources
 D:\WizOneH5\WizOne\obj\Debug\WizOne.Reports.AdeverintaSanatate.resources
@@ -242,10 +245,8 @@ D:\WizOneH5\WizOne\obj\Debug\WizOne.Reports.PrintCereri.resources
 D:\WizOneH5\WizOne\obj\Debug\WizOne.Reports.PrintImage.resources
 D:\WizOneH5\WizOne\obj\Debug\WizOne.Reports.XtraReport1.resources
 D:\WizOneH5\WizOne\obj\Debug\WizOne.csproj.GenerateResource.cache
+D:\WizOneH5\WizOne\obj\Debug\WizOne.dll.licenses
 D:\WizOneH5\WizOne\obj\Debug\WizOne.csproj.CoreCompileInputs.cache
 D:\WizOneH5\WizOne\obj\Debug\WizOne.csproj.CopyComplete
 D:\WizOneH5\WizOne\obj\Debug\WizOne.dll
 D:\WizOneH5\WizOne\obj\Debug\WizOne.pdb
-D:\WizOneH5\WizOne\bin\System.Threading.Tasks.Extensions.dll
-D:\WizOneH5\WizOne\obj\Debug\WizOne.csproj.AssemblyReference.cache
-D:\WizOneH5\WizOne\bin\System.Runtime.CompilerServices.Unsafe.dll

@@ -21877,7 +21877,7 @@ IF @marci not like 'P%'
 		SET @cursor_db = CURSOR FOR 
 		SELECT f10003 
 		FROM f100 
-		WHERE F10003 = convert(int, @marci)
+		WHERE convert(date, getdate()) < f10022 
 	END
 
 OPEN @cursor_db  
@@ -21936,34 +21936,6 @@ GO
 
 ALTER TABLE Ptj_tblAbsenteConfig ADD ToolTip nvarchar(4000)
 GO
-
-CREATE TABLE [dbo].[AvsXDec_Companie](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Denumire] [nvarchar](100) NULL,
-	[CodFiscal] [nvarchar](13) NULL,
-	[Localitate] [nvarchar](50) NULL,
-	[Artera] [nvarchar](50) NULL,
-	[Numar] [nvarchar](20) NULL,
-	[ContBancar] [nvarchar](35) NULL,
-	[USER_NO] [int] NULL,
-	[TIME] [date] NULL
- CONSTRAINT [PK_AvsXDec_Companie] PRIMARY KEY CLUSTERED 
-(
-	Id ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-
-
-----  2.2.144  ----
-
-ALTER TABLE AvsXDec_Document ADD IdCompanie int
-GO
-
-INSERT INTO tblParametrii(Nume, Valoare, Explicatie, IdModul, Criptat) VALUES('AvsXDec_IdAbsentaCerere','','Id-ul absentei necesar pentru generare cerere la aprobare avans',14, 0)
-GO
-
 
 
 ALTER FUNCTION [dbo].[CalculZLP] (
@@ -22036,19 +22008,19 @@ Select @DataPrimeiAngajari = case when year(isnull(F1001049,'2100-01-01')) not i
 
 
 Select @DataAnCalculVechime = case when @TipCalcul in (0,1,11,21,31) then convert(varchar, year(@zi)) + '-12-31'
-								when @TipCalcul in (2,12,22,32) then convert(varchar, year(@zi))  +  '-01-01'
-								when @TipCalcul in (3,13,23,33) then @zi
-								when  @TipCalcul in (4,14,24,34) then case when year(@f10023) > year(@zi) then convert(varchar, year(@zi)) + '-12-31' else @f10023 end
-								end ;
+                                                                                                                                when @TipCalcul in (2,12,22,32) then convert(varchar, year(@zi))  +  '-01-01'
+                                                                                                                                when @TipCalcul in (3,13,23,33) then @zi
+                                                                                                                                when  @TipCalcul in (4,14,24,34) then case when year(@f10023) > year(@zi) then convert(varchar, year(@zi)) + '-12-31' else @f10023 end
+                                                                                                                                end ;
 
 Select @LuniVechime = case 
 
 when @TipCalcul in (0,1,2,3,4) then
-	ISNULL(convert(int,substring(F100644,1,2)),0) * 12 + ISNULL(convert(int,substring(F100644,3,2)),0) + DATEDIFF (MONTH,   (select convert(nvarchar(4),F01011) + '-' +
+                ISNULL(convert(int,substring(F100644,1,2)),0) * 12 + ISNULL(convert(int,substring(F100644,3,2)),0) + DATEDIFF (MONTH,   (select convert(nvarchar(4),F01011) + '-' +
     convert(nvarchar(4),F01012) + '-01' from F010), @DataAnCalculVechime)
 
 when @TipCalcul in (11,12,13,14) then
-	ISNULL(convert(int,substring(F100643,1,2)),0) * 12 + ISNULL(convert(int,substring(F100643,3,2)),0) + DATEDIFF (MONTH,   (select convert(nvarchar(4),F01011) + '-' +
+                ISNULL(convert(int,substring(F100643,1,2)),0) * 12 + ISNULL(convert(int,substring(F100643,3,2)),0) + DATEDIFF (MONTH,   (select convert(nvarchar(4),F01011) + '-' +
     convert(nvarchar(4),F01012) + '-01' from F010), @DataAnCalculVechime) 
 
 when @TipCalcul in (21,22,23,24) then
@@ -22056,17 +22028,17 @@ when @TipCalcul in (21,22,23,24) then
    - case when day(f10022) > day(@DataAnCalculVechime) then 1 else 0 end  
  
 when @TipCalcul in (31,32,33,34) then
-	  DATEDIFF (MONTH, @DataPrimeiAngajari, @DataAnCalculVechime)
-	- case when day(@DataPrimeiAngajari) > day(@DataAnCalculVechime) then 1 else 0 end  
+                  DATEDIFF (MONTH, @DataPrimeiAngajari, @DataAnCalculVechime)
+                - case when day(@DataPrimeiAngajari) > day(@DataAnCalculVechime) then 1 else 0 end  
 
 when @TipCalcul = 99 then
      DATEDIFF (MONTH,  case when f10022 <= '2018-02-14' then '2018-02-14' else f10022 end , @zi )
    - case when ( case when f10022 <= '2018-02-14' then 14 else day(f10022) end) > day(@zi)  then 1 else 0 end
 
- end     from f100 where f10003 = @f10003;
+end     from f100 where f10003 = @f10003;
 
 if isnull(@LuniVechime,0) < =0 
-	 select @LuniVechime = 0;
+                 select @LuniVechime = 0;
 
 If @mod <> 1
    select @ZileCuveniteAn = CuveniteAn from ptj_tblzileco where an=year(@zi) and f10003 = @f10003 else
@@ -22075,31 +22047,31 @@ If @mod <> 1
       (convert(int,c.F02610/100) * 12) <= @LuniVechime and @LuniVechime < (convert(int,c.F02611/100) * 12)  where (year(@zi)  between year(F10022) and year(F10023) ) and a.F10003= @f10003 ;
 
   with xx as  ( select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107='2100-01-01' then f111.f11106 else dateadd(d,-1,f111.f11107) end la_data from f111
-	 inner join
+                inner join
 (select a.f11103, a.f11105, case when a.f11107='2100-01-01' then a.f11106 else dateadd(d,-1,a.f11107) end f11107, a.time, max(b.time) timp from F111 a inner join f111 b  on
 a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107='2100-01-01' then b.f11106 else dateadd(d,-1,b.f11107) end   and b.f11105 <= case when a.f11107='2100-01-01'
 then a.f11106 else dateadd(d,-1,a.f11107) end)  group by a.f11103, a.f11105, case when a.f11107='2100-01-01' then a.f11106 else dateadd(d,-1,a.f11107) end, a.time) t  on f111.f11103 = t.f11103 and
 f111.f11105 = t.f11105 and   case when f111.f11107='2100-01-01' then f111.f11106 else dateadd(d,-1,f111.f11107) end = t.f11107 and f111.time = t.timp 
 where CHARINDEX(concat(',',ltrim(rtrim(convert(nvarchar(100),f111.f11104))),','), concat(',',ltrim(rtrim(@SuspendariExcluse)),','))  = 0  union all select f10003 Marca, datainceput de_la_data, datasfarsit la_data  from ptj_cereri inner join Ptj_tblAbsente on Ptj_Cereri.IdAbsenta = Ptj_tblAbsente.id  where
 ptj_cereri.IdStare=3 and isnull(Ptj_tblAbsente.AbsenteCFPInCalculCO,0) = 1  ),  yy as  (select distinct a.marca, min(b.de_la_data) de_la_data, max(b.la_data) la_data from xx a  inner join xx b on a.marca = b.marca and  (a.de_la_data <= b.la_data and b.de_la_data <= a.la_data)  group by a.marca, a.de_la_data, a.la_data),
- f111_2 as   (select distinct a.marca f11103, min(b.de_la_data) f11105, max(b.la_data)  f11107 from yy a  inner join yy b on a.marca = b.marca and (a.de_la_data <=
+f111_2 as   (select distinct a.marca f11103, min(b.de_la_data) f11105, max(b.la_data)  f11107 from yy a  inner join yy b on a.marca = b.marca and (a.de_la_data <=
   b.la_data and b.de_la_data <= a.la_data)  group by a.marca, a.de_la_data, a.la_data)
 
- select  @ZileSuspendare= (select COALESCE(SUM(dbo.datediff2(@ZileLucratoare,CASE WHEN F11105 <  @PrimaZiAn THEN @PrimaZiAn else F11105 END,CASE WHEN F11107 > @UltimaZiAn THEN @UltimaZiAn else F11107 END)) ,0) from (select * from F100 where f10003 = @F10003) a  join f111_2 Z on a.f10003 = z.f11103  and F11105 <= F11107 AND F11107 >= @PrimaZiAn AND F11105 <= @UltimaZiAn) ,
- @ZileSuspendareZi = (select COALESCE(SUM(dbo.datediff2(@ZileLucratoare,CASE WHEN F11105 < @PrimaZiAn THEN @PrimaZiAn else F11105 END,CASE WHEN F11107 > CONVERT(date,@zi) THEN CONVERT(date,@zi) else F11107 END)) ,0)  from (select * from F100 where f10003 = @F10003) a  join f111_2 Z on a.f10003 = z.f11103  and F11105 <= F11107 AND F11107 >= @PrimaZiAn AND F11105 <= CONVERT(date,@zi)) ;
+select  @ZileSuspendare= (select COALESCE(SUM(dbo.datediff2(@ZileLucratoare,CASE WHEN F11105 <  @PrimaZiAn THEN @PrimaZiAn else F11105 END,CASE WHEN F11107 > @UltimaZiAn THEN @UltimaZiAn else F11107 END)) ,0) from (select * from F100 where f10003 = @F10003) a  join f111_2 Z on a.f10003 = z.f11103  and F11105 <= F11107 AND F11107 >= @PrimaZiAn AND F11105 <= @UltimaZiAn) ,
+@ZileSuspendareZi = (select COALESCE(SUM(dbo.datediff2(@ZileLucratoare,CASE WHEN F11105 < @PrimaZiAn THEN @PrimaZiAn else F11105 END,CASE WHEN F11107 > CONVERT(date,@zi) THEN CONVERT(date,@zi) else F11107 END)) ,0)  from (select * from F100 where f10003 = @F10003) a  join f111_2 Z on a.f10003 = z.f11103  and F11105 <= F11107 AND F11107 >= @PrimaZiAn AND F11105 <= CONVERT(date,@zi)) ;
 
 
 
- select @ZileCuvenite = case when @mod= 1 then 
-			round(convert(float,(@ZileCuveniteAn) * (@ZileAngajare - isnull(@ZileSuspendare,0))) /CONVERT(float,@ZileAn),0)  
+select @ZileCuvenite = case when @mod= 1 then 
+                                                round(convert(float,(@ZileCuveniteAn) * (@ZileAngajare - isnull(@ZileSuspendare,0))) /CONVERT(float,@ZileAn),0)  
            else (select Cuvenite from Ptj_tblZLP where f10003 = @f10003 and an = year(@zi)) end;
 
- select @ZileCuveniteZi =  round(convert(float, (@ZileCuveniteAn)  * (@ZileAngajareZi - isnull(@ZileSuspendareZi,0))) /CONVERT(float,@ZileAn),0)  ;
+select @ZileCuveniteZi =  round(convert(float, (@ZileCuveniteAn)  * (@ZileAngajareZi - isnull(@ZileSuspendareZi,0))) /CONVERT(float,@ZileAn),0)  ;
 
 INSERT INTO @CalculZLP
 SELECT @ZileCuveniteAn, isnull(@ZileCuvenite,0), @ZileCuveniteZi, isnull((select SoldAnterior from Ptj_tblZLP where f10003 = @f10003 and an=year(@zi)),0);
 
- RETURN;
+RETURN;
 END
 
 GO

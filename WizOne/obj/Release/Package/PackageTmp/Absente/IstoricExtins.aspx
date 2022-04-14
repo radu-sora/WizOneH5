@@ -114,7 +114,7 @@
         }
 
         function OnGetRowValues(values) {
-            
+          
             
             var arr = document.getElementsByClassName("tag_" + values[0]);
             for (var idx = 0; idx < arr.length; ++idx)
@@ -138,7 +138,7 @@
                 }
             }
 
-            
+          
         }
 
     </script>
@@ -422,7 +422,7 @@
         <SettingsBehavior AllowSelectByRowClick="false" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" AllowSort="false" />
         <ClientSideEvents ContextMenu="ctx" />
         <SettingsPager Mode="ShowAllRecords" />
-        <ClientSideEvents SelectionChanged="function(s, e) { for (var i = 0; i < grLeg.GetVisibleRowsOnPage(); i++) { grLeg.GetRowValues(i, 'Id;Culoare;Nr', OnGetRowValues); }  }" />
+        <ClientSideEvents SelectionChanged="function(s, e) { for (var i = 0; i < grLeg.GetVisibleRowsOnPage(); i++) { grLeg.GetRowValues(i, 'Id;Culoare;Nr', OnGetRowValues); } }" />
         <Columns>
             <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" CellStyle-CssClass="hide_column" />
             <dx:GridViewDataColorEditColumn FieldName="Culoare" Caption=" " Width="30px">
@@ -445,5 +445,6 @@
     <dx:ASPxLoadingPanel ID="panouLoading" ClientInstanceName="panouLoading" runat="server" Modal="true" HorizontalAlign="Center" ImageSpacing="10" VerticalAlign="Middle">
         <Image Url="~/Fisiere/Imagini/loading.gif" Height="40px" Width="40px"></Image>
     </dx:ASPxLoadingPanel>
+
 
 </asp:Content>

@@ -452,11 +452,12 @@
 
             themeSelector.init();
             accountForm.init();
-            
+
             if (timeOutSecunde) {
                 var timeLeftInfo = $("#spanTimeLeft");
                 var tipInfoChiosc = <%= Session["TipInfoChiosc"] %>;
                 var pagina = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
+
                 if (tipInfoChiosc == 1 || tipInfoChiosc == 2) {
                     pagina = '<%: ResolveClientUrl("~/DefaultTactilFaraCard.aspx") %>';
                 } 

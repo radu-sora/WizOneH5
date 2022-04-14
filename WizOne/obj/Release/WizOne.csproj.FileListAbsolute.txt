@@ -227,7 +227,6 @@ D:\WizOneH5\WizOne\bin\Newtonsoft.Json.xml
 D:\WizOneH5\WizOne\bin\System.IdentityModel.Tokens.Jwt.xml
 D:\WizOneH5\WizOne\bin\System.IO.Packaging.xml
 D:\WizOneH5\WizOne\bin\Twilio.xml
-D:\WizOneH5\WizOne\obj\Release\WizOne.csprojAssemblyReference.cache
 D:\WizOneH5\WizOne\obj\Release\WizOne.Reports.AdeverintaGenerala.resources
 D:\WizOneH5\WizOne\obj\Release\WizOne.Reports.AdeverintaMedic.resources
 D:\WizOneH5\WizOne\obj\Release\WizOne.Reports.AdeverintaSanatate.resources
@@ -250,4 +249,5 @@ D:\WizOneH5\WizOne\obj\Release\WizOne.dll
 D:\WizOneH5\WizOne\obj\Release\WizOne.pdb
 D:\WizOneH5\WizOne\obj\Release\WizOne.XmlSerializers.dll
 D:\WizOneH5\WizOne\bin\System.Runtime.CompilerServices.Unsafe.dll
-D:\WizOneH5\WizOne\obj\Release\WizOne.dll.licenses
+D:\WizOneH5\WizOne\bin\System.Threading.Tasks.Extensions.dll
+D:\WizOneH5\WizOne\obj\Release\WizOne.csproj.AssemblyReference.cache
